@@ -1,0 +1,12 @@
+arb-dir: lib/l10n
+template-arb-file: app_en.arb
+output-localization-file: app_localizations.dart
+synthetic-package: false
+header: |
+  /// FlowSense Localizations
+  /// 
+  /// This file is auto-generated. Do not edit manually.
+  /// Generated from ARB files in lib/l10n/
+output-class: AppLocalizations
+use-deferred-loading: false
+preferred-supported-locales: [ en, es, fr, de, it, pt, ru, ja, ko, zh, ar, hi, bn, tr, vi, th, pl, nl, sv, da, no, fi, he, cs, hu, uk, el, bg, ro, hr, sk, sl, lt, lv, et, mt, is, ga, cy ]

@@ -1,0 +1,518 @@
+{
+  "@@locale": "es",
+  "@@last_modified": "2024-12-13T00:00:00.000Z",
+  "appName": "FlowSense",
+  "appTagline": "Seguimiento del Período y Ciclo con IA",
+  "appDescription": "Rastrea tu ciclo menstrual con conocimientos potenciados por IA y recomendaciones personalizadas para una mejor salud reproductiva.",
+  "home": "Inicio",
+  "calendar": "Calendario",
+  "tracking": "Seguimiento",
+  "insights": "Conocimientos",
+  "settings": "Configuración",
+  "cycleDay": "Día {day}",
+  "cycleLength": "Duración del Ciclo: {length} días",
+  "daysUntilPeriod": "{days} días hasta el período",
+  "daysUntilOvulation": "{days} días hasta la ovulación",
+  "currentPhase": "Fase Actual",
+  "menstrualPhase": "Menstrual",
+  "follicularPhase": "Folicular",
+  "ovulatoryPhase": "Ovulatoria",
+  "lutealPhase": "Lútea",
+  "fertileWindow": "Ventana Fértil",
+  "ovulationDay": "Día de Ovulación",
+  "periodStarted": "Período Iniciado",
+  "periodEnded": "Período Terminado",
+  "flowIntensity": "Intensidad del Flujo",
+  "flowNone": "Ninguno",
+  "flowSpotting": "Manchado",
+  "flowLight": "Ligero",
+  "flowMedium": "Medio",
+  "flowHeavy": "Abundante",
+  "flowVeryHeavy": "Muy Abundante",
+  "symptoms": "Síntomas",
+  "noSymptoms": "Sin síntomas",
+  "cramps": "Calambres",
+  "bloating": "Hinchazón",
+  "headache": "Dolor de Cabeza",
+  "backPain": "Dolor de Espalda",
+  "breastTenderness": "Sensibilidad en los Senos",
+  "fatigue": "Fatiga",
+  "moodSwings": "Cambios de Humor",
+  "acne": "Acné",
+  "nausea": "Náuseas",
+  "cravings": "Antojos",
+  "insomnia": "Insomnio",
+  "hotFlashes": "Sofocos",
+  "coldFlashes": "Escalofríos",
+  "diarrhea": "Diarrea",
+  "constipation": "Estreñimiento",
+  "mood": "Humor",
+  "energy": "Energía",
+  "pain": "Dolor",
+  "moodHappy": "Feliz",
+  "moodNeutral": "Neutral",
+  "moodSad": "Triste",
+  "moodAnxious": "Ansiosa",
+  "moodIrritated": "Irritada",
+  "energyHigh": "Energía Alta",
+  "energyMedium": "Energía Media",
+  "energyLow": "Energía Baja",
+  "painNone": "Sin Dolor",
+  "painMild": "Dolor Leve",
+  "painModerate": "Dolor Moderado",
+  "painSevere": "Dolor Severo",
+  "predictions": "Predicciones",
+  "nextPeriod": "Próximo Período",
+  "nextOvulation": "Próxima Ovulación",
+  "predictedDate": "Predicho: {date}",
+  "confidence": "Confianza: {percentage}%",
+  "aiPoweredPredictions": "Predicciones Potenciadas por IA",
+  "advancedInsights": "Conocimientos Avanzados",
+  "personalizedRecommendations": "Recomendaciones Personalizadas",
+  "cycleInsights": "Conocimientos del Ciclo",
+  "patternAnalysis": "Análisis de Patrones",
+  "cycleTrends": "Tendencias del Ciclo",
+  "symptomPatterns": "Patrones de Síntomas",
+  "moodPatterns": "Patrones de Humor",
+  "regularCycle": "Tu ciclo es regular",
+  "irregularCycle": "Tu ciclo muestra cierta irregularidad",
+  "cycleVariation": "Variación del ciclo: ±{days} días",
+  "averageCycleLength": "Duración promedio del ciclo: {days} días",
+  "lifestyle": "Estilo de Vida",
+  "nutrition": "Nutrición",
+  "exercise": "Ejercicio",
+  "wellness": "Bienestar",
+  "sleepBetter": "Mejora la calidad de tu sueño",
+  "stayHydrated": "Mantente hidratada",
+  "gentleExercise": "Prueba ejercicio suave como yoga",
+  "eatIronRich": "Come alimentos ricos en hierro",
+  "takeBreaks": "Toma descansos regulares",
+  "manageStress": "Practica el manejo del estrés",
+  "warmBath": "Toma un baño caliente",
+  "meditation": "Prueba meditación o respiración profunda",
+  "logToday": "Registrar Hoy",
+  "trackFlow": "Registrar Flujo",
+  "trackSymptoms": "Registrar Síntomas",
+  "trackMood": "Registrar Humor",
+  "trackPain": "Registrar Dolor",
+  "addNotes": "Agregar Notas",
+  "notes": "Notas",
+  "save": "Guardar",
+  "cancel": "Cancelar",
+  "delete": "Eliminar",
+  "edit": "Editar",
+  "update": "Actualizar",
+  "confirm": "Confirmar",
+  "thisMonth": "Este Mes",
+  "nextMonth": "Próximo Mes",
+  "previousMonth": "Mes Anterior",
+  "today": "Hoy",
+  "selectDate": "Seleccionar Fecha",
+  "periodDays": "Días del Período",
+  "fertileDays": "Días Fértiles",
+  "ovulationDays": "Días de Ovulación",
+  "symptomDays": "Días con Síntomas",
+  "profile": "Perfil",
+  "notifications": "Notificaciones",
+  "privacy": "Privacidad",
+  "language": "Idioma",
+  "theme": "Tema",
+  "export": "Exportar Datos",
+  "backup": "Copia de Seguridad",
+  "help": "Ayuda",
+  "about": "Acerca de",
+  "version": "Versión",
+  "contactSupport": "Contactar Soporte",
+  "rateApp": "Calificar App",
+  "shareApp": "Compartir App",
+  "personalInfo": "Información Personal",
+  "age": "Edad",
+  "height": "Altura",
+  "weight": "Peso",
+  "cycleHistory": "Historial del Ciclo",
+  "avgCycleLength": "Duración Promedio del Ciclo",
+  "avgPeriodLength": "Duración Promedio del Período",
+  "lastPeriod": "Último Período",
+  "periodPreferences": "Preferencias del Período",
+  "trackingGoals": "Objetivos de Seguimiento",
+  "periodReminder": "Recordatorio del Período",
+  "ovulationReminder": "Recordatorio de Ovulación",
+  "pillReminder": "Recordatorio de Píldora",
+  "symptomReminder": "Recordatorio de Seguimiento de Síntomas",
+  "insightNotifications": "Notificaciones de Conocimientos",
+  "enableNotifications": "Habilitar Notificaciones",
+  "notificationTime": "Hora de Notificación",
+  "reminderDays": "{days} días antes",
+  "healthData": "Datos de Salud",
+  "connectHealthApp": "Conectar a la App de Salud",
+  "syncData": "Sincronizar Datos",
+  "heartRate": "Frecuencia Cardíaca",
+  "sleepData": "Datos de Sueño",
+  "steps": "Pasos",
+  "temperature": "Temperatura Corporal",
+  "bloodPressure": "Presión Arterial",
+  "aiInsights": "Conocimientos de IA",
+  "smartPredictions": "Predicciones Inteligentes",
+  "personalizedTips": "Consejos Personalizados",
+  "patternRecognition": "Reconocimiento de Patrones",
+  "anomalyDetection": "Detección de Anomalías",
+  "learningFromData": "Aprendiendo de tus datos...",
+  "improvingAccuracy": "Mejorando la precisión de las predicciones",
+  "adaptingToPatterns": "Adaptándose a tus patrones",
+  "welcome": "Bienvenida a FlowSense",
+  "getStarted": "Comenzar",
+  "skipForNow": "Omitir por Ahora",
+  "next": "Siguiente",
+  "previous": "Anterior",
+  "finish": "Finalizar",
+  "setupProfile": "Configurar Tu Perfil",
+  "trackingPermissions": "Permisos de Seguimiento",
+  "notificationPermissions": "Permisos de Notificación",
+  "healthPermissions": "Permisos de App de Salud",
+  "onboardingStep1": "Rastrea tu ciclo con precisión",
+  "onboardingStep2": "Obtén conocimientos potenciados por IA",
+  "onboardingStep3": "Recibe recomendaciones personalizadas",
+  "onboardingStep4": "Monitorea tu salud reproductiva",
+  "error": "Error",
+  "success": "Éxito",
+  "warning": "Advertencia",
+  "info": "Información",
+  "loading": "Cargando...",
+  "noData": "No hay datos disponibles",
+  "noInternetConnection": "Sin conexión a internet",
+  "tryAgain": "Intentar de Nuevo",
+  "somethingWentWrong": "Algo salió mal",
+  "dataUpdated": "Datos actualizados exitosamente",
+  "dataSaved": "Datos guardados exitosamente",
+  "dataDeleted": "Datos eliminados exitosamente",
+  "invalidInput": "Entrada inválida",
+  "fieldRequired": "Este campo es requerido",
+  "selectAtLeastOne": "Por favor selecciona al menos una opción",
+  "days": "días",
+  "weeks": "semanas",
+  "months": "meses",
+  "years": "años",
+  "kg": "kg",
+  "lbs": "lbs",
+  "cm": "cm",
+  "inches": "pulgadas",
+  "celsius": "°C",
+  "fahrenheit": "°F",
+  "morning": "Mañana",
+  "afternoon": "Tarde",
+  "evening": "Noche",
+  "night": "Madrugada",
+  "am": "AM",
+  "pm": "PM",
+  "yesterday": "Ayer",
+  "tomorrow": "Mañana",
+  "thisWeek": "Esta Semana",
+  "lastWeek": "Semana Pasada",
+  "nextWeek": "Próxima Semana",
+  "yes": "Sí",
+  "no": "No",
+  "ok": "OK",
+  "done": "Hecho",
+  "close": "Cerrar",
+  "open": "Abrir",
+  "view": "Ver",
+  "hide": "Ocultar",
+  "show": "Mostrar",
+  "enable": "Habilitar",
+  "disable": "Deshabilitar",
+  "on": "Activado",
+  "off": "Desactivado",
+  "high": "Alto",
+  "medium": "Medio",
+  "low": "Bajo",
+  "none": "Ninguno",
+  "all": "Todo",
+  "search": "Buscar",
+  "filter": "Filtrar",
+  "sort": "Ordenar",
+  "refresh": "Actualizar",
+  "clear": "Limpiar",
+  "reset": "Restablecer",
+  "apply": "Aplicar",
+  "loadingAiEngine": "Inicializando Motor de Salud IA...",
+  "analyzingHealthPatterns": "Analizando tus patrones de salud",
+  "goodMorning": "Buenos días",
+  "goodAfternoon": "Buenas tardes",
+  "goodEvening": "Buenas noches",
+  "aiActive": "IA Activa",
+  "health": "Salud",
+  "optimal": "Óptimo",
+  "cycleStatus": "Estado del Ciclo",
+  "notStarted": "No Iniciado",
+  "moodBalance": "Balance del Humor",
+  "notTracked": "Sin Seguimiento",
+  "energyLevel": "Nivel de Energía",
+  "flowIntensityMetric": "Intensidad del Flujo",
+  "logSymptoms": "Registrar Síntomas",
+  "trackYourHealth": "Rastrea tu salud",
+  "periodTracker": "Rastreador del Período",
+  "startLogging": "Comenzar registro",
+  "moodAndEnergy": "Humor y Energía",
+  "logWellness": "Registrar bienestar",
+  "viewAnalysis": "Ver análisis",
+  "accuracy": "Precisión",
+  "highConfidence": "Alta confianza",
+  "gatheringDataForPredictions": "Recopilando Datos para Predicciones",
+  "startTrackingForPredictions": "Comienza a rastrear tus ciclos para desbloquear predicciones de IA",
+  "aiLearningPatterns": "IA Aprendiendo Tus Patrones",
+  "trackForInsights": "Rastrea tus ciclos para desbloquear conocimientos personalizados de IA",
+  "cycleRegularity": "Regularidad del Ciclo",
+  "fromLastMonth": "+5% desde el mes pasado",
+  "avgCycle": "Ciclo Promedio",
+  "avgMood": "Humor Promedio",
+  "daysCycle": "28.5 días",
+  "moodRating": "4.2/5",
+  "chooseTheme": "Elegir Tema",
+  "lightTheme": "Tema Claro",
+  "lightThemeDescription": "Apariencia brillante y limpia",
+  "darkTheme": "Tema Oscuro",
+  "darkThemeDescription": "Cómodo para los ojos en poca luz",
+  "systemTheme": "Tema del Sistema",
+  "systemThemeDescription": "Coincide con la configuración de tu dispositivo",
+  "themeChangedTo": "Tema cambiado a",
+  "chooseLanguage": "Elegir Idioma",
+  "searchLanguages": "Buscar idiomas...",
+  "languageChangedTo": "Idioma cambiado a",
+  "@appName": {
+    "description": "The name of the application"
+  },
+  "@appTagline": {
+    "description": "The tagline of the application"
+  },
+  "@appDescription": {
+    "description": "The description of the application"
+  },
+  "@home": {
+    "description": "Home screen navigation label"
+  },
+  "@calendar": {
+    "description": "Calendar screen navigation label"
+  },
+  "@tracking": {
+    "description": "Tracking screen navigation label"
+  },
+  "@insights": {
+    "description": "Insights screen navigation label"
+  },
+  "@settings": {
+    "description": "Settings screen navigation label"
+  },
+  "@cycleDay": {
+    "description": "Current day of the cycle",
+    "placeholders": {
+      "day": {
+        "type": "int",
+        "example": "14"
+      }
+    }
+  },
+  "@cycleLength": {
+    "description": "Length of the menstrual cycle",
+    "placeholders": {
+      "length": {
+        "type": "int",
+        "example": "28"
+      }
+    }
+  },
+  "@daysUntilPeriod": {
+    "description": "Days remaining until next period",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "@daysUntilOvulation": {
+    "description": "Days remaining until ovulation",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "example": "10"
+      }
+    }
+  },
+  "@predictedDate": {
+    "description": "Predicted date for an event",
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "example": "Mar 15"
+      }
+    }
+  },
+  "@confidence": {
+    "description": "Confidence level of a prediction",
+    "placeholders": {
+      "percentage": {
+        "type": "int",
+        "example": "85"
+      }
+    }
+  },
+  "@cycleVariation": {
+    "description": "Variation in cycle length",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "@averageCycleLength": {
+    "description": "Average length of menstrual cycles",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "example": "28"
+      }
+    }
+  },
+  "@reminderDays": {
+    "description": "Number of days before to send reminder",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "@loadingAiEngine": {
+    "description": "Loading message for AI initialization"
+  },
+  "@analyzingHealthPatterns": {
+    "description": "Secondary loading message for health analysis"
+  },
+  "@goodMorning": {
+    "description": "Morning greeting"
+  },
+  "@goodAfternoon": {
+    "description": "Afternoon greeting"
+  },
+  "@goodEvening": {
+    "description": "Evening greeting"
+  },
+  "@aiActive": {
+    "description": "Status indicator for AI functionality"
+  },
+  "@health": {
+    "description": "Health indicator label"
+  },
+  "@optimal": {
+    "description": "Optimal health status"
+  },
+  "@cycleStatus": {
+    "description": "Cycle status metric card title"
+  },
+  "@notStarted": {
+    "description": "Status when cycle has not started"
+  },
+  "@moodBalance": {
+    "description": "Mood balance metric card title"
+  },
+  "@notTracked": {
+    "description": "Status when data is not being tracked"
+  },
+  "@energyLevel": {
+    "description": "Energy level metric card title"
+  },
+  "@flowIntensityMetric": {
+    "description": "Flow intensity metric card title"
+  },
+  "@logSymptoms": {
+    "description": "Action card for logging symptoms"
+  },
+  "@trackYourHealth": {
+    "description": "Subtitle for symptoms tracking"
+  },
+  "@periodTracker": {
+    "description": "Action card for period tracking"
+  },
+  "@startLogging": {
+    "description": "Subtitle for period tracking"
+  },
+  "@moodAndEnergy": {
+    "description": "Action card for mood and energy tracking"
+  },
+  "@logWellness": {
+    "description": "Subtitle for mood and energy tracking"
+  },
+  "@viewAnalysis": {
+    "description": "Subtitle for AI insights"
+  },
+  "@accuracy": {
+    "description": "Accuracy label for predictions"
+  },
+  "@highConfidence": {
+    "description": "High confidence indicator"
+  },
+  "@gatheringDataForPredictions": {
+    "description": "Title when no prediction data available"
+  },
+  "@startTrackingForPredictions": {
+    "description": "Message encouraging users to start tracking"
+  },
+  "@aiLearningPatterns": {
+    "description": "Title when AI is learning patterns"
+  },
+  "@trackForInsights": {
+    "description": "Message encouraging users to track for insights"
+  },
+  "@cycleRegularity": {
+    "description": "Cycle regularity trend metric"
+  },
+  "@fromLastMonth": {
+    "description": "Trend comparison from previous month"
+  },
+  "@avgCycle": {
+    "description": "Average cycle length label"
+  },
+  "@avgMood": {
+    "description": "Average mood label"
+  },
+  "@daysCycle": {
+    "description": "Example cycle days"
+  },
+  "@moodRating": {
+    "description": "Example mood rating"
+  },
+  "@chooseTheme": {
+    "description": "Choose theme modal title"
+  },
+  "@lightTheme": {
+    "description": "Light theme option"
+  },
+  "@lightThemeDescription": {
+    "description": "Light theme description"
+  },
+  "@darkTheme": {
+    "description": "Dark theme option"
+  },
+  "@darkThemeDescription": {
+    "description": "Dark theme description"
+  },
+  "@systemTheme": {
+    "description": "System theme option"
+  },
+  "@systemThemeDescription": {
+    "description": "System theme description"
+  },
+  "@themeChangedTo": {
+    "description": "Theme change confirmation message"
+  },
+  "@chooseLanguage": {
+    "description": "Choose language modal title"
+  },
+  "@searchLanguages": {
+    "description": "Search languages placeholder"
+  },
+  "@languageChangedTo": {
+    "description": "Language change confirmation message"
+  }
+}
