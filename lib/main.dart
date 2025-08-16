@@ -60,6 +60,7 @@ class FlowSenseApp extends StatefulWidget {
 
 class _FlowSenseAppState extends State<FlowSenseApp> {
   late SettingsProvider settingsProvider;
+  bool _isInitialized = false;
 
   @override
   void initState() {
@@ -70,6 +71,11 @@ class _FlowSenseAppState extends State<FlowSenseApp> {
 
   Future<void> _initializeSettings() async {
     await settingsProvider.initializeSettings();
+    if (mounted) {
+      setState(() {
+        _isInitialized = true;
+      });
+    }
   }
 
   @override

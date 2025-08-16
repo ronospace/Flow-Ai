@@ -71,6 +71,9 @@ dependencies:
   # HTTP & API
   http: ^1.2.2
   
+  # URL Launcher
+  url_launcher: ^6.3.1
+  
   # Device Info
   device_info_plus: ^10.1.2
   

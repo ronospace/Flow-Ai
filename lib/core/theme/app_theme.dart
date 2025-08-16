@@ -182,9 +182,16 @@ class AppTheme {
   }
   
   static ThemeData get darkTheme {
+    const darkBackground = Color(0xFF121212);
+    const darkSurface = Color(0xFF1A1A1A);
+    const darkCardColor = Color(0xFF2D2D2D);
+    const darkText = Color(0xFFE0E0E0);
+    const darkTextSecondary = Color(0xFFB0B0B0);
+    
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
+      scaffoldBackgroundColor: darkBackground,
       colorScheme: ColorScheme.fromSeed(
         seedColor: primaryRose,
         brightness: Brightness.dark,
@@ -192,37 +199,169 @@ class AppTheme {
         secondary: secondaryBlue,
         tertiary: accentMint,
         error: errorRed,
-        surface: const Color(0xFF1A1A1A),
-        background: const Color(0xFF121212),
+        surface: darkSurface,
+        background: darkBackground,
+        onPrimary: white,
+        onSecondary: white,
+        onSurface: darkText,
+        onBackground: darkText,
       ),
       
-      // Dark theme implementation
+      // Typography for dark theme
       textTheme: const TextTheme(
         displayLarge: TextStyle(
           fontSize: 32,
           fontWeight: FontWeight.bold,
-          color: white,
+          color: darkText,
           letterSpacing: -0.5,
         ),
         displayMedium: TextStyle(
           fontSize: 28,
           fontWeight: FontWeight.bold,
-          color: white,
+          color: darkText,
           letterSpacing: -0.5,
+        ),
+        displaySmall: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.w600,
+          color: darkText,
+        ),
+        headlineLarge: TextStyle(
+          fontSize: 22,
+          fontWeight: FontWeight.w600,
+          color: darkText,
+        ),
+        headlineMedium: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+          color: darkText,
+        ),
+        headlineSmall: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          color: darkText,
+        ),
+        titleLarge: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          color: darkText,
+        ),
+        titleMedium: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+          color: darkText,
         ),
         bodyLarge: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.normal,
-          color: white,
+          color: darkText,
+        ),
+        bodyMedium: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.normal,
+          color: darkText,
+        ),
+        bodySmall: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.normal,
+          color: darkTextSecondary,
         ),
       ),
       
+      // AppBar Theme for dark mode
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: IconThemeData(color: darkText),
+        titleTextStyle: TextStyle(
+          color: darkText,
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      
+      // Card Theme for dark mode
       cardTheme: CardThemeData(
-        elevation: 2,
+        elevation: 4,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        color: const Color(0xFF1A1A1A),
+        color: darkCardColor,
+      ),
+      
+      // Elevated Button Theme for dark mode
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: primaryRose,
+          foregroundColor: white,
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          textStyle: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+      
+      // Input Decoration Theme for dark mode
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: darkSurface,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: darkTextSecondary.withValues(alpha: 0.3)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: darkTextSecondary.withValues(alpha: 0.3)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: primaryRose, width: 2),
+        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        hintStyle: TextStyle(color: darkTextSecondary),
+        labelStyle: TextStyle(color: darkTextSecondary),
+      ),
+      
+      // Bottom Navigation Bar Theme for dark mode
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: darkSurface,
+        selectedItemColor: primaryRose,
+        unselectedItemColor: darkTextSecondary,
+        type: BottomNavigationBarType.fixed,
+        elevation: 8,
+      ),
+      
+      // Floating Action Button Theme for dark mode
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: primaryRose,
+        foregroundColor: white,
+        elevation: 4,
+      ),
+      
+      // Additional dark theme components
+      dividerTheme: DividerThemeData(
+        color: darkTextSecondary.withValues(alpha: 0.2),
+        thickness: 1,
+      ),
+      
+      dialogTheme: DialogThemeData(
+        backgroundColor: darkSurface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+      ),
+      
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: darkCardColor,
+        contentTextStyle: const TextStyle(color: darkText),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
       ),
     );
   }

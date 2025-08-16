@@ -12,6 +12,7 @@ import '../widgets/language_selector.dart';
 import '../widgets/theme_selector.dart';
 import '../widgets/profile_section.dart';
 import '../widgets/cyclesync_integration.dart';
+import 'help_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -133,7 +134,7 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
                                 return Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                                   decoration: BoxDecoration(
-                                    color: AppTheme.primaryRose.withOpacity(0.1),
+                                    color: AppTheme.primaryRose.withValues(alpha: 0.1),
                                     borderRadius: BorderRadius.circular(16),
                                   ),
                                   child: Text(
@@ -158,7 +159,7 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
                                 return Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                                   decoration: BoxDecoration(
-                                    color: AppTheme.accentMint.withOpacity(0.1),
+                                    color: AppTheme.accentMint.withValues(alpha: 0.1),
                                     borderRadius: BorderRadius.circular(16),
                                   ),
                                   child: Text(
@@ -210,13 +211,35 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
                                 leading: const Icon(Icons.access_time, color: AppTheme.primaryRose),
                                 title: l10n.notificationTime,
                                 subtitle: 'When to send daily reminders',
-                                trailing: TextButton(
-                                  onPressed: () => _showTimePicker(context),
-                                  child: Text(
-                                    settings.preferences.notificationTime.format(context),
-                                    style: const TextStyle(
-                                      color: AppTheme.primaryRose,
-                                      fontWeight: FontWeight.w600,
+                                trailing: GestureDetector(
+                                  onTap: () => _showTimePicker(context),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                    decoration: BoxDecoration(
+                                      color: AppTheme.primaryRose.withValues(alpha: 0.1),
+                                      borderRadius: BorderRadius.circular(20),
+                                      border: Border.all(
+                                        color: AppTheme.primaryRose.withValues(alpha: 0.3),
+                                        width: 1,
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                          Icons.access_time,
+                                          color: AppTheme.primaryRose,
+                                          size: 16,
+                                        ),
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          settings.preferences.notificationTime.format(context),
+                                          style: const TextStyle(
+                                            color: AppTheme.primaryRose,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -356,10 +379,10 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
   }
 
   void _showHelp(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Help section coming soon!'),
-        backgroundColor: AppTheme.warningOrange,
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const HelpScreen(),
       ),
     );
   }

@@ -39,9 +39,9 @@ class _LanguageSelectorState extends State<LanguageSelector> {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.75,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
+      decoration: BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(28),
           topRight: Radius.circular(28),
         ),
@@ -82,10 +82,10 @@ class _LanguageSelectorState extends State<LanguageSelector> {
                 const SizedBox(width: 16),
                 Text(
                   AppLocalizations.of(context)!.chooseLanguage,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: AppTheme.darkGrey,
+                    color: Theme.of(context).textTheme.titleLarge?.color,
                   ),
                 ),
               ],
@@ -97,7 +97,7 @@ class _LanguageSelectorState extends State<LanguageSelector> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Container(
               decoration: BoxDecoration(
-                color: AppTheme.lightGrey.withOpacity(0.3),
+                color: AppTheme.lightGrey.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: TextField(
@@ -136,7 +136,7 @@ class _LanguageSelectorState extends State<LanguageSelector> {
                       margin: const EdgeInsets.only(bottom: 8),
                       decoration: BoxDecoration(
                         color: isSelected 
-                            ? AppTheme.accentMint.withOpacity(0.1)
+                            ? AppTheme.accentMint.withValues(alpha: 0.1)
                             : Colors.transparent,
                         borderRadius: BorderRadius.circular(12),
                         border: isSelected 
@@ -150,7 +150,7 @@ class _LanguageSelectorState extends State<LanguageSelector> {
                           decoration: BoxDecoration(
                             color: isSelected 
                                 ? AppTheme.accentMint
-                                : AppTheme.lightGrey.withOpacity(0.5),
+                                : AppTheme.lightGrey.withValues(alpha: 0.5),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Center(
@@ -168,13 +168,13 @@ class _LanguageSelectorState extends State<LanguageSelector> {
                           language.displayName,
                           style: TextStyle(
                             fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                            color: isSelected ? AppTheme.accentMint : AppTheme.darkGrey,
+                            color: isSelected ? AppTheme.accentMint : Theme.of(context).textTheme.bodyLarge?.color,
                           ),
                         ),
                         subtitle: Text(
                           language.code,
-                          style: const TextStyle(
-                            color: AppTheme.mediumGrey,
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
                             fontSize: 12,
                           ),
                         ),

@@ -14,9 +14,9 @@ class ThemeSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.4,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
+      decoration: BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(28),
           topRight: Radius.circular(28),
         ),
@@ -57,10 +57,10 @@ class ThemeSelector extends StatelessWidget {
                 const SizedBox(width: 16),
                 Text(
                   AppLocalizations.of(context)!.chooseTheme,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: AppTheme.darkGrey,
+                    color: Theme.of(context).textTheme.titleLarge?.color,
                   ),
                 ),
               ],
@@ -131,12 +131,12 @@ class ThemeSelector extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: isSelected 
-            ? AppTheme.primaryRose.withOpacity(0.1)
+            ? AppTheme.primaryRose.withValues(alpha: 0.1)
             : Colors.transparent,
         borderRadius: BorderRadius.circular(16),
         border: isSelected 
             ? Border.all(color: AppTheme.primaryRose, width: 2)
-            : Border.all(color: AppTheme.lightGrey.withOpacity(0.5)),
+            : Border.all(color: AppTheme.lightGrey.withValues(alpha: 0.5)),
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
@@ -145,8 +145,8 @@ class ThemeSelector extends StatelessWidget {
           height: 48,
           decoration: BoxDecoration(
             color: isSelected 
-                ? iconColor.withOpacity(0.2)
-                : AppTheme.lightGrey.withOpacity(0.3),
+                ? iconColor.withValues(alpha: 0.2)
+                : AppTheme.lightGrey.withValues(alpha: 0.3),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(
@@ -159,14 +159,14 @@ class ThemeSelector extends StatelessWidget {
           title,
           style: TextStyle(
             fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-            color: isSelected ? AppTheme.primaryRose : AppTheme.darkGrey,
+            color: isSelected ? AppTheme.primaryRose : Theme.of(context).textTheme.bodyLarge?.color,
             fontSize: 16,
           ),
         ),
-        subtitle: Text(
+          subtitle: Text(
           subtitle,
-          style: const TextStyle(
-            color: AppTheme.mediumGrey,
+          style: TextStyle(
+            color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
             fontSize: 14,
           ),
         ),
