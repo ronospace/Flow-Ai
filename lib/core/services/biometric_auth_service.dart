@@ -1,9 +1,10 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:local_auth_platform_interface/local_auth_platform_interface.dart' as platform_types;
 import 'package:local_auth/error_codes.dart' as auth_error;
 
-enum BiometricType {
+enum AppBiometricType {
   none,
   fingerprint,
   face,
@@ -23,7 +24,7 @@ enum AuthStatus {
 class BiometricAuthResult {
   final AuthStatus status;
   final String? errorMessage;
-  final BiometricType? usedBiometric;
+  final AppBiometricType? usedBiometric;
 
   const BiometricAuthResult({
     required this.status,
@@ -67,22 +68,22 @@ class BiometricAuthService {
   }
 
   /// Get list of available biometric types
-  Future<List<BiometricType>> getAvailableBiometrics() async {
+  Future<List<AppBiometricType>> getAvailableBiometrics() async {
     try {
       final availableBiometrics = await _localAuth.getAvailableBiometrics();
       
       return availableBiometrics.map((biometric) {
         switch (biometric) {
-          case BiometricType.fingerprint:
-            return BiometricType.fingerprint;
-          case BiometricType.face:
-            return BiometricType.face;
-          case BiometricType.iris:
-            return BiometricType.iris;
+          case platform_types.BiometricType.fingerprint:
+            return AppBiometricType.fingerprint;
+          case platform_types.BiometricType.face:
+            return AppBiometricType.face;
+          case platform_types.BiometricType.iris:
+            return AppBiometricType.iris;
           default:
-            return BiometricType.none;
+            return AppBiometricType.none;
         }
-      }).where((type) => type != BiometricType.none).toList();
+      }).where((type) => type != AppBiometricType.none).toList();
     } catch (e) {
       return [];
     }
@@ -95,11 +96,11 @@ class BiometricAuthService {
       
       return availableBiometrics.map((biometric) {
         switch (biometric) {
-          case BiometricType.fingerprint:
+          case platform_types.BiometricType.fingerprint:
             return Platform.isIOS ? 'Touch ID' : 'Fingerprint';
-          case BiometricType.face:
+          case platform_types.BiometricType.face:
             return Platform.isIOS ? 'Face ID' : 'Face Recognition';
-          case BiometricType.iris:
+          case platform_types.BiometricType.iris:
             return 'Iris Recognition';
           default:
             return 'Biometric Authentication';
@@ -160,7 +161,7 @@ class BiometricAuthService {
         final availableBiometrics = await getAvailableBiometrics();
         final usedBiometric = availableBiometrics.isNotEmpty 
             ? availableBiometrics.first 
-            : BiometricType.none;
+            : AppBiometricType.none;
 
         return BiometricAuthResult(
           status: AuthStatus.success,
@@ -198,43 +199,43 @@ class BiometricAuthService {
   }
 
   /// Get user-friendly biometric type name
-  String getBiometricTypeName(BiometricType type) {
+  String getBiometricTypeName(AppBiometricType type) {
     switch (type) {
-      case BiometricType.fingerprint:
+      case AppBiometricType.fingerprint:
         return Platform.isIOS ? 'Touch ID' : 'Fingerprint';
-      case BiometricType.face:
+      case AppBiometricType.face:
         return Platform.isIOS ? 'Face ID' : 'Face Recognition';
-      case BiometricType.iris:
+      case AppBiometricType.iris:
         return 'Iris Recognition';
-      case BiometricType.none:
+      case AppBiometricType.none:
         return 'None';
     }
   }
 
   /// Get icon name for biometric type
-  String getBiometricIcon(BiometricType type) {
+  String getBiometricIcon(AppBiometricType type) {
     switch (type) {
-      case BiometricType.fingerprint:
+      case AppBiometricType.fingerprint:
         return '👆';
-      case BiometricType.face:
+      case AppBiometricType.face:
         return '😊';
-      case BiometricType.iris:
+      case AppBiometricType.iris:
         return '👁️';
-      case BiometricType.none:
+      case AppBiometricType.none:
         return '🔒';
     }
   }
 
   /// Check if specific biometric type is available
-  Future<bool> isBiometricTypeAvailable(BiometricType type) async {
+  Future<bool> isBiometricTypeAvailable(AppBiometricType type) async {
     final availableBiometrics = await getAvailableBiometrics();
     return availableBiometrics.contains(type);
   }
 
   /// Get primary biometric type (first available)
-  Future<BiometricType> getPrimaryBiometricType() async {
+  Future<AppBiometricType> getPrimaryBiometricType() async {
     final availableBiometrics = await getAvailableBiometrics();
-    return availableBiometrics.isNotEmpty ? availableBiometrics.first : BiometricType.none;
+    return availableBiometrics.isNotEmpty ? availableBiometrics.first : AppBiometricType.none;
   }
 
   /// Convert platform exception error code to AuthStatus

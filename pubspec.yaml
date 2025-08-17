@@ -55,6 +55,7 @@ dependencies:
   shared_preferences: ^2.3.2
   sqflite: ^2.3.3+1
   path_provider: ^2.1.4
+  path: ^1.9.0
   
   # AI & Analytics
   ml_linalg: ^13.12.6
