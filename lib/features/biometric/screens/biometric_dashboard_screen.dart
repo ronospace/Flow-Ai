@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../generated/app_localizations.dart';
 import '../../../core/models/biometric_data.dart';
 import '../../../core/services/biometric_integration_service.dart';
 import '../widgets/biometric_chart_widget.dart';
@@ -70,13 +71,13 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
         await _loadBiometricData();
       } else {
         setState(() {
-          _errorMessage = 'Health data access not granted. Please enable in settings.';
+          _errorMessage = AppLocalizations.of(context)!.healthDataAccessNotGranted;
           _isLoading = false;
         });
       }
     } catch (e) {
       setState(() {
-        _errorMessage = 'Failed to initialize biometric dashboard: $e';
+        _errorMessage = '${AppLocalizations.of(context)!.failedToInitializeBiometricDashboard}: $e';
         _isLoading = false;
       });
     }
@@ -98,7 +99,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
       });
     } catch (e) {
       setState(() {
-        _errorMessage = 'Failed to load biometric data: $e';
+        _errorMessage = '${AppLocalizations.of(context)!.failedToLoadBiometricData}: $e';
         _isLoading = false;
       });
     }
@@ -225,7 +226,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Biometric Dashboard',
+                      AppLocalizations.of(context).biometricDashboard,
                       style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppTheme.darkGrey,
@@ -233,7 +234,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
                     ).animate().fadeIn().slideX(begin: -0.2, end: 0),
                     const SizedBox(height: 4),
                     Text(
-                      'AI-powered health insights',
+                      AppLocalizations.of(context).aiPoweredHealthInsights,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppTheme.mediumGrey,
                       ),

@@ -43,3 +43,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Build artifacts and large binaries
+*.apk
+*.ipa
+builds_for_testing/*.apk
+builds_for_testing/*.ipa

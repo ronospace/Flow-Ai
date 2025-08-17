@@ -2,8 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import '../models/healthcare_models.dart';
-import '../../cycle/models/cycle_data.dart';
-import '../../biometric/models/biometric_data.dart';
+import '../../../core/models/cycle_data.dart';
 
 /// Healthcare service managing provider integration and patient data sharing
 class HealthcareService {
@@ -322,7 +321,7 @@ class HealthcareService {
   }
 
   /// Get patient's biometric data
-  Future<List<BiometricData>> getPatientBiometricData(String patientId) async {
+  Future<Map<String, dynamic>> getPatientBiometricData(String patientId) async {
     // In production, this would fetch actual biometric data with patient consent
     return _generateSampleBiometricData();
   }
@@ -671,39 +670,38 @@ class HealthcareService {
       final startDate = now.subtract(Duration(days: (i * 28) + (i * 2)));
       cycles.add(CycleData(
         id: 'cycle_$i',
-        userId: 'patient_001',
         startDate: startDate,
         endDate: startDate.add(Duration(days: 28 + Random().nextInt(6) - 3)),
-        flowData: List.generate(5, (index) => Random().nextInt(3) + 1),
+        length: 28 + Random().nextInt(6) - 3,
         symptoms: ['cramping', 'mood_changes', 'fatigue'],
-        moodData: List.generate(28, (index) => Random().nextInt(5) + 1),
-        energyLevels: List.generate(28, (index) => Random().nextInt(5) + 1),
         notes: 'Sample cycle data',
+        createdAt: startDate,
+        updatedAt: DateTime.now(),
       ));
     }
     
     return cycles;
   }
 
-  List<BiometricData> _generateSampleBiometricData() {
+  Map<String, dynamic> _generateSampleBiometricData() {
     // Generate sample biometric data for demonstration
-    final data = <BiometricData>[];
+    final data = <String, dynamic>{};
     final now = DateTime.now();
     
-    for (int i = 0; i < 30; i++) {
-      final date = now.subtract(Duration(days: i));
-      data.add(BiometricData(
-        id: 'bio_$i',
-        userId: 'patient_001',
-        recordedAt: date,
-        heartRate: 65 + Random().nextInt(20),
-        heartRateVariability: 25.0 + Random().nextDouble() * 20,
-        bodyTemperature: 97.8 + Random().nextDouble() * 1.4,
-        sleepQuality: Random().nextInt(5) + 1,
-        stressLevel: Random().nextInt(5) + 1,
-        activityLevel: Random().nextInt(5) + 1,
-      ));
-    }
+    data['heart_rate_data'] = List.generate(30, (i) => {
+      'date': now.subtract(Duration(days: i)).toIso8601String(),
+      'value': 65 + Random().nextInt(20),
+    });
+    
+    data['temperature_data'] = List.generate(30, (i) => {
+      'date': now.subtract(Duration(days: i)).toIso8601String(),
+      'value': 97.8 + Random().nextDouble() * 1.4,
+    });
+    
+    data['sleep_data'] = List.generate(30, (i) => {
+      'date': now.subtract(Duration(days: i)).toIso8601String(),
+      'value': Random().nextInt(5) + 1,
+    });
     
     return data;
   }

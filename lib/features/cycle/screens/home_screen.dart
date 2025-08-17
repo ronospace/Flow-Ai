@@ -117,6 +117,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
   
   Widget _buildPremiumInsightsUnlockWidget() {
+    final localizations = AppLocalizations.of(context)!;
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(20),
@@ -159,14 +160,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Unlock Premium AI Insights',
+                      localizations.unlockPremiumAiInsights,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).textTheme.titleMedium?.color,
                       ),
                     ),
                     Text(
-                      'Watch an ad to unlock advanced insights',
+                      localizations.watchAdToUnlockInsights,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Theme.of(context).textTheme.bodySmall?.color,
                       ),
@@ -183,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  'FREE',
+                  localizations.free,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 10,
@@ -226,7 +227,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      'Watch Ad & Unlock Insights',
+                      localizations.watchAdUnlockInsights,
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -250,7 +251,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  'Get 3 additional premium insights',
+                  localizations.getAdditionalPremiumInsights,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: AppTheme.mediumGrey,
                   ),
@@ -269,7 +270,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  'Unlock advanced health recommendations',
+                  localizations.unlockAdvancedHealthRecommendations,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: AppTheme.mediumGrey,
                   ),
@@ -283,6 +284,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
   
   void _showRewardedAdForInsights() {
+    final localizations = AppLocalizations.of(context)!;
     _adMobService.showRewardedAdWithFrequency(
       onRewarded: (reward) {
         // User watched the full ad, unlock premium insights
@@ -299,7 +301,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  'Premium insights unlocked! 🎉',
+                  localizations.premiumInsightsUnlocked,
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,

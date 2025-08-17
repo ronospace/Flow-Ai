@@ -589,5 +589,416 @@
   "system": "System",
   "@system": {
     "description": "System theme name"
+  },
+  
+  "flowIntensityNone": "Keine",
+  "@flowIntensityNone": {
+    "description": "No menstrual flow intensity"
+  },
+  "flowIntensityNoneSubtitle": "Kein Menstruationsfluss",
+  "@flowIntensityNoneSubtitle": {
+    "description": "Subtitle for no flow"
+  },
+  "flowIntensityNoneDescription": "Vollständiges Fehlen des Menstruationsflusses. Dies ist normal, bevor Ihre Periode beginnt oder nachdem sie endet.",
+  "@flowIntensityNoneDescription": {
+    "description": "Description for no flow intensity"
+  },
+  "flowIntensityNoneMedicalInfo": "Keine Menstruation",
+  "@flowIntensityNoneMedicalInfo": {
+    "description": "Medical info for no flow"
+  },
+  
+  "flowIntensitySpotting": "Schmierblutung",
+  "@flowIntensitySpotting": {
+    "description": "Spotting flow intensity"
+  },
+  "flowIntensitySpottingSubtitle": "Minimaler Ausfluss",
+  "@flowIntensitySpottingSubtitle": {
+    "description": "Subtitle for spotting"
+  },
+  "flowIntensitySpottingDescription": "Sehr leichter rosa oder brauner Ausfluss. Tritt oft zu Beginn oder Ende Ihres Zyklus auf.",
+  "@flowIntensitySpottingDescription": {
+    "description": "Description for spotting intensity"
+  },
+  "flowIntensitySpottingMedicalInfo": "Weniger als 5ml pro Tag",
+  "@flowIntensitySpottingMedicalInfo": {
+    "description": "Medical info for spotting"
+  },
+  
+  "flowIntensityLight": "Leichter Fluss",
+  "@flowIntensityLight": {
+    "description": "Light flow intensity"
+  },
+  "flowIntensityLightSubtitle": "Angenehmer Schutz",
+  "@flowIntensityLightSubtitle": {
+    "description": "Subtitle for light flow"
+  },
+  "flowIntensityLightDescription": "Leichter Menstruationsfluss, der minimalen Schutz erfordert. Dauert normalerweise 1-3 Tage.",
+  "@flowIntensityLightDescription": {
+    "description": "Description for light flow intensity"
+  },
+  "flowIntensityLightMedicalInfo": "5-40ml pro Tag",
+  "@flowIntensityLightMedicalInfo": {
+    "description": "Medical info for light flow"
+  },
+  
+  "flowIntensityMedium": "Normaler Fluss",
+  "@flowIntensityMedium": {
+    "description": "Medium/normal flow intensity"
+  },
+  "flowIntensityMediumSubtitle": "Typische Menstruation",
+  "@flowIntensityMediumSubtitle": {
+    "description": "Subtitle for normal flow"
+  },
+  "flowIntensityMediumDescription": "Regelmäßiger Menstruationsfluss. Dies ist die häufigste Flussstärke für gesunde Zyklen.",
+  "@flowIntensityMediumDescription": {
+    "description": "Description for medium flow intensity"
+  },
+  "flowIntensityMediumMedicalInfo": "40-70ml pro Tag",
+  "@flowIntensityMediumMedicalInfo": {
+    "description": "Medical info for medium flow"
+  },
+  
+  "flowIntensityHeavy": "Starker Fluss",
+  "@flowIntensityHeavy": {
+    "description": "Heavy flow intensity"
+  },
+  "flowIntensityHeavySubtitle": "Hohe Absorptionsfähigkeit erforderlich",
+  "@flowIntensityHeavySubtitle": {
+    "description": "Subtitle for heavy flow"
+  },
+  "flowIntensityHeavyDescription": "Starker Menstruationsfluss, der häufige Wechsel erfordert. Erwägen Sie eine Beratung durch einen Arzt.",
+  "@flowIntensityHeavyDescription": {
+    "description": "Description for heavy flow intensity"
+  },
+  "flowIntensityHeavyMedicalInfo": "70-100ml pro Tag",
+  "@flowIntensityHeavyMedicalInfo": {
+    "description": "Medical info for heavy flow"
+  },
+  
+  "flowIntensityVeryHeavy": "Sehr stark",
+  "@flowIntensityVeryHeavy": {
+    "description": "Very heavy flow intensity"
+  },
+  "flowIntensityVeryHeavySubtitle": "Ärztliche Betreuung empfohlen",
+  "@flowIntensityVeryHeavySubtitle": {
+    "description": "Subtitle for very heavy flow"
+  },
+  "flowIntensityVeryHeavyDescription": "Sehr starker Fluss, der die täglichen Aktivitäten beeinträchtigen kann. Dringend empfohlene Beratung durch einen Arzt.",
+  "@flowIntensityVeryHeavyDescription": {
+    "description": "Description for very heavy flow intensity"
+  },
+  "flowIntensityVeryHeavyMedicalInfo": "Über 100ml pro Tag",
+  "@flowIntensityVeryHeavyMedicalInfo": {
+    "description": "Medical info for very heavy flow"
+  },
+  
+  "aiHealthInsights": "KI-Gesundheits-Einblicke",
+  "@aiHealthInsights": {
+    "description": "AI health insights title"
+  },
+  
+  "aboutThisFlowLevel": "Über diese Flussstärke",
+  "@aboutThisFlowLevel": {
+    "description": "Modal title for flow level info"
+  },
+  
+  "recommendedProducts": "Empfohlene Produkte",
+  "@recommendedProducts": {
+    "description": "Recommended products section title"
+  },
+  
+  "hourlyChanges": "~{changes}/Stunde Wechsel",
+  "@hourlyChanges": {
+    "description": "Hourly product changes indicator",
+    "placeholders": {
+      "changes": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  
+  "monitor": "Überwachen",
+  "@monitor": {
+    "description": "Monitor indicator for heavy flows"
+  },
+  
+  "spottingInsight": "Schmierblutungen sind oft normal zu Zyklusbeginn/-ende. Verfolgen Sie Muster für Einblicke.",
+  "@spottingInsight": {
+    "description": "AI insight for spotting"
+  },
+  
+  "lightFlowInsight": "Leichter Fluss erkannt. Berücksichtigen Sie Stressniveau und Ernährung für optimale Gesundheit.",
+  "@lightFlowInsight": {
+    "description": "AI insight for light flow"
+  },
+  
+  "mediumFlowInsight": "Normales Flussmuster. Ihr Zyklus scheint gesund und regelmäßig zu sein.",
+  "@mediumFlowInsight": {
+    "description": "AI insight for medium flow"
+  },
+  
+  "heavyFlowInsight": "Starker Fluss erkannt. Überwachen Sie Symptome und erwägen Sie eisenreiche Nahrungsmittel.",
+  "@heavyFlowInsight": {
+    "description": "AI insight for heavy flow"
+  },
+  
+  "veryHeavyFlowInsight": "Sehr starker Fluss kann ärztliche Betreuung erfordern. Verfolgen Sie die Dauer sorgfältig.",
+  "@veryHeavyFlowInsight": {
+    "description": "AI insight for very heavy flow"
+  },
+  
+  "noFlowInsight": "Kein Fluss erkannt. Verfolgen Sie andere Symptome für umfassende Einblicke.",
+  "@noFlowInsight": {
+    "description": "AI insight for no flow"
+  },
+  
+  "pantyLiners": "Slipeinlagen",
+  "@pantyLiners": {
+    "description": "Panty liners product"
+  },
+  
+  "periodUnderwear": "Periodenunterwäsche",
+  "@periodUnderwear": {
+    "description": "Period underwear product"
+  },
+  
+  "lightPads": "Leichte Binden",
+  "@lightPads": {
+    "description": "Light pads product"
+  },
+  
+  "tamponsRegular": "Tampons (normal)",
+  "@tamponsRegular": {
+    "description": "Regular tampons product"
+  },
+  
+  "menstrualCups": "Menstruationstassen",
+  "@menstrualCups": {
+    "description": "Menstrual cups product"
+  },
+  
+  "regularPads": "Normale Binden",
+  "@regularPads": {
+    "description": "Regular pads product"
+  },
+  
+  "tamponsSuper": "Tampons (super)",
+  "@tamponsSuper": {
+    "description": "Super tampons product"
+  },
+  
+  "periodUnderwearHeavy": "Periodenunterwäsche (stark)",
+  "@periodUnderwearHeavy": {
+    "description": "Heavy period underwear product"
+  },
+  
+  "superPads": "Super-Binden",
+  "@superPads": {
+    "description": "Super pads product"
+  },
+  
+  "tamponsSuperPlus": "Tampons (super+)",
+  "@tamponsSuperPlus": {
+    "description": "Super plus tampons product"
+  },
+  
+  "menstrualCupsLarge": "Menstruationstassen (groß)",
+  "@menstrualCupsLarge": {
+    "description": "Large menstrual cups product"
+  },
+  
+  "ultraPads": "Ultra-Binden",
+  "@ultraPads": {
+    "description": "Ultra pads product"
+  },
+  
+  "tamponsUltra": "Tampons (ultra)",
+  "@tamponsUltra": {
+    "description": "Ultra tampons product"
+  },
+  
+  "menstrualCupsXL": "Menstruationstassen (XL)",
+  "@menstrualCupsXL": {
+    "description": "XL menstrual cups product"
+  },
+  
+  "medicalConsultation": "Ärztliche Beratung",
+  "@medicalConsultation": {
+    "description": "Medical consultation product"
+  },
+  
+  "unlockPremiumAiInsights": "Premium KI-Einblicke freischalten",
+  "@unlockPremiumAiInsights": {
+    "description": "Title for premium insights unlock widget"
+  },
+  
+  "watchAdToUnlockInsights": "Schaue eine Werbung, um erweiterte Einblicke freizuschalten",
+  "@watchAdToUnlockInsights": {
+    "description": "Subtitle for premium insights unlock widget"
+  },
+  
+  "free": "KOSTENLOS",
+  "@free": {
+    "description": "Free label for premium unlock widget"
+  },
+  
+  "watchAdUnlockInsights": "Werbung ansehen & Einblicke freischalten",
+  "@watchAdUnlockInsights": {
+    "description": "Button text for watching ad to unlock insights"
+  },
+  
+  "getAdditionalPremiumInsights": "Erhalte 3 zusätzliche Premium-Einblicke",
+  "@getAdditionalPremiumInsights": {
+    "description": "Benefit text for premium insights unlock"
+  },
+  
+  "unlockAdvancedHealthRecommendations": "Erweiterte Gesundheitsempfehlungen freischalten",
+  "@unlockAdvancedHealthRecommendations": {
+    "description": "Benefit text for advanced health recommendations"
+  },
+  
+  "premiumInsightsUnlocked": "Premium-Einblicke freigeschaltet! 🎉",
+  "@premiumInsightsUnlocked": {
+    "description": "Success message when premium insights are unlocked"
+  },
+  
+  "day": "Tag {day}",
+  "@day": {
+    "description": "Day number in cycle",
+    "placeholders": {
+      "day": {
+        "type": "int",
+        "example": "14"
+      }
+    }
+  },
+  
+  "confidencePercentage": "{percentage}% Vertrauen",
+  "@confidencePercentage": {
+    "description": "Confidence percentage for predictions",
+    "placeholders": {
+      "percentage": {
+        "type": "int",
+        "example": "85"
+      }
+    }
+  },
+  
+  "quickActions": "Schnellaktionen",
+  "@quickActions": {
+    "description": "Title for quick actions section"
+  },
+  
+  "logPeriod": "Periode protokollieren",
+  "@logPeriod": {
+    "description": "Quick action to log period"
+  },
+  
+  "currentCycleTitle": "Aktueller Zyklus",
+  "@currentCycleTitle": {
+    "description": "Current cycle section title"
+  },
+  
+  "moodLabel": "Stimmung",
+  "@moodLabel": {
+    "description": "Mood info label in current cycle"
+  },
+  
+  "physical": "Körperlich",
+  "@physical": {
+    "description": "Physical symptom category"
+  },
+  
+  "emotional": "Emotional",
+  "@emotional": {
+    "description": "Emotional symptom category"
+  },
+  
+  "skinAndHair": "Haut & Haare",
+  "@skinAndHair": {
+    "description": "Skin and hair symptom category"
+  },
+  
+  "digestive": "Verdauung",
+  "@digestive": {
+    "description": "Digestive symptom category"
+  },
+  
+  "moodSwingsSymptom": "Stimmungsschwankungen",
+  "@moodSwingsSymptom": {
+    "description": "Mood swings symptom"
+  },
+  
+  "irritability": "Reizbarkeit",
+  "@irritability": {
+    "description": "Irritability symptom"
+  },
+  
+  "anxiety": "Angst",
+  "@anxiety": {
+    "description": "Anxiety symptom"
+  },
+  
+  "depression": "Depression",
+  "@depression": {
+    "description": "Depression symptom"
+  },
+  
+  "emotionalSensitivity": "Emotionale Sensibilität",
+  "@emotionalSensitivity": {
+    "description": "Emotional sensitivity symptom"
+  },
+  
+  "stress": "Stress",
+  "@stress": {
+    "description": "Stress symptom"
+  },
+  
+  "oilySkin": "Fettige Haut",
+  "@oilySkin": {
+    "description": "Oily skin symptom"
+  },
+  
+  "drySkin": "Trockene Haut",
+  "@drySkin": {
+    "description": "Dry skin symptom"
+  },
+  
+  "hairChanges": "Haarveränderungen",
+  "@hairChanges": {
+    "description": "Hair changes symptom"
+  },
+  
+  "foodCravings": "Heißhungerattacken",
+  "@foodCravings": {
+    "description": "Food cravings symptom"
+  },
+  
+  "lossOfAppetite": "Appetitverlust",
+  "@lossOfAppetite": {
+    "description": "Loss of appetite symptom"
+  },
+  
+  "selectedSymptoms": "Ausgewählte Symptome ({count})",
+  "@selectedSymptoms": {
+    "description": "Selected symptoms count",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  
+  "biometricDashboard": "Biometrisches Dashboard",
+  "@biometricDashboard": {
+    "description": "Biometric dashboard title"
+  },
+  
+  "aiPoweredHealthInsights": "KI-gestützte Gesundheits-Einblicke",
+  "@aiPoweredHealthInsights": {
+    "description": "AI-powered health insights subtitle"
   }
 }

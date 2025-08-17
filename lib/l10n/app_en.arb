@@ -491,6 +491,162 @@
   "@darkThemeDescription": {
     "description": "Dark theme description"
   },
+  "biometricDashboard": "Biometric Dashboard",
+  "@biometricDashboard": {
+    "description": "Biometric dashboard title"
+  },
+  "currentCycle": "Current Cycle",
+  "@currentCycle": {
+    "description": "Current cycle card title"
+  },
+  "noActiveCycle": "No active cycle",
+  "@noActiveCycle": {
+    "description": "Message when no active cycle"
+  },
+  "startTracking": "Start Tracking",
+  "@startTracking": {
+    "description": "Start tracking button"
+  },
+  "aiPrediction": "AI Prediction",
+  "@aiPrediction": {
+    "description": "AI prediction card title"
+  },
+  "inDays": "In {days} days",
+  "@inDays": {
+    "description": "Days until next event",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "smartActionCommandCenter": "Smart Action Command Center",
+  "@smartActionCommandCenter": {
+    "description": "Smart action center title"
+  },
+  "quickAccessToEssentialFeatures": "Quick access to essential features",
+  "@quickAccessToEssentialFeatures": {
+    "description": "Smart action center subtitle"
+  },
+  "physical": "Physical",
+  "@physical": {
+    "description": "Physical symptom category"
+  },
+  "emotional": "Emotional",
+  "@emotional": {
+    "description": "Emotional symptom category"
+  },
+  "skinAndHair": "Skin & Hair",
+  "@skinAndHair": {
+    "description": "Skin and hair symptom category"
+  },
+  "digestive": "Digestive",
+  "@digestive": {
+    "description": "Digestive symptom category"
+  },
+  "moodSwingsSymptom": "Mood swings",
+  "@moodSwingsSymptom": {
+    "description": "Mood swings symptom"
+  },
+  "irritability": "Irritability",
+  "@irritability": {
+    "description": "Irritability symptom"
+  },
+  "anxiety": "Anxiety",
+  "@anxiety": {
+    "description": "Anxiety symptom"
+  },
+  "depression": "Depression",
+  "@depression": {
+    "description": "Depression symptom"
+  },
+  "emotionalSensitivity": "Emotional sensitivity",
+  "@emotionalSensitivity": {
+    "description": "Emotional sensitivity symptom"
+  },
+  "stress": "Stress",
+  "@stress": {
+    "description": "Stress symptom"
+  },
+  "oilySkin": "Oily skin",
+  "@oilySkin": {
+    "description": "Oily skin symptom"
+  },
+  "drySkin": "Dry skin",
+  "@drySkin": {
+    "description": "Dry skin symptom"
+  },
+  "hairChanges": "Hair changes",
+  "@hairChanges": {
+    "description": "Hair changes symptom"
+  },
+  "foodCravings": "Food cravings",
+  "@foodCravings": {
+    "description": "Food cravings symptom"
+  },
+  "lossOfAppetite": "Loss of appetite",
+  "@lossOfAppetite": {
+    "description": "Loss of appetite symptom"
+  },
+  "selectedSymptoms": "Selected Symptoms ({count})",
+  "@selectedSymptoms": {
+    "description": "Selected symptoms count",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "noMenstrualFlow": "No menstrual flow",
+  "@noMenstrualFlow": {
+    "description": "Description for no flow"
+  },
+  "minimalDischarge": "Minimal discharge",
+  "@minimalDischarge": {
+    "description": "Description for spotting"
+  },
+  "comfortableProtection": "Comfortable protection",
+  "@comfortableProtection": {
+    "description": "Description for light flow"
+  },
+  "lightFlow": "Light Flow",
+  "@lightFlow": {
+    "description": "Light flow intensity title"
+  },
+  "normalFlow": "Normal Flow",
+  "@normalFlow": {
+    "description": "Normal flow intensity title"
+  },
+  "typicalMenstruation": "Typical menstruation",
+  "@typicalMenstruation": {
+    "description": "Description for normal flow"
+  },
+  "heavyFlow": "Heavy Flow",
+  "@heavyFlow": {
+    "description": "Heavy flow intensity title"
+  },
+  "highAbsorptionNeeded": "High absorption needed",
+  "@highAbsorptionNeeded": {
+    "description": "Description for heavy flow"
+  },
+  "veryHeavy": "Very Heavy",
+  "@veryHeavy": {
+    "description": "Very heavy flow intensity title"
+  },
+  "medicalAttentionAdvised": "Medical attention advised",
+  "@medicalAttentionAdvised": {
+    "description": "Description for very heavy flow"
+  },
+  "spotting": "Spotting",
+  "@spotting": {
+    "description": "Spotting flow intensity title"
+  },
+  "flow": "Flow",
+  "@flow": {
+    "description": "Flow label"
+  },
   "systemTheme": "System Theme",
   "@systemTheme": {
     "description": "System theme option"
@@ -543,7 +699,89 @@
   
   "dailyReminders": "When to send daily reminders",
   "@dailyReminders": {
-    "description": "Notification time setting subtitle"
+    "description": "Daily reminders setting subtitle"
+  },
+  
+  "unlockPremiumAiInsights": "Unlock Premium AI Insights",
+  "@unlockPremiumAiInsights": {
+    "description": "Title for premium insights unlock widget"
+  },
+  
+  "watchAdToUnlockInsights": "Watch an ad to unlock advanced insights",
+  "@watchAdToUnlockInsights": {
+    "description": "Subtitle for premium insights unlock widget"
+  },
+  
+  "free": "FREE",
+  "@free": {
+    "description": "Free label for premium unlock widget"
+  },
+  
+  "watchAdUnlockInsights": "Watch Ad & Unlock Insights",
+  "@watchAdUnlockInsights": {
+    "description": "Button text for watching ad to unlock insights"
+  },
+  
+  "getAdditionalPremiumInsights": "Get 3 additional premium insights",
+  "@getAdditionalPremiumInsights": {
+    "description": "Benefit text for premium insights unlock"
+  },
+  
+  "unlockAdvancedHealthRecommendations": "Unlock advanced health recommendations",
+  "@unlockAdvancedHealthRecommendations": {
+    "description": "Benefit text for advanced health recommendations"
+  },
+  
+  "premiumInsightsUnlocked": "Premium insights unlocked! 🎉",
+  "@premiumInsightsUnlocked": {
+    "description": "Success message when premium insights are unlocked"
+  },
+  
+  "currentCycle": "Current Cycle",
+  "@currentCycle": {
+    "description": "Title for current cycle card"
+  },
+  
+  "day": "Day {day}",
+  "@day": {
+    "description": "Day number in cycle",
+    "placeholders": {
+      "day": {
+        "type": "int",
+        "example": "14"
+      }
+    }
+  },
+  
+  "confidencePercentage": "{percentage}% confidence",
+  "@confidencePercentage": {
+    "description": "Confidence percentage for predictions",
+    "placeholders": {
+      "percentage": {
+        "type": "int",
+        "example": "85"
+      }
+    }
+  },
+  
+  "quickActions": "Quick Actions",
+  "@quickActions": {
+    "description": "Title for quick actions section"
+  },
+  
+  "logPeriod": "Log Period",
+  "@logPeriod": {
+    "description": "Quick action to log period"
+  },
+  
+  "currentCycleTitle": "Current Cycle",
+  "@currentCycleTitle": {
+    "description": "Current cycle section title"
+  },
+  
+  "moodLabel": "Mood",
+  "@moodLabel": {
+    "description": "Mood info label in current cycle"
   },
   
   "aiSmartFeatures": "AI & Smart Features",
@@ -594,5 +832,607 @@
   "system": "System",
   "@system": {
     "description": "System theme name"
+  },
+  
+  "flowIntensityNone": "None",
+  "@flowIntensityNone": {
+    "description": "No menstrual flow intensity"
+  },
+  "flowIntensityNoneSubtitle": "No menstrual flow",
+  "@flowIntensityNoneSubtitle": {
+    "description": "Subtitle for no flow"
+  },
+  "flowIntensityNoneDescription": "Complete absence of menstrual flow. This is normal before your period starts or after it ends.",
+  "@flowIntensityNoneDescription": {
+    "description": "Description for no flow intensity"
+  },
+  "flowIntensityNoneMedicalInfo": "No menstruation occurring",
+  "@flowIntensityNoneMedicalInfo": {
+    "description": "Medical info for no flow"
+  },
+  
+  "flowIntensitySpotting": "Spotting",
+  "@flowIntensitySpotting": {
+    "description": "Spotting flow intensity"
+  },
+  "flowIntensitySpottingSubtitle": "Minimal discharge",
+  "@flowIntensitySpottingSubtitle": {
+    "description": "Subtitle for spotting"
+  },
+  "flowIntensitySpottingDescription": "Very light pink or brown discharge. Often occurs at the beginning or end of your cycle.",
+  "@flowIntensitySpottingDescription": {
+    "description": "Description for spotting intensity"
+  },
+  "flowIntensitySpottingMedicalInfo": "Less than 5ml per day",
+  "@flowIntensitySpottingMedicalInfo": {
+    "description": "Medical info for spotting"
+  },
+  
+  "flowIntensityLight": "Light Flow",
+  "@flowIntensityLight": {
+    "description": "Light flow intensity"
+  },
+  "flowIntensityLightSubtitle": "Comfortable protection",
+  "@flowIntensityLightSubtitle": {
+    "description": "Subtitle for light flow"
+  },
+  "flowIntensityLightDescription": "Light menstrual flow requiring minimal protection. Usually lasts 1-3 days.",
+  "@flowIntensityLightDescription": {
+    "description": "Description for light flow intensity"
+  },
+  "flowIntensityLightMedicalInfo": "5-40ml per day",
+  "@flowIntensityLightMedicalInfo": {
+    "description": "Medical info for light flow"
+  },
+  
+  "flowIntensityMedium": "Normal Flow",
+  "@flowIntensityMedium": {
+    "description": "Medium/normal flow intensity"
+  },
+  "flowIntensityMediumSubtitle": "Typical menstruation",
+  "@flowIntensityMediumSubtitle": {
+    "description": "Subtitle for normal flow"
+  },
+  "flowIntensityMediumDescription": "Regular menstrual flow. This is the most common flow intensity for healthy cycles.",
+  "@flowIntensityMediumDescription": {
+    "description": "Description for medium flow intensity"
+  },
+  "flowIntensityMediumMedicalInfo": "40-70ml per day",
+  "@flowIntensityMediumMedicalInfo": {
+    "description": "Medical info for medium flow"
+  },
+  
+  "flowIntensityHeavy": "Heavy Flow",
+  "@flowIntensityHeavy": {
+    "description": "Heavy flow intensity"
+  },
+  "flowIntensityHeavySubtitle": "High absorption needed",
+  "@flowIntensityHeavySubtitle": {
+    "description": "Subtitle for heavy flow"
+  },
+  "flowIntensityHeavyDescription": "Heavy menstrual flow requiring frequent changes. Consider consulting a healthcare provider.",
+  "@flowIntensityHeavyDescription": {
+    "description": "Description for heavy flow intensity"
+  },
+  "flowIntensityHeavyMedicalInfo": "70-100ml per day",
+  "@flowIntensityHeavyMedicalInfo": {
+    "description": "Medical info for heavy flow"
+  },
+  
+  "flowIntensityVeryHeavy": "Very Heavy",
+  "@flowIntensityVeryHeavy": {
+    "description": "Very heavy flow intensity"
+  },
+  "flowIntensityVeryHeavySubtitle": "Medical attention advised",
+  "@flowIntensityVeryHeavySubtitle": {
+    "description": "Subtitle for very heavy flow"
+  },
+  "flowIntensityVeryHeavyDescription": "Very heavy flow that may interfere with daily activities. Strongly recommend consulting a healthcare provider.",
+  "@flowIntensityVeryHeavyDescription": {
+    "description": "Description for very heavy flow intensity"
+  },
+  "flowIntensityVeryHeavyMedicalInfo": "Over 100ml per day",
+  "@flowIntensityVeryHeavyMedicalInfo": {
+    "description": "Medical info for very heavy flow"
+  },
+  
+  "aiHealthInsights": "AI Health Insights",
+  "@aiHealthInsights": {
+    "description": "AI health insights title"
+  },
+  
+  "aboutThisFlowLevel": "About This Flow Level",
+  "@aboutThisFlowLevel": {
+    "description": "Modal title for flow level info"
+  },
+  
+  "recommendedProducts": "Recommended Products",
+  "@recommendedProducts": {
+    "description": "Recommended products section title"
+  },
+  
+  "hourlyChanges": "~{changes}/hour changes",
+  "@hourlyChanges": {
+    "description": "Hourly product changes indicator",
+    "placeholders": {
+      "changes": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  
+  "monitor": "Monitor",
+  "@monitor": {
+    "description": "Monitor indicator for heavy flows"
+  },
+  
+  "spottingInsight": "Spotting is often normal at cycle start/end. Track patterns for insights.",
+  "@spottingInsight": {
+    "description": "AI insight for spotting"
+  },
+  
+  "lightFlowInsight": "Light flow detected. Consider stress levels and nutrition for optimal health.",
+  "@lightFlowInsight": {
+    "description": "AI insight for light flow"
+  },
+  
+  "mediumFlowInsight": "Normal flow pattern. Your cycle appears healthy and regular.",
+  "@mediumFlowInsight": {
+    "description": "AI insight for medium flow"
+  },
+  
+  "heavyFlowInsight": "Heavy flow detected. Monitor symptoms and consider iron-rich foods.",
+  "@heavyFlowInsight": {
+    "description": "AI insight for heavy flow"
+  },
+  
+  "veryHeavyFlowInsight": "Very heavy flow may need medical attention. Track duration carefully.",
+  "@veryHeavyFlowInsight": {
+    "description": "AI insight for very heavy flow"
+  },
+  
+  "noFlowInsight": "No flow detected. Track other symptoms for comprehensive insights.",
+  "@noFlowInsight": {
+    "description": "AI insight for no flow"
+  },
+  
+  "pantyLiners": "Panty liners",
+  "@pantyLiners": {
+    "description": "Panty liners product"
+  },
+  
+  "periodUnderwear": "Period underwear",
+  "@periodUnderwear": {
+    "description": "Period underwear product"
+  },
+  
+  "lightPads": "Light pads",
+  "@lightPads": {
+    "description": "Light pads product"
+  },
+  
+  "tamponsRegular": "Tampons (regular)",
+  "@tamponsRegular": {
+    "description": "Regular tampons product"
+  },
+  
+  "menstrualCups": "Menstrual cups",
+  "@menstrualCups": {
+    "description": "Menstrual cups product"
+  },
+  
+  "regularPads": "Regular pads",
+  "@regularPads": {
+    "description": "Regular pads product"
+  },
+  
+  "tamponsSuper": "Tampons (super)",
+  "@tamponsSuper": {
+    "description": "Super tampons product"
+  },
+  
+  "periodUnderwearHeavy": "Period underwear (heavy)",
+  "@periodUnderwearHeavy": {
+    "description": "Heavy period underwear product"
+  },
+  
+  "superPads": "Super pads",
+  "@superPads": {
+    "description": "Super pads product"
+  },
+  
+  "tamponsSuperPlus": "Tampons (super+)",
+  "@tamponsSuperPlus": {
+    "description": "Super plus tampons product"
+  },
+  
+  "menstrualCupsLarge": "Menstrual cups (large)",
+  "@menstrualCupsLarge": {
+    "description": "Large menstrual cups product"
+  },
+  
+  "ultraPads": "Ultra pads",
+  "@ultraPads": {
+    "description": "Ultra pads product"
+  },
+  
+  "tamponsUltra": "Tampons (ultra)",
+  "@tamponsUltra": {
+    "description": "Ultra tampons product"
+  },
+  
+  "menstrualCupsXL": "Menstrual cups (XL)",
+  "@menstrualCupsXL": {
+    "description": "XL menstrual cups product"
+  },
+  
+  "medicalConsultation": "Medical consultation",
+  "@medicalConsultation": {
+    "description": "Medical consultation product"
+  },
+  
+  "aiPoweredHealthInsights": "AI-Powered Health Insights",
+  "@aiPoweredHealthInsights": {
+    "description": "Biometric dashboard subtitle"
+  },
+  
+  "healthDataAccessNotGranted": "Health data access not granted. Please enable in settings.",
+  "@healthDataAccessNotGranted": {
+    "description": "Error message when health data access is denied"
+  },
+  
+  "failedToInitializeBiometricDashboard": "Failed to initialize biometric dashboard",
+  "@failedToInitializeBiometricDashboard": {
+    "description": "Error message when dashboard fails to initialize"
+  },
+  
+  "failedToLoadBiometricData": "Failed to load biometric data",
+  "@failedToLoadBiometricData": {
+    "description": "Error message when data fails to load"
+  },
+  
+  "biometricDataRefreshedAt": "Biometric data refreshed at {time}",
+  "@biometricDataRefreshedAt": {
+    "description": "Success message for data refresh with time",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "14:30"
+      }
+    }
+  },
+  
+  "failedToRefreshData": "Failed to refresh data",
+  "@failedToRefreshData": {
+    "description": "Error message when refresh fails"
+  },
+  
+  "overview": "Overview",
+  "@overview": {
+    "description": "Overview tab label"
+  },
+  
+  "metrics": "Metrics",
+  "@metrics": {
+    "description": "Metrics tab label"
+  },
+  
+  "sync": "Sync",
+  "@sync": {
+    "description": "Sync tab label"
+  },
+  
+  "healthDataConnected": "Health Data Connected",
+  "@healthDataConnected": {
+    "description": "Status when health data is connected"
+  },
+  
+  "limitedHealthData": "Limited Health Data",
+  "@limitedHealthData": {
+    "description": "Status when health data is limited"
+  },
+  
+  "dataCompleteness": "Data completeness: {percentage}%",
+  "@dataCompleteness": {
+    "description": "Data completeness percentage",
+    "placeholders": {
+      "percentage": {
+        "type": "int",
+        "example": "75"
+      }
+    }
+  },
+  
+  "connectMoreDevicesForBetterInsights": "Connect more devices for better insights",
+  "@connectMoreDevicesForBetterInsights": {
+    "description": "Message encouraging device connection"
+  },
+  
+  "updatedAt": "Updated {time}",
+  "@updatedAt": {
+    "description": "Last update time",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "14:30"
+      }
+    }
+  },
+  
+  "overallHealthScore": "Overall Health Score",
+  "@overallHealthScore": {
+    "description": "Overall health score card title"
+  },
+  
+  "avgHeartRate": "Avg Heart Rate",
+  "@avgHeartRate": {
+    "description": "Average heart rate metric"
+  },
+  
+  "sleepQuality": "Sleep Quality",
+  "@sleepQuality": {
+    "description": "Sleep quality metric"
+  },
+  
+  "bodyTemp": "Body Temp",
+  "@bodyTemp": {
+    "description": "Body temperature metric"
+  },
+  
+  "stressLevel": "Stress Level",
+  "@stressLevel": {
+    "description": "Stress level metric"
+  },
+  
+  "bpm": "BPM",
+  "@bpm": {
+    "description": "Beats per minute unit"
+  },
+  
+  "percent": "%",
+  "@percent": {
+    "description": "Percentage unit"
+  },
+  
+  "degreesF": "°F",
+  "@degreesF": {
+    "description": "Degrees Fahrenheit unit"
+  },
+  
+  "outOfTen": "/10",
+  "@outOfTen": {
+    "description": "Out of ten scale unit"
+  },
+  
+  "recentTrends": "Recent Trends",
+  "@recentTrends": {
+    "description": "Recent trends card title"
+  },
+  
+  "basedOnLastDaysOfData": "Based on the last {days} days of data",
+  "@basedOnLastDaysOfData": {
+    "description": "Trend analysis period",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "example": "7"
+      }
+    }
+  },
+  
+  "sleepQualityImproving": "Sleep quality",
+  "@sleepQualityImproving": {
+    "description": "Sleep quality trend item"
+  },
+  
+  "improving": "Improving",
+  "@improving": {
+    "description": "Improving trend status"
+  },
+  
+  "stressLevels": "Stress levels",
+  "@stressLevels": {
+    "description": "Stress levels trend item"
+  },
+  
+  "stable": "Stable",
+  "@stable": {
+    "description": "Stable trend status"
+  },
+  
+  "heartRateMetric": "Heart rate",
+  "@heartRateMetric": {
+    "description": "Heart rate trend item"
+  },
+  
+  "slightlyElevated": "Slightly elevated",
+  "@slightlyElevated": {
+    "description": "Slightly elevated trend status"
+  },
+  
+  "heartRateChart": "Heart Rate",
+  "@heartRateChart": {
+    "description": "Heart rate chart title"
+  },
+  
+  "sleepQualityChart": "Sleep Quality",
+  "@sleepQualityChart": {
+    "description": "Sleep quality chart title"
+  },
+  
+  "bodyTemperatureChart": "Body Temperature",
+  "@bodyTemperatureChart": {
+    "description": "Body temperature chart title"
+  },
+  
+  "heartRateVariabilityChart": "Heart Rate Variability",
+  "@heartRateVariabilityChart": {
+    "description": "Heart rate variability chart title"
+  },
+  
+  "stressLevelChart": "Stress Level",
+  "@stressLevelChart": {
+    "description": "Stress level chart title"
+  },
+  
+  "aiHealthInsightsTitle": "AI Health Insights",
+  "@aiHealthInsightsTitle": {
+    "description": "AI insights section title"
+  },
+  
+  "personalizedInsightsBasedOnBiometricPatterns": "Personalized insights based on your biometric patterns",
+  "@personalizedInsightsBasedOnBiometricPatterns": {
+    "description": "AI insights section description"
+  },
+  
+  "noInsightsAvailable": "No Insights Available",
+  "@noInsightsAvailable": {
+    "description": "No insights card title"
+  },
+  
+  "keepTrackingHealthDataForAiInsights": "Keep tracking your health data to get personalized AI insights",
+  "@keepTrackingHealthDataForAiInsights": {
+    "description": "No insights card message"
+  },
+  
+  "connectedDevices": "Connected Devices",
+  "@connectedDevices": {
+    "description": "Connected devices card title"
+  },
+  
+  "iphoneHealth": "iPhone Health",
+  "@iphoneHealth": {
+    "description": "iPhone Health device"
+  },
+  
+  "connected": "Connected",
+  "@connected": {
+    "description": "Connected device status"
+  },
+  
+  "appleWatch": "Apple Watch",
+  "@appleWatch": {
+    "description": "Apple Watch device"
+  },
+  
+  "syncing": "Syncing",
+  "@syncing": {
+    "description": "Syncing device status"
+  },
+  
+  "garminConnect": "Garmin Connect",
+  "@garminConnect": {
+    "description": "Garmin Connect device"
+  },
+  
+  "notConnected": "Not connected",
+  "@notConnected": {
+    "description": "Not connected device status"
+  },
+  
+  "syncSettings": "Sync Settings",
+  "@syncSettings": {
+    "description": "Sync settings card title"
+  },
+  
+  "autoSync": "Auto Sync",
+  "@autoSync": {
+    "description": "Auto sync setting"
+  },
+  
+  "automaticallySyncHealthData": "Automatically sync health data",
+  "@automaticallySyncHealthData": {
+    "description": "Auto sync setting description"
+  },
+  
+  "backgroundSync": "Background Sync",
+  "@backgroundSync": {
+    "description": "Background sync setting"
+  },
+  
+  "syncDataInBackground": "Sync data in the background",
+  "@syncDataInBackground": {
+    "description": "Background sync setting description"
+  },
+  
+  "loadingBiometricData": "Loading biometric data...",
+  "@loadingBiometricData": {
+    "description": "Loading state message"
+  },
+  
+  "errorLoadingData": "Error Loading Data",
+  "@errorLoadingData": {
+    "description": "Error state title"
+  },
+  
+  "anUnexpectedErrorOccurred": "An unexpected error occurred",
+  "@anUnexpectedErrorOccurred": {
+    "description": "Generic error message"
+  },
+  
+  "retry": "Retry",
+  "@retry": {
+    "description": "Retry button"
+  },
+  
+  "noHealthData": "No Health Data",
+  "@noHealthData": {
+    "description": "Empty state title"
+  },
+  
+  "connectHealthDevicesForBiometricInsights": "Connect your health devices to see biometric insights",
+  "@connectHealthDevicesForBiometricInsights": {
+    "description": "Empty state message"
+  },
+  
+  "healthAccessRequired": "Health Access Required",
+  "@healthAccessRequired": {
+    "description": "Permission state title"
+  },
+  
+  "pleaseGrantAccessToHealthDataForBiometricInsights": "Please grant access to health data to view biometric insights",
+  "@pleaseGrantAccessToHealthDataForBiometricInsights": {
+    "description": "Permission state message"
+  },
+  
+  "grantAccess": "Grant Access",
+  "@grantAccess": {
+    "description": "Grant access button"
+  },
+  
+  "excellentHealthMetrics": "Excellent health metrics",
+  "@excellentHealthMetrics": {
+    "description": "Health score description for excellent health"
+  },
+  
+  "veryGoodHealthPatterns": "Very good health patterns",
+  "@veryGoodHealthPatterns": {
+    "description": "Health score description for very good health"
+  },
+  
+  "goodOverallHealth": "Good overall health",
+  "@goodOverallHealth": {
+    "description": "Health score description for good health"
+  },
+  
+  "moderateHealthIndicators": "Moderate health indicators",
+  "@moderateHealthIndicators": {
+    "description": "Health score description for moderate health"
+  },
+  
+  "focusOnHealthImprovement": "Focus on health improvement",
+  "@focusOnHealthImprovement": {
+    "description": "Health score description for poor health"
+  },
+  
+  "calendarTitle": "Calendar",
+  "@calendarTitle": {
+    "description": "Calendar screen title"
+  },
+  
+  "todayButton": "Today",
+  "@todayButton": {
+    "description": "Today button label"
   }
 }

@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import '../models/cycle_data.dart';
@@ -36,7 +35,7 @@ class AdvancedAIEngine {
   /// Main prediction method with 95%+ accuracy
   Future<CyclePrediction> predictNextCycle({
     required List<CycleData> historicalCycles,
-    required List<BiometricData> biometricData,
+    required List<BiometricAnalysis> biometricData,
     required UserProfile userProfile,
     Map<String, dynamic>? environmentalData,
   }) async {
@@ -98,7 +97,7 @@ class AdvancedAIEngine {
   }
 
   /// Analyze biometric data for cycle correlation
-  Future<BiometricInsights> _analyzeBiometricData(List<BiometricData> data) async {
+  Future<BiometricInsights> _analyzeBiometricData(List<BiometricAnalysis> data) async {
     if (data.isEmpty) return BiometricInsights.empty();
 
     // Heart rate variability analysis
@@ -391,7 +390,7 @@ class AdvancedAIEngine {
     for (final cycle in cycles) {
       final season = _getSeason(cycle.startDate);
       seasonalData.putIfAbsent(season, () => []);
-      seasonalData[season]!.add(cycle.cycleLength);
+      seasonalData[season]!.add(cycle.length);
     }
 
     return SeasonalPattern(
@@ -487,7 +486,7 @@ class AdvancedAIEngine {
   double _calculatePatternConfidence(List<CycleData> cycles) {
     if (cycles.length < 3) return 0.3;
     
-    final lengths = cycles.map((c) => c.cycleLength).toList();
+    final lengths = cycles.map((c) => c.length).toList();
     final regularity = _calculateRegularity(lengths);
     final dataQuality = math.min(1.0, cycles.length / 12.0); // More data = higher confidence
     
@@ -506,7 +505,7 @@ class AdvancedAIEngine {
   }
   
   List<int> _calculateDurationPattern(List<CycleData> cycles) {
-    return cycles.map((c) => c.flowData.length).toList();
+    return cycles.map((c) => c.length).toList();
   }
   
   List<double> _calculateIntensityProgression(List<dynamic> intensities) {
@@ -546,9 +545,9 @@ class AdvancedAIEngine {
     };
   }
   
-  Map<String, double> _analyzeHRVPatterns(List<BiometricData> data) {
-    final hrvData = data.where((d) => d.heartRateVariability != null)
-                        .map((d) => d.heartRateVariability!).toList();
+  Map<String, double> _analyzeHRVPatterns(List<BiometricAnalysis> data) {
+    final hrvData = data.where((d) => d.hrvData.isNotEmpty)
+                        .expand((d) => d.hrvData.map((hrv) => hrv.value)).toList();
     
     if (hrvData.isEmpty) return {};
     
@@ -561,9 +560,9 @@ class AdvancedAIEngine {
     };
   }
   
-  double _analyzeTemperatureCorrelation(List<BiometricData> data) {
-    final tempData = data.where((d) => d.bodyTemperature != null)
-                         .map((d) => d.bodyTemperature!).toList();
+  double _analyzeTemperatureCorrelation(List<BiometricAnalysis> data) {
+    final tempData = data.where((d) => d.temperatureData.isNotEmpty)
+                         .expand((d) => d.temperatureData.map((temp) => temp.value)).toList();
     
     if (tempData.length < 5) return 0.0;
     
@@ -571,9 +570,9 @@ class AdvancedAIEngine {
     return 0.75; // Placeholder for complex BBT analysis
   }
   
-  double _analyzeSleepImpact(List<BiometricData> data) {
-    final sleepData = data.where((d) => d.sleepQuality != null)
-                          .map((d) => d.sleepQuality!).toList();
+  double _analyzeSleepImpact(List<BiometricAnalysis> data) {
+    final sleepData = data.where((d) => d.sleepData.isNotEmpty)
+                          .expand((d) => d.sleepData.map((sleep) => sleep.value)).toList();
     
     if (sleepData.isEmpty) return 0.0;
     
@@ -581,9 +580,9 @@ class AdvancedAIEngine {
     return average / 10.0; // Normalize to 0-1 scale
   }
   
-  double _analyzeStressCorrelation(List<BiometricData> data) {
-    final stressData = data.where((d) => d.stressLevel != null)
-                           .map((d) => d.stressLevel!).toList();
+  double _analyzeStressCorrelation(List<BiometricAnalysis> data) {
+    final stressData = data.where((d) => d.stressData.isNotEmpty)
+                           .expand((d) => d.stressData.map((stress) => stress.value)).toList();
     
     if (stressData.isEmpty) return 0.0;
     
@@ -591,9 +590,9 @@ class AdvancedAIEngine {
     return average / 10.0; // Normalize to 0-1 scale
   }
   
-  Map<String, double> _analyzeActivityPatterns(List<BiometricData> data) {
-    final activityData = data.where((d) => d.activityLevel != null)
-                             .map((d) => d.activityLevel!).toList();
+  Map<String, double> _analyzeActivityPatterns(List<BiometricAnalysis> data) {
+    final activityData = data.where((d) => d.activityData.isNotEmpty)
+                             .expand((d) => d.activityData.map((activity) => activity.value)).toList();
     
     if (activityData.isEmpty) return {};
     
@@ -605,18 +604,18 @@ class AdvancedAIEngine {
     };
   }
   
-  List<String> _extractPredictiveIndicators(List<BiometricData> data) {
+  List<String> _extractPredictiveIndicators(List<BiometricAnalysis> data) {
     final indicators = <String>[];
     
-    if (data.any((d) => d.heartRateVariability != null)) {
+    if (data.any((d) => d.hrvData.isNotEmpty)) {
       indicators.add('Heart Rate Variability Available');
     }
     
-    if (data.any((d) => d.bodyTemperature != null)) {
+    if (data.any((d) => d.temperatureData.isNotEmpty)) {
       indicators.add('Temperature Tracking Available');
     }
     
-    if (data.any((d) => d.sleepQuality != null)) {
+    if (data.any((d) => d.sleepData.isNotEmpty)) {
       indicators.add('Sleep Quality Data Available');
     }
     
@@ -624,7 +623,7 @@ class AdvancedAIEngine {
   }
   
   Map<String, double> _analyzeMoodPatterns(List<CycleData> cycles) {
-    final allMoods = cycles.expand((c) => c.moodData ?? []).toList();
+    final allMoods = cycles.where((c) => c.mood != null).map((c) => c.mood!).toList();
     
     if (allMoods.isEmpty) return {};
     
@@ -639,7 +638,7 @@ class AdvancedAIEngine {
   }
   
   Map<String, double> _analyzeEnergyCorrelations(List<CycleData> cycles) {
-    final allEnergy = cycles.expand((c) => c.energyLevels ?? []).toList();
+    final allEnergy = cycles.where((c) => c.energy != null).map((c) => c.energy!).toList();
     
     if (allEnergy.isEmpty) return {};
     

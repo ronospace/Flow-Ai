@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../generated/app_localizations.dart';
 
 class SymptomSelector extends StatefulWidget {
   final Set<String> selectedSymptoms;
@@ -22,43 +23,50 @@ class SymptomSelector extends StatefulWidget {
 }
 
 class _SymptomSelectorState extends State<SymptomSelector> {
-  final Map<String, List<SymptomOption>> _symptomCategories = {
-    'Physical': [
-      SymptomOption('Cramps', '🔥', AppTheme.primaryRose),
-      SymptomOption('Headache', '🤕', AppTheme.secondaryBlue),
-      SymptomOption('Breast tenderness', '💙', AppTheme.primaryPurple),
-      SymptomOption('Back pain', '💢', AppTheme.accentMint),
-      SymptomOption('Bloating', '🎈', Color(0xFFFF7043)),
-      SymptomOption('Nausea', '🤢', Color(0xFF66BB6A)),
-      SymptomOption('Fatigue', '😴', Color(0xFF9575CD)),
-      SymptomOption('Hot flashes', '🔥', Color(0xFFEF5350)),
-    ],
-    'Emotional': [
-      SymptomOption('Mood swings', '🎭', AppTheme.primaryRose),
-      SymptomOption('Irritability', '😤', Color(0xFFFF7043)),
-      SymptomOption('Anxiety', '😰', AppTheme.secondaryBlue),
-      SymptomOption('Depression', '😢', Color(0xFF9575CD)),
-      SymptomOption('Emotional sensitivity', '💝', AppTheme.primaryPurple),
-      SymptomOption('Stress', '😫', Color(0xFFEF5350)),
-    ],
-    'Skin & Hair': [
-      SymptomOption('Acne', '🦠', Color(0xFFFF7043)),
-      SymptomOption('Oily skin', '✨', AppTheme.accentMint),
-      SymptomOption('Dry skin', '🏜️', Color(0xFFBCAAA4)),
-      SymptomOption('Hair changes', '💇', AppTheme.primaryPurple),
-    ],
-    'Digestive': [
-      SymptomOption('Constipation', '🚫', Color(0xFFBCAAA4)),
-      SymptomOption('Diarrhea', '💧', AppTheme.secondaryBlue),
-      SymptomOption('Food cravings', '🍫', Color(0xFFFF7043)),
-      SymptomOption('Loss of appetite', '🚫', AppTheme.mediumGrey),
-    ],
-  };
+  Map<String, List<SymptomOption>> _getSymptomCategories(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
+    return {
+      localizations.physical: [
+        SymptomOption(localizations.cramps, '🔥', AppTheme.primaryRose),
+        SymptomOption(localizations.headache, '🤕', AppTheme.secondaryBlue),
+        SymptomOption(localizations.breastTenderness, '💙', AppTheme.primaryPurple),
+        SymptomOption(localizations.backPain, '💢', AppTheme.accentMint),
+        SymptomOption(localizations.bloating, '🎈', Color(0xFFFF7043)),
+        SymptomOption(localizations.nausea, '🤢', Color(0xFF66BB6A)),
+        SymptomOption(localizations.fatigue, '😴', Color(0xFF9575CD)),
+        SymptomOption(localizations.hotFlashes, '🔥', Color(0xFFEF5350)),
+      ],
+      localizations.emotional: [
+        SymptomOption(localizations.moodSwingsSymptom, '🎭', AppTheme.primaryRose),
+        SymptomOption(localizations.irritability, '😤', Color(0xFFFF7043)),
+        SymptomOption(localizations.anxiety, '😰', AppTheme.secondaryBlue),
+        SymptomOption(localizations.depression, '😢', Color(0xFF9575CD)),
+        SymptomOption(localizations.emotionalSensitivity, '💝', AppTheme.primaryPurple),
+        SymptomOption(localizations.stress, '😫', Color(0xFFEF5350)),
+      ],
+      localizations.skinAndHair: [
+        SymptomOption(localizations.acne, '🦠', Color(0xFFFF7043)),
+        SymptomOption(localizations.oilySkin, '✨', AppTheme.accentMint),
+        SymptomOption(localizations.drySkin, '🏜️', Color(0xFFBCAAA4)),
+        SymptomOption(localizations.hairChanges, '💇', AppTheme.primaryPurple),
+      ],
+      localizations.digestive: [
+        SymptomOption(localizations.constipation, '🚫', Color(0xFFBCAAA4)),
+        SymptomOption(localizations.diarrhea, '💧', AppTheme.secondaryBlue),
+        SymptomOption(localizations.foodCravings, '🍫', Color(0xFFFF7043)),
+        SymptomOption(localizations.lossOfAppetite, '🚫', AppTheme.mediumGrey),
+      ],
+    };
+  }
 
-  String _expandedCategory = 'Physical';
+  String _expandedCategory = '';
 
   @override
   Widget build(BuildContext context) {
+    final symptomCategories = _getSymptomCategories(context);
+    if (_expandedCategory.isEmpty) {
+      _expandedCategory = symptomCategories.keys.first;
+    }
     return SingleChildScrollView(
       child: ConstrainedBox(
         constraints: BoxConstraints(
@@ -113,7 +121,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
               ),
               const SizedBox(width: 8),
               Text(
-                'Selected Symptoms (${widget.selectedSymptoms.length})',
+                AppLocalizations.of(context).selectedSymptoms(widget.selectedSymptoms.length),
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppTheme.darkGrey,
@@ -198,10 +206,11 @@ class _SymptomSelectorState extends State<SymptomSelector> {
   }
 
   Widget _buildCategorySelector() {
+    final symptomCategories = _getSymptomCategories(context);
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
-        children: _symptomCategories.keys.map((category) {
+        children: symptomCategories.keys.map((category) {
           final isSelected = category == _expandedCategory;
           return Padding(
             padding: const EdgeInsets.only(right: 12),
@@ -251,7 +260,8 @@ class _SymptomSelectorState extends State<SymptomSelector> {
   }
 
   Widget _buildSymptomsList() {
-    final symptoms = _symptomCategories[_expandedCategory] ?? [];
+    final symptomCategories = _getSymptomCategories(context);
+    final symptoms = symptomCategories[_expandedCategory] ?? [];
     
     return ListView.builder(
       itemCount: symptoms.length,
@@ -426,7 +436,8 @@ class _SymptomSelectorState extends State<SymptomSelector> {
   }
 
   Color _getSymptomColor(String symptom) {
-    for (final category in _symptomCategories.values) {
+    final symptomCategories = _getSymptomCategories(context);
+    for (final category in symptomCategories.values) {
       for (final option in category) {
         if (option.name == symptom) {
           return option.color;
@@ -437,7 +448,8 @@ class _SymptomSelectorState extends State<SymptomSelector> {
   }
 
   String _getSymptomEmoji(String symptom) {
-    for (final category in _symptomCategories.values) {
+    final symptomCategories = _getSymptomCategories(context);
+    for (final category in symptomCategories.values) {
       for (final option in category) {
         if (option.name == symptom) {
           return option.emoji;

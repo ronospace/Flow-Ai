@@ -1798,6 +1798,222 @@ abstract class AppLocalizations {
   /// **'Easy on the eyes in low light'**
   String get darkThemeDescription;
 
+  /// Biometric dashboard title
+  ///
+  /// In en, this message translates to:
+  /// **'Biometric Dashboard'**
+  String get biometricDashboard;
+
+  /// Title for current cycle card
+  ///
+  /// In en, this message translates to:
+  /// **'Current Cycle'**
+  String get currentCycle;
+
+  /// Message when no active cycle
+  ///
+  /// In en, this message translates to:
+  /// **'No active cycle'**
+  String get noActiveCycle;
+
+  /// Start tracking button
+  ///
+  /// In en, this message translates to:
+  /// **'Start Tracking'**
+  String get startTracking;
+
+  /// AI prediction card title
+  ///
+  /// In en, this message translates to:
+  /// **'AI Prediction'**
+  String get aiPrediction;
+
+  /// Days until next event
+  ///
+  /// In en, this message translates to:
+  /// **'In {days} days'**
+  String inDays(int days);
+
+  /// Smart action center title
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Action Command Center'**
+  String get smartActionCommandCenter;
+
+  /// Smart action center subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Quick access to essential features'**
+  String get quickAccessToEssentialFeatures;
+
+  /// Physical symptom category
+  ///
+  /// In en, this message translates to:
+  /// **'Physical'**
+  String get physical;
+
+  /// Emotional symptom category
+  ///
+  /// In en, this message translates to:
+  /// **'Emotional'**
+  String get emotional;
+
+  /// Skin and hair symptom category
+  ///
+  /// In en, this message translates to:
+  /// **'Skin & Hair'**
+  String get skinAndHair;
+
+  /// Digestive symptom category
+  ///
+  /// In en, this message translates to:
+  /// **'Digestive'**
+  String get digestive;
+
+  /// Mood swings symptom
+  ///
+  /// In en, this message translates to:
+  /// **'Mood swings'**
+  String get moodSwingsSymptom;
+
+  /// Irritability symptom
+  ///
+  /// In en, this message translates to:
+  /// **'Irritability'**
+  String get irritability;
+
+  /// Anxiety symptom
+  ///
+  /// In en, this message translates to:
+  /// **'Anxiety'**
+  String get anxiety;
+
+  /// Depression symptom
+  ///
+  /// In en, this message translates to:
+  /// **'Depression'**
+  String get depression;
+
+  /// Emotional sensitivity symptom
+  ///
+  /// In en, this message translates to:
+  /// **'Emotional sensitivity'**
+  String get emotionalSensitivity;
+
+  /// Stress symptom
+  ///
+  /// In en, this message translates to:
+  /// **'Stress'**
+  String get stress;
+
+  /// Oily skin symptom
+  ///
+  /// In en, this message translates to:
+  /// **'Oily skin'**
+  String get oilySkin;
+
+  /// Dry skin symptom
+  ///
+  /// In en, this message translates to:
+  /// **'Dry skin'**
+  String get drySkin;
+
+  /// Hair changes symptom
+  ///
+  /// In en, this message translates to:
+  /// **'Hair changes'**
+  String get hairChanges;
+
+  /// Food cravings symptom
+  ///
+  /// In en, this message translates to:
+  /// **'Food cravings'**
+  String get foodCravings;
+
+  /// Loss of appetite symptom
+  ///
+  /// In en, this message translates to:
+  /// **'Loss of appetite'**
+  String get lossOfAppetite;
+
+  /// Selected symptoms count
+  ///
+  /// In en, this message translates to:
+  /// **'Selected Symptoms ({count})'**
+  String selectedSymptoms(int count);
+
+  /// Description for no flow
+  ///
+  /// In en, this message translates to:
+  /// **'No menstrual flow'**
+  String get noMenstrualFlow;
+
+  /// Description for spotting
+  ///
+  /// In en, this message translates to:
+  /// **'Minimal discharge'**
+  String get minimalDischarge;
+
+  /// Description for light flow
+  ///
+  /// In en, this message translates to:
+  /// **'Comfortable protection'**
+  String get comfortableProtection;
+
+  /// Light flow intensity title
+  ///
+  /// In en, this message translates to:
+  /// **'Light Flow'**
+  String get lightFlow;
+
+  /// Normal flow intensity title
+  ///
+  /// In en, this message translates to:
+  /// **'Normal Flow'**
+  String get normalFlow;
+
+  /// Description for normal flow
+  ///
+  /// In en, this message translates to:
+  /// **'Typical menstruation'**
+  String get typicalMenstruation;
+
+  /// Heavy flow intensity title
+  ///
+  /// In en, this message translates to:
+  /// **'Heavy Flow'**
+  String get heavyFlow;
+
+  /// Description for heavy flow
+  ///
+  /// In en, this message translates to:
+  /// **'High absorption needed'**
+  String get highAbsorptionNeeded;
+
+  /// Very heavy flow intensity title
+  ///
+  /// In en, this message translates to:
+  /// **'Very Heavy'**
+  String get veryHeavy;
+
+  /// Description for very heavy flow
+  ///
+  /// In en, this message translates to:
+  /// **'Medical attention advised'**
+  String get medicalAttentionAdvised;
+
+  /// Spotting flow intensity title
+  ///
+  /// In en, this message translates to:
+  /// **'Spotting'**
+  String get spotting;
+
+  /// Flow label
+  ///
+  /// In en, this message translates to:
+  /// **'Flow'**
+  String get flow;
+
   /// System theme option
   ///
   /// In en, this message translates to:
@@ -1858,11 +2074,89 @@ abstract class AppLocalizations {
   /// **'Receive reminders and updates'**
   String get receiveReminders;
 
-  /// Notification time setting subtitle
+  /// Daily reminders setting subtitle
   ///
   /// In en, this message translates to:
   /// **'When to send daily reminders'**
   String get dailyReminders;
+
+  /// Title for premium insights unlock widget
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock Premium AI Insights'**
+  String get unlockPremiumAiInsights;
+
+  /// Subtitle for premium insights unlock widget
+  ///
+  /// In en, this message translates to:
+  /// **'Watch an ad to unlock advanced insights'**
+  String get watchAdToUnlockInsights;
+
+  /// Free label for premium unlock widget
+  ///
+  /// In en, this message translates to:
+  /// **'FREE'**
+  String get free;
+
+  /// Button text for watching ad to unlock insights
+  ///
+  /// In en, this message translates to:
+  /// **'Watch Ad & Unlock Insights'**
+  String get watchAdUnlockInsights;
+
+  /// Benefit text for premium insights unlock
+  ///
+  /// In en, this message translates to:
+  /// **'Get 3 additional premium insights'**
+  String get getAdditionalPremiumInsights;
+
+  /// Benefit text for advanced health recommendations
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock advanced health recommendations'**
+  String get unlockAdvancedHealthRecommendations;
+
+  /// Success message when premium insights are unlocked
+  ///
+  /// In en, this message translates to:
+  /// **'Premium insights unlocked! 🎉'**
+  String get premiumInsightsUnlocked;
+
+  /// Day number in cycle
+  ///
+  /// In en, this message translates to:
+  /// **'Day {day}'**
+  String day(int day);
+
+  /// Confidence percentage for predictions
+  ///
+  /// In en, this message translates to:
+  /// **'{percentage}% confidence'**
+  String confidencePercentage(int percentage);
+
+  /// Title for quick actions section
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Actions'**
+  String get quickActions;
+
+  /// Quick action to log period
+  ///
+  /// In en, this message translates to:
+  /// **'Log Period'**
+  String get logPeriod;
+
+  /// Current cycle section title
+  ///
+  /// In en, this message translates to:
+  /// **'Current Cycle'**
+  String get currentCycleTitle;
+
+  /// Mood info label in current cycle
+  ///
+  /// In en, this message translates to:
+  /// **'Mood'**
+  String get moodLabel;
 
   /// AI features section title
   ///
@@ -1923,6 +2217,714 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'System'**
   String get system;
+
+  /// No menstrual flow intensity
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get flowIntensityNone;
+
+  /// Subtitle for no flow
+  ///
+  /// In en, this message translates to:
+  /// **'No menstrual flow'**
+  String get flowIntensityNoneSubtitle;
+
+  /// Description for no flow intensity
+  ///
+  /// In en, this message translates to:
+  /// **'Complete absence of menstrual flow. This is normal before your period starts or after it ends.'**
+  String get flowIntensityNoneDescription;
+
+  /// Medical info for no flow
+  ///
+  /// In en, this message translates to:
+  /// **'No menstruation occurring'**
+  String get flowIntensityNoneMedicalInfo;
+
+  /// Spotting flow intensity
+  ///
+  /// In en, this message translates to:
+  /// **'Spotting'**
+  String get flowIntensitySpotting;
+
+  /// Subtitle for spotting
+  ///
+  /// In en, this message translates to:
+  /// **'Minimal discharge'**
+  String get flowIntensitySpottingSubtitle;
+
+  /// Description for spotting intensity
+  ///
+  /// In en, this message translates to:
+  /// **'Very light pink or brown discharge. Often occurs at the beginning or end of your cycle.'**
+  String get flowIntensitySpottingDescription;
+
+  /// Medical info for spotting
+  ///
+  /// In en, this message translates to:
+  /// **'Less than 5ml per day'**
+  String get flowIntensitySpottingMedicalInfo;
+
+  /// Light flow intensity
+  ///
+  /// In en, this message translates to:
+  /// **'Light Flow'**
+  String get flowIntensityLight;
+
+  /// Subtitle for light flow
+  ///
+  /// In en, this message translates to:
+  /// **'Comfortable protection'**
+  String get flowIntensityLightSubtitle;
+
+  /// Description for light flow intensity
+  ///
+  /// In en, this message translates to:
+  /// **'Light menstrual flow requiring minimal protection. Usually lasts 1-3 days.'**
+  String get flowIntensityLightDescription;
+
+  /// Medical info for light flow
+  ///
+  /// In en, this message translates to:
+  /// **'5-40ml per day'**
+  String get flowIntensityLightMedicalInfo;
+
+  /// Medium/normal flow intensity
+  ///
+  /// In en, this message translates to:
+  /// **'Normal Flow'**
+  String get flowIntensityMedium;
+
+  /// Subtitle for normal flow
+  ///
+  /// In en, this message translates to:
+  /// **'Typical menstruation'**
+  String get flowIntensityMediumSubtitle;
+
+  /// Description for medium flow intensity
+  ///
+  /// In en, this message translates to:
+  /// **'Regular menstrual flow. This is the most common flow intensity for healthy cycles.'**
+  String get flowIntensityMediumDescription;
+
+  /// Medical info for medium flow
+  ///
+  /// In en, this message translates to:
+  /// **'40-70ml per day'**
+  String get flowIntensityMediumMedicalInfo;
+
+  /// Heavy flow intensity
+  ///
+  /// In en, this message translates to:
+  /// **'Heavy Flow'**
+  String get flowIntensityHeavy;
+
+  /// Subtitle for heavy flow
+  ///
+  /// In en, this message translates to:
+  /// **'High absorption needed'**
+  String get flowIntensityHeavySubtitle;
+
+  /// Description for heavy flow intensity
+  ///
+  /// In en, this message translates to:
+  /// **'Heavy menstrual flow requiring frequent changes. Consider consulting a healthcare provider.'**
+  String get flowIntensityHeavyDescription;
+
+  /// Medical info for heavy flow
+  ///
+  /// In en, this message translates to:
+  /// **'70-100ml per day'**
+  String get flowIntensityHeavyMedicalInfo;
+
+  /// Very heavy flow intensity
+  ///
+  /// In en, this message translates to:
+  /// **'Very Heavy'**
+  String get flowIntensityVeryHeavy;
+
+  /// Subtitle for very heavy flow
+  ///
+  /// In en, this message translates to:
+  /// **'Medical attention advised'**
+  String get flowIntensityVeryHeavySubtitle;
+
+  /// Description for very heavy flow intensity
+  ///
+  /// In en, this message translates to:
+  /// **'Very heavy flow that may interfere with daily activities. Strongly recommend consulting a healthcare provider.'**
+  String get flowIntensityVeryHeavyDescription;
+
+  /// Medical info for very heavy flow
+  ///
+  /// In en, this message translates to:
+  /// **'Over 100ml per day'**
+  String get flowIntensityVeryHeavyMedicalInfo;
+
+  /// AI health insights title
+  ///
+  /// In en, this message translates to:
+  /// **'AI Health Insights'**
+  String get aiHealthInsights;
+
+  /// Modal title for flow level info
+  ///
+  /// In en, this message translates to:
+  /// **'About This Flow Level'**
+  String get aboutThisFlowLevel;
+
+  /// Recommended products section title
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended Products'**
+  String get recommendedProducts;
+
+  /// Hourly product changes indicator
+  ///
+  /// In en, this message translates to:
+  /// **'~{changes}/hour changes'**
+  String hourlyChanges(int changes);
+
+  /// Monitor indicator for heavy flows
+  ///
+  /// In en, this message translates to:
+  /// **'Monitor'**
+  String get monitor;
+
+  /// AI insight for spotting
+  ///
+  /// In en, this message translates to:
+  /// **'Spotting is often normal at cycle start/end. Track patterns for insights.'**
+  String get spottingInsight;
+
+  /// AI insight for light flow
+  ///
+  /// In en, this message translates to:
+  /// **'Light flow detected. Consider stress levels and nutrition for optimal health.'**
+  String get lightFlowInsight;
+
+  /// AI insight for medium flow
+  ///
+  /// In en, this message translates to:
+  /// **'Normal flow pattern. Your cycle appears healthy and regular.'**
+  String get mediumFlowInsight;
+
+  /// AI insight for heavy flow
+  ///
+  /// In en, this message translates to:
+  /// **'Heavy flow detected. Monitor symptoms and consider iron-rich foods.'**
+  String get heavyFlowInsight;
+
+  /// AI insight for very heavy flow
+  ///
+  /// In en, this message translates to:
+  /// **'Very heavy flow may need medical attention. Track duration carefully.'**
+  String get veryHeavyFlowInsight;
+
+  /// AI insight for no flow
+  ///
+  /// In en, this message translates to:
+  /// **'No flow detected. Track other symptoms for comprehensive insights.'**
+  String get noFlowInsight;
+
+  /// Panty liners product
+  ///
+  /// In en, this message translates to:
+  /// **'Panty liners'**
+  String get pantyLiners;
+
+  /// Period underwear product
+  ///
+  /// In en, this message translates to:
+  /// **'Period underwear'**
+  String get periodUnderwear;
+
+  /// Light pads product
+  ///
+  /// In en, this message translates to:
+  /// **'Light pads'**
+  String get lightPads;
+
+  /// Regular tampons product
+  ///
+  /// In en, this message translates to:
+  /// **'Tampons (regular)'**
+  String get tamponsRegular;
+
+  /// Menstrual cups product
+  ///
+  /// In en, this message translates to:
+  /// **'Menstrual cups'**
+  String get menstrualCups;
+
+  /// Regular pads product
+  ///
+  /// In en, this message translates to:
+  /// **'Regular pads'**
+  String get regularPads;
+
+  /// Super tampons product
+  ///
+  /// In en, this message translates to:
+  /// **'Tampons (super)'**
+  String get tamponsSuper;
+
+  /// Heavy period underwear product
+  ///
+  /// In en, this message translates to:
+  /// **'Period underwear (heavy)'**
+  String get periodUnderwearHeavy;
+
+  /// Super pads product
+  ///
+  /// In en, this message translates to:
+  /// **'Super pads'**
+  String get superPads;
+
+  /// Super plus tampons product
+  ///
+  /// In en, this message translates to:
+  /// **'Tampons (super+)'**
+  String get tamponsSuperPlus;
+
+  /// Large menstrual cups product
+  ///
+  /// In en, this message translates to:
+  /// **'Menstrual cups (large)'**
+  String get menstrualCupsLarge;
+
+  /// Ultra pads product
+  ///
+  /// In en, this message translates to:
+  /// **'Ultra pads'**
+  String get ultraPads;
+
+  /// Ultra tampons product
+  ///
+  /// In en, this message translates to:
+  /// **'Tampons (ultra)'**
+  String get tamponsUltra;
+
+  /// XL menstrual cups product
+  ///
+  /// In en, this message translates to:
+  /// **'Menstrual cups (XL)'**
+  String get menstrualCupsXL;
+
+  /// Medical consultation product
+  ///
+  /// In en, this message translates to:
+  /// **'Medical consultation'**
+  String get medicalConsultation;
+
+  /// Biometric dashboard subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'AI-Powered Health Insights'**
+  String get aiPoweredHealthInsights;
+
+  /// Error message when health data access is denied
+  ///
+  /// In en, this message translates to:
+  /// **'Health data access not granted. Please enable in settings.'**
+  String get healthDataAccessNotGranted;
+
+  /// Error message when dashboard fails to initialize
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to initialize biometric dashboard'**
+  String get failedToInitializeBiometricDashboard;
+
+  /// Error message when data fails to load
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load biometric data'**
+  String get failedToLoadBiometricData;
+
+  /// Success message for data refresh with time
+  ///
+  /// In en, this message translates to:
+  /// **'Biometric data refreshed at {time}'**
+  String biometricDataRefreshedAt(String time);
+
+  /// Error message when refresh fails
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to refresh data'**
+  String get failedToRefreshData;
+
+  /// Overview tab label
+  ///
+  /// In en, this message translates to:
+  /// **'Overview'**
+  String get overview;
+
+  /// Metrics tab label
+  ///
+  /// In en, this message translates to:
+  /// **'Metrics'**
+  String get metrics;
+
+  /// Sync tab label
+  ///
+  /// In en, this message translates to:
+  /// **'Sync'**
+  String get sync;
+
+  /// Status when health data is connected
+  ///
+  /// In en, this message translates to:
+  /// **'Health Data Connected'**
+  String get healthDataConnected;
+
+  /// Status when health data is limited
+  ///
+  /// In en, this message translates to:
+  /// **'Limited Health Data'**
+  String get limitedHealthData;
+
+  /// Data completeness percentage
+  ///
+  /// In en, this message translates to:
+  /// **'Data completeness: {percentage}%'**
+  String dataCompleteness(int percentage);
+
+  /// Message encouraging device connection
+  ///
+  /// In en, this message translates to:
+  /// **'Connect more devices for better insights'**
+  String get connectMoreDevicesForBetterInsights;
+
+  /// Last update time
+  ///
+  /// In en, this message translates to:
+  /// **'Updated {time}'**
+  String updatedAt(String time);
+
+  /// Overall health score card title
+  ///
+  /// In en, this message translates to:
+  /// **'Overall Health Score'**
+  String get overallHealthScore;
+
+  /// Average heart rate metric
+  ///
+  /// In en, this message translates to:
+  /// **'Avg Heart Rate'**
+  String get avgHeartRate;
+
+  /// Sleep quality metric
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep Quality'**
+  String get sleepQuality;
+
+  /// Body temperature metric
+  ///
+  /// In en, this message translates to:
+  /// **'Body Temp'**
+  String get bodyTemp;
+
+  /// Stress level metric
+  ///
+  /// In en, this message translates to:
+  /// **'Stress Level'**
+  String get stressLevel;
+
+  /// Beats per minute unit
+  ///
+  /// In en, this message translates to:
+  /// **'BPM'**
+  String get bpm;
+
+  /// Percentage unit
+  ///
+  /// In en, this message translates to:
+  /// **'%'**
+  String get percent;
+
+  /// Degrees Fahrenheit unit
+  ///
+  /// In en, this message translates to:
+  /// **'°F'**
+  String get degreesF;
+
+  /// Out of ten scale unit
+  ///
+  /// In en, this message translates to:
+  /// **'/10'**
+  String get outOfTen;
+
+  /// Recent trends card title
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Trends'**
+  String get recentTrends;
+
+  /// Trend analysis period
+  ///
+  /// In en, this message translates to:
+  /// **'Based on the last {days} days of data'**
+  String basedOnLastDaysOfData(int days);
+
+  /// Sleep quality trend item
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep quality'**
+  String get sleepQualityImproving;
+
+  /// Improving trend status
+  ///
+  /// In en, this message translates to:
+  /// **'Improving'**
+  String get improving;
+
+  /// Stress levels trend item
+  ///
+  /// In en, this message translates to:
+  /// **'Stress levels'**
+  String get stressLevels;
+
+  /// Stable trend status
+  ///
+  /// In en, this message translates to:
+  /// **'Stable'**
+  String get stable;
+
+  /// Heart rate trend item
+  ///
+  /// In en, this message translates to:
+  /// **'Heart rate'**
+  String get heartRateMetric;
+
+  /// Slightly elevated trend status
+  ///
+  /// In en, this message translates to:
+  /// **'Slightly elevated'**
+  String get slightlyElevated;
+
+  /// Heart rate chart title
+  ///
+  /// In en, this message translates to:
+  /// **'Heart Rate'**
+  String get heartRateChart;
+
+  /// Sleep quality chart title
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep Quality'**
+  String get sleepQualityChart;
+
+  /// Body temperature chart title
+  ///
+  /// In en, this message translates to:
+  /// **'Body Temperature'**
+  String get bodyTemperatureChart;
+
+  /// Heart rate variability chart title
+  ///
+  /// In en, this message translates to:
+  /// **'Heart Rate Variability'**
+  String get heartRateVariabilityChart;
+
+  /// Stress level chart title
+  ///
+  /// In en, this message translates to:
+  /// **'Stress Level'**
+  String get stressLevelChart;
+
+  /// AI insights section title
+  ///
+  /// In en, this message translates to:
+  /// **'AI Health Insights'**
+  String get aiHealthInsightsTitle;
+
+  /// AI insights section description
+  ///
+  /// In en, this message translates to:
+  /// **'Personalized insights based on your biometric patterns'**
+  String get personalizedInsightsBasedOnBiometricPatterns;
+
+  /// No insights card title
+  ///
+  /// In en, this message translates to:
+  /// **'No Insights Available'**
+  String get noInsightsAvailable;
+
+  /// No insights card message
+  ///
+  /// In en, this message translates to:
+  /// **'Keep tracking your health data to get personalized AI insights'**
+  String get keepTrackingHealthDataForAiInsights;
+
+  /// Connected devices card title
+  ///
+  /// In en, this message translates to:
+  /// **'Connected Devices'**
+  String get connectedDevices;
+
+  /// iPhone Health device
+  ///
+  /// In en, this message translates to:
+  /// **'iPhone Health'**
+  String get iphoneHealth;
+
+  /// Connected device status
+  ///
+  /// In en, this message translates to:
+  /// **'Connected'**
+  String get connected;
+
+  /// Apple Watch device
+  ///
+  /// In en, this message translates to:
+  /// **'Apple Watch'**
+  String get appleWatch;
+
+  /// Syncing device status
+  ///
+  /// In en, this message translates to:
+  /// **'Syncing'**
+  String get syncing;
+
+  /// Garmin Connect device
+  ///
+  /// In en, this message translates to:
+  /// **'Garmin Connect'**
+  String get garminConnect;
+
+  /// Not connected device status
+  ///
+  /// In en, this message translates to:
+  /// **'Not connected'**
+  String get notConnected;
+
+  /// Sync settings card title
+  ///
+  /// In en, this message translates to:
+  /// **'Sync Settings'**
+  String get syncSettings;
+
+  /// Auto sync setting
+  ///
+  /// In en, this message translates to:
+  /// **'Auto Sync'**
+  String get autoSync;
+
+  /// Auto sync setting description
+  ///
+  /// In en, this message translates to:
+  /// **'Automatically sync health data'**
+  String get automaticallySyncHealthData;
+
+  /// Background sync setting
+  ///
+  /// In en, this message translates to:
+  /// **'Background Sync'**
+  String get backgroundSync;
+
+  /// Background sync setting description
+  ///
+  /// In en, this message translates to:
+  /// **'Sync data in the background'**
+  String get syncDataInBackground;
+
+  /// Loading state message
+  ///
+  /// In en, this message translates to:
+  /// **'Loading biometric data...'**
+  String get loadingBiometricData;
+
+  /// Error state title
+  ///
+  /// In en, this message translates to:
+  /// **'Error Loading Data'**
+  String get errorLoadingData;
+
+  /// Generic error message
+  ///
+  /// In en, this message translates to:
+  /// **'An unexpected error occurred'**
+  String get anUnexpectedErrorOccurred;
+
+  /// Retry button
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// Empty state title
+  ///
+  /// In en, this message translates to:
+  /// **'No Health Data'**
+  String get noHealthData;
+
+  /// Empty state message
+  ///
+  /// In en, this message translates to:
+  /// **'Connect your health devices to see biometric insights'**
+  String get connectHealthDevicesForBiometricInsights;
+
+  /// Permission state title
+  ///
+  /// In en, this message translates to:
+  /// **'Health Access Required'**
+  String get healthAccessRequired;
+
+  /// Permission state message
+  ///
+  /// In en, this message translates to:
+  /// **'Please grant access to health data to view biometric insights'**
+  String get pleaseGrantAccessToHealthDataForBiometricInsights;
+
+  /// Grant access button
+  ///
+  /// In en, this message translates to:
+  /// **'Grant Access'**
+  String get grantAccess;
+
+  /// Health score description for excellent health
+  ///
+  /// In en, this message translates to:
+  /// **'Excellent health metrics'**
+  String get excellentHealthMetrics;
+
+  /// Health score description for very good health
+  ///
+  /// In en, this message translates to:
+  /// **'Very good health patterns'**
+  String get veryGoodHealthPatterns;
+
+  /// Health score description for good health
+  ///
+  /// In en, this message translates to:
+  /// **'Good overall health'**
+  String get goodOverallHealth;
+
+  /// Health score description for moderate health
+  ///
+  /// In en, this message translates to:
+  /// **'Moderate health indicators'**
+  String get moderateHealthIndicators;
+
+  /// Health score description for poor health
+  ///
+  /// In en, this message translates to:
+  /// **'Focus on health improvement'**
+  String get focusOnHealthImprovement;
+
+  /// Calendar screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar'**
+  String get calendarTitle;
+
+  /// Today button label
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get todayButton;
 }
 
 class _AppLocalizationsDelegate

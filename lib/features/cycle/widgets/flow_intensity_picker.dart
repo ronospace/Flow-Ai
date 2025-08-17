@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/models/cycle_data.dart';
+import '../../../generated/app_localizations.dart';
 
 class FlowIntensityPicker extends StatefulWidget {
   final FlowIntensity selectedIntensity;
@@ -19,80 +20,84 @@ class FlowIntensityPicker extends StatefulWidget {
 
 class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
   
-  final List<FlowIntensityOption> _intensityOptions = [
-    FlowIntensityOption(
-      intensity: FlowIntensity.none,
-      title: 'None',
-      subtitle: 'No menstrual flow',
-      emoji: '✨',
-      color: AppTheme.lightGrey,
-      description: 'Complete absence of menstrual flow. This is normal before your period starts or after it ends.',
-      medicalInfo: 'No menstruation occurring',
-      products: [],
-      hourlyChanges: 0,
-    ),
-    FlowIntensityOption(
-      intensity: FlowIntensity.spotting,
-      title: 'Spotting',
-      subtitle: 'Minimal discharge',
-      emoji: '💧',
-      color: AppTheme.accentMint,
-      description: 'Very light pink or brown discharge. Often occurs at the beginning or end of your cycle.',
-      medicalInfo: 'Less than 5ml per day',
-      products: ['Panty liners', 'Period underwear'],
-      hourlyChanges: 0,
-    ),
-    FlowIntensityOption(
-      intensity: FlowIntensity.light,
-      title: 'Light Flow',
-      subtitle: 'Comfortable protection',
-      emoji: '🌸',
-      color: AppTheme.secondaryBlue,
-      description: 'Light menstrual flow requiring minimal protection. Usually lasts 1-3 days.',
-      medicalInfo: '5-40ml per day',
-      products: ['Light pads', 'Tampons (regular)', 'Menstrual cups'],
-      hourlyChanges: 1,
-    ),
-    FlowIntensityOption(
-      intensity: FlowIntensity.medium,
-      title: 'Normal Flow',
-      subtitle: 'Typical menstruation',
-      emoji: '🌺',
-      color: AppTheme.primaryPurple,
-      description: 'Regular menstrual flow. This is the most common flow intensity for healthy cycles.',
-      medicalInfo: '40-70ml per day',
-      products: ['Regular pads', 'Tampons (super)', 'Menstrual cups', 'Period underwear'],
-      hourlyChanges: 2,
-    ),
-    FlowIntensityOption(
-      intensity: FlowIntensity.heavy,
-      title: 'Heavy Flow',
-      subtitle: 'High absorption needed',
-      emoji: '🌹',
-      color: AppTheme.primaryRose,
-      description: 'Heavy menstrual flow requiring frequent changes. Consider consulting a healthcare provider.',
-      medicalInfo: '70-100ml per day',
-      products: ['Super pads', 'Tampons (super+)', 'Menstrual cups (large)', 'Period underwear (heavy)'],
-      hourlyChanges: 3,
-    ),
-    FlowIntensityOption(
-      intensity: FlowIntensity.veryHeavy,
-      title: 'Very Heavy',
-      subtitle: 'Medical attention advised',
-      emoji: '🔴',
-      color: Color(0xFFD32F2F),
-      description: 'Very heavy flow that may interfere with daily activities. Strongly recommend consulting a healthcare provider.',
-      medicalInfo: 'Over 100ml per day',
-      products: ['Ultra pads', 'Tampons (ultra)', 'Menstrual cups (XL)', 'Medical consultation'],
-      hourlyChanges: 4,
-    ),
-  ];
+  List<FlowIntensityOption> _getIntensityOptions(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
+    return [
+      FlowIntensityOption(
+        intensity: FlowIntensity.none,
+        title: localizations.flowIntensityNone,
+        subtitle: localizations.flowIntensityNoneSubtitle,
+        emoji: '✨',
+        color: AppTheme.lightGrey,
+        description: localizations.flowIntensityNoneDescription,
+        medicalInfo: localizations.flowIntensityNoneMedicalInfo,
+        products: [],
+        hourlyChanges: 0,
+      ),
+      FlowIntensityOption(
+        intensity: FlowIntensity.spotting,
+        title: localizations.flowIntensitySpotting,
+        subtitle: localizations.flowIntensitySpottingSubtitle,
+        emoji: '💧',
+        color: AppTheme.accentMint,
+        description: localizations.flowIntensitySpottingDescription,
+        medicalInfo: localizations.flowIntensitySpottingMedicalInfo,
+        products: [localizations.pantyLiners, localizations.periodUnderwear],
+        hourlyChanges: 0,
+      ),
+      FlowIntensityOption(
+        intensity: FlowIntensity.light,
+        title: localizations.flowIntensityLight,
+        subtitle: localizations.flowIntensityLightSubtitle,
+        emoji: '🌸',
+        color: AppTheme.secondaryBlue,
+        description: localizations.flowIntensityLightDescription,
+        medicalInfo: localizations.flowIntensityLightMedicalInfo,
+        products: [localizations.lightPads, localizations.tamponsRegular, localizations.menstrualCups],
+        hourlyChanges: 1,
+      ),
+      FlowIntensityOption(
+        intensity: FlowIntensity.medium,
+        title: localizations.flowIntensityMedium,
+        subtitle: localizations.flowIntensityMediumSubtitle,
+        emoji: '🌺',
+        color: AppTheme.primaryPurple,
+        description: localizations.flowIntensityMediumDescription,
+        medicalInfo: localizations.flowIntensityMediumMedicalInfo,
+        products: [localizations.regularPads, localizations.tamponsSuper, localizations.menstrualCups, localizations.periodUnderwear],
+        hourlyChanges: 2,
+      ),
+      FlowIntensityOption(
+        intensity: FlowIntensity.heavy,
+        title: localizations.flowIntensityHeavy,
+        subtitle: localizations.flowIntensityHeavySubtitle,
+        emoji: '🌹',
+        color: AppTheme.primaryRose,
+        description: localizations.flowIntensityHeavyDescription,
+        medicalInfo: localizations.flowIntensityHeavyMedicalInfo,
+        products: [localizations.superPads, localizations.tamponsSuperPlus, localizations.menstrualCupsLarge, localizations.periodUnderwearHeavy],
+        hourlyChanges: 3,
+      ),
+      FlowIntensityOption(
+        intensity: FlowIntensity.veryHeavy,
+        title: localizations.flowIntensityVeryHeavy,
+        subtitle: localizations.flowIntensityVeryHeavySubtitle,
+        emoji: '🔴',
+        color: Color(0xFFD32F2F),
+        description: localizations.flowIntensityVeryHeavyDescription,
+        medicalInfo: localizations.flowIntensityVeryHeavyMedicalInfo,
+        products: [localizations.ultraPads, localizations.tamponsUltra, localizations.menstrualCupsXL, localizations.medicalConsultation],
+        hourlyChanges: 4,
+      ),
+    ];
+  }
   
   @override
   Widget build(BuildContext context) {
-    final selectedOption = _intensityOptions.firstWhere(
+    final intensityOptions = _getIntensityOptions(context);
+    final selectedOption = intensityOptions.firstWhere(
       (option) => option.intensity == widget.selectedIntensity,
-      orElse: () => _intensityOptions[0],
+      orElse: () => intensityOptions[0],
     );
     
     return Column(
@@ -109,9 +114,9 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
               mainAxisSpacing: 12,
               childAspectRatio: 0.8, // Improved ratio for better visibility
             ),
-            itemCount: _intensityOptions.length,
+            itemCount: intensityOptions.length,
             itemBuilder: (context, index) {
-              final option = _intensityOptions[index];
+              final option = intensityOptions[index];
               final isSelected = option.intensity == widget.selectedIntensity;
               
               return GestureDetector(
@@ -222,7 +227,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          '~${option.hourlyChanges}/hour changes',
+                          AppLocalizations.of(context).hourlyChanges(option.hourlyChanges),
                           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: AppTheme.mediumGrey,
                           ),
@@ -277,9 +282,9 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'AI Health Insights',
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.of(context).aiHealthInsights,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
@@ -408,7 +413,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                     ),
                     const SizedBox(width: 2),
                     Text(
-                      'Monitor',
+                      AppLocalizations.of(context).monitor,
                       style: TextStyle(
                         color: option.color,
                         fontSize: 8,
@@ -439,23 +444,25 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
   }
   
   String _getAIInsight(FlowIntensityOption option) {
+    final localizations = AppLocalizations.of(context);
     switch (option.intensity) {
       case FlowIntensity.spotting:
-        return 'Spotting is often normal at cycle start/end. Track patterns for insights.';
+        return localizations.spottingInsight;
       case FlowIntensity.light:
-        return 'Light flow detected. Consider stress levels and nutrition for optimal health.';
+        return localizations.lightFlowInsight;
       case FlowIntensity.medium:
-        return 'Normal flow pattern. Your cycle appears healthy and regular.';
+        return localizations.mediumFlowInsight;
       case FlowIntensity.heavy:
-        return 'Heavy flow detected. Monitor symptoms and consider iron-rich foods.';
+        return localizations.heavyFlowInsight;
       case FlowIntensity.veryHeavy:
-        return 'Very heavy flow may need medical attention. Track duration carefully.';
+        return localizations.veryHeavyFlowInsight;
       default:
-        return 'No flow detected. Track other symptoms for comprehensive insights.';
+        return localizations.noFlowInsight;
     }
   }
   
   void _showMedicalInfo(FlowIntensityOption option) {
+    final localizations = AppLocalizations.of(context);
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -538,7 +545,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                   children: [
                     // Description
                     Text(
-                      'About This Flow Level',
+                      localizations.aboutThisFlowLevel,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -557,7 +564,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                     // Recommended Products
                     if (option.products.isNotEmpty) ...[
                       Text(
-                        'Recommended Products',
+                        localizations.recommendedProducts,
                         style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),

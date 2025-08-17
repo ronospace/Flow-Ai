@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../generated/app_localizations.dart';
 import '../../../core/models/cycle_data.dart';
 import '../providers/cycle_provider.dart';
 import '../widgets/calendar_legend.dart';
@@ -117,13 +118,13 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Calendar',
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: AppTheme.darkGrey,
-                  ),
-                ).animate().fadeIn().slideX(begin: -0.3, end: 0),
+                    Text(
+                      AppLocalizations.of(context)!.calendarTitle,
+                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.darkGrey,
+                      ),
+                    ).animate().fadeIn().slideX(begin: -0.3, end: 0),
                 Text(
                   DateFormat('MMMM yyyy').format(_focusedDay),
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -194,11 +195,11 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                   HapticFeedback.lightImpact();
                 },
                 borderRadius: BorderRadius.circular(12),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   child: Text(
-                    'Today',
-                    style: TextStyle(
+                    AppLocalizations.of(context)!.todayButton,
+                    style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
                       fontSize: 14,
