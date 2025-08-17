@@ -57,8 +57,8 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppTheme.backgroundGradient,
+        decoration: BoxDecoration(
+        gradient: AppTheme.backgroundGradient(Theme.of(context).brightness == Brightness.dark),
         ),
         child: SafeArea(
           child: Column(

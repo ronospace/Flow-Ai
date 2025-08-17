@@ -415,32 +415,97 @@ class _HelpScreenState extends State<HelpScreen> {
     final Uri emailLaunchUri = Uri(
       scheme: 'mailto',
       path: 'support@flowsense.app',
-      query: 'subject=FlowSense Support Request',
+      query: Uri.encodeComponent('subject=FlowSense Support Request&body=Hello FlowSense Support Team,\n\nI need help with:\n\nPlease describe your issue here...\n\nBest regards'),
     );
 
     try {
+      // First try launching the email with the system default
       if (await canLaunchUrl(emailLaunchUri)) {
-        await launchUrl(emailLaunchUri);
+        await launchUrl(emailLaunchUri, mode: LaunchMode.externalApplication);
       } else {
-        _showErrorSnackBar('Could not open email app');
+        // Fallback: Try alternative email URI format
+        final fallbackUri = Uri.parse('mailto:support@flowsense.app?subject=FlowSense Support Request');
+        if (await canLaunchUrl(fallbackUri)) {
+          await launchUrl(fallbackUri, mode: LaunchMode.externalApplication);
+        } else {
+          // Show manual email info if all else fails
+          _showEmailManualDialog();
+        }
       }
     } catch (e) {
-      _showErrorSnackBar('Error opening email: $e');
+      debugPrint('Email launch error: $e');
+      _showEmailManualDialog();
     }
   }
 
   void _showLiveChat(BuildContext context) {
+    if (!mounted) return;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Live Chat'),
-        content: const Text(
-          'Live chat feature will be available soon. For now, please use email support for immediate assistance.',
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [AppTheme.secondaryBlue, AppTheme.accentMint],
+                ),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.chat_bubble,
+                color: Colors.white,
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 12),
+            const Text('Live Chat Support'),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Connect with our support team for real-time assistance:',
+              style: TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 16),
+            _buildChatOption(
+              'WhatsApp Support',
+              'Quick messaging support',
+              Icons.message,
+              AppTheme.successGreen,
+              () => _launchWhatsApp(),
+            ),
+            const SizedBox(height: 12),
+            _buildChatOption(
+              'Telegram Support',
+              'Instant messaging help',
+              Icons.telegram,
+              AppTheme.secondaryBlue,
+              () => _launchTelegram(),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Or email us at support@flowsense.app',
+              style: TextStyle(
+                fontSize: 12,
+                fontStyle: FontStyle.italic,
+                color: Colors.grey,
+              ),
+            ),
+          ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
+            child: const Text('Close'),
           ),
         ],
       ),
@@ -462,7 +527,207 @@ class _HelpScreenState extends State<HelpScreen> {
     }
   }
 
+  void _showEmailManualDialog() {
+    if (!mounted) return;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [AppTheme.primaryRose, AppTheme.warningOrange],
+                ),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.email,
+                color: Colors.white,
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 12),
+            const Text('Contact Support'),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Please send an email to our support team:',
+              style: TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.grey.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
+              ),
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: Text(
+                      'support@flowsense.app',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Clipboard.setData(const ClipboardData(text: 'support@flowsense.app'));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Email address copied!'),
+                          backgroundColor: AppTheme.successGreen,
+                          behavior: SnackBarBehavior.floating,
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.copy, size: 20),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
+            const Text(
+              'Include details about your issue for faster assistance.',
+              style: TextStyle(
+                fontSize: 12,
+                fontStyle: FontStyle.italic,
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Close'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildChatOption(
+    String title,
+    String subtitle,
+    IconData icon,
+    Color color,
+    VoidCallback onTap,
+  ) {
+    return GestureDetector(
+      onTap: () {
+        if (mounted) {
+          Navigator.pop(context); // Close dialog first
+          onTap();
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.05),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: color.withValues(alpha: 0.2),
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Icon(
+                icon,
+                color: color,
+                size: 16,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
+                    ),
+                  ),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: Theme.of(context).textTheme.bodyMedium?.color,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: color,
+              size: 14,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _launchWhatsApp() async {
+    const phoneNumber = '+4917627702411'; // FlowSense WhatsApp Support
+    const message = 'Hello! I need help with FlowSense app.';
+    final Uri whatsappUri = Uri.parse(
+      'https://wa.me/$phoneNumber?text=${Uri.encodeComponent(message)}',
+    );
+
+    try {
+      if (await canLaunchUrl(whatsappUri)) {
+        await launchUrl(whatsappUri, mode: LaunchMode.externalApplication);
+      } else {
+        _showErrorSnackBar('WhatsApp is not installed');
+      }
+    } catch (e) {
+      _showErrorSnackBar('Error opening WhatsApp: $e');
+    }
+  }
+
+  void _launchTelegram() async {
+    const username = 'flowsense_support'; // FlowSense Telegram Support
+    final Uri telegramUri = Uri.parse('https://t.me/$username');
+
+    try {
+      if (await canLaunchUrl(telegramUri)) {
+        await launchUrl(telegramUri, mode: LaunchMode.externalApplication);
+      } else {
+        _showErrorSnackBar('Telegram is not installed');
+      }
+    } catch (e) {
+      _showErrorSnackBar('Error opening Telegram: $e');
+    }
+  }
+
   void _showErrorSnackBar(String message) {
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),

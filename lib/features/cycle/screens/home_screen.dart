@@ -10,6 +10,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/services/admob_service.dart';
 import '../providers/cycle_provider.dart';
 import '../../insights/providers/insights_provider.dart';
+import '../../settings/providers/settings_provider.dart';
 import 'dart:math' as math;
 
 class HomeScreen extends StatefulWidget {
@@ -97,15 +98,15 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       height: 60,
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: AppTheme.mediumGrey.withOpacity(0.2),
+          color: Theme.of(context).dividerColor,
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Theme.of(context).shadowColor.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -159,15 +160,15 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   children: [
                     Text(
                       'Unlock Premium AI Insights',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: AppTheme.darkGrey,
+                        color: Theme.of(context).textTheme.titleMedium?.color,
                       ),
                     ),
                     Text(
                       'Watch an ad to unlock advanced insights',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppTheme.mediumGrey,
+                        color: Theme.of(context).textTheme.bodySmall?.color,
                       ),
                     ),
                   ],
@@ -328,24 +329,22 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppTheme.backgroundGradient,
-        ),
-        child: SafeArea(
-          child: Consumer2<CycleProvider, InsightsProvider>(
-            builder: (context, cycleProvider, insightsProvider, child) {
-              if (cycleProvider.isLoading) {
-                return _buildLoadingInterface(localizations);
-              }
+      body: Consumer<SettingsProvider>(
+        builder: (context, settingsProvider, child) {
+          return SafeArea(
+            child: Consumer3<CycleProvider, InsightsProvider, SettingsProvider>(
+              builder: (context, cycleProvider, insightsProvider, settings, child) {
+                  if (cycleProvider.isLoading) {
+                    return _buildLoadingInterface(localizations);
+                  }
 
-              return SingleChildScrollView(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // REVOLUTIONARY: AI-Powered Dynamic Header
-                    _buildRevolutionaryHeader(),
+                  return SingleChildScrollView(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // REVOLUTIONARY: AI-Powered Dynamic Header
+                        _buildRevolutionaryHeader(settings),
                     const SizedBox(height: 24),
                     
                     // REVOLUTIONARY: Health Dashboard Matrix
@@ -372,22 +371,25 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       const SizedBox(height: 24),
                       _buildBannerAdWidget(),
                     ],
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            );
+        },
       ),
     );
   }
   
   Widget _buildLoadingInterface(AppLocalizations localizations) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
     return Container(
       width: double.infinity,
       height: double.infinity,
-      decoration: const BoxDecoration(
-        gradient: AppTheme.backgroundGradient,
+      decoration: BoxDecoration(
+        gradient: AppTheme.backgroundGradient(isDark),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -466,14 +468,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
   
-  Widget _buildRevolutionaryHeader() {
+  Widget _buildRevolutionaryHeader(SettingsProvider settingsProvider) {
     final localizations = AppLocalizations.of(context)!;
     final now = DateTime.now();
-    final greeting = now.hour < 12 
+    final baseGreeting = now.hour < 12 
         ? localizations.goodMorning 
         : now.hour < 17 
             ? localizations.goodAfternoon 
             : localizations.goodEvening;
+    
+    final displayName = settingsProvider.preferences.displayName;
+    final personalizedGreeting = displayName != null && displayName.isNotEmpty
+        ? '$baseGreeting, $displayName!'
+        : '$baseGreeting!';
     
     // Simulate AI health score based on time and random factors
     final healthScore = 0.75 + (math.sin(now.millisecondsSinceEpoch / 100000) * 0.2);
@@ -485,7 +492,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Colors.white,
+            Theme.of(context).cardColor,
             AppTheme.primaryRose.withOpacity(0.02),
           ],
         ),
@@ -516,7 +523,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '$greeting! 👋',
+                      '$personalizedGreeting 👋',
                       style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                         color: AppTheme.darkGrey,
                         fontWeight: FontWeight.bold,
@@ -947,7 +954,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Colors.white,
+            Theme.of(context).cardColor,
             AppTheme.secondaryBlue.withOpacity(0.02),
           ],
         ),
@@ -1073,7 +1080,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Colors.white,
+            Theme.of(context).cardColor,
             color.withOpacity(0.02),
           ],
         ),

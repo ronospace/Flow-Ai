@@ -144,8 +144,8 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppTheme.backgroundGradient,
+        decoration: BoxDecoration(
+        gradient: AppTheme.backgroundGradient(Theme.of(context).brightness == Brightness.dark),
         ),
         child: SafeArea(
           child: Column(
@@ -357,13 +357,13 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
           const SizedBox(height: 8),
           
           Text(
-            'Select the intensity that best describes your flow today',
+            'Select today\'s flow intensity',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppTheme.mediumGrey,
+              color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
             ),
           ).animate().fadeIn(delay: 100.ms),
           
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
           
           Expanded(
             child: FlowIntensityPicker(
@@ -383,27 +383,34 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
   }
   
   Widget _buildSymptomsTab() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Symptoms',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Symptoms',
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Select all symptoms you\'re experiencing',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppTheme.mediumGrey,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 8),
-          Text(
-            'Track any symptoms you\'re experiencing',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppTheme.mediumGrey,
-            ),
-          ),
-          const SizedBox(height: 30),
-          SizedBox(
-            height: MediaQuery.of(context).size.height - 300, // Dynamic height
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: SymptomSelector(
               selectedSymptoms: _symptoms,
               symptomSeverity: _symptomSeverity,
@@ -422,16 +429,17 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
               },
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
   
   Widget _buildMoodEnergyTab() {
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             'Mood & Energy',
@@ -447,50 +455,43 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
             ),
           ),
           const SizedBox(height: 30),
-          Flexible(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  MoodEnergySlider(
-                    label: 'Mood',
-                    value: _mood,
-                    onChanged: (value) {
-                      setState(() {
-                        _mood = value;
-                      });
-                      _markUnsavedChanges();
-                    },
-                    emoji: _getMoodEmoji(_mood),
-                    color: AppTheme.primaryRose,
-                  ),
-                  const SizedBox(height: 40),
-                  MoodEnergySlider(
-                    label: 'Energy',
-                    value: _energy,
-                    onChanged: (value) {
-                      setState(() {
-                        _energy = value;
-                      });
-                      _markUnsavedChanges();
-                    },
-                    emoji: _getEnergyEmoji(_energy),
-                    color: AppTheme.accentMint,
-                  ),
-                  const SizedBox(height: 40),
-                ],
-              ),
-            ),
+          MoodEnergySlider(
+            label: 'Mood',
+            value: _mood,
+            onChanged: (value) {
+              setState(() {
+                _mood = value;
+              });
+              _markUnsavedChanges();
+            },
+            emoji: _getMoodEmoji(_mood),
+            color: AppTheme.primaryRose,
           ),
+          const SizedBox(height: 40),
+          MoodEnergySlider(
+            label: 'Energy',
+            value: _energy,
+            onChanged: (value) {
+              setState(() {
+                _energy = value;
+              });
+              _markUnsavedChanges();
+            },
+            emoji: _getEnergyEmoji(_energy),
+            color: AppTheme.accentMint,
+          ),
+          const SizedBox(height: 100), // Extra bottom padding
         ],
       ),
     );
   }
   
   Widget _buildPainTab() {
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             'Pain Level',
@@ -521,7 +522,8 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
             max: 5,
           ),
           const SizedBox(height: 40),
-          Expanded(
+          SizedBox(
+            height: 400, // Fixed height for PainBodyMap
             child: PainBodyMap(
               painAreas: _painAreas,
               onPainAreaChanged: (area, intensity) {
@@ -536,6 +538,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
               },
             ),
           ),
+          const SizedBox(height: 20), // Bottom padding
         ],
       ),
     );
@@ -570,17 +573,17 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
           Container(
             constraints: const BoxConstraints(minHeight: 200),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).cardColor,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
                 color: _notesController.text.isNotEmpty 
                     ? AppTheme.primaryRose.withOpacity(0.3)
-                    : AppTheme.lightGrey,
+                    : Theme.of(context).dividerColor,
                 width: 2,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.08),
+                  color: Theme.of(context).shadowColor.withOpacity(0.08),
                   blurRadius: 20,
                   offset: const Offset(0, 8),
                 ),
@@ -673,12 +676,12 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
                     minLines: 8,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       height: 1.5,
-                      color: AppTheme.darkGrey,
+                      color: Theme.of(context).textTheme.bodyMedium?.color,
                     ),
                     decoration: InputDecoration(
                       hintText: 'How are you feeling today? Any symptoms, mood changes, or observations you\'d like to remember?\n\nTip: Recording your thoughts helps identify patterns over time.',
                       hintStyle: TextStyle(
-                        color: AppTheme.mediumGrey.withOpacity(0.7),
+                        color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.5),
                         fontSize: 14,
                         height: 1.5,
                       ),

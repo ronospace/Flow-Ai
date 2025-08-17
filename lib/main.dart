@@ -40,15 +40,8 @@ Future<void> _initializeServices() async {
   adMobService.loadInterstitialAd();
   adMobService.loadRewardedAd();
   
-  // Set system UI overlay style
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-      systemNavigationBarColor: Colors.white,
-      systemNavigationBarIconBrightness: Brightness.dark,
-    ),
-  );
+  // System UI overlay style will be set dynamically based on theme
+  // This is now handled in the MaterialApp theme configuration
 }
 
 class FlowSenseApp extends StatefulWidget {
@@ -90,11 +83,29 @@ class _FlowSenseAppState extends State<FlowSenseApp> {
       ],
       child: Consumer<SettingsProvider>(
         builder: (context, settings, child) {
+          // Update system UI overlay style based on theme
+          final isDark = settings.themeMode == ThemeMode.dark ||
+              (settings.themeMode == ThemeMode.system &&
+                  MediaQuery.platformBrightnessOf(context) == Brightness.dark);
+          
+          SystemChrome.setSystemUIOverlayStyle(
+            SystemUiOverlayStyle(
+              statusBarColor: Colors.transparent,
+              statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+              systemNavigationBarColor: isDark ? AppTheme.darkBackground : AppTheme.lightBackground,
+              systemNavigationBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+            ),
+          );
+          
           return MaterialApp.router(
             title: 'FlowSense',
             debugShowCheckedModeBanner: false,
-            theme: AppTheme.lightTheme,
-            darkTheme: AppTheme.darkTheme,
+            theme: AppTheme.lightTheme.copyWith(
+              scaffoldBackgroundColor: AppTheme.lightBackground,
+            ),
+            darkTheme: AppTheme.darkTheme.copyWith(
+              scaffoldBackgroundColor: AppTheme.darkBackground,
+            ),
             themeMode: settings.themeMode,
             locale: settings.locale,
             routerConfig: AppRouter.router,

@@ -71,8 +71,8 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
     
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppTheme.backgroundGradient,
+        decoration: BoxDecoration(
+        gradient: AppTheme.backgroundGradient(Theme.of(context).brightness == Brightness.dark),
         ),
         child: SafeArea(
           child: Consumer<HealthProvider>(

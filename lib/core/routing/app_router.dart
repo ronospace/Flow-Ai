@@ -174,10 +174,10 @@ class _MainShellState extends State<MainShell> {
       body: widget.child,
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).scaffoldBackgroundColor,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Theme.of(context).shadowColor.withValues(alpha: 0.1),
               blurRadius: 10,
               offset: const Offset(0, -2),
             ),
@@ -230,7 +230,7 @@ class _MainShellState extends State<MainShell> {
               ),
               child: Icon(
                 icon,
-                color: isSelected ? Colors.white : Colors.grey[600],
+                color: isSelected ? Colors.white : Theme.of(context).iconTheme.color?.withValues(alpha: 0.6),
                 size: 24,
               ),
             ),
@@ -238,7 +238,7 @@ class _MainShellState extends State<MainShell> {
             Text(
               label,
               style: TextStyle(
-                color: isSelected ? const Color(0xFFFF6B9D) : Colors.grey[600],
+                color: isSelected ? const Color(0xFFFF6B9D) : Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.6),
                 fontSize: 10,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
               ),

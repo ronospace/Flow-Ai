@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AppTheme {
   // Brand Colors
@@ -11,11 +12,25 @@ class AppTheme {
   static const Color errorRed = Color(0xFFE74C3C);
   static const Color successGreen = Color(0xFF2ECC71);
   
-  // Neutral Colors
-  static const Color darkGrey = Color(0xFF2C3E50);
-  static const Color mediumGrey = Color(0xFF95A5A6);
-  static const Color lightGrey = Color(0xFFF8F9FA);
-  static const Color white = Color(0xFFFFFFFF);
+  // Light Theme Colors
+  static const Color lightBackground = Color(0xFFFAFAFA);
+  static const Color lightSurface = Color(0xFFFFFFFF);
+  static const Color lightCard = Color(0xFFFFFFFF);
+  static const Color lightText = Color(0xFF1A1A1A);
+  static const Color lightTextSecondary = Color(0xFF6B7280);
+  
+  // Dark Theme Colors
+  static const Color darkBackground = Color(0xFF0F0F0F);
+  static const Color darkSurface = Color(0xFF1A1A1A);
+  static const Color darkCard = Color(0xFF262626);
+  static const Color darkText = Color(0xFFE5E5E5);
+  static const Color darkTextSecondary = Color(0xFF9CA3AF);
+  
+  // Legacy colors for compatibility
+  static const Color darkGrey = lightText;
+  static const Color mediumGrey = lightTextSecondary;
+  static const Color lightGrey = Color(0xFFF3F4F6);
+  static const Color white = lightSurface;
   
   // Gradient Colors
   static const LinearGradient primaryGradient = LinearGradient(
@@ -24,11 +39,16 @@ class AppTheme {
     colors: [primaryRose, primaryPurple],
   );
   
-  static const LinearGradient backgroundGradient = LinearGradient(
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
-    colors: [Color(0xFFFFF5F8), white],
-  );
+  // Theme-aware gradients
+  static LinearGradient backgroundGradient(bool isDark) {
+    return LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: isDark 
+          ? [darkBackground, darkSurface]
+          : [Color(0xFFFFF8F9), lightSurface],
+    );
+  }
 
   static ThemeData get lightTheme {
     return ThemeData(
@@ -182,16 +202,11 @@ class AppTheme {
   }
   
   static ThemeData get darkTheme {
-    const darkBackground = Color(0xFF121212);
-    const darkSurface = Color(0xFF1A1A1A);
-    const darkCardColor = Color(0xFF2D2D2D);
-    const darkText = Color(0xFFE0E0E0);
-    const darkTextSecondary = Color(0xFFB0B0B0);
     
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      scaffoldBackgroundColor: darkBackground,
+      scaffoldBackgroundColor: AppTheme.darkBackground,
       colorScheme: ColorScheme.fromSeed(
         seedColor: primaryRose,
         brightness: Brightness.dark,
@@ -199,12 +214,15 @@ class AppTheme {
         secondary: secondaryBlue,
         tertiary: accentMint,
         error: errorRed,
-        surface: darkSurface,
-        background: darkBackground,
-        onPrimary: white,
-        onSecondary: white,
-        onSurface: darkText,
-        onBackground: darkText,
+        surface: AppTheme.darkSurface,
+        background: AppTheme.darkBackground,
+        onPrimary: AppTheme.lightSurface,
+        onSecondary: AppTheme.lightSurface,
+        onSurface: AppTheme.darkText,
+        onBackground: AppTheme.darkText,
+        surfaceVariant: AppTheme.darkCard,
+        onSurfaceVariant: AppTheme.darkTextSecondary,
+        outline: AppTheme.darkTextSecondary.withValues(alpha: 0.4),
       ),
       
       // Typography for dark theme
@@ -212,59 +230,59 @@ class AppTheme {
         displayLarge: TextStyle(
           fontSize: 32,
           fontWeight: FontWeight.bold,
-          color: darkText,
+          color: AppTheme.darkText,
           letterSpacing: -0.5,
         ),
         displayMedium: TextStyle(
           fontSize: 28,
           fontWeight: FontWeight.bold,
-          color: darkText,
+          color: AppTheme.darkText,
           letterSpacing: -0.5,
         ),
         displaySmall: TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.w600,
-          color: darkText,
+          color: AppTheme.darkText,
         ),
         headlineLarge: TextStyle(
           fontSize: 22,
           fontWeight: FontWeight.w600,
-          color: darkText,
+          color: AppTheme.darkText,
         ),
         headlineMedium: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w600,
-          color: darkText,
+          color: AppTheme.darkText,
         ),
         headlineSmall: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.w600,
-          color: darkText,
+          color: AppTheme.darkText,
         ),
         titleLarge: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w600,
-          color: darkText,
+          color: AppTheme.darkText,
         ),
         titleMedium: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w500,
-          color: darkText,
+          color: AppTheme.darkText,
         ),
         bodyLarge: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.normal,
-          color: darkText,
+          color: AppTheme.darkText,
         ),
         bodyMedium: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.normal,
-          color: darkText,
+          color: AppTheme.darkText,
         ),
         bodySmall: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.normal,
-          color: darkTextSecondary,
+          color: AppTheme.darkTextSecondary,
         ),
       ),
       
@@ -272,9 +290,9 @@ class AppTheme {
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        iconTheme: IconThemeData(color: darkText),
+        iconTheme: IconThemeData(color: AppTheme.darkText),
         titleTextStyle: TextStyle(
-          color: darkText,
+          color: AppTheme.darkText,
           fontSize: 20,
           fontWeight: FontWeight.w600,
         ),
@@ -286,7 +304,7 @@ class AppTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        color: darkCardColor,
+        color: AppTheme.darkCard,
       ),
       
       // Elevated Button Theme for dark mode
@@ -309,29 +327,29 @@ class AppTheme {
       // Input Decoration Theme for dark mode
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: darkSurface,
+        fillColor: AppTheme.darkSurface,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: darkTextSecondary.withValues(alpha: 0.3)),
+          borderSide: BorderSide(color: AppTheme.darkTextSecondary.withValues(alpha: 0.3)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: darkTextSecondary.withValues(alpha: 0.3)),
+          borderSide: BorderSide(color: AppTheme.darkTextSecondary.withValues(alpha: 0.3)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: primaryRose, width: 2),
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        hintStyle: TextStyle(color: darkTextSecondary),
-        labelStyle: TextStyle(color: darkTextSecondary),
+        hintStyle: TextStyle(color: AppTheme.darkTextSecondary),
+        labelStyle: TextStyle(color: AppTheme.darkTextSecondary),
       ),
       
       // Bottom Navigation Bar Theme for dark mode
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: darkSurface,
+        backgroundColor: AppTheme.darkSurface,
         selectedItemColor: primaryRose,
-        unselectedItemColor: darkTextSecondary,
+        unselectedItemColor: AppTheme.darkTextSecondary,
         type: BottomNavigationBarType.fixed,
         elevation: 8,
       ),
@@ -345,20 +363,20 @@ class AppTheme {
       
       // Additional dark theme components
       dividerTheme: DividerThemeData(
-        color: darkTextSecondary.withValues(alpha: 0.2),
+        color: AppTheme.darkTextSecondary.withValues(alpha: 0.2),
         thickness: 1,
       ),
       
       dialogTheme: DialogThemeData(
-        backgroundColor: darkSurface,
+        backgroundColor: AppTheme.darkSurface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
       ),
       
       snackBarTheme: SnackBarThemeData(
-        backgroundColor: darkCardColor,
-        contentTextStyle: const TextStyle(color: darkText),
+        backgroundColor: AppTheme.darkCard,
+        contentTextStyle: const TextStyle(color: AppTheme.darkText),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),

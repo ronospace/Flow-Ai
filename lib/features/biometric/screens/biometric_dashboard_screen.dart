@@ -181,8 +181,8 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppTheme.backgroundGradient,
+        decoration: BoxDecoration(
+          gradient: AppTheme.backgroundGradient(Theme.of(context).brightness == Brightness.dark),
         ),
         child: SafeArea(
           child: Column(

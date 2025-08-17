@@ -29,7 +29,7 @@ class ThemeSelector extends StatelessWidget {
             height: 4,
             margin: const EdgeInsets.only(top: 12),
             decoration: BoxDecoration(
-              color: AppTheme.lightGrey,
+              color: Theme.of(context).dividerColor,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -136,7 +136,7 @@ class ThemeSelector extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         border: isSelected 
             ? Border.all(color: AppTheme.primaryRose, width: 2)
-            : Border.all(color: AppTheme.lightGrey.withValues(alpha: 0.5)),
+            : Border.all(color: Theme.of(context).dividerColor),
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
@@ -146,12 +146,12 @@ class ThemeSelector extends StatelessWidget {
           decoration: BoxDecoration(
             color: isSelected 
                 ? iconColor.withValues(alpha: 0.2)
-                : AppTheme.lightGrey.withValues(alpha: 0.3),
+                : Theme.of(context).colorScheme.surfaceVariant,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(
             icon,
-            color: isSelected ? iconColor : AppTheme.mediumGrey,
+            color: isSelected ? iconColor : Theme.of(context).colorScheme.onSurfaceVariant,
             size: 24,
           ),
         ),
@@ -175,9 +175,9 @@ class ThemeSelector extends StatelessWidget {
                 Icons.check_circle,
                 color: AppTheme.primaryRose,
               )
-            : const Icon(
+            : Icon(
                 Icons.circle_outlined,
-                color: AppTheme.lightGrey,
+                color: Theme.of(context).colorScheme.outline,
               ),
         onTap: () async {
           if (!isSelected) {

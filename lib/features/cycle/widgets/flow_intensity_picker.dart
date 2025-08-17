@@ -97,28 +97,17 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
     
     return Column(
       children: [
-        // Flow Visualization Panel
-        if (widget.selectedIntensity != FlowIntensity.none)
-          _buildFlowVisualization(selectedOption),
-        
-        // AI Insights Panel
-        if (widget.selectedIntensity != FlowIntensity.none) ...[
-          const SizedBox(height: 20),
-          _buildAIInsightsPanel(selectedOption),
-        ],
-        
-        const SizedBox(height: 20),
-        
-        // Optimized Grid View - Using better scrolling
+        // Optimized Grid View - Using better scrolling with more space
         Expanded(
+          flex: 3,
           child: GridView.builder(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(12),
             physics: const BouncingScrollPhysics(), // Better scrolling performance
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              childAspectRatio: 0.75, // Optimized ratio
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              childAspectRatio: 0.8, // Improved ratio for better visibility
             ),
             itemCount: _intensityOptions.length,
             itemBuilder: (context, index) {
@@ -139,6 +128,13 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
             },
           ),
         ),
+        
+        // AI Insights Panel - Positioned at bottom for better layout
+        if (widget.selectedIntensity != FlowIntensity.none)
+          Container(
+            margin: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+            child: _buildAIInsightsPanel(selectedOption),
+          ),
       ],
     );
   }
@@ -339,76 +335,83 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
         padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             // Icon Container - Simplified
             Container(
-              width: 70,
-              height: 70,
+              width: 60,
+              height: 60,
               decoration: BoxDecoration(
                 color: option.color.withValues(alpha: isSelected ? 0.2 : 0.1),
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(16),
               ),
               child: Center(
                 child: Text(
                   option.emoji,
                   style: TextStyle(
-                    fontSize: isSelected ? 32 : 28,
+                    fontSize: isSelected ? 28 : 24,
                   ),
                 ),
               ),
             ),
             
-            const SizedBox(height: 12),
+            const SizedBox(height: 8),
             
             // Title
-            Text(
-              option.title,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                color: isSelected ? option.color : AppTheme.darkGrey,
-                fontSize: isSelected ? 16 : 15,
+            Flexible(
+              child: Text(
+                option.title,
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                  color: isSelected ? option.color : AppTheme.darkGrey,
+                  fontSize: 14,
+                ),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-              textAlign: TextAlign.center,
             ),
             
-            const SizedBox(height: 4),
+            const SizedBox(height: 2),
             
             // Subtitle
-            Text(
-              option.subtitle,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AppTheme.mediumGrey,
-                fontSize: 11,
+            Flexible(
+              child: Text(
+                option.subtitle,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: AppTheme.mediumGrey,
+                  fontSize: 10,
+                ),
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
             ),
             
             // Medical indicator for heavy flows
             if (option.intensity == FlowIntensity.heavy || 
                 option.intensity == FlowIntensity.veryHeavy) ...[
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
                   color: option.color.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
                       Icons.health_and_safety,
-                      size: 12,
+                      size: 10,
                       color: option.color,
                     ),
-                    const SizedBox(width: 4),
+                    const SizedBox(width: 2),
                     Text(
                       'Monitor',
                       style: TextStyle(
                         color: option.color,
-                        fontSize: 9,
+                        fontSize: 8,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -417,18 +420,18 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
               ),
             ],
             
+            const Spacer(),
+            
             // Selection indicator
-            if (isSelected) ...[
-              const SizedBox(height: 8),
+            if (isSelected) 
               Container(
-                width: 30,
-                height: 4,
+                width: 24,
+                height: 3,
                 decoration: BoxDecoration(
                   color: option.color,
-                  borderRadius: BorderRadius.circular(2),
+                  borderRadius: BorderRadius.circular(1.5),
                 ),
               ),
-            ],
           ],
         ),
       ),

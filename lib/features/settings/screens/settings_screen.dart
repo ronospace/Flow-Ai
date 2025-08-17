@@ -54,8 +54,8 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
     
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppTheme.backgroundGradient,
+        decoration: BoxDecoration(
+        gradient: AppTheme.backgroundGradient(Theme.of(context).brightness == Brightness.dark),
         ),
         child: SafeArea(
           child: CustomScrollView(
