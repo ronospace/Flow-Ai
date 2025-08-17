@@ -515,82 +515,66 @@
   "@languageChangedTo": {
     "description": "Language change confirmation message"
   },
-  
   "appPreferences": "App-Einstellungen",
   "@appPreferences": {
     "description": "App preferences section title"
   },
-  
   "customizeAppearance": "App-Erscheinungsbild anpassen",
   "@customizeAppearance": {
     "description": "Theme customization subtitle"
   },
-  
   "chooseYourLanguage": "Wählen Sie Ihre Sprache",
   "@chooseYourLanguage": {
     "description": "Language selection subtitle"
   },
-  
   "receiveReminders": "Erinnerungen und Updates erhalten",
   "@receiveReminders": {
     "description": "Enable notifications setting subtitle"
   },
-  
   "dailyReminders": "Wann tägliche Erinnerungen senden",
   "@dailyReminders": {
     "description": "Notification time setting subtitle"
   },
-  
   "aiSmartFeatures": "KI & Intelligente Funktionen",
   "@aiSmartFeatures": {
     "description": "AI features section title"
   },
-  
   "personalizedAiInsights": "Personalisierte KI-Einblicke erhalten",
   "@personalizedAiInsights": {
     "description": "AI insights setting subtitle"
   },
-  
   "hapticFeedback": "Haptisches Feedback",
   "@hapticFeedback": {
     "description": "Haptic feedback setting title"
   },
-  
   "vibrationInteractions": "Vibrationen bei Interaktionen spüren",
   "@vibrationInteractions": {
     "description": "Haptic feedback setting subtitle"
   },
-  
   "supportAbout": "Support & Über",
   "@supportAbout": {
     "description": "Support and about section title"
   },
-  
   "getHelpTutorials": "Hilfe und Tutorials erhalten",
   "@getHelpTutorials": {
     "description": "Help section subtitle"
   },
-  
   "versionInfoLegal": "Versionsinformationen und Rechtliches",
   "@versionInfoLegal": {
     "description": "About section subtitle"
   },
-  
   "light": "Hell",
   "@light": {
     "description": "Light theme name"
   },
-  
   "dark": "Dunkel",
   "@dark": {
     "description": "Dark theme name"
   },
-  
   "system": "System",
   "@system": {
     "description": "System theme name"
   },
-  
   "flowIntensityNone": "Keine",
   "@flowIntensityNone": {
     "description": "No menstrual flow intensity"
@@ -607,7 +591,6 @@
   "@flowIntensityNoneMedicalInfo": {
     "description": "Medical info for no flow"
   },
-  
   "flowIntensitySpotting": "Schmierblutung",
   "@flowIntensitySpotting": {
     "description": "Spotting flow intensity"
@@ -624,7 +607,6 @@
   "@flowIntensitySpottingMedicalInfo": {
     "description": "Medical info for spotting"
   },
-  
   "flowIntensityLight": "Leichter Fluss",
   "@flowIntensityLight": {
     "description": "Light flow intensity"
@@ -641,7 +623,6 @@
   "@flowIntensityLightMedicalInfo": {
     "description": "Medical info for light flow"
   },
-  
   "flowIntensityMedium": "Normaler Fluss",
   "@flowIntensityMedium": {
     "description": "Medium/normal flow intensity"
@@ -658,7 +639,6 @@
   "@flowIntensityMediumMedicalInfo": {
     "description": "Medical info for medium flow"
   },
-  
   "flowIntensityHeavy": "Starker Fluss",
   "@flowIntensityHeavy": {
     "description": "Heavy flow intensity"
@@ -675,7 +655,6 @@
   "@flowIntensityHeavyMedicalInfo": {
     "description": "Medical info for heavy flow"
   },
-  
   "flowIntensityVeryHeavy": "Sehr stark",
   "@flowIntensityVeryHeavy": {
     "description": "Very heavy flow intensity"
@@ -692,22 +671,18 @@
   "@flowIntensityVeryHeavyMedicalInfo": {
     "description": "Medical info for very heavy flow"
   },
-  
   "aiHealthInsights": "KI-Gesundheits-Einblicke",
   "@aiHealthInsights": {
     "description": "AI health insights title"
   },
-  
   "aboutThisFlowLevel": "Über diese Flussstärke",
   "@aboutThisFlowLevel": {
     "description": "Modal title for flow level info"
   },
-  
   "recommendedProducts": "Empfohlene Produkte",
   "@recommendedProducts": {
     "description": "Recommended products section title"
   },
-  
   "hourlyChanges": "~{changes}/Stunde Wechsel",
   "@hourlyChanges": {
     "description": "Hourly product changes indicator",
@@ -718,152 +693,122 @@
       }
     }
   },
-  
   "monitor": "Überwachen",
   "@monitor": {
     "description": "Monitor indicator for heavy flows"
   },
-  
   "spottingInsight": "Schmierblutungen sind oft normal zu Zyklusbeginn/-ende. Verfolgen Sie Muster für Einblicke.",
   "@spottingInsight": {
     "description": "AI insight for spotting"
   },
-  
   "lightFlowInsight": "Leichter Fluss erkannt. Berücksichtigen Sie Stressniveau und Ernährung für optimale Gesundheit.",
   "@lightFlowInsight": {
     "description": "AI insight for light flow"
   },
-  
   "mediumFlowInsight": "Normales Flussmuster. Ihr Zyklus scheint gesund und regelmäßig zu sein.",
   "@mediumFlowInsight": {
     "description": "AI insight for medium flow"
   },
-  
   "heavyFlowInsight": "Starker Fluss erkannt. Überwachen Sie Symptome und erwägen Sie eisenreiche Nahrungsmittel.",
   "@heavyFlowInsight": {
     "description": "AI insight for heavy flow"
   },
-  
   "veryHeavyFlowInsight": "Sehr starker Fluss kann ärztliche Betreuung erfordern. Verfolgen Sie die Dauer sorgfältig.",
   "@veryHeavyFlowInsight": {
     "description": "AI insight for very heavy flow"
   },
-  
   "noFlowInsight": "Kein Fluss erkannt. Verfolgen Sie andere Symptome für umfassende Einblicke.",
   "@noFlowInsight": {
     "description": "AI insight for no flow"
   },
-  
   "pantyLiners": "Slipeinlagen",
   "@pantyLiners": {
     "description": "Panty liners product"
   },
-  
   "periodUnderwear": "Periodenunterwäsche",
   "@periodUnderwear": {
     "description": "Period underwear product"
   },
-  
   "lightPads": "Leichte Binden",
   "@lightPads": {
     "description": "Light pads product"
   },
-  
   "tamponsRegular": "Tampons (normal)",
   "@tamponsRegular": {
     "description": "Regular tampons product"
   },
-  
   "menstrualCups": "Menstruationstassen",
   "@menstrualCups": {
     "description": "Menstrual cups product"
   },
-  
   "regularPads": "Normale Binden",
   "@regularPads": {
     "description": "Regular pads product"
   },
-  
   "tamponsSuper": "Tampons (super)",
   "@tamponsSuper": {
     "description": "Super tampons product"
   },
-  
   "periodUnderwearHeavy": "Periodenunterwäsche (stark)",
   "@periodUnderwearHeavy": {
     "description": "Heavy period underwear product"
   },
-  
   "superPads": "Super-Binden",
   "@superPads": {
     "description": "Super pads product"
   },
-  
   "tamponsSuperPlus": "Tampons (super+)",
   "@tamponsSuperPlus": {
     "description": "Super plus tampons product"
   },
-  
   "menstrualCupsLarge": "Menstruationstassen (groß)",
   "@menstrualCupsLarge": {
     "description": "Large menstrual cups product"
   },
-  
   "ultraPads": "Ultra-Binden",
   "@ultraPads": {
     "description": "Ultra pads product"
   },
-  
   "tamponsUltra": "Tampons (ultra)",
   "@tamponsUltra": {
     "description": "Ultra tampons product"
   },
-  
   "menstrualCupsXL": "Menstruationstassen (XL)",
   "@menstrualCupsXL": {
     "description": "XL menstrual cups product"
   },
-  
   "medicalConsultation": "Ärztliche Beratung",
   "@medicalConsultation": {
     "description": "Medical consultation product"
   },
-  
   "unlockPremiumAiInsights": "Premium KI-Einblicke freischalten",
   "@unlockPremiumAiInsights": {
     "description": "Title for premium insights unlock widget"
   },
-  
   "watchAdToUnlockInsights": "Schaue eine Werbung, um erweiterte Einblicke freizuschalten",
   "@watchAdToUnlockInsights": {
     "description": "Subtitle for premium insights unlock widget"
   },
-  
   "free": "KOSTENLOS",
   "@free": {
     "description": "Free label for premium unlock widget"
   },
-  
   "watchAdUnlockInsights": "Werbung ansehen & Einblicke freischalten",
   "@watchAdUnlockInsights": {
     "description": "Button text for watching ad to unlock insights"
   },
-  
   "getAdditionalPremiumInsights": "Erhalte 3 zusätzliche Premium-Einblicke",
   "@getAdditionalPremiumInsights": {
     "description": "Benefit text for premium insights unlock"
   },
-  
   "unlockAdvancedHealthRecommendations": "Erweiterte Gesundheitsempfehlungen freischalten",
   "@unlockAdvancedHealthRecommendations": {
     "description": "Benefit text for advanced health recommendations"
   },
-  
-  "premiumInsightsUnlocked": "Premium-Einblicke freigeschaltet! 🎉",
+  "premiumInsightsUnlocked": "Premium-Einblicke freigeschaltet!",
   "@premiumInsightsUnlocked": {
-    "description": "Success message when premium insights are unlocked"
+    "description": "Premium insights unlocked message"
   },
-  
   "day": "Tag {day}",
   "@day": {
     "description": "Day number in cycle",
@@ -874,7 +819,6 @@
       }
     }
   },
-  
   "confidencePercentage": "{percentage}% Vertrauen",
   "@confidencePercentage": {
     "description": "Confidence percentage for predictions",
@@ -885,102 +829,82 @@
       }
     }
   },
-  
   "quickActions": "Schnellaktionen",
   "@quickActions": {
     "description": "Title for quick actions section"
   },
-  
   "logPeriod": "Periode protokollieren",
   "@logPeriod": {
     "description": "Quick action to log period"
   },
-  
   "currentCycleTitle": "Aktueller Zyklus",
   "@currentCycleTitle": {
     "description": "Current cycle section title"
   },
-  
   "moodLabel": "Stimmung",
   "@moodLabel": {
     "description": "Mood info label in current cycle"
   },
-  
   "physical": "Körperlich",
   "@physical": {
     "description": "Physical symptom category"
   },
-  
   "emotional": "Emotional",
   "@emotional": {
     "description": "Emotional symptom category"
   },
-  
   "skinAndHair": "Haut & Haare",
   "@skinAndHair": {
     "description": "Skin and hair symptom category"
   },
-  
   "digestive": "Verdauung",
   "@digestive": {
     "description": "Digestive symptom category"
   },
-  
   "moodSwingsSymptom": "Stimmungsschwankungen",
   "@moodSwingsSymptom": {
     "description": "Mood swings symptom"
   },
-  
   "irritability": "Reizbarkeit",
   "@irritability": {
     "description": "Irritability symptom"
   },
-  
   "anxiety": "Angst",
   "@anxiety": {
     "description": "Anxiety symptom"
   },
-  
   "depression": "Depression",
   "@depression": {
     "description": "Depression symptom"
   },
-  
   "emotionalSensitivity": "Emotionale Sensibilität",
   "@emotionalSensitivity": {
     "description": "Emotional sensitivity symptom"
   },
-  
   "stress": "Stress",
   "@stress": {
     "description": "Stress symptom"
   },
-  
   "oilySkin": "Fettige Haut",
   "@oilySkin": {
     "description": "Oily skin symptom"
   },
-  
   "drySkin": "Trockene Haut",
   "@drySkin": {
     "description": "Dry skin symptom"
   },
-  
   "hairChanges": "Haarveränderungen",
   "@hairChanges": {
     "description": "Hair changes symptom"
   },
-  
   "foodCravings": "Heißhungerattacken",
   "@foodCravings": {
     "description": "Food cravings symptom"
   },
-  
   "lossOfAppetite": "Appetitverlust",
   "@lossOfAppetite": {
     "description": "Loss of appetite symptom"
   },
-  
   "selectedSymptoms": "Ausgewählte Symptome ({count})",
   "@selectedSymptoms": {
     "description": "Selected symptoms count",
@@ -991,14 +915,197 @@
       }
     }
   },
-  
   "biometricDashboard": "Biometrisches Dashboard",
   "@biometricDashboard": {
     "description": "Biometric dashboard title"
   },
-  
   "aiPoweredHealthInsights": "KI-gestützte Gesundheits-Einblicke",
   "@aiPoweredHealthInsights": {
     "description": "AI-powered health insights subtitle"
-  }
+  },
+  "flowIntensityTitle": "Flussstärke Intensität",
+  "@flowIntensityTitle": {
+    "description": "Flow intensity picker title"
+  },
+  "chooseIntensityDescription": "Wählen Sie die Intensität aus, die Ihren Fluss am besten beschreibt:",
+  "@chooseIntensityDescription": {
+    "description": "Flow intensity description"
+  },
+  "flowNoneSubtitle": "Keine Blutung",
+  "@flowNoneSubtitle": {
+    "description": "No flow subtitle"
+  },
+  "flowSpottingSubtitle": "Sehr leichte Blutung",
+  "@flowSpottingSubtitle": {
+    "description": "Spotting flow subtitle"
+  },
+  "flowLightSubtitle": "Normale leichte Blutung",
+  "@flowLightSubtitle": {
+    "description": "Light flow subtitle"
+  },
+  "flowMediumSubtitle": "Normale mittlere Blutung",
+  "@flowMediumSubtitle": {
+    "description": "Medium flow subtitle"
+  },
+  "flowHeavySubtitle": "Starke Blutung",
+  "@flowHeavySubtitle": {
+    "description": "Heavy flow subtitle"
+  },
+  "flowVeryHeavySubtitle": "Sehr starke Blutung",
+  "@flowVeryHeavySubtitle": {
+    "description": "Very heavy flow subtitle"
+  },
+  "yourPeriodStartedSuccessfully": "Ihre Periode wurde erfolgreich gestartet",
+  "@yourPeriodStartedSuccessfully": {
+    "description": "Period started success message"
+  },
+  "unlockPremiumInsights": "Premium-Einblicke freischalten",
+  "@unlockPremiumInsights": {
+    "description": "Premium insights title"
+  },
+  "watchAdToUnlockPremiumAiInsights": "Schauen Sie sich eine Werbung an, um Premium-KI-Einblicke freizuschalten",
+  "@watchAdToUnlockPremiumAiInsights": {
+    "description": "Watch ad message"
+  },
+  "watchAd": "Werbung ansehen",
+  "@watchAd": {
+    "description": "Watch ad button"
+  },
+  "premiumInsights": "Premium-Einblicke",
+  "@premiumInsights": {
+    "description": "Premium insights unlocked title"
+  },
+  "noAiInsightsYet": "Noch keine KI-Einblicke",
+  "@noAiInsightsYet": {
+    "description": "No insights card title"
+  },
+  "keepTrackingHealthDataForAiInsights": "Verfolgen Sie weiterhin Ihre Gesundheitsdaten, um personalisierte KI-Einblicke zu erhalten",
+  "@keepTrackingHealthDataForAiInsights": {
+    "description": "No insights card message"
+  },
+  "connectedDevices": "Verbundene Geräte",
+  "@connectedDevices": {
+    "description": "Connected devices card title"
+  },
+  "iphoneHealth": "iPhone Health",
+  "@iphoneHealth": {
+    "description": "iPhone Health device"
+  },
+  "connected": "Verbunden",
+  "@connected": {
+    "description": "Connected device status"
+  },
+  "appleWatch": "Apple Watch",
+  "@appleWatch": {
+    "description": "Apple Watch device"
+  },
+  "syncing": "Synchronisieren",
+  "@syncing": {
+    "description": "Syncing device status"
+  },
+  "garminConnect": "Garmin Connect",
+  "@garminConnect": {
+    "description": "Garmin Connect device"
+  },
+  "notConnected": "Nicht verbunden",
+  "@notConnected": {
+    "description": "Not connected device status"
+  },
+  "syncSettings": "Sync-Einstellungen",
+  "@syncSettings": {
+    "description": "Sync settings card title"
+  },
+  "autoSync": "Auto-Sync",
+  "@autoSync": {
+    "description": "Auto sync setting"
+  },
+  "automaticallySyncHealthData": "Gesundheitsdaten automatisch synchronisieren",
+  "@automaticallySyncHealthData": {
+    "description": "Auto sync setting description"
+  },
+  "backgroundSync": "Hintergrund-Sync",
+  "@backgroundSync": {
+    "description": "Background sync setting"
+  },
+  "syncDataInBackground": "Daten im Hintergrund synchronisieren",
+  "@syncDataInBackground": {
+    "description": "Background sync setting description"
+  },
+  "loadingBiometricData": "Biometrische Daten werden geladen...",
+  "@loadingBiometricData": {
+    "description": "Loading state message"
+  },
+  "errorLoadingData": "Fehler beim Laden der Daten",
+  "@errorLoadingData": {
+    "description": "Error state title"
+  },
+  "anUnexpectedErrorOccurred": "Ein unerwarteter Fehler ist aufgetreten",
+  "@anUnexpectedErrorOccurred": {
+    "description": "Generic error message"
+  },
+  "retry": "Erneut versuchen",
+  "@retry": {
+    "description": "Retry button"
+  },
+  "noHealthData": "Keine Gesundheitsdaten",
+  "@noHealthData": {
+    "description": "Empty state title"
+  },
+  "connectHealthDevicesForBiometricInsights": "Verbinden Sie Ihre Gesundheitsgeräte, um biometrische Einblicke zu sehen",
+  "@connectHealthDevicesForBiometricInsights": {
+    "description": "Empty state message"
+  },
+  "healthAccessRequired": "Gesundheitszugriff erforderlich",
+  "@healthAccessRequired": {
+    "description": "Permission state title"
+  },
+  "pleaseGrantAccessToHealthDataForBiometricInsights": "Bitte gewähren Sie Zugriff auf Gesundheitsdaten, um biometrische Einblicke zu sehen",
+  "@pleaseGrantAccessToHealthDataForBiometricInsights": {
+    "description": "Permission state message"
+  },
+  "grantAccess": "Zugriff gewähren",
+  "@grantAccess": {
+    "description": "Grant access button"
+  },
+  "excellentHealthMetrics": "Ausgezeichnete Gesundheitswerte",
+  "@excellentHealthMetrics": {
+    "description": "Health score description for excellent health"
+  },
+  "veryGoodHealthPatterns": "Sehr gute Gesundheitsmuster",
+  "@veryGoodHealthPatterns": {
+    "description": "Health score description for very good health"
+  },
+  "goodOverallHealth": "Gute allgemeine Gesundheit",
+  "@goodOverallHealth": {
+    "description": "Health score description for good health"
+  },
+  "moderateHealthIndicators": "Moderate Gesundheitsindikatoren",
+  "@moderateHealthIndicators": {
+    "description": "Health score description for moderate health"
+  },
+  "focusOnHealthImprovement": "Fokus auf Gesundheitsverbesserung",
+  "@focusOnHealthImprovement": {
+    "description": "Health score description for poor health"
+  },
+  "calendarTitle": "Kalender",
+  "@calendarTitle": {
+    "description": "Calendar screen title"
+  },
+  "todayButton": "Heute",
+  "@todayButton": {
+    "description": "Today button label"
+  },
+  "trackingScreenTitle": "Verfolgungsbildschirm",
+  "flowTab": "Fluss",
+  "symptomsTab": "Symptome",
+  "moodTab": "Stimmung",
+  "painTab": "Schmerz",
+  "notesTab": "Notizen",
+  "overview": "Übersicht",
+  "metrics": "Metriken",
+  "sync": "Synchronisieren",
+  "aiPrediction": "KI-Vorhersage",
+  "currentCycle": "Aktueller Zyklus",
+  "noActiveCycle": "Kein aktiver Zyklus",
+  "startTracking": "Verfolgung starten"
 }

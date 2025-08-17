@@ -281,7 +281,6 @@
   "appPreferences": "Preferencias de la App",
   "customizeAppearance": "Personalizar la apariencia de la app",
   "chooseYourLanguage": "Elige tu idioma",
-  "enableNotifications": "Activar Notificaciones",
   "receiveReminders": "Recibir recordatorios y actualizaciones",
   "dailyReminders": "Cuándo enviar recordatorios diarios",
   "aiSmartFeatures": "IA y Funciones Inteligentes",
@@ -293,5 +292,19 @@
   "versionInfoLegal": "Información de versión y legal",
   "light": "Claro",
   "dark": "Oscuro",
-  "system": "Sistema"
+  "system": "Sistema",
+  "trackingScreenTitle": "Pantalla de Seguimiento",
+  "flowTab": "Flujo",
+  "symptomsTab": "Síntomas",
+  "moodTab": "Estado de Ánimo",
+  "painTab": "Dolor",
+  "notesTab": "Notas",
+  "overview": "Resumen",
+  "metrics": "Métricas",
+  "sync": "Sincronizar",
+  "biometricDashboard": "Panel Biométrico",
+  "aiPrediction": "Predicción IA",
+  "currentCycle": "Ciclo Actual",
+  "noActiveCycle": "Sin ciclo activo",
+  "startTracking": "Comenzar seguimiento"
 }

@@ -637,22 +637,22 @@ class AppLocalizationsDe extends AppLocalizations {
   String get pm => 'PM';
 
   @override
-  String get trackingScreenTitle => 'Tracking';
+  String get trackingScreenTitle => 'Verfolgungsbildschirm';
 
   @override
-  String get flowTab => 'Flow';
+  String get flowTab => 'Fluss';
 
   @override
-  String get symptomsTab => 'Symptoms';
+  String get symptomsTab => 'Symptome';
 
   @override
-  String get moodTab => 'Mood';
+  String get moodTab => 'Stimmung';
 
   @override
-  String get painTab => 'Pain';
+  String get painTab => 'Schmerz';
 
   @override
-  String get notesTab => 'Notes';
+  String get notesTab => 'Notizen';
 
   @override
   String get selectTodaysFlowIntensity => 'Select today\'s flow intensity';
@@ -928,16 +928,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String get biometricDashboard => 'Biometrisches Dashboard';
 
   @override
-  String get currentCycle => 'Current Cycle';
+  String get currentCycle => 'Aktueller Zyklus';
 
   @override
-  String get noActiveCycle => 'No active cycle';
+  String get noActiveCycle => 'Kein aktiver Zyklus';
 
   @override
-  String get startTracking => 'Start Tracking';
+  String get startTracking => 'Verfolgung starten';
 
   @override
-  String get aiPrediction => 'AI Prediction';
+  String get aiPrediction => 'KI-Vorhersage';
 
   @override
   String inDays(int days) {
@@ -1090,7 +1090,7 @@ class AppLocalizationsDe extends AppLocalizations {
       'Erweiterte Gesundheitsempfehlungen freischalten';
 
   @override
-  String get premiumInsightsUnlocked => 'Premium-Einblicke freigeschaltet! 🎉';
+  String get premiumInsightsUnlocked => 'Premium-Einblicke freigeschaltet!';
 
   @override
   String day(int day) {
@@ -1332,13 +1332,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get failedToRefreshData => 'Failed to refresh data';
 
   @override
-  String get overview => 'Overview';
+  String get overview => 'Übersicht';
 
   @override
-  String get metrics => 'Metrics';
+  String get metrics => 'Metriken';
 
   @override
-  String get sync => 'Sync';
+  String get sync => 'Synchronisieren';
 
   @override
   String get healthDataConnected => 'Health Data Connected';
@@ -1437,91 +1437,93 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get keepTrackingHealthDataForAiInsights =>
-      'Keep tracking your health data to get personalized AI insights';
+      'Verfolgen Sie weiterhin Ihre Gesundheitsdaten, um personalisierte KI-Einblicke zu erhalten';
 
   @override
-  String get connectedDevices => 'Connected Devices';
+  String get connectedDevices => 'Verbundene Geräte';
 
   @override
   String get iphoneHealth => 'iPhone Health';
 
   @override
-  String get connected => 'Connected';
+  String get connected => 'Verbunden';
 
   @override
   String get appleWatch => 'Apple Watch';
 
   @override
-  String get syncing => 'Syncing';
+  String get syncing => 'Synchronisieren';
 
   @override
   String get garminConnect => 'Garmin Connect';
 
   @override
-  String get notConnected => 'Not connected';
+  String get notConnected => 'Nicht verbunden';
 
   @override
-  String get syncSettings => 'Sync Settings';
+  String get syncSettings => 'Sync-Einstellungen';
 
   @override
-  String get autoSync => 'Auto Sync';
+  String get autoSync => 'Auto-Sync';
 
   @override
-  String get automaticallySyncHealthData => 'Automatically sync health data';
+  String get automaticallySyncHealthData =>
+      'Gesundheitsdaten automatisch synchronisieren';
 
   @override
-  String get backgroundSync => 'Background Sync';
+  String get backgroundSync => 'Hintergrund-Sync';
 
   @override
-  String get syncDataInBackground => 'Sync data in the background';
+  String get syncDataInBackground => 'Daten im Hintergrund synchronisieren';
 
   @override
-  String get loadingBiometricData => 'Loading biometric data...';
+  String get loadingBiometricData => 'Biometrische Daten werden geladen...';
 
   @override
-  String get errorLoadingData => 'Error Loading Data';
+  String get errorLoadingData => 'Fehler beim Laden der Daten';
 
   @override
-  String get anUnexpectedErrorOccurred => 'An unexpected error occurred';
+  String get anUnexpectedErrorOccurred =>
+      'Ein unerwarteter Fehler ist aufgetreten';
 
   @override
-  String get retry => 'Retry';
+  String get retry => 'Erneut versuchen';
 
   @override
-  String get noHealthData => 'No Health Data';
+  String get noHealthData => 'Keine Gesundheitsdaten';
 
   @override
   String get connectHealthDevicesForBiometricInsights =>
-      'Connect your health devices to see biometric insights';
+      'Verbinden Sie Ihre Gesundheitsgeräte, um biometrische Einblicke zu sehen';
 
   @override
-  String get healthAccessRequired => 'Health Access Required';
+  String get healthAccessRequired => 'Gesundheitszugriff erforderlich';
 
   @override
   String get pleaseGrantAccessToHealthDataForBiometricInsights =>
-      'Please grant access to health data to view biometric insights';
+      'Bitte gewähren Sie Zugriff auf Gesundheitsdaten, um biometrische Einblicke zu sehen';
 
   @override
-  String get grantAccess => 'Grant Access';
+  String get grantAccess => 'Zugriff gewähren';
 
   @override
-  String get excellentHealthMetrics => 'Excellent health metrics';
+  String get excellentHealthMetrics => 'Ausgezeichnete Gesundheitswerte';
 
   @override
-  String get veryGoodHealthPatterns => 'Very good health patterns';
+  String get veryGoodHealthPatterns => 'Sehr gute Gesundheitsmuster';
 
   @override
-  String get goodOverallHealth => 'Good overall health';
+  String get goodOverallHealth => 'Gute allgemeine Gesundheit';
 
   @override
-  String get moderateHealthIndicators => 'Moderate health indicators';
+  String get moderateHealthIndicators => 'Moderate Gesundheitsindikatoren';
 
   @override
-  String get focusOnHealthImprovement => 'Focus on health improvement';
+  String get focusOnHealthImprovement => 'Fokus auf Gesundheitsverbesserung';
 
   @override
-  String get calendarTitle => 'Calendar';
+  String get calendarTitle => 'Kalender';
 
   @override
-  String get todayButton => 'Today';
+  String get todayButton => 'Heute';
 }

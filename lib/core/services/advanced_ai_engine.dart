@@ -2,7 +2,6 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import '../models/cycle_data.dart';
 import '../models/user_profile.dart';
-import '../models/ai_insights.dart';
 import '../models/biometric_data.dart';
 /// Advanced AI prediction engine with 95%+ accuracy
 /// Uses multi-modal data analysis and machine learning

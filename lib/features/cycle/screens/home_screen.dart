@@ -38,40 +38,62 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     
+    // Use slower, less intensive animations to reduce frame drops
     _dashboardController = AnimationController(
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 6), // Slower animation
       vsync: this,
-    )..repeat();
+    );
     
     _healthController = AnimationController(
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 4), // Slower animation
       vsync: this,
-    )..repeat();
+    );
     
     _predictiveController = AnimationController(
-      duration: const Duration(seconds: 4),
+      duration: const Duration(seconds: 8), // Much slower animation
       vsync: this,
-    )..repeat();
+    );
     
-    _dashboardAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(_dashboardController);
+    // Use easier easing curves
+    _dashboardAnimation = CurvedAnimation(
+      parent: _dashboardController,
+      curve: Curves.easeInOut,
+    );
     
-    _healthAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(_healthController);
+    _healthAnimation = CurvedAnimation(
+      parent: _healthController,
+      curve: Curves.easeInOut,
+    );
     
-    _predictiveAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(_predictiveController);
+    _predictiveAnimation = CurvedAnimation(
+      parent: _predictiveController,
+      curve: Curves.easeInOut,
+    );
     
+    // Start animations with a delay to not block UI
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (mounted) {
+        _dashboardController.repeat();
+        _healthController.repeat();
+        _predictiveController.repeat();
+      }
+    });
+    
+    // Defer heavy operations to not block UI
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<CycleProvider>().loadCycles();
-      context.read<InsightsProvider>().loadInsights();
-      _loadBannerAd();
+      Future.delayed(const Duration(milliseconds: 200), () {
+        if (mounted) {
+          context.read<CycleProvider>().loadCycles();
+          context.read<InsightsProvider>().loadInsights();
+        }
+      });
+      
+      // Load ad even later to not impact startup
+      Future.delayed(const Duration(milliseconds: 1000), () {
+        if (mounted) {
+          _loadBannerAd();
+        }
+      });
     });
   }
   
@@ -348,32 +370,40 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       children: [
                         // REVOLUTIONARY: AI-Powered Dynamic Header
                         _buildRevolutionaryHeader(settings),
-                    const SizedBox(height: 24),
-                    
-                    // REVOLUTIONARY: Health Dashboard Matrix
-                    _buildHealthDashboardMatrix(cycleProvider),
-                    const SizedBox(height: 24),
-                    
-                    // REVOLUTIONARY: Predictive Analytics Center
-                    _buildPredictiveAnalyticsCenter(cycleProvider),
-                    const SizedBox(height: 24),
-                    
-                    // REVOLUTIONARY: AI Health Insights Portal
-                    _buildAIHealthInsightsPortal(insightsProvider),
-                    const SizedBox(height: 24),
-                    
-                    // REVOLUTIONARY: Smart Action Command Center
-                    _buildSmartActionCommandCenter(),
-                    const SizedBox(height: 24),
-                    
-                    // REVOLUTIONARY: Health Trends Visualization
-                    _buildHealthTrendsVisualization(),
-                    
-                    // Banner Ad
-                    if (_isBannerAdReady) ...[
-                      const SizedBox(height: 24),
-                      _buildBannerAdWidget(),
-                    ],
+                        const SizedBox(height: 24),
+                        
+                        // Use lazy loading for heavy widgets to improve performance
+                        _LazyWidget(
+                          builder: () => _buildHealthDashboardMatrix(cycleProvider),
+                        ),
+                        const SizedBox(height: 24),
+                        
+                        _LazyWidget(
+                          builder: () => _buildPredictiveAnalyticsCenter(cycleProvider),
+                        ),
+                        const SizedBox(height: 24),
+                        
+                        _LazyWidget(
+                          builder: () => _buildAIHealthInsightsPortal(insightsProvider),
+                        ),
+                        const SizedBox(height: 24),
+                        
+                        _LazyWidget(
+                          builder: () => _buildSmartActionCommandCenter(),
+                        ),
+                        const SizedBox(height: 24),
+                        
+                        _LazyWidget(
+                          builder: () => _buildHealthTrendsVisualization(),
+                        ),
+                        
+                        // Banner Ad - load last to not impact UI
+                        if (_isBannerAdReady) ...[
+                          const SizedBox(height: 24),
+                          _LazyWidget(
+                            builder: () => _buildBannerAdWidget(),
+                          ),
+                        ],
                       ],
                     ),
                   );
@@ -2047,6 +2077,60 @@ class HealthScorePainter extends CustomPainter {
   
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+}
+
+// Lazy loading widget to improve performance
+class _LazyWidget extends StatefulWidget {
+  final Widget Function() builder;
+  
+  const _LazyWidget({required this.builder});
+  
+  @override
+  State<_LazyWidget> createState() => _LazyWidgetState();
+}
+
+class _LazyWidgetState extends State<_LazyWidget> {
+  Widget? _cachedWidget;
+  bool _isBuilt = false;
+  
+  @override
+  Widget build(BuildContext context) {
+    // Only build widget when it's needed (when scrolled into view)
+    if (!_isBuilt) {
+      // Use a post-frame callback to defer building until the frame is complete
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && !_isBuilt) {
+          setState(() {
+            _cachedWidget = widget.builder();
+            _isBuilt = true;
+          });
+        }
+      });
+      
+      // Show a placeholder while building
+      return Container(
+        height: 200,
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor.withOpacity(0.3),
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: Center(
+          child: SizedBox(
+            width: 20,
+            height: 20,
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(
+                Theme.of(context).primaryColor.withOpacity(0.5)
+              ),
+              strokeWidth: 2,
+            ),
+          ),
+        ),
+      );
+    }
+    
+    return _cachedWidget ?? const SizedBox.shrink();
+  }
 }
 
 class NeuralNetworkPainter extends CustomPainter {

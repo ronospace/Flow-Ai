@@ -13,6 +13,7 @@ import '../widgets/prediction_accuracy_card.dart';
 import '../widgets/cycle_regularity_indicator.dart';
 import '../widgets/mood_energy_chart.dart';
 import '../widgets/symptom_heatmap.dart';
+import '../widgets/floating_ai_chat.dart';
 
 class InsightsScreen extends StatefulWidget {
   const InsightsScreen({super.key});
@@ -53,36 +54,43 @@ class _InsightsScreenState extends State<InsightsScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-        gradient: AppTheme.backgroundGradient(Theme.of(context).brightness == Brightness.dark),
-        ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              // Custom Header
-              _buildHeader(),
-              
-              // Time Period Selector
-              _buildTimePeriodSelector(),
-              
-              // Tab Bar
-              _buildTabBar(),
-              
-              // Tab Content
-              Expanded(
-                child: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    _buildOverviewTab(),
-                    _buildTrendsTab(),
-                    _buildPatternsTab(),
-                  ],
-                ),
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+            gradient: AppTheme.backgroundGradient(Theme.of(context).brightness == Brightness.dark),
+            ),
+            child: SafeArea(
+              child: Column(
+                children: [
+                  // Custom Header
+                  _buildHeader(),
+                  
+                  // Time Period Selector
+                  _buildTimePeriodSelector(),
+                  
+                  // Tab Bar
+                  _buildTabBar(),
+                  
+                  // Tab Content
+                  Expanded(
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: [
+                        _buildOverviewTab(),
+                        _buildTrendsTab(),
+                        _buildPatternsTab(),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+          
+          // Floating AI Chat
+          const FloatingAIChat(),
+        ],
       ),
     );
   }

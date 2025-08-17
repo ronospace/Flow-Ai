@@ -278,11 +278,9 @@
   "chooseLanguage": "Choisir la Langue",
   "searchLanguages": "Rechercher des langues...",
   "languageChangedTo": "Langue changée en",
-  
   "appPreferences": "Préférences de l'App",
   "customizeAppearance": "Personnaliser l'apparence de l'app",
   "chooseYourLanguage": "Choisissez votre langue",
-  "enableNotifications": "Activer les Notifications",
   "receiveReminders": "Recevoir des rappels et mises à jour",
   "dailyReminders": "Quand envoyer les rappels quotidiens",
   "aiSmartFeatures": "IA et Fonctionnalités Intelligentes",
@@ -531,5 +529,19 @@
   },
   "@languageChangedTo": {
     "description": "Language change confirmation message"
-  }
+  },
+  "trackingScreenTitle": "Écran de Suivi",
+  "flowTab": "Flux",
+  "symptomsTab": "Symptômes",
+  "moodTab": "Humeur",
+  "painTab": "Douleur",
+  "notesTab": "Notes",
+  "overview": "Vue d'ensemble",
+  "metrics": "Métriques",
+  "sync": "Synchroniser",
+  "biometricDashboard": "Tableau de Bord Biométrique",
+  "aiPrediction": "Prédiction IA",
+  "currentCycle": "Cycle Actuel",
+  "noActiveCycle": "Aucun cycle actif",
+  "startTracking": "Commencer le suivi"
 }

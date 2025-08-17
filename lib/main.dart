@@ -10,6 +10,10 @@ import 'core/routing/app_router.dart';
 import 'core/services/ai_engine.dart';
 import 'core/services/notification_service.dart';
 import 'core/services/admob_service.dart';
+import 'core/services/navigation_service.dart';
+import 'core/services/auth_service.dart';
+import 'core/services/ai_conversation_memory.dart';
+import 'core/services/offline_service.dart';
 import 'features/onboarding/providers/onboarding_provider.dart';
 import 'features/cycle/providers/cycle_provider.dart';
 import 'features/insights/providers/insights_provider.dart';
@@ -19,30 +23,103 @@ import 'features/settings/providers/settings_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Initialize core services
-  await _initializeServices();
+  // Initialize only critical services synchronously
+  await _initializeCriticalServices();
   
   runApp(FlowSenseApp());
+  
+  // Initialize non-critical services asynchronously after app launch
+  _initializeNonCriticalServices();
 }
 
-Future<void> _initializeServices() async {
-  // Initialize AdMob
-  await AdMobService.initialize();
-  
-  // Initialize AI Engine
-  await AIEngine.instance.initialize();
-  
-  // Initialize Notification Service
-  await NotificationService.instance.initialize();
-  
-  // Initialize AdMob ads
-  final adMobService = AdMobService();
-  adMobService.loadInterstitialAd();
-  adMobService.loadRewardedAd();
-  
+Future<void> _initializeCriticalServices() async {
+  // Only initialize absolutely necessary services for app startup
   // System UI overlay style will be set dynamically based on theme
   // This is now handled in the MaterialApp theme configuration
 }
+
+Future<void> _initializeNonCriticalServices() async {
+  // Defer heavy initializations to not block app startup
+  await Future.delayed(const Duration(milliseconds: 100));
+  
+  // Initialize services in parallel to improve performance
+  await Future.wait([
+    _initializeAdMob(),
+    _initializeAI(),
+    _initializeNotifications(),
+    _initializeNavigation(),
+    _initializeAuth(),
+    _initializeAIMemory(),
+    _initializeOfflineService(),
+  ]);
+}
+
+Future<void> _initializeAdMob() async {
+  try {
+    await AdMobService.initialize();
+    final adMobService = AdMobService();
+    // Load ads without blocking - fire and forget
+    adMobService.loadInterstitialAd();
+    adMobService.loadRewardedAd();
+  } catch (e) {
+    debugPrint('AdMob initialization failed: $e');
+  }
+}
+
+Future<void> _initializeAI() async {
+  try {
+    await AIEngine.instance.initialize();
+  } catch (e) {
+    debugPrint('AI Engine initialization failed: $e');
+  }
+}
+
+Future<void> _initializeNotifications() async {
+  try {
+    await NotificationService.instance.initialize();
+  } catch (e) {
+    debugPrint('Notification Service initialization failed: $e');
+  }
+}
+
+Future<void> _initializeNavigation() async {
+  try {
+    await NavigationService().initialize();
+    debugPrint('✅ Navigation Service initialized');
+  } catch (e) {
+    debugPrint('Navigation Service initialization failed: $e');
+  }
+}
+
+Future<void> _initializeAuth() async {
+  try {
+    await AuthService().initialize();
+    debugPrint('🔐 Authentication Service initialized');
+  } catch (e) {
+    debugPrint('Authentication Service initialization failed: $e');
+  }
+}
+
+Future<void> _initializeAIMemory() async {
+  try {
+    await AIConversationMemory().initialize();
+    debugPrint('🧠 AI Conversation Memory initialized');
+  } catch (e) {
+    debugPrint('AI Conversation Memory initialization failed: $e');
+  }
+}
+
+Future<void> _initializeOfflineService() async {
+  try {
+    await OfflineService().initialize();
+    debugPrint('🔄 Offline Service initialized');
+  } catch (e) {
+    debugPrint('Offline Service initialization failed: $e');
+  }
+}
+
+// Helper function to avoid awaiting futures we don't need to wait for
+void unawaited(Future<void> future) {}
 
 class FlowSenseApp extends StatefulWidget {
   const FlowSenseApp({super.key});
@@ -53,7 +130,6 @@ class FlowSenseApp extends StatefulWidget {
 
 class _FlowSenseAppState extends State<FlowSenseApp> {
   late SettingsProvider settingsProvider;
-  bool _isInitialized = false;
 
   @override
   void initState() {
@@ -66,7 +142,7 @@ class _FlowSenseAppState extends State<FlowSenseApp> {
     await settingsProvider.initializeSettings();
     if (mounted) {
       setState(() {
-        _isInitialized = true;
+        // Settings initialized
       });
     }
   }

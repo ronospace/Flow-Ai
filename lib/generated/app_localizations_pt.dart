@@ -637,22 +637,22 @@ class AppLocalizationsPt extends AppLocalizations {
   String get pm => 'PM';
 
   @override
-  String get trackingScreenTitle => 'Tracking';
+  String get trackingScreenTitle => 'Tela de Rastreamento';
 
   @override
-  String get flowTab => 'Flow';
+  String get flowTab => 'Fluxo';
 
   @override
-  String get symptomsTab => 'Symptoms';
+  String get symptomsTab => 'Sintomas';
 
   @override
-  String get moodTab => 'Mood';
+  String get moodTab => 'Humor';
 
   @override
-  String get painTab => 'Pain';
+  String get painTab => 'Dor';
 
   @override
-  String get notesTab => 'Notes';
+  String get notesTab => 'Notas';
 
   @override
   String get selectTodaysFlowIntensity => 'Select today\'s flow intensity';
@@ -924,19 +924,19 @@ class AppLocalizationsPt extends AppLocalizations {
   String get darkThemeDescription => 'Easy on the eyes in low light';
 
   @override
-  String get biometricDashboard => 'Biometric Dashboard';
+  String get biometricDashboard => 'Painel Biométrico';
 
   @override
-  String get currentCycle => 'Current Cycle';
+  String get currentCycle => 'Ciclo Atual';
 
   @override
-  String get noActiveCycle => 'No active cycle';
+  String get noActiveCycle => 'Nenhum ciclo ativo';
 
   @override
-  String get startTracking => 'Start Tracking';
+  String get startTracking => 'Iniciar rastreamento';
 
   @override
-  String get aiPrediction => 'AI Prediction';
+  String get aiPrediction => 'Previsão IA';
 
   @override
   String inDays(int days) {
@@ -1329,13 +1329,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get failedToRefreshData => 'Failed to refresh data';
 
   @override
-  String get overview => 'Overview';
+  String get overview => 'Visão Geral';
 
   @override
-  String get metrics => 'Metrics';
+  String get metrics => 'Métricas';
 
   @override
-  String get sync => 'Sync';
+  String get sync => 'Sincronizar';
 
   @override
   String get healthDataConnected => 'Health Data Connected';

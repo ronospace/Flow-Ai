@@ -78,13 +78,34 @@ dependencies:
   # Device Info
   device_info_plus: ^10.1.2
   
+  # Network Connectivity
+  connectivity_plus: ^6.1.0
+  
   # Biometric Authentication
   local_auth: ^2.3.0
+  
+  # OAuth Authentication  
+  google_sign_in: ^6.2.1
+  sign_in_with_apple: ^6.1.2
+  firebase_auth: ^5.3.1
+  firebase_core: ^3.6.0
+  
+  # State Persistence
+  hydrated_bloc: ^9.1.5
+  
+  # Chat UI Components
+  flutter_chat_ui: ^1.6.15
+  flutter_chat_types: ^3.6.2
+  
+  # UUID Generation
+  uuid: ^4.5.1
   
   # Advertising
   google_mobile_ads: ^5.1.0
 dev_dependencies:
   flutter_test:
+    sdk: flutter
+  integration_test:
     sdk: flutter
 
   # The "flutter_lints" package below contains a set of recommended lints to

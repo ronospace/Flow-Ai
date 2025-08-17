@@ -240,7 +240,7 @@
   "pillReminder": "Pill Reminder",
   "symptomReminder": "Symptom Tracking Reminder",
   "insightNotifications": "Insight Notifications",
-  "enableNotifications": "Enable Notifications",
+  "enableNotifications": "Ativar Notificações",
   "notificationTime": "Notification Time",
   "reminderDays": "{days} days before",
   "@reminderDays": {
@@ -515,84 +515,81 @@
   "@languageChangedTo": {
     "description": "Language change confirmation message"
   },
-  
   "appPreferences": "Preferências do App",
   "@appPreferences": {
     "description": "App preferences section title"
   },
-  
   "customizeAppearance": "Personalizar a aparência do app",
   "@customizeAppearance": {
     "description": "Theme customization subtitle"
   },
-  
   "chooseYourLanguage": "Escolha seu idioma",
   "@chooseYourLanguage": {
     "description": "Language selection subtitle"
   },
-  
-  "enableNotifications": "Ativar Notificações",
   "@enableNotifications": {
     "description": "Enable notifications setting title"
   },
-  
   "receiveReminders": "Receber lembretes e atualizações",
   "@receiveReminders": {
     "description": "Enable notifications setting subtitle"
   },
-  
   "dailyReminders": "Quando enviar lembretes diários",
   "@dailyReminders": {
     "description": "Notification time setting subtitle"
   },
-  
   "aiSmartFeatures": "IA e Recursos Inteligentes",
   "@aiSmartFeatures": {
     "description": "AI features section title"
   },
-  
   "personalizedAiInsights": "Obter insights de IA personalizados",
   "@personalizedAiInsights": {
     "description": "AI insights setting subtitle"
   },
-  
   "hapticFeedback": "Feedback Háptico",
   "@hapticFeedback": {
     "description": "Haptic feedback setting title"
   },
-  
   "vibrationInteractions": "Sentir vibrações nas interações",
   "@vibrationInteractions": {
     "description": "Haptic feedback setting subtitle"
   },
-  
   "supportAbout": "Suporte e Sobre",
   "@supportAbout": {
     "description": "Support and about section title"
   },
-  
   "getHelpTutorials": "Obter ajuda e tutoriais",
   "@getHelpTutorials": {
     "description": "Help section subtitle"
   },
-  
   "versionInfoLegal": "Informações de versão e legais",
   "@versionInfoLegal": {
     "description": "About section subtitle"
   },
-  
   "light": "Claro",
   "@light": {
     "description": "Light theme name"
   },
-  
   "dark": "Escuro",
   "@dark": {
     "description": "Dark theme name"
   },
-  
   "system": "Sistema",
   "@system": {
     "description": "System theme name"
-  }
+  },
+  "trackingScreenTitle": "Tela de Rastreamento",
+  "flowTab": "Fluxo",
+  "symptomsTab": "Sintomas",
+  "moodTab": "Humor",
+  "painTab": "Dor",
+  "notesTab": "Notas",
+  "overview": "Visão Geral",
+  "metrics": "Métricas",
+  "sync": "Sincronizar",
+  "biometricDashboard": "Painel Biométrico",
+  "aiPrediction": "Previsão IA",
+  "currentCycle": "Ciclo Atual",
+  "noActiveCycle": "Nenhum ciclo ativo",
+  "startTracking": "Iniciar rastreamento"
 }

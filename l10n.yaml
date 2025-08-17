@@ -10,3 +10,4 @@ header-comment: |
   FlowSense - AI-Powered Period & Cycle Tracking App
   Auto-generated localization files - Do not edit manually
 preferred-supported-locales: [ en, es, fr, pt, de, it, ar, hi, zh, ja, ko, ru ]
+untranslated-messages-file: untranslated_messages.json
