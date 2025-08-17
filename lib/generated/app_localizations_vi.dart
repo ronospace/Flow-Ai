@@ -859,4 +859,49 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get languageChangedTo => 'Language changed to';
+
+  @override
+  String get appPreferences => 'App Preferences';
+
+  @override
+  String get customizeAppearance => 'Customize app appearance';
+
+  @override
+  String get chooseYourLanguage => 'Choose your language';
+
+  @override
+  String get receiveReminders => 'Receive reminders and updates';
+
+  @override
+  String get dailyReminders => 'When to send daily reminders';
+
+  @override
+  String get aiSmartFeatures => 'AI & Smart Features';
+
+  @override
+  String get personalizedAiInsights => 'Get personalized AI insights';
+
+  @override
+  String get hapticFeedback => 'Haptic Feedback';
+
+  @override
+  String get vibrationInteractions => 'Feel vibrations on interactions';
+
+  @override
+  String get supportAbout => 'Support & About';
+
+  @override
+  String get getHelpTutorials => 'Get help and tutorials';
+
+  @override
+  String get versionInfoLegal => 'Version info and legal';
+
+  @override
+  String get light => 'Light';
+
+  @override
+  String get dark => 'Dark';
+
+  @override
+  String get system => 'System';
 }

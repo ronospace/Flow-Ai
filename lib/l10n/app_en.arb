@@ -514,5 +514,85 @@
   "languageChangedTo": "Language changed to",
   "@languageChangedTo": {
     "description": "Language change confirmation message"
+  },
+  
+  "appPreferences": "App Preferences",
+  "@appPreferences": {
+    "description": "App preferences section title"
+  },
+  
+  "customizeAppearance": "Customize app appearance",
+  "@customizeAppearance": {
+    "description": "Theme customization subtitle"
+  },
+  
+  "chooseYourLanguage": "Choose your language",
+  "@chooseYourLanguage": {
+    "description": "Language selection subtitle"
+  },
+  
+  "enableNotifications": "Enable Notifications",
+  "@enableNotifications": {
+    "description": "Enable notifications setting title"
+  },
+  
+  "receiveReminders": "Receive reminders and updates",
+  "@receiveReminders": {
+    "description": "Enable notifications setting subtitle"
+  },
+  
+  "dailyReminders": "When to send daily reminders",
+  "@dailyReminders": {
+    "description": "Notification time setting subtitle"
+  },
+  
+  "aiSmartFeatures": "AI & Smart Features",
+  "@aiSmartFeatures": {
+    "description": "AI features section title"
+  },
+  
+  "personalizedAiInsights": "Get personalized AI insights",
+  "@personalizedAiInsights": {
+    "description": "AI insights setting subtitle"
+  },
+  
+  "hapticFeedback": "Haptic Feedback",
+  "@hapticFeedback": {
+    "description": "Haptic feedback setting title"
+  },
+  
+  "vibrationInteractions": "Feel vibrations on interactions",
+  "@vibrationInteractions": {
+    "description": "Haptic feedback setting subtitle"
+  },
+  
+  "supportAbout": "Support & About",
+  "@supportAbout": {
+    "description": "Support and about section title"
+  },
+  
+  "getHelpTutorials": "Get help and tutorials",
+  "@getHelpTutorials": {
+    "description": "Help section subtitle"
+  },
+  
+  "versionInfoLegal": "Version info and legal",
+  "@versionInfoLegal": {
+    "description": "About section subtitle"
+  },
+  
+  "light": "Light",
+  "@light": {
+    "description": "Light theme name"
+  },
+  
+  "dark": "Dark",
+  "@dark": {
+    "description": "Dark theme name"
+  },
+  
+  "system": "System",
+  "@system": {
+    "description": "System theme name"
   }
 }

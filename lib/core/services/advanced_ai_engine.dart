@@ -1,9 +1,10 @@
 import 'dart:math';
+import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import '../models/cycle_data.dart';
-import '../models/biometric_data.dart';
 import '../models/user_profile.dart';
-
+import '../models/ai_insights.dart';
+import '../models/biometric_data.dart';
 /// Advanced AI prediction engine with 95%+ accuracy
 /// Uses multi-modal data analysis and machine learning
 class AdvancedAIEngine {
@@ -70,7 +71,7 @@ class AdvancedAIEngine {
     }
 
     // Calculate cycle length patterns
-    final lengths = cycles.map((c) => c.cycleLength).toList();
+    final lengths = cycles.map((c) => c.length).toList();
     final avgLength = lengths.reduce((a, b) => a + b) / lengths.length;
     final variance = _calculateVariance(lengths);
     final regularity = _calculateRegularity(lengths);
@@ -402,7 +403,8 @@ class AdvancedAIEngine {
   }
 
   FlowPatterns _analyzeFlowPatterns(List<CycleData> cycles) {
-    final intensities = cycles.expand((c) => c.flowData).toList();
+    // Use flowIntensity from CycleData instead of flowData
+    final intensities = cycles.map((c) => c.flowIntensity.index).toList();
     
     return FlowPatterns(
       averageIntensity: _calculateAverageIntensity(intensities),

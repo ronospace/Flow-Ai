@@ -443,7 +443,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get insightNotifications => 'Insight Notifications';
 
   @override
-  String get enableNotifications => 'Enable Notifications';
+  String get enableNotifications => '通知を有効にする';
 
   @override
   String get notificationTime => 'Notification Time';
@@ -859,4 +859,49 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get languageChangedTo => 'Language changed to';
+
+  @override
+  String get appPreferences => 'アプリ設定';
+
+  @override
+  String get customizeAppearance => 'アプリの外観をカスタマイズ';
+
+  @override
+  String get chooseYourLanguage => '言語を選択';
+
+  @override
+  String get receiveReminders => 'リマインダーと更新を受け取る';
+
+  @override
+  String get dailyReminders => '毎日のリマインダーを送信する時間';
+
+  @override
+  String get aiSmartFeatures => 'AI＆スマート機能';
+
+  @override
+  String get personalizedAiInsights => 'パーソナライズされたAIインサイトを取得';
+
+  @override
+  String get hapticFeedback => 'ハプティックフィードバック';
+
+  @override
+  String get vibrationInteractions => 'インタラクション時の振動を感じる';
+
+  @override
+  String get supportAbout => 'サポート＆について';
+
+  @override
+  String get getHelpTutorials => 'ヘルプとチュートリアルを見る';
+
+  @override
+  String get versionInfoLegal => 'バージョン情報と法的事項';
+
+  @override
+  String get light => 'ライト';
+
+  @override
+  String get dark => 'ダーク';
+
+  @override
+  String get system => 'システム';
 }

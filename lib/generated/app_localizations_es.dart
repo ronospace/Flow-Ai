@@ -16,7 +16,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get appDescription =>
-      'Rastrea tu ciclo menstrual con conocimientos potenciados por IA y recomendaciones personalizadas para una mejor salud reproductiva.';
+      'Rastrea tu ciclo menstrual con análisis de IA y recomendaciones personalizadas para una mejor salud reproductiva.';
 
   @override
   String get home => 'Inicio';
@@ -28,7 +28,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get tracking => 'Seguimiento';
 
   @override
-  String get insights => 'Conocimientos';
+  String get insights => 'Análisis';
 
   @override
   String get settings => 'Configuración';
@@ -40,7 +40,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String cycleLength(int length) {
-    return 'Duración del Ciclo: $length días';
+    return 'Duración del ciclo: $length días';
   }
 
   @override
@@ -78,7 +78,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get periodStarted => 'Período Iniciado';
 
   @override
-  String get periodEnded => 'Período Terminado';
+  String get periodEnded => 'Período Finalizado';
 
   @override
   String get flowIntensity => 'Intensidad del Flujo';
@@ -114,19 +114,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get bloating => 'Hinchazón';
 
   @override
-  String get headache => 'Dolor de Cabeza';
+  String get headache => 'Dolor de cabeza';
 
   @override
-  String get backPain => 'Dolor de Espalda';
+  String get backPain => 'Dolor de espalda';
 
   @override
-  String get breastTenderness => 'Sensibilidad en los Senos';
+  String get breastTenderness => 'Sensibilidad en los senos';
 
   @override
   String get fatigue => 'Fatiga';
 
   @override
-  String get moodSwings => 'Cambios de Humor';
+  String get moodSwings => 'Cambios de humor';
 
   @override
   String get acne => 'Acné';
@@ -153,7 +153,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get constipation => 'Estreñimiento';
 
   @override
-  String get mood => 'Humor';
+  String get mood => 'Estado de ánimo';
 
   @override
   String get energy => 'Energía';
@@ -177,13 +177,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get moodIrritated => 'Irritada';
 
   @override
-  String get energyHigh => 'Energía Alta';
+  String get energyHigh => 'Alta Energía';
 
   @override
   String get energyMedium => 'Energía Media';
 
   @override
-  String get energyLow => 'Energía Baja';
+  String get energyLow => 'Baja Energía';
 
   @override
   String get painNone => 'Sin Dolor';
@@ -195,7 +195,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get painModerate => 'Dolor Moderado';
 
   @override
-  String get painSevere => 'Dolor Severo';
+  String get painSevere => 'Dolor Intenso';
 
   @override
   String get predictions => 'Predicciones';
@@ -208,7 +208,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String predictedDate(String date) {
-    return 'Predicho: $date';
+    return 'Predicción: $date';
   }
 
   @override
@@ -217,16 +217,16 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get aiPoweredPredictions => 'Predicciones Potenciadas por IA';
+  String get aiPoweredPredictions => 'Predicciones con IA';
 
   @override
-  String get advancedInsights => 'Conocimientos Avanzados';
+  String get advancedInsights => 'Análisis Avanzados';
 
   @override
   String get personalizedRecommendations => 'Recomendaciones Personalizadas';
 
   @override
-  String get cycleInsights => 'Conocimientos del Ciclo';
+  String get cycleInsights => 'Análisis del Ciclo';
 
   @override
   String get patternAnalysis => 'Análisis de Patrones';
@@ -238,13 +238,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get symptomPatterns => 'Patrones de Síntomas';
 
   @override
-  String get moodPatterns => 'Patrones de Humor';
+  String get moodPatterns => 'Patrones de Estado de Ánimo';
 
   @override
   String get regularCycle => 'Tu ciclo es regular';
 
   @override
-  String get irregularCycle => 'Tu ciclo muestra cierta irregularidad';
+  String get irregularCycle => 'Tu ciclo muestra algunas irregularidades';
 
   @override
   String cycleVariation(int days) {
@@ -257,7 +257,7 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get lifestyle => 'Estilo de Vida';
+  String get lifestyle => 'Estilo de vida';
 
   @override
   String get nutrition => 'Nutrición';
@@ -269,16 +269,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get wellness => 'Bienestar';
 
   @override
-  String get sleepBetter => 'Mejora la calidad de tu sueño';
+  String get sleepBetter => 'Mejora tu calidad de sueño';
 
   @override
   String get stayHydrated => 'Mantente hidratada';
 
   @override
-  String get gentleExercise => 'Prueba ejercicio suave como yoga';
+  String get gentleExercise => 'Prueba ejercicios suaves como yoga';
 
   @override
-  String get eatIronRich => 'Come alimentos ricos en hierro';
+  String get eatIronRich => 'Consume alimentos ricos en hierro';
 
   @override
   String get takeBreaks => 'Toma descansos regulares';
@@ -290,7 +290,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get warmBath => 'Toma un baño caliente';
 
   @override
-  String get meditation => 'Prueba meditación o respiración profunda';
+  String get meditation => 'Prueba la meditación o respiración profunda';
 
   @override
   String get logToday => 'Registrar Hoy';
@@ -302,13 +302,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get trackSymptoms => 'Registrar Síntomas';
 
   @override
-  String get trackMood => 'Registrar Humor';
+  String get trackMood => 'Registrar Estado de Ánimo';
 
   @override
   String get trackPain => 'Registrar Dolor';
 
   @override
-  String get addNotes => 'Agregar Notas';
+  String get addNotes => 'Añadir Notas';
 
   @override
   String get notes => 'Notas';
@@ -347,7 +347,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get selectDate => 'Seleccionar Fecha';
 
   @override
-  String get periodDays => 'Días del Período';
+  String get periodDays => 'Días de Período';
 
   @override
   String get fertileDays => 'Días Fértiles';
@@ -389,10 +389,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get version => 'Versión';
 
   @override
-  String get contactSupport => 'Contactar Soporte';
+  String get contactSupport => 'Contactar con Soporte';
 
   @override
-  String get rateApp => 'Calificar App';
+  String get rateApp => 'Valorar App';
 
   @override
   String get shareApp => 'Compartir App';
@@ -410,25 +410,25 @@ class AppLocalizationsEs extends AppLocalizations {
   String get weight => 'Peso';
 
   @override
-  String get cycleHistory => 'Historial del Ciclo';
+  String get cycleHistory => 'Historial de Ciclos';
 
   @override
-  String get avgCycleLength => 'Duración Promedio del Ciclo';
+  String get avgCycleLength => 'Duración Media del Ciclo';
 
   @override
-  String get avgPeriodLength => 'Duración Promedio del Período';
+  String get avgPeriodLength => 'Duración Media del Período';
 
   @override
   String get lastPeriod => 'Último Período';
 
   @override
-  String get periodPreferences => 'Preferencias del Período';
+  String get periodPreferences => 'Preferencias de Período';
 
   @override
   String get trackingGoals => 'Objetivos de Seguimiento';
 
   @override
-  String get periodReminder => 'Recordatorio del Período';
+  String get periodReminder => 'Recordatorio de Período';
 
   @override
   String get ovulationReminder => 'Recordatorio de Ovulación';
@@ -440,10 +440,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get symptomReminder => 'Recordatorio de Seguimiento de Síntomas';
 
   @override
-  String get insightNotifications => 'Notificaciones de Conocimientos';
+  String get insightNotifications => 'Notificaciones de Análisis';
 
   @override
-  String get enableNotifications => 'Habilitar Notificaciones';
+  String get enableNotifications => 'Activar Notificaciones';
 
   @override
   String get notificationTime => 'Hora de Notificación';
@@ -457,13 +457,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get healthData => 'Datos de Salud';
 
   @override
-  String get connectHealthApp => 'Conectar a la App de Salud';
+  String get connectHealthApp => 'Conectar con App de Salud';
 
   @override
   String get syncData => 'Sincronizar Datos';
 
   @override
-  String get heartRate => 'Frecuencia Cardíaca';
+  String get heartRate => 'Ritmo Cardíaco';
 
   @override
   String get sleepData => 'Datos de Sueño';
@@ -478,7 +478,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get bloodPressure => 'Presión Arterial';
 
   @override
-  String get aiInsights => 'Conocimientos de IA';
+  String get aiInsights => 'Análisis de IA';
 
   @override
   String get smartPredictions => 'Predicciones Inteligentes';
@@ -496,7 +496,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get learningFromData => 'Aprendiendo de tus datos...';
 
   @override
-  String get improvingAccuracy => 'Mejorando la precisión de las predicciones';
+  String get improvingAccuracy => 'Mejorando la precisión de predicción';
 
   @override
   String get adaptingToPatterns => 'Adaptándose a tus patrones';
@@ -520,7 +520,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get finish => 'Finalizar';
 
   @override
-  String get setupProfile => 'Configurar Tu Perfil';
+  String get setupProfile => 'Configura tu Perfil';
 
   @override
   String get trackingPermissions => 'Permisos de Seguimiento';
@@ -535,7 +535,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get onboardingStep1 => 'Rastrea tu ciclo con precisión';
 
   @override
-  String get onboardingStep2 => 'Obtén conocimientos potenciados por IA';
+  String get onboardingStep2 => 'Obtén análisis con IA';
 
   @override
   String get onboardingStep3 => 'Recibe recomendaciones personalizadas';
@@ -571,22 +571,22 @@ class AppLocalizationsEs extends AppLocalizations {
   String get somethingWentWrong => 'Algo salió mal';
 
   @override
-  String get dataUpdated => 'Datos actualizados exitosamente';
+  String get dataUpdated => 'Datos actualizados correctamente';
 
   @override
-  String get dataSaved => 'Datos guardados exitosamente';
+  String get dataSaved => 'Datos guardados correctamente';
 
   @override
-  String get dataDeleted => 'Datos eliminados exitosamente';
+  String get dataDeleted => 'Datos eliminados correctamente';
 
   @override
   String get invalidInput => 'Entrada inválida';
 
   @override
-  String get fieldRequired => 'Este campo es requerido';
+  String get fieldRequired => 'Este campo es obligatorio';
 
   @override
-  String get selectAtLeastOne => 'Por favor selecciona al menos una opción';
+  String get selectAtLeastOne => 'Por favor, selecciona al menos una opción';
 
   @override
   String get days => 'días';
@@ -604,7 +604,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get kg => 'kg';
 
   @override
-  String get lbs => 'lbs';
+  String get lbs => 'lb';
 
   @override
   String get cm => 'cm';
@@ -679,16 +679,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get show => 'Mostrar';
 
   @override
-  String get enable => 'Habilitar';
+  String get enable => 'Activar';
 
   @override
-  String get disable => 'Deshabilitar';
+  String get disable => 'Desactivar';
 
   @override
-  String get on => 'Activado';
+  String get on => 'Encendido';
 
   @override
-  String get off => 'Desactivado';
+  String get off => 'Apagado';
 
   @override
   String get high => 'Alto';
@@ -757,10 +757,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get notStarted => 'No Iniciado';
 
   @override
-  String get moodBalance => 'Balance del Humor';
+  String get moodBalance => 'Balance de Ánimo';
 
   @override
-  String get notTracked => 'Sin Seguimiento';
+  String get notTracked => 'No Registrado';
 
   @override
   String get energyLevel => 'Nivel de Energía';
@@ -775,13 +775,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get trackYourHealth => 'Rastrea tu salud';
 
   @override
-  String get periodTracker => 'Rastreador del Período';
+  String get periodTracker => 'Rastreador de Período';
 
   @override
   String get startLogging => 'Comenzar registro';
 
   @override
-  String get moodAndEnergy => 'Humor y Energía';
+  String get moodAndEnergy => 'Ánimo y Energía';
 
   @override
   String get logWellness => 'Registrar bienestar';
@@ -801,14 +801,14 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get startTrackingForPredictions =>
-      'Comienza a rastrear tus ciclos para desbloquear predicciones de IA';
+      'Comienza a rastrear tus ciclos para desbloquear predicciones IA';
 
   @override
-  String get aiLearningPatterns => 'IA Aprendiendo Tus Patrones';
+  String get aiLearningPatterns => 'IA Aprendiendo tus Patrones';
 
   @override
   String get trackForInsights =>
-      'Rastrea tus ciclos para desbloquear conocimientos personalizados de IA';
+      'Rastrea tus ciclos para desbloquear análisis IA personalizados';
 
   @override
   String get cycleRegularity => 'Regularidad del Ciclo';
@@ -820,7 +820,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get avgCycle => 'Ciclo Promedio';
 
   @override
-  String get avgMood => 'Humor Promedio';
+  String get avgMood => 'Ánimo Promedio';
 
   @override
   String get daysCycle => '28.5 días';
@@ -841,7 +841,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get darkTheme => 'Tema Oscuro';
 
   @override
-  String get darkThemeDescription => 'Cómodo para los ojos en poca luz';
+  String get darkThemeDescription => 'Suave para los ojos en poca luz';
 
   @override
   String get systemTheme => 'Tema del Sistema';
@@ -861,4 +861,49 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get languageChangedTo => 'Idioma cambiado a';
+
+  @override
+  String get appPreferences => 'Preferencias de la App';
+
+  @override
+  String get customizeAppearance => 'Personalizar la apariencia de la app';
+
+  @override
+  String get chooseYourLanguage => 'Elige tu idioma';
+
+  @override
+  String get receiveReminders => 'Recibir recordatorios y actualizaciones';
+
+  @override
+  String get dailyReminders => 'Cuándo enviar recordatorios diarios';
+
+  @override
+  String get aiSmartFeatures => 'IA y Funciones Inteligentes';
+
+  @override
+  String get personalizedAiInsights => 'Obtener análisis de IA personalizados';
+
+  @override
+  String get hapticFeedback => 'Retroalimentación Háptica';
+
+  @override
+  String get vibrationInteractions => 'Sentir vibraciones en las interacciones';
+
+  @override
+  String get supportAbout => 'Soporte y Acerca de';
+
+  @override
+  String get getHelpTutorials => 'Obtener ayuda y tutoriales';
+
+  @override
+  String get versionInfoLegal => 'Información de versión y legal';
+
+  @override
+  String get light => 'Claro';
+
+  @override
+  String get dark => 'Oscuro';
+
+  @override
+  String get system => 'Sistema';
 }

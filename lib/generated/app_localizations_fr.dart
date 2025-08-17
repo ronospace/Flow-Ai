@@ -862,4 +862,50 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get languageChangedTo => 'Langue changée en';
+
+  @override
+  String get appPreferences => 'Préférences de l\'App';
+
+  @override
+  String get customizeAppearance => 'Personnaliser l\'apparence de l\'app';
+
+  @override
+  String get chooseYourLanguage => 'Choisissez votre langue';
+
+  @override
+  String get receiveReminders => 'Recevoir des rappels et mises à jour';
+
+  @override
+  String get dailyReminders => 'Quand envoyer les rappels quotidiens';
+
+  @override
+  String get aiSmartFeatures => 'IA et Fonctionnalités Intelligentes';
+
+  @override
+  String get personalizedAiInsights => 'Obtenir des analyses IA personnalisées';
+
+  @override
+  String get hapticFeedback => 'Retour Haptique';
+
+  @override
+  String get vibrationInteractions =>
+      'Sentir les vibrations lors des interactions';
+
+  @override
+  String get supportAbout => 'Support et À Propos';
+
+  @override
+  String get getHelpTutorials => 'Obtenir de l\'aide et des tutoriels';
+
+  @override
+  String get versionInfoLegal => 'Informations de version et légal';
+
+  @override
+  String get light => 'Clair';
+
+  @override
+  String get dark => 'Sombre';
+
+  @override
+  String get system => 'Système';
 }

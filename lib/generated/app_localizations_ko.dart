@@ -443,7 +443,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get insightNotifications => 'Insight Notifications';
 
   @override
-  String get enableNotifications => 'Enable Notifications';
+  String get enableNotifications => '알림 활성화';
 
   @override
   String get notificationTime => 'Notification Time';
@@ -859,4 +859,49 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get languageChangedTo => 'Language changed to';
+
+  @override
+  String get appPreferences => '앱 환경설정';
+
+  @override
+  String get customizeAppearance => '앱 외관 사용자 지정';
+
+  @override
+  String get chooseYourLanguage => '언어를 선택하세요';
+
+  @override
+  String get receiveReminders => '알림 및 업데이트 받기';
+
+  @override
+  String get dailyReminders => '일일 알림을 보낼 시간';
+
+  @override
+  String get aiSmartFeatures => 'AI & 스마트 기능';
+
+  @override
+  String get personalizedAiInsights => '개인 맞춤형 AI 인사이트 받기';
+
+  @override
+  String get hapticFeedback => '햅틱 피드백';
+
+  @override
+  String get vibrationInteractions => '상호작용 시 진동 느끼기';
+
+  @override
+  String get supportAbout => '지원 & 정보';
+
+  @override
+  String get getHelpTutorials => '도움말 및 튜토리얼 보기';
+
+  @override
+  String get versionInfoLegal => '버전 정보 및 법적 고지';
+
+  @override
+  String get light => '라이트';
+
+  @override
+  String get dark => '다크';
+
+  @override
+  String get system => '시스템';
 }

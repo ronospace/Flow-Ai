@@ -514,5 +514,85 @@
   "languageChangedTo": "Language changed to",
   "@languageChangedTo": {
     "description": "Language change confirmation message"
+  },
+  
+  "appPreferences": "앱 환경설정",
+  "@appPreferences": {
+    "description": "App preferences section title"
+  },
+  
+  "customizeAppearance": "앱 외관 사용자 지정",
+  "@customizeAppearance": {
+    "description": "Theme customization subtitle"
+  },
+  
+  "chooseYourLanguage": "언어를 선택하세요",
+  "@chooseYourLanguage": {
+    "description": "Language selection subtitle"
+  },
+  
+  "enableNotifications": "알림 활성화",
+  "@enableNotifications": {
+    "description": "Enable notifications setting title"
+  },
+  
+  "receiveReminders": "알림 및 업데이트 받기",
+  "@receiveReminders": {
+    "description": "Enable notifications setting subtitle"
+  },
+  
+  "dailyReminders": "일일 알림을 보낼 시간",
+  "@dailyReminders": {
+    "description": "Notification time setting subtitle"
+  },
+  
+  "aiSmartFeatures": "AI & 스마트 기능",
+  "@aiSmartFeatures": {
+    "description": "AI features section title"
+  },
+  
+  "personalizedAiInsights": "개인 맞춤형 AI 인사이트 받기",
+  "@personalizedAiInsights": {
+    "description": "AI insights setting subtitle"
+  },
+  
+  "hapticFeedback": "햅틱 피드백",
+  "@hapticFeedback": {
+    "description": "Haptic feedback setting title"
+  },
+  
+  "vibrationInteractions": "상호작용 시 진동 느끼기",
+  "@vibrationInteractions": {
+    "description": "Haptic feedback setting subtitle"
+  },
+  
+  "supportAbout": "지원 & 정보",
+  "@supportAbout": {
+    "description": "Support and about section title"
+  },
+  
+  "getHelpTutorials": "도움말 및 튜토리얼 보기",
+  "@getHelpTutorials": {
+    "description": "Help section subtitle"
+  },
+  
+  "versionInfoLegal": "버전 정보 및 법적 고지",
+  "@versionInfoLegal": {
+    "description": "About section subtitle"
+  },
+  
+  "light": "라이트",
+  "@light": {
+    "description": "Light theme name"
+  },
+  
+  "dark": "다크",
+  "@dark": {
+    "description": "Dark theme name"
+  },
+  
+  "system": "시스템",
+  "@system": {
+    "description": "System theme name"
   }
 }

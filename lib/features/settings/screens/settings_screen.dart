@@ -121,13 +121,13 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
 
                       // App Preferences
                       SettingsSection(
-                        title: 'App Preferences', // TODO: Add to localizations
+                        title: l10n.appPreferences,
                         icon: Icons.palette_outlined,
                         children: [
                           SettingsTile(
                             leading: const Icon(Icons.palette, color: AppTheme.primaryRose),
                             title: l10n.theme,
-                            subtitle: 'Customize app appearance', // TODO: Add to localizations
+                            subtitle: l10n.customizeAppearance,
                             onTap: () => _showThemeSelector(context),
                             trailing: Consumer<SettingsProvider>(
                               builder: (context, settings, child) {
@@ -152,7 +152,7 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
                           SettingsTile(
                             leading: const Icon(Icons.language, color: AppTheme.accentMint),
                             title: l10n.language,
-                            subtitle: 'Choose your language',
+                            subtitle: l10n.chooseYourLanguage,
                             onTap: () => _showLanguageSelector(context),
                             trailing: Consumer<SettingsProvider>(
                               builder: (context, settings, child) {
@@ -195,8 +195,8 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
                                       : Icons.notifications_off,
                                   color: AppTheme.secondaryBlue,
                                 ),
-                                title: 'Enable Notifications',
-                                subtitle: 'Receive reminders and updates',
+                                title: l10n.enableNotifications,
+                                subtitle: l10n.receiveReminders,
                                 trailing: Switch.adaptive(
                                   value: settings.preferences.notificationsEnabled,
                                   onChanged: settings.updateNotificationsEnabled,
@@ -210,7 +210,7 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
                               return SettingsTile(
                                 leading: const Icon(Icons.access_time, color: AppTheme.primaryRose),
                                 title: l10n.notificationTime,
-                                subtitle: 'When to send daily reminders',
+                                subtitle: l10n.dailyReminders,
                                 trailing: GestureDetector(
                                   onTap: () => _showTimePicker(context),
                                   child: Container(
@@ -256,7 +256,7 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
 
                       // AI & Features
                       SettingsSection(
-                        title: 'AI & Smart Features',
+                        title: l10n.aiSmartFeatures,
                         icon: Icons.psychology_outlined,
                         children: [
                           Consumer<SettingsProvider>(
@@ -264,7 +264,7 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
                               return SettingsTile(
                                 leading: const Icon(Icons.auto_awesome, color: AppTheme.warningOrange),
                                 title: l10n.aiInsights,
-                                subtitle: 'Get personalized AI insights',
+                                subtitle: l10n.personalizedAiInsights,
                                 trailing: Switch.adaptive(
                                   value: settings.preferences.aiInsightsEnabled,
                                   onChanged: settings.updateAiInsightsEnabled,
@@ -277,8 +277,8 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
                             builder: (context, settings, child) {
                               return SettingsTile(
                                 leading: const Icon(Icons.vibration, color: AppTheme.secondaryBlue),
-                                title: 'Haptic Feedback',
-                                subtitle: 'Feel vibrations on interactions',
+                                title: l10n.hapticFeedback,
+                                subtitle: l10n.vibrationInteractions,
                                 trailing: Switch.adaptive(
                                   value: settings.preferences.hapticFeedbackEnabled,
                                   onChanged: settings.updateHapticFeedbackEnabled,
@@ -304,19 +304,19 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
 
                       // Support & About
                       SettingsSection(
-                        title: 'Support & About',
+                        title: l10n.supportAbout,
                         icon: Icons.help_outline,
                         children: [
                           SettingsTile(
                             leading: const Icon(Icons.help_center, color: AppTheme.warningOrange),
                             title: l10n.help,
-                            subtitle: 'Get help and tutorials',
+                            subtitle: l10n.getHelpTutorials,
                             onTap: () => _showHelp(context),
                           ),
                           SettingsTile(
                             leading: const Icon(Icons.info, color: AppTheme.mediumGrey),
                             title: l10n.about,
-                            subtitle: 'Version info and legal',
+                            subtitle: l10n.versionInfoLegal,
                             onTap: () => _showAbout(context),
                           ),
                         ],
@@ -337,13 +337,14 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
   }
 
   String _getThemeName(AppThemeMode themeMode) {
+    final l10n = AppLocalizations.of(context)!;
     switch (themeMode) {
       case AppThemeMode.light:
-        return 'Light';
+        return l10n.light;
       case AppThemeMode.dark:
-        return 'Dark';
+        return l10n.dark;
       case AppThemeMode.system:
-        return 'System';
+        return l10n.system;
     }
   }
 

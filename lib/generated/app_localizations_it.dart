@@ -443,7 +443,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get insightNotifications => 'Insight Notifications';
 
   @override
-  String get enableNotifications => 'Enable Notifications';
+  String get enableNotifications => 'Abilita Notifiche';
 
   @override
   String get notificationTime => 'Notification Time';
@@ -859,4 +859,50 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get languageChangedTo => 'Language changed to';
+
+  @override
+  String get appPreferences => 'Preferenze App';
+
+  @override
+  String get customizeAppearance => 'Personalizza l\'aspetto dell\'app';
+
+  @override
+  String get chooseYourLanguage => 'Scegli la tua lingua';
+
+  @override
+  String get receiveReminders => 'Ricevi promemoria e aggiornamenti';
+
+  @override
+  String get dailyReminders => 'Quando inviare promemoria giornalieri';
+
+  @override
+  String get aiSmartFeatures => 'IA e Funzionalità Intelligenti';
+
+  @override
+  String get personalizedAiInsights =>
+      'Ottieni approfondimenti IA personalizzati';
+
+  @override
+  String get hapticFeedback => 'Feedback Aptico';
+
+  @override
+  String get vibrationInteractions => 'Senti le vibrazioni nelle interazioni';
+
+  @override
+  String get supportAbout => 'Supporto e Informazioni';
+
+  @override
+  String get getHelpTutorials => 'Ottieni aiuto e tutorial';
+
+  @override
+  String get versionInfoLegal => 'Informazioni sulla versione e legali';
+
+  @override
+  String get light => 'Chiaro';
+
+  @override
+  String get dark => 'Scuro';
+
+  @override
+  String get system => 'Sistema';
 }

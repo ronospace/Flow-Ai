@@ -860,4 +860,49 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get languageChangedTo => 'Sprache geändert zu';
+
+  @override
+  String get appPreferences => 'App-Einstellungen';
+
+  @override
+  String get customizeAppearance => 'App-Erscheinungsbild anpassen';
+
+  @override
+  String get chooseYourLanguage => 'Wählen Sie Ihre Sprache';
+
+  @override
+  String get receiveReminders => 'Erinnerungen und Updates erhalten';
+
+  @override
+  String get dailyReminders => 'Wann tägliche Erinnerungen senden';
+
+  @override
+  String get aiSmartFeatures => 'KI & Intelligente Funktionen';
+
+  @override
+  String get personalizedAiInsights => 'Personalisierte KI-Einblicke erhalten';
+
+  @override
+  String get hapticFeedback => 'Haptisches Feedback';
+
+  @override
+  String get vibrationInteractions => 'Vibrationen bei Interaktionen spüren';
+
+  @override
+  String get supportAbout => 'Support & Über';
+
+  @override
+  String get getHelpTutorials => 'Hilfe und Tutorials erhalten';
+
+  @override
+  String get versionInfoLegal => 'Versionsinformationen und Rechtliches';
+
+  @override
+  String get light => 'Hell';
+
+  @override
+  String get dark => 'Dunkel';
+
+  @override
+  String get system => 'System';
 }

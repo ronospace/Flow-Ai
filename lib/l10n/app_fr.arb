@@ -278,6 +278,23 @@
   "chooseLanguage": "Choisir la Langue",
   "searchLanguages": "Rechercher des langues...",
   "languageChangedTo": "Langue changée en",
+  
+  "appPreferences": "Préférences de l'App",
+  "customizeAppearance": "Personnaliser l'apparence de l'app",
+  "chooseYourLanguage": "Choisissez votre langue",
+  "enableNotifications": "Activer les Notifications",
+  "receiveReminders": "Recevoir des rappels et mises à jour",
+  "dailyReminders": "Quand envoyer les rappels quotidiens",
+  "aiSmartFeatures": "IA et Fonctionnalités Intelligentes",
+  "personalizedAiInsights": "Obtenir des analyses IA personnalisées",
+  "hapticFeedback": "Retour Haptique",
+  "vibrationInteractions": "Sentir les vibrations lors des interactions",
+  "supportAbout": "Support et À Propos",
+  "getHelpTutorials": "Obtenir de l'aide et des tutoriels",
+  "versionInfoLegal": "Informations de version et légal",
+  "light": "Clair",
+  "dark": "Sombre",
+  "system": "Système",
   "@appName": {
     "description": "The name of the application"
   },

@@ -514,5 +514,80 @@
   },
   "@languageChangedTo": {
     "description": "Language change confirmation message"
+  },
+  
+  "appPreferences": "App-Einstellungen",
+  "@appPreferences": {
+    "description": "App preferences section title"
+  },
+  
+  "customizeAppearance": "App-Erscheinungsbild anpassen",
+  "@customizeAppearance": {
+    "description": "Theme customization subtitle"
+  },
+  
+  "chooseYourLanguage": "Wählen Sie Ihre Sprache",
+  "@chooseYourLanguage": {
+    "description": "Language selection subtitle"
+  },
+  
+  "receiveReminders": "Erinnerungen und Updates erhalten",
+  "@receiveReminders": {
+    "description": "Enable notifications setting subtitle"
+  },
+  
+  "dailyReminders": "Wann tägliche Erinnerungen senden",
+  "@dailyReminders": {
+    "description": "Notification time setting subtitle"
+  },
+  
+  "aiSmartFeatures": "KI & Intelligente Funktionen",
+  "@aiSmartFeatures": {
+    "description": "AI features section title"
+  },
+  
+  "personalizedAiInsights": "Personalisierte KI-Einblicke erhalten",
+  "@personalizedAiInsights": {
+    "description": "AI insights setting subtitle"
+  },
+  
+  "hapticFeedback": "Haptisches Feedback",
+  "@hapticFeedback": {
+    "description": "Haptic feedback setting title"
+  },
+  
+  "vibrationInteractions": "Vibrationen bei Interaktionen spüren",
+  "@vibrationInteractions": {
+    "description": "Haptic feedback setting subtitle"
+  },
+  
+  "supportAbout": "Support & Über",
+  "@supportAbout": {
+    "description": "Support and about section title"
+  },
+  
+  "getHelpTutorials": "Hilfe und Tutorials erhalten",
+  "@getHelpTutorials": {
+    "description": "Help section subtitle"
+  },
+  
+  "versionInfoLegal": "Versionsinformationen und Rechtliches",
+  "@versionInfoLegal": {
+    "description": "About section subtitle"
+  },
+  
+  "light": "Hell",
+  "@light": {
+    "description": "Light theme name"
+  },
+  
+  "dark": "Dunkel",
+  "@dark": {
+    "description": "Dark theme name"
+  },
+  
+  "system": "System",
+  "@system": {
+    "description": "System theme name"
   }
 }

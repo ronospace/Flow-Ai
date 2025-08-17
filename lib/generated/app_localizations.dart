@@ -1006,7 +1006,7 @@ abstract class AppLocalizations {
   /// **'Insight Notifications'**
   String get insightNotifications;
 
-  /// No description provided for @enableNotifications.
+  /// Enable notifications setting title
   ///
   /// In en, this message translates to:
   /// **'Enable Notifications'**
@@ -1833,6 +1833,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Language changed to'**
   String get languageChangedTo;
+
+  /// App preferences section title
+  ///
+  /// In en, this message translates to:
+  /// **'App Preferences'**
+  String get appPreferences;
+
+  /// Theme customization subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Customize app appearance'**
+  String get customizeAppearance;
+
+  /// Language selection subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your language'**
+  String get chooseYourLanguage;
+
+  /// Enable notifications setting subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Receive reminders and updates'**
+  String get receiveReminders;
+
+  /// Notification time setting subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'When to send daily reminders'**
+  String get dailyReminders;
+
+  /// AI features section title
+  ///
+  /// In en, this message translates to:
+  /// **'AI & Smart Features'**
+  String get aiSmartFeatures;
+
+  /// AI insights setting subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Get personalized AI insights'**
+  String get personalizedAiInsights;
+
+  /// Haptic feedback setting title
+  ///
+  /// In en, this message translates to:
+  /// **'Haptic Feedback'**
+  String get hapticFeedback;
+
+  /// Haptic feedback setting subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Feel vibrations on interactions'**
+  String get vibrationInteractions;
+
+  /// Support and about section title
+  ///
+  /// In en, this message translates to:
+  /// **'Support & About'**
+  String get supportAbout;
+
+  /// Help section subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Get help and tutorials'**
+  String get getHelpTutorials;
+
+  /// About section subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Version info and legal'**
+  String get versionInfoLegal;
+
+  /// Light theme name
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get light;
+
+  /// Dark theme name
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get dark;
+
+  /// System theme name
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get system;
 }
 
 class _AppLocalizationsDelegate

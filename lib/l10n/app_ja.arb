@@ -514,5 +514,85 @@
   "languageChangedTo": "Language changed to",
   "@languageChangedTo": {
     "description": "Language change confirmation message"
+  },
+  
+  "appPreferences": "アプリ設定",
+  "@appPreferences": {
+    "description": "App preferences section title"
+  },
+  
+  "customizeAppearance": "アプリの外観をカスタマイズ",
+  "@customizeAppearance": {
+    "description": "Theme customization subtitle"
+  },
+  
+  "chooseYourLanguage": "言語を選択",
+  "@chooseYourLanguage": {
+    "description": "Language selection subtitle"
+  },
+  
+  "enableNotifications": "通知を有効にする",
+  "@enableNotifications": {
+    "description": "Enable notifications setting title"
+  },
+  
+  "receiveReminders": "リマインダーと更新を受け取る",
+  "@receiveReminders": {
+    "description": "Enable notifications setting subtitle"
+  },
+  
+  "dailyReminders": "毎日のリマインダーを送信する時間",
+  "@dailyReminders": {
+    "description": "Notification time setting subtitle"
+  },
+  
+  "aiSmartFeatures": "AI＆スマート機能",
+  "@aiSmartFeatures": {
+    "description": "AI features section title"
+  },
+  
+  "personalizedAiInsights": "パーソナライズされたAIインサイトを取得",
+  "@personalizedAiInsights": {
+    "description": "AI insights setting subtitle"
+  },
+  
+  "hapticFeedback": "ハプティックフィードバック",
+  "@hapticFeedback": {
+    "description": "Haptic feedback setting title"
+  },
+  
+  "vibrationInteractions": "インタラクション時の振動を感じる",
+  "@vibrationInteractions": {
+    "description": "Haptic feedback setting subtitle"
+  },
+  
+  "supportAbout": "サポート＆について",
+  "@supportAbout": {
+    "description": "Support and about section title"
+  },
+  
+  "getHelpTutorials": "ヘルプとチュートリアルを見る",
+  "@getHelpTutorials": {
+    "description": "Help section subtitle"
+  },
+  
+  "versionInfoLegal": "バージョン情報と法的事項",
+  "@versionInfoLegal": {
+    "description": "About section subtitle"
+  },
+  
+  "light": "ライト",
+  "@light": {
+    "description": "Light theme name"
+  },
+  
+  "dark": "ダーク",
+  "@dark": {
+    "description": "Dark theme name"
+  },
+  
+  "system": "システム",
+  "@system": {
+    "description": "System theme name"
   }
 }

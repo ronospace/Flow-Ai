@@ -514,5 +514,85 @@
   "languageChangedTo": "Language changed to",
   "@languageChangedTo": {
     "description": "Language change confirmation message"
+  },
+  
+  "appPreferences": "应用偏好设置",
+  "@appPreferences": {
+    "description": "App preferences section title"
+  },
+  
+  "customizeAppearance": "自定义应用外观",
+  "@customizeAppearance": {
+    "description": "Theme customization subtitle"
+  },
+  
+  "chooseYourLanguage": "选择您的语言",
+  "@chooseYourLanguage": {
+    "description": "Language selection subtitle"
+  },
+  
+  "enableNotifications": "启用通知",
+  "@enableNotifications": {
+    "description": "Enable notifications setting title"
+  },
+  
+  "receiveReminders": "接收提醒和更新",
+  "@receiveReminders": {
+    "description": "Enable notifications setting subtitle"
+  },
+  
+  "dailyReminders": "何时发送日常提醒",
+  "@dailyReminders": {
+    "description": "Notification time setting subtitle"
+  },
+  
+  "aiSmartFeatures": "AI和智能功能",
+  "@aiSmartFeatures": {
+    "description": "AI features section title"
+  },
+  
+  "personalizedAiInsights": "获取个性化AI洞察",
+  "@personalizedAiInsights": {
+    "description": "AI insights setting subtitle"
+  },
+  
+  "hapticFeedback": "触觉反馈",
+  "@hapticFeedback": {
+    "description": "Haptic feedback setting title"
+  },
+  
+  "vibrationInteractions": "在交互时感受振动",
+  "@vibrationInteractions": {
+    "description": "Haptic feedback setting subtitle"
+  },
+  
+  "supportAbout": "支持和关于",
+  "@supportAbout": {
+    "description": "Support and about section title"
+  },
+  
+  "getHelpTutorials": "获取帮助和教程",
+  "@getHelpTutorials": {
+    "description": "Help section subtitle"
+  },
+  
+  "versionInfoLegal": "版本信息和法律信息",
+  "@versionInfoLegal": {
+    "description": "About section subtitle"
+  },
+  
+  "light": "浅色",
+  "@light": {
+    "description": "Light theme name"
+  },
+  
+  "dark": "深色",
+  "@dark": {
+    "description": "Dark theme name"
+  },
+  
+  "system": "系统",
+  "@system": {
+    "description": "System theme name"
   }
 }

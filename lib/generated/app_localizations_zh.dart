@@ -443,7 +443,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get insightNotifications => 'Insight Notifications';
 
   @override
-  String get enableNotifications => 'Enable Notifications';
+  String get enableNotifications => '启用通知';
 
   @override
   String get notificationTime => 'Notification Time';
@@ -859,4 +859,49 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get languageChangedTo => 'Language changed to';
+
+  @override
+  String get appPreferences => '应用偏好设置';
+
+  @override
+  String get customizeAppearance => '自定义应用外观';
+
+  @override
+  String get chooseYourLanguage => '选择您的语言';
+
+  @override
+  String get receiveReminders => '接收提醒和更新';
+
+  @override
+  String get dailyReminders => '何时发送日常提醒';
+
+  @override
+  String get aiSmartFeatures => 'AI和智能功能';
+
+  @override
+  String get personalizedAiInsights => '获取个性化AI洞察';
+
+  @override
+  String get hapticFeedback => '触觉反馈';
+
+  @override
+  String get vibrationInteractions => '在交互时感受振动';
+
+  @override
+  String get supportAbout => '支持和关于';
+
+  @override
+  String get getHelpTutorials => '获取帮助和教程';
+
+  @override
+  String get versionInfoLegal => '版本信息和法律信息';
+
+  @override
+  String get light => '浅色';
+
+  @override
+  String get dark => '深色';
+
+  @override
+  String get system => '系统';
 }

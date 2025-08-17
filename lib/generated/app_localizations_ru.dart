@@ -443,7 +443,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get insightNotifications => 'Insight Notifications';
 
   @override
-  String get enableNotifications => 'Enable Notifications';
+  String get enableNotifications => 'Включить Уведомления';
 
   @override
   String get notificationTime => 'Notification Time';
@@ -859,4 +859,50 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get languageChangedTo => 'Language changed to';
+
+  @override
+  String get appPreferences => 'Настройки Приложения';
+
+  @override
+  String get customizeAppearance => 'Настроить внешний вид приложения';
+
+  @override
+  String get chooseYourLanguage => 'Выберите ваш язык';
+
+  @override
+  String get receiveReminders => 'Получать напоминания и обновления';
+
+  @override
+  String get dailyReminders => 'Когда отправлять ежедневные напоминания';
+
+  @override
+  String get aiSmartFeatures => 'ИИ и Умные Функции';
+
+  @override
+  String get personalizedAiInsights =>
+      'Получить персонализированные инсайты ИИ';
+
+  @override
+  String get hapticFeedback => 'Тактильная Отдача';
+
+  @override
+  String get vibrationInteractions => 'Ощутите вибрацию при взаимодействиях';
+
+  @override
+  String get supportAbout => 'Поддержка и О приложении';
+
+  @override
+  String get getHelpTutorials => 'Получить помощь и руководства';
+
+  @override
+  String get versionInfoLegal => 'Информация о версии и правовые вопросы';
+
+  @override
+  String get light => 'Светлая';
+
+  @override
+  String get dark => 'Тёмная';
+
+  @override
+  String get system => 'Системная';
 }

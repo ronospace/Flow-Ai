@@ -514,5 +514,85 @@
   "languageChangedTo": "Language changed to",
   "@languageChangedTo": {
     "description": "Language change confirmation message"
+  },
+  
+  "appPreferences": "Настройки Приложения",
+  "@appPreferences": {
+    "description": "App preferences section title"
+  },
+  
+  "customizeAppearance": "Настроить внешний вид приложения",
+  "@customizeAppearance": {
+    "description": "Theme customization subtitle"
+  },
+  
+  "chooseYourLanguage": "Выберите ваш язык",
+  "@chooseYourLanguage": {
+    "description": "Language selection subtitle"
+  },
+  
+  "enableNotifications": "Включить Уведомления",
+  "@enableNotifications": {
+    "description": "Enable notifications setting title"
+  },
+  
+  "receiveReminders": "Получать напоминания и обновления",
+  "@receiveReminders": {
+    "description": "Enable notifications setting subtitle"
+  },
+  
+  "dailyReminders": "Когда отправлять ежедневные напоминания",
+  "@dailyReminders": {
+    "description": "Notification time setting subtitle"
+  },
+  
+  "aiSmartFeatures": "ИИ и Умные Функции",
+  "@aiSmartFeatures": {
+    "description": "AI features section title"
+  },
+  
+  "personalizedAiInsights": "Получить персонализированные инсайты ИИ",
+  "@personalizedAiInsights": {
+    "description": "AI insights setting subtitle"
+  },
+  
+  "hapticFeedback": "Тактильная Отдача",
+  "@hapticFeedback": {
+    "description": "Haptic feedback setting title"
+  },
+  
+  "vibrationInteractions": "Ощутите вибрацию при взаимодействиях",
+  "@vibrationInteractions": {
+    "description": "Haptic feedback setting subtitle"
+  },
+  
+  "supportAbout": "Поддержка и О приложении",
+  "@supportAbout": {
+    "description": "Support and about section title"
+  },
+  
+  "getHelpTutorials": "Получить помощь и руководства",
+  "@getHelpTutorials": {
+    "description": "Help section subtitle"
+  },
+  
+  "versionInfoLegal": "Информация о версии и правовые вопросы",
+  "@versionInfoLegal": {
+    "description": "About section subtitle"
+  },
+  
+  "light": "Светлая",
+  "@light": {
+    "description": "Light theme name"
+  },
+  
+  "dark": "Тёмная",
+  "@dark": {
+    "description": "Dark theme name"
+  },
+  
+  "system": "Системная",
+  "@system": {
+    "description": "System theme name"
   }
 }
