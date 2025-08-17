@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
-import '../../../l10n/app_localizations.dart';
+import '../../../generated/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../providers/health_provider.dart';
 import 'dart:math' as math;

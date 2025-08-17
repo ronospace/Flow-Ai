@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
-import '../../../l10n/app_localizations.dart';
+import '../../../generated/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../providers/settings_provider.dart';
 import '../models/user_preferences.dart';
@@ -121,13 +121,13 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
 
                       // App Preferences
                       SettingsSection(
-                        title: 'App Preferences',
+                        title: 'App Preferences', // TODO: Add to localizations
                         icon: Icons.palette_outlined,
                         children: [
                           SettingsTile(
                             leading: const Icon(Icons.palette, color: AppTheme.primaryRose),
-                            title: 'Theme',
-                            subtitle: 'Customize app appearance',
+                            title: l10n.theme,
+                            subtitle: 'Customize app appearance', // TODO: Add to localizations
                             onTap: () => _showThemeSelector(context),
                             trailing: Consumer<SettingsProvider>(
                               builder: (context, settings, child) {

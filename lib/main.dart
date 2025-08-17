@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'l10n/app_localizations.dart';
+import 'generated/app_localizations.dart';
 
 import 'core/theme/app_theme.dart';
 import 'core/routing/app_router.dart';
@@ -116,46 +116,20 @@ class _FlowSenseAppState extends State<FlowSenseApp> {
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
+            // Core 12 languages for global market reach (~4.5B people)
             supportedLocales: const [
-              Locale('en'), // English
-              Locale('es'), // Spanish
-              Locale('fr'), // French
-              Locale('de'), // German
-              Locale('it'), // Italian
-              Locale('pt'), // Portuguese
-              Locale('ru'), // Russian
-              Locale('ja'), // Japanese
-              Locale('ko'), // Korean
-              Locale('zh'), // Chinese
-              Locale('ar'), // Arabic
-              Locale('hi'), // Hindi
-              Locale('bn'), // Bengali
-              Locale('tr'), // Turkish
-              Locale('vi'), // Vietnamese
-              Locale('th'), // Thai
-              Locale('pl'), // Polish
-              Locale('nl'), // Dutch
-              Locale('sv'), // Swedish
-              Locale('da'), // Danish
-              Locale('no'), // Norwegian
-              Locale('fi'), // Finnish
-              Locale('he'), // Hebrew
-              Locale('cs'), // Czech
-              Locale('hu'), // Hungarian
-              Locale('uk'), // Ukrainian
-              Locale('el'), // Greek
-              Locale('bg'), // Bulgarian
-              Locale('ro'), // Romanian
-              Locale('hr'), // Croatian
-              Locale('sk'), // Slovak
-              Locale('sl'), // Slovenian
-              Locale('lt'), // Lithuanian
-              Locale('lv'), // Latvian
-              Locale('et'), // Estonian
-              Locale('mt'), // Maltese
-              Locale('is'), // Icelandic
-              Locale('ga'), // Irish
-              Locale('cy'), // Welsh
+              Locale('en'), // English → Global default, US, UK, Africa, India, SEA
+              Locale('es'), // Spanish → Latin America, Spain, US Hispanic community
+              Locale('fr'), // French → France, Canada (Quebec), Africa (West & Central)
+              Locale('pt'), // Portuguese (Brazilian) → Brazil, Portugal
+              Locale('de'), // German → Germany, Austria, Switzerland
+              Locale('it'), // Italian → Italy + diaspora
+              Locale('ar'), // Arabic (MSA) → Middle East, North Africa
+              Locale('hi'), // Hindi → India
+              Locale('zh'), // Chinese (Simplified) → Mainland China, Singapore
+              Locale('ja'), // Japanese → Japan
+              Locale('ko'), // Korean → South Korea
+              Locale('ru'), // Russian → Eastern Europe, Central Asia
             ],
           ).animate().fadeIn(duration: 800.ms);
         },
