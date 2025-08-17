@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/services/cycle_calculation_engine.dart';
 import '../screens/calendar_screen.dart';
 
 class DayDetailSheet extends StatelessWidget {
@@ -568,6 +569,16 @@ class DayDetailSheet extends StatelessWidget {
             'Practice self-reflection',
             'Eat comforting, nutritious foods',
             'Prepare for upcoming period',
+          ],
+        );
+      case CyclePhase.unknown:
+        return PhaseInfo(
+          name: 'Unknown Phase',
+          emoji: '❓',
+          color: AppTheme.mediumGrey,
+          description: 'Phase information is not available.',
+          tips: [
+            'Continue tracking your cycle for better insights',
           ],
         );
     }

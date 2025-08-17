@@ -77,6 +77,9 @@ dependencies:
   # Device Info
   device_info_plus: ^10.1.2
   
+  # Biometric Authentication
+  local_auth: ^2.3.0
+  
   # Advertising
   google_mobile_ads: ^5.1.0
 dev_dependencies:

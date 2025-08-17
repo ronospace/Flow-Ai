@@ -309,6 +309,64 @@
   "night": "Night",
   "am": "AM",
   "pm": "PM",
+  
+  "trackingScreenTitle": "Tracking",
+  "flowTab": "Flow",
+  "symptomsTab": "Symptoms",
+  "moodTab": "Mood",
+  "painTab": "Pain",
+  "notesTab": "Notes",
+  
+  "flowIntensity": "Flow Intensity",
+  "selectTodaysFlowIntensity": "Select today's flow intensity",
+  
+  "symptoms": "Symptoms",
+  "selectAllSymptoms": "Select all symptoms you're experiencing",
+  
+  "moodAndEnergy": "Mood & Energy",
+  "howAreYouFeelingToday": "How are you feeling today?",
+  "mood": "Mood",
+  "energy": "Energy",
+  
+  "painLevel": "Pain Level",
+  "rateOverallPainLevel": "Rate your overall pain level",
+  
+  "personalNotes": "Personal Notes",
+  "captureThoughtsAndFeelings": "Capture your thoughts, feelings, and observations about your cycle",
+  "todaysJournalEntry": "Today's Journal Entry",
+  "quickNotes": "Quick Notes",
+  "notesPlaceholder": "How are you feeling today? Any symptoms, mood changes, or observations you'd like to remember?\n\nTip: Recording your thoughts helps identify patterns over time.",
+  "charactersCount": "{count} chars",
+  "@charactersCount": {
+    "description": "Character count for notes",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "150"
+      }
+    }
+  },
+  
+  "sleepQuality": "Sleep quality",
+  "foodCravings": "Food cravings",
+  "hydration": "Hydration",
+  "exercise": "Exercise",
+  "energyLevels": "Energy levels",
+  "stressManagement": "Stress management",
+  
+  "saveTrackingData": "Save Tracking Data",
+  "noChangesToSave": "No Changes to Save",
+  "trackingDataSaved": "Tracking data saved for {date}",
+  "@trackingDataSaved": {
+    "description": "Success message when tracking data is saved",
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "example": "Mar 15"
+      }
+    }
+  },
+  "pm": "PM",
   "yesterday": "Yesterday",
   "tomorrow": "Tomorrow",
   "thisWeek": "This Week",

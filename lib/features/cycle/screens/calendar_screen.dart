@@ -8,6 +8,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../generated/app_localizations.dart';
 import '../../../core/models/cycle_data.dart';
 import '../providers/cycle_provider.dart';
+import '../../../core/services/cycle_calculation_engine.dart';
 import '../widgets/calendar_legend.dart';
 import '../widgets/day_detail_sheet.dart';
 
@@ -426,30 +427,64 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
   
   DayInfo _getDayInfo(DateTime day, CycleProvider cycleProvider) {
     // Check if day is in current cycle
-    for (final cycle in cycleProvider.cycles) {
-      if (_isDateInCycle(day, cycle)) {
-        final dayInCycle = day.difference(cycle.startDate).inDays + 1;
-        return DayInfo(
-          cycleDay: dayInCycle,
-          color: _getCyclePhaseColor(dayInCycle, cycle.length),
-          flowIntensity: cycle.flowIntensity,
-          phase: _getCyclePhase(dayInCycle, cycle.length),
-        );
-      }
+    final currentCycle = cycleProvider.cycleData?.currentCycle;
+    if (currentCycle != null && _isDateInCycle(day, currentCycle)) {
+      final dayInCycle = day.difference(currentCycle.startDate).inDays + 1;
+      return DayInfo(
+        cycleDay: dayInCycle,
+        color: _getCyclePhaseColor(dayInCycle, currentCycle.length),
+        flowIntensity: currentCycle.flowIntensity,
+        phase: _getCyclePhase(dayInCycle, currentCycle.length),
+      );
     }
     
-    // Check if day is predicted
-    final prediction = cycleProvider.nextCyclePrediction;
-    if (prediction != null) {
-      if (day.isAfter(prediction.predictedStartDate.subtract(const Duration(days: 1))) &&
-          day.isBefore(prediction.predictedEndDate.add(const Duration(days: 1)))) {
-        final dayInCycle = day.difference(prediction.predictedStartDate).inDays + 1;
+    // Check if day is in predicted next period
+    final predictions = cycleProvider.predictions;
+    if (predictions != null && predictions.nextPeriodDate != null) {
+      final nextPeriodStart = predictions.nextPeriodDate!;
+      final periodLength = 5; // Typical period length
+      final nextPeriodEnd = nextPeriodStart.add(Duration(days: periodLength - 1));
+      
+      if (day.isAfter(nextPeriodStart.subtract(const Duration(days: 1))) &&
+          day.isBefore(nextPeriodEnd.add(const Duration(days: 1)))) {
+        final dayInPeriod = day.difference(nextPeriodStart).inDays + 1;
         return DayInfo(
-          cycleDay: dayInCycle,
-          color: _getCyclePhaseColor(dayInCycle, prediction.predictedLength),
-          phase: _getCyclePhase(dayInCycle, prediction.predictedLength),
+          cycleDay: dayInPeriod,
+          color: AppTheme.primaryRose,
+          phase: CyclePhase.menstrual,
           isPredicted: true,
         );
+      }
+      
+      // Check if day is in fertile window
+      if (predictions.fertileWindowStart != null && predictions.fertileWindowEnd != null) {
+        final fertileStart = predictions.fertileWindowStart!;
+        final fertileEnd = predictions.fertileWindowEnd!;
+        
+        if (day.isAfter(fertileStart.subtract(const Duration(days: 1))) &&
+            day.isBefore(fertileEnd.add(const Duration(days: 1)))) {
+          return DayInfo(
+            color: AppTheme.accentMint,
+            phase: CyclePhase.follicular,
+            isPredicted: true,
+            isFertileWindow: true,
+          );
+        }
+      }
+      
+      // Check if day is ovulation day
+      if (predictions.ovulationDate != null) {
+        final ovulationDay = predictions.ovulationDate!;
+        if (day.isAtSameMomentAs(ovulationDay) ||
+            (day.isAfter(ovulationDay.subtract(const Duration(days: 1))) &&
+             day.isBefore(ovulationDay.add(const Duration(days: 1))))) {
+          return DayInfo(
+            color: AppTheme.secondaryBlue,
+            phase: CyclePhase.ovulation,
+            isPredicted: true,
+            isOvulation: true,
+          );
+        }
       }
     }
     
@@ -510,8 +545,8 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
   Widget _buildCurrentCycleInfo() {
     return Consumer<CycleProvider>(
       builder: (context, cycleProvider, child) {
-        final currentCycle = cycleProvider.currentCycle;
-        final prediction = cycleProvider.nextCyclePrediction;
+        final currentCycle = cycleProvider.cycleData?.currentCycle;
+        final predictions = cycleProvider.predictions;
         
         return Container(
           margin: const EdgeInsets.all(20),
@@ -568,7 +603,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
               ),
               
               // Next Period Prediction
-              if (prediction != null)
+              if (predictions != null && predictions.nextPeriodDate != null)
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -582,14 +617,14 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'In ${prediction.daysUntilStart} days',
+                        'In ${predictions.daysUntilNextPeriod} days',
                         style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                           color: AppTheme.secondaryBlue,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        DateFormat('MMM d').format(prediction.predictedStartDate),
+                        DateFormat('MMM d').format(predictions.nextPeriodDate!),
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppTheme.mediumGrey,
                         ),
@@ -617,6 +652,8 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
         return 'Ovulation Phase';
       case CyclePhase.luteal:
         return 'Luteal Phase';
+      case CyclePhase.unknown:
+        return 'Unknown Phase';
     }
   }
   
@@ -639,6 +676,8 @@ class DayInfo {
   final FlowIntensity? flowIntensity;
   final CyclePhase? phase;
   final bool isPredicted;
+  final bool isFertileWindow;
+  final bool isOvulation;
   
   DayInfo({
     this.cycleDay,
@@ -646,12 +685,8 @@ class DayInfo {
     this.flowIntensity,
     this.phase,
     this.isPredicted = false,
+    this.isFertileWindow = false,
+    this.isOvulation = false,
   });
 }
 
-enum CyclePhase {
-  menstrual,
-  follicular,
-  ovulation,
-  luteal,
-}

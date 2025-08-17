@@ -1390,6 +1390,162 @@ abstract class AppLocalizations {
   /// **'PM'**
   String get pm;
 
+  /// No description provided for @trackingScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tracking'**
+  String get trackingScreenTitle;
+
+  /// No description provided for @flowTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Flow'**
+  String get flowTab;
+
+  /// No description provided for @symptomsTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Symptoms'**
+  String get symptomsTab;
+
+  /// No description provided for @moodTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Mood'**
+  String get moodTab;
+
+  /// No description provided for @painTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Pain'**
+  String get painTab;
+
+  /// No description provided for @notesTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get notesTab;
+
+  /// No description provided for @selectTodaysFlowIntensity.
+  ///
+  /// In en, this message translates to:
+  /// **'Select today\'s flow intensity'**
+  String get selectTodaysFlowIntensity;
+
+  /// No description provided for @selectAllSymptoms.
+  ///
+  /// In en, this message translates to:
+  /// **'Select all symptoms you\'re experiencing'**
+  String get selectAllSymptoms;
+
+  /// Action card for mood and energy tracking
+  ///
+  /// In en, this message translates to:
+  /// **'Mood & Energy'**
+  String get moodAndEnergy;
+
+  /// No description provided for @howAreYouFeelingToday.
+  ///
+  /// In en, this message translates to:
+  /// **'How are you feeling today?'**
+  String get howAreYouFeelingToday;
+
+  /// No description provided for @painLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Pain Level'**
+  String get painLevel;
+
+  /// No description provided for @rateOverallPainLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate your overall pain level'**
+  String get rateOverallPainLevel;
+
+  /// No description provided for @personalNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal Notes'**
+  String get personalNotes;
+
+  /// No description provided for @captureThoughtsAndFeelings.
+  ///
+  /// In en, this message translates to:
+  /// **'Capture your thoughts, feelings, and observations about your cycle'**
+  String get captureThoughtsAndFeelings;
+
+  /// No description provided for @todaysJournalEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Journal Entry'**
+  String get todaysJournalEntry;
+
+  /// No description provided for @quickNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Notes'**
+  String get quickNotes;
+
+  /// No description provided for @notesPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'How are you feeling today? Any symptoms, mood changes, or observations you\'d like to remember?\n\nTip: Recording your thoughts helps identify patterns over time.'**
+  String get notesPlaceholder;
+
+  /// Character count for notes
+  ///
+  /// In en, this message translates to:
+  /// **'{count} chars'**
+  String charactersCount(int count);
+
+  /// Sleep quality metric
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep Quality'**
+  String get sleepQuality;
+
+  /// Food cravings symptom
+  ///
+  /// In en, this message translates to:
+  /// **'Food cravings'**
+  String get foodCravings;
+
+  /// No description provided for @hydration.
+  ///
+  /// In en, this message translates to:
+  /// **'Hydration'**
+  String get hydration;
+
+  /// No description provided for @energyLevels.
+  ///
+  /// In en, this message translates to:
+  /// **'Energy levels'**
+  String get energyLevels;
+
+  /// No description provided for @stressManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Stress management'**
+  String get stressManagement;
+
+  /// No description provided for @saveTrackingData.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Tracking Data'**
+  String get saveTrackingData;
+
+  /// No description provided for @noChangesToSave.
+  ///
+  /// In en, this message translates to:
+  /// **'No Changes to Save'**
+  String get noChangesToSave;
+
+  /// Success message when tracking data is saved
+  ///
+  /// In en, this message translates to:
+  /// **'Tracking data saved for {date}'**
+  String trackingDataSaved(String date);
+
   /// No description provided for @yesterday.
   ///
   /// In en, this message translates to:
@@ -1678,12 +1834,6 @@ abstract class AppLocalizations {
   /// **'Start logging'**
   String get startLogging;
 
-  /// Action card for mood and energy tracking
-  ///
-  /// In en, this message translates to:
-  /// **'Mood & Energy'**
-  String get moodAndEnergy;
-
   /// Subtitle for mood and energy tracking
   ///
   /// In en, this message translates to:
@@ -1923,12 +2073,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hair changes'**
   String get hairChanges;
-
-  /// Food cravings symptom
-  ///
-  /// In en, this message translates to:
-  /// **'Food cravings'**
-  String get foodCravings;
 
   /// Loss of appetite symptom
   ///
@@ -2613,12 +2757,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Avg Heart Rate'**
   String get avgHeartRate;
-
-  /// Sleep quality metric
-  ///
-  /// In en, this message translates to:
-  /// **'Sleep Quality'**
-  String get sleepQuality;
 
   /// Body temperature metric
   ///

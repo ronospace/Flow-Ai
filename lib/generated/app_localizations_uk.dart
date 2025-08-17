@@ -637,6 +637,90 @@ class AppLocalizationsUk extends AppLocalizations {
   String get pm => 'PM';
 
   @override
+  String get trackingScreenTitle => 'Tracking';
+
+  @override
+  String get flowTab => 'Flow';
+
+  @override
+  String get symptomsTab => 'Symptoms';
+
+  @override
+  String get moodTab => 'Mood';
+
+  @override
+  String get painTab => 'Pain';
+
+  @override
+  String get notesTab => 'Notes';
+
+  @override
+  String get selectTodaysFlowIntensity => 'Select today\'s flow intensity';
+
+  @override
+  String get selectAllSymptoms => 'Select all symptoms you\'re experiencing';
+
+  @override
+  String get moodAndEnergy => 'Mood & Energy';
+
+  @override
+  String get howAreYouFeelingToday => 'How are you feeling today?';
+
+  @override
+  String get painLevel => 'Pain Level';
+
+  @override
+  String get rateOverallPainLevel => 'Rate your overall pain level';
+
+  @override
+  String get personalNotes => 'Personal Notes';
+
+  @override
+  String get captureThoughtsAndFeelings =>
+      'Capture your thoughts, feelings, and observations about your cycle';
+
+  @override
+  String get todaysJournalEntry => 'Today\'s Journal Entry';
+
+  @override
+  String get quickNotes => 'Quick Notes';
+
+  @override
+  String get notesPlaceholder =>
+      'How are you feeling today? Any symptoms, mood changes, or observations you\'d like to remember?\n\nTip: Recording your thoughts helps identify patterns over time.';
+
+  @override
+  String charactersCount(int count) {
+    return '$count chars';
+  }
+
+  @override
+  String get sleepQuality => 'Sleep Quality';
+
+  @override
+  String get foodCravings => 'Food cravings';
+
+  @override
+  String get hydration => 'Hydration';
+
+  @override
+  String get energyLevels => 'Energy levels';
+
+  @override
+  String get stressManagement => 'Stress management';
+
+  @override
+  String get saveTrackingData => 'Save Tracking Data';
+
+  @override
+  String get noChangesToSave => 'No Changes to Save';
+
+  @override
+  String trackingDataSaved(String date) {
+    return 'Tracking data saved for $date';
+  }
+
+  @override
   String get yesterday => 'Yesterday';
 
   @override
@@ -781,9 +865,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get startLogging => 'Start logging';
 
   @override
-  String get moodAndEnergy => 'Mood & Energy';
-
-  @override
   String get logWellness => 'Log wellness';
 
   @override
@@ -907,9 +988,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get hairChanges => 'Hair changes';
-
-  @override
-  String get foodCravings => 'Food cravings';
 
   @override
   String get lossOfAppetite => 'Loss of appetite';
@@ -1284,9 +1362,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get avgHeartRate => 'Avg Heart Rate';
-
-  @override
-  String get sleepQuality => 'Sleep Quality';
 
   @override
   String get bodyTemp => 'Body Temp';

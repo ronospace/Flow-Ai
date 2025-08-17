@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
-import '../screens/calendar_screen.dart';
+import '../../../core/services/cycle_calculation_engine.dart';
 
 class CyclePhaseIndicator extends StatelessWidget {
   final CyclePhase phase;
@@ -217,6 +217,8 @@ class CyclePhaseIndicator extends StatelessWidget {
         return PhaseRange((cycleLength ~/ 2) + 1, (cycleLength ~/ 2) + 3);
       case CyclePhase.luteal:
         return PhaseRange((cycleLength ~/ 2) + 4, cycleLength);
+      case CyclePhase.unknown:
+        return PhaseRange(1, cycleLength);
     }
   }
 
@@ -249,6 +251,13 @@ class CyclePhaseIndicator extends StatelessWidget {
           emoji: '🌙',
           color: AppTheme.primaryPurple,
           description: 'Winding down phase. Focus on completion and reflection.',
+        );
+      case CyclePhase.unknown:
+        return PhaseInfo(
+          name: 'Unknown',
+          emoji: '❓',
+          color: AppTheme.mediumGrey,
+          description: 'Phase information is not available.',
         );
     }
   }

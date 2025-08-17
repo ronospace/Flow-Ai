@@ -90,12 +90,29 @@ class CalendarLegend extends StatelessWidget {
           Row(
             children: [
               _buildIndicator(AppTheme.accentMint.withOpacity(0.8), 'Today'),
-              const SizedBox(width: 16),
+              const Spacer(),
               _buildIndicator(
                 Colors.transparent,
                 'Predicted',
                 hasBorder: true,
                 borderColor: AppTheme.secondaryBlue,
+              ),
+            ],
+          ),
+          
+          const SizedBox(height: 8),
+          
+          // Fertile Window indicator
+          Row(
+            children: [
+              _buildIndicator(
+                AppTheme.accentMint.withOpacity(0.6),
+                'Fertile Window',
+              ),
+              const Spacer(),
+              _buildIndicator(
+                AppTheme.secondaryBlue.withOpacity(0.6),
+                'Ovulation',
               ),
             ],
           ),

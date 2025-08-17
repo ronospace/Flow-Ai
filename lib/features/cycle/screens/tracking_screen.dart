@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/models/cycle_data.dart';
-import '../providers/cycle_provider.dart';
+import '../../../core/database/database_service.dart';
+import '../../../generated/app_localizations.dart';
 import '../widgets/flow_intensity_picker.dart';
 import '../widgets/symptom_selector.dart';
 import '../widgets/mood_energy_slider.dart';
@@ -65,28 +65,67 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
     super.dispose();
   }
   
-  void _loadExistingData() {
-    // Load existing tracking data for the selected date
-    // In a real app, this would query the database
-    final cycleProvider = context.read<CycleProvider>();
-    final currentCycle = cycleProvider.currentCycle;
-    
-    if (currentCycle != null && _isDateInCycle(_selectedDate, currentCycle)) {
-      setState(() {
-        _flowIntensity = currentCycle.flowIntensity;
-        _symptoms.addAll(currentCycle.symptoms);
-        _mood = currentCycle.mood ?? 3.0;
-        _energy = currentCycle.energy ?? 3.0;
-        _pain = currentCycle.pain ?? 1.0;
-      });
+  void _loadExistingData() async {
+    try {
+      // Load existing tracking data for the selected date from database
+      final databaseService = DatabaseService();
+      final existingData = await databaseService.getDailyTracking(_selectedDate);
+      
+      if (existingData != null) {
+        setState(() {
+          _flowIntensity = existingData['flow_intensity'] ?? FlowIntensity.none;
+          
+          // Load symptoms
+          _symptoms.clear();
+          if (existingData['symptoms'] != null) {
+            _symptoms.addAll(List<String>.from(existingData['symptoms']));
+          }
+          
+          // Load symptom severity
+          _symptomSeverity.clear();
+          if (existingData['symptom_severity'] != null) {
+            _symptomSeverity.addAll(Map<String, double>.from(existingData['symptom_severity']));
+          }
+          
+          // Load mood, energy, pain
+          _mood = existingData['mood']?.toDouble() ?? 3.0;
+          _energy = existingData['energy']?.toDouble() ?? 3.0;
+          _pain = existingData['pain']?.toDouble() ?? 1.0;
+          
+          // Load pain areas
+          _painAreas.clear();
+          if (existingData['pain_areas'] != null) {
+            _painAreas.addAll(Map<String, double>.from(existingData['pain_areas']));
+          }
+          
+          // Load notes
+          _notes = existingData['notes'] ?? '';
+          _notesController.text = _notes;
+          
+          // Reset unsaved changes since we just loaded
+          _hasUnsavedChanges = false;
+        });
+      } else {
+        // Reset to defaults if no data exists for this date
+        setState(() {
+          _flowIntensity = FlowIntensity.none;
+          _symptoms.clear();
+          _symptomSeverity.clear();
+          _mood = 3.0;
+          _energy = 3.0;
+          _pain = 1.0;
+          _painAreas.clear();
+          _notes = '';
+          _notesController.text = '';
+          _hasUnsavedChanges = false;
+        });
+      }
+    } catch (e) {
+      // Handle database errors gracefully
+      debugPrint('Error loading tracking data: $e');
     }
   }
   
-  bool _isDateInCycle(DateTime date, CycleData cycle) {
-    final cycleEnd = cycle.endDate ?? DateTime.now();
-    return date.isAfter(cycle.startDate.subtract(const Duration(days: 1))) &&
-           date.isBefore(cycleEnd.add(const Duration(days: 1)));
-  }
   
   void _markUnsavedChanges() {
     if (!_hasUnsavedChanges) {
@@ -99,49 +138,69 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
   Future<void> _saveTrackingData() async {
     HapticFeedback.lightImpact();
     
-    final cycleProvider = context.read<CycleProvider>();
-    
-    // Create or update cycle data
-    final newCycleData = CycleData(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      startDate: _selectedDate,
-      endDate: null,
-      length: 28, // Will be calculated later
-      flowIntensity: _flowIntensity,
-      symptoms: _symptoms.toList(),
-      mood: _mood,
-      energy: _energy,
-      pain: _pain,
-      notes: _notes.isEmpty ? null : _notes,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-    );
-    
-    cycleProvider.addCycle(newCycleData);
-    
-    setState(() {
-      _hasUnsavedChanges = false;
-    });
-    
-    // Show success feedback
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Icon(Icons.check_circle, color: Colors.white),
-            const SizedBox(width: 8),
-            Text('Tracking data saved for ${DateFormat('MMM d').format(_selectedDate)}'),
-          ],
-        ),
-        backgroundColor: AppTheme.successGreen,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
+    try {
+      final databaseService = DatabaseService();
+      final localizations = AppLocalizations.of(context);
+      
+      // Save daily tracking data to database
+      await databaseService.saveDailyTracking(
+        date: _selectedDate,
+        flowIntensity: _flowIntensity != FlowIntensity.none ? _flowIntensity : null,
+        symptoms: _symptoms.isNotEmpty ? _symptoms.toList() : null,
+        symptomSeverity: _symptomSeverity.isNotEmpty ? _symptomSeverity : null,
+        mood: _mood,
+        energy: _energy,
+        pain: _pain,
+        painAreas: _painAreas.isNotEmpty ? _painAreas : null,
+        notes: _notes.isNotEmpty ? _notes : null,
+      );
+      
+      setState(() {
+        _hasUnsavedChanges = false;
+      });
+      
+      // Show success feedback with localized message
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                const Icon(Icons.check_circle, color: Colors.white),
+                const SizedBox(width: 8),
+                Text(localizations.trackingDataSaved(DateFormat('MMM d').format(_selectedDate))),
+              ],
+            ),
+            backgroundColor: AppTheme.successGreen,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        );
+      }
+    } catch (e) {
+      // Handle save errors
+      debugPrint('Error saving tracking data: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                const Icon(Icons.error, color: Colors.white),
+                const SizedBox(width: 8),
+                Text('Failed to save tracking data. Please try again.'),
+              ],
+            ),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        );
+      }
+    }
   }
   
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -194,11 +253,11 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.9),
+                  color: Colors.white.withValues(alpha: 0.9),
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
@@ -279,11 +338,11 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.9),
+        color: Colors.white.withValues(alpha: 0.9),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -308,19 +367,19 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
         ),
         tabs: [
           Tab(
-            child: _buildTabContent(Icons.water_drop, 'Flow'),
+            child: _buildTabContent(Icons.water_drop, AppLocalizations.of(context).flowTab),
           ),
           Tab(
-            child: _buildTabContent(Icons.health_and_safety, 'Symptoms'),
+            child: _buildTabContent(Icons.health_and_safety, AppLocalizations.of(context).symptomsTab),
           ),
           Tab(
-            child: _buildTabContent(Icons.mood, 'Mood'),
+            child: _buildTabContent(Icons.mood, AppLocalizations.of(context).moodTab),
           ),
           Tab(
-            child: _buildTabContent(Icons.healing, 'Pain'),
+            child: _buildTabContent(Icons.healing, AppLocalizations.of(context).painTab),
           ),
           Tab(
-            child: _buildTabContent(Icons.note_alt, 'Notes'),
+            child: _buildTabContent(Icons.note_alt, AppLocalizations.of(context).notesTab),
           ),
         ],
       ),
@@ -342,13 +401,15 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
   }
   
   Widget _buildFlowTab() {
+    final localizations = AppLocalizations.of(context);
+    
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Flow Intensity',
+            localizations.flowIntensity,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
             ),
@@ -357,7 +418,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
           const SizedBox(height: 8),
           
           Text(
-            'Select today\'s flow intensity',
+            localizations.selectTodaysFlowIntensity,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
             ),
@@ -383,6 +444,8 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
   }
   
   Widget _buildSymptomsTab() {
+    final localizations = AppLocalizations.of(context);
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -393,14 +456,14 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Symptoms',
+                localizations.symptoms,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 8),
               Text(
-                'Select all symptoms you\'re experiencing',
+                localizations.selectAllSymptoms,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppTheme.mediumGrey,
                 ),
@@ -435,6 +498,8 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
   }
   
   Widget _buildMoodEnergyTab() {
+    final localizations = AppLocalizations.of(context);
+    
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -442,21 +507,21 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'Mood & Energy',
+            localizations.moodAndEnergy,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 8),
           Text(
-            'How are you feeling today?',
+            localizations.howAreYouFeelingToday,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: AppTheme.mediumGrey,
             ),
           ),
           const SizedBox(height: 30),
           MoodEnergySlider(
-            label: 'Mood',
+            label: localizations.mood,
             value: _mood,
             onChanged: (value) {
               setState(() {
@@ -577,13 +642,13 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
                 color: _notesController.text.isNotEmpty 
-                    ? AppTheme.primaryRose.withOpacity(0.3)
+                    ? AppTheme.primaryRose.withValues(alpha: 0.3)
                     : Theme.of(context).dividerColor,
                 width: 2,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Theme.of(context).shadowColor.withOpacity(0.08),
+                  color: Theme.of(context).shadowColor.withValues(alpha: 0.08),
                   blurRadius: 20,
                   offset: const Offset(0, 8),
                 ),
@@ -599,8 +664,8 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        AppTheme.primaryRose.withOpacity(0.1),
-                        AppTheme.primaryPurple.withOpacity(0.05),
+                        AppTheme.primaryRose.withValues(alpha: 0.1),
+                        AppTheme.primaryPurple.withValues(alpha: 0.05),
                       ],
                     ),
                     borderRadius: const BorderRadius.only(
@@ -650,7 +715,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
-                            color: AppTheme.accentMint.withOpacity(0.2),
+                            color: AppTheme.accentMint.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
@@ -681,7 +746,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
                     decoration: InputDecoration(
                       hintText: 'How are you feeling today? Any symptoms, mood changes, or observations you\'d like to remember?\n\nTip: Recording your thoughts helps identify patterns over time.',
                       hintStyle: TextStyle(
-                        color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.5),
+                        color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.5),
                         fontSize: 14,
                         height: 1.5,
                       ),
@@ -762,7 +827,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),

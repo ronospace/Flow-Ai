@@ -1,98 +1,94 @@
 import 'package:flutter/foundation.dart';
 import '../../../core/models/cycle_data.dart';
-import '../../../core/services/ai_engine.dart';
+import '../../../core/database/database_service.dart';
+import '../../../core/services/real_cycle_service.dart';
+import '../../../core/services/cycle_calculation_engine.dart';
 
 class CycleProvider extends ChangeNotifier {
-  final List<CycleData> _cycles = [];
-  CyclePrediction? _nextCyclePrediction;
-  EnhancedCyclePrediction? _enhancedPrediction;
+  final RealCycleService _realCycleService;
+  
+  RealCycleData? _cycleData;
+  CycleInsights? _insights;
   bool _isLoading = false;
+  
+  CycleProvider() : _realCycleService = RealCycleService(DatabaseService());
 
-  List<CycleData> get cycles => List.unmodifiable(_cycles);
-  CyclePrediction? get nextCyclePrediction => _nextCyclePrediction;
-  EnhancedCyclePrediction? get enhancedPrediction => _enhancedPrediction;
+  // Getters for compatibility with existing UI
+  List<CycleData> get cycles => _cycleData?.recentCycles ?? [];
+  CyclePredictions? get predictions => _cycleData?.predictions;
   bool get isLoading => _isLoading;
-
-  CycleData? get currentCycle => _cycles.isNotEmpty ? _cycles.last : null;
+  CycleData? get currentCycle => _cycleData?.currentCycle;
+  CycleInsights? get insights => _insights;
+  RealCycleData? get cycleData => _cycleData;
 
   double get averageCycleLength {
-    if (_cycles.length < 2) return 28.0;
-    final completedCycles = _cycles.where((c) => c.isCompleted).toList();
-    if (completedCycles.isEmpty) return 28.0;
-    return completedCycles.fold<int>(0, (sum, c) => sum + c.actualLength) / completedCycles.length;
+    return _insights?.averageCycleLength ?? 28.0;
   }
 
   Future<void> loadCycles() async {
     _isLoading = true;
     notifyListeners();
 
-    // Simulate loading with sample data
-    await Future.delayed(const Duration(seconds: 1));
-    
-    _cycles.addAll([
-      CycleData(
-        id: '1',
-        startDate: DateTime.now().subtract(const Duration(days: 32)),
-        endDate: DateTime.now().subtract(const Duration(days: 27)),
-        length: 28,
-        flowIntensity: FlowIntensity.medium,
-        symptoms: ['cramps', 'fatigue'],
-        mood: 3.0,
-        energy: 2.5,
-        pain: 3.5,
-        createdAt: DateTime.now().subtract(const Duration(days: 32)),
-        updatedAt: DateTime.now().subtract(const Duration(days: 27)),
-      ),
-      CycleData(
-        id: '2',
-        startDate: DateTime.now().subtract(const Duration(days: 4)),
-        endDate: null,
-        length: 28,
-        flowIntensity: FlowIntensity.heavy,
-        symptoms: ['headache', 'bloating'],
-        mood: 2.5,
-        energy: 2.0,
-        pain: 4.0,
-        createdAt: DateTime.now().subtract(const Duration(days: 4)),
-        updatedAt: DateTime.now(),
-      ),
-    ]);
-
-    await _generatePrediction();
+    try {
+      // Load real cycle data and predictions
+      _cycleData = await _realCycleService.getRealCycleData();
+      _insights = await _realCycleService.getCycleInsights();
+    } catch (e) {
+      debugPrint('Error loading cycle data: $e');
+      // Set default empty data on error
+      _cycleData = null;
+      _insights = null;
+    }
     
     _isLoading = false;
     notifyListeners();
   }
 
-  Future<void> _generatePrediction() async {
-    if (_cycles.isNotEmpty) {
-      // Try to get enhanced prediction, fallback to basic prediction
+  Future<void> refreshPredictions() async {
+    if (_cycleData != null) {
       try {
-        final prediction = await AIEngine.instance.predictNextCycle(_cycles);
-        if (prediction is EnhancedCyclePrediction) {
-          _enhancedPrediction = prediction;
-          _nextCyclePrediction = prediction; // Also store as basic prediction for compatibility
-        } else {
-          _nextCyclePrediction = prediction;
-        }
+        final newPredictions = await _realCycleService.refreshPredictions();
+        _cycleData = RealCycleData(
+          predictions: newPredictions,
+          recentCycles: _cycleData!.recentCycles,
+          currentCycle: _cycleData!.currentCycle,
+          recentTrackingData: _cycleData!.recentTrackingData,
+          lastUpdated: DateTime.now(),
+        );
+        notifyListeners();
       } catch (e) {
-        debugPrint('Prediction generation failed: $e');
+        debugPrint('Error refreshing predictions: $e');
       }
     }
   }
 
-  void addCycle(CycleData cycle) {
-    _cycles.add(cycle);
-    _generatePrediction();
-    notifyListeners();
+  Future<void> startNewCycle({
+    required DateTime startDate,
+    FlowIntensity? initialFlow,
+    List<String>? symptoms,
+    String? notes,
+  }) async {
+    try {
+      await _realCycleService.startNewCycle(
+        startDate: startDate,
+        initialFlow: initialFlow,
+        symptoms: symptoms,
+        notes: notes,
+      );
+      // Reload data after starting new cycle
+      await loadCycles();
+    } catch (e) {
+      debugPrint('Error starting new cycle: $e');
+    }
   }
-
-  void updateCycle(CycleData updatedCycle) {
-    final index = _cycles.indexWhere((c) => c.id == updatedCycle.id);
-    if (index != -1) {
-      _cycles[index] = updatedCycle;
-      _generatePrediction();
-      notifyListeners();
+  
+  Future<void> endCurrentCycle(DateTime endDate) async {
+    try {
+      await _realCycleService.endCurrentCycle(endDate);
+      // Reload data after ending cycle
+      await loadCycles();
+    } catch (e) {
+      debugPrint('Error ending current cycle: $e');
     }
   }
 }

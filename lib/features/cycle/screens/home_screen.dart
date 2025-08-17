@@ -11,6 +11,7 @@ import '../../../core/services/admob_service.dart';
 import '../providers/cycle_provider.dart';
 import '../../insights/providers/insights_provider.dart';
 import '../../settings/providers/settings_provider.dart';
+import '../../../core/services/cycle_calculation_engine.dart';
 import 'dart:math' as math;
 
 class HomeScreen extends StatefulWidget {
@@ -752,81 +753,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildPredictionCard(CycleProvider provider) {
-    final prediction = provider.nextCyclePrediction!;
-    
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.psychology_rounded,
-                  color: AppTheme.secondaryBlue,
-                  size: 24,
-                ),
-                const SizedBox(width: 10),
-                Text(
-                  'AI Prediction',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 15),
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Next Period',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppTheme.mediumGrey,
-                        ),
-                      ),
-                      Text(
-                        DateFormat('MMM d').format(prediction.predictedStartDate),
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          color: AppTheme.secondaryBlue,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'In ${prediction.daysUntilStart} days',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppTheme.mediumGrey,
-                        ),
-                      ),
-                      Text(
-                        '${(prediction.confidence * 100).round()}% confidence',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppTheme.successGreen,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    ).animate().fadeIn(delay: 500.ms).slideY(begin: 0.2, end: 0);
-  }
 
   Widget _buildInsightsSection(InsightsProvider provider) {
     return Column(
@@ -1028,44 +954,48 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             children: [
               _buildHealthMetricCard(
                 'Cycle Status',
-                provider.currentCycle != null 
-                    ? 'Day ${DateTime.now().difference(provider.currentCycle!.startDate).inDays + 1}'
+                provider.cycleData?.currentCycle != null 
+                    ? 'Day ${provider.cycleData!.currentCycleDay}'
                     : 'Not Started',
                 Icons.favorite,
                 AppTheme.primaryRose,
-                provider.currentCycle != null ? '85%' : '0%',
+                provider.predictions?.confidence != null 
+                    ? '${(provider.predictions!.confidence.score * 100).round()}%'
+                    : '0%',
               ),
               
               _buildHealthMetricCard(
-                'Mood Balance',
-                provider.currentCycle?.mood != null 
-                    ? '${provider.currentCycle!.mood}/5'
-                    : 'Not Tracked',
+                'Phase',
+                provider.predictions?.currentPhase.displayName ?? 'Unknown',
                 Icons.psychology,
                 AppTheme.secondaryBlue,
-                provider.currentCycle?.mood != null 
-                    ? '${((provider.currentCycle!.mood! / 5) * 100).round()}%'
+                provider.predictions?.confidence != null 
+                    ? '${(provider.predictions!.confidence.score * 100).round()}%'
                     : '0%',
               ),
               
               _buildHealthMetricCard(
-                'Energy Level',
-                provider.currentCycle?.energy != null 
-                    ? '${provider.currentCycle!.energy}/5'
-                    : 'Not Tracked',
-                Icons.battery_charging_full,
+                'Next Period',
+                provider.predictions?.daysUntilNextPeriod != null 
+                    ? '${provider.predictions!.daysUntilNextPeriod} days'
+                    : 'Unknown',
+                Icons.calendar_today,
                 AppTheme.accentMint,
-                provider.currentCycle?.energy != null 
-                    ? '${((provider.currentCycle!.energy! / 5) * 100).round()}%'
+                provider.predictions?.confidence != null 
+                    ? '${(provider.predictions!.confidence.score * 100).round()}%'
                     : '0%',
               ),
               
               _buildHealthMetricCard(
-                'Flow Intensity',
-                provider.currentCycle?.flowIntensity.name.toUpperCase() ?? 'NONE',
-                Icons.water_drop,
+                'Cycle Length',
+                provider.predictions?.cycleLength != null 
+                    ? '${provider.predictions!.cycleLength} days'
+                    : '28 days',
+                Icons.loop,
                 AppTheme.warningOrange,
-                '92%',
+                provider.insights?.periodPredictionAccuracy != null 
+                    ? '${(provider.insights!.periodPredictionAccuracy * 100).round()}%'
+                    : '50%',
               ),
             ],
           ),
@@ -1144,7 +1074,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
   
   Widget _buildPredictiveAnalyticsCenter(CycleProvider provider) {
-    final prediction = provider.nextCyclePrediction;
+    final prediction = provider.predictions;
     
     return Container(
       padding: const EdgeInsets.all(24),
@@ -1264,7 +1194,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          DateFormat('MMM d').format(prediction.predictedStartDate),
+                          prediction.nextPeriodDate != null 
+                              ? DateFormat('MMM d').format(prediction.nextPeriodDate!)
+                              : 'Calculating...',
                           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                             color: AppTheme.primaryRose,
                             fontWeight: FontWeight.bold,
@@ -1272,7 +1204,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          'In ${prediction.daysUntilStart} days',
+                          prediction.daysUntilNextPeriod != null
+                              ? 'In ${prediction.daysUntilNextPeriod} days'
+                              : 'Calculating...',
                           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: AppTheme.mediumGrey,
                           ),
@@ -1324,7 +1258,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          '${(prediction.confidence * 100).round()}%',
+                          '${(prediction.confidence.score * 100).round()}%',
                           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                             color: AppTheme.successGreen,
                             fontWeight: FontWeight.bold,
