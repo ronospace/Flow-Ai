@@ -2081,7 +2081,7 @@ class HealthScorePainter extends CustomPainter {
     // Pulsing effect
     if (animation > 0.7) {
       final pulsePaint = Paint()
-        ..color = AppTheme.primaryRose.withOpacity(0.3 - (animation - 0.7) * 0.3)
+        ..color = AppTheme.primaryRose.withValues(alpha: 0.3 - (animation - 0.7) * 0.3)
         ..strokeWidth = 12
         ..style = PaintingStyle.stroke;
       

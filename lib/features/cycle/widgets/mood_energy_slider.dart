@@ -353,7 +353,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: currentColor.withOpacity(opacity),
+                              color: currentColor.withValues(alpha: opacity),
                               width: 2,
                             ),
                           ),
@@ -837,7 +837,7 @@ class NeuralNetworkPainter extends CustomPainter {
       final y = center.dy + radius * math.sin(angle);
       
       if (x >= 0 && x <= size.width && y >= 0 && y <= size.height) {
-        paint.color = colors[i % colors.length].withOpacity(0.15 + intensity * 0.2);
+        paint.color = colors[i % colors.length].withValues(alpha: 0.15 + intensity * 0.2);
         canvas.drawCircle(Offset(x, y), 3 + (intensity * 2), paint);
         
         // Draw connections
@@ -848,7 +848,7 @@ class NeuralNetworkPainter extends CustomPainter {
           final prevY = center.dy + prevRadius * math.sin(prevAngle);
           
           final connectionPaint = Paint()
-            ..color = colors[i % colors.length].withOpacity(0.1 + intensity * 0.15)
+            ..color = colors[i % colors.length].withValues(alpha: 0.1 + intensity * 0.15)
             ..strokeWidth = 0.5
             ..style = PaintingStyle.stroke;
           
@@ -859,7 +859,7 @@ class NeuralNetworkPainter extends CustomPainter {
     
     // Draw central pulse
     final pulseRadius = 20 + (intensity * 15) + (animation.value * 5);
-    paint.color = colors.first.withOpacity(0.08 + intensity * 0.1);
+    paint.color = colors.first.withValues(alpha: 0.08 + intensity * 0.1);
     canvas.drawCircle(center, pulseRadius, paint);
   }
 
@@ -909,7 +909,7 @@ class BiometricSliderThumb extends SliderComponentShape {
     
     // Outer pulsing glow
     final outerGlowPaint = Paint()
-      ..color = color.withOpacity(0.2 + (animation.value * 0.2))
+      ..color = color.withValues(alpha: 0.2 + (animation.value * 0.2))
       ..style = PaintingStyle.fill;
     canvas.drawCircle(center, 20 + (animation.value * 5), outerGlowPaint);
     
@@ -917,7 +917,7 @@ class BiometricSliderThumb extends SliderComponentShape {
     for (int i = 0; i < 3; i++) {
       final ringRadius = 12 + (i * 3) + (animation.value * 2);
       final ringPaint = Paint()
-        ..color = color.withOpacity(0.3 - (i * 0.08))
+        ..color = color.withValues(alpha: 0.3 - (i * 0.08))
         ..style = PaintingStyle.stroke
         ..strokeWidth = 1.5;
       canvas.drawCircle(center, ringRadius, ringPaint);
@@ -962,7 +962,7 @@ class BiometricSliderThumb extends SliderComponentShape {
     
     // Central pulse indicator
     final centerPaint = Paint()
-      ..color = Colors.white.withOpacity(0.8 + (animation.value * 0.2))
+      ..color = Colors.white.withValues(alpha: 0.8 + (animation.value * 0.2))
       ..style = PaintingStyle.fill;
     canvas.drawCircle(center, 2 + (intensity * 2), centerPaint);
   }

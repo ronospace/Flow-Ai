@@ -365,7 +365,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
                   return Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: color.withOpacity(0.1 + (animation.value * 0.1)),
+                      color: color.withValues(alpha: 0.1 + (animation.value * 0.1)),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Icon(
@@ -774,7 +774,7 @@ class HealthScorePainter extends CustomPainter {
     // Pulsing effect
     if (animation > 0.7) {
       final pulsePaint = Paint()
-        ..color = AppTheme.primaryRose.withOpacity(0.2 - (animation - 0.7) * 0.2)
+        ..color = AppTheme.primaryRose.withValues(alpha: 0.2 - (animation - 0.7) * 0.2)
         ..strokeWidth = 12
         ..style = PaintingStyle.stroke;
       

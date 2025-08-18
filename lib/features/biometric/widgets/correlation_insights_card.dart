@@ -66,6 +66,7 @@ class CorrelationInsightsCard extends StatelessWidget {
   }
   
   Widget _buildHeader(BuildContext context) {
+    final theme = Theme.of(context);
     return Row(
       children: [
         Container(
@@ -117,6 +118,7 @@ class CorrelationInsightsCard extends StatelessWidget {
   }
   
   Widget _buildCorrelationItem(BuildContext context, String metric, double correlation) {
+    final theme = Theme.of(context);
     final absCorrelation = correlation.abs();
     final strength = _getCorrelationStrength(absCorrelation);
     final color = _getCorrelationColor(correlation);
@@ -208,6 +210,7 @@ class CorrelationInsightsCard extends StatelessWidget {
   }
   
   Widget _buildNoCorrelationsMessage() {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(24),
       child: Column(
@@ -241,6 +244,7 @@ class CorrelationInsightsCard extends StatelessWidget {
   }
   
   Widget _buildViewMoreButton(BuildContext context) {
+    final theme = Theme.of(context);
     return GestureDetector(
       onTap: onViewMore,
       child: Container(
@@ -278,6 +282,7 @@ class CorrelationInsightsCard extends StatelessWidget {
   }
   
   Widget _buildInsightsSummary(BuildContext context) {
+    final theme = Theme.of(context);
     final strongCorrelations = correlations.entries
         .where((entry) => entry.value.abs() > 0.6)
         .toList();

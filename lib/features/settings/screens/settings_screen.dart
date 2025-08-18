@@ -307,8 +307,8 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
                             trailing: Consumer<SettingsProvider>(
                               builder: (context, settings, child) {
                                 return Switch.adaptive(
-                                  value: settings.preferences.biometricEnabled,
-                                  onChanged: settings.updateBiometricEnabled,
+                                  value: settings.preferences.biometricAuth,
+                                  onChanged: (value) => settings.updateBiometricAuth(value),
                                   activeColor: AppTheme.accentMint,
                                 );
                               },

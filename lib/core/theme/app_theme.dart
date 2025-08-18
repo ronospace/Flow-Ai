@@ -62,7 +62,6 @@ class AppTheme {
         tertiary: accentMint,
         error: errorRed,
         surface: white,
-        background: lightGrey,
       ),
       
       // Typography
@@ -215,12 +214,10 @@ class AppTheme {
         tertiary: accentMint,
         error: errorRed,
         surface: AppTheme.darkSurface,
-        background: AppTheme.darkBackground,
         onPrimary: AppTheme.lightSurface,
         onSecondary: AppTheme.lightSurface,
         onSurface: AppTheme.darkText,
-        onBackground: AppTheme.darkText,
-        surfaceVariant: AppTheme.darkCard,
+        surfaceContainerHighest: AppTheme.darkCard,
         onSurfaceVariant: AppTheme.darkTextSecondary,
         outline: AppTheme.darkTextSecondary.withValues(alpha: 0.4),
       ),

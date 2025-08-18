@@ -127,6 +127,7 @@ class HealthMetricsCard extends StatelessWidget {
   }
   
   Widget _buildTrendIndicator() {
+    final theme = Theme.of(context);
     if (trend == 0.0) {
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),

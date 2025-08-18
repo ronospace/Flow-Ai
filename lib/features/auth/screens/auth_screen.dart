@@ -606,18 +606,24 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     try {
       if (_isLogin) {
         // Handle login
-        await _authService.signInWithEmailAndPassword(
-          _emailController.text.trim(),
-          _passwordController.text,
+        final result = await _authService.signInWithEmail(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
         );
+        if (!result.isSuccess) {
+          throw Exception(result.error);
+        }
         _showSuccessMessage('Welcome back!');
       } else {
         // Handle sign up
-        await _authService.createUserWithEmailAndPassword(
-          _emailController.text.trim(),
-          _passwordController.text,
-          _displayNameController.text.trim(),
+        final result = await _authService.signUpWithEmail(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+          displayName: _displayNameController.text.trim(),
         );
+        if (!result.isSuccess) {
+          throw Exception(result.error);
+        }
         _showSuccessMessage('Account created successfully!');
       }
       
@@ -649,7 +655,10 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       
       if (googleUser != null) {
         // Handle Google sign in
-        await _authService.signInWithGoogle(googleUser);
+        final result = await _authService.signInWithGoogle();
+        if (!result.isSuccess) {
+          throw Exception(result.error);
+        }
         _showSuccessMessage('Google sign in successful!');
         
         await Future.delayed(const Duration(milliseconds: 1000));
@@ -684,7 +693,10 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       );
       
       // Handle Apple sign in
-      await _authService.signInWithApple(credential);
+      final result = await _authService.signInWithApple();
+      if (!result.isSuccess) {
+        throw Exception(result.error);
+      }
       _showSuccessMessage('Apple sign in successful!');
       
       await Future.delayed(const Duration(milliseconds: 1000));

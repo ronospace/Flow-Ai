@@ -97,6 +97,7 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
   }
   
   Widget _buildHeader() {
+    final theme = Theme.of(context);
     return Row(
       children: [
         Container(
@@ -208,7 +209,8 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
   }
   
   Widget _buildSelectedDataInfo() {
-    if (_selectedReading == null) return const SizedBox.shrink();
+    if (_selectedReading == null) return const SizedBox();
+    final theme = Theme.of(context);
     
     final reading = _selectedReading!;
     
@@ -264,6 +266,7 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
   }
   
   Widget _buildStatistics() {
+    final theme = Theme.of(context);
     final average = widget.data.map((r) => r.value).reduce((a, b) => a + b) / widget.data.length;
     final trend = _calculateTrend();
     
@@ -296,6 +299,7 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
   }
   
   Widget _buildStatItem(String label, String value, IconData icon, Color color) {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -333,6 +337,7 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
   }
   
   Widget _buildEmptyChart() {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(40),
       decoration: BoxDecoration(

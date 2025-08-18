@@ -64,13 +64,14 @@ class TrackingSummaryCard extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context) {
+    final theme = Theme.of(context);
     return Row(
       children: [
         Container(
           width: 50,
           height: 50,
           decoration: BoxDecoration(
-            gradient: const LinearGradient(
+            gradient: LinearGradient(
               colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
             ),
             borderRadius: BorderRadius.circular(25),
@@ -296,7 +297,7 @@ class TrackingSummaryCard extends StatelessWidget {
               size: 16,
               color: AppTheme.mediumGrey,
             ),
-            const SizedBox(width: 6),
+            SizedBox(width: 6),
             Text(
               'Notes',
               style: TextStyle(
