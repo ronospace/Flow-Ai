@@ -51,11 +51,15 @@ class _FloatingAIChatState extends State<FloatingAIChat>
       curve: Curves.easeInOutBack,
     );
 
-    // Initialize chat service
-    _chatService.initialize(
-      userId: 'current_user_123',
-      userName: 'User',
-    );
+    // Initialize chat service after first build to get localizations
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final localizations = AppLocalizations.of(context);
+      _chatService.initialize(
+        userId: 'current_user_123',
+        userName: 'User',
+        localizations: localizations,
+      );
+    });
 
     // Listen to messages
     _chatService.messagesStream.listen((messages) {
@@ -106,8 +110,11 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   }
 
   void _handleSendPressed(types.PartialText message) {
+    final currentUser = _chatService.currentUser;
+    if (currentUser == null) return;
+    
     final textMessage = types.TextMessage(
-      author: _chatService.currentUser,
+      author: currentUser,
       createdAt: DateTime.now().millisecondsSinceEpoch,
       id: const Uuid().v4(),
       text: message.text,
@@ -205,7 +212,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                                       ),
                                     ),
                                     Text(
-                                      'Ask me anything about your health',
+                                      'Ask me anything about your health', // This could be localized in the future
                                       style: theme.textTheme.bodySmall?.copyWith(
                                         color: Colors.white.withValues(alpha: 0.8),
                                       ),
@@ -236,7 +243,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                               onSendPressed: _handleSendPressed,
                               onMessageTap: _handleMessageTap,
                               onPreviewDataFetched: _handlePreviewDataFetched,
-                              user: _chatService.currentUser,
+                              user: _chatService.currentUser ?? types.User(id: 'fallback_user'),
                               theme: DarkChatTheme(
                                 primaryColor: AppTheme.primaryRose,
                                 secondaryColor: AppTheme.secondaryBlue,
@@ -339,7 +346,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
           Expanded(
             child: TextField(
               decoration: InputDecoration(
-                hintText: 'Ask about your cycle, symptoms, or health...',
+                hintText: 'Ask about your cycle, symptoms, or health...', // This could be localized in the future
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(25),
                   borderSide: BorderSide.none,
@@ -392,7 +399,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Quick questions:',
+            'Quick questions:', // This could be localized in the future
             style: theme.textTheme.bodySmall?.copyWith(
               color: AppTheme.mediumGrey,
               fontWeight: FontWeight.w600,
@@ -405,8 +412,11 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             children: suggestions.map((suggestion) {
               return InkWell(
                 onTap: () {
+                  final currentUser = _chatService.currentUser;
+                  if (currentUser == null) return;
+                  
                   final message = types.TextMessage(
-                    author: _chatService.currentUser,
+                    author: currentUser,
                     createdAt: DateTime.now().millisecondsSinceEpoch,
                     id: const Uuid().v4(),
                     text: suggestion,

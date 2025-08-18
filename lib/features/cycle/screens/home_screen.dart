@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../../generated/app_localizations.dart';
+import '../../../generated/app_localizations_ui_extensions.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/services/admob_service.dart';
 import '../providers/cycle_provider.dart';
@@ -914,6 +915,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   
   Widget _buildHealthDashboardMatrix(CycleProvider provider) {
     final theme = Theme.of(context);
+    final localizations = AppLocalizations.of(context);
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -963,14 +965,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Health Dashboard Matrix',
+                      localizations.healthDashboardMatrix,
                       style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppTheme.darkGrey,
                       ),
                     ),
                     Text(
-                      'Real-time biometric analysis',
+                      localizations.realTimeBiometricAnalysis,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: AppTheme.mediumGrey,
                       ),
@@ -992,10 +994,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             childAspectRatio: 1.2,
             children: [
               _buildHealthMetricCard(
-                'Cycle Status',
+                localizations.cycleStatus,
                 provider.cycleData?.currentCycle != null 
-                    ? 'Day ${provider.cycleData!.currentCycleDay}'
-                    : 'Not Started',
+                    ? localizations.day(provider.cycleData!.currentCycleDay)
+                    : localizations.notStarted,
                 Icons.favorite,
                 AppTheme.primaryRose,
                 provider.predictions?.confidence != null 
@@ -1004,8 +1006,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ),
               
               _buildHealthMetricCard(
-                'Phase',
-                provider.predictions?.currentPhase.displayName ?? 'Unknown',
+                'Phase', // This could be localized in the future
+                provider.predictions?.currentPhase.displayName ?? 'Unknown', // This could be localized in the future
                 Icons.psychology,
                 AppTheme.secondaryBlue,
                 provider.predictions?.confidence != null 
@@ -1014,10 +1016,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ),
               
               _buildHealthMetricCard(
-                'Next Period',
+                localizations.nextPeriod,
                 provider.predictions?.daysUntilNextPeriod != null 
-                    ? '${provider.predictions!.daysUntilNextPeriod} days'
-                    : 'Unknown',
+                    ? '${provider.predictions!.daysUntilNextPeriod} ${localizations.days}'
+                    : 'Unknown', // This could be localized in the future
                 Icons.calendar_today,
                 AppTheme.accentMint,
                 provider.predictions?.confidence != null 
@@ -1026,10 +1028,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ),
               
               _buildHealthMetricCard(
-                'Cycle Length',
+                localizations.cycleLengthLabel,
                 provider.predictions?.cycleLength != null 
-                    ? '${provider.predictions!.cycleLength} days'
-                    : '28 days',
+                    ? '${provider.predictions!.cycleLength} ${localizations.days}'
+                    : '28 ${localizations.days}',
                 Icons.loop,
                 AppTheme.warningOrange,
                 provider.insights?.periodPredictionAccuracy != null 
@@ -1115,6 +1117,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   
   Widget _buildPredictiveAnalyticsCenter(CycleProvider provider) {
     final theme = Theme.of(context);
+    final localizations = AppLocalizations.of(context);
     final prediction = provider.predictions;
     
     return Container(
@@ -1166,14 +1169,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Predictive Analytics Center',
+                      localizations.predictiveAnalyticsCenter,
                       style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppTheme.darkGrey,
                       ),
                     ),
                     Text(
-                      'AI-powered cycle forecasting',
+                      localizations.aiPoweredCycleForecast,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: AppTheme.mediumGrey,
                       ),
@@ -1227,7 +1230,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Next Period',
+                          localizations.nextPeriod,
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: AppTheme.mediumGrey,
                             fontWeight: FontWeight.w500,
@@ -1237,7 +1240,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         Text(
                           prediction.nextPeriodDate != null 
                               ? DateFormat('MMM d').format(prediction.nextPeriodDate!)
-                              : 'Calculating...',
+                              : localizations.loading,
                           style: theme.textTheme.headlineSmall?.copyWith(
                             color: AppTheme.primaryRose,
                             fontWeight: FontWeight.bold,
@@ -1246,8 +1249,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         const SizedBox(height: 4),
                         Text(
                           prediction.daysUntilNextPeriod != null
-                              ? 'In ${prediction.daysUntilNextPeriod} days'
-                              : 'Calculating...',
+                              ? localizations.inDays(prediction.daysUntilNextPeriod!)
+                              : localizations.loading,
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: AppTheme.mediumGrey,
                           ),

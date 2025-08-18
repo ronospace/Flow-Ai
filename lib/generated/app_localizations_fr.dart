@@ -656,69 +656,71 @@ class AppLocalizationsFr extends AppLocalizations {
   String get notesTab => 'Notes';
 
   @override
-  String get selectTodaysFlowIntensity => 'Select today\'s flow intensity';
+  String get selectTodaysFlowIntensity =>
+      'Sélectionnez l\'intensité du flux d\'aujourd\'hui';
 
   @override
-  String get selectAllSymptoms => 'Select all symptoms you\'re experiencing';
+  String get selectAllSymptoms =>
+      'Sélectionnez tous les symptômes que vous ressentez';
 
   @override
   String get moodAndEnergy => 'Humeur et Énergie';
 
   @override
-  String get howAreYouFeelingToday => 'How are you feeling today?';
+  String get howAreYouFeelingToday => 'Comment vous sentez-vous aujourd\'hui ?';
 
   @override
-  String get painLevel => 'Pain Level';
+  String get painLevel => 'Niveau de Douleur';
 
   @override
-  String get rateOverallPainLevel => 'Rate your overall pain level';
+  String get rateOverallPainLevel => 'Évaluez votre niveau de douleur global';
 
   @override
-  String get personalNotes => 'Personal Notes';
+  String get personalNotes => 'Notes Personnelles';
 
   @override
   String get captureThoughtsAndFeelings =>
-      'Capture your thoughts, feelings, and observations about your cycle';
+      'Capturez vos pensées, sentiments et observations sur votre cycle';
 
   @override
-  String get todaysJournalEntry => 'Today\'s Journal Entry';
+  String get todaysJournalEntry => 'Entrée de journal d\'aujourd\'hui';
 
   @override
-  String get quickNotes => 'Quick Notes';
+  String get quickNotes => 'Notes rapides';
 
   @override
   String get notesPlaceholder =>
-      'How are you feeling today? Any symptoms, mood changes, or observations you\'d like to remember?\n\nTip: Recording your thoughts helps identify patterns over time.';
+      'Comment vous sentez-vous aujourd\'hui ? Des symptômes, changements d\'humeur ou observations que vous aimeriez retenir ?\n\nAstuce : Enregistrer vos pensées aide à identifier les tendances au fil du temps.';
 
   @override
   String charactersCount(int count) {
-    return '$count chars';
+    return '$count caractères';
   }
 
   @override
-  String get sleepQuality => 'Sleep Quality';
+  String get sleepQuality => 'Qualité du sommeil';
 
   @override
-  String get foodCravings => 'Food cravings';
+  String get foodCravings => 'Envies alimentaires';
 
   @override
-  String get hydration => 'Hydration';
+  String get hydration => 'Hydratation';
 
   @override
-  String get energyLevels => 'Energy levels';
+  String get energyLevels => 'Niveaux d\'énergie';
 
   @override
-  String get stressManagement => 'Stress management';
+  String get stressManagement => 'Gestion du stress';
 
   @override
-  String get saveTrackingData => 'Save Tracking Data';
+  String get saveTrackingData => 'Sauvegarder les Données de Suivi';
 
   @override
-  String get noChangesToSave => 'No Changes to Save';
+  String get noChangesToSave => 'Aucun Changement à Sauvegarder';
 
   @override
   String trackingDataSaved(String date) {
-    return 'Tracking data saved for $date';
+    return 'Données de suivi sauvegardées pour $date';
   }
 
   @override
@@ -942,98 +944,99 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String inDays(int days) {
-    return 'In $days days';
+    return 'Dans $days jours';
   }
 
   @override
-  String get smartActionCommandCenter => 'Smart Action Command Center';
+  String get smartActionCommandCenter =>
+      'Centre de Commande d\'Action Intelligente';
 
   @override
   String get quickAccessToEssentialFeatures =>
-      'Quick access to essential features';
+      'Accès rapide aux fonctionnalités essentielles';
 
   @override
-  String get physical => 'Physical';
+  String get physical => 'Physique';
 
   @override
-  String get emotional => 'Emotional';
+  String get emotional => 'Émotionnel';
 
   @override
-  String get skinAndHair => 'Skin & Hair';
+  String get skinAndHair => 'Peau et Cheveux';
 
   @override
-  String get digestive => 'Digestive';
+  String get digestive => 'Digestif';
 
   @override
-  String get moodSwingsSymptom => 'Mood swings';
+  String get moodSwingsSymptom => 'Sautes d\'humeur';
 
   @override
-  String get irritability => 'Irritability';
+  String get irritability => 'Irritabilité';
 
   @override
-  String get anxiety => 'Anxiety';
+  String get anxiety => 'Anxiété';
 
   @override
-  String get depression => 'Depression';
+  String get depression => 'Dépression';
 
   @override
-  String get emotionalSensitivity => 'Emotional sensitivity';
+  String get emotionalSensitivity => 'Sensibilité émotionnelle';
 
   @override
   String get stress => 'Stress';
 
   @override
-  String get oilySkin => 'Oily skin';
+  String get oilySkin => 'Peau grasse';
 
   @override
-  String get drySkin => 'Dry skin';
+  String get drySkin => 'Peau sèche';
 
   @override
-  String get hairChanges => 'Hair changes';
+  String get hairChanges => 'Changements capillaires';
 
   @override
-  String get lossOfAppetite => 'Loss of appetite';
+  String get lossOfAppetite => 'Perte d\'appétit';
 
   @override
   String selectedSymptoms(int count) {
-    return 'Selected Symptoms ($count)';
+    return 'Symptômes Sélectionnés ($count)';
   }
 
   @override
-  String get noMenstrualFlow => 'No menstrual flow';
+  String get noMenstrualFlow => 'Aucun flux menstruel';
 
   @override
-  String get minimalDischarge => 'Minimal discharge';
+  String get minimalDischarge => 'Décharge minimale';
 
   @override
-  String get comfortableProtection => 'Comfortable protection';
+  String get comfortableProtection => 'Protection confortable';
 
   @override
-  String get lightFlow => 'Light Flow';
+  String get lightFlow => 'Flux Léger';
 
   @override
-  String get normalFlow => 'Normal Flow';
+  String get normalFlow => 'Flux Normal';
 
   @override
-  String get typicalMenstruation => 'Typical menstruation';
+  String get typicalMenstruation => 'Menstruation typique';
 
   @override
-  String get heavyFlow => 'Heavy Flow';
+  String get heavyFlow => 'Flux Abondant';
 
   @override
-  String get highAbsorptionNeeded => 'High absorption needed';
+  String get highAbsorptionNeeded => 'Forte absorption nécessaire';
 
   @override
-  String get veryHeavy => 'Very Heavy';
+  String get veryHeavy => 'Très Abondant';
 
   @override
-  String get medicalAttentionAdvised => 'Medical attention advised';
+  String get medicalAttentionAdvised => 'Attention médicale conseillée';
 
   @override
   String get spotting => 'Spotting';
 
   @override
-  String get flow => 'Flow';
+  String get flow => 'Flux';
 
   @override
   String get systemTheme => 'Thème Système';
@@ -1070,50 +1073,50 @@ class AppLocalizationsFr extends AppLocalizations {
   String get dailyReminders => 'Quand envoyer les rappels quotidiens';
 
   @override
-  String get unlockPremiumAiInsights => 'Unlock Premium AI Insights';
+  String get unlockPremiumAiInsights => 'Déverrouillez les Analyses IA Premium';
 
   @override
   String get watchAdToUnlockInsights =>
-      'Watch an ad to unlock advanced insights';
+      'Regardez une publicité pour débloquer des analyses avancées';
 
   @override
-  String get free => 'FREE';
+  String get free => 'GRATUIT';
 
   @override
-  String get watchAdUnlockInsights => 'Watch Ad & Unlock Insights';
+  String get watchAdUnlockInsights => 'Regarder Pub et Débloquer Analyses';
 
   @override
   String get getAdditionalPremiumInsights =>
-      'Get 3 additional premium insights';
+      'Obtenez 3 analyses premium supplémentaires';
 
   @override
   String get unlockAdvancedHealthRecommendations =>
-      'Unlock advanced health recommendations';
+      'Déverrouillez des recommandations de santé avancées';
 
   @override
-  String get premiumInsightsUnlocked => 'Premium insights unlocked! 🎉';
+  String get premiumInsightsUnlocked => 'Analyses premium déverrouillées ! 🎉';
 
   @override
   String day(int day) {
-    return 'Day $day';
+    return 'Jour $day';
   }
 
   @override
   String confidencePercentage(int percentage) {
-    return '$percentage% confidence';
+    return '$percentage% de confiance';
   }
 
   @override
-  String get quickActions => 'Quick Actions';
+  String get quickActions => 'Actions Rapides';
 
   @override
-  String get logPeriod => 'Log Period';
+  String get logPeriod => 'Enregistrer les Règles';
 
   @override
-  String get currentCycleTitle => 'Current Cycle';
+  String get currentCycleTitle => 'Cycle Actuel';
 
   @override
-  String get moodLabel => 'Mood';
+  String get moodLabel => 'Humeur';
 
   @override
   String get aiSmartFeatures => 'IA et Fonctionnalités Intelligentes';
@@ -1147,190 +1150,192 @@ class AppLocalizationsFr extends AppLocalizations {
   String get system => 'Système';
 
   @override
-  String get flowIntensityNone => 'None';
+  String get flowIntensityNone => 'Aucun';
 
   @override
-  String get flowIntensityNoneSubtitle => 'No menstrual flow';
+  String get flowIntensityNoneSubtitle => 'Aucun flux menstruel';
 
   @override
   String get flowIntensityNoneDescription =>
-      'Complete absence of menstrual flow. This is normal before your period starts or after it ends.';
+      'Absence complète de flux menstruel. C\'est normal avant le début de vos règles ou après leur fin.';
 
   @override
-  String get flowIntensityNoneMedicalInfo => 'No menstruation occurring';
+  String get flowIntensityNoneMedicalInfo => 'Aucune menstruation en cours';
 
   @override
   String get flowIntensitySpotting => 'Spotting';
 
   @override
-  String get flowIntensitySpottingSubtitle => 'Minimal discharge';
+  String get flowIntensitySpottingSubtitle => 'Décharge minimale';
 
   @override
   String get flowIntensitySpottingDescription =>
-      'Very light pink or brown discharge. Often occurs at the beginning or end of your cycle.';
+      'Très légère décharge rose ou brune. Se produit souvent au début ou à la fin de votre cycle.';
 
   @override
-  String get flowIntensitySpottingMedicalInfo => 'Less than 5ml per day';
+  String get flowIntensitySpottingMedicalInfo => 'Moins de 5ml par jour';
 
   @override
-  String get flowIntensityLight => 'Light Flow';
+  String get flowIntensityLight => 'Flux Léger';
 
   @override
-  String get flowIntensityLightSubtitle => 'Comfortable protection';
+  String get flowIntensityLightSubtitle => 'Protection confortable';
 
   @override
   String get flowIntensityLightDescription =>
-      'Light menstrual flow requiring minimal protection. Usually lasts 1-3 days.';
+      'Flux menstruel léger nécessitant une protection minimale. Dure généralement 1-3 jours.';
 
   @override
-  String get flowIntensityLightMedicalInfo => '5-40ml per day';
+  String get flowIntensityLightMedicalInfo => '5-40ml par jour';
 
   @override
-  String get flowIntensityMedium => 'Normal Flow';
+  String get flowIntensityMedium => 'Flux Normal';
 
   @override
-  String get flowIntensityMediumSubtitle => 'Typical menstruation';
+  String get flowIntensityMediumSubtitle => 'Menstruation typique';
 
   @override
   String get flowIntensityMediumDescription =>
-      'Regular menstrual flow. This is the most common flow intensity for healthy cycles.';
+      'Flux menstruel régulier. C\'est l\'intensité de flux la plus courante pour des cycles sains.';
 
   @override
-  String get flowIntensityMediumMedicalInfo => '40-70ml per day';
+  String get flowIntensityMediumMedicalInfo => '40-70ml par jour';
 
   @override
-  String get flowIntensityHeavy => 'Heavy Flow';
+  String get flowIntensityHeavy => 'Flux Abondant';
 
   @override
-  String get flowIntensityHeavySubtitle => 'High absorption needed';
+  String get flowIntensityHeavySubtitle => 'Forte absorption nécessaire';
 
   @override
   String get flowIntensityHeavyDescription =>
-      'Heavy menstrual flow requiring frequent changes. Consider consulting a healthcare provider.';
+      'Flux menstruel abondant nécessitant des changements fréquents. Considérez consulter un professionnel de santé.';
 
   @override
-  String get flowIntensityHeavyMedicalInfo => '70-100ml per day';
+  String get flowIntensityHeavyMedicalInfo => '70-100ml par jour';
 
   @override
-  String get flowIntensityVeryHeavy => 'Very Heavy';
+  String get flowIntensityVeryHeavy => 'Très Abondant';
 
   @override
-  String get flowIntensityVeryHeavySubtitle => 'Medical attention advised';
+  String get flowIntensityVeryHeavySubtitle => 'Attention médicale conseillée';
 
   @override
   String get flowIntensityVeryHeavyDescription =>
-      'Very heavy flow that may interfere with daily activities. Strongly recommend consulting a healthcare provider.';
+      'Flux très abondant qui peut interférer avec les activités quotidiennes. Fortement recommandé de consulter un professionnel de santé.';
 
   @override
-  String get flowIntensityVeryHeavyMedicalInfo => 'Over 100ml per day';
+  String get flowIntensityVeryHeavyMedicalInfo => 'Plus de 100ml par jour';
 
   @override
-  String get aiHealthInsights => 'AI Health Insights';
+  String get aiHealthInsights => 'Analyses de Santé IA';
 
   @override
-  String get aboutThisFlowLevel => 'About This Flow Level';
+  String get aboutThisFlowLevel => 'À Propos de ce Niveau de Flux';
 
   @override
-  String get recommendedProducts => 'Recommended Products';
+  String get recommendedProducts => 'Produits Recommandés';
 
   @override
   String hourlyChanges(int changes) {
-    return '~$changes/hour changes';
+    return '~$changes/heure changements';
   }
 
   @override
-  String get monitor => 'Monitor';
+  String get monitor => 'Surveiller';
 
   @override
   String get spottingInsight =>
-      'Spotting is often normal at cycle start/end. Track patterns for insights.';
+      'Le spotting est souvent normal au début/fin du cycle. Suivez les tendances pour des analyses.';
 
   @override
   String get lightFlowInsight =>
-      'Light flow detected. Consider stress levels and nutrition for optimal health.';
+      'Flux léger détecté. Considérez les niveaux de stress et la nutrition pour une santé optimale.';
 
   @override
   String get mediumFlowInsight =>
-      'Normal flow pattern. Your cycle appears healthy and regular.';
+      'Schéma de flux normal. Votre cycle semble sain et régulier.';
 
   @override
   String get heavyFlowInsight =>
-      'Heavy flow detected. Monitor symptoms and consider iron-rich foods.';
+      'Flux abondant détecté. Surveillez les symptômes et considérez les aliments riches en fer.';
 
   @override
   String get veryHeavyFlowInsight =>
-      'Very heavy flow may need medical attention. Track duration carefully.';
+      'Flux très abondant peut nécessiter une attention médicale. Suivez la durée attentivement.';
 
   @override
   String get noFlowInsight =>
-      'No flow detected. Track other symptoms for comprehensive insights.';
+      'Aucun flux détecté. Suivez d\'autres symptômes pour des analyses complètes.';
 
   @override
-  String get pantyLiners => 'Panty liners';
+  String get pantyLiners => 'Protège-slips';
 
   @override
-  String get periodUnderwear => 'Period underwear';
+  String get periodUnderwear => 'Culotte menstruelle';
 
   @override
-  String get lightPads => 'Light pads';
+  String get lightPads => 'Serviettes légères';
 
   @override
-  String get tamponsRegular => 'Tampons (regular)';
+  String get tamponsRegular => 'Tampons (réguliers)';
 
   @override
-  String get menstrualCups => 'Menstrual cups';
+  String get menstrualCups => 'Coupes menstruelles';
 
   @override
-  String get regularPads => 'Regular pads';
+  String get regularPads => 'Serviettes régulières';
 
   @override
   String get tamponsSuper => 'Tampons (super)';
 
   @override
-  String get periodUnderwearHeavy => 'Period underwear (heavy)';
+  String get periodUnderwearHeavy => 'Culotte menstruelle (abondante)';
 
   @override
-  String get superPads => 'Super pads';
+  String get superPads => 'Serviettes super';
 
   @override
   String get tamponsSuperPlus => 'Tampons (super+)';
 
   @override
-  String get menstrualCupsLarge => 'Menstrual cups (large)';
+  String get menstrualCupsLarge => 'Coupes menstruelles (grande)';
 
   @override
-  String get ultraPads => 'Ultra pads';
+  String get ultraPads => 'Serviettes ultra';
 
   @override
   String get tamponsUltra => 'Tampons (ultra)';
 
   @override
-  String get menstrualCupsXL => 'Menstrual cups (XL)';
+  String get menstrualCupsXL => 'Coupes menstruelles (XL)';
 
   @override
-  String get medicalConsultation => 'Medical consultation';
+  String get medicalConsultation => 'Consultation médicale';
 
   @override
-  String get aiPoweredHealthInsights => 'AI-Powered Health Insights';
+  String get aiPoweredHealthInsights =>
+      'Analyses de Santé Alimentées par l\'IA';
 
   @override
   String get healthDataAccessNotGranted =>
-      'Health data access not granted. Please enable in settings.';
+      'Accès aux données de santé non accordé. Veuillez activer dans les paramètres.';
 
   @override
   String get failedToInitializeBiometricDashboard =>
-      'Failed to initialize biometric dashboard';
+      'Échec de l\'initialisation du tableau de bord biométrique';
 
   @override
-  String get failedToLoadBiometricData => 'Failed to load biometric data';
+  String get failedToLoadBiometricData =>
+      'Échec du chargement des données biométriques';
 
   @override
   String biometricDataRefreshedAt(String time) {
-    return 'Biometric data refreshed at $time';
+    return 'Données biométriques actualisées à $time';
   }
 
   @override
-  String get failedToRefreshData => 'Failed to refresh data';
+  String get failedToRefreshData => 'Échec de l\'actualisation des données';
 
   @override
   String get overview => 'Vue d\'ensemble';
@@ -1342,36 +1347,36 @@ class AppLocalizationsFr extends AppLocalizations {
   String get sync => 'Synchroniser';
 
   @override
-  String get healthDataConnected => 'Health Data Connected';
+  String get healthDataConnected => 'Données de Santé Connectées';
 
   @override
-  String get limitedHealthData => 'Limited Health Data';
+  String get limitedHealthData => 'Données de Santé Limitées';
 
   @override
   String dataCompleteness(int percentage) {
-    return 'Data completeness: $percentage%';
+    return 'Complétude des données : $percentage%';
   }
 
   @override
   String get connectMoreDevicesForBetterInsights =>
-      'Connect more devices for better insights';
+      'Connectez plus d\'appareils pour de meilleures analyses';
 
   @override
   String updatedAt(String time) {
-    return 'Updated $time';
+    return 'Mis à jour $time';
   }
 
   @override
-  String get overallHealthScore => 'Overall Health Score';
+  String get overallHealthScore => 'Score de Santé Global';
 
   @override
-  String get avgHeartRate => 'Avg Heart Rate';
+  String get avgHeartRate => 'Fréquence Cardiaque Moy.';
 
   @override
-  String get bodyTemp => 'Body Temp';
+  String get bodyTemp => 'Temp. Corporelle';
 
   @override
-  String get stressLevel => 'Stress Level';
+  String get stressLevel => 'Niveau de Stress';
 
   @override
   String get bpm => 'BPM';
@@ -1386,143 +1391,147 @@ class AppLocalizationsFr extends AppLocalizations {
   String get outOfTen => '/10';
 
   @override
-  String get recentTrends => 'Recent Trends';
+  String get recentTrends => 'Tendances Récentes';
 
   @override
   String basedOnLastDaysOfData(int days) {
-    return 'Based on the last $days days of data';
+    return 'Basé sur les $days derniers jours de données';
   }
 
   @override
-  String get sleepQualityImproving => 'Sleep quality';
+  String get sleepQualityImproving => 'Qualité du sommeil';
 
   @override
-  String get improving => 'Improving';
+  String get improving => 'En amélioration';
 
   @override
-  String get stressLevels => 'Stress levels';
+  String get stressLevels => 'Niveaux de stress';
 
   @override
   String get stable => 'Stable';
 
   @override
-  String get heartRateMetric => 'Heart rate';
+  String get heartRateMetric => 'Fréquence cardiaque';
 
   @override
-  String get slightlyElevated => 'Slightly elevated';
+  String get slightlyElevated => 'Légèrement élevée';
 
   @override
-  String get heartRateChart => 'Heart Rate';
+  String get heartRateChart => 'Fréquence Cardiaque';
 
   @override
-  String get sleepQualityChart => 'Sleep Quality';
+  String get sleepQualityChart => 'Qualité du Sommeil';
 
   @override
-  String get bodyTemperatureChart => 'Body Temperature';
+  String get bodyTemperatureChart => 'Température Corporelle';
 
   @override
-  String get heartRateVariabilityChart => 'Heart Rate Variability';
+  String get heartRateVariabilityChart =>
+      'Variabilité de la Fréquence Cardiaque';
 
   @override
-  String get stressLevelChart => 'Stress Level';
+  String get stressLevelChart => 'Niveau de Stress';
 
   @override
-  String get aiHealthInsightsTitle => 'AI Health Insights';
+  String get aiHealthInsightsTitle => 'Analyses de Santé IA';
 
   @override
   String get personalizedInsightsBasedOnBiometricPatterns =>
-      'Personalized insights based on your biometric patterns';
+      'Analyses personnalisées basées sur vos schémas biométriques';
 
   @override
-  String get noInsightsAvailable => 'No Insights Available';
+  String get noInsightsAvailable => 'Aucune Analyse Disponible';
 
   @override
   String get keepTrackingHealthDataForAiInsights =>
-      'Keep tracking your health data to get personalized AI insights';
+      'Continuez à suivre vos données de santé pour obtenir des analyses IA personnalisées';
 
   @override
-  String get connectedDevices => 'Connected Devices';
+  String get connectedDevices => 'Appareils Connectés';
 
   @override
-  String get iphoneHealth => 'iPhone Health';
+  String get iphoneHealth => 'Santé iPhone';
 
   @override
-  String get connected => 'Connected';
+  String get connected => 'Connecté';
 
   @override
   String get appleWatch => 'Apple Watch';
 
   @override
-  String get syncing => 'Syncing';
+  String get syncing => 'Synchronisation';
 
   @override
   String get garminConnect => 'Garmin Connect';
 
   @override
-  String get notConnected => 'Not connected';
+  String get notConnected => 'Non connecté';
 
   @override
-  String get syncSettings => 'Sync Settings';
+  String get syncSettings => 'Paramètres de Synchronisation';
 
   @override
-  String get autoSync => 'Auto Sync';
+  String get autoSync => 'Synchronisation Auto';
 
   @override
-  String get automaticallySyncHealthData => 'Automatically sync health data';
+  String get automaticallySyncHealthData =>
+      'Synchroniser automatiquement les données de santé';
 
   @override
-  String get backgroundSync => 'Background Sync';
+  String get backgroundSync => 'Synchronisation en Arrière-plan';
 
   @override
-  String get syncDataInBackground => 'Sync data in the background';
+  String get syncDataInBackground => 'Synchroniser les données en arrière-plan';
 
   @override
-  String get loadingBiometricData => 'Loading biometric data...';
+  String get loadingBiometricData => 'Chargement des données biométriques...';
 
   @override
-  String get errorLoadingData => 'Error Loading Data';
+  String get errorLoadingData => 'Erreur de Chargement des Données';
 
   @override
-  String get anUnexpectedErrorOccurred => 'An unexpected error occurred';
+  String get anUnexpectedErrorOccurred =>
+      'Une erreur inattendue s\'est produite';
 
   @override
-  String get retry => 'Retry';
+  String get retry => 'Réessayer';
 
   @override
-  String get noHealthData => 'No Health Data';
+  String get noHealthData => 'Aucune Donnée de Santé';
 
   @override
   String get connectHealthDevicesForBiometricInsights =>
-      'Connect your health devices to see biometric insights';
+      'Connectez vos appareils de santé pour voir les analyses biométriques';
 
   @override
-  String get healthAccessRequired => 'Health Access Required';
+  String get healthAccessRequired => 'Accès Santé Requis';
 
   @override
   String get pleaseGrantAccessToHealthDataForBiometricInsights =>
-      'Please grant access to health data to view biometric insights';
+      'Veuillez accorder l\'accès aux données de santé pour voir les analyses biométriques';
 
   @override
-  String get grantAccess => 'Grant Access';
+  String get grantAccess => 'Accorder l\'Accès';
 
   @override
-  String get excellentHealthMetrics => 'Excellent health metrics';
+  String get excellentHealthMetrics => 'Excellentes métriques de santé';
 
   @override
-  String get veryGoodHealthPatterns => 'Very good health patterns';
+  String get veryGoodHealthPatterns => 'Très bons schémas de santé';
 
   @override
-  String get goodOverallHealth => 'Good overall health';
+  String get goodOverallHealth => 'Bonne santé globale';
 
   @override
-  String get moderateHealthIndicators => 'Moderate health indicators';
+  String get moderateHealthIndicators => 'Indicateurs de santé modérés';
 
   @override
-  String get focusOnHealthImprovement => 'Focus on health improvement';
+  String get focusOnHealthImprovement =>
+      'Concentrez-vous sur l\'amélioration de la santé';
 
   @override
-  String get calendarTitle => 'Calendar';
+  String get calendarTitle => 'Calendrier';
 
   @override
-  String get todayButton => 'Today';
+  String get todayButton => 'Aujourd\'hui';
 }

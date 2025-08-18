@@ -5,7 +5,7 @@ output-class: AppLocalizations
 output-dir: lib/generated
 nullable-getter: false
 synthetic-package: false
-use-deferred-loading: false
+use-deferred-loading: true
 header-comment: |
   FlowSense - AI-Powered Period & Cycle Tracking App
   Auto-generated localization files - Do not edit manually

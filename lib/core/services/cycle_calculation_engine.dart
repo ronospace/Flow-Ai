@@ -16,6 +16,55 @@ class CycleCalculationEngine {
   
   CycleCalculationEngine(this._database);
   
+  // Default constructor for cases where database is initialized later
+  CycleCalculationEngine.withoutDatabase() : _database = DatabaseService();
+  
+  /// Calculate next cycle prediction (simpler version for compatibility)
+  CyclePrediction? calculateNextCycle(List<CycleData> cycles) {
+    if (cycles.isEmpty) return null;
+    
+    // Sort cycles by start date
+    cycles.sort((a, b) => a.startDate.compareTo(b.startDate));
+    
+    // Calculate average cycle length
+    final cycleLengths = <int>[];
+    for (int i = 0; i < cycles.length - 1; i++) {
+      final length = cycles[i + 1].startDate.difference(cycles[i].startDate).inDays;
+      if (length >= minCycleLength && length <= maxCycleLength) {
+        cycleLengths.add(length);
+      }
+    }
+    
+    final avgLength = cycleLengths.isNotEmpty 
+        ? cycleLengths.reduce((a, b) => a + b) / cycleLengths.length 
+        : averageCycleLength.toDouble();
+    
+    // Predict next cycle start date
+    final lastCycle = cycles.last;
+    final predictedStartDate = lastCycle.startDate.add(Duration(days: avgLength.round()));
+    
+    // Calculate ovulation day (typically 14 days before next period)
+    final ovulationDay = avgLength.round() - averageLutealPhase;
+    
+    // Calculate confidence based on data consistency
+    double confidence = 0.8;
+    if (cycleLengths.length >= 3) {
+      final variance = cycleLengths.map((l) => (l - avgLength) * (l - avgLength)).reduce((a, b) => a + b) / cycleLengths.length;
+      confidence = max(0.3, 1.0 - (sqrt(variance) / 10.0));
+    }
+    
+    return CyclePrediction(
+      predictedStartDate: predictedStartDate,
+      predictedLength: avgLength.round(),
+      confidence: confidence,
+      fertileWindow: FertileWindow(
+        start: predictedStartDate.subtract(Duration(days: avgLength.round() - ovulationDay + 5)),
+        end: predictedStartDate.subtract(Duration(days: avgLength.round() - ovulationDay - 1)),
+        peak: predictedStartDate.subtract(Duration(days: avgLength.round() - ovulationDay)),
+      ),
+    );
+  }
+  
   /// Calculate comprehensive cycle predictions for a user
   Future<CyclePredictions> calculatePredictions({
     required DateTime referenceDate,

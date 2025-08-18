@@ -30,6 +30,10 @@
 # AdMob
 -keep class com.google.android.gms.ads.** { *; }
 
+# Google Play Core (Deferred components / SplitInstall)
+-keep class com.google.android.play.** { *; }
+-dontwarn com.google.android.play.**
+
 # Local Auth / Biometrics
 -keep class androidx.biometric.** { *; }
 

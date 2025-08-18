@@ -39,17 +39,19 @@ class NotificationService {
     debugPrint('✅ Notification Service initialized');
   }
 
-  Future<void> schedulePeriodicReminder({
+  Future<void> scheduleNotification({
+    required int id,
     required String title,
     required String body,
     required DateTime scheduledDate,
+    String? payload,
   }) async {
     if (!_isInitialized) await initialize();
     
     const androidDetails = AndroidNotificationDetails(
-      'flowsense_periodic',
-      'Period Reminders',
-      channelDescription: 'Notifications about upcoming periods',
+      'flowsense_reminders',
+      'FlowSense Reminders',
+      channelDescription: 'Smart reminders for cycle tracking',
       importance: Importance.high,
       priority: Priority.high,
     );
@@ -67,13 +69,37 @@ class NotificationService {
     final tzScheduledDate = tz.TZDateTime.from(scheduledDate, tz.local);
     
     await _notifications.zonedSchedule(
-      0,
+      id,
       title,
       body,
       tzScheduledDate,
       notificationDetails,
+      payload: payload,
       uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );
+  }
+
+  Future<void> schedulePeriodicReminder({
+    required String title,
+    required String body,
+    required DateTime scheduledDate,
+  }) async {
+    await scheduleNotification(
+      id: 0,
+      title: title,
+      body: body,
+      scheduledDate: scheduledDate,
+    );
+  }
+
+  Future<void> cancelAllNotifications() async {
+    if (!_isInitialized) await initialize();
+    await _notifications.cancelAll();
+  }
+
+  Future<void> cancelNotification(int id) async {
+    if (!_isInitialized) await initialize();
+    await _notifications.cancel(id);
   }
 }

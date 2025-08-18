@@ -443,7 +443,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get insightNotifications => 'Insight Notifications';
 
   @override
-  String get enableNotifications => '启用通知';
+  String get enableNotifications => 'Enable Notifications';
 
   @override
   String get notificationTime => 'Notification Time';
@@ -1052,19 +1052,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get languageChangedTo => 'Language changed to';
 
   @override
-  String get appPreferences => '应用偏好设置';
+  String get appPreferences => 'App Preferences';
 
   @override
-  String get customizeAppearance => '自定义应用外观';
+  String get customizeAppearance => 'Customize app appearance';
 
   @override
-  String get chooseYourLanguage => '选择您的语言';
+  String get chooseYourLanguage => 'Choose your language';
 
   @override
-  String get receiveReminders => '接收提醒和更新';
+  String get receiveReminders => 'Receive reminders and updates';
 
   @override
-  String get dailyReminders => '何时发送日常提醒';
+  String get dailyReminders => 'When to send daily reminders';
 
   @override
   String get unlockPremiumAiInsights => 'Unlock Premium AI Insights';
@@ -1113,34 +1113,34 @@ class AppLocalizationsZh extends AppLocalizations {
   String get moodLabel => 'Mood';
 
   @override
-  String get aiSmartFeatures => 'AI和智能功能';
+  String get aiSmartFeatures => 'AI & Smart Features';
 
   @override
-  String get personalizedAiInsights => '获取个性化AI洞察';
+  String get personalizedAiInsights => 'Get personalized AI insights';
 
   @override
-  String get hapticFeedback => '触觉反馈';
+  String get hapticFeedback => 'Haptic Feedback';
 
   @override
-  String get vibrationInteractions => '在交互时感受振动';
+  String get vibrationInteractions => 'Feel vibrations on interactions';
 
   @override
-  String get supportAbout => '支持和关于';
+  String get supportAbout => 'Support & About';
 
   @override
-  String get getHelpTutorials => '获取帮助和教程';
+  String get getHelpTutorials => 'Get help and tutorials';
 
   @override
-  String get versionInfoLegal => '版本信息和法律信息';
+  String get versionInfoLegal => 'Version info and legal';
 
   @override
-  String get light => '浅色';
+  String get light => 'Light';
 
   @override
-  String get dark => '深色';
+  String get dark => 'Dark';
 
   @override
-  String get system => '系统';
+  String get system => 'System';
 
   @override
   String get flowIntensityNone => 'None';

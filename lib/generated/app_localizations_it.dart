@@ -443,7 +443,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get insightNotifications => 'Insight Notifications';
 
   @override
-  String get enableNotifications => 'Abilita Notifiche';
+  String get enableNotifications => 'Enable Notifications';
 
   @override
   String get notificationTime => 'Notification Time';
@@ -637,22 +637,22 @@ class AppLocalizationsIt extends AppLocalizations {
   String get pm => 'PM';
 
   @override
-  String get trackingScreenTitle => 'Schermata di Tracciamento';
+  String get trackingScreenTitle => 'Tracking';
 
   @override
-  String get flowTab => 'Flusso';
+  String get flowTab => 'Flow';
 
   @override
-  String get symptomsTab => 'Sintomi';
+  String get symptomsTab => 'Symptoms';
 
   @override
-  String get moodTab => 'Umore';
+  String get moodTab => 'Mood';
 
   @override
-  String get painTab => 'Dolore';
+  String get painTab => 'Pain';
 
   @override
-  String get notesTab => 'Note';
+  String get notesTab => 'Notes';
 
   @override
   String get selectTodaysFlowIntensity => 'Select today\'s flow intensity';
@@ -924,19 +924,19 @@ class AppLocalizationsIt extends AppLocalizations {
   String get darkThemeDescription => 'Easy on the eyes in low light';
 
   @override
-  String get biometricDashboard => 'Dashboard Biometrico';
+  String get biometricDashboard => 'Biometric Dashboard';
 
   @override
-  String get currentCycle => 'Ciclo Attuale';
+  String get currentCycle => 'Current Cycle';
 
   @override
-  String get noActiveCycle => 'Nessun ciclo attivo';
+  String get noActiveCycle => 'No active cycle';
 
   @override
-  String get startTracking => 'Inizia tracciamento';
+  String get startTracking => 'Start Tracking';
 
   @override
-  String get aiPrediction => 'Previsione IA';
+  String get aiPrediction => 'AI Prediction';
 
   @override
   String inDays(int days) {
@@ -1052,19 +1052,19 @@ class AppLocalizationsIt extends AppLocalizations {
   String get languageChangedTo => 'Language changed to';
 
   @override
-  String get appPreferences => 'Preferenze App';
+  String get appPreferences => 'App Preferences';
 
   @override
-  String get customizeAppearance => 'Personalizza l\'aspetto dell\'app';
+  String get customizeAppearance => 'Customize app appearance';
 
   @override
-  String get chooseYourLanguage => 'Scegli la tua lingua';
+  String get chooseYourLanguage => 'Choose your language';
 
   @override
-  String get receiveReminders => 'Ricevi promemoria e aggiornamenti';
+  String get receiveReminders => 'Receive reminders and updates';
 
   @override
-  String get dailyReminders => 'Quando inviare promemoria giornalieri';
+  String get dailyReminders => 'When to send daily reminders';
 
   @override
   String get unlockPremiumAiInsights => 'Unlock Premium AI Insights';
@@ -1113,35 +1113,34 @@ class AppLocalizationsIt extends AppLocalizations {
   String get moodLabel => 'Mood';
 
   @override
-  String get aiSmartFeatures => 'IA e Funzionalità Intelligenti';
+  String get aiSmartFeatures => 'AI & Smart Features';
 
   @override
-  String get personalizedAiInsights =>
-      'Ottieni approfondimenti IA personalizzati';
+  String get personalizedAiInsights => 'Get personalized AI insights';
 
   @override
-  String get hapticFeedback => 'Feedback Aptico';
+  String get hapticFeedback => 'Haptic Feedback';
 
   @override
-  String get vibrationInteractions => 'Senti le vibrazioni nelle interazioni';
+  String get vibrationInteractions => 'Feel vibrations on interactions';
 
   @override
-  String get supportAbout => 'Supporto e Informazioni';
+  String get supportAbout => 'Support & About';
 
   @override
-  String get getHelpTutorials => 'Ottieni aiuto e tutorial';
+  String get getHelpTutorials => 'Get help and tutorials';
 
   @override
-  String get versionInfoLegal => 'Informazioni sulla versione e legali';
+  String get versionInfoLegal => 'Version info and legal';
 
   @override
-  String get light => 'Chiaro';
+  String get light => 'Light';
 
   @override
-  String get dark => 'Scuro';
+  String get dark => 'Dark';
 
   @override
-  String get system => 'Sistema';
+  String get system => 'System';
 
   @override
   String get flowIntensityNone => 'None';
@@ -1330,13 +1329,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get failedToRefreshData => 'Failed to refresh data';
 
   @override
-  String get overview => 'Panoramica';
+  String get overview => 'Overview';
 
   @override
-  String get metrics => 'Metriche';
+  String get metrics => 'Metrics';
 
   @override
-  String get sync => 'Sincronizza';
+  String get sync => 'Sync';
 
   @override
   String get healthDataConnected => 'Health Data Connected';

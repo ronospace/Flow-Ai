@@ -77,6 +77,10 @@ class UserProfile {
       updatedAt: DateTime.parse(json['updated_at']),
     );
   }
+  
+  // Add fromMap and toMap for compatibility
+  static UserProfile fromMap(Map<String, dynamic> map) => fromJson(map);
+  Map<String, dynamic> toMap() => toJson();
 }
 
 class AdaptationEvent {

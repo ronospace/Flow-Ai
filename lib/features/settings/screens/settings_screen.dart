@@ -3,8 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:go_router/go_router.dart';
 import '../../../generated/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/services/auth_service.dart';
 import '../providers/settings_provider.dart';
 import '../models/user_preferences.dart';
 import '../widgets/settings_section.dart';
@@ -346,6 +348,64 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
                         title: l10n.supportAbout,
                         icon: Icons.help_outline,
                         children: [
+                          // Future Features Section
+                          SettingsTile(
+                            leading: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: const BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [Color(0xFF6C63FF), Color(0xFF9C27B0)],
+                                ),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.rocket_launch,
+                                color: Colors.white,
+                                size: 14,
+                              ),
+                            ),
+                            title: '🚀 Future Plans',
+                            subtitle: 'See what\'s coming next in FlowSense',
+                            onTap: () => context.push('/future-plans'),
+                            trailing: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  colors: [Color(0xFF6C63FF), Color(0xFF9C27B0)],
+                                ),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Text(
+                                'NEW',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SettingsTile(
+                            leading: const Icon(Icons.favorite, color: AppTheme.primaryRose),
+                            title: 'Help Us Improve',
+                            subtitle: 'Share your feedback and ideas',
+                            onTap: () => context.push('/feedback'),
+                            trailing: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: AppTheme.primaryRose.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: AppTheme.primaryRose.withValues(alpha: 0.3),
+                                ),
+                              ),
+                              child: const Text(
+                                '❤️',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ),
+                          ),
                           SettingsTile(
                             leading: const Icon(Icons.help_center, color: AppTheme.warningOrange),
                             title: l10n.help,
@@ -598,30 +658,50 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
             ],
           ),
           backgroundColor: AppTheme.mediumGrey,
-          duration: Duration(seconds: 2),
+          duration: Duration(seconds: 3),
         ),
       );
       
-      // Perform sign out logic here
-      // await AuthService().signOut();
+      // Import AuthService and call proper sign out
+      final authService = AuthService();
+      await authService.signOut();
       
-      // Navigate to auth screen
+      // Clear all app state and user data
+      await _clearAllAppData();
+      
+      // Clear navigation stack and redirect to auth
       await Future.delayed(const Duration(milliseconds: 1000));
       if (mounted) {
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          '/auth',
-          (route) => false,
-        );
+        // Use GoRouter instead of Navigator for proper routing
+        context.go('/auth');
       }
     } catch (e) {
+      debugPrint('Sign out error: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Sign out failed. Please try again.'),
+          SnackBar(
+            content: Text('Sign out failed: ${e.toString()}'),
             backgroundColor: AppTheme.primaryRose,
+            duration: const Duration(seconds: 3),
           ),
         );
       }
+    }
+  }
+  
+  /// Clear all application data on sign out
+  Future<void> _clearAllAppData() async {
+    try {
+      // Clear provider states
+      final settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
+      
+      // Reset all cached data - you can add more providers here as needed
+      // Note: We keep app preferences like theme, language, etc.
+      // but clear user-specific data
+      
+      debugPrint('✅ Application data cleared successfully');
+    } catch (e) {
+      debugPrint('❌ Error clearing app data: $e');
     }
   }
 

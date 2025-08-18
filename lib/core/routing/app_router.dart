@@ -4,13 +4,17 @@ import 'package:flutter/material.dart';
 import '../../features/onboarding/screens/splash_screen.dart';
 import '../../features/onboarding/screens/onboarding_screen.dart';
 import '../../features/onboarding/screens/setup_screen.dart';
+import '../../features/auth/screens/auth_screen.dart';
 import '../../features/cycle/screens/home_screen.dart';
 import '../../features/cycle/screens/calendar_screen.dart';
 import '../../features/cycle/screens/tracking_screen.dart';
-import '../../features/insights/screens/insights_screen.dart';
-import '../../features/insights/screens/ai_coach_screen.dart';
+// Deferred (lazy) imports for heavy features
+import '../../features/insights/screens/insights_screen.dart' deferred as insights;
+import '../../features/insights/screens/ai_coach_screen.dart' deferred as aicoach;
 import '../../features/health/screens/health_screen.dart';
 import '../../features/settings/screens/settings_screen.dart';
+import '../../features/feedback/screens/feedback_screen.dart';
+import '../../features/future_plans/screens/future_plans_screen.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -31,6 +35,13 @@ class AppRouter {
         path: '/setup',
         name: 'setup',
         builder: (context, state) => const SetupScreen(),
+      ),
+      
+      // Authentication Route
+      GoRoute(
+        path: '/auth',
+        name: 'auth',
+        builder: (context, state) => const AuthScreen(),
       ),
       
       // Main App Routes with Shell Navigation
@@ -55,7 +66,10 @@ class AppRouter {
           GoRoute(
             path: '/insights',
             name: 'insights',
-            builder: (context, state) => const InsightsScreen(),
+            builder: (context, state) => DeferredRouteBuilder(
+              loadLibrary: insights.loadLibrary,
+              builder: (_) => insights.InsightsScreen(),
+            ),
           ),
           GoRoute(
             path: '/health',
@@ -76,11 +90,62 @@ class AppRouter {
         name: 'ai-coach',
         pageBuilder: (context, state) => MaterialPage(
           fullscreenDialog: true,
-          child: const AICoachScreen(),
+          child: DeferredRouteBuilder(
+            loadLibrary: aicoach.loadLibrary,
+            builder: (_) => aicoach.AICoachScreen(),
+          ),
         ),
+      ),
+      
+      // Feedback and Future Plans Routes
+      GoRoute(
+        path: '/feedback',
+        name: 'feedback',
+        builder: (context, state) => const FeedbackScreen(),
+      ),
+      GoRoute(
+        path: '/future-plans',
+        name: 'future-plans',
+        builder: (context, state) => const FuturePlansScreen(),
       ),
     ],
   );
+}
+
+/// Helper widget to load deferred libraries before building the route
+class DeferredRouteBuilder extends StatefulWidget {
+  final Future<void> Function() loadLibrary;
+  final WidgetBuilder builder;
+
+  const DeferredRouteBuilder({super.key, required this.loadLibrary, required this.builder});
+
+  @override
+  State<DeferredRouteBuilder> createState() => _DeferredRouteBuilderState();
+}
+
+class _DeferredRouteBuilderState extends State<DeferredRouteBuilder> {
+  late Future<void> _loadFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFuture = widget.loadLibrary();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<void>(
+      future: _loadFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+        return widget.builder(context);
+      },
+    );
+  }
 }
 
 class MainShell extends StatefulWidget {

@@ -110,6 +110,15 @@ class NavigationService {
     return getBackRoute(null) != null;
   }
 
+  /// Navigate to a new route and replace the current one
+  void pushReplacementNamed(String route) {
+    // Clear the last navigation entry and add the new one
+    if (_navigationHistory.isNotEmpty) {
+      _navigationHistory.removeLast();
+    }
+    recordNavigation(route);
+  }
+
   Future<void> _saveNavigationHistory() async {
     final historyJson = _navigationHistory
         .map((state) => state.toJson())

@@ -112,7 +112,6 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final overallStatus = _getOverallSyncStatus();
     
     return Container(
@@ -383,8 +382,8 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
   }
 
   Widget _buildSyncButton() {
-    final theme = Theme.of(context);
-    return const SizedBox(width: double.infinity,
+    return SizedBox(
+      width: double.infinity,
       height: 48,
       child: ElevatedButton(
         onPressed: _isSyncing ? null : _performSync,
@@ -393,28 +392,25 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-        ).copyWith(
-          backgroundColor: _isSyncing 
-              ? WidgetStateProperty.all(AppTheme.lightGrey)
-              : null,
         ),
         child: Container(
-          decoration: _isSyncing 
+          decoration: _isSyncing
               ? null
-              : const BoxDecoration(
-                  gradient: LinearGradient(
+              : BoxDecoration(
+                  gradient: const LinearGradient(
                     colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
                   ),
-                  borderRadius: BorderRadius.all(Radius.circular(16)),
+                  borderRadius: BorderRadius.circular(16),
                 ),
           child: Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (_isSyncing) ...[
-                  const SizedBox(width: 16,
+                  SizedBox(
+                    width: 16,
                     height: 16,
-                    child: CircularProgressIndicator(
+                    child: const CircularProgressIndicator(
                       strokeWidth: 2,
                       valueColor: AlwaysStoppedAnimation<Color>(
                         AppTheme.mediumGrey,

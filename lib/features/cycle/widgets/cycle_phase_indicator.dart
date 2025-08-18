@@ -82,7 +82,8 @@ class CyclePhaseIndicator extends StatelessWidget {
                 ),
               ),
               // Progress circle
-              const SizedBox(width: 50,
+              SizedBox(
+                width: 50,
                 height: 50,
                 child: Stack(
                   alignment: Alignment.center,

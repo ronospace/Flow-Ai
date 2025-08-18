@@ -18,7 +18,6 @@ class CorrelationInsightsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final displayCorrelations = isPreview 
         ? correlations.entries.take(3).toList()
         : correlations.entries.toList();
@@ -43,7 +42,7 @@ class CorrelationInsightsCard extends StatelessWidget {
           const SizedBox(height: 16),
           
           if (displayCorrelations.isEmpty)
-            _buildNoCorrelationsMessage()
+            _buildNoCorrelationsMessage(context)
           else
             ...displayCorrelations.map((entry) => _buildCorrelationItem(
               context, 
@@ -209,8 +208,7 @@ class CorrelationInsightsCard extends StatelessWidget {
     );
   }
   
-  Widget _buildNoCorrelationsMessage() {
-    final theme = Theme.of(context);
+  Widget _buildNoCorrelationsMessage(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(24),
       child: Column(

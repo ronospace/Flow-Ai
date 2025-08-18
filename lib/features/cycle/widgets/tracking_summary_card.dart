@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/models/cycle_data.dart';
+import 'package:intl/intl.dart';
+import '../../../generated/app_localizations.dart';
 
 class TrackingSummaryCard extends StatelessWidget {
   final CycleData cycleData;
@@ -65,6 +67,7 @@ class TrackingSummaryCard extends StatelessWidget {
 
   Widget _buildHeader(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     return Row(
       children: [
         Container(
@@ -88,14 +91,14 @@ class TrackingSummaryCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Cycle Day ${_getCycleDay()}',
+                l10n.day(_getCycleDay()),
                 style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppTheme.darkGrey,
                 ),
               ),
               Text(
-                _formatDate(cycleData.createdAt),
+                DateFormat.yMMMd(l10n.localeName).format(cycleData.createdAt),
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: AppTheme.mediumGrey,
                 ),
@@ -137,15 +140,15 @@ class TrackingSummaryCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Flow',
-              style: TextStyle(
+              AppLocalizations.of(context).flow,
+              style: const TextStyle(
                 color: AppTheme.mediumGrey,
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
               ),
             ),
             Text(
-              _getFlowText(),
+              _getFlowText(context),
               style: TextStyle(
                 color: _getFlowColor(),
                 fontSize: 16,
@@ -163,8 +166,8 @@ class TrackingSummaryCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Symptoms',
-          style: TextStyle(
+          AppLocalizations.of(context).symptoms,
+          style: const TextStyle(
             color: AppTheme.mediumGrey,
             fontSize: 12,
             fontWeight: FontWeight.w500,
@@ -193,10 +196,11 @@ class TrackingSummaryCard extends StatelessWidget {
           }).toList(),
         ),
         if (cycleData.symptoms.length > 4)
-          const Padding(padding: const EdgeInsets.only(top: 6),
+          Padding(
+            padding: const EdgeInsets.only(top: 6),
             child: Text(
-              '+${cycleData.symptoms.length - 4} more',
-              style: TextStyle(
+              '+${cycleData.symptoms.length - 4} ${AppLocalizations.of(context).more}',
+              style: const TextStyle(
                 color: AppTheme.mediumGrey,
                 fontSize: 12,
                 fontStyle: FontStyle.italic,
@@ -208,14 +212,15 @@ class TrackingSummaryCard extends StatelessWidget {
   }
 
   Widget _buildMoodEnergySection(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Row(
       children: [
         if (cycleData.mood != null)
           Expanded(
             child: _buildStatItem(
-              'Mood',
+              l10n.moodLabel,
               _getMoodEmoji(cycleData.mood!),
-              _getMoodText(cycleData.mood!),
+              _getMoodText(context, cycleData.mood!),
               AppTheme.primaryRose,
             ),
           ),
@@ -224,9 +229,9 @@ class TrackingSummaryCard extends StatelessWidget {
         if (cycleData.energy != null)
           Expanded(
             child: _buildStatItem(
-              'Energy',
+              AppLocalizations.of(context).energy,
               _getEnergyEmoji(cycleData.energy!),
-              _getEnergyText(cycleData.energy!),
+              _getEnergyText(context, cycleData.energy!),
               AppTheme.accentMint,
             ),
           ),
@@ -236,9 +241,9 @@ class TrackingSummaryCard extends StatelessWidget {
 
   Widget _buildPainSection() {
     return _buildStatItem(
-      'Pain Level',
+      AppLocalizations.of(context).painLevel,
       _getPainEmoji(cycleData.pain!),
-      _getPainText(cycleData.pain!),
+      _getPainText(context, cycleData.pain!),
       _getPainColor(cycleData.pain!),
     );
   }
@@ -299,8 +304,8 @@ class TrackingSummaryCard extends StatelessWidget {
             ),
             SizedBox(width: 6),
             Text(
-              'Notes',
-              style: TextStyle(
+              AppLocalizations.of(context).notes,
+              style: const TextStyle(
                 color: AppTheme.mediumGrey,
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
@@ -318,7 +323,7 @@ class TrackingSummaryCard extends StatelessWidget {
           ),
           child: Text(
             cycleData.notes!,
-            style: theme.textTheme.bodyMedium?.copyWith(
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: AppTheme.darkGrey,
               height: 1.4,
             ),
@@ -335,12 +340,9 @@ class TrackingSummaryCard extends StatelessWidget {
     return DateTime.now().difference(cycleData.startDate).inDays + 1;
   }
 
-  String _formatDate(DateTime date) {
-    final months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-    ];
-    return '${months[date.month - 1]} ${date.day}, ${date.year}';
+  String _formatDateLocal(BuildContext context, DateTime date) {
+    final l10n = AppLocalizations.of(context);
+    return DateFormat.yMMMd(l10n.localeName).format(date);
   }
 
   Color _getFlowColor() {
@@ -360,20 +362,21 @@ class TrackingSummaryCard extends StatelessWidget {
     }
   }
 
-  String _getFlowText() {
+  String _getFlowText(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     switch (cycleData.flowIntensity) {
       case FlowIntensity.none:
-        return 'None';
+        return l10n.flowIntensityNone;
       case FlowIntensity.spotting:
-        return 'Spotting';
+        return l10n.spotting;
       case FlowIntensity.light:
-        return 'Light';
+        return l10n.lightFlow;
       case FlowIntensity.medium:
-        return 'Medium';
+        return l10n.normalFlow;
       case FlowIntensity.heavy:
-        return 'Heavy';
+        return l10n.heavyFlow;
       case FlowIntensity.veryHeavy:
-        return 'Very Heavy';
+        return l10n.veryHeavy;
     }
   }
 
@@ -385,12 +388,13 @@ class TrackingSummaryCard extends StatelessWidget {
     return '😄';
   }
 
-  String _getMoodText(double mood) {
-    if (mood <= 1) return 'Terrible';
-    if (mood <= 2) return 'Poor';
-    if (mood <= 3) return 'Okay';
-    if (mood <= 4) return 'Good';
-    return 'Amazing';
+  String _getMoodText(BuildContext context, double mood) {
+    final l10n = AppLocalizations.of(context);
+    if (mood c= 1) return l10n.moodSad; // reuse closest labels
+    if (mood c= 2) return l10n.moodAnxious;
+    if (mood c= 3) return l10n.moodNeutral;
+    if (mood c= 4) return l10n.moodHappy;
+    return l10n.goodEvening; // placeholder fallback
   }
 
   String _getEnergyEmoji(double energy) {
@@ -401,12 +405,14 @@ class TrackingSummaryCard extends StatelessWidget {
     return '🔥';
   }
 
-  String _getEnergyText(double energy) {
-    if (energy <= 1) return 'Exhausted';
-    if (energy <= 2) return 'Tired';
-    if (energy <= 3) return 'Normal';
-    if (energy <= 4) return 'Energetic';
-    return 'Vibrant';
+  String _getEnergyText(BuildContext context, double energy) {
+    // Map energy to generic localized labels
+    final l10n = AppLocalizations.of(context);
+    if (energy c= 1) return l10n.low;
+    if (energy c= 2) return l10n.medium;
+    if (energy c= 3) return l10n.medium;
+    if (energy c= 4) return l10n.high;
+    return l10n.high;
   }
 
   String _getPainEmoji(double pain) {
@@ -417,12 +423,13 @@ class TrackingSummaryCard extends StatelessWidget {
     return '😫';
   }
 
-  String _getPainText(double pain) {
-    if (pain <= 1) return 'None';
-    if (pain <= 2) return 'Mild';
-    if (pain <= 3) return 'Moderate';
-    if (pain <= 4) return 'Severe';
-    return 'Unbearable';
+  String _getPainText(BuildContext context, double pain) {
+    final l10n = AppLocalizations.of(context);
+    if (pain c= 1) return l10n.painNone;
+    if (pain c= 2) return l10n.painMild;
+    if (pain c= 3) return l10n.painModerate;
+    if (pain c= 4) return l10n.painSevere;
+    return l10n.severe; // fallback if exists
   }
 
   Color _getPainColor(double pain) {

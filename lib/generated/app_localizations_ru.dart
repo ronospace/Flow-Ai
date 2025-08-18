@@ -443,7 +443,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get insightNotifications => 'Insight Notifications';
 
   @override
-  String get enableNotifications => 'Включить Уведомления';
+  String get enableNotifications => 'Enable Notifications';
 
   @override
   String get notificationTime => 'Notification Time';
@@ -1052,19 +1052,19 @@ class AppLocalizationsRu extends AppLocalizations {
   String get languageChangedTo => 'Language changed to';
 
   @override
-  String get appPreferences => 'Настройки Приложения';
+  String get appPreferences => 'App Preferences';
 
   @override
-  String get customizeAppearance => 'Настроить внешний вид приложения';
+  String get customizeAppearance => 'Customize app appearance';
 
   @override
-  String get chooseYourLanguage => 'Выберите ваш язык';
+  String get chooseYourLanguage => 'Choose your language';
 
   @override
-  String get receiveReminders => 'Получать напоминания и обновления';
+  String get receiveReminders => 'Receive reminders and updates';
 
   @override
-  String get dailyReminders => 'Когда отправлять ежедневные напоминания';
+  String get dailyReminders => 'When to send daily reminders';
 
   @override
   String get unlockPremiumAiInsights => 'Unlock Premium AI Insights';
@@ -1113,35 +1113,34 @@ class AppLocalizationsRu extends AppLocalizations {
   String get moodLabel => 'Mood';
 
   @override
-  String get aiSmartFeatures => 'ИИ и Умные Функции';
+  String get aiSmartFeatures => 'AI & Smart Features';
 
   @override
-  String get personalizedAiInsights =>
-      'Получить персонализированные инсайты ИИ';
+  String get personalizedAiInsights => 'Get personalized AI insights';
 
   @override
-  String get hapticFeedback => 'Тактильная Отдача';
+  String get hapticFeedback => 'Haptic Feedback';
 
   @override
-  String get vibrationInteractions => 'Ощутите вибрацию при взаимодействиях';
+  String get vibrationInteractions => 'Feel vibrations on interactions';
 
   @override
-  String get supportAbout => 'Поддержка и О приложении';
+  String get supportAbout => 'Support & About';
 
   @override
-  String get getHelpTutorials => 'Получить помощь и руководства';
+  String get getHelpTutorials => 'Get help and tutorials';
 
   @override
-  String get versionInfoLegal => 'Информация о версии и правовые вопросы';
+  String get versionInfoLegal => 'Version info and legal';
 
   @override
-  String get light => 'Светлая';
+  String get light => 'Light';
 
   @override
-  String get dark => 'Тёмная';
+  String get dark => 'Dark';
 
   @override
-  String get system => 'Системная';
+  String get system => 'System';
 
   @override
   String get flowIntensityNone => 'None';

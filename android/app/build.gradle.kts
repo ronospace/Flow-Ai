@@ -53,6 +53,12 @@ flutter {
     source = "../.."
 }
 
+// Exclude duplicate Play Core Common classes from all configurations to avoid R8 duplicate class errors
+configurations.configureEach {
+    exclude(group = "com.google.android.play", module = "core-common")
+}
+
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.2")
+    implementation("com.google.android.play:core:1.10.3")
 }
