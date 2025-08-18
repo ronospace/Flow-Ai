@@ -101,7 +101,7 @@ class DayDetailSheet extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: dayInfo.color != null
                 ? LinearGradient(
-                    colors: [dayInfo.color!.withOpacity(0.3), dayInfo.color!],
+                    colors: [dayInfo.color!.withValues(alpha: 0.3), dayInfo.color!],
                   )
                 : const LinearGradient(
                     colors: [AppTheme.lightGrey, AppTheme.mediumGrey],
@@ -150,7 +150,7 @@ class DayDetailSheet extends StatelessWidget {
                   margin: const EdgeInsets.only(top: 4),
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
-                    color: AppTheme.secondaryBlue.withOpacity(0.1),
+                    color: AppTheme.secondaryBlue.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
@@ -184,10 +184,10 @@ class DayDetailSheet extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: dayInfo.color?.withOpacity(0.1) ?? AppTheme.lightGrey.withOpacity(0.5),
+        color: dayInfo.color?.withValues(alpha: 0.1) ?? AppTheme.lightGrey.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: dayInfo.color?.withOpacity(0.3) ?? AppTheme.lightGrey,
+          color: dayInfo.color?.withValues(alpha: 0.3) ?? AppTheme.lightGrey,
         ),
       ),
       child: Column(
@@ -244,12 +244,12 @@ class DayDetailSheet extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            phaseInfo.color.withOpacity(0.1),
-            phaseInfo.color.withOpacity(0.05),
+            phaseInfo.color.withValues(alpha: 0.1),
+            phaseInfo.color.withValues(alpha: 0.05),
           ],
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: phaseInfo.color.withOpacity(0.3)),
+        border: Border.all(color: phaseInfo.color.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -332,12 +332,12 @@ class DayDetailSheet extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppTheme.secondaryBlue.withOpacity(0.1),
-            AppTheme.accentMint.withOpacity(0.1),
+            AppTheme.secondaryBlue.withValues(alpha: 0.1),
+            AppTheme.accentMint.withValues(alpha: 0.1),
           ],
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.secondaryBlue.withOpacity(0.3)),
+        border: Border.all(color: AppTheme.secondaryBlue.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -347,7 +347,7 @@ class DayDetailSheet extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppTheme.secondaryBlue.withOpacity(0.2),
+                  color: AppTheme.secondaryBlue.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
@@ -451,9 +451,9 @@ class DayDetailSheet extends StatelessWidget {
     return Container(
       height: 56,
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Material(
         color: Colors.transparent,

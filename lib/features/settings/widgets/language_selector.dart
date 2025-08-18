@@ -37,10 +37,11 @@ class _LanguageSelectorState extends State<LanguageSelector> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       height: MediaQuery.of(context).size.height * 0.75,
       decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
+        color: theme.scaffoldBackgroundColor,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(28),
           topRight: Radius.circular(28),
@@ -85,7 +86,7 @@ class _LanguageSelectorState extends State<LanguageSelector> {
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Theme.of(context).textTheme.titleLarge?.color,
+                    color: theme.textTheme.titleLarge?.color,
                   ),
                 ),
               ],
@@ -168,13 +169,13 @@ class _LanguageSelectorState extends State<LanguageSelector> {
                           language.displayName,
                           style: TextStyle(
                             fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                            color: isSelected ? AppTheme.accentMint : Theme.of(context).textTheme.bodyLarge?.color,
+                            color: isSelected ? AppTheme.accentMint : theme.textTheme.bodyLarge?.color,
                           ),
                         ),
                         subtitle: Text(
                           language.code,
                           style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+                            color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
                             fontSize: 12,
                           ),
                         ),
@@ -196,9 +197,7 @@ class _LanguageSelectorState extends State<LanguageSelector> {
                               // Show confirmation
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text(
-                                    '${AppLocalizations.of(context)!.languageChangedTo} ${language.displayName}'
-                                  ),
+                                  content: Text('${AppLocalizations.of(context)!.languageChangedTo} ${language.displayName}'),
                                   backgroundColor: AppTheme.accentMint,
                                   behavior: SnackBarBehavior.floating,
                                   shape: RoundedRectangleBorder(

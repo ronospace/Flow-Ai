@@ -12,10 +12,11 @@ class ThemeSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       height: MediaQuery.of(context).size.height * 0.4,
       decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
+        color: theme.scaffoldBackgroundColor,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(28),
           topRight: Radius.circular(28),
@@ -29,7 +30,7 @@ class ThemeSelector extends StatelessWidget {
             height: 4,
             margin: const EdgeInsets.only(top: 12),
             decoration: BoxDecoration(
-              color: Theme.of(context).dividerColor,
+              color: theme.dividerColor,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -60,7 +61,7 @@ class ThemeSelector extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Theme.of(context).textTheme.titleLarge?.color,
+                    color: theme.textTheme.titleLarge?.color,
                   ),
                 ),
               ],
@@ -126,6 +127,7 @@ class ThemeSelector extends StatelessWidget {
     IconData icon,
     Color iconColor,
   ) {
+    final theme = Theme.of(context);
     final isSelected = settings.preferences.themeMode == themeMode;
     
     return Container(
@@ -136,7 +138,7 @@ class ThemeSelector extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         border: isSelected 
             ? Border.all(color: AppTheme.primaryRose, width: 2)
-            : Border.all(color: Theme.of(context).dividerColor),
+            : Border.all(color: theme.dividerColor),
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
@@ -146,12 +148,12 @@ class ThemeSelector extends StatelessWidget {
           decoration: BoxDecoration(
             color: isSelected 
                 ? iconColor.withValues(alpha: 0.2)
-                : Theme.of(context).colorScheme.surfaceVariant,
+                : theme.colorScheme.surfaceVariant,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(
             icon,
-            color: isSelected ? iconColor : Theme.of(context).colorScheme.onSurfaceVariant,
+            color: isSelected ? iconColor : theme.colorScheme.onSurfaceVariant,
             size: 24,
           ),
         ),
@@ -159,14 +161,14 @@ class ThemeSelector extends StatelessWidget {
           title,
           style: TextStyle(
             fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-            color: isSelected ? AppTheme.primaryRose : Theme.of(context).textTheme.bodyLarge?.color,
+            color: isSelected ? AppTheme.primaryRose : theme.textTheme.bodyLarge?.color,
             fontSize: 16,
           ),
         ),
           subtitle: Text(
           subtitle,
           style: TextStyle(
-            color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+            color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
             fontSize: 14,
           ),
         ),
@@ -177,7 +179,7 @@ class ThemeSelector extends StatelessWidget {
               )
             : Icon(
                 Icons.circle_outlined,
-                color: Theme.of(context).colorScheme.outline,
+                color: theme.colorScheme.outline,
               ),
         onTap: () async {
           if (!isSelected) {
@@ -188,9 +190,7 @@ class ThemeSelector extends StatelessWidget {
               // Show confirmation
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(
-                    '${AppLocalizations.of(context)!.themeChangedTo} $title'
-                  ),
+                  content: Text('${AppLocalizations.of(context)!.themeChangedTo} $title'),
                   backgroundColor: AppTheme.primaryRose,
                   behavior: SnackBarBehavior.floating,
                   shape: RoundedRectangleBorder(

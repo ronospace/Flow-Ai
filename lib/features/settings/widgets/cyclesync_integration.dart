@@ -37,18 +37,18 @@ class _CycleSyncIntegrationState extends State<CycleSyncIntegration> {
                   end: Alignment.bottomRight,
                   colors: [
                     isConnected 
-                        ? AppTheme.successGreen.withOpacity(0.1)
-                        : AppTheme.warningOrange.withOpacity(0.1),
+                        ? AppTheme.successGreen.withValues(alpha: 0.1)
+                        : AppTheme.warningOrange.withValues(alpha: 0.1),
                     isConnected 
-                        ? AppTheme.accentMint.withOpacity(0.05)
-                        : AppTheme.primaryRose.withOpacity(0.05),
+                        ? AppTheme.accentMint.withValues(alpha: 0.05)
+                        : AppTheme.primaryRose.withValues(alpha: 0.05),
                   ],
                 ),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
                   color: isConnected 
-                      ? AppTheme.successGreen.withOpacity(0.3)
-                      : AppTheme.warningOrange.withOpacity(0.3),
+                      ? AppTheme.successGreen.withValues(alpha: 0.3)
+                      : AppTheme.warningOrange.withValues(alpha: 0.3),
                 ),
               ),
               child: Column(
@@ -126,7 +126,7 @@ class _CycleSyncIntegrationState extends State<CycleSyncIntegration> {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: AppTheme.successGreen.withOpacity(0.1),
+                        color: AppTheme.successGreen.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
@@ -181,8 +181,7 @@ class _CycleSyncIntegrationState extends State<CycleSyncIntegration> {
                   ? 'Stop syncing with CycleSync Enterprise'
                   : 'Sync your cycle data with CycleSync Enterprise',
               trailing: _isConnecting
-                  ? const SizedBox(
-                      width: 20,
+                  ? const SizedBox(width: 20,
                       height: 20,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
@@ -227,10 +226,10 @@ class _CycleSyncIntegrationState extends State<CycleSyncIntegration> {
               margin: const EdgeInsets.all(20),
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppTheme.secondaryBlue.withOpacity(0.05),
+                color: AppTheme.secondaryBlue.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: AppTheme.secondaryBlue.withOpacity(0.1),
+                  color: AppTheme.secondaryBlue.withValues(alpha: 0.1),
                 ),
               ),
               child: Column(
@@ -276,7 +275,7 @@ class _CycleSyncIntegrationState extends State<CycleSyncIntegration> {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        SizedBox(width: 4),
+                        const SizedBox(width: 4),
                         Icon(
                           Icons.arrow_forward,
                           color: AppTheme.secondaryBlue,
@@ -312,7 +311,7 @@ class _CycleSyncIntegrationState extends State<CycleSyncIntegration> {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Disconnected from CycleSync'),
+              content: const Text('Disconnected from CycleSync'),
               backgroundColor: AppTheme.warningOrange,
             ),
           );
@@ -372,8 +371,8 @@ class _CycleSyncIntegrationState extends State<CycleSyncIntegration> {
             CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(AppTheme.successGreen),
             ),
-            SizedBox(height: 16),
-            Text('Syncing with CycleSync...'),
+            const SizedBox(height: 16),
+            const Text('Syncing with CycleSync...'),
           ],
         ),
       ),
@@ -386,7 +385,7 @@ class _CycleSyncIntegrationState extends State<CycleSyncIntegration> {
         
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Sync completed successfully!'),
+            content: const Text('Sync completed successfully!'),
             backgroundColor: AppTheme.successGreen,
           ),
         );
@@ -440,7 +439,7 @@ class _CycleSyncIntegrationState extends State<CycleSyncIntegration> {
                       size: 64,
                       color: AppTheme.lightGrey,
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     Text(
                       'Sync history will appear here',
                       style: TextStyle(
@@ -507,12 +506,12 @@ class _CycleSyncIntegrationState extends State<CycleSyncIntegration> {
                   fontSize: 16,
                 ),
               ),
-              SizedBox(height: 16),
-              Text('• Share your menstrual cycle data with CycleSync'),
-              Text('• Allow data synchronization across platforms'),
-              Text('• Enable enhanced AI-powered health insights'),
-              Text('• Receive personalized recommendations'),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
+              const Text('• Share your menstrual cycle data with CycleSync'),
+              const Text('• Allow data synchronization across platforms'),
+              const Text('• Enable enhanced AI-powered health insights'),
+              const Text('• Receive personalized recommendations'),
+              const SizedBox(height: 16),
               Text(
                 'Your data privacy:',
                 style: TextStyle(
@@ -520,12 +519,12 @@ class _CycleSyncIntegrationState extends State<CycleSyncIntegration> {
                   color: AppTheme.successGreen,
                 ),
               ),
-              SizedBox(height: 8),
-              Text('✓ Data is encrypted during transfer'),
-              Text('✓ You can disconnect at any time'),
-              Text('✓ Your data remains under your control'),
-              Text('✓ Complies with healthcare privacy standards'),
-              SizedBox(height: 16),
+              const SizedBox(height: 8),
+              const Text('✓ Data is encrypted during transfer'),
+              const Text('✓ You can disconnect at any time'),
+              const Text('✓ Your data remains under your control'),
+              const Text('✓ Complies with healthcare privacy standards'),
+              const SizedBox(height: 16),
               Text(
                 'Do you consent to connect your FlowSense data with CycleSync Enterprise?',
                 style: TextStyle(
@@ -585,11 +584,11 @@ class _CycleSyncIntegrationState extends State<CycleSyncIntegration> {
                   fontSize: 16,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
                 'CycleSync Enterprise is our comprehensive menstrual health platform that provides advanced analytics, AI-powered insights, and seamless data synchronization across multiple devices and applications.',
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Text(
                 'Benefits of Integration:',
                 style: TextStyle(
@@ -597,12 +596,12 @@ class _CycleSyncIntegrationState extends State<CycleSyncIntegration> {
                   fontSize: 16,
                 ),
               ),
-              SizedBox(height: 8),
-              Text('• Sync data across all your devices'),
-              Text('• Advanced AI health predictions'),
-              Text('• Comprehensive health reports'),
-              Text('• Healthcare provider integration'),
-              Text('• Enhanced data backup and security'),
+              const SizedBox(height: 8),
+              const Text('• Sync data across all your devices'),
+              const Text('• Advanced AI health predictions'),
+              const Text('• Comprehensive health reports'),
+              const Text('• Healthcare provider integration'),
+              const Text('• Enhanced data backup and security'),
             ],
           ),
         ),

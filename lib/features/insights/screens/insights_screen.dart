@@ -53,12 +53,13 @@ class _InsightsScreenState extends State<InsightsScreen>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       body: Stack(
         children: [
           Container(
             decoration: BoxDecoration(
-            gradient: AppTheme.backgroundGradient(Theme.of(context).brightness == Brightness.dark),
+            gradient: AppTheme.backgroundGradient(theme.brightness == Brightness.dark),
             ),
             child: SafeArea(
               child: Column(
@@ -96,6 +97,7 @@ class _InsightsScreenState extends State<InsightsScreen>
   }
 
   Widget _buildHeader() {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(20),
       child: Row(
@@ -107,14 +109,14 @@ class _InsightsScreenState extends State<InsightsScreen>
               children: [
                 Text(
                   'AI Insights',
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  style: theme.textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: AppTheme.darkGrey,
                   ),
                 ).animate().fadeIn().slideX(begin: -0.3, end: 0),
                 Text(
                   'Powered by machine learning',
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  style: theme.textTheme.bodyLarge?.copyWith(
                     color: AppTheme.mediumGrey,
                   ),
                 ).animate().fadeIn(delay: 100.ms),
@@ -132,7 +134,7 @@ class _InsightsScreenState extends State<InsightsScreen>
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: AppTheme.secondaryBlue.withOpacity(0.3),
+                  color: AppTheme.secondaryBlue.withValues(alpha: 0.3),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -149,7 +151,7 @@ class _InsightsScreenState extends State<InsightsScreen>
                 const SizedBox(width: 6),
                 Text(
                   'AI Powered',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  style: theme.textTheme.bodySmall?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -166,11 +168,11 @@ class _InsightsScreenState extends State<InsightsScreen>
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.9),
+        color: Colors.white.withValues(alpha: 0.9),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -223,11 +225,11 @@ class _InsightsScreenState extends State<InsightsScreen>
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.9),
+        color: Colors.white.withValues(alpha: 0.9),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -250,20 +252,17 @@ class _InsightsScreenState extends State<InsightsScreen>
         ),
         tabs: const [
           Tab(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Padding(padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Text('Overview'),
             ),
           ),
           Tab(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Padding(padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Text('Trends'),
             ),
           ),
           Tab(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Padding(padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Text('Patterns'),
             ),
           ),
@@ -275,6 +274,7 @@ class _InsightsScreenState extends State<InsightsScreen>
   Widget _buildOverviewTab() {
     return Consumer2<InsightsProvider, CycleProvider>(
       builder: (context, insightsProvider, cycleProvider, child) {
+        final theme = Theme.of(context);
         if (insightsProvider.isLoading || cycleProvider.isLoading) {
           return const Center(
             child: CircularProgressIndicator(
@@ -310,7 +310,7 @@ class _InsightsScreenState extends State<InsightsScreen>
               // AI Insights
               Text(
                 'AI Insights',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppTheme.darkGrey,
                 ),
@@ -321,8 +321,7 @@ class _InsightsScreenState extends State<InsightsScreen>
               ...insightsProvider.insights.asMap().entries.map((entry) {
                 final index = entry.key;
                 final insight = entry.value;
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
+                return Padding(padding: const EdgeInsets.only(bottom: 16),
                   child: AIInsightCard(
                     insight: insight,
                   ).animate()

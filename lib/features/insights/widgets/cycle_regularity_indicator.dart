@@ -18,6 +18,7 @@ class CycleRegularityIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -25,7 +26,7 @@ class CycleRegularityIndicator extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -40,7 +41,7 @@ class CycleRegularityIndicator extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppTheme.accentMint.withOpacity(0.1),
+                  color: AppTheme.accentMint.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
@@ -52,7 +53,7 @@ class CycleRegularityIndicator extends StatelessWidget {
               const SizedBox(width: 12),
               Text(
                 'Cycle Regularity',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppTheme.darkGrey,
                 ),
@@ -74,14 +75,14 @@ class CycleRegularityIndicator extends StatelessWidget {
                       children: [
                         Text(
                           _getRegularityLabel(regularityScore),
-                          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          style: theme.textTheme.titleSmall?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: _getRegularityColor(regularityScore),
                           ),
                         ),
                         Text(
                           '${(regularityScore * 100).round()}%',
-                          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          style: theme.textTheme.titleSmall?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: _getRegularityColor(regularityScore),
                           ),
@@ -102,7 +103,7 @@ class CycleRegularityIndicator extends StatelessWidget {
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
-                                _getRegularityColor(regularityScore).withOpacity(0.7),
+                                _getRegularityColor(regularityScore).withValues(alpha: 0.7),
                                 _getRegularityColor(regularityScore),
                               ],
                             ),
@@ -123,7 +124,7 @@ class CycleRegularityIndicator extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppTheme.lightGrey.withOpacity(0.5),
+              color: AppTheme.lightGrey.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(
@@ -185,10 +186,10 @@ class CycleRegularityIndicator extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: _getRegularityColor(regularityScore).withOpacity(0.1),
+              color: _getRegularityColor(regularityScore).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: _getRegularityColor(regularityScore).withOpacity(0.3),
+                color: _getRegularityColor(regularityScore).withValues(alpha: 0.3),
               ),
             ),
             child: Row(
@@ -219,6 +220,7 @@ class CycleRegularityIndicator extends StatelessWidget {
 
   Widget _buildStat(BuildContext context, String label, String value, 
       IconData icon, Color color) {
+    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -243,7 +245,7 @@ class CycleRegularityIndicator extends StatelessWidget {
         const SizedBox(height: 4),
         Text(
           value,
-          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+          style: theme.textTheme.titleSmall?.copyWith(
             fontWeight: FontWeight.bold,
             color: color,
           ),

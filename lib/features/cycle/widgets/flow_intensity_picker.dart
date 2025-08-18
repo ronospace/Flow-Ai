@@ -94,6 +94,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
   
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final intensityOptions = _getIntensityOptions(context);
     final selectedOption = intensityOptions.firstWhere(
       (option) => option.intensity == widget.selectedIntensity,
@@ -145,6 +146,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
   }
   
   Widget _buildFlowVisualization(FlowIntensityOption option) {
+    final theme = Theme.of(context);
     return Container(
       height: 120,
       margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -203,7 +205,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                 children: [
                   Text(
                     option.title,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    style: theme.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: option.color,
                     ),
@@ -211,7 +213,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                   const SizedBox(height: 4),
                   Text(
                     option.medicalInfo,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    style: theme.textTheme.bodyMedium?.copyWith(
                       color: AppTheme.darkGrey,
                       fontWeight: FontWeight.w600,
                     ),
@@ -228,7 +230,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                         const SizedBox(width: 4),
                         Text(
                           AppLocalizations.of(context).hourlyChanges(option.hourlyChanges),
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          style: theme.textTheme.bodySmall?.copyWith(
                             color: AppTheme.mediumGrey,
                           ),
                         ),
@@ -307,6 +309,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
   }
   
   Widget _buildFlowIntensityCard(FlowIntensityOption option, bool isSelected) {
+    final theme = Theme.of(context);
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200), // Reduced animation time
       decoration: BoxDecoration(
@@ -366,7 +369,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
             Flexible(
               child: Text(
                 option.title,
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                style: theme.textTheme.titleSmall?.copyWith(
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
                   color: isSelected ? option.color : AppTheme.darkGrey,
                   fontSize: 14,
@@ -383,7 +386,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
             Flexible(
               child: Text(
                 option.subtitle,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                style: theme.textTheme.bodySmall?.copyWith(
                   color: AppTheme.mediumGrey,
                   fontSize: 10,
                 ),
@@ -463,6 +466,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
   
   void _showMedicalInfo(FlowIntensityOption option) {
     final localizations = AppLocalizations.of(context);
+    final theme = Theme.of(context);
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -517,14 +521,14 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                       children: [
                         Text(
                           option.title,
-                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          style: theme.textTheme.headlineSmall?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: AppTheme.darkGrey,
                           ),
                         ),
                         Text(
                           option.medicalInfo,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          style: theme.textTheme.bodyMedium?.copyWith(
                             color: option.color,
                             fontWeight: FontWeight.w600,
                           ),
@@ -546,14 +550,14 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                     // Description
                     Text(
                       localizations.aboutThisFlowLevel,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       option.description,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      style: theme.textTheme.bodyMedium?.copyWith(
                         height: 1.5,
                         color: AppTheme.darkGrey,
                       ),
@@ -565,7 +569,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                     if (option.products.isNotEmpty) ...[
                       Text(
                         localizations.recommendedProducts,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -582,7 +586,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                             const SizedBox(width: 8),
                             Text(
                               product,
-                              style: Theme.of(context).textTheme.bodyMedium,
+                              style: theme.textTheme.bodyMedium,
                             ),
                           ],
                         ),

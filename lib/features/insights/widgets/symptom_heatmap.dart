@@ -16,6 +16,7 @@ class SymptomHeatmap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final filteredData = _getFilteredData();
     
     if (filteredData.isEmpty) {
@@ -32,7 +33,7 @@ class SymptomHeatmap extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -50,7 +51,7 @@ class SymptomHeatmap extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: AppTheme.secondaryBlue.withOpacity(0.1),
+                      color: AppTheme.secondaryBlue.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Icon(
@@ -62,7 +63,7 @@ class SymptomHeatmap extends StatelessWidget {
                   const SizedBox(width: 12),
                   Text(
                     'Symptom Patterns',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: AppTheme.darkGrey,
                     ),
@@ -113,13 +114,11 @@ class SymptomHeatmap extends StatelessWidget {
             // Symptom grid
             ...symptoms.take(8).map((symptom) {
               final intensities = symptomData[symptom]!;
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 12),
+              return Padding(padding: const EdgeInsets.only(bottom: 12),
                 child: Row(
                   children: [
                     // Symptom label
-                    SizedBox(
-                      width: 100,
+                    SizedBox(width: 100,
                       child: Text(
                         symptom,
                         style: TextStyle(
@@ -196,7 +195,7 @@ class SymptomHeatmap extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppTheme.lightGrey.withOpacity(0.5),
+              color: AppTheme.lightGrey.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(
@@ -204,7 +203,7 @@ class SymptomHeatmap extends StatelessWidget {
               children: [
                 Text(
                   'Pattern Insights',
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  style: theme.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: AppTheme.darkGrey,
                   ),
@@ -213,8 +212,7 @@ class SymptomHeatmap extends StatelessWidget {
                 ...symptoms.take(3).map((symptom) {
                   final intensities = symptomData[symptom]!;
                   final pattern = _analyzePattern(intensities);
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 4),
+                  return Padding(padding: const EdgeInsets.only(bottom: 4),
                     child: Row(
                       children: [
                         Icon(
@@ -245,6 +243,7 @@ class SymptomHeatmap extends StatelessWidget {
   }
 
   Widget _buildEmptyState(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(40),
       decoration: BoxDecoration(
@@ -252,7 +251,7 @@ class SymptomHeatmap extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -268,7 +267,7 @@ class SymptomHeatmap extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             'No Symptom Data Available',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            style: theme.textTheme.titleMedium?.copyWith(
               color: AppTheme.mediumGrey,
               fontWeight: FontWeight.bold,
             ),
@@ -389,10 +388,10 @@ class SymptomHeatmap extends StatelessWidget {
     
     final colors = [
       AppTheme.lightGrey,
-      AppTheme.primaryRose.withOpacity(0.2),
-      AppTheme.primaryRose.withOpacity(0.4),
-      AppTheme.primaryRose.withOpacity(0.6),
-      AppTheme.primaryRose.withOpacity(0.8),
+      AppTheme.primaryRose.withValues(alpha: 0.2),
+      AppTheme.primaryRose.withValues(alpha: 0.4),
+      AppTheme.primaryRose.withValues(alpha: 0.6),
+      AppTheme.primaryRose.withValues(alpha: 0.8),
       AppTheme.primaryRose,
     ];
     

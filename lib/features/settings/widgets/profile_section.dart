@@ -28,7 +28,7 @@ class ProfileSection extends StatelessWidget {
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: AppTheme.primaryRose.withOpacity(0.2),
+                color: AppTheme.primaryRose.withValues(alpha: 0.2),
                 blurRadius: 20,
                 offset: const Offset(0, 10),
               ),
@@ -49,7 +49,7 @@ class ProfileSection extends StatelessWidget {
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 10,
                         offset: const Offset(0, 4),
                       ),
@@ -98,14 +98,14 @@ class ProfileSection extends StatelessWidget {
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: preferences.displayName.isEmpty
-                                    ? Colors.white.withOpacity(0.7)
+                                    ? Colors.white.withValues(alpha: 0.7)
                                     : Colors.white,
                               ),
                             ),
                           ),
                           Icon(
                             Icons.edit,
-                            color: Colors.white.withOpacity(0.7),
+                            color: Colors.white.withValues(alpha: 0.7),
                             size: 18,
                           ),
                         ],
@@ -119,7 +119,7 @@ class ProfileSection extends StatelessWidget {
                       'User ID: ${preferences.userId}',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.white.withOpacity(0.8),
+                        color: Colors.white.withValues(alpha: 0.8),
                       ),
                     ),
 
@@ -131,7 +131,7 @@ class ProfileSection extends StatelessWidget {
                         _buildStatChip(
                           icon: Icons.language,
                           label: preferences.language.code.toUpperCase(),
-                          color: Colors.white.withOpacity(0.2),
+                          color: Colors.white.withValues(alpha: 0.2),
                         ),
                         const SizedBox(width: 8),
                         _buildStatChip(
@@ -139,14 +139,14 @@ class ProfileSection extends StatelessWidget {
                               ? Icons.notifications_active
                               : Icons.notifications_off,
                           label: preferences.notificationsEnabled ? 'ON' : 'OFF',
-                          color: Colors.white.withOpacity(0.2),
+                          color: Colors.white.withValues(alpha: 0.2),
                         ),
                         const SizedBox(width: 8),
                         if (preferences.syncWithCycleSync)
                           _buildStatChip(
                             icon: Icons.sync,
                             label: 'SYNC',
-                            color: AppTheme.successGreen.withOpacity(0.3),
+                            color: AppTheme.successGreen.withValues(alpha: 0.3),
                           ),
                       ],
                     ),
@@ -223,7 +223,7 @@ class ProfileSection extends StatelessWidget {
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Display name updated!'),
+                      content: const Text('Display name updated!'),
                       backgroundColor: AppTheme.successGreen,
                     ),
                   );
@@ -323,7 +323,7 @@ class ProfileSection extends StatelessWidget {
             width: 60,
             height: 60,
             decoration: BoxDecoration(
-              color: AppTheme.lightGrey.withOpacity(0.3),
+              color: AppTheme.lightGrey.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(16),
             ),
             child: Icon(
@@ -350,7 +350,7 @@ class ProfileSection extends StatelessWidget {
     Navigator.pop(context);
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Camera selection coming soon!'),
+        content: const Text('Camera selection coming soon!'),
         backgroundColor: AppTheme.secondaryBlue,
       ),
     );
@@ -361,7 +361,7 @@ class ProfileSection extends StatelessWidget {
     Navigator.pop(context);
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Gallery selection coming soon!'),
+        content: const Text('Gallery selection coming soon!'),
         backgroundColor: AppTheme.secondaryBlue,
       ),
     );
@@ -375,7 +375,7 @@ class ProfileSection extends StatelessWidget {
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Avatar removed!'),
+          content: const Text('Avatar removed!'),
           backgroundColor: AppTheme.successGreen,
         ),
       );

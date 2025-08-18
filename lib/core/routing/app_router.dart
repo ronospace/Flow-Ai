@@ -169,22 +169,22 @@ class _MainShellState extends State<MainShell> {
 
   @override
   Widget build(BuildContext context) {
-    
+    final theme = Theme.of(context);
     return Scaffold(
       body: widget.child,
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
+          color: theme.scaffoldBackgroundColor,
           boxShadow: [
             BoxShadow(
-              color: Theme.of(context).shadowColor.withValues(alpha: 0.1),
+              color: theme.shadowColor.withValues(alpha: 0.1),
               blurRadius: 10,
               offset: const Offset(0, -2),
             ),
           ],
         ),
         child: SafeArea(
-          child: Container(
+          child: SizedBox(
             height: 80,
             child: SingleChildScrollView(
               controller: _scrollController,
@@ -208,6 +208,7 @@ class _MainShellState extends State<MainShell> {
   
   Widget _buildNavItem(int index, IconData icon, String label) {
     final isSelected = _currentIndex == index;
+    final theme = Theme.of(context);
     
     return GestureDetector(
       onTap: () => _onNavigationTap(index),
@@ -230,7 +231,7 @@ class _MainShellState extends State<MainShell> {
               ),
               child: Icon(
                 icon,
-                color: isSelected ? Colors.white : Theme.of(context).iconTheme.color?.withValues(alpha: 0.6),
+                color: isSelected ? Colors.white : theme.iconTheme.color?.withValues(alpha: 0.6),
                 size: 24,
               ),
             ),
@@ -238,7 +239,7 @@ class _MainShellState extends State<MainShell> {
             Text(
               label,
               style: TextStyle(
-                color: isSelected ? const Color(0xFFFF6B9D) : Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.6),
+                color: isSelected ? const Color(0xFFFF6B9D) : theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.6),
                 fontSize: 10,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
               ),

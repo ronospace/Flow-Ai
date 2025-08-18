@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'generated/app_localizations.dart';
 
 import 'core/theme/app_theme.dart';
+import 'core/utils/image_cache_config.dart';
 import 'core/routing/app_router.dart';
 import 'core/services/ai_engine.dart';
 import 'core/services/notification_service.dart';
@@ -33,6 +34,7 @@ void main() async {
 }
 
 Future<void> _initializeCriticalServices() async {
+  ImageCacheConfig.configure();
   // Only initialize absolutely necessary services for app startup
   // System UI overlay style will be set dynamically based on theme
   // This is now handled in the MaterialApp theme configuration
@@ -40,9 +42,9 @@ Future<void> _initializeCriticalServices() async {
 
 Future<void> _initializeNonCriticalServices() async {
   // Defer heavy initializations to not block app startup
-  await Future.delayed(const Duration(milliseconds: 100));
+  await Future.delayed(const Duration(milliseconds: 50));
   
-  // Initialize services in parallel to improve performance
+  // Initialize services in parallel with optimized batching for faster startup
   await Future.wait([
     _initializeAdMob(),
     _initializeAI(),

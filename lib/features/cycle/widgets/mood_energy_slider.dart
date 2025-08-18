@@ -129,7 +129,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
     } else {
       // For mood and energy, higher values are better (positive colors)
       return Color.lerp(
-        widget.color.withOpacity(0.5),
+        widget.color.withValues(alpha: 0.5),
         widget.color,
         intensity,
       ) ?? widget.color;
@@ -194,6 +194,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final currentColor = _getColorForValue(widget.value);
     final levelText = _getLevelText(widget.value);
     final neuralColors = _getNeuralNetworkColors(widget.value);
@@ -210,17 +211,17 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
               end: Alignment.bottomRight,
               colors: [
                 Colors.white,
-                currentColor.withOpacity(0.02),
+                currentColor.withValues(alpha: 0.02),
               ],
             ),
             borderRadius: BorderRadius.circular(24),
             border: Border.all(
-              color: currentColor.withOpacity(0.2),
+              color: currentColor.withValues(alpha: 0.2),
               width: 2,
             ),
             boxShadow: [
               BoxShadow(
-                color: currentColor.withOpacity(0.15),
+                color: currentColor.withValues(alpha: 0.15),
                 blurRadius: 25,
                 offset: const Offset(0, 12),
                 spreadRadius: 2,
@@ -242,7 +243,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                     children: [
                       Text(
                         widget.label,
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        style: theme.textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: AppTheme.darkGrey,
                         ),
@@ -250,7 +251,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                       const SizedBox(height: 4),
                       Text(
                         'Biometric Analysis',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        style: theme.textTheme.bodySmall?.copyWith(
                           color: AppTheme.mediumGrey,
                           fontSize: 10,
                         ),
@@ -294,13 +295,13 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                       gradient: LinearGradient(
                         colors: [
                           currentColor,
-                          currentColor.withOpacity(0.8),
+                          currentColor.withValues(alpha: 0.8),
                         ],
                       ),
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
-                          color: currentColor.withOpacity(0.3),
+                          color: currentColor.withValues(alpha: 0.3),
                           blurRadius: 8,
                           offset: const Offset(0, 4),
                         ),
@@ -373,15 +374,15 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                           decoration: BoxDecoration(
                             gradient: RadialGradient(
                               colors: [
-                                currentColor.withOpacity(0.8),
-                                currentColor.withOpacity(0.4),
-                                currentColor.withOpacity(0.1),
+                                currentColor.withValues(alpha: 0.8),
+                                currentColor.withValues(alpha: 0.4),
+                                currentColor.withValues(alpha: 0.1),
                               ],
                             ),
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: currentColor.withOpacity(0.5),
+                                color: currentColor.withValues(alpha: 0.5),
                                 blurRadius: 20,
                                 offset: const Offset(0, 8),
                               ),
@@ -402,7 +403,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.9),
+                                    color: Colors.white.withValues(alpha: 0.9),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Text(
@@ -452,11 +453,11 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                               ? LinearGradient(
                                   colors: [
                                     indicatorColor,
-                                    indicatorColor.withOpacity(0.8),
+                                    indicatorColor.withValues(alpha: 0.8),
                                   ],
                                 )
                               : null,
-                          color: isActive ? null : indicatorColor.withOpacity(0.15),
+                          color: isActive ? null : indicatorColor.withValues(alpha: 0.15),
                           shape: BoxShape.circle,
                           border: Border.all(
                             color: indicatorColor,
@@ -464,19 +465,19 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                           ),
           boxShadow: isActive ? [
                             SafeShadows.safe(
-                              color: indicatorColor.withOpacity(0.5),
+                              color: indicatorColor.withValues(alpha: 0.5),
                               blurRadius: 15.0,
                               offset: const Offset(0, 6),
                               spreadRadius: 2.0,
                             ),
                             SafeShadows.safe(
-                              color: Colors.white.withOpacity(0.8),
+                              color: Colors.white.withValues(alpha: 0.8),
                               blurRadius: 5.0,
                               offset: const Offset(0, 2),
                             ),
                           ] : [
                             SafeShadows.safe(
-                              color: indicatorColor.withOpacity(0.2),
+                              color: indicatorColor.withValues(alpha: 0.2),
                               blurRadius: 8.0,
                               offset: const Offset(0, 3),
                             ),
@@ -491,7 +492,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                                 width: 50,
                                 height: 50,
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.2),
+                                  color: Colors.white.withValues(alpha: 0.2),
                                   shape: BoxShape.circle,
                                 ),
                               ).animate(onPlay: (controller) => controller.repeat())
@@ -532,9 +533,9 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            currentColor.withOpacity(0.1),
-                            currentColor.withOpacity(0.3),
-                            currentColor.withOpacity(0.1),
+                            currentColor.withValues(alpha: 0.1),
+                            currentColor.withValues(alpha: 0.3),
+                            currentColor.withValues(alpha: 0.1),
                           ],
                         ),
                         borderRadius: BorderRadius.circular(6),
@@ -547,7 +548,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                         activeTrackColor: Colors.transparent,
                         inactiveTrackColor: Colors.transparent,
                         thumbColor: currentColor,
-                        overlayColor: currentColor.withOpacity(0.2),
+                        overlayColor: currentColor.withValues(alpha: 0.2),
                         thumbShape: BiometricSliderThumb(
                           color: currentColor,
                           value: widget.value,
@@ -574,8 +575,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
               ),
               
               // Range labels with enhanced styling
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -584,7 +584,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                       children: [
                         Text(
                           _getLevelText(widget.min),
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          style: theme.textTheme.bodySmall?.copyWith(
                             color: _getColorForValue(widget.min),
                             fontWeight: FontWeight.w600,
                           ),
@@ -603,7 +603,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                       children: [
                         Text(
                           _getLevelText(widget.max),
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          style: theme.textTheme.bodySmall?.copyWith(
                             color: _getColorForValue(widget.max),
                             fontWeight: FontWeight.w600,
                           ),
@@ -635,18 +635,18 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                AppTheme.secondaryBlue.withOpacity(0.1),
-                AppTheme.accentMint.withOpacity(0.05),
+                AppTheme.secondaryBlue.withValues(alpha: 0.1),
+                AppTheme.accentMint.withValues(alpha: 0.05),
               ],
             ),
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: currentColor.withOpacity(0.2),
+              color: currentColor.withValues(alpha: 0.2),
               width: 1,
             ),
             boxShadow: [
               BoxShadow(
-                color: AppTheme.secondaryBlue.withOpacity(0.1),
+                color: AppTheme.secondaryBlue.withValues(alpha: 0.1),
                 blurRadius: 15,
                 offset: const Offset(0, 5),
               ),
@@ -668,7 +668,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
-                          color: AppTheme.secondaryBlue.withOpacity(0.3),
+                          color: AppTheme.secondaryBlue.withValues(alpha: 0.3),
                           blurRadius: 8,
                           offset: const Offset(0, 2),
                         ),
@@ -691,7 +691,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                       children: [
                         Text(
                           'AI Psychology Insights',
-                          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          style: theme.textTheme.titleSmall?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: AppTheme.darkGrey,
                             fontSize: 16,
@@ -700,7 +700,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                         const SizedBox(height: 2),
                         Text(
                           'Personalized for your cycle',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          style: theme.textTheme.bodySmall?.copyWith(
                             color: AppTheme.mediumGrey,
                             fontSize: 11,
                           ),
@@ -713,7 +713,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: AppTheme.accentMint.withOpacity(0.2),
+                      color: AppTheme.accentMint.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Text(
@@ -733,12 +733,12 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.7),
+                  color: Colors.white.withValues(alpha: 0.7),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
                   psychologyInsight,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  style: theme.textTheme.bodyMedium?.copyWith(
                     color: AppTheme.darkGrey,
                     height: 1.5,
                     fontSize: 14,
@@ -776,7 +776,7 @@ class NeuralWavePainter extends CustomPainter {
     final path = Path();
 
     for (int i = 0; i < colors.length; i++) {
-      paint.color = colors[i].withOpacity(0.7);
+      paint.color = colors[i].withValues(alpha: 0.7);
       path.reset();
       
       final yOffset = size.height / 2 + (i - 1) * 3;
@@ -928,8 +928,8 @@ class BiometricSliderThumb extends SliderComponentShape {
       ..shader = RadialGradient(
         colors: [
           color,
-          color.withOpacity(0.8),
-          color.withOpacity(0.6),
+          color.withValues(alpha: 0.8),
+          color.withValues(alpha: 0.6),
         ],
         stops: const [0.0, 0.7, 1.0],
       ).createShader(Rect.fromCircle(center: center, radius: 14))
@@ -938,7 +938,7 @@ class BiometricSliderThumb extends SliderComponentShape {
     
     // Inner biometric pattern
     final patternPaint = Paint()
-      ..color = Colors.white.withOpacity(0.4)
+      ..color = Colors.white.withValues(alpha: 0.4)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
     
@@ -1030,7 +1030,7 @@ class CustomSliderThumb extends SliderComponentShape {
     
     // Outer circle (glow effect)
     final glowPaint = Paint()
-      ..color = color.withOpacity(0.3)
+      ..color = color.withValues(alpha: 0.3)
       ..style = PaintingStyle.fill;
     canvas.drawCircle(center, radius * 1.5, glowPaint);
     
@@ -1042,7 +1042,7 @@ class CustomSliderThumb extends SliderComponentShape {
     
     // Inner highlight
     final highlightPaint = Paint()
-      ..color = Colors.white.withOpacity(0.3)
+      ..color = Colors.white.withValues(alpha: 0.3)
       ..style = PaintingStyle.fill;
     canvas.drawCircle(center, radius * 0.6, highlightPaint);
   }

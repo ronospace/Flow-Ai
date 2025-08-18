@@ -158,9 +158,10 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
       lastDate: DateTime.now(),
       initialDateRange: _selectedRange,
       builder: (context, child) {
+        final theme = Theme.of(context);
         return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: Theme.of(context).colorScheme.copyWith(
+          data: theme.copyWith(
+            colorScheme: theme.colorScheme.copyWith(
               primary: AppTheme.primaryRose,
             ),
           ),
@@ -180,10 +181,11 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
   
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          gradient: AppTheme.backgroundGradient(Theme.of(context).brightness == Brightness.dark),
+          gradient: AppTheme.backgroundGradient(theme.brightness == Brightness.dark),
         ),
         child: SafeArea(
           child: Column(
@@ -252,7 +254,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withValues(alpha: 0.9),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: AppTheme.lightGrey),
                       ),
@@ -293,8 +295,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: _isRefreshing
-                          ? const SizedBox(
-                              width: 20,
+                          ? const SizedBox(width: 20,
                               height: 20,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
@@ -330,12 +331,12 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: hasData
-              ? [AppTheme.successGreen.withOpacity(0.1), AppTheme.accentMint.withOpacity(0.1)]
-              : [AppTheme.warningOrange.withOpacity(0.1), AppTheme.warningOrange.withOpacity(0.05)],
+              ? [AppTheme.successGreen.withValues(alpha: 0.1), AppTheme.accentMint.withValues(alpha: 0.1)]
+              : [AppTheme.warningOrange.withValues(alpha: 0.1), AppTheme.warningOrange.withValues(alpha: 0.05)],
         ),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: hasData ? AppTheme.successGreen.withOpacity(0.3) : AppTheme.warningOrange.withOpacity(0.3),
+          color: hasData ? AppTheme.successGreen.withValues(alpha: 0.3) : AppTheme.warningOrange.withValues(alpha: 0.3),
         ),
       ),
       child: Row(
@@ -394,11 +395,11 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.9),
+        color: Colors.white.withValues(alpha: 0.9),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -440,8 +441,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
   }
   
   Widget _buildTabContent(IconData icon, String label) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+    return Padding(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -617,8 +617,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
   }
   
   Widget _buildSyncTab() {
-    return Padding(
-      padding: const EdgeInsets.all(20),
+    return Padding(padding: const EdgeInsets.all(20),
       child: Column(
         children: [
           // Sync Status
@@ -652,10 +651,10 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [scoreColor.withOpacity(0.1), scoreColor.withOpacity(0.05)],
+          colors: [scoreColor.withValues(alpha: 0.1), scoreColor.withValues(alpha: 0.05)],
         ),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: scoreColor.withOpacity(0.3)),
+        border: Border.all(color: scoreColor.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
@@ -699,7 +698,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
                 const SizedBox(height: 8),
                 LinearProgressIndicator(
                   value: score,
-                  backgroundColor: scoreColor.withOpacity(0.3),
+                  backgroundColor: scoreColor.withValues(alpha: 0.3),
                   valueColor: AlwaysStoppedAnimation<Color>(scoreColor),
                 ),
               ],
@@ -770,7 +769,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -814,8 +813,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
   }
   
   Widget _buildTrendItem(String metric, String trend, IconData icon, Color color) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+    return Padding(padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
           Icon(icon, color: color, size: 18),
@@ -850,7 +848,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
         border: Border.all(color: AppTheme.lightGrey),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -902,7 +900,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
           Icon(
             Icons.insights,
             size: 48,
-            color: AppTheme.mediumGrey.withOpacity(0.5),
+            color: AppTheme.mediumGrey.withValues(alpha: 0.5),
           ),
           const SizedBox(height: 16),
           Text(
@@ -933,7 +931,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -959,8 +957,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
   }
   
   Widget _buildDeviceItem(String name, String status, bool isConnected) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+    return Padding(padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
           Container(
@@ -994,7 +991,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -1099,7 +1096,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
           Icon(
             Icons.health_and_safety,
             size: 64,
-            color: AppTheme.mediumGrey.withOpacity(0.5),
+            color: AppTheme.mediumGrey.withValues(alpha: 0.5),
           ),
           const SizedBox(height: 16),
           Text(

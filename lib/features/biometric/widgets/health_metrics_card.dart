@@ -26,6 +26,7 @@ class HealthMetricsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -35,13 +36,13 @@ class HealthMetricsCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.08),
+              color: Colors.black.withValues(alpha: 0.08),
               blurRadius: 20,
               offset: const Offset(0, 8),
             ),
           ],
           border: Border.all(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             width: 1,
           ),
         ),
@@ -57,7 +58,7 @@ class HealthMetricsCard extends StatelessWidget {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.1),
+                    color: color.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
@@ -79,7 +80,7 @@ class HealthMetricsCard extends StatelessWidget {
                 Flexible(
                   child: Text(
                     value,
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    style: theme.textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: AppTheme.darkGrey,
                     ),
@@ -89,7 +90,7 @@ class HealthMetricsCard extends StatelessWidget {
                 const SizedBox(width: 4),
                 Text(
                   unit,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  style: theme.textTheme.bodySmall?.copyWith(
                     color: AppTheme.mediumGrey,
                     fontWeight: FontWeight.w500,
                   ),
@@ -102,7 +103,7 @@ class HealthMetricsCard extends StatelessWidget {
             // Title and subtitle
             Text(
               title,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              style: theme.textTheme.bodyMedium?.copyWith(
                 fontWeight: FontWeight.w600,
                 color: AppTheme.darkGrey,
               ),
@@ -112,7 +113,7 @@ class HealthMetricsCard extends StatelessWidget {
               const SizedBox(height: 2),
               Text(
                 subtitle!,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                style: theme.textTheme.bodySmall?.copyWith(
                   color: AppTheme.mediumGrey,
                 ),
                 maxLines: 1,
@@ -130,7 +131,7 @@ class HealthMetricsCard extends StatelessWidget {
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         decoration: BoxDecoration(
-          color: AppTheme.mediumGrey.withOpacity(0.1),
+          color: AppTheme.mediumGrey.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
@@ -163,7 +164,7 @@ class HealthMetricsCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
       decoration: BoxDecoration(
-        color: trendColor.withOpacity(0.1),
+        color: trendColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -223,6 +224,7 @@ class HealthMetricsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return GridView.count(
       crossAxisCount: crossAxisCount,
       shrinkWrap: true,

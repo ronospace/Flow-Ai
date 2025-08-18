@@ -31,12 +31,12 @@ class CyclePhaseIndicator extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            phaseInfo.color.withOpacity(0.1),
-            phaseInfo.color.withOpacity(0.05),
+            phaseInfo.color.withValues(alpha: 0.1),
+            phaseInfo.color.withValues(alpha: 0.05),
           ],
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: phaseInfo.color.withOpacity(0.3)),
+        border: Border.all(color: phaseInfo.color.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,7 +48,7 @@ class CyclePhaseIndicator extends StatelessWidget {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: phaseInfo.color.withOpacity(0.2),
+                  color: phaseInfo.color.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Center(
@@ -82,15 +82,14 @@ class CyclePhaseIndicator extends StatelessWidget {
                 ),
               ),
               // Progress circle
-              SizedBox(
-                width: 50,
+              const SizedBox(width: 50,
                 height: 50,
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
                     CircularProgressIndicator(
                       value: progress,
-                      backgroundColor: phaseInfo.color.withOpacity(0.2),
+                      backgroundColor: phaseInfo.color.withValues(alpha: 0.2),
                       valueColor: AlwaysStoppedAnimation(phaseInfo.color),
                       strokeWidth: 4,
                     ),
@@ -139,7 +138,7 @@ class CyclePhaseIndicator extends StatelessWidget {
                 borderRadius: BorderRadius.circular(4),
                 child: LinearProgressIndicator(
                   value: progress,
-                  backgroundColor: phaseInfo.color.withOpacity(0.2),
+                  backgroundColor: phaseInfo.color.withValues(alpha: 0.2),
                   valueColor: AlwaysStoppedAnimation(phaseInfo.color),
                   minHeight: 6,
                 ),
@@ -155,9 +154,9 @@ class CyclePhaseIndicator extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: phaseInfo.color.withOpacity(0.1),
+        color: phaseInfo.color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: phaseInfo.color.withOpacity(0.3)),
+        border: Border.all(color: phaseInfo.color.withValues(alpha: 0.3)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -180,7 +179,7 @@ class CyclePhaseIndicator extends StatelessWidget {
             width: 30,
             height: 4,
             decoration: BoxDecoration(
-              color: phaseInfo.color.withOpacity(0.2),
+              color: phaseInfo.color.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(2),
             ),
             child: FractionallySizedBox(

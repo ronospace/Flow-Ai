@@ -18,6 +18,7 @@ class CorrelationInsightsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final displayCorrelations = isPreview 
         ? correlations.entries.take(3).toList()
         : correlations.entries.toList();
@@ -29,7 +30,7 @@ class CorrelationInsightsCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -89,7 +90,7 @@ class CorrelationInsightsCard extends StatelessWidget {
             children: [
               Text(
                 title ?? 'Cycle Correlations',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppTheme.darkGrey,
                 ),
@@ -98,7 +99,7 @@ class CorrelationInsightsCard extends StatelessWidget {
                 isPreview 
                     ? 'How your health metrics relate to your cycle'
                     : 'Detailed correlation analysis',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                style: theme.textTheme.bodySmall?.copyWith(
                   color: AppTheme.mediumGrey,
                 ),
               ),
@@ -125,9 +126,9 @@ class CorrelationInsightsCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
@@ -153,7 +154,7 @@ class CorrelationInsightsCard extends StatelessWidget {
               children: [
                 Text(
                   metric,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  style: theme.textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                     color: AppTheme.darkGrey,
                   ),
@@ -161,7 +162,7 @@ class CorrelationInsightsCard extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   '$strength ${isPositive ? 'positive' : 'negative'} correlation',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  style: theme.textTheme.bodySmall?.copyWith(
                     color: AppTheme.mediumGrey,
                   ),
                 ),
@@ -175,7 +176,7 @@ class CorrelationInsightsCard extends StatelessWidget {
             children: [
               Text(
                 '${(absCorrelation * 100).round()}%',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                style: theme.textTheme.bodySmall?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: color,
                 ),
@@ -185,7 +186,7 @@ class CorrelationInsightsCard extends StatelessWidget {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.3),
+                  color: color.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(2),
                 ),
                 child: FractionallySizedBox(
@@ -214,7 +215,7 @@ class CorrelationInsightsCard extends StatelessWidget {
           Icon(
             Icons.trending_flat,
             size: 32,
-            color: AppTheme.mediumGrey.withOpacity(0.5),
+            color: AppTheme.mediumGrey.withValues(alpha: 0.5),
           ),
           const SizedBox(height: 12),
           Text(
@@ -247,19 +248,19 @@ class CorrelationInsightsCard extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              AppTheme.primaryRose.withOpacity(0.1),
-              AppTheme.primaryPurple.withOpacity(0.1),
+              AppTheme.primaryRose.withValues(alpha: 0.1),
+              AppTheme.primaryPurple.withValues(alpha: 0.1),
             ],
           ),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppTheme.primaryRose.withOpacity(0.3)),
+          border: Border.all(color: AppTheme.primaryRose.withValues(alpha: 0.3)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               'View All Correlations (${correlations.length})',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              style: theme.textTheme.bodyMedium?.copyWith(
                 fontWeight: FontWeight.w600,
                 color: AppTheme.primaryRose,
               ),
@@ -285,7 +286,7 @@ class CorrelationInsightsCard extends StatelessWidget {
       return Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppTheme.accentMint.withOpacity(0.1),
+          color: AppTheme.accentMint.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
@@ -299,7 +300,7 @@ class CorrelationInsightsCard extends StatelessWidget {
             Expanded(
               child: Text(
                 'Continue tracking to discover stronger patterns between your health metrics and cycle.',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                style: theme.textTheme.bodyMedium?.copyWith(
                   color: AppTheme.darkGrey,
                   height: 1.4,
                 ),
@@ -313,7 +314,7 @@ class CorrelationInsightsCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppTheme.successGreen.withOpacity(0.1),
+        color: AppTheme.successGreen.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -329,7 +330,7 @@ class CorrelationInsightsCard extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 'Key Insights',
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                style: theme.textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppTheme.darkGrey,
                 ),
@@ -339,7 +340,7 @@ class CorrelationInsightsCard extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             _generateInsightText(strongCorrelations),
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            style: theme.textTheme.bodyMedium?.copyWith(
               color: AppTheme.darkGrey,
               height: 1.4,
             ),

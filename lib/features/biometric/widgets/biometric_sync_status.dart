@@ -112,6 +112,7 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final overallStatus = _getOverallSyncStatus();
     
     return Container(
@@ -121,7 +122,7 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -151,7 +152,7 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: _getStatusColor(overallStatus).withOpacity(0.1),
+            color: _getStatusColor(overallStatus).withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
           ),
           child: AnimatedBuilder(
@@ -182,14 +183,14 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
             children: [
               Text(
                 'Sync Status',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppTheme.darkGrey,
                 ),
               ),
               Text(
                 _isSyncing ? 'Syncing...' : _getStatusDescription(overallStatus),
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                style: theme.textTheme.bodySmall?.copyWith(
                   color: AppTheme.mediumGrey,
                 ),
               ),
@@ -199,7 +200,7 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
         if (_lastSync != null)
           Text(
             'Updated ${_formatLastSync(_lastSync!)}',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            style: theme.textTheme.bodySmall?.copyWith(
               color: AppTheme.mediumGrey,
               fontSize: 10,
             ),
@@ -218,12 +219,12 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            _getStatusColor(overallStatus).withOpacity(0.1),
-            _getStatusColor(overallStatus).withOpacity(0.05),
+            _getStatusColor(overallStatus).withValues(alpha: 0.1),
+            _getStatusColor(overallStatus).withValues(alpha: 0.05),
           ],
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: _getStatusColor(overallStatus).withOpacity(0.3)),
+        border: Border.all(color: _getStatusColor(overallStatus).withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
@@ -233,7 +234,7 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
               children: [
                 Text(
                   'Total Data Points Synced',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  style: theme.textTheme.bodySmall?.copyWith(
                     color: AppTheme.mediumGrey,
                     fontWeight: FontWeight.w500,
                   ),
@@ -241,7 +242,7 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
                 const SizedBox(height: 4),
                 Text(
                   totalDataPoints.toString(),
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  style: theme.textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: AppTheme.darkGrey,
                   ),
@@ -273,7 +274,7 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
       children: [
         Text(
           'Data Sources',
-          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+          style: theme.textTheme.titleSmall?.copyWith(
             fontWeight: FontWeight.bold,
             color: AppTheme.darkGrey,
           ),
@@ -292,9 +293,9 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
       margin: const EdgeInsets.symmetric(vertical: 6),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: _getStatusColor(data.status).withOpacity(0.05),
+        color: _getStatusColor(data.status).withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: _getStatusColor(data.status).withOpacity(0.2)),
+        border: Border.all(color: _getStatusColor(data.status).withValues(alpha: 0.2)),
       ),
       child: Row(
         children: [
@@ -322,7 +323,7 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
                   children: [
                     Text(
                       dataType,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      style: theme.textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: AppTheme.darkGrey,
                       ),
@@ -331,12 +332,12 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                       decoration: BoxDecoration(
-                        color: AppTheme.mediumGrey.withOpacity(0.2),
+                        color: AppTheme.mediumGrey.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
                         data.source,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        style: theme.textTheme.bodySmall?.copyWith(
                           color: AppTheme.mediumGrey,
                           fontSize: 10,
                           fontWeight: FontWeight.w500,
@@ -348,7 +349,7 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
                 const SizedBox(height: 2),
                 Text(
                   '${data.dataPoints} points • Last: ${_formatLastSync(data.lastSync)}',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  style: theme.textTheme.bodySmall?.copyWith(
                     color: AppTheme.mediumGrey,
                   ),
                 ),
@@ -360,7 +361,7 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: _getStatusColor(data.status).withOpacity(0.1),
+              color: _getStatusColor(data.status).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
@@ -378,8 +379,7 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
   }
 
   Widget _buildSyncButton() {
-    return SizedBox(
-      width: double.infinity,
+    return const SizedBox(width: double.infinity,
       height: 48,
       child: ElevatedButton(
         onPressed: _isSyncing ? null : _performSync,
@@ -407,8 +407,7 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (_isSyncing) ...[
-                  SizedBox(
-                    width: 16,
+                  const SizedBox(width: 16,
                     height: 16,
                     child: CircularProgressIndicator(
                       strokeWidth: 2,

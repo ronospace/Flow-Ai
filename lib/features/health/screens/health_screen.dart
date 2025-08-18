@@ -67,12 +67,13 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final localizations = AppLocalizations.of(context)!;
     
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-        gradient: AppTheme.backgroundGradient(Theme.of(context).brightness == Brightness.dark),
+        gradient: AppTheme.backgroundGradient(theme.brightness == Brightness.dark),
         ),
         child: SafeArea(
           child: Consumer<HealthProvider>(
@@ -82,7 +83,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildHeader(localizations),
+                    _buildHealthHeader(localizations),
                     const SizedBox(height: 24),
                     
                     _buildHealthScoreCard(localizations),
@@ -108,7 +109,8 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
     );
   }
 
-  Widget _buildHeader(AppLocalizations localizations) {
+  Widget _buildHealthHeader(AppLocalizations localizations) {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -117,17 +119,17 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
           end: Alignment.bottomRight,
           colors: [
             Colors.white,
-            AppTheme.successGreen.withOpacity(0.02),
+            AppTheme.successGreen.withValues(alpha: 0.02),
           ],
         ),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: AppTheme.successGreen.withOpacity(0.1),
+          color: AppTheme.successGreen.withValues(alpha: 0.1),
           width: 2,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 24,
             offset: const Offset(0, 12),
           ),
@@ -159,7 +161,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
                   children: [
                     Text(
                       'Health Dashboard',
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      style: theme.textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppTheme.darkGrey,
                       ),
@@ -167,7 +169,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
                     const SizedBox(height: 4),
                     Text(
                       'Comprehensive health monitoring',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      style: theme.textTheme.bodyMedium?.copyWith(
                         color: AppTheme.mediumGrey,
                       ),
                     ),
@@ -182,6 +184,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
   }
 
   Widget _buildHealthScoreCard(AppLocalizations localizations) {
+    final theme = Theme.of(context);
     final healthScore = 0.82; // Mock data
     
     return Container(
@@ -191,13 +194,13 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            AppTheme.primaryRose.withOpacity(0.1),
-            AppTheme.primaryPurple.withOpacity(0.1),
+            AppTheme.primaryRose.withValues(alpha: 0.1),
+            AppTheme.primaryPurple.withValues(alpha: 0.1),
           ],
         ),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: AppTheme.primaryRose.withOpacity(0.2),
+          color: AppTheme.primaryRose.withValues(alpha: 0.2),
           width: 2,
         ),
       ),
@@ -209,7 +212,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
               children: [
                 Text(
                   'Overall Health Score',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  style: theme.textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: AppTheme.darkGrey,
                   ),
@@ -217,7 +220,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
                 const SizedBox(height: 8),
                 Text(
                   '${(healthScore * 100).round()}/100',
-                  style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                  style: theme.textTheme.displaySmall?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: AppTheme.primaryRose,
                   ),
@@ -226,7 +229,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: AppTheme.successGreen.withOpacity(0.1),
+                    color: AppTheme.successGreen.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
@@ -240,8 +243,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
               ],
             ),
           ),
-          SizedBox(
-            width: 100,
+          SizedBox(width: 100,
             height: 100,
             child: AnimatedBuilder(
               animation: _heartRateAnimation,
@@ -261,12 +263,13 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
   }
 
   Widget _buildBiometricGrid(AppLocalizations localizations) {
+    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Biometric Monitoring',
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+          style: theme.textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.bold,
             color: AppTheme.darkGrey,
           ),
@@ -326,6 +329,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
     Animation<double> animation,
     String status,
   ) {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -334,17 +338,17 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
           end: Alignment.bottomRight,
           colors: [
             Colors.white,
-            color.withOpacity(0.05),
+            color.withValues(alpha: 0.05),
           ],
         ),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: color.withOpacity(0.2),
+          color: color.withValues(alpha: 0.2),
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -376,7 +380,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
-                  color: AppTheme.successGreen.withOpacity(0.1),
+                  color: AppTheme.successGreen.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -393,7 +397,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
           const SizedBox(height: 16),
           Text(
             title,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            style: theme.textTheme.bodySmall?.copyWith(
               color: AppTheme.mediumGrey,
               fontWeight: FontWeight.w500,
             ),
@@ -401,7 +405,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
           const SizedBox(height: 4),
           Text(
             value,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            style: theme.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
               color: color,
             ),
@@ -413,6 +417,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
   }
 
   Widget _buildHealthInsightsSection(AppLocalizations localizations) {
+    final theme = Theme.of(context);
     final insights = [
       {
         'title': 'Excellent Sleep Pattern',
@@ -439,7 +444,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
       children: [
         Text(
           'Health Insights',
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+          style: theme.textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.bold,
             color: AppTheme.darkGrey,
           ),
@@ -464,12 +469,12 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: getColor().withOpacity(0.2),
+                color: getColor().withValues(alpha: 0.2),
                 width: 1,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 10,
                   offset: const Offset(0, 5),
                 ),
@@ -480,7 +485,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: getColor().withOpacity(0.1),
+                    color: getColor().withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
@@ -496,7 +501,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
                     children: [
                       Text(
                         insight['title'] as String,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: AppTheme.darkGrey,
                         ),
@@ -504,7 +509,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
                       const SizedBox(height: 4),
                       Text(
                         insight['description'] as String,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        style: theme.textTheme.bodySmall?.copyWith(
                           color: AppTheme.mediumGrey,
                           height: 1.3,
                         ),
@@ -522,6 +527,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
   }
 
   Widget _buildSymptomTracker(AppLocalizations localizations) {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -530,12 +536,12 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
           end: Alignment.bottomRight,
           colors: [
             Colors.white,
-            AppTheme.accentMint.withOpacity(0.02),
+            AppTheme.accentMint.withValues(alpha: 0.02),
           ],
         ),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: AppTheme.accentMint.withOpacity(0.1),
+          color: AppTheme.accentMint.withValues(alpha: 0.1),
           width: 2,
         ),
       ),
@@ -562,7 +568,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
               Expanded(
                 child: Text(
                   'Symptom Tracker',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  style: theme.textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: AppTheme.darkGrey,
                   ),
@@ -599,13 +605,13 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
                   color: isActive 
-                      ? AppTheme.accentMint.withOpacity(0.1)
-                      : AppTheme.lightGrey.withOpacity(0.3),
+                      ? AppTheme.accentMint.withValues(alpha: 0.1)
+                      : AppTheme.lightGrey.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
                     color: isActive 
                         ? AppTheme.accentMint
-                        : AppTheme.mediumGrey.withOpacity(0.3),
+                        : AppTheme.mediumGrey.withValues(alpha: 0.3),
                     width: 1,
                   ),
                 ),
@@ -626,6 +632,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
   }
 
   Widget _buildHealthGoals(AppLocalizations localizations) {
+    final theme = Theme.of(context);
     final goals = [
       {'title': 'Daily Steps', 'current': 8420, 'target': 10000, 'unit': 'steps'},
       {'title': 'Water Intake', 'current': 6, 'target': 8, 'unit': 'glasses'},
@@ -637,7 +644,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
       children: [
         Text(
           'Health Goals',
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+          style: theme.textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.bold,
             color: AppTheme.darkGrey,
           ),
@@ -655,13 +662,13 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: isCompleted 
-                    ? AppTheme.successGreen.withOpacity(0.3)
-                    : AppTheme.lightGrey.withOpacity(0.5),
+                    ? AppTheme.successGreen.withValues(alpha: 0.3)
+                    : AppTheme.lightGrey.withValues(alpha: 0.5),
                 width: 1,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 10,
                   offset: const Offset(0, 5),
                 ),
@@ -675,7 +682,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
                     Expanded(
                       child: Text(
                         goal['title'] as String,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: AppTheme.darkGrey,
                         ),
@@ -685,7 +692,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
                       Container(
                         padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
-                          color: AppTheme.successGreen.withOpacity(0.1),
+                          color: AppTheme.successGreen.withValues(alpha: 0.1),
                           shape: BoxShape.circle,
                         ),
                         child: Icon(
@@ -699,7 +706,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
                 const SizedBox(height: 8),
                 Text(
                   '${goal['current']} / ${goal['target']} ${goal['unit']}',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  style: theme.textTheme.bodyMedium?.copyWith(
                     color: AppTheme.mediumGrey,
                   ),
                 ),
@@ -708,7 +715,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
                   borderRadius: BorderRadius.circular(8),
                   child: LinearProgressIndicator(
                     value: progress.clamp(0.0, 1.0),
-                    backgroundColor: AppTheme.lightGrey.withOpacity(0.3),
+                    backgroundColor: AppTheme.lightGrey.withValues(alpha: 0.3),
                     valueColor: AlwaysStoppedAnimation<Color>(
                       isCompleted ? AppTheme.successGreen : AppTheme.primaryRose,
                     ),
@@ -739,7 +746,7 @@ class HealthScorePainter extends CustomPainter {
     
     // Background ring
     final backgroundPaint = Paint()
-      ..color = AppTheme.lightGrey.withOpacity(0.3)
+      ..color = AppTheme.lightGrey.withValues(alpha: 0.3)
       ..strokeWidth = 8
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;

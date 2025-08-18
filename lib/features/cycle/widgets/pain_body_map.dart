@@ -90,6 +90,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       children: [
         // Body map
@@ -102,7 +103,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -200,8 +201,8 @@ class _PainBodyMapState extends State<PainBodyMap> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              color.withOpacity(0.9),
-              color.withOpacity(0.6),
+              color.withValues(alpha: 0.9),
+              color.withValues(alpha: 0.6),
             ],
           ) : null,
           color: !isActive ? Colors.white : null,
@@ -214,7 +215,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
           borderRadius: BorderRadius.circular(isSelected ? 35 : 27),
           boxShadow: [
             BoxShadow(
-              color: (isSelected ? AppTheme.primaryRose : color).withOpacity(0.4),
+              color: (isSelected ? AppTheme.primaryRose : color).withValues(alpha: 0.4),
               blurRadius: isSelected ? 20 : (isActive ? 12 : 6),
               offset: Offset(0, isSelected ? 8 : 4),
               spreadRadius: isSelected ? 2 : 0,
@@ -236,8 +237,8 @@ class _PainBodyMapState extends State<PainBodyMap> {
                     borderRadius: BorderRadius.circular(isSelected ? 35 : 27),
                     gradient: RadialGradient(
                       colors: [
-                        color.withOpacity(0.8),
-                        color.withOpacity(0.2),
+                        color.withValues(alpha: 0.8),
+                        color.withValues(alpha: 0.2),
                         Colors.transparent,
                       ],
                     ),
@@ -281,6 +282,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
   }
 
   Widget _buildSelectedAreaDetails() {
+    final theme = Theme.of(context);
     final area = _bodyAreas[_selectedArea!]!;
     final intensity = widget.painAreas[_selectedArea!] ?? 0.0;
     
@@ -295,7 +297,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
         ),
         boxShadow: [
           BoxShadow(
-            color: AppTheme.primaryRose.withOpacity(0.2),
+            color: AppTheme.primaryRose.withValues(alpha: 0.2),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
@@ -309,7 +311,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
                 width: 50,
                 height: 50,
                 decoration: BoxDecoration(
-                  color: AppTheme.primaryRose.withOpacity(0.15),
+                  color: AppTheme.primaryRose.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(25),
                 ),
                 child: Center(
@@ -326,7 +328,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
                   children: [
                     Text(
                       area.name,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppTheme.darkGrey,
                       ),
@@ -335,7 +337,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
                       intensity > 0 
                           ? 'Pain Level: ${_getPainLevelText(intensity)}'
                           : 'No pain recorded',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      style: theme.textTheme.bodyMedium?.copyWith(
                         color: intensity > 0 
                             ? _getColorForIntensity(intensity)
                             : AppTheme.mediumGrey,
@@ -370,6 +372,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
   }
 
   Widget _buildPainIntensitySlider() {
+    final theme = Theme.of(context);
     final intensity = widget.painAreas[_selectedArea!] ?? 0.0;
     final color = _getColorForIntensity(intensity);
     
@@ -380,14 +383,14 @@ class _PainBodyMapState extends State<PainBodyMap> {
           children: [
             Text(
               'Pain Intensity',
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+              style: theme.textTheme.titleSmall?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.15),
+                color: color.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
@@ -407,9 +410,9 @@ class _PainBodyMapState extends State<PainBodyMap> {
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
             activeTrackColor: color,
-            inactiveTrackColor: color.withOpacity(0.2),
+            inactiveTrackColor: color.withValues(alpha: 0.2),
             thumbColor: color,
-            overlayColor: color.withOpacity(0.2),
+            overlayColor: color.withValues(alpha: 0.2),
             thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10),
             trackHeight: 6,
           ),
@@ -429,11 +432,12 @@ class _PainBodyMapState extends State<PainBodyMap> {
   }
 
   Widget _buildQuickPainLevels() {
+    final theme = Theme.of(context);
     if (_selectedArea == null) {
       return Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: AppTheme.lightGrey.withOpacity(0.5),
+          color: AppTheme.lightGrey.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Row(
@@ -446,7 +450,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
             const SizedBox(width: 12),
             Text(
               'Tap on any body area to track pain',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              style: theme.textTheme.bodyMedium?.copyWith(
                 color: AppTheme.mediumGrey,
                 fontStyle: FontStyle.italic,
               ),
@@ -463,7 +467,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -474,7 +478,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
         children: [
           Text(
             'Quick Pain Levels',
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+            style: theme.textTheme.titleSmall?.copyWith(
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -496,7 +500,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
                   width: 45,
                   height: 45,
                   decoration: BoxDecoration(
-                    color: isSelected ? color : color.withOpacity(0.2),
+                    color: isSelected ? color : color.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       color: color,
@@ -574,7 +578,9 @@ class _PainBodyMapState extends State<PainBodyMap> {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
-      builder: (context) => Container(
+      builder: (modalContext) {
+        final theme = Theme.of(modalContext);
+        return Container(
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
@@ -605,7 +611,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
                   width: 60,
                   height: 60,
                   decoration: BoxDecoration(
-                    color: AppTheme.primaryRose.withOpacity(0.15),
+                    color: AppTheme.primaryRose.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(30),
                   ),
                   child: Center(
@@ -622,14 +628,14 @@ class _PainBodyMapState extends State<PainBodyMap> {
                     children: [
                       Text(
                         area.name,
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        style: theme.textTheme.headlineSmall?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: AppTheme.darkGrey,
                         ),
                       ),
                       Text(
                         'Set your current pain level',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        style: theme.textTheme.bodyMedium?.copyWith(
                           color: AppTheme.mediumGrey,
                         ),
                       ),
@@ -669,10 +675,10 @@ class _PainBodyMapState extends State<PainBodyMap> {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      color: color.withOpacity(0.1),
+                      color: color.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: color.withOpacity(0.3),
+                        color: color.withValues(alpha: 0.3),
                         width: 2,
                       ),
                     ),
@@ -697,7 +703,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w500,
-                            color: color.withOpacity(0.8),
+                            color: color.withValues(alpha: 0.8),
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -716,10 +722,10 @@ class _PainBodyMapState extends State<PainBodyMap> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppTheme.accentMint.withOpacity(0.1),
+                color: AppTheme.accentMint.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: AppTheme.accentMint.withOpacity(0.3),
+                  color: AppTheme.accentMint.withValues(alpha: 0.3),
                 ),
               ),
               child: Row(
@@ -745,7 +751,8 @@ class _PainBodyMapState extends State<PainBodyMap> {
             ),
           ],
         ),
-      ),
+        );
+      },
     );
   }
 }
@@ -766,7 +773,7 @@ class BodySilhouettePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = AppTheme.lightGrey.withOpacity(0.3)
+      ..color = AppTheme.lightGrey.withValues(alpha: 0.3)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
 

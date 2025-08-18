@@ -186,7 +186,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
               children: [
                 const Icon(Icons.error, color: Colors.white),
                 const SizedBox(width: 8),
-                Text('Failed to save tracking data. Please try again.'),
+                const Text('Failed to save tracking data. Please try again.'),
               ],
             ),
             backgroundColor: Colors.red,
@@ -200,11 +200,11 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
   
   @override
   Widget build(BuildContext context) {
-    
+    final theme = Theme.of(context);
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-        gradient: AppTheme.backgroundGradient(Theme.of(context).brightness == Brightness.dark),
+        gradient: AppTheme.backgroundGradient(theme.brightness == Brightness.dark),
         ),
         child: SafeArea(
           child: Column(
@@ -242,6 +242,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
   }
   
   Widget _buildCustomAppBar() {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(20),
       child: Row(
@@ -276,13 +277,13 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
                       children: [
                         Text(
                           DateFormat('EEEE').format(_selectedDate),
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          style: theme.textTheme.bodySmall?.copyWith(
                             color: AppTheme.mediumGrey,
                           ),
                         ),
                         Text(
                           DateFormat('MMMM d, y').format(_selectedDate),
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          style: theme.textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -301,34 +302,24 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
           
           const SizedBox(width: 12),
           
-          // AI Insights Badge
+          // Status indicator (simplified)
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [AppTheme.secondaryBlue, AppTheme.accentMint],
+              color: _hasUnsavedChanges 
+                ? AppTheme.warningOrange.withValues(alpha: 0.2)
+                : AppTheme.accentMint.withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              _hasUnsavedChanges ? 'Unsaved' : 'Synced',
+              style: TextStyle(
+                color: _hasUnsavedChanges ? AppTheme.warningOrange : AppTheme.accentMint,
+                fontWeight: FontWeight.w600,
+                fontSize: 10,
               ),
-              borderRadius: BorderRadius.circular(12),
             ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.psychology,
-                  color: Colors.white,
-                  size: 16,
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  'AI',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ).animate().fadeIn(delay: 200.ms).scale(),
+          ).animate().fadeIn(delay: 200.ms),
         ],
       ),
     );
@@ -387,8 +378,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
   }
   
   Widget _buildTabContent(IconData icon, String label) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+    return Padding(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -402,15 +392,15 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
   
   Widget _buildFlowTab() {
     final localizations = AppLocalizations.of(context);
+    final theme = Theme.of(context);
     
-    return Padding(
-      padding: const EdgeInsets.all(20),
+    return Padding(padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             localizations.flowIntensity,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+            style: theme.textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
             ),
           ).animate().fadeIn().slideX(begin: -0.2, end: 0),
@@ -419,24 +409,116 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
           
           Text(
             localizations.selectTodaysFlowIntensity,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
             ),
           ).animate().fadeIn(delay: 100.ms),
           
           const SizedBox(height: 20),
           
           Expanded(
-            child: FlowIntensityPicker(
-              selectedIntensity: _flowIntensity,
-              onIntensitySelected: (intensity) {
-                setState(() {
-                  _flowIntensity = intensity;
-                });
-                _markUnsavedChanges();
-                HapticFeedback.selectionClick();
-              },
-            ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.3, end: 0),
+            child: Column(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: FlowIntensityPicker(
+                    selectedIntensity: _flowIntensity,
+                    onIntensitySelected: (intensity) {
+                      setState(() {
+                        _flowIntensity = intensity;
+                      });
+                      _markUnsavedChanges();
+                      HapticFeedback.selectionClick();
+                    },
+                  ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.3, end: 0),
+                ),
+                
+                const SizedBox(height: 20),
+                
+                // AI Health Insights Section
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        AppTheme.secondaryBlue.withValues(alpha: 0.1),
+                        AppTheme.accentMint.withValues(alpha: 0.05),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: AppTheme.secondaryBlue.withValues(alpha: 0.2),
+                      width: 1,
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            width: 36,
+                            height: 36,
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [AppTheme.secondaryBlue, AppTheme.accentMint],
+                              ),
+                              borderRadius: BorderRadius.circular(18),
+                            ),
+                            child: const Icon(
+                              Icons.psychology,
+                              color: Colors.white,
+                              size: 18,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'AI Health Insights',
+                                  style: theme.textTheme.titleSmall?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: AppTheme.darkGrey,
+                                  ),
+                                ),
+                                Text(
+                                  _getFlowInsight(_flowIntensity),
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: AppTheme.mediumGrey,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                            decoration: BoxDecoration(
+                              color: AppTheme.accentMint.withValues(alpha: 0.2),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: const Text(
+                              'SMART',
+                              style: TextStyle(
+                                color: AppTheme.accentMint,
+                                fontSize: 8,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.2, end: 0),
+              ],
+            ),
           ),
         ],
       ),
@@ -445,26 +527,26 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
   
   Widget _buildSymptomsTab() {
     final localizations = AppLocalizations.of(context);
+    final theme = Theme.of(context);
     
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.all(20),
+        Padding(padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 localizations.symptoms,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                style: theme.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 8),
               Text(
                 localizations.selectAllSymptoms,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                style: theme.textTheme.bodyMedium?.copyWith(
                   color: AppTheme.mediumGrey,
                 ),
               ),
@@ -472,8 +554,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
           ),
         ),
         Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Padding(padding: const EdgeInsets.symmetric(horizontal: 20),
             child: SymptomSelector(
               selectedSymptoms: _symptoms,
               symptomSeverity: _symptomSeverity,
@@ -499,6 +580,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
   
   Widget _buildMoodEnergyTab() {
     final localizations = AppLocalizations.of(context);
+    final theme = Theme.of(context);
     
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
@@ -508,14 +590,14 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
         children: [
           Text(
             localizations.moodAndEnergy,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+            style: theme.textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 8),
           Text(
             localizations.howAreYouFeelingToday,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            style: theme.textTheme.bodyMedium?.copyWith(
               color: AppTheme.mediumGrey,
             ),
           ),
@@ -552,6 +634,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
   }
   
   Widget _buildPainTab() {
+    final theme = Theme.of(context);
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -560,14 +643,14 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
         children: [
           Text(
             'Pain Level',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+            style: theme.textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 8),
           Text(
             'Rate your overall pain level',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            style: theme.textTheme.bodyMedium?.copyWith(
               color: AppTheme.mediumGrey,
             ),
           ),
@@ -587,8 +670,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
             max: 5,
           ),
           const SizedBox(height: 40),
-          SizedBox(
-            height: 400, // Fixed height for PainBodyMap
+          SizedBox(height: 400, // Fixed height for PainBodyMap
             child: PainBodyMap(
               painAreas: _painAreas,
               onPainAreaChanged: (area, intensity) {
@@ -610,6 +692,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
   }
   
   Widget _buildNotesTab() {
+    final theme = Theme.of(context);
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -617,7 +700,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
         children: [
           Text(
             'Personal Notes',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+            style: theme.textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
               color: AppTheme.darkGrey,
             ),
@@ -627,7 +710,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
           
           Text(
             'Capture your thoughts, feelings, and observations about your cycle',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            style: theme.textTheme.bodyMedium?.copyWith(
               color: AppTheme.mediumGrey,
             ),
           ).animate().fadeIn(delay: 100.ms),
@@ -638,17 +721,17 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
           Container(
             constraints: const BoxConstraints(minHeight: 200),
             decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
+              color: theme.cardColor,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
                 color: _notesController.text.isNotEmpty 
                     ? AppTheme.primaryRose.withValues(alpha: 0.3)
-                    : Theme.of(context).dividerColor,
+                    : theme.dividerColor,
                 width: 2,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Theme.of(context).shadowColor.withValues(alpha: 0.08),
+                  color: theme.shadowColor.withValues(alpha: 0.08),
                   blurRadius: 20,
                   offset: const Offset(0, 8),
                 ),
@@ -697,14 +780,14 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
                           children: [
                             Text(
                               'Today\'s Journal Entry',
-                              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              style: theme.textTheme.titleMedium?.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: AppTheme.darkGrey,
                               ),
                             ),
                             Text(
                               DateFormat('EEEE, MMMM d').format(_selectedDate),
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              style: theme.textTheme.bodySmall?.copyWith(
                                 color: AppTheme.mediumGrey,
                               ),
                             ),
@@ -739,14 +822,14 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
                     controller: _notesController,
                     maxLines: null,
                     minLines: 8,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    style: theme.textTheme.bodyMedium?.copyWith(
                       height: 1.5,
-                      color: Theme.of(context).textTheme.bodyMedium?.color,
+                      color: theme.textTheme.bodyMedium?.color,
                     ),
                     decoration: InputDecoration(
                       hintText: 'How are you feeling today? Any symptoms, mood changes, or observations you\'d like to remember?\n\nTip: Recording your thoughts helps identify patterns over time.',
                       hintStyle: TextStyle(
-                        color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.5),
+                        color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.5),
                         fontSize: 14,
                         height: 1.5,
                       ),
@@ -773,7 +856,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
           if (_notesController.text.isEmpty) ...[
             Text(
               'Quick Notes',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: AppTheme.darkGrey,
               ),
@@ -799,6 +882,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
   }
   
   Widget _buildQuickNote(String emoji, String label) {
+    final theme = Theme.of(context);
     return GestureDetector(
       onTap: () {
         final currentText = _notesController.text;
@@ -843,7 +927,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
             const SizedBox(width: 8),
             Text(
               label,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              style: theme.textTheme.bodySmall?.copyWith(
                 color: AppTheme.darkGrey,
                 fontWeight: FontWeight.w500,
               ),
@@ -863,8 +947,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
   Widget _buildSaveButton() {
     return Container(
       padding: const EdgeInsets.all(20),
-      child: SizedBox(
-        width: double.infinity,
+      child: SizedBox(width: double.infinity,
         height: 56,
         child: ElevatedButton(
           onPressed: _hasUnsavedChanges ? _saveTrackingData : null,
@@ -894,7 +977,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   if (_hasUnsavedChanges) ...[
-                    Icon(
+                    const Icon(
                       Icons.save,
                       color: Colors.white,
                       size: 20,
@@ -919,6 +1002,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
   }
   
   Future<void> _showDatePicker() async {
+    final theme = Theme.of(context);
     final picked = await showDatePicker(
       context: context,
       initialDate: _selectedDate,
@@ -926,8 +1010,8 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
       lastDate: DateTime.now().add(const Duration(days: 30)),
       builder: (context, child) {
         return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: Theme.of(context).colorScheme.copyWith(
+          data: theme.copyWith(
+            colorScheme: theme.colorScheme.copyWith(
               primary: AppTheme.primaryRose,
             ),
           ),
@@ -966,5 +1050,22 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
     if (pain <= 3) return '😣';
     if (pain <= 4) return '😖';
     return '😫';
+  }
+  
+  String _getFlowInsight(FlowIntensity intensity) {
+    switch (intensity) {
+      case FlowIntensity.none:
+        return 'Track your flow to get personalized insights';
+      case FlowIntensity.light:
+        return 'Light flow detected. Stay hydrated and consider gentle activities.';
+      case FlowIntensity.medium:
+        return 'Normal flow pattern. Your cycle appears to be on track.';
+      case FlowIntensity.heavy:
+        return 'Heavy flow detected. Monitor iron levels and rest when needed.';
+      case FlowIntensity.veryHeavy:
+        return 'Very heavy flow. Consider consulting with healthcare provider if persistent.';
+      default:
+        return 'Continue tracking for better insights';
+    }
   }
 }

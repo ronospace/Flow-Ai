@@ -7,14 +7,15 @@ class CalendarLegend extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.9),
+        color: Colors.white.withValues(alpha: 0.9),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -33,7 +34,7 @@ class CalendarLegend extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 'Cycle Phases',
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                style: theme.textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppTheme.darkGrey,
                 ),
@@ -89,7 +90,7 @@ class CalendarLegend extends StatelessWidget {
           // Additional info
           Row(
             children: [
-              _buildIndicator(AppTheme.accentMint.withOpacity(0.8), 'Today'),
+              _buildIndicator(AppTheme.accentMint.withValues(alpha: 0.8), 'Today'),
               const Spacer(),
               _buildIndicator(
                 Colors.transparent,
@@ -106,12 +107,12 @@ class CalendarLegend extends StatelessWidget {
           Row(
             children: [
               _buildIndicator(
-                AppTheme.accentMint.withOpacity(0.6),
+                AppTheme.accentMint.withValues(alpha: 0.6),
                 'Fertile Window',
               ),
               const Spacer(),
               _buildIndicator(
-                AppTheme.secondaryBlue.withOpacity(0.6),
+                AppTheme.secondaryBlue.withValues(alpha: 0.6),
                 'Ovulation',
               ),
             ],
@@ -127,6 +128,7 @@ class CalendarLegend extends StatelessWidget {
     Color color,
     String emoji,
   ) {
+    final theme = Theme.of(context);
     return Row(
       children: [
         Container(
@@ -134,7 +136,7 @@ class CalendarLegend extends StatelessWidget {
           height: 20,
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [color.withOpacity(0.3), color.withOpacity(0.6)],
+              colors: [color.withValues(alpha: 0.3), color.withValues(alpha: 0.6)],
             ),
             shape: BoxShape.circle,
           ),
@@ -149,7 +151,7 @@ class CalendarLegend extends StatelessWidget {
         Expanded(
           child: Text(
             label,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            style: theme.textTheme.bodySmall?.copyWith(
               color: AppTheme.mediumGrey,
               fontWeight: FontWeight.w500,
             ),

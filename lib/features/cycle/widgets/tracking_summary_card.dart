@@ -15,6 +15,7 @@ class TrackingSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       padding: const EdgeInsets.all(20),
@@ -23,7 +24,7 @@ class TrackingSummaryCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
@@ -87,14 +88,14 @@ class TrackingSummaryCard extends StatelessWidget {
             children: [
               Text(
                 'Cycle Day ${_getCycleDay()}',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppTheme.darkGrey,
                 ),
               ),
               Text(
                 _formatDate(cycleData.createdAt),
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                style: theme.textTheme.bodyMedium?.copyWith(
                   color: AppTheme.mediumGrey,
                 ),
               ),
@@ -120,7 +121,7 @@ class TrackingSummaryCard extends StatelessWidget {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: _getFlowColor().withOpacity(0.15),
+            color: _getFlowColor().withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Center(
@@ -176,7 +177,7 @@ class TrackingSummaryCard extends StatelessWidget {
             return Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: AppTheme.secondaryBlue.withOpacity(0.15),
+                color: AppTheme.secondaryBlue.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
@@ -191,8 +192,7 @@ class TrackingSummaryCard extends StatelessWidget {
           }).toList(),
         ),
         if (cycleData.symptoms.length > 4)
-          Padding(
-            padding: const EdgeInsets.only(top: 6),
+          const Padding(padding: const EdgeInsets.only(top: 6),
             child: Text(
               '+${cycleData.symptoms.length - 4} more',
               style: TextStyle(
@@ -249,7 +249,7 @@ class TrackingSummaryCard extends StatelessWidget {
           width: 32,
           height: 32,
           decoration: BoxDecoration(
-            color: color.withOpacity(0.15),
+            color: color.withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Center(
@@ -312,12 +312,12 @@ class TrackingSummaryCard extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: AppTheme.lightGrey.withOpacity(0.5),
+            color: AppTheme.lightGrey.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Text(
             cycleData.notes!,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            style: theme.textTheme.bodyMedium?.copyWith(
               color: AppTheme.darkGrey,
               height: 1.4,
             ),

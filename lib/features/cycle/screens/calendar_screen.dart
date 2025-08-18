@@ -57,10 +57,11 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
   
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-        gradient: AppTheme.backgroundGradient(Theme.of(context).brightness == Brightness.dark),
+        gradient: AppTheme.backgroundGradient(theme.brightness == Brightness.dark),
         ),
         child: SafeArea(
           child: Column(
@@ -81,7 +82,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 15,
                         offset: const Offset(0, 8),
                       ),
@@ -110,6 +111,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
   }
   
   Widget _buildHeader() {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(20),
       child: Row(
@@ -121,14 +123,14 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
               children: [
                     Text(
                       AppLocalizations.of(context)!.calendarTitle,
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      style: theme.textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppTheme.darkGrey,
                       ),
                     ).animate().fadeIn().slideX(begin: -0.3, end: 0),
                 Text(
                   DateFormat('MMMM yyyy').format(_focusedDay),
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  style: theme.textTheme.bodyLarge?.copyWith(
                     color: AppTheme.mediumGrey,
                   ),
                 ).animate().fadeIn(delay: 100.ms),
@@ -139,11 +141,11 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
           // View Toggle Button
           Container(
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.9),
+              color: Colors.white.withValues(alpha: 0.9),
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: 8,
                   offset: const Offset(0, 4),
                 ),
@@ -161,8 +163,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                   HapticFeedback.selectionClick();
                 },
                 borderRadius: BorderRadius.circular(12),
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
+                child: Padding(padding: const EdgeInsets.all(12),
                   child: Icon(
                     _calendarFormat == CalendarFormat.month
                         ? Icons.calendar_view_week
@@ -196,8 +197,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                   HapticFeedback.lightImpact();
                 },
                 borderRadius: BorderRadius.circular(12),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: Padding(padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   child: Text(
                     AppLocalizations.of(context)!.todayButton,
                     style: const TextStyle(
@@ -223,6 +223,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
   }
   
   Widget _buildCalendar(CycleProvider cycleProvider) {
+    final theme = Theme.of(context);
     return TableCalendar<CycleData>(
       firstDay: DateTime.utc(2020, 1, 1),
       lastDay: DateTime.utc(2030, 12, 31),
@@ -245,7 +246,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
         
         // Today styling
         todayDecoration: BoxDecoration(
-          color: AppTheme.accentMint.withOpacity(0.8),
+          color: AppTheme.accentMint.withValues(alpha: 0.8),
           shape: BoxShape.circle,
         ),
         todayTextStyle: const TextStyle(
@@ -285,7 +286,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
         titleCentered: true,
         leftChevronVisible: true,
         rightChevronVisible: true,
-        titleTextStyle: Theme.of(context).textTheme.titleLarge!.copyWith(
+        titleTextStyle: theme.textTheme.titleLarge!.copyWith(
           fontWeight: FontWeight.bold,
           color: AppTheme.darkGrey,
         ),
@@ -350,11 +351,11 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
               )
             : isToday
                 ? LinearGradient(
-                    colors: [AppTheme.accentMint.withOpacity(0.8), AppTheme.accentMint],
+                    colors: [AppTheme.accentMint.withValues(alpha: 0.8), AppTheme.accentMint],
                   )
                 : dayInfo.color != null
                     ? LinearGradient(
-                        colors: [dayInfo.color!.withOpacity(0.3), dayInfo.color!.withOpacity(0.6)],
+                        colors: [dayInfo.color!.withValues(alpha: 0.3), dayInfo.color!.withValues(alpha: 0.6)],
                       )
                     : null,
         color: dayInfo.color == null && !isSelected && !isToday
@@ -396,7 +397,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                 width: _getFlowIndicatorSize(dayInfo.flowIntensity!),
                 height: 3,
                 decoration: BoxDecoration(
-                  color: isSelected || isToday ? Colors.white : Colors.white.withOpacity(0.8),
+                  color: isSelected || isToday ? Colors.white : Colors.white.withValues(alpha: 0.8),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -545,6 +546,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
   Widget _buildCurrentCycleInfo() {
     return Consumer<CycleProvider>(
       builder: (context, cycleProvider, child) {
+        final theme = Theme.of(context);
         final currentCycle = cycleProvider.cycleData?.currentCycle;
         final predictions = cycleProvider.predictions;
         
@@ -556,7 +558,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -571,7 +573,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                   children: [
                     Text(
                       'Current Cycle',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppTheme.darkGrey,
                       ),
@@ -580,21 +582,21 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                     if (currentCycle != null) ...[
                       Text(
                         'Day ${DateTime.now().difference(currentCycle.startDate).inDays + 1}',
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        style: theme.textTheme.headlineSmall?.copyWith(
                           color: AppTheme.primaryRose,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
                         _getCurrentPhaseText(currentCycle),
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        style: theme.textTheme.bodyMedium?.copyWith(
                           color: AppTheme.mediumGrey,
                         ),
                       ),
                     ] else
                       Text(
                         'No active cycle',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        style: theme.textTheme.bodyMedium?.copyWith(
                           color: AppTheme.mediumGrey,
                         ),
                       ),
@@ -610,7 +612,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                     children: [
                       Text(
                         'Next Period',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: AppTheme.darkGrey,
                         ),
@@ -618,14 +620,14 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                       const SizedBox(height: 4),
                       Text(
                         'In ${predictions.daysUntilNextPeriod} days',
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        style: theme.textTheme.headlineSmall?.copyWith(
                           color: AppTheme.secondaryBlue,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
                         DateFormat('MMM d').format(predictions.nextPeriodDate!),
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        style: theme.textTheme.bodyMedium?.copyWith(
                           color: AppTheme.mediumGrey,
                         ),
                       ),

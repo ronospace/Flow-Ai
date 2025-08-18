@@ -17,6 +17,7 @@ class MoodEnergyChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final filteredData = _getFilteredData();
     
     if (filteredData.isEmpty) {
@@ -33,7 +34,7 @@ class MoodEnergyChart extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -51,7 +52,7 @@ class MoodEnergyChart extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: AppTheme.primaryPurple.withOpacity(0.1),
+                      color: AppTheme.primaryPurple.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Icon(
@@ -63,7 +64,7 @@ class MoodEnergyChart extends StatelessWidget {
                   const SizedBox(width: 12),
                   Text(
                     'Mood & Energy Trends',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: AppTheme.darkGrey,
                     ),
@@ -95,8 +96,7 @@ class MoodEnergyChart extends StatelessWidget {
           const SizedBox(height: 20),
           
           // Chart
-          SizedBox(
-            height: 200,
+          SizedBox(height: 200,
             child: LineChart(
               LineChartData(
                 gridData: FlGridData(
@@ -190,7 +190,7 @@ class MoodEnergyChart extends StatelessWidget {
                     ),
                     belowBarData: BarAreaData(
                       show: true,
-                      color: AppTheme.primaryPurple.withOpacity(0.1),
+                      color: AppTheme.primaryPurple.withValues(alpha: 0.1),
                     ),
                   ),
                   // Energy line
@@ -245,7 +245,7 @@ class MoodEnergyChart extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppTheme.lightGrey.withOpacity(0.5),
+              color: AppTheme.lightGrey.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
@@ -278,6 +278,7 @@ class MoodEnergyChart extends StatelessWidget {
   }
 
   Widget _buildEmptyState(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(40),
       decoration: BoxDecoration(
@@ -285,7 +286,7 @@ class MoodEnergyChart extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -301,7 +302,7 @@ class MoodEnergyChart extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             'No Mood Data Available',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            style: theme.textTheme.titleMedium?.copyWith(
               color: AppTheme.mediumGrey,
               fontWeight: FontWeight.bold,
             ),

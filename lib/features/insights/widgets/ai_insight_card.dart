@@ -13,17 +13,18 @@ class AIInsightCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: _getInsightTypeColor().withOpacity(0.3),
+          color: _getInsightTypeColor().withValues(alpha: 0.3),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -38,7 +39,7 @@ class AIInsightCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: _getInsightTypeColor().withOpacity(0.1),
+                  color: _getInsightTypeColor().withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
@@ -51,7 +52,7 @@ class AIInsightCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   insight.title,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: AppTheme.darkGrey,
                   ),
@@ -60,7 +61,7 @@ class AIInsightCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: _getConfidenceColor().withOpacity(0.1),
+                  color: _getConfidenceColor().withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
@@ -80,7 +81,7 @@ class AIInsightCard extends StatelessWidget {
           // Description
           Text(
             insight.description,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            style: theme.textTheme.bodyMedium?.copyWith(
               color: AppTheme.mediumGrey,
               height: 1.5,
             ),
@@ -91,15 +92,14 @@ class AIInsightCard extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               'Recommendations:',
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+              style: theme.textTheme.titleSmall?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: _getInsightTypeColor(),
               ),
             ),
             const SizedBox(height: 8),
             ...insight.recommendations.map((recommendation) => 
-              Padding(
-                padding: const EdgeInsets.only(bottom: 6),
+              Padding(padding: const EdgeInsets.only(bottom: 6),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -134,10 +134,10 @@ class AIInsightCard extends StatelessWidget {
               margin: const EdgeInsets.only(top: 16),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: AppTheme.primaryRose.withOpacity(0.1),
+                color: AppTheme.primaryRose.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: AppTheme.primaryRose.withOpacity(0.3),
+                  color: AppTheme.primaryRose.withValues(alpha: 0.3),
                 ),
               ),
               child: Row(

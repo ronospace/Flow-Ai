@@ -15,6 +15,7 @@ class CycleLengthChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final filteredCycles = _getFilteredCycles();
     
     if (filteredCycles.isEmpty) {
@@ -28,7 +29,7 @@ class CycleLengthChart extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
@@ -62,7 +63,7 @@ class CycleLengthChart extends StatelessWidget {
                   children: [
                     Text(
                       'Cycle Length Trends',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppTheme.darkGrey,
                       ),
@@ -85,8 +86,7 @@ class CycleLengthChart extends StatelessWidget {
           const SizedBox(height: 30),
           
           // Chart
-          SizedBox(
-            height: 200,
+          SizedBox(height: 200,
             child: LineChart(_buildLineChartData(filteredCycles)),
           ),
         ],
@@ -137,7 +137,7 @@ class CycleLengthChart extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
@@ -186,7 +186,7 @@ class CycleLengthChart extends StatelessWidget {
         horizontalInterval: 1,
         getDrawingHorizontalLine: (value) {
           return FlLine(
-            color: AppTheme.lightGrey.withOpacity(0.3),
+            color: AppTheme.lightGrey.withValues(alpha: 0.3),
             strokeWidth: 1,
           );
         },
@@ -217,8 +217,7 @@ class CycleLengthChart extends StatelessWidget {
               final index = value.toInt();
               if (index >= 0 && index < cycles.length) {
                 final cycle = cycles[index];
-                return Padding(
-                  padding: const EdgeInsets.only(top: 8),
+                return Padding(padding: const EdgeInsets.only(top: 8),
                   child: Text(
                     '${cycle.startDate.month}/${cycle.startDate.day}',
                     style: TextStyle(
@@ -260,8 +259,8 @@ class CycleLengthChart extends StatelessWidget {
             show: true,
             gradient: LinearGradient(
               colors: [
-                AppTheme.primaryRose.withOpacity(0.3),
-                AppTheme.primaryRose.withOpacity(0.1),
+                AppTheme.primaryRose.withValues(alpha: 0.3),
+                AppTheme.primaryRose.withValues(alpha: 0.1),
               ],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
@@ -288,7 +287,7 @@ class CycleLengthChart extends StatelessWidget {
               return null;
             }).toList();
           },
-          getTooltipColor: (touchedSpot) => AppTheme.darkGrey.withOpacity(0.9),
+          getTooltipColor: (touchedSpot) => AppTheme.darkGrey.withValues(alpha: 0.9),
           tooltipRoundedRadius: 8,
         ),
       ),

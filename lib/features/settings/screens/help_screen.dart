@@ -68,10 +68,11 @@ class _HelpScreenState extends State<HelpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: Row(
           children: [
@@ -94,7 +95,7 @@ class _HelpScreenState extends State<HelpScreen> {
             Text(
               l10n.help,
               style: TextStyle(
-                color: Theme.of(context).textTheme.titleLarge?.color,
+                color: theme.textTheme.titleLarge?.color,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -105,7 +106,7 @@ class _HelpScreenState extends State<HelpScreen> {
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            color: Theme.of(context).iconTheme.color,
+            color: theme.iconTheme.color,
           ),
           onPressed: () => Navigator.pop(context),
         ),
@@ -166,7 +167,7 @@ class _HelpScreenState extends State<HelpScreen> {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).textTheme.titleLarge?.color,
+                color: theme.textTheme.titleLarge?.color,
               ),
             ).animate().slideX(begin: -0.3, end: 0).fadeIn(delay: 200.ms),
             
@@ -180,7 +181,7 @@ class _HelpScreenState extends State<HelpScreen> {
               return Container(
                 margin: const EdgeInsets.only(bottom: 12),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor,
+                  color: theme.cardColor,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
@@ -209,18 +210,17 @@ class _HelpScreenState extends State<HelpScreen> {
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 16,
-                      color: Theme.of(context).textTheme.bodyLarge?.color,
+                      color: theme.textTheme.bodyLarge?.color,
                     ),
                   ),
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(72, 0, 16, 16),
+                    Padding(padding: const EdgeInsets.fromLTRB(72, 0, 16, 16),
                       child: Text(
                         item.answer,
                         style: TextStyle(
                           fontSize: 14,
                           height: 1.5,
-                          color: Theme.of(context).textTheme.bodyMedium?.color,
+                          color: theme.textTheme.bodyMedium?.color,
                         ),
                       ),
                     ),
@@ -244,7 +244,7 @@ class _HelpScreenState extends State<HelpScreen> {
               width: double.infinity,
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
+                color: theme.cardColor,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
                   color: AppTheme.accentMint.withValues(alpha: 0.3),
@@ -281,14 +281,14 @@ class _HelpScreenState extends State<HelpScreen> {
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
-                                color: Theme.of(context).textTheme.titleLarge?.color,
+                                color: theme.textTheme.titleLarge?.color,
                               ),
                             ),
                             Text(
                               'Contact our support team',
                               style: TextStyle(
                                 fontSize: 14,
-                                color: Theme.of(context).textTheme.bodyMedium?.color,
+                                color: theme.textTheme.bodyMedium?.color,
                               ),
                             ),
                           ],
@@ -349,6 +349,7 @@ class _HelpScreenState extends State<HelpScreen> {
     Color color,
     VoidCallback onTap,
   ) {
+    final theme = Theme.of(context);
     return GestureDetector(
       onTap: () {
         HapticFeedback.lightImpact();
@@ -387,14 +388,14 @@ class _HelpScreenState extends State<HelpScreen> {
                     title,
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      color: Theme.of(context).textTheme.bodyLarge?.color,
+                      color: theme.textTheme.bodyLarge?.color,
                     ),
                   ),
                   Text(
                     subtitle,
                     style: TextStyle(
                       fontSize: 12,
-                      color: Theme.of(context).textTheme.bodyMedium?.color,
+                      color: theme.textTheme.bodyMedium?.color,
                     ),
                   ),
                 ],
@@ -628,6 +629,7 @@ class _HelpScreenState extends State<HelpScreen> {
     Color color,
     VoidCallback onTap,
   ) {
+    final theme = Theme.of(context);
     return GestureDetector(
       onTap: () {
         if (mounted) {
@@ -669,14 +671,14 @@ class _HelpScreenState extends State<HelpScreen> {
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 14,
-                      color: Theme.of(context).textTheme.bodyLarge?.color,
+                      color: theme.textTheme.bodyLarge?.color,
                     ),
                   ),
                   Text(
                     subtitle,
                     style: TextStyle(
                       fontSize: 11,
-                      color: Theme.of(context).textTheme.bodyMedium?.color,
+                      color: theme.textTheme.bodyMedium?.color,
                     ),
                   ),
                 ],

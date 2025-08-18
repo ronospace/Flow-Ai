@@ -133,6 +133,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final localizations = AppLocalizations.of(context)!;
     
     return Stack(
@@ -151,11 +152,11 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                     width: MediaQuery.of(context).size.width - 32,
                     height: MediaQuery.of(context).size.height * 0.6,
                     decoration: BoxDecoration(
-                      color: Theme.of(context).scaffoldBackgroundColor,
+                      color: theme.scaffoldBackgroundColor,
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
+                          color: Colors.black.withValues(alpha: 0.2),
                           blurRadius: 20,
                           spreadRadius: 5,
                           offset: const Offset(0, 8),
@@ -182,7 +183,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                                 width: 40,
                                 height: 40,
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.2),
+                                  color: Colors.white.withValues(alpha: 0.2),
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: const Icon(
@@ -198,15 +199,15 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                                   children: [
                                     Text(
                                       'FlowSense AI Assistant',
-                                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                      style: theme.textTheme.titleMedium?.copyWith(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                     Text(
                                       'Ask me anything about your health',
-                                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                        color: Colors.white.withOpacity(0.8),
+                                      style: theme.textTheme.bodySmall?.copyWith(
+                                        color: Colors.white.withValues(alpha: 0.8),
                                       ),
                                     ),
                                   ],
@@ -226,7 +227,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                         // Chat Messages
                         Expanded(
                           child: Theme(
-                            data: Theme.of(context).copyWith(
+                            data: theme.copyWith(
                               // Customize chat theme
                               primaryColor: AppTheme.primaryRose,
                             ),
@@ -239,9 +240,9 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                               theme: DarkChatTheme(
                                 primaryColor: AppTheme.primaryRose,
                                 secondaryColor: AppTheme.secondaryBlue,
-                                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                                inputBackgroundColor: Theme.of(context).cardColor,
-                                inputTextColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.black,
+                                backgroundColor: theme.scaffoldBackgroundColor,
+                                inputBackgroundColor: theme.cardColor,
+                                inputTextColor: theme.textTheme.bodyMedium?.color ?? Colors.black,
                                 messageBorderRadius: 12,
                               ),
                               customBottomWidget: _buildCustomInput(),
@@ -321,13 +322,14 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   }
 
   Widget _buildCustomInput() {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
+        color: theme.cardColor,
         border: Border(
           top: BorderSide(
-            color: Theme.of(context).dividerColor,
+            color: theme.dividerColor,
             width: 0.5,
           ),
         ),
@@ -343,7 +345,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   borderSide: BorderSide.none,
                 ),
                 filled: true,
-                fillColor: Theme.of(context).scaffoldBackgroundColor,
+                fillColor: theme.scaffoldBackgroundColor,
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 20,
                   vertical: 12,
@@ -372,15 +374,16 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   }
 
   Widget _buildQuickReplies() {
+    final theme = Theme.of(context);
     final suggestions = _chatService.getSuggestedReplies();
     
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor.withOpacity(0.5),
+        color: theme.cardColor.withValues(alpha: 0.5),
         border: Border(
           top: BorderSide(
-            color: Theme.of(context).dividerColor,
+            color: theme.dividerColor,
             width: 0.5,
           ),
         ),
@@ -390,7 +393,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
         children: [
           Text(
             'Quick questions:',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            style: theme.textTheme.bodySmall?.copyWith(
               color: AppTheme.mediumGrey,
               fontWeight: FontWeight.w600,
             ),
@@ -421,16 +424,16 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: AppTheme.primaryRose.withOpacity(0.1),
+                    color: AppTheme.primaryRose.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                      color: AppTheme.primaryRose.withOpacity(0.3),
+                      color: AppTheme.primaryRose.withValues(alpha: 0.3),
                       width: 1,
                     ),
                   ),
                   child: Text(
                     suggestion,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    style: theme.textTheme.bodySmall?.copyWith(
                       color: AppTheme.primaryRose,
                       fontWeight: FontWeight.w500,
                     ),

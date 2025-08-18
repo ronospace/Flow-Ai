@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../generated/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../providers/settings_provider.dart';
@@ -50,12 +51,13 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-        gradient: AppTheme.backgroundGradient(Theme.of(context).brightness == Brightness.dark),
+        gradient: AppTheme.backgroundGradient(theme.brightness == Brightness.dark),
         ),
         child: SafeArea(
           child: CustomScrollView(
@@ -107,12 +109,11 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
 
               // Settings Content
               SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Padding(padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     children: [
                       // Profile Section
-                      const ProfileSection()
+                      ProfileSection()
                           .animate(controller: _sectionsController)
                           .slideY(begin: 0.3, end: 0)
                           .fadeIn(),
@@ -294,6 +295,44 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
 
                       const SizedBox(height: 24),
 
+                      // Authentication & Security
+                      SettingsSection(
+                        title: 'Authentication & Security',
+                        icon: Icons.security_outlined,
+                        children: [
+                          SettingsTile(
+                            leading: const Icon(Icons.fingerprint, color: AppTheme.accentMint),
+                            title: 'Biometric Login',
+                            subtitle: 'Use fingerprint or face recognition',
+                            trailing: Consumer<SettingsProvider>(
+                              builder: (context, settings, child) {
+                                return Switch.adaptive(
+                                  value: settings.preferences.biometricEnabled,
+                                  onChanged: settings.updateBiometricEnabled,
+                                  activeColor: AppTheme.accentMint,
+                                );
+                              },
+                            ),
+                          ),
+                          SettingsTile(
+                            leading: const Icon(Icons.logout, color: AppTheme.primaryRose),
+                            title: 'Sign Out',
+                            subtitle: 'Sign out of your account',
+                            onTap: () => _showSignOutDialog(context),
+                          ),
+                          SettingsTile(
+                            leading: const Icon(Icons.manage_accounts, color: AppTheme.secondaryBlue),
+                            title: 'Account Management',
+                            subtitle: 'Manage your account settings',
+                            onTap: () => _showAccountManagement(context),
+                          ),
+                        ],
+                      ).animate(controller: _sectionsController)
+                          .slideY(begin: 0.3, end: 0)
+                          .fadeIn(delay: 350.ms),
+
+                      const SizedBox(height: 24),
+
                       // CycleSync Integration
                       const CycleSyncIntegration()
                           .animate(controller: _sectionsController)
@@ -312,6 +351,18 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
                             title: l10n.help,
                             subtitle: l10n.getHelpTutorials,
                             onTap: () => _showHelp(context),
+                          ),
+                          SettingsTile(
+                            leading: const Icon(Icons.chat, color: AppTheme.accentMint),
+                            title: 'WhatsApp Support',
+                            subtitle: 'Get instant help via WhatsApp',
+                            onTap: () => _launchWhatsApp(),
+                          ),
+                          SettingsTile(
+                            leading: const Icon(Icons.send, color: AppTheme.secondaryBlue),
+                            title: 'Telegram Support',
+                            subtitle: 'Connect with us on Telegram',
+                            onTap: () => _launchTelegram(),
                           ),
                           SettingsTile(
                             leading: const Icon(Icons.info, color: AppTheme.mediumGrey),
@@ -397,6 +448,450 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
       children: [
         const Text('AI-powered menstrual cycle tracking for better reproductive health.'),
       ],
+    );
+  }
+
+  Future<void> _launchWhatsApp() async {
+    final phoneNumber = '+4917627702411';
+    final message = 'Hi! I need help with FlowSense app.';
+    final url = 'https://wa.me/$phoneNumber?text=${Uri.encodeComponent(message)}';
+    
+    try {
+      if (await canLaunchUrl(Uri.parse(url))) {
+        await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+        HapticFeedback.lightImpact();
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('WhatsApp is not installed on this device'),
+              backgroundColor: AppTheme.primaryRose,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      debugPrint('Error launching WhatsApp: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Could not open WhatsApp'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _launchTelegram() async {
+    const username = 'ronospace';
+    const url = 'https://t.me/$username';
+    
+    try {
+      if (await canLaunchUrl(Uri.parse(url))) {
+        await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+        HapticFeedback.lightImpact();
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Telegram is not installed on this device'),
+              backgroundColor: AppTheme.secondaryBlue,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      debugPrint('Error launching Telegram: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Could not open Telegram'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  void _showSignOutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: AppTheme.primaryRose.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Icon(
+                  Icons.logout,
+                  color: AppTheme.primaryRose,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 16),
+              const Text('Sign Out'),
+            ],
+          ),
+          content: const Text(
+            'Are you sure you want to sign out of your account? You can always sign back in later.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                  color: AppTheme.mediumGrey,
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _handleSignOut();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppTheme.primaryRose,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: const Text(
+                'Sign Out',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _handleSignOut() async {
+    try {
+      // Show loading indicator
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Row(
+            children: [
+              SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
+              ),
+              SizedBox(width: 12),
+              Text('Signing out...'),
+            ],
+          ),
+          backgroundColor: AppTheme.mediumGrey,
+          duration: Duration(seconds: 2),
+        ),
+      );
+      
+      // Perform sign out logic here
+      // await AuthService().signOut();
+      
+      // Navigate to auth screen
+      await Future.delayed(const Duration(milliseconds: 1000));
+      if (mounted) {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          '/auth',
+          (route) => false,
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Sign out failed. Please try again.'),
+            backgroundColor: AppTheme.primaryRose,
+          ),
+        );
+      }
+    }
+  }
+
+  void _showAccountManagement(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        final theme = Theme.of(context);
+        return Container(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.8,
+          ),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(28),
+              topRight: Radius.circular(28),
+            ),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Handle bar
+              Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(top: 12),
+                decoration: BoxDecoration(
+                  color: AppTheme.lightGrey,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              
+              // Header
+              Padding(
+                padding: const EdgeInsets.all(24),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [AppTheme.secondaryBlue, AppTheme.accentMint],
+                        ),
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      child: const Icon(
+                        Icons.manage_accounts,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Account Management',
+                            style: theme.textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: AppTheme.darkGrey,
+                            ),
+                          ),
+                          Text(
+                            'Manage your account and preferences',
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: AppTheme.mediumGrey,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              
+              // Account Options
+              Flexible(
+                child: ListView(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  children: [
+                    _buildAccountOption(
+                      icon: Icons.edit,
+                      title: 'Edit Profile',
+                      subtitle: 'Update your personal information',
+                      onTap: () => Navigator.pop(context),
+                    ),
+                    _buildAccountOption(
+                      icon: Icons.lock_reset,
+                      title: 'Change Password',
+                      subtitle: 'Update your account password',
+                      onTap: () => Navigator.pop(context),
+                    ),
+                    _buildAccountOption(
+                      icon: Icons.email,
+                      title: 'Change Email',
+                      subtitle: 'Update your email address',
+                      onTap: () => Navigator.pop(context),
+                    ),
+                    _buildAccountOption(
+                      icon: Icons.download,
+                      title: 'Export Data',
+                      subtitle: 'Download your tracking data',
+                      onTap: () => Navigator.pop(context),
+                    ),
+                    _buildAccountOption(
+                      icon: Icons.delete_forever,
+                      title: 'Delete Account',
+                      subtitle: 'Permanently delete your account',
+                      onTap: () {
+                        Navigator.pop(context);
+                        _showDeleteAccountDialog(context);
+                      },
+                      isDestructive: true,
+                    ),
+                  ],
+                ),
+              ),
+              
+              const SizedBox(height: 24),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildAccountOption({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+    bool isDestructive = false,
+  }) {
+    final theme = Theme.of(context);
+    final color = isDestructive ? AppTheme.primaryRose : AppTheme.secondaryBlue;
+    
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: color.withValues(alpha: 0.2),
+          width: 1,
+        ),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: color.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Icon(
+                    icon,
+                    color: color,
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: AppTheme.darkGrey,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        subtitle,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: AppTheme.mediumGrey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  color: AppTheme.mediumGrey,
+                  size: 16,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showDeleteAccountDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: AppTheme.primaryRose.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Icon(
+                  Icons.warning,
+                  color: AppTheme.primaryRose,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 16),
+              const Text('Delete Account'),
+            ],
+          ),
+          content: const Text(
+            'This action cannot be undone. All your data including cycle history, insights, and preferences will be permanently deleted.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                  color: AppTheme.mediumGrey,
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                // Handle account deletion
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppTheme.primaryRose,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: const Text(
+                'Delete',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

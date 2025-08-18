@@ -16,6 +16,7 @@ class PredictionAccuracyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -23,7 +24,7 @@ class PredictionAccuracyCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -38,7 +39,7 @@ class PredictionAccuracyCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppTheme.secondaryBlue.withOpacity(0.1),
+                  color: AppTheme.secondaryBlue.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
@@ -50,7 +51,7 @@ class PredictionAccuracyCard extends StatelessWidget {
               const SizedBox(width: 12),
               Text(
                 'Prediction Accuracy',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppTheme.darkGrey,
                 ),
@@ -65,8 +66,7 @@ class PredictionAccuracyCard extends StatelessWidget {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                SizedBox(
-                  width: 120,
+                SizedBox(width: 120,
                   height: 120,
                   child: CircularProgressIndicator(
                     value: accuracy,
@@ -82,7 +82,7 @@ class PredictionAccuracyCard extends StatelessWidget {
                   children: [
                     Text(
                       '${(accuracy * 100).round()}%',
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      style: theme.textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: _getAccuracyColor(accuracy),
                       ),
@@ -136,7 +136,7 @@ class PredictionAccuracyCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: _getAccuracyColor(accuracy).withOpacity(0.1),
+              color: _getAccuracyColor(accuracy).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(
@@ -169,6 +169,7 @@ class PredictionAccuracyCard extends StatelessWidget {
 
   Widget _buildStat(BuildContext context, String label, String value, 
       IconData icon, Color color) {
+    final theme = Theme.of(context);
     return Column(
       children: [
         Icon(
@@ -179,7 +180,7 @@ class PredictionAccuracyCard extends StatelessWidget {
         const SizedBox(height: 4),
         Text(
           value,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+          style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.bold,
             color: color,
           ),

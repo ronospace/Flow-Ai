@@ -59,6 +59,7 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
   
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     if (widget.data.isEmpty) {
       return _buildEmptyChart();
     }
@@ -70,7 +71,7 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -102,7 +103,7 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: widget.color.withOpacity(0.1),
+            color: widget.color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(
@@ -118,7 +119,7 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
             children: [
               Text(
                 widget.title,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppTheme.darkGrey,
                 ),
@@ -127,7 +128,7 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
                 const SizedBox(height: 2),
                 Text(
                   widget.subtitle!,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  style: theme.textTheme.bodySmall?.copyWith(
                     color: AppTheme.mediumGrey,
                   ),
                 ),
@@ -139,7 +140,7 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
-            color: widget.color.withOpacity(0.1),
+            color: widget.color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
@@ -214,9 +215,9 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: widget.color.withOpacity(0.1),
+        color: widget.color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: widget.color.withOpacity(0.3)),
+        border: Border.all(color: widget.color.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
@@ -232,14 +233,14 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
               children: [
                 Text(
                   '${reading.value.toStringAsFixed(1)} ${reading.unit}',
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  style: theme.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: AppTheme.darkGrey,
                   ),
                 ),
                 Text(
                   _formatDateTime(reading.timestamp),
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  style: theme.textTheme.bodySmall?.copyWith(
                     color: AppTheme.mediumGrey,
                   ),
                 ),
@@ -298,7 +299,7 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -311,14 +312,14 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
               children: [
                 Text(
                   label,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  style: theme.textTheme.bodySmall?.copyWith(
                     color: AppTheme.mediumGrey,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 Text(
                   value,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  style: theme.textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: AppTheme.darkGrey,
                   ),
@@ -344,12 +345,12 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
           Icon(
             _getIconForType(widget.type),
             size: 48,
-            color: AppTheme.mediumGrey.withOpacity(0.5),
+            color: AppTheme.mediumGrey.withValues(alpha: 0.5),
           ),
           const SizedBox(height: 16),
           Text(
             'No ${widget.title} Data',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.w600,
               color: AppTheme.mediumGrey,
             ),
@@ -358,7 +359,7 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
           Text(
             'Data will appear here once available',
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            style: theme.textTheme.bodyMedium?.copyWith(
               color: AppTheme.mediumGrey,
             ),
           ),
@@ -453,7 +454,7 @@ class BiometricChartPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round;
 
     final fillPaint = Paint()
-      ..color = color.withOpacity(0.1)
+      ..color = color.withValues(alpha: 0.1)
       ..style = PaintingStyle.fill;
 
     final pointPaint = Paint()
@@ -518,7 +519,7 @@ class BiometricChartPainter extends CustomPainter {
             point,
             pointRadius + 4,
             Paint()
-              ..color = color.withOpacity(0.3)
+              ..color = color.withValues(alpha: 0.3)
               ..style = PaintingStyle.fill,
           );
         }
@@ -542,7 +543,7 @@ class BiometricChartPainter extends CustomPainter {
         final avgY = size.height - (normalizedAvg * size.height);
         
         final avgPaint = Paint()
-          ..color = color.withOpacity(0.5)
+          ..color = color.withValues(alpha: 0.5)
           ..strokeWidth = 2
           ..style = PaintingStyle.stroke
           ..strokeDashPattern = [5, 5];

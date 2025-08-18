@@ -63,6 +63,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final symptomCategories = _getSymptomCategories(context);
     if (_expandedCategory.isEmpty) {
       _expandedCategory = symptomCategories.keys.first;
@@ -96,6 +97,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
   }
 
   Widget _buildSelectedSymptomsSummary() {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -103,7 +105,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -122,7 +124,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
               const SizedBox(width: 8),
               Text(
                 AppLocalizations.of(context).selectedSymptoms(widget.selectedSymptoms.length),
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                style: theme.textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppTheme.darkGrey,
                 ),
@@ -150,9 +152,9 @@ class _SymptomSelectorState extends State<SymptomSelector> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.15),
+        color: color.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -212,8 +214,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
       child: Row(
         children: symptomCategories.keys.map((category) {
           final isSelected = category == _expandedCategory;
-          return Padding(
-            padding: const EdgeInsets.only(right: 12),
+          return Padding(padding: const EdgeInsets.only(right: 12),
             child: GestureDetector(
               onTap: () {
                 setState(() {
@@ -238,7 +239,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
                   boxShadow: [
                     if (isSelected)
                       BoxShadow(
-                        color: AppTheme.primaryRose.withOpacity(0.3),
+                        color: AppTheme.primaryRose.withValues(alpha: 0.3),
                         blurRadius: 10,
                         offset: const Offset(0, 4),
                       ),
@@ -270,8 +271,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
         final isSelected = widget.selectedSymptoms.contains(symptom.name);
         final severity = widget.symptomSeverity[symptom.name] ?? 3.0;
         
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 12),
+        return Padding(padding: const EdgeInsets.only(bottom: 12),
           child: _buildSymptomTile(symptom, isSelected, severity, index),
         );
       },
@@ -279,6 +279,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
   }
 
   Widget _buildSymptomTile(SymptomOption symptom, bool isSelected, double severity, int index) {
+    final theme = Theme.of(context);
     return GestureDetector(
       onTap: () {
         final updatedSymptoms = Set<String>.from(widget.selectedSymptoms);
@@ -303,8 +304,8 @@ class _SymptomSelectorState extends State<SymptomSelector> {
           boxShadow: [
             BoxShadow(
               color: isSelected 
-                  ? symptom.color.withOpacity(0.2)
-                  : Colors.black.withOpacity(0.1),
+                  ? symptom.color.withValues(alpha: 0.2)
+                  : Colors.black.withValues(alpha: 0.1),
               blurRadius: isSelected ? 12 : 8,
               offset: Offset(0, isSelected ? 6 : 4),
             ),
@@ -319,7 +320,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: symptom.color.withOpacity(0.15),
+                    color: symptom.color.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Center(
@@ -333,7 +334,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
                 Expanded(
                   child: Text(
                     symptom.name,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                       color: isSelected ? symptom.color : AppTheme.darkGrey,
                     ),
@@ -377,6 +378,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
   }
 
   Widget _buildSeveritySlider(String symptom, double severity, Color color) {
+    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -384,7 +386,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
           children: [
             Text(
               'Severity:',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              style: theme.textTheme.bodySmall?.copyWith(
                 color: AppTheme.mediumGrey,
                 fontWeight: FontWeight.w500,
               ),
@@ -392,7 +394,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
             const Spacer(),
             Text(
               _getSeverityText(severity),
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              style: theme.textTheme.bodySmall?.copyWith(
                 color: color,
                 fontWeight: FontWeight.bold,
               ),
@@ -403,9 +405,9 @@ class _SymptomSelectorState extends State<SymptomSelector> {
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
             activeTrackColor: color,
-            inactiveTrackColor: color.withOpacity(0.2),
+            inactiveTrackColor: color.withValues(alpha: 0.2),
             thumbColor: color,
-            overlayColor: color.withOpacity(0.2),
+            overlayColor: color.withValues(alpha: 0.2),
             thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
             trackHeight: 4,
           ),
