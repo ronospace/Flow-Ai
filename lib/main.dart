@@ -13,6 +13,7 @@ import 'core/services/notification_service.dart';
 import 'core/services/admob_service.dart';
 import 'core/services/navigation_service.dart';
 import 'core/services/auth_service.dart';
+import 'core/services/local_user_service.dart';
 import 'core/services/ai_conversation_memory.dart';
 import 'core/services/offline_service.dart';
 import 'features/onboarding/providers/onboarding_provider.dart';
@@ -51,6 +52,7 @@ Future<void> _initializeNonCriticalServices() async {
     _initializeNotifications(),
     _initializeNavigation(),
     _initializeAuth(),
+    _initializeLocalUserService(),
     _initializeAIMemory(),
     _initializeOfflineService(),
   ]);
@@ -99,6 +101,15 @@ Future<void> _initializeAuth() async {
     debugPrint('🔐 Authentication Service initialized');
   } catch (e) {
     debugPrint('Authentication Service initialization failed: $e');
+  }
+}
+
+Future<void> _initializeLocalUserService() async {
+  try {
+    await LocalUserService().initialize();
+    debugPrint('👤 Local User Service initialized');
+  } catch (e) {
+    debugPrint('Local User Service initialization failed: $e');
   }
 }
 

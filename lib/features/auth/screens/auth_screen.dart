@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/services/auth_service.dart';
 import '../../../generated/app_localizations.dart';
@@ -559,7 +560,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         await Future.delayed(const Duration(milliseconds: 500));
         // Navigate to main app
         if (mounted) {
-          Navigator.of(context).pushReplacementNamed('/home');
+          context.go('/home');
         }
       }
     } catch (e) {
@@ -604,6 +605,14 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     });
     
     try {
+      // Initialize auth service if needed
+      try {
+        await _authService.initialize();
+      } catch (initError) {
+        debugPrint('⚠️ Auth service initialization warning: $initError');
+        // Continue anyway as we have local fallback
+      }
+      
       if (_isLogin) {
         // Handle login
         final result = await _authService.signInWithEmail(
@@ -630,10 +639,14 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       // Navigate to main app
       await Future.delayed(const Duration(milliseconds: 1000));
       if (mounted) {
-        Navigator.of(context).pushReplacementNamed('/home');
+        context.go('/home');
       }
     } catch (e) {
-      _showErrorMessage(_isLogin ? 'Sign in failed. Please check your credentials.' : 'Sign up failed. Please try again.');
+      debugPrint('❌ Auth error: $e');
+      final errorMessage = e.toString().replaceFirst('Exception: ', '');
+      _showErrorMessage(_isLogin 
+          ? 'Sign in failed: $errorMessage' 
+          : 'Sign up failed: $errorMessage');
     } finally {
       if (mounted) {
         setState(() {
@@ -663,7 +676,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         
         await Future.delayed(const Duration(milliseconds: 1000));
         if (mounted) {
-          Navigator.of(context).pushReplacementNamed('/home');
+          context.go('/home');
         }
       }
     } catch (e) {
@@ -701,7 +714,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       
       await Future.delayed(const Duration(milliseconds: 1000));
       if (mounted) {
-        Navigator.of(context).pushReplacementNamed('/home');
+        context.go('/home');
       }
     } catch (e) {
       _showErrorMessage('Apple sign in failed. Please try again.');

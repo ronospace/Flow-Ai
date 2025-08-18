@@ -641,48 +641,94 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
   void _handleSignOut() async {
     try {
       // Show loading indicator
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Row(
-            children: [
-              SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Row(
+              children: [
+                SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
                 ),
-              ),
-              SizedBox(width: 12),
-              Text('Signing out...'),
-            ],
+                SizedBox(width: 12),
+                Text('Signing out...'),
+              ],
+            ),
+            backgroundColor: AppTheme.mediumGrey,
+            duration: Duration(seconds: 5),
           ),
-          backgroundColor: AppTheme.mediumGrey,
-          duration: Duration(seconds: 3),
-        ),
-      );
+        );
+      }
       
-      // Import AuthService and call proper sign out
+      // Initialize and sign out from AuthService
       final authService = AuthService();
+      try {
+        await authService.initialize();
+      } catch (e) {
+        debugPrint('⚠️ AuthService initialization failed during sign out, continuing anyway: $e');
+      }
       await authService.signOut();
       
       // Clear all app state and user data
       await _clearAllAppData();
       
-      // Clear navigation stack and redirect to auth
-      await Future.delayed(const Duration(milliseconds: 1000));
+      // Show success message
       if (mounted) {
-        // Use GoRouter instead of Navigator for proper routing
-        context.go('/auth');
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Row(
+              children: [
+                Icon(Icons.check_circle, color: Colors.white),
+                SizedBox(width: 12),
+                Text('Successfully signed out'),
+              ],
+            ),
+            backgroundColor: AppTheme.successGreen,
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+      
+      // Navigate to auth screen after a brief delay
+      await Future.delayed(const Duration(milliseconds: 1500));
+      if (mounted) {
+        // First try GoRouter go method
+        try {
+          context.go('/auth');
+        } catch (goError) {
+          debugPrint('GoRouter navigation failed: $goError');
+          // Fallback to pushNamedAndRemoveUntil using regular Navigator
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            '/auth',
+            (route) => false,
+          );
+        }
       }
     } catch (e) {
-      debugPrint('Sign out error: $e');
+      debugPrint('❌ Sign out error: $e');
       if (mounted) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Sign out failed: ${e.toString()}'),
+            content: Row(
+              children: [
+                const Icon(Icons.error, color: Colors.white),
+                const SizedBox(width: 12),
+                Expanded(child: Text('Sign out failed: ${e.toString()}')),
+              ],
+            ),
             backgroundColor: AppTheme.primaryRose,
-            duration: const Duration(seconds: 3),
+            duration: const Duration(seconds: 4),
+            action: SnackBarAction(
+              label: 'Retry',
+              textColor: Colors.white,
+              onPressed: _handleSignOut,
+            ),
           ),
         );
       }

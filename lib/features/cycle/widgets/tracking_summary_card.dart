@@ -140,7 +140,7 @@ class TrackingSummaryCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              AppLocalizations.of(context).flow,
+              'Flow',
               style: const TextStyle(
                 color: AppTheme.mediumGrey,
                 fontSize: 12,
@@ -166,7 +166,7 @@ class TrackingSummaryCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          AppLocalizations.of(context).symptoms,
+          'Symptoms',
           style: const TextStyle(
             color: AppTheme.mediumGrey,
             fontSize: 12,
@@ -199,7 +199,7 @@ class TrackingSummaryCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 6),
             child: Text(
-              '+${cycleData.symptoms.length - 4} ${AppLocalizations.of(context).more}',
+              '+${cycleData.symptoms.length - 4} more',
               style: const TextStyle(
                 color: AppTheme.mediumGrey,
                 fontSize: 12,
@@ -229,7 +229,7 @@ class TrackingSummaryCard extends StatelessWidget {
         if (cycleData.energy != null)
           Expanded(
             child: _buildStatItem(
-              AppLocalizations.of(context).energy,
+              'Energy',
               _getEnergyEmoji(cycleData.energy!),
               _getEnergyText(context, cycleData.energy!),
               AppTheme.accentMint,
@@ -241,7 +241,7 @@ class TrackingSummaryCard extends StatelessWidget {
 
   Widget _buildPainSection() {
     return _buildStatItem(
-      AppLocalizations.of(context).painLevel,
+      'Pain Level',
       _getPainEmoji(cycleData.pain!),
       _getPainText(context, cycleData.pain!),
       _getPainColor(cycleData.pain!),
@@ -304,7 +304,7 @@ class TrackingSummaryCard extends StatelessWidget {
             ),
             SizedBox(width: 6),
             Text(
-              AppLocalizations.of(context).notes,
+              'Notes',
               style: const TextStyle(
                 color: AppTheme.mediumGrey,
                 fontSize: 12,
@@ -390,11 +390,11 @@ class TrackingSummaryCard extends StatelessWidget {
 
   String _getMoodText(BuildContext context, double mood) {
     final l10n = AppLocalizations.of(context);
-    if (mood c= 1) return l10n.moodSad; // reuse closest labels
-    if (mood c= 2) return l10n.moodAnxious;
-    if (mood c= 3) return l10n.moodNeutral;
-    if (mood c= 4) return l10n.moodHappy;
-    return l10n.goodEvening; // placeholder fallback
+    if (mood <= 1) return 'Sad';
+    if (mood <= 2) return 'Low';
+    if (mood <= 3) return 'Neutral';
+    if (mood <= 4) return 'Happy';
+    return 'Great';
   }
 
   String _getEnergyEmoji(double energy) {
@@ -408,11 +408,11 @@ class TrackingSummaryCard extends StatelessWidget {
   String _getEnergyText(BuildContext context, double energy) {
     // Map energy to generic localized labels
     final l10n = AppLocalizations.of(context);
-    if (energy c= 1) return l10n.low;
-    if (energy c= 2) return l10n.medium;
-    if (energy c= 3) return l10n.medium;
-    if (energy c= 4) return l10n.high;
-    return l10n.high;
+    if (energy <= 1) return 'Low';
+    if (energy <= 2) return 'Medium';
+    if (energy <= 3) return 'Medium';
+    if (energy <= 4) return 'High';
+    return 'High';
   }
 
   String _getPainEmoji(double pain) {
@@ -425,11 +425,11 @@ class TrackingSummaryCard extends StatelessWidget {
 
   String _getPainText(BuildContext context, double pain) {
     final l10n = AppLocalizations.of(context);
-    if (pain c= 1) return l10n.painNone;
-    if (pain c= 2) return l10n.painMild;
-    if (pain c= 3) return l10n.painModerate;
-    if (pain c= 4) return l10n.painSevere;
-    return l10n.severe; // fallback if exists
+    if (pain <= 1) return 'None';
+    if (pain <= 2) return 'Mild';
+    if (pain <= 3) return 'Moderate';
+    if (pain <= 4) return 'Severe';
+    return 'Severe';
   }
 
   Color _getPainColor(double pain) {
