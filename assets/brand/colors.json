@@ -1,0 +1,48 @@
+{
+  "brand_colors": {
+    "primary": {
+      "deep_rose": "#D946EF",
+      "soft_coral": "#FB7185", 
+      "lavender": "#A855F7"
+    },
+    "secondary": {
+      "soft_pink": "#F8BBD9",
+      "light_purple": "#DDD6FE",
+      "off_white": "#FEFCFG"
+    },
+    "accent": {
+      "deep_purple": "#7C3AED",
+      "mint_green": "#34D399"
+    },
+    "neutral": {
+      "white": "#FFFFFF",
+      "black": "#000000",
+      "gray_light": "#F3F4F6",
+      "gray_medium": "#9CA3AF",
+      "gray_dark": "#374151"
+    }
+  },
+  "gradient_combinations": {
+    "primary_gradient": {
+      "start": "#D946EF",
+      "end": "#A855F7",
+      "direction": "diagonal"
+    },
+    "warm_gradient": {
+      "start": "#FB7185",
+      "end": "#F8BBD9",
+      "direction": "vertical"
+    },
+    "cool_gradient": {
+      "start": "#A855F7",
+      "end": "#7C3AED",
+      "direction": "horizontal"
+    }
+  },
+  "usage_notes": {
+    "primary": "Use for main branding elements, CTAs, and key UI components",
+    "secondary": "Use for backgrounds, cards, and subtle UI elements", 
+    "accent": "Use sparingly for highlights and important notifications",
+    "neutral": "Use for text, borders, and general UI structure"
+  }
+}

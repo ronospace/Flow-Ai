@@ -148,7 +148,7 @@ class TrackingSummaryCard extends StatelessWidget {
               ),
             ),
             Text(
-              _getFlowText(context),
+              _getFlowText(),
               style: TextStyle(
                 color: _getFlowColor(),
                 fontSize: 16,
@@ -243,7 +243,7 @@ class TrackingSummaryCard extends StatelessWidget {
     return _buildStatItem(
       'Pain Level',
       _getPainEmoji(cycleData.pain!),
-      _getPainText(context, cycleData.pain!),
+      _getPainText(cycleData.pain!),
       _getPainColor(cycleData.pain!),
     );
   }
@@ -362,21 +362,20 @@ class TrackingSummaryCard extends StatelessWidget {
     }
   }
 
-  String _getFlowText(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+  String _getFlowText() {
     switch (cycleData.flowIntensity) {
       case FlowIntensity.none:
-        return l10n.flowIntensityNone;
+        return 'None';
       case FlowIntensity.spotting:
-        return l10n.spotting;
+        return 'Spotting';
       case FlowIntensity.light:
-        return l10n.lightFlow;
+        return 'Light';
       case FlowIntensity.medium:
-        return l10n.normalFlow;
+        return 'Medium';
       case FlowIntensity.heavy:
-        return l10n.heavyFlow;
+        return 'Heavy';
       case FlowIntensity.veryHeavy:
-        return l10n.veryHeavy;
+        return 'Very Heavy';
     }
   }
 
@@ -423,8 +422,7 @@ class TrackingSummaryCard extends StatelessWidget {
     return '😫';
   }
 
-  String _getPainText(BuildContext context, double pain) {
-    final l10n = AppLocalizations.of(context);
+  String _getPainText(double pain) {
     if (pain <= 1) return 'None';
     if (pain <= 2) return 'Mild';
     if (pain <= 3) return 'Moderate';

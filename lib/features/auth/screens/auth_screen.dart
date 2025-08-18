@@ -11,6 +11,7 @@ import '../../../generated/app_localizations.dart';
 import '../widgets/auth_text_field.dart';
 import '../widgets/social_login_button.dart';
 import '../widgets/biometric_button.dart';
+import '../../../core/widgets/flowsense_logo.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -151,28 +152,10 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       padding: const EdgeInsets.all(40),
       child: Column(
         children: [
-          // Logo Container
-          Container(
-            width: 120,
-            height: 120,
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
-              ),
-              borderRadius: BorderRadius.circular(30),
-              boxShadow: [
-                BoxShadow(
-                  color: AppTheme.primaryRose.withValues(alpha: 0.3),
-                  blurRadius: 20,
-                  offset: const Offset(0, 10),
-                ),
-              ],
-            ),
-            child: const Icon(
-              Icons.favorite_rounded,
-              color: Colors.white,
-              size: 60,
-            ),
+          // FlowSense Logo
+          FlowSenseLogo(
+            size: 120,
+            showWordmark: false,
           ).animate(controller: _headerController)
             .scale(begin: const Offset(0.5, 0.5))
             .fadeIn(),

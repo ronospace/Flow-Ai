@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Primary gradient -->
+    <linearGradient id="primaryGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#D946EF;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#FB7185;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#A855F7;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Secondary gradient for inner elements -->
+    <radialGradient id="innerGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#F8BBD9;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#DDD6FE;stop-opacity:0.4" />
+    </radialGradient>
+    
+    <!-- Drop shadow filter -->
+    <filter id="dropshadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#7C3AED" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="512" cy="512" r="480" fill="url(#primaryGradient)" filter="url(#dropshadow)" />
+  
+  <!-- Main flower/cycle design -->
+  <g transform="translate(512, 512)">
+    <!-- Outer petals representing cycle phases -->
+    
+    <!-- Petal 1 (Menstrual) - Top -->
+    <ellipse cx="0" cy="-200" rx="80" ry="140" fill="url(#innerGradient)" transform="rotate(0)" opacity="0.9" />
+    
+    <!-- Petal 2 (Follicular) - Top Right -->  
+    <ellipse cx="141" cy="-141" rx="80" ry="140" fill="url(#innerGradient)" transform="rotate(45)" opacity="0.9" />
+    
+    <!-- Petal 3 (Ovulation) - Right -->
+    <ellipse cx="200" cy="0" rx="80" ry="140" fill="url(#innerGradient)" transform="rotate(90)" opacity="0.9" />
+    
+    <!-- Petal 4 (Luteal) - Bottom Right -->
+    <ellipse cx="141" cy="141" rx="80" ry="140" fill="url(#innerGradient)" transform="rotate(135)" opacity="0.9" />
+    
+    <!-- Petal 5 (Pre-menstrual) - Bottom -->
+    <ellipse cx="0" cy="200" rx="80" ry="140" fill="url(#innerGradient)" transform="rotate(180)" opacity="0.9" />
+    
+    <!-- Petal 6 - Bottom Left -->
+    <ellipse cx="-141" cy="141" rx="80" ry="140" fill="url(#innerGradient)" transform="rotate(225)" opacity="0.9" />
+    
+    <!-- Petal 7 - Left -->
+    <ellipse cx="-200" cy="0" rx="80" ry="140" fill="url(#innerGradient)" transform="rotate(270)" opacity="0.9" />
+    
+    <!-- Petal 8 - Top Left -->
+    <ellipse cx="-141" cy="-141" rx="80" ry="140" fill="url(#innerGradient)" transform="rotate(315)" opacity="0.9" />
+    
+    <!-- Central circle representing unity/AI core -->
+    <circle cx="0" cy="0" r="80" fill="#FEFCFG" opacity="0.95" />
+    
+    <!-- AI data points - small dots -->
+    <circle cx="-30" cy="-30" r="8" fill="#7C3AED" opacity="0.7" />
+    <circle cx="30" cy="-30" r="8" fill="#7C3AED" opacity="0.7" />
+    <circle cx="30" cy="30" r="8" fill="#7C3AED" opacity="0.7" />
+    <circle cx="-30" cy="30" r="8" fill="#7C3AED" opacity="0.7" />
+    
+    <!-- Central AI symbol - abstract flow -->
+    <path d="M -20 -20 Q 0 -40 20 -20 Q 40 0 20 20 Q 0 40 -20 20 Q -40 0 -20 -20 Z" 
+          fill="none" 
+          stroke="#D946EF" 
+          stroke-width="3" 
+          opacity="0.8" />
+  </g>
+  
+  <!-- Outer ring for additional depth -->
+  <circle cx="512" cy="512" r="480" fill="none" stroke="#FEFCFG" stroke-width="8" opacity="0.3" />
+</svg>

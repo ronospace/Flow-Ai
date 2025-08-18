@@ -134,6 +134,9 @@ dev_dependencies:
     sdk: flutter
   integration_test:
     sdk: flutter
+    
+  # App icon generation
+  flutter_launcher_icons: ^0.14.1
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -160,6 +163,8 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/logos/
+    - assets/brand/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
@@ -186,3 +191,22 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+# Flutter Launcher Icons configuration
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "flowsense_current.png"
+  min_sdk_android: 21
+  web:
+    generate: true
+    image_path: "flowsense_current.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: true
+    image_path: "flowsense_current.png"
+    icon_size: 48
+  macos:
+    generate: true
+    image_path: "flowsense_current.png"
