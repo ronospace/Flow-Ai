@@ -45,7 +45,7 @@ class SettingsProvider extends ChangeNotifier {
     await _syncUserDataFromAuth();
   }
   
-  // Sync user data from AuthService with comprehensive data management
+  // Sync user data from AuthService with comprehensive data management and immediate persistence
   Future<void> _syncUserDataFromAuth() async {
     try {
       final appState = AppStateService();
@@ -63,46 +63,76 @@ class SettingsProvider extends ChangeNotifier {
         String? email = userData['email'];
         String? photoURL = userData['photoURL'];
         
-        // Use displayName as primary, fallback to username, then email prefix
+        // Smart name resolution with multiple fallbacks
         String? finalDisplayName = displayName;
-        if ((finalDisplayName == null || finalDisplayName.isEmpty) && username != null && username.isNotEmpty) {
+        
+        // Try displayName first
+        if (finalDisplayName == null || finalDisplayName.isEmpty) {
           finalDisplayName = username;
         }
-        if ((finalDisplayName == null || finalDisplayName.isEmpty) && email != null) {
-          // Extract name from email (before @)
-          finalDisplayName = email.split('@').first;
+        
+        // If still empty, extract from email
+        if (finalDisplayName == null || finalDisplayName.isEmpty) {
+          if (email != null && email.isNotEmpty) {
+            // Extract name from email (before @)
+            final emailParts = email.split('@');
+            if (emailParts.isNotEmpty) {
+              finalDisplayName = emailParts.first;
+              // Capitalize first letter
+              if (finalDisplayName.isNotEmpty) {
+                finalDisplayName = finalDisplayName[0].toUpperCase() + 
+                    finalDisplayName.substring(1).toLowerCase();
+              }
+            }
+          }
         }
         
-        // Update preferences if we have new data
+        // Final fallback
+        if (finalDisplayName == null || finalDisplayName.isEmpty) {
+          finalDisplayName = 'User';
+        }
+        
+        // Always update if we have valid data - be more aggressive about syncing
         bool hasChanges = false;
         
-        if (finalDisplayName != null && finalDisplayName.isNotEmpty && finalDisplayName != _preferences.displayName) {
+        // Update display name
+        if (finalDisplayName.isNotEmpty) {
           _preferences = _preferences.copyWith(displayName: finalDisplayName);
           hasChanges = true;
           debugPrint('✅ Updated display name: $finalDisplayName');
         }
         
-        if (uid != null && uid.isNotEmpty && uid != _preferences.userId) {
+        // Update user ID
+        if (uid != null && uid.isNotEmpty) {
           _preferences = _preferences.copyWith(userId: uid);
           hasChanges = true;
           debugPrint('✅ Updated user ID: $uid');
         }
         
-        // Store additional profile data in user preferences for future use
-        if (hasChanges) {
-          _preferences = _preferences.copyWith(lastUpdated: DateTime.now());
+        // Always mark as updated for proper sync
+        if (hasChanges || _preferences.displayName != finalDisplayName) {
+          _preferences = _preferences.copyWith(
+            lastUpdated: DateTime.now(),
+            displayName: finalDisplayName,
+          );
           
-          // Store additional user metadata
+          // Store comprehensive user metadata for future sessions
           await _storeUserMetadata({
             'email': email,
             'photoURL': photoURL,
             'provider': userData['provider'],
             'profileComplete': userData['profileComplete'] ?? true,
             'lastSync': DateTime.now().toIso8601String(),
+            'username': username,
+            'displayName': finalDisplayName,
+            'uid': uid,
           });
           
-          notifyListeners();
+          debugPrint('📝 User metadata stored: (email, photoURL, provider, profileComplete, lastSync)');
+          
+          // Immediately save and notify
           await _savePreferences();
+          notifyListeners();
           debugPrint('✅ User data sync completed successfully');
         } else {
           debugPrint('ℹ️ No user data changes detected');
@@ -113,6 +143,12 @@ class SettingsProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint('❌ Error syncing user data from auth: $e');
     }
+  }
+  
+  /// Force user data synchronization - called after authentication
+  Future<void> forceUserDataSync() async {
+    debugPrint('🔄 Forcing user data sync...');
+    await _syncUserDataFromAuth();
   }
 
   // Load preferences from SharedPreferences
@@ -347,9 +383,4 @@ class SettingsProvider extends ChangeNotifier {
     return null;
   }
   
-  // Force sync user data (can be called manually)
-  Future<void> forceUserDataSync() async {
-    debugPrint('🔄 Forcing user data sync...');
-    await _syncUserDataFromAuth();
-  }
 }

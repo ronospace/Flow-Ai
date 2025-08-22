@@ -54,6 +54,45 @@ class AuthService {
     return null;
   }
   
+  /// Get comprehensive user data for UI display and persistence
+  Future<Map<String, dynamic>?> getUserData() async {
+    final currentUser = await getCurrentUser();
+    if (currentUser == null) return null;
+    
+    Map<String, dynamic> userData = {};
+    
+    // Handle Firebase User
+    if (currentUser is User) {
+      userData = {
+        'uid': currentUser.uid,
+        'email': currentUser.email,
+        'displayName': currentUser.displayName,
+        'username': currentUser.displayName, // Fallback to displayName
+        'photoURL': currentUser.photoURL,
+        'provider': 'firebase',
+        'createdAt': currentUser.metadata.creationTime?.toIso8601String(),
+        'lastSignIn': currentUser.metadata.lastSignInTime?.toIso8601String(),
+        'profileComplete': currentUser.displayName != null && currentUser.displayName!.isNotEmpty,
+      };
+    } else if (currentUser is LocalUser) {
+      // Handle Local User
+      final localUser = currentUser as LocalUser;
+      userData = {
+        'uid': localUser.uid,
+        'email': localUser.email,
+        'displayName': localUser.displayName,
+        'username': localUser.username ?? localUser.displayName,
+        'photoURL': null,
+        'provider': 'local',
+        'createdAt': localUser.createdAt.toIso8601String(),
+        'lastSignIn': localUser.lastLogin.toIso8601String(),
+        'profileComplete': true, // Local users always have complete profiles
+      };
+    }
+    
+    return userData.isNotEmpty ? userData : null;
+  }
+  
   Future<bool> _hasLocalUser() async {
     // Check if we have a valid local user session
     final isValid = await _localUserService?.isUserSessionValid();
@@ -591,10 +630,6 @@ class AuthService {
     }
   }
 
-  /// Get stored user data
-  Future<Map<String, dynamic>?> getUserData() async {
-    return await _getStoredUserData();
-  }
 
   /// Get last used login method
   String? getLastLoginMethod() {

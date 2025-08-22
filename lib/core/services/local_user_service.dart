@@ -20,7 +20,7 @@ class LocalUserService {
     debugPrint('✅ LocalUserService initialized');
   }
 
-  /// Create a new user account locally
+  /// Create a new user account locally with clean slate data isolation
   Future<LocalAuthResult> createUser({
     required String email,
     required String password,
@@ -38,35 +38,40 @@ class LocalUserService {
         return LocalAuthResult.failure('An account with this email already exists');
       }
 
-      // Create new user
+      // Create new user with completely fresh data - no history
       final userId = _generateUserId();
       final userData = LocalUser(
         uid: userId,
         email: email,
         displayName: displayName,
-        username: username,
+        username: username ?? displayName, // Use displayName as fallback for username
         passwordHash: _hashPassword(password),
         provider: 'local',
         createdAt: DateTime.now(),
         lastLogin: DateTime.now(),
+        lastUpdated: DateTime.now(),
         isActive: true,
         profileData: UserProfileData(
           age: null,
-          cycleLength: 28,
-          lastPeriodDate: null,
-          averageCycleLength: 28,
-          symptoms: [],
-          medications: [],
-          notes: [],
+          cycleLength: 28, // Default cycle length
+          lastPeriodDate: null, // New user - no period history
+          averageCycleLength: 28, // Default average
+          symptoms: [], // No symptoms history
+          medications: [], // No medications history
+          notes: [], // No notes history
         ),
       );
 
-      // Store user
+      // Store user with clean slate data isolation
       await _storeUser(userData);
       await _setCurrentUser(userData);
       await _createUserSession(userData);
-
+      
+      // Clear any existing cycle data for complete data isolation
+      await _clearUserCycleData(userId);
+      
       debugPrint('✅ Local user created successfully: ${userData.email}');
+      debugPrint('✅ Local user profile saved: ${userData.displayName} (${userData.email})');
       return LocalAuthResult.success(userData);
     } catch (e) {
       debugPrint('❌ Local user creation failed: $e');
@@ -74,7 +79,7 @@ class LocalUserService {
     }
   }
 
-  /// Sign in an existing user
+  /// Sign in an existing user with proper data restoration
   Future<LocalAuthResult> signInUser({
     required String email,
     required String password,
@@ -97,13 +102,17 @@ class LocalUserService {
         return LocalAuthResult.failure('Account is deactivated');
       }
 
-      // Update last login
-      final updatedUser = user.copyWith(lastLogin: DateTime.now());
+      // Update last login and preserve user data
+      final updatedUser = user.copyWith(
+        lastLogin: DateTime.now(),
+        lastUpdated: DateTime.now(),
+      );
       await _updateUser(updatedUser);
       await _setCurrentUser(updatedUser);
       await _createUserSession(updatedUser);
 
       debugPrint('✅ Local user signed in successfully: ${updatedUser.email}');
+      debugPrint('✅ User data restored: ${updatedUser.displayName} with ${updatedUser.profileData?.notes?.length ?? 0} notes, cycle data: ${updatedUser.profileData?.lastPeriodDate != null}');
       return LocalAuthResult.success(updatedUser);
     } catch (e) {
       debugPrint('❌ Local user sign in failed: $e');
@@ -256,6 +265,27 @@ class LocalUserService {
   bool _verifyPassword(String password, String hash) {
     return _hashPassword(password) == hash;
   }
+  
+  /// Clear user-specific cycle data for complete data isolation (new users)
+  Future<void> _clearUserCycleData(String userId) async {
+    if (_prefs == null) return;
+    
+    // Clear any cycle-specific data that might exist for this user
+    final keysToRemove = [
+      'cycle_data_$userId',
+      'tracking_data_$userId', 
+      'predictions_$userId',
+      'insights_$userId',
+      'symptoms_history_$userId',
+      'period_history_$userId',
+    ];
+    
+    for (final key in keysToRemove) {
+      await _prefs!.remove(key);
+    }
+    
+    debugPrint('✅ Cleared cycle data for new user: $userId');
+  }
 
   /// Mark onboarding as completed for the current user
   Future<void> setOnboardingCompleted(bool completed) async {
@@ -282,6 +312,7 @@ class LocalUser {
   final String provider;
   final DateTime createdAt;
   final DateTime lastLogin;
+  final DateTime lastUpdated;
   final bool isActive;
   final UserProfileData profileData;
 
@@ -294,6 +325,7 @@ class LocalUser {
     required this.provider,
     required this.createdAt,
     required this.lastLogin,
+    required this.lastUpdated,
     required this.isActive,
     required this.profileData,
   });
@@ -307,6 +339,7 @@ class LocalUser {
     String? provider,
     DateTime? createdAt,
     DateTime? lastLogin,
+    DateTime? lastUpdated,
     bool? isActive,
     UserProfileData? profileData,
   }) {
@@ -319,6 +352,7 @@ class LocalUser {
       provider: provider ?? this.provider,
       createdAt: createdAt ?? this.createdAt,
       lastLogin: lastLogin ?? this.lastLogin,
+      lastUpdated: lastUpdated ?? this.lastUpdated,
       isActive: isActive ?? this.isActive,
       profileData: profileData ?? this.profileData,
     );
@@ -334,6 +368,7 @@ class LocalUser {
       'provider': provider,
       'createdAt': createdAt.toIso8601String(),
       'lastLogin': lastLogin.toIso8601String(),
+      'lastUpdated': lastUpdated.toIso8601String(),
       'isActive': isActive,
       'profileData': profileData.toJson(),
     };
@@ -349,6 +384,7 @@ class LocalUser {
       provider: json['provider'] ?? 'local',
       createdAt: DateTime.parse(json['createdAt'] ?? DateTime.now().toIso8601String()),
       lastLogin: DateTime.parse(json['lastLogin'] ?? DateTime.now().toIso8601String()),
+      lastUpdated: DateTime.parse(json['lastUpdated'] ?? DateTime.now().toIso8601String()),
       isActive: json['isActive'] ?? true,
       profileData: UserProfileData.fromJson(json['profileData'] ?? {}),
     );
