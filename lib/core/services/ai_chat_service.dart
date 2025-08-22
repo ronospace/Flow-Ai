@@ -58,7 +58,7 @@ class AIChatService {
       // Add welcome message
       _addAIMessage(
         _localizations?.aiGreeting.replaceAll('{userName}', userName) ??
-        "Hi ${userName}! 👋 I'm your FlowSense AI assistant. I'm here to help you understand your cycle, provide personalized health insights, and answer any questions about reproductive wellness. How can I help you today?"
+        "Hi ${userName}! 👋 I'm Nova, your FlowSense AI assistant. I'm here to help you understand your cycle, provide personalized health insights, and answer any questions about reproductive wellness. How can I help you today?"
       );
     }
     
@@ -144,6 +144,11 @@ class AIChatService {
     // Predictions and insights
     if (lowerMessage.contains('predict') || lowerMessage.contains('next period') || lowerMessage.contains('when')) {
       return _getPredictionResponse(lowerMessage);
+    }
+
+    // Name-related questions
+    if (lowerMessage.contains('name') || lowerMessage.contains('call you') || lowerMessage.contains('who are you')) {
+      return _getNameResponse(lowerMessage);
     }
 
     // General greeting or thanks
@@ -241,6 +246,16 @@ class AIChatService {
       ];
       return thanks[math.Random().nextInt(thanks.length)];
     }
+  }
+
+  String _getNameResponse(String message) {
+    final responses = [
+      "Hi! I'm Nova ✨ Your personal FlowSense AI assistant. I'm here to help you with all things related to your reproductive health and cycle tracking!",
+      "You can call me Nova! 🌟 I'm your dedicated AI health companion, ready to support you on your wellness journey.",
+      "I'm Nova, your FlowSense AI assistant! 💫 Think of me as your personal health guide - I'm always here to help answer your questions about cycles, symptoms, and reproductive wellness.",
+      "Nice to meet you! I'm Nova ⭐ I'm specifically designed to help you understand and track your menstrual health. What would you like to know?",
+    ];
+    return responses[math.Random().nextInt(responses.length)];
   }
 
   String _getContextualResponse(String message) {

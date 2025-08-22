@@ -6,7 +6,7 @@ import '../models/onboarding_step.dart';
 import '../widgets/onboarding_page.dart';
 import '../widgets/setup_form.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/services/navigation_service.dart';
+import 'package:go_router/go_router.dart';
 import '../../../generated/app_localizations.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -261,12 +261,33 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   Future<void> _completeOnboarding(OnboardingProvider provider) async {
     try {
       await provider.completeOnboarding();
-      await provider.scheduleWelcomeNotification();
+      
+      // Schedule welcome notification safely
+      try {
+        await provider.scheduleWelcomeNotification();
+      } catch (notifError) {
+        debugPrint('Warning: Could not schedule welcome notification: $notifError');
+        // Continue anyway - notification failure shouldn't block completion
+      }
       
       if (mounted) {
-        NavigationService().pushReplacementNamed('/home');
+        // Add a small delay to ensure all services are ready
+        await Future.delayed(const Duration(milliseconds: 100));
+        
+        if (mounted) {
+          try {
+            context.go('/home');
+          } catch (navError) {
+            debugPrint('Navigation error: $navError');
+            // If navigation fails, try replacing current route
+            if (mounted) {
+              context.pushReplacement('/home');
+            }
+          }
+        }
       }
     } catch (e) {
+      debugPrint('Onboarding completion error: $e');
       if (mounted) {
         final localizations = AppLocalizations.of(context);
         ScaffoldMessenger.of(context).showSnackBar(
@@ -304,7 +325,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     if (shouldSkip == true) {
       await provider.skipOnboarding();
       if (mounted) {
-        NavigationService().pushReplacementNamed('/home');
+        context.go('/home');
       }
     }
   }

@@ -12,10 +12,10 @@ import 'core/services/ai_engine.dart';
 import 'core/services/notification_service.dart';
 import 'core/services/admob_service.dart';
 import 'core/services/navigation_service.dart';
-import 'core/services/auth_service.dart';
-import 'core/services/local_user_service.dart';
 import 'core/services/ai_conversation_memory.dart';
 import 'core/services/offline_service.dart';
+import 'core/services/app_state_service.dart';
+import 'core/services/local_user_service.dart';
 import 'features/onboarding/providers/onboarding_provider.dart';
 import 'features/cycle/providers/cycle_provider.dart';
 import 'features/insights/providers/insights_provider.dart';
@@ -28,7 +28,7 @@ void main() async {
   // Initialize only critical services synchronously
   await _initializeCriticalServices();
   
-  runApp(FlowSenseApp());
+  runApp(const CycleAIApp());
   
   // Initialize non-critical services asynchronously after app launch
   _initializeNonCriticalServices();
@@ -36,7 +36,15 @@ void main() async {
 
 Future<void> _initializeCriticalServices() async {
   ImageCacheConfig.configure();
-  // Only initialize absolutely necessary services for app startup
+  
+  // Initialize app state service which coordinates auth and preferences
+  try {
+    await AppStateService().initialize();
+    debugPrint('✅ App State Service initialized');
+  } catch (e) {
+    debugPrint('⚠️ App State Service initialization failed: $e');
+  }
+  
   // System UI overlay style will be set dynamically based on theme
   // This is now handled in the MaterialApp theme configuration
 }
@@ -95,13 +103,10 @@ Future<void> _initializeNavigation() async {
   }
 }
 
+// Auth is now initialized by AppStateService
 Future<void> _initializeAuth() async {
-  try {
-    await AuthService().initialize();
-    debugPrint('🔐 Authentication Service initialized');
-  } catch (e) {
-    debugPrint('Authentication Service initialization failed: $e');
-  }
+  // Skip this since it's already handled by AppStateService
+  debugPrint('🔐 Authentication Service already initialized via AppStateService');
 }
 
 Future<void> _initializeLocalUserService() async {
@@ -134,14 +139,14 @@ Future<void> _initializeOfflineService() async {
 // Helper function to avoid awaiting futures we don't need to wait for
 void unawaited(Future<void> future) {}
 
-class FlowSenseApp extends StatefulWidget {
-  const FlowSenseApp({super.key});
+class CycleAIApp extends StatefulWidget {
+  const CycleAIApp({super.key});
 
   @override
-  State<FlowSenseApp> createState() => _FlowSenseAppState();
+  State<CycleAIApp> createState() => _CycleAIAppState();
 }
 
-class _FlowSenseAppState extends State<FlowSenseApp> {
+class _CycleAIAppState extends State<CycleAIApp> {
   late SettingsProvider settingsProvider;
 
   @override
@@ -187,7 +192,7 @@ class _FlowSenseAppState extends State<FlowSenseApp> {
           );
           
           return MaterialApp.router(
-            title: 'FlowSense',
+            title: 'CycleAI',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme.copyWith(
               scaffoldBackgroundColor: AppTheme.lightBackground,

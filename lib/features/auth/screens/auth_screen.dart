@@ -3,15 +3,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/services/auth_service.dart';
 import '../../../generated/app_localizations.dart';
+import '../../../core/widgets/modern_button.dart';
 import '../widgets/auth_text_field.dart';
 import '../widgets/social_login_button.dart';
 import '../widgets/biometric_button.dart';
-import '../../../core/widgets/flowsense_logo.dart';
+import '../../../core/widgets/cycleai_logo.dart';
+import '../../settings/providers/settings_provider.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -152,8 +153,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       padding: const EdgeInsets.all(40),
       child: Column(
         children: [
-          // FlowSense Logo
-          FlowSenseLogo(
+          // CycleAI Logo
+          CycleAILogo(
             size: 120,
             showWordmark: false,
           ).animate(controller: _headerController)
@@ -164,7 +165,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
           
           // App Name
           Text(
-            'FlowSense',
+            'CycleAI',
             style: theme.textTheme.headlineLarge?.copyWith(
               fontWeight: FontWeight.bold,
               color: AppTheme.darkGrey,
@@ -524,31 +525,42 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   }
   
   Future<void> _handleBiometricLogin() async {
-    if (!_biometricsAvailable) return;
+    if (!_biometricsAvailable) {
+      _showErrorMessage('Biometric authentication is not available on this device');
+      return;
+    }
+    
+    setState(() {
+      _isLoading = true;
+    });
     
     try {
-      final isAuthenticated = await _localAuth.authenticate(
-        localizedReason: 'Please authenticate to access FlowSense',
-        options: const AuthenticationOptions(
-          biometricOnly: true,
-          stickyAuth: true,
-        ),
-      );
+      // Initialize auth service first
+      await _authService.initialize();
       
-      if (isAuthenticated) {
+      final result = await _authService.authenticateWithBiometrics();
+      
+      if (result.isSuccess) {
         HapticFeedback.lightImpact();
-        // Handle successful biometric authentication
-        // You would typically load saved credentials here
         _showSuccessMessage('Biometric authentication successful!');
         await Future.delayed(const Duration(milliseconds: 500));
+        
         // Navigate to main app
         if (mounted) {
           context.go('/home');
         }
+      } else {
+        _showErrorMessage(result.error ?? 'Biometric authentication failed');
       }
     } catch (e) {
       debugPrint('Biometric authentication error: $e');
       _showErrorMessage('Biometric authentication failed. Please try again.');
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
   
@@ -619,6 +631,17 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         _showSuccessMessage('Account created successfully!');
       }
       
+      // Sync user data immediately to ensure username is captured and available
+      try {
+        final settingsProvider = SettingsProvider();
+        await settingsProvider.initializeSettings();
+        // Force an immediate sync to capture fresh auth data
+        await settingsProvider.forceUserDataSync();
+        debugPrint('✅ User settings synced successfully after authentication');
+      } catch (syncError) {
+        debugPrint('⚠️ Warning: Could not sync user settings after auth: $syncError');
+      }
+      
       // Navigate to main app
       await Future.delayed(const Duration(milliseconds: 1000));
       if (mounted) {
@@ -647,23 +670,32 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     });
     
     try {
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      // Initialize auth service first
+      await _authService.initialize();
       
-      if (googleUser != null) {
-        // Handle Google sign in
-        final result = await _authService.signInWithGoogle();
-        if (!result.isSuccess) {
-          throw Exception(result.error);
-        }
+      // Handle Google sign in directly through AuthService
+      final result = await _authService.signInWithGoogle();
+      if (result.isSuccess) {
         _showSuccessMessage('Google sign in successful!');
         
         await Future.delayed(const Duration(milliseconds: 1000));
         if (mounted) {
           context.go('/home');
         }
+      } else {
+        // Handle specific error messages from AuthService
+        final errorMessage = result.error ?? 'Google sign-in failed';
+        
+        // Check if it's a cancellation (show as info, not error)
+        if (errorMessage.toLowerCase().contains('cancelled')) {
+          _showInfoMessage(errorMessage);
+        } else {
+          _showErrorMessage(errorMessage);
+        }
       }
     } catch (e) {
-      _showErrorMessage('Google sign in failed. Please try again.');
+      debugPrint('Google sign-in error: $e');
+      _showErrorMessage('An unexpected error occurred during Google sign-in. Please try again or use email authentication.');
     } finally {
       if (mounted) {
         setState(() {
@@ -681,26 +713,32 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     });
     
     try {
-      final credential = await SignInWithApple.getAppleIDCredential(
-        scopes: [
-          AppleIDAuthorizationScopes.email,
-          AppleIDAuthorizationScopes.fullName,
-        ],
-      );
+      // Initialize auth service first
+      await _authService.initialize();
       
-      // Handle Apple sign in
+      // Handle Apple sign in directly through AuthService
       final result = await _authService.signInWithApple();
-      if (!result.isSuccess) {
-        throw Exception(result.error);
-      }
-      _showSuccessMessage('Apple sign in successful!');
-      
-      await Future.delayed(const Duration(milliseconds: 1000));
-      if (mounted) {
-        context.go('/home');
+      if (result.isSuccess) {
+        _showSuccessMessage('Apple sign in successful!');
+        
+        await Future.delayed(const Duration(milliseconds: 1000));
+        if (mounted) {
+          context.go('/home');
+        }
+      } else {
+        // Handle specific error messages from AuthService
+        final errorMessage = result.error ?? 'Apple sign-in failed';
+        
+        // Check if it's a cancellation (show as info, not error)
+        if (errorMessage.toLowerCase().contains('cancelled')) {
+          _showInfoMessage(errorMessage);
+        } else {
+          _showErrorMessage(errorMessage);
+        }
       }
     } catch (e) {
-      _showErrorMessage('Apple sign in failed. Please try again.');
+      debugPrint('Apple sign-in error: $e');
+      _showErrorMessage('An unexpected error occurred during Apple sign-in. Please try again or use email authentication.');
     } finally {
       if (mounted) {
         setState(() {
@@ -711,8 +749,166 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   }
   
   void _handleForgotPassword() {
-    // Implement forgot password functionality
-    _showInfoMessage('Forgot password functionality will be implemented soon.');
+    // Show forgot password dialog
+    _showForgotPasswordDialog();
+  }
+  
+  void _showForgotPasswordDialog() {
+    final TextEditingController resetEmailController = TextEditingController();
+    bool isResetting = false;
+    
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext dialogContext) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: Container(
+                padding: const EdgeInsets.all(28),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Theme.of(context).cardColor,
+                      Theme.of(context).cardColor.withValues(alpha: 0.9),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(
+                    color: AppTheme.primaryRose.withValues(alpha: 0.2),
+                    width: 1,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppTheme.primaryRose.withValues(alpha: 0.1),
+                      blurRadius: 20,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Header
+                    Container(
+                      width: 64,
+                      height: 64,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: const Icon(
+                        Icons.lock_reset_rounded,
+                        color: Colors.white,
+                        size: 32,
+                      ),
+                    ),
+                    
+                    const SizedBox(height: 20),
+                    
+                    Text(
+                      'Reset Password',
+                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.darkGrey,
+                      ),
+                    ),
+                    
+                    const SizedBox(height: 12),
+                    
+                    Text(
+                      'Enter your email address and we\'ll send you a link to reset your password.',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppTheme.mediumGrey,
+                        height: 1.5,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    
+                    const SizedBox(height: 24),
+                    
+                    // Email Input
+                    AuthTextField(
+                      controller: resetEmailController,
+                      hintText: 'Enter your email',
+                      prefixIcon: Icons.email_outlined,
+                      keyboardType: TextInputType.emailAddress,
+                      enabled: !isResetting,
+                    ),
+                    
+                    const SizedBox(height: 28),
+                    
+                    // Action Buttons
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ModernButton(
+                            text: 'Cancel',
+                            onPressed: isResetting ? null : () {
+                              Navigator.of(dialogContext).pop();
+                            },
+                            type: ModernButtonType.secondary,
+                            size: ModernButtonSize.medium,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: ModernButton(
+                            text: isResetting ? 'Sending...' : 'Send Reset Link',
+                            isLoading: isResetting,
+                            onPressed: isResetting ? null : () async {
+                              // Validate email
+                              if (resetEmailController.text.trim().isEmpty) {
+                                _showErrorMessage('Please enter your email address');
+                                return;
+                              }
+                              
+                              setState(() => isResetting = true);
+                              
+                              try {
+                                // Initialize auth service if needed
+                                await _authService.initialize();
+                                
+                                final result = await _authService.resetPassword(
+                                  resetEmailController.text.trim(),
+                                );
+                                
+                                if (result.isSuccess) {
+                                  Navigator.of(dialogContext).pop();
+                                  _showSuccessMessage(
+                                    'Password reset link sent! Check your email.',
+                                  );
+                                } else {
+                                  throw Exception(result.error);
+                                }
+                              } catch (e) {
+                                _showErrorMessage(
+                                  'Failed to send reset email. Please try again.',
+                                );
+                              } finally {
+                                setState(() => isResetting = false);
+                              }
+                            },
+                            size: ModernButtonSize.medium,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
   }
   
   void _showSuccessMessage(String message) {

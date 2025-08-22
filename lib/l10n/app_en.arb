@@ -1,15 +1,15 @@
 {
   "@@locale": "en",
   "@@last_modified": "2024-12-13T00:00:00.000Z",
-  "appName": "FlowSense",
+  "appName": "ZyraFlow",
   "@appName": {
     "description": "The name of the application"
   },
-  "appTagline": "AI-Powered Period & Cycle Tracking",
+  "appTagline": "Intelligent Period & Cycle Wellness Companion",
   "@appTagline": {
     "description": "The tagline of the application"
   },
-  "appDescription": "Track your menstrual cycle with AI-powered insights and personalized recommendations for better reproductive health.",
+  "appDescription": "Track your menstrual cycle with intelligent insights and personalized recommendations for better reproductive health.",
   "@appDescription": {
     "description": "The description of the application"
   },
@@ -264,7 +264,7 @@
   "learningFromData": "Learning from your data...",
   "improvingAccuracy": "Improving prediction accuracy",
   "adaptingToPatterns": "Adapting to your patterns",
-  "welcome": "Welcome to FlowSense",
+  "welcome": "Welcome to ZyraFlow",
   "getStarted": "Get Started",
   "skipForNow": "Skip for Now",
   "next": "Next",

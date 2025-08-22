@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 
 /// Anonymous user profile for community interactions
 class AnonymousProfile {

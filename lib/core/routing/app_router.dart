@@ -19,6 +19,11 @@ import '../../features/future_plans/screens/future_plans_screen.dart';
 class AppRouter {
   static final GoRouter router = GoRouter(
     initialLocation: '/splash',
+    // Handle navigation and back button behavior
+    redirect: (context, state) {
+      // Allow proper back navigation by not forcing redirects
+      return null;
+    },
     routes: [
       // Onboarding Routes
       GoRoute(
@@ -235,10 +240,25 @@ class _MainShellState extends State<MainShell> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Scaffold(
-      body: widget.child,
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        
+        // Handle back navigation properly
+        final router = GoRouter.of(context);
+        if (router.canPop()) {
+          router.pop();
+        } else {
+          // If can't pop, exit the app or go to a safe route
+          // This prevents the infinite redirect loop
+          return;
+        }
+      },
+      child: Scaffold(
+        body: widget.child,
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
           color: theme.scaffoldBackgroundColor,
           boxShadow: [
             BoxShadow(
@@ -266,6 +286,7 @@ class _MainShellState extends State<MainShell> {
               ),
             ),
           ),
+        ),
         ),
       ),
     );

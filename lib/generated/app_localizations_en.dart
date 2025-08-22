@@ -9,14 +9,14 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appName => 'FlowSense';
+  String get appName => 'ZyraFlow';
 
   @override
-  String get appTagline => 'AI-Powered Period & Cycle Tracking';
+  String get appTagline => 'Intelligent Period & Cycle Wellness Companion';
 
   @override
   String get appDescription =>
-      'Track your menstrual cycle with AI-powered insights and personalized recommendations for better reproductive health.';
+      'Track your menstrual cycle with intelligent insights and personalized recommendations for better reproductive health.';
 
   @override
   String get home => 'Home';
@@ -502,7 +502,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get adaptingToPatterns => 'Adapting to your patterns';
 
   @override
-  String get welcome => 'Welcome to FlowSense';
+  String get welcome => 'Welcome to ZyraFlow';
 
   @override
   String get getStarted => 'Get Started';

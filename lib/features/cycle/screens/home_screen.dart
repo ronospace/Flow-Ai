@@ -13,6 +13,7 @@ import '../providers/cycle_provider.dart';
 import '../../insights/providers/insights_provider.dart';
 import '../../settings/providers/settings_provider.dart';
 import '../../../core/services/cycle_calculation_engine.dart';
+import '../../../core/widgets/coming_soon_widget.dart';
 import 'dart:math' as math;
 
 class HomeScreen extends StatefulWidget {
@@ -399,6 +400,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         
                         _LazyWidget(
                           builder: () => _buildHealthTrendsVisualization(),
+                        ),
+                        const SizedBox(height: 24),
+                        
+                        // Premium Features Coming Soon
+                        _LazyWidget(
+                          builder: () => _buildPremiumFeaturesPreview(),
                         ),
                         
                         // Banner Ad - load last to not impact UI
@@ -2094,6 +2101,379 @@ class HealthScorePainter extends CustomPainter {
   
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+}
+
+extension _PremiumFeaturesMethods on _HomeScreenState {
+  Widget _buildPremiumFeaturesPreview() {
+    final theme = Theme.of(context);
+    
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            theme.cardColor,
+            AppTheme.primaryPurple.withValues(alpha: 0.02),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: AppTheme.primaryPurple.withValues(alpha: 0.1),
+          width: 2,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 24,
+            offset: const Offset(0, 12),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [AppTheme.primaryPurple, AppTheme.primaryRose],
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(
+                  Icons.stars_rounded,
+                  color: Colors.white,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Premium Features Coming Soon',
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.darkGrey,
+                      ),
+                    ),
+                    Text(
+                      'Advanced health intelligence features',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: AppTheme.mediumGrey,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [AppTheme.primaryPurple, AppTheme.primaryRose],
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Text(
+                  'PREVIEW',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          
+          // Premium feature cards grid
+          GridView.count(
+            crossAxisCount: 2,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            childAspectRatio: 0.85,
+            children: [
+              _buildPremiumFeatureCard(
+                'AI Health Coach',
+                'Personal health guidance powered by advanced AI',
+                Icons.psychology_rounded,
+                AppTheme.primaryPurple,
+                'Q2 2024',
+                () => _showComingSoonDialog('AI Health Coach'),
+              ),
+              
+              _buildPremiumFeatureCard(
+                'Partner Sharing',
+                'Securely share cycle data with trusted partners',
+                Icons.favorite_rounded,
+                AppTheme.primaryRose,
+                'Q3 2024',
+                () => _showComingSoonDialog('Partner Integration'),
+              ),
+              
+              _buildPremiumFeatureCard(
+                'Healthcare Portal',
+                'Export data for medical appointments',
+                Icons.medical_services_rounded,
+                AppTheme.secondaryBlue,
+                'Q4 2024',
+                () => _showComingSoonDialog('Healthcare Provider Portal'),
+              ),
+              
+              _buildPremiumFeatureCard(
+                'Advanced Analytics',
+                'Deep insights with predictive modeling',
+                Icons.analytics_rounded,
+                AppTheme.accentMint,
+                'Q1 2024',
+                () => _showComingSoonDialog('Premium Analytics'),
+              ),
+            ],
+          ),
+        ],
+      ),
+    ).animate().fadeIn(delay: 1200.ms).slideY(begin: 0.3, end: 0);
+  }
+  
+  Widget _buildPremiumFeatureCard(
+    String title,
+    String description,
+    IconData icon,
+    Color color,
+    String estimatedDate,
+    VoidCallback onTap,
+  ) {
+    final theme = Theme.of(context);
+    
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Colors.white,
+            color.withValues(alpha: 0.02),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: color.withValues(alpha: 0.2),
+          width: 1,
+        ),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {
+            HapticFeedback.lightImpact();
+            onTap();
+          },
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: color.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        icon,
+                        color: color,
+                        size: 18,
+                      ),
+                    ),
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: AppTheme.warningOrange.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        estimatedDate,
+                        style: TextStyle(
+                          color: AppTheme.warningOrange,
+                          fontSize: 8,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Flexible(
+                  child: Text(
+                    title,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.darkGrey,
+                      fontSize: 12,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Flexible(
+                  flex: 2,
+                  child: Text(
+                    description,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: AppTheme.mediumGrey,
+                      height: 1.2,
+                      fontSize: 10,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.schedule_rounded,
+                      color: color,
+                      size: 12,
+                    ),
+                    const SizedBox(width: 4),
+                    Flexible(
+                      child: Text(
+                        'Coming Soon',
+                        style: TextStyle(
+                          color: color,
+                          fontSize: 9,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      color: AppTheme.mediumGrey,
+                      size: 10,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    ).animate(onPlay: (controller) => controller.repeat())
+      .shimmer(duration: 4000.ms, color: color.withValues(alpha: 0.03))
+      .then(delay: 3000.ms);
+  }
+  
+  void _showComingSoonDialog(String featureName) {
+    Widget comingSoonWidget;
+    
+    switch (featureName) {
+      case 'AI Health Coach':
+        comingSoonWidget = ComingSoonWidgets.aiCoach(
+          context,
+          onNotifyMe: () => _handleNotifyMe(featureName),
+        );
+        break;
+      case 'Partner Integration':
+        comingSoonWidget = ComingSoonWidgets.partnerFeatures(
+          context,
+          onNotifyMe: () => _handleNotifyMe(featureName),
+        );
+        break;
+      case 'Healthcare Provider Portal':
+        comingSoonWidget = ComingSoonWidgets.healthcareProvider(
+          context,
+          onNotifyMe: () => _handleNotifyMe(featureName),
+        );
+        break;
+      case 'Premium Analytics':
+        comingSoonWidget = ComingSoonWidgets.premiumAnalytics(
+          context,
+          onNotifyMe: () => _handleNotifyMe(featureName),
+        );
+        break;
+      default:
+        // Fallback generic coming soon widget
+        comingSoonWidget = ComingSoonWidget(
+          title: featureName,
+          description: 'This advanced feature is currently under development and will be available soon.',
+          icon: Icons.auto_awesome,
+          estimatedDate: 'Q2 2024',
+          onNotifyMe: () => _handleNotifyMe(featureName),
+        );
+    }
+    
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+          insetPadding: const EdgeInsets.all(16),
+          backgroundColor: Colors.transparent,
+          child: Container(
+            constraints: const BoxConstraints(maxHeight: 600),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(24),
+              child: comingSoonWidget,
+            ),
+          ),
+        );
+      },
+    );
+  }
+  
+  void _handleNotifyMe(String featureName) {
+    Navigator.of(context).pop(); // Close the dialog
+    
+    // Show confirmation snackbar
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Icon(
+              Icons.notifications_active,
+              color: Colors.white,
+              size: 20,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                'You\'ll be notified when $featureName is ready!',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: AppTheme.primaryPurple,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        duration: const Duration(seconds: 3),
+      ),
+    );
+    
+    // Here you could also save the notification preference to local storage
+    // or send it to your backend for future notifications
+  }
 }
 
 // Lazy loading widget to improve performance

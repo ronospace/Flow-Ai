@@ -198,6 +198,181 @@ class UserPreferencesService {
     await _prefs.clear();
   }
 
+  // Additional methods for onboarding support
+  Future<void> setDisplayName(String name) async {
+    await setString('display_name', name);
+  }
+
+  String? getDisplayName() {
+    return getString('display_name');
+  }
+
+  Future<void> setPreferredName(String name) async {
+    await setString('preferred_name', name);
+  }
+
+  String? getPreferredName() {
+    return getString('preferred_name');
+  }
+
+  Future<void> setDateOfBirth(DateTime dateOfBirth) async {
+    await setString('date_of_birth', dateOfBirth.toIso8601String());
+  }
+
+  DateTime? getDateOfBirth() {
+    final dateString = getString('date_of_birth');
+    if (dateString == null) return null;
+    try {
+      return DateTime.parse(dateString);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<void> setLastPeriodDate(DateTime date) async {
+    await setString('last_period_date', date.toIso8601String());
+  }
+
+  DateTime? getLastPeriodDate() {
+    final dateString = getString('last_period_date');
+    if (dateString == null) return null;
+    try {
+      return DateTime.parse(dateString);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<void> setIsFirstTimeTracking(bool isFirstTime) async {
+    await setBool('is_first_time_tracking', isFirstTime);
+  }
+
+  bool getIsFirstTimeTracking() {
+    return getBool('is_first_time_tracking', defaultValue: true);
+  }
+
+  Future<void> setPreviousTrackingMethod(String method) async {
+    await setString('previous_tracking_method', method);
+  }
+
+  String? getPreviousTrackingMethod() {
+    return getString('previous_tracking_method');
+  }
+
+  Future<void> setLifestylePreferences(Map<String, dynamic> preferences) async {
+    final jsonString = jsonEncode(preferences);
+    await setString('lifestyle_preferences', jsonString);
+  }
+
+  Map<String, dynamic> getLifestylePreferences() {
+    final jsonString = getString('lifestyle_preferences');
+    if (jsonString == null) return {};
+    try {
+      return jsonDecode(jsonString) as Map<String, dynamic>;
+    } catch (e) {
+      return {};
+    }
+  }
+
+  Future<void> setNotificationPreferences(Map<String, dynamic> preferences) async {
+    final jsonString = jsonEncode(preferences);
+    await setString('notification_preferences', jsonString);
+  }
+
+  Map<String, dynamic> getNotificationPreferences() {
+    final jsonString = getString('notification_preferences');
+    if (jsonString == null) {
+      return {
+        'periodReminder': true,
+        'ovulationReminder': true,
+        'symptomsReminder': true,
+        'wellnessReminder': true,
+      };
+    }
+    try {
+      return jsonDecode(jsonString) as Map<String, dynamic>;
+    } catch (e) {
+      return {
+        'periodReminder': true,
+        'ovulationReminder': true,
+        'symptomsReminder': true,
+        'wellnessReminder': true,
+      };
+    }
+  }
+
+  Future<void> setShareDataForResearch(bool shareData) async {
+    await setBool('share_data_for_research', shareData);
+  }
+
+  bool getShareDataForResearch() {
+    return getBool('share_data_for_research', defaultValue: false);
+  }
+
+  Future<void> setEnableAIInsights(bool enableAI) async {
+    await setBool('enable_ai_insights', enableAI);
+  }
+
+  bool getEnableAIInsights() {
+    return getBool('enable_ai_insights', defaultValue: true);
+  }
+
+  Future<void> setOnboardingData(Map<String, dynamic> data) async {
+    final jsonString = jsonEncode(data);
+    await setString('onboarding_data', jsonString);
+  }
+
+  Map<String, dynamic> getOnboardingData() {
+    final jsonString = getString('onboarding_data');
+    if (jsonString == null) return {};
+    try {
+      return jsonDecode(jsonString) as Map<String, dynamic>;
+    } catch (e) {
+      return {};
+    }
+  }
+
+  bool isOnboardingCompleted() {
+    return onboardingComplete;
+  }
+
+  /// Alias for setOnboardingComplete to support both naming conventions
+  Future<void> setOnboardingCompleted(bool completed) async {
+    await setOnboardingComplete(completed);
+  }
+
+  int getAverageCycleLength() {
+    return getInt('average_cycle_length', defaultValue: 28);
+  }
+
+  Future<void> setAverageCycleLength(int length) async {
+    await setInt('average_cycle_length', length);
+  }
+
+  int getAveragePeriodLength() {
+    return getInt('average_period_length', defaultValue: 5);
+  }
+
+  Future<void> setAveragePeriodLength(int length) async {
+    await setInt('average_period_length', length);
+  }
+
+  List<String> getTrackingGoals() {
+    final jsonString = getString('tracking_goals');
+    if (jsonString == null) return [];
+    try {
+      final list = jsonDecode(jsonString) as List<dynamic>;
+      return list.cast<String>();
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<void> setTrackingGoals(List<String> goals) async {
+    final jsonString = jsonEncode(goals);
+    await setString('tracking_goals', jsonString);
+  }
+
   bool containsKey(String key) {
     return _prefs.containsKey(key);
   }
@@ -206,25 +381,11 @@ class UserPreferencesService {
     return _prefs.getKeys();
   }
   
-  // Additional methods for onboarding
-  Future<void> setOnboardingCompleted(bool completed) async {
-    await setBool(_keyOnboardingComplete, completed);
-  }
-  
   Future<void> setFirstLaunch(bool isFirst) async {
     await setBool('first_launch', isFirst);
   }
-  
-  Future<void> setAverageCycleLength(int length) async {
-    await setInt('average_cycle_length', length);
-  }
-  
-  Future<void> setAveragePeriodLength(int length) async {
-    await setInt('average_period_length', length);
-  }
-  
-  Future<void> setTrackingGoals(List<String> goals) async {
-    final goalsString = goals.join(',');
-    await setString('tracking_goals', goalsString);
+
+  bool getFirstLaunch() {
+    return getBool('first_launch', defaultValue: true);
   }
 }

@@ -28,7 +28,7 @@ enum OnboardingStepType {
 class OnboardingData {
   static List<OnboardingStep> get steps => [
     const OnboardingStep(
-      title: 'Welcome to FlowSense',
+      title: 'Welcome to CycleAI',
       description: 'Your intelligent period and health tracking companion',
       imagePath: 'assets/images/onboarding/welcome.png',
       highlights: [

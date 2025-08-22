@@ -18,44 +18,53 @@ class OnboardingPage extends StatelessWidget {
     final theme = Theme.of(context);
     final localizations = AppLocalizations.of(context);
     
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(24.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Illustration
-          _buildIllustration(theme),
-          const SizedBox(height: 40),
-          
-          // Title
-          Text(
-            step.title,
-            style: theme.textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: theme.colorScheme.onSurface,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          minHeight: MediaQuery.of(context).size.height - 200, // Account for navigation bars
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(height: 20), // Top spacing
+            
+            // Illustration
+            _buildIllustration(theme),
+            const SizedBox(height: 32),
+            
+            // Title
+            Text(
+              step.title,
+              style: theme.textTheme.headlineMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: theme.colorScheme.onSurface,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 16),
-          
-          // Description
-          Text(
-            step.description,
-            style: theme.textTheme.bodyLarge?.copyWith(
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
-              height: 1.5,
+            const SizedBox(height: 16),
+            
+            // Description
+            Text(
+              step.description,
+              style: theme.textTheme.bodyLarge?.copyWith(
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                height: 1.5,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 32),
-          
-          // Highlights
-          _buildHighlights(theme),
-          
-          // Permission-specific content
-          if (step.type == OnboardingStepType.permissions)
-            _buildPermissionContent(theme, localizations),
-        ],
+            const SizedBox(height: 24),
+            
+            // Highlights
+            _buildHighlights(theme),
+            
+            // Permission-specific content
+            if (step.type == OnboardingStepType.permissions)
+              _buildPermissionContent(theme, localizations),
+              
+            const SizedBox(height: 20), // Bottom spacing
+          ],
+        ),
       ),
     );
   }

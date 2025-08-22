@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:provider/provider.dart';
 import '../../../core/services/ai_chat_service.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../generated/app_localizations.dart';
+import '../../settings/providers/settings_provider.dart';
 import 'package:uuid/uuid.dart';
 
 /// Floating AI Chat Widget for insights screen
@@ -26,6 +28,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   final AIChatService _chatService = AIChatService();
   List<types.Message> _messages = [];
   bool _isTyping = false;
+  late TextEditingController _textController;
 
   @override
   void initState() {
@@ -50,13 +53,23 @@ class _FloatingAIChatState extends State<FloatingAIChat>
       parent: _chatController,
       curve: Curves.easeInOutBack,
     );
+    
+    // Initialize text controller
+    _textController = TextEditingController();
 
     // Initialize chat service after first build to get localizations
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final localizations = AppLocalizations.of(context);
+      final settingsProvider = context.read<SettingsProvider>();
+      final userPreferences = settingsProvider.preferences;
+      
+      final userName = userPreferences.displayName ?? 
+                      userPreferences.userId.split('_').last ?? 
+                      'User';
+      
       _chatService.initialize(
-        userId: 'current_user_123',
-        userName: 'User',
+        userId: userPreferences.userId,
+        userName: userName,
         localizations: localizations,
       );
     });
@@ -81,6 +94,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   void dispose() {
     _fabController.dispose();
     _chatController.dispose();
+    _textController.dispose();
     super.dispose();
   }
 
@@ -278,6 +292,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               return Transform.scale(
                 scale: _isExpanded ? 1.0 : (1.0 + _fabAnimation.value * 0.1),
                 child: FloatingActionButton(
+                  heroTag: "ai_chat_main_fab",
                   onPressed: _toggleChat,
                   backgroundColor: AppTheme.primaryRose,
                   elevation: 8,
@@ -330,6 +345,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
   Widget _buildCustomInput() {
     final theme = Theme.of(context);
+    
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -345,6 +361,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
         children: [
           Expanded(
             child: TextField(
+              controller: _textController,
               decoration: InputDecoration(
                 hintText: 'Ask about your cycle, symptoms, or health...', // This could be localized in the future
                 border: OutlineInputBorder(
@@ -361,12 +378,23 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               maxLines: null,
               keyboardType: TextInputType.multiline,
               textCapitalization: TextCapitalization.sentences,
+              onSubmitted: (text) {
+                if (text.trim().isNotEmpty) {
+                  _handleSendPressed(types.PartialText(text: text.trim()));
+                  _textController.clear();
+                }
+              },
             ),
           ),
           const SizedBox(width: 8),
           FloatingActionButton.small(
+            heroTag: "ai_chat_send_fab",
             onPressed: () {
-              // Handle send - this would be connected to the chat input
+              final text = _textController.text.trim();
+              if (text.isNotEmpty) {
+                _handleSendPressed(types.PartialText(text: text));
+                _textController.clear();
+              }
             },
             backgroundColor: AppTheme.primaryRose,
             child: const Icon(

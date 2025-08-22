@@ -16,7 +16,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get appDescription =>
-      'Track your menstrual cycle with AI-powered insights and personalized recommendations for better reproductive health.';
+      'Track your menstrual cycle with intelligent insights and personalized recommendations for better reproductive health.';
 
   @override
   String get home => 'Главная';

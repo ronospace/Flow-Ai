@@ -1,11 +1,11 @@
 {
-    "name": "FlowSense",
-    "short_name": "FlowSense",
+    "name": "CycleAI",
+    "short_name": "CycleAI",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#hexcode",
-    "theme_color": "#hexcode",
-    "description": "FlowSense - AI-Powered Period & Cycle Tracking App",
+    "background_color": "#4F46E5",
+    "theme_color": "#C147E9",
+    "description": "CycleAI - Futuristic AI-Powered Period & Cycle Tracking",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

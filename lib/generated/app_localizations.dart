@@ -174,19 +174,19 @@ abstract class AppLocalizations {
   /// The name of the application
   ///
   /// In en, this message translates to:
-  /// **'FlowSense'**
+  /// **'ZyraFlow'**
   String get appName;
 
   /// The tagline of the application
   ///
   /// In en, this message translates to:
-  /// **'AI-Powered Period & Cycle Tracking'**
+  /// **'Intelligent Period & Cycle Wellness Companion'**
   String get appTagline;
 
   /// The description of the application
   ///
   /// In en, this message translates to:
-  /// **'Track your menstrual cycle with AI-powered insights and personalized recommendations for better reproductive health.'**
+  /// **'Track your menstrual cycle with intelligent insights and personalized recommendations for better reproductive health.'**
   String get appDescription;
 
   /// Home screen navigation label
@@ -1122,7 +1122,7 @@ abstract class AppLocalizations {
   /// No description provided for @welcome.
   ///
   /// In en, this message translates to:
-  /// **'Welcome to FlowSense'**
+  /// **'Welcome to ZyraFlow'**
   String get welcome;
 
   /// No description provided for @getStarted.

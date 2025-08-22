@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../models/user_preferences.dart';
+import '../../../core/services/app_state_service.dart';
 
 class SettingsProvider extends ChangeNotifier {
   static const String _preferencesKey = 'user_preferences';
+  static const String _userMetadataKey = 'user_metadata';
   
   UserPreferences _preferences = UserPreferences(
     userId: 'default_user',
@@ -40,6 +42,77 @@ class SettingsProvider extends ChangeNotifier {
   // Initialize settings from storage
   Future<void> initializeSettings() async {
     await _loadPreferences();
+    await _syncUserDataFromAuth();
+  }
+  
+  // Sync user data from AuthService with comprehensive data management
+  Future<void> _syncUserDataFromAuth() async {
+    try {
+      final appState = AppStateService();
+      if (!appState.isInitialized) {
+        await appState.initialize();
+      }
+      final userData = await appState.auth.getUserData();
+      
+      debugPrint('🔄 Syncing user data: $userData');
+      
+      if (userData != null) {
+        String? displayName = userData['displayName'];
+        String? username = userData['username'];
+        String? uid = userData['uid'];
+        String? email = userData['email'];
+        String? photoURL = userData['photoURL'];
+        
+        // Use displayName as primary, fallback to username, then email prefix
+        String? finalDisplayName = displayName;
+        if ((finalDisplayName == null || finalDisplayName.isEmpty) && username != null && username.isNotEmpty) {
+          finalDisplayName = username;
+        }
+        if ((finalDisplayName == null || finalDisplayName.isEmpty) && email != null) {
+          // Extract name from email (before @)
+          finalDisplayName = email.split('@').first;
+        }
+        
+        // Update preferences if we have new data
+        bool hasChanges = false;
+        
+        if (finalDisplayName != null && finalDisplayName.isNotEmpty && finalDisplayName != _preferences.displayName) {
+          _preferences = _preferences.copyWith(displayName: finalDisplayName);
+          hasChanges = true;
+          debugPrint('✅ Updated display name: $finalDisplayName');
+        }
+        
+        if (uid != null && uid.isNotEmpty && uid != _preferences.userId) {
+          _preferences = _preferences.copyWith(userId: uid);
+          hasChanges = true;
+          debugPrint('✅ Updated user ID: $uid');
+        }
+        
+        // Store additional profile data in user preferences for future use
+        if (hasChanges) {
+          _preferences = _preferences.copyWith(lastUpdated: DateTime.now());
+          
+          // Store additional user metadata
+          await _storeUserMetadata({
+            'email': email,
+            'photoURL': photoURL,
+            'provider': userData['provider'],
+            'profileComplete': userData['profileComplete'] ?? true,
+            'lastSync': DateTime.now().toIso8601String(),
+          });
+          
+          notifyListeners();
+          await _savePreferences();
+          debugPrint('✅ User data sync completed successfully');
+        } else {
+          debugPrint('ℹ️ No user data changes detected');
+        }
+      } else {
+        debugPrint('⚠️ No user data found in AuthService');
+      }
+    } catch (e) {
+      debugPrint('❌ Error syncing user data from auth: $e');
+    }
   }
 
   // Load preferences from SharedPreferences
@@ -247,5 +320,36 @@ class SettingsProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint('Error importing settings: $e');
     }
+  }
+  
+  // Store additional user metadata
+  Future<void> _storeUserMetadata(Map<String, dynamic> metadata) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_userMetadataKey, jsonEncode(metadata));
+      debugPrint('📝 User metadata stored: ${metadata.keys}');
+    } catch (e) {
+      debugPrint('Error storing user metadata: $e');
+    }
+  }
+  
+  // Retrieve user metadata
+  Future<Map<String, dynamic>?> getUserMetadata() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final metadataJson = prefs.getString(_userMetadataKey);
+      if (metadataJson != null) {
+        return Map<String, dynamic>.from(jsonDecode(metadataJson));
+      }
+    } catch (e) {
+      debugPrint('Error retrieving user metadata: $e');
+    }
+    return null;
+  }
+  
+  // Force sync user data (can be called manually)
+  Future<void> forceUserDataSync() async {
+    debugPrint('🔄 Forcing user data sync...');
+    await _syncUserDataFromAuth();
   }
 }

@@ -256,6 +256,20 @@ class LocalUserService {
   bool _verifyPassword(String password, String hash) {
     return _hashPassword(password) == hash;
   }
+
+  /// Mark onboarding as completed for the current user
+  Future<void> setOnboardingCompleted(bool completed) async {
+    if (_prefs != null) {
+      await _prefs!.setBool('onboarding_completed', completed);
+      debugPrint('✅ Onboarding completion status set to $completed');
+    }
+  }
+
+  /// Check if current user has completed onboarding
+  Future<bool> hasCompletedOnboarding() async {
+    if (_prefs == null) return false;
+    return _prefs!.getBool('onboarding_completed') ?? false;
+  }
 }
 
 /// Local User Model

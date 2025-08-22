@@ -5,13 +5,27 @@ import '../../../core/services/real_cycle_service.dart';
 import '../../../core/services/cycle_calculation_engine.dart';
 
 class CycleProvider extends ChangeNotifier {
-  final RealCycleService _realCycleService;
+  RealCycleService? _realCycleService;
   
   RealCycleData? _cycleData;
   CycleInsights? _insights;
   bool _isLoading = false;
+  bool _isInitialized = false;
   
-  CycleProvider() : _realCycleService = RealCycleService(DatabaseService());
+  CycleProvider() {
+    _initializeService();
+  }
+  
+  Future<void> _initializeService() async {
+    try {
+      _realCycleService = RealCycleService(DatabaseService());
+      _isInitialized = true;
+    } catch (e) {
+      debugPrint('CycleProvider initialization failed: $e');
+      // Continue without the service - UI will show fallback content
+      _isInitialized = false;
+    }
+  }
 
   // Getters for compatibility with existing UI
   List<CycleData> get cycles => _cycleData?.recentCycles ?? [];
@@ -30,9 +44,15 @@ class CycleProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // Load real cycle data and predictions
-      _cycleData = await _realCycleService.getRealCycleData();
-      _insights = await _realCycleService.getCycleInsights();
+      if (_realCycleService != null) {
+        // Load real cycle data and predictions
+        _cycleData = await _realCycleService!.getRealCycleData();
+        _insights = await _realCycleService!.getCycleInsights();
+      } else {
+        // Set demo data when service is not available
+        _cycleData = null;
+        _insights = null;
+      }
     } catch (e) {
       debugPrint('Error loading cycle data: $e');
       // Set default empty data on error
@@ -45,9 +65,9 @@ class CycleProvider extends ChangeNotifier {
   }
 
   Future<void> refreshPredictions() async {
-    if (_cycleData != null) {
+    if (_cycleData != null && _realCycleService != null) {
       try {
-        final newPredictions = await _realCycleService.refreshPredictions();
+        final newPredictions = await _realCycleService!.refreshPredictions();
         _cycleData = RealCycleData(
           predictions: newPredictions,
           recentCycles: _cycleData!.recentCycles,
@@ -68,8 +88,13 @@ class CycleProvider extends ChangeNotifier {
     List<String>? symptoms,
     String? notes,
   }) async {
+    if (_realCycleService == null) {
+      debugPrint('CycleService not available');
+      return;
+    }
+    
     try {
-      await _realCycleService.startNewCycle(
+      await _realCycleService!.startNewCycle(
         startDate: startDate,
         initialFlow: initialFlow,
         symptoms: symptoms,
@@ -83,8 +108,13 @@ class CycleProvider extends ChangeNotifier {
   }
   
   Future<void> endCurrentCycle(DateTime endDate) async {
+    if (_realCycleService == null) {
+      debugPrint('CycleService not available');
+      return;
+    }
+    
     try {
-      await _realCycleService.endCurrentCycle(endDate);
+      await _realCycleService!.endCurrentCycle(endDate);
       // Reload data after ending cycle
       await loadCycles();
     } catch (e) {

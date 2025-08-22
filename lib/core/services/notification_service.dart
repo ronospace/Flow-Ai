@@ -102,4 +102,51 @@ class NotificationService {
     if (!_isInitialized) await initialize();
     await _notifications.cancel(id);
   }
+
+  Future<bool> requestPermission() async {
+    if (!_isInitialized) await initialize();
+    
+    // Request permissions for different platforms
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      final androidPlugin = _notifications.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+      if (androidPlugin != null) {
+        return await androidPlugin.requestNotificationsPermission() ?? false;
+      }
+    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
+      final iosPlugin = _notifications.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
+      if (iosPlugin != null) {
+        return await iosPlugin.requestPermissions(
+          alert: true,
+          badge: true,
+          sound: true,
+        ) ?? false;
+      }
+    } else if (defaultTargetPlatform == TargetPlatform.macOS) {
+      final macOSPlugin = _notifications.resolvePlatformSpecificImplementation<MacOSFlutterLocalNotificationsPlugin>();
+      if (macOSPlugin != null) {
+        return await macOSPlugin.requestPermissions(
+          alert: true,
+          badge: true,
+          sound: true,
+        ) ?? false;
+      }
+    }
+    
+    // Default to true for unsupported platforms
+    return true;
+  }
+
+  Future<bool> areNotificationsEnabled() async {
+    if (!_isInitialized) await initialize();
+    
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      final androidPlugin = _notifications.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+      if (androidPlugin != null) {
+        return await androidPlugin.areNotificationsEnabled() ?? false;
+      }
+    }
+    
+    // For other platforms, assume true
+    return true;
+  }
 }

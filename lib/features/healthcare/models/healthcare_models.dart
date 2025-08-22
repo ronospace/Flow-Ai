@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 
 /// Healthcare provider profile and credentials
 class HealthcareProvider {

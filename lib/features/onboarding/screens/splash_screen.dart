@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/services/app_state_service.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -18,9 +19,25 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   _navigateToHome() async {
-    await Future.delayed(const Duration(seconds: 3));
+    // Show splash for a minimum of 2 seconds for branding
+    await Future.delayed(const Duration(seconds: 2));
+    
     if (mounted) {
-      context.go('/home');
+      try {
+        // Determine the appropriate route based on user state
+        final route = await AppStateService().getInitialRoute();
+        debugPrint('🚀 Navigating to: $route');
+        
+        if (mounted) {
+          context.go(route);
+        }
+      } catch (e) {
+        debugPrint('❌ Error determining route: $e');
+        // Fallback to auth screen
+        if (mounted) {
+          context.go('/auth');
+        }
+      }
     }
   }
 
@@ -61,7 +78,7 @@ class _SplashScreenState extends State<SplashScreen> {
               
               // App Name
               const Text(
-                'FlowSense',
+                'CycleAI',
                 style: TextStyle(
                   fontSize: 48,
                   fontWeight: FontWeight.bold,

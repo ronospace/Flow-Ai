@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-/// FlowSense Logo Widget - Provides consistent branding across the app
+/// CycleAI Logo Widget - Provides consistent branding across the app
 /// 
 /// Supports different sizes, colors, and layouts for various use cases:
 /// - App bars and headers
 /// - Splash screens
 /// - Authentication screens
 /// - Settings and about pages
-class FlowSenseLogo extends StatelessWidget {
-  const FlowSenseLogo({
+class CycleAILogo extends StatelessWidget {
+  const CycleAILogo({
     super.key,
     this.size = 100.0,
     this.showWordmark = true,
@@ -20,7 +20,7 @@ class FlowSenseLogo extends StatelessWidget {
   /// The size of the logo (applies to icon portion)
   final double size;
   
-  /// Whether to show the text "FlowSense" alongside the icon
+  /// Whether to show the text "CycleAI" alongside the icon
   final bool showWordmark;
   
   /// Layout arrangement of icon and wordmark
@@ -83,7 +83,7 @@ class FlowSenseLogo extends StatelessWidget {
           // Main flower/cycle design
           Positioned.fill(
             child: CustomPaint(
-              painter: FlowSenseIconPainter(),
+              painter: CycleAIIconPainter(),
             ),
           ),
           
@@ -152,7 +152,7 @@ class FlowSenseLogo extends StatelessWidget {
     final theme = Theme.of(context);
     
     final wordmark = Text(
-      'FlowSense',
+      'CycleAI',
       style: theme.textTheme.headlineMedium?.copyWith(
         fontWeight: FontWeight.w600,
         color: logoColor,
@@ -192,8 +192,8 @@ enum LogoLayout {
   vertical,
 }
 
-/// Custom painter for the FlowSense icon design
-class FlowSenseIconPainter extends CustomPainter {
+/// Custom painter for the CycleAI icon design
+class CycleAIIconPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);

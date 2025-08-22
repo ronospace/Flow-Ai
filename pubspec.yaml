@@ -1,5 +1,5 @@
-name: flowsense
-description: "FlowSense - AI-Powered Period & Cycle Tracking App"
+name: zyraflow
+description: "ZyraFlow - Intelligent Period & Cycle Wellness Companion"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -196,17 +196,18 @@ flutter:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "flowsense_current.png"
+  image_path: "zyraflow_icon.png"
   min_sdk_android: 21
+  remove_alpha_ios: true
   web:
     generate: true
-    image_path: "flowsense_current.png"
-    background_color: "#hexcode"
-    theme_color: "#hexcode"
+    image_path: "zyraflow_icon.png"
+    background_color: "#4F46E5"
+    theme_color: "#C147E9"
   windows:
     generate: true
-    image_path: "flowsense_current.png"
+    image_path: "zyraflow_icon.png"
     icon_size: 48
   macos:
     generate: true
-    image_path: "flowsense_current.png"
+    image_path: "zyraflow_icon.png"

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -6,6 +7,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/models/cycle_data.dart';
 import '../../../core/database/database_service.dart';
 import '../../../generated/app_localizations.dart';
+import '../../../core/widgets/modern_button.dart';
 import '../widgets/flow_intensity_picker.dart';
 import '../widgets/symptom_selector.dart';
 import '../widgets/mood_energy_slider.dart';
@@ -35,6 +37,9 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
   
   final TextEditingController _notesController = TextEditingController();
   bool _hasUnsavedChanges = false;
+  bool _isSaving = false;
+  bool _recentlySaved = false;
+  Timer? _savedStateTimer;
   
   @override
   void initState() {
@@ -59,6 +64,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
   
   @override
   void dispose() {
+    _savedStateTimer?.cancel();
     _tabController.dispose();
     _pageController.dispose();
     _notesController.dispose();
@@ -131,12 +137,23 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
     if (!_hasUnsavedChanges) {
       setState(() {
         _hasUnsavedChanges = true;
+        _recentlySaved = false; // Clear recent saved state when new changes are made
       });
     }
+    // Cancel the saved state timer if it's running
+    _savedStateTimer?.cancel();
   }
   
   Future<void> _saveTrackingData() async {
+    // Prevent multiple simultaneous saves
+    if (_isSaving) return;
+    
     HapticFeedback.lightImpact();
+    
+    // Set loading state
+    setState(() {
+      _isSaving = true;
+    });
     
     try {
       final databaseService = DatabaseService();
@@ -155,43 +172,143 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
         notes: _notes.isNotEmpty ? _notes : null,
       );
       
-      setState(() {
-        _hasUnsavedChanges = false;
-      });
+      // Success haptic feedback
+      HapticFeedback.heavyImpact();
       
-      // Show success feedback with localized message
       if (mounted) {
+        setState(() {
+          _hasUnsavedChanges = false;
+          _isSaving = false;
+          _recentlySaved = true;
+        });
+        
+        // Set timer to clear the "recently saved" state after 3 seconds
+        _savedStateTimer?.cancel();
+        _savedStateTimer = Timer(const Duration(seconds: 3), () {
+          if (mounted) {
+            setState(() {
+              _recentlySaved = false;
+            });
+          }
+        });
+        
+        // Show enhanced success feedback with animation
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Row(
               children: [
-                const Icon(Icons.check_circle, color: Colors.white),
-                const SizedBox(width: 8),
-                Text(localizations.trackingDataSaved(DateFormat('MMM d').format(_selectedDate))),
+                Container(
+                  width: 24,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(
+                    Icons.check_circle,
+                    color: Colors.white,
+                    size: 16,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        localizations.trackingDataSaved(DateFormat('MMM d').format(_selectedDate)),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                        ),
+                      ),
+                      const Text(
+                        'Your data has been securely saved',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.white70,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
             backgroundColor: AppTheme.successGreen,
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            margin: const EdgeInsets.all(16),
+            duration: const Duration(milliseconds: 2500),
+            elevation: 8,
           ),
         );
       }
     } catch (e) {
       // Handle save errors
       debugPrint('Error saving tracking data: $e');
+      
       if (mounted) {
+        setState(() {
+          _isSaving = false;
+        });
+        
+        // Error haptic feedback
+        HapticFeedback.heavyImpact();
+        
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Row(
               children: [
-                const Icon(Icons.error, color: Colors.white),
-                const SizedBox(width: 8),
-                const Text('Failed to save tracking data. Please try again.'),
+                Container(
+                  width: 24,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(
+                    Icons.error_outline,
+                    color: Colors.white,
+                    size: 16,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                const Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Save Failed',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                        ),
+                      ),
+                      Text(
+                        'Please check your connection and try again',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.white70,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.red.shade600,
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            margin: const EdgeInsets.all(16),
+            duration: const Duration(seconds: 4),
+            elevation: 8,
+            action: SnackBarAction(
+              label: 'Retry',
+              textColor: Colors.white,
+              onPressed: _saveTrackingData,
+            ),
           ),
         );
       }
@@ -945,60 +1062,52 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
   }
   
   Widget _buildSaveButton() {
+    String buttonText;
+    IconData buttonIcon;
+    List<Color>? gradientColors;
+    bool isEnabled;
+    bool isLoading = false;
+    
+    if (_isSaving) {
+      buttonText = '⏳ Saving...';
+      buttonIcon = Icons.hourglass_empty_rounded;
+      gradientColors = [AppTheme.mediumGrey, AppTheme.mediumGrey];
+      isEnabled = false;
+      isLoading = true;
+    } else if (_recentlySaved) {
+      buttonText = '🎉 Successfully Saved!';
+      buttonIcon = Icons.celebration_rounded;
+      gradientColors = [AppTheme.successGreen, const Color(0xFF4CAF50)];
+      isEnabled = false;
+    } else if (_hasUnsavedChanges) {
+      buttonText = '✨ Save Tracking Data';
+      buttonIcon = Icons.save_rounded;
+      gradientColors = null; // Use default success gradient
+      isEnabled = true;
+    } else {
+      buttonText = '✅ All Changes Saved!';
+      buttonIcon = Icons.check_circle_rounded;
+      gradientColors = [AppTheme.accentMint, AppTheme.accentMint.withValues(alpha: 0.8)];
+      isEnabled = false;
+    }
+    
     return Container(
       padding: const EdgeInsets.all(20),
-      child: SizedBox(width: double.infinity,
-        height: 56,
-        child: ElevatedButton(
-          onPressed: _hasUnsavedChanges ? _saveTrackingData : null,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: _hasUnsavedChanges ? null : AppTheme.lightGrey,
-            disabledBackgroundColor: AppTheme.lightGrey,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            elevation: _hasUnsavedChanges ? 4 : 0,
-          ).copyWith(
-            backgroundColor: _hasUnsavedChanges 
-                ? WidgetStateProperty.all(null)
-                : WidgetStateProperty.all(AppTheme.lightGrey),
-          ),
-          child: Container(
-            decoration: _hasUnsavedChanges 
-                ? const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
-                    ),
-                    borderRadius: BorderRadius.all(Radius.circular(16)),
-                  )
-                : null,
-            child: Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (_hasUnsavedChanges) ...[
-                    const Icon(
-                      Icons.save,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                  ],
-                  const SizedBox(width: 8),
-                  Text(
-                    _hasUnsavedChanges ? 'Save Tracking Data' : 'No Changes to Save',
-                    style: TextStyle(
-                      color: _hasUnsavedChanges ? Colors.white : AppTheme.mediumGrey,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+        child: ModernButton(
+          text: buttonText,
+          onPressed: isEnabled ? _saveTrackingData : null,
+          icon: buttonIcon,
+          type: ModernButtonType.success,
+          size: ModernButtonSize.large,
+          isExpanded: true,
+          isLoading: isLoading,
+          gradientColors: gradientColors,
         ),
-      ),
-    ).animate().fadeIn(delay: 500.ms).slideY(begin: 0.3, end: 0);
+      ).animate().fadeIn(delay: 500.ms).slideY(begin: 0.3, end: 0),
+    );
   }
   
   Future<void> _showDatePicker() async {

@@ -9,8 +9,25 @@ class OnboardingProvider extends ChangeNotifier {
   int _currentStep = 0;
   bool _isLoading = false;
   final List<OnboardingStep> _steps = OnboardingData.steps;
-  final UserPreferencesService _preferencesService = UserPreferencesService();
+  UserPreferencesService? _preferencesService;
   final NotificationService _notificationService = NotificationService.instance;
+  bool _isInitialized = false;
+
+  OnboardingProvider() {
+    _initializeServices();
+  }
+
+  Future<void> _initializeServices() async {
+    try {
+      _preferencesService = UserPreferencesService();
+      await _preferencesService!.initialize();
+      _isInitialized = true;
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error initializing OnboardingProvider services: $e');
+      _preferencesService = null; // Ensure it's null if initialization failed
+    }
+  }
 
   // Enhanced getters
   bool get isCompleted => _isCompleted;
@@ -26,8 +43,12 @@ class OnboardingProvider extends ChangeNotifier {
     _setLoading(true);
     try {
       _isCompleted = true;
-      await _preferencesService.setOnboardingCompleted(true);
-      await _preferencesService.setFirstLaunch(false);
+      if (_preferencesService != null) {
+        await _preferencesService!.setOnboardingComplete(true);
+        await _preferencesService!.setFirstLaunch(false);
+      } else {
+        debugPrint('PreferencesService not initialized, skipping preferences update');
+      }
     } catch (e) {
       debugPrint('Error completing onboarding: $e');
     } finally {
@@ -63,7 +84,9 @@ class OnboardingProvider extends ChangeNotifier {
       final status = await Permission.notification.request();
       if (status.isGranted) {
         await _notificationService.initialize();
-        await _preferencesService.setNotificationsEnabled(true);
+        if (_preferencesService != null) {
+          await _preferencesService!.setNotificationsEnabled(true);
+        }
         return true;
       }
       return false;
@@ -84,10 +107,14 @@ class OnboardingProvider extends ChangeNotifier {
   }) async {
     _setLoading(true);
     try {
-      await _preferencesService.setAverageCycleLength(averageCycleLength);
-      await _preferencesService.setAveragePeriodLength(averagePeriodLength);
-      await _preferencesService.setTrackingGoals(trackingGoals);
-      await _preferencesService.setReminderSettings(reminderSettings);
+      if (_preferencesService != null) {
+        await _preferencesService!.setAverageCycleLength(averageCycleLength);
+        await _preferencesService!.setAveragePeriodLength(averagePeriodLength);
+        await _preferencesService!.setTrackingGoals(trackingGoals);
+        await _preferencesService!.setReminderSettings(reminderSettings);
+      } else {
+        throw Exception('PreferencesService not initialized');
+      }
     } catch (e) {
       debugPrint('Error saving user preferences: $e');
       rethrow;
@@ -103,8 +130,10 @@ class OnboardingProvider extends ChangeNotifier {
 
   // Reset onboarding (for testing)
   Future<void> resetOnboarding() async {
-    await _preferencesService.setOnboardingCompleted(false);
-    await _preferencesService.setFirstLaunch(true);
+    if (_preferencesService != null) {
+      await _preferencesService!.setOnboardingComplete(false);
+      await _preferencesService!.setFirstLaunch(true);
+    }
     _currentStep = 0;
     _isCompleted = false;
     notifyListeners();
@@ -114,7 +143,7 @@ class OnboardingProvider extends ChangeNotifier {
   Future<void> scheduleWelcomeNotification() async {
     await _notificationService.scheduleNotification(
       id: 0,
-      title: 'Welcome to FlowSense! 🌸',
+      title: 'Welcome to CycleAI! 🌸',
       body: 'Ready to start tracking your health journey?',
       scheduledDate: DateTime.now().add(const Duration(hours: 24)),
     );
