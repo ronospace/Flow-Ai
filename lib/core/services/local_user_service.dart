@@ -266,7 +266,7 @@ class LocalUserService {
     return _hashPassword(password) == hash;
   }
   
-  /// Clear user-specific cycle data for complete data isolation (new users)
+  /// Clear user-specific cycle data and AI conversation data for complete data isolation (new users)
   Future<void> _clearUserCycleData(String userId) async {
     if (_prefs == null) return;
     
@@ -278,13 +278,19 @@ class LocalUserService {
       'insights_$userId',
       'symptoms_history_$userId',
       'period_history_$userId',
+      // Clear AI conversation data for complete user isolation
+      'ai_conversation_history_$userId',
+      'ai_user_preferences_$userId', 
+      'ai_topics_interest_$userId',
+      'ai_frequent_questions_$userId',
+      'ai_personalized_insights_$userId',
     ];
     
     for (final key in keysToRemove) {
       await _prefs!.remove(key);
     }
     
-    debugPrint('✅ Cleared cycle data for new user: $userId');
+    debugPrint('✅ Cleared cycle data and AI conversation data for new user: $userId');
   }
 
   /// Mark onboarding as completed for the current user

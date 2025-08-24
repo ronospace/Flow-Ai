@@ -109,7 +109,7 @@ class _FuturePlansScreenState extends State<FuturePlansScreen>
       ),
       ComingSoonCard(
         title: 'Telehealth Integration',
-        description: 'Direct consultations with healthcare providers using your FlowSense data.',
+        description: 'Direct consultations with healthcare providers using your ZyraFlow data.',
         icon: Icons.video_call_outlined,
         gradientColors: const [Color(0xFF3F51B5), Color(0xFF9C27B0)],
         eta: 'Q3 2025',
@@ -211,7 +211,7 @@ class _FuturePlansScreenState extends State<FuturePlansScreen>
                         ),
                         SizedBox(height: 8),
                         Text(
-                          'Discover what\'s coming next in FlowSense',
+                          'Discover what\'s coming next in ZyraFlow',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,
@@ -285,15 +285,20 @@ class _FuturePlansScreenState extends State<FuturePlansScreen>
           
           // Features Grid
           SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            sliver: SliverGrid(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 1,
-                childAspectRatio: 2.2,
-                crossAxisSpacing: 8,
-                mainAxisSpacing: 8,
+            padding: const EdgeInsets.all(16),
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final features = _getFilteredFeatures();
+                  if (index >= features.length) return null;
+                  
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: features[index],
+                  );
+                },
+                childCount: _getFilteredFeatures().length,
               ),
-              delegate: SliverChildListDelegate(_getFilteredFeatures()),
             ),
           ),
           
@@ -326,7 +331,7 @@ class _FuturePlansScreenState extends State<FuturePlansScreen>
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'We\'d love to hear your feature requests and ideas for the future of FlowSense.',
+                    'We\'d love to hear your feature requests and ideas for the future of ZyraFlow.',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 14,

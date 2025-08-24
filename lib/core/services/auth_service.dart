@@ -173,7 +173,7 @@ class AuthService {
       }
 
       final bool isAuthenticated = await _localAuth!.authenticate(
-        localizedReason: 'Please authenticate to access FlowSense',
+        localizedReason: 'Please authenticate to access ZyraFlow',
         options: const AuthenticationOptions(
           biometricOnly: true,
           stickyAuth: true,
