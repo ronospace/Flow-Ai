@@ -177,7 +177,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.2),
+                          color: theme.shadowColor.withValues(alpha: 0.2),
                           blurRadius: 20,
                           spreadRadius: 5,
                           offset: const Offset(0, 8),
@@ -204,12 +204,12 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                                 width: 40,
                                 height: 40,
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withValues(alpha: 0.2),
+                                  color: theme.colorScheme.onPrimary.withValues(alpha: 0.2),
                                   borderRadius: BorderRadius.circular(20),
                                 ),
-                                child: const Icon(
+                                child: Icon(
                                   Icons.psychology,
-                                  color: Colors.white,
+                                  color: theme.colorScheme.onPrimary,
                                   size: 20,
                                 ),
                               ),
@@ -221,14 +221,14 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                                     Text(
                                       'FlowSense AI Assistant',
                                       style: theme.textTheme.titleMedium?.copyWith(
-                                        color: Colors.white,
+                                        color: theme.colorScheme.onPrimary,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                     Text(
                                       'Ask me anything about your health', // This could be localized in the future
                                       style: theme.textTheme.bodySmall?.copyWith(
-                                        color: Colors.white.withValues(alpha: 0.8),
+                                        color: theme.colorScheme.onPrimary.withValues(alpha: 0.8),
                                       ),
                                     ),
                                   ],
@@ -236,9 +236,9 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                               ),
                               IconButton(
                                 onPressed: _toggleChat,
-                                icon: const Icon(
+                                icon: Icon(
                                   Icons.close,
-                                  color: Colors.white,
+                                  color: theme.colorScheme.onPrimary,
                                 ),
                               ),
                             ],
@@ -299,17 +299,17 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   child: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 200),
                     child: _isExpanded
-                        ? const Icon(
+                        ? Icon(
                             Icons.close,
-                            color: Colors.white,
-                            key: ValueKey('close'),
+                            color: theme.colorScheme.onPrimary,
+                            key: const ValueKey('close'),
                           )
                         : Stack(
                             key: const ValueKey('chat'),
                             children: [
-                              const Icon(
+                              Icon(
                                 Icons.psychology,
-                                color: Colors.white,
+                                color: theme.colorScheme.onPrimary,
                               ),
                               if (!_isExpanded)
                                 Positioned(
@@ -322,7 +322,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                                       color: AppTheme.successGreen,
                                       borderRadius: BorderRadius.circular(6),
                                       border: Border.all(
-                                        color: Colors.white,
+                                        color: theme.colorScheme.onPrimary,
                                         width: 2,
                                       ),
                                     ),
@@ -397,9 +397,9 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               }
             },
             backgroundColor: AppTheme.primaryRose,
-            child: const Icon(
+            child: Icon(
               Icons.send,
-              color: Colors.white,
+              color: theme.colorScheme.onPrimary,
               size: 16,
             ),
           ),

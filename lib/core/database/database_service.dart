@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -503,8 +504,8 @@ class DatabaseService {
   CycleData _cycleFromMap(Map<String, dynamic> map) {
     return CycleData(
       id: map['id'],
-      startDate: DateTime.parse(map['start_date']),
-      endDate: map['end_date'] != null ? DateTime.parse(map['end_date']) : null,
+      startDate: _parseDateTime(map['start_date']),
+      endDate: map['end_date'] != null ? _parseDateTime(map['end_date']) : null,
       length: map['length'],
       flowIntensity: FlowIntensity.values.firstWhere(
         (e) => e.name == map['flow_intensity'],
@@ -517,8 +518,8 @@ class DatabaseService {
       energy: map['energy']?.toDouble(),
       pain: map['pain']?.toDouble(),
       notes: map['notes'],
-      createdAt: DateTime.parse(map['created_at']),
-      updatedAt: DateTime.parse(map['updated_at']),
+      createdAt: _parseDateTime(map['created_at']),
+      updatedAt: _parseDateTime(map['updated_at']),
     );
   }
 
@@ -545,6 +546,52 @@ class DatabaseService {
     return map;
   }
 
+  /// Helper method to parse DateTime from various formats (String, Timestamp, DateTime)
+  DateTime _parseDateTime(dynamic dateValue) {
+    if (dateValue == null) {
+      return DateTime.now();
+    }
+    
+    if (dateValue is DateTime) {
+      return dateValue;
+    }
+    
+    if (dateValue is String) {
+      try {
+        return DateTime.parse(dateValue);
+      } catch (e) {
+        debugPrint('Error parsing date string: $dateValue, error: $e');
+        return DateTime.now();
+      }
+    }
+    
+    // Handle Firestore Timestamp
+    if (dateValue.runtimeType.toString() == 'Timestamp') {
+      try {
+        // Access toDate() method via reflection-like approach
+        final timestamp = dateValue as dynamic;
+        return timestamp.toDate() as DateTime;
+      } catch (e) {
+        debugPrint('Error parsing Timestamp: $dateValue, error: $e');
+        return DateTime.now();
+      }
+    }
+    
+    // Handle milliseconds since epoch
+    if (dateValue is int) {
+      try {
+        return DateTime.fromMillisecondsSinceEpoch(dateValue);
+      } catch (e) {
+        debugPrint('Error parsing timestamp: $dateValue, error: $e');
+        return DateTime.now();
+      }
+    }
+    
+    // Fallback
+    debugPrint('Unknown date format: ${dateValue.runtimeType}, value: $dateValue');
+    return DateTime.now();
+  }
+  
   // ===== DATABASE MANAGEMENT =====
 
   Future<void> close() async {

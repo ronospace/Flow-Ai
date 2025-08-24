@@ -107,17 +107,17 @@ class _InsightsScreenState extends State<InsightsScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'AI Insights',
-                  style: theme.textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: AppTheme.darkGrey,
-                  ),
-                ).animate().fadeIn().slideX(begin: -0.3, end: 0),
+                  Text(
+                    'AI Insights',
+                    style: theme.textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: theme.colorScheme.onSurface,
+                    ),
+                  ).animate().fadeIn().slideX(begin: -0.3, end: 0),
                 Text(
                   'Powered by machine learning',
                   style: theme.textTheme.bodyLarge?.copyWith(
-                    color: AppTheme.mediumGrey,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
                 ).animate().fadeIn(delay: 100.ms),
               ],
@@ -165,14 +165,15 @@ class _InsightsScreenState extends State<InsightsScreen>
   }
 
   Widget _buildTimePeriodSelector() {
+    final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.9),
+        color: theme.colorScheme.surface.withValues(alpha: 0.9),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
+            color: theme.shadowColor.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -208,7 +209,7 @@ class _InsightsScreenState extends State<InsightsScreen>
                   period['label'],
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: isSelected ? Colors.white : AppTheme.mediumGrey,
+                    color: isSelected ? Colors.white : theme.colorScheme.onSurface.withValues(alpha: 0.7),
                     fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                     fontSize: 14,
                   ),
@@ -222,14 +223,15 @@ class _InsightsScreenState extends State<InsightsScreen>
   }
 
   Widget _buildTabBar() {
+    final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.9),
+        color: theme.colorScheme.surface.withValues(alpha: 0.9),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
+            color: theme.shadowColor.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -245,7 +247,7 @@ class _InsightsScreenState extends State<InsightsScreen>
         ),
         dividerColor: Colors.transparent,
         labelColor: Colors.white,
-        unselectedLabelColor: AppTheme.mediumGrey,
+        unselectedLabelColor: theme.colorScheme.onSurface.withValues(alpha: 0.7),
         labelStyle: const TextStyle(
           fontWeight: FontWeight.w600,
           fontSize: 14,
@@ -312,7 +314,7 @@ class _InsightsScreenState extends State<InsightsScreen>
                 'AI Insights',
                 style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppTheme.darkGrey,
+                  color: theme.colorScheme.onSurface,
                 ),
               ).animate().fadeIn(delay: 200.ms),
               

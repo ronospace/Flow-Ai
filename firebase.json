@@ -1,0 +1,55 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "zyraflow-production",
+          "appId": "1:1009671565006:android:67dcc937b380eff90e6a9f",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "zyraflow-production",
+          "appId": "1:1009671565006:ios:8dbd46fa23d21e3c0e6a9f",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "macos": {
+        "default": {
+          "projectId": "zyraflow-production",
+          "appId": "1:1009671565006:ios:5a9a268d9ec73b940e6a9f",
+          "uploadDebugSymbols": false,
+          "fileOutput": "macos/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "zyraflow-production",
+          "configurations": {
+            "android": "1:1009671565006:android:67dcc937b380eff90e6a9f",
+            "ios": "1:1009671565006:ios:8dbd46fa23d21e3c0e6a9f",
+            "macos": "1:1009671565006:ios:5a9a268d9ec73b940e6a9f",
+            "web": "1:1009671565006:web:7171b688664478ba0e6a9f",
+            "windows": "1:1009671565006:web:28599e0ffd9e17340e6a9f"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

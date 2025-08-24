@@ -144,7 +144,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                   partnerService.hasPartner ? 'Partner Connection' : 'Connect with Partner',
                   style: theme.textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: AppTheme.darkGrey,
+                    color: theme.colorScheme.onSurface,
                   ),
                 ),
                 centerTitle: true,
@@ -160,7 +160,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
             onPressed: () => _showPartnerSettings(context, partnerService),
             icon: Icon(
               Icons.settings,
-              color: AppTheme.mediumGrey,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
             ),
           ),
       ],
@@ -221,7 +221,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                             decoration: BoxDecoration(
-                              color: isConnected ? AppTheme.successGreen.withValues(alpha: 0.1) : AppTheme.warningOrange.withValues(alpha: 0.1),
+                              color: isConnected ? AppTheme.sweetPeach.withValues(alpha: 0.15) : AppTheme.warningOrange.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Row(
@@ -231,7 +231,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                                   width: 8,
                                   height: 8,
                                   decoration: BoxDecoration(
-                                    color: isConnected ? AppTheme.successGreen : AppTheme.warningOrange,
+                                    color: isConnected ? AppTheme.sweetPeach : AppTheme.warningOrange,
                                     shape: BoxShape.circle,
                                   ),
                                 ),
@@ -239,7 +239,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                                 Text(
                                   isConnected ? 'Connected' : 'Reconnecting',
                                   style: TextStyle(
-                                    color: isConnected ? AppTheme.successGreen : AppTheme.warningOrange,
+                                    color: isConnected ? AppTheme.sweetPeach : AppTheme.warningOrange,
                                     fontSize: 12,
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -301,7 +301,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
         ),
         shape: BoxShape.circle,
         border: Border.all(
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           width: 3,
         ),
         boxShadow: [
@@ -326,6 +326,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
   }
 
   Widget _buildConnectionStat(String label, String value, IconData icon, Color color) {
+    final theme = Theme.of(context);
     return Column(
       children: [
         Icon(icon, color: color, size: 20),
@@ -342,7 +343,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
           label,
           style: TextStyle(
             fontSize: 12,
-            color: AppTheme.mediumGrey,
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
           ),
         ),
       ],
@@ -413,13 +414,14 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
   }
 
   Widget _buildActionCard(_ActionButton action) {
+    final theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Colors.white,
+            theme.cardColor,
             action.color.withValues(alpha: 0.05),
           ],
         ),
@@ -463,10 +465,10 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                 const Spacer(),
                 Text(
                   action.title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: AppTheme.darkGrey,
+                    color: theme.colorScheme.onSurface,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -474,7 +476,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                   action.subtitle,
                   style: TextStyle(
                     fontSize: 12,
-                    color: AppTheme.mediumGrey,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
                 ),
               ],
@@ -540,7 +542,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
             'Connect with Your Partner',
             style: theme.textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.bold,
-              color: AppTheme.darkGrey,
+              color: theme.colorScheme.onSurface,
             ),
           ).animate().fadeIn(delay: 200.ms),
           
@@ -550,7 +552,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
             'Share your cycle journey together.\nGet support, insights, and stay connected.',
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyLarge?.copyWith(
-              color: AppTheme.mediumGrey,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
               height: 1.5,
             ),
           ).animate().fadeIn(delay: 400.ms),

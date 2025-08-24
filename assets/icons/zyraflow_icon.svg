@@ -1,0 +1,79 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background with gradient -->
+  <defs>
+    <!-- Main background gradient -->
+    <radialGradient id="backgroundGradient" cx="50%" cy="30%" r="80%">
+      <stop offset="0%" style="stop-color:#FFB6C1;stop-opacity:1" />
+      <stop offset="40%" style="stop-color:#DDA0DD;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FF9A56;stop-opacity:1" />
+    </radialGradient>
+    
+    <!-- First arc gradient (Rose to Purple) -->
+    <linearGradient id="arc1Gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E91E63;stop-opacity:0.9" />
+      <stop offset="50%" style="stop-color:#9C27B0;stop-opacity:0.95" />
+      <stop offset="100%" style="stop-color:#673AB7;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Second arc gradient (Purple to Mint) -->
+    <linearGradient id="arc2Gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#673AB7;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#4ECDC4;stop-opacity:0.95" />
+      <stop offset="100%" style="stop-color:#26C6DA;stop-opacity:0.9" />
+    </linearGradient>
+    
+    <!-- Droplet gradient -->
+    <radialGradient id="dropletGradient" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:0.3" />
+      <stop offset="40%" style="stop-color:#E91E63;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#C62828;stop-opacity:1" />
+    </radialGradient>
+    
+    <!-- Shadow filter -->
+    <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.15"/>
+    </filter>
+    
+    <!-- Glow filter -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="512" cy="512" r="480" fill="url(#backgroundGradient)" />
+  
+  <!-- First Arc (flowing from top-left) -->
+  <path d="M 200 350 Q 350 200, 550 280 Q 750 360, 824 580 Q 780 750, 600 800 Q 400 750, 350 550" 
+        fill="none" 
+        stroke="url(#arc1Gradient)" 
+        stroke-width="45" 
+        stroke-linecap="round"
+        filter="url(#softShadow)"
+        opacity="0.85" />
+  
+  <!-- Second Arc (flowing from bottom-right, intersecting) -->
+  <path d="M 824 674 Q 674 824, 474 744 Q 274 664, 200 444 Q 244 274, 424 224 Q 624 274, 674 474" 
+        fill="none" 
+        stroke="url(#arc2Gradient)" 
+        stroke-width="45" 
+        stroke-linecap="round"
+        filter="url(#softShadow)"
+        opacity="0.85" />
+  
+  <!-- Intersection highlight (where arcs meet) -->
+  <circle cx="512" cy="512" r="25" fill="url(#dropletGradient)" opacity="0.6" filter="url(#glow)" />
+  
+  <!-- Main droplet at intersection -->
+  <path d="M 512 480 Q 490 500, 490 520 Q 490 545, 512 545 Q 534 545, 534 520 Q 534 500, 512 480 Z" 
+        fill="url(#dropletGradient)" 
+        filter="url(#softShadow)" />
+  
+  <!-- Subtle highlight on droplet -->
+  <ellipse cx="506" cy="508" rx="8" ry="12" fill="#FFFFFF" opacity="0.4" />
+  
+</svg>

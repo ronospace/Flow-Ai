@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'generated/app_localizations.dart';
 
 import 'core/theme/app_theme.dart';
@@ -28,13 +30,23 @@ void main() async {
   // Initialize only critical services synchronously
   await _initializeCriticalServices();
   
-  runApp(const CycleAIApp());
+  runApp(const ZyraFlowApp());
   
   // Initialize non-critical services asynchronously after app launch
   _initializeNonCriticalServices();
 }
 
 Future<void> _initializeCriticalServices() async {
+  // Initialize Firebase first - required for all Firebase services
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    debugPrint('🔥 Firebase initialized successfully');
+  } catch (e) {
+    debugPrint('⚠️ Firebase initialization failed: $e');
+  }
+  
   ImageCacheConfig.configure();
   
   // Initialize app state service which coordinates auth and preferences
@@ -139,14 +151,14 @@ Future<void> _initializeOfflineService() async {
 // Helper function to avoid awaiting futures we don't need to wait for
 void unawaited(Future<void> future) {}
 
-class CycleAIApp extends StatefulWidget {
-  const CycleAIApp({super.key});
+class ZyraFlowApp extends StatefulWidget {
+  const ZyraFlowApp({super.key});
 
   @override
-  State<CycleAIApp> createState() => _CycleAIAppState();
+  State<ZyraFlowApp> createState() => _ZyraFlowAppState();
 }
 
-class _CycleAIAppState extends State<CycleAIApp> {
+class _ZyraFlowAppState extends State<ZyraFlowApp> {
   late SettingsProvider settingsProvider;
 
   @override
@@ -192,7 +204,7 @@ class _CycleAIAppState extends State<CycleAIApp> {
           );
           
           return MaterialApp.router(
-            title: 'CycleAI',
+            title: 'ZyraFlow',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme.copyWith(
               scaffoldBackgroundColor: AppTheme.lightBackground,

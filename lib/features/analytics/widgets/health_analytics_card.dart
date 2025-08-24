@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../../../core/services/analytics_service.dart';
+import '../../../core/theme/app_theme.dart';
 
 class HealthAnalyticsCard extends StatelessWidget {
   final HealthAnalytics analytics;
@@ -38,7 +39,7 @@ class HealthAnalyticsCard extends StatelessWidget {
             children: [
               Icon(
                 Icons.local_hospital,
-                color: Colors.green,
+                color: AppTheme.successGreen,
                 size: 24,
               ),
               const SizedBox(width: 12),
@@ -78,7 +79,7 @@ class HealthAnalyticsCard extends StatelessWidget {
                   'Mood',
                   analytics.moodTrend,
                   Icons.mood,
-                  Colors.purple,
+                  AppTheme.primaryPurple,
                   theme,
                 ),
               ),
@@ -88,7 +89,7 @@ class HealthAnalyticsCard extends StatelessWidget {
                   'Energy',
                   analytics.energyTrend,
                   Icons.battery_charging_full,
-                  Colors.orange,
+                  AppTheme.warningOrange,
                   theme,
                 ),
               ),
@@ -102,7 +103,7 @@ class HealthAnalyticsCard extends StatelessWidget {
                   'Sleep',
                   analytics.sleepTrend,
                   Icons.bed,
-                  Colors.blue,
+                  AppTheme.secondaryBlue,
                   theme,
                 ),
               ),
@@ -385,7 +386,7 @@ class HealthAnalyticsCard extends StatelessWidget {
                 LineChartBarData(
                   spots: _generateMoodSpots(),
                   isCurved: true,
-                  color: Colors.purple,
+                  color: AppTheme.primaryPurple,
                   barWidth: 2,
                   isStrokeCapRound: true,
                   dotData: FlDotData(show: false),
@@ -394,7 +395,7 @@ class HealthAnalyticsCard extends StatelessWidget {
                 LineChartBarData(
                   spots: _generateEnergySpots(),
                   isCurved: true,
-                  color: Colors.orange,
+                  color: AppTheme.warningOrange,
                   barWidth: 2,
                   isStrokeCapRound: true,
                   dotData: FlDotData(show: false),
@@ -403,7 +404,7 @@ class HealthAnalyticsCard extends StatelessWidget {
                 LineChartBarData(
                   spots: _generateSleepSpots(),
                   isCurved: true,
-                  color: Colors.blue,
+                  color: AppTheme.secondaryBlue,
                   barWidth: 2,
                   isStrokeCapRound: true,
                   dotData: FlDotData(show: false),
@@ -416,9 +417,9 @@ class HealthAnalyticsCard extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _buildLegendItem('Mood', Colors.purple, theme),
-            _buildLegendItem('Energy', Colors.orange, theme),
-            _buildLegendItem('Sleep', Colors.blue, theme),
+            _buildLegendItem('Mood', AppTheme.primaryPurple, theme),
+            _buildLegendItem('Energy', AppTheme.warningOrange, theme),
+            _buildLegendItem('Sleep', AppTheme.secondaryBlue, theme),
           ],
         ),
       ],
@@ -476,9 +477,9 @@ class HealthAnalyticsCard extends StatelessWidget {
   }
 
   Color _getHealthScoreColor(double score) {
-    if (score >= 80) return Colors.green;
-    if (score >= 60) return Colors.orange;
-    return Colors.red;
+    if (score >= 80) return AppTheme.successGreen;
+    if (score >= 60) return AppTheme.warningOrange;
+    return AppTheme.errorRed;
   }
 
   String _getHealthScoreLabel(double score) {
@@ -502,11 +503,11 @@ class HealthAnalyticsCard extends StatelessWidget {
   Color _getTrendColor(TrendDirection direction) {
     switch (direction) {
       case TrendDirection.improving:
-        return Colors.green;
+        return AppTheme.successGreen;
       case TrendDirection.declining:
-        return Colors.red;
+        return AppTheme.errorRed;
       case TrendDirection.stable:
-        return Colors.grey;
+        return AppTheme.mediumGrey;
     }
   }
 

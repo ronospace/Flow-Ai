@@ -78,7 +78,7 @@ class _SplashScreenState extends State<SplashScreen> {
               
               // App Name
               const Text(
-                'CycleAI',
+                'ZyraFlow',
                 style: TextStyle(
                   fontSize: 48,
                   fontWeight: FontWeight.bold,
@@ -91,7 +91,7 @@ class _SplashScreenState extends State<SplashScreen> {
               
               // Tagline
               const Text(
-                'AI-Powered Period Tracking',
+                'AI-Powered Menstrual Health',
                 style: TextStyle(
                   fontSize: 18,
                   color: Colors.white70,

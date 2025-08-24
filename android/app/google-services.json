@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1009671565006",
+    "project_id": "zyraflow-production",
+    "storage_bucket": "zyraflow-production.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1009671565006:android:67dcc937b380eff90e6a9f",
+        "android_client_info": {
+          "package_name": "com.zyraflow.zyraflow"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "REMOVED_GOOGLE_API_KEY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

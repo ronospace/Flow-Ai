@@ -31,11 +31,11 @@ class AuthTextField extends StatelessWidget {
     
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
+            color: theme.shadowColor.withValues(alpha: 0.08),
             blurRadius: 15,
             offset: const Offset(0, 4),
           ),
@@ -49,12 +49,12 @@ class AuthTextField extends StatelessWidget {
         onChanged: onChanged,
         style: theme.textTheme.bodyMedium?.copyWith(
           fontSize: 16,
-          color: AppTheme.darkGrey,
+          color: theme.colorScheme.onSurface,
         ),
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: TextStyle(
-            color: AppTheme.mediumGrey,
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
             fontSize: 16,
           ),
           prefixIcon: Container(
@@ -111,7 +111,7 @@ class AuthTextField extends StatelessWidget {
             ),
           ),
           filled: true,
-          fillColor: enabled ? Colors.white : AppTheme.lightGrey.withValues(alpha: 0.3),
+          fillColor: enabled ? theme.colorScheme.surface : theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 20,
             vertical: 18,

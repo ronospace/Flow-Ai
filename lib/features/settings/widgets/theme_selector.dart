@@ -30,7 +30,7 @@ class ThemeSelector extends StatelessWidget {
             height: 4,
             margin: const EdgeInsets.only(top: 12),
             decoration: BoxDecoration(
-              color: theme.dividerColor,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -138,7 +138,7 @@ class ThemeSelector extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         border: isSelected 
             ? Border.all(color: AppTheme.primaryRose, width: 2)
-            : Border.all(color: theme.dividerColor),
+            : Border.all(color: theme.colorScheme.outline),
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
@@ -191,7 +191,7 @@ class ThemeSelector extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text('${AppLocalizations.of(context)!.themeChangedTo} $title'),
-                  backgroundColor: AppTheme.primaryRose,
+                  backgroundColor: AppTheme.sweetPeach,
                   behavior: SnackBarBehavior.floating,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),

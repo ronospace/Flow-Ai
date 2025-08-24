@@ -179,15 +179,15 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
     
     if (widget.label.toLowerCase() == 'mood') {
       return [
-        Color.lerp(Colors.blue.shade200, AppTheme.primaryRose, intensity)!,
-        Color.lerp(Colors.purple.shade200, AppTheme.primaryPurple, intensity)!,
-        Color.lerp(Colors.pink.shade200, AppTheme.accentMint, intensity)!,
+        Color.lerp(AppTheme.secondaryBlue.withValues(alpha: 0.5), AppTheme.primaryRose, intensity)!,
+        Color.lerp(AppTheme.primaryPurple.withValues(alpha: 0.5), AppTheme.primaryPurple, intensity)!,
+        Color.lerp(AppTheme.primaryRose.withValues(alpha: 0.5), AppTheme.accentMint, intensity)!,
       ];
     } else {
       return [
-        Color.lerp(Colors.orange.shade200, AppTheme.accentMint, intensity)!,
-        Color.lerp(Colors.yellow.shade200, AppTheme.secondaryBlue, intensity)!,
-        Color.lerp(Colors.green.shade200, AppTheme.primaryRose, intensity)!,
+        Color.lerp(AppTheme.warningOrange.withValues(alpha: 0.5), AppTheme.accentMint, intensity)!,
+        Color.lerp(AppTheme.accentMint.withValues(alpha: 0.5), AppTheme.secondaryBlue, intensity)!,
+        Color.lerp(AppTheme.successGreen.withValues(alpha: 0.5), AppTheme.primaryRose, intensity)!,
       ];
     }
   }

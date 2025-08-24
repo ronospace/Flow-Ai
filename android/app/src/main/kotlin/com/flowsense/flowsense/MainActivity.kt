@@ -1,4 +1,4 @@
-package com.flowsense.flowsense
+package com.zyraflow.app
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -41,46 +41,56 @@ class ComingSoonWidget extends StatelessWidget {
               )
             : AppTheme.backgroundGradient(theme.brightness == Brightness.dark),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Main illustration
-            _buildMainIllustration(context),
-            
-            const SizedBox(height: 40),
-            
-            // Title and description
-            _buildTitleSection(context),
-            
-            const SizedBox(height: 32),
-            
-            // Feature list
-            if (featureList != null && featureList!.isNotEmpty)
-              _buildFeatureList(context),
-            
-            const SizedBox(height: 32),
-            
-            // Estimated date
-            if (estimatedDate != null)
-              _buildEstimatedDate(context),
-            
-            const SizedBox(height: 24),
-            
-            // Notify me button
-            if (onNotifyMe != null)
-              _buildNotifyButton(context),
-          ],
+      child: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: size.height * 0.7,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Main illustration (made responsive)
+                _buildMainIllustration(context, size),
+                
+                SizedBox(height: size.height * 0.03),
+                
+                // Title and description
+                _buildTitleSection(context),
+                
+                SizedBox(height: size.height * 0.02),
+                
+                // Feature list (made collapsible for smaller screens)
+                if (featureList != null && featureList!.isNotEmpty)
+                  _buildFeatureList(context, size),
+                
+                SizedBox(height: size.height * 0.02),
+                
+                // Estimated date
+                if (estimatedDate != null)
+                  _buildEstimatedDate(context),
+                
+                const SizedBox(height: 16),
+                
+                // Notify me button
+                if (onNotifyMe != null)
+                  _buildNotifyButton(context),
+                  
+                const SizedBox(height: 16), // Bottom padding
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildMainIllustration(BuildContext context) {
+  Widget _buildMainIllustration(BuildContext context, Size screenSize) {
+    final illustrationSize = screenSize.height < 700 ? 120.0 : 160.0;
     return Container(
-      width: 160,
-      height: 160,
+      width: illustrationSize,
+      height: illustrationSize,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         gradient: LinearGradient(
@@ -104,9 +114,10 @@ class ComingSoonWidget extends StatelessWidget {
         children: [
           // Background pattern
           ...List.generate(3, (index) {
+            final patternSize = illustrationSize - 20 - (index * 20);
             return Container(
-              width: 140 - (index * 20),
-              height: 140 - (index * 20),
+              width: patternSize,
+              height: patternSize,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
@@ -121,8 +132,8 @@ class ComingSoonWidget extends StatelessWidget {
           
           // Main icon
           Container(
-            width: 80,
-            height: 80,
+            width: illustrationSize * 0.5,
+            height: illustrationSize * 0.5,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               gradient: LinearGradient(
@@ -140,7 +151,7 @@ class ComingSoonWidget extends StatelessWidget {
             ),
             child: Icon(
               icon,
-              size: 40,
+              size: illustrationSize * 0.25,
               color: Colors.white,
             ),
           ).animate()
@@ -218,11 +229,13 @@ class ComingSoonWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildFeatureList(BuildContext context) {
+  Widget _buildFeatureList(BuildContext context, Size screenSize) {
     final theme = Theme.of(context);
+    final isCompact = screenSize.height < 700;
+    final maxFeatures = isCompact ? 3 : featureList!.length;
     
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(isCompact ? 16 : 20),
       decoration: BoxDecoration(
         color: Colors.white.withValues(
           alpha: theme.brightness == Brightness.dark ? 0.1 : 0.8,
@@ -238,18 +251,19 @@ class ComingSoonWidget extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             children: [
               Icon(
                 Icons.star_rounded,
                 color: AppTheme.primaryPurple,
-                size: 20,
+                size: 18,
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 6),
               Text(
-                'Upcoming Features',
-                style: theme.textTheme.titleMedium?.copyWith(
+                'Key Features',
+                style: theme.textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: theme.brightness == Brightness.dark 
                       ? Colors.white 
@@ -258,49 +272,58 @@ class ComingSoonWidget extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          ...featureList!.asMap().entries.map((entry) {
+          const SizedBox(height: 12),
+          ...featureList!.take(maxFeatures).toList().asMap().entries.map((entry) {
             final index = entry.key;
             final feature = entry.value;
             return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
+              padding: const EdgeInsets.symmetric(vertical: 3),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    margin: const EdgeInsets.only(top: 6),
-                    width: 6,
-                    height: 6,
+                    margin: const EdgeInsets.only(top: 5),
+                    width: 4,
+                    height: 4,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      gradient: LinearGradient(
-                        colors: [AppTheme.primaryPurple, AppTheme.primaryRose],
-                      ),
+                      color: AppTheme.primaryPurple,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Text(
                       feature,
-                      style: theme.textTheme.bodyMedium?.copyWith(
+                      style: theme.textTheme.bodySmall?.copyWith(
                         color: theme.brightness == Brightness.dark 
                             ? Colors.white70 
                             : AppTheme.mediumGrey,
-                        height: 1.4,
+                        height: 1.3,
                       ),
                     ),
                   ),
                 ],
-              ).animate(delay: Duration(milliseconds: 800 + (index * 100)))
+              ).animate(delay: Duration(milliseconds: 400 + (index * 50)))
                   .fadeIn()
-                  .slideX(begin: 0.3, end: 0),
+                  .slideX(begin: 0.2, end: 0),
             );
           }),
+          if (isCompact && featureList!.length > maxFeatures)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(
+                '+${featureList!.length - maxFeatures} more features',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: AppTheme.primaryPurple,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ),
         ],
       ),
-    ).animate(delay: 700.ms)
+    ).animate(delay: 300.ms)
         .fadeIn()
-        .slideY(begin: 0.2, end: 0);
+        .slideY(begin: 0.1, end: 0);
   }
 
   Widget _buildEstimatedDate(BuildContext context) {

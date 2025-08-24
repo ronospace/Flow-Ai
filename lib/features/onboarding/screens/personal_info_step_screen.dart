@@ -82,17 +82,13 @@ class _PersonalInfoStepScreenState extends State<PersonalInfoStepScreen> {
                           'Personal Information',
                           style: theme.textTheme.headlineSmall?.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: theme.brightness == Brightness.dark
-                                ? Colors.white
-                                : AppTheme.darkGrey,
+                            color: theme.colorScheme.onSurface,
                           ),
                         ),
                         Text(
                           'Tell us a bit about yourself',
                           style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.brightness == Brightness.dark
-                                ? Colors.white70
-                                : AppTheme.mediumGrey,
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                           ),
                         ),
                       ],
@@ -175,9 +171,7 @@ class _PersonalInfoStepScreenState extends State<PersonalInfoStepScreen> {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(
-          theme.brightness == Brightness.dark ? 0.1 : 0.9,
-        ),
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -191,9 +185,7 @@ class _PersonalInfoStepScreenState extends State<PersonalInfoStepScreen> {
         controller: controller,
         validator: validator,
         style: TextStyle(
-          color: theme.brightness == Brightness.dark
-              ? Colors.white
-              : AppTheme.darkGrey,
+          color: theme.colorScheme.onSurface,
         ),
         decoration: InputDecoration(
           labelText: label,
@@ -203,9 +195,7 @@ class _PersonalInfoStepScreenState extends State<PersonalInfoStepScreen> {
             fontWeight: FontWeight.w500,
           ),
           hintStyle: TextStyle(
-            color: theme.brightness == Brightness.dark
-                ? Colors.white54
-                : AppTheme.mediumGrey,
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
           ),
           prefixIcon: Container(
             margin: const EdgeInsets.all(12),
@@ -238,9 +228,7 @@ class _PersonalInfoStepScreenState extends State<PersonalInfoStepScreen> {
   Widget _buildDateField(ThemeData theme) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(
-          theme.brightness == Brightness.dark ? 0.1 : 0.9,
-        ),
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -291,12 +279,8 @@ class _PersonalInfoStepScreenState extends State<PersonalInfoStepScreen> {
                             : 'Select your date of birth',
                         style: TextStyle(
                           color: _selectedDate != null
-                              ? (theme.brightness == Brightness.dark
-                                  ? Colors.white
-                                  : AppTheme.darkGrey)
-                              : (theme.brightness == Brightness.dark
-                                  ? Colors.white54
-                                  : AppTheme.mediumGrey),
+                              ? theme.colorScheme.onSurface
+                              : theme.colorScheme.onSurface.withValues(alpha: 0.6),
                           fontSize: 16,
                         ),
                       ),

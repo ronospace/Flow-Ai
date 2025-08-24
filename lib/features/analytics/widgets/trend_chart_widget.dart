@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../../../core/services/analytics_service.dart';
+import '../../../core/theme/app_theme.dart';
 
 class TrendChartWidget extends StatelessWidget {
   final TrendAnalytics analytics;
@@ -38,7 +39,7 @@ class TrendChartWidget extends StatelessWidget {
             children: [
               Icon(
                 Icons.trending_up,
-                color: Colors.blue,
+                color: theme.colorScheme.primary,
                 size: 24,
               ),
               const SizedBox(width: 12),
@@ -474,15 +475,16 @@ class TrendChartWidget extends StatelessWidget {
   }
 
   Color _getTrendColor(String key) {
+    // Use AppTheme colors for consistency with brand colors
     switch (key) {
       case 'mood':
-        return Colors.purple;
+        return AppTheme.primaryPurple;
       case 'energy':
-        return Colors.orange;
+        return AppTheme.accentMint;
       case 'sleep':
-        return Colors.blue;
+        return AppTheme.secondaryBlue;
       default:
-        return Colors.grey;
+        return AppTheme.mediumGrey;
     }
   }
 
@@ -500,11 +502,11 @@ class TrendChartWidget extends StatelessWidget {
   Color _getTrendDirectionColor(TrendDirection direction) {
     switch (direction) {
       case TrendDirection.improving:
-        return Colors.green;
+        return AppTheme.successGreen;
       case TrendDirection.declining:
-        return Colors.red;
+        return AppTheme.errorRed;
       case TrendDirection.stable:
-        return Colors.grey;
+        return AppTheme.mediumGrey;
     }
   }
 
