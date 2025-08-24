@@ -39,15 +39,15 @@ class AIChatService {
     );
 
     _aiUser = types.User(
-      id: 'ai_flowsense',
-      firstName: 'FlowSense',
+      id: 'ai_zyraflow',
+      firstName: 'Nova',
       lastName: 'AI',
       imageUrl: 'https://i.pravatar.cc/300?img=47', // AI avatar
     );
     
-    // Initialize conversation memory
+    // Initialize conversation memory with user ID for data isolation
     _conversationMemory = AIConversationMemory();
-    await _conversationMemory?.initialize();
+    await _conversationMemory?.initialize(userId: userId);
     
     // Load existing messages or add welcome message
     final existingMessages = _conversationMemory?.getRelevantContext() ?? [];
@@ -58,7 +58,7 @@ class AIChatService {
       // Add welcome message
       _addAIMessage(
         _localizations?.aiGreeting.replaceAll('{userName}', userName) ??
-        "Hi ${userName}! 👋 I'm Nova, your FlowSense AI assistant. I'm here to help you understand your cycle, provide personalized health insights, and answer any questions about reproductive wellness. How can I help you today?"
+        "Hi ${userName}! 👋 I'm Nova, your ZyraFlow AI assistant. I'm here to help you understand your cycle, provide personalized health insights, and answer any questions about reproductive wellness. How can I help you today?"
       );
     }
     
@@ -250,9 +250,9 @@ class AIChatService {
 
   String _getNameResponse(String message) {
     final responses = [
-      "Hi! I'm Nova ✨ Your personal FlowSense AI assistant. I'm here to help you with all things related to your reproductive health and cycle tracking!",
+      "Hi! I'm Nova ✨ Your personal ZyraFlow AI assistant. I'm here to help you with all things related to your reproductive health and cycle tracking!",
       "You can call me Nova! 🌟 I'm your dedicated AI health companion, ready to support you on your wellness journey.",
-      "I'm Nova, your FlowSense AI assistant! 💫 Think of me as your personal health guide - I'm always here to help answer your questions about cycles, symptoms, and reproductive wellness.",
+      "I'm Nova, your ZyraFlow AI assistant! 💫 Think of me as your personal health guide - I'm always here to help answer your questions about cycles, symptoms, and reproductive wellness.",
       "Nice to meet you! I'm Nova ⭐ I'm specifically designed to help you understand and track your menstrual health. What would you like to know?",
     ];
     return responses[math.Random().nextInt(responses.length)];

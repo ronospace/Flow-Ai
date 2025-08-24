@@ -3,14 +3,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 /// AI Conversation Memory service to maintain context and user preferences
+/// Now with complete user data isolation
 class AIConversationMemory {
   static final AIConversationMemory _instance = AIConversationMemory._internal();
   factory AIConversationMemory() => _instance;
   AIConversationMemory._internal();
 
   late SharedPreferences _prefs;
+  String? _currentUserId; // Track current user for data isolation
   
-  // Memory keys
+  // Base memory keys (will be suffixed with user ID)
   static const String _conversationHistoryKey = 'ai_conversation_history';
   static const String _userPreferencesKey = 'ai_user_preferences';
   static const String _topicsOfInterestKey = 'ai_topics_interest';
@@ -24,8 +26,9 @@ class AIConversationMemory {
   Map<String, int> _frequentQuestions = {};
   Map<String, String> _personalizedInsights = {};
 
-  Future<void> initialize() async {
+  Future<void> initialize({String? userId}) async {
     _prefs = await SharedPreferences.getInstance();
+    _currentUserId = userId;
     await _loadMemoryData();
   }
 
@@ -39,7 +42,7 @@ class AIConversationMemory {
     }
 
     // Extract insights from user messages
-    if (message.author.id != 'ai_flowsense' && message is types.TextMessage) {
+    if (message.author.id != 'ai_zyraflow' && message is types.TextMessage) {
       await _analyzeUserMessage(message.text);
     }
 
@@ -178,7 +181,7 @@ class AIConversationMemory {
       context.write('Recent conversation context: ');
       for (final msg in recentMessages.reversed) {
         if (msg is types.TextMessage) {
-          context.write('${msg.author.id == 'ai_flowsense' ? 'AI' : 'User'}: ${msg.text}; ');
+          context.write('${msg.author.id == 'ai_zyraflow' ? 'AI' : 'User'}: ${msg.text}; ');
         }
       }
     }
@@ -205,11 +208,21 @@ class AIConversationMemory {
     _frequentQuestions.clear();
     _personalizedInsights.clear();
 
-    await _prefs.remove(_conversationHistoryKey);
-    await _prefs.remove(_userPreferencesKey);
-    await _prefs.remove(_topicsOfInterestKey);
-    await _prefs.remove(_frequentQuestionsKey);
-    await _prefs.remove(_personalizedInsightsKey);
+    // Clear user-specific data from storage
+    await _prefs.remove(_getUserSpecificKey(_conversationHistoryKey));
+    await _prefs.remove(_getUserSpecificKey(_userPreferencesKey));
+    await _prefs.remove(_getUserSpecificKey(_topicsOfInterestKey));
+    await _prefs.remove(_getUserSpecificKey(_frequentQuestionsKey));
+    await _prefs.remove(_getUserSpecificKey(_personalizedInsightsKey));
+  }
+  
+  /// Clear memory for a specific user (for user data isolation)
+  Future<void> clearMemoryForUser(String userId) async {
+    await _prefs.remove('${_conversationHistoryKey}_$userId');
+    await _prefs.remove('${_userPreferencesKey}_$userId');
+    await _prefs.remove('${_topicsOfInterestKey}_$userId');
+    await _prefs.remove('${_frequentQuestionsKey}_$userId');
+    await _prefs.remove('${_personalizedInsightsKey}_$userId');
   }
 
   /// Get memory statistics for debugging
@@ -232,8 +245,13 @@ class AIConversationMemory {
     await _loadPersonalizedInsights();
   }
 
+  /// Get user-specific key for data isolation
+  String _getUserSpecificKey(String baseKey) {
+    return _currentUserId != null ? '${baseKey}_${_currentUserId}' : baseKey;
+  }
+
   Future<void> _loadConversationHistory() async {
-    final historyJson = _prefs.getString(_conversationHistoryKey);
+    final historyJson = _prefs.getString(_getUserSpecificKey(_conversationHistoryKey));
     if (historyJson != null) {
       final List<dynamic> messages = json.decode(historyJson);
       _conversationHistory = messages.map((msgJson) {
@@ -271,50 +289,50 @@ class AIConversationMemory {
       return null;
     }).where((msg) => msg != null).toList();
 
-    await _prefs.setString(_conversationHistoryKey, json.encode(messagesJson));
+    await _prefs.setString(_getUserSpecificKey(_conversationHistoryKey), json.encode(messagesJson));
   }
 
   Future<void> _loadUserPreferences() async {
-    final prefsJson = _prefs.getString(_userPreferencesKey);
+    final prefsJson = _prefs.getString(_getUserSpecificKey(_userPreferencesKey));
     if (prefsJson != null) {
       _userPreferences = Map<String, dynamic>.from(json.decode(prefsJson));
     }
   }
 
   Future<void> _saveUserPreferences() async {
-    await _prefs.setString(_userPreferencesKey, json.encode(_userPreferences));
+    await _prefs.setString(_getUserSpecificKey(_userPreferencesKey), json.encode(_userPreferences));
   }
 
   Future<void> _loadTopicsOfInterest() async {
-    final topicsJson = _prefs.getString(_topicsOfInterestKey);
+    final topicsJson = _prefs.getString(_getUserSpecificKey(_topicsOfInterestKey));
     if (topicsJson != null) {
       _topicsOfInterest = Set<String>.from(json.decode(topicsJson));
     }
   }
 
   Future<void> _saveTopicsOfInterest() async {
-    await _prefs.setString(_topicsOfInterestKey, json.encode(_topicsOfInterest.toList()));
+    await _prefs.setString(_getUserSpecificKey(_topicsOfInterestKey), json.encode(_topicsOfInterest.toList()));
   }
 
   Future<void> _loadFrequentQuestions() async {
-    final questionsJson = _prefs.getString(_frequentQuestionsKey);
+    final questionsJson = _prefs.getString(_getUserSpecificKey(_frequentQuestionsKey));
     if (questionsJson != null) {
       _frequentQuestions = Map<String, int>.from(json.decode(questionsJson));
     }
   }
 
   Future<void> _saveFrequentQuestions() async {
-    await _prefs.setString(_frequentQuestionsKey, json.encode(_frequentQuestions));
+    await _prefs.setString(_getUserSpecificKey(_frequentQuestionsKey), json.encode(_frequentQuestions));
   }
 
   Future<void> _loadPersonalizedInsights() async {
-    final insightsJson = _prefs.getString(_personalizedInsightsKey);
+    final insightsJson = _prefs.getString(_getUserSpecificKey(_personalizedInsightsKey));
     if (insightsJson != null) {
       _personalizedInsights = Map<String, String>.from(json.decode(insightsJson));
     }
   }
 
   Future<void> _savePersonalizedInsights() async {
-    await _prefs.setString(_personalizedInsightsKey, json.encode(_personalizedInsights));
+    await _prefs.setString(_getUserSpecificKey(_personalizedInsightsKey), json.encode(_personalizedInsights));
   }
 }

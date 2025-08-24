@@ -154,7 +154,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       padding: const EdgeInsets.all(40),
       child: Column(
         children: [
-          // CycleAI Logo
+          // ZyraFlow Logo
                         ZyraFlowLogo(
             size: 120,
             showWordmark: false,
