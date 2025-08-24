@@ -64,7 +64,7 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  Colors.white,
+                  theme.cardColor,
                   AppTheme.primaryRose.withValues(alpha: 0.02),
                 ],
               ),
@@ -114,20 +114,20 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
       ),
       child: Row(
         children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  Icons.chat_bubble,
+                  color: theme.colorScheme.onPrimary,
+                  size: 20,
+                ),
               ),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const Icon(
-              Icons.chat_bubble,
-              color: Colors.white,
-              size: 20,
-            ),
-          ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -137,7 +137,7 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
                   'Partner Chat',
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: AppTheme.darkGrey,
+                    color: theme.colorScheme.onSurface,
                   ),
                 ),
                 Text(
@@ -145,7 +145,7 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
                     ? '${widget.messages.length} messages'
                     : 'Start a conversation',
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: AppTheme.mediumGrey,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
                 ),
               ],
@@ -174,7 +174,7 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
           Text(
             'Recent Messages',
             style: theme.textTheme.bodySmall?.copyWith(
-              color: AppTheme.mediumGrey,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -223,7 +223,7 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
             ),
             child: Icon(
               isFromPartner ? Icons.favorite : Icons.chat,
-              color: Colors.white,
+              color: theme.colorScheme.onPrimary,
               size: 16,
             ),
           ),
@@ -239,7 +239,7 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
-                        color: AppTheme.darkGrey,
+                        color: theme.colorScheme.onSurface,
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -247,7 +247,7 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
                       _formatTime(message.sentAt),
                       style: TextStyle(
                         fontSize: 10,
-                        color: AppTheme.mediumGrey,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                       ),
                     ),
                   ],
@@ -257,7 +257,7 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
                   message.content,
                   style: TextStyle(
                     fontSize: 14,
-                    color: AppTheme.mediumGrey,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -292,7 +292,7 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
           Text(
             'Quick Messages',
             style: theme.textTheme.bodySmall?.copyWith(
-              color: AppTheme.mediumGrey,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -356,10 +356,10 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
             controller: _messageController,
             decoration: InputDecoration(
               hintText: 'Send a message...',
-              hintStyle: TextStyle(color: AppTheme.mediumGrey),
+              hintStyle: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.6)),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(25),
-                borderSide: BorderSide(color: AppTheme.lightGrey),
+                borderSide: BorderSide(color: theme.colorScheme.onSurface.withValues(alpha: 0.3)),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(25),
@@ -378,9 +378,9 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
         FloatingActionButton.small(
           onPressed: () => _sendMessage(_messageController.text),
           backgroundColor: AppTheme.primaryRose,
-          child: const Icon(
+          child: Icon(
             Icons.send,
-            color: Colors.white,
+            color: theme.colorScheme.onPrimary,
             size: 16,
           ),
         ),
@@ -408,7 +408,7 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
                 'Full Conversation',
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppTheme.darkGrey,
+                  color: theme.colorScheme.onSurface,
                 ),
               ),
               const Spacer(),
@@ -473,7 +473,7 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
                   child: Text(
                     message.content,
                     style: TextStyle(
-                      color: isFromPartner ? AppTheme.darkGrey : Colors.white,
+                      color: isFromPartner ? theme.colorScheme.onSurface : Colors.white,
                       fontSize: 14,
                     ),
                   ),
@@ -483,7 +483,7 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
                   _formatMessageTime(message.sentAt),
                   style: TextStyle(
                     fontSize: 10,
-                    color: AppTheme.mediumGrey,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
                 ),
               ],
@@ -499,6 +499,7 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
   }
 
   Widget _buildAvatar(bool isFromPartner) {
+    final theme = Theme.of(context);
     return Container(
       width: 32,
       height: 32,
@@ -509,11 +510,11 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
             : [AppTheme.primaryRose, AppTheme.primaryPurple],
         ),
         shape: BoxShape.circle,
-        border: Border.all(color: Colors.white, width: 2),
+        border: Border.all(color: theme.cardColor, width: 2),
       ),
       child: Icon(
         isFromPartner ? Icons.favorite : Icons.account_circle,
-        color: Colors.white,
+        color: theme.colorScheme.onPrimary,
         size: 16,
       ),
     );

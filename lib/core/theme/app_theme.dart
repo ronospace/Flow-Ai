@@ -12,6 +12,12 @@ class AppTheme {
   static const Color errorRed = Color(0xFFE74C3C);
   static const Color successGreen = Color(0xFF2ECC71);
   
+  // Warm Sweet Colors for Period Moods
+  static const Color sweetPeach = Color(0xFFFFB3BA);     // Soft peachy pink
+  static const Color warmApricot = Color(0xFFFFCB9A);    // Gentle apricot
+  static const Color softLavender = Color(0xFFC7CEEA);   // Calming lavender
+  static const Color blushRose = Color(0xFFFFB6C1);      // Light rose blush
+  
   // Light Theme Colors
   static const Color lightBackground = Color(0xFFFAFAFA);
   static const Color lightSurface = Color(0xFFFFFFFF);

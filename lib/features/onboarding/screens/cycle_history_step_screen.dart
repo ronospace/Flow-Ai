@@ -87,17 +87,13 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
                         'Cycle History',
                         style: theme.textTheme.headlineSmall?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: theme.brightness == Brightness.dark
-                              ? Colors.white
-                              : AppTheme.darkGrey,
+                          color: theme.colorScheme.onSurface,
                         ),
                       ),
                       Text(
                         'Help us understand your cycle patterns',
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.brightness == Brightness.dark
-                              ? Colors.white70
-                              : AppTheme.mediumGrey,
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                         ),
                       ),
                     ],
@@ -247,7 +243,7 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
                     _previousTrackingMethod = selected ? method : null;
                   });
                 },
-                backgroundColor: Colors.white,
+                backgroundColor: theme.cardColor,
                 selectedColor: AppTheme.primaryRose.withOpacity(0.2),
                 labelStyle: TextStyle(
                   color: isSelected ? AppTheme.primaryRose : AppTheme.mediumGrey,
@@ -267,9 +263,7 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
       subtitle: 'When did your last period start?',
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(
-            theme.brightness == Brightness.dark ? 0.1 : 0.9,
-          ),
+          color: theme.cardColor,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -320,10 +314,8 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
                               : 'Select date',
                           style: TextStyle(
                             color: _lastPeriodDate != null
-                                ? (theme.brightness == Brightness.dark
-                                    ? Colors.white
-                                    : AppTheme.darkGrey)
-                                : AppTheme.mediumGrey,
+                                ? theme.colorScheme.onSurface
+                                : theme.colorScheme.onSurface.withValues(alpha: 0.6),
                             fontSize: 16,
                           ),
                         ),
@@ -350,10 +342,8 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
       subtitle: 'How many days from period start to next period start?',
       child: Container(
         padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(
-            theme.brightness == Brightness.dark ? 0.1 : 0.9,
-          ),
+      decoration: BoxDecoration(
+        color: theme.cardColor,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -424,10 +414,8 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
       subtitle: 'How many days does your period typically last?',
       child: Container(
         padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(
-            theme.brightness == Brightness.dark ? 0.1 : 0.9,
-          ),
+      decoration: BoxDecoration(
+        color: theme.cardColor,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -513,7 +501,7 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
                 }
               });
             },
-            backgroundColor: Colors.white,
+            backgroundColor: theme.cardColor,
             selectedColor: AppTheme.accentMint.withOpacity(0.2),
             labelStyle: TextStyle(
               color: isSelected ? AppTheme.accentMint : AppTheme.mediumGrey,
@@ -546,7 +534,7 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
                 }
               });
             },
-            backgroundColor: Colors.white,
+            backgroundColor: theme.cardColor,
             selectedColor: AppTheme.warningOrange.withOpacity(0.2),
             labelStyle: TextStyle(
               color: isSelected ? AppTheme.warningOrange : AppTheme.mediumGrey,
@@ -568,9 +556,7 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(
-          theme.brightness == Brightness.dark ? 0.05 : 0.7,
-        ),
+        color: theme.cardColor.withValues(alpha: 0.7),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -587,18 +573,14 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
             title,
             style: theme.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
-              color: theme.brightness == Brightness.dark
-                  ? Colors.white
-                  : AppTheme.darkGrey,
+              color: theme.colorScheme.onSurface,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             subtitle,
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.brightness == Brightness.dark
-                  ? Colors.white70
-                  : AppTheme.mediumGrey,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
             ),
           ),
           const SizedBox(height: 20),
@@ -621,7 +603,7 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
       decoration: BoxDecoration(
         color: isSelected
             ? AppTheme.primaryPurple.withOpacity(0.1)
-            : Colors.white.withOpacity(0.9),
+            : theme.cardColor,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isSelected
@@ -669,7 +651,7 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
 
   Color _getCycleLengthColor() {
     if (_cycleLength >= 25 && _cycleLength <= 32) {
-      return AppTheme.successGreen;
+      return AppTheme.sweetPeach;
     } else if (_cycleLength >= 23 && _cycleLength <= 35) {
       return AppTheme.warningOrange;
     } else {
@@ -689,7 +671,7 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
 
   Color _getPeriodLengthColor() {
     if (_periodLength >= 3 && _periodLength <= 7) {
-      return AppTheme.successGreen;
+      return AppTheme.sweetPeach;
     } else if (_periodLength >= 2 && _periodLength <= 8) {
       return AppTheme.warningOrange;
     } else {

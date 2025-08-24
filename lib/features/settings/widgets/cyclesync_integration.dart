@@ -110,9 +110,9 @@ class _CycleSyncIntegrationState extends State<CycleSyncIntegration> {
                               isConnected
                                   ? 'Your data syncs with CycleSync Enterprise'
                                   : 'Connect to sync your cycle data across apps',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 14,
-                                color: AppTheme.mediumGrey,
+                                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
                               ),
                             ),
                           ],
@@ -141,11 +141,11 @@ class _CycleSyncIntegrationState extends State<CycleSyncIntegration> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
+                                Text(
                                   'Synced Account',
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: AppTheme.mediumGrey,
+                                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -201,9 +201,9 @@ class _CycleSyncIntegrationState extends State<CycleSyncIntegration> {
                 title: 'Sync Now',
                 subtitle: 'Manually sync your latest data',
                 onTap: () => _syncNow(context, settings),
-                trailing: const Icon(
+                trailing: Icon(
                   Icons.arrow_forward_ios,
-                  color: AppTheme.mediumGrey,
+                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
                   size: 16,
                 ),
               ),
@@ -213,9 +213,9 @@ class _CycleSyncIntegrationState extends State<CycleSyncIntegration> {
                 title: 'Sync History',
                 subtitle: 'View sync activity and conflicts',
                 onTap: () => _showSyncHistory(context),
-                trailing: const Icon(
+                trailing: Icon(
                   Icons.arrow_forward_ios,
-                  color: AppTheme.mediumGrey,
+                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
                   size: 16,
                 ),
               ),
@@ -254,11 +254,11 @@ class _CycleSyncIntegrationState extends State<CycleSyncIntegration> {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  const Text(
+                  Text(
                     'Connect FlowSense with CycleSync Enterprise to sync your menstrual cycle data across platforms. Your data remains secure and encrypted during transfer.',
                     style: TextStyle(
                       fontSize: 12,
-                      color: AppTheme.mediumGrey,
+                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
                       height: 1.4,
                     ),
                   ),
@@ -400,8 +400,8 @@ class _CycleSyncIntegrationState extends State<CycleSyncIntegration> {
       isScrollControlled: true,
       builder: (context) => Container(
         height: MediaQuery.of(context).size.height * 0.6,
-        decoration: const BoxDecoration(
-          color: Colors.white,
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(28),
             topRight: Radius.circular(28),

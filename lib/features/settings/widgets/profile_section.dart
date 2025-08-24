@@ -17,11 +17,13 @@ class ProfileSection extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            gradient: const LinearGradient(
+            gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Colors.white,
+                Theme.of(context).brightness == Brightness.dark
+                    ? AppTheme.primaryRose.withValues(alpha: 0.8)
+                    : Colors.white,
                 AppTheme.primaryRose,
               ],
             ),
@@ -247,9 +249,9 @@ class ProfileSection extends StatelessWidget {
       backgroundColor: Colors.transparent,
       builder: (context) => Container(
         height: 200,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(28),
             topRight: Radius.circular(28),
           ),
@@ -262,17 +264,17 @@ class ProfileSection extends StatelessWidget {
               height: 4,
               margin: const EdgeInsets.only(top: 12),
               decoration: BoxDecoration(
-                color: AppTheme.lightGrey,
+                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
             const SizedBox(height: 20),
-            const Text(
+            Text(
               'Change Avatar',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: AppTheme.darkGrey,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 20),
@@ -323,21 +325,21 @@ class ProfileSection extends StatelessWidget {
             width: 60,
             height: 60,
             decoration: BoxDecoration(
-              color: AppTheme.lightGrey.withValues(alpha: 0.3),
+              color: Theme.of(context).colorScheme.surfaceVariant,
               borderRadius: BorderRadius.circular(16),
             ),
             child: Icon(
               icon,
-              color: AppTheme.mediumGrey,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
               size: 24,
             ),
           ),
           const SizedBox(height: 8),
           Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12,
-              color: AppTheme.mediumGrey,
+              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
             ),
           ),
         ],

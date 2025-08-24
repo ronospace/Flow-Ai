@@ -14,6 +14,9 @@ import '../../insights/providers/insights_provider.dart';
 import '../../settings/providers/settings_provider.dart';
 import '../../../core/services/cycle_calculation_engine.dart';
 import '../../../core/widgets/coming_soon_widget.dart';
+import '../../../core/ai/period_prediction_engine.dart';
+import '../../ai_predictions/widgets/ai_prediction_card.dart';
+import '../../ai_predictions/screens/ai_predictions_screen.dart';
 import 'dart:math' as math;
 
 class HomeScreen extends StatefulWidget {
@@ -35,6 +38,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   BannerAd? _bannerAd;
   bool _isBannerAdReady = false;
   final AdMobService _adMobService = AdMobService();
+  
+  // AI Prediction
+  PeriodPrediction? _currentPrediction;
+  bool _isLoadingPrediction = false;
   
   @override
   void initState() {
@@ -96,6 +103,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           _loadBannerAd();
         }
       });
+      
+      // Load AI prediction
+      Future.delayed(const Duration(milliseconds: 800), () {
+        if (mounted) {
+          _loadAIPrediction();
+        }
+      });
     });
   }
   
@@ -115,6 +129,31 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         _isBannerAdReady = true;
       });
     });
+  }
+  
+  Future<void> _loadAIPrediction() async {
+    if (mounted) {
+      setState(() {
+        _isLoadingPrediction = true;
+      });
+    }
+
+    try {
+      final prediction = await PeriodPredictionEngine().predictNextPeriod('demo_user_id');
+      
+      if (mounted) {
+        setState(() {
+          _currentPrediction = prediction;
+          _isLoadingPrediction = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoadingPrediction = false;
+        });
+      }
+    }
   }
   
   Widget _buildBannerAdWidget() {
@@ -175,9 +214,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   ),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.star,
-                  color: Colors.white,
+                  color: theme.colorScheme.onPrimary,
                   size: 20,
                 ),
               ),
@@ -213,7 +252,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 child: Text(
                   localizations.free,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: theme.colorScheme.onPrimary,
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
                   ),
@@ -247,16 +286,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.play_circle_fill,
-                      color: Colors.white,
+                      color: theme.colorScheme.onPrimary,
                       size: 20,
                     ),
                     const SizedBox(width: 8),
                     Text(
                       localizations.watchAdUnlockInsights,
                       style: theme.textTheme.titleSmall?.copyWith(
-                        color: Colors.white,
+                        color: theme.colorScheme.onPrimary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -272,7 +311,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             children: [
               Icon(
                 Icons.check_circle,
-                color: AppTheme.successGreen,
+              color: AppTheme.sweetPeach,
                 size: 16,
               ),
               const SizedBox(width: 8),
@@ -280,7 +319,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 child: Text(
                   localizations.getAdditionalPremiumInsights,
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: AppTheme.mediumGrey,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
                 ),
               ),
@@ -291,7 +330,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             children: [
               Icon(
                 Icons.check_circle,
-                color: AppTheme.successGreen,
+              color: AppTheme.sweetPeach,
                 size: 16,
               ),
               const SizedBox(width: 8),
@@ -299,7 +338,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 child: Text(
                   localizations.unlockAdvancedHealthRecommendations,
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: AppTheme.mediumGrey,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
                 ),
               ),
@@ -312,6 +351,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   
   void _showRewardedAdForInsights() {
     final localizations = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
     _adMobService.showRewardedAdWithFrequency(
       onRewarded: (reward) {
         // User watched the full ad, unlock premium insights
@@ -330,13 +370,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 Text(
                   localizations.premiumInsightsUnlocked,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: theme.colorScheme.onPrimary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
               ],
             ),
-            backgroundColor: AppTheme.successGreen,
+            backgroundColor: AppTheme.sweetPeach,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
@@ -375,6 +415,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       children: [
                         // REVOLUTIONARY: AI-Powered Dynamic Header
                         _buildRevolutionaryHeader(settings),
+                        const SizedBox(height: 24),
+                        
+                        // AI Prediction Summary
+                        _LazyWidget(
+                          builder: () => _buildAIPredictionSummary(),
+                        ),
                         const SizedBox(height: 24),
                         
                         // Use lazy loading for heavy widgets to improve performance
@@ -495,7 +541,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           Text(
             localizations.loadingAiEngine,
             style: theme.textTheme.titleMedium?.copyWith(
-              color: AppTheme.darkGrey,
+              color: theme.colorScheme.onSurface,
               fontWeight: FontWeight.w600,
             ),
           ).animate().fadeIn(delay: 500.ms),
@@ -505,7 +551,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           Text(
             localizations.analyzingHealthPatterns,
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: AppTheme.mediumGrey,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
             ),
           ).animate().fadeIn(delay: 800.ms),
         ],
@@ -549,12 +595,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
+            color: theme.shadowColor.withValues(alpha: 0.08),
             blurRadius: 24,
             offset: const Offset(0, 12),
           ),
           BoxShadow(
-            color: Colors.white,
+            color: theme.colorScheme.surface,
             blurRadius: 8,
             offset: const Offset(0, -4),
           ),
@@ -596,16 +642,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(
+                              Icon(
                                 Icons.psychology,
-                                color: Colors.white,
+                                color: theme.colorScheme.onPrimary,
                                 size: 14,
                               ),
                               const SizedBox(width: 4),
                               Text(
                                 localizations.aiActive,
-                                style: const TextStyle(
-                                  color: Colors.white,
+                                style: TextStyle(
+                                  color: theme.colorScheme.onPrimary,
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -749,10 +795,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 ],
               ),
             ] else ...[
-              const Text(
+              Text(
                 'No active cycle',
                 style: TextStyle(
-                  color: Colors.white70,
+                  color: theme.colorScheme.onPrimary.withValues(alpha: 0.7),
                   fontSize: 16,
                 ),
               ),
@@ -762,7 +808,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   // Navigate to tracking
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
+                  backgroundColor: theme.colorScheme.surface,
                   foregroundColor: AppTheme.primaryRose,
                 ),
                 child: const Text('Start Tracking'),
@@ -775,20 +821,21 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildCycleInfo(String label, String value) {
+    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: const TextStyle(
-            color: Colors.white70,
+          style: TextStyle(
+            color: theme.colorScheme.onPrimary.withValues(alpha: 0.7),
             fontSize: 12,
           ),
         ),
         Text(
           value,
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: theme.colorScheme.onPrimary,
             fontSize: 16,
             fontWeight: FontWeight.w600,
           ),
@@ -941,7 +988,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
+            color: theme.shadowColor.withValues(alpha: 0.08),
             blurRadius: 24,
             offset: const Offset(0, 12),
           ),
@@ -960,9 +1007,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   ),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.dashboard_customize,
-                  color: Colors.white,
+                  color: theme.colorScheme.onPrimary,
                   size: 20,
                 ),
               ),
@@ -2438,7 +2485,10 @@ extension _PremiumFeaturesMethods on _HomeScreenState {
   }
   
   void _handleNotifyMe(String featureName) {
-    Navigator.of(context).pop(); // Close the dialog
+    // Safely close the dialog
+    if (Navigator.canPop(context)) {
+      Navigator.of(context).pop();
+    }
     
     // Show confirmation snackbar
     ScaffoldMessenger.of(context).showSnackBar(
@@ -2613,6 +2663,93 @@ extension _NavigationMethods on _HomeScreenState {
     Future.delayed(const Duration(milliseconds: 500), () {
       context.go('/insights');
     });
+  }
+  
+  void _navigateToAIPredictions() {
+    // Show interstitial ad before navigation
+    _adMobService.showInterstitialAdWithFrequency();
+    
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const AIPredictionsScreen(),
+      ),
+    );
+  }
+  
+  Widget _buildAIPredictionSummary() {
+    if (_isLoadingPrediction) {
+      return Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              AppTheme.primaryRose.withValues(alpha: 0.1),
+              AppTheme.primaryPurple.withValues(alpha: 0.05),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: AppTheme.primaryRose.withValues(alpha: 0.2),
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+                ),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const Icon(
+                Icons.psychology_rounded,
+                color: Colors.white,
+                size: 20,
+              ),
+            ).animate(onPlay: (controller) => controller.repeat())
+              .shimmer(duration: 1200.ms),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Generating AI Prediction',
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    'AI is analyzing your cycle patterns...',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: AppTheme.mediumGrey,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12,
+              height: 12,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryRose),
+              ),
+            ),
+          ],
+        ),
+      ).animate().fadeIn(delay: 600.ms);
+    }
+    
+    if (_currentPrediction == null) {
+      return const SizedBox.shrink();
+    }
+    
+    return AIPredictionSummary(
+      prediction: _currentPrediction!,
+      onTap: _navigateToAIPredictions,
+    );
   }
 }
 

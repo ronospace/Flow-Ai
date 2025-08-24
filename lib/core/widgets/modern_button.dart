@@ -131,22 +131,22 @@ class _ModernButtonState extends State<ModernButton>
   double _getHeight() {
     switch (widget.size) {
       case ModernButtonSize.small:
-        return 40;
+        return 36;
       case ModernButtonSize.medium:
-        return 50;
+        return 44;
       case ModernButtonSize.large:
-        return 56;
+        return 48;
     }
   }
 
   EdgeInsetsGeometry _getPadding() {
     switch (widget.size) {
       case ModernButtonSize.small:
-        return const EdgeInsets.symmetric(horizontal: 16, vertical: 8);
+        return const EdgeInsets.symmetric(horizontal: 12, vertical: 6);
       case ModernButtonSize.medium:
-        return const EdgeInsets.symmetric(horizontal: 20, vertical: 12);
+        return const EdgeInsets.symmetric(horizontal: 16, vertical: 8);
       case ModernButtonSize.large:
-        return const EdgeInsets.symmetric(horizontal: 24, vertical: 16);
+        return const EdgeInsets.symmetric(horizontal: 20, vertical: 10);
     }
   }
 
@@ -296,13 +296,17 @@ class _ModernButtonState extends State<ModernButton>
           ),
           const SizedBox(width: 8),
         ],
-        Text(
-          widget.text,
-          style: TextStyle(
-            color: textColor,
-            fontSize: fontSize,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 0.5,
+        Flexible(
+          child: Text(
+            widget.text,
+            style: TextStyle(
+              color: textColor,
+              fontSize: fontSize,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.5,
+            ),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
           ),
         ),
       ],

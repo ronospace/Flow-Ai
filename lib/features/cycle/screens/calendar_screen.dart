@@ -78,11 +78,11 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: theme.colorScheme.surface,
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.1),
+                        color: theme.shadowColor.withValues(alpha: 0.1),
                         blurRadius: 15,
                         offset: const Offset(0, 8),
                       ),
@@ -125,13 +125,13 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                       AppLocalizations.of(context)!.calendarTitle,
                       style: theme.textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: AppTheme.darkGrey,
+                        color: theme.colorScheme.onSurface,
                       ),
                     ).animate().fadeIn().slideX(begin: -0.3, end: 0),
                 Text(
                   DateFormat('MMMM yyyy').format(_focusedDay),
                   style: theme.textTheme.bodyLarge?.copyWith(
-                    color: AppTheme.mediumGrey,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
                 ).animate().fadeIn(delay: 100.ms),
               ],
@@ -141,11 +141,11 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
           // View Toggle Button
           Container(
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.9),
+              color: theme.colorScheme.surface.withValues(alpha: 0.9),
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
+                  color: theme.shadowColor.withValues(alpha: 0.1),
                   blurRadius: 8,
                   offset: const Offset(0, 4),
                 ),
@@ -288,7 +288,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
         rightChevronVisible: true,
         titleTextStyle: theme.textTheme.titleLarge!.copyWith(
           fontWeight: FontWeight.bold,
-          color: AppTheme.darkGrey,
+          color: theme.colorScheme.onSurface,
         ),
         leftChevronIcon: const Icon(
           Icons.chevron_left,
@@ -302,11 +302,11 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
       ),
       daysOfWeekStyle: DaysOfWeekStyle(
         weekendStyle: TextStyle(
-          color: AppTheme.mediumGrey,
+          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
           fontWeight: FontWeight.w500,
         ),
         weekdayStyle: TextStyle(
-          color: AppTheme.mediumGrey,
+          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
           fontWeight: FontWeight.w500,
         ),
       ),
@@ -340,6 +340,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
   
   Widget _buildCalendarDay(DateTime day, CycleProvider cycleProvider, bool isSelected, {bool isToday = false}) {
     final dayInfo = _getDayInfo(day, cycleProvider);
+    final theme = Theme.of(context);
     
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
@@ -381,24 +382,41 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                   ? Colors.white
                   : dayInfo.color != null
                       ? Colors.white
-                      : AppTheme.darkGrey,
+                      : theme.colorScheme.onSurface,
               fontWeight: isSelected || isToday || dayInfo.color != null
                   ? FontWeight.bold
                   : FontWeight.w500,
-              fontSize: 16,
+              fontSize: 14,
             ),
           ),
           
-          // Flow intensity indicator
-          if (dayInfo.flowIntensity != null && dayInfo.flowIntensity != FlowIntensity.none)
+          // Period tracking emoji overlay
+          if (dayInfo.phase != null && (dayInfo.flowIntensity != null && dayInfo.flowIntensity != FlowIntensity.none))
             Positioned(
-              bottom: 2,
-              child: Container(
-                width: _getFlowIndicatorSize(dayInfo.flowIntensity!),
-                height: 3,
-                decoration: BoxDecoration(
-                  color: isSelected || isToday ? Colors.white : Colors.white.withValues(alpha: 0.8),
-                  borderRadius: BorderRadius.circular(2),
+              bottom: 0,
+              child: Text(
+                _getPhaseEmoji(dayInfo.phase!, dayInfo.flowIntensity),
+                style: TextStyle(
+                  fontSize: _getEmojiSize(dayInfo.flowIntensity!),
+                  shadows: [
+                    Shadow(
+                      color: Colors.black.withValues(alpha: 0.3),
+                      offset: const Offset(0.5, 0.5),
+                      blurRadius: 1,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            
+          // Alternative flow intensity indicator for non-period days
+          if ((dayInfo.flowIntensity == null || dayInfo.flowIntensity == FlowIntensity.none) && dayInfo.phase != null)
+            Positioned(
+              bottom: 1,
+              child: Text(
+                _getPhaseEmoji(dayInfo.phase!, null),
+                style: const TextStyle(
+                  fontSize: 8,
                 ),
               ),
             ),
@@ -406,17 +424,34 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
           // AI prediction indicator
           if (dayInfo.isPredicted)
             Positioned(
-              top: 2,
-              right: 2,
+              top: 1,
+              right: 1,
               child: Container(
-                width: 6,
-                height: 6,
+                width: 8,
+                height: 8,
                 decoration: BoxDecoration(
-                  color: AppTheme.secondaryBlue,
+                  gradient: const LinearGradient(
+                    colors: [AppTheme.secondaryBlue, AppTheme.accentMint],
+                  ),
                   shape: BoxShape.circle,
                   border: Border.all(
                     color: Colors.white,
                     width: 1,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppTheme.secondaryBlue.withValues(alpha: 0.3),
+                      blurRadius: 2,
+                      offset: const Offset(0, 1),
+                    ),
+                  ],
+                ),
+                child: const Center(
+                  child: Text(
+                    '🤖',
+                    style: TextStyle(
+                      fontSize: 4,
+                    ),
                   ),
                 ),
               ),
@@ -537,6 +572,54 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
     }
   }
   
+  String _getPhaseEmoji(CyclePhase phase, FlowIntensity? flowIntensity) {
+    switch (phase) {
+      case CyclePhase.menstrual:
+        if (flowIntensity != null) {
+          switch (flowIntensity) {
+            case FlowIntensity.spotting:
+              return '💧';
+            case FlowIntensity.light:
+              return '🩸';
+            case FlowIntensity.medium:
+              return '🩸';
+            case FlowIntensity.heavy:
+              return '🔴';
+            case FlowIntensity.veryHeavy:
+              return '🔴';
+            case FlowIntensity.none:
+              return '✨';
+          }
+        }
+        return '🩸';
+      case CyclePhase.follicular:
+        return '🌱';
+      case CyclePhase.ovulation:
+        return '🥚';
+      case CyclePhase.luteal:
+        return '🌙';
+      case CyclePhase.unknown:
+        return '❓';
+    }
+  }
+  
+  double _getEmojiSize(FlowIntensity intensity) {
+    switch (intensity) {
+      case FlowIntensity.none:
+        return 6;
+      case FlowIntensity.spotting:
+        return 8;
+      case FlowIntensity.light:
+        return 10;
+      case FlowIntensity.medium:
+        return 12;
+      case FlowIntensity.heavy:
+        return 14;
+      case FlowIntensity.veryHeavy:
+        return 16;
+    }
+  }
+  
   bool _isDateInCycle(DateTime date, CycleData cycle) {
     final cycleEnd = cycle.endDate ?? DateTime.now();
     return date.isAfter(cycle.startDate.subtract(const Duration(days: 1))) &&
@@ -554,11 +637,11 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
           margin: const EdgeInsets.all(20),
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: theme.colorScheme.surface,
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
+                color: theme.shadowColor.withValues(alpha: 0.1),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -575,7 +658,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                       'Current Cycle',
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: AppTheme.darkGrey,
+                        color: theme.colorScheme.onSurface,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -590,14 +673,14 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                       Text(
                         _getCurrentPhaseText(currentCycle),
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: AppTheme.mediumGrey,
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                         ),
                       ),
                     ] else
                       Text(
                         'No active cycle',
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: AppTheme.mediumGrey,
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                         ),
                       ),
                   ],
@@ -614,7 +697,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                         'Next Period',
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: AppTheme.darkGrey,
+                          color: theme.colorScheme.onSurface,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -628,7 +711,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                       Text(
                         DateFormat('MMM d').format(predictions.nextPeriodDate!),
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: AppTheme.mediumGrey,
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                         ),
                       ),
                     ],

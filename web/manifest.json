@@ -1,11 +1,11 @@
 {
-    "name": "CycleAI",
-    "short_name": "CycleAI",
+    "name": "ZyraFlow",
+    "short_name": "ZyraFlow",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#4F46E5",
     "theme_color": "#C147E9",
-    "description": "CycleAI - Futuristic AI-Powered Period & Cycle Tracking",
+    "description": "ZyraFlow - AI-Powered Menstrual Health Companion",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

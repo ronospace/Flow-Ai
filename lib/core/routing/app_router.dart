@@ -77,6 +77,11 @@ class AppRouter {
             ),
           ),
           GoRoute(
+            path: '/cycle',
+            name: 'cycle',
+            builder: (context, state) => const CalendarScreen(), // Use calendar as cycle overview
+          ),
+          GoRoute(
             path: '/health',
             name: 'health',
             builder: (context, state) => const HealthScreen(),
@@ -262,7 +267,7 @@ class _MainShellState extends State<MainShell> {
           color: theme.scaffoldBackgroundColor,
           boxShadow: [
             BoxShadow(
-              color: theme.shadowColor.withValues(alpha: 0.1),
+              color: theme.shadowColor.withOpacity(0.1),
               blurRadius: 10,
               offset: const Offset(0, -2),
             ),
@@ -317,7 +322,7 @@ class _MainShellState extends State<MainShell> {
               ),
               child: Icon(
                 icon,
-                color: isSelected ? Colors.white : theme.iconTheme.color?.withValues(alpha: 0.6),
+                color: isSelected ? Colors.white : theme.iconTheme.color?.withOpacity(0.6),
                 size: 24,
               ),
             ),
@@ -325,7 +330,7 @@ class _MainShellState extends State<MainShell> {
             Text(
               label,
               style: TextStyle(
-                color: isSelected ? const Color(0xFFFF6B9D) : theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.6),
+                color: isSelected ? const Color(0xFFFF6B9D) : theme.textTheme.bodyMedium?.color?.withOpacity(0.6),
                 fontSize: 10,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
               ),
