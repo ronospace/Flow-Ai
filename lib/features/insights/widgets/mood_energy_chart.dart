@@ -30,7 +30,7 @@ class MoodEnergyChart extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -66,7 +66,7 @@ class MoodEnergyChart extends StatelessWidget {
                     'Mood & Energy Trends',
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: AppTheme.darkGrey,
+                      color: theme.colorScheme.onSurface,
                     ),
                   ),
                 ],
@@ -74,7 +74,7 @@ class MoodEnergyChart extends StatelessWidget {
               Text(
                 selectedPeriod.displayName,
                 style: TextStyle(
-                  color: AppTheme.mediumGrey,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                   fontSize: 12,
                 ),
               ),
@@ -87,9 +87,9 @@ class MoodEnergyChart extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildLegendItem('Mood', AppTheme.primaryPurple),
+              _buildLegendItem('Mood', AppTheme.primaryPurple, context),
               const SizedBox(width: 20),
-              _buildLegendItem('Energy', AppTheme.accentMint),
+              _buildLegendItem('Energy', AppTheme.accentMint, context),
             ],
           ),
           
@@ -105,7 +105,7 @@ class MoodEnergyChart extends StatelessWidget {
                   horizontalInterval: 1,
                   getDrawingHorizontalLine: (value) {
                     return FlLine(
-                      color: AppTheme.lightGrey,
+                      color: theme.colorScheme.outline.withValues(alpha: 0.3),
                       strokeWidth: 1,
                     );
                   },
@@ -131,7 +131,7 @@ class MoodEnergyChart extends StatelessWidget {
                             child: Text(
                               '${data.startDate.month}/${data.startDate.day}',
                               style: TextStyle(
-                                color: AppTheme.mediumGrey,
+                                color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                                 fontSize: 10,
                               ),
                             ),
@@ -152,7 +152,7 @@ class MoodEnergyChart extends StatelessWidget {
                           child: Text(
                             value.toInt().toString(),
                             style: TextStyle(
-                              color: AppTheme.mediumGrey,
+                              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                               fontSize: 12,
                             ),
                           ),
@@ -163,7 +163,7 @@ class MoodEnergyChart extends StatelessWidget {
                 ),
                 borderData: FlBorderData(
                   show: true,
-                  border: Border.all(color: AppTheme.lightGrey),
+                  border: Border.all(color: theme.colorScheme.outline.withValues(alpha: 0.3)),
                 ),
                 minX: 0,
                 maxX: (filteredData.length - 1).toDouble(),
@@ -184,7 +184,7 @@ class MoodEnergyChart extends StatelessWidget {
                           radius: 4,
                           color: AppTheme.primaryPurple,
                           strokeWidth: 2,
-                          strokeColor: Colors.white,
+                          strokeColor: theme.colorScheme.surface,
                         );
                       },
                     ),
@@ -207,7 +207,7 @@ class MoodEnergyChart extends StatelessWidget {
                           radius: 4,
                           color: AppTheme.accentMint,
                           strokeWidth: 2,
-                          strokeColor: Colors.white,
+                          strokeColor: theme.colorScheme.surface,
                         );
                       },
                     ),
@@ -216,7 +216,7 @@ class MoodEnergyChart extends StatelessWidget {
                 lineTouchData: LineTouchData(
                   enabled: true,
                   touchTooltipData: LineTouchTooltipData(
-                    getTooltipColor: (touchedSpot) => AppTheme.darkGrey,
+                    getTooltipColor: (touchedSpot) => theme.colorScheme.inverseSurface,
                     tooltipRoundedRadius: 8,
                     getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
                       return touchedBarSpots.map((barSpot) {
@@ -245,7 +245,7 @@ class MoodEnergyChart extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppTheme.lightGrey.withValues(alpha: 0.5),
+              color: theme.colorScheme.surfaceVariant,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
@@ -256,18 +256,21 @@ class MoodEnergyChart extends StatelessWidget {
                   '${_getAverageMood(filteredData).toStringAsFixed(1)}/5',
                   AppTheme.primaryPurple,
                   Icons.mood,
+                  context,
                 ),
                 _buildSummaryItem(
                   'Avg Energy',
                   '${_getAverageEnergy(filteredData).toStringAsFixed(1)}/5',
                   AppTheme.accentMint,
                   Icons.battery_charging_full,
+                  context,
                 ),
                 _buildSummaryItem(
                   'Trend',
                   _getTrendDirection(moodData, energyData),
                   AppTheme.secondaryBlue,
                   Icons.trending_up,
+                  context,
                 ),
               ],
             ),
@@ -282,7 +285,7 @@ class MoodEnergyChart extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(40),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -297,13 +300,13 @@ class MoodEnergyChart extends StatelessWidget {
           Icon(
             Icons.mood_bad,
             size: 48,
-            color: AppTheme.lightGrey,
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
           ),
           const SizedBox(height: 16),
           Text(
             'No Mood Data Available',
             style: theme.textTheme.titleMedium?.copyWith(
-              color: AppTheme.mediumGrey,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -312,7 +315,7 @@ class MoodEnergyChart extends StatelessWidget {
             'Start tracking your mood and energy levels to see trends over time.',
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: AppTheme.mediumGrey,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
               fontSize: 14,
             ),
           ),
@@ -321,7 +324,8 @@ class MoodEnergyChart extends StatelessWidget {
     );
   }
 
-  Widget _buildLegendItem(String label, Color color) {
+  Widget _buildLegendItem(String label, Color color, BuildContext context) {
+    final theme = Theme.of(context);
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -337,7 +341,7 @@ class MoodEnergyChart extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            color: AppTheme.mediumGrey,
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
             fontSize: 12,
             fontWeight: FontWeight.w500,
           ),
@@ -346,7 +350,8 @@ class MoodEnergyChart extends StatelessWidget {
     );
   }
 
-  Widget _buildSummaryItem(String label, String value, Color color, IconData icon) {
+  Widget _buildSummaryItem(String label, String value, Color color, IconData icon, BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       children: [
         Icon(
@@ -366,7 +371,7 @@ class MoodEnergyChart extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            color: AppTheme.mediumGrey,
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
             fontSize: 10,
           ),
         ),

@@ -19,17 +19,17 @@ class CycleLengthChart extends StatelessWidget {
     final filteredCycles = _getFilteredCycles();
     
     if (filteredCycles.isEmpty) {
-      return _buildEmptyState();
+      return _buildEmptyState(theme);
     }
 
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
+            color: theme.shadowColor.withValues(alpha: 0.1),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
@@ -65,13 +65,13 @@ class CycleLengthChart extends StatelessWidget {
                       'Cycle Length Trends',
                       style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: AppTheme.darkGrey,
+                        color: theme.colorScheme.onSurface,
                       ),
                     ),
                     Text(
                       'Last ${months == 12 ? '1 year' : '$months months'}',
                       style: TextStyle(
-                        color: AppTheme.mediumGrey,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                         fontSize: 14,
                       ),
                     ),
@@ -79,7 +79,7 @@ class CycleLengthChart extends StatelessWidget {
                 ),
               ),
               // Statistics
-              _buildStatistics(filteredCycles),
+              _buildStatistics(filteredCycles, theme),
             ],
           ),
           
@@ -94,7 +94,7 @@ class CycleLengthChart extends StatelessWidget {
     );
   }
 
-  Widget _buildStatistics(List<CycleData> cycles) {
+  Widget _buildStatistics(List<CycleData> cycles, ThemeData theme) {
     final avgLength = cycles.fold<int>(0, (sum, cycle) => sum + cycle.length) / cycles.length;
     final shortest = cycles.map((c) => c.length).reduce((min, length) => length < min ? length : min);
     final longest = cycles.map((c) => c.length).reduce((max, length) => length > max ? length : max);
@@ -113,7 +113,7 @@ class CycleLengthChart extends StatelessWidget {
         Text(
           'Average',
           style: TextStyle(
-            color: AppTheme.mediumGrey,
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
             fontSize: 12,
           ),
         ),
@@ -121,7 +121,7 @@ class CycleLengthChart extends StatelessWidget {
         Text(
           '$shortest-$longest days',
           style: TextStyle(
-            color: AppTheme.mediumGrey,
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
             fontSize: 12,
           ),
         ),
@@ -129,15 +129,15 @@ class CycleLengthChart extends StatelessWidget {
     );
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(ThemeData theme) {
     return Container(
       padding: const EdgeInsets.all(40),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
+            color: theme.shadowColor.withValues(alpha: 0.1),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
@@ -149,13 +149,13 @@ class CycleLengthChart extends StatelessWidget {
             Icon(
               Icons.timeline,
               size: 48,
-              color: AppTheme.lightGrey,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
             ),
             const SizedBox(height: 16),
             Text(
               'No cycle data available',
               style: TextStyle(
-                color: AppTheme.mediumGrey,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
@@ -164,7 +164,7 @@ class CycleLengthChart extends StatelessWidget {
             Text(
               'Start tracking your cycles to see trends',
               style: TextStyle(
-                color: AppTheme.mediumGrey,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 fontSize: 14,
               ),
             ),

@@ -131,7 +131,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
               Text('Biometric data refreshed at ${DateFormat('HH:mm').format(DateTime.now())}'),
             ],
           ),
-          backgroundColor: AppTheme.successGreen,
+          backgroundColor: AppTheme.accentMint,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         ),
@@ -216,6 +216,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
   }
   
   Widget _buildAppBar() {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -231,14 +232,14 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
                       AppLocalizations.of(context).biometricDashboard,
                       style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: AppTheme.darkGrey,
+                        color: theme.colorScheme.onSurface,
                       ),
                     ).animate().fadeIn().slideX(begin: -0.2, end: 0),
                     const SizedBox(height: 4),
                     Text(
                       AppLocalizations.of(context).aiPoweredHealthInsights,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppTheme.mediumGrey,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                       ),
                     ).animate().fadeIn(delay: 100.ms),
                   ],
@@ -254,9 +255,9 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.9),
+                        color: theme.cardColor.withValues(alpha: 0.9),
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: AppTheme.lightGrey),
+                        border: Border.all(color: theme.dividerColor),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -269,10 +270,10 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
                           const SizedBox(width: 4),
                           Text(
                             '${_selectedRange.duration.inDays}d',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
-                              color: AppTheme.darkGrey,
+                              color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
                             ),
                           ),
                         ],
@@ -363,7 +364,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
                   hasData ? 'Health Data Connected' : 'Limited Health Data',
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: AppTheme.darkGrey,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
                 Text(
@@ -371,7 +372,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
                       ? 'Data completeness: ${(completeness * 100).round()}%'
                       : 'Connect more devices for better insights',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppTheme.mediumGrey,
+                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
                 ),
               ],
@@ -381,7 +382,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
             Text(
               'Updated ${DateFormat('HH:mm').format(_lastRefresh!)}',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AppTheme.mediumGrey,
+                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
                 fontSize: 10,
               ),
             ),
@@ -392,10 +393,11 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
   }
   
   Widget _buildTabBar() {
+    final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.9),
+        color: theme.cardColor.withValues(alpha: 0.9),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -417,7 +419,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
         ),
         dividerColor: Colors.transparent,
         labelColor: Colors.white,
-        unselectedLabelColor: AppTheme.mediumGrey,
+        unselectedLabelColor: theme.colorScheme.onSurface.withValues(alpha: 0.6),
         labelStyle: const TextStyle(
           fontWeight: FontWeight.w600,
           fontSize: 12,

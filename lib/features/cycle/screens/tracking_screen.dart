@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/models/cycle_data.dart';
 import '../../../core/database/database_service.dart';
@@ -182,9 +183,9 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
           _recentlySaved = true;
         });
         
-        // Set timer to clear the "recently saved" state after 3 seconds
+        // Set timer to clear the "recently saved" state after 2 seconds (reduced feedback time)
         _savedStateTimer?.cancel();
-        _savedStateTimer = Timer(const Duration(seconds: 3), () {
+        _savedStateTimer = Timer(const Duration(milliseconds: 2000), () {
           if (mounted) {
             setState(() {
               _recentlySaved = false;
@@ -192,57 +193,105 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
           }
         });
         
-        // Show enhanced success feedback with animation
+        // Show enhanced success feedback with animation and improved styling
+        final theme = Theme.of(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Row(
-              children: [
-                Container(
-                  width: 24,
-                  height: 24,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Icon(
-                    Icons.check_circle,
-                    color: Colors.white,
-                    size: 16,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        localizations.trackingDataSaved(DateFormat('MMM d').format(_selectedDate)),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14,
+            content: Container(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Row(
+                children: [
+                  Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.surface,
+                      borderRadius: BorderRadius.circular(18),
+                      boxShadow: [
+                        BoxShadow(
+                          color: theme.shadowColor.withOpacity(0.1),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
                         ),
-                      ),
-                      const Text(
-                        'Your data has been securely saved',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.white70,
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
+                    child: Icon(
+                      Icons.celebration,
+                      color: AppTheme.primaryRose,
+                      size: 20,
+                    ),
                   ),
-                ),
-              ],
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          children: [
+                            Flexible(
+                              child: Text(
+                                '🎉 Data Successfully Saved!',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: theme.colorScheme.onPrimary,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Tracking for ${DateFormat('MMMM d, yyyy').format(_selectedDate)} securely stored',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: theme.colorScheme.onPrimary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.onPrimary.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      '✓',
+                      style: TextStyle(
+                        color: theme.colorScheme.onPrimary,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            backgroundColor: AppTheme.successGreen,
+            backgroundColor: AppTheme.primaryRose,
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             margin: const EdgeInsets.all(16),
-            duration: const Duration(milliseconds: 2500),
-            elevation: 8,
+            duration: const Duration(seconds: 4), // Increased from 2.5 to 4 seconds
+            elevation: 12,
+            action: _shouldShowSmartNavigation() ? SnackBarAction(
+              label: 'View Insights',
+              textColor: theme.colorScheme.onPrimary,
+              backgroundColor: theme.colorScheme.onPrimary.withOpacity(0.2),
+              onPressed: () => _navigateToInsights(),
+            ) : null,
           ),
         );
+        
+        // Smart post-save navigation after delay
+        _scheduleSmartNavigation();
+        
+        // Always show a quick action suggestion after 2 seconds for user engagement
+        _scheduleQuickActionSuggestion();
       }
     } catch (e) {
       // Handle save errors
@@ -256,6 +305,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
         // Error haptic feedback
         HapticFeedback.heavyImpact();
         
+        final theme = Theme.of(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Row(
@@ -264,33 +314,33 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
                   width: 24,
                   height: 24,
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.2),
+                    color: theme.colorScheme.onError.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.error_outline,
-                    color: Colors.white,
+                    color: theme.colorScheme.onError,
                     size: 16,
                   ),
                 ),
                 const SizedBox(width: 12),
-                const Expanded(
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
+                      const Text(
                         'Save Failed',
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 14,
                         ),
                       ),
-                      Text(
+                        Text(
                         'Please check your connection and try again',
                         style: TextStyle(
                           fontSize: 12,
-                          color: Colors.white70,
+                          color: theme.colorScheme.onError.withOpacity(0.7),
                         ),
                       ),
                     ],
@@ -306,7 +356,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
             elevation: 8,
             action: SnackBarAction(
               label: 'Retry',
-              textColor: Colors.white,
+              textColor: theme.colorScheme.onError,
               onPressed: _saveTrackingData,
             ),
           ),
@@ -371,11 +421,11 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.9),
+                  color: theme.cardColor.withValues(alpha: 0.9),
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.1),
+                      color: Colors.black.withOpacity(0.1),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
@@ -395,7 +445,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
                         Text(
                           DateFormat('EEEE').format(_selectedDate),
                           style: theme.textTheme.bodySmall?.copyWith(
-                            color: AppTheme.mediumGrey,
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                           ),
                         ),
                         Text(
@@ -409,7 +459,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
                     const Spacer(),
                     Icon(
                       Icons.expand_more,
-                      color: AppTheme.mediumGrey,
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                     ),
                   ],
                 ),
@@ -424,8 +474,8 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
             decoration: BoxDecoration(
               color: _hasUnsavedChanges 
-                ? AppTheme.warningOrange.withValues(alpha: 0.2)
-                : AppTheme.accentMint.withValues(alpha: 0.2),
+                ? AppTheme.warningOrange.withOpacity(0.2)
+                : AppTheme.accentMint.withOpacity(0.2),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
@@ -443,14 +493,15 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
   }
   
   Widget _buildTabBar() {
+    final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.9),
+        color: theme.cardColor.withValues(alpha: 0.9),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
+            color: Colors.black.withOpacity(0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -467,11 +518,11 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
           borderRadius: BorderRadius.circular(12),
         ),
         dividerColor: Colors.transparent,
-        labelColor: Colors.white,
-        unselectedLabelColor: AppTheme.mediumGrey,
+        labelColor: theme.colorScheme.onPrimary,
+        unselectedLabelColor: theme.colorScheme.onSurface.withValues(alpha: 0.6),
         labelStyle: const TextStyle(
           fontWeight: FontWeight.w600,
-          fontSize: 12,
+          fontSize: 10,
         ),
         tabs: [
           Tab(
@@ -495,12 +546,12 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
   }
   
   Widget _buildTabContent(IconData icon, String label) {
-    return Padding(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+    return Padding(padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 16),
-          const SizedBox(width: 4),
+          Icon(icon, size: 14),
+          const SizedBox(width: 3),
           Text(label),
         ],
       ),
@@ -508,135 +559,70 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
   }
   
   Widget _buildFlowTab() {
-    final localizations = AppLocalizations.of(context);
     final theme = Theme.of(context);
     
-    return Padding(padding: const EdgeInsets.all(20),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            localizations.flowIntensity,
+            'Flow',
             style: theme.textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
+              color: theme.colorScheme.onSurface,
             ),
           ).animate().fadeIn().slideX(begin: -0.2, end: 0),
           
-          const SizedBox(height: 8),
+          const SizedBox(height: 24),
           
-          Text(
-            localizations.selectTodaysFlowIntensity,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
-            ),
-          ).animate().fadeIn(delay: 100.ms),
+          // Modern flow intensity selector
+          FlowIntensityPicker(
+            selectedIntensity: _flowIntensity,
+            onIntensitySelected: (intensity) {
+              setState(() {
+                _flowIntensity = intensity;
+              });
+              _markUnsavedChanges();
+              HapticFeedback.selectionClick();
+            },
+          ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.2, end: 0),
           
-          const SizedBox(height: 20),
+          const SizedBox(height: 24),
           
-          Expanded(
-            child: Column(
-              children: [
-                Expanded(
-                  flex: 3,
-                  child: FlowIntensityPicker(
-                    selectedIntensity: _flowIntensity,
-                    onIntensitySelected: (intensity) {
-                      setState(() {
-                        _flowIntensity = intensity;
-                      });
-                      _markUnsavedChanges();
-                      HapticFeedback.selectionClick();
-                    },
-                  ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.3, end: 0),
+          // Simplified AI insight
+          if (_flowIntensity != FlowIntensity.none)
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppTheme.accentMint.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: AppTheme.accentMint.withOpacity(0.3),
+                  width: 1,
                 ),
-                
-                const SizedBox(height: 20),
-                
-                // AI Health Insights Section
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        AppTheme.secondaryBlue.withValues(alpha: 0.1),
-                        AppTheme.accentMint.withValues(alpha: 0.05),
-                      ],
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: AppTheme.secondaryBlue.withValues(alpha: 0.2),
-                      width: 1,
-                    ),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.lightbulb_outline,
+                    color: AppTheme.accentMint,
+                    size: 20,
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            width: 36,
-                            height: 36,
-                            decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                colors: [AppTheme.secondaryBlue, AppTheme.accentMint],
-                              ),
-                              borderRadius: BorderRadius.circular(18),
-                            ),
-                            child: const Icon(
-                              Icons.psychology,
-                              color: Colors.white,
-                              size: 18,
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'AI Health Insights',
-                                  style: theme.textTheme.titleSmall?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: AppTheme.darkGrey,
-                                  ),
-                                ),
-                                Text(
-                                  _getFlowInsight(_flowIntensity),
-                                  style: theme.textTheme.bodySmall?.copyWith(
-                                    color: AppTheme.mediumGrey,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                            decoration: BoxDecoration(
-                              color: AppTheme.accentMint.withValues(alpha: 0.2),
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: const Text(
-                              'SMART',
-                              style: TextStyle(
-                                color: AppTheme.accentMint,
-                                fontSize: 8,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      _getFlowInsight(_flowIntensity),
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                        fontSize: 13,
                       ),
-                    ],
+                    ),
                   ),
-                ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.2, end: 0),
-              ],
-            ),
-          ),
+                ],
+              ),
+            ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.1, end: 0),
         ],
       ),
     );
@@ -664,7 +650,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
               Text(
                 localizations.selectAllSymptoms,
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  color: AppTheme.mediumGrey,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                 ),
               ),
             ],
@@ -715,7 +701,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
           Text(
             localizations.howAreYouFeelingToday,
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: AppTheme.mediumGrey,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
             ),
           ),
           const SizedBox(height: 30),
@@ -768,7 +754,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
           Text(
             'Rate your overall pain level',
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: AppTheme.mediumGrey,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
             ),
           ),
           const SizedBox(height: 30),
@@ -819,7 +805,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
             'Personal Notes',
             style: theme.textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
-              color: AppTheme.darkGrey,
+              color: theme.colorScheme.onSurface,
             ),
           ).animate().fadeIn().slideX(begin: -0.2, end: 0),
           
@@ -828,7 +814,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
           Text(
             'Capture your thoughts, feelings, and observations about your cycle',
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: AppTheme.mediumGrey,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
             ),
           ).animate().fadeIn(delay: 100.ms),
           
@@ -842,13 +828,13 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
                 color: _notesController.text.isNotEmpty 
-                    ? AppTheme.primaryRose.withValues(alpha: 0.3)
+                    ? AppTheme.primaryRose.withOpacity(0.3)
                     : theme.dividerColor,
                 width: 2,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: theme.shadowColor.withValues(alpha: 0.08),
+                  color: theme.shadowColor.withOpacity(0.08),
                   blurRadius: 20,
                   offset: const Offset(0, 8),
                 ),
@@ -864,8 +850,8 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        AppTheme.primaryRose.withValues(alpha: 0.1),
-                        AppTheme.primaryPurple.withValues(alpha: 0.05),
+                        AppTheme.primaryRose.withOpacity(0.1),
+                        AppTheme.primaryPurple.withOpacity(0.05),
                       ],
                     ),
                     borderRadius: const BorderRadius.only(
@@ -884,9 +870,9 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
                           ),
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.edit_note_rounded,
-                          color: Colors.white,
+                          color: theme.colorScheme.onPrimary,
                           size: 20,
                         ),
                       ),
@@ -899,13 +885,13 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
                               'Today\'s Journal Entry',
                               style: theme.textTheme.titleMedium?.copyWith(
                                 fontWeight: FontWeight.bold,
-                                color: AppTheme.darkGrey,
+                                color: theme.colorScheme.onSurface,
                               ),
                             ),
                             Text(
                               DateFormat('EEEE, MMMM d').format(_selectedDate),
                               style: theme.textTheme.bodySmall?.copyWith(
-                                color: AppTheme.mediumGrey,
+                                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                               ),
                             ),
                           ],
@@ -915,7 +901,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
-                            color: AppTheme.accentMint.withValues(alpha: 0.2),
+                            color: AppTheme.accentMint.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
@@ -946,7 +932,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
                     decoration: InputDecoration(
                       hintText: 'How are you feeling today? Any symptoms, mood changes, or observations you\'d like to remember?\n\nTip: Recording your thoughts helps identify patterns over time.',
                       hintStyle: TextStyle(
-                        color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.5),
+                        color: theme.textTheme.bodyMedium?.color?.withOpacity(0.5),
                         fontSize: 14,
                         height: 1.5,
                       ),
@@ -975,7 +961,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
               'Quick Notes',
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: AppTheme.darkGrey,
+                color: theme.colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 16),
@@ -1021,14 +1007,14 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: theme.cardColor,
           borderRadius: BorderRadius.circular(25),
           border: Border.all(
-            color: AppTheme.lightGrey,
+            color: theme.dividerColor,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
+              color: theme.shadowColor.withOpacity(0.05),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -1045,7 +1031,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
             Text(
               label,
               style: theme.textTheme.bodySmall?.copyWith(
-                color: AppTheme.darkGrey,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -1053,7 +1039,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
             Icon(
               Icons.add_circle_outline,
               size: 16,
-              color: AppTheme.mediumGrey,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
             ),
           ],
         ),
@@ -1075,19 +1061,19 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
       isEnabled = false;
       isLoading = true;
     } else if (_recentlySaved) {
-      buttonText = '🎉 Successfully Saved!';
-      buttonIcon = Icons.celebration_rounded;
-      gradientColors = [AppTheme.successGreen, const Color(0xFF4CAF50)];
+      buttonText = 'Saved ✓';
+      buttonIcon = Icons.check_rounded;
+      gradientColors = [AppTheme.successGreen, AppTheme.successGreen.withValues(alpha: 0.8)];
       isEnabled = false;
     } else if (_hasUnsavedChanges) {
-      buttonText = '✨ Save Tracking Data';
+      buttonText = 'Save Changes';
       buttonIcon = Icons.save_rounded;
-      gradientColors = null; // Use default success gradient
+      gradientColors = [AppTheme.primaryRose, AppTheme.primaryPurple]; // Elegant gradient
       isEnabled = true;
     } else {
-      buttonText = '✅ All Changes Saved!';
-      buttonIcon = Icons.check_circle_rounded;
-      gradientColors = [AppTheme.accentMint, AppTheme.accentMint.withValues(alpha: 0.8)];
+      buttonText = 'Up to date';
+      buttonIcon = Icons.done_rounded;
+      gradientColors = [AppTheme.accentMint.withValues(alpha: 0.6), AppTheme.accentMint.withValues(alpha: 0.4)];
       isEnabled = false;
     }
     
@@ -1100,8 +1086,8 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
           text: buttonText,
           onPressed: isEnabled ? _saveTrackingData : null,
           icon: buttonIcon,
-          type: ModernButtonType.success,
-          size: ModernButtonSize.large,
+          type: _hasUnsavedChanges ? ModernButtonType.primary : ModernButtonType.success,
+          size: ModernButtonSize.medium,
           isExpanded: true,
           isLoading: isLoading,
           gradientColors: gradientColors,
@@ -1164,17 +1150,193 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
   String _getFlowInsight(FlowIntensity intensity) {
     switch (intensity) {
       case FlowIntensity.none:
-        return 'Track your flow to get personalized insights';
+        return 'Start tracking to get personalized insights';
+      case FlowIntensity.spotting:
+        return 'Light spotting is normal at the beginning or end of your cycle.';
       case FlowIntensity.light:
-        return 'Light flow detected. Stay hydrated and consider gentle activities.';
+        return 'Light flow - stay hydrated and rest as needed.';
       case FlowIntensity.medium:
-        return 'Normal flow pattern. Your cycle appears to be on track.';
+        return 'Normal flow pattern - you\'re doing great!';
       case FlowIntensity.heavy:
-        return 'Heavy flow detected. Monitor iron levels and rest when needed.';
+        return 'Heavy flow - monitor iron intake and rest.';
       case FlowIntensity.veryHeavy:
-        return 'Very heavy flow. Consider consulting with healthcare provider if persistent.';
+        return 'Very heavy flow - consider tracking for your doctor.';
       default:
-        return 'Continue tracking for better insights';
+        return 'Keep tracking for better insights';
     }
+  }
+  
+  // Smart navigation helper methods
+  bool _shouldShowSmartNavigation() {
+    // Only show navigation suggestion for critical situations
+    final hasCriticalData = (_flowIntensity == FlowIntensity.heavy || _flowIntensity == FlowIntensity.veryHeavy) ||
+        (_symptoms.length >= 3) || // Multiple symptoms
+        (_pain >= 4.0) || // High pain
+        (_painAreas.length >= 2); // Multiple pain areas
+    
+    return hasCriticalData;
+  }
+  
+  void _navigateToInsights() {
+    // Navigate to insights/analytics page
+    context.go('/insights');
+  }
+  
+  void _scheduleSmartNavigation() {
+    // Only schedule auto-navigation if user has entered substantial tracking data
+    if (!_shouldShowSmartNavigation()) return;
+    
+    // Wait 6 seconds after save confirmation, then show navigation options
+    Timer(const Duration(seconds: 6), () {
+      if (!mounted) return;
+      
+      // Determine best next screen based on tracked data
+      String nextScreen = _determineNextScreen();
+      String screenTitle = _getScreenTitle(nextScreen);
+      
+      // Show bottom sheet with navigation options
+      _showSmartNavigationSheet(nextScreen, screenTitle);
+    });
+  }
+  
+  void _scheduleQuickActionSuggestion() {
+    // Show a quick action suggestion for all users after 2 seconds
+    Timer(const Duration(seconds: 2), () {
+      if (!mounted) return;
+      
+      // Don't show if critical navigation is already scheduled
+      if (_shouldShowSmartNavigation()) return;
+      
+      // Show a brief, helpful next action
+      _showQuickActionSnackBar();
+    });
+  }
+  
+  void _showQuickActionSnackBar() {
+    final theme = Theme.of(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            Icon(
+              Icons.lightbulb_outline,
+              color: AppTheme.accentMint,
+              size: 20,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                'Great job tracking! View your progress or add more entries.',
+                style: TextStyle(
+                  color: theme.colorScheme.onSurface,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: theme.colorScheme.surface,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        margin: const EdgeInsets.all(16),
+        duration: const Duration(seconds: 3),
+        action: SnackBarAction(
+          label: 'View Progress',
+          textColor: AppTheme.primaryRose,
+          onPressed: () => context.go('/insights'),
+        ),
+      ),
+    );
+  }
+  
+  String _determineNextScreen() {
+    // Smart logic to suggest next screen based on what was tracked
+    if (_symptoms.isNotEmpty || _pain > 2.0) {
+      return '/insights'; // Show health insights if symptoms or pain
+    } else if (_flowIntensity != FlowIntensity.none) {
+      return '/cycle'; // Show cycle overview for flow tracking
+    } else if (_notes.isNotEmpty && _notes.length > 50) {
+      return '/journal'; // Show journal/notes history for detailed entries
+    } else {
+      return '/home'; // Default to home screen
+    }
+  }
+  
+  String _getScreenTitle(String route) {
+    switch (route) {
+      case '/insights':
+        return 'Health Insights';
+      case '/cycle':
+        return 'Cycle Overview';
+      case '/journal':
+        return 'Personal Journal';
+      case '/home':
+      default:
+        return 'Home Dashboard';
+    }
+  }
+  
+  void _showSmartNavigationSheet(String nextScreen, String screenTitle) {
+    final theme = Theme.of(context);
+    
+    // Show a more subtle snackbar instead of full modal
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+                ),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Icon(
+                Icons.auto_awesome,
+                color: Colors.white,
+                size: 16,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'AI Insights Available',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: theme.colorScheme.onSurface,
+                      fontSize: 14,
+                    ),
+                  ),
+                  Text(
+                    'View personalized health recommendations',
+                    style: TextStyle(
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: theme.colorScheme.surface,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        margin: const EdgeInsets.all(16),
+        duration: const Duration(seconds: 4),
+        elevation: 8,
+        action: SnackBarAction(
+          label: 'View Insights',
+          textColor: AppTheme.primaryRose,
+          onPressed: () => context.go(nextScreen),
+        ),
+      ),
+    );
   }
 }

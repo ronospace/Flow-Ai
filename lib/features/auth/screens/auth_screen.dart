@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/services/auth_service.dart';
 import '../../../generated/app_localizations.dart';
@@ -11,7 +12,7 @@ import '../../../core/widgets/modern_button.dart';
 import '../widgets/auth_text_field.dart';
 import '../widgets/social_login_button.dart';
 import '../widgets/biometric_button.dart';
-import '../../../core/widgets/cycleai_logo.dart';
+import '../../../core/widgets/zyraflow_logo.dart';
 import '../../settings/providers/settings_provider.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -154,7 +155,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       child: Column(
         children: [
           // CycleAI Logo
-          CycleAILogo(
+                        ZyraFlowLogo(
             size: 120,
             showWordmark: false,
           ).animate(controller: _headerController)
@@ -165,7 +166,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
           
           // App Name
           Text(
-            'CycleAI',
+            'ZyraFlow',
             style: theme.textTheme.headlineLarge?.copyWith(
               fontWeight: FontWeight.bold,
               color: AppTheme.darkGrey,
@@ -179,7 +180,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
           
           // Subtitle
           Text(
-            'AI-Powered Period & Cycle Tracking',
+            'Smart Period & Wellness Tracking',
             style: theme.textTheme.bodyLarge?.copyWith(
               color: AppTheme.mediumGrey,
               fontSize: 16,
@@ -543,6 +544,17 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       if (result.isSuccess) {
         HapticFeedback.lightImpact();
         _showSuccessMessage('Biometric authentication successful!');
+        
+        // Sync user data immediately to ensure username is captured and available
+        try {
+          final settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
+          // Force an immediate sync to capture fresh auth data
+          await settingsProvider.forceUserDataSync();
+          debugPrint('✅ User settings synced successfully after biometric authentication');
+        } catch (syncError) {
+          debugPrint('⚠️ Warning: Could not sync user settings after biometric auth: $syncError');
+        }
+        
         await Future.delayed(const Duration(milliseconds: 500));
         
         // Navigate to main app
@@ -678,6 +690,16 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       if (result.isSuccess) {
         _showSuccessMessage('Google sign in successful!');
         
+        // Sync user data immediately to ensure username is captured and available
+        try {
+          final settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
+          // Force an immediate sync to capture fresh auth data
+          await settingsProvider.forceUserDataSync();
+          debugPrint('✅ User settings synced successfully after Google authentication');
+        } catch (syncError) {
+          debugPrint('⚠️ Warning: Could not sync user settings after Google auth: $syncError');
+        }
+        
         await Future.delayed(const Duration(milliseconds: 1000));
         if (mounted) {
           context.go('/home');
@@ -720,6 +742,16 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       final result = await _authService.signInWithApple();
       if (result.isSuccess) {
         _showSuccessMessage('Apple sign in successful!');
+        
+        // Sync user data immediately to ensure username is captured and available
+        try {
+          final settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
+          // Force an immediate sync to capture fresh auth data
+          await settingsProvider.forceUserDataSync();
+          debugPrint('✅ User settings synced successfully after Apple authentication');
+        } catch (syncError) {
+          debugPrint('⚠️ Warning: Could not sync user settings after Apple auth: $syncError');
+        }
         
         await Future.delayed(const Duration(milliseconds: 1000));
         if (mounted) {

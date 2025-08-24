@@ -11,11 +11,11 @@ class CalendarLegend extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.9),
+        color: theme.colorScheme.surface.withValues(alpha: 0.9),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
+            color: theme.shadowColor.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -36,7 +36,7 @@ class CalendarLegend extends StatelessWidget {
                 'Cycle Phases',
                 style: theme.textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppTheme.darkGrey,
+                  color: theme.colorScheme.onSurface,
                 ),
               ),
             ],
@@ -44,76 +44,76 @@ class CalendarLegend extends StatelessWidget {
           const SizedBox(height: 12),
           
           // Legend items in a grid
-          Row(
-            children: [
-              Expanded(
-                child: _buildLegendItem(
-                  context,
-                  'Menstrual',
-                  AppTheme.primaryRose,
-                  '🩸',
+          IntrinsicHeight(
+            child: Row(
+              children: [
+                Flexible(
+                  child: _buildLegendItem(
+                    context,
+                    'Menstrual',
+                    AppTheme.primaryRose,
+                    '🩸',
+                  ),
                 ),
-              ),
-              Expanded(
-                child: _buildLegendItem(
-                  context,
-                  'Follicular',
-                  AppTheme.accentMint,
-                  '🌱',
+                Flexible(
+                  child: _buildLegendItem(
+                    context,
+                    'Follicular',
+                    AppTheme.accentMint,
+                    '🌱',
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           const SizedBox(height: 8),
-          Row(
-            children: [
-              Expanded(
-                child: _buildLegendItem(
-                  context,
-                  'Ovulation',
-                  AppTheme.secondaryBlue,
-                  '🥚',
+          IntrinsicHeight(
+            child: Row(
+              children: [
+                Flexible(
+                  child: _buildLegendItem(
+                    context,
+                    'Ovulation',
+                    AppTheme.secondaryBlue,
+                    '🥚',
+                  ),
                 ),
-              ),
-              Expanded(
-                child: _buildLegendItem(
-                  context,
-                  'Luteal',
-                  AppTheme.primaryPurple,
-                  '🌙',
+                Flexible(
+                  child: _buildLegendItem(
+                    context,
+                    'Luteal',
+                    AppTheme.primaryPurple,
+                    '🌙',
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           const SizedBox(height: 12),
           
-          // Additional info
+          // Additional info with improved flow intensity indicators
           Row(
             children: [
-              _buildIndicator(AppTheme.accentMint.withValues(alpha: 0.8), 'Today'),
+              _buildFlowIntensityIndicator('Light Flow', '💧', 8),
               const Spacer(),
-              _buildIndicator(
-                Colors.transparent,
-                'Predicted',
-                hasBorder: true,
-                borderColor: AppTheme.secondaryBlue,
-              ),
+              _buildFlowIntensityIndicator('Heavy Flow', '🔴', 12),
             ],
           ),
           
           const SizedBox(height: 8),
           
-          // Fertile Window indicator
+          // Status indicators
           Row(
             children: [
-              _buildIndicator(
-                AppTheme.accentMint.withValues(alpha: 0.6),
-                'Fertile Window',
-              ),
+              _buildIndicator(context, AppTheme.accentMint.withValues(alpha: 0.8), 'Today'),
               const Spacer(),
               _buildIndicator(
-                AppTheme.secondaryBlue.withValues(alpha: 0.6),
-                'Ovulation',
+                context,
+                Colors.transparent,
+                'AI Predicted',
+                hasBorder: true,
+                borderColor: AppTheme.secondaryBlue,
+                hasRobotIcon: true,
               ),
             ],
           ),
@@ -130,6 +130,7 @@ class CalendarLegend extends StatelessWidget {
   ) {
     final theme = Theme.of(context);
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Container(
           width: 20,
@@ -148,11 +149,11 @@ class CalendarLegend extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 6),
-        Expanded(
+        Flexible(
           child: Text(
             label,
             style: theme.textTheme.bodySmall?.copyWith(
-              color: AppTheme.mediumGrey,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
               fontWeight: FontWeight.w500,
             ),
             overflow: TextOverflow.ellipsis,
@@ -163,12 +164,16 @@ class CalendarLegend extends StatelessWidget {
   }
 
   Widget _buildIndicator(
+    BuildContext context,
     Color color,
     String label, {
     bool hasBorder = false,
     Color? borderColor,
+    bool hasRobotIcon = false,
   }) {
+    final theme = Theme.of(context);
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Container(
           width: 16,
@@ -180,14 +185,68 @@ class CalendarLegend extends StatelessWidget {
                 ? Border.all(color: borderColor, width: 2)
                 : null,
           ),
+          child: hasRobotIcon
+              ? const Center(
+                  child: Text(
+                    '🤖',
+                    style: TextStyle(fontSize: 8),
+                  ),
+                )
+              : null,
         ),
         const SizedBox(width: 6),
-        Text(
-          label,
-          style: TextStyle(
-            color: AppTheme.mediumGrey,
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
+        Flexible(
+          child: Text(
+            label,
+            style: TextStyle(
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
+    );
+  }
+  
+  Widget _buildFlowIntensityIndicator(String label, String emoji, double size) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 16,
+          height: 16,
+          decoration: BoxDecoration(
+            color: AppTheme.primaryRose.withValues(alpha: 0.1),
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: AppTheme.primaryRose.withValues(alpha: 0.3),
+              width: 1,
+            ),
+          ),
+          child: Center(
+            child: Text(
+              emoji,
+              style: TextStyle(fontSize: size),
+            ),
+          ),
+        ),
+        const SizedBox(width: 6),
+        Flexible(
+          child: Builder(
+            builder: (context) {
+              final theme = Theme.of(context);
+              return Text(
+                label,
+                style: TextStyle(
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+                overflow: TextOverflow.ellipsis,
+              );
+            },
           ),
         ),
       ],

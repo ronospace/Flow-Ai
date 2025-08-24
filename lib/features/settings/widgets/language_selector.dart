@@ -55,7 +55,7 @@ class _LanguageSelectorState extends State<LanguageSelector> {
             height: 4,
             margin: const EdgeInsets.only(top: 12),
             decoration: BoxDecoration(
-              color: AppTheme.lightGrey,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -98,7 +98,7 @@ class _LanguageSelectorState extends State<LanguageSelector> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Container(
               decoration: BoxDecoration(
-                color: AppTheme.lightGrey.withValues(alpha: 0.3),
+                color: theme.colorScheme.surfaceVariant,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: TextField(
@@ -110,7 +110,7 @@ class _LanguageSelectorState extends State<LanguageSelector> {
                 },
                 decoration: InputDecoration(
                   hintText: AppLocalizations.of(context)!.searchLanguages,
-                  prefixIcon: const Icon(Icons.search, color: AppTheme.mediumGrey),
+                  prefixIcon: Icon(Icons.search, color: theme.colorScheme.onSurfaceVariant),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
@@ -151,14 +151,14 @@ class _LanguageSelectorState extends State<LanguageSelector> {
                           decoration: BoxDecoration(
                             color: isSelected 
                                 ? AppTheme.accentMint
-                                : AppTheme.lightGrey.withValues(alpha: 0.5),
+                                : theme.colorScheme.surfaceVariant,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Center(
                             child: Text(
                               language.code.toUpperCase(),
                               style: TextStyle(
-                                color: isSelected ? Colors.white : AppTheme.mediumGrey,
+                                color: isSelected ? Colors.white : theme.colorScheme.onSurfaceVariant,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 12,
                               ),
@@ -184,9 +184,9 @@ class _LanguageSelectorState extends State<LanguageSelector> {
                                 Icons.check_circle,
                                 color: AppTheme.accentMint,
                               )
-                            : const Icon(
+                            : Icon(
                                 Icons.circle_outlined,
-                                color: AppTheme.lightGrey,
+                                color: theme.colorScheme.outline,
                               ),
                         onTap: () async {
                           if (!isSelected) {

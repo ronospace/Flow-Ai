@@ -102,10 +102,11 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
     );
     
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         // Optimized Grid View - Using better scrolling with more space
-        Expanded(
-          flex: 3,
+        Container(
+          height: 400, // Fixed height to avoid unbounded constraints
           child: GridView.builder(
             padding: const EdgeInsets.all(12),
             physics: const BouncingScrollPhysics(), // Better scrolling performance
@@ -205,7 +206,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                 children: [
                   Text(
                     option.title,
-                    style: theme.textTheme.titleLarge?.copyWith(
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: option.color,
                     ),
@@ -213,7 +214,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                   const SizedBox(height: 4),
                   Text(
                     option.medicalInfo,
-                    style: theme.textTheme.bodyMedium?.copyWith(
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: AppTheme.darkGrey,
                       fontWeight: FontWeight.w600,
                     ),
@@ -230,7 +231,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                         const SizedBox(width: 4),
                         Text(
                           AppLocalizations.of(context).hourlyChanges(option.hourlyChanges),
-                          style: theme.textTheme.bodySmall?.copyWith(
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: AppTheme.mediumGrey,
                           ),
                         ),
@@ -246,6 +247,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
   }
   
   Widget _buildAIInsightsPanel(FlowIntensityOption option) {
+    final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(16),
@@ -268,12 +270,12 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
             width: 50,
             height: 50,
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
+              color: theme.colorScheme.onPrimary.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(25),
             ),
-            child: const Icon(
+            child: Icon(
               Icons.psychology,
-              color: Colors.white,
+              color: theme.colorScheme.onPrimary,
               size: 24,
             ),
           ),
@@ -286,8 +288,8 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
               children: [
                 Text(
                   AppLocalizations.of(context).aiHealthInsights,
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: theme.colorScheme.onPrimary,
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),
@@ -295,8 +297,8 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                 const SizedBox(height: 4),
                 Text(
                   _getAIInsight(option),
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: theme.colorScheme.onPrimary,
                     fontSize: 12,
                   ),
                 ),
@@ -323,7 +325,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                 ],
               )
             : null,
-        color: isSelected ? null : Colors.white,
+        color: isSelected ? null : theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
           color: isSelected ? option.color : AppTheme.lightGrey.withValues(alpha: 0.5),
@@ -333,7 +335,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
           BoxShadow(
             color: isSelected 
                 ? option.color.withValues(alpha: 0.3)
-                : Colors.black.withValues(alpha: 0.05),
+                : theme.shadowColor.withValues(alpha: 0.05),
             blurRadius: isSelected ? 15.0 : 8.0,
             offset: Offset(0, isSelected ? 8.0 : 4.0),
           ),
@@ -473,9 +475,9 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
       isScrollControlled: true,
       builder: (context) => Container(
         height: MediaQuery.of(context).size.height * 0.6,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(28),
             topRight: Radius.circular(28),
           ),

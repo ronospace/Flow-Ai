@@ -16,6 +16,7 @@ import '../widgets/theme_selector.dart';
 import '../widgets/profile_section.dart';
 import '../widgets/cyclesync_integration.dart';
 import 'help_screen.dart';
+import 'account_management_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -96,8 +97,8 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
                       const SizedBox(width: 12),
                       Text(
                         l10n.settings,
-                        style: const TextStyle(
-                          color: AppTheme.darkGrey,
+                        style: TextStyle(
+                          color: theme.colorScheme.onSurface,
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
                         ),
@@ -366,7 +367,7 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
                               ),
                             ),
                             title: '🚀 Future Plans',
-                            subtitle: 'See what\'s coming next in FlowSense',
+                            subtitle: 'See what\'s coming next in ZyraFlow',
                             onTap: () => context.push('/future-plans'),
                             trailing: Container(
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -502,9 +503,9 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
   void _showAbout(BuildContext context) {
     showAboutDialog(
       context: context,
-      applicationName: 'FlowSense',
+      applicationName: 'ZyraFlow',
       applicationVersion: '1.0.0',
-      applicationLegalese: '© 2024 FlowSense. All rights reserved.',
+      applicationLegalese: '© 2024 ZyraFlow. All rights reserved.',
       children: [
         const Text('AI-powered menstrual cycle tracking for better reproductive health.'),
       ],
@@ -513,7 +514,7 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
 
   Future<void> _launchWhatsApp() async {
     final phoneNumber = '+4917627702411';
-    final message = 'Hi! I need help with FlowSense app.';
+    final message = 'Hi! I need help with ZyraFlow app.';
     final url = 'https://wa.me/$phoneNumber?text=${Uri.encodeComponent(message)}';
     
     try {
@@ -752,272 +753,12 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
   }
 
   void _showAccountManagement(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        final theme = Theme.of(context);
-        return Container(
-          constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height * 0.8,
-          ),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(28),
-              topRight: Radius.circular(28),
-            ),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Handle bar
-              Container(
-                width: 40,
-                height: 4,
-                margin: const EdgeInsets.only(top: 12),
-                decoration: BoxDecoration(
-                  color: AppTheme.lightGrey,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              
-              // Header
-              Padding(
-                padding: const EdgeInsets.all(24),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [AppTheme.secondaryBlue, AppTheme.accentMint],
-                        ),
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      child: const Icon(
-                        Icons.manage_accounts,
-                        color: Colors.white,
-                        size: 24,
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Account Management',
-                            style: theme.textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: AppTheme.darkGrey,
-                            ),
-                          ),
-                          Text(
-                            'Manage your account and preferences',
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: AppTheme.mediumGrey,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              
-              // Account Options
-              Flexible(
-                child: ListView(
-                  shrinkWrap: true,
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  children: [
-                    _buildAccountOption(
-                      icon: Icons.edit,
-                      title: 'Edit Profile',
-                      subtitle: 'Update your personal information',
-                      onTap: () => Navigator.pop(context),
-                    ),
-                    _buildAccountOption(
-                      icon: Icons.lock_reset,
-                      title: 'Change Password',
-                      subtitle: 'Update your account password',
-                      onTap: () => Navigator.pop(context),
-                    ),
-                    _buildAccountOption(
-                      icon: Icons.email,
-                      title: 'Change Email',
-                      subtitle: 'Update your email address',
-                      onTap: () => Navigator.pop(context),
-                    ),
-                    _buildAccountOption(
-                      icon: Icons.download,
-                      title: 'Export Data',
-                      subtitle: 'Download your tracking data',
-                      onTap: () => Navigator.pop(context),
-                    ),
-                    _buildAccountOption(
-                      icon: Icons.delete_forever,
-                      title: 'Delete Account',
-                      subtitle: 'Permanently delete your account',
-                      onTap: () {
-                        Navigator.pop(context);
-                        _showDeleteAccountDialog(context);
-                      },
-                      isDestructive: true,
-                    ),
-                  ],
-                ),
-              ),
-              
-              const SizedBox(height: 24),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildAccountOption({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required VoidCallback onTap,
-    bool isDestructive = false,
-  }) {
-    final theme = Theme.of(context);
-    final color = isDestructive ? AppTheme.primaryRose : AppTheme.secondaryBlue;
-    
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: color.withValues(alpha: 0.2),
-          width: 1,
-        ),
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(16),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: color.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Icon(
-                    icon,
-                    color: color,
-                    size: 20,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: AppTheme.darkGrey,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        subtitle,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: AppTheme.mediumGrey,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Icon(
-                  Icons.arrow_forward_ios,
-                  color: AppTheme.mediumGrey,
-                  size: 16,
-                ),
-              ],
-            ),
-          ),
-        ),
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const AccountManagementScreen(),
       ),
     );
   }
 
-  void _showDeleteAccountDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          title: Row(
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: AppTheme.primaryRose.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Icon(
-                  Icons.warning,
-                  color: AppTheme.primaryRose,
-                  size: 20,
-                ),
-              ),
-              const SizedBox(width: 16),
-              const Text('Delete Account'),
-            ],
-          ),
-          content: const Text(
-            'This action cannot be undone. All your data including cycle history, insights, and preferences will be permanently deleted.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text(
-                'Cancel',
-                style: TextStyle(
-                  color: AppTheme.mediumGrey,
-                ),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                // Handle account deletion
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primaryRose,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: const Text(
-                'Delete',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
 }
