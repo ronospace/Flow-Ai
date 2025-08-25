@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Lovely Background Gradient (replacing white) -->
+    <radialGradient id="lovelyBg" cx="50%" cy="40%" r="80%">
+      <stop offset="0%" style="stop-color:#FFF0F8;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#F8E8FF;stop-opacity:1" />
+      <stop offset="60%" style="stop-color:#FFEBF0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#F0E6FF;stop-opacity:1" />
+    </radialGradient>
+    
+    <!-- Main Curved Flow Gradient (matching your reference exactly) -->
+    <linearGradient id="mainCurveGradient" x1="20%" y1="20%" x2="80%" y2="80%">
+      <stop offset="0%" style="stop-color:#FF69B4;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#FF1493;stop-opacity:1" />
+      <stop offset="60%" style="stop-color:#DA70D6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9370DB;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Inner curve highlight -->
+    <linearGradient id="innerCurveGradient" x1="30%" y1="30%" x2="70%" y2="70%">
+      <stop offset="0%" style="stop-color:#FFB6C1;stop-opacity:0.8" />
+      <stop offset="50%" style="stop-color:#DDA0DD;stop-opacity:0.7" />
+      <stop offset="100%" style="stop-color:#B19CD9;stop-opacity:0.6" />
+    </linearGradient>
+    
+    <!-- Subtle shimmer -->
+    <linearGradient id="shimmer" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:0.4" />
+      <stop offset="50%" style="stop-color:#FFFFFF;stop-opacity:0.2" />
+      <stop offset="100%" style="stop-color:#FFFFFF;stop-opacity:0.0" />
+    </linearGradient>
+    
+    <!-- Soft shadow filter -->
+    <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#9370DB" flood-opacity="0.2"/>
+    </filter>
+    
+    <!-- Inner glow -->
+    <filter id="innerGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Lovely full-bleed background (no more white!) -->
+  <rect x="0" y="0" width="1024" height="1024" fill="url(#lovelyBg)"/>
+  
+  <!-- Soft background circle for depth -->
+  <circle cx="512" cy="512" r="470" fill="rgba(255,255,255,0.3)" opacity="0.6"/>
+  
+  <!-- Main curved flow shape (matching your reference colors) -->
+  <g filter="url(#softShadow)">
+    <!-- Primary curve -->
+    <path d="M 512 200
+             C 650 200, 760 280, 780 400
+             C 800 500, 760 580, 700 630
+             C 640 680, 560 700, 480 680
+             C 400 660, 340 620, 300 560
+             C 260 500, 270 430, 310 370
+             C 350 310, 410 270, 480 260
+             C 550 250, 620 270, 670 310
+             C 720 350, 750 400, 740 450
+             C 730 500, 700 540, 660 560
+             C 620 580, 570 580, 530 560
+             C 490 540, 460 510, 450 470
+             C 440 430, 450 390, 480 360
+             C 510 330, 550 320, 580 330
+             C 610 340, 630 360, 635 390
+             C 640 420, 630 450, 610 470
+             C 590 490, 560 500, 530 490
+             Z" 
+          fill="url(#mainCurveGradient)"/>
+    
+    <!-- Inner curve for depth -->
+    <path d="M 512 240
+             C 620 240, 710 310, 725 410
+             C 740 480, 710 540, 670 580
+             C 630 620, 580 640, 520 630
+             C 460 620, 410 590, 380 540
+             C 350 490, 355 435, 385 390
+             C 415 345, 465 315, 520 310
+             C 575 305, 625 320, 660 350
+             C 695 380, 715 420, 710 460
+             C 705 500, 685 530, 655 545
+             C 625 560, 590 560, 560 545
+             C 530 530, 510 505, 505 475
+             C 500 445, 510 415, 535 395
+             C 560 375, 590 370, 615 380
+             Z" 
+          fill="url(#innerCurveGradient)" 
+          opacity="0.7"/>
+    
+    <!-- Shimmer highlights -->
+    <ellipse cx="590" cy="350" rx="50" ry="20" 
+             fill="url(#shimmer)" 
+             transform="rotate(-20 590 350)" 
+             opacity="0.8"/>
+    
+    <ellipse cx="450" cy="480" rx="35" ry="12" 
+             fill="url(#shimmer)" 
+             transform="rotate(30 450 480)" 
+             opacity="0.6"/>
+  </g>
+  
+  <!-- Central highlight point -->
+  <circle cx="560" cy="420" r="6" 
+          fill="#FFFFFF" 
+          opacity="0.9" 
+          filter="url(#innerGlow)"/>
+  
+  <!-- Subtle outer boundary -->
+  <circle cx="512" cy="512" r="490" 
+          fill="none" 
+          stroke="rgba(255,255,255,0.4)" 
+          stroke-width="1" 
+          opacity="0.8"/>
+          
+  <!-- Inner accent circle -->
+  <circle cx="512" cy="512" r="450" 
+          fill="none" 
+          stroke="url(#mainCurveGradient)" 
+          stroke-width="0.5" 
+          opacity="0.3"/>
+</svg>

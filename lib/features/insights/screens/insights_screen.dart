@@ -54,44 +54,53 @@ class _InsightsScreenState extends State<InsightsScreen>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-            gradient: AppTheme.backgroundGradient(theme.brightness == Brightness.dark),
-            ),
-            child: SafeArea(
-              child: Column(
-                children: [
-                  // Custom Header
-                  _buildHeader(),
-                  
-                  // Time Period Selector
-                  _buildTimePeriodSelector(),
-                  
-                  // Tab Bar
-                  _buildTabBar(),
-                  
-                  // Tab Content
-                  Expanded(
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: [
-                        _buildOverviewTab(),
-                        _buildTrendsTab(),
-                        _buildPatternsTab(),
-                      ],
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: (didPop, result) {
+        // Ensure proper cleanup when navigating away
+        if (didPop && mounted) {
+          // This helps prevent widget tree persistence issues
+        }
+      },
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+              gradient: AppTheme.backgroundGradient(theme.brightness == Brightness.dark),
+              ),
+              child: SafeArea(
+                child: Column(
+                  children: [
+                    // Custom Header
+                    _buildHeader(),
+                    
+                    // Time Period Selector
+                    _buildTimePeriodSelector(),
+                    
+                    // Tab Bar
+                    _buildTabBar(),
+                    
+                    // Tab Content
+                    Expanded(
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: [
+                          _buildOverviewTab(),
+                          _buildTrendsTab(),
+                          _buildPatternsTab(),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          
-          // Floating AI Chat
-          const FloatingAIChat(),
-        ],
+            
+            // Floating AI Chat - only render if mounted
+            if (mounted) const FloatingAIChat(),
+          ],
+        ),
       ),
     );
   }

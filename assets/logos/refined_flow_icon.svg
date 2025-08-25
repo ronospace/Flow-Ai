@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Refined Aura Background Gradient -->
+    <radialGradient id="refinedAura" cx="50%" cy="45%" r="75%">
+      <stop offset="0%" style="stop-color:#FFE8F4;stop-opacity:1" />
+      <stop offset="35%" style="stop-color:#F0E6FF;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#E8D5FF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFD6CC;stop-opacity:1" />
+    </radialGradient>
+    
+    <!-- Main Flow Gradient (Enhanced) -->
+    <linearGradient id="mainFlowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E91E63;stop-opacity:1" />
+      <stop offset="25%" style="stop-color:#FF6B9D;stop-opacity:0.95" />
+      <stop offset="50%" style="stop-color:#C147E9;stop-opacity:0.9" />
+      <stop offset="75%" style="stop-color:#9C27B0;stop-opacity:0.95" />
+      <stop offset="100%" style="stop-color:#673AB7;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Inner Flow Gradient -->
+    <linearGradient id="innerFlowGradient" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF8A95;stop-opacity:0.8" />
+      <stop offset="50%" style="stop-color:#DDA0DD;stop-opacity:0.85" />
+      <stop offset="100%" style="stop-color:#B39DDB;stop-opacity:0.9" />
+    </linearGradient>
+    
+    <!-- Shimmer Highlight -->
+    <linearGradient id="shimmerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:0.6" />
+      <stop offset="30%" style="stop-color:#FFE4E1;stop-opacity:0.4" />
+      <stop offset="70%" style="stop-color:#F8BBD9;stop-opacity:0.2" />
+      <stop offset="100%" style="stop-color:#FFFFFF;stop-opacity:0.1" />
+    </linearGradient>
+    
+    <!-- Shadow Filter -->
+    <filter id="flowShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#8E44AD" flood-opacity="0.25"/>
+    </filter>
+    
+    <!-- Glow Filter -->
+    <filter id="flowGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Full-bleed Aura Background -->
+  <rect x="0" y="0" width="1024" height="1024" fill="url(#refinedAura)"/>
+  
+  <!-- Background Circle with Subtle Glow -->
+  <circle cx="512" cy="512" r="460" fill="rgba(255,255,255,0.1)" opacity="0.5"/>
+  
+  <!-- Main Curved Flow Shape (Refined) -->
+  <g filter="url(#flowShadow)">
+    <!-- Outer Flow Curve -->
+    <path d="M 512 180
+             C 680 180, 820 280, 820 420
+             C 820 520, 780 600, 720 650
+             C 660 700, 580 720, 512 720
+             C 400 720, 320 660, 280 580
+             C 240 500, 260 410, 320 350
+             C 380 290, 460 270, 540 290
+             C 620 310, 680 360, 700 420
+             C 720 480, 700 540, 660 580
+             C 620 620, 560 640, 512 620
+             C 480 610, 460 590, 450 560
+             C 440 530, 450 500, 470 480
+             C 490 460, 520 450, 540 460
+             C 560 470, 570 490, 565 510
+             Z" 
+          fill="url(#mainFlowGradient)" 
+          stroke="none"/>
+    
+    <!-- Inner Flow Highlight -->
+    <path d="M 512 220
+             C 640 220, 750 300, 750 400
+             C 750 480, 720 540, 680 580
+             C 640 620, 580 640, 512 640
+             C 420 640, 360 600, 330 540
+             C 300 480, 315 415, 360 370
+             C 405 325, 470 310, 530 325
+             C 590 340, 630 375, 645 415
+             C 660 455, 645 495, 615 525
+             C 585 555, 540 570, 512 560
+             C 490 555, 475 540, 470 520
+             C 465 500, 470 480, 485 465
+             C 500 450, 520 445, 535 450
+             Z" 
+          fill="url(#innerFlowGradient)" 
+          opacity="0.7"/>
+    
+    <!-- Shimmer Effect -->
+    <ellipse cx="580" cy="350" rx="60" ry="25" 
+             fill="url(#shimmerGradient)" 
+             transform="rotate(-25 580 350)" 
+             opacity="0.6"/>
+    
+    <!-- Additional Shimmer -->
+    <ellipse cx="420" cy="520" rx="40" ry="15" 
+             fill="url(#shimmerGradient)" 
+             transform="rotate(35 420 520)" 
+             opacity="0.4"/>
+  </g>
+  
+  <!-- Central Highlight Dot -->
+  <circle cx="512" cy="450" r="8" 
+          fill="#FFFFFF" 
+          opacity="0.8" 
+          filter="url(#flowGlow)"/>
+  
+  <!-- Subtle Outer Ring -->
+  <circle cx="512" cy="512" r="480" 
+          fill="none" 
+          stroke="rgba(255,255,255,0.2)" 
+          stroke-width="2" 
+          opacity="0.6"/>
+          
+  <!-- Inner Accent Ring -->
+  <circle cx="512" cy="512" r="440" 
+          fill="none" 
+          stroke="url(#mainFlowGradient)" 
+          stroke-width="1" 
+          opacity="0.3"/>
+</svg>

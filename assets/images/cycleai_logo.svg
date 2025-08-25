@@ -38,18 +38,18 @@
   <!-- Main cycle symbol - stylized infinity loop representing cycles -->
   <path d="M 80 128 Q 100 100, 128 128 Q 156 156, 176 128 Q 156 100, 128 128 Q 100 156, 80 128 Z" 
         fill="none" 
-        stroke="white" 
+        stroke="#00E5FF" 
         stroke-width="8" 
         stroke-linecap="round" 
         opacity="0.9"/>
   
   <!-- AI Brain/Circuit elements -->
   <!-- Central AI node -->
-  <circle cx="128" cy="128" r="12" fill="white" opacity="0.9"/>
+  <circle cx="128" cy="128" r="12" fill="#00D4FF" opacity="0.9"/>
   <circle cx="128" cy="128" r="8" fill="url(#primaryGradient)"/>
   
   <!-- Neural connections -->
-  <g stroke="white" stroke-width="2" opacity="0.7" fill="white">
+  <g stroke="#00D4FF" stroke-width="2" opacity="0.8" fill="#00E5FF">
     <!-- Top connections -->
     <line x1="128" y1="116" x2="128" y2="90"/>
     <circle cx="128" cy="85" r="4"/>
@@ -90,5 +90,5 @@
   </g>
   
   <!-- Outer ring with tech elements -->
-  <circle cx="128" cy="128" r="110" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-dasharray="5,5"/>
+  <circle cx="128" cy="128" r="110" fill="none" stroke="#8B5CF6" stroke-width="1.5" stroke-dasharray="5,5" opacity="0.6"/>
 </svg>

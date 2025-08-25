@@ -8,10 +8,24 @@
       <stop offset="100%" style="stop-color:#A855F7;stop-opacity:1" />
     </linearGradient>
     
+    <!-- Aura background gradient (full-bleed) -->
+    <radialGradient id="auraBg" cx="50%" cy="40%" r="80%">
+      <stop offset="0%" style="stop-color:#FFE3F3;stop-opacity:1" />
+      <stop offset="45%" style="stop-color:#E9D5FF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFC3A0;stop-opacity:1" />
+    </radialGradient>
+
     <!-- Secondary gradient for inner elements -->
     <radialGradient id="innerGradient" cx="50%" cy="50%" r="50%">
       <stop offset="0%" style="stop-color:#F8BBD9;stop-opacity:0.8" />
       <stop offset="100%" style="stop-color:#DDD6FE;stop-opacity:0.4" />
+    </radialGradient>
+    
+    <!-- Central circle gradient -->
+    <radialGradient id="centralGradient" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" style="stop-color:#FFF8F0;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#FFEBEE;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#F3E5F5;stop-opacity:1" />
     </radialGradient>
     
     <!-- Drop shadow filter -->
@@ -20,6 +34,9 @@
     </filter>
   </defs>
   
+  <!-- Full-bleed aura background (prevents white in app icon mask) -->
+  <rect x="0" y="0" width="1024" height="1024" fill="url(#auraBg)"/>
+
   <!-- Background circle -->
   <circle cx="512" cy="512" r="480" fill="url(#primaryGradient)" filter="url(#dropshadow)" />
   
@@ -52,7 +69,7 @@
     <ellipse cx="-141" cy="-141" rx="80" ry="140" fill="url(#innerGradient)" transform="rotate(315)" opacity="0.9" />
     
     <!-- Central circle representing unity/AI core -->
-    <circle cx="0" cy="0" r="80" fill="#FEFCFG" opacity="0.95" />
+    <circle cx="0" cy="0" r="80" fill="url(#centralGradient)" opacity="0.95" />
     
     <!-- AI data points - small dots -->
     <circle cx="-30" cy="-30" r="8" fill="#7C3AED" opacity="0.7" />
@@ -69,5 +86,5 @@
   </g>
   
   <!-- Outer ring for additional depth -->
-  <circle cx="512" cy="512" r="480" fill="none" stroke="#FEFCFG" stroke-width="8" opacity="0.3" />
+  <circle cx="512" cy="512" r="480" fill="none" stroke="#FFE4B5" stroke-width="8" opacity="0.5" />
 </svg>

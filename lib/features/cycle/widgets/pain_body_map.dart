@@ -99,11 +99,11 @@ class _PainBodyMapState extends State<PainBodyMap> {
           child: Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: theme.colorScheme.surface,
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
+                  color: theme.shadowColor.withValues(alpha: 0.1),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -177,6 +177,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
     bool isActive,
     bool isSelected,
   ) {
+    final theme = Theme.of(context);
     final color = _getColorForIntensity(intensity);
     
     return GestureDetector(
@@ -205,7 +206,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
               color.withValues(alpha: 0.6),
             ],
           ) : null,
-          color: !isActive ? Colors.white : null,
+          color: !isActive ? theme.colorScheme.surface : null,
           border: Border.all(
             color: isSelected 
                 ? AppTheme.primaryRose
@@ -220,8 +221,8 @@ class _PainBodyMapState extends State<PainBodyMap> {
               offset: Offset(0, isSelected ? 8 : 4),
               spreadRadius: isSelected ? 2 : 0,
             ),
-            if (isSelected) const BoxShadow(
-              color: Colors.white,
+            if (isSelected) BoxShadow(
+              color: theme.colorScheme.surface,
               blurRadius: 3,
               offset: Offset(0, -1),
             ),
@@ -266,7 +267,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
-                        color: isActive ? Colors.white : color,
+                        color: isActive ? theme.colorScheme.onPrimary : color,
                       ),
                     ),
                   ],
@@ -289,7 +290,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: AppTheme.primaryRose,
@@ -463,11 +464,11 @@ class _PainBodyMapState extends State<PainBodyMap> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
+            color: theme.shadowColor.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -515,7 +516,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: isSelected ? Colors.white : color,
+                          color: isSelected ? theme.colorScheme.onPrimary : color,
                         ),
                       ),
                       Text(
@@ -581,9 +582,9 @@ class _PainBodyMapState extends State<PainBodyMap> {
       builder: (modalContext) {
         final theme = Theme.of(modalContext);
         return Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(28),
             topRight: Radius.circular(28),
           ),

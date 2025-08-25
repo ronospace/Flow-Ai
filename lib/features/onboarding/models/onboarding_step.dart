@@ -28,7 +28,7 @@ enum OnboardingStepType {
 class OnboardingData {
   static List<OnboardingStep> get steps => [
     const OnboardingStep(
-      title: 'Welcome to CycleAI',
+      title: 'Welcome to ZyraFlow',
       description: 'Your intelligent period and health tracking companion',
       imagePath: 'assets/images/onboarding/welcome.png',
       highlights: [
