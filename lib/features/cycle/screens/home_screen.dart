@@ -1428,7 +1428,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Colors.white,
+            theme.colorScheme.surface,
             AppTheme.primaryPurple.withValues(alpha: 0.02),
           ],
         ),
@@ -1503,7 +1503,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    Colors.white,
+                    theme.colorScheme.surface,
                     AppTheme.primaryPurple.withValues(alpha: 0.03),
                   ],
                 ),
@@ -2660,9 +2660,10 @@ extension _NavigationMethods on _HomeScreenState {
     _adMobService.showInterstitialAdWithFrequency();
     
     // Navigate to insights screen with GoRouter
-    Future.delayed(const Duration(milliseconds: 500), () {
+    // Use immediate navigation to prevent state issues
+    if (mounted) {
       context.go('/insights');
-    });
+    }
   }
   
   void _navigateToAIPredictions() {

@@ -210,7 +210,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Colors.white,
+                theme.colorScheme.surface,
                 currentColor.withValues(alpha: 0.02),
               ],
             ),
@@ -227,7 +227,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                 spreadRadius: 2,
               ),
               BoxShadow(
-                color: Colors.white,
+                color: theme.colorScheme.surface,
                 blurRadius: 8,
                 offset: const Offset(0, -4),
               ),
@@ -403,7 +403,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withValues(alpha: 0.9),
+                                    color: theme.colorScheme.surface.withValues(alpha: 0.9),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Text(
@@ -471,7 +471,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                               spreadRadius: 2.0,
                             ),
                             SafeShadows.safe(
-                              color: Colors.white.withValues(alpha: 0.8),
+                              color: theme.colorScheme.surface.withValues(alpha: 0.8),
                               blurRadius: 5.0,
                               offset: const Offset(0, 2),
                             ),
@@ -492,7 +492,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                                 width: 50,
                                 height: 50,
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withValues(alpha: 0.2),
+                                  color: theme.colorScheme.surface.withValues(alpha: 0.2),
                                   shape: BoxShape.circle,
                                 ),
                               ).animate(onPlay: (controller) => controller.repeat())
@@ -504,7 +504,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                             Text(
                               indicatorValue.round().toString(),
                               style: TextStyle(
-                                color: isActive ? Colors.white : indicatorColor,
+                                color: isActive ? theme.colorScheme.onPrimary : indicatorColor,
                                 fontWeight: FontWeight.bold,
                                 fontSize: isActive ? 20 : 16,
                               ),
@@ -554,6 +554,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                           value: widget.value,
                           maxValue: widget.max,
                           animation: _waveAnimation,
+                          theme: theme,
                         ),
                         trackHeight: 12,
                         overlayShape: const RoundSliderOverlayShape(overlayRadius: 30),
@@ -674,9 +675,9 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                         ),
                       ],
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.psychology,
-                      color: Colors.white,
+                      color: theme.colorScheme.onPrimary,
                       size: 20,
                     ),
                   ).animate(onPlay: (controller) => controller.repeat())
@@ -733,13 +734,17 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.7),
+                  color: theme.colorScheme.surface.withValues(alpha: 0.7),
                   borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: theme.colorScheme.outline.withValues(alpha: 0.1),
+                    width: 1,
+                  ),
                 ),
                 child: Text(
                   psychologyInsight,
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: AppTheme.darkGrey,
+                    color: theme.colorScheme.onSurface,
                     height: 1.5,
                     fontSize: 14,
                   ),
@@ -876,12 +881,14 @@ class BiometricSliderThumb extends SliderComponentShape {
   final double value;
   final double maxValue;
   final Animation<double> animation;
+  final ThemeData theme;
 
   BiometricSliderThumb({
     required this.color,
     required this.value,
     required this.maxValue,
     required this.animation,
+    required this.theme,
   }) : super();
 
   @override
@@ -938,7 +945,7 @@ class BiometricSliderThumb extends SliderComponentShape {
     
     // Inner biometric pattern
     final patternPaint = Paint()
-      ..color = Colors.white.withValues(alpha: 0.4)
+      ..color = theme.colorScheme.onPrimary.withValues(alpha: 0.4)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
     
@@ -962,7 +969,7 @@ class BiometricSliderThumb extends SliderComponentShape {
     
     // Central pulse indicator
     final centerPaint = Paint()
-      ..color = Colors.white.withValues(alpha: 0.8 + (animation.value * 0.2))
+      ..color = theme.colorScheme.onPrimary.withValues(alpha: 0.8 + (animation.value * 0.2))
       ..style = PaintingStyle.fill;
     canvas.drawCircle(center, 2 + (intensity * 2), centerPaint);
   }
@@ -1000,10 +1007,12 @@ class _SafeBoxShadow extends BoxShadow {
 class CustomSliderThumb extends SliderComponentShape {
   final Color color;
   final double radius;
+  final ThemeData theme;
 
   const CustomSliderThumb({
     required this.color,
     this.radius = 10,
+    required this.theme,
   });
 
   @override
@@ -1042,7 +1051,7 @@ class CustomSliderThumb extends SliderComponentShape {
     
     // Inner highlight
     final highlightPaint = Paint()
-      ..color = Colors.white.withValues(alpha: 0.3)
+      ..color = theme.colorScheme.onPrimary.withValues(alpha: 0.3)
       ..style = PaintingStyle.fill;
     canvas.drawCircle(center, radius * 0.6, highlightPaint);
   }

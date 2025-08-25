@@ -535,7 +535,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Colors.white,
+            theme.colorScheme.surface,
             AppTheme.accentMint.withValues(alpha: 0.02),
           ],
         ),
@@ -658,7 +658,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
             margin: const EdgeInsets.only(bottom: 16),
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: theme.colorScheme.surface,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: isCompleted 
