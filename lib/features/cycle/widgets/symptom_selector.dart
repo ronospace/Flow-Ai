@@ -101,11 +101,11 @@ class _SymptomSelectorState extends State<SymptomSelector> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
+            color: theme.shadowColor.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -208,6 +208,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
   }
 
   Widget _buildCategorySelector() {
+    final theme = Theme.of(context);
     final symptomCategories = _getSymptomCategories(context);
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -231,7 +232,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
                           colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
                         )
                       : null,
-                  color: isSelected ? null : Colors.white,
+                  color: isSelected ? null : theme.colorScheme.surface,
                   borderRadius: BorderRadius.circular(25),
                   border: Border.all(
                     color: isSelected ? Colors.transparent : AppTheme.lightGrey,
@@ -295,7 +296,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isSelected ? symptom.color : Colors.transparent,

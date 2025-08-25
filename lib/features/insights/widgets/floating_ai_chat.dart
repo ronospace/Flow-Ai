@@ -92,6 +92,9 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
   @override
   void dispose() {
+    // Ensure animations are stopped and controllers disposed properly
+    _fabController.stop();
+    _chatController.stop();
     _fabController.dispose();
     _chatController.dispose();
     _textController.dispose();
