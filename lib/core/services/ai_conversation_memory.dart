@@ -199,6 +199,11 @@ class AIConversationMemory {
   String? getPersonalizedInsight(String key) {
     return _personalizedInsights[key];
   }
+  
+  /// Get all personalized insights for FlowAI context
+  Map<String, String> getPersonalizedInsights() {
+    return Map<String, String>.from(_personalizedInsights);
+  }
 
   /// Clear all conversation memory (for privacy/reset)
   Future<void> clearMemory() async {

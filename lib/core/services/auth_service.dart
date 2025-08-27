@@ -57,17 +57,24 @@ class AuthService {
   /// Get comprehensive user data for UI display and persistence
   Future<Map<String, dynamic>?> getUserData() async {
     final currentUser = await getCurrentUser();
-    if (currentUser == null) return null;
+    if (currentUser == null) {
+      // Check if we have stored user data from previous session
+      final storedData = await _getStoredUserData();
+      return storedData;
+    }
     
     Map<String, dynamic> userData = {};
     
     // Handle Firebase User
     if (currentUser is User) {
+      // Get stored user data to preserve username and other custom fields
+      final storedData = await _getStoredUserData();
+      
       userData = {
         'uid': currentUser.uid,
         'email': currentUser.email,
         'displayName': currentUser.displayName,
-        'username': currentUser.displayName, // Fallback to displayName
+        'username': storedData?['username'] ?? currentUser.displayName, // Preserve stored username
         'photoURL': currentUser.photoURL,
         'provider': 'firebase',
         'createdAt': currentUser.metadata.creationTime?.toIso8601String(),
@@ -334,10 +341,13 @@ class AuthService {
           );
 
           if (result.user != null) {
+            // Get existing stored data to preserve username
+            final existingData = await _getStoredUserData();
             await _storeUserData({
               'uid': result.user!.uid,
               'email': email,
               'displayName': result.user!.displayName,
+              'username': existingData?['username'] ?? result.user!.displayName, // Preserve username
               'provider': 'firebase',
               'lastLogin': DateTime.now().toIso8601String(),
             });
@@ -361,10 +371,13 @@ class AuthService {
         );
 
         if (localResult.isSuccess) {
+          // Get existing stored data to preserve username
+          final existingData = await _getStoredUserData();
           await _storeUserData({
             'uid': localResult.user!.uid,
             'email': email,
             'displayName': localResult.user!.displayName,
+            'username': existingData?['username'] ?? localResult.user!.username ?? localResult.user!.displayName, // Preserve username
             'provider': 'local',
             'lastLogin': DateTime.now().toIso8601String(),
           });
@@ -693,17 +706,84 @@ class AuthService {
     }
   }
 
+  /// Check if an email account already exists
+  Future<bool> isEmailRegistered(String email) async {
+    try {
+      // Check Firebase first if available
+      if (_firebaseAvailable && _auth != null) {
+        try {
+          final methods = await _auth!.fetchSignInMethodsForEmail(email);
+          if (methods.isNotEmpty) {
+            debugPrint('✅ Email found in Firebase: $email (methods: ${methods.join(', ')})');
+            return true;
+          }
+        } catch (e) {
+          debugPrint('⚠️ Firebase email check failed: $e');
+        }
+      }
+      
+      // Check local user service
+      if (_localUserService != null) {
+        final localUserExists = await _localUserService!.userExists(email);
+        if (localUserExists) {
+          debugPrint('✅ Email found in local storage: $email');
+          return true;
+        }
+      }
+      
+      // Check stored user data as backup
+      final storedData = await _getStoredUserData();
+      if (storedData != null && storedData['email'] == email) {
+        debugPrint('✅ Email found in stored data: $email');
+        return true;
+      }
+      
+      debugPrint('❌ Email not found: $email');
+      return false;
+    } catch (e) {
+      debugPrint('❌ Error checking email registration: $e');
+      return false;
+    }
+  }
+  
   /// Reset password
   Future<AuthResult> resetPassword(String email) async {
     try {
-      if (_auth != null) {
-        await _auth!.sendPasswordResetEmail(email: email);
-      } else {
-        return AuthResult.failure('Authentication service not initialized');
+      // Try Firebase password reset first
+      if (_firebaseAvailable && _auth != null) {
+        try {
+          await _auth!.sendPasswordResetEmail(email: email);
+          debugPrint('✅ Password reset email sent via Firebase');
+          return AuthResult.success(null);
+        } catch (firebaseError) {
+          debugPrint('⚠️ Firebase password reset failed: $firebaseError');
+        }
       }
-      return AuthResult.success(null);
+      
+      // Local password reset is not supported in the current implementation
+      // In a production environment, this would typically send an email through a backend service
+      if (_localUserService != null) {
+        debugPrint('ℹ️ Local password reset not supported. Using Firebase only.');
+        return AuthResult.failure('Password reset is only available for online accounts. Please ensure you have an internet connection.');
+      }
+      
+      return AuthResult.failure('Password reset service not available');
+    } on FirebaseAuthException catch (e) {
+      debugPrint('❌ Firebase Auth Error during password reset: ${e.code} - ${e.message}');
+      
+      switch (e.code) {
+        case 'user-not-found':
+          return AuthResult.failure('No account found with this email address.');
+        case 'invalid-email':
+          return AuthResult.failure('Please enter a valid email address.');
+        case 'too-many-requests':
+          return AuthResult.failure('Too many reset attempts. Please try again later.');
+        default:
+          return AuthResult.failure('Password reset failed: ${e.message ?? e.code}');
+      }
     } catch (e) {
-      return AuthResult.failure(e.toString());
+      debugPrint('❌ Password reset error: $e');
+      return AuthResult.failure('Password reset failed: ${e.toString()}');
     }
   }
 
