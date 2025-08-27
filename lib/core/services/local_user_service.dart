@@ -112,7 +112,7 @@ class LocalUserService {
       await _createUserSession(updatedUser);
 
       debugPrint('✅ Local user signed in successfully: ${updatedUser.email}');
-      debugPrint('✅ User data restored: ${updatedUser.displayName} with ${updatedUser.profileData?.notes?.length ?? 0} notes, cycle data: ${updatedUser.profileData?.lastPeriodDate != null}');
+      debugPrint('✅ User data restored: ${updatedUser.displayName} with ${updatedUser.profileData.notes.length} notes, cycle data: ${updatedUser.profileData.lastPeriodDate != null}');
       return LocalAuthResult.success(updatedUser);
     } catch (e) {
       debugPrint('❌ Local user sign in failed: $e');

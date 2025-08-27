@@ -5,16 +5,16 @@ import 'package:zyraflow/core/services/ai_chat_service.dart';
 import 'package:zyraflow/core/services/ai_engine.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// Test suite for FlowAI integration
+/// Test suite for Flow Ai integration
 /// 
-/// These tests verify that the FlowAI integration is working correctly
+/// These tests verify that the Flow Ai integration is working correctly
 /// including configuration, service initialization, and fallback behavior.
 void main() {
   // Ensure Flutter bindings and mock preferences are initialized for tests
   TestWidgetsFlutterBinding.ensureInitialized();
   SharedPreferences.setMockInitialValues({});
 
-  group('FlowAI Configuration Tests', () {
+  group('Flow Ai Configuration Tests', () {
     test('should validate configuration correctly', () {
       // Test empty API key
       FlowAIConfig.initialize(apiKey: '');
@@ -48,7 +48,7 @@ test('should validate configuration parameters', () {
     });
   });
   
-  group('FlowAI Service Tests', () {
+  group('Flow Ai Service Tests', () {
     late FlowAIService service;
     
     setUp(() {

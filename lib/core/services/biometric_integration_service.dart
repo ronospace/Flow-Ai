@@ -110,12 +110,12 @@ class BiometricIntegrationService {
       ]);
 
       return BiometricAnalysis(
-        heartRateData: results[0] as List<BiometricReading>,
-        sleepData: results[1] as List<BiometricReading>,
-        temperatureData: results[2] as List<BiometricReading>,
-        hrvData: results[3] as List<BiometricReading>,
-        stressData: results[4] as List<BiometricReading>,
-        activityData: results[5] as List<BiometricReading>,
+        heartRateData: results[0],
+        sleepData: results[1],
+        temperatureData: results[2],
+        hrvData: results[3],
+        stressData: results[4],
+        activityData: results[5],
         analysisDate: DateTime.now(),
         cycleCorrelations: await _calculateCycleCorrelations(results),
       );
