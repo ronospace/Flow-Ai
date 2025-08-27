@@ -3,7 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:provider/provider.dart';
-import '../../../core/services/ai_chat_service.dart';
+import '../../../core/services/enhanced_ai_chat_service.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../generated/app_localizations.dart';
 import '../../settings/providers/settings_provider.dart';
@@ -25,7 +25,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   late Animation<double> _fabAnimation;
   late Animation<double> _chatAnimation;
   
-  final AIChatService _chatService = AIChatService();
+  final EnhancedAIChatService _chatService = EnhancedAIChatService();
   List<types.Message> _messages = [];
   bool _isTyping = false;
   late TextEditingController _textController;
@@ -221,19 +221,19 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      'Mira AI Assistant',
-                                      style: theme.textTheme.titleMedium?.copyWith(
-                                        color: theme.colorScheme.onPrimary,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Text(
-                                      'Ask me anything about your health', // This could be localized in the future
-                                      style: theme.textTheme.bodySmall?.copyWith(
-                                        color: theme.colorScheme.onPrimary.withValues(alpha: 0.8),
-                                      ),
-                                    ),
+                      Text(
+                        'Mira AI Assistant',
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          color: theme.colorScheme.onPrimary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        'Ask me about health, science, tech & more!',
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onPrimary.withValues(alpha: 0.8),
+                        ),
+                      ),
                                   ],
                                 ),
                               ),
@@ -366,7 +366,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             child: TextField(
               controller: _textController,
               decoration: InputDecoration(
-                hintText: 'Ask about your cycle, symptoms, or health...', // This could be localized in the future
+                hintText: 'Ask about health, science, technology, lifestyle...',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(25),
                   borderSide: BorderSide.none,
@@ -430,7 +430,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Quick questions:', // This could be localized in the future
+            'Quick questions:',
             style: theme.textTheme.bodySmall?.copyWith(
               color: AppTheme.mediumGrey,
               fontWeight: FontWeight.w600,
