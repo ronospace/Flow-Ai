@@ -183,9 +183,9 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
           _recentlySaved = true;
         });
         
-        // Set timer to clear the "recently saved" state after 2 seconds (reduced feedback time)
+        // Set timer to clear the "recently saved" state after 1 second (faster feedback)
         _savedStateTimer?.cancel();
-        _savedStateTimer = Timer(const Duration(milliseconds: 2000), () {
+        _savedStateTimer = Timer(const Duration(milliseconds: 1000), () {
           if (mounted) {
             setState(() {
               _recentlySaved = false;
@@ -276,7 +276,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             margin: const EdgeInsets.all(16),
-            duration: const Duration(seconds: 4), // Increased from 2.5 to 4 seconds
+            duration: const Duration(milliseconds: 1500), // Fast display for better UX
             elevation: 12,
             action: _shouldShowSmartNavigation() ? SnackBarAction(
               label: 'View Insights',

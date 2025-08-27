@@ -7,14 +7,14 @@ import '../providers/settings_provider.dart';
 import '../widgets/settings_section.dart';
 import '../widgets/settings_tile.dart';
 
-class CycleSyncIntegration extends StatefulWidget {
-  const CycleSyncIntegration({super.key});
+class FlowIQIntegration extends StatefulWidget {
+  const FlowIQIntegration({super.key});
 
   @override
-  State<CycleSyncIntegration> createState() => _CycleSyncIntegrationState();
+  State<FlowIQIntegration> createState() => _FlowIQIntegrationState();
 }
 
-class _CycleSyncIntegrationState extends State<CycleSyncIntegration> {
+class _FlowIQIntegrationState extends State<FlowIQIntegration> {
   bool _isConnecting = false;
 
   @override
@@ -24,8 +24,8 @@ class _CycleSyncIntegrationState extends State<CycleSyncIntegration> {
         final isConnected = settings.preferences.syncWithCycleSync;
         
         return SettingsSection(
-          title: 'CycleSync Integration',
-          icon: Icons.sync_outlined,
+          title: 'Flow iQ Integration',
+          icon: Icons.local_hospital_outlined,
           children: [
             // Connection Status
             Container(
@@ -108,8 +108,8 @@ class _CycleSyncIntegrationState extends State<CycleSyncIntegration> {
                             const SizedBox(height: 4),
                             Text(
                               isConnected
-                                  ? 'Your data syncs with CycleSync Enterprise'
-                                  : 'Connect to sync your cycle data across apps',
+                                  ? 'Your data syncs with Flow iQ Clinical'
+                                  : 'Connect to sync your cycle data with clinical app',
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
@@ -176,10 +176,10 @@ class _CycleSyncIntegrationState extends State<CycleSyncIntegration> {
                 isConnected ? Icons.sync : Icons.sync_disabled,
                 color: isConnected ? AppTheme.successGreen : AppTheme.warningOrange,
               ),
-              title: isConnected ? 'Disconnect CycleSync' : 'Connect to CycleSync',
+              title: isConnected ? 'Disconnect Flow iQ' : 'Connect to Flow iQ',
               subtitle: isConnected 
-                  ? 'Stop syncing with CycleSync Enterprise'
-                  : 'Sync your cycle data with CycleSync Enterprise',
+                  ? 'Stop syncing with Flow iQ Clinical'
+                  : 'Sync your cycle data with Flow iQ Clinical',
               trailing: _isConnecting
                   ? const SizedBox(width: 20,
                       height: 20,

@@ -2,6 +2,8 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import '../models/cycle_data.dart';
 import '../models/ai_insights.dart';
+import 'flowai_service.dart';
+import '../config/flowai_config.dart';
 
 class AIEngine {
   static final AIEngine _instance = AIEngine._internal();
@@ -10,6 +12,10 @@ class AIEngine {
 
   bool _isInitialized = false;
   bool get isInitialized => _isInitialized;
+  
+  // FlowAI Integration
+  final FlowAIService _flowAIService = FlowAIService();
+  bool _useFlowAI = false;
 
   // Enhanced AI Models for Week 1 Implementation
   late Map<String, dynamic> _predictionModel;
@@ -87,6 +93,15 @@ class AIEngine {
       'individual_variation': 0.4,
       'baseline_calculation_cycles': 6,
     };
+    
+    // Initialize FlowAI if configured
+    if (FlowAIConfig.isConfigured) {
+      try {
+        await _initializeFlowAI();
+      } catch (e) {
+        debugPrint('FlowAI initialization failed in AI Engine: $e');
+      }
+    }
     
     _isInitialized = true;
     debugPrint('✅ Enhanced AI Engine initialized with advanced algorithms');
@@ -534,5 +549,188 @@ class AIEngine {
     // This would use symptom patterns to adjust ovulation timing
     // For now, return 0 (no adjustment)
     return 0;
+  }
+  
+  // FlowAI Integration Methods
+  
+  /// Initialize FlowAI service for enhanced insights
+  Future<void> _initializeFlowAI() async {
+    if (!FlowAIConfig.isConfigured) return;
+    
+    try {
+      await _flowAIService.initialize(apiKey: FlowAIConfig.apiKey!);
+      _useFlowAI = _flowAIService.isInitialized;
+      debugPrint('🤖 AI Engine FlowAI integration ${_useFlowAI ? "enabled" : "failed"}');
+    } catch (e) {
+      debugPrint('AI Engine FlowAI initialization error: $e');
+      _useFlowAI = false;
+    }
+  }
+  
+  /// Generate enhanced insights using FlowAI
+  Future<List<AIInsight>> generateEnhancedInsights({
+    required String userId,
+    required List<CycleData> cycles,
+    List<String>? detectedPatterns,
+  }) async {
+    if (!_useFlowAI || cycles.isEmpty) {
+      // Fallback to local insights
+      return generateInsights(cycles);
+    }
+    
+    try {
+      // Prepare cycle analysis data for FlowAI
+      final cycleAnalysis = _prepareCycleAnalysisForFlowAI(cycles);
+      
+      final response = await _flowAIService.generateInsights(
+        userId: userId,
+        cycleAnalysis: cycleAnalysis,
+        patterns: detectedPatterns,
+      );
+      
+      // Parse FlowAI response into AIInsight objects
+      final flowAIInsights = _parseFlowAIInsights(response.content);
+      
+      // Combine with local insights
+      final localInsights = await generateInsights(cycles);
+      final combinedInsights = <AIInsight>[];
+      
+      // Add FlowAI insights first (they're more sophisticated)
+      combinedInsights.addAll(flowAIInsights);
+      
+      // Add local insights that don't overlap
+      for (final localInsight in localInsights) {
+        if (!_hasOverlapWithFlowAIInsights(localInsight, flowAIInsights)) {
+          combinedInsights.add(localInsight);
+        }
+      }
+      
+      return combinedInsights;
+    } catch (e) {
+      debugPrint('FlowAI insights generation failed: $e');
+      // Fallback to local insights on error
+      return generateInsights(cycles);
+    }
+  }
+  
+  /// Prepare cycle data for FlowAI analysis
+  Map<String, dynamic> _prepareCycleAnalysisForFlowAI(List<CycleData> cycles) {
+    final analysis = <String, dynamic>{};
+    
+    if (cycles.isEmpty) return analysis;
+    
+    // Basic cycle statistics
+    final lengths = cycles.map((c) => c.length).toList();
+    analysis['cycle_count'] = cycles.length;
+    analysis['average_length'] = lengths.reduce((a, b) => a + b) / lengths.length;
+    analysis['length_variance'] = _calculateVariance(lengths.map((l) => l.toDouble()).toList());
+    analysis['regularity_score'] = _analyzeRegularity(cycles);
+    
+    // Symptom analysis
+    final allSymptoms = cycles.expand((c) => c.symptoms).toList();
+    final symptomFrequency = <String, int>{};
+    for (final symptom in allSymptoms) {
+      symptomFrequency[symptom] = (symptomFrequency[symptom] ?? 0) + 1;
+    }
+    analysis['common_symptoms'] = symptomFrequency;
+    
+    // Mood and energy patterns
+    final moodData = cycles.where((c) => c.mood != null).map((c) => c.mood!).toList();
+    final energyData = cycles.where((c) => c.energy != null).map((c) => c.energy!).toList();
+    
+    if (moodData.isNotEmpty) {
+      analysis['average_mood'] = moodData.reduce((a, b) => a + b) / moodData.length;
+    }
+    if (energyData.isNotEmpty) {
+      analysis['average_energy'] = energyData.reduce((a, b) => a + b) / energyData.length;
+    }
+    
+    // Recent trends
+    if (cycles.length >= 6) {
+      final recentCycles = cycles.take(3).toList();
+      final olderCycles = cycles.skip(3).take(3).toList();
+      
+      final recentAvgLength = recentCycles.map((c) => c.length).reduce((a, b) => a + b) / recentCycles.length;
+      final olderAvgLength = olderCycles.map((c) => c.length).reduce((a, b) => a + b) / olderCycles.length;
+      
+      analysis['length_trend'] = recentAvgLength - olderAvgLength;
+    }
+    
+    return analysis;
+  }
+  
+  /// Parse FlowAI response into AIInsight objects
+  List<AIInsight> _parseFlowAIInsights(String response) {
+    final insights = <AIInsight>[];
+    
+    try {
+      // This is a simplified parser - in a real implementation,
+      // FlowAI would return structured data
+      final lines = response.split('\n').where((line) => line.trim().isNotEmpty).toList();
+      
+      for (int i = 0; i < lines.length; i += 2) {
+        if (i + 1 < lines.length) {
+          final title = lines[i].replaceAll(RegExp(r'^\d+\.\s*'), '').trim();
+          final description = lines[i + 1].trim();
+          
+          if (title.isNotEmpty && description.isNotEmpty) {
+            insights.add(AIInsight(
+              type: InsightType.correlationInsight,
+              title: title,
+              description: description,
+              confidence: 0.85, // FlowAI insights are generally high confidence
+              actionable: description.contains('consider') || description.contains('try'),
+              recommendations: _extractRecommendations(description),
+            ));
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint('Error parsing FlowAI insights: $e');
+    }
+    
+    return insights;
+  }
+  
+  /// Extract recommendations from FlowAI insight text
+  List<String> _extractRecommendations(String text) {
+    final recommendations = <String>[];
+    
+    // Simple keyword-based extraction
+    if (text.contains('track')) recommendations.add('Continue tracking your data');
+    if (text.contains('exercise')) recommendations.add('Consider adjusting exercise routine');
+    if (text.contains('stress')) recommendations.add('Focus on stress management');
+    if (text.contains('sleep')) recommendations.add('Prioritize good sleep hygiene');
+    if (text.contains('doctor') || text.contains('healthcare')) {
+      recommendations.add('Consult with a healthcare provider');
+    }
+    
+    return recommendations.isNotEmpty ? recommendations : ['Keep monitoring your patterns'];
+  }
+  
+  /// Check if local insight overlaps with FlowAI insights
+  bool _hasOverlapWithFlowAIInsights(AIInsight localInsight, List<AIInsight> flowAIInsights) {
+    // Simple overlap detection based on keywords in titles
+    final localKeywords = localInsight.title.toLowerCase().split(' ');
+    
+    for (final flowAIInsight in flowAIInsights) {
+      final flowAIKeywords = flowAIInsight.title.toLowerCase().split(' ');
+      
+      // If there's significant keyword overlap, consider it a duplicate
+      final overlap = localKeywords.where((word) => flowAIKeywords.contains(word)).length;
+      if (overlap >= 2) return true;
+    }
+    
+    return false;
+  }
+  
+  /// Check if FlowAI is enabled
+  bool get isFlowAIEnabled => _useFlowAI && _flowAIService.isInitialized;
+  
+  /// Get AI engine status
+  String get engineStatus {
+    if (!_isInitialized) return 'Not initialized';
+    if (_useFlowAI && _flowAIService.isInitialized) return 'Enhanced with FlowAI';
+    return 'Local processing only';
   }
 }

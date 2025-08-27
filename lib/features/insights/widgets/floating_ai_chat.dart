@@ -222,7 +222,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'FlowSense AI Assistant',
+                                      'Mira AI Assistant',
                                       style: theme.textTheme.titleMedium?.copyWith(
                                         color: theme.colorScheme.onPrimary,
                                         fontWeight: FontWeight.bold,

@@ -5,6 +5,8 @@ import 'dart:math' as math;
 import 'dart:async';
 
 import 'ai_conversation_memory.dart';
+import 'flowai_service.dart';
+import '../config/flowai_config.dart';
 import '../../generated/app_localizations.dart';
 import '../../generated/app_localizations_extensions.dart';
 
@@ -24,11 +26,15 @@ class AIChatService {
   AIConversationMemory? _conversationMemory;
   bool _isInitialized = false;
   AppLocalizations? _localizations;
+  
+  // FlowAI Integration
+  final FlowAIService _flowAIService = FlowAIService();
+  bool _useFlowAI = false;
 
   Stream<List<types.Message>> get messagesStream => _messagesController.stream;
   List<types.Message> get messages => List.unmodifiable(_messages);
 
-  Future<void> initialize({required String userId, required String userName, AppLocalizations? localizations}) async {
+  Future<void> initialize({required String userId, required String userName, AppLocalizations? localizations, String? flowAIApiKey}) async {
     if (_isInitialized) return;
     
     _localizations = localizations;
@@ -40,10 +46,25 @@ class AIChatService {
 
     _aiUser = types.User(
       id: 'ai_zyraflow',
-      firstName: 'Nova',
+      firstName: 'Mira',
       lastName: 'AI',
       imageUrl: 'https://i.pravatar.cc/300?img=47', // AI avatar
     );
+    
+    // Initialize FlowAI if API key is provided
+    if (flowAIApiKey != null && flowAIApiKey.isNotEmpty) {
+      try {
+        await _initializeFlowAI(flowAIApiKey);
+      } catch (e) {
+        debugPrint('FlowAI initialization failed, using fallback responses: $e');
+      }
+    } else if (FlowAIConfig.isConfigured) {
+      try {
+        await _initializeFlowAI(FlowAIConfig.apiKey!);
+      } catch (e) {
+        debugPrint('FlowAI initialization failed, using fallback responses: $e');
+      }
+    }
     
     // Initialize conversation memory with user ID for data isolation
     _conversationMemory = AIConversationMemory();
@@ -58,7 +79,7 @@ class AIChatService {
       // Add welcome message
       _addAIMessage(
         _localizations?.aiGreeting.replaceAll('{userName}', userName) ??
-        "Hi ${userName}! 👋 I'm Nova, your ZyraFlow AI assistant. I'm here to help you understand your cycle, provide personalized health insights, and answer any questions about reproductive wellness. How can I help you today?"
+        "Hi ${userName}! 👋 I'm Mira, your ZyraFlow AI assistant. I'm here to help you understand your cycle, provide personalized health insights, and answer any questions about reproductive wellness. How can I help you today?"
       );
     }
     
@@ -103,12 +124,29 @@ class AIChatService {
 
   /// Generate contextual AI response based on user input
   Future<String> _generateAIResponse(String userMessage, {String? contextPrompt}) async {
+    // Try FlowAI first if available
+    if (_useFlowAI && _currentUser != null) {
+      try {
+        final flowAIResponse = await _getFlowAIResponse(userMessage, contextPrompt);
+        if (flowAIResponse != null && flowAIResponse.isNotEmpty) {
+          return flowAIResponse;
+        }
+      } catch (e) {
+        debugPrint('FlowAI request failed, falling back to local responses: $e');
+      }
+    }
+    
+    // Fallback to local responses
+    return _getLocalAIResponse(userMessage, contextPrompt: contextPrompt);
+  }
+  
+  /// Generate local AI response (fallback when FlowAI is unavailable)
+  Future<String> _getLocalAIResponse(String userMessage, {String? contextPrompt}) async {
     final lowerMessage = userMessage.toLowerCase();
     
     // Use conversation context for more personalized responses
     if (contextPrompt != null && contextPrompt.isNotEmpty) {
       debugPrint('Using context for response: $contextPrompt');
-      // In a real implementation, we would pass the context to an LLM
     }
 
     // Cycle tracking responses
@@ -250,10 +288,10 @@ class AIChatService {
 
   String _getNameResponse(String message) {
     final responses = [
-      "Hi! I'm Nova ✨ Your personal ZyraFlow AI assistant. I'm here to help you with all things related to your reproductive health and cycle tracking!",
-      "You can call me Nova! 🌟 I'm your dedicated AI health companion, ready to support you on your wellness journey.",
-      "I'm Nova, your ZyraFlow AI assistant! 💫 Think of me as your personal health guide - I'm always here to help answer your questions about cycles, symptoms, and reproductive wellness.",
-      "Nice to meet you! I'm Nova ⭐ I'm specifically designed to help you understand and track your menstrual health. What would you like to know?",
+      "Hi! I'm Mira ✨ Your personal ZyraFlow AI assistant. I'm here to help you with all things related to your reproductive health and cycle tracking!",
+      "You can call me Mira! 🌟 I'm your dedicated AI health companion, ready to support you on your wellness journey.",
+      "I'm Mira, your ZyraFlow AI assistant! 💫 Think of me as your personal health guide - I'm always here to help answer your questions about cycles, symptoms, and reproductive wellness.",
+      "Nice to meet you! I'm Mira ⭐ I'm specifically designed to help you understand and track your menstrual health. What would you like to know?",
     ];
     return responses[math.Random().nextInt(responses.length)];
   }
@@ -334,5 +372,117 @@ class AIChatService {
   /// Get a personalized insight about the user
   String? getPersonalizedInsight(String key) {
     return _conversationMemory?.getPersonalizedInsight(key);
+  }
+  
+  // FlowAI Integration Methods
+  
+  /// Initialize FlowAI service
+  Future<void> _initializeFlowAI(String apiKey) async {
+    try {
+      await _flowAIService.initialize(apiKey: apiKey);
+      _useFlowAI = _flowAIService.isInitialized;
+      debugPrint('🤖 FlowAI integration ${_useFlowAI ? "enabled" : "failed"}');
+    } catch (e) {
+      debugPrint('FlowAI initialization error: $e');
+      _useFlowAI = false;
+    }
+  }
+  
+  /// Get response from FlowAI service
+  Future<String?> _getFlowAIResponse(String userMessage, String? contextPrompt) async {
+    if (!_useFlowAI || _currentUser == null) return null;
+    
+    try {
+      // Build context from conversation memory and cycle data
+      final healthContext = _buildHealthContext(contextPrompt);
+      
+      final response = await _flowAIService.sendHealthChatMessage(
+        message: userMessage,
+        userId: _currentUser!.id,
+        cycleData: _getCycleContextData(),
+        recentSymptoms: _getRecentSymptoms(),
+        currentPhase: _getCurrentCyclePhase(),
+      );
+      
+      return response.content;
+    } on FlowAIException catch (e) {
+      debugPrint('FlowAI service error: $e');
+      return null;
+    } catch (e) {
+      debugPrint('Unexpected FlowAI error: $e');
+      return null;
+    }
+  }
+  
+  /// Build health context for FlowAI
+  String? _buildHealthContext(String? conversationContext) {
+    final contextParts = <String>[];
+    
+    if (conversationContext != null && conversationContext.isNotEmpty) {
+      contextParts.add('Previous conversation: $conversationContext');
+    }
+    
+    // Add personalized insights from memory
+    final personalizedInsights = _conversationMemory?.getPersonalizedInsights() ?? {};
+    if (personalizedInsights.isNotEmpty) {
+      final insightsText = personalizedInsights.entries
+          .map((e) => '${e.key}: ${e.value}')
+          .join(', ');
+      contextParts.add('User insights: $insightsText');
+    }
+    
+    return contextParts.isNotEmpty ? contextParts.join('; ') : null;
+  }
+  
+  /// Get cycle context data for FlowAI
+  Map<String, dynamic>? _getCycleContextData() {
+    // This would be populated with actual cycle data from the app
+    // For now, return null as we don't have access to cycle data here
+    return null;
+  }
+  
+  /// Get recent symptoms for FlowAI context
+  List<String>? _getRecentSymptoms() {
+    // This would be populated with recent symptom data
+    // For now, return null as we don't have access to symptom data here
+    return null;
+  }
+  
+  /// Get current cycle phase for FlowAI context
+  String? _getCurrentCyclePhase() {
+    // This would be calculated based on current cycle data
+    // For now, return null as we don't have access to cycle data here
+    return null;
+  }
+  
+  /// Generate AI insights using FlowAI
+  Future<String?> generateFlowAIInsights({
+    required Map<String, dynamic> cycleAnalysis,
+    List<String>? patterns,
+  }) async {
+    if (!_useFlowAI || _currentUser == null) return null;
+    
+    try {
+      final response = await _flowAIService.generateInsights(
+        userId: _currentUser!.id,
+        cycleAnalysis: cycleAnalysis,
+        patterns: patterns,
+      );
+      
+      return response.content;
+    } catch (e) {
+      debugPrint('FlowAI insights generation failed: $e');
+      return null;
+    }
+  }
+  
+  /// Check if FlowAI is available and working
+  bool get isFlowAIEnabled => _useFlowAI && _flowAIService.isInitialized;
+  
+  /// Get FlowAI service status
+  String get aiServiceStatus {
+    if (!_isInitialized) return 'Not initialized';
+    if (_useFlowAI && _flowAIService.isInitialized) return 'FlowAI enabled';
+    return 'Local responses only';
   }
 }
