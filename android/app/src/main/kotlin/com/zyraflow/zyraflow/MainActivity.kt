@@ -1,4 +1,4 @@
-package com.zyraflow.app
+package com.zyraflow.zyraflow
 
 import io.flutter.embedding.android.FlutterActivity
 

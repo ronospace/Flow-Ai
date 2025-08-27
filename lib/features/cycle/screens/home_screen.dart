@@ -9,6 +9,7 @@ import '../../../generated/app_localizations.dart';
 import '../../../generated/app_localizations_ui_extensions.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/services/admob_service.dart';
+import '../../../core/services/auth_service.dart';
 import '../providers/cycle_provider.dart';
 import '../../insights/providers/insights_provider.dart';
 import '../../settings/providers/settings_provider.dart';
@@ -139,7 +140,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     }
 
     try {
-      final prediction = await PeriodPredictionEngine().predictNextPeriod('demo_user_id');
+      // Get current user ID from auth service
+      final authService = Provider.of<AuthService>(context, listen: false);
+      final currentUser = authService.currentUser;
+      final userId = currentUser?.uid ?? 'anonymous_user';
+      
+      final prediction = await PeriodPredictionEngine().predictNextPeriod(userId);
       
       if (mounted) {
         setState(() {
