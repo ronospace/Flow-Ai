@@ -3,14 +3,14 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
-/// Service class for FlowAI integration
-/// Handles communication with FlowAI API endpoints
+/// Service class for Flow Ai integration
+/// Handles communication with Flow Ai API endpoints
 class FlowAIService {
   static final FlowAIService _instance = FlowAIService._internal();
   factory FlowAIService() => _instance;
   FlowAIService._internal();
 
-  // FlowAI Configuration
+  // Flow Ai Configuration
   static const String _baseUrl = 'https://api.flowai.io/v1';
   static const String _chatEndpoint = '/chat/completions';
   static const String _healthEndpoint = '/health';
@@ -24,7 +24,7 @@ class FlowAIService {
   DateTime? _lastRequestTime;
   static const Duration _minRequestInterval = Duration(milliseconds: 500);
   
-  /// Initialize FlowAI service with API credentials
+  /// Initialize Flow Ai service with API credentials
   Future<void> initialize({
     required String apiKey,
     String modelId = 'flowai-chat-v1',
@@ -38,18 +38,18 @@ class FlowAIService {
     try {
       final isHealthy = await _checkHealth();
       if (!isHealthy) {
-        throw FlowAIException('FlowAI service is not available');
+        throw FlowAIException('Flow Ai service is not available');
       }
       
       _isInitialized = true;
-      debugPrint('✅ FlowAI service initialized successfully');
+      debugPrint('✅ Flow Ai service initialized successfully');
     } catch (e) {
-      debugPrint('❌ FlowAI initialization failed: $e');
-      throw FlowAIException('Failed to initialize FlowAI service: $e');
+      debugPrint('❌ Flow Ai initialization failed: $e');
+      throw FlowAIException('Failed to initialize Flow Ai service: $e');
     }
   }
 
-  /// Send a chat message to FlowAI and get response
+  /// Send a chat message to Flow Ai and get response
   Future<FlowAIResponse> sendChatMessage({
     required String message,
     required String userId,
@@ -57,7 +57,7 @@ class FlowAIService {
     Map<String, dynamic>? userMetadata,
   }) async {
     if (!_isInitialized) {
-      throw FlowAIException('FlowAI service not initialized');
+      throw FlowAIException('Flow Ai service not initialized');
     }
 
     if (_apiKey == null) {
@@ -138,7 +138,7 @@ class FlowAIService {
     );
   }
 
-  /// Check if FlowAI service is healthy
+  /// Check if Flow Ai service is healthy
   Future<bool> _checkHealth() async {
     try {
       final response = await http

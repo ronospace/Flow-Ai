@@ -15,10 +15,13 @@ class PeriodPredictionEngine {
   factory PeriodPredictionEngine() => _instance;
   PeriodPredictionEngine._internal();
 
+  // ignore: unused_field
   final DatabaseService _database = DatabaseService();
   
   // Advanced model parameters
+  // ignore: unused_field
   static const int _minimumDataPoints = 3; // Need at least 3 cycles for prediction
+  // ignore: unused_field
   static const int _optimalDataPoints = 12; // 1 year of data for best accuracy
   static const double _defaultCycleLength = 28.0;
   static const double _defaultPeriodLength = 5.0;
@@ -68,7 +71,6 @@ class PeriodPredictionEngine {
     
     // Multi-layer perceptron-inspired calculation
     double cycleLengthPrediction = 0;
-    double periodLengthPrediction = 0;
     
     // Input layer: Historical cycle lengths
     for (int i = 0; i < patterns.cycleLengths.length && i < _neuralWeights.length; i++) {
@@ -413,11 +415,7 @@ class PeriodPredictionEngine {
     
     // Simplified regression using normal equation (for small datasets)
     // In production, you might want to use more sophisticated methods
-    final n = features.length;
     final m = features.first.length;
-    
-    // Add bias term
-    final X = features.map((row) => [1.0, ...row]).toList();
     
     // Calculate (X^T * X)^-1 * X^T * y
     // This is a simplified version - in production, use proper matrix operations
