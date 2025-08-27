@@ -70,18 +70,14 @@ class AIChatService {
     _conversationMemory = AIConversationMemory();
     await _conversationMemory?.initialize(userId: userId);
     
-    // Load existing messages or add welcome message
-    final existingMessages = _conversationMemory?.getRelevantContext() ?? [];
-    if (existingMessages.isNotEmpty) {
-      _messages.addAll(existingMessages);
-      _notifyListeners();
-    } else {
-      // Add welcome message
-      _addAIMessage(
-        _localizations?.aiGreeting.replaceAll('{userName}', userName) ??
-        "Hi ${userName}! 👋 I'm Mira, your ZyraFlow AI assistant. I'm here to help you understand your cycle, provide personalized health insights, and answer any questions about reproductive wellness. How can I help you today?"
-      );
-    }
+    // Clear any existing conversation history to ensure clean state
+    await _conversationMemory?.clearMemory();
+    _messages.clear();
+    
+    // Always add fresh welcome message with updated name
+    _addAIMessage(
+      "Hi ${userName}! 👋 I'm Mira, your AI assistant. I'm here to help you understand your cycle, provide personalized health insights, and answer any questions about reproductive wellness. How can I help you today?"
+    );
     
     _isInitialized = true;
   }
@@ -188,6 +184,11 @@ class AIChatService {
     if (lowerMessage.contains('name') || lowerMessage.contains('call you') || lowerMessage.contains('who are you')) {
       return _getNameResponse(lowerMessage);
     }
+    
+    // Date and time questions
+    if (lowerMessage.contains('date') || lowerMessage.contains('today') || lowerMessage.contains('time') || lowerMessage.contains('what day')) {
+      return _getDateTimeResponse(lowerMessage);
+    }
 
     // General greeting or thanks
     if (lowerMessage.contains('hi') || lowerMessage.contains('hello') || lowerMessage.contains('thank')) {
@@ -288,11 +289,32 @@ class AIChatService {
 
   String _getNameResponse(String message) {
     final responses = [
-      "Hi! I'm Mira ✨ Your personal ZyraFlow AI assistant. I'm here to help you with all things related to your reproductive health and cycle tracking!",
+      "Hi! I'm Mira ✨ Your personal AI assistant. I'm here to help you with all things related to your reproductive health and cycle tracking!",
       "You can call me Mira! 🌟 I'm your dedicated AI health companion, ready to support you on your wellness journey.",
-      "I'm Mira, your ZyraFlow AI assistant! 💫 Think of me as your personal health guide - I'm always here to help answer your questions about cycles, symptoms, and reproductive wellness.",
+      "I'm Mira, your AI assistant! 💫 Think of me as your personal health guide - I'm always here to help answer your questions about cycles, symptoms, and reproductive wellness.",
       "Nice to meet you! I'm Mira ⭐ I'm specifically designed to help you understand and track your menstrual health. What would you like to know?",
     ];
+    return responses[math.Random().nextInt(responses.length)];
+  }
+  
+  String _getDateTimeResponse(String message) {
+    final now = DateTime.now();
+    final weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    final months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                   'July', 'August', 'September', 'October', 'November', 'December'];
+    
+    final dayName = weekdays[now.weekday - 1];
+    final monthName = months[now.month - 1];
+    final day = now.day;
+    final year = now.year;
+    
+    final responses = [
+      "📅 Today is $dayName, $monthName $day, $year! Perfect day for tracking your health data. How are you feeling today?",
+      "Today's date is $monthName $day, $year ($dayName). 🗓️ This is great timing to log any symptoms or cycle updates!",
+      "It's $dayName, $monthName $day, $year today! ✨ A good day to check in with your body and track how you're feeling.",
+      "Today is $monthName $day, $year - that's a $dayName! 🌟 Want to log any cycle data or symptoms for today?",
+    ];
+    
     return responses[math.Random().nextInt(responses.length)];
   }
 

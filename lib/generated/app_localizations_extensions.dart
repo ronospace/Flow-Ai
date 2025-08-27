@@ -5,7 +5,7 @@ import 'app_localizations.dart';
 
 extension AppLocalizationsExtras on AppLocalizations {
   // Greetings and general
-  String get aiGreeting => "Hi {userName}! 👋 I'm your FlowSense AI assistant. I'm here to help you understand your cycle, provide personalized health insights, and answer any questions about reproductive wellness. How can I help you today?";
+  String get aiGreeting => "Hi {userName}! 👋 I'm Mira, your Flow Ai assistant. I'm here to help you understand your cycle, provide personalized health insights, and answer any questions about reproductive wellness. How can I help you today?";
   String get aiWelcomeBack => "Hello again! 👋 I'm ready to help you with any questions about your reproductive health and cycle tracking. What can I assist you with today?";
 
   String get aiGreetingHello1 => "Hello! 😊 How can I help you with your reproductive health today?";
