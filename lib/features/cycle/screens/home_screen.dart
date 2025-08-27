@@ -1741,11 +1741,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ),
               
               _buildSmartActionCard(
-                'Mood & Energy',
-                'Log wellness',
-                Icons.psychology,
+                'FAQ & Help',
+                'Get answers',
+                Icons.help_center,
                 AppTheme.accentMint,
-                () => _navigateToTracking(2), // Navigate to mood tab
+                () => _navigateToFAQ(),
               ),
               
               _buildSmartActionCard(
@@ -2664,11 +2664,21 @@ extension _NavigationMethods on _HomeScreenState {
   void _navigateToInsights() {
     // Show interstitial ad before navigation
     _adMobService.showInterstitialAdWithFrequency();
-    
+
     // Navigate to insights screen with GoRouter
     // Use immediate navigation to prevent state issues
     if (mounted) {
       context.go('/insights');
+    }
+  }
+  
+  void _navigateToFAQ() {
+    // Show interstitial ad before navigation
+    _adMobService.showInterstitialAdWithFrequency();
+    
+    // Navigate to FAQ screen with GoRouter
+    if (mounted) {
+      context.go('/faq');
     }
   }
   

@@ -11,6 +11,7 @@ import '../../features/cycle/screens/tracking_screen.dart';
 // Deferred (lazy) imports for heavy features
 import '../../features/insights/screens/insights_screen.dart' deferred as insights;
 import '../../features/insights/screens/ai_coach_screen.dart' deferred as aicoach;
+import '../../features/insights/screens/faq_browser_screen.dart';
 import '../../features/health/screens/health_screen.dart';
 import '../../features/settings/screens/settings_screen.dart';
 import '../../features/feedback/screens/feedback_screen.dart';
@@ -90,6 +91,11 @@ class AppRouter {
             path: '/settings',
             name: 'settings',
             builder: (context, state) => const SettingsScreen(),
+          ),
+          GoRoute(
+            path: '/faq',
+            name: 'faq',
+            builder: (context, state) => const FAQBrowserScreen(),
           ),
         ],
       ),
