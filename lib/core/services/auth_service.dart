@@ -83,7 +83,7 @@ class AuthService {
       };
     } else if (currentUser is LocalUser) {
       // Handle Local User
-      final localUser = currentUser as LocalUser;
+      final localUser = currentUser;
       userData = {
         'uid': localUser.uid,
         'email': localUser.email,
@@ -724,8 +724,8 @@ class AuthService {
       
       // Check local user service
       if (_localUserService != null) {
-        final localUserExists = await _localUserService!.userExists(email);
-        if (localUserExists) {
+        final localUser = await _localUserService!.getUserByEmail(email);
+        if (localUser != null) {
           debugPrint('✅ Email found in local storage: $email');
           return true;
         }
