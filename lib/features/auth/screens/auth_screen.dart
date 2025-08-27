@@ -631,6 +631,18 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         }
         _showSuccessMessage('Welcome back!');
       } else {
+        // Check if email already exists before attempting sign up
+        final emailExists = await _authService.isEmailRegistered(_emailController.text.trim());
+        if (emailExists) {
+          // Email exists, suggest sign in instead
+          setState(() {
+            _isLoading = false;
+            _isLogin = true; // Switch to login mode
+          });
+          _showErrorMessage('An account with this email already exists. Please sign in instead.');
+          return; // Exit early
+        }
+        
         // Handle sign up
         final result = await _authService.signUpWithEmail(
           email: _emailController.text.trim(),
