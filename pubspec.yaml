@@ -46,8 +46,8 @@ dependencies:
   # AI & Analytics
   ml_linalg: ^13.12.6
   
-  # Health Integration
-  health: ^13.1.1
+  # Health Integration (temporarily disabled)
+  # health: ^13.1.1
   
   # Notifications
   flutter_local_notifications: ^17.2.3
@@ -102,7 +102,7 @@ dependencies:
   csv: ^6.0.0
   
   # File Picker
-  file_picker: ^8.0.6
+  file_picker: ^8.1.2
   
   # Share Plus
   share_plus: ^11.1.0

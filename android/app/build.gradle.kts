@@ -27,7 +27,7 @@ android {
         applicationId = "com.zyraflow.zyraflow"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = 26
+        minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
@@ -35,9 +35,9 @@ android {
 
     buildTypes {
         release {
-            // Enable minification and obfuscation for production builds
-            isMinifyEnabled = true
-            isShrinkResources = true
+            // Disable minification and obfuscation for debugging
+            isMinifyEnabled = false
+            isShrinkResources = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             
             // TODO: Add your own signing config for the release build.
