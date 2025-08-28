@@ -944,11 +944,11 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
-  String get smartActionCommandCenter => 'Smart Action Command Center';
+  String get smartActionCommandCenter => 'स्मार्ट एक्शन कमांड सेंटर';
 
   @override
   String get quickAccessToEssentialFeatures =>
-      'Quick access to essential features';
+      'आवश्यक विशेषताओं तक तुरंत पहुंच';
 
   @override
   String get physical => 'Physical';
@@ -1521,4 +1521,62 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get todayButton => 'Today';
+
+  @override
+  String get faqAndKnowledgeBase => 'FAQ और ज्ञान बेस';
+
+  @override
+  String get findAnswersToCommonQuestions => 'आम सवालों के जवाब पाएं';
+
+  @override
+  String get searchFAQs => 'FAQ में खोजें...';
+
+  @override
+  String get allCategories => 'सभी श्रेणियां';
+
+  @override
+  String searchResults(int count) {
+    return '$count खोज के नतीजे';
+  }
+
+  @override
+  String faqsInCategory(int count, String category) {
+    return '$category में $count FAQ';
+  }
+
+  @override
+  String totalFAQs(int count) {
+    return 'कुल $count FAQ';
+  }
+
+  @override
+  String get askMira => 'मीरा से पूछें';
+
+  @override
+  String get askRelatedQuestion => 'संबंधित सवाल पूछें';
+
+  @override
+  String get verified => 'सत्यापित';
+
+  @override
+  String get askMiraAI => 'मीरा AI से पूछें';
+
+  @override
+  String get getPersonalizedAnswers => 'अपने सवालों के व्यक्तिगत जवाब पाएं';
+
+  @override
+  String get fullChatExperienceComingSoon => 'पूरा चैट अनुभव जल्दी आ रहा है!';
+
+  @override
+  String get useFloatingChatInInsights =>
+      'अभी के लिए, इनसाइट्स स्क्रीन में फ्लोटिंग चैट का इस्तेमाल करें';
+
+  @override
+  String get goToAIChat => 'AI चैट पर जाएं';
+
+  @override
+  String get faqAndHelp => 'FAQ और सहायता';
+
+  @override
+  String get getAnswers => 'जवाब पाएं';
 }

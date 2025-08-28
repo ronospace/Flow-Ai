@@ -945,11 +945,12 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get smartActionCommandCenter => 'Smart Action Command Center';
+  String get smartActionCommandCenter =>
+      'Centro de Comandos de Acción Inteligente';
 
   @override
   String get quickAccessToEssentialFeatures =>
-      'Quick access to essential features';
+      'Acceso rápido a funciones esenciales';
 
   @override
   String get physical => 'Physical';
@@ -1523,4 +1524,66 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get todayButton => 'Today';
+
+  @override
+  String get faqAndKnowledgeBase =>
+      'Preguntas Frecuentes y Base de Conocimiento';
+
+  @override
+  String get findAnswersToCommonQuestions =>
+      'Encuentra respuestas a preguntas comunes';
+
+  @override
+  String get searchFAQs => 'Buscar preguntas frecuentes...';
+
+  @override
+  String get allCategories => 'Todas';
+
+  @override
+  String searchResults(int count) {
+    return '$count resultados de búsqueda';
+  }
+
+  @override
+  String faqsInCategory(int count, String category) {
+    return '$count preguntas en $category';
+  }
+
+  @override
+  String totalFAQs(int count) {
+    return '$count preguntas totales';
+  }
+
+  @override
+  String get askMira => 'Preguntar a Mira';
+
+  @override
+  String get askRelatedQuestion => 'Hacer pregunta relacionada';
+
+  @override
+  String get verified => 'Verificado';
+
+  @override
+  String get askMiraAI => 'Preguntar a Mira IA';
+
+  @override
+  String get getPersonalizedAnswers =>
+      'Obtén respuestas personalizadas a tus preguntas';
+
+  @override
+  String get fullChatExperienceComingSoon =>
+      '¡La experiencia de chat completa llegará pronto!';
+
+  @override
+  String get useFloatingChatInInsights =>
+      'Por ahora, usa el chat flotante en la pantalla de análisis';
+
+  @override
+  String get goToAIChat => 'Ir al Chat IA';
+
+  @override
+  String get faqAndHelp => 'Preguntas y Ayuda';
+
+  @override
+  String get getAnswers => 'Obtener respuestas';
 }

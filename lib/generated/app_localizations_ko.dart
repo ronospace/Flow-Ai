@@ -944,11 +944,10 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get smartActionCommandCenter => 'Smart Action Command Center';
+  String get smartActionCommandCenter => '스마트 액션 명령 센터';
 
   @override
-  String get quickAccessToEssentialFeatures =>
-      'Quick access to essential features';
+  String get quickAccessToEssentialFeatures => '필수 기능에 빠르게 접근';
 
   @override
   String get physical => 'Physical';
@@ -1521,4 +1520,61 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get todayButton => 'Today';
+
+  @override
+  String get faqAndKnowledgeBase => 'FAQ 및 지식 데이터베이스';
+
+  @override
+  String get findAnswersToCommonQuestions => '일반적인 질문에 대한 답변 찾기';
+
+  @override
+  String get searchFAQs => 'FAQ 검색...';
+
+  @override
+  String get allCategories => '모든 카테고리';
+
+  @override
+  String searchResults(int count) {
+    return '검색 결과 $count개';
+  }
+
+  @override
+  String faqsInCategory(int count, String category) {
+    return '$category에 $count개의 FAQ';
+  }
+
+  @override
+  String totalFAQs(int count) {
+    return '총 $count개의 FAQ';
+  }
+
+  @override
+  String get askMira => '미라에게 물어보기';
+
+  @override
+  String get askRelatedQuestion => '관련 질문하기';
+
+  @override
+  String get verified => '확인됨';
+
+  @override
+  String get askMiraAI => '미라 AI에게 물어보기';
+
+  @override
+  String get getPersonalizedAnswers => '맞춤형 답변 받기';
+
+  @override
+  String get fullChatExperienceComingSoon => '전체 채팅 경험이 곧 출시됩니다!';
+
+  @override
+  String get useFloatingChatInInsights => '현재는 인사이트 화면에서 떠있는 채팅을 사용하세요';
+
+  @override
+  String get goToAIChat => 'AI 채팅으로 이동';
+
+  @override
+  String get faqAndHelp => 'FAQ 및 도움말';
+
+  @override
+  String get getAnswers => '답변 받기';
 }

@@ -155,7 +155,7 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
                       ).animate().scale(delay: 200.ms),
                       const SizedBox(height: 16),
                       Text(
-                        'FAQ & Knowledge Base',
+                        localizations.faqAndKnowledgeBase,
                         style: theme.textTheme.headlineMedium?.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -163,7 +163,7 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
                       ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.3),
                       const SizedBox(height: 8),
                       Text(
-                        'Find answers to common questions',
+                        localizations.findAnswersToCommonQuestions,
                         style: theme.textTheme.bodyLarge?.copyWith(
                           color: Colors.white.withValues(alpha: 0.9),
                         ),
@@ -194,7 +194,7 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
                 child: TextField(
                   controller: _searchController,
                   decoration: InputDecoration(
-                    hintText: 'Search FAQs...',
+                    hintText: localizations.searchFAQs,
                     prefixIcon: Icon(
                       Icons.search,
                       color: AppTheme.primaryPurple,
@@ -234,7 +234,7 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
                     return Padding(
                       padding: const EdgeInsets.only(right: 8),
                       child: FilterChip(
-                        label: const Text('All'),
+                        label: Text(localizations.allCategories),
                         selected: _selectedCategory == null,
                         onSelected: (_) => _filterByCategory(null),
                         backgroundColor: theme.cardColor,

@@ -1521,4 +1521,64 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get todayButton => 'Today';
+
+  @override
+  String get faqAndKnowledgeBase => 'FAQ & Knowledge Base';
+
+  @override
+  String get findAnswersToCommonQuestions => 'Find answers to common questions';
+
+  @override
+  String get searchFAQs => 'Search FAQs...';
+
+  @override
+  String get allCategories => 'All';
+
+  @override
+  String searchResults(int count) {
+    return '$count search results';
+  }
+
+  @override
+  String faqsInCategory(int count, String category) {
+    return '$count FAQs in $category';
+  }
+
+  @override
+  String totalFAQs(int count) {
+    return '$count total FAQs';
+  }
+
+  @override
+  String get askMira => 'Ask Mira';
+
+  @override
+  String get askRelatedQuestion => 'Ask related question';
+
+  @override
+  String get verified => 'Verified';
+
+  @override
+  String get askMiraAI => 'Ask Mira AI';
+
+  @override
+  String get getPersonalizedAnswers =>
+      'Get personalized answers to your questions';
+
+  @override
+  String get fullChatExperienceComingSoon =>
+      'Full chat experience coming soon!';
+
+  @override
+  String get useFloatingChatInInsights =>
+      'For now, use the floating chat in the insights screen';
+
+  @override
+  String get goToAIChat => 'Go to AI Chat';
+
+  @override
+  String get faqAndHelp => 'FAQ & Help';
+
+  @override
+  String get getAnswers => 'Get answers';
 }

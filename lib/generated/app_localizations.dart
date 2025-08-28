@@ -3062,6 +3062,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Today'**
   String get todayButton;
+
+  /// FAQ browser screen title
+  ///
+  /// In en, this message translates to:
+  /// **'FAQ & Knowledge Base'**
+  String get faqAndKnowledgeBase;
+
+  /// FAQ browser screen subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Find answers to common questions'**
+  String get findAnswersToCommonQuestions;
+
+  /// Search field placeholder for FAQs
+  ///
+  /// In en, this message translates to:
+  /// **'Search FAQs...'**
+  String get searchFAQs;
+
+  /// All categories filter chip label
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get allCategories;
+
+  /// Number of search results found
+  ///
+  /// In en, this message translates to:
+  /// **'{count} search results'**
+  String searchResults(int count);
+
+  /// Number of FAQs in a specific category
+  ///
+  /// In en, this message translates to:
+  /// **'{count} FAQs in {category}'**
+  String faqsInCategory(int count, String category);
+
+  /// Total number of FAQs available
+  ///
+  /// In en, this message translates to:
+  /// **'{count} total FAQs'**
+  String totalFAQs(int count);
+
+  /// Button label to ask AI assistant
+  ///
+  /// In en, this message translates to:
+  /// **'Ask Mira'**
+  String get askMira;
+
+  /// Button to ask AI about related topics
+  ///
+  /// In en, this message translates to:
+  /// **'Ask related question'**
+  String get askRelatedQuestion;
+
+  /// Verified content indicator
+  ///
+  /// In en, this message translates to:
+  /// **'Verified'**
+  String get verified;
+
+  /// AI chat dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Ask Mira AI'**
+  String get askMiraAI;
+
+  /// AI chat dialog subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Get personalized answers to your questions'**
+  String get getPersonalizedAnswers;
+
+  /// Message indicating full chat is coming soon
+  ///
+  /// In en, this message translates to:
+  /// **'Full chat experience coming soon!'**
+  String get fullChatExperienceComingSoon;
+
+  /// Instructions for current chat functionality
+  ///
+  /// In en, this message translates to:
+  /// **'For now, use the floating chat in the insights screen'**
+  String get useFloatingChatInInsights;
+
+  /// Button to navigate to AI chat
+  ///
+  /// In en, this message translates to:
+  /// **'Go to AI Chat'**
+  String get goToAIChat;
+
+  /// FAQ and help section title
+  ///
+  /// In en, this message translates to:
+  /// **'FAQ & Help'**
+  String get faqAndHelp;
+
+  /// Action button subtitle for FAQ
+  ///
+  /// In en, this message translates to:
+  /// **'Get answers'**
+  String get getAnswers;
 }
 
 class _AppLocalizationsDelegate

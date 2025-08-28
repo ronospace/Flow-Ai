@@ -944,11 +944,10 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get smartActionCommandCenter => 'Smart Action Command Center';
+  String get smartActionCommandCenter => '智能操作命令中心';
 
   @override
-  String get quickAccessToEssentialFeatures =>
-      'Quick access to essential features';
+  String get quickAccessToEssentialFeatures => '快速访问核心功能';
 
   @override
   String get physical => 'Physical';
@@ -1521,4 +1520,61 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get todayButton => 'Today';
+
+  @override
+  String get faqAndKnowledgeBase => '常见问题和知识库';
+
+  @override
+  String get findAnswersToCommonQuestions => '查找常见问题的答案';
+
+  @override
+  String get searchFAQs => '搜索常见问题...';
+
+  @override
+  String get allCategories => '全部';
+
+  @override
+  String searchResults(int count) {
+    return '$count个搜索结果';
+  }
+
+  @override
+  String faqsInCategory(int count, String category) {
+    return '$category中有$count个常见问题';
+  }
+
+  @override
+  String totalFAQs(int count) {
+    return '共$count个常见问题';
+  }
+
+  @override
+  String get askMira => '问问米拉';
+
+  @override
+  String get askRelatedQuestion => '提问相关问题';
+
+  @override
+  String get verified => '已验证';
+
+  @override
+  String get askMiraAI => '问问米拉AI';
+
+  @override
+  String get getPersonalizedAnswers => '获取个性化问题答案';
+
+  @override
+  String get fullChatExperienceComingSoon => '完整的聊天体验即将推出！';
+
+  @override
+  String get useFloatingChatInInsights => '目前请使用洞察界面的浮动聊天';
+
+  @override
+  String get goToAIChat => '前往AI聊天';
+
+  @override
+  String get faqAndHelp => '常见问题和帮助';
+
+  @override
+  String get getAnswers => '获取答案';
 }
