@@ -1648,6 +1648,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   
   Widget _buildSmartActionCommandCenter() {
     final theme = Theme.of(context);
+    final localizations = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -1697,14 +1698,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Smart Action Command Center',
+                      localizations.smartActionCommandCenter,
                       style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppTheme.darkGrey,
                       ),
                     ),
                     Text(
-                      'Quick access to essential features',
+                      localizations.quickAccessToEssentialFeatures,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: AppTheme.mediumGrey,
                       ),
@@ -1741,8 +1742,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ),
               
               _buildSmartActionCard(
-                'FAQ & Help',
-                'Get answers',
+                localizations.faqAndHelp,
+                localizations.getAnswers,
                 Icons.help_center,
                 AppTheme.accentMint,
                 () => _navigateToFAQ(),

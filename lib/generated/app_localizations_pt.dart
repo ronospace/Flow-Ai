@@ -944,11 +944,12 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get smartActionCommandCenter => 'Smart Action Command Center';
+  String get smartActionCommandCenter =>
+      'Centro de Comando de Ações Inteligentes';
 
   @override
   String get quickAccessToEssentialFeatures =>
-      'Quick access to essential features';
+      'Acesso rápido às funcionalidades essenciais';
 
   @override
   String get physical => 'Physical';
@@ -1521,4 +1522,65 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get todayButton => 'Today';
+
+  @override
+  String get faqAndKnowledgeBase => 'FAQ e Base de Conhecimento';
+
+  @override
+  String get findAnswersToCommonQuestions =>
+      'Encontre respostas para perguntas comuns';
+
+  @override
+  String get searchFAQs => 'Pesquisar FAQ...';
+
+  @override
+  String get allCategories => 'Todas';
+
+  @override
+  String searchResults(int count) {
+    return '$count resultados da pesquisa';
+  }
+
+  @override
+  String faqsInCategory(int count, String category) {
+    return '$count FAQs em $category';
+  }
+
+  @override
+  String totalFAQs(int count) {
+    return '$count FAQs no total';
+  }
+
+  @override
+  String get askMira => 'Pergunte a Mira';
+
+  @override
+  String get askRelatedQuestion => 'Faça uma pergunta relacionada';
+
+  @override
+  String get verified => 'Verificado';
+
+  @override
+  String get askMiraAI => 'Pergunte a Mira AI';
+
+  @override
+  String get getPersonalizedAnswers =>
+      'Obtenha respostas personalizadas para suas perguntas';
+
+  @override
+  String get fullChatExperienceComingSoon =>
+      'A experiência completa de chat estará disponível em breve!';
+
+  @override
+  String get useFloatingChatInInsights =>
+      'Por enquanto, use o chat flutuante na tela de Insights';
+
+  @override
+  String get goToAIChat => 'Ir para o Chat IA';
+
+  @override
+  String get faqAndHelp => 'FAQ e Ajuda';
+
+  @override
+  String get getAnswers => 'Obter respostas';
 }

@@ -944,11 +944,11 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get smartActionCommandCenter => 'Smart Action Command Center';
+  String get smartActionCommandCenter => 'Smart Action Commandocentrum';
 
   @override
   String get quickAccessToEssentialFeatures =>
-      'Quick access to essential features';
+      'Snelle toegang tot essentiële functies';
 
   @override
   String get physical => 'Physical';
@@ -1521,4 +1521,65 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get todayButton => 'Today';
+
+  @override
+  String get faqAndKnowledgeBase => 'FAQ en Kennisbank';
+
+  @override
+  String get findAnswersToCommonQuestions =>
+      'Vind antwoorden op veelgestelde vragen';
+
+  @override
+  String get searchFAQs => 'Zoek FAQ\'s...';
+
+  @override
+  String get allCategories => 'Alle';
+
+  @override
+  String searchResults(int count) {
+    return '$count zoekresultaten';
+  }
+
+  @override
+  String faqsInCategory(int count, String category) {
+    return '$count FAQ\'s in $category';
+  }
+
+  @override
+  String totalFAQs(int count) {
+    return '$count FAQ\'s in totaal';
+  }
+
+  @override
+  String get askMira => 'Vraag Mira';
+
+  @override
+  String get askRelatedQuestion => 'Stel een gerelateerde vraag';
+
+  @override
+  String get verified => 'Geverifieerd';
+
+  @override
+  String get askMiraAI => 'Vraag Mira AI';
+
+  @override
+  String get getPersonalizedAnswers =>
+      'Krijg gepersonaliseerde antwoorden op je vragen';
+
+  @override
+  String get fullChatExperienceComingSoon =>
+      'De volledige chatervaring komt binnenkort!';
+
+  @override
+  String get useFloatingChatInInsights =>
+      'Gebruik voorlopig de zwevende chat in het Inzichten-scherm';
+
+  @override
+  String get goToAIChat => 'Ga naar AI Chat';
+
+  @override
+  String get faqAndHelp => 'FAQ en Help';
+
+  @override
+  String get getAnswers => 'Krijg antwoorden';
 }

@@ -27,10 +27,13 @@ android {
         applicationId = "com.zyraflow.zyraflow"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
+        minSdk = flutter.minSdkVersion  // Explicit minimum SDK for broader compatibility
+        targetSdk = 33  // Reduced target SDK for compatibility
+        versionCode = 1
+        versionName = "1.0.0"
+        
+        // Add multiDex support for large apps
+        multiDexEnabled = true
     }
 
     buildTypes {
@@ -64,4 +67,5 @@ configurations.configureEach {
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.2")
     implementation("com.google.android.play:core:1.10.3")
+    implementation("androidx.multidex:multidex:2.0.1")
 }
