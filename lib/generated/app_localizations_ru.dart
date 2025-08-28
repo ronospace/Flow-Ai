@@ -944,11 +944,11 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get smartActionCommandCenter => 'Smart Action Command Center';
+  String get smartActionCommandCenter => 'Центр Управления Умными Действиями';
 
   @override
   String get quickAccessToEssentialFeatures =>
-      'Quick access to essential features';
+      'Быстрый доступ к основным функциям';
 
   @override
   String get physical => 'Physical';
@@ -1521,4 +1521,64 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get todayButton => 'Today';
+
+  @override
+  String get faqAndKnowledgeBase => 'FAQ и База Знаний';
+
+  @override
+  String get findAnswersToCommonQuestions => 'Найдите ответы на частые вопросы';
+
+  @override
+  String get searchFAQs => 'Поиск FAQ...';
+
+  @override
+  String get allCategories => 'Все';
+
+  @override
+  String searchResults(int count) {
+    return '$count результатов поиска';
+  }
+
+  @override
+  String faqsInCategory(int count, String category) {
+    return '$count FAQ в категории $category';
+  }
+
+  @override
+  String totalFAQs(int count) {
+    return 'Всего $count FAQ';
+  }
+
+  @override
+  String get askMira => 'Спросить Миру';
+
+  @override
+  String get askRelatedQuestion => 'Задать связанный вопрос';
+
+  @override
+  String get verified => 'Проверено';
+
+  @override
+  String get askMiraAI => 'Спросить Миру ИИ';
+
+  @override
+  String get getPersonalizedAnswers =>
+      'Получите персонализированные ответы на ваши вопросы';
+
+  @override
+  String get fullChatExperienceComingSoon =>
+      'Полный опыт чата скоро будет доступен!';
+
+  @override
+  String get useFloatingChatInInsights =>
+      'Пока используйте плавающий чат на экране Аналитики';
+
+  @override
+  String get goToAIChat => 'Перейти к ИИ Чату';
+
+  @override
+  String get faqAndHelp => 'FAQ и Помощь';
+
+  @override
+  String get getAnswers => 'Получить ответы';
 }

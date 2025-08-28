@@ -8,7 +8,6 @@ import 'ai_conversation_memory.dart';
 import 'flowai_service.dart';
 import '../config/flowai_config.dart';
 import '../../generated/app_localizations.dart';
-import '../../generated/app_localizations_extensions.dart';
 
 /// Enhanced AI Chat Service with comprehensive FAQ and general knowledge
 class EnhancedAIChatService {

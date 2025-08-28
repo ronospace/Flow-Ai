@@ -1534,4 +1534,65 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get todayButton => 'Aujourd\'hui';
+
+  @override
+  String get faqAndKnowledgeBase => 'FAQ et Base de Connaissances';
+
+  @override
+  String get findAnswersToCommonQuestions =>
+      'Trouvez des réponses aux questions courantes';
+
+  @override
+  String get searchFAQs => 'Rechercher FAQ...';
+
+  @override
+  String get allCategories => 'Toutes';
+
+  @override
+  String searchResults(int count) {
+    return '$count résultats de recherche';
+  }
+
+  @override
+  String faqsInCategory(int count, String category) {
+    return '$count FAQ dans $category';
+  }
+
+  @override
+  String totalFAQs(int count) {
+    return '$count FAQ au total';
+  }
+
+  @override
+  String get askMira => 'Demander à Mira';
+
+  @override
+  String get askRelatedQuestion => 'Poser une question liée';
+
+  @override
+  String get verified => 'Vérifié';
+
+  @override
+  String get askMiraAI => 'Demander à Mira IA';
+
+  @override
+  String get getPersonalizedAnswers =>
+      'Obtenez des réponses personnalisées à vos questions';
+
+  @override
+  String get fullChatExperienceComingSoon =>
+      'L\'expérience de chat complète arrive bientôt !';
+
+  @override
+  String get useFloatingChatInInsights =>
+      'Pour l\'instant, utilisez le chat flottant dans l\'écran d\'analyses';
+
+  @override
+  String get goToAIChat => 'Aller au Chat IA';
+
+  @override
+  String get faqAndHelp => 'FAQ et Aide';
+
+  @override
+  String get getAnswers => 'Obtenir des réponses';
 }

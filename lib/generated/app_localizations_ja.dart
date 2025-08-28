@@ -944,11 +944,10 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get smartActionCommandCenter => 'Smart Action Command Center';
+  String get smartActionCommandCenter => 'スマートアクションコマンドセンター';
 
   @override
-  String get quickAccessToEssentialFeatures =>
-      'Quick access to essential features';
+  String get quickAccessToEssentialFeatures => '重要な機能へのクイックアクセス';
 
   @override
   String get physical => 'Physical';
@@ -1521,4 +1520,61 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get todayButton => 'Today';
+
+  @override
+  String get faqAndKnowledgeBase => 'FAQとナレッジベース';
+
+  @override
+  String get findAnswersToCommonQuestions => 'よくある質問の回答を探す';
+
+  @override
+  String get searchFAQs => 'FAQを検索...';
+
+  @override
+  String get allCategories => 'すべて';
+
+  @override
+  String searchResults(int count) {
+    return '$count件の検索結果';
+  }
+
+  @override
+  String faqsInCategory(int count, String category) {
+    return '$categoryに$count件のFAQ';
+  }
+
+  @override
+  String totalFAQs(int count) {
+    return '合計$count件のFAQ';
+  }
+
+  @override
+  String get askMira => 'ミラに質問';
+
+  @override
+  String get askRelatedQuestion => '関連する質問をする';
+
+  @override
+  String get verified => '確認済み';
+
+  @override
+  String get askMiraAI => 'ミラAIに質問';
+
+  @override
+  String get getPersonalizedAnswers => 'あなたの質問に個人化された回答を得る';
+
+  @override
+  String get fullChatExperienceComingSoon => '完全なチャット体験は近日公開！';
+
+  @override
+  String get useFloatingChatInInsights => '現在はインサイト画面のフローティングチャットをご利用ください';
+
+  @override
+  String get goToAIChat => 'AIチャットに移動';
+
+  @override
+  String get faqAndHelp => 'FAQとヘルプ';
+
+  @override
+  String get getAnswers => '回答を得る';
 }

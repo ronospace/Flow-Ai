@@ -944,11 +944,10 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get smartActionCommandCenter => 'Smart Action Command Center';
+  String get smartActionCommandCenter => 'مركز قيادة الإجراءات الذكية';
 
   @override
-  String get quickAccessToEssentialFeatures =>
-      'Quick access to essential features';
+  String get quickAccessToEssentialFeatures => 'وصول سريع للميزات الأساسية';
 
   @override
   String get physical => 'Physical';
@@ -1521,4 +1520,63 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get todayButton => 'Today';
+
+  @override
+  String get faqAndKnowledgeBase => 'الأسئلة الشائعة وقاعدة المعرفة';
+
+  @override
+  String get findAnswersToCommonQuestions => 'اعثر على إجابات للأسئلة الشائعة';
+
+  @override
+  String get searchFAQs => 'ابحث في الأسئلة الشائعة...';
+
+  @override
+  String get allCategories => 'جميع الفئات';
+
+  @override
+  String searchResults(int count) {
+    return '$count نتائج بحث';
+  }
+
+  @override
+  String faqsInCategory(int count, String category) {
+    return '$count أسئلة شائعة في $category';
+  }
+
+  @override
+  String totalFAQs(int count) {
+    return 'إجمالي $count أسئلة شائعة';
+  }
+
+  @override
+  String get askMira => 'اسأل ميرا';
+
+  @override
+  String get askRelatedQuestion => 'اطرح سؤالاً مرتبطاً';
+
+  @override
+  String get verified => 'معتمد';
+
+  @override
+  String get askMiraAI => 'اسأل ميرا الذكاء الاصطناعي';
+
+  @override
+  String get getPersonalizedAnswers => 'احصل على إجابات مخصصة لأسئلتك';
+
+  @override
+  String get fullChatExperienceComingSoon =>
+      'تجربة المحادثة الكاملة قادمة قريباً!';
+
+  @override
+  String get useFloatingChatInInsights =>
+      'في الوقت الحالي، استخدم المحادثة العائمة في شاشة الأفكار';
+
+  @override
+  String get goToAIChat => 'انتقل إلى محادثة الذكاء الاصطناعي';
+
+  @override
+  String get faqAndHelp => 'الأسئلة الشائعة والمساعدة';
+
+  @override
+  String get getAnswers => 'احصل على إجابات';
 }

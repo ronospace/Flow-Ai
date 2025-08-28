@@ -789,5 +789,25 @@
   "aiPrediction": "Prédiction IA",
   "currentCycle": "Cycle Actuel",
   "noActiveCycle": "Aucun cycle actif",
-  "startTracking": "Commencer le suivi"
+  "startTracking": "Commencer le suivi",
+  
+  "faqAndKnowledgeBase": "FAQ et Base de Connaissances",
+  "findAnswersToCommonQuestions": "Trouvez des réponses aux questions courantes",
+  "searchFAQs": "Rechercher FAQ...",
+  "allCategories": "Toutes",
+  "searchResults": "{count} résultats de recherche",
+  "faqsInCategory": "{count} FAQ dans {category}",
+  "totalFAQs": "{count} FAQ au total",
+  "askMira": "Demander à Mira",
+  "askRelatedQuestion": "Poser une question liée",
+  "verified": "Vérifié",
+  "askMiraAI": "Demander à Mira IA",
+  "getPersonalizedAnswers": "Obtenez des réponses personnalisées à vos questions",
+  "fullChatExperienceComingSoon": "L'expérience de chat complète arrive bientôt !",
+  "useFloatingChatInInsights": "Pour l'instant, utilisez le chat flottant dans l'écran d'analyses",
+  "goToAIChat": "Aller au Chat IA",
+  "faqAndHelp": "FAQ et Aide",
+  "getAnswers": "Obtenir des réponses",
+  "smartActionCommandCenter": "Centre de Commande d'Action Intelligente",
+  "quickAccessToEssentialFeatures": "Accès rapide aux fonctionnalités essentielles"
 }

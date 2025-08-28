@@ -1492,5 +1492,122 @@
   "todayButton": "Today",
   "@todayButton": {
     "description": "Today button label"
+  },
+  
+  "faqAndKnowledgeBase": "FAQ & Knowledge Base",
+  "@faqAndKnowledgeBase": {
+    "description": "FAQ browser screen title"
+  },
+  
+  "findAnswersToCommonQuestions": "Find answers to common questions",
+  "@findAnswersToCommonQuestions": {
+    "description": "FAQ browser screen subtitle"
+  },
+  
+  "searchFAQs": "Search FAQs...",
+  "@searchFAQs": {
+    "description": "Search field placeholder for FAQs"
+  },
+  
+  "allCategories": "All",
+  "@allCategories": {
+    "description": "All categories filter chip label"
+  },
+  
+  "searchResults": "{count} search results",
+  "@searchResults": {
+    "description": "Number of search results found",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  
+  "faqsInCategory": "{count} FAQs in {category}",
+  "@faqsInCategory": {
+    "description": "Number of FAQs in a specific category",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "10"
+      },
+      "category": {
+        "type": "String",
+        "example": "health"
+      }
+    }
+  },
+  
+  "totalFAQs": "{count} total FAQs",
+  "@totalFAQs": {
+    "description": "Total number of FAQs available",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "50"
+      }
+    }
+  },
+  
+  "askMira": "Ask Mira",
+  "@askMira": {
+    "description": "Button label to ask AI assistant"
+  },
+  
+  "askRelatedQuestion": "Ask related question",
+  "@askRelatedQuestion": {
+    "description": "Button to ask AI about related topics"
+  },
+  
+  "verified": "Verified",
+  "@verified": {
+    "description": "Verified content indicator"
+  },
+  
+  "askMiraAI": "Ask Mira AI",
+  "@askMiraAI": {
+    "description": "AI chat dialog title"
+  },
+  
+  "getPersonalizedAnswers": "Get personalized answers to your questions",
+  "@getPersonalizedAnswers": {
+    "description": "AI chat dialog subtitle"
+  },
+  
+  "fullChatExperienceComingSoon": "Full chat experience coming soon!",
+  "@fullChatExperienceComingSoon": {
+    "description": "Message indicating full chat is coming soon"
+  },
+  
+  "useFloatingChatInInsights": "For now, use the floating chat in the insights screen",
+  "@useFloatingChatInInsights": {
+    "description": "Instructions for current chat functionality"
+  },
+  
+  "goToAIChat": "Go to AI Chat",
+  "@goToAIChat": {
+    "description": "Button to navigate to AI chat"
+  },
+  
+  "faqAndHelp": "FAQ & Help",
+  "@faqAndHelp": {
+    "description": "FAQ and help section title"
+  },
+  
+  "getAnswers": "Get answers",
+  "@getAnswers": {
+    "description": "Action button subtitle for FAQ"
+  },
+  
+  "smartActionCommandCenter": "Smart Action Command Center",
+  "@smartActionCommandCenter": {
+    "description": "Smart action center title"
+  },
+  
+  "quickAccessToEssentialFeatures": "Quick access to essential features",
+  "@quickAccessToEssentialFeatures": {
+    "description": "Smart action center subtitle"
   }
 }

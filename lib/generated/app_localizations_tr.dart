@@ -944,11 +944,10 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get smartActionCommandCenter => 'Smart Action Command Center';
+  String get smartActionCommandCenter => 'Akıllı Eylem Komut Merkezi';
 
   @override
-  String get quickAccessToEssentialFeatures =>
-      'Quick access to essential features';
+  String get quickAccessToEssentialFeatures => 'Temel özelliklere hızlı erişim';
 
   @override
   String get physical => 'Physical';
@@ -1521,4 +1520,65 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get todayButton => 'Today';
+
+  @override
+  String get faqAndKnowledgeBase => 'SSS ve Bilgi Bankası';
+
+  @override
+  String get findAnswersToCommonQuestions =>
+      'Sık sorulan sorulara cevaplar bulun';
+
+  @override
+  String get searchFAQs => 'SSS\'lerde arama yapın...';
+
+  @override
+  String get allCategories => 'Tüm Kategoriler';
+
+  @override
+  String searchResults(int count) {
+    return '$count arama sonucu';
+  }
+
+  @override
+  String faqsInCategory(int count, String category) {
+    return '$category kategorisinde $count SSS';
+  }
+
+  @override
+  String totalFAQs(int count) {
+    return 'Toplam $count SSS';
+  }
+
+  @override
+  String get askMira => 'Mira\'ya Sor';
+
+  @override
+  String get askRelatedQuestion => 'İlgili soru sor';
+
+  @override
+  String get verified => 'Doğrulanmış';
+
+  @override
+  String get askMiraAI => 'Mira AI\'ya Sor';
+
+  @override
+  String get getPersonalizedAnswers =>
+      'Sorularınıza kişiselleştirilmiş cevaplar alın';
+
+  @override
+  String get fullChatExperienceComingSoon =>
+      'Tam sohbet deneyimi yakında geliyor!';
+
+  @override
+  String get useFloatingChatInInsights =>
+      'Şimdilik, Görüşler ekranındaki yüzen sohbeti kullanın';
+
+  @override
+  String get goToAIChat => 'AI Sohbet\'e Git';
+
+  @override
+  String get faqAndHelp => 'SSS ve Yardım';
+
+  @override
+  String get getAnswers => 'Cevaplar Alın';
 }
