@@ -42,7 +42,7 @@ class AIConversationMemory {
     }
 
     // Extract insights from user messages
-    if (message.author.id != 'ai_zyraflow' && message is types.TextMessage) {
+    if (message.author.id != 'ai_flowai' && message is types.TextMessage) {
       await _analyzeUserMessage(message.text);
     }
 
@@ -263,7 +263,7 @@ class AIConversationMemory {
       context.write('Recent conversation context: ');
       for (final msg in recentMessages.reversed) {
         if (msg is types.TextMessage) {
-          context.write('${msg.author.id == 'ai_zyraflow' ? 'AI' : 'User'}: ${msg.text}; ');
+          context.write('${msg.author.id == 'ai_flowai' ? 'AI' : 'User'}: ${msg.text}; ');
         }
       }
     }

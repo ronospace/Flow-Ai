@@ -109,7 +109,7 @@ class _FuturePlansScreenState extends State<FuturePlansScreen>
       ),
       ComingSoonCard(
         title: 'Telehealth Integration',
-        description: 'Direct consultations with healthcare providers using your ZyraFlow data.',
+        description: 'Direct consultations with healthcare providers using your Flow Ai data.',
         icon: Icons.video_call_outlined,
         gradientColors: const [Color(0xFF3F51B5), Color(0xFF9C27B0)],
         eta: 'Q3 2025',
@@ -211,7 +211,7 @@ class _FuturePlansScreenState extends State<FuturePlansScreen>
                         ),
                         SizedBox(height: 8),
                         Text(
-                          'Discover what\'s coming next in ZyraFlow',
+                          'Discover what\'s coming next in Flow Ai',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,
@@ -331,7 +331,7 @@ class _FuturePlansScreenState extends State<FuturePlansScreen>
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'We\'d love to hear your feature requests and ideas for the future of ZyraFlow.',
+                    'We\'d love to hear your feature requests and ideas for the future of Flow Ai.',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 14,

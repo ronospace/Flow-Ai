@@ -143,7 +143,7 @@ class OnboardingProvider extends ChangeNotifier {
   Future<void> scheduleWelcomeNotification() async {
     await _notificationService.scheduleNotification(
       id: 0,
-      title: 'Welcome to ZyraFlow! 🌸',
+      title: 'Welcome to Flow Ai! 🌸',
       body: 'Ready to start tracking your health journey?',
       scheduledDate: DateTime.now().add(const Duration(hours: 24)),
     );

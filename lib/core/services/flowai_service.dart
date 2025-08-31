@@ -114,7 +114,7 @@ class FlowAIService {
       conversationContext: healthContext,
       userMetadata: {
         'type': 'health_chat',
-        'app': 'zyraflow',
+        'app': 'flowai',
         'domain': 'reproductive_health',
       },
     );
@@ -133,7 +133,7 @@ class FlowAIService {
       userId: userId,
       userMetadata: {
         'type': 'insight_generation',
-        'app': 'zyraflow',
+        'app': 'flowai',
       },
     );
   }
@@ -160,7 +160,7 @@ class FlowAIService {
     return {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $_apiKey',
-      'User-Agent': 'ZyraFlow/1.0',
+      'User-Agent': 'FlowAi/1.0',
       'X-Model-Id': _modelId ?? 'flowai-chat-v1',
     };
   }
@@ -206,7 +206,7 @@ class FlowAIService {
   /// Get system prompt for Mira AI
   String _getSystemPrompt() {
     return '''
-You are Mira, the AI assistant for ZyraFlow, a menstrual cycle tracking app. You are knowledgeable, empathetic, and supportive when discussing reproductive health topics.
+You are Mira, the AI assistant for Flow Ai, a menstrual cycle tracking app. You are knowledgeable, empathetic, and supportive when discussing reproductive health topics.
 
 Key characteristics:
 - Warm, friendly, and professional tone

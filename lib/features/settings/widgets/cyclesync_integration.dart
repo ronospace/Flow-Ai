@@ -301,22 +301,8 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
     try {
       HapticFeedback.mediumImpact();
       
-      if (value) {
-        // Connect to CycleSync
-        await _connectToCycleSync(context, settings);
-      } else {
-        // Disconnect from CycleSync
-        await settings.updateCycleSyncIntegration(false, null);
-        
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: const Text('Disconnected from CycleSync'),
-              backgroundColor: AppTheme.warningOrange,
-            ),
-          );
-        }
-      }
+      // Show coming soon message instead of actual functionality
+      _showComingSoonDialog(context);
     } finally {
       if (mounted) {
         setState(() {
@@ -565,6 +551,178 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
         ],
       ),
     ) ?? false; // Return false if dialog is dismissed
+  }
+
+  void _showComingSoonDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: Container(
+          padding: const EdgeInsets.all(28),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Theme.of(context).cardColor,
+                Theme.of(context).cardColor.withValues(alpha: 0.9),
+              ],
+            ),
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(
+              color: AppTheme.primaryRose.withValues(alpha: 0.2),
+              width: 1,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: AppTheme.primaryRose.withValues(alpha: 0.1),
+                blurRadius: 20,
+                offset: const Offset(0, 8),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Header
+              Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+                  ),
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                child: const Icon(
+                  Icons.local_hospital_rounded,
+                  color: Colors.white,
+                  size: 40,
+                ),
+              ),
+              
+              const SizedBox(height: 24),
+              
+              Text(
+                'Flow iQ Coming Soon! 🏥',
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: AppTheme.darkGrey,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              
+              const SizedBox(height: 16),
+              
+              Text(
+                'We\'re developing the Flow iQ integration to connect with healthcare providers and clinical systems for enhanced cycle tracking and medical insights.',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppTheme.mediumGrey,
+                  height: 1.5,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              
+              const SizedBox(height: 20),
+              
+              // Features preview
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: AppTheme.secondaryBlue.withValues(alpha: 0.05),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: AppTheme.secondaryBlue.withValues(alpha: 0.1),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Coming Features:',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.secondaryBlue,
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    _buildFeatureItem('🔗', 'Clinical data synchronization'),
+                    _buildFeatureItem('📊', 'Healthcare provider integration'),
+                    _buildFeatureItem('🤖', 'AI-powered medical insights'),
+                    _buildFeatureItem('🔒', 'HIPAA-compliant data handling'),
+                    _buildFeatureItem('📋', 'Comprehensive health reports'),
+                  ],
+                ),
+              ),
+              
+              const SizedBox(height: 24),
+              
+              // Close Button
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    shadowColor: Colors.transparent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: const Text(
+                      'Got it!',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+  
+  Widget _buildFeatureItem(String emoji, String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        children: [
+          Text(
+            emoji,
+            style: const TextStyle(fontSize: 14),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: 13,
+                color: AppTheme.darkGrey.withValues(alpha: 0.8),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   void _learnMore(BuildContext context) {

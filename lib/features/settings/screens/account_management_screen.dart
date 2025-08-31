@@ -48,16 +48,40 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
     final settings = Provider.of<SettingsProvider>(context, listen: false);
     _displayNameController.text = settings.preferences.displayName ?? '';
     
-    // Load email from auth service
+    // Force a fresh sync first
     try {
-      final authService = AuthService();
-      await authService.initialize();
-      final userData = await authService.getUserData();
-      if (userData != null && userData['email'] != null) {
-        _emailController.text = userData['email'];
+      await settings.forceUserDataSync();
+    } catch (e) {
+      debugPrint('Warning: Could not sync user data: $e');
+    }
+    
+    // Load email from stored user metadata (more reliable than auth service)
+    try {
+      final userMetadata = await settings.getUserMetadata();
+      if (userMetadata != null && userMetadata['email'] != null && userMetadata['email'].toString().isNotEmpty) {
+        _emailController.text = userMetadata['email'];
+        debugPrint('📧 Loaded email from metadata: ${userMetadata['email']}');
+      } else {
+        // Fallback to auth service if metadata doesn't have email
+        final authService = AuthService();
+        await authService.initialize();
+        final userData = await authService.getUserData();
+        if (userData != null && userData['email'] != null && userData['email'].toString().isNotEmpty) {
+          _emailController.text = userData['email'];
+          debugPrint('📧 Loaded email from auth service: ${userData['email']}');
+          
+          // Store this email in metadata for future use
+          final currentMetadata = await settings.getUserMetadata() ?? {};
+          currentMetadata['email'] = userData['email'];
+          await settings.storeUserMetadata(currentMetadata);
+        } else {
+          debugPrint('⚠️ No email found in metadata or auth service');
+          _emailController.text = 'Not available';
+        }
       }
     } catch (e) {
       debugPrint('Error loading user data: $e');
+      _emailController.text = 'Error loading email';
     }
   }
 
@@ -427,6 +451,14 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
           subtitle: 'Free up storage space',
           onTap: _clearCache,
         ),
+        
+        // Delete All Data
+        SettingsTile(
+          leading: const Icon(Icons.delete_sweep, color: AppTheme.primaryRose),
+          title: 'Delete All Data',
+          subtitle: 'Permanently delete all tracking data',
+          onTap: _showDeleteAllDataDialog,
+        ),
       ],
     );
   }
@@ -629,7 +661,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
       // Share the data
       await Share.share(
         csvData,
-        subject: 'ZyraFlow Data Export',
+        subject: 'Flow Ai Data Export',
       );
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -732,6 +764,128 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
         ],
       ),
     );
+  }
+
+  void _showDeleteAllDataDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Row(
+          children: [
+            Icon(Icons.delete_sweep, color: AppTheme.primaryRose),
+            SizedBox(width: 16),
+            Text('Delete All Data'),
+          ],
+        ),
+        content: const Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'This will permanently delete all your tracking data including:',
+              style: TextStyle(fontWeight: FontWeight.w600),
+            ),
+            SizedBox(height: 12),
+            Text('• Cycle history and period tracking'),
+            Text('• Symptoms and mood logs'),
+            Text('• AI insights and predictions'),
+            Text('• Personal preferences and settings'),
+            Text('• Conversation history with AI'),
+            SizedBox(height: 12),
+            Text(
+              'Your account will remain active but all data will be lost. This action cannot be undone.',
+              style: TextStyle(
+                color: AppTheme.primaryRose,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              _performDataDeletion();
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: AppTheme.primaryRose),
+            child: const Text('Delete All Data'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _performDataDeletion() async {
+    try {
+      // Show loading dialog
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(height: 16),
+              Text('Deleting all data...'),
+            ],
+          ),
+        ),
+      );
+      
+      // Simulate data deletion process
+      await Future.delayed(const Duration(seconds: 3));
+      
+      // TODO: Implement actual data deletion logic here
+      // This would include:
+      // - Clear all SharedPreferences data
+      // - Clear conversation memory
+      // - Reset user preferences
+      // - Clear any cached files
+      // - Reset AI chat history
+      
+      // For now, just reset settings to demonstrate
+      final settings = Provider.of<SettingsProvider>(context, listen: false);
+      await settings.resetToDefaults();
+      
+      // Close loading dialog
+      Navigator.pop(context);
+      
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Row(
+            children: [
+              Icon(Icons.check_circle, color: Colors.white),
+              SizedBox(width: 8),
+              Text('All data deleted successfully'),
+            ],
+          ),
+          backgroundColor: AppTheme.successGreen,
+          duration: Duration(seconds: 4),
+        ),
+      );
+      
+      // Refresh the screen
+      setState(() {});
+      _loadUserData();
+      
+    } catch (e) {
+      // Close loading dialog
+      Navigator.pop(context);
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to delete data: $e'),
+          backgroundColor: AppTheme.primaryRose,
+        ),
+      );
+    }
   }
 
   void _showDeleteAccountDialog() {

@@ -23,34 +23,45 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.zyraflow.zyraflow"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion  // Explicit minimum SDK for broader compatibility
-        targetSdk = 33  // Reduced target SDK for compatibility
-        versionCode = 1
-        versionName = "1.0.0"
+        applicationId = "com.zyraflow.flowai"
+        minSdk = flutter.minSdkVersion  // Support Android 5.0 and above
+        targetSdk = flutter.targetSdkVersion  // Updated target SDK for latest Play Store requirements
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
         
         // Add multiDex support for large apps
         multiDexEnabled = true
+        
+        // Vector drawables support
+        vectorDrawables.useSupportLibrary = true
+        
+        // Add test instrumentation runner
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            // Disable minification and obfuscation for debugging
-            isMinifyEnabled = false
-            isShrinkResources = false
+            // Enable optimization for production builds
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+            // Production signing - replace with actual keystore for App Store release
             signingConfig = signingConfigs.getByName("debug")
+            
+            // Optimize for production
+            isDebuggable = false
+            isJniDebuggable = false
+            isRenderscriptDebuggable = false
+            isPseudoLocalesEnabled = false
         }
         debug {
             // Keep debug builds fast
             isMinifyEnabled = false
             isShrinkResources = false
+            isDebuggable = true
+            // Temporarily removed debug suffix to match Firebase config
+            // applicationIdSuffix = ".debug"
         }
     }
 }

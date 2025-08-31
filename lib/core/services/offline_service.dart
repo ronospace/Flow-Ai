@@ -52,8 +52,10 @@ class OfflineService {
     // Check initial connectivity
     await _checkConnectivity();
     
-    // Listen for connectivity changes
-    _connectivity.onConnectivityChanged.listen(_onConnectivityChanged);
+    // Listen for connectivity changes (using older API which expects single ConnectivityResult)
+    _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
+      _onConnectivityChanged([result]);
+    });
     
     debugPrint('🔄 Offline Service initialized - Status: ${_isOffline ? 'Offline' : 'Online'}');
   }
@@ -61,7 +63,8 @@ class OfflineService {
   /// Check current connectivity status
   Future<void> _checkConnectivity() async {
     try {
-      _connectionStatus = await _connectivity.checkConnectivity();
+      final ConnectivityResult result = await _connectivity.checkConnectivity();
+      _connectionStatus = [result];
       await _updateConnectivityStatus(_connectionStatus);
     } catch (e) {
       debugPrint('Connectivity check failed: $e');
