@@ -174,7 +174,7 @@ abstract class AppLocalizations {
   /// The name of the application
   ///
   /// In en, this message translates to:
-  /// **'ZyraFlow'**
+  /// **'Flow Ai'**
   String get appName;
 
   /// The tagline of the application
@@ -1122,7 +1122,7 @@ abstract class AppLocalizations {
   /// No description provided for @welcome.
   ///
   /// In en, this message translates to:
-  /// **'Welcome to ZyraFlow'**
+  /// **'Welcome to Flow Ai'**
   String get welcome;
 
   /// No description provided for @getStarted.

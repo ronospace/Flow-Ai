@@ -216,7 +216,7 @@ class MoodEnergyChart extends StatelessWidget {
                 lineTouchData: LineTouchData(
                   enabled: true,
                   touchTooltipData: LineTouchTooltipData(
-                    getTooltipColor: (touchedSpot) => theme.colorScheme.inverseSurface,
+                    // getTooltipColor removed in newer fl_chart versions - using default styling
                     tooltipRoundedRadius: 8,
                     getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
                       return touchedBarSpots.map((barSpot) {

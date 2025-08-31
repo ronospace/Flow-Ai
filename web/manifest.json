@@ -1,11 +1,11 @@
 {
-    "name": "ZyraFlow",
-    "short_name": "ZyraFlow",
+    "name": "Flow Ai",
+    "short_name": "Flow Ai",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#4F46E5",
     "theme_color": "#C147E9",
-    "description": "ZyraFlow - AI-Powered Menstrual Health Companion",
+    "description": "Flow Ai - AI-Powered Menstrual Health Companion",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

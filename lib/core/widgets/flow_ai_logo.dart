@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-/// ZyraFlow Logo Widget - Provides consistent branding across the app
+/// Flow Ai Logo Widget - Provides consistent branding across the app
 /// 
 /// Supports different sizes, colors, and layouts for various use cases:
 /// - App bars and headers
 /// - Splash screens
 /// - Authentication screens
 /// - Settings and about pages
-class ZyraFlowLogo extends StatelessWidget {
-  const ZyraFlowLogo({
+class FlowAiLogo extends StatelessWidget {
+  const FlowAiLogo({
     super.key,
     this.size = 100.0,
     this.showWordmark = true,
@@ -20,7 +20,7 @@ class ZyraFlowLogo extends StatelessWidget {
   /// The size of the logo (applies to icon portion)
   final double size;
   
-  /// Whether to show the text "ZyraFlow" alongside the icon
+  /// Whether to show the text "Flow Ai" alongside the icon
   final bool showWordmark;
   
   /// Layout arrangement of icon and wordmark
@@ -83,7 +83,7 @@ class ZyraFlowLogo extends StatelessWidget {
           // Main flower/cycle design
           Positioned.fill(
             child: CustomPaint(
-              painter: ZyraFlowIconPainter(),
+              painter: FlowAiIconPainter(),
             ),
           ),
           
@@ -152,7 +152,7 @@ class ZyraFlowLogo extends StatelessWidget {
     final theme = Theme.of(context);
     
     final wordmark = Text(
-      'ZyraFlow',
+      'Flow Ai',
       style: theme.textTheme.headlineMedium?.copyWith(
         fontWeight: FontWeight.w600,
         color: logoColor,
@@ -192,8 +192,8 @@ enum LogoLayout {
   vertical,
 }
 
-/// Custom painter for the ZyraFlow icon design
-class ZyraFlowIconPainter extends CustomPainter {
+/// Custom painter for the Flow Ai icon design
+class FlowAiIconPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);

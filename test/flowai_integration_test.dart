@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zyraflow/core/services/flowai_service.dart';
-import 'package:zyraflow/core/config/flowai_config.dart';
-import 'package:zyraflow/core/services/ai_chat_service.dart';
-import 'package:zyraflow/core/services/ai_engine.dart';
+import 'package:flowai/core/services/flowai_service.dart';
+import 'package:flowai/core/config/flowai_config.dart';
+import 'package:flowai/core/services/ai_chat_service.dart';
+import 'package:flowai/core/services/ai_engine.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Test suite for Flow Ai integration
@@ -73,7 +73,7 @@ test('should validate configuration parameters', () {
       
       expect(headers['Content-Type'], equals('application/json'));
       expect(headers['Authorization'], equals('Bearer test-key-123'));
-      expect(headers['User-Agent'], equals('ZyraFlow/1.0'));
+      expect(headers['User-Agent'], equals('FlowAi/1.0'));
     });
     
     test('should handle FlowAI exceptions properly', () {

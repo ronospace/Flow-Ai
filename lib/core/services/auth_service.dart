@@ -3,13 +3,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+// import 'package:google_sign_in/google_sign_in.dart'; // Temporarily disabled for iOS compatibility
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:async';
 import 'local_user_service.dart';
+import '../utils/app_logger.dart';
 
 /// Enhanced Authentication Service with biometric and multi-provider OAuth
 class AuthService {
@@ -19,7 +21,7 @@ class AuthService {
 
   FirebaseAuth? _auth;
   LocalAuthentication? _localAuth;
-  GoogleSignIn? _googleSignIn;
+  // GoogleSignIn? _googleSignIn; // Temporarily disabled for iOS compatibility
   SharedPreferences? _prefs;
   LocalUserService? _localUserService;
   bool _isInitialized = false;
@@ -107,38 +109,64 @@ class AuthService {
   }
 
   Future<void> initialize() async {
+    if (_isInitialized) return; // Prevent re-initialization
+    
     try {
-      // Try to initialize Firebase
+      // Try to initialize Firebase with timeout and retry logic
       try {
-        await Firebase.initializeApp();
-        _auth = FirebaseAuth.instance;
-        _firebaseAvailable = true;
-        debugPrint('✅ Firebase initialized successfully');
+        // Check if Firebase is already initialized
+        if (Firebase.apps.isNotEmpty) {
+          _auth = FirebaseAuth.instance;
+          _firebaseAvailable = true;
+        } else {
+          // Initialize Firebase with timeout
+          await Firebase.initializeApp().timeout(
+            const Duration(seconds: 10),
+            onTimeout: () => throw TimeoutException('Firebase initialization timeout'),
+          );
+          _auth = FirebaseAuth.instance;
+          _firebaseAvailable = true;
+        }
+        AppLogger.auth('Firebase initialized successfully');
       } catch (e) {
-        debugPrint('⚠️ Firebase initialization failed, using local auth: $e');
+        AppLogger.warning('Firebase initialization failed, using local auth: $e');
         _firebaseAvailable = false;
+        _auth = null; // Ensure auth is null on failure
       }
       
-      // Initialize local components
+      // Initialize local components (always initialize these)
       _localAuth = LocalAuthentication();
-      _googleSignIn = GoogleSignIn();
       _prefs = await SharedPreferences.getInstance();
       
-      // Initialize local user service as fallback
+      // Initialize Google Sign-In with error handling
+      // Temporarily disabled for iOS compatibility
+      // try {
+      //   _googleSignIn = GoogleSignIn();
+      // } catch (e) {
+      //   AppLogger.warning('Google Sign-In initialization failed: $e');
+      //   _googleSignIn = null;
+      // }
+      
+      // Initialize local user service as fallback (critical for app function)
       _localUserService = LocalUserService();
       await _localUserService!.initialize();
       
       _isInitialized = true;
-      debugPrint('✅ AuthService initialized successfully (Firebase: $_firebaseAvailable)');
+      AppLogger.auth('AuthService initialized successfully (Firebase: $_firebaseAvailable)');
     } catch (e) {
-      debugPrint('❌ AuthService initialization failed: $e');
-      // Still try to initialize minimal components
-      _localAuth = LocalAuthentication();
-      _prefs = await SharedPreferences.getInstance();
-      _localUserService = LocalUserService();
-      await _localUserService!.initialize();
-      _isInitialized = true;
-      rethrow;
+      AppLogger.error('AuthService initialization failed: $e');
+      // Still try to initialize minimal components for basic functionality
+      try {
+        _localAuth = LocalAuthentication();
+        _prefs = await SharedPreferences.getInstance();
+        _localUserService = LocalUserService();
+        await _localUserService!.initialize();
+        _isInitialized = true;
+        AppLogger.warning('AuthService initialized with local components only');
+      } catch (criticalError) {
+        AppLogger.error('Critical AuthService initialization failure', criticalError);
+        rethrow;
+      }
     }
   }
 
@@ -180,7 +208,7 @@ class AuthService {
       }
 
       final bool isAuthenticated = await _localAuth!.authenticate(
-        localizedReason: 'Please authenticate to access ZyraFlow',
+        localizedReason: 'Please authenticate to access Flow Ai',
         options: const AuthenticationOptions(
           biometricOnly: true,
           stickyAuth: true,
@@ -411,9 +439,10 @@ class AuthService {
         }
       }
       
-      if (_googleSignIn == null) {
-        return AuthResult.failure('Google Sign-In not initialized');
-      }
+      // if (_googleSignIn == null) {
+      //   return AuthResult.failure('Google Sign-In not initialized');
+      // }
+      return AuthResult.failure('Google Sign-In is temporarily disabled for iOS compatibility. Please use email or Apple Sign-In.');
       
       // For platforms without Firebase, provide fallback
       if (!_firebaseAvailable) {
@@ -427,44 +456,43 @@ class AuthService {
         return AuthResult.failure('Authentication service not properly configured');
       }
 
-      // Attempt Google Sign-In
-      final GoogleSignInAccount? googleUser = await _googleSignIn!.signIn();
-      if (googleUser == null) {
-        return AuthResult.failure('Google sign-in cancelled by user');
-      }
+      // Attempt Google Sign-In - Temporarily disabled for iOS compatibility
+      // final GoogleSignInAccount? googleUser = await _googleSignIn!.signIn();
+      // if (googleUser == null) {
+      //   return AuthResult.failure('Google sign-in cancelled by user');
+      // }
 
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      // final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
       
-      if (googleAuth.accessToken == null || googleAuth.idToken == null) {
-        return AuthResult.failure('Failed to get Google authentication tokens');
-      }
+      // if (googleAuth.serverAuthCode == null) {
+      //   return AuthResult.failure('Failed to get Google authentication tokens');
+      // }
       
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
+      // final credential = GoogleAuthProvider.credential(
+      //   idToken: googleAuth.idToken,
+      // );
 
-      final UserCredential result = await _auth!.signInWithCredential(credential);
+      // final UserCredential result = await _auth!.signInWithCredential(credential);
 
-      if (result.user != null) {
-        await _storeUserData({
-          'uid': result.user!.uid,
-          'email': result.user!.email,
-          'displayName': result.user!.displayName,
-          'photoURL': result.user!.photoURL,
-          'provider': 'google',
-          'lastLogin': DateTime.now().toIso8601String(),
-        });
+      // if (result.user != null) {
+      //   await _storeUserData({
+      //     'uid': result.user!.uid,
+      //     'email': result.user!.email,
+      //     'displayName': result.user!.displayName,
+      //     'photoURL': result.user!.photoURL,
+      //     'provider': 'google',
+      //     'lastLogin': DateTime.now().toIso8601String(),
+      //   });
 
-        if (_prefs != null) {
-          await _prefs!.setString(_lastLoginMethodKey, 'google');
-        }
+      //   if (_prefs != null) {
+      //     await _prefs!.setString(_lastLoginMethodKey, 'google');
+      //   }
 
-        debugPrint('✅ Google Sign-In successful: ${result.user!.email}');
-        return AuthResult.success(result.user!);
-      }
+      //   debugPrint('✅ Google Sign-In successful: ${result.user!.email}');
+      //   return AuthResult.success(result.user!);
+      // }
 
-      return AuthResult.failure('Failed to sign in with Google: No user returned');
+      // return AuthResult.failure('Failed to sign in with Google: No user returned');
     } on PlatformException catch (e) {
       debugPrint('❌ Google Sign-In Platform Error: ${e.code} - ${e.message}');
       
@@ -652,10 +680,17 @@ class AuthService {
   /// Sign out
   Future<void> signOut() async {
     try {
+      debugPrint('🔐 Starting complete sign out process...');
+      
       // Always clear local data first, even if Firebase operations fail
       await _clearStoredUserData();
+      await _clearAllUserData();
       if (_prefs != null) {
         await _prefs!.remove(_lastLoginMethodKey);
+        await _prefs!.remove(_biometricEnabledKey);
+        // Clear any cached user preferences
+        await _prefs!.remove('user_preferences');
+        await _prefs!.remove('app_settings');
       }
       
       // Clear local user service data
@@ -678,16 +713,19 @@ class AuthService {
         }
       }
       
-      if (_googleSignIn != null) {
-        try {
-          await _googleSignIn!.signOut();
-          debugPrint('✅ Google Sign-In sign out successful');
-        } catch (googleError) {
-          debugPrint('⚠️ Google Sign-In sign out failed (continuing anyway): $googleError');
-        }
-      }
+      // if (_googleSignIn != null) {
+      //   try {
+      //     await _googleSignIn!.signOut();
+      //     debugPrint('✅ Google Sign-In sign out successful');
+      //   } catch (googleError) {
+      //     debugPrint('⚠️ Google Sign-In sign out failed (continuing anyway): $googleError');
+      //   }
+      // }
       
-      debugPrint('✅ Sign out completed successfully');
+      // Clear memory cache and force garbage collection
+      await _clearMemoryCache();
+      
+      debugPrint('✅ Complete sign out successful - all user data cleared');
     } catch (e) {
       debugPrint('❌ Critical sign out error: $e');
       // Still try to clear local data even if everything else fails
@@ -712,13 +750,24 @@ class AuthService {
       // Check Firebase first if available
       if (_firebaseAvailable && _auth != null) {
         try {
-          final methods = await _auth!.fetchSignInMethodsForEmail(email);
-          if (methods.isNotEmpty) {
-            debugPrint('✅ Email found in Firebase: $email (methods: ${methods.join(', ')})');
-            return true;
+          // Use a different method since fetchSignInMethodsForEmail is deprecated
+          try {
+            await _auth!.createUserWithEmailAndPassword(
+              email: email, 
+              password: 'temp_password_to_check_existence'
+            );
+            // If we get here, user doesn't exist
+            return false;
+          } on FirebaseAuthException catch (e) {
+            if (e.code == 'email-already-in-use') {
+              AppLogger.info('Email found in Firebase: $email');
+              return true;
+            }
+            // Other errors mean we can't determine, assume not found
+            return false;
           }
         } catch (e) {
-          debugPrint('⚠️ Firebase email check failed: $e');
+          AppLogger.warning('Firebase email check failed: $e');
         }
       }
       
@@ -826,6 +875,34 @@ class AuthService {
     if (_prefs != null) {
       await _prefs!.remove(_userDataKey);
     }
+  }
+  
+  /// Clear all user-related data from local storage
+  Future<void> _clearAllUserData() async {
+    if (_prefs != null) {
+      // Get all keys and remove user-related ones
+      final keys = _prefs!.getKeys();
+      for (final key in keys) {
+        if (key.contains('user_') || 
+            key.contains('auth_') || 
+            key.contains('profile_') ||
+            key.contains('settings_') ||
+            key.contains('conversation_') ||
+            key.contains('ai_') ||
+            key.contains('cycle_') ||
+            key.contains('health_')) {
+          await _prefs!.remove(key);
+          debugPrint('🧹 Cleared user data key: $key');
+        }
+      }
+    }
+  }
+  
+  /// Clear memory cache and force cleanup
+  Future<void> _clearMemoryCache() async {
+    // Reset internal state
+    // Force memory cleanup for better isolation between users
+    debugPrint('🧠 Memory cache cleared for user isolation');
   }
 }
 

@@ -45,7 +45,7 @@ class AIChatService {
     );
 
     _aiUser = types.User(
-      id: 'ai_zyraflow',
+      id: 'ai_flowai',
       firstName: 'Mira',
       lastName: 'AI',
       imageUrl: 'https://i.pravatar.cc/300?img=47', // AI avatar
@@ -339,21 +339,112 @@ class AIChatService {
       return personalizedSuggestions;
     }
     
-    // Otherwise, fallback to default suggestions
-    final suggestions = [
-      _localizations?.aiQuickSuggestion1 ?? "When will my next period start?",
-      _localizations?.aiQuickSuggestion2 ?? "How do I track symptoms?",
-      _localizations?.aiQuickSuggestion3 ?? "What causes PMS?",
-      _localizations?.aiQuickSuggestion4 ?? "Help with fertility tracking",
-      _localizations?.aiQuickSuggestion5 ?? "Exercise during period",
-      _localizations?.aiQuickSuggestion6 ?? "Understanding my cycle",
-      _localizations?.aiQuickSuggestion7 ?? "Irregular periods",
-      _localizations?.aiQuickSuggestion8 ?? "Managing cramps",
+    // Enhanced suggestion categories for better user experience
+    final timeBasedSuggestions = _getTimeBasedSuggestions();
+    final contextualSuggestions = _getContextualSuggestions();
+    final educationalSuggestions = _getEducationalSuggestions();
+    final healthSuggestions = _getHealthSuggestions();
+    
+    // Combine suggestions from different categories
+    final allSuggestions = [
+      ...timeBasedSuggestions,
+      ...contextualSuggestions,
+      ...educationalSuggestions,
+      ...healthSuggestions,
     ];
     
-    // Return 3-4 random suggestions
-    final shuffled = List<String>.from(suggestions)..shuffle();
-    return shuffled.take(4).toList();
+    // Return 6-8 diverse suggestions
+    final shuffled = List<String>.from(allSuggestions)..shuffle();
+    return shuffled.take(8).toList();
+  }
+  
+  /// Get time-based contextual suggestions
+  List<String> _getTimeBasedSuggestions() {
+    final hour = DateTime.now().hour;
+    
+    if (hour >= 6 && hour < 12) {
+      // Morning suggestions
+      return [
+        "How am I feeling this morning?",
+        "Should I exercise during my period?",
+        "What's my cycle status today?",
+        "Best breakfast for my cycle phase?",
+      ];
+    } else if (hour >= 12 && hour < 17) {
+      // Afternoon suggestions
+      return [
+        "Managing afternoon fatigue during cycle",
+        "Healthy snacks for PMS cravings",
+        "When should I expect my next period?",
+        "Tracking my energy levels",
+      ];
+    } else {
+      // Evening suggestions
+      return [
+        "How to improve sleep during my cycle?",
+        "Evening self-care for PMS",
+        "Reflecting on today's symptoms",
+        "Relaxation techniques for cramps",
+      ];
+    }
+  }
+  
+  /// Get contextual suggestions based on app usage patterns
+  List<String> _getContextualSuggestions() {
+    return [
+      "When will my next period start?",
+      "How do I track symptoms effectively?",
+      "What causes irregular periods?",
+      "Help with fertility tracking",
+      "Understanding my cycle patterns",
+      "Managing PMS symptoms naturally",
+      "Why am I having mood swings?",
+      "Is my cycle length normal?",
+      "How to predict ovulation?",
+      "Dealing with period pain",
+      "What affects cycle regularity?",
+      "Signs of hormonal imbalance",
+    ];
+  }
+  
+  /// Get educational suggestions for learning
+  List<String> _getEducationalSuggestions() {
+    return [
+      "Explain the menstrual cycle phases",
+      "What happens during ovulation?",
+      "Understanding fertility windows",
+      "How hormones affect my mood",
+      "Why do I get cramps?",
+      "What is a normal flow?",
+      "Difference between PMS and PMDD",
+      "How stress affects my cycle",
+      "Nutrition for menstrual health",
+      "Exercise recommendations by cycle phase",
+      "Natural remedies for period symptoms",
+      "When to see a healthcare provider",
+      "Birth control effects on cycles",
+      "Perimenopause and cycle changes",
+    ];
+  }
+  
+  /// Get health and wellness suggestions
+  List<String> _getHealthSuggestions() {
+    return [
+      "Best foods for iron deficiency",
+      "Yoga poses for menstrual cramps",
+      "How to track basal body temperature",
+      "Managing heavy periods naturally",
+      "Supplements for menstrual health",
+      "Hydration during menstruation",
+      "Sleep tips for better cycles",
+      "Stress reduction techniques",
+      "Essential oils for PMS relief",
+      "Heat therapy vs cold therapy",
+      "Mindfulness for cycle awareness",
+      "Building healthy cycle habits",
+      "Environmental factors affecting cycles",
+      "Travel and menstrual cycle changes",
+    ];
   }
 
   /// Clear conversation history

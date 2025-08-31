@@ -26,7 +26,7 @@ class FirebaseTestService {
       await firestore.collection('test').doc('connection').set({
         'timestamp': DateTime.now().millisecondsSinceEpoch,
         'message': 'Firebase connection successful',
-        'app': 'ZyraFlow',
+        'app': 'Flow Ai',
       });
       print('📝 Test document written to Firestore');
       

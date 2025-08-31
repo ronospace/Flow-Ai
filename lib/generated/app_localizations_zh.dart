@@ -9,7 +9,7 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
-  String get appName => 'FlowSense';
+  String get appName => 'Flow Ai';
 
   @override
   String get appTagline => 'AI 生理期和周期跟踪';
@@ -502,7 +502,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get adaptingToPatterns => 'Adapting to your patterns';
 
   @override
-  String get welcome => '欢迎使用 FlowSense';
+  String get welcome => '欢迎使用 Flow Ai';
 
   @override
   String get getStarted => '开始';

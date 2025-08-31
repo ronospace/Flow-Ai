@@ -1,7 +1,7 @@
 {
   "@@locale": "fr",
   "@@last_modified": "2024-12-13T00:00:00.000Z",
-  "appName": "FlowSense",
+  "appName": "Flow Ai",
   "appTagline": "Suivi des Règles et du Cycle avec IA",
   "appDescription": "Suivez votre cycle menstruel avec des analyses alimentées par l'IA et des recommandations personnalisées pour une meilleure santé reproductive.",
   "home": "Accueil",
@@ -69,7 +69,7 @@
   "aiPoweredPredictions": "Prédictions Alimentées par l'IA",
   "advancedInsights": "Analyses Avancées",
   "personalizedRecommendations": "Recommandations Personnalisées",
-  "welcome": "Bienvenue dans FlowSense",
+  "welcome": "Bienvenue dans Flow Ai",
   "getStarted": "Commencer",
   "skipForNow": "Passer pour Maintenant",
   "next": "Suivant",
@@ -485,7 +485,7 @@
   "calendarTitle": "Calendrier",
   "todayButton": "Aujourd'hui",
   
-  "aiGreeting": "Salut {userName}! 👋 Je suis votre assistant IA FlowSense. Je suis là pour vous aider à comprendre votre cycle, fournir des analyses de santé personnalisées et répondre à toutes vos questions sur le bien-être reproductif. Comment puis-je vous aider aujourd'hui ?",
+  "aiGreeting": "Salut {userName}! 👋 Je suis votre assistant IA Flow Ai. Je suis là pour vous aider à comprendre votre cycle, fournir des analyses de santé personnalisées et répondre à toutes vos questions sur le bien-être reproductif. Comment puis-je vous aider aujourd'hui ?",
   "aiPeriodResponse1": "Je peux vous aider à suivre votre cycle menstruel ! 🩸 Quand vos dernières règles ont-elles commencé ? Vous pouvez l'enregistrer dans la section Suivi des Règles, et je vous aiderai à prédire votre prochain cycle.",
   "aiPeriodResponse2": "Comprendre vos schémas menstruels est essentiel pour la santé reproductive. Le cycle moyen dure 21-35 jours. Avez-vous remarqué des changements dans votre cycle récemment ?",
   "aiPeriodResponse3": "Le suivi des règles aide à identifier les schémas d'intensité du flux, de durée et de symptômes. Voulez-vous que je vous guide pour enregistrer vos règles actuelles ?",

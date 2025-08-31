@@ -367,7 +367,7 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
                               ),
                             ),
                             title: '🚀 Future Plans',
-                            subtitle: 'See what\'s coming next in ZyraFlow',
+                            subtitle: 'See what\'s coming next in Flow Ai',
                             onTap: () => context.push('/future-plans'),
                             trailing: Container(
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -503,9 +503,9 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
   void _showAbout(BuildContext context) {
     showAboutDialog(
       context: context,
-      applicationName: 'ZyraFlow',
-      applicationVersion: '1.0.0',
-      applicationLegalese: '© 2024 ZyraFlow. All rights reserved.',
+      applicationName: 'Flow Ai',
+      applicationVersion: '2.0.0',
+      applicationLegalese: '© 2024 Flow Ai. All rights reserved.',
       children: [
         const Text('AI-powered menstrual cycle tracking for better reproductive health.'),
       ],
@@ -514,7 +514,7 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
 
   Future<void> _launchWhatsApp() async {
     final phoneNumber = '+4917627702411';
-    final message = 'Hi! I need help with ZyraFlow app.';
+    final message = 'Hi! I need help with Flow Ai app.';
     final url = 'https://wa.me/$phoneNumber?text=${Uri.encodeComponent(message)}';
     
     try {
