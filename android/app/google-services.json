@@ -9,10 +9,23 @@
       "client_info": {
         "mobilesdk_app_id": "1:1009671565006:android:67dcc937b380eff90e6a9f",
         "android_client_info": {
-          "package_name": "com.zyraflow.zyraflow"
+          "package_name": "com.zyraflow.flowai"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1009671565006-7sf3cjmn9vn2kjdgjk5e7v2lmjv9s8qv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zyraflow.flowai",
+            "certificate_hash": "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+          }
+        },
+        {
+          "client_id": "1009671565006-v7k7p1p5e7v2lnj9s8qv3r5l8m6k4n3j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyC9eMu4PA8fKggxW0Ne2kYVV0WQr5EKXIs"

@@ -287,7 +287,7 @@ class CycleLengthChart extends StatelessWidget {
               return null;
             }).toList();
           },
-          getTooltipColor: (touchedSpot) => AppTheme.darkGrey.withValues(alpha: 0.9),
+          // getTooltipColor removed in newer fl_chart versions - using default styling
           tooltipRoundedRadius: 8,
         ),
       ),

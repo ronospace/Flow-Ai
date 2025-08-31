@@ -52,21 +52,21 @@ class ThemeUtils {
   static Color getShadowColor(BuildContext context) {
     final theme = Theme.of(context);
     return theme.brightness == Brightness.dark 
-        ? Colors.black.withOpacity(0.5)
-        : Colors.black.withOpacity(0.1);
+        ? Colors.black.withValues(alpha: 0.5)
+        : Colors.black.withValues(alpha: 0.1);
   }
   
   /// Get theme-aware container background with opacity
   static Color getContainerColor(BuildContext context, {double opacity = 0.9}) {
-    return Theme.of(context).cardColor.withOpacity(opacity);
+    return Theme.of(context).cardColor.withValues(alpha: opacity);
   }
   
   /// Get theme-aware border color
   static Color getBorderColor(BuildContext context, {double opacity = 0.2}) {
     final theme = Theme.of(context);
     return theme.brightness == Brightness.dark 
-        ? AppTheme.darkTextSecondary.withOpacity(opacity)
-        : AppTheme.lightTextSecondary.withOpacity(opacity);
+        ? AppTheme.darkTextSecondary.withValues(alpha: opacity)
+        : AppTheme.lightTextSecondary.withValues(alpha: opacity);
   }
   
   /// Get theme-aware divider color
@@ -78,8 +78,8 @@ class ThemeUtils {
   static Color getOverlayColor(BuildContext context) {
     final theme = Theme.of(context);
     return theme.brightness == Brightness.dark 
-        ? Colors.black.withOpacity(0.8)
-        : Colors.black.withOpacity(0.5);
+        ? Colors.black.withValues(alpha: 0.8)
+        : Colors.black.withValues(alpha: 0.5);
   }
   
   /// Get theme-aware gradient colors for backgrounds
@@ -115,7 +115,7 @@ class ThemeUtils {
     final shadowColor = color ?? getShadowColor(context);
     return [
       BoxShadow(
-        color: shadowColor.withOpacity(opacity),
+        color: shadowColor.withValues(alpha: opacity),
         blurRadius: blurRadius,
         offset: offset,
       ),
@@ -134,8 +134,8 @@ class ThemeUtils {
   static Color getDisabledColor(BuildContext context) {
     final theme = Theme.of(context);
     return theme.brightness == Brightness.dark 
-        ? AppTheme.darkTextSecondary.withOpacity(0.5)
-        : AppTheme.lightTextSecondary.withOpacity(0.5);
+        ? AppTheme.darkTextSecondary.withValues(alpha: 0.5)
+        : AppTheme.lightTextSecondary.withValues(alpha: 0.5);
   }
   
   /// Helper to create theme-aware gradients with brand colors
@@ -169,16 +169,16 @@ class ThemeUtils {
   static Color getIconColor(BuildContext context, {double opacity = 1.0}) {
     final theme = Theme.of(context);
     return theme.brightness == Brightness.dark 
-        ? AppTheme.darkText.withOpacity(opacity)
-        : AppTheme.lightText.withOpacity(opacity);
+        ? AppTheme.darkText.withValues(alpha: opacity)
+        : AppTheme.lightText.withValues(alpha: opacity);
   }
   
   /// Get theme-aware placeholder text color
   static Color getPlaceholderColor(BuildContext context) {
     final theme = Theme.of(context);
     return theme.brightness == Brightness.dark 
-        ? AppTheme.darkTextSecondary.withOpacity(0.7)
-        : AppTheme.lightTextSecondary.withOpacity(0.7);
+        ? AppTheme.darkTextSecondary.withValues(alpha: 0.7)
+        : AppTheme.lightTextSecondary.withValues(alpha: 0.7);
   }
 }
 

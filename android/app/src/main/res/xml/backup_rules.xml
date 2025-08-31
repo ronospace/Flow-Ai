@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!-- Include all files by default -->
+    <include domain="file" path="."/>
+    <include domain="database" path="."/>
+    <include domain="sharedpref" path="."/>
+    
+    <!-- Then exclude sensitive files from backup -->
+    <exclude domain="sharedpref" path="flutter.prefs"/>
+    <exclude domain="database" path="app_database.db"/>
+    <exclude domain="database" path="app_database.db-shm"/>
+    <exclude domain="database" path="app_database.db-wal"/>
+    
+    <!-- Exclude cache directories -->
+    <exclude domain="file" path="cache/"/>
+    <exclude domain="file" path="code_cache/"/>
+</full-backup-content>

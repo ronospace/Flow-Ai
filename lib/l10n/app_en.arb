@@ -1,7 +1,7 @@
 {
   "@@locale": "en",
   "@@last_modified": "2024-12-13T00:00:00.000Z",
-  "appName": "ZyraFlow",
+  "appName": "Flow Ai",
   "@appName": {
     "description": "The name of the application"
   },
@@ -264,7 +264,7 @@
   "learningFromData": "Learning from your data...",
   "improvingAccuracy": "Improving prediction accuracy",
   "adaptingToPatterns": "Adapting to your patterns",
-  "welcome": "Welcome to ZyraFlow",
+  "welcome": "Welcome to Flow Ai",
   "getStarted": "Get Started",
   "skipForNow": "Skip for Now",
   "next": "Next",

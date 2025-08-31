@@ -1,7 +1,7 @@
 {
   "@@locale": "es",
   "@@last_modified": "2024-12-17T00:00:00.000Z",
-  "appName": "FlowSense",
+  "appName": "Flow Ai",
   "appTagline": "Seguimiento del Período y Ciclo con IA",
   "appDescription": "Rastrea tu ciclo menstrual con análisis de IA y recomendaciones personalizadas para una mejor salud reproductiva.",
   "home": "Inicio",
@@ -159,7 +159,7 @@
   "learningFromData": "Aprendiendo de tus datos...",
   "improvingAccuracy": "Mejorando la precisión de predicción",
   "adaptingToPatterns": "Adaptándose a tus patrones",
-  "welcome": "Bienvenida a FlowSense",
+  "welcome": "Bienvenida a Flow Ai",
   "getStarted": "Comenzar",
   "skipForNow": "Omitir por Ahora",
   "next": "Siguiente",

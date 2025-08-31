@@ -54,10 +54,12 @@ class WelcomeStepScreen extends StatelessWidget {
                     colors: [AppTheme.primaryPurple, AppTheme.primaryRose],
                   ),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.favorite_rounded,
                   size: 40,
-                  color: Colors.white,
+                  color: theme.brightness == Brightness.dark 
+                      ? Colors.white 
+                      : Colors.white,
                 ),
               ),
             ).animate()
@@ -68,7 +70,7 @@ class WelcomeStepScreen extends StatelessWidget {
 
             // Welcome title
             Text(
-              'Welcome to ZyraFlow! 🌸',
+              'Welcome to Flow Ai! 🌸',
               style: theme.textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: theme.brightness == Brightness.dark

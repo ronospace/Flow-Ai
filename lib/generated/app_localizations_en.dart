@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appName => 'ZyraFlow';
+  String get appName => 'Flow Ai';
 
   @override
   String get appTagline => 'Intelligent Period & Cycle Wellness Companion';
@@ -502,7 +502,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get adaptingToPatterns => 'Adapting to your patterns';
 
   @override
-  String get welcome => 'Welcome to ZyraFlow';
+  String get welcome => 'Welcome to Flow Ai';
 
   @override
   String get getStarted => 'Get Started';

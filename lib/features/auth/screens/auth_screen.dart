@@ -2,17 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+// import 'package:google_sign_in/google_sign_in.dart'; // Temporarily disabled for iOS compatibility
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'dart:io';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/services/auth_service.dart';
+import '../../../core/services/platform_service.dart';
+import '../../../core/ui/adaptive_components.dart';
 import '../../../generated/app_localizations.dart';
 import '../../../core/widgets/modern_button.dart';
 import '../widgets/auth_text_field.dart';
 import '../widgets/social_login_button.dart';
 import '../widgets/biometric_button.dart';
-import '../../../core/widgets/zyraflow_logo.dart';
+import '../../../core/widgets/flow_ai_logo.dart';
 import '../../settings/providers/settings_provider.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -28,7 +31,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   late AnimationController _socialController;
   
   final LocalAuthentication _localAuth = LocalAuthentication();
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  // final GoogleSignIn _googleSignIn = GoogleSignIn(); // Temporarily disabled for iOS compatibility
   final AuthService _authService = AuthService();
   
   final PageController _pageController = PageController();
@@ -113,7 +116,9 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     
-    return Scaffold(
+    // Use adaptive scaffold that automatically adjusts to platform conventions
+    return AdaptiveComponents.adaptiveScaffold(
+      context: context,
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -132,11 +137,11 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
               // Header Section
               _buildHeader(theme, l10n),
               
-              // Form Section
+              // Form Section with adaptive scroll physics
               Expanded(
                 child: PageView(
                   controller: _pageController,
-                  physics: const NeverScrollableScrollPhysics(),
+                  physics: context.adaptiveScrollPhysics,
                   children: [
                     _buildAuthForm(theme, l10n),
                   ],
@@ -154,8 +159,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       padding: const EdgeInsets.all(40),
       child: Column(
         children: [
-          // ZyraFlow Logo
-                        ZyraFlowLogo(
+          // Flow AI Logo
+                        FlowAiLogo(
             size: 120,
             showWordmark: false,
           ).animate(controller: _headerController)
@@ -166,7 +171,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
           
           // App Name
           Text(
-            'ZyraFlow',
+            'Flow Ai',
             style: theme.textTheme.headlineLarge?.copyWith(
               fontWeight: FontWeight.bold,
               color: AppTheme.darkGrey,
@@ -236,26 +241,32 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
             const SizedBox(height: 24),
           ],
           
-          // Email Field
-          AuthTextField(
+          // Email Field - using adaptive text field
+          AdaptiveComponents.adaptiveTextField(
+            context: context,
             controller: _emailController,
-            hintText: 'Email address',
-            prefixIcon: Icons.email_outlined,
+            labelText: 'Email address',
+            hintText: 'Enter your email',
+            prefixIcon: const Icon(Icons.email_outlined),
             keyboardType: TextInputType.emailAddress,
             enabled: !_isLoading,
+            textInputAction: TextInputAction.next,
           ).animate(controller: _formController)
             .slideY(begin: 0.3, end: 0)
             .fadeIn(delay: _biometricsAvailable && _isLogin ? 200.ms : 0.ms),
           
           const SizedBox(height: 16),
           
-          // Display Name Field (Sign Up only)
+          // Display Name Field (Sign Up only) - using adaptive text field
           if (!_isLogin) ...[
-            AuthTextField(
+            AdaptiveComponents.adaptiveTextField(
+              context: context,
               controller: _displayNameController,
-              hintText: 'Display name (username)',
-              prefixIcon: Icons.person_outline,
+              labelText: 'Display name',
+              hintText: 'Enter your display name',
+              prefixIcon: const Icon(Icons.person_outline),
               enabled: !_isLoading,
+              textInputAction: TextInputAction.next,
             ).animate(controller: _formController)
               .slideY(begin: 0.3, end: 0)
               .fadeIn(delay: 100.ms),
@@ -263,18 +274,22 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
             const SizedBox(height: 16),
           ],
           
-          // Password Field
-          AuthTextField(
+          // Password Field - using adaptive text field
+          AdaptiveComponents.adaptiveTextField(
+            context: context,
             controller: _passwordController,
-            hintText: 'Password',
-            prefixIcon: Icons.lock_outline,
+            labelText: 'Password',
+            hintText: 'Enter your password',
+            prefixIcon: const Icon(Icons.lock_outline),
             obscureText: _obscurePassword,
             enabled: !_isLoading,
+            textInputAction: _isLogin ? TextInputAction.done : TextInputAction.next,
             suffixIcon: IconButton(
               onPressed: () {
                 setState(() {
                   _obscurePassword = !_obscurePassword;
                 });
+                context.hapticFeedback(HapticFeedbackType.selection);
               },
               icon: Icon(
                 _obscurePassword ? Icons.visibility_off : Icons.visibility,
@@ -287,19 +302,23 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
           
           const SizedBox(height: 16),
           
-          // Confirm Password Field (Sign Up only)
+          // Confirm Password Field (Sign Up only) - using adaptive text field
           if (!_isLogin) ...[
-            AuthTextField(
+            AdaptiveComponents.adaptiveTextField(
+              context: context,
               controller: _confirmPasswordController,
-              hintText: 'Confirm password',
-              prefixIcon: Icons.lock_outline,
+              labelText: 'Confirm password',
+              hintText: 'Re-enter your password',
+              prefixIcon: const Icon(Icons.lock_outline),
               obscureText: _obscureConfirmPassword,
               enabled: !_isLoading,
+              textInputAction: TextInputAction.done,
               suffixIcon: IconButton(
                 onPressed: () {
                   setState(() {
                     _obscureConfirmPassword = !_obscureConfirmPassword;
                   });
+                  context.hapticFeedback(HapticFeedbackType.selection);
                 },
                 icon: Icon(
                   _obscureConfirmPassword ? Icons.visibility_off : Icons.visibility,
@@ -313,19 +332,16 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
             const SizedBox(height: 16),
           ],
           
-          // Forgot Password (Login only)
+          // Forgot Password (Login only) - using adaptive button
           if (_isLogin) ...[
             Align(
               alignment: Alignment.centerRight,
-              child: TextButton(
+              child: AdaptiveComponents.adaptiveButton(
+                context: context,
+                text: 'Forgot Password?',
                 onPressed: _isLoading ? null : _handleForgotPassword,
-                child: Text(
-                  'Forgot Password?',
-                  style: TextStyle(
-                    color: AppTheme.primaryRose,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                isPrimary: false,
+                height: 36,
               ),
             ).animate(controller: _formController)
               .slideX(begin: 0.3, end: 0)
@@ -334,47 +350,19 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
             const SizedBox(height: 8),
           ],
           
-          // Submit Button
-          SizedBox(
+          // Submit Button - using adaptive button with platform-specific styling
+          AdaptiveComponents.adaptiveButton(
+            context: context,
+            text: _isLoading
+                ? (_isLogin ? 'Signing In...' : 'Creating Account...')
+                : (_isLogin ? 'Sign In' : 'Create Account'),
+            onPressed: _isLoading ? null : _handleSubmit,
+            isPrimary: true,
             width: double.infinity,
             height: 56,
-            child: ElevatedButton(
-              onPressed: _isLoading ? null : _handleSubmit,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.transparent,
-                shadowColor: Colors.transparent,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
-                  ),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Center(
-                  child: _isLoading
-                      ? const SizedBox(
-                          width: 24,
-                          height: 24,
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                            strokeWidth: 2,
-                          ),
-                        )
-                      : Text(
-                          _isLogin ? 'Sign In' : 'Create Account',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                ),
-              ),
-            ),
+            icon: _isLoading 
+                ? null 
+                : (_isLogin ? Icons.login : Icons.person_add),
           ).animate(controller: _formController)
             .slideY(begin: 0.3, end: 0)
             .fadeIn(delay: 500.ms),
@@ -391,89 +379,22 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   }
   
   Widget _buildTabSelector(ThemeData theme) {
-    return Container(
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: GestureDetector(
-              onTap: () {
-                if (!_isLogin) {
-                  setState(() {
-                    _isLogin = true;
-                  });
-                  HapticFeedback.selectionClick();
-                }
-              },
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                decoration: BoxDecoration(
-                  gradient: _isLogin
-                      ? const LinearGradient(
-                          colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
-                        )
-                      : null,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  'Sign In',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: _isLogin ? Colors.white : AppTheme.mediumGrey,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: GestureDetector(
-              onTap: () {
-                if (_isLogin) {
-                  setState(() {
-                    _isLogin = false;
-                  });
-                  HapticFeedback.selectionClick();
-                }
-              },
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                decoration: BoxDecoration(
-                  gradient: !_isLogin
-                      ? const LinearGradient(
-                          colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
-                        )
-                      : null,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  'Sign Up',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: !_isLogin ? Colors.white : AppTheme.mediumGrey,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+    // Use adaptive segmented control for better platform integration
+    return AdaptiveComponents.adaptiveSegmentedControl<bool>(
+      context: context,
+      options: const {
+        true: 'Sign In',
+        false: 'Sign Up',
+      },
+      selectedValue: _isLogin,
+      onChanged: (bool isLogin) {
+        setState(() {
+          _isLogin = isLogin;
+        });
+        // Use platform-appropriate haptic feedback
+        context.hapticFeedback(HapticFeedbackType.selection);
+      },
+      enabled: !_isLoading,
     ).animate(controller: _formController)
       .slideY(begin: -0.3, end: 0)
       .fadeIn();
@@ -497,16 +418,20 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         // Social Login Buttons
         Row(
           children: [
-            Expanded(
-              child: SocialLoginButton(
-                icon: Icons.g_mobiledata,
-                label: 'Google',
-                onPressed: _isLoading ? null : _handleGoogleSignIn,
-                backgroundColor: Colors.white,
-                iconColor: const Color(0xFF4285F4),
+            // Google Sign-In (hidden on iOS due to dependency conflicts)
+            if (!Platform.isIOS) ...[
+              Expanded(
+                child: SocialLoginButton(
+                  icon: Icons.g_mobiledata,
+                  label: 'Google',
+                  onPressed: _isLoading ? null : _handleGoogleSignIn,
+                  backgroundColor: Colors.white,
+                  iconColor: const Color(0xFF4285F4),
+                ),
               ),
-            ),
-            const SizedBox(width: 16),
+              const SizedBox(width: 16),
+            ],
+            // Apple Sign-In
             Expanded(
               child: SocialLoginButton(
                 icon: Icons.apple,
@@ -517,6 +442,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                 textColor: Colors.white,
               ),
             ),
+            // If on iOS and Google is hidden, fill the space
+            if (Platform.isIOS) const Expanded(child: SizedBox()),
           ],
         ).animate(controller: _socialController)
           .slideY(begin: 0.3, end: 0)
@@ -689,107 +616,15 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   Future<void> _handleGoogleSignIn() async {
     if (_isLoading) return;
     
-    setState(() {
-      _isLoading = true;
-    });
-    
-    try {
-      // Initialize auth service first
-      await _authService.initialize();
-      
-      // Handle Google sign in directly through AuthService
-      final result = await _authService.signInWithGoogle();
-      if (result.isSuccess) {
-        _showSuccessMessage('Google sign in successful!');
-        
-        // Sync user data immediately to ensure username is captured and available
-        try {
-          final settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
-          // Force an immediate sync to capture fresh auth data
-          await settingsProvider.forceUserDataSync();
-          debugPrint('✅ User settings synced successfully after Google authentication');
-        } catch (syncError) {
-          debugPrint('⚠️ Warning: Could not sync user settings after Google auth: $syncError');
-        }
-        
-        await Future.delayed(const Duration(milliseconds: 1000));
-        if (mounted) {
-          context.go('/home');
-        }
-      } else {
-        // Handle specific error messages from AuthService
-        final errorMessage = result.error ?? 'Google sign-in failed';
-        
-        // Check if it's a cancellation (show as info, not error)
-        if (errorMessage.toLowerCase().contains('cancelled')) {
-          _showInfoMessage(errorMessage);
-        } else {
-          _showErrorMessage(errorMessage);
-        }
-      }
-    } catch (e) {
-      debugPrint('Google sign-in error: $e');
-      _showErrorMessage('An unexpected error occurred during Google sign-in. Please try again or use email authentication.');
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
+    // Show coming soon message
+    _showInfoMessage('Google Sign-In is coming soon! 🚀\n\nWe\'re working on integrating Google authentication with enhanced security features. For now, please use email authentication to create your account.');
   }
   
   Future<void> _handleAppleSignIn() async {
     if (_isLoading) return;
     
-    setState(() {
-      _isLoading = true;
-    });
-    
-    try {
-      // Initialize auth service first
-      await _authService.initialize();
-      
-      // Handle Apple sign in directly through AuthService
-      final result = await _authService.signInWithApple();
-      if (result.isSuccess) {
-        _showSuccessMessage('Apple sign in successful!');
-        
-        // Sync user data immediately to ensure username is captured and available
-        try {
-          final settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
-          // Force an immediate sync to capture fresh auth data
-          await settingsProvider.forceUserDataSync();
-          debugPrint('✅ User settings synced successfully after Apple authentication');
-        } catch (syncError) {
-          debugPrint('⚠️ Warning: Could not sync user settings after Apple auth: $syncError');
-        }
-        
-        await Future.delayed(const Duration(milliseconds: 1000));
-        if (mounted) {
-          context.go('/home');
-        }
-      } else {
-        // Handle specific error messages from AuthService
-        final errorMessage = result.error ?? 'Apple sign-in failed';
-        
-        // Check if it's a cancellation (show as info, not error)
-        if (errorMessage.toLowerCase().contains('cancelled')) {
-          _showInfoMessage(errorMessage);
-        } else {
-          _showErrorMessage(errorMessage);
-        }
-      }
-    } catch (e) {
-      debugPrint('Apple sign-in error: $e');
-      _showErrorMessage('An unexpected error occurred during Apple sign-in. Please try again or use email authentication.');
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
+    // Show coming soon message
+    _showInfoMessage('Apple Sign-In is coming soon! 🍎\n\nWe\'re working on integrating Apple Sign-In with enhanced privacy features. For now, please use email authentication to create your account.');
   }
   
   void _handleForgotPassword() {

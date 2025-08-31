@@ -26,5 +26,11 @@
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
 	<string>1:1009671565006:ios:8dbd46fa23d21e3c0e6a9f</string>
+	<key>DATABASE_URL</key>
+	<string>https://zyraflow-production-default-rtdb.firebaseio.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1009671565006-pmjcpe33eo6fhjmmdolal5jqj2d2ik0j</string>
+	<key>CLIENT_ID</key>
+	<string>1009671565006-pmjcpe33eo6fhjmmdolal5jqj2d2ik0j.apps.googleusercontent.com</string>
 </dict>
 </plist>
