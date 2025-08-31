@@ -224,7 +224,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                           ).createShader(bounds);
                         },
                         child: const Text(
-                          'ZyraFlow',
+                          'Flow Ai',
                           style: TextStyle(
                             fontSize: 52,
                             fontWeight: FontWeight.w800,

@@ -117,7 +117,7 @@ class SettingsProvider extends ChangeNotifier {
           );
           
           // Store comprehensive user metadata for future sessions
-          await _storeUserMetadata({
+          await storeUserMetadata({
             'email': email,
             'photoURL': photoURL,
             'provider': userData['provider'],
@@ -359,7 +359,7 @@ class SettingsProvider extends ChangeNotifier {
   }
   
   // Store additional user metadata
-  Future<void> _storeUserMetadata(Map<String, dynamic> metadata) async {
+  Future<void> storeUserMetadata(Map<String, dynamic> metadata) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(_userMetadataKey, jsonEncode(metadata));

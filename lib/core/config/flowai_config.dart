@@ -98,7 +98,7 @@ class FlowAIConfig {
   static Map<String, String> getRequestHeaders() {
     final headers = <String, String>{
       'Content-Type': 'application/json',
-      'User-Agent': 'ZyraFlow/1.0',
+      'User-Agent': 'FlowAi/1.0',
       'X-App-Version': '1.0.0',
       'X-Platform': kIsWeb ? 'web' : 'mobile',
     };
