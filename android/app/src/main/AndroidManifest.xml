@@ -29,7 +29,7 @@
     <uses-feature android:name="android.hardware.fingerprint" android:required="false" />
     <uses-feature android:name="android.hardware.biometrics" android:required="false" />
     <application
-        android:label="Flow AI"
+        android:label="Flow Ai"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon"
         android:allowBackup="true"
