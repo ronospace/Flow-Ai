@@ -344,7 +344,7 @@ class PerformanceService {
       
       _recordMetric(PerformanceMetric(
         name: 'memory.cache_size',
-        duration: Duration(bytes: memoryUsage.totalCacheSize),
+        duration: Duration(microseconds: memoryUsage.totalCacheSize),
         timestamp: DateTime.now(),
         type: PerformanceMetricType.memory,
       ));

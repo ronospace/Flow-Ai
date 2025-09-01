@@ -5,8 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+// Firebase temporarily disabled for iOS build
+// import 'package:firebase_core/firebase_core.dart';
+// import 'firebase_options.dart';
 import 'generated/app_localizations.dart';
 import 'core/utils/app_logger.dart';
 
@@ -61,15 +62,15 @@ Future<void> _initializeCriticalServices() async {
     AppLogger.error('Platform Service initialization failed: $e');
   }
   
-  // Initialize Firebase with platform-specific configurations
-  try {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-    AppLogger.success('Firebase initialized successfully');
-  } catch (e) {
-    AppLogger.warning('Firebase initialization failed: $e');
-  }
+  // Firebase temporarily disabled for iOS build
+  // try {
+  //   await Firebase.initializeApp(
+  //     options: DefaultFirebaseOptions.currentPlatform,
+  //   );
+  //   AppLogger.success('Firebase initialized successfully');
+  // } catch (e) {
+  //   AppLogger.warning('Firebase initialization failed: $e');
+  // }
   
   ImageCacheConfig.configure();
   

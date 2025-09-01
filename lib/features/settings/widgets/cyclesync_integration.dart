@@ -244,7 +244,7 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                       ),
                       const SizedBox(width: 8),
                       const Text(
-                        'About CycleSync Integration',
+                        'About Flow iQ Integration',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -255,7 +255,7 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Connect FlowSense with CycleSync Enterprise to sync your menstrual cycle data across platforms. Your data remains secure and encrypted during transfer.',
+                    'Connect Flow Ai with Flow iQ Clinical to sync your menstrual cycle data across platforms. Your data remains secure and encrypted during transfer.',
                     style: TextStyle(
                       fontSize: 12,
                       color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),

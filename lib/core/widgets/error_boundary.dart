@@ -40,12 +40,6 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
       return _buildErrorUI(context);
     }
 
-    return ErrorWidget.builder = (FlutterErrorDetails details) {
-      _captureError(details.exception, details.stack);
-      return _buildErrorUI(context);
-    };
-
-    // This won't actually be reached in normal flow, but keeps the analyzer happy
     return widget.child;
   }
 

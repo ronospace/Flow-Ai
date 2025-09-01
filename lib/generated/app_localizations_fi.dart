@@ -9,7 +9,7 @@ class AppLocalizationsFi extends AppLocalizations {
   AppLocalizationsFi([String locale = 'fi']) : super(locale);
 
   @override
-  String get appName => 'FlowSense';
+  String get appName => 'Flow iQ';
 
   @override
   String get appTagline => 'AI-pohjainen Kuukautiskierron Seuranta';
@@ -502,7 +502,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get adaptingToPatterns => 'Adapting to your patterns';
 
   @override
-  String get welcome => 'Tervetuloa FlowSenseen';
+  String get welcome => 'Tervetuloa Flow iQen';
 
   @override
   String get getStarted => 'Aloita';
