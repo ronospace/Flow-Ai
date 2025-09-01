@@ -49,3 +49,4 @@ app.*.map.json
 *.ipa
 builds_for_testing/*.apk
 builds_for_testing/*.ipa
+build/

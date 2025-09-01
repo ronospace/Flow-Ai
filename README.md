@@ -1,6 +1,6 @@
-# FlowSense
+# Flow iQ
 
-FlowSense - AI-Powered Period & Cycle Tracking App
+Flow iQ - AI-Powered Period & Cycle Tracking App
 
 ## Getting Started
 
