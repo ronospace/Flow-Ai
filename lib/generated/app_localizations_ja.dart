@@ -9,7 +9,7 @@ class AppLocalizationsJa extends AppLocalizations {
   AppLocalizationsJa([String locale = 'ja']) : super(locale);
 
   @override
-  String get appName => 'FlowSense';
+  String get appName => 'Flow iQ';
 
   @override
   String get appTagline => 'AIによる生理・月経周期トラッキング';
@@ -502,7 +502,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get adaptingToPatterns => 'Adapting to your patterns';
 
   @override
-  String get welcome => 'FlowSenseへようこそ';
+  String get welcome => 'Flow iQへようこそ';
 
   @override
   String get getStarted => '始める';

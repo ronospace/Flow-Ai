@@ -1,4 +1,4 @@
-# FlowSense Icon Update Summary
+# Flow iQ Icon Update Summary
 
 ## Overview
 Updated all app icons by replacing white elements with smart, contextually appropriate color alternatives that maintain visual hierarchy and improve aesthetic appeal. **Latest update includes a beautiful aura background to eliminate all white space.**
@@ -10,7 +10,7 @@ Updated all app icons by replacing white elements with smart, contextually appro
 - **New**: Mint cyan highlight (`#4ECDC4` at 0.7 opacity)
 - **Reasoning**: Matches the existing mint gradient in the second arc, creates a water-like shimmer effect
 
-### 2. FlowSense Primary Icon (`assets/logos/primary/flowsense_icon_only.svg`)
+### 2. Flow iQ Primary Icon (`assets/logos/primary/flowsense_icon_only.svg`)
 - **Original**: Pure white central circle (`#FEFCFG`)
 - **New**: Warm gradient (cream `#FFF8F0` → pink `#FFEBEE` → lavender `#F3E5F5`)
 - **Reasoning**: Creates depth while maintaining warmth and femininity of the design
@@ -46,7 +46,7 @@ Updated all app icons by replacing white elements with smart, contextually appro
 - `cycleai_logo_256_updated.png` (256×256)
 
 ### Platform-Specific Icons
-All generated from the updated FlowSense primary icon:
+All generated from the updated Flow iQ primary icon:
 
 #### Android Icons (`updated_icons/android/`) - Original Updates
 - `ic_launcher_48.png` (mdpi)
