@@ -3,7 +3,7 @@
 ## ✅ Completed Items
 
 ### Branding & Identity
-- [x] Updated all app names from legacy brands (FlowSense, CycleAI) to ZyraFlow
+- [x] Updated all app names from legacy brands (Flow iQ, CycleAI) to ZyraFlow
 - [x] Updated app icon and logo across all platforms
 - [x] Updated splash screen with ZyraFlow branding
 - [x] Updated subtitle to "Smart Period & Wellness Tracking"

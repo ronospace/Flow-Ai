@@ -232,9 +232,6 @@ class AppEnhancementService {
     if (!kDebugMode) return;
     
     try {
-      // Check memory usage
-      final info = developer.Service.getIsolateID(Isolate.current);
-      
       // Check error rate
       final recentErrors = _errors.where((error) => 
           DateTime.now().difference(error.timestamp).inMinutes < 5).length;

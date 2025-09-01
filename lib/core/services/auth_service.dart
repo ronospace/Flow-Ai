@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+// Firebase temporarily disabled for iOS build
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_core/firebase_core.dart';
 // import 'package:google_sign_in/google_sign_in.dart'; // Temporarily disabled for iOS compatibility
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:local_auth/local_auth.dart';
@@ -19,7 +20,7 @@ class AuthService {
   factory AuthService() => _instance;
   AuthService._internal();
 
-  FirebaseAuth? _auth;
+  // FirebaseAuth? _auth; // Firebase temporarily disabled for iOS build
   LocalAuthentication? _localAuth;
   // GoogleSignIn? _googleSignIn; // Temporarily disabled for iOS compatibility
   SharedPreferences? _prefs;
@@ -31,16 +32,17 @@ class AuthService {
   static const String _biometricEnabledKey = 'biometric_enabled';
   static const String _lastLoginMethodKey = 'last_login_method';
 
-  User? get currentUser => _auth?.currentUser;
+  // User? get currentUser => _auth?.currentUser; // Firebase temporarily disabled for iOS build
+  dynamic get currentUser => null;
   bool get isInitialized => _isInitialized;
-  Future<bool> get isAuthenticated async => _auth?.currentUser != null || await _hasLocalUser();
+  Future<bool> get isAuthenticated async => /* _auth?.currentUser != null || */ await _hasLocalUser();
   
   /// Get current user, checking both Firebase and local users
   Future<dynamic> getCurrentUser() async {
-    // Check Firebase user first
-    if (_auth?.currentUser != null) {
-      return _auth!.currentUser;
-    }
+    // Check Firebase user first (disabled for iOS build)
+    // if (_auth?.currentUser != null) {
+    //   return _auth!.currentUser;
+    // }
     
     // Check local user session
     if (_localUserService != null) {
@@ -67,23 +69,24 @@ class AuthService {
     
     Map<String, dynamic> userData = {};
     
-    // Handle Firebase User
-    if (currentUser is User) {
-      // Get stored user data to preserve username and other custom fields
-      final storedData = await _getStoredUserData();
-      
-      userData = {
-        'uid': currentUser.uid,
-        'email': currentUser.email,
-        'displayName': currentUser.displayName,
-        'username': storedData?['username'] ?? currentUser.displayName, // Preserve stored username
-        'photoURL': currentUser.photoURL,
-        'provider': 'firebase',
-        'createdAt': currentUser.metadata.creationTime?.toIso8601String(),
-        'lastSignIn': currentUser.metadata.lastSignInTime?.toIso8601String(),
-        'profileComplete': currentUser.displayName != null && currentUser.displayName!.isNotEmpty,
-      };
-    } else if (currentUser is LocalUser) {
+    // Handle Firebase User (disabled for iOS build)
+    // if (currentUser is User) {
+    //   // Get stored user data to preserve username and other custom fields
+    //   final storedData = await _getStoredUserData();
+    //   
+    //   userData = {
+    //     'uid': currentUser.uid,
+    //     'email': currentUser.email,
+    //     'displayName': currentUser.displayName,
+    //     'username': storedData?['username'] ?? currentUser.displayName, // Preserve stored username
+    //     'photoURL': currentUser.photoURL,
+    //     'provider': 'firebase',
+    //     'createdAt': currentUser.metadata.creationTime?.toIso8601String(),
+    //     'lastSignIn': currentUser.metadata.lastSignInTime?.toIso8601String(),
+    //     'profileComplete': currentUser.displayName != null && currentUser.displayName!.isNotEmpty,
+    //   };
+    // } else
+    if (currentUser is LocalUser) {
       // Handle Local User
       final localUser = currentUser;
       userData = {
@@ -112,27 +115,27 @@ class AuthService {
     if (_isInitialized) return; // Prevent re-initialization
     
     try {
-      // Try to initialize Firebase with timeout and retry logic
-      try {
-        // Check if Firebase is already initialized
-        if (Firebase.apps.isNotEmpty) {
-          _auth = FirebaseAuth.instance;
-          _firebaseAvailable = true;
-        } else {
-          // Initialize Firebase with timeout
-          await Firebase.initializeApp().timeout(
-            const Duration(seconds: 10),
-            onTimeout: () => throw TimeoutException('Firebase initialization timeout'),
-          );
-          _auth = FirebaseAuth.instance;
-          _firebaseAvailable = true;
-        }
-        AppLogger.auth('Firebase initialized successfully');
-      } catch (e) {
-        AppLogger.warning('Firebase initialization failed, using local auth: $e');
+      // Firebase temporarily disabled for iOS build
+      // try {
+      //   // Check if Firebase is already initialized
+      //   if (Firebase.apps.isNotEmpty) {
+      //     _auth = FirebaseAuth.instance;
+      //     _firebaseAvailable = true;
+      //   } else {
+      //     // Initialize Firebase with timeout
+      //     await Firebase.initializeApp().timeout(
+      //       const Duration(seconds: 10),
+      //       onTimeout: () => throw TimeoutException('Firebase initialization timeout'),
+      //     );
+      //     _auth = FirebaseAuth.instance;
+      //     _firebaseAvailable = true;
+      //   }
+      //   AppLogger.auth('Firebase initialized successfully');
+      // } catch (e) {
+        AppLogger.warning('Firebase disabled for iOS build, using local auth only');
         _firebaseAvailable = false;
-        _auth = null; // Ensure auth is null on failure
-      }
+        // _auth = null; // Ensure auth is null on failure
+      // }
       
       // Initialize local components (always initialize these)
       _localAuth = LocalAuthentication();
@@ -225,8 +228,8 @@ class AuthService {
             if (sessionValid) {
               return AuthResult.success(null); // Local user authenticated
             }
-          } else if (userData['provider'] == 'firebase' && _auth?.currentUser != null) {
-            return AuthResult.success(_auth!.currentUser!);
+          // } else if (userData['provider'] == 'firebase' && _auth?.currentUser != null) {
+          //   return AuthResult.success(_auth!.currentUser!);
           }
           return AuthResult.success(null); // Biometric auth successful, user data exists
         } else {
@@ -274,43 +277,43 @@ class AuthService {
     String? username,
   }) async {
     try {
-      // Try Firebase first if available
-      if (_firebaseAvailable && _auth != null) {
-        try {
-          final UserCredential result = await _auth!.createUserWithEmailAndPassword(
-            email: email,
-            password: password,
-          );
-
-          if (result.user != null) {
-            // Update display name
-            await result.user!.updateDisplayName(displayName);
-            await result.user!.reload();
-
-            // Store user data with comprehensive profile information
-            await _storeUserData({
-              'uid': result.user!.uid,
-              'email': email,
-              'displayName': displayName,
-              'username': username ?? displayName, // Use displayName as fallback for username
-              'provider': 'firebase',
-              'createdAt': DateTime.now().toIso8601String(),
-              'lastUpdated': DateTime.now().toIso8601String(),
-              'profileComplete': true,
-            });
-            
-            debugPrint('✅ User profile saved: $displayName (${result.user!.uid})');
-
-            if (_prefs != null) {
-              await _prefs!.setString(_lastLoginMethodKey, 'firebase');
-            }
-
-            return AuthResult.success(result.user!);
-          }
-        } catch (firebaseError) {
-          debugPrint('⚠️ Firebase sign up failed, falling back to local: $firebaseError');
-        }
-      }
+      // Firebase temporarily disabled for iOS build
+      // if (_firebaseAvailable && _auth != null) {
+      //   try {
+      //     final UserCredential result = await _auth!.createUserWithEmailAndPassword(
+      //       email: email,
+      //       password: password,
+      //     );
+      //
+      //     if (result.user != null) {
+      //       // Update display name
+      //       await result.user!.updateDisplayName(displayName);
+      //       await result.user!.reload();
+      //
+      //       // Store user data with comprehensive profile information
+      //       await _storeUserData({
+      //         'uid': result.user!.uid,
+      //         'email': email,
+      //         'displayName': displayName,
+      //         'username': username ?? displayName, // Use displayName as fallback for username
+      //         'provider': 'firebase',
+      //         'createdAt': DateTime.now().toIso8601String(),
+      //         'lastUpdated': DateTime.now().toIso8601String(),
+      //         'profileComplete': true,
+      //       });
+      //       
+      //       debugPrint('✅ User profile saved: $displayName (${result.user!.uid})');
+      //
+      //       if (_prefs != null) {
+      //         await _prefs!.setString(_lastLoginMethodKey, 'firebase');
+      //       }
+      //
+      //       return AuthResult.success(result.user!);
+      //     }
+      //   } catch (firebaseError) {
+      //     debugPrint('⚠️ Firebase sign up failed, falling back to local: $firebaseError');
+      //   }
+      // }
 
       // Fallback to local authentication
       if (_localUserService != null) {
@@ -360,36 +363,36 @@ class AuthService {
     required String password,
   }) async {
     try {
-      // Try Firebase first if available
-      if (_firebaseAvailable && _auth != null) {
-        try {
-          final UserCredential result = await _auth!.signInWithEmailAndPassword(
-            email: email,
-            password: password,
-          );
-
-          if (result.user != null) {
-            // Get existing stored data to preserve username
-            final existingData = await _getStoredUserData();
-            await _storeUserData({
-              'uid': result.user!.uid,
-              'email': email,
-              'displayName': result.user!.displayName,
-              'username': existingData?['username'] ?? result.user!.displayName, // Preserve username
-              'provider': 'firebase',
-              'lastLogin': DateTime.now().toIso8601String(),
-            });
-
-            if (_prefs != null) {
-              await _prefs!.setString(_lastLoginMethodKey, 'firebase');
-            }
-
-            return AuthResult.success(result.user!);
-          }
-        } catch (firebaseError) {
-          debugPrint('⚠️ Firebase sign in failed, trying local: $firebaseError');
-        }
-      }
+      // Firebase temporarily disabled for iOS build
+      // if (_firebaseAvailable && _auth != null) {
+      //   try {
+      //     final UserCredential result = await _auth!.signInWithEmailAndPassword(
+      //       email: email,
+      //       password: password,
+      //     );
+      //
+      //     if (result.user != null) {
+      //       // Get existing stored data to preserve username
+      //       final existingData = await _getStoredUserData();
+      //       await _storeUserData({
+      //         'uid': result.user!.uid,
+      //         'email': email,
+      //         'displayName': result.user!.displayName,
+      //         'username': existingData?['username'] ?? result.user!.displayName, // Preserve username
+      //         'provider': 'firebase',
+      //         'lastLogin': DateTime.now().toIso8601String(),
+      //       });
+      //
+      //       if (_prefs != null) {
+      //         await _prefs!.setString(_lastLoginMethodKey, 'firebase');
+      //       }
+      //
+      //       return AuthResult.success(result.user!);
+      //     }
+      //   } catch (firebaseError) {
+      //     debugPrint('⚠️ Firebase sign in failed, trying local: $firebaseError');
+      //   }
+      // }
 
       // Fallback to local authentication
       if (_localUserService != null) {
@@ -452,9 +455,9 @@ class AuthService {
         return AuthResult.failure('Google Sign-In requires additional platform configuration. Please use email authentication for now.');
       }
       
-      if (_auth == null) {
-        return AuthResult.failure('Authentication service not properly configured');
-      }
+      // if (_auth == null) {
+      //   return AuthResult.failure('Authentication service not properly configured');
+      // }
 
       // Attempt Google Sign-In - Temporarily disabled for iOS compatibility
       // final GoogleSignInAccount? googleUser = await _googleSignIn!.signIn();
@@ -493,36 +496,36 @@ class AuthService {
       // }
 
       // return AuthResult.failure('Failed to sign in with Google: No user returned');
-    } on PlatformException catch (e) {
-      debugPrint('❌ Google Sign-In Platform Error: ${e.code} - ${e.message}');
-      
-      switch (e.code) {
-        case 'sign_in_failed':
-          return AuthResult.failure('Google sign-in failed. Please check your internet connection and try again.');
-        case 'network_error':
-          return AuthResult.failure('Network error. Please check your internet connection.');
-        case 'sign_in_canceled':
-          return AuthResult.failure('Google sign-in was cancelled.');
-        case 'sign_in_required':
-          return AuthResult.failure('Google sign-in is required but not available.');
-        default:
-          return AuthResult.failure('Google sign-in error: ${e.message ?? e.code}');
-      }
-    } on FirebaseAuthException catch (e) {
-      debugPrint('❌ Firebase Auth Error: ${e.code} - ${e.message}');
-      
-      switch (e.code) {
-        case 'account-exists-with-different-credential':
-          return AuthResult.failure('An account already exists with this email using a different sign-in method.');
-        case 'invalid-credential':
-          return AuthResult.failure('The Google credentials are invalid or expired.');
-        case 'operation-not-allowed':
-          return AuthResult.failure('Google sign-in is not enabled. Please contact support.');
-        case 'user-disabled':
-          return AuthResult.failure('This Google account has been disabled.');
-        default:
-          return AuthResult.failure('Authentication error: ${e.message ?? e.code}');
-      }
+    // } on FirebaseAuthException catch (e) {
+    //   debugPrint('❌ Firebase Auth Error: ${e.code} - ${e.message}');
+    //   
+    //   switch (e.code) {
+    //     case 'sign_in_failed':
+    //       return AuthResult.failure('Google sign-in failed. Please check your internet connection and try again.');
+    //     case 'network_error':
+    //       return AuthResult.failure('Network error. Please check your internet connection.');
+    //     case 'sign_in_canceled':
+    //       return AuthResult.failure('Google sign-in was cancelled.');
+    //     case 'sign_in_required':
+    //       return AuthResult.failure('Google sign-in is required but not available.');
+    //     default:
+    //       return AuthResult.failure('Google sign-in error: ${e.message ?? e.code}');
+    //   }
+    // } on FirebaseAuthException catch (e) {
+    //   debugPrint('❌ Firebase Auth Error: ${e.code} - ${e.message}');
+    //   
+    //   switch (e.code) {
+    //     case 'account-exists-with-different-credential':
+    //       return AuthResult.failure('An account already exists with this email using a different sign-in method.');
+    //     case 'invalid-credential':
+    //       return AuthResult.failure('The Google credentials are invalid or expired.');
+    //     case 'operation-not-allowed':
+    //       return AuthResult.failure('Google sign-in is not enabled. Please contact support.');
+    //     case 'user-disabled':
+    //       return AuthResult.failure('This Google account has been disabled.');
+    //     default:
+    //       return AuthResult.failure('Authentication error: ${e.message ?? e.code}');
+    //   }
     } catch (e) {
       debugPrint('❌ Unexpected Google Sign-In error: $e');
       return AuthResult.failure('Unexpected error during Google sign-in. Please try again or use email authentication.');
@@ -546,56 +549,8 @@ class AuthService {
         return AuthResult.failure('Apple Sign-In requires additional platform configuration. Please use email authentication for now.');
       }
       
-      if (_auth == null) {
-        return AuthResult.failure('Authentication service not properly configured');
-      }
-
-      // Check if Apple Sign-In is available on this device
-      final bool isAvailable = await SignInWithApple.isAvailable();
-      if (!isAvailable) {
-        return AuthResult.failure('Apple Sign-In is not available on this device. Please use email authentication instead.');
-      }
-
-      final credential = await SignInWithApple.getAppleIDCredential(
-        scopes: [
-          AppleIDAuthorizationScopes.email,
-          AppleIDAuthorizationScopes.fullName,
-        ],
-      );
-
-      final oauthCredential = OAuthProvider("apple.com").credential(
-        idToken: credential.identityToken,
-        accessToken: credential.authorizationCode,
-      );
-
-      final UserCredential result = await _auth!.signInWithCredential(oauthCredential);
-
-      if (result.user != null) {
-        // For Apple Sign-In, we might need to construct display name from givenName and familyName
-        String? displayName = result.user!.displayName;
-        if (displayName == null && credential.givenName != null) {
-          displayName = '${credential.givenName} ${credential.familyName ?? ''}'.trim();
-          await result.user!.updateDisplayName(displayName);
-          await result.user!.reload();
-        }
-
-        await _storeUserData({
-          'uid': result.user!.uid,
-          'email': result.user!.email,
-          'displayName': displayName,
-          'provider': 'apple',
-          'lastLogin': DateTime.now().toIso8601String(),
-        });
-
-        if (_prefs != null) {
-          await _prefs!.setString(_lastLoginMethodKey, 'apple');
-        }
-
-        debugPrint('✅ Apple Sign-In successful: ${result.user!.email}');
-        return AuthResult.success(result.user!);
-      }
-
-      return AuthResult.failure('Failed to sign in with Apple: No user returned');
+      // Apple Sign-In is temporarily disabled for iOS build
+      return AuthResult.failure('Apple Sign-In is temporarily disabled for iOS compatibility. Please use email authentication.');
     } on SignInWithAppleException catch (e) {
       debugPrint('❌ Apple Sign-In Error: ${e.toString()}');
       
@@ -610,21 +565,21 @@ class AuthService {
       } else {
         return AuthResult.failure('Apple sign-in error. Please try again.');
       }
-    } on FirebaseAuthException catch (e) {
-      debugPrint('❌ Firebase Auth Error: ${e.code} - ${e.message}');
-      
-      switch (e.code) {
-        case 'account-exists-with-different-credential':
-          return AuthResult.failure('An account already exists with this email using a different sign-in method.');
-        case 'invalid-credential':
-          return AuthResult.failure('The Apple credentials are invalid or expired.');
-        case 'operation-not-allowed':
-          return AuthResult.failure('Apple sign-in is not enabled. Please contact support.');
-        case 'user-disabled':
-          return AuthResult.failure('This Apple account has been disabled.');
-        default:
-          return AuthResult.failure('Authentication error: ${e.message ?? e.code}');
-      }
+    // } on FirebaseAuthException catch (e) {
+    //   debugPrint('❌ Firebase Auth Error: ${e.code} - ${e.message}');
+    //   
+    //   switch (e.code) {
+    //     case 'account-exists-with-different-credential':
+    //       return AuthResult.failure('An account already exists with this email using a different sign-in method.');
+    //     case 'invalid-credential':
+    //       return AuthResult.failure('The Apple credentials are invalid or expired.');
+    //     case 'operation-not-allowed':
+    //       return AuthResult.failure('Apple sign-in is not enabled. Please contact support.');
+    //     case 'user-disabled':
+    //       return AuthResult.failure('This Apple account has been disabled.');
+    //     default:
+    //       return AuthResult.failure('Authentication error: ${e.message ?? e.code}');
+    //   }
     } on PlatformException catch (e) {
       debugPrint('❌ Apple Sign-In Platform Error: ${e.code} - ${e.message}');
       return AuthResult.failure('Apple sign-in platform error: ${e.message ?? e.code}');
@@ -703,15 +658,15 @@ class AuthService {
         }
       }
       
-      // Try Firebase sign out operations, but don't fail if they don't work
-      if (_auth != null) {
-        try {
-          await _auth!.signOut();
-          debugPrint('✅ Firebase Auth sign out successful');
-        } catch (firebaseError) {
-          debugPrint('⚠️ Firebase Auth sign out failed (continuing anyway): $firebaseError');
-        }
-      }
+      // Firebase temporarily disabled for iOS build
+      // if (_auth != null) {
+      //   try {
+      //     await _auth!.signOut();
+      //     debugPrint('✅ Firebase Auth sign out successful');
+      //   } catch (firebaseError) {
+      //     debugPrint('⚠️ Firebase Auth sign out failed (continuing anyway): $firebaseError');
+      //   }
+      // }
       
       // if (_googleSignIn != null) {
       //   try {
@@ -747,29 +702,29 @@ class AuthService {
   /// Check if an email account already exists
   Future<bool> isEmailRegistered(String email) async {
     try {
-      // Check Firebase first if available
-      if (_firebaseAvailable && _auth != null) {
-        try {
-          // Use a different method since fetchSignInMethodsForEmail is deprecated
-          try {
-            await _auth!.createUserWithEmailAndPassword(
-              email: email, 
-              password: 'temp_password_to_check_existence'
-            );
-            // If we get here, user doesn't exist
-            return false;
-          } on FirebaseAuthException catch (e) {
-            if (e.code == 'email-already-in-use') {
-              AppLogger.info('Email found in Firebase: $email');
-              return true;
-            }
-            // Other errors mean we can't determine, assume not found
-            return false;
-          }
-        } catch (e) {
-          AppLogger.warning('Firebase email check failed: $e');
-        }
-      }
+      // Firebase temporarily disabled for iOS build
+      // if (_firebaseAvailable && _auth != null) {
+      //   try {
+      //     // Use a different method since fetchSignInMethodsForEmail is deprecated
+      //     try {
+      //       await _auth!.createUserWithEmailAndPassword(
+      //         email: email, 
+      //         password: 'temp_password_to_check_existence'
+      //       );
+      //       // If we get here, user doesn't exist
+      //       return false;
+      //     } on FirebaseAuthException catch (e) {
+      //       if (e.code == 'email-already-in-use') {
+      //         AppLogger.info('Email found in Firebase: $email');
+      //         return true;
+      //       }
+      //       // Other errors mean we can't determine, assume not found
+      //       return false;
+      //     }
+      //   } catch (e) {
+      //     AppLogger.warning('Firebase email check failed: $e');
+      //   }
+      // }
       
       // Check local user service
       if (_localUserService != null) {
@@ -798,16 +753,16 @@ class AuthService {
   /// Reset password
   Future<AuthResult> resetPassword(String email) async {
     try {
-      // Try Firebase password reset first
-      if (_firebaseAvailable && _auth != null) {
-        try {
-          await _auth!.sendPasswordResetEmail(email: email);
-          debugPrint('✅ Password reset email sent via Firebase');
-          return AuthResult.success(null);
-        } catch (firebaseError) {
-          debugPrint('⚠️ Firebase password reset failed: $firebaseError');
-        }
-      }
+      // Firebase temporarily disabled for iOS build
+      // if (_firebaseAvailable && _auth != null) {
+      //   try {
+      //     await _auth!.sendPasswordResetEmail(email: email);
+      //     debugPrint('✅ Password reset email sent via Firebase');
+      //     return AuthResult.success(null);
+      //   } catch (firebaseError) {
+      //     debugPrint('⚠️ Firebase password reset failed: $firebaseError');
+      //   }
+      // }
       
       // Local password reset is not supported in the current implementation
       // In a production environment, this would typically send an email through a backend service
@@ -817,19 +772,19 @@ class AuthService {
       }
       
       return AuthResult.failure('Password reset service not available');
-    } on FirebaseAuthException catch (e) {
-      debugPrint('❌ Firebase Auth Error during password reset: ${e.code} - ${e.message}');
-      
-      switch (e.code) {
-        case 'user-not-found':
-          return AuthResult.failure('No account found with this email address.');
-        case 'invalid-email':
-          return AuthResult.failure('Please enter a valid email address.');
-        case 'too-many-requests':
-          return AuthResult.failure('Too many reset attempts. Please try again later.');
-        default:
-          return AuthResult.failure('Password reset failed: ${e.message ?? e.code}');
-      }
+    // } on FirebaseAuthException catch (e) {
+    //   debugPrint('❌ Firebase Auth Error during password reset: ${e.code} - ${e.message}');
+    //   
+    //   switch (e.code) {
+    //     case 'user-not-found':
+    //       return AuthResult.failure('No account found with this email address.');
+    //     case 'invalid-email':
+    //       return AuthResult.failure('Please enter a valid email address.');
+    //     case 'too-many-requests':
+    //       return AuthResult.failure('Too many reset attempts. Please try again later.');
+    //     default:
+    //       return AuthResult.failure('Password reset failed: ${e.message ?? e.code}');
+    //   }
     } catch (e) {
       debugPrint('❌ Password reset error: $e');
       return AuthResult.failure('Password reset failed: ${e.toString()}');
@@ -909,7 +864,8 @@ class AuthService {
 /// Authentication result model
 class AuthResult {
   final bool isSuccess;
-  final User? user;
+  // final User? user; // Firebase temporarily disabled for iOS build
+  final dynamic user;
   final String? error;
 
   AuthResult._({
@@ -918,7 +874,7 @@ class AuthResult {
     this.error,
   });
 
-  factory AuthResult.success(User? user) {
+  factory AuthResult.success(dynamic user) {
     return AuthResult._(
       isSuccess: true,
       user: user,
