@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.zyraflow.app</string>
+	<string>com.flowai.app</string>
 	<key>PROJECT_ID</key>
 	<string>zyraflow-production</string>
 	<key>STORAGE_BUCKET</key>

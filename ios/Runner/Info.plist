@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Flow Ai</string>
+	<string>Flow AI</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -13,7 +13,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>flow_ai</string>
+	<string>Flow AI</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -59,7 +59,7 @@
 	<array>
 		<dict>
 			<key>CFBundleURLName</key>
-			<string>com.zyraflow.app</string>
+			<string>com.flowai.app</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<!-- Google Sign-In Reversed Client ID - from Firebase Console -->
@@ -80,21 +80,21 @@
 	</array>
 	<!-- Privacy descriptions for App Store -->
 	<key>NSFaceIDUsageDescription</key>
-	<string>Flow Ai uses Face ID to provide secure, convenient access to your personal menstrual health data.</string>
+	<string>Flow AI uses Face ID to provide secure, convenient access to your personal menstrual health data.</string>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>Flow Ai uses local network access to sync your data securely across your devices.</string>
+	<string>Flow AI uses local network access to sync your data securely across your devices.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Flow Ai can use your camera to scan health-related documents and QR codes for easy data entry.</string>
+	<string>Flow AI can use your camera to scan health-related documents and QR codes for easy data entry.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Flow Ai can access your photo library to help you document your health journey by importing relevant images.</string>
+	<string>Flow AI can access your photo library to help you document your health journey by importing relevant images.</string>
 	<key>NSCalendarsUsageDescription</key>
-	<string>Flow Ai can integrate with your calendar to provide personalized cycle predictions and health reminders.</string>
+	<string>Flow AI can integrate with your calendar to provide personalized cycle predictions and health reminders.</string>
 	<key>NSHealthUpdateUsageDescription</key>
-	<string>Flow Ai can write health data to help you maintain a comprehensive view of your menstrual and reproductive health.</string>
+	<string>Flow AI can write health data to help you maintain a comprehensive view of your menstrual and reproductive health.</string>
 	<key>NSHealthShareUsageDescription</key>
-	<string>Flow Ai can read your health data to provide more accurate cycle predictions and personalized health insights.</string>
+	<string>Flow AI can read your health data to provide more accurate cycle predictions and personalized health insights.</string>
 	<key>NSContactsUsageDescription</key>
-	<string>Flow Ai can access your contacts to help you share health reports with your healthcare provider.</string>
+	<string>Flow AI can access your contacts to help you share health reports with your healthcare provider.</string>
 	<!-- Required for proper app categorization -->
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.medical</string>

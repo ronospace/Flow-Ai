@@ -9,7 +9,7 @@ plugins {
 }
 
 android {
-    namespace = "com.zyraflow.zyraflow"
+    namespace = "com.flowai.app"
     compileSdk = flutter.compileSdkVersion
 
     compileOptions {
@@ -23,7 +23,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.zyraflow.flowai"
+        applicationId = "com.flowai.app"
         minSdk = flutter.minSdkVersion  // Support Android 5.0 and above
         targetSdk = flutter.targetSdkVersion  // Updated target SDK for latest Play Store requirements
         versionCode = flutter.versionCode
