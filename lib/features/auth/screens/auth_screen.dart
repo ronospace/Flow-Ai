@@ -10,6 +10,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/services/auth_service.dart';
 import '../../../core/services/platform_service.dart';
 import '../../../core/ui/adaptive_components.dart';
+import '../../../core/ui/adaptive_messages.dart';
 import '../../../generated/app_localizations.dart';
 import '../../../core/widgets/modern_button.dart';
 import '../widgets/auth_text_field.dart';
@@ -792,58 +793,19 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   
   void _showSuccessMessage(String message) {
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Row(
-            children: [
-              const Icon(Icons.check_circle, color: Colors.white),
-              const SizedBox(width: 8),
-              Expanded(child: Text(message)),
-            ],
-          ),
-          backgroundColor: AppTheme.successGreen,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        ),
-      );
+      AdaptiveMessages.showSuccess(context, message);
     }
   }
   
   void _showErrorMessage(String message) {
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Row(
-            children: [
-              const Icon(Icons.error, color: Colors.white),
-              const SizedBox(width: 8),
-              Expanded(child: Text(message)),
-            ],
-          ),
-          backgroundColor: AppTheme.primaryRose,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        ),
-      );
+      AdaptiveMessages.showError(context, message);
     }
   }
   
   void _showInfoMessage(String message) {
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Row(
-            children: [
-              const Icon(Icons.info, color: Colors.white),
-              const SizedBox(width: 8),
-              Expanded(child: Text(message)),
-            ],
-          ),
-          backgroundColor: AppTheme.secondaryBlue,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        ),
-      );
+      AdaptiveMessages.showInfo(context, message);
     }
   }
 }

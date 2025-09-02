@@ -24,6 +24,7 @@ import 'core/services/app_state_service.dart';
 import 'core/services/local_user_service.dart';
 import 'core/services/memory_manager.dart';
 import 'core/services/platform_service.dart';
+import 'core/services/production_analytics_service.dart';
 import 'core/config/platform_config.dart';
 import 'features/onboarding/providers/onboarding_provider.dart';
 import 'features/cycle/providers/cycle_provider.dart';
@@ -100,6 +101,7 @@ Future<void> _initializeNonCriticalServices() async {
     _initializeLocalUserService(),
     _initializeAIMemory(),
     _initializeOfflineService(),
+    _initializeProductionAnalytics(),
   ], eagerError: false); // Don't fail all services if one fails
 }
 
@@ -183,6 +185,15 @@ Future<void> _initializeMemoryManager() async {
     AppLogger.memory('Memory Manager initialized with performance optimizations');
   } catch (e) {
     AppLogger.warning('Memory Manager initialization failed: $e');
+  }
+}
+
+Future<void> _initializeProductionAnalytics() async {
+  try {
+    await ProductionAnalyticsService().initialize();
+    AppLogger.success('Production Analytics Service initialized');
+  } catch (e) {
+    AppLogger.warning('Production Analytics Service initialization failed: $e');
   }
 }
 
