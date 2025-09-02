@@ -420,7 +420,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         Row(
           children: [
             // Google Sign-In (hidden on iOS due to dependency conflicts)
-            if (!Platform.isIOS) ...[
+            if (PlatformService().platformInfo.platform != TargetPlatform.iOS) ...[
               Expanded(
                 child: SocialLoginButton(
                   icon: Icons.g_mobiledata,
@@ -444,7 +444,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
               ),
             ),
             // If on iOS and Google is hidden, fill the space
-            if (Platform.isIOS) const Expanded(child: SizedBox()),
+            if (PlatformService().platformInfo.platform == TargetPlatform.iOS) const Expanded(child: SizedBox()),
           ],
         ).animate(controller: _socialController)
           .slideY(begin: 0.3, end: 0)
