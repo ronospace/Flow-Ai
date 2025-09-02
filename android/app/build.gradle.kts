@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
     // START: FlutterFire Configuration
@@ -8,8 +11,15 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+// Load keystore properties
+val keystoreProperties = Properties()
+val keystorePropertiesFile = rootProject.file("key.properties")
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+}
+
 android {
-    namespace = "com.flowai.app"
+    namespace = "com.flowai.health"
     compileSdk = flutter.compileSdkVersion
 
     compileOptions {
@@ -23,7 +33,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.flowai.app"
+        applicationId = "com.flowai.health"
         minSdk = flutter.minSdkVersion  // Support Android 5.0 and above
         targetSdk = flutter.targetSdkVersion  // Updated target SDK for latest Play Store requirements
         versionCode = flutter.versionCode
@@ -39,6 +49,17 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            if (keystorePropertiesFile.exists()) {
+                keyAlias = keystoreProperties["keyAlias"] as String
+                keyPassword = keystoreProperties["keyPassword"] as String
+                storeFile = rootProject.file(keystoreProperties["storeFile"] as String)
+                storePassword = keystoreProperties["storePassword"] as String
+            }
+        }
+    }
+
     buildTypes {
         release {
             // Enable optimization for production builds
@@ -46,8 +67,12 @@ android {
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             
-            // Production signing - replace with actual keystore for App Store release
-            signingConfig = signingConfigs.getByName("debug")
+            // Production signing with proper keystore
+            signingConfig = if (keystorePropertiesFile.exists()) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
             
             // Optimize for production
             isDebuggable = false
@@ -77,6 +102,8 @@ configurations.configureEach {
 
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.2")
-    implementation("com.google.android.play:core:1.10.3")
+    // Updated Play Core libraries compatible with Android 14 (API 34)
+    implementation("com.google.android.play:app-update:2.1.0")
+    implementation("com.google.android.play:review:2.0.1")
     implementation("androidx.multidex:multidex:2.0.1")
 }

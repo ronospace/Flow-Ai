@@ -1,4 +1,4 @@
-package com.flowai.app
+package com.flowai.health
 
 import io.flutter.embedding.android.FlutterActivity
 
