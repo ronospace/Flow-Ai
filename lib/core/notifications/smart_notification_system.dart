@@ -18,11 +18,11 @@ class SmartNotificationSystem {
   bool get isInitialized => _initialized;
 
   // Core notification components
-  late FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
-  late NotificationPersonalizationEngine _personalizationEngine;
-  late NotificationScheduler _scheduler;
-  late NotificationContentGenerator _contentGenerator;
-  late NotificationOptimizer _optimizer;
+  FlutterLocalNotificationsPlugin? _flutterLocalNotificationsPlugin;
+  NotificationPersonalizationEngine? _personalizationEngine;
+  NotificationScheduler? _scheduler;
+  NotificationContentGenerator? _contentGenerator;
+  NotificationOptimizer? _optimizer;
 
   // Smart timing and context
   final Map<String, dynamic> _userContext = {};
@@ -156,22 +156,25 @@ class SmartNotificationSystem {
       }
 
       // Generate personalized content
-      final content = await _contentGenerator.generatePersonalizedContent(
+      final content = await _contentGenerator?.generatePersonalizedContent(
         user: user,
         type: type,
         healthData: healthData,
         customMessage: customMessage,
         userContext: _userContext,
+      ) ?? NotificationContent(
+        title: 'Flow Ai Health Update',
+        body: customMessage ?? 'We have a health update for you.',
       );
 
       // Calculate optimal timing
-      final optimalTime = await _scheduler.calculateOptimalTime(
+      final optimalTime = await _scheduler?.calculateOptimalTime(
         user: user,
         type: type,
         priority: priority,
         delayMinutes: delayMinutes,
         userContext: _userContext,
-      );
+      ) ?? DateTime.now().add(Duration(minutes: delayMinutes ?? 5));
 
       // Create smart notification
       final notification = SmartNotification(
@@ -330,7 +333,7 @@ class SmartNotificationSystem {
 
     if (scheduledTime.isAfter(now)) {
       // Schedule for future
-      await _flutterLocalNotificationsPlugin.zonedSchedule(
+      await _flutterLocalNotificationsPlugin?.zonedSchedule(
         notification.id,
         notification.title,
         notification.body,
@@ -342,7 +345,7 @@ class SmartNotificationSystem {
       );
     } else {
       // Send immediately
-      await _flutterLocalNotificationsPlugin.show(
+      await _flutterLocalNotificationsPlugin?.show(
         notification.id,
         notification.title,
         notification.body,
@@ -369,17 +372,18 @@ class SmartNotificationSystem {
     }
 
     // Check user preferences and context
-    final preferences = await _personalizationEngine.getUserPreferences(user);
+    final preferences = await _personalizationEngine?.getUserPreferences(user) ?? 
+        NotificationPreferences.defaultPreferences();
     if (!preferences.allowsNotification(type)) {
       return false;
     }
 
     // Check optimal timing context
-    final isOptimalTime = await _scheduler.isOptimalTime(
+    final isOptimalTime = await _scheduler?.isOptimalTime(
       user: user,
       type: type,
       userContext: _userContext,
-    );
+    ) ?? true;
 
     return isOptimalTime || priority == NotificationPriority.critical;
   }
@@ -435,7 +439,7 @@ class SmartNotificationSystem {
       ));
 
       // Update engagement metrics
-      _optimizer.recordEngagement(notification, 'tapped');
+      _optimizer?.recordEngagement(notification, 'tapped');
     } catch (e) {
       debugPrint('Error parsing notification response: $e');
     }
@@ -465,10 +469,10 @@ class SmartNotificationSystem {
   Future<void> _optimizeNotificationStrategy() async {
     debugPrint('⚡ Optimizing notification strategy...');
     
-    final insights = await _optimizer.analyzeNotificationPerformance(
+    final insights = await _optimizer?.analyzeNotificationPerformance(
       _notificationHistory,
       _userContext,
-    );
+    ) ?? [];
 
     debugPrint('📊 Notification insights: ${insights.length} optimizations found');
   }
@@ -494,12 +498,12 @@ class SmartNotificationSystem {
 
   /// Cancel specific notification
   Future<void> cancelNotification(int id) async {
-    await _flutterLocalNotificationsPlugin.cancel(id);
+    await _flutterLocalNotificationsPlugin?.cancel(id);
   }
 
   /// Cancel all notifications
   Future<void> cancelAllNotifications() async {
-    await _flutterLocalNotificationsPlugin.cancelAll();
+    await _flutterLocalNotificationsPlugin?.cancelAll();
   }
 
   /// Get notification history
