@@ -50,3 +50,49 @@ app.*.map.json
 builds_for_testing/*.apk
 builds_for_testing/*.ipa
 build/
+**/build/
+
+# iOS build artifacts
+**/ios/build/
+**/ios/.symlinks/
+**/ios/Runner.xcworkspace
+**/ios/Pods/
+**/ios/.generated/
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/ServiceDefinitions.json
+**/ios/Runner/GeneratedPluginRegistrant.*
+
+# Android build artifacts
+**/android/build/
+**/android/app/build/
+**/android/gradle-wrapper.jar
+**/android/.gradle/
+**/android/captures/
+**/android/gradlew
+**/android/gradlew.bat
+**/android/local.properties
+**/android/app/src/main/java/**/GeneratedPluginRegistrant.java
+
+# Web build artifacts
+**/web/build/
+
+# Debug symbols and crash reports
+**/*.dSYM/
+**/*.dSYM.zip
+**/crashlytics-build.properties
+**/firebase-debug.log
+**/firestore-debug.log
+
+# Large files and binaries
+*.xcarchive
+*.framework
+*.a
+*.so
+*.dylib
+*.exe
+*.app
+*.dmg
+*.pkg
+*.zip
+*.tar.gz
