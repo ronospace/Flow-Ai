@@ -18,4 +18,12 @@ class HealthProvider extends ChangeNotifier {
     _healthScore = score;
     notifyListeners();
   }
+  
+  /// Clear all user health data (used during sign out)
+  void clearUserData() {
+    _isHealthKitConnected = false;
+    _healthScore = 0.0;
+    notifyListeners();
+    debugPrint('✅ HealthProvider: All user data cleared');
+  }
 }

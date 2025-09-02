@@ -121,4 +121,13 @@ class CycleProvider extends ChangeNotifier {
       debugPrint('Error ending current cycle: $e');
     }
   }
+  
+  /// Clear all user cycle data (used during sign out)
+  void clearUserData() {
+    _cycleData = null;
+    _insights = null;
+    _isLoading = false;
+    notifyListeners();
+    debugPrint('✅ CycleProvider: All user data cleared');
+  }
 }

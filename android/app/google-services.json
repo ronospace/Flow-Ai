@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:1009671565006:android:67dcc937b380eff90e6a9f",
         "android_client_info": {
-          "package_name": "com.flowai.app"
+          "package_name": "com.flowai.health"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "1009671565006-7sf3cjmn9vn2kjdgjk5e7v2lmjv9s8qv.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.flowai.app",
+            "package_name": "com.flowai.health",
             "certificate_hash": "da39a3ee5e6b4b0d3255bfef95601890afd80709"
           }
         },

@@ -68,4 +68,12 @@ class InsightsProvider extends ChangeNotifier {
     
     notifyListeners();
   }
+  
+  /// Clear all user insights data (used during sign out)
+  void clearUserData() {
+    _insights.clear();
+    _isLoading = false;
+    notifyListeners();
+    debugPrint('✅ InsightsProvider: All user data cleared');
+  }
 }
