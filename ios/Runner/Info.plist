@@ -59,7 +59,7 @@
 	<array>
 		<dict>
 			<key>CFBundleURLName</key>
-			<string>com.flowai.app</string>
+			<string>com.flowai.health</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<!-- Google Sign-In Reversed Client ID - from Firebase Console -->
@@ -95,6 +95,10 @@
 	<string>Flow Ai can read your health data to provide more accurate cycle predictions and personalized health insights.</string>
 	<key>NSContactsUsageDescription</key>
 	<string>Flow Ai can access your contacts to help you share health reports with your healthcare provider.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Flow Ai may use your location to provide personalized health insights based on environmental factors and to enhance your menstrual cycle predictions.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Flow Ai may use your location to provide personalized health insights based on environmental factors and to enhance your menstrual cycle predictions.</string>
 	<!-- Required for proper app categorization -->
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.medical</string>

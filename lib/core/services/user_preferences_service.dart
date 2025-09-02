@@ -15,14 +15,28 @@ class UserPreferencesService {
   static const String _keyReminderSettings = 'reminder_settings';
   
   late SharedPreferences _prefs;
+  bool _isInitialized = false;
 
   /// Initialize the preferences service
   Future<void> initialize() async {
-    _prefs = await SharedPreferences.getInstance();
+    if (!_isInitialized) {
+      _prefs = await SharedPreferences.getInstance();
+      _isInitialized = true;
+    }
+  }
+  
+  /// Ensure preferences are initialized before use
+  Future<void> _ensureInitialized() async {
+    if (!_isInitialized) {
+      await initialize();
+    }
   }
 
   // Theme settings
-  String get themeMode => _prefs.getString(_keyThemeMode) ?? 'system';
+  String get themeMode {
+    if (!_isInitialized) return 'system';
+    return _prefs.getString(_keyThemeMode) ?? 'system';
+  }
   Future<void> setThemeMode(String mode) async {
     await _prefs.setString(_keyThemeMode, mode);
   }
@@ -46,7 +60,10 @@ class UserPreferencesService {
   }
 
   // Onboarding status
-  bool get onboardingComplete => _prefs.getBool(_keyOnboardingComplete) ?? false;
+  bool get onboardingComplete {
+    if (!_isInitialized) return false;
+    return _prefs.getBool(_keyOnboardingComplete) ?? false;
+  }
   Future<void> setOnboardingComplete(bool complete) async {
     await _prefs.setBool(_keyOnboardingComplete, complete);
   }

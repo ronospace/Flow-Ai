@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:go_router/go_router.dart';
-import '../../../generated/app_localizations.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import '../../../core/services/app_state_service.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/services/auth_service.dart';
+import '../../../core/utils/app_logger.dart';
+import '../../../core/ui/adaptive_messages.dart';
+import '../../../generated/app_localizations.dart';
 import '../providers/settings_provider.dart';
+import '../../cycle/providers/cycle_provider.dart';
+import '../../insights/providers/insights_provider.dart';
+import '../../health/providers/health_provider.dart';
+import '../../onboarding/providers/onboarding_provider.dart';
 import '../models/user_preferences.dart';
 import '../widgets/settings_section.dart';
 import '../widgets/settings_tile.dart';
@@ -55,7 +61,7 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     
     return Scaffold(
       body: Container(
@@ -449,7 +455,7 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
   }
 
   String _getThemeName(AppThemeMode themeMode) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     switch (themeMode) {
       case AppThemeMode.light:
         return l10n.light;
@@ -641,68 +647,34 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
 
   void _handleSignOut() async {
     try {
-      // Show loading indicator
+      // Show loading message using adaptive messaging
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Row(
-              children: [
-                SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                  ),
-                ),
-                SizedBox(width: 12),
-                Text('Signing out...'),
-              ],
-            ),
-            backgroundColor: AppTheme.mediumGrey,
-            duration: Duration(seconds: 5),
-          ),
-        );
+        await AdaptiveMessages.showInfo(context, 'Signing out...');
       }
       
-      // Initialize and sign out from AuthService
-      final authService = AuthService();
-      try {
-        await authService.initialize();
-      } catch (e) {
-        debugPrint('⚠️ AuthService initialization failed during sign out, continuing anyway: $e');
-      }
-      await authService.signOut();
+      AppLogger.auth('🔐 Starting comprehensive sign out process...');
       
-      // Clear all app state and user data
+      // Clear all app state and user data first
       await _clearAllAppData();
+      
+      // Reset app state using the centralized service
+      final appStateService = AppStateService();
+      await appStateService.resetAppState();
+      
+      AppLogger.auth('✅ Complete sign out successful - all user data cleared');
       
       // Show success message
       if (mounted) {
-        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Row(
-              children: [
-                Icon(Icons.check_circle, color: Colors.white),
-                SizedBox(width: 12),
-                Text('Successfully signed out'),
-              ],
-            ),
-            backgroundColor: AppTheme.successGreen,
-            duration: Duration(seconds: 2),
-          ),
-        );
+        await AdaptiveMessages.showSuccess(context, 'Successfully signed out');
       }
       
-      // Navigate to auth screen after a brief delay
-      await Future.delayed(const Duration(milliseconds: 1500));
+      // Navigate to auth screen immediately
       if (mounted) {
-        // First try GoRouter go method
         try {
           context.go('/auth');
+          AppLogger.navigation('📱 Navigated to auth screen after sign out');
         } catch (goError) {
-          debugPrint('GoRouter navigation failed: $goError');
+          AppLogger.error('GoRouter navigation failed: $goError');
           // Fallback to pushNamedAndRemoveUntil using regular Navigator
           Navigator.of(context).pushNamedAndRemoveUntil(
             '/auth',
@@ -711,26 +683,12 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
         }
       }
     } catch (e) {
-      debugPrint('❌ Sign out error: $e');
+      AppLogger.error('❌ Sign out error: $e');
       if (mounted) {
-        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Row(
-              children: [
-                const Icon(Icons.error, color: Colors.white),
-                const SizedBox(width: 12),
-                Expanded(child: Text('Sign out failed: ${e.toString()}')),
-              ],
-            ),
-            backgroundColor: AppTheme.primaryRose,
-            duration: const Duration(seconds: 4),
-            action: SnackBarAction(
-              label: 'Retry',
-              textColor: Colors.white,
-              onPressed: _handleSignOut,
-            ),
-          ),
+        await AdaptiveMessages.showError(
+          context,
+          'Sign out failed: ${e.toString()}',
+          duration: const Duration(seconds: 4),
         );
       }
     }
@@ -739,16 +697,52 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
   /// Clear all application data on sign out
   Future<void> _clearAllAppData() async {
     try {
-      // Clear provider states
-      final settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
+      AppLogger.auth('🧹 Clearing all application data...');
       
-      // Reset all cached data - you can add more providers here as needed
-      // Note: We keep app preferences like theme, language, etc.
-      // but clear user-specific data
+      // Clear all provider states but preserve app preferences (theme, language, etc.)
+      try {
+        // Clear cycle-related data
+        final cycleProvider = Provider.of<CycleProvider>(context, listen: false);
+        cycleProvider.clearUserData();
+        AppLogger.auth('✅ Cycle data cleared');
+      } catch (e) {
+        AppLogger.warning('⚠️ Failed to clear cycle data: $e');
+      }
       
-      debugPrint('✅ Application data cleared successfully');
+      try {
+        // Clear insights and AI data
+        final insightsProvider = Provider.of<InsightsProvider>(context, listen: false);
+        insightsProvider.clearUserData();
+        AppLogger.auth('✅ Insights data cleared');
+      } catch (e) {
+        AppLogger.warning('⚠️ Failed to clear insights data: $e');
+      }
+      
+      try {
+        // Clear health data
+        final healthProvider = Provider.of<HealthProvider>(context, listen: false);
+        healthProvider.clearUserData();
+        AppLogger.auth('✅ Health data cleared');
+      } catch (e) {
+        AppLogger.warning('⚠️ Failed to clear health data: $e');
+      }
+      
+      try {
+        // Clear onboarding state (user will need to go through onboarding again)
+        final onboardingProvider = Provider.of<OnboardingProvider>(context, listen: false);
+        onboardingProvider.resetOnboarding();
+        AppLogger.auth('✅ Onboarding data cleared');
+      } catch (e) {
+        AppLogger.warning('⚠️ Failed to clear onboarding data: $e');
+      }
+      
+      // Note: We intentionally preserve SettingsProvider data (theme, language, etc.)
+      // as these are app preferences, not user-specific data
+      
+      AppLogger.auth('✅ All user-specific application data cleared successfully');
     } catch (e) {
-      debugPrint('❌ Error clearing app data: $e');
+      AppLogger.error('❌ Error clearing app data: $e');
+      rethrow; // Re-throw to handle in the calling method
     }
   }
 
