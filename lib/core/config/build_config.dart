@@ -1,7 +1,5 @@
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 import '../services/platform_service.dart';
-import '../utils/app_logger.dart';
 
 /// Build configuration manager for handling platform-specific build settings
 class BuildConfig {
@@ -422,7 +420,7 @@ dependencies {
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Flow AI</string>
+	<string>Flow Ai</string>
 	<key>CFBundleExecutable</key>
 	<string>\$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -553,7 +551,7 @@ dependencies {
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     
     <application
-        android:label="Flow AI"
+        android:label="Flow Ai"
         android:name="\${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:enableOnBackInvokedCallback="true"
@@ -581,7 +579,7 @@ dependencies {
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https"
-                      android:host="zyraflow.com" />
+                      android:host="flowai.app" />
             </intent-filter>
         </activity>
         
@@ -733,7 +731,7 @@ echo "✅ All platform builds completed"
       "client_info": {
         "mobilesdk_app_id": "YOUR_ANDROID_APP_ID",
         "android_client_info": {
-          "package_name": "com.example.zyraflow"
+          "package_name": "com.flowai.app"
         }
       },
       "oauth_client": [
@@ -741,7 +739,7 @@ echo "✅ All platform builds completed"
           "client_id": "YOUR_ANDROID_CLIENT_ID",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.zyraflow",
+            "package_name": "com.flowai.app",
             "certificate_hash": "YOUR_SHA1_HASH"
           }
         }
@@ -773,7 +771,7 @@ echo "✅ All platform builds completed"
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.zyraflow</string>
+	<string>com.flowai.app</string>
 	<key>PROJECT_ID</key>
 	<string>YOUR_PROJECT_ID</string>
 	<key>STORAGE_BUCKET</key>
@@ -809,9 +807,9 @@ const bool IS_STAGING = ${environment == 'staging'};
 
 // API Configuration
 const String API_BASE_URL = IS_PRODUCTION 
-    ? 'https://api.zyraflow.com'
+    ? 'https://api.flowai.app'
     : IS_STAGING
-        ? 'https://staging-api.zyraflow.com'
+        ? 'https://staging-api.flowai.app'
         : 'http://localhost:3000/api';
 
 // Feature Flags
