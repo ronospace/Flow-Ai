@@ -309,12 +309,12 @@ class PlatformConfig {
 
   String _getiOSBundleId() {
     return const String.fromEnvironment('IOS_BUNDLE_ID',
-        defaultValue: 'com.zyraflow.app');
+        defaultValue: 'com.flowai.app');
   }
 
   String _getAndroidPackageName() {
     return const String.fromEnvironment('ANDROID_PACKAGE_NAME',
-        defaultValue: 'com.zyraflow.flowai');
+        defaultValue: 'com.flowai.app');
   }
 
   String _getBaseApiUrl() {

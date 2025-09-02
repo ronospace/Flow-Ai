@@ -3,6 +3,7 @@
 
 class UserProfile {
   final String id;
+  final String? displayName;
   final int? age;
   final String? lifestyle;
   final List<String> healthConcerns;
@@ -11,9 +12,13 @@ class UserProfile {
   final List<AdaptationEvent> adaptationHistory;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final double? weight;
+  final double? height;
+  final Map<String, dynamic>? familyHistory;
 
   const UserProfile({
     required this.id,
+    this.displayName,
     this.age,
     this.lifestyle,
     required this.healthConcerns,
@@ -22,10 +27,14 @@ class UserProfile {
     required this.adaptationHistory,
     required this.createdAt,
     required this.updatedAt,
+    this.weight,
+    this.height,
+    this.familyHistory,
   });
 
   UserProfile copyWith({
     String? id,
+    String? displayName,
     int? age,
     String? lifestyle,
     List<String>? healthConcerns,
@@ -34,9 +43,13 @@ class UserProfile {
     List<AdaptationEvent>? adaptationHistory,
     DateTime? createdAt,
     DateTime? updatedAt,
+    double? weight,
+    double? height,
+    Map<String, dynamic>? familyHistory,
   }) {
     return UserProfile(
       id: id ?? this.id,
+      displayName: displayName ?? this.displayName,
       age: age ?? this.age,
       lifestyle: lifestyle ?? this.lifestyle,
       healthConcerns: healthConcerns ?? this.healthConcerns,
@@ -45,12 +58,16 @@ class UserProfile {
       adaptationHistory: adaptationHistory ?? this.adaptationHistory,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      weight: weight ?? this.weight,
+      height: height ?? this.height,
+      familyHistory: familyHistory ?? this.familyHistory,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'display_name': displayName,
       'age': age,
       'lifestyle': lifestyle,
       'health_concerns': healthConcerns,
@@ -59,12 +76,16 @@ class UserProfile {
       'adaptation_history': adaptationHistory.map((e) => e.toJson()).toList(),
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
+      'weight': weight,
+      'height': height,
+      'family_history': familyHistory,
     };
   }
 
   static UserProfile fromJson(Map<String, dynamic> json) {
     return UserProfile(
       id: json['id'],
+      displayName: json['display_name'],
       age: json['age'],
       lifestyle: json['lifestyle'],
       healthConcerns: List<String>.from(json['health_concerns'] ?? []),
@@ -75,6 +96,9 @@ class UserProfile {
           .toList() ?? [],
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
+      weight: json['weight'] != null ? (json['weight'] as num).toDouble() : null,
+      height: json['height'] != null ? (json['height'] as num).toDouble() : null,
+      familyHistory: json['family_history'] != null ? Map<String, dynamic>.from(json['family_history']) : null,
     );
   }
   
