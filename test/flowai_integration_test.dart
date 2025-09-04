@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flowai/core/services/flowai_service.dart';
-import 'package:flowai/core/config/flowai_config.dart';
-import 'package:flowai/core/services/ai_chat_service.dart';
-import 'package:flowai/core/services/ai_engine.dart';
+import 'package:healpray/core/services/flowai_service.dart';
+import 'package:healpray/core/config/flowai_config.dart';
+import 'package:healpray/core/services/ai_chat_service.dart';
+import 'package:healpray/core/services/ai_engine.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Test suite for Flow Ai integration

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SOURCE_SVG="assets/logos/zyraflow_lovely_icon.svg"
+SOURCE_SVG="assets/logos/flowai_lovely_icon.svg"
 
 # Generate Android icons
 rsvg-convert -w 48 -h 48 $SOURCE_SVG -o android/app/src/main/res/mipmap-mdpi/ic_launcher.png

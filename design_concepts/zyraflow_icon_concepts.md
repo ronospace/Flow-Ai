@@ -1,4 +1,4 @@
-# ZyraFlow Premium Icon Design Concepts 🚀
+# Flow Ai Premium Icon Design Concepts 🚀
 
 ## Core Brand Philosophy
 **"Flow with confidence, track with precision, thrive with intelligence"**
@@ -87,7 +87,7 @@ Size Variations:
 - **Period Tracker**: Calendar (boring)
 - **Natural Cycles**: Ring design (limited)
 
-### ZyraFlow Advantage:
+### Flow Ai Advantage:
 - **Mystical yet Scientific**: Appeals to both spiritual and data-driven users
 - **Premium Aesthetic**: Signals high-quality experience
 - **Memorable Symbol**: Crescent + drop = instant recognition
@@ -148,7 +148,7 @@ Size Variations:
 - **Gender Inclusive**: Mystical aesthetic appeals beyond just women
 - **Age Spanning**: Sophisticated enough for professionals, beautiful for Gen Z
 
-**The ZyraFlow icon won't just be downloaded—it'll be desired.**
+**The Flow Ai icon won't just be downloaded—it'll be desired.**
 
 ---
 

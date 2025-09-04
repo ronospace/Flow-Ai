@@ -18,7 +18,7 @@
 ### **macOS App Store** ✅ READY FOR UPLOAD
 - ✅ **Build**: Flow AI.app (58MB) code-signed and ready
 - ✅ **Screenshots**: Mac-specific screenshots (1280x800 to 2880x1800)
-- ✅ **Bundle ID**: com.zyraflow.app (matches iOS)
+- ✅ **Bundle ID**: com.flowai.app (matches iOS)
 - 🎯 **ACTION**: Upload via Xcode Organizer to App Store Connect
 
 ---

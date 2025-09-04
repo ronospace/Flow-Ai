@@ -356,7 +356,7 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
 android {
-    namespace 'com.example.zyraflow'
+    namespace 'com.flowai.health'
     compileSdkVersion ${config['compileSdkVersion']}
     ndkVersion "${config['ndkVersion']}"
 
@@ -370,7 +370,7 @@ android {
     }
 
     defaultConfig {
-        applicationId 'com.example.zyraflow'
+        applicationId 'com.flowai.health'
         minSdkVersion ${config['minSdkVersion']}
         targetSdkVersion ${config['targetSdkVersion']}
         versionCode flutterVersionCode.toInteger()

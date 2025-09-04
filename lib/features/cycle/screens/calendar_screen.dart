@@ -8,7 +8,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../generated/app_localizations.dart';
 import '../../../core/models/cycle_data.dart';
 import '../providers/cycle_provider.dart';
-import '../../../core/services/cycle_calculation_engine.dart';
+import '../../../core/services/cycle_calculation_engine.dart' as calc_engine;
 import '../widgets/calendar_legend.dart';
 import '../widgets/day_detail_sheet.dart';
 
@@ -516,7 +516,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
              day.isBefore(ovulationDay.add(const Duration(days: 1))))) {
           return DayInfo(
             color: AppTheme.secondaryBlue,
-            phase: CyclePhase.ovulation,
+            phase: CyclePhase.ovulatory,
             isPredicted: true,
             isOvulation: true,
           );
@@ -549,7 +549,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
     } else if (dayInCycle <= cycleLength ~/ 2) {
       return CyclePhase.follicular;
     } else if (dayInCycle <= (cycleLength ~/ 2) + 3) {
-      return CyclePhase.ovulation;
+      return CyclePhase.ovulatory;
     } else {
       return CyclePhase.luteal;
     }
@@ -594,7 +594,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
         return '🩸';
       case CyclePhase.follicular:
         return '🌱';
-      case CyclePhase.ovulation:
+      case CyclePhase.ovulatory:
         return '🥚';
       case CyclePhase.luteal:
         return '🌙';
@@ -733,8 +733,8 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
         return 'Menstrual Phase';
       case CyclePhase.follicular:
         return 'Follicular Phase';
-      case CyclePhase.ovulation:
-        return 'Ovulation Phase';
+      case CyclePhase.ovulatory:
+        return 'Ovulatory Phase';
       case CyclePhase.luteal:
         return 'Luteal Phase';
       case CyclePhase.unknown:

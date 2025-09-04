@@ -136,39 +136,46 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
                   ),
                 ),
                 child: SafeArea(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const SizedBox(height: 40),
-                      Container(
-                        width: 80,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(40),
-                        ),
-                        child: const Icon(
-                          Icons.help_center,
-                          color: Colors.white,
-                          size: 40,
-                        ),
-                      ).animate().scale(delay: 200.ms),
-                      const SizedBox(height: 16),
-                      Text(
-                        localizations.faqAndKnowledgeBase,
-                        style: theme.textTheme.headlineMedium?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.3),
-                      const SizedBox(height: 8),
-                      Text(
-                        localizations.findAnswersToCommonQuestions,
-                        style: theme.textTheme.bodyLarge?.copyWith(
-                          color: Colors.white.withValues(alpha: 0.9),
-                        ),
-                      ).animate().fadeIn(delay: 600.ms),
-                    ],
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(height: 20),
+                        Container(
+                          width: 70,
+                          height: 70,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(35),
+                          ),
+                          child: const Icon(
+                            Icons.help_center,
+                            color: Colors.white,
+                            size: 35,
+                          ),
+                        ).animate().scale(delay: 200.ms),
+                        const SizedBox(height: 12),
+                        Text(
+                          localizations.faqAndKnowledgeBase,
+                          style: theme.textTheme.headlineSmall?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.3),
+                        const SizedBox(height: 6),
+                        Text(
+                          localizations.findAnswersToCommonQuestions,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: Colors.white.withValues(alpha: 0.9),
+                          ),
+                          textAlign: TextAlign.center,
+                        ).animate().fadeIn(delay: 600.ms),
+                        const SizedBox(height: 10),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -224,9 +231,10 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
           SliverToBoxAdapter(
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              height: 60,
+              constraints: const BoxConstraints(minHeight: 60, maxHeight: 80),
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
                 itemCount: _chatService.getFAQCategories().length + 1,
                 itemBuilder: (context, index) {
                   if (index == 0) {

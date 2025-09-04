@@ -1,0 +1,504 @@
+import 'dart:async';
+import 'dart:math';
+import 'package:flutter/foundation.dart';
+// Firebase temporarily disabled for iOS build
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+import '../models/partner_models.dart';
+import '../../../core/services/notification_service.dart';
+import '../../../core/services/email_service.dart';
+
+class PartnerService extends ChangeNotifier {
+  static final PartnerService _instance = PartnerService._internal();
+  factory PartnerService() => _instance;
+  PartnerService._internal();
+
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  
+  Partnership? _currentPartnership;
+  List<PartnerMessage> _messages = [];
+  List<PartnerCareAction> _careActions = [];
+  List<PartnerInsight> _insights = [];
+  
+  bool _isLoading = false;
+  String? _error;
+  
+  StreamSubscription<QuerySnapshot>? _messagesSubscription;
+  StreamSubscription<DocumentSnapshot>? _partnershipSubscription;
+
+  // Getters
+  Partnership? get currentPartnership => _currentPartnership;
+  List<PartnerMessage> get messages => _messages;
+  List<PartnerCareAction> get careActions => _careActions;
+  List<PartnerInsight> get insights => _insights;
+  bool get isLoading => _isLoading;
+  String? get error => _error;
+  bool get hasPartner => _currentPartnership != null;
+
+  /// Initialize the partner service
+  Future<void> initialize() async {
+    final user = _auth.currentUser;
+    if (user == null) return;
+
+    await _loadCurrentPartnership(user.uid);
+    if (_currentPartnership != null) {
+      await _setupRealTimeListeners();
+    }
+  }
+
+  /// Load current partnership for the user
+  Future<void> _loadCurrentPartnership(String userId) async {
+    try {
+      _setLoading(true);
+      
+      final partnerships = await _firestore
+          .collection('partnerships')
+          .where('primaryUserId', isEqualTo: userId)
+          .where('status', isEqualTo: PartnershipStatus.active.name)
+          .limit(1)
+          .get();
+
+      if (partnerships.docs.isNotEmpty) {
+        _currentPartnership = Partnership.fromJson(partnerships.docs.first.data());
+      } else {
+        // Check if user is a partner in someone else's partnership
+        final partnerPartnerships = await _firestore
+            .collection('partnerships')
+            .where('partnerUserId', isEqualTo: userId)
+            .where('status', isEqualTo: PartnershipStatus.active.name)
+            .limit(1)
+            .get();
+
+        if (partnerPartnerships.docs.isNotEmpty) {
+          _currentPartnership = Partnership.fromJson(partnerPartnerships.docs.first.data());
+        }
+      }
+    } catch (e) {
+      _setError('Failed to load partnership: $e');
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  /// Setup real-time listeners for partnership data
+  Future<void> _setupRealTimeListeners() async {
+    if (_currentPartnership == null) return;
+
+    // Listen to partnership updates
+    _partnershipSubscription = _firestore
+        .collection('partnerships')
+        .doc(_currentPartnership!.id)
+        .snapshots()
+        .listen((snapshot) {
+      if (snapshot.exists) {
+        _currentPartnership = Partnership.fromJson(snapshot.data()!);
+        notifyListeners();
+      }
+    });
+
+    // Listen to messages
+    _messagesSubscription = _firestore
+        .collection('partnerships')
+        .doc(_currentPartnership!.id)
+        .collection('messages')
+        .orderBy('sentAt', descending: true)
+        .limit(50)
+        .snapshots()
+        .listen((snapshot) {
+      _messages = snapshot.docs
+          .map((doc) => PartnerMessage.fromJson(doc.data()))
+          .toList();
+      notifyListeners();
+    });
+
+    // Load care actions and insights
+    await _loadCareActions();
+    await _loadInsights();
+  }
+
+  /// Send invitation to partner
+  Future<PartnerInvitation?> sendPartnerInvitation({
+    required String inviteeEmail,
+    String? inviteePhone,
+    String? personalMessage,
+  }) async {
+    try {
+      _setLoading(true);
+      final user = _auth.currentUser;
+      if (user == null) throw Exception('User not authenticated');
+
+      // Generate invitation code
+      final invitationCode = _generateInvitationCode();
+      
+      final invitation = PartnerInvitation(
+        id: _firestore.collection('partner_invitations').doc().id,
+        inviterId: user.uid,
+        inviterName: user.displayName ?? 'FlowSense User',
+        inviterEmail: user.email,
+        inviteeEmail: inviteeEmail,
+        inviteePhone: inviteePhone,
+        invitationCode: invitationCode,
+        createdAt: DateTime.now(),
+        expiresAt: DateTime.now().add(const Duration(days: 7)),
+        message: personalMessage,
+      );
+
+      // Save invitation to Firestore
+      await _firestore
+          .collection('partner_invitations')
+          .doc(invitation.id)
+          .set(invitation.toJson());
+
+      // Send invitation email
+      await _sendInvitationEmail(invitation);
+
+      return invitation;
+    } catch (e) {
+      _setError('Failed to send invitation: $e');
+      return null;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  /// Accept partner invitation
+  Future<Partnership?> acceptPartnerInvitation(String invitationCode) async {
+    try {
+      _setLoading(true);
+      final user = _auth.currentUser;
+      if (user == null) throw Exception('User not authenticated');
+
+      // Find invitation
+      final invitationQuery = await _firestore
+          .collection('partner_invitations')
+          .where('invitationCode', isEqualTo: invitationCode)
+          .where('status', isEqualTo: PartnershipStatus.invited.name)
+          .limit(1)
+          .get();
+
+      if (invitationQuery.docs.isEmpty) {
+        throw Exception('Invalid or expired invitation code');
+      }
+
+      final invitation = PartnerInvitation.fromJson(invitationQuery.docs.first.data());
+      
+      // Check if invitation is expired
+      if (invitation.expiresAt.isBefore(DateTime.now())) {
+        throw Exception('Invitation has expired');
+      }
+
+      // Create partnership
+      final partnership = Partnership(
+        id: _firestore.collection('partnerships').doc().id,
+        primaryUserId: invitation.inviterId,
+        partnerUserId: user.uid,
+        primaryUserName: invitation.inviterName,
+        partnerUserName: user.displayName ?? 'Partner',
+        primaryUserEmail: invitation.inviterEmail,
+        partnerUserEmail: user.email,
+        createdAt: DateTime.now(),
+        lastActiveAt: DateTime.now(),
+        sharingSettings: const PartnerSharingSettings(),
+      );
+
+      // Save partnership
+      await _firestore
+          .collection('partnerships')
+          .doc(partnership.id)
+          .set(partnership.toJson());
+
+      // Update invitation status
+      await _firestore
+          .collection('partner_invitations')
+          .doc(invitation.id)
+          .update({'status': PartnershipStatus.active.name});
+
+      _currentPartnership = partnership;
+      await _setupRealTimeListeners();
+
+      // Send welcome notification to both users
+      await _sendPartnershipCreatedNotification(partnership);
+
+      return partnership;
+    } catch (e) {
+      _setError('Failed to accept invitation: $e');
+      return null;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  /// Send message to partner
+  Future<PartnerMessage?> sendMessage({
+    required String content,
+    PartnerMessageType type = PartnerMessageType.text,
+    Map<String, dynamic>? metadata,
+  }) async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null || _currentPartnership == null) return null;
+
+      final message = PartnerMessage(
+        id: _firestore.collection('partnerships').doc().id,
+        senderId: user.uid,
+        receiverId: _getPartnerId(),
+        partnershipId: _currentPartnership!.id,
+        type: type,
+        content: content,
+        metadata: metadata,
+        sentAt: DateTime.now(),
+      );
+
+      await _firestore
+          .collection('partnerships')
+          .doc(_currentPartnership!.id)
+          .collection('messages')
+          .doc(message.id)
+          .set(message.toJson());
+
+      // Send push notification to partner
+      await _sendMessageNotification(message);
+
+      return message;
+    } catch (e) {
+      _setError('Failed to send message: $e');
+      return null;
+    }
+  }
+
+  /// Send care action to partner
+  Future<PartnerCareAction?> sendCareAction({
+    required PartnerCareActionType type,
+    required String title,
+    String? description,
+    Map<String, dynamic>? actionData,
+  }) async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null || _currentPartnership == null) return null;
+
+      final careAction = PartnerCareAction(
+        id: _firestore.collection('partnerships').doc().id,
+        partnershipId: _currentPartnership!.id,
+        performedByUserId: user.uid,
+        forUserId: _getPartnerId(),
+        type: type,
+        title: title,
+        description: description,
+        actionData: actionData,
+        performedAt: DateTime.now(),
+      );
+
+      await _firestore
+          .collection('partnerships')
+          .doc(_currentPartnership!.id)
+          .collection('care_actions')
+          .doc(careAction.id)
+          .set(careAction.toJson());
+
+      await _loadCareActions(); // Refresh care actions
+      
+      // Send notification to partner
+      await _sendCareActionNotification(careAction);
+
+      return careAction;
+    } catch (e) {
+      _setError('Failed to send care action: $e');
+      return null;
+    }
+  }
+
+  /// Update sharing settings
+  Future<void> updateSharingSettings(PartnerSharingSettings newSettings) async {
+    try {
+      if (_currentPartnership == null) return;
+
+      final updatedSettings = newSettings.copyWith(lastUpdatedAt: DateTime.now());
+      
+      await _firestore
+          .collection('partnerships')
+          .doc(_currentPartnership!.id)
+          .update({
+        'sharingSettings': updatedSettings.toJson(),
+      });
+
+      _currentPartnership = _currentPartnership!.copyWith(
+        sharingSettings: updatedSettings,
+      );
+      
+      notifyListeners();
+    } catch (e) {
+      _setError('Failed to update sharing settings: $e');
+    }
+  }
+
+  /// Load care actions
+  Future<void> _loadCareActions() async {
+    try {
+      if (_currentPartnership == null) return;
+
+      final careActions = await _firestore
+          .collection('partnerships')
+          .doc(_currentPartnership!.id)
+          .collection('care_actions')
+          .orderBy('performedAt', descending: true)
+          .limit(20)
+          .get();
+
+      _careActions = careActions.docs
+          .map((doc) => PartnerCareAction.fromJson(doc.data()))
+          .toList();
+      
+      notifyListeners();
+    } catch (e) {
+      _setError('Failed to load care actions: $e');
+    }
+  }
+
+  /// Load partner insights
+  Future<void> _loadInsights() async {
+    try {
+      if (_currentPartnership == null) return;
+
+      final insights = await _firestore
+          .collection('partnerships')
+          .doc(_currentPartnership!.id)
+          .collection('insights')
+          .where('expiresAt', isGreaterThan: Timestamp.fromDate(DateTime.now()))
+          .orderBy('expiresAt')
+          .orderBy('generatedAt', descending: true)
+          .limit(10)
+          .get();
+
+      _insights = insights.docs
+          .map((doc) => PartnerInsight.fromJson(doc.data()))
+          .toList();
+      
+      notifyListeners();
+    } catch (e) {
+      _setError('Failed to load insights: $e');
+    }
+  }
+
+  /// Generate AI insights for partner
+  Future<void> generatePartnerInsights() async {
+    try {
+      if (_currentPartnership == null) return;
+
+      // This would integrate with your AI service
+      // For now, we'll create sample insights
+      final sampleInsights = [
+        PartnerInsight(
+          id: _firestore.collection('partnerships').doc().id,
+          partnershipId: _currentPartnership!.id,
+          type: PartnerInsightType.supportSuggestion,
+          title: 'Perfect Time for Extra Care',
+          content: 'Your partner is in their luteal phase. This is a great time to offer emotional support and perhaps plan a relaxing evening together.',
+          actionSuggestions: [
+            'Prepare their favorite comfort food',
+            'Suggest a movie night at home',
+            'Offer a gentle massage',
+          ],
+          generatedAt: DateTime.now(),
+          expiresAt: DateTime.now().add(const Duration(days: 3)),
+        ),
+      ];
+
+      for (final insight in sampleInsights) {
+        await _firestore
+            .collection('partnerships')
+            .doc(_currentPartnership!.id)
+            .collection('insights')
+            .doc(insight.id)
+            .set(insight.toJson());
+      }
+
+      await _loadInsights();
+    } catch (e) {
+      _setError('Failed to generate insights: $e');
+    }
+  }
+
+  /// Disconnect partnership
+  Future<void> disconnectPartnership() async {
+    try {
+      if (_currentPartnership == null) return;
+
+      await _firestore
+          .collection('partnerships')
+          .doc(_currentPartnership!.id)
+          .update({
+        'status': PartnershipStatus.ended.name,
+        'lastActiveAt': FieldValue.serverTimestamp(),
+      });
+
+      _currentPartnership = null;
+      _messages.clear();
+      _careActions.clear();
+      _insights.clear();
+      
+      await _disposeListeners();
+      notifyListeners();
+    } catch (e) {
+      _setError('Failed to disconnect partnership: $e');
+    }
+  }
+
+  /// Helper methods
+  String _getPartnerId() {
+    if (_currentPartnership == null) return '';
+    final user = _auth.currentUser;
+    if (user == null) return '';
+    
+    return _currentPartnership!.primaryUserId == user.uid
+        ? _currentPartnership!.partnerUserId
+        : _currentPartnership!.primaryUserId;
+  }
+
+  String _generateInvitationCode() {
+    final random = Random();
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    return List.generate(8, (index) => chars[random.nextInt(chars.length)]).join();
+  }
+
+  Future<void> _sendInvitationEmail(PartnerInvitation invitation) async {
+    // Implement email service integration
+    // This would send a beautifully designed email with the invitation
+  }
+
+  Future<void> _sendMessageNotification(PartnerMessage message) async {
+    // Implement push notification to partner
+  }
+
+  Future<void> _sendCareActionNotification(PartnerCareAction action) async {
+    // Implement push notification for care action
+  }
+
+  Future<void> _sendPartnershipCreatedNotification(Partnership partnership) async {
+    // Send welcome notification to both partners
+  }
+
+  void _setLoading(bool loading) {
+    _isLoading = loading;
+    notifyListeners();
+  }
+
+  void _setError(String? error) {
+    _error = error;
+    notifyListeners();
+  }
+
+  Future<void> _disposeListeners() async {
+    await _messagesSubscription?.cancel();
+    await _partnershipSubscription?.cancel();
+    _messagesSubscription = null;
+    _partnershipSubscription = null;
+  }
+
+  @override
+  void dispose() {
+    _disposeListeners();
+    super.dispose();
+  }
+}

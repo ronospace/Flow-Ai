@@ -10,6 +10,7 @@ import '../../../generated/app_localizations_ui_extensions.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/services/admob_service.dart';
 import '../../../core/services/auth_service.dart';
+import '../../../core/models/cycle_data.dart';
 import '../providers/cycle_provider.dart';
 import '../../insights/providers/insights_provider.dart';
 import '../../settings/providers/settings_provider.dart';
@@ -791,7 +792,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               const SizedBox(height: 10),
               Row(
                 children: [
-                  _buildCycleInfo('Flow', currentCycle.flowIntensity.emoji),
+                  _buildCycleInfo('Flow', currentCycle.flowIntensity?.emoji ?? '✨'),
                   const SizedBox(width: 20),
                   if (currentCycle.mood != null)
                     _buildCycleInfo('Mood', '${currentCycle.mood}/5'),
@@ -1067,7 +1068,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               
               _buildHealthMetricCard(
                 'Phase', // This could be localized in the future
-                provider.predictions?.currentPhase.displayName ?? 'Unknown', // This could be localized in the future
+                provider.predictions?.currentPhase?.displayName ?? 'Unknown', // This could be localized in the future
                 Icons.psychology,
                 AppTheme.secondaryBlue,
                 provider.predictions?.confidence != null 

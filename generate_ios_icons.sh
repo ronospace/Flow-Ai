@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SOURCE_SVG="assets/logos/zyraflow_lovely_icon.svg"
+SOURCE_SVG="assets/logos/flowai_lovely_icon.svg"
 DEST_DIR="ios/Runner/Assets.xcassets/AppIcon.appiconset"
 
 # Generate all required iOS icon sizes
