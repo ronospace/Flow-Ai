@@ -1,8 +1,8 @@
 {
   "project_info": {
     "project_number": "1009671565006",
-    "project_id": "zyraflow-production",
-    "storage_bucket": "zyraflow-production.firebasestorage.app"
+    "project_id": "flowai-production",
+    "storage_bucket": "flowai-production.firebasestorage.app"
   },
   "client": [
     {

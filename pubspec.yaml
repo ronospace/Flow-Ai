@@ -45,6 +45,7 @@ dependencies:
   
   # AI & Analytics
   ml_linalg: ^13.0.0
+  tflite_flutter: ^0.10.4
   
   # Notifications
   flutter_local_notifications: ^17.2.4
@@ -141,6 +142,10 @@ dev_dependencies:
     sdk: flutter
   integration_test:
     sdk: flutter
+    
+  # Mocking for unit tests
+  mockito: ^5.4.4
+  build_runner: ^2.4.12
     
   # App icon generation
   flutter_launcher_icons: ^0.14.1

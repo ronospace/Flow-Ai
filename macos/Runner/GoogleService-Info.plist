@@ -11,9 +11,9 @@
 	<key>BUNDLE_ID</key>
 	<string>com.flowsense.flowsense</string>
 	<key>PROJECT_ID</key>
-	<string>zyraflow-production</string>
+	<string>flowai-production</string>
 	<key>STORAGE_BUCKET</key>
-	<string>zyraflow-production.firebasestorage.app</string>
+	<string>flowai-production.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>

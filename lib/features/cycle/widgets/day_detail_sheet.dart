@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/services/cycle_calculation_engine.dart';
+import '../../../core/models/cycle_data.dart';
 import '../screens/calendar_screen.dart';
 
 class DayDetailSheet extends StatelessWidget {
@@ -545,7 +546,7 @@ class DayDetailSheet extends StatelessWidget {
             'Take advantage of higher energy',
           ],
         );
-      case CyclePhase.ovulation:
+      case CyclePhase.ovulatory:
         return PhaseInfo(
           name: 'Ovulation Phase',
           emoji: '🥚',

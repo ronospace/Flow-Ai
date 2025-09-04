@@ -5,7 +5,7 @@ Updated all app icons by replacing white elements with smart, contextually appro
 
 ## Color Replacements Made
 
-### 1. ZyraFlow Icon (`assets/icons/zyraflow_icon.svg`)
+### 1. Flow Ai Icon (`assets/icons/flowai_icon.svg`)
 - **Original**: White droplet highlight (`#FFFFFF` at 0.4 opacity)
 - **New**: Mint cyan highlight (`#4ECDC4` at 0.7 opacity)
 - **Reasoning**: Matches the existing mint gradient in the second arc, creates a water-like shimmer effect
@@ -40,7 +40,7 @@ Updated all app icons by replacing white elements with smart, contextually appro
 ## Generated Assets
 
 ### Updated PNG Files
-- `zyraflow_icon_1024_updated.png` (1024×1024)
+- `flowai_icon_1024_updated.png` (1024×1024)
 - `flowsense_icon_1024_updated.png` (1024×1024)  
 - `flowsense_icon_aura_1024.png` (1024×1024) **← Latest with aura**
 - `cycleai_logo_256_updated.png` (256×256)

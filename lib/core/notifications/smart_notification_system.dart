@@ -75,7 +75,7 @@ class SmartNotificationSystem {
       iOS: initializationSettingsIOS,
     );
 
-    await _flutterLocalNotificationsPlugin.initialize(
+    await _flutterLocalNotificationsPlugin?.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse: _onNotificationResponse,
     );
@@ -85,14 +85,16 @@ class SmartNotificationSystem {
   }
 
   Future<void> _requestNotificationPermissions() async {
-    final androidPlugin = _flutterLocalNotificationsPlugin
+    if (_flutterLocalNotificationsPlugin == null) return;
+    
+    final androidPlugin = _flutterLocalNotificationsPlugin!
         .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
     
     if (androidPlugin != null) {
       await androidPlugin.requestNotificationsPermission();
     }
 
-    final iosPlugin = _flutterLocalNotificationsPlugin
+    final iosPlugin = _flutterLocalNotificationsPlugin!
         .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
     
     if (iosPlugin != null) {
@@ -113,10 +115,10 @@ class SmartNotificationSystem {
     _optimizer = NotificationOptimizer();
 
     await Future.wait([
-      _personalizationEngine.initialize(),
-      _scheduler.initialize(),
-      _contentGenerator.initialize(),
-      _optimizer.initialize(),
+      _personalizationEngine?.initialize() ?? Future.value(),
+      _scheduler?.initialize() ?? Future.value(),
+      _contentGenerator?.initialize() ?? Future.value(),
+      _optimizer?.initialize() ?? Future.value(),
     ]);
   }
 

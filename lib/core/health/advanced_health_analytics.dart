@@ -600,7 +600,7 @@ class HealthScoringEngine {
     score *= 0.4 + (regularity * 0.6);
 
     // Flow consistency
-    final flowIntensities = cycles.map((c) => _flowToNumeric(c.flowIntensity)).toList();
+    final flowIntensities = cycles.map((c) => _flowToNumeric(c.flowIntensity ?? FlowIntensity.none)).toList();
     final flowVariance = _calculateVariance(flowIntensities);
     final flowConsistency = 1.0 - (flowVariance / 5.0).clamp(0.0, 1.0);
     score *= 0.3 + (flowConsistency * 0.7);
@@ -1880,7 +1880,7 @@ class TrendAnalyzer {
     trends['length_stability'] = _calculateStability(lengths.map((l) => l.toDouble()).toList());
 
     // Flow trends
-    final flows = cycles.map((c) => _flowToNumeric(c.flowIntensity)).toList();
+    final flows = cycles.map((c) => _flowToNumeric(c.flowIntensity ?? FlowIntensity.none)).toList();
     trends['flow_trend'] = _calculateTrend(flows);
 
     return trends;

@@ -1,16 +1,16 @@
 #!/bin/bash
 
-# ZyraFlow Icon Generator
+# Flow Ai Icon Generator
 # Generates all required iOS app icon sizes from SVG source
 
-echo "🎨 Generating ZyraFlow App Icons..."
+echo "🎨 Generating Flow Ai App Icons..."
 
 # Create directories
 mkdir -p assets/icons/ios
 mkdir -p ios/Runner/Assets.xcassets/AppIcon.appiconset
 
 # Source SVG file
-SVG_FILE="assets/icons/zyraflow_icon.svg"
+SVG_FILE="assets/icons/flowai_icon.svg"
 
 if [ ! -f "$SVG_FILE" ]; then
     echo "❌ Error: SVG source file not found at $SVG_FILE"
@@ -152,4 +152,4 @@ echo "   1. Review the generated 1024px icon: assets/icons/ios/icon_1024.png"
 echo "   2. Open Xcode and verify the AppIcon set is properly configured"
 echo "   3. Build and test on device to see the new icon in action"
 echo ""
-echo "🎨 Your new Dual Arc Flow icon is ready for ZyraFlow!"
+echo "🎨 Your new Dual Arc Flow icon is ready for Flow Ai!"

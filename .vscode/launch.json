@@ -2,21 +2,21 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "ZyraFlow (iPhone 16 Plus)",
+            "name": "Flow Ai",
             "request": "launch",
             "type": "dart",
             "deviceId": "4AE9785A-6AA6-47F4-8DB1-6C6F84DA1B09",
             "flutterMode": "debug"
         },
         {
-            "name": "ZyraFlow (iPhone 16 Plus Profile)",
+            "name": "Flow Ai (profile mode)",
             "request": "launch",
             "type": "dart",
             "deviceId": "4AE9785A-6AA6-47F4-8DB1-6C6F84DA1B09",
             "flutterMode": "profile"
         },
         {
-            "name": "ZyraFlow (iPhone 16 Plus Release)",
+            "name": "Flow Ai (release mode)",
             "request": "launch",
             "type": "dart",
             "deviceId": "4AE9785A-6AA6-47F4-8DB1-6C6F84DA1B09",

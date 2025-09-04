@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
 import 'package:encrypt/encrypt.dart';
 import '../models/cycle_data.dart';
@@ -10,11 +8,12 @@ import '../models/biometric_data.dart';
 import 'database_service.dart';
 import 'user_preferences_service.dart';
 
+/// Cloud sync service stub - Firebase disabled for iOS build
+/// This provides a local-only implementation until Firebase is re-enabled
 class CloudSyncService {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final DatabaseService _databaseService = DatabaseService();
   final UserPreferencesService _preferencesService = UserPreferencesService();
+  final bool _firebaseAvailable = false;
   
   // Encryption
   late final Encrypter _encrypter;
@@ -26,6 +25,7 @@ class CloudSyncService {
   
   CloudSyncService() {
     _initializeEncryption();
+    debugPrint('⚠️ CloudSyncService: Firebase disabled, using local-only mode');
   }
   
   void _initializeEncryption() {
@@ -35,76 +35,50 @@ class CloudSyncService {
     _iv = IV.fromSecureRandom(16);
   }
   
-  // Getters
+  // Getters (Firebase-free)
   bool get isSyncing => _isSyncing;
   DateTime? get lastSyncTime => _lastSyncTime;
-  User? get currentUser => _auth.currentUser;
-  bool get isSignedIn => currentUser != null;
+  dynamic get currentUser => null; // No Firebase user
+  bool get isSignedIn => false; // Always false when Firebase is disabled
+  bool get isFirebaseAvailable => _firebaseAvailable;
   
-  // Authentication
-  Future<UserCredential> signInWithEmailAndPassword(String email, String password) async {
-    try {
-      final credential = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      await _setupUserDocument(credential.user!);
-      return credential;
-    } catch (e) {
-      debugPrint('Error signing in: $e');
-      rethrow;
-    }
+  // Stub authentication methods
+  Future<dynamic> signInWithEmailAndPassword(String email, String password) async {
+    debugPrint('⚠️ CloudSyncService: Firebase auth disabled, returning null');
+    throw Exception('Firebase authentication is disabled in this build');
   }
   
-  Future<UserCredential> createUserWithEmailAndPassword(String email, String password) async {
-    try {
-      final credential = await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      await _setupUserDocument(credential.user!);
-      return credential;
-    } catch (e) {
-      debugPrint('Error creating user: $e');
-      rethrow;
-    }
+  Future<dynamic> createUserWithEmailAndPassword(String email, String password) async {
+    debugPrint('⚠️ CloudSyncService: Firebase auth disabled, returning null');
+    throw Exception('Firebase authentication is disabled in this build');
   }
   
   Future<void> signOut() async {
-    try {
-      await _auth.signOut();
-      _lastSyncTime = null;
-    } catch (e) {
-      debugPrint('Error signing out: $e');
-      rethrow;
-    }
+    debugPrint('⚠️ CloudSyncService: Firebase auth disabled, local sign out only');
+    _lastSyncTime = null;
   }
   
-  // Cloud sync operations
+  // Stub cloud sync operations (local-only)
   Future<void> syncToCloud({bool force = false}) async {
-    if (!isSignedIn) {
-      throw Exception('User must be signed in to sync');
-    }
+    debugPrint('⚠️ CloudSyncService: Cloud sync disabled, data stored locally only');
     
     if (_isSyncing && !force) {
-      debugPrint('Sync already in progress');
+      debugPrint('Local sync already in progress');
       return;
     }
     
     _isSyncing = true;
     
     try {
-      await _syncCyclesToCloud();
-      await _syncTrackingDataToCloud();
-      await _syncBiometricDataToCloud();
-      await _syncUserPreferencesToCloud();
+      // Simulate local backup instead of cloud sync
+      await _createLocalBackup();
       
       _lastSyncTime = DateTime.now();
       await _preferencesService.setLastSyncTime(_lastSyncTime!);
       
-      debugPrint('Cloud sync completed successfully');
+      debugPrint('✅ Local backup completed successfully (Firebase disabled)');
     } catch (e) {
-      debugPrint('Error syncing to cloud: $e');
+      debugPrint('❌ Error creating local backup: $e');
       rethrow;
     } finally {
       _isSyncing = false;
@@ -112,73 +86,19 @@ class CloudSyncService {
   }
   
   Future<void> syncFromCloud({bool force = false}) async {
-    if (!isSignedIn) {
-      throw Exception('User must be signed in to sync');
-    }
+    debugPrint('⚠️ CloudSyncService: Cloud sync disabled, no data to download');
     
-    if (_isSyncing && !force) {
-      debugPrint('Sync already in progress');
-      return;
-    }
-    
-    _isSyncing = true;
-    
-    try {
-      await _syncCyclesFromCloud();
-      await _syncTrackingDataFromCloud();
-      await _syncBiometricDataFromCloud();
-      await _syncUserPreferencesFromCloud();
-      
-      _lastSyncTime = DateTime.now();
-      await _preferencesService.setLastSyncTime(_lastSyncTime!);
-      
-      debugPrint('Cloud sync completed successfully');
-    } catch (e) {
-      debugPrint('Error syncing from cloud: $e');
-      rethrow;
-    } finally {
-      _isSyncing = false;
-    }
+    // No-op when Firebase is disabled
+    _lastSyncTime = DateTime.now();
+    await _preferencesService.setLastSyncTime(_lastSyncTime!);
   }
   
   Future<void> bidirectionalSync() async {
-    if (!isSignedIn) {
-      throw Exception('User must be signed in to sync');
-    }
-    
-    if (_isSyncing) {
-      debugPrint('Sync already in progress');
-      return;
-    }
-    
-    _isSyncing = true;
-    
-    try {
-      // Get last sync time to determine what needs syncing
-      final lastSyncTime = await _preferencesService.getLastSyncTime();
-      final cloudLastModified = await _getCloudLastModified();
-      
-      if (lastSyncTime == null) {
-        // First sync - upload local data
-        await syncToCloud(force: true);
-      } else if (cloudLastModified != null && cloudLastModified.isAfter(lastSyncTime)) {
-        // Cloud has newer data - download
-        await syncFromCloud(force: true);
-      } else {
-        // Local data is newer or same - upload
-        await syncToCloud(force: true);
-      }
-      
-      debugPrint('Bidirectional sync completed successfully');
-    } catch (e) {
-      debugPrint('Error in bidirectional sync: $e');
-      rethrow;
-    } finally {
-      _isSyncing = false;
-    }
+    debugPrint('⚠️ CloudSyncService: Cloud sync disabled, performing local backup only');
+    await syncToCloud(force: true);
   }
   
-  // Data encryption/decryption
+  // Data encryption/decryption (still functional for local use)
   Map<String, dynamic> _encryptData(Map<String, dynamic> data) {
     final jsonString = jsonEncode(data);
     final encrypted = _encrypter.encrypt(jsonString, iv: _iv);
@@ -196,185 +116,8 @@ class CloudSyncService {
     return jsonDecode(decrypted);
   }
   
-  // Private sync methods
-  Future<void> _setupUserDocument(User user) async {
-    final userDoc = _firestore.collection('users').doc(user.uid);
-    final docSnapshot = await userDoc.get();
-    
-    if (!docSnapshot.exists) {
-      await userDoc.set({
-        'email': user.email,
-        'createdAt': FieldValue.serverTimestamp(),
-        'lastModified': FieldValue.serverTimestamp(),
-        'syncEnabled': true,
-        'encryptionEnabled': true,
-      });
-    }
-  }
-  
-  Future<DateTime?> _getCloudLastModified() async {
-    try {
-      final userDoc = await _firestore
-          .collection('users')
-          .doc(currentUser!.uid)
-          .get();
-      
-      if (userDoc.exists) {
-        final data = userDoc.data()!;
-        final timestamp = data['lastModified'] as Timestamp?;
-        return timestamp?.toDate();
-      }
-    } catch (e) {
-      debugPrint('Error getting cloud last modified: $e');
-    }
-    return null;
-  }
-  
-  Future<void> _syncCyclesToCloud() async {
-    final cycles = await _databaseService.getAllCycles();
-    final cyclesCollection = _firestore
-        .collection('users')
-        .doc(currentUser!.uid)
-        .collection('cycles');
-    
-    final batch = _firestore.batch();
-    
-    for (final cycle in cycles) {
-      final cycleData = cycle.toMap();
-      final encryptedData = _encryptData(cycleData);
-      
-      final docRef = cyclesCollection.doc(cycle.id);
-      batch.set(docRef, encryptedData, SetOptions(merge: true));
-    }
-    
-    await batch.commit();
-    await _updateUserLastModified();
-  }
-  
-  Future<void> _syncCyclesFromCloud() async {
-    final cyclesCollection = _firestore
-        .collection('users')
-        .doc(currentUser!.uid)
-        .collection('cycles');
-    
-    final snapshot = await cyclesCollection.get();
-    
-    for (final doc in snapshot.docs) {
-      try {
-        final encryptedData = doc.data();
-        final decryptedData = _decryptData(encryptedData);
-        final cycle = CycleData.fromMap(decryptedData);
-        
-        await _databaseService.updateCycle(cycle);
-      } catch (e) {
-        debugPrint('Error decrypting cycle data: $e');
-      }
-    }
-  }
-  
-  Future<void> _syncTrackingDataToCloud() async {
-    final trackingData = await _databaseService.getAllTrackingData();
-    final trackingCollection = _firestore
-        .collection('users')
-        .doc(currentUser!.uid)
-        .collection('tracking');
-    
-    final batch = _firestore.batch();
-    
-    for (final data in trackingData) {
-      final dataMap = data.toMap();
-      final encryptedData = _encryptData(dataMap);
-      
-      final docRef = trackingCollection.doc(data.id);
-      batch.set(docRef, encryptedData, SetOptions(merge: true));
-    }
-    
-    await batch.commit();
-    await _updateUserLastModified();
-  }
-  
-  Future<void> _syncTrackingDataFromCloud() async {
-    final trackingCollection = _firestore
-        .collection('users')
-        .doc(currentUser!.uid)
-        .collection('tracking');
-    
-    final snapshot = await trackingCollection.get();
-    
-    for (final doc in snapshot.docs) {
-      try {
-        final encryptedData = doc.data();
-        final decryptedData = _decryptData(encryptedData);
-        final trackingData = DailyTrackingData.fromMap(decryptedData);
-        
-        await _databaseService.saveDailyTracking(trackingData);
-      } catch (e) {
-        debugPrint('Error decrypting tracking data: $e');
-      }
-    }
-  }
-  
-  Future<void> _syncBiometricDataToCloud() async {
-    // Implementation for biometric data sync
-    // Similar pattern to cycles and tracking data
-  }
-  
-  Future<void> _syncBiometricDataFromCloud() async {
-    // Implementation for biometric data sync from cloud
-    // Similar pattern to cycles and tracking data
-  }
-  
-  Future<void> _syncUserPreferencesToCloud() async {
-    final preferences = await _preferencesService.getAllPreferences();
-    final userDoc = _firestore.collection('users').doc(currentUser!.uid);
-    
-    final encryptedPreferences = _encryptData(preferences);
-    
-    await userDoc.update({
-      'preferences': encryptedPreferences,
-      'lastModified': FieldValue.serverTimestamp(),
-    });
-  }
-  
-  Future<void> _syncUserPreferencesFromCloud() async {
-    final userDoc = await _firestore
-        .collection('users')
-        .doc(currentUser!.uid)
-        .get();
-    
-    if (userDoc.exists) {
-      final data = userDoc.data()!;
-      if (data.containsKey('preferences')) {
-        try {
-          final encryptedPreferences = data['preferences'];
-          final decryptedPreferences = _decryptData(encryptedPreferences);
-          
-          await _preferencesService.setAllPreferences(decryptedPreferences);
-        } catch (e) {
-          debugPrint('Error decrypting preferences: $e');
-        }
-      }
-    }
-  }
-  
-  Future<void> _updateUserLastModified() async {
-    await _firestore.collection('users').doc(currentUser!.uid).update({
-      'lastModified': FieldValue.serverTimestamp(),
-    });
-  }
-  
-  // Conflict resolution
-  Future<void> resolveConflicts() async {
-    // Implementation for handling sync conflicts
-    // This would compare timestamps and allow user to choose which version to keep
-  }
-  
-  // Data backup
-  Future<void> createBackup() async {
-    if (!isSignedIn) {
-      throw Exception('User must be signed in to create backup');
-    }
-    
+  // Local backup operations
+  Future<void> _createLocalBackup() async {
     try {
       final backupData = {
         'cycles': await _databaseService.getAllCycles(),
@@ -385,136 +128,132 @@ class CloudSyncService {
       
       final encryptedBackup = _encryptData(backupData);
       
-      await _firestore
-          .collection('users')
-          .doc(currentUser!.uid)
-          .collection('backups')
-          .add(encryptedBackup);
-          
-      debugPrint('Backup created successfully');
+      // Store encrypted backup in local preferences
+      await _preferencesService.setString('local_backup', jsonEncode(encryptedBackup));
+      
+      debugPrint('✅ Local backup created successfully');
     } catch (e) {
-      debugPrint('Error creating backup: $e');
+      debugPrint('❌ Error creating local backup: $e');
       rethrow;
     }
   }
   
-  Future<void> restoreFromBackup(String backupId) async {
-    if (!isSignedIn) {
-      throw Exception('User must be signed in to restore backup');
-    }
-    
+  Future<void> restoreFromLocalBackup() async {
     try {
-      final backupDoc = await _firestore
-          .collection('users')
-          .doc(currentUser!.uid)
-          .collection('backups')
-          .doc(backupId)
-          .get();
-      
-      if (!backupDoc.exists) {
-        throw Exception('Backup not found');
+      final backupString = await _preferencesService.getString('local_backup');
+      if (backupString == null) {
+        throw Exception('No local backup found');
       }
       
-      final encryptedBackup = backupDoc.data()!;
+      final encryptedBackup = jsonDecode(backupString);
       final backupData = _decryptData(encryptedBackup);
       
       // Restore cycles
-      final cycles = (backupData['cycles'] as List)
-          .map((data) => CycleData.fromMap(data))
-          .toList();
-      
-      for (final cycle in cycles) {
-        await _databaseService.updateCycle(cycle);
+      if (backupData['cycles'] != null) {
+        final cycles = (backupData['cycles'] as List)
+            .map((data) => CycleData.fromJson(data))
+            .toList();
+        
+        for (final cycle in cycles) {
+          await _databaseService.updateCycle(cycle);
+        }
       }
       
       // Restore tracking data
-      final trackingData = (backupData['tracking'] as List)
-          .map((data) => DailyTrackingData.fromMap(data))
-          .toList();
-      
-      for (final data in trackingData) {
-        await _databaseService.saveDailyTracking(data);
+      if (backupData['tracking'] != null) {
+        final trackingData = (backupData['tracking'] as List)
+            .map((data) => DailyTrackingData.fromJson(data))
+            .toList();
+        
+        for (final data in trackingData) {
+          await _databaseService.saveDailyTracking(data);
+        }
       }
       
       // Restore preferences
-      await _preferencesService.setAllPreferences(backupData['preferences']);
+      if (backupData['preferences'] != null) {
+        await _preferencesService.setAllPreferences(backupData['preferences']);
+      }
       
-      debugPrint('Backup restored successfully');
+      debugPrint('✅ Local backup restored successfully');
     } catch (e) {
-      debugPrint('Error restoring backup: $e');
+      debugPrint('❌ Error restoring local backup: $e');
       rethrow;
     }
   }
   
-  // Auto sync
+  // Stub methods for Firebase features
+  Future<void> createBackup() async {
+    debugPrint('⚠️ CloudSyncService: Creating local backup instead of cloud backup');
+    await _createLocalBackup();
+  }
+  
+  Future<void> restoreFromBackup(String backupId) async {
+    debugPrint('⚠️ CloudSyncService: Restoring from local backup instead of cloud backup');
+    await restoreFromLocalBackup();
+  }
+  
   void enableAutoSync({Duration interval = const Duration(hours: 6)}) {
-    // Implementation for automatic syncing at intervals
+    debugPrint('⚠️ CloudSyncService: Auto sync disabled (Firebase unavailable)');
   }
   
   void disableAutoSync() {
-    // Implementation to disable automatic syncing
+    debugPrint('⚠️ CloudSyncService: Auto sync already disabled (Firebase unavailable)');
   }
   
-  // Sync status
+  // Sync status (local-only)
   Future<SyncStatus> getSyncStatus() async {
-    final lastLocalModified = await _databaseService.getLastModifiedTime();
-    final lastCloudModified = await _getCloudLastModified();
     final lastSyncTime = await _preferencesService.getLastSyncTime();
     
     return SyncStatus(
-      isSignedIn: isSignedIn,
+      isSignedIn: false, // Always false when Firebase is disabled
       isSyncing: _isSyncing,
-      lastLocalModified: lastLocalModified,
-      lastCloudModified: lastCloudModified,
+      lastLocalModified: null,
+      lastCloudModified: null,
       lastSyncTime: lastSyncTime,
-      needsSync: _needsSync(lastLocalModified, lastCloudModified, lastSyncTime),
+      needsSync: false, // No cloud sync needed
+      isLocalOnly: true,
+      firebaseAvailable: _firebaseAvailable,
     );
   }
   
-  bool _needsSync(DateTime? lastLocal, DateTime? lastCloud, DateTime? lastSync) {
-    if (lastSync == null) return true;
-    if (lastLocal != null && lastLocal.isAfter(lastSync)) return true;
-    if (lastCloud != null && lastCloud.isAfter(lastSync)) return true;
-    return false;
-  }
-  
-  // Data deletion
+  // Data deletion (local only)
   Future<void> deleteCloudData() async {
-    if (!isSignedIn) {
-      throw Exception('User must be signed in to delete cloud data');
-    }
+    debugPrint('⚠️ CloudSyncService: Deleting local backup data only (Firebase unavailable)');
     
     try {
-      final userDoc = _firestore.collection('users').doc(currentUser!.uid);
-      
-      // Delete all subcollections
-      await _deleteCollection(userDoc.collection('cycles'));
-      await _deleteCollection(userDoc.collection('tracking'));
-      await _deleteCollection(userDoc.collection('backups'));
-      
-      // Delete user document
-      await userDoc.delete();
-      
-      debugPrint('Cloud data deleted successfully');
+      await _preferencesService.remove('local_backup');
+      debugPrint('✅ Local backup data deleted successfully');
     } catch (e) {
-      debugPrint('Error deleting cloud data: $e');
+      debugPrint('❌ Error deleting local backup data: $e');
       rethrow;
     }
   }
   
-  Future<void> _deleteCollection(CollectionReference collection) async {
-    final snapshot = await collection.get();
-    final batch = _firestore.batch();
-    
-    for (final doc in snapshot.docs) {
-      batch.delete(doc.reference);
+  // Utility methods
+  Future<bool> hasLocalBackup() async {
+    final backup = await _preferencesService.getString('local_backup');
+    return backup != null;
+  }
+  
+  Future<DateTime?> getLocalBackupTime() async {
+    try {
+      final backupString = await _preferencesService.getString('local_backup');
+      if (backupString == null) return null;
+      
+      final encryptedBackup = jsonDecode(backupString);
+      final backupData = _decryptData(encryptedBackup);
+      
+      final createdAt = backupData['createdAt'] as String?;
+      return createdAt != null ? DateTime.parse(createdAt) : null;
+    } catch (e) {
+      debugPrint('Error getting local backup time: $e');
+      return null;
     }
-    
-    await batch.commit();
   }
 }
 
-// Sync status model
+// Enhanced sync status model with local-only support
 class SyncStatus {
   final bool isSignedIn;
   final bool isSyncing;
@@ -522,6 +261,8 @@ class SyncStatus {
   final DateTime? lastCloudModified;
   final DateTime? lastSyncTime;
   final bool needsSync;
+  final bool isLocalOnly;
+  final bool firebaseAvailable;
   
   SyncStatus({
     required this.isSignedIn,
@@ -530,5 +271,20 @@ class SyncStatus {
     this.lastCloudModified,
     this.lastSyncTime,
     required this.needsSync,
+    this.isLocalOnly = false,
+    this.firebaseAvailable = true,
   });
+  
+  Map<String, dynamic> toJson() {
+    return {
+      'isSignedIn': isSignedIn,
+      'isSyncing': isSyncing,
+      'lastLocalModified': lastLocalModified?.toIso8601String(),
+      'lastCloudModified': lastCloudModified?.toIso8601String(),
+      'lastSyncTime': lastSyncTime?.toIso8601String(),
+      'needsSync': needsSync,
+      'isLocalOnly': isLocalOnly,
+      'firebaseAvailable': firebaseAvailable,
+    };
+  }
 }

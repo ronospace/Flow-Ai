@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import '../models/cycle_data.dart';
 import '../models/biometric_data.dart';
+import '../utils/collection_extensions.dart';
 
 /// Week 3: Biometric Data Integration Engine
 /// Processes HR, HRV, sleep, temperature, and stress data from wearables

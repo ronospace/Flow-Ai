@@ -1,10 +1,10 @@
-# ZyraFlow Icon Design
+# Flow Ai Icon Design
 
 ## Overview
 
-The ZyraFlow app icon features a **Dual Arc Flow** design that beautifully represents the cyclical nature of menstrual health tracking while maintaining a modern, elegant aesthetic.
+The Flow Ai app icon features a **Dual Arc Flow** design that beautifully represents the cyclical nature of menstrual health tracking while maintaining a modern, elegant aesthetic.
 
-![ZyraFlow Icon](../assets/icons/ios/icon_1024.png)
+![Flow Ai Icon](../assets/icons/ios/icon_1024.png)
 
 ## Design Concept
 
@@ -39,7 +39,7 @@ The ZyraFlow app icon features a **Dual Arc Flow** design that beautifully repre
 ### File Structure
 ```
 assets/icons/
-├── zyraflow_icon.svg           # Master SVG source
+├── flowai_icon.svg           # Master SVG source
 └── ios/                        # Generated PNG assets
     ├── icon_20.png            # 20x20px
     ├── icon_29.png            # 29x29px
@@ -77,7 +77,7 @@ ios/Runner/Assets.xcassets/AppIcon.appiconset/
 
 ## Brand Alignment
 
-The icon perfectly aligns with ZyraFlow's brand values:
+The icon perfectly aligns with Flow Ai's brand values:
 
 - **Elegance**: Sophisticated, non-clinical design
 - **Flow**: Dynamic movement and rhythm
@@ -123,4 +123,4 @@ The SVG-based design system allows for easy adaptation to:
 
 ---
 
-*This icon design represents ZyraFlow's commitment to elegant, user-centered design in women's health technology.*
+*This icon design represents Flow Ai's commitment to elegant, user-centered design in women's health technology.*

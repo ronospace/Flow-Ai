@@ -41,23 +41,34 @@ class DatabaseService {
     await _createSymptomsTable(db);
     await _createUserSettingsTable(db);
     await _createPredictionsTable(db);
+    await _createFeelingsTable(db);
   }
 
   Future<void> _createCycleTable(Database db) async {
     await db.execute('''
       CREATE TABLE cycles (
         id TEXT PRIMARY KEY,
+        user_id TEXT NOT NULL DEFAULT 'unknown',
         start_date TEXT NOT NULL,
         end_date TEXT,
-        length INTEGER NOT NULL,
-        flow_intensity TEXT NOT NULL,
+        length INTEGER,
+        period_length INTEGER,
+        average_flow TEXT NOT NULL DEFAULT 'medium',
+        flow_intensity TEXT,
         symptoms TEXT, -- JSON array of symptoms
+        moods TEXT, -- JSON array of moods
+        current_phase TEXT NOT NULL DEFAULT 'menstrual',
+        ovulation_date TEXT,
+        expected_next_period TEXT,
+        fertility_score REAL,
+        is_complete BOOLEAN DEFAULT 0,
+        quality TEXT NOT NULL DEFAULT 'regular',
         mood REAL,
         energy REAL,
         pain REAL,
         notes TEXT,
         created_at TEXT NOT NULL,
-        updated_at TEXT NOT NULL
+        updated_at TEXT
       )
     ''');
 
@@ -133,6 +144,30 @@ class DatabaseService {
     await db.execute('CREATE INDEX idx_predictions_expires_at ON predictions(expires_at)');
   }
 
+  Future<void> _createFeelingsTable(Database db) async {
+    await db.execute('''
+      CREATE TABLE feelings (
+        id TEXT PRIMARY KEY,
+        user_id TEXT NOT NULL,
+        feeling_score INTEGER NOT NULL CHECK(feeling_score >= 1 AND feeling_score <= 10),
+        time_of_day TEXT NOT NULL CHECK(time_of_day IN ('morning', 'evening')),
+        timestamp TEXT NOT NULL,
+        notes TEXT,
+        encrypted_notes TEXT,
+        context_data TEXT, -- JSON object
+        app_type TEXT NOT NULL CHECK(app_type IN ('consumer', 'clinical')),
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      )
+    ''');
+
+    // Create indexes for better performance
+    await db.execute('CREATE INDEX idx_feelings_user_id ON feelings(user_id)');
+    await db.execute('CREATE INDEX idx_feelings_timestamp ON feelings(timestamp)');
+    await db.execute('CREATE INDEX idx_feelings_app_type ON feelings(app_type)');
+    await db.execute('CREATE INDEX idx_feelings_user_timestamp ON feelings(user_id, timestamp)');
+  }
+
   Future<void> _insertDefaultSymptoms(Database db) async {
     final defaultSymptoms = [
       // Physical symptoms
@@ -188,12 +223,34 @@ class DatabaseService {
 
   Future<String> insertCycle(CycleData cycle) async {
     final db = await database;
-    final cycleJson = cycle.toJson();
     
-    // Convert symptoms list to JSON string
-    cycleJson['symptoms'] = cycle.symptoms.join(',');
+    // Map CycleData to database columns
+    final data = <String, dynamic>{
+      'id': cycle.id,
+      'user_id': cycle.userId,
+      'start_date': cycle.startDate.toIso8601String(),
+      'end_date': cycle.endDate?.toIso8601String(),
+      'length': cycle.cycleLength,
+      'period_length': cycle.periodLength,
+      'average_flow': cycle.averageFlow.name,
+      'flow_intensity': cycle.flowIntensity?.name,
+      'symptoms': cycle.symptoms.join(','),
+      'moods': cycle.moods.join(','),
+      'current_phase': cycle.currentPhase.name,
+      'ovulation_date': cycle.ovulationDate?.toIso8601String(),
+      'expected_next_period': cycle.expectedNextPeriod?.toIso8601String(),
+      'fertility_score': cycle.fertilityScore,
+      'is_complete': cycle.isComplete ? 1 : 0,
+      'quality': cycle.quality.name,
+      'mood': cycle.mood,
+      'energy': cycle.energy,
+      'pain': cycle.pain,
+      'notes': cycle.notes != null ? (cycle.notes!['text'] ?? '') : null,
+      'created_at': cycle.createdAt.toIso8601String(),
+      'updated_at': cycle.lastUpdated?.toIso8601String() ?? DateTime.now().toIso8601String(),
+    };
     
-    await db.insert('cycles', cycleJson, conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.insert('cycles', data, conflictAlgorithm: ConflictAlgorithm.replace);
     return cycle.id;
   }
 
@@ -259,12 +316,37 @@ class DatabaseService {
 
   Future<void> updateCycle(CycleData cycle) async {
     final db = await database;
-    final cycleJson = cycle.copyWith(updatedAt: DateTime.now()).toJson();
-    cycleJson['symptoms'] = cycle.symptoms.join(',');
+    final updatedCycle = cycle.copyWith(lastUpdated: DateTime.now());
+    
+    // Map CycleData to database columns
+    final data = <String, dynamic>{
+      'id': updatedCycle.id,
+      'user_id': updatedCycle.userId,
+      'start_date': updatedCycle.startDate.toIso8601String(),
+      'end_date': updatedCycle.endDate?.toIso8601String(),
+      'length': updatedCycle.cycleLength,
+      'period_length': updatedCycle.periodLength,
+      'average_flow': updatedCycle.averageFlow.name,
+      'flow_intensity': updatedCycle.flowIntensity?.name,
+      'symptoms': updatedCycle.symptoms.join(','),
+      'moods': updatedCycle.moods.join(','),
+      'current_phase': updatedCycle.currentPhase.name,
+      'ovulation_date': updatedCycle.ovulationDate?.toIso8601String(),
+      'expected_next_period': updatedCycle.expectedNextPeriod?.toIso8601String(),
+      'fertility_score': updatedCycle.fertilityScore,
+      'is_complete': updatedCycle.isComplete ? 1 : 0,
+      'quality': updatedCycle.quality.name,
+      'mood': updatedCycle.mood,
+      'energy': updatedCycle.energy,
+      'pain': updatedCycle.pain,
+      'notes': updatedCycle.notes != null ? (updatedCycle.notes!['text'] ?? '') : null,
+      'created_at': updatedCycle.createdAt.toIso8601String(),
+      'updated_at': updatedCycle.lastUpdated?.toIso8601String() ?? DateTime.now().toIso8601String(),
+    };
     
     await db.update(
       'cycles',
-      cycleJson,
+      data,
       where: 'id = ?',
       whereArgs: [cycle.id],
     );
@@ -504,22 +586,43 @@ class DatabaseService {
   CycleData _cycleFromMap(Map<String, dynamic> map) {
     return CycleData(
       id: map['id'],
+      userId: map['user_id'] ?? 'unknown',
       startDate: _parseDateTime(map['start_date']),
       endDate: map['end_date'] != null ? _parseDateTime(map['end_date']) : null,
-      length: map['length'],
+      cycleLength: map['length'],
+      periodLength: map['period_length'],
+      averageFlow: FlowIntensity.values.firstWhere(
+        (e) => e.name == map['flow_intensity'],
+        orElse: () => FlowIntensity.medium,
+      ),
+      dailyData: {},
+      symptoms: map['symptoms'] != null 
+          ? (map['symptoms'] as String).split(',').where((s) => s.isNotEmpty).toList()
+          : [],
+      moods: [], // Empty for now, can be populated from daily tracking data
+      currentPhase: CyclePhase.values.firstWhere(
+        (e) => e.name == map['current_phase'],
+        orElse: () => CyclePhase.menstrual,
+      ),
+      ovulationDate: map['ovulation_date'] != null ? _parseDateTime(map['ovulation_date']) : null,
+      expectedNextPeriod: map['expected_next_period'] != null ? _parseDateTime(map['expected_next_period']) : null,
+      notes: map['notes'] != null ? {"text": map['notes']} : null,
+      fertilityScore: map['fertility_score']?.toDouble(),
+      events: [], // Empty for now, can be populated from events table if needed
+      createdAt: _parseDateTime(map['created_at']),
+      lastUpdated: map['updated_at'] != null ? _parseDateTime(map['updated_at']) : null,
+      isComplete: map['is_complete'] == 1 || map['is_complete'] == true,
+      quality: CycleQuality.values.firstWhere(
+        (e) => e.name == map['quality'],
+        orElse: () => CycleQuality.regular,
+      ),
+      mood: map['mood']?.toDouble(),
+      energy: map['energy']?.toDouble(),
+      pain: map['pain']?.toDouble(),
       flowIntensity: FlowIntensity.values.firstWhere(
         (e) => e.name == map['flow_intensity'],
         orElse: () => FlowIntensity.medium,
       ),
-      symptoms: map['symptoms'] != null 
-          ? (map['symptoms'] as String).split(',').where((s) => s.isNotEmpty).toList()
-          : [],
-      mood: map['mood']?.toDouble(),
-      energy: map['energy']?.toDouble(),
-      pain: map['pain']?.toDouble(),
-      notes: map['notes'],
-      createdAt: _parseDateTime(map['created_at']),
-      updatedAt: _parseDateTime(map['updated_at']),
     );
   }
 
@@ -662,4 +765,262 @@ class DatabaseService {
       orderBy: 'date DESC',
     );
   }
+
+  // ===== FEELINGS TRACKING METHODS =====
+
+  /// Store a feelings entry to the database
+  Future<void> storeFeelingsEntry(dynamic feelingsEntry) async {
+    final db = await database;
+    
+    // Convert the feelings entry to a map for database storage
+    final data = <String, dynamic>{
+      'id': feelingsEntry.id,
+      'user_id': feelingsEntry.userId,
+      'feeling_score': feelingsEntry.feelingScore,
+      'time_of_day': feelingsEntry.timeOfDay.name,
+      'timestamp': feelingsEntry.timestamp.toIso8601String(),
+      'notes': feelingsEntry.notes,
+      'encrypted_notes': feelingsEntry.encryptedNotes,
+      'context_data': feelingsEntry.contextData.isNotEmpty ? _mapToJsonString(feelingsEntry.contextData) : null,
+      'app_type': feelingsEntry.appType.name,
+      'created_at': DateTime.now().toIso8601String(),
+      'updated_at': DateTime.now().toIso8601String(),
+    };
+
+    await db.insert('feelings', data, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  /// Get feelings history from database
+  Future<List<dynamic>> getFeelingsHistory() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'feelings',
+      orderBy: 'timestamp DESC',
+    );
+
+    // Convert database records back to FeelingsEntry objects
+    return maps.map((map) => _feelingsEntryFromMap(map)).toList();
+  }
+
+  /// Get feelings entries for a specific user
+  Future<List<Map<String, dynamic>>> getFeelingsForUser({
+    required String userId,
+    DateTime? startDate,
+    DateTime? endDate,
+    String? appType,
+  }) async {
+    final db = await database;
+    
+    String whereClause = 'user_id = ?';
+    List<dynamic> whereArgs = [userId];
+    
+    if (startDate != null) {
+      whereClause += ' AND timestamp >= ?';
+      whereArgs.add(startDate.toIso8601String());
+    }
+    
+    if (endDate != null) {
+      whereClause += ' AND timestamp <= ?';
+      whereArgs.add(endDate.toIso8601String());
+    }
+    
+    if (appType != null) {
+      whereClause += ' AND app_type = ?';
+      whereArgs.add(appType);
+    }
+
+    final List<Map<String, dynamic>> maps = await db.query(
+      'feelings',
+      where: whereClause,
+      whereArgs: whereArgs,
+      orderBy: 'timestamp DESC',
+    );
+
+    return maps.map((map) => _processFeelingsMap(map)).toList();
+  }
+
+  /// Get feelings entries within a date range
+  Future<List<Map<String, dynamic>>> getFeelingsInDateRange({
+    DateTime? startDate,
+    DateTime? endDate,
+    String? userId,
+    String? appType,
+  }) async {
+    final db = await database;
+    
+    String whereClause = '1=1'; // Always true condition
+    List<dynamic> whereArgs = [];
+    
+    if (userId != null) {
+      whereClause += ' AND user_id = ?';
+      whereArgs.add(userId);
+    }
+    
+    if (startDate != null) {
+      whereClause += ' AND timestamp >= ?';
+      whereArgs.add(startDate.toIso8601String());
+    }
+    
+    if (endDate != null) {
+      whereClause += ' AND timestamp <= ?';
+      whereArgs.add(endDate.toIso8601String());
+    }
+    
+    if (appType != null) {
+      whereClause += ' AND app_type = ?';
+      whereArgs.add(appType);
+    }
+
+    final List<Map<String, dynamic>> maps = await db.query(
+      'feelings',
+      where: whereClause,
+      whereArgs: whereArgs,
+      orderBy: 'timestamp ASC',
+    );
+
+    return maps.map((map) => _processFeelingsMap(map)).toList();
+  }
+
+  /// Delete old feelings entries (keep only recent data)
+  Future<void> cleanupOldFeelings({int daysToKeep = 365}) async {
+    final db = await database;
+    final cutoffDate = DateTime.now().subtract(Duration(days: daysToKeep));
+    
+    await db.delete(
+      'feelings',
+      where: 'timestamp < ?',
+      whereArgs: [cutoffDate.toIso8601String()],
+    );
+  }
+
+  /// Get feelings statistics for a user
+  Future<Map<String, dynamic>> getFeelingsStatistics(String userId, {String? appType}) async {
+    final db = await database;
+    
+    String whereClause = 'user_id = ?';
+    List<dynamic> whereArgs = [userId];
+    
+    if (appType != null) {
+      whereClause += ' AND app_type = ?';
+      whereArgs.add(appType);
+    }
+
+    // Get basic statistics
+    final statsResult = await db.rawQuery('''
+      SELECT 
+        COUNT(*) as total_entries,
+        AVG(feeling_score) as avg_score,
+        MIN(feeling_score) as min_score,
+        MAX(feeling_score) as max_score,
+        MIN(timestamp) as first_entry,
+        MAX(timestamp) as last_entry
+      FROM feelings 
+      WHERE $whereClause
+    ''', whereArgs);
+
+    // Get entries by time of day
+    final timeOfDayResult = await db.rawQuery('''
+      SELECT 
+        time_of_day,
+        COUNT(*) as count,
+        AVG(feeling_score) as avg_score
+      FROM feelings 
+      WHERE $whereClause
+      GROUP BY time_of_day
+    ''', whereArgs);
+
+    // Get recent trend (last 30 days)
+    final thirtyDaysAgo = DateTime.now().subtract(const Duration(days: 30));
+    final trendResult = await db.rawQuery('''
+      SELECT 
+        AVG(feeling_score) as recent_avg
+      FROM feelings 
+      WHERE $whereClause AND timestamp >= ?
+    ''', [...whereArgs, thirtyDaysAgo.toIso8601String()]);
+
+    return {
+      'overall': statsResult.isNotEmpty ? statsResult.first : {},
+      'by_time_of_day': timeOfDayResult,
+      'recent_trend': trendResult.isNotEmpty ? trendResult.first : {},
+    };
+  }
+
+  // Helper methods for feelings data
+  
+  /// Convert a database map to a feelings entry
+  dynamic _feelingsEntryFromMap(Map<String, dynamic> map) {
+    // This is a placeholder - in the actual implementation, this would create
+    // a proper FeelingsEntry object. For now, return the processed map.
+    return _processFeelingsMap(map);
+  }
+
+  /// Process feelings map from database
+  Map<String, dynamic> _processFeelingsMap(Map<String, dynamic> map) {
+    final processedMap = Map<String, dynamic>.from(map);
+    
+    // Parse timestamp
+    if (processedMap['timestamp'] != null) {
+      processedMap['timestamp'] = DateTime.parse(processedMap['timestamp']);
+    }
+    
+    // Parse context_data JSON
+    if (processedMap['context_data'] != null && processedMap['context_data'] is String) {
+      try {
+        processedMap['context_data'] = _jsonStringToMap(processedMap['context_data']);
+      } catch (e) {
+        processedMap['context_data'] = <String, dynamic>{};
+      }
+    } else {
+      processedMap['context_data'] = <String, dynamic>{};
+    }
+    
+    return processedMap;
+  }
+
+  /// Convert map to JSON string
+  String _mapToJsonString(Map<String, dynamic> map) {
+    if (map.isEmpty) return '{}';
+    
+    final entries = map.entries.map((e) {
+      final value = e.value is String ? '"${e.value}"' : e.value.toString();
+      return '"${e.key}":$value';
+    }).join(',');
+    
+    return '{$entries}';
+  }
+
+  /// Convert JSON string to map
+  Map<String, dynamic> _jsonStringToMap(String json) {
+    final map = <String, dynamic>{};
+    if (json.startsWith('{') && json.endsWith('}')) {
+      final content = json.substring(1, json.length - 1);
+      if (content.isNotEmpty) {
+        for (final entry in content.split(',')) {
+          final colonIndex = entry.indexOf(':');
+          if (colonIndex != -1) {
+            final key = entry.substring(0, colonIndex).replaceAll('"', '').trim();
+            final valueStr = entry.substring(colonIndex + 1).trim();
+            
+            // Try to parse different value types
+            dynamic value;
+            if (valueStr.startsWith('"') && valueStr.endsWith('"')) {
+              value = valueStr.substring(1, valueStr.length - 1);
+            } else if (valueStr == 'true') {
+              value = true;
+            } else if (valueStr == 'false') {
+              value = false;
+            } else {
+              value = double.tryParse(valueStr) ?? valueStr;
+            }
+            
+            map[key] = value;
+          }
+        }
+      }
+    }
+    return map;
+  }
+
+  // Add a static instance getter for singleton access
+  static DatabaseService get instance => _instance;
 }
