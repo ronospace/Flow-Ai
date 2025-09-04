@@ -40,7 +40,7 @@ echo ""
 
 echo "🔧 Before Upload Checklist:"
 echo "   ✅ App is code-signed (automatic in release build)"
-echo "   ✅ Bundle identifier matches App Store Connect: com.zyraflow.app"
+echo "   ✅ Bundle identifier matches App Store Connect: com.flowai.app"
 echo "   ✅ Version number: $(plutil -p "$APP_PATH/Contents/Info.plist" | grep CFBundleShortVersionString | awk '{print $3}' | tr -d '"')"
 echo "   ✅ Build number: $(plutil -p "$APP_PATH/Contents/Info.plist" | grep CFBundleVersion | awk '{print $3}' | tr -d '"')"
 echo ""

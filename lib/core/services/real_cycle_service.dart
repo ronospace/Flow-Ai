@@ -88,14 +88,17 @@ class RealCycleService {
     // Create new cycle
     final newCycle = CycleData(
       id: 'cycle_${DateTime.now().millisecondsSinceEpoch}',
+      userId: 'unknown', // TODO: Get from auth service
       startDate: startDate,
       endDate: null,
-      length: 28, // Will be updated when cycle ends
-      flowIntensity: initialFlow ?? FlowIntensity.medium,
+      cycleLength: 28, // Will be updated when cycle ends
+      dailyData: {},
+      averageFlow: initialFlow ?? FlowIntensity.medium,
+      flowIntensity: initialFlow,
       symptoms: symptoms ?? [],
-      notes: notes,
+      notes: notes != null ? {"text": notes} : null,
       createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
+      lastUpdated: DateTime.now(),
     );
     
     await _database.insertCycle(newCycle);
@@ -108,7 +111,7 @@ class RealCycleService {
       final length = endDate.difference(current.startDate).inDays;
       final updatedCycle = current.copyWith(
         endDate: endDate,
-        length: length,
+        cycleLength: length,
       );
       await _database.updateCycle(updatedCycle);
     }
@@ -255,10 +258,10 @@ class RealCycleData {
       );
     }
     
-    if (daysUntilOvulation > 0 && daysUntilOvulation < daysUntilPeriod) {
+    if (daysUntilOvulation > 0 && daysUntilOvulation < daysUntilPeriod && predictions.ovulationDate != null) {
       return NextEvent(
         type: EventType.ovulation,
-        date: predictions.ovulationDate,
+        date: predictions.ovulationDate!,
         daysAway: daysUntilOvulation,
         description: 'Ovulation expected',
       );

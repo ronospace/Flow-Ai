@@ -1,7 +1,7 @@
-# 🚀 ZyraFlow - Ready for Production Release
+# 🚀 Flow Ai - Ready for Production Release
 
 ## 📱 App Overview
-**ZyraFlow** is a comprehensive AI-powered menstrual health tracking application featuring advanced biometric integration, cycle prediction, and personalized insights.
+**Flow Ai** is a comprehensive AI-powered menstrual health tracking application featuring advanced biometric integration, cycle prediction, and personalized insights.
 
 ## ✅ Release Readiness Status
 
@@ -21,14 +21,14 @@
 ### 📦 **Build Artifacts**
 - ✅ **Android APK**: `build/app/outputs/flutter-apk/app-release.apk` (69.3MB)
 - ✅ **iOS App Bundle**: `build/ios/iphoneos/Runner.app` (63.1MB)
-- ✅ **Git Repository**: Successfully pushed to GitHub (ronospace/ZyraFlow)
+- ✅ **Git Repository**: Successfully pushed to GitHub (ronospace/Flow Ai)
 
 ## 🏪 **Store Submission Checklist**
 
 ### App Store (iOS)
 - ✅ App built successfully for iOS release
 - ✅ Development team configured (9FY62NTL53)
-- ✅ Bundle ID: com.zyraflow.app
+- ✅ Bundle ID: com.flowai.app
 - ⚠️ **Action Required**: Upload to App Store Connect via Xcode or Transporter
 
 ### Google Play Store (Android)
@@ -87,6 +87,6 @@
 
 ---
 
-**ZyraFlow is now production-ready and prepared for App Store and Play Store submission! 🎉**
+**Flow Ai is now production-ready and prepared for App Store and Play Store submission! 🎉**
 
 *Built with love for women's health and wellness* 💜

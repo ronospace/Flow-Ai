@@ -1,21 +1,21 @@
-# ZyraFlow Firebase Setup Guide
+# Flow Ai Firebase Setup Guide
 
 ## 🔥 Firebase Project Structure
 
 ### Production Environment
-**Project ID**: `zyraflow-production`
+**Project ID**: `flowai-production`
 
 #### App Configurations:
 ```
 Platform    | Package Name           | App Name
 ------------|----------------------|------------------
-Android     | com.zyraflow.app     | ZyraFlow
-iOS         | com.zyraflow.app     | ZyraFlow  
-Web         | zyraflow-web         | ZyraFlow Web
+Android     | com.flowai.app     | Flow Ai
+iOS         | com.flowai.app     | Flow Ai  
+Web         | flowai-web         | Flow Ai Web
 ```
 
 ### Development Environment  
-**Project ID**: `zyraflow-development`
+**Project ID**: `flowai-development`
 - Same package names with `.dev` suffix
 - Separate Firestore database
 - Test Analytics
@@ -98,7 +98,7 @@ firebase login
 
 ### 2. Initialize Firebase in Project
 ```bash
-cd /Users/ronos/development/ZyraFlow
+cd /Users/ronos/development/Flow Ai
 firebase init
 # Select: Functions, Firestore, Hosting, Storage, Emulators
 ```

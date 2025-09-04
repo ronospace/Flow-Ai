@@ -110,4 +110,25 @@ class AppLogger {
       debugPrint('$_prefix 🌙 $message');
     }
   }
+  
+  /// Log analytics-related messages
+  static void analytics(String message) {
+    if (kDebugMode) {
+      debugPrint('$_prefix 📊 $message');
+    }
+  }
+  
+  /// Log security-related messages
+  static void security(String message) {
+    if (kDebugMode) {
+      debugPrint('$_prefix 🔒 $message');
+    }
+  }
+  
+  /// Log clinical-related messages
+  static void clinical(String message) {
+    if (kDebugMode) {
+      debugPrint('$_prefix 🏥 $message');
+    }
+  }
 }
