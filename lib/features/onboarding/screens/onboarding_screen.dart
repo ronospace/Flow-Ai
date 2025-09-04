@@ -290,12 +290,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       debugPrint('Onboarding completion error: $e');
       if (mounted) {
         final localizations = AppLocalizations.of(context);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${localizations.error}: $e'),
-            backgroundColor: Theme.of(context).colorScheme.error,
-          ),
-        );
+        _showErrorMessage('${localizations.error}: $e');
       }
     }
   }
@@ -339,12 +334,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       if (granted && mounted) {
         final localizations = AppLocalizations.of(context);
         HapticFeedback.lightImpact();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${localizations.notifications} ${localizations.success.toLowerCase()}!'),
-            backgroundColor: Theme.of(context).colorScheme.primary,
-          ),
-        );
+        _showSuccessMessage('${localizations.notifications} ${localizations.success.toLowerCase()}!');
       }
     }
   }
@@ -364,23 +354,45 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       if (mounted) {
         final localizations = AppLocalizations.of(context);
         HapticFeedback.lightImpact();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${localizations.success}!'),
-            backgroundColor: Theme.of(context).colorScheme.primary,
-          ),
-        );
+        _showSuccessMessage('${localizations.success}!');
       }
     } catch (e) {
       if (mounted) {
         final localizations = AppLocalizations.of(context);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${localizations.error}: $e'),
-            backgroundColor: Theme.of(context).colorScheme.error,
-          ),
-        );
+        _showErrorMessage('${localizations.error}: $e');
       }
+    }
+  }
+  
+  /// Helper method to show success messages (works with both Material and Cupertino)
+  void _showSuccessMessage(String message) {
+    try {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } catch (e) {
+      // Fallback to debug print if ScaffoldMessenger is not available
+      debugPrint('Success: $message');
+    }
+  }
+  
+  /// Helper method to show error messages (works with both Material and Cupertino)
+  void _showErrorMessage(String message) {
+    try {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: Theme.of(context).colorScheme.error,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } catch (e) {
+      // Fallback to debug print if ScaffoldMessenger is not available
+      debugPrint('Error: $message');
     }
   }
 }

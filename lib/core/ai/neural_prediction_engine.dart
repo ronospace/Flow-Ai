@@ -367,7 +367,7 @@ class CyclePatternExtractor extends FeatureExtractor {
       
       // Flow patterns
       final flowIntensities = historicalData
-          .map((c) => _flowIntensityToDouble(c.flowIntensity))
+          .map((c) => _flowIntensityToDouble(c.flowIntensity ?? FlowIntensity.none))
           .toList();
       features.add(flowIntensities.isNotEmpty ? _mean(flowIntensities) : 0.0);
     } else {

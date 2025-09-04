@@ -1,11 +1,11 @@
-# 🔄 REBRANDING GUIDE - ZyraFlow to New Name
+# 🔄 REBRANDING GUIDE - Flow Ai to New Name
 
 ## 📋 Overview
-This document outlines all files and locations that need to be updated when changing the app name from "ZyraFlow" to a new name and updating logos/icons.
+This document outlines all files and locations that need to be updated when changing the app name from "Flow Ai" to a new name and updating logos/icons.
 
 ## ✅ BACKUP STATUS
 - **✅ Committed to Git:** `26383a1` - WORKING VERSION
-- **✅ Backup Branch:** `backup/zyraflow-working-v1.0`  
+- **✅ Backup Branch:** `backup/flowai-working-v1.0`  
 - **✅ Pushed to GitHub:** All changes backed up
 - **✅ APK Status:** Working APKs built and tested
 
@@ -16,17 +16,17 @@ This document outlines all files and locations that need to be updated when chan
 ### 1. App Identity Files
 ```
 📄 pubspec.yaml (line 2)
-   - name: zyraflow → NEW_NAME
+   - name: flowai → NEW_NAME
 
 📄 android/app/src/main/AndroidManifest.xml (line 9)
-   - android:label="ZyraFlow" → android:label="NEW_NAME"
+   - android:label="Flow Ai" → android:label="NEW_NAME"
 
 📄 ios/Runner/Info.plist (line 8)
-   - <string>ZyraFlow</string> → <string>NEW_NAME</string>
+   - <string>Flow Ai</string> → <string>NEW_NAME</string>
 
 📄 web/manifest.json (lines 2,3,8)
-   - "name": "ZyraFlow"
-   - "short_name": "ZyraFlow"
+   - "name": "Flow Ai"
+   - "short_name": "Flow Ai"
    - Multiple references to update
 ```
 
@@ -35,9 +35,9 @@ This document outlines all files and locations that need to be updated when chan
 📄 lib/main.dart (lines 33,154,155,158,161,207)
    - App title references
    - Window title configurations
-   - Multiple ZyraFlow references
+   - Multiple Flow Ai references
 
-📄 lib/core/widgets/zyraflow_logo.dart
+📄 lib/core/widgets/flowai_logo.dart
    - ENTIRE FILE needs renaming and content update
    - Widget class names
    - Asset references
@@ -55,12 +55,12 @@ This document outlines all files and locations that need to be updated when chan
 ### A. Vector Graphics (Source Files)
 ```
 📁 assets/icons/
-   ├── zyraflow_icon.svg ← REPLACE
-   └── zyraflow_quantum_flow/quantum_flow_master.svg ← REPLACE
+   ├── flowai_icon.svg ← REPLACE
+   └── flowai_quantum_flow/quantum_flow_master.svg ← REPLACE
 
 📁 assets/logos/
    ├── refined_flow_icon.svg ← REPLACE
-   ├── zyraflow_lovely_icon.svg ← REPLACE
+   ├── flowai_lovely_icon.svg ← REPLACE
    └── primary/flowsense_icon_only.svg ← REPLACE
 
 📁 assets/images/
@@ -172,7 +172,7 @@ Root Directory:
 📄 docs/ICON_DESIGN.md (lines 1,5,7,80,126)
 📄 PRODUCTION_READINESS_REPORT.md (lines 1,239,249,252)
 📄 RELEASE_NOTES_v2.0.0.md (lines 1,6,190,201)
-📄 design_concepts/zyraflow_icon_concepts.md (lines 1,90,151)
+📄 design_concepts/flowai_icon_concepts.md (lines 1,90,151)
 ```
 
 ### Asset Documentation
@@ -241,7 +241,7 @@ Root Directory:
 
 ### Phase 1: Text References
 1. ✅ **Backup Current Version** (COMPLETED)
-2. 🔄 Replace "ZyraFlow" with "NEW_NAME" in all files above
+2. 🔄 Replace "Flow Ai" with "NEW_NAME" in all files above
 3. 🔄 Update app display names in manifests
 4. 🔄 Update localization files
 
@@ -272,7 +272,7 @@ Root Directory:
 - **Keep Firebase Configuration:** Don't change package names in build.gradle.kts or AndroidManifest.xml package attribute
 - **Preserve Working Config:** Current APK installs successfully - maintain same build configuration
 - **Test Thoroughly:** After rebranding, test APK installation and core functionality
-- **Backup Branch Available:** `backup/zyraflow-working-v1.0` contains the last working ZyraFlow version
+- **Backup Branch Available:** `backup/flowai-working-v1.0` contains the last working Flow Ai version
 
 ---
 
@@ -281,4 +281,4 @@ Root Directory:
 **Status:** ✅ All files identified and backup completed  
 **Next Step:** Provide new app name and logo assets to begin transformation
 
-The current working version is safely backed up. Ready to transform ZyraFlow into the new brand while preserving all functionality!
+The current working version is safely backed up. Ready to transform Flow Ai into the new brand while preserving all functionality!

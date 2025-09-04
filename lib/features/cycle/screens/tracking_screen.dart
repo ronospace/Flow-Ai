@@ -195,7 +195,10 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
         
         // Show enhanced success feedback with animation and improved styling
         final theme = Theme.of(context);
-        ScaffoldMessenger.of(context).showSnackBar(
+        
+        // Use a try-catch to handle ScaffoldMessenger context issues
+        try {
+          ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Container(
               padding: const EdgeInsets.symmetric(vertical: 8),
@@ -286,6 +289,10 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
             ) : null,
           ),
         );
+        } catch (e) {
+          // Fallback: show simple success indicator if ScaffoldMessenger fails
+          debugPrint('✅ Data saved successfully for ${DateFormat('MMMM d, yyyy').format(_selectedDate)}');
+        }
         
         // Smart post-save navigation after delay
         _scheduleSmartNavigation();
@@ -1214,39 +1221,45 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
   
   void _showQuickActionSnackBar() {
     final theme = Theme.of(context);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            Icon(
-              Icons.lightbulb_outline,
-              color: AppTheme.accentMint,
-              size: 20,
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                'Great job tracking! View your progress or add more entries.',
-                style: TextStyle(
-                  color: theme.colorScheme.onSurface,
-                  fontWeight: FontWeight.w500,
+    
+    try {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              Icon(
+                Icons.lightbulb_outline,
+                color: AppTheme.accentMint,
+                size: 20,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  'Great job tracking! View your progress or add more entries.',
+                  style: TextStyle(
+                    color: theme.colorScheme.onSurface,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
+          backgroundColor: theme.colorScheme.surface,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          margin: const EdgeInsets.all(16),
+          duration: const Duration(seconds: 3),
+          action: SnackBarAction(
+            label: 'View Progress',
+            textColor: AppTheme.primaryRose,
+            onPressed: () => context.go('/insights'),
+          ),
         ),
-        backgroundColor: theme.colorScheme.surface,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        margin: const EdgeInsets.all(16),
-        duration: const Duration(seconds: 3),
-        action: SnackBarAction(
-          label: 'View Progress',
-          textColor: AppTheme.primaryRose,
-          onPressed: () => context.go('/insights'),
-        ),
-      ),
-    );
+      );
+    } catch (e) {
+      // Fallback: log success message if ScaffoldMessenger fails
+      debugPrint('💡 Quick action suggestion: View your progress or add more entries');
+    }
   }
   
   String _determineNextScreen() {
@@ -1279,64 +1292,69 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
   void _showSmartNavigationSheet(String nextScreen, String screenTitle) {
     final theme = Theme.of(context);
     
-    // Show a more subtle snackbar instead of full modal
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+    try {
+      // Show a more subtle snackbar instead of full modal
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+                  ),
+                  borderRadius: BorderRadius.circular(16),
                 ),
-                borderRadius: BorderRadius.circular(16),
+                child: Icon(
+                  Icons.auto_awesome,
+                  color: Colors.white,
+                  size: 16,
+                ),
               ),
-              child: Icon(
-                Icons.auto_awesome,
-                color: Colors.white,
-                size: 16,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'AI Insights Available',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: theme.colorScheme.onSurface,
-                      fontSize: 14,
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'AI Insights Available',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: theme.colorScheme.onSurface,
+                        fontSize: 14,
+                      ),
                     ),
-                  ),
-                  Text(
-                    'View personalized health recommendations',
-                    style: TextStyle(
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
-                      fontSize: 12,
+                    Text(
+                      'View personalized health recommendations',
+                      style: TextStyle(
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                        fontSize: 12,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
+          backgroundColor: theme.colorScheme.surface,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          margin: const EdgeInsets.all(16),
+          duration: const Duration(seconds: 4),
+          elevation: 8,
+          action: SnackBarAction(
+            label: 'View Insights',
+            textColor: AppTheme.primaryRose,
+            onPressed: () => context.go(nextScreen),
+          ),
         ),
-        backgroundColor: theme.colorScheme.surface,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        margin: const EdgeInsets.all(16),
-        duration: const Duration(seconds: 4),
-        elevation: 8,
-        action: SnackBarAction(
-          label: 'View Insights',
-          textColor: AppTheme.primaryRose,
-          onPressed: () => context.go(nextScreen),
-        ),
-      ),
-    );
+      );
+    } catch (e) {
+      // Fallback: log smart navigation suggestion if ScaffoldMessenger fails
+      debugPrint('🤖 AI Insights Available: View personalized health recommendations at $screenTitle');
+    }
   }
 }

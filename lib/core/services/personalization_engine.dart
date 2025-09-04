@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import '../models/cycle_data.dart';
 import '../models/user_profile.dart';
+import '../utils/collection_extensions.dart';
 
 /// Week 2: Advanced Personalization Engine
 /// Implements user-specific adaptive models and learning from user corrections

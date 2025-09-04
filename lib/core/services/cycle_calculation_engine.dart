@@ -2,6 +2,127 @@ import 'dart:math';
 import '../database/database_service.dart';
 import '../models/cycle_data.dart';
 
+// Additional types for cycle calculations
+class CyclePredictions {
+  final DateTime nextPeriodDate;
+  final DateTime? ovulationDate;
+  final DateTime fertileWindowStart;
+  final DateTime fertileWindowEnd;
+  final CyclePhase currentPhase;
+  final int cycleLength;
+  final CycleRegularity cycleRegularity;
+  final PredictionConfidence confidence;
+  final DateTime lastUpdated;
+
+  CyclePredictions({
+    required this.nextPeriodDate,
+    this.ovulationDate,
+    required this.fertileWindowStart,
+    required this.fertileWindowEnd,
+    required this.currentPhase,
+    required this.cycleLength,
+    required this.cycleRegularity,
+    required this.confidence,
+    required this.lastUpdated,
+  });
+  
+  /// Get days until next period
+  int get daysUntilNextPeriod {
+    return nextPeriodDate.difference(DateTime.now()).inDays;
+  }
+  
+  /// Get days until ovulation
+  int get daysUntilOvulation {
+    if (ovulationDate == null) return 0;
+    return ovulationDate!.difference(DateTime.now()).inDays;
+  }
+  
+  /// Check if currently in fertile window
+  bool get isInFertileWindow {
+    final now = DateTime.now();
+    return now.isAfter(fertileWindowStart.subtract(const Duration(days: 1))) &&
+           now.isBefore(fertileWindowEnd.add(const Duration(days: 1)));
+  }
+}
+
+class CycleStatistics {
+  final int averageCycleLength;
+  final double regularityScore;
+  final CycleRegularity regularity;
+  final double standardDeviation;
+  final int sampleSize;
+
+  CycleStatistics({
+    required this.averageCycleLength,
+    required this.regularityScore,
+    required this.regularity,
+    required this.standardDeviation,
+    required this.sampleSize,
+  });
+}
+
+/// Date range helper class
+class DateRange {
+  final DateTime start;
+  final DateTime end;
+  
+  DateRange({required this.start, required this.end});
+  
+  bool contains(DateTime date) {
+    return date.isAfter(start.subtract(const Duration(days: 1))) &&
+           date.isBefore(end.add(const Duration(days: 1)));
+  }
+  
+  int get lengthInDays {
+    return end.difference(start).inDays + 1;
+  }
+}
+
+enum CycleRegularity {
+  veryRegular,
+  regular,
+  somewhatIrregular,
+  irregular,
+  unknown,
+}
+
+/// Prediction confidence levels
+enum PredictionConfidence {
+  high,
+  medium,
+  low,
+  veryLow,
+}
+
+/// Extension for PredictionConfidence
+extension PredictionConfidenceExtension on PredictionConfidence {
+  String get displayName {
+    switch (this) {
+      case PredictionConfidence.high:
+        return 'High Confidence';
+      case PredictionConfidence.medium:
+        return 'Medium Confidence';
+      case PredictionConfidence.low:
+        return 'Low Confidence';
+      case PredictionConfidence.veryLow:
+        return 'Very Low Confidence';
+    }
+  }
+  
+  double get score {
+    switch (this) {
+      case PredictionConfidence.high:
+        return 0.9;
+      case PredictionConfidence.medium:
+        return 0.7;
+      case PredictionConfidence.low:
+        return 0.4;
+      case PredictionConfidence.veryLow:
+        return 0.1;
+    }
+  }
+}
+
 /// Comprehensive engine for calculating menstrual cycle predictions
 /// Uses standard fertility tracking algorithms and historical data analysis
 class CycleCalculationEngine {
@@ -248,9 +369,9 @@ class CycleCalculationEngine {
       return CyclePhase.follicular;
     }
     
-    // Ovulation phase (around ovulation day ± 1)
+    // Ovulatory phase (around ovulation day ± 1)
     if (daysSinceStart >= ovulationDay - 1 && daysSinceStart <= ovulationDay + 1) {
-      return CyclePhase.ovulation;
+      return CyclePhase.ovulatory;
     }
     
     // Luteal phase (after ovulation until next period)
@@ -331,196 +452,3 @@ class CycleCalculationEngine {
   }
 }
 
-/// Comprehensive cycle predictions
-class CyclePredictions {
-  final DateTime nextPeriodDate;
-  final DateTime ovulationDate;
-  final DateTime fertileWindowStart;
-  final DateTime fertileWindowEnd;
-  final CyclePhase currentPhase;
-  final int cycleLength;
-  final CycleRegularity cycleRegularity;
-  final PredictionConfidence confidence;
-  final DateTime lastUpdated;
-  
-  CyclePredictions({
-    required this.nextPeriodDate,
-    required this.ovulationDate,
-    required this.fertileWindowStart,
-    required this.fertileWindowEnd,
-    required this.currentPhase,
-    required this.cycleLength,
-    required this.cycleRegularity,
-    required this.confidence,
-    required this.lastUpdated,
-  });
-  
-  /// Get days until next period
-  int get daysUntilNextPeriod {
-    return nextPeriodDate.difference(DateTime.now()).inDays;
-  }
-  
-  /// Get days until ovulation
-  int get daysUntilOvulation {
-    return ovulationDate.difference(DateTime.now()).inDays;
-  }
-  
-  /// Check if currently in fertile window
-  bool get isInFertileWindow {
-    final now = DateTime.now();
-    return now.isAfter(fertileWindowStart.subtract(const Duration(days: 1))) &&
-           now.isBefore(fertileWindowEnd.add(const Duration(days: 1)));
-  }
-  
-  Map<String, dynamic> toJson() {
-    return {
-      'nextPeriodDate': nextPeriodDate.toIso8601String(),
-      'ovulationDate': ovulationDate.toIso8601String(),
-      'fertileWindowStart': fertileWindowStart.toIso8601String(),
-      'fertileWindowEnd': fertileWindowEnd.toIso8601String(),
-      'currentPhase': currentPhase.toString(),
-      'cycleLength': cycleLength,
-      'cycleRegularity': cycleRegularity.toString(),
-      'confidence': confidence.toString(),
-      'lastUpdated': lastUpdated.toIso8601String(),
-    };
-  }
-}
-
-/// Cycle statistics from historical analysis
-class CycleStatistics {
-  final int averageCycleLength;
-  final double regularityScore; // 0.0 - 1.0
-  final CycleRegularity regularity;
-  final double standardDeviation;
-  final int sampleSize;
-  
-  CycleStatistics({
-    required this.averageCycleLength,
-    required this.regularityScore,
-    required this.regularity,
-    required this.standardDeviation,
-    required this.sampleSize,
-  });
-}
-
-/// Date range helper class
-class DateRange {
-  final DateTime start;
-  final DateTime end;
-  
-  DateRange({required this.start, required this.end});
-  
-  bool contains(DateTime date) {
-    return date.isAfter(start.subtract(const Duration(days: 1))) &&
-           date.isBefore(end.add(const Duration(days: 1)));
-  }
-  
-  int get lengthInDays {
-    return end.difference(start).inDays + 1;
-  }
-}
-
-/// Cycle phases
-enum CyclePhase {
-  menstrual,
-  follicular,
-  ovulation,
-  luteal,
-  unknown,
-}
-
-/// Cycle regularity levels
-enum CycleRegularity {
-  veryRegular,
-  regular,
-  somewhatIrregular,
-  irregular,
-  unknown,
-}
-
-/// Prediction confidence levels
-enum PredictionConfidence {
-  high,
-  medium,
-  low,
-  veryLow,
-}
-
-/// Extension methods for enums
-extension CyclePhaseExtension on CyclePhase {
-  String get displayName {
-    switch (this) {
-      case CyclePhase.menstrual:
-        return 'Menstrual';
-      case CyclePhase.follicular:
-        return 'Follicular';
-      case CyclePhase.ovulation:
-        return 'Ovulation';
-      case CyclePhase.luteal:
-        return 'Luteal';
-      case CyclePhase.unknown:
-        return 'Unknown';
-    }
-  }
-  
-  String get description {
-    switch (this) {
-      case CyclePhase.menstrual:
-        return 'Your period is here';
-      case CyclePhase.follicular:
-        return 'Preparing for ovulation';
-      case CyclePhase.ovulation:
-        return 'Most fertile time';
-      case CyclePhase.luteal:
-        return 'After ovulation';
-      case CyclePhase.unknown:
-        return 'Phase unknown';
-    }
-  }
-}
-
-extension CycleRegularityExtension on CycleRegularity {
-  String get displayName {
-    switch (this) {
-      case CycleRegularity.veryRegular:
-        return 'Very Regular';
-      case CycleRegularity.regular:
-        return 'Regular';
-      case CycleRegularity.somewhatIrregular:
-        return 'Somewhat Irregular';
-      case CycleRegularity.irregular:
-        return 'Irregular';
-      case CycleRegularity.unknown:
-        return 'Unknown';
-    }
-  }
-}
-
-extension PredictionConfidenceExtension on PredictionConfidence {
-  String get displayName {
-    switch (this) {
-      case PredictionConfidence.high:
-        return 'High Confidence';
-      case PredictionConfidence.medium:
-        return 'Medium Confidence';
-      case PredictionConfidence.low:
-        return 'Low Confidence';
-      case PredictionConfidence.veryLow:
-        return 'Very Low Confidence';
-    }
-  }
-  
-  double get score {
-    switch (this) {
-      case PredictionConfidence.high:
-        return 0.9;
-      case PredictionConfidence.medium:
-        return 0.7;
-      case PredictionConfidence.low:
-        return 0.4;
-      case PredictionConfidence.veryLow:
-        return 0.1;
-    }
-  }
-}

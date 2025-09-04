@@ -49,13 +49,13 @@ class AppleSignInService {
       
       // Return failure indicating disabled status
       return AuthResult.failure(
-        'Apple Sign-In is temporarily disabled for iOS compatibility. Please use email authentication instead.',
+        error: 'Apple Sign-In is temporarily disabled for iOS compatibility. Please use email authentication instead.',
       );
 
     } catch (e) {
       AppLogger.error('❌ Error in Apple Sign-In', e);
       return AuthResult.failure(
-        'Apple Sign-In is not available. Please use email authentication.',
+        error: 'Apple Sign-In is not available. Please use email authentication.',
       );
     } finally {
       enhancementService.stopPerformanceTrace('apple_signin');

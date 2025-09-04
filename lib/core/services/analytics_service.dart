@@ -7,6 +7,10 @@ import '../database/database_service.dart';
 import 'cycle_calculation_engine.dart';
 
 class AnalyticsService {
+  static final AnalyticsService _instance = AnalyticsService._internal();
+  static AnalyticsService get instance => _instance;
+  AnalyticsService._internal();
+
   final DatabaseService _databaseService = DatabaseService();
   final CycleCalculationEngine _calculationEngine = CycleCalculationEngine();
 
@@ -93,6 +97,16 @@ class AnalyticsService {
     } catch (e) {
       debugPrint('Error getting personalized recommendations: $e');
       return [];
+    }
+  }
+
+  // Log event for general analytics tracking
+  void logEvent(String eventName, Map<String, dynamic> parameters) {
+    try {
+      // In a production app, this would send to your analytics backend
+      debugPrint('Analytics Event: $eventName, Parameters: $parameters');
+    } catch (e) {
+      debugPrint('Error logging analytics event: $e');
     }
   }
 
@@ -701,3 +715,10 @@ enum FlowPattern { light, medium, heavy, variable, unknown }
 enum TrendDirection { improving, declining, stable }
 enum RecommendationCategory { cycle, health, mood, sleep, nutrition, exercise }
 enum RecommendationPriority { low, medium, high, urgent }
+
+/// Extension for RecommendationPriority to add compareTo functionality
+extension RecommendationPriorityExtension on RecommendationPriority {
+  int compareTo(RecommendationPriority other) {
+    return index.compareTo(other.index);
+  }
+}
