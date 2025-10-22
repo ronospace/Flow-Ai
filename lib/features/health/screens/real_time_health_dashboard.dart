@@ -230,8 +230,8 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
                 shape: BoxShape.circle,
                 gradient: LinearGradient(
                   colors: [
-                    Colors.pink.withOpacity(0.3),
-                    Colors.purple.withOpacity(0.3),
+                    Colors.pink.withValues(alpha: 0.1),
+                    Colors.purple.withValues(alpha: 0.1),
                   ],
                 ),
               ),
@@ -343,7 +343,7 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
             children: [
               CircleAvatar(
                 radius: 25,
-                backgroundColor: Colors.pink.withOpacity(0.2),
+                backgroundColor: Colors.pink.withValues(alpha: 0.1),
                 child: Text(
                   widget.user.displayName?.substring(0, 1).toUpperCase() ?? 'U',
                   style: const TextStyle(
@@ -419,7 +419,7 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: Colors.green.withOpacity(0.2),
+                color: Colors.green.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
@@ -528,7 +528,7 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 10,
                 offset: const Offset(0, 5),
               ),
@@ -622,7 +622,7 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           decoration: BoxDecoration(
-            color: isSelected ? Colors.pink.withOpacity(0.2) : const Color(0xFF2A2D5A),
+            color: isSelected ? Colors.pink.withValues(alpha: 0.1) : const Color(0xFF2A2D5A),
             borderRadius: BorderRadius.circular(25),
             border: isSelected ? Border.all(color: Colors.pink) : null,
           ),

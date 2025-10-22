@@ -210,7 +210,10 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
                                 trailing: Switch.adaptive(
                                   value: settings.preferences.notificationsEnabled,
                                   onChanged: settings.updateNotificationsEnabled,
-                                  activeColor: AppTheme.secondaryBlue,
+                                  thumbColor: WidgetStateProperty.resolveWith((states) => 
+                                    states.contains(WidgetState.selected) ? AppTheme.secondaryBlue : null),
+                                  trackColor: WidgetStateProperty.resolveWith((states) => 
+                                    states.contains(WidgetState.selected) ? AppTheme.secondaryBlue.withValues(alpha: 0.5) : null),
                                 ),
                               );
                             },
@@ -278,7 +281,10 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
                                 trailing: Switch.adaptive(
                                   value: settings.preferences.aiInsightsEnabled,
                                   onChanged: settings.updateAiInsightsEnabled,
-                                  activeColor: AppTheme.warningOrange,
+                                  thumbColor: WidgetStateProperty.resolveWith((states) => 
+                                    states.contains(WidgetState.selected) ? AppTheme.warningOrange : null),
+                                  trackColor: WidgetStateProperty.resolveWith((states) => 
+                                    states.contains(WidgetState.selected) ? AppTheme.warningOrange.withValues(alpha: 0.5) : null),
                                 ),
                               );
                             },
@@ -292,7 +298,10 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
                                 trailing: Switch.adaptive(
                                   value: settings.preferences.hapticFeedbackEnabled,
                                   onChanged: settings.updateHapticFeedbackEnabled,
-                                  activeColor: AppTheme.secondaryBlue,
+                                  thumbColor: WidgetStateProperty.resolveWith((states) => 
+                                    states.contains(WidgetState.selected) ? AppTheme.secondaryBlue : null),
+                                  trackColor: WidgetStateProperty.resolveWith((states) => 
+                                    states.contains(WidgetState.selected) ? AppTheme.secondaryBlue.withValues(alpha: 0.5) : null),
                                 ),
                               );
                             },
@@ -318,7 +327,10 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
                                 return Switch.adaptive(
                                   value: settings.preferences.biometricAuth,
                                   onChanged: (value) => settings.updateBiometricAuth(value),
-                                  activeColor: AppTheme.accentMint,
+                                  thumbColor: WidgetStateProperty.resolveWith((states) => 
+                                    states.contains(WidgetState.selected) ? AppTheme.accentMint : null),
+                                  trackColor: WidgetStateProperty.resolveWith((states) => 
+                                    states.contains(WidgetState.selected) ? AppTheme.accentMint.withValues(alpha: 0.5) : null),
                                 );
                               },
                             ),

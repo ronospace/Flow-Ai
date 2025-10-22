@@ -643,7 +643,10 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
           Switch.adaptive(
             value: value,
             onChanged: onChanged,
-            activeColor: AppTheme.primaryRose,
+            thumbColor: WidgetStateProperty.resolveWith((states) => 
+              states.contains(WidgetState.selected) ? AppTheme.primaryRose : null),
+            trackColor: WidgetStateProperty.resolveWith((states) => 
+              states.contains(WidgetState.selected) ? AppTheme.primaryRose.withValues(alpha: 0.5) : null),
           ),
         ],
       ),

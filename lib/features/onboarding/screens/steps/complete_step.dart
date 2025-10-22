@@ -93,7 +93,7 @@ class _CompleteStepState extends State<CompleteStep>
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: theme.colorScheme.primary.withOpacity(0.3),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.1),
                     blurRadius: 20,
                     spreadRadius: 5,
                   ),
@@ -149,10 +149,10 @@ class _CompleteStepState extends State<CompleteStep>
             child: Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+                color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: theme.colorScheme.outline.withOpacity(0.2),
+                  color: theme.colorScheme.outline.withValues(alpha: 0.1),
                 ),
               ),
               child: Column(
@@ -254,7 +254,7 @@ class _CompleteStepState extends State<CompleteStep>
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: theme.colorScheme.primary.withOpacity(0.1),
+            color: theme.colorScheme.primary.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(

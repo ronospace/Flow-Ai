@@ -133,7 +133,7 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: AppTheme.primaryRose.withOpacity(0.3),
+                    color: AppTheme.primaryRose.withValues(alpha: 0.1),
                     blurRadius: 8,
                     offset: const Offset(0, 4),
                   ),
@@ -187,8 +187,8 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  AppTheme.primaryRose.withOpacity(0.2),
-                  AppTheme.primaryPurple.withOpacity(0.1),
+                  AppTheme.primaryRose.withValues(alpha: 0.1),
+                  AppTheme.primaryPurple.withValues(alpha: 0.1),
                 ],
               ),
               borderRadius: BorderRadius.circular(30),
@@ -241,13 +241,13 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            AppTheme.secondaryBlue.withOpacity(0.1),
-            AppTheme.accentMint.withOpacity(0.05),
+            AppTheme.secondaryBlue.withValues(alpha: 0.1),
+            AppTheme.accentMint.withValues(alpha: 0.1),
           ],
         ),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: AppTheme.secondaryBlue.withOpacity(0.2),
+          color: AppTheme.secondaryBlue.withValues(alpha: 0.1),
         ),
       ),
       child: Column(
@@ -258,7 +258,7 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppTheme.secondaryBlue.withOpacity(0.2),
+                  color: AppTheme.secondaryBlue.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: const Icon(
@@ -344,7 +344,7 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: AppTheme.lightGrey.withOpacity(0.3),
+          color: AppTheme.lightGrey.withValues(alpha: 0.1),
         ),
       ),
       child: Column(
@@ -454,10 +454,10 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
                         margin: const EdgeInsets.only(bottom: 8),
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: AppTheme.accentMint.withOpacity(0.1),
+                          color: AppTheme.accentMint.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: AppTheme.accentMint.withOpacity(0.2),
+                            color: AppTheme.accentMint.withValues(alpha: 0.1),
                           ),
                         ),
                         child: Row(

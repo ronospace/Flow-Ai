@@ -29,8 +29,8 @@ class ChallengeCard extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                challenge.primaryColor.withOpacity(0.1),
-                challenge.accentColor.withOpacity(0.05),
+                challenge.primaryColor.withValues(alpha: 0.1),
+                challenge.accentColor.withValues(alpha: 0.1),
               ],
             ),
           ),
@@ -47,7 +47,7 @@ class ChallengeCard extends StatelessWidget {
                       width: 56,
                       height: 56,
                       decoration: BoxDecoration(
-                        color: challenge.primaryColor.withOpacity(0.15),
+                        color: challenge.primaryColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Icon(
@@ -324,7 +324,7 @@ class ChallengeCard extends StatelessWidget {
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.green.withOpacity(0.1),
+                          color: Colors.green.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
                             color: Colors.green,
@@ -389,8 +389,8 @@ class CompactChallengeCard extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                challenge.primaryColor.withOpacity(0.1),
-                challenge.accentColor.withOpacity(0.05),
+                challenge.primaryColor.withValues(alpha: 0.1),
+                challenge.accentColor.withValues(alpha: 0.1),
               ],
             ),
           ),
@@ -407,7 +407,7 @@ class CompactChallengeCard extends StatelessWidget {
                       width: 32,
                       height: 32,
                       decoration: BoxDecoration(
-                        color: challenge.primaryColor.withOpacity(0.2),
+                        color: challenge.primaryColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Icon(

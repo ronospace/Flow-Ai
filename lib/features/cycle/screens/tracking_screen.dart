@@ -212,7 +212,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
                       borderRadius: BorderRadius.circular(18),
                       boxShadow: [
                         BoxShadow(
-                          color: theme.shadowColor.withOpacity(0.1),
+                          color: theme.shadowColor.withValues(alpha: 0.15),
                           blurRadius: 4,
                           offset: const Offset(0, 2),
                         ),
@@ -260,7 +260,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.onPrimary.withOpacity(0.2),
+                      color: theme.colorScheme.onPrimary.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
@@ -284,7 +284,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
             action: _shouldShowSmartNavigation() ? SnackBarAction(
               label: 'View Insights',
               textColor: theme.colorScheme.onPrimary,
-              backgroundColor: theme.colorScheme.onPrimary.withOpacity(0.2),
+              backgroundColor: theme.colorScheme.onPrimary.withValues(alpha: 0.2),
               onPressed: () => _navigateToInsights(),
             ) : null,
           ),
@@ -321,7 +321,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
                   width: 24,
                   height: 24,
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.onError.withOpacity(0.2),
+                    color: theme.colorScheme.onError.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
@@ -347,7 +347,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
                         'Please check your connection and try again',
                         style: TextStyle(
                           fontSize: 12,
-                          color: theme.colorScheme.onError.withOpacity(0.7),
+                          color: theme.colorScheme.onError.withValues(alpha: 0.1),
                         ),
                       ),
                     ],
@@ -432,7 +432,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
@@ -481,8 +481,8 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
             decoration: BoxDecoration(
               color: _hasUnsavedChanges 
-                ? AppTheme.warningOrange.withOpacity(0.2)
-                : AppTheme.accentMint.withOpacity(0.2),
+                ? AppTheme.warningOrange.withValues(alpha: 0.1)
+                : AppTheme.accentMint.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
@@ -508,7 +508,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -603,10 +603,10 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
               width: double.infinity,
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppTheme.accentMint.withOpacity(0.1),
+                color: AppTheme.accentMint.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: AppTheme.accentMint.withOpacity(0.3),
+                  color: AppTheme.accentMint.withValues(alpha: 0.1),
                   width: 1,
                 ),
               ),
@@ -835,13 +835,13 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
                 color: _notesController.text.isNotEmpty 
-                    ? AppTheme.primaryRose.withOpacity(0.3)
+                    ? AppTheme.primaryRose.withValues(alpha: 0.1)
                     : theme.dividerColor,
                 width: 2,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: theme.shadowColor.withOpacity(0.08),
+                  color: theme.shadowColor.withValues(alpha: 0.1),
                   blurRadius: 20,
                   offset: const Offset(0, 8),
                 ),
@@ -857,8 +857,8 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        AppTheme.primaryRose.withOpacity(0.1),
-                        AppTheme.primaryPurple.withOpacity(0.05),
+                        AppTheme.primaryRose.withValues(alpha: 0.1),
+                        AppTheme.primaryPurple.withValues(alpha: 0.1),
                       ],
                     ),
                     borderRadius: const BorderRadius.only(
@@ -908,7 +908,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
-                            color: AppTheme.accentMint.withOpacity(0.2),
+                            color: AppTheme.accentMint.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
@@ -939,7 +939,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
                     decoration: InputDecoration(
                       hintText: 'How are you feeling today? Any symptoms, mood changes, or observations you\'d like to remember?\n\nTip: Recording your thoughts helps identify patterns over time.',
                       hintStyle: TextStyle(
-                        color: theme.textTheme.bodyMedium?.color?.withOpacity(0.5),
+                        color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.1),
                         fontSize: 14,
                         height: 1.5,
                       ),
@@ -1021,7 +1021,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
           ),
           boxShadow: [
             BoxShadow(
-              color: theme.shadowColor.withOpacity(0.05),
+              color: theme.shadowColor.withValues(alpha: 0.1),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),

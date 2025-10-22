@@ -1,12 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
-import 'package:flow_ai/core/services/auth_service.dart';
-import 'package:flow_ai/core/services/local_user_service.dart';
-import 'package:flow_ai/core/services/apple_signin_service.dart';
-import 'package:flow_ai/core/services/biometric_auth_service.dart';
-import 'package:flow_ai/core/models/auth_result.dart';
-import 'package:flow_ai/core/models/user.dart';
+import 'package:flow_iq/core/services/auth_service.dart';
+import 'package:flow_iq/core/services/local_user_service.dart';
+import 'package:flow_iq/core/services/apple_signin_service.dart';
+import 'package:flow_iq/core/services/biometric_auth_service.dart';
+import 'package:flow_iq/core/models/auth_result.dart';
+import 'package:flow_iq/core/models/user.dart';
 
 // Generate mocks
 @GenerateMocks([LocalUserService, AppleSignInService, BiometricAuthService])

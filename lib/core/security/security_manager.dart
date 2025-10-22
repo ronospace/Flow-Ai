@@ -223,25 +223,6 @@ class SecurityManager {
 
       final isAuthenticated = await _localAuth.authenticate(
         localizedReason: reason,
-        authMessages: const [
-          AndroidAuthMessages(
-            signInTitle: 'Flow iQ Security',
-            biometricHint: 'Verify your identity',
-            biometricNotRecognized: 'Try again',
-            biometricSuccess: 'Authentication successful',
-            cancelButton: 'Cancel',
-            deviceCredentialsRequiredTitle: 'Device credentials required',
-            deviceCredentialsSetupDescription: 'Please set up device credentials',
-            goToSettingsButton: 'Go to Settings',
-            goToSettingsDescription: 'Set up biometrics in Settings',
-          ),
-          IOSAuthMessages(
-            lockOut: 'Biometric authentication is disabled',
-            goToSettingsButton: 'Go to Settings',
-            goToSettingsDescription: 'Set up biometrics in Settings',
-            cancelButton: 'Cancel',
-          ),
-        ],
         options: const AuthenticationOptions(
           biometricOnly: false,
           stickyAuth: true,

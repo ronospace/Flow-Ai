@@ -40,6 +40,16 @@
 # Health Integration
 -keep class androidx.health.** { *; }
 
+# TensorFlow Lite
+-keep class org.tensorflow.lite.** { *; }
+-keep class org.tensorflow.lite.gpu.** { *; }
+-dontwarn org.tensorflow.lite.**
+
+# Machine Learning (if using ML Kit or TensorFlow Lite)
+-keep class com.google.mlkit.** { *; }
+-keep class com.google.android.gms.tflite.** { *; }
+-dontwarn com.google.mlkit.**
+
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
 -keepattributes SourceFile,LineNumberTable

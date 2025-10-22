@@ -255,7 +255,7 @@ class PerformanceMonitor {
   /// Capture memory snapshot
   void _captureMemorySnapshot() {
     try {
-      final info = developer.Service.getIsolateID(Isolate.current);
+      final info = developer.Service.getIsolateId(Isolate.current);
       
       final snapshot = MemorySnapshot(
         timestamp: DateTime.now(),

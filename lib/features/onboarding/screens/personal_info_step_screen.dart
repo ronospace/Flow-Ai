@@ -175,7 +175,7 @@ class _PersonalInfoStepScreenState extends State<PersonalInfoStepScreen> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -201,7 +201,7 @@ class _PersonalInfoStepScreenState extends State<PersonalInfoStepScreen> {
             margin: const EdgeInsets.all(12),
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: AppTheme.primaryPurple.withOpacity(0.1),
+              color: AppTheme.primaryPurple.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(
@@ -232,7 +232,7 @@ class _PersonalInfoStepScreenState extends State<PersonalInfoStepScreen> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -251,7 +251,7 @@ class _PersonalInfoStepScreenState extends State<PersonalInfoStepScreen> {
                   margin: const EdgeInsets.only(right: 16),
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: AppTheme.primaryPurple.withOpacity(0.1),
+                    color: AppTheme.primaryPurple.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(

@@ -1,10 +1,5 @@
 import 'package:flutter/foundation.dart';
-import '../models/discussion.dart';
-import '../models/expert_question.dart';
-import '../models/cycle_buddy.dart';
-import '../models/symptom_story.dart';
-import '../models/community_achievement.dart';
-import '../models/community_stats.dart';
+import '../../../core/models/community_models.dart';
 import '../services/community_service.dart';
 
 /// 🌍 Community Controller - Central Management for Community Features
