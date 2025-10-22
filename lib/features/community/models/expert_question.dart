@@ -185,3 +185,110 @@ class Expert {
     );
   }
 }
+
+/// Expert answer model
+class ExpertAnswer {
+  final String id;
+  final String questionId;
+  final String expertId;
+  final String expertName;
+  final String content;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final int upvoteCount;
+  final int downvoteCount;
+  final bool isVerified;
+  final bool hasUpvoted;
+  final bool hasDownvoted;
+  final List<String> attachments;
+  final String? verificationNote;
+
+  const ExpertAnswer({
+    required this.id,
+    required this.questionId,
+    required this.expertId,
+    required this.expertName,
+    required this.content,
+    required this.createdAt,
+    required this.updatedAt,
+    this.upvoteCount = 0,
+    this.downvoteCount = 0,
+    this.isVerified = false,
+    this.hasUpvoted = false,
+    this.hasDownvoted = false,
+    this.attachments = const [],
+    this.verificationNote,
+  });
+
+  ExpertAnswer copyWith({
+    String? id,
+    String? questionId,
+    String? expertId,
+    String? expertName,
+    String? content,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    int? upvoteCount,
+    int? downvoteCount,
+    bool? isVerified,
+    bool? hasUpvoted,
+    bool? hasDownvoted,
+    List<String>? attachments,
+    String? verificationNote,
+  }) {
+    return ExpertAnswer(
+      id: id ?? this.id,
+      questionId: questionId ?? this.questionId,
+      expertId: expertId ?? this.expertId,
+      expertName: expertName ?? this.expertName,
+      content: content ?? this.content,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      upvoteCount: upvoteCount ?? this.upvoteCount,
+      downvoteCount: downvoteCount ?? this.downvoteCount,
+      isVerified: isVerified ?? this.isVerified,
+      hasUpvoted: hasUpvoted ?? this.hasUpvoted,
+      hasDownvoted: hasDownvoted ?? this.hasDownvoted,
+      attachments: attachments ?? this.attachments,
+      verificationNote: verificationNote ?? this.verificationNote,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'questionId': questionId,
+      'expertId': expertId,
+      'expertName': expertName,
+      'content': content,
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
+      'upvoteCount': upvoteCount,
+      'downvoteCount': downvoteCount,
+      'isVerified': isVerified,
+      'hasUpvoted': hasUpvoted,
+      'hasDownvoted': hasDownvoted,
+      'attachments': attachments,
+      'verificationNote': verificationNote,
+    };
+  }
+
+  factory ExpertAnswer.fromJson(Map<String, dynamic> json) {
+    return ExpertAnswer(
+      id: json['id'] as String,
+      questionId: json['questionId'] as String,
+      expertId: json['expertId'] as String,
+      expertName: json['expertName'] as String,
+      content: json['content'] as String,
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      updatedAt: DateTime.parse(json['updatedAt'] as String),
+      upvoteCount: json['upvoteCount'] as int? ?? 0,
+      downvoteCount: json['downvoteCount'] as int? ?? 0,
+      isVerified: json['isVerified'] as bool? ?? false,
+      hasUpvoted: json['hasUpvoted'] as bool? ?? false,
+      hasDownvoted: json['hasDownvoted'] as bool? ?? false,
+      attachments: List<String>.from(json['attachments'] as List? ?? []),
+      verificationNote: json['verificationNote'] as String?,
+    );
+  }
+}

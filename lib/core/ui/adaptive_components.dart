@@ -160,10 +160,10 @@ class AdaptiveComponents {
           child: ElevatedButton(
             onPressed: onPressed,
             style: buttonStyle.copyWith(
-              backgroundColor: MaterialStateProperty.all(
+              backgroundColor: WidgetStateProperty.all(
                 isDestructive ? theme.colorScheme.error : theme.colorScheme.primary,
               ),
-              padding: MaterialStateProperty.all(
+              padding: WidgetStateProperty.all(
                 padding ?? const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               ),
             ),
@@ -302,7 +302,7 @@ class AdaptiveComponents {
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: errorText != null
                       ? CupertinoColors.destructiveRed
-                      : theme.colorScheme.onSurface.withOpacity(0.6),
+                      : theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
               ),
             ],
@@ -379,7 +379,10 @@ class AdaptiveComponents {
       switchWidget = Switch(
         value: value,
         onChanged: enabled ? onChanged : null,
-        activeColor: theme.colorScheme.primary,
+        thumbColor: WidgetStateProperty.resolveWith((states) => 
+          states.contains(WidgetState.selected) ? theme.colorScheme.primary : null),
+        trackColor: WidgetStateProperty.resolveWith((states) => 
+          states.contains(WidgetState.selected) ? theme.colorScheme.primary.withValues(alpha: 0.5) : null),
       );
     }
     
@@ -393,7 +396,7 @@ class AdaptiveComponents {
               style: theme.textTheme.bodyLarge?.copyWith(
                 color: enabled
                     ? theme.colorScheme.onSurface
-                    : theme.colorScheme.onSurface.withOpacity(0.5),
+                    : theme.colorScheme.onSurface.withValues(alpha: 0.5),
               ),
             ),
           ),
@@ -499,7 +502,7 @@ class AdaptiveComponents {
               }
             : null,
         style: ButtonStyle(
-          shape: MaterialStateProperty.all(
+          shape: WidgetStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),

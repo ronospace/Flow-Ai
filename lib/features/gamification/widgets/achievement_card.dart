@@ -29,8 +29,8 @@ class AchievementCard extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                achievement.color.withOpacity(0.1),
-                achievement.color.withOpacity(0.05),
+                achievement.color.withValues(alpha: 0.1),
+                achievement.color.withValues(alpha: 0.1),
               ],
             ),
           ),
@@ -46,7 +46,7 @@ class AchievementCard extends StatelessWidget {
                       width: 48,
                       height: 48,
                       decoration: BoxDecoration(
-                        color: achievement.color.withOpacity(0.2),
+                        color: achievement.color.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Icon(
@@ -282,8 +282,8 @@ class AchievementGridCard extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                achievement.color.withOpacity(0.1),
-                achievement.color.withOpacity(0.05),
+                achievement.color.withValues(alpha: 0.1),
+                achievement.color.withValues(alpha: 0.1),
               ],
             ),
           ),
@@ -298,8 +298,8 @@ class AchievementGridCard extends StatelessWidget {
                   height: 40,
                   decoration: BoxDecoration(
                     color: achievement.isUnlocked 
-                        ? achievement.color.withOpacity(0.2)
-                        : Colors.grey.withOpacity(0.2),
+                        ? achievement.color.withValues(alpha: 0.1)
+                        : Colors.grey.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Icon(

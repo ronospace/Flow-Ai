@@ -130,9 +130,9 @@ class _BiometricPulseIndicatorState extends State<BiometricPulseIndicator>
                     shape: BoxShape.circle,
                     gradient: RadialGradient(
                       colors: [
-                        indicatorColor.withOpacity(0.8),
-                        indicatorColor.withOpacity(0.4),
-                        indicatorColor.withOpacity(0.1),
+                        indicatorColor.withValues(alpha: 0.1),
+                        indicatorColor.withValues(alpha: 0.1),
+                        indicatorColor.withValues(alpha: 0.1),
                       ],
                       stops: const [0.3, 0.7, 1.0],
                     ),
@@ -144,7 +144,7 @@ class _BiometricPulseIndicatorState extends State<BiometricPulseIndicator>
                       color: indicatorColor,
                       boxShadow: [
                         BoxShadow(
-                          color: indicatorColor.withOpacity(0.6),
+                          color: indicatorColor.withValues(alpha: 0.1),
                           blurRadius: 8,
                           spreadRadius: 2,
                         ),

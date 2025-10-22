@@ -178,7 +178,7 @@ class AdvancedVisualizationService {
         series.add(ChartSeries(
           name: 'Predictions',
           data: predictionData,
-          color: Colors.red.withOpacity(0.5),
+          color: Colors.red.withValues(alpha: 0.1),
           style: ChartSeriesStyle(
             strokeWidth: 2.0,
             strokeDashPattern: [5, 5],
@@ -261,7 +261,7 @@ class AdvancedVisualizationService {
         color: Colors.blue,
         style: ChartSeriesStyle(
           heatmapColorScheme: [
-            Colors.blue.withOpacity(0.2),
+            Colors.blue.withValues(alpha: 0.1),
             Colors.blue,
             Colors.red,
           ],

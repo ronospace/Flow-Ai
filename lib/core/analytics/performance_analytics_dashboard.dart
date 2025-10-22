@@ -1379,7 +1379,7 @@ class MoodTrendChartPainter extends CustomPainter {
     // Draw average line
     final avgY = size.height - ((data.averageLine - data.minValue) / valueRange * size.height);
     final avgPaint = Paint()
-      ..color = accentColor.withOpacity(0.5)
+      ..color = accentColor.withValues(alpha: 0.6)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1
       ..strokeCap = StrokeCap.round;

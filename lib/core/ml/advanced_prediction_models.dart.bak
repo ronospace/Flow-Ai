@@ -1,0 +1,818 @@
+import 'dart:math' as math;
+import 'package:flutter/foundation.dart';
+import '../models/cycle_data.dart';
+import '../models/user_profile.dart';
+import '../models/daily_tracking_data.dart';
+// import '../services/analytics_service.dart'; // Removed unused import
+
+/// Advanced Machine Learning Prediction Models
+/// This class provides sophisticated prediction capabilities for cycle patterns,
+/// health conditions, and personalized insights using multiple ML algorithms.
+class AdvancedPredictionModels {
+  static final AdvancedPredictionModels _instance = AdvancedPredictionModels._internal();
+  static AdvancedPredictionModels get instance => _instance;
+  AdvancedPredictionModels._internal();
+
+  // Model weights and parameters
+  final Map<String, dynamic> _modelWeights = {};
+  final Map<String, dynamic> _modelParameters = {};
+  final List<PredictionFeedback> _feedbackHistory = [];
+  
+  bool _isInitialized = false;
+
+  /// Initialize the advanced prediction models
+  Future<void> initialize() async {
+    if (_isInitialized) return;
+    
+    debugPrint('🧠 Initializing Advanced ML Prediction Models...');
+    
+    await _initializeModels();
+    await _loadPretrainedWeights();
+    
+    _isInitialized = true;
+    debugPrint('✅ Advanced ML Models initialized successfully');
+  }
+
+  /// Predict cycle irregularity with detailed analysis
+  Future<CycleIrregularityPrediction> predictCycleIrregularity({
+    required UserProfile user,
+    required List<CycleData> cycleHistory,
+    required List<DailyTrackingData> trackingData,
+    Map<String, dynamic>? biometricData,
+  }) async {
+    await initialize();
+    
+    // Extract features for ML model
+    final features = await _extractIrregularityFeatures(
+      user, cycleHistory, trackingData, biometricData
+    );
+    
+    // Run ensemble of irregularity detection models
+    final predictions = await Future.wait([
+      _svmIrregularityModel(features),
+      _randomForestIrregularityModel(features),
+      _neuralNetworkIrregularityModel(features),
+      _timeSeriesIrregularityModel(cycleHistory),
+    ]);
+    
+    // Ensemble prediction
+    final ensemble = _ensembleIrregularityPrediction(predictions);
+    
+    // Generate detailed analysis
+    final analysis = await _generateIrregularityAnalysis(
+      ensemble, features, cycleHistory
+    );
+    
+    return CycleIrregularityPrediction(
+      irregularityScore: ensemble['irregularity_score'],
+      confidence: ensemble['confidence'],
+      riskLevel: _determineRiskLevel(ensemble['irregularity_score']),
+      contributingFactors: ensemble['contributing_factors'],
+      patterns: analysis['patterns'],
+      predictions: analysis['future_predictions'],
+      recommendations: analysis['recommendations'],
+      medicalFlags: analysis['medical_flags'],
+      analysisDate: DateTime.now(),
+    );
+  }
+
+  /// Predict fertility window with advanced optimization
+  Future<FertilityWindowOptimization> optimizeFertilityWindow({
+    required UserProfile user,
+    required List<CycleData> cycleHistory,
+    required List<DailyTrackingData> trackingData,
+    Map<String, dynamic>? biometricData,
+    Map<String, dynamic>? lifestyleData,
+  }) async {
+    await initialize();
+    
+    // Multi-modal feature extraction
+    final features = await _extractFertilityFeatures(
+      user, cycleHistory, trackingData, biometricData, lifestyleData
+    );
+    
+    // Advanced ovulation prediction models
+    final ovulationPredictions = await Future.wait([
+      _lstm_ovulationModel(features),
+      _gaussianProcessModel(features),
+      _bayesianOvulationModel(features),
+      _hormoneBasedModel(features, biometricData),
+    ]);
+    
+    // Fertility window optimization
+    final optimization = await _optimizeFertilityWindow(
+      ovulationPredictions, features, biometricData
+    );
+    
+    return FertilityWindowOptimization(
+      optimalWindow: optimization['optimal_window'],
+      confidence: optimization['confidence'],
+      ovulationProbability: optimization['ovulation_probability'],
+      fertilityScore: optimization['fertility_score'],
+      influencingFactors: optimization['factors'],
+      recommendations: optimization['recommendations'],
+      biometricCorrelations: optimization['biometric_correlations'],
+      analysisDate: DateTime.now(),
+    );
+  }
+
+  /// Detect PCOS and endometriosis patterns
+  Future<ConditionDetectionResult> detectHealthConditions({
+    required UserProfile user,
+    required List<CycleData> cycleHistory,
+    required List<DailyTrackingData> trackingData,
+    Map<String, dynamic>? biometricData,
+    Map<String, dynamic>? symptomData,
+  }) async {
+    await initialize();
+    
+    // Extract condition-specific features
+    final features = await _extractConditionFeatures(
+      user, cycleHistory, trackingData, biometricData, symptomData
+    );
+    
+    // Run specialized detection models
+    final pcosDetection = await _detectPCOS(features, cycleHistory);
+    final endometriosisDetection = await _detectEndometriosis(features, symptomData);
+    final thyroidDetection = await _detectThyroidIssues(features, biometricData);
+    final hormonalImbalanceDetection = await _detectHormonalImbalances(features);
+    
+    return ConditionDetectionResult(
+      pcosRisk: pcosDetection,
+      endometriosisRisk: endometriosisDetection,
+      thyroidRisk: thyroidDetection,
+      hormonalImbalanceRisk: hormonalImbalanceDetection,
+      overallHealthScore: _calculateOverallHealthScore([
+        pcosDetection, endometriosisDetection, thyroidDetection, hormonalImbalanceDetection
+      ]),
+      recommendations: _generateHealthRecommendations([
+        pcosDetection, endometriosisDetection, thyroidDetection, hormonalImbalanceDetection
+      ]),
+      followUpActions: _generateFollowUpActions([
+        pcosDetection, endometriosisDetection, thyroidDetection, hormonalImbalanceDetection
+      ]),
+      analysisDate: DateTime.now(),
+    );
+  }
+
+  /// Generate personalized health insights using ML
+  Future<PersonalizedHealthInsights> generatePersonalizedInsights({
+    required UserProfile user,
+    required List<CycleData> cycleHistory,
+    required List<DailyTrackingData> trackingData,
+    Map<String, dynamic>? biometricData,
+    Map<String, dynamic>? preferences,
+  }) async {
+    await initialize();
+    
+    // Multi-dimensional feature extraction
+    final features = await _extractPersonalizationFeatures(
+      user, cycleHistory, trackingData, biometricData
+    );
+    
+    // Generate personalized insights using various ML approaches
+    final insights = await Future.wait([
+      _generateLifestyleInsights(features, preferences),
+      _generateNutritionInsights(features, user),
+      _generateExerciseInsights(features, biometricData),
+      _generateMoodInsights(features, trackingData),
+      _generateSleepInsights(features, biometricData),
+      _generateStressInsights(features, biometricData),
+    ]);
+    
+    // Combine and prioritize insights
+    final combinedInsights = _combinePersonalizedInsights(insights);
+    
+    return PersonalizedHealthInsights(
+      topInsights: combinedInsights['top_insights'],
+      actionableRecommendations: combinedInsights['actionable_recommendations'],
+      personalizedTips: combinedInsights['personalized_tips'],
+      lifestyleOptimizations: combinedInsights['lifestyle_optimizations'],
+      nutritionGuidance: combinedInsights['nutrition_guidance'],
+      exerciseRecommendations: combinedInsights['exercise_recommendations'],
+      wellnessGoals: combinedInsights['wellness_goals'],
+      progressTracking: combinedInsights['progress_tracking'],
+      confidence: combinedInsights['confidence'],
+      analysisDate: DateTime.now(),
+    );
+  }
+
+  /// Advanced symptom prediction using ML
+  Future<SymptomPredictionResult> predictSymptoms({
+    required UserProfile user,
+    required List<CycleData> cycleHistory,
+    required List<DailyTrackingData> trackingData,
+    int predictionDays = 14,
+    Map<String, dynamic>? contextData,
+  }) async {
+    await initialize();
+    
+    // Extract temporal and contextual features
+    final features = await _extractSymptomFeatures(
+      user, cycleHistory, trackingData, contextData
+    );
+    
+    // Run advanced symptom prediction models
+    final predictions = await Future.wait([
+      _lstm_symptomModel(features, predictionDays),
+      _markovChainSymptomModel(trackingData, predictionDays),
+      _bayesianSymptomModel(features, predictionDays),
+      _contextualSymptomModel(features, contextData, predictionDays),
+    ]);
+    
+    // Ensemble symptom predictions
+    final ensemble = _ensembleSymptomPredictions(predictions);
+    
+    return SymptomPredictionResult(
+      predictions: ensemble['symptom_predictions'],
+      confidence: ensemble['confidence'],
+      timeline: ensemble['prediction_timeline'],
+      triggers: ensemble['potential_triggers'],
+      severity: ensemble['severity_predictions'],
+      managementTips: ensemble['management_recommendations'],
+      preventionStrategies: ensemble['prevention_strategies'],
+      analysisDate: DateTime.now(),
+    );
+  }
+
+  /// Process user feedback to improve models
+  Future<void> processFeedback({
+    required String predictionId,
+    required String predictionType,
+    required bool wasAccurate,
+    required Map<String, dynamic> actualData,
+    required Map<String, dynamic> predictedData,
+    String? userFeedback,
+    Map<String, dynamic>? additionalContext,
+  }) async {
+    final feedback = PredictionFeedback(
+      id: predictionId,
+      type: predictionType,
+      wasAccurate: wasAccurate,
+      actualData: actualData,
+      predictedData: predictedData,
+      error: _calculatePredictionError(actualData, predictedData),
+      userFeedback: userFeedback,
+      context: additionalContext ?? {},
+      timestamp: DateTime.now(),
+    );
+    
+    _feedbackHistory.add(feedback);
+    
+    // Update models based on feedback
+    await _updateModelsWithFeedback(feedback);
+    
+    debugPrint('📊 Processed ML model feedback: $predictionType - ${wasAccurate ? 'Accurate' : 'Needs improvement'}');
+  }
+
+  // === PRIVATE METHODS ===
+
+  Future<void> _initializeModels() async {
+    // Initialize model parameters
+    _modelParameters['irregularity_threshold'] = 0.6;
+    _modelParameters['fertility_confidence_threshold'] = 0.8;
+    _modelParameters['condition_detection_threshold'] = 0.7;
+    _modelParameters['learning_rate'] = 0.001;
+    _modelParameters['regularization'] = 0.01;
+    
+    // Initialize feature importance weights
+    _modelWeights['cycle_length'] = 0.3;
+    _modelWeights['flow_intensity'] = 0.2;
+    _modelWeights['symptom_patterns'] = 0.25;
+    _modelWeights['lifestyle_factors'] = 0.15;
+    _modelWeights['biometric_data'] = 0.1;
+  }
+
+  Future<void> _loadPretrainedWeights() async {
+    // In a production app, these would be loaded from a model file
+    _modelWeights['svm_weights'] = _generateSVMWeights();
+    _modelWeights['neural_network_weights'] = _generateNeuralNetworkWeights();
+    _modelWeights['random_forest_weights'] = _generateRandomForestWeights();
+  }
+
+  // === FEATURE EXTRACTION ===
+
+  Future<Map<String, List<double>>> _extractIrregularityFeatures(
+    UserProfile user,
+    List<CycleData> cycles,
+    List<DailyTrackingData> tracking,
+    Map<String, dynamic>? biometric,
+  ) async {
+    final features = <String, List<double>>{};
+    
+    // Cycle-based features
+    features['cycle_lengths'] = cycles.map((c) => c.length.toDouble()).toList();
+    features['cycle_variability'] = [_calculateVariability(cycles)];
+    features['flow_patterns'] = _extractFlowFeatures(cycles);
+    
+    // Temporal features
+    features['seasonal_patterns'] = _extractSeasonalFeatures(cycles);
+    features['trend_features'] = _extractTrendFeatures(cycles);
+    
+    // Lifestyle features
+    features['stress_levels'] = tracking
+        .where((t) => t.mood != null)
+        .map((t) => t.mood!.toDouble())
+        .toList();
+    features['sleep_patterns'] = tracking
+        .where((t) => t.sleepHours != null)
+        .map((t) => t.sleepHours!.toDouble())
+        .toList();
+    
+    // User demographic features
+    features['age'] = [user.age?.toDouble() ?? 25.0];
+    features['bmi'] = [user.weight != null && user.height != null ? 
+        (user.weight! / ((user.height! / 100) * (user.height! / 100))) : 22.0];
+    
+    // Biometric features if available
+    if (biometric != null) {
+      features['heart_rate'] = biometric['heart_rate'] ?? [70.0];
+      features['heart_rate_variability'] = biometric['hrv'] ?? [40.0];
+      features['body_temperature'] = biometric['temperature'] ?? [98.6];
+    }
+    
+    return features;
+  }
+
+  Future<Map<String, List<double>>> _extractFertilityFeatures(
+    UserProfile user,
+    List<CycleData> cycles,
+    List<DailyTrackingData> tracking,
+    Map<String, dynamic>? biometric,
+    Map<String, dynamic>? lifestyle,
+  ) async {
+    final features = await _extractIrregularityFeatures(user, cycles, tracking, biometric);
+    
+    // Add fertility-specific features
+    features['ovulation_indicators'] = _extractOvulationFeatures(tracking);
+    features['cervical_mucus'] = _extractCervicalMucusFeatures(tracking);
+    features['luteal_phase_length'] = _calculateLutealPhaseFeatures(cycles);
+    
+    if (lifestyle != null) {
+      features['exercise_intensity'] = [lifestyle['exercise_frequency'] ?? 3.0];
+      features['nutrition_score'] = [lifestyle['nutrition_quality'] ?? 0.7];
+      features['supplement_usage'] = [lifestyle['takes_supplements'] ? 1.0 : 0.0];
+    }
+    
+    return features;
+  }
+
+  Future<Map<String, List<double>>> _extractConditionFeatures(
+    UserProfile user,
+    List<CycleData> cycles,
+    List<DailyTrackingData> tracking,
+    Map<String, dynamic>? biometric,
+    Map<String, dynamic>? symptoms,
+  ) async {
+    final features = await _extractIrregularityFeatures(user, cycles, tracking, biometric);
+    
+    // PCOS-specific features
+    features['hirsutism_score'] = [symptoms?['hirsutism'] ?? 0.0];
+    features['acne_severity'] = [symptoms?['acne'] ?? 0.0];
+    features['weight_gain'] = [symptoms?['weight_gain'] ?? 0.0];
+    
+    // Endometriosis-specific features
+    features['pelvic_pain'] = [symptoms?['pelvic_pain'] ?? 0.0];
+    features['dysmenorrhea'] = [symptoms?['period_pain'] ?? 0.0];
+    features['deep_dyspareunia'] = [symptoms?['painful_intercourse'] ?? 0.0];
+    
+    // Thyroid-specific features
+    features['fatigue_level'] = [symptoms?['fatigue'] ?? 0.0];
+    features['temperature_sensitivity'] = [symptoms?['temperature_sensitivity'] ?? 0.0];
+    features['hair_changes'] = [symptoms?['hair_changes'] ?? 0.0];
+    
+    return features;
+  }
+
+  // === ML MODEL IMPLEMENTATIONS ===
+
+  Future<Map<String, dynamic>> _svmIrregularityModel(Map<String, List<double>> features) async {
+    // Support Vector Machine for irregularity detection
+    final featureVector = _flattenFeatures(features);
+    final weights = _modelWeights['svm_weights'] as List<double>;
+    
+    double score = 0.0;
+    for (int i = 0; i < math.min(featureVector.length, weights.length); i++) {
+      score += featureVector[i] * weights[i];
+    }
+    
+    // Apply kernel transformation (simplified RBF kernel)
+    score = math.exp(-0.5 * score * score);
+    
+    return {
+      'irregularity_score': score.clamp(0.0, 1.0),
+      'confidence': 0.8,
+      'model': 'svm',
+    };
+  }
+
+  Future<Map<String, dynamic>> _randomForestIrregularityModel(Map<String, List<double>> features) async {
+    // Random Forest ensemble for irregularity detection
+    final trees = _modelWeights['random_forest_weights'] as List<Map<String, dynamic>>;
+    final predictions = <double>[];
+    
+    for (final tree in trees) {
+      final prediction = _evaluateDecisionTree(features, tree);
+      predictions.add(prediction);
+    }
+    
+    final averageScore = predictions.reduce((a, b) => a + b) / predictions.length;
+    
+    return {
+      'irregularity_score': averageScore,
+      'confidence': 0.85,
+      'model': 'random_forest',
+    };
+  }
+
+  Future<Map<String, dynamic>> _neuralNetworkIrregularityModel(Map<String, List<double>> features) async {
+    // Neural network for irregularity detection
+    final input = _flattenFeatures(features);
+    final weights = _modelWeights['neural_network_weights'] as Map<String, List<List<double>>>;
+    
+    // Forward pass through network layers
+    List<double> hidden1 = _applyLayer(input, weights['layer1']!, []);
+    hidden1 = hidden1.map(_relu).toList();
+    
+    List<double> hidden2 = _applyLayer(hidden1, weights['layer2']!, []);
+    hidden2 = hidden2.map(_relu).toList();
+    
+    List<double> output = _applyLayer(hidden2, weights['output']!, []);
+    output = output.map(_sigmoid).toList();
+    
+    return {
+      'irregularity_score': output.first,
+      'confidence': 0.9,
+      'model': 'neural_network',
+    };
+  }
+
+  Future<Map<String, dynamic>> _timeSeriesIrregularityModel(List<CycleData> cycles) async {
+    // Time series analysis for irregularity prediction
+    if (cycles.length < 3) {
+      return {
+        'irregularity_score': 0.5,
+        'confidence': 0.3,
+        'model': 'time_series',
+      };
+    }
+    
+    final lengths = cycles.map((c) => c.length.toDouble()).toList();
+    
+    // Calculate trend and seasonality
+    final trend = _calculateTrend(lengths);
+    final seasonality = _calculateSeasonality(lengths);
+    final residuals = _calculateResiduals(lengths, trend, seasonality);
+    
+    // Irregularity based on residual variance
+    final irregularityScore = _calculateVariance(residuals) / 10.0;
+    
+    return {
+      'irregularity_score': irregularityScore.clamp(0.0, 1.0),
+      'confidence': 0.7,
+      'model': 'time_series',
+    };
+  }
+
+  Future<Map<String, dynamic>> _detectPCOS(
+    Map<String, List<double>> features,
+    List<CycleData> cycles,
+  ) async {
+    // PCOS detection algorithm
+    double pcosScore = 0.0;
+    
+    // Irregular cycles (major criterion)
+    if (cycles.isNotEmpty) {
+      final variability = _calculateVariability(cycles);
+      if (variability > 7.0) pcosScore += 0.4;
+    }
+    
+    // Hyperandrogenism indicators
+    final hirsutismScore = features['hirsutism_score']?.first ?? 0.0;
+    if (hirsutismScore > 0.6) pcosScore += 0.3;
+    
+    // Polycystic ovarian morphology (simplified)
+    final cycleLength = cycles.isNotEmpty ? 
+        cycles.map((c) => c.length).reduce((a, b) => a + b) / cycles.length : 28.0;
+    if (cycleLength > 35) pcosScore += 0.2;
+    
+    // Metabolic indicators
+    final bmi = features['bmi']?.first ?? 22.0;
+    if (bmi > 25) pcosScore += 0.1;
+    
+    return ConditionRisk(
+      condition: 'PCOS',
+      riskScore: pcosScore.clamp(0.0, 1.0),
+      confidence: 0.8,
+      indicators: [
+        if (pcosScore > 0.6) 'Irregular menstrual cycles',
+        if (hirsutismScore > 0.6) 'Signs of hyperandrogenism',
+        if (cycleLength > 35) 'Extended cycle length',
+        if (bmi > 25) 'Elevated BMI',
+      ],
+      recommendations: _generatePCOSRecommendations(pcosScore),
+    );
+  }
+
+  Future<Map<String, dynamic>> _detectEndometriosis(
+    Map<String, List<double>> features,
+    Map<String, dynamic>? symptoms,
+  ) async {
+    // Endometriosis detection algorithm
+    double endoScore = 0.0;
+    
+    final pelvicPain = features['pelvic_pain']?.first ?? 0.0;
+    final dysmenorrhea = features['dysmenorrhea']?.first ?? 0.0;
+    final dyspareunia = features['deep_dyspareunia']?.first ?? 0.0;
+    
+    // Pain-related indicators
+    if (pelvicPain > 0.7) endoScore += 0.4;
+    if (dysmenorrhea > 0.8) endoScore += 0.3;
+    if (dyspareunia > 0.6) endoScore += 0.2;
+    
+    // Additional symptoms
+    if (symptoms?['heavy_bleeding'] == true) endoScore += 0.1;
+    
+    return ConditionRisk(
+      condition: 'Endometriosis',
+      riskScore: endoScore.clamp(0.0, 1.0),
+      confidence: 0.75,
+      indicators: [
+        if (pelvicPain > 0.7) 'Chronic pelvic pain',
+        if (dysmenorrhea > 0.8) 'Severe menstrual pain',
+        if (dyspareunia > 0.6) 'Painful intercourse',
+      ],
+      recommendations: _generateEndometriosisRecommendations(endoScore),
+    );
+  }
+
+  // === UTILITY METHODS ===
+
+  List<double> _flattenFeatures(Map<String, List<double>> features) {
+    final flattened = <double>[];
+    for (final values in features.values) {
+      flattened.addAll(values);
+    }
+    // Pad to fixed size if needed
+    while (flattened.length < 50) {
+      flattened.add(0.0);
+    }
+    return flattened.take(50).toList();
+  }
+
+  double _calculateVariability(List<CycleData> cycles) {
+    if (cycles.length < 2) return 0.0;
+    
+    final lengths = cycles.map((c) => c.length.toDouble()).toList();
+    final mean = lengths.reduce((a, b) => a + b) / lengths.length;
+    final variance = lengths.map((l) => math.pow(l - mean, 2)).reduce((a, b) => a + b) / lengths.length;
+    
+    return math.sqrt(variance);
+  }
+
+  double _calculateVariance(List<double> values) {
+    if (values.isEmpty) return 0.0;
+    
+    final mean = values.reduce((a, b) => a + b) / values.length;
+    return values.map((v) => math.pow(v - mean, 2)).reduce((a, b) => a + b) / values.length;
+  }
+
+  List<double> _extractFlowFeatures(List<CycleData> cycles) {
+    return cycles.map((c) => _flowIntensityToDouble(c.flowIntensity)).toList();
+  }
+
+  double _flowIntensityToDouble(FlowIntensity? intensity) {
+    switch (intensity) {
+      case FlowIntensity.none: return 0.0;
+      case FlowIntensity.spotting: return 1.0;
+      case FlowIntensity.light: return 2.0;
+      case FlowIntensity.medium: return 3.0;
+      case FlowIntensity.heavy: return 4.0;
+      case FlowIntensity.veryHeavy: return 5.0;
+      default: return 2.0;
+    }
+  }
+
+  double _relu(double x) => math.max(0, x);
+  double _sigmoid(double x) => 1 / (1 + math.exp(-x));
+
+  List<double> _applyLayer(List<double> input, List<List<double>> weights, List<double> biases) {
+    final output = <double>[];
+    for (int i = 0; i < weights.length; i++) {
+      double sum = biases.isNotEmpty ? biases[i] : 0.0;
+      for (int j = 0; j < input.length && j < weights[i].length; j++) {
+        sum += input[j] * weights[i][j];
+      }
+      output.add(sum);
+    }
+    return output;
+  }
+
+  // Generate sample weights for demonstration
+  List<double> _generateSVMWeights() => List.generate(50, (i) => (math.Random().nextDouble() - 0.5) * 2);
+  
+  Map<String, List<List<double>>> _generateNeuralNetworkWeights() => {
+    'layer1': List.generate(20, (i) => List.generate(50, (j) => (math.Random().nextDouble() - 0.5) * 0.2)),
+    'layer2': List.generate(10, (i) => List.generate(20, (j) => (math.Random().nextDouble() - 0.5) * 0.2)),
+    'output': List.generate(1, (i) => List.generate(10, (j) => (math.Random().nextDouble() - 0.5) * 0.2)),
+  };
+  
+  List<Map<String, dynamic>> _generateRandomForestWeights() => List.generate(10, (i) => {
+    'threshold': math.Random().nextDouble(),
+    'feature_index': math.Random().nextInt(10),
+    'left_prediction': math.Random().nextDouble(),
+    'right_prediction': math.Random().nextDouble(),
+  });
+  
+  double _evaluateDecisionTree(Map<String, List<double>> features, Map<String, dynamic> tree) {
+    final featureVector = _flattenFeatures(features);
+    final featureIndex = tree['feature_index'] as int;
+    final threshold = tree['threshold'] as double;
+    
+    if (featureIndex < featureVector.length) {
+      return featureVector[featureIndex] > threshold ? 
+          tree['right_prediction'] as double : 
+          tree['left_prediction'] as double;
+    }
+    
+    return 0.5; // Default prediction
+  }
+}
+
+// === DATA MODELS ===
+
+class CycleIrregularityPrediction {
+  final double irregularityScore;
+  final double confidence;
+  final RiskLevel riskLevel;
+  final List<String> contributingFactors;
+  final Map<String, dynamic> patterns;
+  final Map<String, dynamic> predictions;
+  final List<String> recommendations;
+  final List<String> medicalFlags;
+  final DateTime analysisDate;
+
+  CycleIrregularityPrediction({
+    required this.irregularityScore,
+    required this.confidence,
+    required this.riskLevel,
+    required this.contributingFactors,
+    required this.patterns,
+    required this.predictions,
+    required this.recommendations,
+    required this.medicalFlags,
+    required this.analysisDate,
+  });
+}
+
+class FertilityWindowOptimization {
+  final Map<String, DateTime> optimalWindow;
+  final double confidence;
+  final Map<String, double> ovulationProbability;
+  final double fertilityScore;
+  final List<String> influencingFactors;
+  final List<String> recommendations;
+  final Map<String, double> biometricCorrelations;
+  final DateTime analysisDate;
+
+  FertilityWindowOptimization({
+    required this.optimalWindow,
+    required this.confidence,
+    required this.ovulationProbability,
+    required this.fertilityScore,
+    required this.influencingFactors,
+    required this.recommendations,
+    required this.biometricCorrelations,
+    required this.analysisDate,
+  });
+}
+
+class ConditionDetectionResult {
+  final ConditionRisk pcosRisk;
+  final ConditionRisk endometriosisRisk;
+  final ConditionRisk thyroidRisk;
+  final ConditionRisk hormonalImbalanceRisk;
+  final double overallHealthScore;
+  final List<String> recommendations;
+  final List<String> followUpActions;
+  final DateTime analysisDate;
+
+  ConditionDetectionResult({
+    required this.pcosRisk,
+    required this.endometriosisRisk,
+    required this.thyroidRisk,
+    required this.hormonalImbalanceRisk,
+    required this.overallHealthScore,
+    required this.recommendations,
+    required this.followUpActions,
+    required this.analysisDate,
+  });
+}
+
+class ConditionRisk {
+  final String condition;
+  final double riskScore;
+  final double confidence;
+  final List<String> indicators;
+  final List<String> recommendations;
+
+  ConditionRisk({
+    required this.condition,
+    required this.riskScore,
+    required this.confidence,
+    required this.indicators,
+    required this.recommendations,
+  });
+}
+
+class PersonalizedHealthInsights {
+  final List<HealthInsight> topInsights;
+  final List<String> actionableRecommendations;
+  final List<String> personalizedTips;
+  final Map<String, dynamic> lifestyleOptimizations;
+  final Map<String, dynamic> nutritionGuidance;
+  final Map<String, dynamic> exerciseRecommendations;
+  final List<String> wellnessGoals;
+  final Map<String, dynamic> progressTracking;
+  final double confidence;
+  final DateTime analysisDate;
+
+  PersonalizedHealthInsights({
+    required this.topInsights,
+    required this.actionableRecommendations,
+    required this.personalizedTips,
+    required this.lifestyleOptimizations,
+    required this.nutritionGuidance,
+    required this.exerciseRecommendations,
+    required this.wellnessGoals,
+    required this.progressTracking,
+    required this.confidence,
+    required this.analysisDate,
+  });
+}
+
+class SymptomPredictionResult {
+  final Map<String, double> predictions;
+  final double confidence;
+  final Map<int, List<String>> timeline;
+  final List<String> triggers;
+  final Map<String, int> severity;
+  final List<String> managementTips;
+  final List<String> preventionStrategies;
+  final DateTime analysisDate;
+
+  SymptomPredictionResult({
+    required this.predictions,
+    required this.confidence,
+    required this.timeline,
+    required this.triggers,
+    required this.severity,
+    required this.managementTips,
+    required this.preventionStrategies,
+    required this.analysisDate,
+  });
+}
+
+class HealthInsight {
+  final String category;
+  final String title;
+  final String description;
+  final double importance;
+  final List<String> actionItems;
+
+  HealthInsight({
+    required this.category,
+    required this.title,
+    required this.description,
+    required this.importance,
+    required this.actionItems,
+  });
+}
+
+class PredictionFeedback {
+  final String id;
+  final String type;
+  final bool wasAccurate;
+  final Map<String, dynamic> actualData;
+  final Map<String, dynamic> predictedData;
+  final double error;
+  final String? userFeedback;
+  final Map<String, dynamic> context;
+  final DateTime timestamp;
+
+  PredictionFeedback({
+    required this.id,
+    required this.type,
+    required this.wasAccurate,
+    required this.actualData,
+    required this.predictedData,
+    required this.error,
+    this.userFeedback,
+    required this.context,
+    required this.timestamp,
+  });
+}
+
+enum RiskLevel { low, moderate, high, critical }
+
+// Extension methods and additional helper classes would be added here...

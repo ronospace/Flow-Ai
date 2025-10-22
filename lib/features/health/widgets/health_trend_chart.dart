@@ -121,10 +121,10 @@ class _HealthTrendChartState extends State<HealthTrendChart>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: _getMetricColor(widget.selectedMetric).withOpacity(0.1),
+        color: _getMetricColor(widget.selectedMetric).withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: _getMetricColor(widget.selectedMetric).withOpacity(0.3),
+          color: _getMetricColor(widget.selectedMetric).withValues(alpha: 0.1),
         ),
       ),
       child: Column(
@@ -350,8 +350,8 @@ class _HealthTrendChartState extends State<HealthTrendChart>
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                _getMetricColor(widget.selectedMetric).withOpacity(0.3),
-                _getMetricColor(widget.selectedMetric).withOpacity(0.05),
+                _getMetricColor(widget.selectedMetric).withValues(alpha: 0.1),
+                _getMetricColor(widget.selectedMetric).withValues(alpha: 0.1),
               ],
             ),
           ),
