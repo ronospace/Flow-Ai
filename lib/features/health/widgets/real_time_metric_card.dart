@@ -67,12 +67,12 @@ class _RealTimeMetricCardState extends State<RealTimeMetricCard>
           color: const Color(0xFF1D1E33),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: widget.color.withOpacity(0.2),
+            color: widget.color.withValues(alpha: 0.1),
             width: 1,
           ),
           boxShadow: [
             BoxShadow(
-              color: widget.color.withOpacity(0.1),
+              color: widget.color.withValues(alpha: 0.1),
               blurRadius: 10,
               offset: const Offset(0, 5),
             ),
@@ -92,7 +92,7 @@ class _RealTimeMetricCardState extends State<RealTimeMetricCard>
                       child: Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: widget.color.withOpacity(0.2),
+                          color: widget.color.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Icon(
@@ -154,7 +154,7 @@ class _RealTimeMetricCardState extends State<RealTimeMetricCard>
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         decoration: BoxDecoration(
-          color: Colors.grey.withOpacity(0.2),
+          color: Colors.grey.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
@@ -185,7 +185,7 @@ class _RealTimeMetricCardState extends State<RealTimeMetricCard>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.2),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(

@@ -14,7 +14,7 @@ class UserService extends ChangeNotifier {
   bool _isInitialized = false;
   
   final LocalUserService _localUserService = LocalUserService();
-  final AuthService _authService = AuthService.instance;
+  final AuthService _authService = AuthService();
 
   UserProfile? get currentUser => _currentUser;
   bool get isInitialized => _isInitialized;
@@ -218,7 +218,22 @@ class UserService extends ChangeNotifier {
       // Try to load the most recent user
       final users = await _localUserService.getAllUsers();
       if (users.isNotEmpty) {
-        _currentUser = users.first; // Get the most recent user
+        final localUser = users.first; // Get the most recent user
+        _currentUser = UserProfile(
+          id: localUser.uid,
+          displayName: localUser.displayName,
+          age: 25,
+          lifestyle: 'active',
+          healthConcerns: [],
+          preferences: _getDefaultPreferences(),
+          personalizedBaselines: {},
+          adaptationHistory: [],
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+          weight: 65.0,
+          height: 165.0,
+          familyHistory: {},
+        );
         notifyListeners();
         debugPrint('👤 Loaded current user: ${_currentUser!.displayName}');
       } else {

@@ -31,6 +31,7 @@ import 'features/cycle/providers/cycle_provider.dart';
 import 'features/insights/providers/insights_provider.dart';
 import 'features/health/providers/health_provider.dart';
 import 'features/settings/providers/settings_provider.dart';
+import 'features/premium/providers/premium_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -235,6 +236,7 @@ class _FlowAIAppState extends State<FlowAIApp> {
         ChangeNotifierProvider(create: (_) => InsightsProvider()),
         ChangeNotifierProvider(create: (_) => HealthProvider()),
         ChangeNotifierProvider.value(value: settingsProvider),
+        ChangeNotifierProvider(create: (_) => PremiumProvider()),
       ],
       child: Consumer<SettingsProvider>(
         builder: (context, settings, child) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'dart:math';
+import '../models/user_profile.dart';
 
 /// Local User Service for storing and managing user data offline
 /// This service provides fallback authentication when Firebase is not available
@@ -375,6 +376,48 @@ class LocalUserService {
   Future<bool> userExists(String email) async {
     final user = await getUserByEmail(email);
     return user != null;
+  }
+
+  /// Get user by ID (compatibility method)
+  Future<UserProfile?> getUser(String userId) async {
+    // For compatibility with UserService, convert LocalUser to UserProfile
+    // This is a temporary adapter method
+    return null; // TODO: Implement proper conversion if needed
+  }
+
+  /// Delete user by ID (compatibility method)
+  Future<bool> deleteUser(String userId) async {
+    // Find user by ID and delete
+    final users = await getAllUsers();
+    final user = users.where((u) => u.uid == userId).firstOrNull;
+    if (user == null) return false;
+    
+    try {
+      final usersJson = _prefs!.getString(_usersKey);
+      if (usersJson != null) {
+        final usersData = Map<String, dynamic>.from(json.decode(usersJson));
+        usersData.remove(userId);
+        await _prefs!.setString(_usersKey, json.encode(usersData));
+        
+        // Clear current user if it's the deleted user
+        final currentUser = await getCurrentUser();
+        if (currentUser?.uid == userId) {
+          await signOut();
+        }
+        
+        return true;
+      }
+    } catch (e) {
+      debugPrint('❌ Failed to delete user: $e');
+    }
+    return false;
+  }
+
+  /// Save user (compatibility method)
+  Future<void> saveUser(UserProfile user) async {
+    // This is a compatibility method for UserService
+    // In practice, we'd need to convert UserProfile to LocalUser
+    debugPrint('⚠️ saveUser called but not implemented for UserProfile');
   }
 }
 

@@ -6,7 +6,7 @@ import 'dart:async';
 
 import 'ai_conversation_memory.dart';
 import 'flowai_service.dart';
-import '../config/flowai_config.dart';
+import '../config/flowiq_config.dart';
 import '../../generated/app_localizations.dart';
 import '../../generated/app_localizations_extensions.dart';
 
@@ -58,9 +58,9 @@ class AIChatService {
       } catch (e) {
         debugPrint('FlowAI initialization failed, using fallback responses: $e');
       }
-    } else if (FlowAIConfig.isConfigured) {
+    } else if (FlowIQConfig.isConfigured) {
       try {
-        await _initializeFlowAI(FlowAIConfig.apiKey!);
+        await _initializeFlowAI(FlowIQConfig.apiKey!);
       } catch (e) {
         debugPrint('FlowAI initialization failed, using fallback responses: $e');
       }

@@ -340,7 +340,8 @@ class _SetupFormState extends State<SetupForm> {
                   _reminderSettings[entry.key] = value;
                 });
               },
-              activeColor: theme.colorScheme.primary,
+              activeTrackColor: Colors.blue,
+        activeThumbColor: Colors.blue,
             ),
           );
         }).toList(),

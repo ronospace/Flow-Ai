@@ -27,19 +27,19 @@ class AIPredictionCard extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              AppTheme.primaryRose.withOpacity(0.1),
-              AppTheme.primaryPurple.withOpacity(0.05),
-              AppTheme.accentMint.withOpacity(0.05),
+              AppTheme.primaryRose.withValues(alpha: 0.1),
+              AppTheme.primaryPurple.withValues(alpha: 0.1),
+              AppTheme.accentMint.withValues(alpha: 0.1),
             ],
           ),
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
-            color: AppTheme.primaryRose.withOpacity(0.2),
+            color: AppTheme.primaryRose.withValues(alpha: 0.1),
             width: 1,
           ),
           boxShadow: [
             BoxShadow(
-              color: AppTheme.primaryRose.withOpacity(0.1),
+              color: AppTheme.primaryRose.withValues(alpha: 0.1),
               blurRadius: 20,
               offset: const Offset(0, 8),
             ),
@@ -95,7 +95,7 @@ class AIPredictionCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: AppTheme.primaryRose.withOpacity(0.3),
+                color: AppTheme.primaryRose.withValues(alpha: 0.1),
                 blurRadius: 8,
                 offset: const Offset(0, 4),
               ),
@@ -132,10 +132,10 @@ class AIPredictionCard extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
-            color: _getConfidenceColor().withOpacity(0.2),
+            color: _getConfidenceColor().withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: _getConfidenceColor().withOpacity(0.3),
+              color: _getConfidenceColor().withValues(alpha: 0.1),
             ),
           ),
           child: Text(
@@ -186,13 +186,13 @@ class AIPredictionCard extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                _getPredictionStatusColor().withOpacity(0.2),
-                _getPredictionStatusColor().withOpacity(0.1),
+                _getPredictionStatusColor().withValues(alpha: 0.1),
+                _getPredictionStatusColor().withValues(alpha: 0.1),
               ],
             ),
             borderRadius: BorderRadius.circular(40),
             border: Border.all(
-              color: _getPredictionStatusColor().withOpacity(0.3),
+              color: _getPredictionStatusColor().withValues(alpha: 0.1),
               width: 2,
             ),
           ),
@@ -243,7 +243,7 @@ class AIPredictionCard extends StatelessWidget {
         Expanded(
           child: LinearProgressIndicator(
             value: prediction.confidenceLevel / 100,
-            backgroundColor: AppTheme.lightGrey.withOpacity(0.3),
+            backgroundColor: AppTheme.lightGrey.withValues(alpha: 0.1),
             valueColor: AlwaysStoppedAnimation<Color>(_getConfidenceColor()),
             borderRadius: BorderRadius.circular(4),
           ),
@@ -322,13 +322,13 @@ class AIPredictionCard extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppTheme.accentMint.withOpacity(0.1),
-            AppTheme.secondaryBlue.withOpacity(0.05),
+            AppTheme.accentMint.withValues(alpha: 0.1),
+            AppTheme.secondaryBlue.withValues(alpha: 0.1),
           ],
         ),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: AppTheme.accentMint.withOpacity(0.2),
+          color: AppTheme.accentMint.withValues(alpha: 0.1),
         ),
       ),
       child: Column(
@@ -378,7 +378,7 @@ class AIPredictionCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: AppTheme.accentMint.withOpacity(0.2),
+                  color: AppTheme.accentMint.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -461,13 +461,13 @@ class AIPredictionSummary extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              AppTheme.primaryRose.withOpacity(0.1),
-              AppTheme.primaryPurple.withOpacity(0.05),
+              AppTheme.primaryRose.withValues(alpha: 0.1),
+              AppTheme.primaryPurple.withValues(alpha: 0.1),
             ],
           ),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: AppTheme.primaryRose.withOpacity(0.2),
+            color: AppTheme.primaryRose.withValues(alpha: 0.1),
           ),
         ),
         child: Row(
@@ -504,7 +504,7 @@ class AIPredictionSummary extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
-                          color: AppTheme.accentMint.withOpacity(0.2),
+                          color: AppTheme.accentMint.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(

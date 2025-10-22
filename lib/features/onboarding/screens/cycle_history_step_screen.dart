@@ -212,10 +212,10 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppTheme.primaryRose.withOpacity(0.05),
+        color: AppTheme.primaryRose.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: AppTheme.primaryRose.withOpacity(0.2),
+          color: AppTheme.primaryRose.withValues(alpha: 0.1),
           width: 1,
         ),
       ),
@@ -244,7 +244,7 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
                   });
                 },
                 backgroundColor: theme.cardColor,
-                selectedColor: AppTheme.primaryRose.withOpacity(0.2),
+                selectedColor: AppTheme.primaryRose.withValues(alpha: 0.1),
                 labelStyle: TextStyle(
                   color: isSelected ? AppTheme.primaryRose : AppTheme.mediumGrey,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
@@ -267,7 +267,7 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -285,7 +285,7 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: AppTheme.primaryRose.withOpacity(0.1),
+                      color: AppTheme.primaryRose.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Icon(
@@ -347,7 +347,7 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -368,7 +368,7 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: _getCycleLengthColor().withOpacity(0.1),
+                    color: _getCycleLengthColor().withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
@@ -388,7 +388,8 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
               min: 21,
               max: 40,
               divisions: 19,
-              activeColor: AppTheme.primaryPurple,
+              activeTrackColor: Colors.blue,
+        activeThumbColor: Colors.blue,
               onChanged: (value) {
                 setState(() {
                   _cycleLength = value.round();
@@ -419,7 +420,7 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -440,7 +441,7 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: _getPeriodLengthColor().withOpacity(0.1),
+                    color: _getPeriodLengthColor().withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
@@ -460,7 +461,8 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
               min: 2,
               max: 10,
               divisions: 8,
-              activeColor: AppTheme.primaryRose,
+              activeTrackColor: Colors.blue,
+        activeThumbColor: Colors.blue,
               onChanged: (value) {
                 setState(() {
                   _periodLength = value.round();
@@ -502,7 +504,7 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
               });
             },
             backgroundColor: theme.cardColor,
-            selectedColor: AppTheme.accentMint.withOpacity(0.2),
+            selectedColor: AppTheme.accentMint.withValues(alpha: 0.1),
             labelStyle: TextStyle(
               color: isSelected ? AppTheme.accentMint : AppTheme.mediumGrey,
               fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
@@ -535,7 +537,7 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
               });
             },
             backgroundColor: theme.cardColor,
-            selectedColor: AppTheme.warningOrange.withOpacity(0.2),
+            selectedColor: AppTheme.warningOrange.withValues(alpha: 0.1),
             labelStyle: TextStyle(
               color: isSelected ? AppTheme.warningOrange : AppTheme.mediumGrey,
               fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
@@ -560,7 +562,7 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -602,13 +604,13 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
     return Container(
       decoration: BoxDecoration(
         color: isSelected
-            ? AppTheme.primaryPurple.withOpacity(0.1)
+            ? AppTheme.primaryPurple.withValues(alpha: 0.1)
             : theme.cardColor,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isSelected
               ? AppTheme.primaryPurple
-              : AppTheme.mediumGrey.withOpacity(0.3),
+              : AppTheme.mediumGrey.withValues(alpha: 0.1),
           width: isSelected ? 2 : 1,
         ),
       ),

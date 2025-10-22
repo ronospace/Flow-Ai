@@ -87,9 +87,9 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
         icon: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.1),
+            color: Colors.white.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.white.withOpacity(0.2)),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
           ),
           child: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 16),
         ),
@@ -108,7 +108,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
           icon: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: AppTheme.primaryColor.withOpacity(0.2),
+              color: AppTheme.primaryColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: const Icon(Icons.save_outlined, color: Colors.white),
@@ -169,12 +169,12 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            AppTheme.primaryColor.withOpacity(0.3),
-            AppTheme.secondaryColor.withOpacity(0.2),
+            AppTheme.primaryColor.withValues(alpha: 0.1),
+            AppTheme.secondaryColor.withValues(alpha: 0.1),
           ],
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withOpacity(0.1)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
       ),
       child: Row(
         children: [
@@ -185,7 +185,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: AppTheme.primaryColor.withOpacity(0.3),
+                  color: AppTheme.primaryColor.withValues(alpha: 0.1),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),
@@ -250,12 +250,12 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
+        color: Colors.white.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isEnabled 
-              ? AppTheme.primaryColor.withOpacity(0.3)
-              : Colors.white.withOpacity(0.1),
+              ? AppTheme.primaryColor.withValues(alpha: 0.1)
+              : Colors.white.withValues(alpha: 0.1),
         ),
       ),
       child: ListTile(
@@ -264,8 +264,8 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: isEnabled 
-                ? _getTypeColor(type).withOpacity(0.2)
-                : Colors.grey.withOpacity(0.2),
+                ? _getTypeColor(type).withValues(alpha: 0.1)
+                : Colors.grey.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(
@@ -291,8 +291,10 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
         ),
         trailing: Switch.adaptive(
           value: isEnabled,
-          activeColor: _getTypeColor(type),
-          inactiveThumbColor: Colors.grey,
+          thumbColor: WidgetStateProperty.resolveWith((states) => 
+            states.contains(WidgetState.selected) ? _getTypeColor(type) : Colors.grey),
+          trackColor: WidgetStateProperty.resolveWith((states) => 
+            states.contains(WidgetState.selected) ? _getTypeColor(type).withValues(alpha: 0.5) : null),
           onChanged: (value) {
             setState(() {
               _preferences.typePreferences[type] = value;
@@ -325,9 +327,9 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
+        color: Colors.white.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withOpacity(0.1)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
       ),
       child: Column(
         children: [
@@ -404,9 +406,9 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: AppTheme.primaryColor.withOpacity(0.1),
+          color: AppTheme.primaryColor.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: AppTheme.primaryColor.withOpacity(0.3)),
+          border: Border.all(color: AppTheme.primaryColor.withValues(alpha: 0.1)),
         ),
         child: Column(
           children: [
@@ -448,9 +450,9 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
-            color: AppTheme.primaryColor.withOpacity(0.1),
+            color: AppTheme.primaryColor.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: AppTheme.primaryColor.withOpacity(0.3)),
+            border: Border.all(color: AppTheme.primaryColor.withValues(alpha: 0.1)),
           ),
           child: Text(
             '${_preferences.maxDailyNotifications}',
@@ -491,7 +493,10 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
         ),
         Switch.adaptive(
           value: _preferences.allowWeekends,
-          activeColor: AppTheme.primaryColor,
+          thumbColor: WidgetStateProperty.resolveWith((states) => 
+            states.contains(WidgetState.selected) ? AppTheme.primaryColor : null),
+          trackColor: WidgetStateProperty.resolveWith((states) => 
+            states.contains(WidgetState.selected) ? AppTheme.primaryColor.withValues(alpha: 0.5) : null),
           onChanged: (value) {
             setState(() {
               // This would update the preference
@@ -524,9 +529,9 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
+        color: Colors.white.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withOpacity(0.1)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
       ),
       child: Column(
         children: [
@@ -570,7 +575,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: AppTheme.primaryColor.withOpacity(0.2),
+            color: AppTheme.primaryColor.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(icon, color: AppTheme.primaryColor, size: 20),
@@ -600,7 +605,10 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
         ),
         Switch.adaptive(
           value: value,
-          activeColor: AppTheme.primaryColor,
+          thumbColor: WidgetStateProperty.resolveWith((states) => 
+            states.contains(WidgetState.selected) ? AppTheme.primaryColor : null),
+          trackColor: WidgetStateProperty.resolveWith((states) => 
+            states.contains(WidgetState.selected) ? AppTheme.primaryColor.withValues(alpha: 0.5) : null),
           onChanged: onChanged,
         ),
       ],
