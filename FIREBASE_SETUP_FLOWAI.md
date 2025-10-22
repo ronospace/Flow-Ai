@@ -1,10 +1,10 @@
-# Firebase Setup for Flow AI
+# Firebase Setup for Flow Ai
 
 ## Current Configuration
 - **Firebase Project**: flow-ai-656b3
 - **iOS Bundle ID**: com.flowai.health
 - **Android Package**: com.flowai.health
-- **App Name**: Flow AI
+- **App Name**: Flow Ai
 
 ## Steps to Complete Firebase Configuration
 
@@ -79,13 +79,13 @@ flutter run -d [device-id]
 
 #### iOS App Store
 - Bundle ID: `com.flowai.health`
-- App Name: `Flow AI`
+- App Name: `Flow Ai`
 - Category: Health & Fitness
 - Age Rating: 12+ (health/medical information)
 
 #### Android Play Store
 - Package: `com.flowai.health`
-- App Name: `Flow AI`
+- App Name: `Flow Ai`
 - Category: Health & Fitness
 - Content Rating: Teen (health information)
 
@@ -107,7 +107,7 @@ flutter run -d [device-id]
 
 ## Current Status
 
-✅ App rebranded to Flow AI
+✅ App rebranded to Flow Ai
 ✅ Firebase dependencies enabled (v2.1.0+7)
 ✅ Bundle IDs configured
 ✅ App icons generated
