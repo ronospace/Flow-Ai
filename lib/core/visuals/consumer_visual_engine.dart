@@ -303,7 +303,7 @@ class BreathingAnimationEngine {
     return BreathingAnimationWidget(
       pattern: pattern,
       size: size,
-      color: color ?? Colors.blue.withOpacity(0.7),
+      color: color ?? Colors.blue.withValues(alpha: 0.1),
       onCycleComplete: onCycleComplete,
     );
   }
@@ -407,13 +407,13 @@ class BiometricsRenderer {
   Color _getDefaultColor(BiometricVisualization type) {
     switch (type) {
       case BiometricVisualization.heartRate:
-        return Colors.red.withOpacity(0.8);
+        return Colors.red.withValues(alpha: 0.1);
       case BiometricVisualization.breathingRate:
-        return Colors.blue.withOpacity(0.8);
+        return Colors.blue.withValues(alpha: 0.1);
       case BiometricVisualization.stressLevel:
-        return Colors.orange.withOpacity(0.8);
+        return Colors.orange.withValues(alpha: 0.1);
       case BiometricVisualization.energy:
-        return Colors.green.withOpacity(0.8);
+        return Colors.green.withValues(alpha: 0.1);
     }
   }
 
@@ -531,7 +531,7 @@ class _BreathingAnimationWidgetState extends State<BreathingAnimationWidget>
                     color: widget.color.withOpacity(_opacityAnimation.value),
                     boxShadow: [
                       BoxShadow(
-                        color: widget.color.withOpacity(0.3),
+                        color: widget.color.withValues(alpha: 0.1),
                         blurRadius: 20,
                         spreadRadius: 5,
                       ),
@@ -545,7 +545,7 @@ class _BreathingAnimationWidgetState extends State<BreathingAnimationWidget>
                 height: 20,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withOpacity(0.9),
+                  color: Colors.white.withValues(alpha: 0.1),
                 ),
               ),
             ],

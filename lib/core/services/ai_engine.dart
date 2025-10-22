@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import '../models/cycle_data.dart';
 import '../models/ai_insights.dart';
 import 'flowai_service.dart';
-import '../config/flowai_config.dart';
+import '../config/flowiq_config.dart';
 
 class AIEngine {
   static final AIEngine _instance = AIEngine._internal();
@@ -95,7 +95,7 @@ class AIEngine {
     };
     
     // Initialize FlowAI if configured
-    if (FlowAIConfig.isConfigured) {
+        if (FlowIQConfig.isConfigured) {
       try {
         await _initializeFlowAI();
       } catch (e) {
@@ -555,10 +555,10 @@ class AIEngine {
   
   /// Initialize FlowAI service for enhanced insights
   Future<void> _initializeFlowAI() async {
-    if (!FlowAIConfig.isConfigured) return;
+        if (!FlowIQConfig.isConfigured) return;
     
     try {
-      await _flowAIService.initialize(apiKey: FlowAIConfig.apiKey!);
+          await _flowAIService.initialize(apiKey: FlowIQConfig.apiKey!);
       _useFlowAI = _flowAIService.isInitialized;
       debugPrint('🤖 AI Engine FlowAI integration ${_useFlowAI ? "enabled" : "failed"}');
     } catch (e) {

@@ -402,7 +402,7 @@ class AdvancedAIEngine {
 
   FlowPatterns _analyzeFlowPatterns(List<CycleData> cycles) {
     // Use flowIntensity from CycleData instead of flowData
-    final intensities = cycles.map((c) => c.flowIntensity.index).toList();
+    final intensities = cycles.map((c) => c.flowIntensity?.index ?? 2).toList();
     
     return FlowPatterns(
       averageIntensity: _calculateAverageIntensity(intensities),

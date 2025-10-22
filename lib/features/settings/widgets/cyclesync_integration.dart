@@ -191,7 +191,10 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                   : Switch.adaptive(
                       value: isConnected,
                       onChanged: (value) => _toggleConnection(context, settings, value),
-                      activeColor: AppTheme.successGreen,
+                      thumbColor: WidgetStateProperty.resolveWith((states) => 
+                        states.contains(WidgetState.selected) ? AppTheme.successGreen : null),
+                      trackColor: WidgetStateProperty.resolveWith((states) => 
+                        states.contains(WidgetState.selected) ? AppTheme.successGreen.withValues(alpha: 0.5) : null),
                     ),
             ),
 

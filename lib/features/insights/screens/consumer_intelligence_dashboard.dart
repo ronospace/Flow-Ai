@@ -201,7 +201,7 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
                         width: 50,
                         height: 50,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
+                          color: Colors.white.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(25),
                         ),
                         child: const Icon(
@@ -225,7 +225,7 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
                             Text(
                               'AI-powered health insights',
                               style: theme.textTheme.bodyMedium?.copyWith(
-                                color: Colors.white.withOpacity(0.9),
+                                color: Colors.white.withValues(alpha: 0.1),
                               ),
                             ).animate().fadeIn(delay: 600.ms),
                           ],
@@ -265,11 +265,11 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
                 color: isSelected 
-                    ? Colors.white.withOpacity(0.3)
-                    : Colors.white.withOpacity(0.1),
+                    ? Colors.white.withValues(alpha: 0.1)
+                    : Colors.white.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: Colors.white.withOpacity(0.3),
+                  color: Colors.white.withValues(alpha: 0.1),
                   width: 1,
                 ),
               ),
@@ -396,7 +396,7 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -411,7 +411,7 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
                 width: 32,
                 height: 32,
                 decoration: BoxDecoration(
-                  color: iconColor.withOpacity(0.1),
+                  color: iconColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
@@ -526,12 +526,12 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: _getInsightColor(insight.priority).withOpacity(0.2),
+          color: _getInsightColor(insight.priority).withValues(alpha: 0.1),
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -546,7 +546,7 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
                 width: 32,
                 height: 32,
                 decoration: BoxDecoration(
-                  color: _getInsightColor(insight.priority).withOpacity(0.1),
+                  color: _getInsightColor(insight.priority).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
@@ -582,7 +582,7 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: _getInsightColor(insight.priority).withOpacity(0.1),
+                  color: _getInsightColor(insight.priority).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
@@ -673,7 +673,7 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -715,7 +715,7 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
           drawVerticalLine: false,
           horizontalInterval: 20,
           getDrawingHorizontalLine: (value) => FlLine(
-            color: AppTheme.lightGrey.withOpacity(0.5),
+            color: AppTheme.lightGrey.withValues(alpha: 0.1),
             strokeWidth: 1,
           ),
         ),
@@ -756,8 +756,8 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
               show: true,
               gradient: LinearGradient(
                 colors: [
-                  AppTheme.primaryPurple.withOpacity(0.1),
-                  AppTheme.primaryRose.withOpacity(0.1),
+                  AppTheme.primaryPurple.withValues(alpha: 0.1),
+                  AppTheme.primaryRose.withValues(alpha: 0.1),
                 ],
               ),
             ),
@@ -806,12 +806,12 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: AppTheme.accentMint.withOpacity(0.3),
+          color: AppTheme.accentMint.withValues(alpha: 0.1),
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -826,7 +826,7 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
                 width: 32,
                 height: 32,
                 decoration: BoxDecoration(
-                  color: AppTheme.accentMint.withOpacity(0.1),
+                  color: AppTheme.accentMint.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
@@ -872,7 +872,7 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
               Expanded(
                 child: LinearProgressIndicator(
                   value: recommendation.potentialImpact,
-                  backgroundColor: AppTheme.lightGrey.withOpacity(0.3),
+                  backgroundColor: AppTheme.lightGrey.withValues(alpha: 0.1),
                   valueColor: AlwaysStoppedAnimation<Color>(
                     _getImpactColor(recommendation.potentialImpact),
                   ),
@@ -980,12 +980,12 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: color.withOpacity(0.2),
+            color: color.withValues(alpha: 0.1),
             width: 1,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -998,7 +998,7 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
+                color: color.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(
@@ -1071,10 +1071,10 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: AppTheme.lightGrey.withOpacity(0.3),
+          color: AppTheme.lightGrey.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: AppTheme.mediumGrey.withOpacity(0.2),
+            color: AppTheme.mediumGrey.withValues(alpha: 0.1),
             width: 1,
           ),
         ),
@@ -1359,7 +1359,7 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: _getInsightColor(insight.priority).withOpacity(0.1),
+                      color: _getInsightColor(insight.priority).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Icon(
@@ -1416,7 +1416,7 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
                     child: Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: AppTheme.lightGrey.withOpacity(0.3),
+                        color: AppTheme.lightGrey.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
@@ -1448,7 +1448,7 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
                     child: Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: AppTheme.lightGrey.withOpacity(0.3),
+                        color: AppTheme.lightGrey.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
@@ -1483,10 +1483,10 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: AppTheme.warningOrange.withOpacity(0.1),
+                    color: AppTheme.warningOrange.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: AppTheme.warningOrange.withOpacity(0.3),
+                      color: AppTheme.warningOrange.withValues(alpha: 0.1),
                     ),
                   ),
                   child: Column(

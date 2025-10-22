@@ -264,7 +264,7 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
                         width: 50,
                         height: 50,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
+                          color: Colors.white.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(25),
                         ),
                         child: const Icon(
@@ -288,7 +288,7 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
                             Text(
                               'Track your emotional wellbeing',
                               style: theme.textTheme.bodyMedium?.copyWith(
-                                color: Colors.white.withOpacity(0.9),
+                                color: Colors.white.withValues(alpha: 0.1),
                               ),
                             ).animate().fadeIn(delay: 600.ms),
                           ],
@@ -340,7 +340,7 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -400,13 +400,13 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                _getWellbeingColor(_overallWellbeing).withOpacity(0.1),
-                _getWellbeingColor(_overallWellbeing).withOpacity(0.05),
+                _getWellbeingColor(_overallWellbeing).withValues(alpha: 0.1),
+                _getWellbeingColor(_overallWellbeing).withValues(alpha: 0.1),
               ],
             ),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: _getWellbeingColor(_overallWellbeing).withOpacity(0.3),
+              color: _getWellbeingColor(_overallWellbeing).withValues(alpha: 0.1),
             ),
           ),
           child: Column(
@@ -443,9 +443,9 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
               SliderTheme(
                 data: SliderTheme.of(context).copyWith(
                   activeTrackColor: _getWellbeingColor(_overallWellbeing),
-                  inactiveTrackColor: _getWellbeingColor(_overallWellbeing).withOpacity(0.2),
+                  inactiveTrackColor: _getWellbeingColor(_overallWellbeing).withValues(alpha: 0.1),
                   thumbColor: _getWellbeingColor(_overallWellbeing),
-                  overlayColor: _getWellbeingColor(_overallWellbeing).withOpacity(0.2),
+                  overlayColor: _getWellbeingColor(_overallWellbeing).withValues(alpha: 0.1),
                   trackHeight: 6,
                   thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 12),
                 ),
@@ -505,7 +505,7 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
         child: Container(
           height: 50,
           decoration: BoxDecoration(
-            color: AppTheme.lightGrey.withOpacity(0.3),
+            color: AppTheme.lightGrey.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(25),
           ),
           child: TabBar(
@@ -580,11 +580,11 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: color.withOpacity(0.2),
+          color: color.withValues(alpha: 0.1),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -624,9 +624,9 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
           SliderTheme(
             data: SliderTheme.of(context).copyWith(
               activeTrackColor: color,
-              inactiveTrackColor: color.withOpacity(0.2),
+              inactiveTrackColor: color.withValues(alpha: 0.1),
               thumbColor: color,
-              overlayColor: color.withOpacity(0.2),
+              overlayColor: color.withValues(alpha: 0.1),
               trackHeight: 4,
               thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10),
             ),
@@ -674,11 +674,11 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: color.withOpacity(0.2),
+          color: color.withValues(alpha: 0.1),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -718,9 +718,9 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
           SliderTheme(
             data: SliderTheme.of(context).copyWith(
               activeTrackColor: color,
-              inactiveTrackColor: color.withOpacity(0.2),
+              inactiveTrackColor: color.withValues(alpha: 0.1),
               thumbColor: color,
-              overlayColor: color.withOpacity(0.2),
+              overlayColor: color.withValues(alpha: 0.1),
               trackHeight: 4,
               thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10),
             ),
@@ -769,13 +769,13 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: isSelected 
-                          ? AppTheme.primaryRose.withOpacity(0.1)
+                          ? AppTheme.primaryRose.withValues(alpha: 0.1)
                           : Colors.white,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
                         color: isSelected 
                             ? AppTheme.primaryRose 
-                            : AppTheme.mediumGrey.withOpacity(0.3),
+                            : AppTheme.mediumGrey.withValues(alpha: 0.1),
                         width: isSelected ? 2 : 1,
                       ),
                     ),
@@ -806,7 +806,7 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
                               decoration: BoxDecoration(
                                 color: i < intensity 
                                     ? AppTheme.primaryRose 
-                                    : AppTheme.mediumGrey.withOpacity(0.3),
+                                    : AppTheme.mediumGrey.withValues(alpha: 0.1),
                                 shape: BoxShape.circle,
                               ),
                             )),
@@ -846,7 +846,7 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
             children: [
               ..._customTags.entries.map((entry) => Chip(
                 label: Text(entry.key),
-                backgroundColor: AppTheme.accentMint.withOpacity(0.2),
+                backgroundColor: AppTheme.accentMint.withValues(alpha: 0.1),
                 labelStyle: const TextStyle(
                   color: AppTheme.darkGrey,
                   fontWeight: FontWeight.w500,
@@ -870,7 +870,7 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
                   size: 16,
                   color: AppTheme.primaryPurple,
                 ),
-                backgroundColor: AppTheme.primaryPurple.withOpacity(0.1),
+                backgroundColor: AppTheme.primaryPurple.withValues(alpha: 0.1),
                 labelStyle: const TextStyle(
                   color: AppTheme.primaryPurple,
                   fontWeight: FontWeight.w600,
@@ -900,7 +900,7 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
                 fontSize: 12,
               ),
               side: BorderSide(
-                color: AppTheme.mediumGrey.withOpacity(0.3),
+                color: AppTheme.mediumGrey.withValues(alpha: 0.1),
               ),
               onPressed: () {
                 setState(() {
@@ -943,10 +943,10 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
               child: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: AppTheme.accentMint.withOpacity(0.1),
+                  color: AppTheme.accentMint.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
-                    color: AppTheme.accentMint.withOpacity(0.3),
+                    color: AppTheme.accentMint.withValues(alpha: 0.1),
                   ),
                 ),
                 child: Row(
@@ -988,7 +988,7 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -1022,13 +1022,13 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
                 decoration: InputDecoration(
                   hintText: 'How are you feeling today? Any specific thoughts or events you\'d like to remember?',
                   hintStyle: TextStyle(
-                    color: AppTheme.mediumGrey.withOpacity(0.8),
+                    color: AppTheme.mediumGrey.withValues(alpha: 0.1),
                     fontSize: 14,
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide(
-                      color: AppTheme.mediumGrey.withOpacity(0.3),
+                      color: AppTheme.mediumGrey.withValues(alpha: 0.1),
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
@@ -1065,7 +1065,7 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),

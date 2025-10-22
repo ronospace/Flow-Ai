@@ -401,7 +401,10 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
                     Switch.adaptive(
                       value: currentValue,
                       onChanged: (_) => _toggleOption(option['id']),
-                      activeColor: theme.colorScheme.primary,
+                      thumbColor: WidgetStateProperty.resolveWith((states) => 
+                        states.contains(WidgetState.selected) ? theme.colorScheme.primary : null),
+                      trackColor: WidgetStateProperty.resolveWith((states) => 
+                        states.contains(WidgetState.selected) ? theme.colorScheme.primary.withValues(alpha: 0.5) : null),
                     ),
                   ],
                 ),

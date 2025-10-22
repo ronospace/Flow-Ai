@@ -1,0 +1,802 @@
+import 'dart:async';
+import 'package:flutter/foundation.dart';
+import '../ml/advanced_prediction_models.dart';
+import '../ml/advanced_prediction_models_impl.dart';
+import '../models/cycle_data.dart';
+import '../models/user_profile.dart';
+import '../models/daily_tracking_data.dart';
+import 'ai_engine.dart';
+import 'enhanced_ai_engine.dart';
+import 'biometric_engine.dart';
+
+/// Integration service that connects the Advanced ML Prediction Models
+/// with the existing AI engines and Flutter app architecture
+class MLIntegrationService {
+  static final MLIntegrationService _instance = MLIntegrationService._internal();
+  factory MLIntegrationService() => _instance;
+  MLIntegrationService._internal();
+
+  // Service dependencies
+  late AdvancedPredictionModels _mlModels;
+  late AIEngine _aiEngine;
+  late EnhancedAIEngine _enhancedAIEngine;
+  late BiometricEngine _biometricEngine;
+  
+  bool _isInitialized = false;
+  final StreamController<MLPredictionEvent> _eventController = StreamController<MLPredictionEvent>.broadcast();
+  
+  /// Stream of ML prediction events
+  Stream<MLPredictionEvent> get events => _eventController.stream;
+  
+  /// Initialize the ML integration service
+  Future<void> initialize() async {
+    if (_isInitialized) return;
+    
+    try {
+      debugPrint('🤖 Initializing ML Integration Service...');
+      
+      // Initialize ML models
+      _mlModels = AdvancedPredictionModels.instance;
+      await _mlModels.initialize();
+      
+      // Get existing AI engine instances
+      _aiEngine = AIEngine.instance;
+      _enhancedAIEngine = EnhancedAIEngine.instance;
+      _biometricEngine = BiometricEngine.instance;
+      
+      _isInitialized = true;
+      
+      _eventController.add(MLPredictionEvent(
+        type: MLEventType.serviceInitialized,
+        message: 'ML Integration Service initialized successfully',
+        timestamp: DateTime.now(),
+      ));
+      
+      debugPrint('✅ ML Integration Service initialized successfully');
+    } catch (e) {
+      debugPrint('❌ Failed to initialize ML Integration Service: $e');
+      _eventController.add(MLPredictionEvent(
+        type: MLEventType.error,
+        message: 'Failed to initialize: $e',
+        timestamp: DateTime.now(),
+      ));
+      rethrow;
+    }
+  }
+  
+  /// Enhanced cycle irregularity detection combining multiple AI engines
+  Future<EnhancedIrregularityResult> detectCycleIrregularity({
+    required UserProfile user,
+    required List<CycleData> cycles,
+    required List<DailyTrackingData> trackingData,
+    Map<String, dynamic>? biometricData,
+  }) async {
+    _ensureInitialized();
+    
+    try {
+      debugPrint('🔍 Running enhanced cycle irregularity detection...');
+      
+      // Run both legacy AI engine and advanced ML models
+      final legacyResult = await _aiEngine.analyzeCycleIrregularity(cycles);
+      final mlResult = await _mlModels.detectCycleIrregularity(
+        user, cycles, trackingData, biometricData,
+      );
+      
+      // Enhanced AI engine analysis
+      final enhancedResult = await _enhancedAIEngine.analyzeAdvancedPatterns(cycles, trackingData);
+      
+      // Combine results for ensemble prediction
+      final combinedResult = _combineIrregularityResults(legacyResult, mlResult, enhancedResult);
+      
+      _eventController.add(MLPredictionEvent(
+        type: MLEventType.irregularityDetected,
+        message: 'Cycle irregularity analysis completed',
+        data: combinedResult,
+        timestamp: DateTime.now(),
+      ));
+      
+      return combinedResult;
+    } catch (e) {
+      debugPrint('❌ Error in cycle irregularity detection: $e');
+      _eventController.add(MLPredictionEvent(
+        type: MLEventType.error,
+        message: 'Irregularity detection failed: $e',
+        timestamp: DateTime.now(),
+      ));
+      rethrow;
+    }
+  }
+  
+  /// Enhanced fertility window prediction
+  Future<EnhancedFertilityResult> predictFertilityWindow({
+    required UserProfile user,
+    required List<CycleData> cycles,
+    required List<DailyTrackingData> trackingData,
+    Map<String, dynamic>? biometricData,
+  }) async {
+    _ensureInitialized();
+    
+    try {
+      debugPrint('🌸 Predicting enhanced fertility window...');
+      
+      // Legacy predictions
+      final legacyOvulation = await _aiEngine.predictOvulationDate(cycles);
+      final legacyFertility = await _aiEngine.calculateFertilityWindow(cycles);
+      
+      // Advanced ML predictions
+      final mlResult = await _mlModels.optimizeFertilityWindow(
+        user, cycles, trackingData, biometricData,
+      );
+      
+      // Biometric integration
+      Map<String, dynamic>? biometricInsights;
+      if (biometricData != null) {
+        biometricInsights = await _biometricEngine.analyzeFertilityBiomarkers(biometricData);
+      }
+      
+      // Combine all results
+      final combinedResult = _combineFertilityResults(
+        legacyOvulation, legacyFertility, mlResult, biometricInsights,
+      );
+      
+      _eventController.add(MLPredictionEvent(
+        type: MLEventType.fertilityPredicted,
+        message: 'Fertility window prediction completed',
+        data: combinedResult,
+        timestamp: DateTime.now(),
+      ));
+      
+      return combinedResult;
+    } catch (e) {
+      debugPrint('❌ Error in fertility prediction: $e');
+      _eventController.add(MLPredictionEvent(
+        type: MLEventType.error,
+        message: 'Fertility prediction failed: $e',
+        timestamp: DateTime.now(),
+      ));
+      rethrow;
+    }
+  }
+  
+  /// Enhanced health condition detection (PCOS, Endometriosis)
+  Future<EnhancedConditionResult> detectHealthConditions({
+    required UserProfile user,
+    required List<CycleData> cycles,
+    required List<DailyTrackingData> trackingData,
+    Map<String, dynamic>? biometricData,
+  }) async {
+    _ensureInitialized();
+    
+    try {
+      debugPrint('🏥 Running enhanced health condition detection...');
+      
+      // Legacy health assessments
+      final legacyPCOS = await _enhancedAIEngine.detectPCOSPatterns(cycles, trackingData);
+      final legacyEndo = await _enhancedAIEngine.detectEndometriosisPatterns(cycles, trackingData);
+      
+      // Advanced ML condition detection
+      final mlResult = await _mlModels.detectHealthConditions(
+        user, cycles, trackingData, biometricData,
+      );
+      
+      // Biometric correlation analysis
+      Map<String, dynamic>? biometricCorrelations;
+      if (biometricData != null) {
+        biometricCorrelations = await _biometricEngine.analyzeHealthCorrelations(biometricData);
+      }
+      
+      // Combine results
+      final combinedResult = _combineConditionResults(
+        legacyPCOS, legacyEndo, mlResult, biometricCorrelations,
+      );
+      
+      _eventController.add(MLPredictionEvent(
+        type: MLEventType.conditionDetected,
+        message: 'Health condition analysis completed',
+        data: combinedResult,
+        timestamp: DateTime.now(),
+      ));
+      
+      return combinedResult;
+    } catch (e) {
+      debugPrint('❌ Error in health condition detection: $e');
+      _eventController.add(MLPredictionEvent(
+        type: MLEventType.error,
+        message: 'Condition detection failed: $e',
+        timestamp: DateTime.now(),
+      ));
+      rethrow;
+    }
+  }
+  
+  /// Generate personalized health insights
+  Future<EnhancedInsightsResult> generatePersonalizedInsights({
+    required UserProfile user,
+    required List<CycleData> cycles,
+    required List<DailyTrackingData> trackingData,
+    Map<String, dynamic>? biometricData,
+  }) async {
+    _ensureInitialized();
+    
+    try {
+      debugPrint('💡 Generating personalized health insights...');
+      
+      // Legacy insights
+      final legacyInsights = await _enhancedAIEngine.generatePersonalizedInsights(user, cycles);
+      
+      // Advanced ML insights
+      final mlInsights = await _mlModels.generatePersonalizedInsights(
+        user, cycles, trackingData, biometricData,
+      );
+      
+      // Combine with biometric insights
+      Map<String, dynamic>? biometricInsights;
+      if (biometricData != null) {
+        biometricInsights = await _biometricEngine.generateHealthInsights(biometricData);
+      }
+      
+      final combinedResult = _combineInsightResults(
+        legacyInsights, mlInsights, biometricInsights,
+      );
+      
+      _eventController.add(MLPredictionEvent(
+        type: MLEventType.insightsGenerated,
+        message: 'Personalized insights generated',
+        data: combinedResult,
+        timestamp: DateTime.now(),
+      ));
+      
+      return combinedResult;
+    } catch (e) {
+      debugPrint('❌ Error generating insights: $e');
+      _eventController.add(MLPredictionEvent(
+        type: MLEventType.error,
+        message: 'Insights generation failed: $e',
+        timestamp: DateTime.now(),
+      ));
+      rethrow;
+    }
+  }
+  
+  /// Predict symptoms for upcoming cycle phases
+  Future<EnhancedSymptomResult> predictSymptoms({
+    required UserProfile user,
+    required List<CycleData> cycles,
+    required List<DailyTrackingData> trackingData,
+    Map<String, dynamic>? context,
+  }) async {
+    _ensureInitialized();
+    
+    try {
+      debugPrint('🔮 Predicting cycle symptoms...');
+      
+      // Legacy symptom predictions
+      final legacySymptoms = await _aiEngine.predictSymptomPatterns(cycles, trackingData);
+      
+      // Advanced ML symptom prediction
+      final mlSymptoms = await _mlModels.predictSymptoms(
+        user, cycles, trackingData, context,
+      );
+      
+      final combinedResult = _combineSymptomResults(legacySymptoms, mlSymptoms);
+      
+      _eventController.add(MLPredictionEvent(
+        type: MLEventType.symptomsPredicted,
+        message: 'Symptom prediction completed',
+        data: combinedResult,
+        timestamp: DateTime.now(),
+      ));
+      
+      return combinedResult;
+    } catch (e) {
+      debugPrint('❌ Error in symptom prediction: $e');
+      _eventController.add(MLPredictionEvent(
+        type: MLEventType.error,
+        message: 'Symptom prediction failed: $e',
+        timestamp: DateTime.now(),
+      ));
+      rethrow;
+    }
+  }
+  
+  /// Process user feedback to improve predictions
+  Future<void> processFeedback(PredictionFeedback feedback) async {
+    _ensureInitialized();
+    
+    try {
+      debugPrint('📝 Processing user feedback for model improvement...');
+      
+      // Process feedback in ML models
+      await _mlModels.processFeedback(feedback);
+      
+      // Update legacy AI engines based on feedback
+      await _updateLegacyEnginesWithFeedback(feedback);
+      
+      _eventController.add(MLPredictionEvent(
+        type: MLEventType.feedbackProcessed,
+        message: 'User feedback processed successfully',
+        data: {'feedback_id': feedback.predictionId, 'type': feedback.type.toString()},
+        timestamp: DateTime.now(),
+      ));
+      
+      debugPrint('✅ Feedback processed and models updated');
+    } catch (e) {
+      debugPrint('❌ Error processing feedback: $e');
+      _eventController.add(MLPredictionEvent(
+        type: MLEventType.error,
+        message: 'Feedback processing failed: $e',
+        timestamp: DateTime.now(),
+      ));
+    }
+  }
+  
+  // === PRIVATE HELPER METHODS ===
+  
+  void _ensureInitialized() {
+    if (!_isInitialized) {
+      throw StateError('MLIntegrationService must be initialized before use');
+    }
+  }
+  
+  EnhancedIrregularityResult _combineIrregularityResults(
+    Map<String, dynamic> legacy,
+    CycleIrregularityPrediction ml,
+    Map<String, dynamic> enhanced,
+  ) {
+    // Ensemble scoring with weights: ML 50%, Enhanced 30%, Legacy 20%
+    final ensembleScore = (ml.irregularityScore * 0.5) +
+        ((enhanced['irregularity_score'] as double? ?? 0.5) * 0.3) +
+        ((legacy['irregularity_score'] as double? ?? 0.5) * 0.2);
+    
+    final ensembleConfidence = (ml.confidence * 0.5) +
+        ((enhanced['confidence'] as double? ?? 0.5) * 0.3) +
+        ((legacy['confidence'] as double? ?? 0.5) * 0.2);
+    
+    return EnhancedIrregularityResult(
+      irregularityScore: ensembleScore,
+      confidence: ensembleConfidence,
+      riskLevel: ml.riskLevel,
+      contributingFactors: [
+        ...ml.contributingFactors,
+        ...List<String>.from(enhanced['factors'] ?? []),
+        ...List<String>.from(legacy['factors'] ?? []),
+      ].toSet().toList(), // Remove duplicates
+      patterns: ml.patterns,
+      predictions: ml.futurePredictions,
+      recommendations: [
+        ...ml.recommendations,
+        ...List<String>.from(enhanced['recommendations'] ?? []),
+      ].toSet().toList(),
+      medicalFlags: [
+        ...ml.medicalFlags,
+        ...List<String>.from(enhanced['medical_flags'] ?? []),
+      ].toSet().toList(),
+      modelContributions: {
+        'advanced_ml': ml.irregularityScore,
+        'enhanced_ai': enhanced['irregularity_score'] as double? ?? 0.5,
+        'legacy_ai': legacy['irregularity_score'] as double? ?? 0.5,
+      },
+    );
+  }
+  
+  EnhancedFertilityResult _combineFertilityResults(
+    Map<String, dynamic> legacyOvulation,
+    Map<String, dynamic> legacyFertility,
+    FertilityWindowOptimization ml,
+    Map<String, dynamic>? biometricInsights,
+  ) {
+    return EnhancedFertilityResult(
+      optimalWindow: ml.optimalWindow,
+      ovulationProbabilities: ml.ovulationProbabilities,
+      fertilityScore: ml.fertilityScore,
+      confidence: ml.confidence,
+      factors: [
+        ...ml.factors,
+        ...List<String>.from(legacyFertility['factors'] ?? []),
+      ].toSet().toList(),
+      recommendations: [
+        ...ml.recommendations,
+        ...List<String>.from(legacyFertility['recommendations'] ?? []),
+      ].toSet().toList(),
+      biometricCorrelations: {
+        ...ml.biometricCorrelations,
+        ...(biometricInsights?['correlations'] as Map<String, dynamic>? ?? {}),
+      },
+      modelContributions: {
+        'advanced_ml': ml.confidence,
+        'legacy_ovulation': legacyOvulation['confidence'] as double? ?? 0.5,
+        'legacy_fertility': legacyFertility['confidence'] as double? ?? 0.5,
+        'biometric': biometricInsights?['confidence'] as double? ?? 0.0,
+      },
+    );
+  }
+  
+  EnhancedConditionResult _combineConditionResults(
+    Map<String, dynamic> legacyPCOS,
+    Map<String, dynamic> legacyEndo,
+    List<ConditionDetectionResult> mlResults,
+    Map<String, dynamic>? biometricCorrelations,
+  ) {
+    final conditionRisks = <String, ConditionRisk>{};
+    
+    // Process ML results
+    for (final result in mlResults) {
+      conditionRisks[result.condition] = result.risk;
+    }
+    
+    // Integrate legacy results
+    if (legacyPCOS['risk_score'] != null) {
+      final legacyRisk = ConditionRisk(
+        level: _scoreToRiskLevel(legacyPCOS['risk_score']),
+        score: legacyPCOS['risk_score'],
+        factors: List<String>.from(legacyPCOS['factors'] ?? []),
+      );
+      conditionRisks['PCOS'] = _combineConditionRisk(conditionRisks['PCOS'], legacyRisk);
+    }
+    
+    if (legacyEndo['risk_score'] != null) {
+      final legacyRisk = ConditionRisk(
+        level: _scoreToRiskLevel(legacyEndo['risk_score']),
+        score: legacyEndo['risk_score'],
+        factors: List<String>.from(legacyEndo['factors'] ?? []),
+      );
+      conditionRisks['Endometriosis'] = _combineConditionRisk(conditionRisks['Endometriosis'], legacyRisk);
+    }
+    
+    return EnhancedConditionResult(
+      conditionRisks: conditionRisks,
+      overallHealthScore: _calculateOverallHealthScore(conditionRisks),
+      recommendations: _generateCombinedConditionRecommendations(mlResults, legacyPCOS, legacyEndo),
+      biometricCorrelations: biometricCorrelations ?? {},
+      requiresMedicalAttention: conditionRisks.values.any((risk) => 
+          risk.level == RiskLevel.high || risk.level == RiskLevel.critical),
+    );
+  }
+  
+  EnhancedInsightsResult _combineInsightResults(
+    Map<String, dynamic> legacy,
+    PersonalizedHealthInsights ml,
+    Map<String, dynamic>? biometric,
+  ) {
+    return EnhancedInsightsResult(
+      insights: [
+        ...ml.insights,
+        ...List<HealthInsight>.from((legacy['insights'] as List?)?.map((i) => 
+            HealthInsight.fromLegacy(i)) ?? []),
+        ...List<HealthInsight>.from((biometric?['insights'] as List?)?.map((i) => 
+            HealthInsight.fromBiometric(i)) ?? []),
+      ],
+      personalizedScore: ml.personalizedScore,
+      confidence: ml.confidence,
+      actionableRecommendations: [
+        ...ml.actionableRecommendations,
+        ...List<String>.from(legacy['recommendations'] ?? []),
+      ].toSet().toList(),
+      healthTrends: {
+        ...ml.healthTrends,
+        ...(legacy['trends'] as Map<String, dynamic>? ?? {}),
+        ...(biometric?['trends'] as Map<String, dynamic>? ?? {}),
+      },
+      riskFactors: [
+        ...ml.riskFactors,
+        ...List<String>.from(legacy['risk_factors'] ?? []),
+      ].toSet().toList(),
+    );
+  }
+  
+  EnhancedSymptomResult _combineSymptomResults(
+    Map<String, dynamic> legacy,
+    List<SymptomPredictionResult> ml,
+  ) {
+    final combinedPredictions = <String, SymptomPredictionResult>{};
+    
+    // Add ML predictions
+    for (final prediction in ml) {
+      combinedPredictions[prediction.symptomType] = prediction;
+    }
+    
+    // Integrate legacy predictions
+    final legacyPredictions = legacy['predictions'] as Map<String, dynamic>? ?? {};
+    for (final entry in legacyPredictions.entries) {
+      final symptomType = entry.key;
+      final legacyData = entry.value as Map<String, dynamic>;
+      
+      if (combinedPredictions.containsKey(symptomType)) {
+        // Combine with existing ML prediction
+        final mlPrediction = combinedPredictions[symptomType]!;
+        combinedPredictions[symptomType] = _combineSymptomPrediction(mlPrediction, legacyData);
+      } else {
+        // Add as new prediction from legacy
+        combinedPredictions[symptomType] = SymptomPredictionResult.fromLegacy(symptomType, legacyData);
+      }
+    }
+    
+    return EnhancedSymptomResult(
+      predictions: combinedPredictions.values.toList(),
+      overallConfidence: _calculateSymptomConfidence(combinedPredictions.values.toList()),
+      timeHorizon: Duration(days: 30), // Default prediction horizon
+      factors: [
+        ...List<String>.from(legacy['factors'] ?? []),
+        'Advanced ML pattern recognition',
+        'Historical symptom analysis',
+      ],
+    );
+  }
+  
+  Future<void> _updateLegacyEnginesWithFeedback(PredictionFeedback feedback) async {
+    // Update legacy AI engines based on ML feedback
+    switch (feedback.type) {
+      case FeedbackType.cyclePrediction:
+        await _aiEngine.updateCyclePredictionAccuracy(feedback.accuracy);
+        break;
+      case FeedbackType.fertilityWindow:
+        await _aiEngine.updateFertilityPredictionAccuracy(feedback.accuracy);
+        break;
+      case FeedbackType.symptomPrediction:
+        await _enhancedAIEngine.updateSymptomPredictionAccuracy(feedback.accuracy);
+        break;
+      case FeedbackType.healthCondition:
+        await _enhancedAIEngine.updateConditionDetectionAccuracy(feedback.accuracy);
+        break;
+    }
+  }
+  
+  // Helper methods
+  RiskLevel _scoreToRiskLevel(double score) {
+    if (score >= 0.8) return RiskLevel.critical;
+    if (score >= 0.6) return RiskLevel.high;
+    if (score >= 0.4) return RiskLevel.moderate;
+    return RiskLevel.low;
+  }
+  
+  ConditionRisk _combineConditionRisk(ConditionRisk? existing, ConditionRisk legacy) {
+    if (existing == null) return legacy;
+    
+    // Ensemble scoring: ML 70%, Legacy 30%
+    final combinedScore = (existing.score * 0.7) + (legacy.score * 0.3);
+    final combinedLevel = combinedScore >= 0.8 ? RiskLevel.critical :
+                         combinedScore >= 0.6 ? RiskLevel.high :
+                         combinedScore >= 0.4 ? RiskLevel.moderate : RiskLevel.low;
+    
+    return ConditionRisk(
+      level: combinedLevel,
+      score: combinedScore,
+      factors: [...existing.factors, ...legacy.factors].toSet().toList(),
+    );
+  }
+  
+  double _calculateOverallHealthScore(Map<String, ConditionRisk> risks) {
+    if (risks.isEmpty) return 0.8; // Default healthy score
+    
+    final avgRisk = risks.values.map((r) => r.score).reduce((a, b) => a + b) / risks.length;
+    return (1.0 - avgRisk).clamp(0.0, 1.0);
+  }
+  
+  List<String> _generateCombinedConditionRecommendations(
+    List<ConditionDetectionResult> mlResults,
+    Map<String, dynamic> legacyPCOS,
+    Map<String, dynamic> legacyEndo,
+  ) {
+    final recommendations = <String>{};
+    
+    // Add ML recommendations
+    for (final result in mlResults) {
+      recommendations.addAll(result.recommendations);
+    }
+    
+    // Add legacy recommendations
+    recommendations.addAll(List<String>.from(legacyPCOS['recommendations'] ?? []));
+    recommendations.addAll(List<String>.from(legacyEndo['recommendations'] ?? []));
+    
+    return recommendations.toList();
+  }
+  
+  SymptomPredictionResult _combineSymptomPrediction(
+    SymptomPredictionResult ml,
+    Map<String, dynamic> legacy,
+  ) {
+    // Combine predictions with ML weighted higher
+    final combinedProbability = (ml.probability * 0.7) + 
+        ((legacy['probability'] as double? ?? 0.5) * 0.3);
+    final combinedConfidence = (ml.confidence * 0.7) + 
+        ((legacy['confidence'] as double? ?? 0.5) * 0.3);
+    
+    return SymptomPredictionResult(
+      symptomType: ml.symptomType,
+      probability: combinedProbability,
+      confidence: combinedConfidence,
+      severity: ml.severity,
+      timing: ml.timing,
+      factors: [
+        ...ml.factors,
+        ...List<String>.from(legacy['factors'] ?? []),
+      ].toSet().toList(),
+    );
+  }
+  
+  double _calculateSymptomConfidence(List<SymptomPredictionResult> predictions) {
+    if (predictions.isEmpty) return 0.0;
+    return predictions.map((p) => p.confidence).reduce((a, b) => a + b) / predictions.length;
+  }
+  
+  void dispose() {
+    _eventController.close();
+  }
+}
+
+// === ENHANCED RESULT DATA CLASSES ===
+
+class EnhancedIrregularityResult {
+  final double irregularityScore;
+  final double confidence;
+  final RiskLevel riskLevel;
+  final List<String> contributingFactors;
+  final Map<String, dynamic> patterns;
+  final Map<String, dynamic> predictions;
+  final List<String> recommendations;
+  final List<String> medicalFlags;
+  final Map<String, double> modelContributions;
+
+  EnhancedIrregularityResult({
+    required this.irregularityScore,
+    required this.confidence,
+    required this.riskLevel,
+    required this.contributingFactors,
+    required this.patterns,
+    required this.predictions,
+    required this.recommendations,
+    required this.medicalFlags,
+    required this.modelContributions,
+  });
+}
+
+class EnhancedFertilityResult {
+  final Map<String, DateTime> optimalWindow;
+  final Map<String, double> ovulationProbabilities;
+  final double fertilityScore;
+  final double confidence;
+  final List<String> factors;
+  final List<String> recommendations;
+  final Map<String, double> biometricCorrelations;
+  final Map<String, double> modelContributions;
+
+  EnhancedFertilityResult({
+    required this.optimalWindow,
+    required this.ovulationProbabilities,
+    required this.fertilityScore,
+    required this.confidence,
+    required this.factors,
+    required this.recommendations,
+    required this.biometricCorrelations,
+    required this.modelContributions,
+  });
+}
+
+class EnhancedConditionResult {
+  final Map<String, ConditionRisk> conditionRisks;
+  final double overallHealthScore;
+  final List<String> recommendations;
+  final Map<String, dynamic> biometricCorrelations;
+  final bool requiresMedicalAttention;
+
+  EnhancedConditionResult({
+    required this.conditionRisks,
+    required this.overallHealthScore,
+    required this.recommendations,
+    required this.biometricCorrelations,
+    required this.requiresMedicalAttention,
+  });
+}
+
+class EnhancedInsightsResult {
+  final List<HealthInsight> insights;
+  final double personalizedScore;
+  final double confidence;
+  final List<String> actionableRecommendations;
+  final Map<String, dynamic> healthTrends;
+  final List<String> riskFactors;
+
+  EnhancedInsightsResult({
+    required this.insights,
+    required this.personalizedScore,
+    required this.confidence,
+    required this.actionableRecommendations,
+    required this.healthTrends,
+    required this.riskFactors,
+  });
+}
+
+class EnhancedSymptomResult {
+  final List<SymptomPredictionResult> predictions;
+  final double overallConfidence;
+  final Duration timeHorizon;
+  final List<String> factors;
+
+  EnhancedSymptomResult({
+    required this.predictions,
+    required this.overallConfidence,
+    required this.timeHorizon,
+    required this.factors,
+  });
+}
+
+// === EVENT SYSTEM ===
+
+enum MLEventType {
+  serviceInitialized,
+  irregularityDetected,
+  fertilityPredicted,
+  conditionDetected,
+  insightsGenerated,
+  symptomsPredicted,
+  feedbackProcessed,
+  error,
+}
+
+class MLPredictionEvent {
+  final MLEventType type;
+  final String message;
+  final Map<String, dynamic>? data;
+  final DateTime timestamp;
+
+  MLPredictionEvent({
+    required this.type,
+    required this.message,
+    this.data,
+    required this.timestamp,
+  });
+}
+
+// === EXTENSION METHODS FOR LEGACY COMPATIBILITY ===
+
+extension HealthInsightExtensions on HealthInsight {
+  static HealthInsight fromLegacy(Map<String, dynamic> legacyInsight) {
+    return HealthInsight(
+      category: legacyInsight['category'] ?? 'General',
+      title: legacyInsight['title'] ?? 'Health Insight',
+      description: legacyInsight['description'] ?? '',
+      severity: _parseInsightSeverity(legacyInsight['severity']),
+      confidence: legacyInsight['confidence'] ?? 0.5,
+      actionable: legacyInsight['actionable'] ?? false,
+      recommendations: List<String>.from(legacyInsight['recommendations'] ?? []),
+    );
+  }
+  
+  static HealthInsight fromBiometric(Map<String, dynamic> biometricInsight) {
+    return HealthInsight(
+      category: 'Biometric',
+      title: biometricInsight['title'] ?? 'Biometric Insight',
+      description: biometricInsight['description'] ?? '',
+      severity: InsightSeverity.informational,
+      confidence: biometricInsight['confidence'] ?? 0.7,
+      actionable: true,
+      recommendations: List<String>.from(biometricInsight['recommendations'] ?? []),
+    );
+  }
+  
+  static InsightSeverity _parseInsightSeverity(String? severity) {
+    switch (severity?.toLowerCase()) {
+      case 'critical': return InsightSeverity.critical;
+      case 'warning': return InsightSeverity.warning;
+      case 'informational': return InsightSeverity.informational;
+      default: return InsightSeverity.informational;
+    }
+  }
+}
+
+extension SymptomPredictionExtensions on SymptomPredictionResult {
+  static SymptomPredictionResult fromLegacy(String symptomType, Map<String, dynamic> legacyData) {
+    return SymptomPredictionResult(
+      symptomType: symptomType,
+      probability: legacyData['probability'] ?? 0.5,
+      confidence: legacyData['confidence'] ?? 0.5,
+      severity: _parseSeverity(legacyData['severity']),
+      timing: legacyData['timing'] ?? 'Unknown',
+      factors: List<String>.from(legacyData['factors'] ?? []),
+    );
+  }
+  
+  static String _parseSeverity(dynamic severity) {
+    return severity?.toString() ?? 'Mild';
+  }
+}

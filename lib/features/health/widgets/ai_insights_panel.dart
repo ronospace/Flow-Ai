@@ -66,7 +66,7 @@ class _AIInsightsPanelState extends State<AIInsightsPanel>
           color: const Color(0xFF1D1E33),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: Colors.purple.withOpacity(0.2),
+            color: Colors.purple.withValues(alpha: 0.1),
             width: 1,
           ),
         ),
@@ -93,8 +93,8 @@ class _AIInsightsPanelState extends State<AIInsightsPanel>
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Colors.purple.withOpacity(0.1),
-            Colors.pink.withOpacity(0.1),
+            Colors.purple.withValues(alpha: 0.1),
+            Colors.pink.withValues(alpha: 0.1),
           ],
         ),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
@@ -104,7 +104,7 @@ class _AIInsightsPanelState extends State<AIInsightsPanel>
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.purple.withOpacity(0.2),
+              color: Colors.purple.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: const Icon(
@@ -139,7 +139,7 @@ class _AIInsightsPanelState extends State<AIInsightsPanel>
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: _getHealthScoreColor().withOpacity(0.2),
+              color: _getHealthScoreColor().withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
@@ -185,7 +185,7 @@ class _AIInsightsPanelState extends State<AIInsightsPanel>
         color: const Color(0xFF2A2D5A),
         borderRadius: BorderRadius.circular(12),
         border: index == _selectedInsightIndex
-            ? Border.all(color: Colors.purple.withOpacity(0.5))
+            ? Border.all(color: Colors.purple.withValues(alpha: 0.1))
             : null,
       ),
       child: Column(
@@ -196,7 +196,7 @@ class _AIInsightsPanelState extends State<AIInsightsPanel>
               Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: insight['color'].withOpacity(0.2),
+                  color: insight['color'].withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
@@ -266,7 +266,7 @@ class _AIInsightsPanelState extends State<AIInsightsPanel>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.2),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Text(
@@ -362,7 +362,7 @@ class _AIInsightsPanelState extends State<AIInsightsPanel>
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
             decoration: BoxDecoration(
-              color: _getPriorityColor(recommendation.priority).withOpacity(0.2),
+              color: _getPriorityColor(recommendation.priority).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
@@ -455,7 +455,7 @@ class _AIInsightsPanelState extends State<AIInsightsPanel>
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(
-            color: Colors.purple.withOpacity(0.2),
+            color: Colors.purple.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(20),
           ),
           child: Row(

@@ -1,0 +1,641 @@
+import 'dart:async';
+import 'package:flutter/foundation.dart';
+import '../../../core/services/ml_integration_service.dart';
+import '../../../core/models/cycle_data.dart';
+import '../../../core/models/user_profile.dart';
+import '../../../core/models/daily_tracking_data.dart';
+import '../../../core/ml/advanced_prediction_models.dart';
+
+/// Provider for managing ML predictions and state in the Flutter app
+class MLPredictionProvider extends ChangeNotifier {
+  late final MLIntegrationService _mlService;
+  StreamSubscription<MLPredictionEvent>? _eventSubscription;
+  
+  // State properties
+  bool _isInitialized = false;
+  bool _isLoading = false;
+  String? _error;
+  
+  // Prediction results
+  EnhancedIrregularityResult? _irregularityResult;
+  EnhancedFertilityResult? _fertilityResult;
+  EnhancedConditionResult? _conditionResult;
+  EnhancedInsightsResult? _insightsResult;
+  EnhancedSymptomResult? _symptomResult;
+  
+  // Event stream
+  final StreamController<MLPredictionEvent> _eventController = StreamController<MLPredictionEvent>.broadcast();
+  
+  // Getters
+  bool get isInitialized => _isInitialized;
+  bool get isLoading => _isLoading;
+  String? get error => _error;
+  
+  EnhancedIrregularityResult? get irregularityResult => _irregularityResult;
+  EnhancedFertilityResult? get fertilityResult => _fertilityResult;
+  EnhancedConditionResult? get conditionResult => _conditionResult;
+  EnhancedInsightsResult? get insightsResult => _insightsResult;
+  EnhancedSymptomResult? get symptomResult => _symptomResult;
+  
+  Stream<MLPredictionEvent> get events => _eventController.stream;
+  
+  MLPredictionProvider() {
+    _mlService = MLIntegrationService();
+    _initializeService();
+  }
+  
+  /// Initialize the ML integration service
+  Future<void> _initializeService() async {
+    try {
+      _setLoading(true);
+      _clearError();
+      
+      await _mlService.initialize();
+      
+      // Listen to ML service events
+      _eventSubscription = _mlService.events.listen((event) {
+        _eventController.add(event);
+        
+        // Handle specific events that affect state
+        switch (event.type) {
+          case MLEventType.serviceInitialized:
+            _isInitialized = true;
+            break;
+          case MLEventType.error:
+            _setError(event.message);
+            break;
+          default:
+            break;
+        }
+        
+        notifyListeners();
+      });
+      
+      _isInitialized = true;
+      _setLoading(false);
+      
+      debugPrint('✅ ML Prediction Provider initialized successfully');
+    } catch (e) {
+      _setError('Failed to initialize ML services: $e');
+      _setLoading(false);
+      debugPrint('❌ Failed to initialize ML Prediction Provider: $e');
+    }
+  }
+  
+  /// Run comprehensive cycle analysis
+  Future<void> analyzeCycle({
+    required UserProfile user,
+    required List<CycleData> cycles,
+    required List<DailyTrackingData> trackingData,
+    Map<String, dynamic>? biometricData,
+  }) async {
+    if (!_isInitialized) {
+      throw StateError('ML services not initialized');
+    }
+    
+    try {
+      _setLoading(true);
+      _clearError();
+      
+      // Run cycle irregularity detection
+      _irregularityResult = await _mlService.detectCycleIrregularity(
+        user: user,
+        cycles: cycles,
+        trackingData: trackingData,
+        biometricData: biometricData,
+      );
+      
+      // Run fertility window prediction
+      _fertilityResult = await _mlService.predictFertilityWindow(
+        user: user,
+        cycles: cycles,
+        trackingData: trackingData,
+        biometricData: biometricData,
+      );
+      
+      // Run health condition detection
+      _conditionResult = await _mlService.detectHealthConditions(
+        user: user,
+        cycles: cycles,
+        trackingData: trackingData,
+        biometricData: biometricData,
+      );
+      
+      // Generate personalized insights
+      _insightsResult = await _mlService.generatePersonalizedInsights(
+        user: user,
+        cycles: cycles,
+        trackingData: trackingData,
+        biometricData: biometricData,
+      );
+      
+      // Predict symptoms
+      _symptomResult = await _mlService.predictSymptoms(
+        user: user,
+        cycles: cycles,
+        trackingData: trackingData,
+      );
+      
+      _setLoading(false);
+      
+      _eventController.add(MLPredictionEvent(
+        type: MLEventType.insightsGenerated,
+        message: 'Comprehensive cycle analysis completed',
+        data: {
+          'irregularity_score': _irregularityResult?.irregularityScore,
+          'fertility_score': _fertilityResult?.fertilityScore,
+          'health_conditions': _conditionResult?.conditionRisks.keys.toList(),
+          'insights_count': _insightsResult?.insights.length,
+          'symptom_predictions': _symptomResult?.predictions.length,
+        },
+        timestamp: DateTime.now(),
+      ));
+      
+      debugPrint('✅ Comprehensive cycle analysis completed');
+    } catch (e) {
+      _setError('Cycle analysis failed: $e');
+      _setLoading(false);
+      debugPrint('❌ Cycle analysis failed: $e');
+      rethrow;
+    }
+  }
+  
+  /// Run only cycle irregularity detection
+  Future<EnhancedIrregularityResult> detectIrregularity({
+    required UserProfile user,
+    required List<CycleData> cycles,
+    required List<DailyTrackingData> trackingData,
+    Map<String, dynamic>? biometricData,
+  }) async {
+    if (!_isInitialized) {
+      throw StateError('ML services not initialized');
+    }
+    
+    try {
+      _setLoading(true);
+      _clearError();
+      
+      _irregularityResult = await _mlService.detectCycleIrregularity(
+        user: user,
+        cycles: cycles,
+        trackingData: trackingData,
+        biometricData: biometricData,
+      );
+      
+      _setLoading(false);
+      notifyListeners();
+      
+      return _irregularityResult!;
+    } catch (e) {
+      _setError('Irregularity detection failed: $e');
+      _setLoading(false);
+      rethrow;
+    }
+  }
+  
+  /// Run only fertility window prediction
+  Future<EnhancedFertilityResult> predictFertility({
+    required UserProfile user,
+    required List<CycleData> cycles,
+    required List<DailyTrackingData> trackingData,
+    Map<String, dynamic>? biometricData,
+  }) async {
+    if (!_isInitialized) {
+      throw StateError('ML services not initialized');
+    }
+    
+    try {
+      _setLoading(true);
+      _clearError();
+      
+      _fertilityResult = await _mlService.predictFertilityWindow(
+        user: user,
+        cycles: cycles,
+        trackingData: trackingData,
+        biometricData: biometricData,
+      );
+      
+      _setLoading(false);
+      notifyListeners();
+      
+      return _fertilityResult!;
+    } catch (e) {
+      _setError('Fertility prediction failed: $e');
+      _setLoading(false);
+      rethrow;
+    }
+  }
+  
+  /// Run only health condition detection
+  Future<EnhancedConditionResult> detectConditions({
+    required UserProfile user,
+    required List<CycleData> cycles,
+    required List<DailyTrackingData> trackingData,
+    Map<String, dynamic>? biometricData,
+  }) async {
+    if (!_isInitialized) {
+      throw StateError('ML services not initialized');
+    }
+    
+    try {
+      _setLoading(true);
+      _clearError();
+      
+      _conditionResult = await _mlService.detectHealthConditions(
+        user: user,
+        cycles: cycles,
+        trackingData: trackingData,
+        biometricData: biometricData,
+      );
+      
+      _setLoading(false);
+      notifyListeners();
+      
+      return _conditionResult!;
+    } catch (e) {
+      _setError('Health condition detection failed: $e');
+      _setLoading(false);
+      rethrow;
+    }
+  }
+  
+  /// Generate personalized insights only
+  Future<EnhancedInsightsResult> generateInsights({
+    required UserProfile user,
+    required List<CycleData> cycles,
+    required List<DailyTrackingData> trackingData,
+    Map<String, dynamic>? biometricData,
+  }) async {
+    if (!_isInitialized) {
+      throw StateError('ML services not initialized');
+    }
+    
+    try {
+      _setLoading(true);
+      _clearError();
+      
+      _insightsResult = await _mlService.generatePersonalizedInsights(
+        user: user,
+        cycles: cycles,
+        trackingData: trackingData,
+        biometricData: biometricData,
+      );
+      
+      _setLoading(false);
+      notifyListeners();
+      
+      return _insightsResult!;
+    } catch (e) {
+      _setError('Insights generation failed: $e');
+      _setLoading(false);
+      rethrow;
+    }
+  }
+  
+  /// Predict symptoms only
+  Future<EnhancedSymptomResult> predictSymptoms({
+    required UserProfile user,
+    required List<CycleData> cycles,
+    required List<DailyTrackingData> trackingData,
+    Map<String, dynamic>? context,
+  }) async {
+    if (!_isInitialized) {
+      throw StateError('ML services not initialized');
+    }
+    
+    try {
+      _setLoading(true);
+      _clearError();
+      
+      _symptomResult = await _mlService.predictSymptoms(
+        user: user,
+        cycles: cycles,
+        trackingData: trackingData,
+        context: context,
+      );
+      
+      _setLoading(false);
+      notifyListeners();
+      
+      return _symptomResult!;
+    } catch (e) {
+      _setError('Symptom prediction failed: $e');
+      _setLoading(false);
+      rethrow;
+    }
+  }
+  
+  /// Submit feedback for improving predictions
+  Future<void> submitFeedback(PredictionFeedback feedback) async {
+    if (!_isInitialized) {
+      throw StateError('ML services not initialized');
+    }
+    
+    try {
+      await _mlService.processFeedback(feedback);
+      
+      _eventController.add(MLPredictionEvent(
+        type: MLEventType.feedbackProcessed,
+        message: 'Feedback submitted successfully',
+        data: {
+          'feedback_type': feedback.type.toString(),
+          'accuracy': feedback.accuracy,
+          'prediction_id': feedback.predictionId,
+        },
+        timestamp: DateTime.now(),
+      ));
+      
+      debugPrint('✅ Feedback submitted: ${feedback.type} - ${feedback.accuracy}');
+    } catch (e) {
+      _setError('Failed to submit feedback: $e');
+      debugPrint('❌ Failed to submit feedback: $e');
+      rethrow;
+    }
+  }
+  
+  /// Clear all cached results
+  void clearResults() {
+    _irregularityResult = null;
+    _fertilityResult = null;
+    _conditionResult = null;
+    _insightsResult = null;
+    _symptomResult = null;
+    _clearError();
+    notifyListeners();
+  }
+  
+  /// Get summary of all current predictions
+  MLPredictionSummary get predictionSummary {
+    return MLPredictionSummary(
+      hasIrregularityAnalysis: _irregularityResult != null,
+      hasFertilityPrediction: _fertilityResult != null,
+      hasConditionDetection: _conditionResult != null,
+      hasPersonalizedInsights: _insightsResult != null,
+      hasSymptomPrediction: _symptomResult != null,
+      overallHealthScore: _calculateOverallHealthScore(),
+      highPriorityAlerts: _getHighPriorityAlerts(),
+      lastAnalysisDate: DateTime.now(), // Would track actual last analysis
+      confidenceLevel: _calculateOverallConfidence(),
+    );
+  }
+  
+  /// Get actionable recommendations from all analyses
+  List<String> get actionableRecommendations {
+    final recommendations = <String>{};
+    
+    if (_irregularityResult != null) {
+      recommendations.addAll(_irregularityResult!.recommendations);
+    }
+    
+    if (_fertilityResult != null) {
+      recommendations.addAll(_fertilityResult!.recommendations);
+    }
+    
+    if (_conditionResult != null) {
+      recommendations.addAll(_conditionResult!.recommendations);
+    }
+    
+    if (_insightsResult != null) {
+      recommendations.addAll(_insightsResult!.actionableRecommendations);
+    }
+    
+    return recommendations.toList();
+  }
+  
+  /// Get all medical flags requiring attention
+  List<String> get medicalFlags {
+    final flags = <String>{};
+    
+    if (_irregularityResult != null) {
+      flags.addAll(_irregularityResult!.medicalFlags);
+    }
+    
+    if (_conditionResult != null && _conditionResult!.requiresMedicalAttention) {
+      flags.add('HEALTH_CONDITION_DETECTED');
+      flags.addAll(_conditionResult!.conditionRisks.entries
+          .where((entry) => entry.value.level == RiskLevel.high || 
+                          entry.value.level == RiskLevel.critical)
+          .map((entry) => '${entry.key.toUpperCase()}_RISK'));
+    }
+    
+    return flags.toList();
+  }
+  
+  // Private helper methods
+  void _setLoading(bool loading) {
+    if (_isLoading != loading) {
+      _isLoading = loading;
+      notifyListeners();
+    }
+  }
+  
+  void _setError(String error) {
+    _error = error;
+    notifyListeners();
+  }
+  
+  void _clearError() {
+    if (_error != null) {
+      _error = null;
+      notifyListeners();
+    }
+  }
+  
+  double _calculateOverallHealthScore() {
+    double totalScore = 0.8; // Default healthy score
+    int scoreCount = 0;
+    
+    if (_conditionResult != null) {
+      totalScore += _conditionResult!.overallHealthScore;
+      scoreCount++;
+    }
+    
+    if (_insightsResult != null) {
+      totalScore += _insightsResult!.personalizedScore;
+      scoreCount++;
+    }
+    
+    if (_irregularityResult != null) {
+      totalScore += (1.0 - _irregularityResult!.irregularityScore);
+      scoreCount++;
+    }
+    
+    return scoreCount > 0 ? totalScore / scoreCount : 0.8;
+  }
+  
+  List<String> _getHighPriorityAlerts() {
+    final alerts = <String>[];
+    
+    if (_irregularityResult != null && 
+        _irregularityResult!.riskLevel == RiskLevel.high ||
+        _irregularityResult!.riskLevel == RiskLevel.critical) {
+      alerts.add('High cycle irregularity detected');
+    }
+    
+    if (_conditionResult != null && _conditionResult!.requiresMedicalAttention) {
+      alerts.add('Health conditions require medical attention');
+    }
+    
+    if (_fertilityResult != null && _fertilityResult!.fertilityScore < 0.5) {
+      alerts.add('Fertility concerns identified');
+    }
+    
+    return alerts;
+  }
+  
+  double _calculateOverallConfidence() {
+    final confidences = <double>[];
+    
+    if (_irregularityResult != null) confidences.add(_irregularityResult!.confidence);
+    if (_fertilityResult != null) confidences.add(_fertilityResult!.confidence);
+    if (_insightsResult != null) confidences.add(_insightsResult!.confidence);
+    if (_symptomResult != null) confidences.add(_symptomResult!.overallConfidence);
+    
+    return confidences.isNotEmpty 
+        ? confidences.reduce((a, b) => a + b) / confidences.length 
+        : 0.0;
+  }
+  
+  @override
+  void dispose() {
+    _eventSubscription?.cancel();
+    _eventController.close();
+    super.dispose();
+  }
+}
+
+/// Summary class for ML prediction state
+class MLPredictionSummary {
+  final bool hasIrregularityAnalysis;
+  final bool hasFertilityPrediction;
+  final bool hasConditionDetection;
+  final bool hasPersonalizedInsights;
+  final bool hasSymptomPrediction;
+  final double overallHealthScore;
+  final List<String> highPriorityAlerts;
+  final DateTime lastAnalysisDate;
+  final double confidenceLevel;
+
+  MLPredictionSummary({
+    required this.hasIrregularityAnalysis,
+    required this.hasFertilityPrediction,
+    required this.hasConditionDetection,
+    required this.hasPersonalizedInsights,
+    required this.hasSymptomPrediction,
+    required this.overallHealthScore,
+    required this.highPriorityAlerts,
+    required this.lastAnalysisDate,
+    required this.confidenceLevel,
+  });
+
+  bool get hasCompleteAnalysis =>
+      hasIrregularityAnalysis &&
+      hasFertilityPrediction &&
+      hasConditionDetection &&
+      hasPersonalizedInsights &&
+      hasSymptomPrediction;
+
+  bool get hasAnyAnalysis =>
+      hasIrregularityAnalysis ||
+      hasFertilityPrediction ||
+      hasConditionDetection ||
+      hasPersonalizedInsights ||
+      hasSymptomPrediction;
+
+  bool get requiresAttention => highPriorityAlerts.isNotEmpty;
+
+  String get healthScoreCategory {
+    if (overallHealthScore >= 0.8) return 'Excellent';
+    if (overallHealthScore >= 0.6) return 'Good';
+    if (overallHealthScore >= 0.4) return 'Fair';
+    return 'Needs Attention';
+  }
+
+  String get confidenceCategory {
+    if (confidenceLevel >= 0.8) return 'High';
+    if (confidenceLevel >= 0.6) return 'Moderate';
+    if (confidenceLevel >= 0.4) return 'Low';
+    return 'Very Low';
+  }
+}
+
+/// Extensions for easy UI integration
+extension MLPredictionProviderExtensions on MLPredictionProvider {
+  
+  /// Get the most critical condition risk
+  ConditionRisk? get mostCriticalCondition {
+    if (conditionResult == null) return null;
+    
+    ConditionRisk? mostCritical;
+    for (final risk in conditionResult!.conditionRisks.values) {
+      if (mostCritical == null || 
+          risk.level.index > mostCritical.level.index ||
+          (risk.level == mostCritical.level && risk.score > mostCritical.score)) {
+        mostCritical = risk;
+      }
+    }
+    return mostCritical;
+  }
+  
+  /// Get fertility window dates for easy UI display
+  Map<String, DateTime>? get fertilityWindow {
+    return fertilityResult?.optimalWindow;
+  }
+  
+  /// Get next predicted ovulation date
+  DateTime? get nextOvulationDate {
+    return fertilityResult?.optimalWindow['peak_fertility'];
+  }
+  
+  /// Check if any high-risk conditions are detected
+  bool get hasHighRiskConditions {
+    if (conditionResult == null) return false;
+    
+    return conditionResult!.conditionRisks.values.any((risk) =>
+        risk.level == RiskLevel.high || risk.level == RiskLevel.critical);
+  }
+  
+  /// Get the most relevant health insight
+  HealthInsight? get topHealthInsight {
+    if (insightsResult == null || insightsResult!.insights.isEmpty) return null;
+    
+    // Prioritize by severity and confidence
+    final sortedInsights = List<HealthInsight>.from(insightsResult!.insights)
+      ..sort((a, b) {
+        final severityCompare = b.severity.index.compareTo(a.severity.index);
+        if (severityCompare != 0) return severityCompare;
+        return b.confidence.compareTo(a.confidence);
+      });
+    
+    return sortedInsights.first;
+  }
+  
+  /// Get symptoms predicted for the next week
+  List<SymptomPredictionResult> get upcomingSymptoms {
+    if (symptomResult == null) return [];
+    
+    return symptomResult!.predictions
+        .where((prediction) => prediction.probability > 0.3)
+        .toList()
+      ..sort((a, b) => b.probability.compareTo(a.probability));
+  }
+}
+
+/// State management utility for UI widgets
+class MLPredictionState {
+  static MLPredictionProvider? _provider;
+  
+  static MLPredictionProvider of(dynamic context) {
+    // Would use Provider.of<MLPredictionProvider>(context) in real Flutter app
+    return _provider ??= MLPredictionProvider();
+  }
+  
+  static void initialize() {
+    _provider = MLPredictionProvider();
+  }
+  
+  static void dispose() {
+    _provider?.dispose();
+    _provider = null;
+  }
+}

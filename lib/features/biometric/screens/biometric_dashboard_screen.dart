@@ -1015,14 +1015,20 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
             subtitle: const Text('Automatically sync health data'),
             value: true,
             onChanged: (value) {},
-            activeColor: AppTheme.primaryRose,
+            thumbColor: WidgetStateProperty.resolveWith((states) => 
+              states.contains(WidgetState.selected) ? AppTheme.primaryRose : null),
+            trackColor: WidgetStateProperty.resolveWith((states) => 
+              states.contains(WidgetState.selected) ? AppTheme.primaryRose.withValues(alpha: 0.5) : null),
           ),
           SwitchListTile(
             title: const Text('Background Sync'),
             subtitle: const Text('Sync data in the background'),
             value: true,
             onChanged: (value) {},
-            activeColor: AppTheme.primaryRose,
+            thumbColor: WidgetStateProperty.resolveWith((states) => 
+              states.contains(WidgetState.selected) ? AppTheme.primaryRose : null),
+            trackColor: WidgetStateProperty.resolveWith((states) => 
+              states.contains(WidgetState.selected) ? AppTheme.primaryRose.withValues(alpha: 0.5) : null),
           ),
         ],
       ),

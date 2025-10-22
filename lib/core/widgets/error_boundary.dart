@@ -79,8 +79,8 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      AppTheme.primaryRose.withOpacity(0.2),
-                      AppTheme.primaryPurple.withOpacity(0.2),
+                      AppTheme.primaryRose.withValues(alpha: 0.1),
+                      AppTheme.primaryPurple.withValues(alpha: 0.1),
                     ],
                   ),
                   borderRadius: BorderRadius.circular(60),
@@ -181,7 +181,7 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
                       onPressed: _handleReport,
                       style: OutlinedButton.styleFrom(
                         side: BorderSide(
-                          color: AppTheme.primaryRose.withOpacity(0.3),
+                          color: AppTheme.primaryRose.withValues(alpha: 0.1),
                           width: 2,
                         ),
                         shape: RoundedRectangleBorder(
@@ -255,11 +255,11 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: isDark 
-                      ? Colors.grey[900]?.withOpacity(0.5)
+                      ? Colors.grey[900]?.withValues(alpha: 0.1)
                       : Colors.grey[100],
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: AppTheme.primaryRose.withOpacity(0.2),
+                      color: AppTheme.primaryRose.withValues(alpha: 0.1),
                     ),
                   ),
                   child: Column(

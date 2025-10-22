@@ -34,7 +34,7 @@ android {
 
     defaultConfig {
         applicationId = "com.flowai.health"
-        minSdk = flutter.minSdkVersion  // Support Android 5.0 and above
+        minSdk = 26  // Required for health plugin (Android 8.0+)
         targetSdk = flutter.targetSdkVersion  // Updated target SDK for latest Play Store requirements
         versionCode = flutter.versionCode
         versionName = flutter.versionName
@@ -62,9 +62,9 @@ android {
 
     buildTypes {
         release {
-            // Enable optimization for production builds
-            isMinifyEnabled = true
-            isShrinkResources = true
+            // Disable optimization temporarily for cross-platform testing
+            isMinifyEnabled = false
+            isShrinkResources = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             
             // Production signing with proper keystore

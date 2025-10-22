@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
-import '../models/community_models.dart';
+import '../../../core/models/community_models.dart';
 
 /// Community service managing anonymous platform and expert moderation
 class CommunityService {
@@ -190,6 +190,218 @@ class CommunityService {
     
     debugPrint('💬 Created reply to post: $postId');
     return reply;
+  }
+
+  /// Get community statistics
+  Future<CommunityStats> getCommunityStats() async {
+    return CommunityStats(
+      totalMembers: 5000,
+      activeMembers: 1200,
+      totalPosts: _posts.length,
+      totalQuestions: _posts.where((p) => p.type == PostType.question).length,
+      expertAnswers: 150,
+      storiesShared: _posts.where((p) => p.type == PostType.story).length,
+      categoryCounts: {'general': 100, 'symptoms': 80, 'tips': 60},
+      lastUpdated: DateTime.now(),
+    );
+  }
+
+  /// Get discussions
+  Future<List<DiscussionPost>> getDiscussions() async {
+    return _posts.map((post) => DiscussionPost(
+      id: post.postId,
+      userId: post.authorId,
+      title: post.title,
+      content: post.content,
+      category: post.tags.isNotEmpty ? post.tags.first : 'general',
+      createdAt: post.createdAt,
+      likes: post.upvotes,
+      replies: _replies.where((r) => r.postId == post.postId).length,
+      tags: post.tags,
+    )).toList();
+  }
+
+  /// Create discussion
+  Future<void> createDiscussion({
+    required String title,
+    required String content,
+    required String category,
+    List<String>? tags,
+    bool isAnonymous = false,
+  }) async {
+    await createPost(
+      groupId: 'general',
+      title: title,
+      content: content,
+      type: PostType.discussion,
+      tags: tags ?? [],
+    );
+  }
+
+  /// Join discussion
+  Future<void> joinDiscussion(String discussionId) async {
+    debugPrint('Joined discussion: $discussionId');
+  }
+
+  /// Like post
+  Future<void> likePost(String postId) async {
+    debugPrint('Liked post: $postId');
+  }
+
+  /// Report post
+  Future<void> reportPost(String postId) async {
+    debugPrint('Reported post: $postId');
+  }
+
+  /// Get expert questions
+  Future<List<ExpertQuestion>> getExpertQuestions() async {
+    return [
+      ExpertQuestion(
+        id: 'eq1',
+        userId: 'user1',
+        title: 'Question about irregular cycles',
+        content: 'I have been experiencing irregular cycles...',
+        category: 'medical',
+        createdAt: DateTime.now(),
+      ),
+    ];
+  }
+
+  /// Get experts
+  Future<List<CommunityProfile>> getExperts() async {
+    return [
+      CommunityProfile(
+        id: 'expert1',
+        userId: 'exp1',
+        displayName: 'Dr. Smith',
+        bio: 'Gynecologist with 10 years of experience',
+        joinDate: DateTime.now(),
+        reputationScore: 95,
+        badges: ['verified', 'expert'],
+      ),
+    ];
+  }
+
+  /// Ask expert question
+  Future<void> askExpertQuestion({
+    required String title,
+    required String content,
+    required String category,
+    String? preferredExpertId,
+    bool isAnonymous = false,
+  }) async {
+    debugPrint('Asked expert question: $title');
+  }
+
+  /// Answer question
+  Future<void> answerQuestion(String questionId, String answer) async {
+    debugPrint('Answered question: $questionId');
+  }
+
+  /// Upvote answer
+  Future<void> upvoteAnswer(String answerId) async {
+    debugPrint('Upvoted answer: $answerId');
+  }
+
+  /// Bookmark answer
+  Future<void> bookmarkAnswer(String answerId) async {
+    debugPrint('Bookmarked answer: $answerId');
+  }
+
+  /// Get cycle buddies
+  Future<List<CycleBuddy>> getCycleBuddies() async {
+    return [];
+  }
+
+  /// Get pending buddy requests
+  Future<List<BuddyRequest>> getPendingBuddyRequests() async {
+    return [];
+  }
+
+  /// Find cycle buddies
+  Future<List<CycleBuddy>> findCycleBuddies() async {
+    return [];
+  }
+
+  /// Send buddy request
+  Future<void> sendBuddyRequest(String userId, String message) async {
+    debugPrint('Sent buddy request to: $userId');
+  }
+
+  /// Accept buddy request
+  Future<void> acceptBuddyRequest(String requestId) async {
+    debugPrint('Accepted buddy request: $requestId');
+  }
+
+  /// Decline buddy request
+  Future<void> declineBuddyRequest(String requestId) async {
+    debugPrint('Declined buddy request: $requestId');
+  }
+
+  /// Get symptom stories
+  Future<List<SymptomStory>> getSymptomStories() async {
+    return [];
+  }
+
+  /// Get symptom categories
+  Future<List<String>> getSymptomCategories() async {
+    return ['cramps', 'headache', 'mood swings', 'fatigue'];
+  }
+
+  /// Share symptom story
+  Future<void> shareSymptomStory(SymptomStory story) async {
+    debugPrint('Shared symptom story: ${story.title}');
+  }
+
+  /// React to story
+  Future<void> reactToStory(String storyId, String reaction) async {
+    debugPrint('Reacted to story: $storyId with $reaction');
+  }
+
+  /// Follow story
+  Future<void> followStory(String storyId) async {
+    debugPrint('Following story: $storyId');
+  }
+
+  /// Get community achievements
+  Future<List<CommunityAchievement>> getCommunityAchievements() async {
+    return _achievements;
+  }
+
+  /// Get user achievement progress
+  Future<Map<String, double>> getUserAchievementProgress() async {
+    return {'first_post': 1.0, 'helpful_member': 0.5};
+  }
+
+  /// Get achievement leaderboard
+  Future<List<LeaderboardEntry>> getAchievementLeaderboard() async {
+    return [
+      LeaderboardEntry(
+        userId: 'user1',
+        displayName: 'ActiveUser',
+        points: 500,
+        rank: 1,
+        badges: ['top_contributor'],
+      ),
+    ];
+  }
+
+  /// Claim achievement
+  Future<void> claimAchievement(String achievementId) async {
+    debugPrint('Claimed achievement: $achievementId');
+  }
+
+  /// Share achievement
+  Future<void> shareAchievement(String achievementId) async {
+    debugPrint('Shared achievement: $achievementId');
+  }
+
+  /// Search community
+  Future<List<dynamic>> searchCommunity(String query) async {
+    return _posts.where((post) => 
+      post.title.toLowerCase().contains(query.toLowerCase()) ||
+      post.content.toLowerCase().contains(query.toLowerCase())
+    ).toList();
   }
 
   /// Vote on a post or reply

@@ -1,0 +1,616 @@
+import 'dart:math' as math;
+import 'package:flutter/foundation.dart';
+import 'advanced_prediction_models.dart';
+import '../models/cycle_data.dart';
+import '../models/user_profile.dart';
+import '../models/daily_tracking_data.dart';
+
+/// Extension to AdvancedPredictionModels with missing implementations
+extension AdvancedPredictionModelsImpl on AdvancedPredictionModels {
+  
+  // === MISSING METHOD IMPLEMENTATIONS ===
+  
+  /// Ensemble prediction combination
+  Map<String, dynamic> ensembleIrregularityPrediction(List<Map<String, dynamic>> predictions) {
+    final weights = [0.3, 0.25, 0.3, 0.15]; // SVM, RandomForest, Neural, TimeSeries
+    
+    double totalScore = 0.0;
+    double totalConfidence = 0.0;
+    double totalWeight = 0.0;
+    
+    for (int i = 0; i < predictions.length && i < weights.length; i++) {
+      final weight = weights[i];
+      final score = predictions[i]['irregularity_score'] as double;
+      final confidence = predictions[i]['confidence'] as double;
+      
+      totalScore += score * weight;
+      totalConfidence += confidence * weight;
+      totalWeight += weight;
+    }
+    
+    final ensembleScore = totalScore / totalWeight;
+    final ensembleConfidence = totalConfidence / totalWeight;
+    
+    return {
+      'irregularity_score': ensembleScore,
+      'confidence': ensembleConfidence,
+      'contributing_factors': _identifyContributingFactors(predictions, ensembleScore),
+    };
+  }
+  
+  /// Generate detailed irregularity analysis
+  Future<Map<String, dynamic>> generateIrregularityAnalysis(
+    Map<String, dynamic> ensemble,
+    Map<String, List<double>> features,
+    List<CycleData> cycles,
+  ) async {
+    final score = ensemble['irregularity_score'] as double;
+    
+    return {
+      'patterns': _analyzeIrregularityPatterns(cycles),
+      'future_predictions': _generateFuturePredictions(cycles, score),
+      'recommendations': _generateIrregularityRecommendations(score),
+      'medical_flags': _generateMedicalFlags(score, cycles),
+    };
+  }
+  
+  /// Determine risk level from score
+  RiskLevel determineRiskLevel(double score) {
+    if (score >= 0.8) return RiskLevel.critical;
+    if (score >= 0.6) return RiskLevel.high;
+    if (score >= 0.4) return RiskLevel.moderate;
+    return RiskLevel.low;
+  }
+  
+  /// Advanced ovulation prediction models
+  Future<Map<String, dynamic>> lstm_ovulationModel(Map<String, List<double>> features) async {
+    // LSTM-based ovulation prediction
+    final sequenceLength = math.min(features['cycle_lengths']?.length ?? 6, 12);
+    final cycleSequence = features['cycle_lengths']?.take(sequenceLength).toList() ?? [];
+    
+    // Simplified LSTM forward pass
+    final hiddenStates = <List<double>>[];
+    final cellStates = <List<double>>[];
+    
+    for (int t = 0; t < cycleSequence.length; t++) {
+      final input = [cycleSequence[t]];
+      final hiddenState = _lstmCell(input, 
+          hiddenStates.isNotEmpty ? hiddenStates.last : List.filled(10, 0.0),
+          cellStates.isNotEmpty ? cellStates.last : List.filled(10, 0.0));
+      hiddenStates.add(hiddenState['hidden']);
+      cellStates.add(hiddenState['cell']);
+    }
+    
+    final prediction = hiddenStates.isNotEmpty ? 
+        hiddenStates.last.reduce((a, b) => a + b) / hiddenStates.last.length : 14.0;
+    
+    return {
+      'ovulation_day': prediction.clamp(10.0, 20.0),
+      'confidence': 0.85,
+      'model': 'lstm',
+    };
+  }
+  
+  Future<Map<String, dynamic>> gaussianProcessModel(Map<String, List<double>> features) async {
+    // Gaussian Process for ovulation prediction
+    final cycleLengths = features['cycle_lengths'] ?? [28.0];
+    final mean = cycleLengths.reduce((a, b) => a + b) / cycleLengths.length;
+    final variance = cycleLengths.map((l) => math.pow(l - mean, 2)).reduce((a, b) => a + b) / cycleLengths.length;
+    
+    final ovulationDay = mean - 14.0; // Luteal phase assumption
+    final uncertainty = math.sqrt(variance) / 2.0;
+    
+    return {
+      'ovulation_day': ovulationDay.clamp(10.0, 20.0),
+      'confidence': math.max(0.5, 1.0 - uncertainty / 5.0),
+      'uncertainty': uncertainty,
+      'model': 'gaussian_process',
+    };
+  }
+  
+  Future<Map<String, dynamic>> bayesianOvulationModel(Map<String, List<double>> features) async {
+    // Bayesian inference for ovulation prediction
+    final priorMean = 14.0; // Prior belief about ovulation day
+    final priorVariance = 4.0; // Prior uncertainty
+    
+    final cycleLengths = features['cycle_lengths'] ?? [28.0];
+    final observedLengths = cycleLengths.map((l) => l - 14.0).toList(); // Convert to ovulation days
+    
+    // Bayesian update
+    final likelihoodVariance = 2.0;
+    final posteriorPrecision = 1 / priorVariance + observedLengths.length / likelihoodVariance;
+    final posteriorMean = (priorMean / priorVariance + 
+        observedLengths.reduce((a, b) => a + b) / likelihoodVariance) / posteriorPrecision;
+    
+    return {
+      'ovulation_day': posteriorMean.clamp(10.0, 20.0),
+      'confidence': math.min(0.95, 0.6 + observedLengths.length * 0.05),
+      'posterior_variance': 1 / posteriorPrecision,
+      'model': 'bayesian',
+    };
+  }
+  
+  Future<Map<String, dynamic>> hormoneBasedModel(
+    Map<String, List<double>> features,
+    Map<String, dynamic>? biometric,
+  ) async {
+    // Hormone-based ovulation prediction
+    double ovulationDay = 14.0;
+    double confidence = 0.7;
+    
+    // Adjust based on biometric indicators
+    if (biometric != null) {
+      final temperature = biometric['temperature'] as List<double>? ?? [];
+      final heartRate = biometric['heart_rate'] as List<double>? ?? [];
+      
+      // Temperature-based adjustment
+      if (temperature.isNotEmpty) {
+        final tempVariation = calculateVariance(temperature);
+        if (tempVariation > 0.5) {
+          ovulationDay += 1.0; // Temperature spike indicates ovulation
+          confidence += 0.1;
+        }
+      }
+      
+      // Heart rate-based adjustment
+      if (heartRate.isNotEmpty) {
+        final avgHeartRate = heartRate.reduce((a, b) => a + b) / heartRate.length;
+        if (avgHeartRate > 75) {
+          ovulationDay -= 0.5; // Elevated HR may indicate earlier ovulation
+        }
+      }
+    }
+    
+    return {
+      'ovulation_day': ovulationDay.clamp(10.0, 20.0),
+      'confidence': confidence.clamp(0.0, 1.0),
+      'model': 'hormone_based',
+    };
+  }
+  
+  /// Fertility window optimization
+  Future<Map<String, dynamic>> optimizeFertilityWindow(
+    List<Map<String, dynamic>> ovulationPredictions,
+    Map<String, List<double>> features,
+    Map<String, dynamic>? biometric,
+  ) async {
+    // Ensemble ovulation predictions
+    final weights = [0.3, 0.25, 0.25, 0.2]; // LSTM, GP, Bayesian, Hormone
+    double weightedOvulation = 0.0;
+    double totalWeight = 0.0;
+    
+    for (int i = 0; i < ovulationPredictions.length && i < weights.length; i++) {
+      final weight = weights[i];
+      final ovulationDay = ovulationPredictions[i]['ovulation_day'] as double;
+      weightedOvulation += ovulationDay * weight;
+      totalWeight += weight;
+    }
+    
+    final predictedOvulation = weightedOvulation / totalWeight;
+    final now = DateTime.now();
+    
+    return {
+      'optimal_window': {
+        'fertile_start': now.add(Duration(days: (predictedOvulation - 5).round())),
+        'peak_fertility': now.add(Duration(days: predictedOvulation.round())),
+        'fertile_end': now.add(Duration(days: (predictedOvulation + 1).round())),
+      },
+      'confidence': _calculateEnsembleConfidence(ovulationPredictions),
+      'ovulation_probability': {
+        'day_${predictedOvulation.round() - 1}': 0.3,
+        'day_${predictedOvulation.round()}': 0.7,
+        'day_${predictedOvulation.round() + 1}': 0.4,
+      },
+      'fertility_score': _calculateFertilityScore(features, biometric),
+      'factors': _identifyFertilityFactors(features, biometric),
+      'recommendations': _generateFertilityRecommendations(predictedOvulation),
+      'biometric_correlations': _calculateBiometricCorrelations(features, biometric),
+    };
+  }
+  
+  /// Feature extraction helper methods
+  List<double> extractSeasonalFeatures(List<CycleData> cycles) {
+    final seasonalFeatures = <double>[];
+    
+    for (final cycle in cycles) {
+      final month = cycle.startDate.month;
+      // Convert month to seasonal indicator (0-1)
+      final seasonalIndicator = math.sin(2 * math.pi * month / 12);
+      seasonalFeatures.add(seasonalIndicator);
+    }
+    
+    return seasonalFeatures;
+  }
+  
+  List<double> extractTrendFeatures(List<CycleData> cycles) {
+    if (cycles.length < 2) return [0.0];
+    
+    final lengths = cycles.map((c) => c.length.toDouble()).toList();
+    final trend = calculateTrend(lengths);
+    
+    return [trend];
+  }
+  
+  List<double> extractOvulationFeatures(List<DailyTrackingData> tracking) {
+    final ovulationFeatures = <double>[];
+    
+    for (final data in tracking) {
+      // Extract temperature variations as ovulation indicators
+      if (data.temperature != null) {
+        ovulationFeatures.add(data.temperature!);
+      }
+      // Add other ovulation indicators (cervical mucus, etc.)
+    }
+    
+    return ovulationFeatures.isNotEmpty ? ovulationFeatures : [98.6];
+  }
+  
+  List<double> extractCervicalMucusFeatures(List<DailyTrackingData> tracking) {
+    // Simplified cervical mucus feature extraction
+    return [0.5]; // Placeholder - would analyze actual cervical mucus data
+  }
+  
+  List<double> calculateLutealPhaseFeatures(List<CycleData> cycles) {
+    final lutealLengths = <double>[];
+    
+    for (final cycle in cycles) {
+      // Estimate luteal phase length (typically 12-16 days)
+      final lutealLength = math.max(10.0, cycle.length - 14.0);
+      lutealLengths.add(lutealLength);
+    }
+    
+    return lutealLengths.isNotEmpty ? lutealLengths : [14.0];
+  }
+  
+  /// Time series analysis helper methods
+  List<double> calculateTrend(List<double> values) {
+    if (values.length < 2) return values;
+    
+    final n = values.length;
+    final x = List.generate(n, (i) => i.toDouble());
+    final y = values;
+    
+    // Simple linear regression
+    final xMean = x.reduce((a, b) => a + b) / n;
+    final yMean = y.reduce((a, b) => a + b) / n;
+    
+    double numerator = 0.0;
+    double denominator = 0.0;
+    
+    for (int i = 0; i < n; i++) {
+      numerator += (x[i] - xMean) * (y[i] - yMean);
+      denominator += (x[i] - xMean) * (x[i] - xMean);
+    }
+    
+    final slope = denominator != 0 ? numerator / denominator : 0.0;
+    final intercept = yMean - slope * xMean;
+    
+    return x.map((xi) => slope * xi + intercept).toList();
+  }
+  
+  List<double> calculateSeasonality(List<double> values) {
+    // Simplified seasonality calculation (moving average)
+    if (values.length < 4) return values;
+    
+    final seasonality = <double>[];
+    final windowSize = math.min(4, values.length);
+    
+    for (int i = 0; i < values.length; i++) {
+      final start = math.max(0, i - windowSize ~/ 2);
+      final end = math.min(values.length, start + windowSize);
+      final window = values.sublist(start, end);
+      final average = window.reduce((a, b) => a + b) / window.length;
+      seasonality.add(average);
+    }
+    
+    return seasonality;
+  }
+  
+  List<double> calculateResiduals(List<double> values, List<double> trend, List<double> seasonality) {
+    final residuals = <double>[];
+    
+    for (int i = 0; i < values.length; i++) {
+      final residual = values[i] - trend[i] - seasonality[i] + values.reduce((a, b) => a + b) / values.length;
+      residuals.add(residual);
+    }
+    
+    return residuals;
+  }
+  
+  // Continued helper methods...
+  List<String> identifyContributingFactors(List<Map<String, dynamic>> predictions, double score) {
+    final factors = <String>[];
+    
+    if (score > 0.7) {
+      factors.add('High cycle variability detected');
+      factors.add('Significant pattern deviations');
+    }
+    
+    if (score > 0.5) {
+      factors.add('Moderate irregularity patterns');
+      factors.add('Lifestyle factors may be influential');
+    }
+    
+    // Add model-specific insights
+    final neuralPrediction = predictions.firstWhere((p) => p['model'] == 'neural_network', orElse: () => {});
+    if (neuralPrediction.isNotEmpty && neuralPrediction['irregularity_score'] > 0.6) {
+      factors.add('Complex patterns detected by AI analysis');
+    }
+    
+    return factors;
+  }
+  
+  Map<String, dynamic> analyzeIrregularityPatterns(List<CycleData> cycles) {
+    return {
+      'cycle_count': cycles.length,
+      'length_range': cycles.isNotEmpty ? {
+        'min': cycles.map((c) => c.length).reduce(math.min),
+        'max': cycles.map((c) => c.length).reduce(math.max),
+      } : {'min': 0, 'max': 0},
+      'variability': calculateVariability(cycles),
+      'trend_direction': cycles.length >= 3 ? _determineTrendDirection(cycles) : 'insufficient_data',
+    };
+  }
+  
+  Map<String, dynamic> generateFuturePredictions(List<CycleData> cycles, double irregularityScore) {
+    final predictions = <String, dynamic>{};
+    
+    if (irregularityScore < 0.3) {
+      predictions['next_3_cycles'] = 'Regular patterns expected to continue';
+      predictions['confidence'] = 0.8;
+    } else if (irregularityScore < 0.6) {
+      predictions['next_3_cycles'] = 'Some variability expected';
+      predictions['confidence'] = 0.6;
+    } else {
+      predictions['next_3_cycles'] = 'Irregular patterns likely to persist';
+      predictions['confidence'] = 0.7;
+    }
+    
+    return predictions;
+  }
+  
+  List<String> generateIrregularityRecommendations(double score) {
+    final recommendations = <String>[];
+    
+    if (score > 0.6) {
+      recommendations.addAll([
+        'Consider tracking stress levels more closely',
+        'Monitor sleep patterns and aim for 7-9 hours nightly',
+        'Consult with a healthcare provider about cycle irregularity',
+        'Consider tracking additional symptoms and lifestyle factors',
+      ]);
+    } else if (score > 0.4) {
+      recommendations.addAll([
+        'Continue consistent tracking for better pattern recognition',
+        'Consider lifestyle factors that might influence cycle regularity',
+        'Monitor for any new symptoms or changes',
+      ]);
+    } else {
+      recommendations.addAll([
+        'Your cycles show good regularity - keep up current habits',
+        'Continue tracking to maintain prediction accuracy',
+      ]);
+    }
+    
+    return recommendations;
+  }
+  
+  List<String> generateMedicalFlags(double score, List<CycleData> cycles) {
+    final flags = <String>[];
+    
+    if (score > 0.8) {
+      flags.add('HIGH_IRREGULARITY_DETECTED');
+    }
+    
+    if (cycles.any((c) => c.length > 35 || c.length < 21)) {
+      flags.add('ABNORMAL_CYCLE_LENGTH');
+    }
+    
+    if (cycles.length >= 3 && calculateVariability(cycles) > 10) {
+      flags.add('HIGH_VARIABILITY');
+    }
+    
+    return flags;
+  }
+  
+  /// LSTM cell implementation (simplified)
+  Map<String, List<double>> lstmCell(List<double> input, List<double> hiddenState, List<double> cellState) {
+    final inputSize = input.length;
+    final hiddenSize = hiddenState.length;
+    
+    // Simplified LSTM gates (normally would use learned weights)
+    final forgetGate = input.map((x) => sigmoid(x + 0.5)).toList();
+    final inputGate = input.map((x) => sigmoid(x)).toList();
+    final outputGate = input.map((x) => sigmoid(x - 0.5)).toList();
+    final candidateValues = input.map((x) => math.tanh(x)).toList();
+    
+    // Update cell state
+    final newCellState = <double>[];
+    for (int i = 0; i < math.min(hiddenSize, inputSize); i++) {
+      final forget = i < forgetGate.length ? forgetGate[i] : 0.5;
+      final inputVal = i < inputGate.length ? inputGate[i] : 0.5;
+      final candidate = i < candidateValues.length ? candidateValues[i] : 0.0;
+      final oldCell = i < cellState.length ? cellState[i] : 0.0;
+      
+      newCellState.add(forget * oldCell + inputVal * candidate);
+    }
+    
+    // Update hidden state
+    final newHiddenState = <double>[];
+    for (int i = 0; i < math.min(hiddenSize, inputSize); i++) {
+      final output = i < outputGate.length ? outputGate[i] : 0.5;
+      final cell = i < newCellState.length ? newCellState[i] : 0.0;
+      newHiddenState.add(output * math.tanh(cell));
+    }
+    
+    // Pad to maintain size
+    while (newCellState.length < hiddenSize) newCellState.add(0.0);
+    while (newHiddenState.length < hiddenSize) newHiddenState.add(0.0);
+    
+    return {
+      'hidden': newHiddenState,
+      'cell': newCellState,
+    };
+  }
+  
+  // Additional helper methods
+  double sigmoid(double x) => 1 / (1 + math.exp(-x));
+  
+  double calculateEnsembleConfidence(List<Map<String, dynamic>> predictions) {
+    if (predictions.isEmpty) return 0.5;
+    
+    final confidences = predictions.map((p) => p['confidence'] as double).toList();
+    return confidences.reduce((a, b) => a + b) / confidences.length;
+  }
+  
+  double calculateFertilityScore(Map<String, List<double>> features, Map<String, dynamic>? biometric) {
+    double score = 0.8; // Base fertility score
+    
+    // Age factor
+    final age = features['age']?.first ?? 25.0;
+    if (age > 35) score *= 0.9;
+    if (age > 40) score *= 0.8;
+    
+    // Cycle regularity factor
+    final variability = features['cycle_variability']?.first ?? 0.0;
+    score *= math.max(0.7, 1.0 - variability / 10.0);
+    
+    // BMI factor
+    final bmi = features['bmi']?.first ?? 22.0;
+    if (bmi < 18.5 || bmi > 30) score *= 0.9;
+    
+    return score.clamp(0.0, 1.0);
+  }
+  
+  List<String> identifyFertilityFactors(Map<String, List<double>> features, Map<String, dynamic>? biometric) {
+    final factors = <String>[];
+    
+    final age = features['age']?.first ?? 25.0;
+    if (age > 35) factors.add('Age-related fertility considerations');
+    
+    final variability = features['cycle_variability']?.first ?? 0.0;
+    if (variability > 5) factors.add('Cycle irregularity may affect timing');
+    
+    if (biometric != null) {
+      factors.add('Biometric data available for enhanced predictions');
+    }
+    
+    return factors;
+  }
+  
+  List<String> generateFertilityRecommendations(double ovulationDay) {
+    return [
+      'Optimal timing: ${(ovulationDay - 3).round()} to ${(ovulationDay + 1).round()} days',
+      'Track cervical mucus changes for additional confirmation',
+      'Consider ovulation prediction kits for precise timing',
+      'Maintain healthy lifestyle habits to support fertility',
+    ];
+  }
+  
+  Map<String, double> calculateBiometricCorrelations(Map<String, List<double>> features, Map<String, dynamic>? biometric) {
+    final correlations = <String, double>{};
+    
+    if (biometric != null) {
+      correlations['temperature_correlation'] = 0.7;
+      correlations['heart_rate_correlation'] = 0.5;
+      correlations['sleep_correlation'] = 0.6;
+    }
+    
+    return correlations;
+  }
+  
+  String determineTrendDirection(List<CycleData> cycles) {
+    if (cycles.length < 3) return 'insufficient_data';
+    
+    final lengths = cycles.map((c) => c.length.toDouble()).toList();
+    final trend = calculateTrend(lengths);
+    
+    final firstHalf = trend.take(trend.length ~/ 2).reduce((a, b) => a + b) / (trend.length ~/ 2);
+    final secondHalf = trend.skip(trend.length ~/ 2).reduce((a, b) => a + b) / (trend.length - trend.length ~/ 2);
+    
+    if (secondHalf > firstHalf + 1) return 'increasing';
+    if (firstHalf > secondHalf + 1) return 'decreasing';
+    return 'stable';
+  }
+  
+  // Placeholder methods for missing implementations
+  Future<Map<String, dynamic>> extractPersonalizationFeatures(
+    UserProfile user,
+    List<CycleData> cycles,
+    List<DailyTrackingData> tracking,
+    Map<String, dynamic>? biometric,
+  ) async {
+    // Implementation would extract comprehensive personalization features
+    return {
+      'lifestyle_patterns': [0.7],
+      'health_indicators': [0.8],
+      'behavioral_patterns': [0.6],
+    };
+  }
+  
+  Future<Map<String, dynamic>> extractSymptomFeatures(
+    UserProfile user,
+    List<CycleData> cycles,
+    List<DailyTrackingData> tracking,
+    Map<String, dynamic>? context,
+  ) async {
+    // Implementation would extract symptom prediction features
+    return {
+      'symptom_history': [0.5],
+      'temporal_patterns': [0.6],
+      'contextual_factors': [0.4],
+    };
+  }
+  
+  // Additional placeholder methods for comprehensive ML pipeline
+  double calculatePredictionError(Map<String, dynamic> actual, Map<String, dynamic> predicted) {
+    // Calculate error between actual and predicted values
+    return 0.1; // Placeholder
+  }
+  
+  Future<void> updateModelsWithFeedback(PredictionFeedback feedback) async {
+    // Update model weights based on feedback
+    debugPrint('🔄 Updating models with feedback: ${feedback.type}');
+  }
+}
+
+/// Additional helper functions for ML operations
+class MLUtils {
+  static List<double> normalizeFeatures(List<double> features) {
+    if (features.isEmpty) return features;
+    
+    final min = features.reduce(math.min);
+    final max = features.reduce(math.max);
+    final range = max - min;
+    
+    if (range == 0) return features.map((_) => 0.5).toList();
+    
+    return features.map((f) => (f - min) / range).toList();
+  }
+  
+  static double cosineSimilarity(List<double> a, List<double> b) {
+    if (a.length != b.length) return 0.0;
+    
+    double dotProduct = 0.0;
+    double normA = 0.0;
+    double normB = 0.0;
+    
+    for (int i = 0; i < a.length; i++) {
+      dotProduct += a[i] * b[i];
+      normA += a[i] * a[i];
+      normB += b[i] * b[i];
+    }
+    
+    if (normA == 0 || normB == 0) return 0.0;
+    
+    return dotProduct / (math.sqrt(normA) * math.sqrt(normB));
+  }
+  
+  static List<double> applySoftmax(List<double> values) {
+    final max = values.reduce(math.max);
+    final expValues = values.map((v) => math.exp(v - max)).toList();
+    final sum = expValues.reduce((a, b) => a + b);
+    
+    return expValues.map((v) => v / sum).toList();
+  }
+}

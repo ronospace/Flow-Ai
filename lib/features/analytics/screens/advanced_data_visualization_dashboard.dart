@@ -167,8 +167,8 @@ class _AdvancedDataVisualizationDashboardState
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                AppTheme.primaryColor.withOpacity(0.8),
-                AppTheme.secondaryColor.withOpacity(0.6),
+                AppTheme.primaryColor.withValues(alpha: 0.1),
+                AppTheme.secondaryColor.withValues(alpha: 0.1),
                 AppTheme.backgroundColor,
               ],
             ),
@@ -185,10 +185,10 @@ class _AdvancedDataVisualizationDashboardState
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
+                          color: Colors.white.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: Colors.white.withOpacity(0.3),
+                            color: Colors.white.withValues(alpha: 0.1),
                           ),
                         ),
                         child: const Icon(
@@ -213,7 +213,7 @@ class _AdvancedDataVisualizationDashboardState
                             Text(
                               'AI-powered health insights for ${widget.userProfile.displayName ?? 'you'}',
                               style: TextStyle(
-                                color: Colors.white.withOpacity(0.9),
+                                color: Colors.white.withValues(alpha: 0.1),
                                 fontSize: 16,
                               ),
                             ),
@@ -232,7 +232,7 @@ class _AdvancedDataVisualizationDashboardState
         icon: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.1),
+            color: Colors.white.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
@@ -244,7 +244,7 @@ class _AdvancedDataVisualizationDashboardState
           icon: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.1),
+              color: Colors.white.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: const Icon(Icons.settings, color: Colors.white),
@@ -265,7 +265,7 @@ class _AdvancedDataVisualizationDashboardState
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: AppTheme.primaryColor.withOpacity(0.1),
+                color: AppTheme.primaryColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: CircularProgressIndicator(
@@ -301,9 +301,9 @@ class _AdvancedDataVisualizationDashboardState
         margin: const EdgeInsets.all(16),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.05),
+          color: Colors.white.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.white.withOpacity(0.1)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -354,12 +354,12 @@ class _AdvancedDataVisualizationDashboardState
                   decoration: BoxDecoration(
                     color: isSelected
                         ? AppTheme.primaryColor
-                        : Colors.white.withOpacity(0.1),
+                        : Colors.white.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
                       color: isSelected
                           ? AppTheme.primaryColor
-                          : Colors.white.withOpacity(0.3),
+                          : Colors.white.withValues(alpha: 0.1),
                     ),
                   ),
                   child: Text(
@@ -405,12 +405,12 @@ class _AdvancedDataVisualizationDashboardState
                   decoration: BoxDecoration(
                     color: isSelected
                         ? AppTheme.secondaryColor
-                        : Colors.white.withOpacity(0.1),
+                        : Colors.white.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
                       color: isSelected
                           ? AppTheme.secondaryColor
-                          : Colors.white.withOpacity(0.3),
+                          : Colors.white.withValues(alpha: 0.1),
                     ),
                   ),
                   child: Row(
@@ -477,10 +477,10 @@ class _AdvancedDataVisualizationDashboardState
             return Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: AppTheme.primaryColor.withOpacity(0.2),
+                color: AppTheme.primaryColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: AppTheme.primaryColor.withOpacity(0.5),
+                  color: AppTheme.primaryColor.withValues(alpha: 0.1),
                 ),
               ),
               child: Row(
@@ -588,9 +588,9 @@ class _AdvancedDataVisualizationDashboardState
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
+        color: Colors.white.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withOpacity(0.1)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -645,9 +645,9 @@ class _AdvancedDataVisualizationDashboardState
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
+        color: Colors.white.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withOpacity(0.1)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -850,14 +850,20 @@ class _AdvancedDataVisualizationDashboardState
               subtitle: const Text('Display AI-powered predictions', style: TextStyle(color: Colors.white70)),
               value: _showPredictions,
               onChanged: (value) => setState(() => _showPredictions = value),
-              activeColor: AppTheme.primaryColor,
+              thumbColor: WidgetStateProperty.resolveWith((states) => 
+                states.contains(WidgetState.selected) ? AppTheme.primaryColor : null),
+              trackColor: WidgetStateProperty.resolveWith((states) => 
+                states.contains(WidgetState.selected) ? AppTheme.primaryColor.withValues(alpha: 0.5) : null),
             ),
             SwitchListTile(
               title: const Text('Show Correlations', style: TextStyle(color: Colors.white)),
               subtitle: const Text('Display metric correlations', style: TextStyle(color: Colors.white70)),
               value: _showCorrelations,
               onChanged: (value) => setState(() => _showCorrelations = value),
-              activeColor: AppTheme.primaryColor,
+              thumbColor: WidgetStateProperty.resolveWith((states) => 
+                states.contains(WidgetState.selected) ? AppTheme.primaryColor : null),
+              trackColor: WidgetStateProperty.resolveWith((states) => 
+                states.contains(WidgetState.selected) ? AppTheme.primaryColor.withValues(alpha: 0.5) : null),
             ),
           ],
         ),
@@ -887,7 +893,10 @@ class _AdvancedDataVisualizationDashboardState
                 });
                 Navigator.pop(context);
               },
-              activeColor: AppTheme.primaryColor,
+              checkColor: WidgetStateProperty.resolveWith((states) => 
+                states.contains(WidgetState.selected) ? Colors.white : null),
+              fillColor: WidgetStateProperty.resolveWith((states) => 
+                states.contains(WidgetState.selected) ? AppTheme.primaryColor : null),
             );
           }).toList(),
         ),

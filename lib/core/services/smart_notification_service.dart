@@ -549,16 +549,18 @@ class SmartNotificationService {
       final startDate = now.subtract(Duration(days: 30 * (index + 1)));
       return CycleData(
         id: 'mock_${index}',
+        userId: 'mock_user',
         startDate: startDate,
         endDate: startDate.add(Duration(days: 28)),
-        length: 28 + index,
+        cycleLength: 28 + index,
+        dailyData: {},
         flowIntensity: FlowIntensity.medium,
         symptoms: ['cramps', 'fatigue'],
         mood: 3.5,
         energy: 3.0,
         pain: 2.5,
         createdAt: startDate,
-        updatedAt: startDate,
+        lastUpdated: startDate,
       );
     });
   }

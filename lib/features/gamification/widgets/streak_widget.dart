@@ -27,8 +27,8 @@ class StreakWidget extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                _getStreakColor().withOpacity(0.1),
-                _getStreakColor().withOpacity(0.05),
+                _getStreakColor().withValues(alpha: 0.1),
+                _getStreakColor().withValues(alpha: 0.1),
               ],
             ),
           ),
@@ -45,7 +45,7 @@ class StreakWidget extends StatelessWidget {
                       width: 48,
                       height: 48,
                       decoration: BoxDecoration(
-                        color: _getStreakColor().withOpacity(0.2),
+                        color: _getStreakColor().withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Icon(
@@ -103,7 +103,7 @@ class StreakWidget extends StatelessWidget {
                           Text(
                             'days',
                             style: TextStyle(
-                              color: Colors.white.withOpacity(0.9),
+                              color: Colors.white.withValues(alpha: 0.1),
                               fontSize: 12,
                             ),
                           ),
@@ -160,10 +160,10 @@ class StreakWidget extends StatelessWidget {
                     width: double.infinity,
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.amber.withOpacity(0.1),
+                      color: Colors.amber.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: Colors.amber.withOpacity(0.3),
+                        color: Colors.amber.withValues(alpha: 0.1),
                         width: 1,
                       ),
                     ),
@@ -189,7 +189,7 @@ class StreakWidget extends StatelessWidget {
                           '${streak.nextMilestone! - streak.currentStreak} to go',
                           style: TextStyle(
                             fontSize: 12,
-                            color: Colors.amber.withOpacity(0.8),
+                            color: Colors.amber.withValues(alpha: 0.1),
                           ),
                         ),
                       ],
@@ -208,7 +208,7 @@ class StreakWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -395,8 +395,8 @@ class CompactStreakWidget extends StatelessWidget {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                _getStreakColor().withOpacity(0.1),
-                _getStreakColor().withOpacity(0.05),
+                _getStreakColor().withValues(alpha: 0.1),
+                _getStreakColor().withValues(alpha: 0.1),
               ],
             ),
           ),
@@ -407,7 +407,7 @@ class CompactStreakWidget extends StatelessWidget {
                 width: 32,
                 height: 32,
                 decoration: BoxDecoration(
-                  color: _getStreakColor().withOpacity(0.2),
+                  color: _getStreakColor().withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(

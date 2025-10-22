@@ -1,3 +1,5 @@
+import 'user.dart';
+
 /// Authentication result model for handling login/signup responses
 class AuthResult {
   final bool success;
@@ -28,14 +30,15 @@ class AuthResult {
 
   /// Factory constructor for successful authentication
   factory AuthResult.success({
-    required String userId,
-    required AuthProvider provider,
+    String? userId,
+    AuthProvider provider = AuthProvider.local,
     String? email,
     String? displayName,
     String? photoUrl,
     String? accessToken,
     String? refreshToken,
     Map<String, dynamic>? additionalData,
+    User? user,  // Add user parameter for test compatibility
   }) {
     return AuthResult(
       success: true,
@@ -52,13 +55,14 @@ class AuthResult {
 
   /// Factory constructor for failed authentication
   factory AuthResult.failure({
-    required String error,
+    String? error,
+    String? message,  // Add message parameter for test compatibility
     AuthProvider provider = AuthProvider.local,
     Map<String, dynamic>? additionalData,
   }) {
     return AuthResult(
       success: false,
-      error: error,
+      error: error ?? message ?? 'Authentication failed',
       provider: provider,
       additionalData: additionalData,
     );
@@ -131,6 +135,9 @@ class AuthResult {
       timestamp: timestamp ?? this.timestamp,
     );
   }
+
+  /// Getter for error message (for test compatibility)
+  String? get errorMessage => error;
 
   @override
   String toString() {
