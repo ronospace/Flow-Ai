@@ -62,9 +62,9 @@ android {
 
     buildTypes {
         release {
-            // Disable optimization temporarily for cross-platform testing
-            isMinifyEnabled = false
-            isShrinkResources = false
+            // Enable R8 optimization for production
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             
             // Production signing with proper keystore
