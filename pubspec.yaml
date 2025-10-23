@@ -118,6 +118,11 @@ dependencies:
   # Advertising
   google_mobile_ads: ^5.1.0
   
+  # In-App Purchases (Premium Subscriptions)
+  in_app_purchase: ^3.1.11
+  in_app_purchase_android: ^0.3.3+1
+  in_app_purchase_storekit: ^0.3.9+2
+  
   # Platform utilities (override to fix deprecated API issue)
   platform: ^3.1.0
   
