@@ -72,7 +72,7 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
     return Consumer<EnhancedOnboardingController>(
       builder: (context, controller, child) {
         return Scaffold(
-          backgroundColor: Theme.of(context).colorScheme.background,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           body: SafeArea(
             child: Column(
               children: [

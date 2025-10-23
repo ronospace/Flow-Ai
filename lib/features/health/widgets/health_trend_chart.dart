@@ -9,11 +9,11 @@ class HealthTrendChart extends StatefulWidget {
   final int timeRange;
 
   const HealthTrendChart({
-    Key? key,
+    super.key,
     required this.data,
     required this.selectedMetric,
     required this.timeRange,
-  }) : super(key: key);
+  });
 
   @override
   State<HealthTrendChart> createState() => _HealthTrendChartState();

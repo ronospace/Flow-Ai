@@ -101,7 +101,7 @@ class Question {
       return '${truncated.substring(0, lastSpace)}...';
     }
     
-    return '${truncated}...';
+    return '$truncated...';
   }
 
   /// Check if question matches search query

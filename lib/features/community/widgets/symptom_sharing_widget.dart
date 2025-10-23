@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../core/models/community_models.dart';
-import '../controllers/community_controller.dart';
 
 class SymptomSharingWidget extends StatefulWidget {
   final List<SymptomStory> stories;
@@ -11,14 +10,14 @@ class SymptomSharingWidget extends StatefulWidget {
   final Function(SymptomStory) onShareStory;
 
   const SymptomSharingWidget({
-    Key? key,
+    super.key,
     required this.stories,
     required this.categories,
     required this.onStoryTapped,
     required this.onReactToStory,
     required this.onFollowStory,
     required this.onShareStory,
-  }) : super(key: key);
+  });
 
   @override
   State<SymptomSharingWidget> createState() => _SymptomSharingWidgetState();

@@ -164,8 +164,8 @@ class Answer {
     var summary = '';
     
     for (final sentence in sentences) {
-      if ((summary + sentence + '. ').length <= maxLength) {
-        summary += sentence + '. ';
+      if (('$summary$sentence. ').length <= maxLength) {
+        summary += '$sentence. ';
       } else {
         break;
       }
@@ -173,7 +173,7 @@ class Answer {
     
     if (summary.isEmpty) {
       // Fallback to character limit
-      return content.substring(0, maxLength) + '...';
+      return '${content.substring(0, maxLength)}...';
     }
     
     return summary.trim();

@@ -105,7 +105,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
       mainAxisSize: MainAxisSize.min,
       children: [
         // Optimized Grid View - Using better scrolling with more space
-        Container(
+        SizedBox(
           height: 400, // Fixed height to avoid unbounded constraints
           child: GridView.builder(
             padding: const EdgeInsets.all(12),

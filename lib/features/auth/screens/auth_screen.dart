@@ -5,7 +5,6 @@ import 'package:local_auth/local_auth.dart';
 // import 'package:google_sign_in/google_sign_in.dart'; // Temporarily disabled for iOS compatibility
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'dart:io';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/services/auth_service.dart';
 import '../../../core/services/platform_service.dart';
@@ -115,7 +114,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     
     // Use adaptive scaffold that automatically adjusts to platform conventions
     return AdaptiveComponents.adaptiveScaffold(

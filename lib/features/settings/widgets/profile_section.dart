@@ -225,7 +225,7 @@ class ProfileSection extends StatelessWidget {
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: const Text('Display name updated!'),
+                      content: Text('Display name updated!'),
                       backgroundColor: AppTheme.successGreen,
                     ),
                   );
@@ -325,7 +325,7 @@ class ProfileSection extends StatelessWidget {
             width: 60,
             height: 60,
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surfaceVariant,
+              color: Theme.of(context).colorScheme.surfaceContainerHighest,
               borderRadius: BorderRadius.circular(16),
             ),
             child: Icon(
@@ -352,7 +352,7 @@ class ProfileSection extends StatelessWidget {
     Navigator.pop(context);
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: const Text('Camera selection coming soon!'),
+        content: Text('Camera selection coming soon!'),
         backgroundColor: AppTheme.secondaryBlue,
       ),
     );
@@ -363,7 +363,7 @@ class ProfileSection extends StatelessWidget {
     Navigator.pop(context);
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: const Text('Gallery selection coming soon!'),
+        content: Text('Gallery selection coming soon!'),
         backgroundColor: AppTheme.secondaryBlue,
       ),
     );
@@ -377,7 +377,7 @@ class ProfileSection extends StatelessWidget {
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: const Text('Avatar removed!'),
+          content: Text('Avatar removed!'),
           backgroundColor: AppTheme.successGreen,
         ),
       );

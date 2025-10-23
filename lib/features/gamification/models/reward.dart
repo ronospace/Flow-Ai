@@ -144,7 +144,7 @@ class Reward {
         }
         return 'Discount';
       case 'points':
-        return '+${pointsCost} Points';
+        return '+$pointsCost Points';
       default:
         return '';
     }
@@ -153,7 +153,7 @@ class Reward {
   String get stockDisplay {
     if (!isLimited) return '';
     if (limitedQuantity != null && remainingQuantity != null) {
-      return '${remainingQuantity}/${limitedQuantity} left';
+      return '$remainingQuantity/$limitedQuantity left';
     }
     if (remainingQuantity != null) {
       return '$remainingQuantity left';

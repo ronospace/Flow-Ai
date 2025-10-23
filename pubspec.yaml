@@ -147,7 +147,10 @@ dependencies:
   logger: ^2.0.2+1
   
   # JSON serialization
-  json_annotation: ^4.8.1
+  json_annotation: ^4.9.0
+  
+  # Archive (for data export/import compression)
+  archive: ^3.6.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -157,6 +160,7 @@ dev_dependencies:
   # Mocking for unit tests
   mockito: ^5.4.4
   build_runner: ^2.4.12
+  json_serializable: ^6.7.1
     
   # App icon generation
   flutter_launcher_icons: ^0.14.1

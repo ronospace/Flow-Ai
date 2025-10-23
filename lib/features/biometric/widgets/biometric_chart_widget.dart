@@ -166,7 +166,7 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
     return AnimatedBuilder(
       animation: _animation,
       builder: (context, child) {
-        return Container(
+        return SizedBox(
           height: chartHeight,
           width: double.infinity,
           child: CustomPaint(

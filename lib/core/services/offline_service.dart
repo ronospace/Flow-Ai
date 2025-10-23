@@ -384,7 +384,7 @@ mixin OfflineCapableMixin<T extends StatefulWidget> on State<T> {
   void showOfflineMessage() {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: const Text('You are currently offline. Changes will be synced when connection is restored.'),
+        content: Text('You are currently offline. Changes will be synced when connection is restored.'),
         backgroundColor: Colors.orange,
         duration: Duration(seconds: 3),
       ),
@@ -395,7 +395,7 @@ mixin OfflineCapableMixin<T extends StatefulWidget> on State<T> {
   void showOnlineMessage() {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: const Text('Connection restored. Syncing data...'),
+        content: Text('Connection restored. Syncing data...'),
         backgroundColor: Colors.green,
         duration: Duration(seconds: 2),
       ),

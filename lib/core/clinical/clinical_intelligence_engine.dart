@@ -1,11 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'package:flutter/foundation.dart';
-import '../models/health_insights.dart';
-import '../models/user_profile.dart';
 import '../error/error_handler.dart';
 import '../utils/app_logger.dart';
-import '../security/security_manager.dart';
 
 /// 🏥 Clinical Intelligence Engine
 /// AI-powered clinical decision support system with evidence-based insights

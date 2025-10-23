@@ -2,10 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io' show Platform;
 import 'dart:math';
-import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
 import 'package:encrypt/encrypt.dart' hide Key;
-import 'package:flutter/foundation.dart';
 import 'package:encrypt/encrypt.dart' as encrypt show Key;
 import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,7 +35,7 @@ class SecurityManager {
   // Session management
   String? _currentSessionId;
   DateTime? _sessionStartTime;
-  Duration _sessionTimeout = const Duration(minutes: 30);
+  final Duration _sessionTimeout = const Duration(minutes: 30);
   Timer? _sessionTimer;
   
   // Device fingerprinting

@@ -6,7 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/clinical_models.dart';
 import '../../tracking/services/feelings_database_service.dart';
-import '../../analytics/services/advanced_analytics_service.dart';
 import '../../tracking/screens/enhanced_daily_feelings_tracker.dart' show TrendDirection, MoodCategory;
 
 /// Clinical intelligence service for healthcare provider features and medical analysis

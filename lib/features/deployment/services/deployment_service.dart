@@ -50,7 +50,7 @@ class DeploymentService {
       bundleId: 'com.flowiq.app',
       version: '1.0.0',
       buildNumber: '1',
-      description: '''Flow iQ is a comprehensive women\'s health tracking app that empowers users to understand their menstrual cycles, track symptoms, monitor mood patterns, and gain personalized insights.
+      description: '''Flow iQ is a comprehensive women's health tracking app that empowers users to understand their menstrual cycles, track symptoms, monitor mood patterns, and gain personalized insights.
 
 Features:
 • Advanced cycle tracking with AI-powered predictions
@@ -366,7 +366,7 @@ Flow iQ transforms complex health data into actionable insights, helping women m
     await _saveComplianceReport(report);
     _complianceController.add(report);
     
-    debugPrint('✅ Compliance check completed: ${passedCount}/${updatedChecks.length} passed');
+    debugPrint('✅ Compliance check completed: $passedCount/${updatedChecks.length} passed');
     
     return report;
   }
@@ -683,7 +683,7 @@ Flow iQ transforms complex health data into actionable insights, helping women m
         startTime: startTime,
         endTime: endTime,
         buildDuration: endTime.difference(startTime),
-        outputPath: '/builds/${buildId}/app-release.${_getArtifactExtension(platform)}',
+        outputPath: '/builds/$buildId/app-release.${_getArtifactExtension(platform)}',
         buildSize: 50 * 1024 * 1024, // 50MB simulated
         artifacts: _generateBuildArtifacts(buildId, platform),
         messages: [

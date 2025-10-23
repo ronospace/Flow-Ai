@@ -1,10 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../feelings/daily_feelings_tracker.dart';
-import '../intelligence/consumer_intelligence_engine.dart';
-import '../visuals/consumer_visual_engine.dart';
 import '../utils/app_logger.dart';
 import '../utils/collection_extensions.dart';
 
@@ -465,7 +462,7 @@ class PerformanceAnalyticsDashboard {
 
   /// Build loading chart widget
   Widget _buildLoadingChart(double height) {
-    return Container(
+    return SizedBox(
       height: height,
       child: const Center(
         child: CircularProgressIndicator(),
@@ -475,7 +472,7 @@ class PerformanceAnalyticsDashboard {
 
   /// Build error chart widget
   Widget _buildErrorChart(double height, String error) {
-    return Container(
+    return SizedBox(
       height: height,
       child: Center(
         child: Column(
@@ -945,7 +942,7 @@ class VisualizationRenderer {
     required double height,
     required Color accentColor,
   }) {
-    return Container(
+    return SizedBox(
       height: height,
       child: CustomPaint(
         size: Size(double.infinity, height),

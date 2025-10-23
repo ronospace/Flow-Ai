@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flow_iq/core/models/user.dart';
+import 'package:flow_ai/core/models/user.dart';
 
 void main() {
   group('User Model Tests', () {

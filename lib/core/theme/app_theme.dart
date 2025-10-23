@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 class AppTheme {
   // Brand Colors
   static const Color primaryRose = Color(0xFFFF6B9D);

@@ -1,5 +1,6 @@
 /// User Profile and Personalization Models
 /// Week 2: Advanced personalization data structures
+library;
 
 class UserProfile {
   final String id;

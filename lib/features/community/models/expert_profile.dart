@@ -307,7 +307,9 @@ class ExpertAvailability {
 /// Time slot for expert availability
 @JsonSerializable()
 class TimeSlot {
+  @JsonKey(fromJson: _timeOfDayFromJson, toJson: _timeOfDayToJson)
   final TimeOfDay startTime;
+  @JsonKey(fromJson: _timeOfDayFromJson, toJson: _timeOfDayToJson)
   final TimeOfDay endTime;
   final bool isAvailable;
   final String? notes;
@@ -349,6 +351,14 @@ class TimeSlot {
 
   factory TimeSlot.fromJson(Map<String, dynamic> json) => _$TimeSlotFromJson(json);
   Map<String, dynamic> toJson() => _$TimeSlotToJson(this);
+  
+  static TimeOfDay _timeOfDayFromJson(Map<String, dynamic> json) {
+    return TimeOfDay(hour: json['hour'] as int, minute: json['minute'] as int);
+  }
+  
+  static Map<String, dynamic> _timeOfDayToJson(TimeOfDay time) {
+    return {'hour': time.hour, 'minute': time.minute};
+  }
 }
 
 /// Simple TimeOfDay class (if not importing from Flutter)

@@ -938,12 +938,6 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
     return insights;
   }
 
-  // === ORIGINAL TAB IMPLEMENTATIONS ===
-        ],
-      ),
-    );
-  }
-
   Widget _buildCycleTab(
     AnalyticsProvider provider,
     ThemeData theme,

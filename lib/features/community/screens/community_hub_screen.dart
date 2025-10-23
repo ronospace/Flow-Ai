@@ -7,8 +7,6 @@ import '../widgets/cycle_buddy_widget.dart';
 import '../widgets/symptom_sharing_widget.dart';
 import '../widgets/community_achievements_widget.dart';
 import '../widgets/community_stats_widget.dart';
-import '../../../core/ui/adaptive_components.dart';
-import '../../../core/theme/app_theme.dart';
 
 /// 🌍 Community Hub Screen - Week 3 Implementation
 /// Features: Anonymous discussion boards, expert Q&A system, cycle buddy matching,
@@ -110,7 +108,7 @@ class _CommunityHubScreenState extends State<CommunityHubScreen>
     return Consumer<CommunityController>(
       builder: (context, controller, child) {
         return Scaffold(
-          backgroundColor: Theme.of(context).colorScheme.background,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           body: FadeTransition(
             opacity: _fadeAnimation,
             child: NestedScrollView(

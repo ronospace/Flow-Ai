@@ -2,7 +2,6 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import '../models/cycle_data.dart';
 import '../models/ai_insights.dart';
-import '../utils/collection_extensions.dart';
 
 /// Enhanced AI Engine with advanced prediction capabilities
 class EnhancedAIEngine {

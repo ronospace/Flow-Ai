@@ -186,8 +186,8 @@ class EducationalContent {
 
   String get rewardsText {
     final rewards = <String>[];
-    if (pointsReward > 0) rewards.add('${pointsReward} pts');
-    if (xpReward > 0) rewards.add('${xpReward} XP');
+    if (pointsReward > 0) rewards.add('$pointsReward pts');
+    if (xpReward > 0) rewards.add('$xpReward XP');
     return rewards.join(' • ');
   }
 

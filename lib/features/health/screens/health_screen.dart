@@ -68,7 +68,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = AppLocalizations.of(context);
     
     return Scaffold(
       body: Container(
@@ -521,7 +521,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
             ),
           ).animate().fadeIn(delay: (600 + insights.indexOf(insight) * 200).ms)
            .slideX(begin: 0.2, end: 0);
-        }).toList(),
+        }),
       ],
     );
   }
@@ -726,7 +726,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
             ),
           ).animate().fadeIn(delay: (1400 + goals.indexOf(goal) * 100).ms)
            .slideX(begin: 0.3, end: 0);
-        }).toList(),
+        }),
       ],
     );
   }

@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'package:flutter/foundation.dart';
 import '../feelings/daily_feelings_tracker.dart';
-import '../models/user_profile.dart';
 import '../utils/app_logger.dart';
 import '../utils/collection_extensions.dart';
 
