@@ -1,12 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 import 'package:flow_ai/core/services/ai_engine.dart';
 import 'package:flow_ai/core/services/ai_chat_service.dart';
 import 'package:flow_ai/core/services/enhanced_ai_chat_service.dart';
-import 'package:flow_ai/core/models/ai_insights.dart';
 import 'package:flow_ai/core/models/cycle_data.dart';
-import 'package:flow_ai/core/models/symptom_analysis.dart';
 
 // Generate mocks
 @GenerateMocks([AIEngine, AIChatService])

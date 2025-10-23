@@ -19,7 +19,7 @@ class SmartNotificationService {
   Timer? _biometricAnalysisTimer;
   
   // Notification preferences
-  Map<String, bool> _notificationPreferences = {
+  final Map<String, bool> _notificationPreferences = {
     'cycle_predictions': true,
     'fertile_window_alerts': true,
     'symptom_reminders': true,
@@ -30,7 +30,7 @@ class SmartNotificationService {
     'ai_coaching': true,
   };
 
-  Map<String, TimeOfDay> _notificationTimes = {
+  final Map<String, TimeOfDay> _notificationTimes = {
     'morning_insight': TimeOfDay(hour: 9, minute: 0),
     'evening_reflection': TimeOfDay(hour: 21, minute: 0),
     'medication_reminder': TimeOfDay(hour: 8, minute: 0),
@@ -548,7 +548,7 @@ class SmartNotificationService {
     return List.generate(3, (index) {
       final startDate = now.subtract(Duration(days: 30 * (index + 1)));
       return CycleData(
-        id: 'mock_${index}',
+        id: 'mock_$index',
         userId: 'mock_user',
         startDate: startDate,
         endDate: startDate.add(Duration(days: 28)),

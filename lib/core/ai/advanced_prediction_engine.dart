@@ -1,8 +1,5 @@
 import 'dart:math';
 import 'package:flutter/foundation.dart';
-import '../models/cycle_prediction.dart';
-import '../models/biometric_data.dart';
-import '../models/health_insights.dart';
 
 /// Advanced AI Prediction Engine with enhanced capabilities
 class AdvancedPredictionEngine {

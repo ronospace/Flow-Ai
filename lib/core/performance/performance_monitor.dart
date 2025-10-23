@@ -4,7 +4,6 @@ import 'dart:io';
 import 'dart:isolate';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import '../error/error_handler.dart';
 import '../utils/app_logger.dart';
@@ -769,11 +768,6 @@ class PerformanceLifecycleObserver extends WidgetsBindingObserver {
     }
   }
 
-  @override
-  void didChangeMetrics() {
-    super.didChangeMetrics();
-    // Could capture display metrics changes here
-  }
 
   @override
   void didHaveMemoryPressure() {

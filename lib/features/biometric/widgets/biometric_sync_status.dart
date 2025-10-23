@@ -285,7 +285,7 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
         ..._syncData.entries.map((entry) => _buildSyncDataItem(
           entry.key,
           entry.value,
-        )).toList(),
+        )),
       ],
     );
   }

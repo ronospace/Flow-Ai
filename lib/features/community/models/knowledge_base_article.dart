@@ -446,8 +446,9 @@ class ArticleMetadata {
     
     if (hasReferences) score += 3;
     if (haCurrentMedicalReview) score += 2;
-    if (evidenceLevel == 'high') score += 3;
-    else if (evidenceLevel == 'moderate') score += 2;
+    if (evidenceLevel == 'high') {
+      score += 3;
+    } else if (evidenceLevel == 'moderate') score += 2;
     else if (evidenceLevel == 'low') score += 1;
     
     return score.clamp(0, 8);

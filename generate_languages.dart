@@ -632,7 +632,7 @@ void main() async {
   print('\n🎉 Successfully generated $created language files!');
   print('📊 Total supported languages: ${languageTranslations.length}');
   print('\nSupported locales:');
-  languageTranslations.keys.forEach((locale) {
+  for (var locale in languageTranslations.keys) {
     print('  • $locale');
-  });
+  }
 }

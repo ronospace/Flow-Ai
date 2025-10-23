@@ -122,17 +122,14 @@ class SafeShadows {
 /// Safe BoxShadow implementation that prevents negative values during animations
 class _SafeBoxShadow extends BoxShadow {
   const _SafeBoxShadow({
-    Color color = const Color(0xFF000000),
-    Offset offset = Offset.zero,
+    super.color,
+    super.offset,
     double blurRadius = 0.0,
     double spreadRadius = 0.0,
-    BlurStyle blurStyle = BlurStyle.normal,
+    super.blurStyle,
   }) : super(
-         color: color,
-         offset: offset,
          blurRadius: blurRadius < 0 ? 0 : blurRadius,
          spreadRadius: spreadRadius < 0 ? 0 : spreadRadius,
-         blurStyle: blurStyle,
        );
 
   @override

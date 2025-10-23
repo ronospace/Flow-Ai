@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:permission_handler/permission_handler.dart';
 import '../models/biometric_data.dart';
 
 /// Service for integrating with device biometric sensors and health platforms
@@ -702,7 +701,7 @@ class BiometricIntegrationService {
         'unit': 'degF',
       });
       
-      debugPrint('📝 Wrote basal body temperature: ${temperature}°F');
+      debugPrint('📝 Wrote basal body temperature: $temperature°F');
       return result as bool? ?? false;
     } catch (e) {
       debugPrint('Failed to write basal body temperature: $e');

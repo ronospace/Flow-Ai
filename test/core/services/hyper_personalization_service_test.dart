@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import '../../../lib/core/models/personalization.dart';
-import '../../../lib/core/models/user_profile.dart';
-import '../../../lib/core/services/hyper_personalization_service.dart';
+import 'package:flow_ai/core/models/personalization.dart';
+import 'package:flow_ai/core/models/user_profile.dart';
+import 'package:flow_ai/core/services/hyper_personalization_service.dart';
 
 void main() {
   group('HyperPersonalizationService', () {

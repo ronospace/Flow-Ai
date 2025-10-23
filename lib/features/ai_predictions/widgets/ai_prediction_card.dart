@@ -307,7 +307,7 @@ class AIPredictionCard extends StatelessWidget {
               ),
             ],
           ),
-        )).toList(),
+        )),
       ],
     );
   }

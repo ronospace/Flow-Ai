@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'dart:math' as math;
 
-import '../../../core/models/cycle_data.dart';
-import '../../../core/models/symptom_tracking.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../generated/app_localizations.dart';
 import '../services/feelings_database_service.dart';
 import '../services/feelings_analytics_service.dart';
 
@@ -47,7 +43,7 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
   bool _isLoading = true;
   bool _isSaving = false;
   bool _hasUnsavedChanges = false;
-  String _selectedFeelingsCategory = 'mood';
+  final String _selectedFeelingsCategory = 'mood';
   
   @override
   void initState() {

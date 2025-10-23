@@ -366,8 +366,4 @@ class OnboardingController extends ChangeNotifier {
   /// Get current step number (1-indexed)
   int get currentStepNumber => OnboardingStep.values.indexOf(_currentStep) + 1;
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 }

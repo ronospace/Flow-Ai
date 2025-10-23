@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/services/cycle_calculation_engine.dart';
+import '../../../core/models/cycle_data.dart';
 
 class CyclePhaseIndicator extends StatelessWidget {
   final CyclePhase phase;

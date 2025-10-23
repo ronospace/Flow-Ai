@@ -278,7 +278,7 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        const SizedBox(width: 4),
+                        SizedBox(width: 4),
                         Icon(
                           Icons.arrow_forward,
                           color: AppTheme.secondaryBlue,
@@ -360,8 +360,8 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
             CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(AppTheme.successGreen),
             ),
-            const SizedBox(height: 16),
-            const Text('Syncing with CycleSync...'),
+            SizedBox(height: 16),
+            Text('Syncing with CycleSync...'),
           ],
         ),
       ),
@@ -374,7 +374,7 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
         
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: const Text('Sync completed successfully!'),
+            content: Text('Sync completed successfully!'),
             backgroundColor: AppTheme.successGreen,
           ),
         );
@@ -428,7 +428,7 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                       size: 64,
                       color: AppTheme.lightGrey,
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
                     Text(
                       'Sync history will appear here',
                       style: TextStyle(
@@ -495,12 +495,12 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                   fontSize: 16,
                 ),
               ),
-              const SizedBox(height: 16),
-              const Text('• Share your menstrual cycle data with CycleSync'),
-              const Text('• Allow data synchronization across platforms'),
-              const Text('• Enable enhanced AI-powered health insights'),
-              const Text('• Receive personalized recommendations'),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
+              Text('• Share your menstrual cycle data with CycleSync'),
+              Text('• Allow data synchronization across platforms'),
+              Text('• Enable enhanced AI-powered health insights'),
+              Text('• Receive personalized recommendations'),
+              SizedBox(height: 16),
               Text(
                 'Your data privacy:',
                 style: TextStyle(
@@ -508,12 +508,12 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                   color: AppTheme.successGreen,
                 ),
               ),
-              const SizedBox(height: 8),
-              const Text('✓ Data is encrypted during transfer'),
-              const Text('✓ You can disconnect at any time'),
-              const Text('✓ Your data remains under your control'),
-              const Text('✓ Complies with healthcare privacy standards'),
-              const SizedBox(height: 16),
+              SizedBox(height: 8),
+              Text('✓ Data is encrypted during transfer'),
+              Text('✓ You can disconnect at any time'),
+              Text('✓ Your data remains under your control'),
+              Text('✓ Complies with healthcare privacy standards'),
+              SizedBox(height: 16),
               Text(
                 'Do you consent to connect your FlowSense data with CycleSync Enterprise?',
                 style: TextStyle(
@@ -745,11 +745,11 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                   fontSize: 16,
                 ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               Text(
                 'CycleSync Enterprise is our comprehensive menstrual health platform that provides advanced analytics, AI-powered insights, and seamless data synchronization across multiple devices and applications.',
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               Text(
                 'Benefits of Integration:',
                 style: TextStyle(
@@ -757,12 +757,12 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                   fontSize: 16,
                 ),
               ),
-              const SizedBox(height: 8),
-              const Text('• Sync data across all your devices'),
-              const Text('• Advanced AI health predictions'),
-              const Text('• Comprehensive health reports'),
-              const Text('• Healthcare provider integration'),
-              const Text('• Enhanced data backup and security'),
+              SizedBox(height: 8),
+              Text('• Sync data across all your devices'),
+              Text('• Advanced AI health predictions'),
+              Text('• Comprehensive health reports'),
+              Text('• Healthcare provider integration'),
+              Text('• Enhanced data backup and security'),
             ],
           ),
         ),

@@ -7,9 +7,9 @@ class AIInsightsPanel extends StatefulWidget {
   final ComprehensiveHealthReport healthReport;
 
   const AIInsightsPanel({
-    Key? key,
+    super.key,
     required this.healthReport,
-  }) : super(key: key);
+  });
 
   @override
   State<AIInsightsPanel> createState() => _AIInsightsPanelState();

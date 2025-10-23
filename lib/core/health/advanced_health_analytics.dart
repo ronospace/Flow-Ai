@@ -360,7 +360,7 @@ class AdvancedHealthAnalytics {
       if (score < 0.4) {
         findings.add('${category.capitalize()} health shows concerning patterns (${(score * 100).round()}%)');
       } else if (score > 0.8) {
-        findings.add('Excellent ${category} health indicators (${(score * 100).round()}%)');
+        findings.add('Excellent $category health indicators (${(score * 100).round()}%)');
       }
     });
 
@@ -413,7 +413,7 @@ class AdvancedHealthAnalytics {
     // Score-based concerns
     quickScores.forEach((category, score) {
       if (score < 0.3) {
-        concerns.add('Critical ${category} indicators');
+        concerns.add('Critical $category indicators');
       }
     });
 
@@ -457,9 +457,9 @@ class AdvancedHealthAnalytics {
         recommendations.add(HealthRecommendation(
           category: category,
           priority: score < 0.4 ? RecommendationPriority.high : RecommendationPriority.medium,
-          action: 'Improve ${category} health through targeted interventions',
-          reasoning: 'Current ${category} score: ${(score * 100).round()}%',
-          expectedOutcome: 'Enhanced ${category} function and overall wellness',
+          action: 'Improve $category health through targeted interventions',
+          reasoning: 'Current $category score: ${(score * 100).round()}%',
+          expectedOutcome: 'Enhanced $category function and overall wellness',
           timeframe: score < 0.4 ? '2-4 weeks' : '4-8 weeks',
         ));
       }
@@ -515,7 +515,7 @@ class AdvancedHealthAnalytics {
     // Critical score recommendations
     quickScores.forEach((category, score) {
       if (score < 0.3) {
-        urgent.add('Immediate attention needed for ${category} health');
+        urgent.add('Immediate attention needed for $category health');
       }
     });
 
@@ -1751,7 +1751,7 @@ class PersonalizationEngine {
 
     scores.forEach((category, score) {
       if (score > 0.8) {
-        strengths.add('Excellent ${category} health');
+        strengths.add('Excellent $category health');
       }
     });
 
@@ -1769,7 +1769,7 @@ class PersonalizationEngine {
 
     scores.forEach((category, score) {
       if (score < 0.6 && score > 0.3) {
-        opportunities.add('Opportunity to improve ${category} health');
+        opportunities.add('Opportunity to improve $category health');
       }
     });
 
@@ -1925,10 +1925,10 @@ class TrendAnalyzer {
     final trendValues = <String>[];
 
     // Collect trend directions
-    [cycleTrends, symptomTrends, healthTrends].forEach((trendMap) {
+    for (var trendMap in [cycleTrends, symptomTrends, healthTrends]) {
       trendMap.values.where((v) => v is String && ['improving', 'declining', 'stable'].contains(v))
           .forEach((v) => trendValues.add(v));
-    });
+    }
 
     if (trendValues.isEmpty) return 'insufficient_data';
 

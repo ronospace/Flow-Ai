@@ -11,14 +11,14 @@ class CycleBuddyWidget extends StatefulWidget {
   final Function(String) onRemoveBuddy;
 
   const CycleBuddyWidget({
-    Key? key,
+    super.key,
     required this.availableBuddies,
     required this.pendingRequests,
     required this.currentBuddies,
     required this.onSendBuddyRequest,
     required this.onRespondToBuddyRequest,
     required this.onRemoveBuddy,
-  }) : super(key: key);
+  });
 
   @override
   State<CycleBuddyWidget> createState() => _CycleBuddyWidgetState();
@@ -378,7 +378,7 @@ class _CycleBuddyWidgetState extends State<CycleBuddyWidget>
                 ),
               ],
             ),
-            if (request.message?.isNotEmpty ?? false) ...[
+            if (request.message.isNotEmpty ?? false) ...[
               const SizedBox(height: 12),
               Container(
                 padding: const EdgeInsets.all(12),
@@ -387,7 +387,7 @@ class _CycleBuddyWidgetState extends State<CycleBuddyWidget>
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  request.message!,
+                  request.message,
                   style: const TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
                 ),
               ),

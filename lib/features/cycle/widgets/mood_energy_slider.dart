@@ -326,7 +326,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                 alignment: Alignment.center,
                 children: [
                   // Neural network background pattern
-                  Container(
+                  SizedBox(
                     width: 140,
                     height: 140,
                     child: CustomPaint(
@@ -522,7 +522,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
               const SizedBox(height: 32),
               
               // REVOLUTIONARY: Advanced Biometric Slider
-              Container(
+              SizedBox(
                 height: 60,
                 child: Stack(
                   alignment: Alignment.center,
@@ -978,17 +978,14 @@ class BiometricSliderThumb extends SliderComponentShape {
 /// Safe BoxShadow that prevents negative blur radius values
 class _SafeBoxShadow extends BoxShadow {
   const _SafeBoxShadow({
-    Color color = const Color(0xFF000000),
-    Offset offset = Offset.zero,
+    super.color,
+    super.offset,
     double blurRadius = 0.0,
     double spreadRadius = 0.0,
-    BlurStyle blurStyle = BlurStyle.normal,
+    super.blurStyle,
   }) : super(
-         color: color,
-         offset: offset,
          blurRadius: blurRadius < 0 ? 0 : blurRadius,
          spreadRadius: spreadRadius < 0 ? 0 : spreadRadius,
-         blurStyle: blurStyle,
        );
 
   @override

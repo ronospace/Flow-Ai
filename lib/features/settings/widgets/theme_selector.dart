@@ -57,7 +57,7 @@ class ThemeSelector extends StatelessWidget {
                 ),
                 const SizedBox(width: 16),
                 Text(
-                  AppLocalizations.of(context)!.chooseTheme,
+                  AppLocalizations.of(context).chooseTheme,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -79,8 +79,8 @@ class ThemeSelector extends StatelessWidget {
                       context,
                       settings,
                       AppThemeMode.light,
-                      AppLocalizations.of(context)!.lightTheme,
-                      AppLocalizations.of(context)!.lightThemeDescription,
+                      AppLocalizations.of(context).lightTheme,
+                      AppLocalizations.of(context).lightThemeDescription,
                       Icons.light_mode,
                       Colors.orange,
                     ).animate().slideX(begin: 0.3, end: 0).fadeIn(),
@@ -91,8 +91,8 @@ class ThemeSelector extends StatelessWidget {
                       context,
                       settings,
                       AppThemeMode.dark,
-                      AppLocalizations.of(context)!.darkTheme,
-                      AppLocalizations.of(context)!.darkThemeDescription,
+                      AppLocalizations.of(context).darkTheme,
+                      AppLocalizations.of(context).darkThemeDescription,
                       Icons.dark_mode,
                       Colors.indigo,
                     ).animate().slideX(begin: 0.3, end: 0).fadeIn(delay: 100.ms),
@@ -103,8 +103,8 @@ class ThemeSelector extends StatelessWidget {
                       context,
                       settings,
                       AppThemeMode.system,
-                      AppLocalizations.of(context)!.systemTheme,
-                      AppLocalizations.of(context)!.systemThemeDescription,
+                      AppLocalizations.of(context).systemTheme,
+                      AppLocalizations.of(context).systemThemeDescription,
                       Icons.settings_brightness,
                       Colors.purple,
                     ).animate().slideX(begin: 0.3, end: 0).fadeIn(delay: 200.ms),
@@ -148,7 +148,7 @@ class ThemeSelector extends StatelessWidget {
           decoration: BoxDecoration(
             color: isSelected 
                 ? iconColor.withValues(alpha: 0.2)
-                : theme.colorScheme.surfaceVariant,
+                : theme.colorScheme.surfaceContainerHighest,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(
@@ -190,7 +190,7 @@ class ThemeSelector extends StatelessWidget {
               // Show confirmation
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('${AppLocalizations.of(context)!.themeChangedTo} $title'),
+                  content: Text('${AppLocalizations.of(context).themeChangedTo} $title'),
                   backgroundColor: AppTheme.sweetPeach,
                   behavior: SnackBarBehavior.floating,
                   shape: RoundedRectangleBorder(

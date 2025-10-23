@@ -27,7 +27,7 @@ class GamificationController extends ChangeNotifier {
 
   // Error states
   String? _error;
-  Map<String, String> _errors = {};
+  final Map<String, String> _errors = {};
 
   // User progress data
   int _userLevel = 1;
@@ -46,7 +46,7 @@ class GamificationController extends ChangeNotifier {
   // Achievement data
   List<Achievement> _achievements = [];
   int _unlockedAchievements = 0;
-  List<Achievement> _recentlyUnlocked = [];
+  final List<Achievement> _recentlyUnlocked = [];
 
   // Challenge data
   List<Challenge> _activeChallenges = [];

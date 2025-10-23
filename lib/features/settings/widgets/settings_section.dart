@@ -69,7 +69,7 @@ class SettingsSection extends StatelessWidget {
           ),
           
           // Section Items
-          ...children.map((child) => child).toList(),
+          ...children.map((child) => child),
         ],
       ),
     );

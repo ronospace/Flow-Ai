@@ -437,7 +437,7 @@ class PremiumFeatureWidget extends StatelessWidget {
                 feature.description,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
-              if (feature.benefits.isNotEmpty) ..[
+              if (feature.benefits.isNotEmpty) ...[
                 const SizedBox(height: 16),
                 Text(
                   'Benefits:',
@@ -516,68 +516,6 @@ class PremiumFeatureWidget extends StatelessWidget {
     // Here you would typically navigate to the feature or trigger its functionality
     // For now, we'll just show a placeholder message
   }
-                const SizedBox(height: 16),
-                Text(
-                  'Benefits:',
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                ...feature.benefits.map((benefit) => Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 2),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('• '),
-                      Expanded(child: Text(benefit)),
-                    ],
-                  ),
-                )),
-              ],
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Close'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _useFeature(BuildContext context) {
-    // Navigate to the specific feature usage screen based on feature type
-    switch (feature.type) {
-      case PremiumFeatureType.customReports:
-        Navigator.of(context).pushNamed('/reports/custom');
-        break;
-      case PremiumFeatureType.unlimitedExports:
-        Navigator.of(context).pushNamed('/settings/export');
-        break;
-      case PremiumFeatureType.advancedAI:
-        Navigator.of(context).pushNamed('/ai-coach');
-        break;
-      case PremiumFeatureType.healthcareIntegration:
-        Navigator.of(context).pushNamed('/settings/healthcare');
-        break;
-      case PremiumFeatureType.biometricSync:
-        Navigator.of(context).pushNamed('/settings/biometric');
-        break;
-      case PremiumFeatureType.advancedAnalytics:
-        Navigator.of(context).pushNamed('/insights/advanced');
-        break;
-      default:
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${feature.name} is now available!'),
-            backgroundColor: Colors.green,
-          ),
-        );
-    }
-  }
 }
 
 // Helper widget for displaying a list of premium features
@@ -588,12 +526,12 @@ class PremiumFeatureList extends StatelessWidget {
   final VoidCallback? onUpgradePressed;
 
   const PremiumFeatureList({
-    Key? key,
+    super.key,
     required this.features,
     this.isCompact = false,
     this.showUpgradeButtons = true,
     this.onUpgradePressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -619,10 +557,10 @@ class PremiumFeatureComparison extends StatelessWidget {
   final List<String> tiers;
 
   const PremiumFeatureComparison({
-    Key? key,
+    super.key,
     required this.features,
     required this.tiers,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -189,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
   
   Widget _buildPremiumInsightsUnlockWidget() {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = AppLocalizations.of(context);
     final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -357,7 +357,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
   
   void _showRewardedAdForInsights() {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = AppLocalizations.of(context);
     final theme = Theme.of(context);
     _adMobService.showRewardedAdWithFrequency(
       onRewarded: (reward) {
@@ -404,7 +404,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = AppLocalizations.of(context);
     return Scaffold(
       body: Consumer<SettingsProvider>(
         builder: (context, settingsProvider, child) {
@@ -568,7 +568,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   
   Widget _buildRevolutionaryHeader(SettingsProvider settingsProvider) {
     final theme = Theme.of(context);
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = AppLocalizations.of(context);
     final now = DateTime.now();
     final baseGreeting = now.hour < 12 
         ? localizations.goodMorning 
@@ -577,7 +577,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             : localizations.goodEvening;
     
     final displayName = settingsProvider.preferences.displayName;
-    final personalizedGreeting = displayName != null && displayName.isNotEmpty
+    final personalizedGreeting = displayName.isNotEmpty
         ? '$baseGreeting, $displayName!'
         : '$baseGreeting!';
     
@@ -1068,7 +1068,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               
               _buildHealthMetricCard(
                 'Phase', // This could be localized in the future
-                provider.predictions?.currentPhase?.displayName ?? 'Unknown', // This could be localized in the future
+                provider.predictions?.currentPhase.displayName ?? 'Unknown', // This could be localized in the future
                 Icons.psychology,
                 AppTheme.secondaryBlue,
                 provider.predictions?.confidence != null 
@@ -1299,9 +1299,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          prediction.nextPeriodDate != null 
-                              ? DateFormat('MMM d').format(prediction.nextPeriodDate!)
-                              : localizations.loading,
+                          DateFormat('MMM d').format(prediction.nextPeriodDate),
                           style: theme.textTheme.headlineSmall?.copyWith(
                             color: AppTheme.primaryRose,
                             fontWeight: FontWeight.bold,
@@ -1309,9 +1307,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          prediction.daysUntilNextPeriod != null
-                              ? localizations.inDays(prediction.daysUntilNextPeriod!)
-                              : localizations.loading,
+                          localizations.inDays(prediction.daysUntilNextPeriod),
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: AppTheme.mediumGrey,
                           ),
@@ -1649,7 +1645,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   
   Widget _buildSmartActionCommandCenter() {
     final theme = Theme.of(context);
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = AppLocalizations.of(context);
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(

@@ -57,7 +57,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     super.dispose();
   }
 
-  _navigateToHome() async {
+  Future<void> _navigateToHome() async {
     // Show splash for a longer duration for better branding and beautiful animation
     await Future.delayed(const Duration(seconds: 4));
     

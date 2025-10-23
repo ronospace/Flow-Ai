@@ -3,12 +3,11 @@ import 'package:provider/provider.dart';
 import '../../../core/notifications/smart_notification_system.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/services/user_service.dart';
-import '../../../core/models/user_profile.dart';
 
 /// 🔔 Notification Settings Screen
 /// Advanced notification preferences with smart timing controls
 class NotificationSettingsScreen extends StatefulWidget {
-  const NotificationSettingsScreen({Key? key}) : super(key: key);
+  const NotificationSettingsScreen({super.key});
 
   @override
   State<NotificationSettingsScreen> createState() => _NotificationSettingsScreenState();
@@ -634,7 +633,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
   }
   
   Widget _buildTestButton() {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
         onPressed: _sendTestNotification,

@@ -22,7 +22,7 @@ class CommunityController extends ChangeNotifier {
 
   // Error states
   String? _error;
-  Map<String, String> _errors = {};
+  final Map<String, String> _errors = {};
 
   // Community data
   CommunityStats? _communityStats;

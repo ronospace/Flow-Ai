@@ -4,13 +4,12 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../../../core/services/advanced_biometric_service.dart';
 import '../../../core/services/ai_engine.dart';
-import '../../../core/models/biometric_data.dart';
 import '../../../core/models/ai_insights.dart';
 import '../../../core/utils/app_logger.dart';
 
 /// Enhanced Consumer Intelligence Dashboard with real-time biometric integration
 class EnhancedConsumerDashboard extends StatefulWidget {
-  const EnhancedConsumerDashboard({Key? key}) : super(key: key);
+  const EnhancedConsumerDashboard({super.key});
 
   @override
   State<EnhancedConsumerDashboard> createState() => _EnhancedConsumerDashboardState();

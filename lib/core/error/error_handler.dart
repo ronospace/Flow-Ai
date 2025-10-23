@@ -16,7 +16,7 @@ class ErrorHandler {
   bool _initialized = false;
   final Map<Type, ErrorRecoveryStrategy> _recoveryStrategies = {};
   final List<AppError> _errorHistory = [];
-  int _maxErrorHistory = 100;
+  final int _maxErrorHistory = 100;
 
   /// Initialize error handling system
   Future<void> initialize() async {

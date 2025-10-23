@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import '../../lib/core/examples/personalization_example.dart';
+import 'package:flow_ai/core/examples/personalization_example.dart';
 
 void main() {
   test('demoPersonalization runs successfully', () async {

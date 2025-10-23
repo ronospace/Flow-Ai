@@ -4,7 +4,6 @@ import 'package:flow_ai/core/models/cycle_data.dart';
 import 'package:flow_ai/core/models/symptom_tracking.dart';
 import 'package:flow_ai/core/models/daily_tracking_data.dart';
 import 'package:flow_ai/core/models/auth_result.dart';
-import 'package:flow_ai/core/models/period_prediction.dart' as model;
 import 'package:flow_ai/core/ai/period_prediction_engine.dart' as ai;
 import 'package:flow_ai/core/ai/emotional_intelligence_engine.dart';
 import 'package:flow_ai/core/utils/list_extensions.dart';

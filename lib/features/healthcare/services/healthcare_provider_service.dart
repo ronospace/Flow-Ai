@@ -16,7 +16,7 @@ class HealthcareProviderService {
   final EncryptionService _encryption = EncryptionService();
   final UserPreferencesService _preferences = UserPreferencesService();
   
-  List<HealthcareProvider> _connectedProviders = [];
+  final List<HealthcareProvider> _connectedProviders = [];
   List<MedicalRecord> _medicalRecords = [];
   bool _isInitialized = false;
 
@@ -170,7 +170,7 @@ class HealthcareProviderService {
         id: 'report_${DateTime.now().millisecondsSinceEpoch}',
         providerId: providerId,
         providerName: provider.name,
-        patientId: await _preferences.getString('user_id') ?? 'unknown',
+        patientId: _preferences.getString('user_id') ?? 'unknown',
         reportDate: DateTime.now(),
         startDate: startDate,
         endDate: endDate,
@@ -215,9 +215,9 @@ class HealthcareProviderService {
 
   Future<void> _loadConnectedProviders() async {
     try {
-      final keys = await _preferences.getKeys();
+      final keys = _preferences.getKeys();
       for (final key in keys.where((k) => k.startsWith('provider_'))) {
-        final encryptedData = await _preferences.getString(key);
+        final encryptedData = _preferences.getString(key);
         if (encryptedData != null) {
           final decrypted = await _encryption.decrypt(encryptedData);
           final provider = HealthcareProvider.fromJson(jsonDecode(decrypted));
@@ -231,7 +231,7 @@ class HealthcareProviderService {
 
   Future<void> _loadMedicalRecords() async {
     try {
-      final recordsData = await _preferences.getString('medical_records');
+      final recordsData = _preferences.getString('medical_records');
       if (recordsData != null) {
         final decrypted = await _encryption.decrypt(recordsData);
         final List<dynamic> recordsList = jsonDecode(decrypted);

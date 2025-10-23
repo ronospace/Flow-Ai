@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flow_iq/core/utils/app_logger.dart';
+import 'package:flow_ai/core/utils/app_logger.dart';
 
 void main() {
   group('AppLogger Tests', () {

@@ -1,9 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:isolate';
-import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import '../utils/app_logger.dart';
 
 /// Performance Optimization Service
@@ -23,7 +20,7 @@ class PerformanceOptimizationService {
 
   // Memory management
   Timer? _memoryCleanupTimer;
-  int _lastMemoryUsage = 0;
+  final int _lastMemoryUsage = 0;
   final int _memoryThresholdMB = 150; // Alert threshold
 
   // Cache management

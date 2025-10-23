@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
-import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
@@ -199,7 +197,7 @@ class PerformanceOptimizationService {
   Future<void> _performLightCleanup() async {
     // Clear expired cache entries
     for (final cache in _caches.values) {
-      await cache.removeExpired();
+      cache.removeExpired();
     }
     
     // Trigger GC hint

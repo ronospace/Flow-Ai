@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import '../lib/core/error/error_handler.dart';
-import '../lib/core/security/security_manager.dart';
-import '../lib/core/performance/performance_monitor.dart';
-import '../lib/core/clinical/clinical_intelligence_engine.dart';
+import 'package:flow_ai/core/error/error_handler.dart';
+import 'package:flow_ai/core/security/security_manager.dart';
+import 'package:flow_ai/core/performance/performance_monitor.dart';
+import 'package:flow_ai/core/clinical/clinical_intelligence_engine.dart';
 
 /// 🧪 Comprehensive Test Suite Runner
 /// Production-grade testing framework for Flow iQ

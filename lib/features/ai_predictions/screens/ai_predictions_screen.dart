@@ -480,7 +480,7 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
                             ),
                           ],
                         ),
-                      )).toList(),
+                      )),
                     ],
                     const SizedBox(height: 100),
                   ],

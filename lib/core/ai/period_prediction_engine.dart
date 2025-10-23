@@ -547,7 +547,7 @@ class PeriodPredictionEngine {
     final mostCommon = symptomFrequency.entries.reduce((a, b) => a.value > b.value ? a : b);
     final frequency = (mostCommon.value / data.length * 100).round();
     
-    return 'Most common symptom: ${mostCommon.key} (${frequency}% of cycles)';
+    return 'Most common symptom: ${mostCommon.key} ($frequency% of cycles)';
   }
   
   String _getMonthName(int month) {

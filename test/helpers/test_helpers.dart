@@ -3,12 +3,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:mockito/mockito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../lib/core/services/auth_service.dart';
-import '../../lib/core/services/app_enhancement_service.dart';
-import '../../lib/features/settings/providers/settings_provider.dart';
-import '../../lib/features/cycle/providers/cycle_provider.dart';
-import '../../lib/features/insights/providers/insights_provider.dart';
-import '../../lib/features/health/providers/health_provider.dart';
+import 'package:flow_ai/core/services/auth_service.dart';
+import 'package:flow_ai/core/services/app_enhancement_service.dart';
+import 'package:flow_ai/features/settings/providers/settings_provider.dart';
+import 'package:flow_ai/features/cycle/providers/cycle_provider.dart';
+import 'package:flow_ai/features/insights/providers/insights_provider.dart';
+import 'package:flow_ai/features/health/providers/health_provider.dart';
 
 /// Comprehensive test helpers and utilities for Flow AI app testing
 class TestHelpers {

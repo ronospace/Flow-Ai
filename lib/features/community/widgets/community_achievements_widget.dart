@@ -7,11 +7,11 @@ class CommunityAchievementsWidget extends StatelessWidget {
   final VoidCallback? onViewAll;
 
   const CommunityAchievementsWidget({
-    Key? key,
+    super.key,
     required this.achievements,
     this.onClaimReward,
     this.onViewAll,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
