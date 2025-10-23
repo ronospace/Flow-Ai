@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../models/onboarding_data.dart';
-import '../../../core/ui/adaptive_components.dart';
 
 /// 🧠 Personality Quiz Widget - Intelligent Onboarding Component
 /// Features: Personality-based setup questions, adaptive personalization,
@@ -28,7 +27,7 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
   String? _selectedPersonalityType;
   String? _selectedTrackingStyle;
   String? _selectedMotivationLevel;
-  List<String> _selectedInterests = [];
+  final List<String> _selectedInterests = [];
   
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;

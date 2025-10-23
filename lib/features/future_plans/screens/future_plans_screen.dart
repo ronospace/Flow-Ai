@@ -127,10 +127,9 @@ class _FuturePlansScreenState extends State<FuturePlansScreen>
         case 'tech':
           return feature is TechFeatureCard;
         case 'social':
-          return feature is ComingSoonCard && 
-                 !(feature is AIFeatureCard) && 
-                 !(feature is HealthFeatureCard) && 
-                 !(feature is TechFeatureCard);
+          return feature is! AIFeatureCard && 
+                 feature is! HealthFeatureCard && 
+                 feature is! TechFeatureCard;
         default:
           return true;
       }

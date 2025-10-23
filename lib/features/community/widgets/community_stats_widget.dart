@@ -6,10 +6,10 @@ class CommunityStatsWidget extends StatelessWidget {
   final VoidCallback? onRefresh;
 
   const CommunityStatsWidget({
-    Key? key,
+    super.key,
     required this.stats,
     this.onRefresh,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

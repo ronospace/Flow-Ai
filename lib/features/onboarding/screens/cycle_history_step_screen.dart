@@ -50,7 +50,7 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = AppLocalizations.of(context);
 
     return Container(
       decoration: BoxDecoration(

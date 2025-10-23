@@ -154,7 +154,7 @@ class SmartNotificationService {
           description: 'Reminders to take medication',
           importance: Importance.max,
           enableVibration: true,
-          sound: const RawResourceAndroidNotificationSound('medication_alert'),
+          sound: RawResourceAndroidNotificationSound('medication_alert'),
         ),
       );
 

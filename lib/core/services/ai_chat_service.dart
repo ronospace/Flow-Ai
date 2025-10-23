@@ -76,7 +76,7 @@ class AIChatService {
     
     // Always add fresh welcome message with updated name
     _addAIMessage(
-      "Hi ${userName}! 👋 I'm Mira, your AI assistant. I'm here to help you understand your cycle, provide personalized health insights, and answer any questions about reproductive wellness. How can I help you today?"
+      "Hi $userName! 👋 I'm Mira, your AI assistant. I'm here to help you understand your cycle, provide personalized health insights, and answer any questions about reproductive wellness. How can I help you today?"
     );
     
     _isInitialized = true;

@@ -83,6 +83,8 @@ class WearableDevice {
         return 'Connected via Cellular';
       case ConnectionType.cloud:
         return 'Syncing with Cloud';
+      case ConnectionType.usb:
+        return 'Connected via USB';
     }
   }
 

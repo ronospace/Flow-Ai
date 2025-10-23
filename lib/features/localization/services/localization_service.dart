@@ -21,7 +21,7 @@ class LocalizationService {
   bool _isInitialized = false;
   SharedPreferences? _prefs;
   late SupportedLocale _currentLocale;
-  Map<String, Map<String, String>> _localizedStrings = {};
+  final Map<String, Map<String, String>> _localizedStrings = {};
   final StreamController<SupportedLocale> _localeController = StreamController<SupportedLocale>.broadcast();
 
   // Configuration

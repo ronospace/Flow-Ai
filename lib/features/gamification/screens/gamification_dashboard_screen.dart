@@ -8,8 +8,6 @@ import '../widgets/leaderboard_widget.dart';
 import '../widgets/educational_content_widget.dart';
 import '../widgets/progress_overview_widget.dart';
 import '../widgets/reward_center_widget.dart';
-import '../../../core/ui/adaptive_components.dart';
-import '../../../core/theme/app_theme.dart';
 
 /// 🏆 Gamification Dashboard Screen - Week 4 Implementation
 /// Features: Daily check-in streaks, health achievement badges, monthly wellness challenges,
@@ -90,7 +88,7 @@ class _GamificationDashboardScreenState extends State<GamificationDashboardScree
     return Consumer<GamificationController>(
       builder: (context, controller, child) {
         return Scaffold(
-          backgroundColor: Theme.of(context).colorScheme.background,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           body: RefreshIndicator(
             onRefresh: () => controller.refresh(),
             child: CustomScrollView(

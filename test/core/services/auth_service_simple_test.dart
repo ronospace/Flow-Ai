@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flow_iq/core/services/auth_service.dart';
+import 'package:flow_ai/core/services/auth_service.dart';
 
 void main() {
   // Initialize Flutter bindings for testing

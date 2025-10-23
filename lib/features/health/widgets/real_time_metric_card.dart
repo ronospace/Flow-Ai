@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 
 /// Real-time metric display card with trend indicators and animations
 class RealTimeMetricCard extends StatefulWidget {
@@ -11,14 +10,14 @@ class RealTimeMetricCard extends StatefulWidget {
   final double trend; // Percentage change
 
   const RealTimeMetricCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.value,
     required this.unit,
     required this.icon,
     required this.color,
     required this.trend,
-  }) : super(key: key);
+  });
 
   @override
   State<RealTimeMetricCard> createState() => _RealTimeMetricCardState();

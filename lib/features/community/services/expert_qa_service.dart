@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
-import '../../../core/models/user_profile.dart';
 import '../models/expert_profile.dart';
 import '../models/question.dart';
 import '../models/answer.dart';

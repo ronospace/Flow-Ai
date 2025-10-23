@@ -8,10 +8,10 @@ class SubscriptionStatusWidget extends StatelessWidget {
   final VoidCallback? onTap;
 
   const SubscriptionStatusWidget({
-    Key? key,
+    super.key,
     this.isCompact = false,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -236,7 +236,7 @@ class SubscriptionStatusWidget extends StatelessWidget {
                           ],
                         ),
                         Text(
-                          subscription.tier.priceString + '/month',
+                          '${subscription.tier.priceString}/month',
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
                           ),

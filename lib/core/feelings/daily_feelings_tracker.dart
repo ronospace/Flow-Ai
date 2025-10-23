@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'package:flutter/foundation.dart';
-import '../models/user_profile.dart';
 import '../database/database_service.dart';
 import '../utils/app_logger.dart';
 import '../security/security_manager.dart';

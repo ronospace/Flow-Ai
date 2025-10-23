@@ -5,7 +5,7 @@ import '../models/subscription.dart';
 import '../models/premium_feature.dart';
 
 class PremiumSubscriptionScreen extends StatefulWidget {
-  const PremiumSubscriptionScreen({Key? key}) : super(key: key);
+  const PremiumSubscriptionScreen({super.key});
 
   @override
   State<PremiumSubscriptionScreen> createState() => _PremiumSubscriptionScreenState();

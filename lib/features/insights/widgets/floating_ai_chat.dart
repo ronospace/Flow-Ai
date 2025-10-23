@@ -876,7 +876,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   }
                 },
                 borderRadius: BorderRadius.circular(24),
-                child: Container(
+                child: SizedBox(
                   width: 48,
                   height: 48,
                   child: Icon(

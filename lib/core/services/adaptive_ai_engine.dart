@@ -18,11 +18,11 @@ class AdaptiveAIEngine {
   bool get isInitialized => _baseEngine.isInitialized;
 
   // Self-correction and learning parameters
-  Map<String, double> _userSpecificWeights = {};
-  List<PredictionCorrection> _correctionHistory = [];
-  Map<String, HormonePattern> _hormonalPatterns = {};
+  final Map<String, double> _userSpecificWeights = {};
+  final List<PredictionCorrection> _correctionHistory = [];
+  final Map<String, HormonePattern> _hormonalPatterns = {};
   double _adaptationRate = 0.15;
-  double _forgettingFactor = 0.95;
+  final double _forgettingFactor = 0.95;
   
   // Hormone-aware model parameters
   late Map<String, dynamic> _hormoneAwareModel;
@@ -788,5 +788,5 @@ class _ThyroidIndicators {
   final bool needsAttention;
   final Map<String, dynamic> indicators;
   
-  _ThyroidIndicators({this.needsAttention = false, this.indicators = const {}});
+  _ThyroidIndicators();
 }

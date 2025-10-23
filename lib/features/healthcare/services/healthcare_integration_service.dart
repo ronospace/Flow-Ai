@@ -569,7 +569,7 @@ class HealthcareIntegrationService {
               'code': 'd'
             }
           }
-        }).toList(),
+        }),
       ],
     };
   }

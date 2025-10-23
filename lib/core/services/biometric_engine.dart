@@ -206,7 +206,7 @@ class BiometricEngine {
     // Generate insights
     final insights = <String>[];
     if (zScore.abs() > 2.0) {
-      insights.add('Your resting heart rate is ${zScore > 0 ? 'elevated' : 'lower'} compared to typical ${currentPhase} values');
+      insights.add('Your resting heart rate is ${zScore > 0 ? 'elevated' : 'lower'} compared to typical $currentPhase values');
     }
     
     if (trend.abs() > 3.0) {

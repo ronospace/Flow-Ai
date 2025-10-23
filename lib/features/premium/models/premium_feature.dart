@@ -154,6 +154,7 @@ class PremiumFeature {
   final double? usageLimitPerMonth;
   final String? helpUrl;
   final List<String> benefits;
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final FeatureUsage? usage;
 
   const PremiumFeature({

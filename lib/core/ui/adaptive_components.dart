@@ -373,7 +373,7 @@ class AdaptiveComponents {
       switchWidget = CupertinoSwitch(
         value: value,
         onChanged: enabled ? onChanged : null,
-        activeColor: theme.colorScheme.primary,
+        activeTrackColor: theme.colorScheme.primary,
       );
     } else {
       switchWidget = Switch(
@@ -771,12 +771,12 @@ class ResponsiveBuilder extends StatelessWidget {
   final Widget Function(BuildContext context) fallback;
 
   const ResponsiveBuilder({
-    Key? key,
+    super.key,
     this.mobile,
     this.tablet,
     this.desktop,
     required this.fallback,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

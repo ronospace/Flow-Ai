@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
-import '../../../lib/core/models/user.dart';
-import '../../../lib/core/models/cycle_data.dart';
-import '../../../lib/core/models/symptom_tracking.dart';
-import '../../../lib/core/models/auth_result.dart';
-import '../../../lib/core/models/period_prediction.dart' hide CyclePhase;
-import '../../../lib/core/models/period_prediction.dart' as pp;
+import 'package:flow_ai/core/models/user.dart';
+import 'package:flow_ai/core/models/cycle_data.dart';
+import 'package:flow_ai/core/models/symptom_tracking.dart';
+import 'package:flow_ai/core/models/auth_result.dart';
+import 'package:flow_ai/core/models/period_prediction.dart' hide CyclePhase;
+import 'package:flow_ai/core/models/period_prediction.dart' as pp;
 
 void main() {
   group('User Model Tests', () {

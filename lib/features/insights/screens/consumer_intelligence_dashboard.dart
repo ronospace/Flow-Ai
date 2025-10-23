@@ -127,7 +127,7 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = AppLocalizations.of(context);
     
     return Scaffold(
       body: CustomScrollView(

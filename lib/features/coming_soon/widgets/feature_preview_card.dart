@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../../../core/theme/app_theme.dart';
-import '../screens/coming_soon_screen.dart';
+import '../models/coming_soon_feature.dart';
 
 /// Advanced feature preview card with detailed information and interaction
 class FeaturePreviewCard extends StatefulWidget {
@@ -210,7 +209,7 @@ class _FeaturePreviewCardState extends State<FeaturePreviewCard>
     IconData timeIcon;
     
     if (daysUntil <= 30) {
-      timeText = 'Coming in ${daysUntil} days';
+      timeText = 'Coming in $daysUntil days';
       timeIcon = Icons.schedule;
     } else if (daysUntil <= 90) {
       final weeks = (daysUntil / 7).round();

@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../feelings/daily_feelings_tracker.dart';
 import '../utils/app_logger.dart';
 
@@ -499,7 +497,7 @@ class _BreathingAnimationWidgetState extends State<BreathingAnimationWidget>
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
-        return Container(
+        return SizedBox(
           width: widget.size,
           height: widget.size,
           child: Stack(
@@ -676,7 +674,7 @@ class WellnessChartWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: height,
       child: CustomPaint(
         size: Size(double.infinity, height),

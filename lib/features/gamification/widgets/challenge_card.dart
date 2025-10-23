@@ -253,7 +253,7 @@ class ChallengeCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                  )).toList(),
+                  )),
                   const SizedBox(height: 16),
                 ],
                 

@@ -114,7 +114,7 @@ class EnhancedAIChatService {
     
     // Add enhanced welcome message
     _addAIMessage(
-      "Hi ${userName}! 👋 I'm Mira, your enhanced AI assistant. I can help you with:\n\n🩸 Reproductive health & cycle tracking\n💡 General knowledge & science\n🔬 Technology & lifestyle questions\n❓ FAQs on various topics\n\nWhat would you like to explore today?"
+      "Hi $userName! 👋 I'm Mira, your enhanced AI assistant. I can help you with:\n\n🩸 Reproductive health & cycle tracking\n💡 General knowledge & science\n🔬 Technology & lifestyle questions\n❓ FAQs on various topics\n\nWhat would you like to explore today?"
     );
     
     _isInitialized = true;
@@ -246,7 +246,7 @@ class EnhancedAIChatService {
       for (final faq in faqs) {
         // Check if question matches closely
         if (_calculateSimilarity(query, faq.question.toLowerCase()) > 0.6) {
-          return "${faq.answer}\n\n💡 This is from my ${category} knowledge base. Feel free to ask follow-up questions!";
+          return "${faq.answer}\n\n💡 This is from my $category knowledge base. Feel free to ask follow-up questions!";
         }
         
         // Check if answer contains relevant keywords

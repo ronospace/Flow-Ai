@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/utils/app_logger.dart';
 import '../../../core/services/app_enhancement_service.dart';
@@ -209,7 +208,7 @@ class EnhancedCycleService {
       );
 
       await _saveSymptoms();
-      AppLogger.cycle('✅ Symptoms tracked for ${dateKey}');
+      AppLogger.cycle('✅ Symptoms tracked for $dateKey');
 
     } catch (e) {
       AppLogger.error('❌ Failed to track symptoms', e);

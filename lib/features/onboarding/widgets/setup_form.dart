@@ -344,7 +344,7 @@ class _SetupFormState extends State<SetupForm> {
         activeThumbColor: Colors.blue,
             ),
           );
-        }).toList(),
+        }),
       ],
     );
   }

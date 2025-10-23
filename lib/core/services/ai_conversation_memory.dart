@@ -334,7 +334,7 @@ class AIConversationMemory {
 
   /// Get user-specific key for data isolation
   String _getUserSpecificKey(String baseKey) {
-    return _currentUserId != null ? '${baseKey}_${_currentUserId}' : baseKey;
+    return _currentUserId != null ? '${baseKey}_$_currentUserId' : baseKey;
   }
 
   Future<void> _loadConversationHistory() async {

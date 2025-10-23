@@ -360,6 +360,7 @@ class BiometricIntegrationService {
       healthScore: _calculateHealthScore(data),
       recommendations: _generateRecommendations(data),
       riskFactors: _identifyRiskFactors(data),
+      summary: _generateInsightsSummary(data),
     );
     
     debugPrint('✅ Generated insights with ${insights.keyMetrics.length} key metrics');
@@ -745,11 +746,73 @@ class BiometricIntegrationService {
           riskLevel: RiskLevel.medium,
           description: 'Consistently elevated heart rate may indicate cardiovascular stress.',
           relatedMetrics: [BiometricType.heartRate],
+          riskScore: ((avgHeartRate - 100) / 100 * 75).clamp(0, 75),
+          identifiedDate: DateTime.now(),
         ));
       }
     }
     
     return riskFactors;
+  }
+  
+  InsightsSummary _generateInsightsSummary(List<BiometricData> data) {
+    final healthScore = _calculateHealthScore(data);
+    
+    // Generate overall assessment
+    String assessment;
+    InsightsCategory category;
+    if (healthScore >= 85) {
+      assessment = 'Your biometric data shows excellent health patterns';
+      category = InsightsCategory.excellent;
+    } else if (healthScore >= 70) {
+      assessment = 'Your health metrics are generally good with room for optimization';
+      category = InsightsCategory.good;
+    } else if (healthScore >= 55) {
+      assessment = 'Your health data shows moderate patterns that could be improved';
+      category = InsightsCategory.fair;
+    } else {
+      assessment = 'Your biometric data suggests several areas need attention';
+      category = InsightsCategory.poor;
+    }
+    
+    // Key findings
+    final keyFindings = <String>[];
+    final improvements = <String>[];
+    final concerns = <String>[];
+    
+    final metrics = _calculateKeyMetrics(data);
+    if (metrics.containsKey(BiometricType.steps)) {
+      final avgSteps = metrics[BiometricType.steps]!;
+      if (avgSteps > 8000) {
+        improvements.add('Good daily step count average');
+      } else {
+        concerns.add('Daily step count could be improved');
+      }
+      keyFindings.add('Average daily steps: ${avgSteps.toInt()}');
+    }
+    
+    if (metrics.containsKey(BiometricType.heartRate)) {
+      final avgHR = metrics[BiometricType.heartRate]!;
+      keyFindings.add('Average heart rate: ${avgHR.toInt()} bpm');
+      if (avgHR > 100) {
+        concerns.add('Elevated resting heart rate detected');
+      } else if (avgHR >= 60 && avgHR <= 100) {
+        improvements.add('Heart rate within healthy range');
+      }
+    }
+    
+    final nextSteps = concerns.isNotEmpty
+        ? 'Focus on addressing identified concerns and continue regular tracking'
+        : 'Continue maintaining your healthy patterns and regular tracking';
+    
+    return InsightsSummary(
+      overallAssessment: assessment,
+      keyFindings: keyFindings,
+      improvements: improvements,
+      concerns: concerns,
+      nextSteps: nextSteps,
+      category: category,
+    );
   }
 
   void _updateSyncStatus(HealthSyncStatus status) {

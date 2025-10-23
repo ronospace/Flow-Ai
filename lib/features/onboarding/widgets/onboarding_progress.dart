@@ -48,7 +48,7 @@ class OnboardingProgress extends StatelessWidget {
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
               value: currentStep.progress,
-              backgroundColor: theme.colorScheme.surfaceVariant,
+              backgroundColor: theme.colorScheme.surfaceContainerHighest,
               valueColor: AlwaysStoppedAnimation<Color>(theme.colorScheme.primary),
               minHeight: 6,
             ),

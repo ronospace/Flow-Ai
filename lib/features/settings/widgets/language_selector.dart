@@ -82,7 +82,7 @@ class _LanguageSelectorState extends State<LanguageSelector> {
                 ),
                 const SizedBox(width: 16),
                 Text(
-                  AppLocalizations.of(context)!.chooseLanguage,
+                  AppLocalizations.of(context).chooseLanguage,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -98,7 +98,7 @@ class _LanguageSelectorState extends State<LanguageSelector> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Container(
               decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceVariant,
+                color: theme.colorScheme.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: TextField(
@@ -109,7 +109,7 @@ class _LanguageSelectorState extends State<LanguageSelector> {
                   });
                 },
                 decoration: InputDecoration(
-                  hintText: AppLocalizations.of(context)!.searchLanguages,
+                  hintText: AppLocalizations.of(context).searchLanguages,
                   prefixIcon: Icon(Icons.search, color: theme.colorScheme.onSurfaceVariant),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -151,7 +151,7 @@ class _LanguageSelectorState extends State<LanguageSelector> {
                           decoration: BoxDecoration(
                             color: isSelected 
                                 ? AppTheme.accentMint
-                                : theme.colorScheme.surfaceVariant,
+                                : theme.colorScheme.surfaceContainerHighest,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Center(
@@ -197,7 +197,7 @@ class _LanguageSelectorState extends State<LanguageSelector> {
                               // Show confirmation
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text('${AppLocalizations.of(context)!.languageChangedTo} ${language.displayName}'),
+                                  content: Text('${AppLocalizations.of(context).languageChangedTo} ${language.displayName}'),
                                   backgroundColor: AppTheme.accentMint,
                                   behavior: SnackBarBehavior.floating,
                                   shape: RoundedRectangleBorder(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../models/discussion.dart';
-import '../../../core/ui/adaptive_components.dart';
 import '../../../core/utils/time_utils.dart';
 
 /// 💬 Discussion Board Widget - Anonymous Community Discussion System

@@ -71,13 +71,13 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
         await _loadBiometricData();
       } else {
         setState(() {
-          _errorMessage = AppLocalizations.of(context)!.healthDataAccessNotGranted;
+          _errorMessage = AppLocalizations.of(context).healthDataAccessNotGranted;
           _isLoading = false;
         });
       }
     } catch (e) {
       setState(() {
-        _errorMessage = '${AppLocalizations.of(context)!.failedToInitializeBiometricDashboard}: $e';
+        _errorMessage = '${AppLocalizations.of(context).failedToInitializeBiometricDashboard}: $e';
         _isLoading = false;
       });
     }
@@ -99,7 +99,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
       });
     } catch (e) {
       setState(() {
-        _errorMessage = '${AppLocalizations.of(context)!.failedToLoadBiometricData}: $e';
+        _errorMessage = '${AppLocalizations.of(context).failedToLoadBiometricData}: $e';
         _isLoading = false;
       });
     }
@@ -743,7 +743,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
         if (analysis.temperatureData.isNotEmpty)
           HealthMetricsCard(
             title: 'Body Temp',
-            value: '${_getAverageValue(analysis.temperatureData).toStringAsFixed(1)}',
+            value: _getAverageValue(analysis.temperatureData).toStringAsFixed(1),
             unit: '°F',
             icon: Icons.thermostat,
             color: AppTheme.warningOrange,
@@ -753,7 +753,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
         if (analysis.stressData.isNotEmpty)
           HealthMetricsCard(
             title: 'Stress Level',
-            value: '${_getAverageValue(analysis.stressData).toStringAsFixed(1)}',
+            value: _getAverageValue(analysis.stressData).toStringAsFixed(1),
             unit: '/10',
             icon: Icons.psychology,
             color: AppTheme.accentMint,

@@ -9,12 +9,12 @@ class BiometricPulseIndicator extends StatefulWidget {
   final double size;
 
   const BiometricPulseIndicator({
-    Key? key,
+    super.key,
     required this.value,
     required this.label,
     this.color,
     this.size = 60.0,
-  }) : super(key: key);
+  });
 
   @override
   State<BiometricPulseIndicator> createState() => _BiometricPulseIndicatorState();

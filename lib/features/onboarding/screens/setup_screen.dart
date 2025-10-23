@@ -6,7 +6,7 @@ class SetupScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Center(child: const Text('Setup Screen')),
+      body: Center(child: Text('Setup Screen')),
     );
   }
 }
