@@ -165,27 +165,11 @@ class SecurityPrivacyService {
 
       // Perform authentication
       final bool authenticated = await _localAuth.authenticate(
-        localizedFallbackTitle: 'Use PIN',
-        authMessages: const [
-          AndroidAuthMessages(
-            signInTitle: 'Flow Ai Authentication',
-            biometricHint: 'Touch the fingerprint sensor',
-            biometricNotRecognized: 'Fingerprint not recognized, try again',
-            biometricRequiredTitle: 'Biometric authentication required',
-            biometricSuccess: 'Authentication successful',
-            cancelButton: 'Cancel',
-            deviceCredentialsRequiredTitle: 'Device credentials required',
-            deviceCredentialsSetupDescription: 'Please set up device credentials',
-            goToSettingsButton: 'Settings',
-            goToSettingsDescription: 'Please set up biometric authentication in settings',
-          ),
-          IOSAuthMessages(
-            cancelButton: 'Cancel',
-            goToSettingsButton: 'Settings',
-            goToSettingsDescription: 'Please set up biometric authentication in settings',
-            lockOut: 'Please re-enable biometric authentication',
-          ),
-        ],
+        localizedReason: reason,
+        options: const AuthenticationOptions(
+          stickyAuth: true,
+          biometricOnly: false,
+        ),
       );
 
       if (authenticated) {
