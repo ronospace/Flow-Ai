@@ -12,17 +12,28 @@ class AdMobService {
   static const String _testInterstitialAdUnitId = 'ca-app-pub-3940256099942544/1033173712';
   static const String _testRewardedAdUnitId = 'ca-app-pub-3940256099942544/5224354917';
 
-  // Production Ad Unit IDs (replace with your actual IDs when ready for production)
-  static const String _prodBannerAdUnitId = 'ca-app-pub-3940256099942544/6300978111';
-  static const String _prodInterstitialAdUnitId = 'ca-app-pub-3940256099942544/1033173712';
-  static const String _prodRewardedAdUnitId = 'ca-app-pub-3940256099942544/5224354917';
+  // Android Production Ad Unit IDs (App ID: ca-app-pub-3053779336)
+  static const String _androidBannerAdUnitId = 'ca-app-pub-8707491489514576/9591267529';
+  static const String _androidInterstitialAdUnitId = 'ca-app-pub-8707491489514576/8812021403';
+  static const String _androidRewardedAdUnitId = 'ca-app-pub-8707491489514576/7894240148';
+  static const String _androidAppOpenAdUnitId = 'ca-app-pub-8707491489514576/7498939737';
+  static const String _androidNativeAdUnitId = 'ca-app-pub-8707491489514576/2837639998';
+  static const String _androidRewardedInterstitialAdUnitId = 'ca-app-pub-8707491489514576/8114534323';
+  
+  // iOS Production Ad Unit IDs (App ID: ca-app-pub-5064348089)
+  static const String _iosBannerAdUnitId = 'ca-app-pub-8707491489514576/4146566820';
+  static const String _iosInterstitialAdUnitId = 'ca-app-pub-8707491489514576/4558432692';
+  static const String _iosRewardedAdUnitId = 'ca-app-pub-8707491489514576/2833485150';
+  static const String _iosAppOpenAdUnitId = 'ca-app-pub-8707491489514576/1932269355';
+  static const String _iosNativeAdUnitId = 'ca-app-pub-8707491489514576/3245351026';
+  static const String _iosRewardedInterstitialAdUnitId = 'ca-app-pub-8707491489514576/2881586612';
 
   // Ad unit getters
   static String get bannerAdUnitId {
     if (kDebugMode) {
       return _testBannerAdUnitId;
     } else {
-      return Platform.isAndroid ? _prodBannerAdUnitId : _prodBannerAdUnitId;
+      return Platform.isAndroid ? _androidBannerAdUnitId : _iosBannerAdUnitId;
     }
   }
 
@@ -30,7 +41,7 @@ class AdMobService {
     if (kDebugMode) {
       return _testInterstitialAdUnitId;
     } else {
-      return Platform.isAndroid ? _prodInterstitialAdUnitId : _prodInterstitialAdUnitId;
+      return Platform.isAndroid ? _androidInterstitialAdUnitId : _iosInterstitialAdUnitId;
     }
   }
 
@@ -38,7 +49,7 @@ class AdMobService {
     if (kDebugMode) {
       return _testRewardedAdUnitId;
     } else {
-      return Platform.isAndroid ? _prodRewardedAdUnitId : _prodRewardedAdUnitId;
+      return Platform.isAndroid ? _androidRewardedAdUnitId : _iosRewardedAdUnitId;
     }
   }
 

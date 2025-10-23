@@ -2,7 +2,7 @@ name: flow_ai
 description: "Flow Ai - AI-Powered Menstrual Health platform with advanced machine learning predictions, intelligent insights, and personalized health analytics."
 publish_to: 'none'
 
-version: 2.1.1+8
+version: 2.1.1+10
 
 environment:
   sdk: ^3.8.1
