@@ -523,7 +523,10 @@ class AdaptiveAIEngine {
   CyclePrediction _adjustForLHPatterns(CyclePrediction prediction, dynamic pattern) => prediction;
   dynamic _analyzeCortisolImpact(dynamic indicators) => {};
   CyclePrediction _adjustForCortisolLevels(CyclePrediction prediction, dynamic impact) => prediction;
-  dynamic _analyzeThyroidIndicators(List<CycleData> cycles) => _ThyroidIndicators();
+  dynamic _analyzeThyroidIndicators(List<CycleData> cycles) => _ThyroidIndicators(
+    needsAttention: false,
+    indicators: {},
+  );
   CyclePrediction _adjustForThyroidFactors(CyclePrediction prediction, dynamic indicators) => prediction;
 
   // Missing methods implementation
@@ -788,5 +791,8 @@ class _ThyroidIndicators {
   final bool needsAttention;
   final Map<String, dynamic> indicators;
   
-  _ThyroidIndicators();
+  _ThyroidIndicators({
+    required this.needsAttention,
+    required this.indicators,
+  });
 }
