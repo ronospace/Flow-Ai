@@ -9,12 +9,12 @@ class ExpertQAWidget extends StatefulWidget {
   final Function(String) onBookmarkQuestion;
 
   const ExpertQAWidget({
-    Key? key,
+    super.key,
     required this.questions,
     required this.onAskQuestion,
     required this.onLikeQuestion,
     required this.onBookmarkQuestion,
-  }) : super(key: key);
+  });
 
   @override
   State<ExpertQAWidget> createState() => _ExpertQAWidgetState();
@@ -75,7 +75,7 @@ class _ExpertQAWidgetState extends State<ExpertQAWidget> {
             ),
             const SizedBox(height: 12),
             DropdownButtonFormField<String>(
-              value: _selectedCategory,
+              initialValue: _selectedCategory,
               decoration: const InputDecoration(
                 labelText: 'Category',
                 border: OutlineInputBorder(),

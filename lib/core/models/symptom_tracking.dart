@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 /// Symptom tracking model for comprehensive health monitoring
 class SymptomTracking {

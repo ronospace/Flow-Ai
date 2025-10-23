@@ -60,13 +60,15 @@ class BiometricInsights {
     var score = 0;
     
     // Data quantity factor
-    if (totalDataPoints > 1000) score += 30;
-    else if (totalDataPoints > 500) score += 20;
+    if (totalDataPoints > 1000) {
+      score += 30;
+    } else if (totalDataPoints > 500) score += 20;
     else if (totalDataPoints > 100) score += 10;
     
     // Time window factor
-    if (analysisWindow.inDays >= 30) score += 25;
-    else if (analysisWindow.inDays >= 14) score += 15;
+    if (analysisWindow.inDays >= 30) {
+      score += 25;
+    } else if (analysisWindow.inDays >= 14) score += 15;
     else if (analysisWindow.inDays >= 7) score += 10;
     
     // Metric diversity factor

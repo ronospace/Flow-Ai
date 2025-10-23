@@ -2,7 +2,6 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import '../models/cycle_data.dart';
 import '../models/user_profile.dart';
-import '../models/health_insights.dart';
 import '../utils/collection_extensions.dart';
 
 /// Blueprint Implementation: Preventive Health Insights

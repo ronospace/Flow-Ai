@@ -6,8 +6,6 @@ import 'package:fl_chart/fl_chart.dart';
 import '../../../core/biometrics/advanced_biometric_engine.dart';
 import '../../../core/health/advanced_health_analytics.dart';
 import '../../../core/performance/performance_optimization_engine.dart';
-import '../../../core/ai/neural_prediction_engine.dart';
-import '../../../core/ai/emotional_intelligence_engine.dart';
 import '../../../core/models/user_profile.dart';
 import '../../../core/models/cycle_data.dart';
 import '../widgets/real_time_metric_card.dart';
@@ -22,9 +20,9 @@ class RealTimeHealthDashboard extends StatefulWidget {
   final UserProfile user;
 
   const RealTimeHealthDashboard({
-    Key? key,
+    super.key,
     required this.user,
-  }) : super(key: key);
+  });
 
   @override
   State<RealTimeHealthDashboard> createState() => _RealTimeHealthDashboardState();
@@ -46,7 +44,7 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
   BiometricSnapshot? _latestBiometrics;
   PerformanceMetrics? _latestPerformance;
   ComprehensiveHealthReport? _healthReport;
-  List<BiometricReading> _realtimeData = [];
+  final List<BiometricReading> _realtimeData = [];
   bool _isLoading = true;
   String _selectedMetric = 'heart_rate';
   int _selectedTimeRange = 1; // 1=1hr, 24=24hr, 168=1week
@@ -824,7 +822,7 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
               ),
             ],
           ),
-        )).toList(),
+        )),
       ],
     );
   }

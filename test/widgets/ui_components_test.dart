@@ -6,8 +6,6 @@ import 'package:mockito/annotations.dart';
 import 'package:flow_ai/core/services/auth_service.dart';
 import 'package:flow_ai/core/services/ai_engine.dart';
 import 'package:flow_ai/core/services/analytics_service.dart';
-import 'package:flow_ai/core/models/user.dart';
-import 'package:flow_ai/core/models/cycle_data.dart';
 
 // Generate mocks
 @GenerateMocks([AuthService, AIEngine, AnalyticsService])
@@ -163,7 +161,7 @@ void main() {
             body: Column(
               children: [
                 const Text('Period Calendar', key: Key('calendar_title')),
-                Container(
+                SizedBox(
                   key: const Key('calendar_container'),
                   height: 400,
                   child: GridView.builder(

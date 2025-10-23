@@ -8,7 +8,6 @@ import '../../../core/theme/app_theme.dart';
 import '../../../generated/app_localizations.dart';
 import '../../../core/models/cycle_data.dart';
 import '../providers/cycle_provider.dart';
-import '../../../core/services/cycle_calculation_engine.dart' as calc_engine;
 import '../widgets/calendar_legend.dart';
 import '../widgets/day_detail_sheet.dart';
 
@@ -122,7 +121,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                     Text(
-                      AppLocalizations.of(context)!.calendarTitle,
+                      AppLocalizations.of(context).calendarTitle,
                       style: theme.textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: theme.colorScheme.onSurface,
@@ -199,7 +198,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                 borderRadius: BorderRadius.circular(12),
                 child: Padding(padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   child: Text(
-                    AppLocalizations.of(context)!.todayButton,
+                    AppLocalizations.of(context).todayButton,
                     style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
@@ -476,8 +475,8 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
     
     // Check if day is in predicted next period
     final predictions = cycleProvider.predictions;
-    if (predictions != null && predictions.nextPeriodDate != null) {
-      final nextPeriodStart = predictions.nextPeriodDate!;
+    if (predictions != null) {
+      final nextPeriodStart = predictions.nextPeriodDate;
       final periodLength = 5; // Typical period length
       final nextPeriodEnd = nextPeriodStart.add(Duration(days: periodLength - 1));
       
@@ -493,21 +492,19 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
       }
       
       // Check if day is in fertile window
-      if (predictions.fertileWindowStart != null && predictions.fertileWindowEnd != null) {
-        final fertileStart = predictions.fertileWindowStart!;
-        final fertileEnd = predictions.fertileWindowEnd!;
-        
-        if (day.isAfter(fertileStart.subtract(const Duration(days: 1))) &&
-            day.isBefore(fertileEnd.add(const Duration(days: 1)))) {
-          return DayInfo(
-            color: AppTheme.accentMint,
-            phase: CyclePhase.follicular,
-            isPredicted: true,
-            isFertileWindow: true,
-          );
-        }
-      }
+      final fertileStart = predictions.fertileWindowStart;
+      final fertileEnd = predictions.fertileWindowEnd;
       
+      if (day.isAfter(fertileStart.subtract(const Duration(days: 1))) &&
+          day.isBefore(fertileEnd.add(const Duration(days: 1)))) {
+        return DayInfo(
+          color: AppTheme.accentMint,
+          phase: CyclePhase.follicular,
+          isPredicted: true,
+          isFertileWindow: true,
+        );
+      }
+          
       // Check if day is ovulation day
       if (predictions.ovulationDate != null) {
         final ovulationDay = predictions.ovulationDate!;
@@ -688,7 +685,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
               ),
               
               // Next Period Prediction
-              if (predictions != null && predictions.nextPeriodDate != null)
+              if (predictions != null)
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -709,7 +706,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                         ),
                       ),
                       Text(
-                        DateFormat('MMM d').format(predictions.nextPeriodDate!),
+                        DateFormat('MMM d').format(predictions.nextPeriodDate),
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                         ),

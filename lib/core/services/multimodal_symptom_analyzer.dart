@@ -1,8 +1,6 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
-import '../models/symptom_analysis.dart';
 import '../models/user_profile.dart';
 
 /// Blueprint Implementation: Multimodal Symptom Analysis
@@ -1114,9 +1112,9 @@ class TextSymptomAnalysis extends SymptomAnalysisBase {
     required this.contextualInsights,
     required this.confidenceScores,
     required this.processingTime,
-    required String userId,
-    required DateTime timestamp,
-  }) : super(userId: userId, timestamp: timestamp);
+    required super.userId,
+    required super.timestamp,
+  });
 }
 
 class VoiceSymptomAnalysis extends SymptomAnalysisBase {
@@ -1144,9 +1142,9 @@ class VoiceSymptomAnalysis extends SymptomAnalysisBase {
     required this.vocalHealthIndicators,
     required this.audioQuality,
     required this.processingTime,
-    required String userId,
-    required DateTime timestamp,
-  }) : super(userId: userId, timestamp: timestamp);
+    required super.userId,
+    required super.timestamp,
+  });
 }
 
 class ImageSymptomAnalysis extends SymptomAnalysisBase {
@@ -1176,9 +1174,9 @@ class ImageSymptomAnalysis extends SymptomAnalysisBase {
     required this.insights,
     required this.imageQuality,
     required this.processingTime,
-    required String userId,
-    required DateTime timestamp,
-  }) : super(userId: userId, timestamp: timestamp);
+    required super.userId,
+    required super.timestamp,
+  });
 }
 
 class SmartJournalEntry {

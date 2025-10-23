@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../models/onboarding_data.dart';
-import '../../../core/ui/adaptive_components.dart';
 
 /// 📊 Cycle History Import Widget - Advanced Data Import System  
 /// Features: Multiple import sources, CSV/JSON parsing, manual entry,
@@ -332,7 +331,7 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
         decoration: BoxDecoration(
           color: isSelected
               ? theme.colorScheme.primary.withValues(alpha: 0.1)
-              : theme.colorScheme.background,
+              : theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected
@@ -532,14 +531,14 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: theme.colorScheme.background,
+              color: theme.colorScheme.surface,
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
               'Date,Flow,Symptoms,Mood\n2024-01-15,Heavy,"Cramps,Bloating",Tired\n2024-01-16,Medium,Headache,Moody',
               style: theme.textTheme.bodySmall?.copyWith(
                 fontFamily: 'monospace',
-                color: theme.colorScheme.onBackground.withValues(alpha: 0.8),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
               ),
             ),
           ),
@@ -651,7 +650,7 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: theme.colorScheme.background,
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: theme.colorScheme.outline.withValues(alpha: 0.3),

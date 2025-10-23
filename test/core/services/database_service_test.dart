@@ -7,7 +7,6 @@ import 'package:flow_ai/core/services/offline_service.dart';
 import 'package:flow_ai/core/models/cycle_data.dart';
 import 'package:flow_ai/core/models/symptom_tracking.dart';
 import 'package:flow_ai/core/models/daily_tracking_data.dart';
-import 'package:flow_ai/core/models/user.dart';
 import 'package:sqflite_common/sqflite.dart';
 
 // Generate mocks
@@ -416,7 +415,9 @@ void main() {
     test('should handle network status changes', () async {
       // Arrange
       when(mockOfflineService.onNetworkStatusChange(any))
-          .thenAnswer((_) async {});
+          .thenAnswer((_) async {
+            return null;
+          });
 
       // Act
       await mockOfflineService.onNetworkStatusChange(true); // Online

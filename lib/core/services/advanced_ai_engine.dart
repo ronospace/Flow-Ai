@@ -855,8 +855,9 @@ class AdvancedAIEngine {
     final avgIntensity = patterns.flowPatterns.averageIntensity;
     String severity;
     
-    if (avgIntensity < 2) severity = 'light';
-    else if (avgIntensity < 3) severity = 'moderate';
+    if (avgIntensity < 2) {
+      severity = 'light';
+    } else if (avgIntensity < 3) severity = 'moderate';
     else severity = 'heavy';
     
     return SymptomPrediction(

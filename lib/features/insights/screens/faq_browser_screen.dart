@@ -111,7 +111,7 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = AppLocalizations.of(context);
     
     return Scaffold(
       body: CustomScrollView(
@@ -299,7 +299,7 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
                 _isSearching
                     ? '${_searchResults.length} search results'
                     : _selectedCategory != null
-                        ? '${_filteredFAQs.length} FAQs in ${_selectedCategory}'
+                        ? '${_filteredFAQs.length} FAQs in $_selectedCategory'
                         : '${_filteredFAQs.length} total FAQs',
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: AppTheme.mediumGrey,
