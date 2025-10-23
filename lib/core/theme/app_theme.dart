@@ -36,6 +36,13 @@ class AppTheme {
   static const Color lightGrey = Color(0xFFF3F4F6);
   static const Color white = lightSurface;
   
+  // Theme-aware getters (default to light theme)
+  static Color get scaffoldBackgroundColor => lightBackground;
+  static Color get cardColor => lightCard;
+  static Color get borderColor => lightGrey;
+  static Color get textPrimary => lightText;
+  static Color get textSecondary => lightTextSecondary;
+  
   // Gradient Colors
   static const LinearGradient primaryGradient = LinearGradient(
     begin: Alignment.topLeft,
