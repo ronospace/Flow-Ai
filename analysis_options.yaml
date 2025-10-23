@@ -13,6 +13,7 @@ analyzer:
   exclude:
     - lib/features/partner/**
     - lib/features/analytics/**
+    - lib/features/_disabled_experimental/**
     - lib/core/services/analytics_service.dart
     - lib/core/services/cloud_sync_service.dart
     - lib/core/services/export_import_service.dart
