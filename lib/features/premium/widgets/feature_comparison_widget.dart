@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
-import '../models/subscription.dart';
-import '../models/premium_feature.dart';
 
 /// Feature Comparison Widget
 /// Shows a comparison table of features across subscription tiers

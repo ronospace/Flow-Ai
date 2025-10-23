@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/subscription.dart';
+import '../models/premium_feature.dart';
 import '../providers/premium_provider.dart';
 
 class SubscriptionStatusWidget extends StatelessWidget {
@@ -462,6 +463,8 @@ class SubscriptionStatusWidget extends StatelessWidget {
         return Colors.grey;
       case SubscriptionStatus.pending:
         return Colors.orange;
+      case SubscriptionStatus.suspended:
+        return Colors.amber;
     }
   }
 
@@ -476,6 +479,8 @@ class SubscriptionStatusWidget extends StatelessWidget {
         return 'Expired';
       case SubscriptionStatus.pending:
         return 'Payment Pending';
+      case SubscriptionStatus.suspended:
+        return 'Suspended - Payment Issue';
     }
   }
 
