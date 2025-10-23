@@ -7,6 +7,7 @@ enum CyclePhase {
   menstrual,
   follicular,
   ovulatory,
+  ovulation, // Alias for ovulatory
   luteal,
   preMenstrual
 }
@@ -46,6 +47,29 @@ class CycleData {
 
   factory CycleData.fromJson(Map<String, dynamic> json) => _$CycleDataFromJson(json);
   Map<String, dynamic> toJson() => _$CycleDataToJson(this);
+  
+  /// Create a copy with updated fields
+  CycleData copyWith({
+    String? id,
+    String? userId,
+    DateTime? startDate,
+    DateTime? endDate,
+    int? length,
+    Map<DateTime, DailyData>? dailyData,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return CycleData(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
+      length: length ?? this.length,
+      dailyData: dailyData ?? this.dailyData,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? DateTime.now(),
+    );
+  }
 }
 
 /// Daily cycle data
@@ -94,6 +118,9 @@ class CycleSettings {
 
   factory CycleSettings.fromJson(Map<String, dynamic> json) => _$CycleSettingsFromJson(json);
   Map<String, dynamic> toJson() => _$CycleSettingsToJson(this);
+  
+  /// Create default settings
+  factory CycleSettings.defaults() => const CycleSettings();
 }
 
 /// Cycle statistics
@@ -119,4 +146,15 @@ class CycleStatistics {
 
   factory CycleStatistics.fromJson(Map<String, dynamic> json) => _$CycleStatisticsFromJson(json);
   Map<String, dynamic> toJson() => _$CycleStatisticsToJson(this);
+  
+  /// Create empty statistics
+  factory CycleStatistics.empty() => const CycleStatistics(
+    averageCycleLength: 28.0,
+    averagePeriodLength: 5.0,
+    cycleVariability: 0.0,
+    totalCycles: 0,
+  );
+  
+  /// Get cycle lengths list (for backward compatibility)
+  List<int> get cycleLengths => [];
 }
