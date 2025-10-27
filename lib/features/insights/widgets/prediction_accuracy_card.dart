@@ -162,6 +162,34 @@ class PredictionAccuracyCard extends StatelessWidget {
               ],
             ),
           ),
+          
+          const SizedBox(height: 12),
+          
+          // View Sources link
+          GestureDetector(
+            onTap: () {
+              _showCitationDialog(context);
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.menu_book,
+                  size: 14,
+                  color: AppTheme.secondaryBlue,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  'View Sources',
+                  style: TextStyle(
+                    color: AppTheme.secondaryBlue,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     ).animate().fadeIn().slideY(begin: 0.2, end: 0);
@@ -236,5 +264,110 @@ class PredictionAccuracyCard extends StatelessWidget {
     } else {
       return 'Keep tracking daily! More data is needed for accurate predictions.';
     }
+  }
+
+  void _showCitationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(
+              Icons.menu_book,
+              color: AppTheme.secondaryBlue,
+              size: 20,
+            ),
+            const SizedBox(width: 8),
+            Text('Prediction Accuracy Sources'),
+          ],
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Prediction accuracy is calculated using:',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: AppTheme.darkGrey,
+                ),
+              ),
+              const SizedBox(height: 12),
+              _buildCitation(
+                '1. Historical Comparison',
+                'Comparing AI predictions against actual cycle start dates you recorded.',
+              ),
+              _buildCitation(
+                '2. Machine Learning Models',
+                'Ensemble of SVM, Random Forest, Neural Networks, and LSTM models.',
+              ),
+              _buildCitation(
+                '3. Confidence Scoring',
+                'Statistical analysis of prediction reliability and uncertainty ranges.',
+              ),
+              _buildCitation(
+                '4. Continuous Learning',
+                'Algorithms improve accuracy over time using your feedback and data.',
+              ),
+              _buildCitation(
+                '5. Biometric Integration',
+                'Heart rate, temperature, and health data correlation for enhanced accuracy.',
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              'Close',
+              style: TextStyle(color: AppTheme.secondaryBlue),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCitation(String title, String description) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            Icons.check_circle,
+            size: 16,
+            color: AppTheme.accentMint,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 13,
+                    color: AppTheme.darkGrey,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  description,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: AppTheme.mediumGrey,
+                    height: 1.3,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
