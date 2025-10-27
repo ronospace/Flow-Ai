@@ -1,6 +1,6 @@
 {
   "@@locale": "pt",
-  "@@last_modified": "2025-08-18T19:08:36.080121Z",
+  "@@last_modified": "2025-10-27T09:30:53.383636Z",
   "appName": "Flow Ai",
   "appTagline": "Rastreamento de Período e Ciclo com IA",
   "home": "Início",
@@ -13,25 +13,5 @@
   "yes": "Sim",
   "no": "Não",
   "save": "Salvar",
-  "cancel": "Cancelar",
-  
-  "faqAndKnowledgeBase": "FAQ e Base de Conhecimento",
-  "findAnswersToCommonQuestions": "Encontre respostas para perguntas comuns",
-  "searchFAQs": "Pesquisar FAQ...",
-  "allCategories": "Todas",
-  "searchResults": "{count} resultados da pesquisa",
-  "faqsInCategory": "{count} FAQs em {category}",
-  "totalFAQs": "{count} FAQs no total",
-  "askMira": "Pergunte a Mira",
-  "askRelatedQuestion": "Faça uma pergunta relacionada",
-  "verified": "Verificado",
-  "askMiraAI": "Pergunte a Mira AI",
-  "getPersonalizedAnswers": "Obtenha respostas personalizadas para suas perguntas",
-  "fullChatExperienceComingSoon": "A experiência completa de chat estará disponível em breve!",
-  "useFloatingChatInInsights": "Por enquanto, use o chat flutuante na tela de Insights",
-  "goToAIChat": "Ir para o Chat IA",
-  "faqAndHelp": "FAQ e Ajuda",
-  "getAnswers": "Obter respostas",
-  "smartActionCommandCenter": "Centro de Comando de Ações Inteligentes",
-  "quickAccessToEssentialFeatures": "Acesso rápido às funcionalidades essenciais"
+  "cancel": "Cancelar"
 }

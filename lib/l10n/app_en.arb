@@ -5,11 +5,11 @@
   "@appName": {
     "description": "The name of the application"
   },
-  "appTagline": "Intelligent Period & Cycle Wellness Companion",
+  "appTagline": "Cycle Awareness & Personal Insights",
   "@appTagline": {
     "description": "The tagline of the application"
   },
-  "appDescription": "Track your menstrual cycle with intelligent insights and personalized recommendations for better reproductive health.",
+  "appDescription": "Learn your patterns. Understand your rhythm. Track your menstrual cycle with AI-powered awareness tools and personalized insights.",
   "@appDescription": {
     "description": "The description of the application"
   },
@@ -1609,5 +1609,65 @@
   "quickAccessToEssentialFeatures": "Quick access to essential features",
   "@quickAccessToEssentialFeatures": {
     "description": "Smart action center subtitle"
+  },
+  
+  "medicalDisclaimer": "This information is AI-generated for awareness purposes only and not a substitute for professional medical advice. Consult a qualified healthcare provider for medical concerns.",
+  "@medicalDisclaimer": {
+    "description": "Medical disclaimer for health information"
+  },
+  
+  "medicalDisclaimerShort": "AI-generated information. Not medical advice.",
+  "@medicalDisclaimerShort": {
+    "description": "Short medical disclaimer"
+  },
+  
+  "aiGeneratedContent": "AI-Generated Content",
+  "@aiGeneratedContent": {
+    "description": "AI content indicator"
+  },
+  
+  "notMedicalAdvice": "Not Medical Advice",
+  "@notMedicalAdvice": {
+    "description": "Not medical advice indicator"
+  },
+  
+  "consultHealthcareProvider": "Consult a healthcare provider for medical advice",
+  "@consultHealthcareProvider": {
+    "description": "Recommendation to consult healthcare provider"
+  },
+  
+  "cycleAwarenessInsights": "Cycle Awareness & Personal Insights",
+  "@cycleAwarenessInsights": {
+    "description": "Non-medical app positioning"
+  },
+  
+  "learnYourPatterns": "Learn your patterns. Understand your rhythm. Powered by AI.",
+  "@learnYourPatterns": {
+    "description": "Safe app tagline focused on awareness"
+  },
+  
+  "basedOnYourLoggedData": "Based on your logged information",
+  "@basedOnYourLoggedData": {
+    "description": "Clarification that insights are based on user data"
+  },
+  
+  "personalizedEstimates": "Personalized Estimations",
+  "@personalizedEstimates": {
+    "description": "Safe term instead of predictions"
+  },
+  
+  "cyclePatternAwareness": "Cycle Pattern Awareness",
+  "@cyclePatternAwareness": {
+    "description": "Safe term for cycle insights"
+  },
+  
+  "mayHelpIncreaseAwareness": "May help increase awareness of your body's patterns",
+  "@mayHelpIncreaseAwareness": {
+    "description": "Safe benefit statement"
+  },
+  
+  "estimatedBasedOnPatterns": "Estimated based on your logged patterns",
+  "@estimatedBasedOnPatterns": {
+    "description": "Safe prediction language"
   }
 }
