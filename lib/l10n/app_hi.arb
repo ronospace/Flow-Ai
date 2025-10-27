@@ -1,6 +1,6 @@
 {
   "@@locale": "hi",
-  "@@last_modified": "2025-08-18T19:08:36.079379Z",
+  "@@last_modified": "2025-10-27T09:30:53.382818Z",
   "appName": "Flow Ai",
   "appTagline": "AI-संचालित मासिक धर्म और चक्र ट्रैकिंग",
   "home": "होम",
@@ -13,25 +13,5 @@
   "yes": "हां",
   "no": "नहीं",
   "save": "सेव करें",
-  "cancel": "रद्द करें",
-  
-  "faqAndKnowledgeBase": "FAQ और ज्ञान बेस",
-  "findAnswersToCommonQuestions": "आम सवालों के जवाब पाएं",
-  "searchFAQs": "FAQ में खोजें...",
-  "allCategories": "सभी श्रेणियां",
-  "searchResults": "{count} खोज के नतीजे",
-  "faqsInCategory": "{category} में {count} FAQ",
-  "totalFAQs": "कुल {count} FAQ",
-  "askMira": "मीरा से पूछें",
-  "askRelatedQuestion": "संबंधित सवाल पूछें",
-  "verified": "सत्यापित",
-  "askMiraAI": "मीरा AI से पूछें",
-  "getPersonalizedAnswers": "अपने सवालों के व्यक्तिगत जवाब पाएं",
-  "fullChatExperienceComingSoon": "पूरा चैट अनुभव जल्दी आ रहा है!",
-  "useFloatingChatInInsights": "अभी के लिए, इनसाइट्स स्क्रीन में फ्लोटिंग चैट का इस्तेमाल करें",
-  "goToAIChat": "AI चैट पर जाएं",
-  "faqAndHelp": "FAQ और सहायता",
-  "getAnswers": "जवाब पाएं",
-  "smartActionCommandCenter": "स्मार्ट एक्शन कमांड सेंटर",
-  "quickAccessToEssentialFeatures": "आवश्यक विशेषताओं तक तुरंत पहुंच"
+  "cancel": "रद्द करें"
 }

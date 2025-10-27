@@ -1,6 +1,6 @@
 {
   "@@locale": "it",
-  "@@last_modified": "2025-08-18T19:08:36.082209Z",
+  "@@last_modified": "2025-10-27T09:30:53.385397Z",
   "appName": "Flow Ai",
   "appTagline": "Tracciamento del Ciclo Mestruale con AI",
   "home": "Home",
@@ -13,25 +13,5 @@
   "yes": "Sì",
   "no": "No",
   "save": "Salva",
-  "cancel": "Annulla",
-  
-  "faqAndKnowledgeBase": "FAQ e Base di Conoscenza",
-  "findAnswersToCommonQuestions": "Trova risposte alle domande comuni",
-  "searchFAQs": "Cerca FAQ...",
-  "allCategories": "Tutte",
-  "searchResults": "{count} risultati di ricerca",
-  "faqsInCategory": "{count} FAQ in {category}",
-  "totalFAQs": "{count} FAQ in totale",
-  "askMira": "Chiedi a Mira",
-  "askRelatedQuestion": "Fai una domanda correlata",
-  "verified": "Verificato",
-  "askMiraAI": "Chiedi a Mira AI",
-  "getPersonalizedAnswers": "Ottieni risposte personalizzate alle tue domande",
-  "fullChatExperienceComingSoon": "L'esperienza chat completa arriva presto!",
-  "useFloatingChatInInsights": "Per ora, usa la chat fluttuante nella schermata Approfondimenti",
-  "goToAIChat": "Vai alla Chat AI",
-  "faqAndHelp": "FAQ e Aiuto",
-  "getAnswers": "Ottieni risposte",
-  "smartActionCommandCenter": "Centro Comando Azioni Intelligenti",
-  "quickAccessToEssentialFeatures": "Accesso rapido alle funzionalità essenziali"
+  "cancel": "Annulla"
 }

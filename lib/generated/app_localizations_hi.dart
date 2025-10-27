@@ -16,7 +16,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get appDescription =>
-      'Track your menstrual cycle with intelligent insights and personalized recommendations for better reproductive health.';
+      'Learn your patterns. Understand your rhythm. Track your menstrual cycle with AI-powered awareness tools and personalized insights.';
 
   @override
   String get home => 'होम';
@@ -944,11 +944,11 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
-  String get smartActionCommandCenter => 'स्मार्ट एक्शन कमांड सेंटर';
+  String get smartActionCommandCenter => 'Smart Action Command Center';
 
   @override
   String get quickAccessToEssentialFeatures =>
-      'आवश्यक विशेषताओं तक तुरंत पहुंच';
+      'Quick access to essential features';
 
   @override
   String get physical => 'Physical';
@@ -1523,60 +1523,104 @@ class AppLocalizationsHi extends AppLocalizations {
   String get todayButton => 'Today';
 
   @override
-  String get faqAndKnowledgeBase => 'FAQ और ज्ञान बेस';
+  String get faqAndKnowledgeBase => 'FAQ & Knowledge Base';
 
   @override
-  String get findAnswersToCommonQuestions => 'आम सवालों के जवाब पाएं';
+  String get findAnswersToCommonQuestions => 'Find answers to common questions';
 
   @override
-  String get searchFAQs => 'FAQ में खोजें...';
+  String get searchFAQs => 'Search FAQs...';
 
   @override
-  String get allCategories => 'सभी श्रेणियां';
+  String get allCategories => 'All';
 
   @override
   String searchResults(int count) {
-    return '$count खोज के नतीजे';
+    return '$count search results';
   }
 
   @override
   String faqsInCategory(int count, String category) {
-    return '$category में $count FAQ';
+    return '$count FAQs in $category';
   }
 
   @override
   String totalFAQs(int count) {
-    return 'कुल $count FAQ';
+    return '$count total FAQs';
   }
 
   @override
-  String get askMira => 'मीरा से पूछें';
+  String get askMira => 'Ask Mira';
 
   @override
-  String get askRelatedQuestion => 'संबंधित सवाल पूछें';
+  String get askRelatedQuestion => 'Ask related question';
 
   @override
-  String get verified => 'सत्यापित';
+  String get verified => 'Verified';
 
   @override
-  String get askMiraAI => 'मीरा AI से पूछें';
+  String get askMiraAI => 'Ask Mira AI';
 
   @override
-  String get getPersonalizedAnswers => 'अपने सवालों के व्यक्तिगत जवाब पाएं';
+  String get getPersonalizedAnswers =>
+      'Get personalized answers to your questions';
 
   @override
-  String get fullChatExperienceComingSoon => 'पूरा चैट अनुभव जल्दी आ रहा है!';
+  String get fullChatExperienceComingSoon =>
+      'Full chat experience coming soon!';
 
   @override
   String get useFloatingChatInInsights =>
-      'अभी के लिए, इनसाइट्स स्क्रीन में फ्लोटिंग चैट का इस्तेमाल करें';
+      'For now, use the floating chat in the insights screen';
 
   @override
-  String get goToAIChat => 'AI चैट पर जाएं';
+  String get goToAIChat => 'Go to AI Chat';
 
   @override
-  String get faqAndHelp => 'FAQ और सहायता';
+  String get faqAndHelp => 'FAQ & Help';
 
   @override
-  String get getAnswers => 'जवाब पाएं';
+  String get getAnswers => 'Get answers';
+
+  @override
+  String get medicalDisclaimer =>
+      'This information is AI-generated for awareness purposes only and not a substitute for professional medical advice. Consult a qualified healthcare provider for medical concerns.';
+
+  @override
+  String get medicalDisclaimerShort =>
+      'AI-generated information. Not medical advice.';
+
+  @override
+  String get aiGeneratedContent => 'AI-Generated Content';
+
+  @override
+  String get notMedicalAdvice => 'Not Medical Advice';
+
+  @override
+  String get consultHealthcareProvider =>
+      'Consult a healthcare provider for medical advice';
+
+  @override
+  String get cycleAwarenessInsights => 'Cycle Awareness & Personal Insights';
+
+  @override
+  String get learnYourPatterns =>
+      'Learn your patterns. Understand your rhythm. Powered by AI.';
+
+  @override
+  String get basedOnYourLoggedData => 'Based on your logged information';
+
+  @override
+  String get personalizedEstimates => 'Personalized Estimations';
+
+  @override
+  String get cyclePatternAwareness => 'Cycle Pattern Awareness';
+
+  @override
+  String get mayHelpIncreaseAwareness =>
+      'May help increase awareness of your body\'s patterns';
+
+  @override
+  String get estimatedBasedOnPatterns =>
+      'Estimated based on your logged patterns';
 }

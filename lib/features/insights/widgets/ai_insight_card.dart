@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../../generated/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/models/ai_insights.dart';
 import '../../../core/models/medical_citation.dart';
@@ -35,6 +36,40 @@ class AIInsightCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Medical Disclaimer Badge
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+              color: AppTheme.warningOrange.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: AppTheme.warningOrange.withValues(alpha: 0.3),
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.info_outline,
+                  size: 14,
+                  color: AppTheme.warningOrange,
+                ),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    AppLocalizations.of(context)!.medicalDisclaimerShort,
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: AppTheme.warningOrange,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          
           // Header with type icon and confidence
           Row(
             children: [
