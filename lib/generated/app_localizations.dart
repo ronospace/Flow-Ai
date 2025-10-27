@@ -180,13 +180,13 @@ abstract class AppLocalizations {
   /// The tagline of the application
   ///
   /// In en, this message translates to:
-  /// **'Intelligent Period & Cycle Wellness Companion'**
+  /// **'Cycle Awareness & Personal Insights'**
   String get appTagline;
 
   /// The description of the application
   ///
   /// In en, this message translates to:
-  /// **'Track your menstrual cycle with intelligent insights and personalized recommendations for better reproductive health.'**
+  /// **'Learn your patterns. Understand your rhythm. Track your menstrual cycle with AI-powered awareness tools and personalized insights.'**
   String get appDescription;
 
   /// Home screen navigation label
@@ -3164,6 +3164,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Get answers'**
   String get getAnswers;
+
+  /// Medical disclaimer for health information
+  ///
+  /// In en, this message translates to:
+  /// **'This information is AI-generated for awareness purposes only and not a substitute for professional medical advice. Consult a qualified healthcare provider for medical concerns.'**
+  String get medicalDisclaimer;
+
+  /// Short medical disclaimer
+  ///
+  /// In en, this message translates to:
+  /// **'AI-generated information. Not medical advice.'**
+  String get medicalDisclaimerShort;
+
+  /// AI content indicator
+  ///
+  /// In en, this message translates to:
+  /// **'AI-Generated Content'**
+  String get aiGeneratedContent;
+
+  /// Not medical advice indicator
+  ///
+  /// In en, this message translates to:
+  /// **'Not Medical Advice'**
+  String get notMedicalAdvice;
+
+  /// Recommendation to consult healthcare provider
+  ///
+  /// In en, this message translates to:
+  /// **'Consult a healthcare provider for medical advice'**
+  String get consultHealthcareProvider;
+
+  /// Non-medical app positioning
+  ///
+  /// In en, this message translates to:
+  /// **'Cycle Awareness & Personal Insights'**
+  String get cycleAwarenessInsights;
+
+  /// Safe app tagline focused on awareness
+  ///
+  /// In en, this message translates to:
+  /// **'Learn your patterns. Understand your rhythm. Powered by AI.'**
+  String get learnYourPatterns;
+
+  /// Clarification that insights are based on user data
+  ///
+  /// In en, this message translates to:
+  /// **'Based on your logged information'**
+  String get basedOnYourLoggedData;
+
+  /// Safe term instead of predictions
+  ///
+  /// In en, this message translates to:
+  /// **'Personalized Estimations'**
+  String get personalizedEstimates;
+
+  /// Safe term for cycle insights
+  ///
+  /// In en, this message translates to:
+  /// **'Cycle Pattern Awareness'**
+  String get cyclePatternAwareness;
+
+  /// Safe benefit statement
+  ///
+  /// In en, this message translates to:
+  /// **'May help increase awareness of your body\'s patterns'**
+  String get mayHelpIncreaseAwareness;
+
+  /// Safe prediction language
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated based on your logged patterns'**
+  String get estimatedBasedOnPatterns;
 }
 
 class _AppLocalizationsDelegate

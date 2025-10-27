@@ -1,6 +1,6 @@
 {
   "@@locale": "de",
-  "@@last_modified": "2025-08-18T19:08:36.081870Z",
+  "@@last_modified": "2025-10-27T09:30:53.385124Z",
   "appName": "Flow Ai",
   "appTagline": "KI-gestütztes Periode & Zyklus Tracking",
   "home": "Start",
@@ -13,25 +13,5 @@
   "yes": "Ja",
   "no": "Nein",
   "save": "Speichern",
-  "cancel": "Abbrechen",
-  
-  "faqAndKnowledgeBase": "FAQ und Wissensdatenbank",
-  "findAnswersToCommonQuestions": "Finden Sie Antworten auf häufige Fragen",
-  "searchFAQs": "FAQ durchsuchen...",
-  "allCategories": "Alle",
-  "searchResults": "{count} Suchergebnisse",
-  "faqsInCategory": "{count} FAQs in {category}",
-  "totalFAQs": "{count} FAQs insgesamt",
-  "askMira": "Frage Mira",
-  "askRelatedQuestion": "Ähnliche Frage stellen",
-  "verified": "Verifiziert",
-  "askMiraAI": "Frage Mira AI",
-  "getPersonalizedAnswers": "Erhalten Sie personalisierte Antworten auf Ihre Fragen",
-  "fullChatExperienceComingSoon": "Die vollständige Chat-Erfahrung kommt bald!",
-  "useFloatingChatInInsights": "Verwenden Sie vorerst den schwebenden Chat im Einblicke-Bildschirm",
-  "goToAIChat": "Zum AI-Chat gehen",
-  "faqAndHelp": "FAQ und Hilfe",
-  "getAnswers": "Antworten erhalten",
-  "smartActionCommandCenter": "Smart Action Kommandozentrale",
-  "quickAccessToEssentialFeatures": "Schnellzugriff auf wichtige Funktionen"
+  "cancel": "Abbrechen"
 }

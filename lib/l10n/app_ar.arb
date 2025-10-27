@@ -1,6 +1,6 @@
 {
   "@@locale": "ar",
-  "@@last_modified": "2025-08-18T19:08:36.071697Z",
+  "@@last_modified": "2025-10-27T09:30:53.374662Z",
   "appName": "Flow Ai",
   "appTagline": "تتبع الدورة الشهرية بالذكاء الاصطناعي",
   "home": "الرئيسية",
@@ -13,25 +13,5 @@
   "yes": "نعم",
   "no": "لا",
   "save": "حفظ",
-  "cancel": "إلغاء",
-  
-  "faqAndKnowledgeBase": "الأسئلة الشائعة وقاعدة المعرفة",
-  "findAnswersToCommonQuestions": "اعثر على إجابات للأسئلة الشائعة",
-  "searchFAQs": "ابحث في الأسئلة الشائعة...",
-  "allCategories": "جميع الفئات",
-  "searchResults": "{count} نتائج بحث",
-  "faqsInCategory": "{count} أسئلة شائعة في {category}",
-  "totalFAQs": "إجمالي {count} أسئلة شائعة",
-  "askMira": "اسأل ميرا",
-  "askRelatedQuestion": "اطرح سؤالاً مرتبطاً",
-  "verified": "معتمد",
-  "askMiraAI": "اسأل ميرا الذكاء الاصطناعي",
-  "getPersonalizedAnswers": "احصل على إجابات مخصصة لأسئلتك",
-  "fullChatExperienceComingSoon": "تجربة المحادثة الكاملة قادمة قريباً!",
-  "useFloatingChatInInsights": "في الوقت الحالي، استخدم المحادثة العائمة في شاشة الأفكار",
-  "goToAIChat": "انتقل إلى محادثة الذكاء الاصطناعي",
-  "faqAndHelp": "الأسئلة الشائعة والمساعدة",
-  "getAnswers": "احصل على إجابات",
-  "smartActionCommandCenter": "مركز قيادة الإجراءات الذكية",
-  "quickAccessToEssentialFeatures": "وصول سريع للميزات الأساسية"
+  "cancel": "إلغاء"
 }
