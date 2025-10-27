@@ -354,7 +354,7 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
 
                       const SizedBox(height: 24),
 
-                      // Flow iQ Integration
+                      // Flow Ai Integration
                       const FlowIQIntegration()
                           .animate(controller: _sectionsController)
                           .slideY(begin: 0.3, end: 0)

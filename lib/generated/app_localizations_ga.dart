@@ -9,7 +9,7 @@ class AppLocalizationsGa extends AppLocalizations {
   AppLocalizationsGa([String locale = 'ga']) : super(locale);
 
   @override
-  String get appName => 'Flow iQ';
+  String get appName => 'Flow Ai';
 
   @override
   String get appTagline => 'Rianadh Timthriall Mhíosta le hAI';
@@ -502,7 +502,7 @@ class AppLocalizationsGa extends AppLocalizations {
   String get adaptingToPatterns => 'Adapting to your patterns';
 
   @override
-  String get welcome => 'Fáilte go Flow iQ';
+  String get welcome => 'Fáilte go Flow Ai';
 
   @override
   String get getStarted => 'Tosaigh';

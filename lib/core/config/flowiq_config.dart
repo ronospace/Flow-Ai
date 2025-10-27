@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 
-/// Configuration class for Flow iQ integration
+/// Configuration class for Flow Ai integration
 class FlowIQConfig {
-  // Flow iQ API Configuration
+  // Flow Ai API Configuration
   static const String baseUrl = 'https://api.flowai.io/v1';
   static const String chatEndpoint = '/chat/completions';
   static const String healthEndpoint = '/health';
@@ -42,14 +42,14 @@ class FlowIQConfig {
   static String? _apiKey;
   static String? _organizationId;
   
-  /// Initialize Flow iQ configuration with API credentials
+  /// Initialize Flow Ai configuration with API credentials
   static void initialize({
     required String apiKey,
     String? organizationId,
   }) {
     _apiKey = apiKey;
     _organizationId = organizationId;
-    debugPrint('🔑 Flow iQ configuration initialized');
+    debugPrint('🔑 Flow Ai configuration initialized');
   }
   
   /// Get API key (should be set from secure storage or environment)
@@ -68,7 +68,7 @@ class FlowIQConfig {
   /// Get organization ID
   static String? get organizationId => _organizationId;
   
-  /// Check if Flow iQ is configured
+  /// Check if Flow Ai is configured
   static bool get isConfigured => apiKey != null && apiKey!.isNotEmpty;
   
   /// Get environment-specific configuration

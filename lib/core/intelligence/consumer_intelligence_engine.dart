@@ -5,7 +5,7 @@ import '../utils/app_logger.dart';
 import '../utils/collection_extensions.dart';
 
 /// 🧠 Consumer Intelligence Engine
-/// AI-powered wellness intelligence system adapted from Flow iQ clinical intelligence
+/// AI-powered wellness intelligence system adapted from Flow Ai clinical intelligence
 /// Provides personalized lifestyle insights, mood predictions, and wellness recommendations
 class ConsumerIntelligenceEngine {
   static final ConsumerIntelligenceEngine _instance = ConsumerIntelligenceEngine._internal();
