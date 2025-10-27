@@ -97,7 +97,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStat
             Text('Thank you!'),
           ],
         ),
-        content: const Text('Your feedback has been submitted. We truly appreciate your input in making Flow iQ better!'),
+        content: const Text('Your feedback has been submitted. We truly appreciate your input in making Flow Ai better!'),
         actions: [
           TextButton(
             onPressed: () {
@@ -171,7 +171,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStat
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'Help us shape the future of Flow iQ with your valuable feedback',
+                    'Help us shape the future of Flow Ai with your valuable feedback',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,

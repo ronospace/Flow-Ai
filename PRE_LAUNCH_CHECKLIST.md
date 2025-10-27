@@ -3,7 +3,7 @@
 ## ✅ Completed Items
 
 ### Branding & Identity
-- [x] Updated all app names from legacy brands (Flow iQ, CycleAI) to Flow Ai
+- [x] Updated all app names from legacy brands (Flow Ai, CycleAI) to Flow Ai
 - [x] Updated app icon and logo across all platforms
 - [x] Updated splash screen with Flow Ai branding
 - [x] Updated subtitle to "Smart Period & Wellness Tracking"

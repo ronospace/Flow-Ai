@@ -52,7 +52,7 @@ Created a refined version of the curved flow icon based on your reference design
 ### 🎯 **Visual Excellence**
 - **Zero white space** - Perfect for app icon masking
 - **Premium appearance** - Sophisticated gradient work
-- **Brand consistency** - Matches Flow iQ pink/purple theme
+- **Brand consistency** - Matches Flow Ai pink/purple theme
 - **Organic feel** - Natural flowing curves represent cycles
 
 ### 📱 **Technical Advantages**

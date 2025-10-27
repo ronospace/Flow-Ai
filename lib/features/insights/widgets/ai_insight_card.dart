@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/models/ai_insights.dart';
+import '../../../core/models/medical_citation.dart';
 
 class AIInsightCard extends StatelessWidget {
   final AIInsight insight;
@@ -160,6 +162,55 @@ class AIInsightCard extends StatelessWidget {
                 ],
               ),
             ),
+            
+          // Medical Citations Section
+          if (insight.allCitations.isNotEmpty) ...[
+            const SizedBox(height: 20),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppTheme.secondaryBlue.withValues(alpha: 0.05),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: AppTheme.secondaryBlue.withValues(alpha: 0.2),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.medical_information,
+                        size: 16,
+                        color: AppTheme.secondaryBlue,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        'Medical Sources',
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.secondaryBlue,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'This information is based on medical research and clinical guidelines:',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  ...insight.allCitations.map((citation) => 
+                    _buildCitationItem(context, citation),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ],
       ),
     ).animate().fadeIn().slideY(begin: 0.2, end: 0);
@@ -234,6 +285,92 @@ class AIInsightCard extends StatelessWidget {
       return AppTheme.primaryPurple;
     } else {
       return AppTheme.mediumGrey;
+    }
+  }
+  
+  Widget _buildCitationItem(BuildContext context, MedicalCitation citation) {
+    final theme = Theme.of(context);
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: theme.dividerColor.withValues(alpha: 0.2),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Citation source and year
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  citation.source,
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.secondaryBlue,
+                  ),
+                ),
+              ),
+              if (citation.year != null)
+                Text(
+                  citation.year!,
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          // Citation title
+          Text(
+            citation.title,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+              height: 1.3,
+            ),
+          ),
+          const SizedBox(height: 6),
+          // View source button
+          InkWell(
+            onTap: () => _launchCitationUrl(citation.url),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.open_in_new,
+                  size: 12,
+                  color: AppTheme.secondaryBlue,
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  'View Source',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: AppTheme.secondaryBlue,
+                    fontWeight: FontWeight.w600,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  Future<void> _launchCitationUrl(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
     }
   }
 }

@@ -1,9 +1,9 @@
-# 📱 Flow iQ - App Store Preparation Guide
+# 📱 Flow Ai - App Store Preparation Guide
 
 ## App Store Connect Configuration
 
 ### App Information
-- **App Name**: Flow iQ
+- **App Name**: Flow Ai
 - **Bundle ID**: `com.flowiq.health` 
 - **SKU**: `flowiq-ios-2025`
 - **Primary Category**: Health & Fitness
@@ -16,7 +16,7 @@
 AI-powered cycle & health tracking
 
 #### Full Description
-Transform your menstrual health journey with Flow iQ - the most intelligent period and cycle tracking app powered by advanced AI technology.
+Transform your menstrual health journey with Flow Ai - the most intelligent period and cycle tracking app powered by advanced AI technology.
 
 🧠 **AI-Powered Predictions**
 • Neural network-based cycle predictions with 95%+ accuracy
@@ -48,7 +48,7 @@ Transform your menstrual health journey with Flow iQ - the most intelligent peri
 • Customizable notifications and wellness coaching
 • Privacy-first design with local data processing
 
-Whether you're tracking your cycle for the first time or seeking advanced health insights, Flow iQ adapts to your needs with cutting-edge AI technology while maintaining the highest standards of privacy and security.
+Whether you're tracking your cycle for the first time or seeking advanced health insights, Flow Ai adapts to your needs with cutting-edge AI technology while maintaining the highest standards of privacy and security.
 
 Perfect for women seeking intelligent, evidence-based cycle tracking with comprehensive health analytics.
 
@@ -83,30 +83,30 @@ period tracker, menstrual cycle, women health, AI health, cycle prediction, fert
 ```xml
 <!-- Health Data Access -->
 <key>NSHealthShareUsageDescription</key>
-<string>Flow iQ accesses health data to provide personalized cycle predictions and health insights while maintaining complete privacy.</string>
+<string>Flow Ai accesses health data to provide personalized cycle predictions and health insights while maintaining complete privacy.</string>
 
 <key>NSHealthUpdateUsageDescription</key>
-<string>Flow iQ can update your health data with cycle information for comprehensive health tracking across your devices.</string>
+<string>Flow Ai can update your health data with cycle information for comprehensive health tracking across your devices.</string>
 
 <!-- Biometric Authentication -->
 <key>NSFaceIDUsageDescription</key>
-<string>Flow iQ uses Face ID to securely protect your sensitive health data with biometric authentication.</string>
+<string>Flow Ai uses Face ID to securely protect your sensitive health data with biometric authentication.</string>
 
 <!-- Camera Access (for symptom photos) -->
 <key>NSCameraUsageDescription</key>
-<string>Flow iQ can analyze photos to help track skin changes and symptoms related to your cycle.</string>
+<string>Flow Ai can analyze photos to help track skin changes and symptoms related to your cycle.</string>
 
 <!-- Microphone Access (for voice symptom logging) -->
 <key>NSMicrophoneUsageDescription</key>
-<string>Flow iQ can analyze voice input to help log symptoms and mood more naturally.</string>
+<string>Flow Ai can analyze voice input to help log symptoms and mood more naturally.</string>
 
 <!-- Location (optional, for timezone) -->
 <key>NSLocationWhenInUseUsageDescription</key>
-<string>Flow iQ uses your location to adjust reminders and predictions for your timezone.</string>
+<string>Flow Ai uses your location to adjust reminders and predictions for your timezone.</string>
 
 <!-- Notifications -->
 <key>NSUserNotificationUsageDescription</key>
-<string>Flow iQ sends personalized notifications to help you track your cycle and maintain your health routine.</string>
+<string>Flow Ai sends personalized notifications to help you track your cycle and maintain your health routine.</string>
 ```
 
 #### App Store Connect Capabilities
@@ -228,7 +228,7 @@ support@flowiq.health (to be configured)
 - Note: Demo account with sample data pre-populated
 
 **App Review Notes**:
-"Flow iQ is a comprehensive women's health tracking app with AI-powered cycle predictions. The demo account includes sample cycle data to demonstrate all features. All health data is processed locally with optional secure cloud backup. The app complies with HIPAA standards and follows Apple's health data guidelines."
+"Flow Ai is a comprehensive women's health tracking app with AI-powered cycle predictions. The demo account includes sample cycle data to demonstrate all features. All health data is processed locally with optional secure cloud backup. The app complies with HIPAA standards and follows Apple's health data guidelines."
 
 ---
 

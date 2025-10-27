@@ -1,6 +1,6 @@
-# Flow iQ
+# Flow Ai
 
-Flow iQ - AI-Powered Period & Cycle Tracking App
+Flow Ai - AI-Powered Period & Cycle Tracking App
 
 ## Getting Started
 

@@ -9,7 +9,7 @@ class AppLocalizationsVi extends AppLocalizations {
   AppLocalizationsVi([String locale = 'vi']) : super(locale);
 
   @override
-  String get appName => 'Flow iQ';
+  String get appName => 'Flow Ai';
 
   @override
   String get appTagline => 'Theo dõi Chu kỳ và Kinh nguyệt với AI';
@@ -502,7 +502,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get adaptingToPatterns => 'Adapting to your patterns';
 
   @override
-  String get welcome => 'Chào mừng đến với Flow iQ';
+  String get welcome => 'Chào mừng đến với Flow Ai';
 
   @override
   String get getStarted => 'Bắt đầu';

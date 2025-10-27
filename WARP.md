@@ -4,7 +4,7 @@ This file provides guidance to WARP (warp.dev) when working with code in this re
 
 ## Project Overview
 
-Flow iQ is an AI-powered period and cycle tracking Flutter application with comprehensive multi-platform support (iOS, Android, Web) and internationalization for 36 languages. The app focuses on advanced AI predictions, personalized insights, and healthcare integration.
+Flow Ai is an AI-powered period and cycle tracking Flutter application with comprehensive multi-platform support (iOS, Android, Web) and internationalization for 36 languages. The app focuses on advanced AI predictions, personalized insights, and healthcare integration.
 
 ## Development Commands
 

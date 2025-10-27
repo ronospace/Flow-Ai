@@ -7,7 +7,7 @@ import '../utils/collection_extensions.dart';
 
 /// 📊 Performance Analytics Dashboard
 /// Comprehensive analytics and visualization dashboard for tracking user mood and wellness performance
-/// Provides insights, trends, and interactive visualizations for both Flow AI and Flow iQ
+/// Provides insights, trends, and interactive visualizations for both Flow AI and Flow Ai
 class PerformanceAnalyticsDashboard {
   static final PerformanceAnalyticsDashboard _instance = PerformanceAnalyticsDashboard._internal();
   static PerformanceAnalyticsDashboard get instance => _instance;

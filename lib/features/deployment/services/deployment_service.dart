@@ -44,13 +44,13 @@ class DeploymentService {
   }
 
   Future<void> _loadAppMetadata() async {
-    // Create default Flow iQ app metadata
+    // Create default Flow Ai app metadata
     _appMetadata = AppMetadata(
-      appName: 'Flow iQ',
+      appName: 'Flow Ai',
       bundleId: 'com.flowiq.app',
       version: '1.0.0',
       buildNumber: '1',
-      description: '''Flow iQ is a comprehensive women's health tracking app that empowers users to understand their menstrual cycles, track symptoms, monitor mood patterns, and gain personalized insights.
+      description: '''Flow Ai is a comprehensive women's health tracking app that empowers users to understand their menstrual cycles, track symptoms, monitor mood patterns, and gain personalized insights.
 
 Features:
 • Advanced cycle tracking with AI-powered predictions
@@ -64,7 +64,7 @@ Features:
 • Beautiful, intuitive user interface
 • Accessibility-focused design
 
-Flow iQ transforms complex health data into actionable insights, helping women make informed decisions about their health and wellness.''',
+Flow Ai transforms complex health data into actionable insights, helping women make informed decisions about their health and wellness.''',
       shortDescription: 'Advanced women\'s health tracking with AI-powered cycle predictions and comprehensive wellness insights.',
       keywords: [
         'womens health',
@@ -83,7 +83,7 @@ Flow iQ transforms complex health data into actionable insights, helping women m
       supportUrl: 'https://support.flowiq.app',
       marketingUrl: 'https://www.flowiq.app',
       privacyPolicyUrl: 'https://www.flowiq.app/privacy',
-      copyrightText: '© 2024 Flow iQ Technologies. All rights reserved.',
+      copyrightText: '© 2024 Flow Ai Technologies. All rights reserved.',
       localizedDescriptions: {
         'en': 'Advanced women\'s health tracking with AI-powered cycle predictions',
         'es': 'Seguimiento avanzado de la salud femenina con predicciones de ciclo impulsadas por IA',
@@ -149,7 +149,7 @@ Flow iQ transforms complex health data into actionable insights, helping women m
         inAppPurchases: [
           InAppPurchase(
             id: 'premium_features',
-            name: 'Flow iQ Premium Features',
+            name: 'Flow Ai Premium Features',
             description: 'Unlock advanced analytics, extended history, and premium insights',
             prices: {
               'US': 4.99,
@@ -165,7 +165,7 @@ Flow iQ transforms complex health data into actionable insights, helping women m
         subscriptions: [
           Subscription(
             id: 'premium_monthly',
-            name: 'Flow iQ Premium Monthly',
+            name: 'Flow Ai Premium Monthly',
             description: 'Monthly subscription for premium features',
             prices: {
               'US': 2.99,
@@ -181,7 +181,7 @@ Flow iQ transforms complex health data into actionable insights, helping women m
           ),
           Subscription(
             id: 'premium_yearly',
-            name: 'Flow iQ Premium Yearly',
+            name: 'Flow Ai Premium Yearly',
             description: 'Yearly subscription for premium features with significant savings',
             prices: {
               'US': 19.99,
