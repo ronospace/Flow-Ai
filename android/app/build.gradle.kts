@@ -50,9 +50,8 @@ android {
         
         // Support 16 KB memory page sizes for Android 15+ (required by Google Play)
         // This ensures compatibility with devices using 16 KB page sizes
-        ndk {
-            abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a", "x86_64"))
-        }
+        // NDK filters removed for maximum device compatibility
+        // Google Play will automatically optimize per-device
     }
 
     signingConfigs {
