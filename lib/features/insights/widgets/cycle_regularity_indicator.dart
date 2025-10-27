@@ -213,6 +213,35 @@ class CycleRegularityIndicator extends StatelessWidget {
               ],
             ),
           ),
+          
+          const SizedBox(height: 12),
+          
+          // View Sources link
+          GestureDetector(
+            onTap: () {
+              // Navigate to detailed insights or show citation dialog
+              _showCitationDialog(context);
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.menu_book,
+                  size: 14,
+                  color: AppTheme.primaryPurple,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  'View Sources',
+                  style: TextStyle(
+                    color: AppTheme.primaryPurple,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     ).animate().fadeIn().slideY(begin: 0.2, end: 0);
@@ -322,5 +351,106 @@ class CycleRegularityIndicator extends StatelessWidget {
     } else {
       return 'Your cycles are quite irregular. Consider discussing this pattern with your healthcare provider.';
     }
+  }
+
+  void _showCitationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(
+              Icons.menu_book,
+              color: AppTheme.primaryPurple,
+              size: 20,
+            ),
+            const SizedBox(width: 8),
+            Text('Cycle Regularity Sources'),
+          ],
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'This analysis is based on:',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: AppTheme.darkGrey,
+                ),
+              ),
+              const SizedBox(height: 12),
+              _buildCitation(
+                '1. Cycle Length Analysis',
+                'Statistical analysis of your recorded cycle lengths over time.',
+              ),
+              _buildCitation(
+                '2. Variation Tracking',
+                'Standard deviation calculation to measure cycle consistency.',
+              ),
+              _buildCitation(
+                '3. Pattern Recognition',
+                'Machine learning models trained on clinical cycle data and research.',
+              ),
+              _buildCitation(
+                '4. Medical Guidelines',
+                'Based on ACOG and WHO standards for menstrual health assessment.',
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              'Close',
+              style: TextStyle(color: AppTheme.primaryPurple),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCitation(String title, String description) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            Icons.check_circle,
+            size: 16,
+            color: AppTheme.accentMint,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 13,
+                    color: AppTheme.darkGrey,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  description,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: AppTheme.mediumGrey,
+                    height: 1.3,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
