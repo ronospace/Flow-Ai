@@ -6,11 +6,11 @@ import 'package:flow_ai/core/performance/performance_monitor.dart';
 import 'package:flow_ai/core/clinical/clinical_intelligence_engine.dart';
 
 /// 🧪 Comprehensive Test Suite Runner
-/// Production-grade testing framework for Flow iQ
+/// Production-grade testing framework for Flow Ai
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   
-  group('Flow iQ Comprehensive Test Suite', () {
+  group('Flow Ai Comprehensive Test Suite', () {
     setUpAll(() async {
       // Initialize test environment
       await _setupTestEnvironment();
@@ -356,7 +356,7 @@ void testWidgetRendering() {
       await tester.pumpAndSettle();
       
       // Verify splash screen elements
-      expect(find.text('Flow iQ'), findsOneWidget);
+      expect(find.text('Flow Ai'), findsOneWidget);
     });
 
     testWidgets('should render dashboard correctly', (tester) async {
@@ -911,7 +911,7 @@ class TestApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flow iQ Test App',
+      title: 'Flow Ai Test App',
       initialRoute: initialRoute ?? '/',
       routes: {
         '/': (context) => const TestHomePage(),
@@ -928,7 +928,7 @@ class TestHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Flow iQ')),
+      appBar: AppBar(title: const Text('Flow Ai')),
       body: Column(
         children: [
           ElevatedButton(
@@ -962,7 +962,7 @@ class TestSplashPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text('Flow iQ', style: TextStyle(fontSize: 24)),
+        child: Text('Flow Ai', style: TextStyle(fontSize: 24)),
       ),
     );
   }

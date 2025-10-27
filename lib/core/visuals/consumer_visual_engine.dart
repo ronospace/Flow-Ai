@@ -5,7 +5,7 @@ import '../feelings/daily_feelings_tracker.dart';
 import '../utils/app_logger.dart';
 
 /// 🎨 Consumer Visual Engine
-/// Advanced visual system adapted from Flow iQ for consumer wellness experience
+/// Advanced visual system adapted from Flow Ai for consumer wellness experience
 /// Features mood-based color morphing, breathing animations, and wellness visualizations
 class ConsumerVisualEngine {
   static final ConsumerVisualEngine _instance = ConsumerVisualEngine._internal();

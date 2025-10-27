@@ -5,7 +5,7 @@ import '../utils/app_logger.dart';
 import '../security/security_manager.dart';
 
 /// 💖 Daily Feelings Tracker
-/// Smart daily feelings tracking system for both Flow AI (consumer) and Flow iQ (clinical)
+/// Smart daily feelings tracking system for both Flow AI (consumer) and Flow Ai (clinical)
 /// Tracks user feelings twice daily on 1-10 scale with performance analytics
 class DailyFeelingsTracker {
   static final DailyFeelingsTracker _instance = DailyFeelingsTracker._internal();
@@ -708,5 +708,5 @@ enum FeelingsTrend {
 
 enum AppType {
   consumer,  // Flow AI
-  clinical,  // Flow iQ
+  clinical,  // Flow Ai
 }
