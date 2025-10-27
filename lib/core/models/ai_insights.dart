@@ -1,3 +1,5 @@
+import 'medical_citation.dart';
+
 enum InsightType {
   cycleRegularity,
   symptomPattern,
@@ -37,6 +39,8 @@ class AIInsight {
   final List<String> recommendations;
   final String? recommendation; // Single recommendation for backward compatibility
   final DateTime generatedAt;
+  final List<MedicalCitation> citations; // Medical sources for health information
+  final String? citationCategory; // Category for automatic citation lookup
 
   AIInsight({
     required this.type,
@@ -47,7 +51,20 @@ class AIInsight {
     this.recommendations = const [],
     this.recommendation,
     DateTime? generatedAt,
+    this.citations = const [],
+    this.citationCategory,
   }) : generatedAt = generatedAt ?? DateTime.now();
+  
+  /// Get all applicable citations including auto-loaded from category
+  List<MedicalCitation> get allCitations {
+    final List<MedicalCitation> allCites = List.from(citations);
+    if (citationCategory != null) {
+      allCites.addAll(
+        MedicalCitationsDatabase.getCitationsForInsightType(citationCategory!)
+      );
+    }
+    return allCites;
+  }
 }
 
 class PatternDetection {
