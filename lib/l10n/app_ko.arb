@@ -1,6 +1,6 @@
 {
   "@@locale": "ko",
-  "@@last_modified": "2025-08-18T19:08:36.081482Z",
+  "@@last_modified": "2025-10-27T09:30:53.384862Z",
   "appName": "Flow Ai",
   "appTagline": "AI 기반 생리주기 추적",
   "home": "홈",
@@ -13,25 +13,5 @@
   "yes": "예",
   "no": "아니오",
   "save": "저장",
-  "cancel": "취소",
-  
-  "faqAndKnowledgeBase": "FAQ 및 지식 데이터베이스",
-  "findAnswersToCommonQuestions": "일반적인 질문에 대한 답변 찾기",
-  "searchFAQs": "FAQ 검색...",
-  "allCategories": "모든 카테고리",
-  "searchResults": "검색 결과 {count}개",
-  "faqsInCategory": "{category}에 {count}개의 FAQ",
-  "totalFAQs": "총 {count}개의 FAQ",
-  "askMira": "미라에게 물어보기",
-  "askRelatedQuestion": "관련 질문하기",
-  "verified": "확인됨",
-  "askMiraAI": "미라 AI에게 물어보기",
-  "getPersonalizedAnswers": "맞춤형 답변 받기",
-  "fullChatExperienceComingSoon": "전체 채팅 경험이 곧 출시됩니다!",
-  "useFloatingChatInInsights": "현재는 인사이트 화면에서 떠있는 채팅을 사용하세요",
-  "goToAIChat": "AI 채팅으로 이동",
-  "faqAndHelp": "FAQ 및 도움말",
-  "getAnswers": "답변 받기",
-  "smartActionCommandCenter": "스마트 액션 명령 센터",
-  "quickAccessToEssentialFeatures": "필수 기능에 빠르게 접근"
+  "cancel": "취소"
 }

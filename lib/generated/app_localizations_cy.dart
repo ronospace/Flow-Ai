@@ -16,7 +16,7 @@ class AppLocalizationsCy extends AppLocalizations {
 
   @override
   String get appDescription =>
-      'Track your menstrual cycle with intelligent insights and personalized recommendations for better reproductive health.';
+      'Learn your patterns. Understand your rhythm. Track your menstrual cycle with AI-powered awareness tools and personalized insights.';
 
   @override
   String get home => 'Cartref';
@@ -1581,4 +1581,46 @@ class AppLocalizationsCy extends AppLocalizations {
 
   @override
   String get getAnswers => 'Get answers';
+
+  @override
+  String get medicalDisclaimer =>
+      'This information is AI-generated for awareness purposes only and not a substitute for professional medical advice. Consult a qualified healthcare provider for medical concerns.';
+
+  @override
+  String get medicalDisclaimerShort =>
+      'AI-generated information. Not medical advice.';
+
+  @override
+  String get aiGeneratedContent => 'AI-Generated Content';
+
+  @override
+  String get notMedicalAdvice => 'Not Medical Advice';
+
+  @override
+  String get consultHealthcareProvider =>
+      'Consult a healthcare provider for medical advice';
+
+  @override
+  String get cycleAwarenessInsights => 'Cycle Awareness & Personal Insights';
+
+  @override
+  String get learnYourPatterns =>
+      'Learn your patterns. Understand your rhythm. Powered by AI.';
+
+  @override
+  String get basedOnYourLoggedData => 'Based on your logged information';
+
+  @override
+  String get personalizedEstimates => 'Personalized Estimations';
+
+  @override
+  String get cyclePatternAwareness => 'Cycle Pattern Awareness';
+
+  @override
+  String get mayHelpIncreaseAwareness =>
+      'May help increase awareness of your body\'s patterns';
+
+  @override
+  String get estimatedBasedOnPatterns =>
+      'Estimated based on your logged patterns';
 }

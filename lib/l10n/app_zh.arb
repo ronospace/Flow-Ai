@@ -1,6 +1,6 @@
 {
   "@@locale": "zh",
-  "@@last_modified": "2025-08-18T19:08:36.078689Z",
+  "@@last_modified": "2025-10-27T09:30:53.382437Z",
   "appName": "Flow Ai",
   "appTagline": "AI 生理期和周期跟踪",
   "home": "首页",
@@ -13,25 +13,5 @@
   "yes": "是",
   "no": "否",
   "save": "保存",
-  "cancel": "取消",
-  
-  "faqAndKnowledgeBase": "常见问题和知识库",
-  "findAnswersToCommonQuestions": "查找常见问题的答案",
-  "searchFAQs": "搜索常见问题...",
-  "allCategories": "全部",
-  "searchResults": "{count}个搜索结果",
-  "faqsInCategory": "{category}中有{count}个常见问题",
-  "totalFAQs": "共{count}个常见问题",
-  "askMira": "问问米拉",
-  "askRelatedQuestion": "提问相关问题",
-  "verified": "已验证",
-  "askMiraAI": "问问米拉AI",
-  "getPersonalizedAnswers": "获取个性化问题答案",
-  "fullChatExperienceComingSoon": "完整的聊天体验即将推出！",
-  "useFloatingChatInInsights": "目前请使用洞察界面的浮动聊天",
-  "goToAIChat": "前往AI聊天",
-  "faqAndHelp": "常见问题和帮助",
-  "getAnswers": "获取答案",
-  "smartActionCommandCenter": "智能操作命令中心",
-  "quickAccessToEssentialFeatures": "快速访问核心功能"
+  "cancel": "取消"
 }

@@ -1,6 +1,6 @@
 {
   "@@locale": "nl",
-  "@@last_modified": "2025-08-18T19:08:36.084073Z",
+  "@@last_modified": "2025-10-27T09:30:53.386826Z",
   "appName": "Flow Ai",
   "appTagline": "AI-gedreven Menstruatie Tracking",
   "home": "Home",
@@ -13,25 +13,5 @@
   "yes": "Ja",
   "no": "Nee",
   "save": "Opslaan",
-  "cancel": "Annuleren",
-  
-  "faqAndKnowledgeBase": "FAQ en Kennisbank",
-  "findAnswersToCommonQuestions": "Vind antwoorden op veelgestelde vragen",
-  "searchFAQs": "Zoek FAQ's...",
-  "allCategories": "Alle",
-  "searchResults": "{count} zoekresultaten",
-  "faqsInCategory": "{count} FAQ's in {category}",
-  "totalFAQs": "{count} FAQ's in totaal",
-  "askMira": "Vraag Mira",
-  "askRelatedQuestion": "Stel een gerelateerde vraag",
-  "verified": "Geverifieerd",
-  "askMiraAI": "Vraag Mira AI",
-  "getPersonalizedAnswers": "Krijg gepersonaliseerde antwoorden op je vragen",
-  "fullChatExperienceComingSoon": "De volledige chatervaring komt binnenkort!",
-  "useFloatingChatInInsights": "Gebruik voorlopig de zwevende chat in het Inzichten-scherm",
-  "goToAIChat": "Ga naar AI Chat",
-  "faqAndHelp": "FAQ en Help",
-  "getAnswers": "Krijg antwoorden",
-  "smartActionCommandCenter": "Smart Action Commandocentrum",
-  "quickAccessToEssentialFeatures": "Snelle toegang tot essentiële functies"
+  "cancel": "Annuleren"
 }

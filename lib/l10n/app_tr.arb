@@ -1,6 +1,6 @@
 {
   "@@locale": "tr",
-  "@@last_modified": "2025-08-18T19:08:36.082466Z",
+  "@@last_modified": "2025-10-27T09:30:53.385656Z",
   "appName": "Flow Ai",
   "appTagline": "AI Destekli Adet ve Döngü Takibi",
   "home": "Ana Sayfa",
@@ -13,25 +13,5 @@
   "yes": "Evet",
   "no": "Hayır",
   "save": "Kaydet",
-  "cancel": "İptal",
-  
-  "faqAndKnowledgeBase": "SSS ve Bilgi Bankası",
-  "findAnswersToCommonQuestions": "Sık sorulan sorulara cevaplar bulun",
-  "searchFAQs": "SSS'lerde arama yapın...",
-  "allCategories": "Tüm Kategoriler",
-  "searchResults": "{count} arama sonucu",
-  "faqsInCategory": "{category} kategorisinde {count} SSS",
-  "totalFAQs": "Toplam {count} SSS",
-  "askMira": "Mira'ya Sor",
-  "askRelatedQuestion": "İlgili soru sor",
-  "verified": "Doğrulanmış",
-  "askMiraAI": "Mira AI'ya Sor",
-  "getPersonalizedAnswers": "Sorularınıza kişiselleştirilmiş cevaplar alın",
-  "fullChatExperienceComingSoon": "Tam sohbet deneyimi yakında geliyor!",
-  "useFloatingChatInInsights": "Şimdilik, Görüşler ekranındaki yüzen sohbeti kullanın",
-  "goToAIChat": "AI Sohbet'e Git",
-  "faqAndHelp": "SSS ve Yardım",
-  "getAnswers": "Cevaplar Alın",
-  "smartActionCommandCenter": "Akıllı Eylem Komut Merkezi",
-  "quickAccessToEssentialFeatures": "Temel özelliklere hızlı erişim"
+  "cancel": "İptal"
 }

@@ -1,6 +1,6 @@
 {
   "@@locale": "ru",
-  "@@last_modified": "2025-08-18T19:08:36.080627Z",
+  "@@last_modified": "2025-10-27T09:30:53.384183Z",
   "appName": "Flow Ai",
   "appTagline": "ИИ-трекер менструального цикла",
   "home": "Главная",
@@ -13,25 +13,5 @@
   "yes": "Да",
   "no": "Нет",
   "save": "Сохранить",
-  "cancel": "Отмена",
-  
-  "faqAndKnowledgeBase": "FAQ и База Знаний",
-  "findAnswersToCommonQuestions": "Найдите ответы на частые вопросы",
-  "searchFAQs": "Поиск FAQ...",
-  "allCategories": "Все",
-  "searchResults": "{count} результатов поиска",
-  "faqsInCategory": "{count} FAQ в категории {category}",
-  "totalFAQs": "Всего {count} FAQ",
-  "askMira": "Спросить Миру",
-  "askRelatedQuestion": "Задать связанный вопрос",
-  "verified": "Проверено",
-  "askMiraAI": "Спросить Миру ИИ",
-  "getPersonalizedAnswers": "Получите персонализированные ответы на ваши вопросы",
-  "fullChatExperienceComingSoon": "Полный опыт чата скоро будет доступен!",
-  "useFloatingChatInInsights": "Пока используйте плавающий чат на экране Аналитики",
-  "goToAIChat": "Перейти к ИИ Чату",
-  "faqAndHelp": "FAQ и Помощь",
-  "getAnswers": "Получить ответы",
-  "smartActionCommandCenter": "Центр Управления Умными Действиями",
-  "quickAccessToEssentialFeatures": "Быстрый доступ к основным функциям"
+  "cancel": "Отмена"
 }

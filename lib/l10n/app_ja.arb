@@ -1,6 +1,6 @@
 {
   "@@locale": "ja",
-  "@@last_modified": "2025-08-18T19:08:36.081079Z",
+  "@@last_modified": "2025-10-27T09:30:53.384587Z",
   "appName": "Flow Ai",
   "appTagline": "AIによる生理・月経周期トラッキング",
   "home": "ホーム",
@@ -13,25 +13,5 @@
   "yes": "はい",
   "no": "いいえ",
   "save": "保存",
-  "cancel": "キャンセル",
-  
-  "faqAndKnowledgeBase": "FAQとナレッジベース",
-  "findAnswersToCommonQuestions": "よくある質問の回答を探す",
-  "searchFAQs": "FAQを検索...",
-  "allCategories": "すべて",
-  "searchResults": "{count}件の検索結果",
-  "faqsInCategory": "{category}に{count}件のFAQ",
-  "totalFAQs": "合計{count}件のFAQ",
-  "askMira": "ミラに質問",
-  "askRelatedQuestion": "関連する質問をする",
-  "verified": "確認済み",
-  "askMiraAI": "ミラAIに質問",
-  "getPersonalizedAnswers": "あなたの質問に個人化された回答を得る",
-  "fullChatExperienceComingSoon": "完全なチャット体験は近日公開！",
-  "useFloatingChatInInsights": "現在はインサイト画面のフローティングチャットをご利用ください",
-  "goToAIChat": "AIチャットに移動",
-  "faqAndHelp": "FAQとヘルプ",
-  "getAnswers": "回答を得る",
-  "smartActionCommandCenter": "スマートアクションコマンドセンター",
-  "quickAccessToEssentialFeatures": "重要な機能へのクイックアクセス"
+  "cancel": "キャンセル"
 }
