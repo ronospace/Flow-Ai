@@ -294,8 +294,8 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
           debugPrint('✅ Data saved successfully for ${DateFormat('MMMM d, yyyy').format(_selectedDate)}');
         }
         
-        // Auto-navigate to next tab after save (unless on last tab)
-        _autoNavigateToNextTab();
+        // Auto-navigate removed - let user control tab switching manually
+        // This allows proper completion of subcategories within each tab
         
         // Smart post-save navigation after delay
         _scheduleSmartNavigation();
