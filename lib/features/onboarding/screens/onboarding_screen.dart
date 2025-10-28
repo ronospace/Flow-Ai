@@ -351,10 +351,21 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         reminderSettings: Map<String, bool>.from(data['reminders'] ?? {}),
       );
       
+      // Handle demo data if enabled
+      final useDemoData = data['useDemoData'] ?? false;
+      if (useDemoData) {
+        provider.setUseDemoData(true);
+        if (mounted) {
+          _showSuccessMessage('Demo data loaded! Explore the app with sample cycle data.');
+        }
+      }
+      
       if (mounted) {
         final localizations = AppLocalizations.of(context);
         HapticFeedback.lightImpact();
-        _showSuccessMessage('${localizations.success}!');
+        if (!useDemoData) {
+          _showSuccessMessage('${localizations.success}!');
+        }
       }
     } catch (e) {
       if (mounted) {
