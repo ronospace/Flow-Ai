@@ -17,6 +17,7 @@ flutter gen-l10n
 # Run development builds
 flutter run                           # Debug mode on connected device
 flutter run -d chrome                 # Web development
+flutter run -d "iPhone 16 Pro Max"    # iOS simulator (Firebase disabled)
 flutter run --release                 # Release mode for performance testing
 
 # Code quality and testing
@@ -27,8 +28,15 @@ flutter test test/widget_test.dart    # Run specific test
 # Build for production
 flutter build apk --release          # Android APK
 flutter build appbundle --release    # Android App Bundle (Google Play)
-flutter build ios --release --no-codesign  # iOS build
+flutter build ios --release --no-codesign  # iOS build (Firebase disabled)
 flutter build web --release          # Web build
+
+# iOS clean rebuild (when pods fail)
+flutter clean
+rm -rf ios/Pods ios/Podfile.lock
+flutter pub get
+cd ios && pod install && cd ..
+flutter run -d "iPhone 16 Pro Max"
 ```
 
 ### Localization Management
@@ -140,6 +148,30 @@ MultiProvider
 - **Modal Routes**: AI Coach screen as full-screen dialog
 
 ## Development Considerations
+
+### iOS Firebase Workaround (December 2024)
+**Known Issue**: Firebase Core 3.15.2 has Objective-C parse errors on Xcode 15.5+ that block iOS builds.
+
+**Current Workaround**:
+1. Firebase dependencies are commented out in `pubspec.yaml` for iOS builds
+2. Firebase initialization is disabled in `main.dart` for iOS platform
+3. App uses local authentication and offline-first architecture on iOS
+4. Web and Android builds can re-enable Firebase by uncommenting dependencies
+
+**Resolution**: Wait for Firebase Core 4.x update or use web/Android for Firebase features.
+
+### Enhanced Onboarding System (✅ COMPLETED)
+**Progressive Disclosure Features**:
+- **Demo Data Option**: Pre-populated demo user with realistic cycle data for app review
+- **Interactive Tutorials**: Step-by-step guidance through core features
+- **Smart Skip Logic**: Adaptive onboarding flow based on user preferences
+- **Contextual Help**: In-app tooltips and feature discovery prompts
+
+**Tracking Flow Improvements**:
+- **Manual Tab Control**: Removed automatic tab switching to allow proper completion of subcategories
+- **Symptom Categories**: Physical and Emotional symptom tracking with severity levels
+- **Save Feedback**: Enhanced visual feedback with celebration animations
+- **Progress Indicators**: Real-time sync status (Unsaved/Synced) in tracking UI
 
 ### Advanced ML Integration Focus
 The app's competitive advantage lies in its advanced AI/ML capabilities:
