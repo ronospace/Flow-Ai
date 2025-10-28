@@ -463,6 +463,11 @@ class DatabaseService {
     }).toList();
   }
 
+  // Alias for getDailyTrackingRange to match export service expectations
+  Future<List<Map<String, dynamic>>> getTrackingDataInRange(DateTime start, DateTime end) async {
+    return getDailyTrackingRange(start, end);
+  }
+
   // ===== SYMPTOMS METHODS =====
 
   Future<List<Map<String, dynamic>>> getAllSymptoms() async {
