@@ -1,12 +1,12 @@
 # AI-Powered Menstrual Health Prediction System
-## Research Proposal Summary for Master of Software Engineering
+## Research Proposal Summary for Master of Data Science
 
 **Student**: Geoffrey Rono  
-**Program**: MSc Data Science  
+**Program**: Master of Data Science (MSc Data Science)  
 **Matriculation No.**: 74199495  
 **Email**: geoffrey.rono@ue-germany.de  
 **Institution**: University of Europe for Applied Sciences  
-**Supervisor**: Prof. Dr. Iftikhar Ahmed, Program Director, Master of Software Engineering  
+**Supervisor**: Prof. Dr. Iftikhar Ahmed, Program Director, Master of Data Science  
 **Date**: December 28, 2024
 
 ---
@@ -89,75 +89,52 @@ Menstrual health affects 1.8 billion women globally, yet current period tracking
 
 ### Datasets
 
-**Primary Dataset: Flow Ai User Data** (Collected)
-- **Size**: Target 10,000 users × 12 cycles = 120,000 cycles (Pilot: 1,000 users × 6 cycles = 6,000 cycles)
-- **Features**: Cycle dates, flow intensity, 70+ symptoms with severity, mood/energy (10-point scale), pain mapping, biometrics
-- **Ethics**: IRB-approved, informed consent, GDPR-compliant
+**Primary Dataset: Flow Ai Real Tester Data**
+- **Source**: Real tester data from Flow Ai app, EU-hosted Firebase Firestore (eur3 region)
+- **Pilot Users**: ~10-30 real testers (target: scale to ~100)
+- **Tracking Duration**: 1-3 complete cycles per tester
+- **Data Volume**: ~200-600 daily tracking logs (realistic current state)
+- **Features**: Cycle dates, flow intensity, symptoms, mood/energy, biometrics
+- **Collection Period**: Ongoing pilot testing
+- **Ethics**: Anonymized consent obtained, GDPR-compliant EU storage
 
-**Secondary Datasets: Public Repositories**
-
-1. **Clue Dataset** - Open Science Initiative
-   - 100,000+ anonymized cycles
-   - Features: Cycle lengths, bleeding patterns, symptoms, mood
-   - Access: Public research dataset
-   - URL: https://helloclue.com/research-and-data
-
-2. **NHANES** - CDC National Health Survey
-   - 10,000+ women's reproductive health data
-   - Features: Demographics, health conditions, lab results
-   - Access: Public dataset
-   - URL: https://www.cdc.gov/nchs/nhanes/
-
-3. **PCOS/Endometriosis Clinical Data**
-   - 5,000+ PCOS cases (Kaggle + clinical partnerships)
-   - 2,000+ endometriosis cases (academic medical centers)
-   - Purpose: Train and validate health condition detection models
-
-4. **Biometric Data** - Apple HealthKit / Google Fit
-   - Heart rate, steps, sleep, temperature, HRV
-   - User consent-based, on-device processing for privacy
+**Supplementary Dataset: Small Synthetic Augmentation** (Only if Needed)
+- **Purpose**: Improve model robustness only if necessary
+- **Approach**: Clearly documented as synthetic in thesis
+- **Volume**: Minimal - primary results always based on real tester data
 
 **Data Preprocessing**:
-- Missing data imputation (KNN, forward-fill)
-- Outlier removal (IQR, Z-score methods)
+- Anonymization of real tester data from Firebase Firestore
+- Missing data handling and outlier detection
 - Per-user normalization for personalization
-- SMOTE for class imbalance, GAN-based synthetic data augmentation
+- Standard ML preprocessing pipeline
 
 ---
 
 ### Evaluation Metrics
 
-**Prediction Accuracy**:
-- **Primary**: >90% accuracy (±1 day tolerance)
-- Precision >88%, Recall >92%, F1-Score >90%
-- Confidence calibration: Expected Calibration Error <0.1
+**Prediction Accuracy** (sufficient for pilot dataset ~200-600 records):
+- Classification: Precision, Recall, F1-Score
+- Time-series: MAE, RMSE for cycle prediction
+- Pattern Detection: Clustering analysis for symptom patterns
 
-**Clinical Validation**:
-- PCOS Detection: Sensitivity >85%, Specificity >90%, AUC-ROC >0.92
-- Endometriosis Detection: Sensitivity >80%, Specificity >88%, AUC-ROC >0.90
-
-**Performance**:
-- Inference time <100ms on mobile (target: <50ms)
-- Model size <50MB
-- Battery impact <2% per day
-
-**User Experience**:
-- User trust survey >4.2/5.0
-- 30-day retention rate, Net Promoter Score >50
+**User Experience** (Mixed-Methods):
+- Quantitative: ML prediction performance metrics
+- Qualitative: User surveys/interviews on trust, usefulness, privacy perception
 
 ---
 
 ### Experimental Procedure (12 Months)
 
-**Phase 1 (Months 1-3)**: Data collection from 1,000 beta users, integrate public datasets, preprocessing
+**Phase 1 (Months 1-3)**: Complete real tester data collection (~10-30 users, 1-3 cycles), anonymization, preprocessing
 
-**Phase 2 (Months 4-6)**: Train ensemble models, hyperparameter tuning, on-device deployment
+**Phase 2 (Months 4-6)**: Train ML models on real tester data, ensemble development, hyperparameter tuning
 
-**Phase 3 (Months 7-9)**: Validation testing, A/B experiments, clinical validation, benchmarking
+**Phase 3 (Months 7-9)**: Validation testing, user surveys/interviews, mixed-methods analysis
 
-**Phase 4 (Months 10-11)**: Optimization, explainability features (SHAP), user feedback integration
+**Phase 4 (Months 10-11)**: Model refinement, explainability features, user feedback integration
 
-**Phase 5 (Month 12)**: Final evaluation, thesis writing, peer-review submission, app deployment
+**Phase 5 (Month 12)**: Final evaluation, thesis writing, submission preparation
 
 ---
 
@@ -213,7 +190,7 @@ Menstrual health affects 1.8 billion women globally, yet current period tracking
 **GitHub**: github.com/ronospace/ZyraFlow  
 
 **Supervisor**: Prof. Dr. Iftikhar Ahmed  
-**Position**: Program Director, Master of Software Engineering
+**Position**: Program Director, Master of Data Science
 
 **Submitted**: December 28, 2024  
 **Institution**: University of Europe for Applied Sciences

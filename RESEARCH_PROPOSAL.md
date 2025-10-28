@@ -1,12 +1,12 @@
 # AI-Powered Menstrual Health Prediction System Using Ensemble Machine Learning
-## Research Proposal for Master of Software Engineering
+## Research Proposal for Master of Data Science
 
 **Student Name**: Geoffrey Rono  
 **Matriculation No.**: 74199495  
 **Email**: geoffrey.rono@ue-germany.de  
 **Supervisor**: Prof. Dr. Iftikhar Ahmed  
 **Institution**: University of Europe for Applied Sciences  
-**Program**: MSc Data Science (Master of Software Engineering)  
+**Program**: Master of Data Science (MSc Data Science)  
 **Date**: December 28, 2024
 
 ---
@@ -194,116 +194,79 @@ The system implements a **weighted ensemble** of four complementary algorithms:
 
 ### 4.4 Datasets
 
-#### 4.4.1 Primary Dataset: Flow Ai User Data (Collected)
+#### 4.4.1 Primary Dataset: Flow Ai Real Tester Data
 
-**Source**: In-app user tracking (anonymized, consent-based)
+**Source**: Real user data collected through Flow Ai app, EU-hosted Firebase Firestore (eur3 region)
 
-**Size**: 
-- Target: 10,000 users × 12 cycles = 120,000 cycles
-- Current (pilot): 1,000 users × 6 cycles = 6,000 cycles
+**Dataset Parameters**: 
+- **Real Testers**: ~10-30 users (scaling toward ~100)
+- **Tracking Duration**: 1-3 complete menstrual cycles per user
+- **Data Volume**: ~200-600 daily tracking logs (realistic current state)
+- **Demographics**: Diverse age range, primarily European users
+- **Collection Period**: Ongoing pilot testing
 
 **Data Points**:
-- Cycle start/end dates
-- Flow intensity (5 levels)
+- Cycle start/end dates, flow intensity
 - Symptoms (70+ types with severity)
-- Mood & energy levels (10-point scale)
+- Mood & energy levels
 - Pain locations and intensity
-- Notes (text, anonymized)
+- Optional biometric data
 
-**Collection Period**: January 2024 - December 2025
-
-**Ethical Approval**: IRB-approved protocol, informed consent, GDPR-compliant
+**Ethical Compliance**: Anonymized consent from all testers, GDPR-compliant EU storage, no identifiable data in dataset export
 
 ---
 
-#### 4.4.2 Secondary Dataset: Public Menstrual Health Datasets
+#### 4.4.2 Supplementary Dataset: Small Synthetic Augmentation (Only if Needed)
 
-**1. Clue Dataset (Open Science Initiative)**
-- **Source**: Clue app data donation program
-- **Size**: ~100,000 anonymized cycles
-- **Features**: Cycle lengths, bleeding, symptoms, mood
-- **Access**: Public research dataset (non-commercial use)
-- **URL**: https://helloclue.com/research-and-data
+**Purpose**: Improve model robustness only if necessary for edge cases
 
-**2. MyFLo Dataset**
-- **Source**: Academic research collaboration
-- **Size**: ~50,000 cycles from research studies
-- **Features**: Detailed symptom tracking, validated medical data
-- **Access**: Research partnership agreement
+**Approach**:
+- Small-scale synthetic data generation if needed
+- **Clearly documented as synthetic in thesis**
 
-**3. NHANES (National Health and Nutrition Examination Survey)**
-- **Source**: CDC (Centers for Disease Control and Prevention)
-- **Size**: 10,000+ women's reproductive health data
-- **Features**: Demographics, health conditions, laboratory results
-- **Access**: Public dataset
-- **URL**: https://www.cdc.gov/nchs/nhanes/
+**Validation Strategy**:
+- All primary results based on real tester data
+- Full transparency regarding any synthetic data use
 
 ---
 
-#### 4.4.3 Tertiary Dataset: Clinical Validation Data
+#### 4.4.3 Biometric Data (Optional)
 
-**PCOS Detection Dataset**
-- **Source**: Kaggle PCOS dataset + Clinical partnerships
-- **Size**: 5,000+ diagnosed cases
-- **Features**: Hormonal levels, ultrasound results, symptoms
-- **Purpose**: Train and validate health condition detection models
-
-**Endometriosis Dataset**
-- **Source**: Academic medical centers (partnership)
-- **Size**: 2,000+ diagnosed cases
-- **Features**: Surgical records, symptom severity, imaging
-- **Purpose**: Anomaly detection validation
+**Optional Integration**: Biometric data from users who opt-in
+- Heart rate, sleep, temperature, activity data
+- Privacy-preserving on-device processing
 
 ---
 
-#### 4.4.4 Biometric Data Integration
+#### 4.4.4 Data Preprocessing & Quality Assurance
 
-**Apple HealthKit / Google Fit**
-- **Source**: User consent-based sync
-- **Data**: Heart rate, steps, sleep, temperature, HRV
-- **Purpose**: Biometric correlation analysis
-- **Privacy**: On-device processing, no raw data storage
+**Preprocessing Pipeline**:
+- **Anonymization**: Export from Firebase with all identifiable data removed
+- **Cleaning**: Missing data handling, outlier detection
+- **Normalization**: Per-user normalization for personalization
+- **Feature Engineering**: Standard ML preprocessing
 
----
-
-#### 4.4.5 Data Preprocessing & Augmentation
-
-**Preprocessing**:
-- Missing data imputation (KNN, forward-fill for time series)
-- Outlier detection and removal (IQR method, Z-score)
-- Data normalization (per-user for personalization)
-- Temporal alignment (handle irregular tracking)
-
-**Data Augmentation**:
-- SMOTE for minority classes (irregular cycles)
-- Synthetic cycle generation (GAN-based, validated)
-- Permutation testing for robustness
-
-**Data Quality Assurance**:
-- Validation rules (cycle lengths 15-60 days)
-- Cross-validation with medical literature
-- User feedback verification
+**Data Quality**:
+- Validation rules for physiologically plausible values
+- User feedback for data accuracy
 
 ---
 
 ### 4.5 Evaluation Metrics
 
-#### 4.5.1 Prediction Accuracy Metrics
+#### 4.5.1 Prediction Metrics (Appropriate for ~200-600 records)
 
-**Primary Metrics**:
-- **Accuracy**: (TP + TN) / Total predictions - Target: >90%
-- **Precision**: TP / (TP + FP) - Target: >88%
-- **Recall**: TP / (TP + FN) - Target: >92%
-- **F1-Score**: Harmonic mean of precision and recall - Target: >90%
+**Classification Metrics**:
+- Precision, Recall, F1-Score
+- Sufficient for pilot dataset size
 
-**Prediction Window Tolerance**:
-- Exact match: ±0 days
-- Acceptable: ±1 day (primary metric)
-- Acceptable range: ±2 days (secondary metric)
+**Time-Series Forecasting**:
+- MAE (Mean Absolute Error)
+- RMSE (Root Mean Square Error)
 
-**Confidence Calibration**:
-- Expected Calibration Error (ECE) <0.1
-- Brier Score for probability calibration
+**Pattern Analysis**:
+- Clustering for symptom patterns
+- Correlation analysis
 
 #### 4.5.2 Model Performance Metrics
 
@@ -312,17 +275,13 @@ The system implements a **weighted ensemble** of four complementary algorithms:
 - **Battery Impact**: <2% per day with active tracking
 - **Computational Efficiency**: FLOPS, memory usage
 
-#### 4.5.3 Clinical Validation Metrics
+#### 4.5.3 User Experience Evaluation (Mixed-Methods)
 
-**PCOS Detection**:
-- Sensitivity (True Positive Rate): >85%
-- Specificity (True Negative Rate): >90%
-- AUC-ROC: >0.92
-
-**Endometriosis Detection**:
-- Sensitivity: >80%
-- Specificity: >88%
-- AUC-ROC: >0.90
+**Quantitative**: ML model performance on real tester data
+**Qualitative**: User surveys and optional interviews evaluating:
+- Prediction usefulness perception
+- Trust in AI recommendations
+- Privacy and data control satisfaction
 
 #### 4.5.4 User Experience Metrics
 
@@ -336,11 +295,11 @@ The system implements a **weighted ensemble** of four complementary algorithms:
 ### 4.6 Experimental Procedure
 
 #### Phase 1: Data Collection & Preparation (Months 1-3)
-1. Deploy pilot app to 1,000 beta users
-2. Collect initial 6 months of cycle data
-3. Integrate public datasets (Clue, NHANES)
-4. Preprocess and clean all datasets
-5. Establish data quality baselines
+1. Complete real tester data collection (~10-30 users, 1-3 cycles each)
+2. Export and anonymize data from EU-hosted Firebase Firestore  
+3. Preprocess and clean dataset (~200-600 daily logs)
+4. Establish data quality baselines
+5. Exploratory data analysis
 
 #### Phase 2: Model Development (Months 4-6)
 1. Train individual ML models (SVM, RF, NN, LSTM)
@@ -350,25 +309,25 @@ The system implements a **weighted ensemble** of four complementary algorithms:
 5. Build prediction API and inference pipeline
 
 #### Phase 3: Validation & Testing (Months 7-9)
-1. Test on hold-out dataset (10% of data)
-2. Compare against baseline (simple statistical models)
-3. A/B testing with user groups (ensemble vs. single models)
-4. Clinical validation with healthcare providers
+1. Test on hold-out dataset (temporal split)
+2. Compare against baseline statistical methods
+3. Conduct user surveys/interviews with testers
+4. Evaluate user perception: trust, usefulness, privacy
 5. Performance benchmarking on mobile devices
 
 #### Phase 4: Optimization & Iteration (Months 10-11)
-1. Analyze results and identify failure cases
-2. Retrain models with full dataset
-3. Optimize ensemble weights based on performance
-4. Implement explainability features (SHAP)
-5. User feedback integration and model refinement
+1. Analyze results from pilot study and identify model failure cases
+2. Retrain models with optimized hyperparameters based on pilot feedback
+3. Optimize ensemble weights based on validation performance
+4. Implement and evaluate explainability features (SHAP, confidence scores)
+5. Integrate user feedback from surveys and refine prediction logic
 
 #### Phase 5: Final Evaluation & Documentation (Month 12)
-1. Comprehensive accuracy testing across user populations
-2. Clinical validation study writeup
+1. Comprehensive evaluation with real tester cohort
+2. Mixed-methods analysis: quantitative ML + qualitative user feedback
 3. Comparative analysis with existing solutions
-4. Thesis writing and peer-review submission
-5. Prepare for app store deployment
+4. Complete thesis documentation
+5. Prepare for supervisor approval and thesis registration
 
 ---
 
@@ -400,33 +359,36 @@ The system implements a **weighted ensemble** of four complementary algorithms:
 
 ### 4.9 Limitations
 
-1. **Sample Size**: Initial pilot limited to 1,000 users (scaling to 10,000+)
-2. **Data Quality**: Relies on user-reported data (potential inaccuracies)
-3. **Generalizability**: May not generalize to all populations (ongoing international expansion)
-4. **Computational Constraints**: Mobile device limitations for large models
-5. **External Factors**: Cannot capture all factors affecting menstrual cycles (genetics, undisclosed medications)
+1. **Sample Size**: Pilot limited to ~10-30 real testers (target scale to ~100), 1-3 cycles each (~200-600 records)
+   - ✅ Sufficient for classification metrics (F1, Precision, Recall)
+   - ✅ Adequate for time-series forecasting (MAE, RMSE)  
+   - ✅ Enables symptom clustering and pattern analysis
+2. **Data Quality**: User-reported data (self-tracking potential inaccuracies)
+3. **Generalizability**: Primarily European pilot users
+4. **Computational Constraints**: Mobile device limitations
+5. **External Factors**: Cannot capture all cycle-affecting variables
 
 ---
 
 ### 4.10 Expected Contributions
 
 #### Technical Contributions:
-1. Novel ensemble ML architecture for menstrual cycle prediction
-2. On-device, privacy-preserving ML implementation
-3. Real-time anomaly detection framework for health risks
-4. Explainable AI for healthcare applications
+1. Validated ensemble ML architecture for menstrual cycle prediction using real pilot data
+2. On-device, privacy-preserving ML implementation with EU GDPR compliance
+3. Pattern detection framework for cycle irregularities and health anomalies
+4. Explainable AI framework for healthcare predictions with confidence scoring
 
 #### Scientific Contributions:
-1. Largest validated dataset for menstrual health ML research
-2. Peer-reviewed publications in health informatics journals
-3. Open-source ML models for research community
-4. Clinical validation framework for period tracking apps
+1. Empirical ML validation with realistic real tester data (~10-30 users, scaling to ~100)
+2. Mixed-methods: quantitative ML + qualitative user trust/usefulness evaluation  
+3. Privacy-preserving methodology for menstrual health AI
+4. Real-world AI deployment framework for sensitive health tracking
 
 #### Practical Contributions:
-1. Production-ready mobile app with >90% accuracy
-2. Improved women's health outcomes through early detection
-3. Healthcare provider integration tools
-4. Privacy-first health AI architecture
+1. Production-ready mobile app evaluated with real user data
+2. Privacy-first architecture model for FemTech applications
+3. User trust and acceptance framework for AI health predictions
+4. Ethical guidelines for menstrual health AI deployment
 
 ---
 
@@ -463,13 +425,13 @@ The system implements a **weighted ensemble** of four complementary algorithms:
 ---
 
 ## 6. TIMELINE
-
-| Phase | Duration | Months | Key Milestones |
+|| Phase | Duration | Months | Key Milestones |
 |-------|----------|--------|----------------|
-| Phase 1 | 3 months | Jan-Mar 2025 | Data collection complete (6,000 cycles) |
-| Phase 2 | 3 months | Apr-Jun 2025 | Models trained, ensemble optimized |
-| Phase 3 | 3 months | Jul-Sep 2025 | Validation complete, accuracy >90% |
-| Phase 4 | 2 months | Oct-Nov 2025 | Optimization, user testing |
+| Phase 1 | 3 months | Jan-Mar 2025 | Real tester data collection (~10-30 users, 1-3 cycles) |
+| Phase 2 | 3 months | Apr-Jun 2025 | ML models trained, ensemble optimized |
+| Phase 3 | 3 months | Jul-Sep 2025 | Validation, user surveys/interviews |
+| Phase 4 | 2 months | Oct-Nov 2025 | Optimization, explainability, feedback integration |
+| Phase 5 | 1 month | Dec 2025 | Final evaluation, thesis completion, submission |
 | Phase 5 | 1 month | Dec 2025 | Thesis defense, paper submission |
 
 ---
@@ -521,14 +483,14 @@ The system implements a **weighted ensemble** of four complementary algorithms:
 **Supervisor**:  
 Prof. Dr. Iftikhar Ahmed  
 Professor & Program Director  
-Master of Software Engineering  
+Master of Data Science  
 University of Europe for Applied Sciences  
 Email: iftikhar.ahmed@ue-germany.de
 
 ---
 
 **Submitted**: December 28, 2024  
-**For**: Master of Software Engineering Research Proposal  
+**For**: Master of Data Science Research Proposal  
 **Confidential Research Document**
 
 ---
