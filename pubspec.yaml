@@ -74,8 +74,8 @@ dependencies:
   # OAuth Authentication
   google_sign_in: ^6.2.2
   sign_in_with_apple: ^7.0.1
-  firebase_auth: ^5.3.1
-  firebase_core: ^3.8.0
+  firebase_auth: ^5.7.0
+  firebase_core: ^3.15.2
   
   # State Persistence
   hydrated_bloc: ^9.1.2
@@ -88,7 +88,7 @@ dependencies:
   uuid: ^4.2.1
   
   # Cloud Firestore
-  cloud_firestore: ^5.4.4
+  cloud_firestore: ^5.6.12
   
   # Crypto
   crypto: ^3.0.3

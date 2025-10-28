@@ -60,7 +60,7 @@ post_install do |installer|
       config.build_settings['ONLY_ACTIVE_ARCH'] = 'YES'
       
       # For simulator builds, use arm64 for Apple Silicon
-      config.build_settings['ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+      config.build_settings['ARCHS[sdk=iphonesimulator*]'] = 'arm64 x86_64'
       
       # For device builds, use arm64
       config.build_settings['ARCHS[sdk=iphoneos*]'] = 'arm64'
@@ -68,6 +68,10 @@ post_install do |installer|
       # Remove conflicting architecture exclusions
       config.build_settings.delete('EXCLUDED_ARCHS[sdk=iphonesimulator*]')
       config.build_settings.delete('EXCLUDED_ARCHS[sdk=iphoneos*]')
+      
+      # Fix Swift compilation for all architectures
+      config.build_settings['SWIFT_VERSION'] = '5.0'
+      config.build_settings['SWIFT_SUPPRESS_WARNINGS'] = 'YES'
       
       # Fix leveldb port issue for newer Firebase versions
       if target.name == 'leveldb-library'
@@ -83,9 +87,10 @@ post_install do |installer|
       end
       
       # Fix GoogleDataTransport nanopb issue
-      if target.name.include?("GoogleDataTransport") || target.name.include?("nanopb")
+      if target.name.include?("GoogleDataTransport") || target.name.include?("nanopb") || target.name.include?("FirebaseFirestore")
         config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= []
         config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << 'PB_FIELD_32BIT=1'
+        config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << 'PB_FIELD_16BIT=1'
         config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << 'PB_NO_PACKED_STRUCTS=1'
         config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << 'PB_ENABLE_MALLOC=1'
       end
@@ -93,7 +98,8 @@ post_install do |installer|
       # Fix Firebase version definition
       if target.name.include?("Firebase")
         config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= []
-        config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << 'Firebase_VERSION=3.15.2'
+        config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << 'Firebase_VERSION=11.15.0'
+        config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << 'FIRFirestore_VERSION=11.15.0'
       end
       
       # Fix GoogleSignIn SDK version
