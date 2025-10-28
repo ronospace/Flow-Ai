@@ -22,6 +22,7 @@ import '../widgets/language_selector.dart';
 import '../widgets/theme_selector.dart';
 import '../widgets/profile_section.dart';
 import '../widgets/cyclesync_integration.dart';
+import '../widgets/theme_switcher_card.dart';
 import 'help_screen.dart';
 import 'account_management_screen.dart';
 
@@ -130,36 +131,19 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
                       
                       const SizedBox(height: 24),
 
+                      // Prominent Theme Switcher Card
+                      const ThemeSwitcherCard()
+                          .animate(controller: _sectionsController)
+                          .slideY(begin: 0.3, end: 0)
+                          .fadeIn(delay: 50.ms),
+
+                      const SizedBox(height: 24),
+
                       // App Preferences
                       SettingsSection(
                         title: l10n.appPreferences,
-                        icon: Icons.palette_outlined,
+                        icon: Icons.language_outlined,
                         children: [
-                          SettingsTile(
-                            leading: const Icon(Icons.palette, color: AppTheme.primaryRose),
-                            title: l10n.theme,
-                            subtitle: l10n.customizeAppearance,
-                            onTap: () => _showThemeSelector(context),
-                            trailing: Consumer<SettingsProvider>(
-                              builder: (context, settings, child) {
-                                return Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                  decoration: BoxDecoration(
-                                    color: AppTheme.primaryRose.withValues(alpha: 0.1),
-                                    borderRadius: BorderRadius.circular(16),
-                                  ),
-                                  child: Text(
-                                    _getThemeName(settings.preferences.themeMode),
-                                    style: const TextStyle(
-                                      color: AppTheme.primaryRose,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
                           SettingsTile(
                             leading: const Icon(Icons.language, color: AppTheme.accentMint),
                             title: l10n.language,
