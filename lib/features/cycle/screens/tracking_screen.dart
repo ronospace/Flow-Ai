@@ -294,6 +294,9 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
           debugPrint('✅ Data saved successfully for ${DateFormat('MMMM d, yyyy').format(_selectedDate)}');
         }
         
+        // Auto-navigate to next tab after save (unless on last tab)
+        _autoNavigateToNextTab();
+        
         // Smart post-save navigation after delay
         _scheduleSmartNavigation();
         
@@ -1170,6 +1173,27 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
         return 'Very heavy flow - consider tracking for your doctor.';
       default:
         return 'Keep tracking for better insights';
+    }
+  }
+  
+  // Auto-navigate to next tab after save
+  void _autoNavigateToNextTab() {
+    // Get current tab index
+    final currentTabIndex = _tabController.index;
+    final totalTabs = _tabController.length;
+    
+    // Only navigate if not on last tab
+    if (currentTabIndex < totalTabs - 1) {
+      // Schedule navigation with small delay for better UX
+      Timer(const Duration(milliseconds: 800), () {
+        if (mounted) {
+          // Animate to next tab
+          _tabController.animateTo(currentTabIndex + 1);
+          
+          // Provide haptic feedback
+          HapticFeedback.selectionClick();
+        }
+      });
     }
   }
   
