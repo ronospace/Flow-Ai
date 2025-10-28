@@ -3,6 +3,8 @@ import 'package:permission_handler/permission_handler.dart';
 import '../models/onboarding_step.dart';
 import '../../../core/services/user_preferences_service.dart';
 import '../../../core/services/notification_service.dart';
+import '../../../core/services/demo_data_service.dart';
+import '../../../core/services/onboarding_tutorial_service.dart';
 
 class OnboardingProvider extends ChangeNotifier {
   bool _isCompleted = false;
@@ -11,7 +13,11 @@ class OnboardingProvider extends ChangeNotifier {
   final List<OnboardingStep> _steps = OnboardingData.steps;
   UserPreferencesService? _preferencesService;
   final NotificationService _notificationService = NotificationService.instance;
+  final DemoDataService _demoDataService = DemoDataService();
+  final OnboardingTutorialService _tutorialService = OnboardingTutorialService();
   bool _isInitialized = false;
+  bool _useDemoData = false;
+  DemoDataSet? _demoDataSet;
 
   OnboardingProvider() {
     _initializeServices();
@@ -38,6 +44,9 @@ class OnboardingProvider extends ChangeNotifier {
   bool get isFirstStep => _currentStep == 0;
   bool get isLastStep => _currentStep == _steps.length - 1;
   double get progress => (_currentStep + 1) / _steps.length;
+  bool get useDemoData => _useDemoData;
+  DemoDataSet? get demoDataSet => _demoDataSet;
+  OnboardingTutorialService get tutorialService => _tutorialService;
 
   Future<void> completeOnboarding() async {
     _setLoading(true);
@@ -151,6 +160,55 @@ class OnboardingProvider extends ChangeNotifier {
 
   void _setLoading(bool loading) {
     _isLoading = loading;
+    notifyListeners();
+  }
+
+  // Demo data management
+  void setUseDemoData(bool value) {
+    _useDemoData = value;
+    if (value) {
+      _demoDataSet = _demoDataService.generateCompleteDemo();
+    } else {
+      _demoDataSet = null;
+    }
+    notifyListeners();
+  }
+
+  /// Generate demo data for exploration
+  Future<DemoDataSet> generateDemoData() async {
+    _setLoading(true);
+    try {
+      final demoData = _demoDataService.generateCompleteDemo();
+      _demoDataSet = demoData;
+      return demoData;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  /// Start a tutorial for a specific feature
+  Future<void> startTutorial(String tutorialId) async {
+    final completed = await _tutorialService.isTutorialCompleted(tutorialId);
+    if (!completed) {
+      // Tutorial will be shown by the UI layer
+      debugPrint('Starting tutorial: $tutorialId');
+    }
+  }
+
+  /// Check if a tutorial should be shown
+  Future<bool> shouldShowTutorial(String tutorialId) async {
+    return !(await _tutorialService.isTutorialCompleted(tutorialId));
+  }
+
+  /// Reset specific tutorial
+  Future<void> resetTutorial(String tutorialId) async {
+    await _tutorialService.resetTutorial(tutorialId);
+    notifyListeners();
+  }
+
+  /// Reset all tutorials
+  Future<void> resetAllTutorials() async {
+    await _tutorialService.resetAllTutorials();
     notifyListeners();
   }
 }
