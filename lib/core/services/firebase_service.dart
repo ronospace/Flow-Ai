@@ -70,10 +70,12 @@ class FirebaseService {
       
     } catch (e, stackTrace) {
       debugPrint('❌ Firebase initialization failed: $e');
-      debugPrint('Stack trace: $stackTrace');
+      debugPrint('⚠️ App will continue without Firebase');
       
       // Don't throw - allow app to continue without Firebase
       _initialized = false;
+      _auth = null;
+      _firestore = null;
     }
   }
 
