@@ -9,11 +9,18 @@ Flow Ai is a comprehensive period tracking application featuring advanced machin
 [![iOS](https://img.shields.io/badge/iOS-16.0+-000000?logo=apple)](https://www.apple.com/ios)
 [![Android](https://img.shields.io/badge/Android-7.0+-3DDC84?logo=android)](https://www.android.com)
 
-## ✨ Current Version: 2.1.2
+## ✨ Current Version: 2.2.0
 
-### 🆕 Latest Features (v2.1.2)
+### 🆕 Latest Features (v2.2.0 - December 2024)
 
-#### **AI Transparency & Citations**
+#### **Enhanced Onboarding & User Experience**
+- 🎓 **Progressive Disclosure**: Smart onboarding with interactive tutorials and feature discovery
+- 🎭 **Demo Data Mode**: Pre-populated realistic cycle data for app review and testing
+- ✨ **Improved Tracking Flow**: Manual tab control for better subcategory completion
+- 📱 **iOS Optimization**: Local-first architecture with Firebase workaround for Xcode 15.5+
+- 🎯 **Enhanced Visual Feedback**: Celebration animations and real-time sync indicators
+
+#### **AI Transparency & Citations (v2.1.2)**
 - 🔬 **View Sources**: Tap to see the science behind every prediction
 - 📚 **Citation Dialogs**: Detailed methodology explanations for AI insights
 - 🎯 **Cycle Regularity Sources**: Statistical analysis, ML models, medical guidelines (ACOG/WHO)
@@ -98,7 +105,22 @@ flutter pub get
 flutter gen-l10n
 
 # Run the app
-flutter run
+flutter run                           # Default device
+flutter run -d chrome                 # Web
+flutter run -d "iPhone 16 Pro Max"    # iOS Simulator (Firebase disabled)
+```
+
+### iOS Development Notes
+
+**Firebase Workaround**: Due to Firebase Core 3.15.2 compatibility issues with Xcode 15.5+, Firebase is temporarily disabled for iOS builds. The app uses local authentication and offline-first architecture.
+
+```bash
+# Clean rebuild for iOS (if pods fail)
+flutter clean
+rm -rf ios/Pods ios/Podfile.lock
+flutter pub get
+cd ios && pod install && cd ..
+flutter run -d "iPhone 16 Pro Max"
 ```
 
 ### Build for Production
@@ -110,16 +132,20 @@ flutter build appbundle --release
 # Android APK
 flutter build apk --release
 
-# iOS IPA (macOS only)
-flutter build ipa --release
+# iOS IPA (macOS only, Firebase disabled)
+flutter build ipa --release --no-codesign
+
+# Web
+flutter build web --release
 ```
 
 ## 📦 Release Builds
 
-**Version 2.1.2+11**
+**Version 2.2.0+12**
 - **Android App Bundle**: 61 MB (`build/app/outputs/bundle/release/app-release.aab`)
 - **Android APK**: 87 MB (`build/app/outputs/flutter-apk/app-release.apk`)
-- **iOS IPA**: 29 MB (`build/ios/ipa/Flow Ai.ipa`)
+- **iOS IPA**: 29 MB (`build/ios/ipa/Flow Ai.ipa`) - Firebase disabled for Xcode 15.5+ compatibility
+- **Web**: Optimized PWA build available
 
 ## 🧪 Testing
 
@@ -203,6 +229,7 @@ See [MISSIONS_PENDING.md](MISSIONS_PENDING.md) and [COMING_SOON.md](COMING_SOON.
 
 ## 📝 Release Notes
 
+- [v2.2.0 - Enhanced Onboarding & iOS Optimization](RELEASE_NOTES_v2.2.0.md) ⭐ Latest
 - [v2.1.2 - AI Transparency & Citations](RELEASE_NOTES_v2.1.2.md)
 - [v2.0.0 - Production Release](RELEASE_NOTES_v2.0.0.md)
 
