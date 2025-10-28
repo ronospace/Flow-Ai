@@ -1,10 +1,12 @@
 # AI-Powered Menstrual Health Prediction System Using Ensemble Machine Learning
 ## Research Proposal for Master of Software Engineering
 
-**Student Name**: [Your Name]  
+**Student Name**: Geoffrey Rono  
+**Matriculation No.**: 74199495  
+**Email**: geoffrey.rono@ue-germany.de  
 **Supervisor**: Prof. Dr. Iftikhar Ahmed  
-**Institution**: [Your University]  
-**Program**: Master of Software Engineering  
+**Institution**: University of Europe for Applied Sciences  
+**Program**: MSc Data Science (Master of Software Engineering)  
 **Date**: December 28, 2024
 
 ---
@@ -510,18 +512,18 @@ The system implements a **weighted ensemble** of four complementary algorithms:
 
 ## 9. CONTACT INFORMATION
 
-**Student**: [Your Name]  
-**Email**: [Your Email]  
-**Phone**: [Your Phone]  
-**LinkedIn**: [Your Profile]  
-**GitHub**: https://github.com/ronospace/ZyraFlow
+**Student**: Geoffrey Rono  
+**Matriculation No.**: 74199495  
+**Email**: geoffrey.rono@ue-germany.de  
+**GitHub**: https://github.com/ronospace/ZyraFlow  
+**LinkedIn**: linkedin.com/in/geoffrey-rono
 
 **Supervisor**:  
 Prof. Dr. Iftikhar Ahmed  
 Professor & Program Director  
 Master of Software Engineering  
-[University Name]  
-Email: [Supervisor Email]
+University of Europe for Applied Sciences  
+Email: iftikhar.ahmed@ue-germany.de
 
 ---
 
