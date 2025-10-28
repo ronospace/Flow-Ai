@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/ai/period_prediction_engine.dart';
+import '../../../core/widgets/citation_widget.dart';
 
 class AIPredictionCard extends StatelessWidget {
   final PeriodPrediction prediction;
@@ -73,6 +74,17 @@ class AIPredictionCard extends StatelessWidget {
               
               // Fertility window
               _buildFertilityWindow(theme),
+              
+              const SizedBox(height: 16),
+              
+              // View Sources Citation
+              CitationWidget(
+                dialogTitle: 'Period Prediction Sources',
+                dialogDescription: 'Our AI predictions are based on:',
+                citations: CitationSets.predictionAccuracy,
+                linkColor: AppTheme.primaryPurple,
+                iconColor: AppTheme.primaryPurple,
+              ),
             ],
           ),
         ),
