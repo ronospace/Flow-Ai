@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/services/app_state_service.dart';
+import '../../../core/services/data_export_service.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/app_logger.dart';
 import '../../../core/ui/adaptive_messages.dart';
@@ -313,7 +314,40 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
 
                       const SizedBox(height: 24),
 
-                      // Authentication & Security
+                      // Data & Privacy
+                      SettingsSection(
+                        title: 'Data & Privacy',
+                        icon: Icons.cloud_download_outlined,
+                        children: [
+                          SettingsTile(
+                            leading: const Icon(Icons.picture_as_pdf, color: AppTheme.primaryRose),
+                            title: 'Export as PDF',
+                            subtitle: 'Download health report as PDF',
+                            onTap: () => _exportData(context, ExportFormat.pdf),
+                            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                          ),
+                          SettingsTile(
+                            leading: const Icon(Icons.table_chart, color: AppTheme.accentMint),
+                            title: 'Export as CSV',
+                            subtitle: 'Download data for spreadsheet analysis',
+                            onTap: () => _exportData(context, ExportFormat.csv),
+                            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                          ),
+                          SettingsTile(
+                            leading: const Icon(Icons.code, color: AppTheme.secondaryBlue),
+                            title: 'Export as JSON',
+                            subtitle: 'Complete data backup in JSON format',
+                            onTap: () => _exportData(context, ExportFormat.json),
+                            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                          ),
+                        ],
+                      ).animate(controller: _sectionsController)
+                          .slideY(begin: 0.3, end: 0)
+                          .fadeIn(delay: 300.ms),
+
+                      const SizedBox(height: 24),
+
+                      // Account & Security
                       SettingsSection(
                         title: 'Authentication & Security',
                         icon: Icons.security_outlined,
@@ -763,6 +797,137 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
       context,
       MaterialPageRoute(
         builder: (context) => const AccountManagementScreen(),
+      ),
+    );
+  }
+
+  Future<void> _exportData(BuildContext context, ExportFormat format) async {
+    // Show date range selector
+    final dateRange = await _showDateRangeSelector(context);
+    if (dateRange == null) return;
+
+    // Show loading
+    if (!mounted) return;
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: Card(
+          child: Padding(
+            padding: EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(height: 16),
+                Text('Exporting data...'),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    try {
+      final exportService = DataExportService();
+      final filePath = await exportService.exportData(
+        format: format,
+        dateRange: dateRange,
+      );
+
+      if (!mounted) return;
+      Navigator.pop(context); // Close loading
+
+      if (filePath != null) {
+        // Show success with share option
+        _showExportSuccess(context, filePath, format);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Export failed. Please try again.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      Navigator.pop(context); // Close loading
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Export error: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  Future<ExportDateRange?> _showDateRangeSelector(BuildContext context) async {
+    return await showDialog<ExportDateRange>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Select Date Range'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              title: const Text('Last 30 Days'),
+              onTap: () => Navigator.pop(context, ExportDateRange.last30Days()),
+            ),
+            ListTile(
+              title: const Text('Last 3 Months'),
+              onTap: () => Navigator.pop(context, ExportDateRange.last3Months()),
+            ),
+            ListTile(
+              title: const Text('Last 6 Months'),
+              onTap: () => Navigator.pop(context, ExportDateRange.last6Months()),
+            ),
+            ListTile(
+              title: const Text('Last 12 Months'),
+              onTap: () => Navigator.pop(context, ExportDateRange.last12Months()),
+            ),
+            ListTile(
+              title: const Text('All Time'),
+              onTap: () => Navigator.pop(context, ExportDateRange.allTime()),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showExportSuccess(BuildContext context, String filePath, ExportFormat format) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(
+              Icons.check_circle,
+              color: AppTheme.successGreen,
+            ),
+            const SizedBox(width: 12),
+            const Text('Export Successful'),
+          ],
+        ),
+        content: Text('Your data has been exported as ${format.name.toUpperCase()}.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Close'),
+          ),
+          ElevatedButton.icon(
+            onPressed: () async {
+              Navigator.pop(context);
+              await DataExportService().shareExportedFile(filePath);
+            },
+            icon: const Icon(Icons.share),
+            label: const Text('Share'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppTheme.primaryPurple,
+              foregroundColor: Colors.white,
+            ),
+          ),
+        ],
       ),
     );
   }
