@@ -1,7 +1,11 @@
 # AI-Powered Menstrual Health Prediction System
 ## Research Proposal Summary for Master of Software Engineering
 
-**Student**: [Your Name]  
+**Student**: Geoffrey Rono  
+**Program**: MSc Data Science  
+**Matriculation No.**: 74199495  
+**Email**: geoffrey.rono@ue-germany.de  
+**Institution**: University of Europe for Applied Sciences  
 **Supervisor**: Prof. Dr. Iftikhar Ahmed, Program Director, Master of Software Engineering  
 **Date**: December 28, 2024
 
@@ -203,11 +207,16 @@ Menstrual health affects 1.8 billion women globally, yet current period tracking
 
 ## CONTACT
 
-**Student**: [Your Name] | Email: [Your Email] | GitHub: github.com/ronospace/ZyraFlow  
-**Supervisor**: Prof. Dr. Iftikhar Ahmed | Master of Software Engineering Program Director
+**Student**: Geoffrey Rono  
+**Matriculation No.**: 74199495  
+**Email**: geoffrey.rono@ue-germany.de  
+**GitHub**: github.com/ronospace/ZyraFlow  
+
+**Supervisor**: Prof. Dr. Iftikhar Ahmed  
+**Position**: Program Director, Master of Software Engineering
 
 **Submitted**: December 28, 2024  
-**Institution**: [Your University]
+**Institution**: University of Europe for Applied Sciences
 
 ---
 
