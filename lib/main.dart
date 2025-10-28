@@ -6,7 +6,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'generated/app_localizations.dart';
-import 'core/services/firebase_service.dart';
+// import 'core/services/firebase_service.dart'; // Temporarily disabled for iOS build
 import 'core/utils/app_logger.dart';
 
 import 'core/theme/app_theme.dart';
@@ -63,10 +63,11 @@ Future<void> _initializeCriticalServices() async {
     AppLogger.error('Platform Service initialization failed: $e');
   }
   
-  // Initialize Firebase service
+  // Initialize Firebase service - skip on iOS for now due to Firebase Core compatibility issue
   try {
-    await FirebaseService().initialize();
-    AppLogger.success('Firebase initialized successfully');
+    // TODO: Re-enable when Firebase Core 4.x is released with iOS compatibility
+    // await FirebaseService().initialize();
+    AppLogger.warning('Firebase temporarily disabled for iOS build compatibility');
   } catch (e) {
     AppLogger.warning('Firebase initialization failed (app will continue): $e');
   }
