@@ -396,6 +396,38 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
 
                       const SizedBox(height: 24),
 
+                      // Help & Tutorials
+                      SettingsSection(
+                        title: 'Help & Tutorials',
+                        icon: Icons.school_outlined,
+                        children: [
+                          SettingsTile(
+                            leading: const Icon(Icons.play_circle_outline, color: AppTheme.secondaryBlue),
+                            title: 'Interactive Tutorials',
+                            subtitle: 'Learn how to use Flow Ai features',
+                            onTap: () => _showTutorialsDialog(context),
+                            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                          ),
+                          SettingsTile(
+                            leading: const Icon(Icons.refresh, color: AppTheme.warningOrange),
+                            title: 'Reset Tutorials',
+                            subtitle: 'See all tutorials again',
+                            onTap: () => _resetAllTutorials(context),
+                          ),
+                          SettingsTile(
+                            leading: const Icon(Icons.lock_open, color: AppTheme.accentMint),
+                            title: 'Feature Progress',
+                            subtitle: 'View unlocked features and progress',
+                            onTap: () => _showFeatureProgress(context),
+                            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                          ),
+                        ],
+                      ).animate(controller: _sectionsController)
+                          .slideY(begin: 0.3, end: 0)
+                          .fadeIn(delay: 450.ms),
+
+                      const SizedBox(height: 24),
+
                       // Support & About
                       SettingsSection(
                         title: l10n.supportAbout,
@@ -926,6 +958,207 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
               backgroundColor: AppTheme.primaryPurple,
               foregroundColor: Colors.white,
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showTutorialsDialog(BuildContext context) {
+    final tutorials = [
+      {'id': 'home', 'title': 'Home Dashboard', 'icon': Icons.home},
+      {'id': 'calendar', 'title': 'Cycle Calendar', 'icon': Icons.calendar_month},
+      {'id': 'tracking', 'title': 'Daily Tracking', 'icon': Icons.track_changes},
+      {'id': 'insights', 'title': 'AI Insights', 'icon': Icons.insights},
+      {'id': 'health', 'title': 'Health Dashboard', 'icon': Icons.favorite},
+      {'id': 'settings', 'title': 'Settings', 'icon': Icons.settings},
+      {'id': 'ai_coach', 'title': 'AI Coach', 'icon': Icons.smart_toy},
+    ];
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Interactive Tutorials'),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: tutorials.length,
+            itemBuilder: (context, index) {
+              final tutorial = tutorials[index];
+              return ListTile(
+                leading: Icon(tutorial['icon'] as IconData, color: AppTheme.primaryRose),
+                title: Text(tutorial['title'] as String),
+                subtitle: const Text('Tap to start tutorial'),
+                trailing: const Icon(Icons.play_arrow),
+                onTap: () {
+                  Navigator.pop(context);
+                  _startTutorial(context, tutorial['id'] as String);
+                },
+              );
+            },
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Close'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _startTutorial(BuildContext context, String tutorialId) async {
+    try {
+      final onboardingProvider = Provider.of<OnboardingProvider>(context, listen: false);
+      await onboardingProvider.startTutorial(tutorialId);
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Tutorial "$tutorialId" will start shortly'),
+            backgroundColor: AppTheme.successGreen,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to start tutorial: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _resetAllTutorials(BuildContext context) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.refresh, color: AppTheme.warningOrange),
+            const SizedBox(width: 12),
+            const Text('Reset Tutorials'),
+          ],
+        ),
+        content: const Text(
+          'This will reset all tutorials so you can view them again. Are you sure?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppTheme.warningOrange,
+            ),
+            child: const Text('Reset'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm == true && mounted) {
+      try {
+        final onboardingProvider = Provider.of<OnboardingProvider>(context, listen: false);
+        await onboardingProvider.resetAllTutorials();
+        
+        if (mounted) {
+          HapticFeedback.mediumImpact();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('All tutorials have been reset'),
+              backgroundColor: AppTheme.successGreen,
+            ),
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Failed to reset tutorials: $e'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    }
+  }
+
+  void _showFeatureProgress(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.lock_open, color: AppTheme.accentMint),
+            const SizedBox(width: 12),
+            const Text('Feature Progress'),
+          ],
+        ),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Progressive feature unlocking helps you learn the app gradually. Track your progress below:',
+                style: TextStyle(fontSize: 14),
+              ),
+              const SizedBox(height: 16),
+              _buildFeatureProgressItem('Basic Tracking', 1.0, 'Unlocked'),
+              _buildFeatureProgressItem('Cycle Calendar', 0.8, '4/5 actions'),
+              _buildFeatureProgressItem('AI Insights', 0.3, '3/10 entries'),
+              _buildFeatureProgressItem('Health Dashboard', 0.0, 'Locked'),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Close'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFeatureProgressItem(String title, double progress, String subtitle) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(fontWeight: FontWeight.w600),
+              ),
+              Text(
+                subtitle,
+                style: TextStyle(
+                  color: progress == 1.0 ? AppTheme.successGreen : AppTheme.mediumGrey,
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          LinearProgressIndicator(
+            value: progress,
+            backgroundColor: AppTheme.lightGrey,
+            valueColor: AlwaysStoppedAnimation<Color>(
+              progress == 1.0 ? AppTheme.successGreen : AppTheme.primaryPurple,
+            ),
+            borderRadius: BorderRadius.circular(4),
           ),
         ],
       ),
