@@ -24,6 +24,7 @@ import 'core/services/memory_manager.dart';
 import 'core/services/platform_service.dart';
 import 'core/services/production_analytics_service.dart';
 import 'core/config/platform_config.dart';
+import 'core/services/progressive_disclosure_service.dart';
 import 'features/onboarding/providers/onboarding_provider.dart';
 import 'features/cycle/providers/cycle_provider.dart';
 import 'features/insights/providers/insights_provider.dart';
@@ -206,12 +207,15 @@ class FlowAIApp extends StatefulWidget {
 
 class _FlowAIAppState extends State<FlowAIApp> {
   late SettingsProvider settingsProvider;
+  late ProgressiveDisclosureService progressiveDisclosureService;
 
   @override
   void initState() {
     super.initState();
     settingsProvider = SettingsProvider();
+    progressiveDisclosureService = ProgressiveDisclosureService();
     _initializeSettings();
+    _initializeProgressiveDisclosure();
   }
 
   Future<void> _initializeSettings() async {
@@ -220,6 +224,15 @@ class _FlowAIAppState extends State<FlowAIApp> {
       setState(() {
         // Settings initialized
       });
+    }
+  }
+
+  Future<void> _initializeProgressiveDisclosure() async {
+    try {
+      await progressiveDisclosureService.initialize();
+      AppLogger.success('Progressive Disclosure Service initialized');
+    } catch (e) {
+      AppLogger.warning('Progressive Disclosure initialization failed: $e');
     }
   }
 
@@ -232,6 +245,7 @@ class _FlowAIAppState extends State<FlowAIApp> {
         ChangeNotifierProvider(create: (_) => InsightsProvider()),
         ChangeNotifierProvider(create: (_) => HealthProvider()),
         ChangeNotifierProvider.value(value: settingsProvider),
+        ChangeNotifierProvider.value(value: progressiveDisclosureService),
         ChangeNotifierProvider(create: (_) => PremiumProvider()),
       ],
       child: Consumer<SettingsProvider>(
