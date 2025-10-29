@@ -1,0 +1,194 @@
+================================================================================
+FLOW AI - APP STORE DESCRIPTION
+================================================================================
+
+SUBTITLE (30 characters max):
+Smart Period & Wellness Tracking
+
+APP STORE DESCRIPTION:
+================================================================================
+
+Flow Ai is your intelligent companion for menstrual health tracking, powered by advanced AI to provide personalized cycle predictions and health insights.
+
+🌸 SMART CYCLE PREDICTIONS
+Track your period with confidence using AI-powered predictions that learn from your unique cycle patterns. Get accurate forecasts for your next period, fertility window, and ovulation with confidence scores.
+
+📊 COMPREHENSIVE HEALTH TRACKING
+• Log 70+ symptoms with severity ratings
+• Track mood changes and energy levels
+• Monitor pain locations and intensity
+• Record sleep quality and stress levels
+• Note lifestyle factors that affect your cycle
+
+🤖 AI-POWERED INSIGHTS
+• Personalized cycle predictions based on your history
+• Symptom pattern recognition and correlations
+• Fertility window optimization
+• Health trend analysis and recommendations
+• Cycle irregularity detection
+
+💬 EDUCATIONAL AI ASSISTANT
+Ask questions about menstrual health and get instant, informative answers from our AI chat assistant. Learn about your body, cycle phases, symptoms, and wellness tips in a safe, judgment-free space.
+
+🔒 PRIVACY FIRST
+Your health data is yours alone:
+• Local-first storage (works offline)
+• Medical-grade encryption (AES-256)
+• Optional cloud sync (EU region, GDPR-compliant)
+• Biometric authentication (Face ID/Touch ID)
+• Complete data export anytime (PDF/CSV/JSON)
+• No third-party data sharing
+
+✨ BEAUTIFUL & INTUITIVE
+• Clean, modern interface designed for daily use
+• Dark mode with automatic switching
+• Color-coded calendar for easy cycle visualization
+• Smooth animations and responsive design
+• 36 languages supported
+
+📈 HEALTH DASHBOARD
+• Cycle regularity analysis
+• Average cycle length statistics
+• Symptom frequency charts
+• Mood pattern visualizations
+• Long-term health trends
+
+🎯 KEY FEATURES
+• Period start/end date logging
+• Flow intensity tracking (5 levels)
+• Fertility and ovulation predictions
+• PMS symptom tracking
+• Medication and supplement logging
+• Notes and observations
+• Reminder notifications
+• Data backup and restore
+• Multi-device sync (optional)
+
+💝 DESIGNED FOR YOU
+Whether you're tracking for pregnancy planning, avoiding pregnancy, understanding your cycle better, or managing symptoms, Flow Ai adapts to your needs with personalized insights that improve over time.
+
+🌍 TRUSTED & SECURE
+• GDPR and HIPAA-ready architecture
+• Transparent AI predictions with confidence scores
+• Clear disclaimers (informational, not medical advice)
+• Regular updates and improvements
+• Responsive customer support
+
+FREE FEATURES:
+✓ Unlimited cycle tracking
+✓ AI-powered predictions
+✓ 70+ symptom logging
+✓ Health dashboard
+✓ Calendar view
+✓ Basic data export
+✓ AI chat assistant
+
+PREMIUM FEATURES:
+• Ad-free experience
+• Advanced AI insights
+• Unlimited data export
+• Priority support
+• Early access to new features
+• Custom reminders
+• Advanced analytics
+
+Download Flow Ai today and take control of your menstrual health with the power of artificial intelligence!
+
+---
+
+KEYWORDS (100 characters max):
+period tracker, menstrual cycle, fertility, ovulation, pregnancy, period calendar, women's health
+
+---
+
+PROMOTIONAL TEXT (170 characters max):
+Track your cycle with AI-powered predictions. Smart, private, and personalized menstrual health tracking with 70+ symptoms and fertility insights. Try free today!
+
+---
+
+WHAT'S NEW (Version 2.1.2):
+• Enhanced theme switcher with beautiful glassmorphism design
+• Improved UI polish across all screens
+• Better dark mode support with smoother transitions
+• Performance optimizations for faster loading
+• Bug fixes and stability improvements
+• Updated to latest Flutter framework
+
+We're constantly improving Flow Ai based on your feedback. Thank you for being part of our community!
+
+---
+
+SUPPORT INFORMATION:
+Email: support@flowai.app
+Website: https://flow-iq-app.web.app
+Privacy Policy: https://flow-iq-app.web.app/privacy
+Terms of Service: https://flow-iq-app.web.app/terms
+
+---
+
+CATEGORY: Health & Fitness
+SUBCATEGORY: Women's Health
+
+AGE RATING: 13+ (with parental consent for minors)
+
+CONTENT WARNINGS:
+• Medical/Treatment Information
+• Realistic health and medical content
+
+---
+
+APP PREVIEW VIDEO SCRIPT (Optional):
+[Scene 1 - Home] "Meet Flow Ai - your intelligent period tracking companion"
+[Scene 2 - Tracking] "Log symptoms, mood, and flow with just a few taps"
+[Scene 3 - AI Predictions] "Get personalized predictions powered by AI"
+[Scene 4 - Calendar] "Visualize your cycle patterns at a glance"
+[Scene 5 - Insights] "Understand your body with detailed health insights"
+[Scene 6 - Privacy] "Your data stays private with medical-grade encryption"
+[Scene 7 - CTA] "Download Flow Ai today - Free on the App Store"
+
+---
+
+SCREENSHOTS CAPTIONS:
+1. Home Dashboard - "Track your current cycle and upcoming periods"
+2. AI Predictions - "Get accurate predictions with confidence scores"
+3. Calendar View - "Visualize months of cycle data at a glance"
+4. Symptom Tracking - "Log 70+ symptoms with detailed severity ratings"
+5. Health Insights - "Discover patterns and trends in your cycle"
+6. AI Chat - "Ask questions and get instant health information"
+7. Settings - "Customize your experience with themes and privacy controls"
+
+---
+
+APP STORE SEARCH OPTIMIZATION:
+Primary Keywords: period tracker, menstrual cycle, fertility tracker
+Secondary Keywords: ovulation calendar, pregnancy planning, PMS tracker
+Long-tail Keywords: AI period prediction, smart cycle tracking, women's health app
+
+---
+
+COMPETITIVE ADVANTAGES:
+vs Flo: Better AI predictions, stronger privacy focus, no data selling
+vs Clue: More comprehensive symptom tracking, AI chat assistant
+vs Period Tracker: Advanced ML algorithms, personalized insights
+vs Eve: Professional health insights, medical-grade encryption
+
+---
+
+TARGET AUDIENCE:
+• Women aged 13-50 tracking menstrual cycles
+• Those planning or avoiding pregnancy
+• Users managing PCOS, endometriosis, or other conditions
+• Anyone seeking to understand their cycle better
+• Privacy-conscious users wanting data control
+
+---
+
+USER TESTIMONIALS (for marketing, not App Store):
+"Finally, a period tracker that actually learns my patterns!"
+"The AI predictions are incredibly accurate after a few months."
+"I love that my data stays private and I can export everything."
+"Best cycle tracking app I've used. The insights are so helpful!"
+
+================================================================================
+END OF APP STORE DESCRIPTION
+================================================================================
