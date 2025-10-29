@@ -1,0 +1,356 @@
+================================================================================
+FLOW AI - APPLE APP REVIEW DEMO ACCOUNT & TEST LOGS
+================================================================================
+Submission Date: 29 October 2025
+App Name: Flow Ai
+Bundle ID: com.flowai.health
+Version: 2.1.2 (Build 11)
+Platform: iOS 16.0+
+
+================================================================================
+DEMO ACCOUNT CREDENTIALS
+================================================================================
+
+Email: demo@flowai.app
+Password: FlowAiDemo2025!
+
+IMPORTANT: This is a pre-configured demo account with realistic sample data
+for testing all app features without requiring actual user cycle tracking.
+
+================================================================================
+DEMO ACCOUNT FEATURES & TEST SCENARIOS
+================================================================================
+
+1. ONBOARDING FLOW (First-Time User Experience)
+   ✓ Welcome screens with app introduction
+   ✓ Permission requests (Notifications, Health data - optional)
+   ✓ Initial profile setup
+   ✓ Quick tutorial on key features
+
+2. HOME DASHBOARD
+   ✓ Current cycle status display
+   ✓ Next period prediction with confidence score
+   ✓ Fertility window visualization
+   ✓ Quick action buttons (Log Period, Track Symptoms)
+   ✓ AI insights cards
+
+3. CYCLE CALENDAR VIEW
+   ✓ Monthly calendar with cycle phase indicators
+   ✓ Historical cycle data (6 months of sample data)
+   ✓ Period days marked in red
+   ✓ Fertile window highlighted
+   ✓ Tap any day to view/edit tracking data
+
+4. DAILY TRACKING FEATURES
+   ✓ Period flow logging (Light/Medium/Heavy/Spotting)
+   ✓ 70+ symptoms with severity ratings
+   ✓ Mood tracking (Happy, Sad, Anxious, Energetic, etc.)
+   ✓ Energy levels (1-10 scale)
+   ✓ Sleep quality tracking
+   ✓ Notes and observations
+
+5. AI INSIGHTS & PREDICTIONS
+   ✓ Cycle prediction with confidence scores
+   ✓ Symptom patterns and correlations
+   ✓ Fertility window predictions
+   ✓ Health insights based on tracking data
+   ✓ Personalized recommendations
+
+6. HEALTH DASHBOARD
+   ✓ Cycle regularity analysis
+   ✓ Average cycle length statistics
+   ✓ Symptom frequency charts
+   ✓ Mood patterns visualization
+   ✓ Health trends over time
+
+7. SETTINGS & PREFERENCES
+   ✓ Theme switcher (Auto/Light/Dark mode)
+   ✓ Language selection (36 languages supported)
+   ✓ Notification preferences
+   ✓ Data export (PDF/CSV/JSON)
+   ✓ Privacy settings
+   ✓ Account management
+
+8. DATA PRIVACY FEATURES
+   ✓ Local data storage (offline-first)
+   ✓ Optional cloud sync (Firebase - EU region)
+   ✓ Biometric authentication (Face ID/Touch ID)
+   ✓ Data encryption at rest
+   ✓ GDPR-compliant data handling
+   ✓ Complete data export and deletion options
+
+================================================================================
+PRE-LOADED DEMO DATA
+================================================================================
+
+The demo account includes 6 months of realistic cycle data:
+
+CYCLE 1 (May 2025)
+- Period: May 5-9 (5 days)
+- Cycle Length: 28 days
+- Symptoms: Cramps (Moderate), Headache (Mild), Fatigue (Moderate)
+- Mood: Irritable days 1-2, Normal days 3-5
+
+CYCLE 2 (June 2025)
+- Period: June 2-6 (5 days)
+- Cycle Length: 28 days
+- Symptoms: Bloating (Moderate), Breast Tenderness (Mild)
+- Mood: Anxious day 1, Happy days 3-6
+
+CYCLE 3 (July 2025)
+- Period: July 1-5 (5 days)
+- Cycle Length: 29 days
+- Symptoms: Lower back pain (Moderate), Cramps (Severe)
+- Mood: Sad days 1-2, Energetic days 4-5
+
+CYCLE 4 (August 2025)
+- Period: July 30 - August 3 (5 days)
+- Cycle Length: 29 days
+- Symptoms: Fatigue (Severe), Headache (Moderate)
+- Mood: Irritable days 1-3, Calm days 4-5
+
+CYCLE 5 (September 2025)
+- Period: September 28 - October 2 (5 days)
+- Cycle Length: 30 days
+- Symptoms: Cramps (Moderate), Nausea (Mild)
+- Mood: Normal throughout
+
+CYCLE 6 (October 2025)
+- Period: October 28 - November 1 (5 days, ongoing in demo)
+- Predicted Cycle Length: 29 days
+- Current tracking includes symptoms and mood
+
+================================================================================
+AI PREDICTION EXAMPLES IN DEMO ACCOUNT
+================================================================================
+
+1. Next Period Prediction:
+   - Predicted Date: November 26, 2025
+   - Confidence: 87%
+   - Based on: 6 cycle history, average length 28.8 days
+
+2. Fertility Window Prediction:
+   - Most Fertile Days: November 11-15, 2025
+   - Ovulation (predicted): November 13, 2025
+   - Confidence: 82%
+
+3. Symptom Predictions:
+   - Cramps: High likelihood (85%) days 1-3 of next period
+   - Fatigue: Moderate likelihood (72%) days 1-2
+   - Mood changes: Expected 2-3 days before period start
+
+4. Health Insights Available:
+   - "Your cycles are regular with 28-30 day patterns"
+   - "Cramps are most common during days 1-3 of your period"
+   - "Energy levels typically dip 2 days before period starts"
+   - "You track consistently - great for accurate predictions!"
+
+================================================================================
+TESTING INSTRUCTIONS FOR APPLE REVIEW TEAM
+================================================================================
+
+STEP 1: Login
+1. Open Flow Ai app
+2. If onboarding appears, complete it or skip to login
+3. Enter email: demo@flowai.app
+4. Enter password: FlowAiDemo2025!
+5. Tap "Sign In"
+
+STEP 2: Explore Home Dashboard
+1. View current cycle status (currently in period phase)
+2. Check next period prediction card
+3. Tap on AI insights cards to view detailed information
+4. Note the confidence scores on predictions
+
+STEP 3: View Cycle Calendar
+1. Tap "Calendar" in bottom navigation
+2. Scroll through past 6 months of data
+3. Tap any date to see detailed tracking for that day
+4. Note color coding: Red = Period, Purple = Fertile, Pink = Other phases
+
+STEP 4: Test Daily Tracking
+1. Tap "Track" in bottom navigation or "Log Today" button
+2. Select period flow if needed
+3. Add symptoms (tap + to add more)
+4. Rate mood and energy levels
+5. Add optional notes
+6. Tap "Save" to store entry
+
+STEP 5: View AI Insights
+1. Tap "Insights" in bottom navigation
+2. Explore prediction accuracy metrics
+3. View symptom correlation charts
+4. Check cycle regularity analysis
+5. Review personalized health recommendations
+
+STEP 6: Check Health Dashboard
+1. Tap "Health" in bottom navigation
+2. View cycle statistics (average length, regularity)
+3. Explore symptom frequency charts
+4. Check mood pattern visualizations
+5. Review historical trends
+
+STEP 7: Test Settings
+1. Tap "Settings" in bottom navigation
+2. Try theme switcher (Auto/Light/Dark)
+3. View notification preferences
+4. Test data export (PDF/CSV/JSON)
+5. Check privacy settings
+
+STEP 8: Test Data Privacy Features
+1. Go to Settings > Privacy
+2. Enable biometric authentication (if available on device)
+3. Test data export functionality
+4. View privacy policy and terms
+5. Check data deletion options (DO NOT DELETE demo account)
+
+================================================================================
+EXPECTED BEHAVIOR & PERFORMANCE
+================================================================================
+
+✓ App launches in < 3 seconds on iPhone 12 or newer
+✓ Smooth 60fps animations throughout
+✓ No crashes or freezes during normal use
+✓ All buttons and navigation responsive
+✓ Data persists after closing and reopening app
+✓ Offline functionality works (no internet required for core features)
+✓ Cloud sync optional (can be disabled in settings)
+✓ Biometric auth works with Face ID/Touch ID when enabled
+✓ Dark mode fully supported and automatic based on system settings
+✓ All 36 languages available and properly translated
+
+================================================================================
+KNOWN LIMITATIONS (By Design)
+================================================================================
+
+1. Firebase Features Limited on iOS:
+   - Cloud sync temporarily disabled in v2.1.2 due to Firebase Core 4.x compatibility
+   - Local SQLite database used instead (offline-first approach)
+   - No impact on core functionality or user experience
+
+2. Demo Account Restrictions:
+   - Cannot delete demo account (protected for review testing)
+   - Some advanced features locked for demo (premium subscription preview)
+
+3. Health Data Integration:
+   - Apple Health integration optional (user must grant permission)
+   - App functions fully without Health app connection
+
+================================================================================
+PRIVACY & DATA HANDLING
+================================================================================
+
+1. Data Storage:
+   - Primary: Local SQLite database (encrypted)
+   - Optional: Firebase Firestore (EU region only, GDPR-compliant)
+   - No third-party analytics or tracking
+
+2. Permissions Requested:
+   - Notifications: For period and symptom reminders (optional)
+   - Health: For biometric data import (optional)
+   - Biometric: For app locking with Face ID/Touch ID (optional)
+
+3. Data Not Collected:
+   - No location tracking
+   - No advertising identifiers
+   - No user behavior analytics
+   - No data sharing with third parties
+
+4. User Control:
+   - Full data export available (PDF/CSV/JSON)
+   - Complete data deletion option
+   - Cloud sync can be disabled
+   - Account deletion available
+
+================================================================================
+ADVERTISING CONTENT
+================================================================================
+
+The app includes non-intrusive banner ads:
+- Displayed at bottom of some screens
+- Marked as "Advertisement" clearly
+- Can be removed with premium subscription
+- Google AdMob integration (Google certified)
+- GDPR/CCPA compliant ad serving
+- No personalized tracking required
+
+Ad Frequency:
+- Max 1 banner per screen
+- No interstitial or video ads
+- No ads during critical health tracking flows
+
+================================================================================
+SUBSCRIPTION INFORMATION
+================================================================================
+
+Premium Features (In-App Purchase):
+- Ad-free experience
+- Advanced AI insights
+- Unlimited data export
+- Priority support
+- Early access to new features
+
+Price: $4.99/month or $39.99/year
+Free Trial: 7 days
+
+Note: All core tracking features remain FREE forever
+
+================================================================================
+CONTACT INFORMATION
+================================================================================
+
+Developer: Geoffrey Rono
+Support Email: support@flowai.app
+Website: https://flow-iq-app.web.app
+Privacy Policy: https://flow-iq-app.web.app/privacy
+Terms of Service: https://flow-iq-app.web.app/terms
+
+Support Response Time: Within 24 hours
+
+================================================================================
+ADDITIONAL NOTES FOR REVIEW TEAM
+================================================================================
+
+1. This is a health & fitness app focused on menstrual cycle tracking
+2. All health predictions are clearly marked as "informational, not medical advice"
+3. App encourages users to consult healthcare providers for medical concerns
+4. GDPR and HIPAA-ready architecture with strong privacy protections
+5. Designed for users aged 13+ (with parental consent for minors)
+6. No social features or user-generated content sharing
+7. All content is appropriate and health-focused
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+If you encounter any issues:
+
+1. Login Problems:
+   - Ensure email is: demo@flowai.app (no spaces)
+   - Password is case-sensitive: FlowAiDemo2025!
+   - Try "Forgot Password" if needed (will send reset to demo email)
+
+2. Data Not Showing:
+   - Demo data loads automatically on first login
+   - If calendar is empty, try logging out and back in
+   - Check internet connection for initial sync
+
+3. Crashes or Freezes:
+   - Force quit app and reopen
+   - Ensure iOS 16.0 or higher
+   - Check device storage (app requires ~150MB)
+
+4. Feature Not Working:
+   - Some features require permissions (check Settings > Flow Ai)
+   - Premium features show preview only in demo
+   - Cloud sync is optional and can be disabled
+
+================================================================================
+END OF DEMO LOGS
+================================================================================
+
+This document provides comprehensive information for Apple App Review testing.
+For any questions or clarifications, please contact: geoffrey.rono@ue-germany.de
+
+Last Updated: 29 October 2025
+Document Version: 2.1.2
