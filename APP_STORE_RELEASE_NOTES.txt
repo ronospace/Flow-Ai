@@ -1,0 +1,68 @@
+Flow Ai is a menstrual health tracking app that uses artificial intelligence to provide personalized cycle predictions and health insights.
+
+KEY FEATURES FOR REVIEW:
+• Period and cycle tracking with AI-powered predictions
+• Health symptom logging and mood tracking (70+ symptoms)
+• Educational AI chat assistant for menstrual health questions
+• Biometric authentication (Face ID/Touch ID) for privacy protection
+• Local data storage with optional cloud sync (EU region, GDPR-compliant)
+• Data export functionality (PDF, CSV, JSON formats)
+• Multi-language support (36 languages)
+• Dark mode with automatic theme switching
+
+DEMO ACCOUNT:
+Email: demo@flowai.app
+Password: FlowAiDemo2025!
+
+TESTING NOTES:
+• The demo account includes 6 months of pre-populated cycle data to showcase AI predictions
+• The app works best when users log period data over time to improve AI predictions
+• All health data is stored locally by default for maximum privacy
+• Optional cloud sync can be enabled (stored in EU region, GDPR-compliant)
+• AI chat provides educational content only (not medical advice)
+• App requires iOS 16.0+ for optimal functionality
+
+KEY SCREENS TO TEST:
+1. Home Dashboard - Shows current cycle status and next period prediction
+2. Calendar View - Displays historical cycle data with color-coded phases
+3. Daily Tracking - Log symptoms, mood, energy levels, and notes
+4. AI Insights - View predictions with confidence scores and patterns
+5. Health Dashboard - Statistics and trends over time
+6. Settings - Theme switcher, language selection, data export, privacy controls
+
+NEW IN VERSION 2.1.2:
+• Enhanced theme switcher with prominent glassmorphism design
+• Improved UI polish across all screens
+• Better dark mode support with automatic switching
+• Performance optimizations and faster load times
+• Bug fixes and stability improvements
+
+PRIVACY & SECURITY:
+• No personal health data is shared with third parties
+• All data encryption follows medical-grade standards (AES-256)
+• Users can delete all data at any time through settings
+• Biometric authentication adds extra security layer
+• GDPR-compliant data handling and storage
+• Complete data export available in multiple formats
+
+ADVERTISING:
+• Non-intrusive banner ads displayed at bottom of select screens
+• Clearly marked as "Advertisement"
+• Can be removed with premium subscription
+• Google AdMob integration (GDPR/CCPA compliant)
+• No personalized tracking required
+
+Please test the period tracking, calendar view, AI insights, and settings features. The app is designed to be intuitive for women of all ages and prioritizes privacy and data control.
+
+For comprehensive testing instructions, see the attached APPLE_DEMO_LOGS.txt document which includes:
+- Detailed step-by-step testing scenarios
+- Expected behavior for each feature
+- Troubleshooting guide
+- Complete privacy and data handling information
+
+SUPPORT:
+Email: support@flowai.app
+Website: https://flow-iq-app.web.app
+Response Time: Within 24 hours
+
+Thank you for reviewing Flow Ai!
