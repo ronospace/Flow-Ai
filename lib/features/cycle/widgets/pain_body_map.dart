@@ -354,6 +354,11 @@ class _PainBodyMapState extends State<PainBodyMap> {
                   onPressed: () {
                     widget.onPainAreaChanged(_selectedArea!, 0);
                     HapticFeedback.lightImpact();
+                    
+                    // Clear selection after removing pain
+                    setState(() {
+                      _selectedArea = null;
+                    });
                   },
                   icon: const Icon(
                     Icons.close,
@@ -425,6 +430,17 @@ class _PainBodyMapState extends State<PainBodyMap> {
             onChanged: (value) {
               widget.onPainAreaChanged(_selectedArea!, value);
               HapticFeedback.selectionClick();
+              
+              // Auto-dismiss selection after a short delay to show the body map
+              if (value > 0) {
+                Future.delayed(const Duration(milliseconds: 800), () {
+                  if (mounted) {
+                    setState(() {
+                      _selectedArea = null;
+                    });
+                  }
+                });
+              }
             },
           ),
         ),
@@ -495,6 +511,17 @@ class _PainBodyMapState extends State<PainBodyMap> {
                 onTap: () {
                   widget.onPainAreaChanged(_selectedArea!, level);
                   HapticFeedback.selectionClick();
+                  
+                  // Auto-dismiss selection after pain level is set
+                  if (level > 0) {
+                    Future.delayed(const Duration(milliseconds: 600), () {
+                      if (mounted) {
+                        setState(() {
+                          _selectedArea = null;
+                        });
+                      }
+                    });
+                  }
                 },
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
@@ -668,11 +695,13 @@ class _PainBodyMapState extends State<PainBodyMap> {
                 return GestureDetector(
                   onTap: () {
                     widget.onPainAreaChanged(areaId, level);
-                    setState(() {
-                      _selectedArea = areaId;
-                    });
                     HapticFeedback.mediumImpact();
                     Navigator.pop(context);
+                    
+                    // Clear selection to show full body map
+                    setState(() {
+                      _selectedArea = null;
+                    });
                   },
                   child: Container(
                     decoration: BoxDecoration(
