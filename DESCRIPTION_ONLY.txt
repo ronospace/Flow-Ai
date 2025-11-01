@@ -1,0 +1,85 @@
+Flow Ai is your intelligent companion for menstrual health tracking, powered by advanced AI to provide personalized cycle predictions and health insights.
+
+🌸 SMART CYCLE PREDICTIONS
+Track your period with confidence using AI-powered predictions that learn from your unique cycle patterns. Get accurate forecasts for your next period, fertility window, and ovulation with confidence scores.
+
+📊 COMPREHENSIVE HEALTH TRACKING
+• Log 70+ symptoms with severity ratings
+• Track mood changes and energy levels
+• Monitor pain locations and intensity
+• Record sleep quality and stress levels
+• Note lifestyle factors that affect your cycle
+
+🤖 AI-POWERED INSIGHTS
+• Personalized cycle predictions based on your history
+• Symptom pattern recognition and correlations
+• Fertility window optimization
+• Health trend analysis and recommendations
+• Cycle irregularity detection
+
+💬 EDUCATIONAL AI ASSISTANT
+Ask questions about menstrual health and get instant, informative answers from our AI chat assistant. Learn about your body, cycle phases, symptoms, and wellness tips in a safe, judgment-free space.
+
+🔒 PRIVACY FIRST
+Your health data is yours alone:
+• Local-first storage (works offline)
+• Medical-grade encryption (AES-256)
+• Optional cloud sync (EU region, GDPR-compliant)
+• Biometric authentication (Face ID/Touch ID)
+• Complete data export anytime (PDF/CSV/JSON)
+• No third-party data sharing
+
+✨ BEAUTIFUL & INTUITIVE
+• Clean, modern interface designed for daily use
+• Dark mode with automatic switching
+• Color-coded calendar for easy cycle visualization
+• Smooth animations and responsive design
+• 36 languages supported
+
+📈 HEALTH DASHBOARD
+• Cycle regularity analysis
+• Average cycle length statistics
+• Symptom frequency charts
+• Mood pattern visualizations
+• Long-term health trends
+
+🎯 KEY FEATURES
+• Period start/end date logging
+• Flow intensity tracking (5 levels)
+• Fertility and ovulation predictions
+• PMS symptom tracking
+• Medication and supplement logging
+• Notes and observations
+• Reminder notifications
+• Data backup and restore
+• Multi-device sync (optional)
+
+💝 DESIGNED FOR YOU
+Whether you're tracking for pregnancy planning, avoiding pregnancy, understanding your cycle better, or managing symptoms, Flow Ai adapts to your needs with personalized insights that improve over time.
+
+🌍 TRUSTED & SECURE
+• GDPR and HIPAA-ready architecture
+• Transparent AI predictions with confidence scores
+• Clear disclaimers (informational, not medical advice)
+• Regular updates and improvements
+• Responsive customer support
+
+FREE FEATURES:
+✓ Unlimited cycle tracking
+✓ AI-powered predictions
+✓ 70+ symptom logging
+✓ Health dashboard
+✓ Calendar view
+✓ Basic data export
+✓ AI chat assistant
+
+PREMIUM FEATURES:
+• Ad-free experience
+• Advanced AI insights
+• Unlimited data export
+• Priority support
+• Early access to new features
+• Custom reminders
+• Advanced analytics
+
+Download Flow Ai today and take control of your menstrual health with the power of artificial intelligence!
