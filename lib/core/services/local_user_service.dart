@@ -327,7 +327,7 @@ class LocalUserService {
       // Create demo account with complete profile for App Store reviewers
       final result = await createUser(
         email: demoEmail,
-        password: 'FlowAiDemo2024!',
+        password: 'FlowAiDemo2025!',
         displayName: 'Demo User for App Review',
         username: 'demo_reviewer',
       );
@@ -362,7 +362,7 @@ class LocalUserService {
         await setOnboardingCompleted(true);
         
         debugPrint('✅ Demo account auto-created for App Store review with sample data');
-        debugPrint('📧 Demo credentials: demo@flowai.app / FlowAiDemo2024!');
+        debugPrint('📧 Demo credentials: demo@flowai.app / FlowAiDemo2025!');
       } else {
         debugPrint('❌ Failed to create demo account: ${result.error}');
       }
