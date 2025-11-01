@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'conversation_cloud_sync.dart';
 
 /// AI Conversation Memory service to maintain context and user preferences
 /// Now with complete user data isolation
@@ -11,6 +12,7 @@ class AIConversationMemory {
 
   late SharedPreferences _prefs;
   String? _currentUserId; // Track current user for data isolation
+  final ConversationCloudSync _cloudSync = ConversationCloudSync();
   
   // Base memory keys (will be suffixed with user ID)
   static const String _conversationHistoryKey = 'ai_conversation_history';
@@ -29,7 +31,22 @@ class AIConversationMemory {
   Future<void> initialize({String? userId}) async {
     _prefs = await SharedPreferences.getInstance();
     _currentUserId = userId;
-    await _loadMemoryData();
+    
+    // Initialize cloud sync service
+    await _cloudSync.initialize(userId: userId);
+    
+    // Try to restore from cloud first (for new device)
+    final restored = await _cloudSync.restoreFromCloud();
+    if (restored) {
+      // Reload data after cloud restore
+      await _loadMemoryData();
+    } else {
+      // Load from local storage
+      await _loadMemoryData();
+    }
+    
+    // Start auto-sync for cross-device persistence
+    _cloudSync.startAutoSync();
   }
 
   /// Store a conversation message in memory
@@ -47,6 +64,9 @@ class AIConversationMemory {
     }
 
     await _saveConversationHistory();
+    
+    // Sync message to cloud immediately for cross-device persistence
+    await _cloudSync.syncMessage(message);
   }
 
   /// Get relevant conversation context for AI response generation
@@ -101,6 +121,9 @@ class AIConversationMemory {
     await _saveUserPreferences();
     await _saveTopicsOfInterest();
     await _saveFrequentQuestions();
+    
+    // Sync to cloud for cross-device persistence
+    await _cloudSync.syncToCloud();
   }
 
   /// Normalize question text for pattern matching
@@ -301,6 +324,9 @@ class AIConversationMemory {
     await _prefs.remove(_getUserSpecificKey(_topicsOfInterestKey));
     await _prefs.remove(_getUserSpecificKey(_frequentQuestionsKey));
     await _prefs.remove(_getUserSpecificKey(_personalizedInsightsKey));
+    
+    // Clear cloud backup as well
+    await _cloudSync.clearCloudBackup();
   }
   
   /// Clear memory for a specific user (for user data isolation)
@@ -313,13 +339,18 @@ class AIConversationMemory {
   }
 
   /// Get memory statistics for debugging
-  Map<String, dynamic> getMemoryStats() {
+  Future<Map<String, dynamic>> getMemoryStats() async {
+    final syncStatus = await _cloudSync.getSyncStatus();
+    
     return {
       'total_messages': _conversationHistory.length,
       'topics_of_interest': _topicsOfInterest.length,
       'frequent_questions': _frequentQuestions.length,
       'user_preferences': _userPreferences.length,
       'personalized_insights': _personalizedInsights.length,
+      'cloud_sync_enabled': syncStatus['sync_enabled'],
+      'last_cloud_sync': syncStatus['last_sync'],
+      'pending_cloud_sync': syncStatus['pending_sync'],
     };
   }
 

@@ -24,7 +24,7 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
         final isConnected = settings.preferences.syncWithCycleSync;
         
         return SettingsSection(
-          title: 'Flow Ai Integration',
+          title: 'Flow iQ Integration',
           icon: Icons.local_hospital_outlined,
           children: [
             // Connection Status
@@ -108,7 +108,7 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                             const SizedBox(height: 4),
                             Text(
                               isConnected
-                                  ? 'Your data syncs with Flow Ai Clinical'
+                                  ? 'Your data syncs with Flow iQ Clinical'
                                   : 'Connect to sync your cycle data with clinical app',
                               style: TextStyle(
                                 fontSize: 14,
@@ -176,10 +176,10 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                 isConnected ? Icons.sync : Icons.sync_disabled,
                 color: isConnected ? AppTheme.successGreen : AppTheme.warningOrange,
               ),
-              title: isConnected ? 'Disconnect Flow Ai' : 'Connect to Flow Ai',
+              title: isConnected ? 'Disconnect Flow iQ' : 'Connect to Flow iQ',
               subtitle: isConnected 
-                  ? 'Stop syncing with Flow Ai Clinical'
-                  : 'Sync your cycle data with Flow Ai Clinical',
+                  ? 'Stop syncing with Flow iQ Clinical'
+                  : 'Sync your cycle data with Flow iQ Clinical',
               trailing: _isConnecting
                   ? const SizedBox(width: 20,
                       height: 20,
@@ -247,7 +247,7 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                       ),
                       const SizedBox(width: 8),
                       const Text(
-                        'About Flow Ai Integration',
+                        'About Flow iQ Integration',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -258,7 +258,7 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Connect Flow Ai with Flow Ai Clinical to sync your menstrual cycle data across platforms. Your data remains secure and encrypted during transfer.',
+                    'Connect Flow Ai with Flow iQ Clinical to sync your menstrual cycle data across platforms. Flow iQ is our clinical app project (https://github.com/ronospace/Flow-iQ) for healthcare providers. Your data remains secure and encrypted during transfer.',
                     style: TextStyle(
                       fontSize: 12,
                       color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
@@ -610,7 +610,7 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
               const SizedBox(height: 24),
               
               Text(
-                'Flow Ai Coming Soon! 🏥',
+                'Flow iQ Coming Soon! 🏥',
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppTheme.darkGrey,
@@ -621,7 +621,7 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
               const SizedBox(height: 16),
               
               Text(
-                'We\'re developing the Flow Ai integration to connect with healthcare providers and clinical systems for enhanced cycle tracking and medical insights.',
+                'We\'re developing the Flow iQ integration to connect with healthcare providers and clinical systems for enhanced cycle tracking and medical insights. Flow iQ (https://github.com/ronospace/Flow-iQ) is our AI-powered clinical app for reproductive health professionals.',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppTheme.mediumGrey,
                   height: 1.5,
