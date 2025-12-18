@@ -231,6 +231,12 @@ abstract class AppLocalizations {
   /// **'Cycle Length: {length} days'**
   String cycleLength(int length);
 
+  /// Label for cycle length
+  ///
+  /// In en, this message translates to:
+  /// **'Cycle Length'**
+  String get cycleLengthLabel;
+
   /// Days remaining until next period
   ///
   /// In en, this message translates to:
@@ -776,6 +782,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Update'**
   String get update;
+
+  /// Login button text
+  ///
+  /// In en, this message translates to:
+  /// **'Login'**
+  String get login;
+
+  /// Sign up button text
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Up'**
+  String get signUp;
 
   /// No description provided for @confirm.
   ///
@@ -3236,6 +3254,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Estimated based on your logged patterns'**
   String get estimatedBasedOnPatterns;
+
+  /// Health dashboard matrix title
+  ///
+  /// In en, this message translates to:
+  /// **'Health Dashboard Matrix'**
+  String get healthDashboardMatrix;
+
+  /// Real-time biometric analysis title
+  ///
+  /// In en, this message translates to:
+  /// **'Real-time Biometric Analysis'**
+  String get realTimeBiometricAnalysis;
+
+  /// Predictive analytics center title
+  ///
+  /// In en, this message translates to:
+  /// **'Predictive Analytics Center'**
+  String get predictiveAnalyticsCenter;
+
+  /// AI-powered cycle forecast subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'AI-Powered Cycle Forecast'**
+  String get aiPoweredCycleForecast;
 }
 
 class _AppLocalizationsDelegate

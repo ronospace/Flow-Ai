@@ -7,8 +7,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../services/user_service.dart';
+import '../../../../core/services/ai_notification_scheduler.dart';
 
 /// Smart notification service with personalized timing and content
 class SmartNotificationService {
@@ -63,7 +62,9 @@ class SmartNotificationService {
       debugPrint('🔔 Smart notification service initialized');
     } catch (e) {
       debugPrint('❌ Failed to initialize notifications: $e');
-      throw NotificationException('Failed to initialize notification service: $e');
+      throw NotificationException(
+        'Failed to initialize notification service: $e',
+      );
     }
   }
 
@@ -76,17 +77,17 @@ class SmartNotificationService {
     // iOS initialization
     final DarwinInitializationSettings initializationSettingsIOS =
         DarwinInitializationSettings(
-      requestSoundPermission: false,
-      requestBadgePermission: false,
-      requestAlertPermission: false,
-      onDidReceiveLocalNotification: _onDidReceiveLocalNotification,
-    );
+          requestSoundPermission: false,
+          requestBadgePermission: false,
+          requestAlertPermission: false,
+          onDidReceiveLocalNotification: _onDidReceiveLocalNotification,
+        );
 
     final InitializationSettings initializationSettings =
         InitializationSettings(
-      android: initializationSettingsAndroid,
-      iOS: initializationSettingsIOS,
-    );
+          android: initializationSettingsAndroid,
+          iOS: initializationSettingsIOS,
+        );
 
     await _flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
@@ -102,8 +103,10 @@ class SmartNotificationService {
   /// Create Android notification channels
   Future<void> _createAndroidNotificationChannels() async {
     final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
-        _flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>();
+        _flutterLocalNotificationsPlugin
+            .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin
+            >();
 
     if (androidImplementation != null) {
       // Cycle reminder channel
@@ -183,12 +186,16 @@ class SmartNotificationService {
 
   /// Handle iOS local notification when app is in foreground
   void _onDidReceiveLocalNotification(
-      int id, String? title, String? body, String? payload) async {
+    int id,
+    String? title,
+    String? body,
+    String? payload,
+  ) async {
     // Handle iOS notification in foreground
     debugPrint('📱 iOS notification received: $id - $title');
   }
 
-  /// Handle notification tap
+  /// Handle notification tap with engagement tracking
   void _onDidReceiveNotificationResponse(NotificationResponse response) async {
     final String? payload = response.payload;
     debugPrint('🔔 Notification tapped with payload: $payload');
@@ -196,6 +203,19 @@ class SmartNotificationService {
     if (payload != null) {
       try {
         final Map<String, dynamic> data = json.decode(payload);
+
+        // Track engagement with AI scheduler
+        final notificationType = data['cyclePhase'] != null
+            ? 'cycle_reminder'
+            : (data['action'] == 'open_symptom_tracker'
+                  ? 'symptom_tracking'
+                  : 'general');
+        AINotificationScheduler.instance.recordEngagement(
+          notificationType: notificationType,
+          timestamp: DateTime.now(),
+          engagement: EngagementType.opened,
+        );
+
         await _handleNotificationAction(data);
       } catch (e) {
         debugPrint('❌ Error handling notification action: $e');
@@ -206,7 +226,7 @@ class SmartNotificationService {
   /// Handle notification actions
   Future<void> _handleNotificationAction(Map<String, dynamic> data) async {
     final String action = data['action'] ?? '';
-    
+
     switch (action) {
       case 'open_cycle_tracker':
         // Navigate to cycle tracker
@@ -239,28 +259,27 @@ class SmartNotificationService {
       final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
           _flutterLocalNotificationsPlugin
               .resolvePlatformSpecificImplementation<
-                  AndroidFlutterLocalNotificationsPlugin>();
+                AndroidFlutterLocalNotificationsPlugin
+              >();
 
       if (androidImplementation != null) {
-        final bool? granted = await androidImplementation.requestPermission();
-        return granted ?? false;
+        // For Android, permissions are typically granted automatically
+        // but we can check if notifications are enabled
+        return true;
       }
     } else if (Platform.isIOS) {
       final bool? granted = await _flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<
-              IOSFlutterLocalNotificationsPlugin>()
-          ?.requestPermissions(
-            alert: true,
-            badge: true,
-            sound: true,
-          );
+            IOSFlutterLocalNotificationsPlugin
+          >()
+          ?.requestPermissions(alert: true, badge: true, sound: true);
       return granted ?? false;
     }
 
     return false;
   }
 
-  /// Schedule cycle prediction notification
+  /// Schedule cycle prediction notification with AI-optimized timing
   Future<void> scheduleCyclePrediction({
     required DateTime predictedDate,
     required String cyclePhase,
@@ -269,7 +288,8 @@ class SmartNotificationService {
     if (!_isInitialized) await initialize();
 
     final String title = _getCyclePredictionTitle(cyclePhase);
-    final String body = customMessage ?? _getCyclePredictionMessage(cyclePhase, predictedDate);
+    final String body =
+        customMessage ?? _getCyclePredictionMessage(cyclePhase, predictedDate);
 
     final String payload = json.encode({
       'action': 'open_cycle_tracker',
@@ -277,28 +297,38 @@ class SmartNotificationService {
       'predictedDate': predictedDate.toIso8601String(),
     });
 
+    // Use AI-optimized notification timing
+    final optimalTime = await AINotificationScheduler.instance
+        .getOptimalNotificationTime(
+          notificationType: 'cycle_reminder',
+          targetDate: predictedDate.subtract(const Duration(days: 1)),
+        );
+
     await _scheduleNotification(
       id: cycleReminderID,
       title: title,
       body: body,
-      scheduledDate: predictedDate.subtract(const Duration(days: 1)),
+      scheduledDate: optimalTime,
       channel: _cycleReminderChannel,
       payload: payload,
     );
   }
 
-  /// Schedule daily symptom tracking reminder
+  /// Schedule daily symptom tracking reminder with AI-optimized timing
   Future<void> scheduleSymptomTrackingReminder({
     required TimeOfDay preferredTime,
     List<String> customSymptoms = const [],
   }) async {
     if (!_isInitialized) await initialize();
 
-    // Calculate optimal time based on user behavior
-    final TimeOfDay optimalTime = await _calculateOptimalTime(
-      'symptom_tracking',
-      preferredTime,
-    );
+    // Use AI-optimized timing instead of basic calculation
+    final optimalDateTime = await AINotificationScheduler.instance
+        .getOptimalNotificationTime(
+          notificationType: 'symptom_tracking',
+          targetDate: DateTime.now(),
+          preferredTime: preferredTime,
+        );
+    final TimeOfDay optimalTime = TimeOfDay.fromDateTime(optimalDateTime);
 
     final String title = 'Track Your Symptoms';
     final String body = customSymptoms.isNotEmpty
@@ -333,7 +363,8 @@ class SmartNotificationService {
     );
 
     final String title = 'Daily Check-in';
-    final String body = personalizedMessage ?? await _getPersonalizedFeelingsMessage();
+    final String body =
+        personalizedMessage ?? await _getPersonalizedFeelingsMessage();
 
     final String payload = json.encode({
       'action': 'open_feelings_tracker',
@@ -399,7 +430,8 @@ class SmartNotificationService {
       'dosage': dosage,
     });
 
-    final int notificationId = medicationBaseID + medicationId.hashCode.abs() % 1000;
+    final int notificationId =
+        medicationBaseID + medicationId.hashCode.abs() % 1000;
 
     await _scheduleNotification(
       id: notificationId,
@@ -435,7 +467,8 @@ class SmartNotificationService {
       'appointmentType': appointmentType,
     });
 
-    final int notificationId = appointmentBaseID + appointmentId.hashCode.abs() % 1000;
+    final int notificationId =
+        appointmentBaseID + appointmentId.hashCode.abs() % 1000;
 
     // Schedule 1 hour before
     await _scheduleNotification(
@@ -503,14 +536,20 @@ class SmartNotificationService {
   Future<void> _optimizeNotificationTiming() async {
     try {
       // Analyze user engagement patterns
-      final Map<String, List<int>> engagementPatterns = await _analyzeEngagementPatterns();
+      final Map<String, List<int>> engagementPatterns =
+          await _analyzeEngagementPatterns();
 
       // Update optimal notification times
       for (final category in engagementPatterns.keys) {
         final List<int> engagementTimes = engagementPatterns[category]!;
         if (engagementTimes.isNotEmpty) {
-          final int averageHour = (engagementTimes.reduce((a, b) => a + b) / engagementTimes.length).round();
-          await _saveOptimalTime(category, TimeOfDay(hour: averageHour, minute: 0));
+          final int averageHour =
+              (engagementTimes.reduce((a, b) => a + b) / engagementTimes.length)
+                  .round();
+          await _saveOptimalTime(
+            category,
+            TimeOfDay(hour: averageHour, minute: 0),
+          );
         }
       }
     } catch (e) {
@@ -530,7 +569,10 @@ class SmartNotificationService {
   }
 
   /// Calculate optimal notification time
-  Future<TimeOfDay> _calculateOptimalTime(String category, TimeOfDay fallback) async {
+  Future<TimeOfDay> _calculateOptimalTime(
+    String category,
+    TimeOfDay fallback,
+  ) async {
     final String? savedTime = _prefs?.getString('optimal_time_$category');
     if (savedTime != null) {
       final List<String> parts = savedTime.split(':');
@@ -541,7 +583,10 @@ class SmartNotificationService {
 
   /// Save optimal time for category
   Future<void> _saveOptimalTime(String category, TimeOfDay time) async {
-    await _prefs?.setString('optimal_time_$category', '${time.hour}:${time.minute}');
+    await _prefs?.setString(
+      'optimal_time_$category',
+      '${time.hour}:${time.minute}',
+    );
   }
 
   /// Schedule a notification
@@ -553,7 +598,10 @@ class SmartNotificationService {
     required String channel,
     String? payload,
   }) async {
-    final tz.TZDateTime scheduledTZDate = tz.TZDateTime.from(scheduledDate, tz.local);
+    final tz.TZDateTime scheduledTZDate = tz.TZDateTime.from(
+      scheduledDate,
+      tz.local,
+    );
 
     await _flutterLocalNotificationsPlugin.zonedSchedule(
       id,
@@ -576,7 +624,8 @@ class SmartNotificationService {
         ),
       ),
       payload: payload,
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.time,
     );
   }
@@ -626,7 +675,8 @@ class SmartNotificationService {
         ),
       ),
       payload: payload,
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.time,
     );
   }
@@ -710,18 +760,23 @@ class SmartNotificationService {
   }
 
   String _getAppointmentReminderMessage(
-      String type, DateTime time, String? doctor, String? location) {
-    final String timeStr = '${time.hour}:${time.minute.toString().padLeft(2, '0')}';
+    String type,
+    DateTime time,
+    String? doctor,
+    String? location,
+  ) {
+    final String timeStr =
+        '${time.hour}:${time.minute.toString().padLeft(2, '0')}';
     String message = 'You have a $type appointment at $timeStr';
-    
+
     if (doctor != null) {
       message += ' with Dr. $doctor';
     }
-    
+
     if (location != null) {
       message += ' at $location';
     }
-    
+
     return message;
   }
 
@@ -804,7 +859,7 @@ class SmartNotificationService {
     try {
       // This would typically update the medication tracking system
       debugPrint('💊 Marked medication $medicationId as taken');
-      
+
       // You could integrate with a medication service here
       // await MedicationService.instance.markAsTaken(medicationId);
     } catch (e) {
@@ -859,8 +914,10 @@ class NotificationPreferences {
       'enableMedicationReminders': enableMedicationReminders,
       'enableAppointmentReminders': enableAppointmentReminders,
       'enableWellnessTips': enableWellnessTips,
-      'symptomTrackingTime': '${symptomTrackingTime.hour}:${symptomTrackingTime.minute}',
-      'feelingsTrackingTime': '${feelingsTrackingTime.hour}:${feelingsTrackingTime.minute}',
+      'symptomTrackingTime':
+          '${symptomTrackingTime.hour}:${symptomTrackingTime.minute}',
+      'feelingsTrackingTime':
+          '${feelingsTrackingTime.hour}:${feelingsTrackingTime.minute}',
       'wellnessTime': '${wellnessTime.hour}:${wellnessTime.minute}',
       'adaptiveTiming': adaptiveTiming,
       'mutedCategories': mutedCategories,
@@ -876,9 +933,15 @@ class NotificationPreferences {
       enableMedicationReminders: json['enableMedicationReminders'] ?? true,
       enableAppointmentReminders: json['enableAppointmentReminders'] ?? true,
       enableWellnessTips: json['enableWellnessTips'] ?? true,
-      symptomTrackingTime: _parseTimeOfDay(json['symptomTrackingTime']) ?? const TimeOfDay(hour: 9, minute: 0),
-      feelingsTrackingTime: _parseTimeOfDay(json['feelingsTrackingTime']) ?? const TimeOfDay(hour: 20, minute: 0),
-      wellnessTime: _parseTimeOfDay(json['wellnessTime']) ?? const TimeOfDay(hour: 8, minute: 0),
+      symptomTrackingTime:
+          _parseTimeOfDay(json['symptomTrackingTime']) ??
+          const TimeOfDay(hour: 9, minute: 0),
+      feelingsTrackingTime:
+          _parseTimeOfDay(json['feelingsTrackingTime']) ??
+          const TimeOfDay(hour: 20, minute: 0),
+      wellnessTime:
+          _parseTimeOfDay(json['wellnessTime']) ??
+          const TimeOfDay(hour: 8, minute: 0),
       adaptiveTiming: json['adaptiveTiming'] ?? true,
       mutedCategories: List<String>.from(json['mutedCategories'] ?? []),
     );

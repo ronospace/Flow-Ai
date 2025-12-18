@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../core/widgets/coming_soon_widget.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/medical_citations_footer.dart';
+import '../../../core/widgets/medical_disclaimer_banner.dart';
 
 class AICoachScreen extends StatelessWidget {
   const AICoachScreen({super.key});
@@ -14,11 +16,21 @@ class AICoachScreen extends StatelessWidget {
         elevation: 0,
         foregroundColor: AppTheme.primaryPurple,
       ),
-      body: ComingSoonWidgets.aiCoach(
-        context,
-        onNotifyMe: () {
-          _showNotificationDialog(context);
-        },
+      body: Column(
+        children: [
+          Expanded(
+            child: ComingSoonWidgets.aiCoach(
+              context,
+              onNotifyMe: () {
+                _showNotificationDialog(context);
+              },
+            ),
+          ),
+          // Medical Disclaimer Banner (App Store 1.4.1)
+          MedicalDisclaimerBanner(),
+          // Medical Citations Footer (App Store 1.4.1)
+          MedicalCitationsFooter(),
+        ],
       ),
     );
   }

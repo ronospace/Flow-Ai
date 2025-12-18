@@ -133,11 +133,15 @@ class _InsightsScreenState extends State<InsightsScreen>
             ),
           ),
           
+          // Settings icon removed - not necessary per user request
+          
+          const SizedBox(width: 8),
+          
           // AI Badge
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
+              gradient: LinearGradient(
                 colors: [AppTheme.secondaryBlue, AppTheme.accentMint],
               ),
               borderRadius: BorderRadius.circular(20),
@@ -208,7 +212,7 @@ class _InsightsScreenState extends State<InsightsScreen>
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
                   gradient: isSelected
-                      ? const LinearGradient(
+                      ? LinearGradient(
                           colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
                         )
                       : null,
@@ -249,7 +253,7 @@ class _InsightsScreenState extends State<InsightsScreen>
       child: TabBar(
         controller: _tabController,
         indicator: BoxDecoration(
-          gradient: const LinearGradient(
+          gradient: LinearGradient(
             colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
           ),
           borderRadius: BorderRadius.circular(12),
@@ -287,7 +291,7 @@ class _InsightsScreenState extends State<InsightsScreen>
       builder: (context, insightsProvider, cycleProvider, child) {
         final theme = Theme.of(context);
         if (insightsProvider.isLoading || cycleProvider.isLoading) {
-          return const Center(
+          return Center(
             child: CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryRose),
             ),

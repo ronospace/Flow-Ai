@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:local_auth/local_auth.dart';
-// import 'package:google_sign_in/google_sign_in.dart'; // Temporarily disabled for iOS compatibility
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../core/theme/app_theme.dart';
@@ -29,25 +28,25 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   late AnimationController _headerController;
   late AnimationController _formController;
   late AnimationController _socialController;
-  
+
   final LocalAuthentication _localAuth = LocalAuthentication();
-  // final GoogleSignIn _googleSignIn = GoogleSignIn(); // Temporarily disabled for iOS compatibility
   final AuthService _authService = AuthService();
-  
+
   final PageController _pageController = PageController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _displayNameController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
-  
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+
   bool _isLogin = true;
   bool _isLoading = false;
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
   bool _biometricsAvailable = false;
-  bool _biometricsEnabled = false;
   List<BiometricType> _availableBiometrics = [];
-  
+  bool _showForgotPassword = false; // Only show after failed login attempt
+
   @override
   void initState() {
     super.initState();
@@ -55,7 +54,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     _checkBiometrics();
     _startAnimations();
   }
-  
+
   void _initializeControllers() {
     _headerController = AnimationController(
       duration: const Duration(milliseconds: 1200),
@@ -70,7 +69,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       vsync: this,
     );
   }
-  
+
   void _startAnimations() {
     _headerController.forward();
     Future.delayed(const Duration(milliseconds: 300), () {
@@ -80,24 +79,22 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       _socialController.forward();
     });
   }
-  
+
   Future<void> _checkBiometrics() async {
     try {
       final isAvailable = await _localAuth.canCheckBiometrics;
       final isDeviceSupported = await _localAuth.isDeviceSupported();
       final availableBiometrics = await _localAuth.getAvailableBiometrics();
-      
+
       setState(() {
         _biometricsAvailable = isAvailable && isDeviceSupported;
         _availableBiometrics = availableBiometrics;
-        // Check if user has previously enabled biometrics
-        _biometricsEnabled = _biometricsAvailable; // You can load this from SharedPreferences
       });
     } catch (e) {
       debugPrint('Error checking biometrics: $e');
     }
   }
-  
+
   @override
   void dispose() {
     _headerController.dispose();
@@ -110,12 +107,12 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     _confirmPasswordController.dispose();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
-    
+
     // Use adaptive scaffold that automatically adjusts to platform conventions
     return AdaptiveComponents.adaptiveScaffold(
       context: context,
@@ -136,15 +133,13 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
             children: [
               // Header Section
               _buildHeader(theme, l10n),
-              
+
               // Form Section with adaptive scroll physics
               Expanded(
                 child: PageView(
                   controller: _pageController,
                   physics: context.adaptiveScrollPhysics,
-                  children: [
-                    _buildAuthForm(theme, l10n),
-                  ],
+                  children: [_buildAuthForm(theme, l10n)],
                 ),
               ),
             ],
@@ -153,52 +148,52 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       ),
     );
   }
-  
+
   Widget _buildHeader(ThemeData theme, AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.all(40),
       child: Column(
         children: [
           // Flow AI Logo
-                        FlowAiLogo(
-            size: 120,
-            showWordmark: false,
-          ).animate(controller: _headerController)
-            .scale(begin: const Offset(0.5, 0.5))
-            .fadeIn(),
-          
+          FlowAiLogo(size: 120, showWordmark: false)
+              .animate(controller: _headerController)
+              .scale(begin: const Offset(0.5, 0.5))
+              .fadeIn(),
+
           const SizedBox(height: 24),
-          
+
           // App Name
           Text(
-            'Flow Ai',
-            style: theme.textTheme.headlineLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: AppTheme.darkGrey,
-              fontSize: 32,
-            ),
-          ).animate(controller: _headerController)
-            .slideY(begin: 0.3, end: 0)
-            .fadeIn(delay: 200.ms),
-          
+                'Flow Ai',
+                style: theme.textTheme.headlineLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: AppTheme.darkGrey,
+                  fontSize: 32,
+                ),
+              )
+              .animate(controller: _headerController)
+              .slideY(begin: 0.3, end: 0)
+              .fadeIn(delay: 200.ms),
+
           const SizedBox(height: 8),
-          
+
           // Subtitle
           Text(
-            'Smart Period & Wellness Tracking',
-            style: theme.textTheme.bodyLarge?.copyWith(
-              color: AppTheme.mediumGrey,
-              fontSize: 16,
-            ),
-            textAlign: TextAlign.center,
-          ).animate(controller: _headerController)
-            .slideY(begin: 0.3, end: 0)
-            .fadeIn(delay: 400.ms),
+                'Smart Period & Wellness Tracking',
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: AppTheme.mediumGrey,
+                  fontSize: 16,
+                ),
+                textAlign: TextAlign.center,
+              )
+              .animate(controller: _headerController)
+              .slideY(begin: 0.3, end: 0)
+              .fadeIn(delay: 400.ms),
         ],
       ),
     );
   }
-  
+
   Widget _buildAuthForm(ThemeData theme, AppLocalizations l10n) {
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -206,200 +201,233 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         children: [
           // Tab Selector
           _buildTabSelector(theme),
-          
+
           const SizedBox(height: 32),
-          
+
           // Biometric Login (if available and on login page)
           if (_biometricsAvailable && _isLogin) ...[
             BiometricButton(
-              availableBiometrics: _availableBiometrics,
-              onBiometricLogin: _handleBiometricLogin,
-            ).animate(controller: _formController)
-              .slideY(begin: 0.3, end: 0)
-              .fadeIn(),
-            
-            const SizedBox(height: 24),
-            
+                  availableBiometrics: _availableBiometrics,
+                  onBiometricLogin: _handleBiometricLogin,
+                )
+                .animate(controller: _formController)
+                .slideY(begin: 0.3, end: 0)
+                .fadeIn(),
+
+            const SizedBox(height: 20),
+
             // Divider
             Row(
               children: [
-                const Expanded(child: Divider()),
+                Expanded(
+                  child: Divider(
+                    height: 1,
+                    thickness: 1,
+                    color: theme.dividerColor.withValues(alpha: 0.3),
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
                     'Or continue with',
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: AppTheme.mediumGrey,
+                      fontSize: 13,
                     ),
                   ),
                 ),
-                const Expanded(child: Divider()),
+                Expanded(
+                  child: Divider(
+                    height: 1,
+                    thickness: 1,
+                    color: theme.dividerColor.withValues(alpha: 0.3),
+                  ),
+                ),
               ],
-            ).animate(controller: _formController)
-              .fadeIn(delay: 100.ms),
-            
-            const SizedBox(height: 24),
+            ).animate(controller: _formController).fadeIn(delay: 100.ms),
+
+            const SizedBox(height: 20),
           ],
-          
+
           // Email Field - using adaptive text field
           AdaptiveComponents.adaptiveTextField(
-            context: context,
-            controller: _emailController,
-            labelText: 'Email address',
-            hintText: 'Enter your email',
-            prefixIcon: const Icon(Icons.email_outlined),
-            keyboardType: TextInputType.emailAddress,
-            enabled: !_isLoading,
-            textInputAction: TextInputAction.next,
-          ).animate(controller: _formController)
-            .slideY(begin: 0.3, end: 0)
-            .fadeIn(delay: _biometricsAvailable && _isLogin ? 200.ms : 0.ms),
-          
+                context: context,
+                controller: _emailController,
+                labelText: 'Email address',
+                hintText: 'Enter your email',
+                prefixIcon: const Icon(Icons.email_outlined),
+                keyboardType: TextInputType.emailAddress,
+                enabled: !_isLoading,
+                textInputAction: TextInputAction.next,
+              )
+              .animate(controller: _formController)
+              .slideY(begin: 0.3, end: 0)
+              .fadeIn(delay: _biometricsAvailable && _isLogin ? 200.ms : 0.ms),
+
           const SizedBox(height: 16),
-          
+
           // Display Name Field (Sign Up only) - using adaptive text field
           if (!_isLogin) ...[
             AdaptiveComponents.adaptiveTextField(
-              context: context,
-              controller: _displayNameController,
-              labelText: 'Display name',
-              hintText: 'Enter your display name',
-              prefixIcon: const Icon(Icons.person_outline),
-              enabled: !_isLoading,
-              textInputAction: TextInputAction.next,
-            ).animate(controller: _formController)
-              .slideY(begin: 0.3, end: 0)
-              .fadeIn(delay: 100.ms),
-            
+                  context: context,
+                  controller: _displayNameController,
+                  labelText: 'Display name',
+                  hintText: 'Enter your display name',
+                  prefixIcon: const Icon(Icons.person_outline),
+                  enabled: !_isLoading,
+                  textInputAction: TextInputAction.next,
+                )
+                .animate(controller: _formController)
+                .slideY(begin: 0.3, end: 0)
+                .fadeIn(delay: 100.ms),
+
             const SizedBox(height: 16),
           ],
-          
+
           // Password Field - using adaptive text field
           AdaptiveComponents.adaptiveTextField(
-            context: context,
-            controller: _passwordController,
-            labelText: 'Password',
-            hintText: 'Enter your password',
-            prefixIcon: const Icon(Icons.lock_outline),
-            obscureText: _obscurePassword,
-            enabled: !_isLoading,
-            textInputAction: _isLogin ? TextInputAction.done : TextInputAction.next,
-            suffixIcon: IconButton(
-              onPressed: () {
-                setState(() {
-                  _obscurePassword = !_obscurePassword;
-                });
-                context.hapticFeedback(HapticFeedbackType.selection);
-              },
-              icon: Icon(
-                _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                color: AppTheme.mediumGrey,
+                context: context,
+                controller: _passwordController,
+                labelText: 'Password',
+                hintText: 'Enter your password',
+                prefixIcon: const Icon(Icons.lock_outline),
+                obscureText: _obscurePassword,
+                enabled: !_isLoading,
+                textInputAction: _isLogin
+                    ? TextInputAction.done
+                    : TextInputAction.next,
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _obscurePassword = !_obscurePassword;
+                    });
+                    context.hapticFeedback(HapticFeedbackType.selection);
+                  },
+                  icon: Icon(
+                    _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                    color: AppTheme.mediumGrey,
+                  ),
+                ),
+              )
+              .animate(controller: _formController)
+              .slideY(begin: 0.3, end: 0)
+              .fadeIn(
+                delay: _biometricsAvailable && _isLogin ? 300.ms : 100.ms,
               ),
-            ),
-          ).animate(controller: _formController)
-            .slideY(begin: 0.3, end: 0)
-            .fadeIn(delay: _biometricsAvailable && _isLogin ? 300.ms : 100.ms),
-          
+
+          // Forgot Password (Login only) - only show after failed login attempt
+          if (_isLogin && _showForgotPassword) ...[
+            const SizedBox(height: 8),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: _isLoading ? null : _handleForgotPassword,
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                child: Text(
+                  'Forgot Password?',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: AppTheme.primaryRose,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ).animate(controller: _formController).fadeIn(),
+          ],
+
           const SizedBox(height: 16),
-          
+
           // Confirm Password Field (Sign Up only) - using adaptive text field
           if (!_isLogin) ...[
             AdaptiveComponents.adaptiveTextField(
-              context: context,
-              controller: _confirmPasswordController,
-              labelText: 'Confirm password',
-              hintText: 'Re-enter your password',
-              prefixIcon: const Icon(Icons.lock_outline),
-              obscureText: _obscureConfirmPassword,
-              enabled: !_isLoading,
-              textInputAction: TextInputAction.done,
-              suffixIcon: IconButton(
-                onPressed: () {
-                  setState(() {
-                    _obscureConfirmPassword = !_obscureConfirmPassword;
-                  });
-                  context.hapticFeedback(HapticFeedbackType.selection);
-                },
-                icon: Icon(
-                  _obscureConfirmPassword ? Icons.visibility_off : Icons.visibility,
-                  color: AppTheme.mediumGrey,
-                ),
-              ),
-            ).animate(controller: _formController)
-              .slideY(begin: 0.3, end: 0)
-              .fadeIn(delay: 200.ms),
-            
+                  context: context,
+                  controller: _confirmPasswordController,
+                  labelText: 'Confirm password',
+                  hintText: 'Re-enter your password',
+                  prefixIcon: const Icon(Icons.lock_outline),
+                  obscureText: _obscureConfirmPassword,
+                  enabled: !_isLoading,
+                  textInputAction: TextInputAction.done,
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _obscureConfirmPassword = !_obscureConfirmPassword;
+                      });
+                      context.hapticFeedback(HapticFeedbackType.selection);
+                    },
+                    icon: Icon(
+                      _obscureConfirmPassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                      color: AppTheme.mediumGrey,
+                    ),
+                  ),
+                )
+                .animate(controller: _formController)
+                .slideY(begin: 0.3, end: 0)
+                .fadeIn(delay: 200.ms),
+
             const SizedBox(height: 16),
           ],
-          
-          // Forgot Password (Login only) - using adaptive button
-          if (_isLogin) ...[
-            Align(
-              alignment: Alignment.centerRight,
-              child: AdaptiveComponents.adaptiveButton(
-                context: context,
-                text: 'Forgot Password?',
-                onPressed: _isLoading ? null : _handleForgotPassword,
-                isPrimary: false,
-                height: 36,
-              ),
-            ).animate(controller: _formController)
-              .slideX(begin: 0.3, end: 0)
-              .fadeIn(delay: 400.ms),
-            
-            const SizedBox(height: 8),
-          ],
-          
+
           // Submit Button - using adaptive button with platform-specific styling
           AdaptiveComponents.adaptiveButton(
-            context: context,
-            text: _isLoading
-                ? (_isLogin ? 'Signing In...' : 'Creating Account...')
-                : (_isLogin ? 'Sign In' : 'Create Account'),
-            onPressed: _isLoading ? null : _handleSubmit,
-            isPrimary: true,
-            width: double.infinity,
-            height: 56,
-            icon: _isLoading 
-                ? null 
-                : (_isLogin ? Icons.login : Icons.person_add),
-          ).animate(controller: _formController)
-            .slideY(begin: 0.3, end: 0)
-            .fadeIn(delay: 500.ms),
-          
+                context: context,
+                text: _isLoading
+                    ? (_isLogin ? 'Signing In...' : 'Creating Account...')
+                    : (_isLogin ? 'Sign In' : 'Create Account'),
+                onPressed: _isLoading ? null : _handleSubmit,
+                isPrimary: true,
+                width: double.infinity,
+                height: 56,
+                icon: _isLoading
+                    ? null
+                    : (_isLogin ? Icons.login : Icons.person_add),
+              )
+              .animate(controller: _formController)
+              .slideY(begin: 0.3, end: 0)
+              .fadeIn(delay: 500.ms),
+
           const SizedBox(height: 32),
-          
+
           // Social Login Section
           _buildSocialLogin(theme),
-          
-          const SizedBox(height: 32),
+
+          const SizedBox(height: 24),
+
+          // Demo Account Button
+          _buildDemoAccountButton(theme),
+
+          const SizedBox(height: 24),
         ],
       ),
     );
   }
-  
+
   Widget _buildTabSelector(ThemeData theme) {
     // Use adaptive segmented control for better platform integration
     return AdaptiveComponents.adaptiveSegmentedControl<bool>(
       context: context,
-      options: const {
-        true: 'Sign In',
-        false: 'Sign Up',
-      },
+      options: const {true: 'Sign In', false: 'Sign Up'},
       selectedValue: _isLogin,
       onChanged: (bool isLogin) {
         setState(() {
           _isLogin = isLogin;
+          _showForgotPassword = false; // Reset when switching tabs
         });
         // Use platform-appropriate haptic feedback
         context.hapticFeedback(HapticFeedbackType.selection);
       },
       enabled: !_isLoading,
-    ).animate(controller: _formController)
-      .slideY(begin: -0.3, end: 0)
-      .fadeIn();
+    ).animate(controller: _formController).slideY(begin: -0.3, end: 0).fadeIn();
   }
-  
+
   Widget _buildSocialLogin(ThemeData theme) {
     return Column(
       children: [
@@ -410,80 +438,91 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
             color: AppTheme.mediumGrey,
             fontWeight: FontWeight.w500,
           ),
-        ).animate(controller: _socialController)
-          .fadeIn(),
-        
+        ).animate(controller: _socialController).fadeIn(),
+
         const SizedBox(height: 20),
-        
+
         // Social Login Buttons
         Row(
-          children: [
-            // Google Sign-In (hidden on iOS due to dependency conflicts)
-            if (PlatformService().platformInfo.platform != TargetPlatform.iOS) ...[
-              Expanded(
-                child: SocialLoginButton(
-                  icon: Icons.g_mobiledata,
-                  label: 'Google',
-                  onPressed: _isLoading ? null : _handleGoogleSignIn,
-                  backgroundColor: Colors.white,
-                  iconColor: const Color(0xFF4285F4),
+              children: [
+                // Google Sign-In
+                Expanded(
+                  child: SocialLoginButton(
+                    icon: Icons.g_mobiledata,
+                    label: 'Google',
+                    onPressed: _isLoading ? null : _handleGoogleSignIn,
+                    backgroundColor: Colors.white,
+                    iconColor: const Color(0xFF4285F4),
+                  ),
                 ),
-              ),
-              const SizedBox(width: 16),
-            ],
-            // Apple Sign-In
-            Expanded(
-              child: SocialLoginButton(
-                icon: Icons.apple,
-                label: 'Apple',
-                onPressed: _isLoading ? null : _handleAppleSignIn,
-                backgroundColor: Colors.black,
-                iconColor: Colors.white,
-                textColor: Colors.white,
-              ),
-            ),
-            // If on iOS and Google is hidden, fill the space
-            if (PlatformService().platformInfo.platform == TargetPlatform.iOS) const Expanded(child: SizedBox()),
-          ],
-        ).animate(controller: _socialController)
-          .slideY(begin: 0.3, end: 0)
-          .fadeIn(delay: 200.ms),
+                const SizedBox(width: 16),
+                // Apple Sign-In (iOS only)
+                if (PlatformService().platformInfo.platform ==
+                    TargetPlatform.iOS)
+                  Expanded(
+                    child: SocialLoginButton(
+                      icon: Icons.apple,
+                      label: 'Apple',
+                      onPressed: _isLoading ? null : _handleAppleSignIn,
+                      backgroundColor: Colors.black,
+                      iconColor: Colors.white,
+                      textColor: Colors.white,
+                    ),
+                  ),
+                // If not iOS, fill the space
+                if (PlatformService().platformInfo.platform !=
+                    TargetPlatform.iOS)
+                  const Expanded(child: SizedBox()),
+              ],
+            )
+            .animate(controller: _socialController)
+            .slideY(begin: 0.3, end: 0)
+            .fadeIn(delay: 200.ms),
       ],
     );
   }
-  
+
   Future<void> _handleBiometricLogin() async {
     if (!_biometricsAvailable) {
-      _showErrorMessage('Biometric authentication is not available on this device');
+      _showErrorMessage(
+        'Biometric authentication is not available on this device',
+      );
       return;
     }
-    
+
     setState(() {
       _isLoading = true;
     });
-    
+
     try {
       // Initialize auth service first
       await _authService.initialize();
-      
+
       final result = await _authService.authenticateWithBiometrics();
-      
+
       if (result.isSuccess) {
         HapticFeedback.lightImpact();
         _showSuccessMessage('Biometric authentication successful!');
-        
+
         // Sync user data immediately to ensure username is captured and available
         try {
-          final settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
+          final settingsProvider = Provider.of<SettingsProvider>(
+            context,
+            listen: false,
+          );
           // Force an immediate sync to capture fresh auth data
           await settingsProvider.forceUserDataSync();
-          debugPrint('✅ User settings synced successfully after biometric authentication');
+          debugPrint(
+            '✅ User settings synced successfully after biometric authentication',
+          );
         } catch (syncError) {
-          debugPrint('⚠️ Warning: Could not sync user settings after biometric auth: $syncError');
+          debugPrint(
+            '⚠️ Warning: Could not sync user settings after biometric auth: $syncError',
+          );
         }
-        
+
         await Future.delayed(const Duration(milliseconds: 500));
-        
+
         // Navigate to main app
         if (mounted) {
           context.go('/home');
@@ -502,42 +541,42 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       }
     }
   }
-  
+
   Future<void> _handleSubmit() async {
     if (_isLoading) return;
-    
+
     // Basic validation
     if (_emailController.text.trim().isEmpty) {
       _showErrorMessage('Please enter your email address');
       return;
     }
-    
+
     if (_passwordController.text.isEmpty) {
       _showErrorMessage('Please enter your password');
       return;
     }
-    
+
     if (!_isLogin) {
       if (_displayNameController.text.trim().isEmpty) {
         _showErrorMessage('Please enter a display name');
         return;
       }
-      
+
       if (_passwordController.text != _confirmPasswordController.text) {
         _showErrorMessage('Passwords do not match');
         return;
       }
-      
+
       if (_passwordController.text.length < 8) {
         _showErrorMessage('Password must be at least 8 characters long');
         return;
       }
     }
-    
+
     setState(() {
       _isLoading = true;
     });
-    
+
     try {
       // Initialize auth service if needed
       try {
@@ -546,7 +585,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         debugPrint('⚠️ Auth service initialization warning: $initError');
         // Continue anyway as we have local fallback
       }
-      
+
       if (_isLogin) {
         // Handle login
         final result = await _authService.signInWithEmail(
@@ -554,22 +593,35 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
           password: _passwordController.text,
         );
         if (!result.isSuccess) {
+          // Show forgot password after failed login attempt
+          setState(() {
+            _showForgotPassword = true;
+          });
           throw Exception(result.error);
         }
+        // Reset forgot password visibility on successful login
+        setState(() {
+          _showForgotPassword = false;
+        });
         _showSuccessMessage('Welcome back!');
       } else {
         // Check if email already exists before attempting sign up
-        final emailExists = await _authService.isEmailRegistered(_emailController.text.trim());
+        final emailExists = await _authService.isEmailRegistered(
+          _emailController.text.trim(),
+        );
         if (emailExists) {
           // Email exists, suggest sign in instead
           setState(() {
             _isLoading = false;
             _isLogin = true; // Switch to login mode
+            _showForgotPassword = false; // Reset when switching to login
           });
-          _showErrorMessage('An account with this email already exists. Please sign in instead.');
+          _showErrorMessage(
+            'An account with this email already exists. Please sign in instead.',
+          );
           return; // Exit early
         }
-        
+
         // Handle sign up
         final result = await _authService.signUpWithEmail(
           email: _emailController.text.trim(),
@@ -581,18 +633,23 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         }
         _showSuccessMessage('Account created successfully!');
       }
-      
+
       // Sync user data immediately to ensure username is captured and available
       try {
-        final settingsProvider = SettingsProvider();
+        final settingsProvider = Provider.of<SettingsProvider>(
+          context,
+          listen: false,
+        );
         await settingsProvider.initializeSettings();
         // Force an immediate sync to capture fresh auth data
         await settingsProvider.forceUserDataSync();
         debugPrint('✅ User settings synced successfully after authentication');
       } catch (syncError) {
-        debugPrint('⚠️ Warning: Could not sync user settings after auth: $syncError');
+        debugPrint(
+          '⚠️ Warning: Could not sync user settings after auth: $syncError',
+        );
       }
-      
+
       // Navigate to main app
       await Future.delayed(const Duration(milliseconds: 1000));
       if (mounted) {
@@ -601,9 +658,11 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     } catch (e) {
       debugPrint('❌ Auth error: $e');
       final errorMessage = e.toString().replaceFirst('Exception: ', '');
-      _showErrorMessage(_isLogin 
-          ? 'Sign in failed: $errorMessage' 
-          : 'Sign up failed: $errorMessage');
+      _showErrorMessage(
+        _isLogin
+            ? 'Sign in failed: $errorMessage'
+            : 'Sign up failed: $errorMessage',
+      );
     } finally {
       if (mounted) {
         setState(() {
@@ -612,30 +671,118 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       }
     }
   }
-  
+
   Future<void> _handleGoogleSignIn() async {
     if (_isLoading) return;
-    
-    // Show coming soon message
-    _showInfoMessage('Google Sign-In is coming soon! 🚀\n\nWe\'re working on integrating Google authentication with enhanced security features. For now, please use email authentication to create your account.');
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      // Initialize auth service
+      await _authService.initialize();
+
+      // Perform Google Sign-In
+      final result = await _authService.signInWithGoogle();
+
+      if (result.isSuccess) {
+        HapticFeedback.lightImpact();
+        _showSuccessMessage('Welcome! Signed in with Google successfully!');
+
+        // Sync user data
+        try {
+          final settingsProvider = Provider.of<SettingsProvider>(
+            context,
+            listen: false,
+          );
+          await settingsProvider.forceUserDataSync();
+          debugPrint('✅ User settings synced after Google sign-in');
+        } catch (syncError) {
+          debugPrint('⚠️ Warning: Could not sync user settings: $syncError');
+        }
+
+        await Future.delayed(const Duration(milliseconds: 500));
+
+        // Navigate to main app
+        if (mounted) {
+          context.go('/home');
+        }
+      } else {
+        _showErrorMessage(result.error ?? 'Google sign-in failed');
+      }
+    } catch (e) {
+      debugPrint('Google sign-in error: $e');
+      _showErrorMessage('Google sign-in failed. Please try again.');
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
-  
+
   Future<void> _handleAppleSignIn() async {
     if (_isLoading) return;
-    
-    // Show coming soon message
-    _showInfoMessage('Apple Sign-In is coming soon! 🍎\n\nWe\'re working on integrating Apple Sign-In with enhanced privacy features. For now, please use email authentication to create your account.');
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      // Initialize auth service
+      await _authService.initialize();
+
+      // Perform Apple Sign-In
+      final result = await _authService.signInWithApple();
+
+      if (result.isSuccess) {
+        HapticFeedback.lightImpact();
+        _showSuccessMessage('Welcome! Signed in with Apple successfully!');
+
+        // Sync user data
+        try {
+          final settingsProvider = Provider.of<SettingsProvider>(
+            context,
+            listen: false,
+          );
+          await settingsProvider.forceUserDataSync();
+          debugPrint('✅ User settings synced after Apple sign-in');
+        } catch (syncError) {
+          debugPrint('⚠️ Warning: Could not sync user settings: $syncError');
+        }
+
+        await Future.delayed(const Duration(milliseconds: 500));
+
+        // Navigate to main app
+        if (mounted) {
+          context.go('/home');
+        }
+      } else {
+        _showErrorMessage(result.error ?? 'Apple sign-in failed');
+      }
+    } catch (e) {
+      debugPrint('Apple sign-in error: $e');
+      _showErrorMessage('Apple sign-in failed. Please try again.');
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
-  
+
   void _handleForgotPassword() {
     // Show forgot password dialog
     _showForgotPasswordDialog();
   }
-  
+
   void _showForgotPasswordDialog() {
     final TextEditingController resetEmailController = TextEditingController();
     bool isResetting = false;
-    
+
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -679,7 +826,10 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                       height: 64,
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
-                          colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+                          colors: [
+                            AppTheme.primaryRose,
+                            AppTheme.primaryPurple,
+                          ],
                         ),
                         borderRadius: BorderRadius.circular(20),
                       ),
@@ -689,19 +839,20 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                         size: 32,
                       ),
                     ),
-                    
+
                     const SizedBox(height: 20),
-                    
+
                     Text(
                       'Reset Password',
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppTheme.darkGrey,
-                      ),
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: AppTheme.darkGrey,
+                          ),
                     ),
-                    
+
                     const SizedBox(height: 12),
-                    
+
                     Text(
                       'Enter your email address and we\'ll send you a link to reset your password.',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -710,9 +861,9 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    
+
                     const SizedBox(height: 24),
-                    
+
                     // Email Input
                     AuthTextField(
                       controller: resetEmailController,
@@ -721,18 +872,20 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                       keyboardType: TextInputType.emailAddress,
                       enabled: !isResetting,
                     ),
-                    
+
                     const SizedBox(height: 28),
-                    
+
                     // Action Buttons
                     Row(
                       children: [
                         Expanded(
                           child: ModernButton(
                             text: 'Cancel',
-                            onPressed: isResetting ? null : () {
-                              Navigator.of(dialogContext).pop();
-                            },
+                            onPressed: isResetting
+                                ? null
+                                : () {
+                                    Navigator.of(dialogContext).pop();
+                                  },
                             type: ModernButtonType.secondary,
                             size: ModernButtonSize.medium,
                           ),
@@ -740,41 +893,50 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                         const SizedBox(width: 12),
                         Expanded(
                           child: ModernButton(
-                            text: isResetting ? 'Sending...' : 'Send Reset Link',
+                            text: isResetting
+                                ? 'Sending...'
+                                : 'Send Reset Link',
                             isLoading: isResetting,
-                            onPressed: isResetting ? null : () async {
-                              // Validate email
-                              if (resetEmailController.text.trim().isEmpty) {
-                                _showErrorMessage('Please enter your email address');
-                                return;
-                              }
-                              
-                              setState(() => isResetting = true);
-                              
-                              try {
-                                // Initialize auth service if needed
-                                await _authService.initialize();
-                                
-                                final result = await _authService.resetPassword(
-                                  resetEmailController.text.trim(),
-                                );
-                                
-                                if (result.isSuccess) {
-                                  Navigator.of(dialogContext).pop();
-                                  _showSuccessMessage(
-                                    'Password reset link sent! Check your email.',
-                                  );
-                                } else {
-                                  throw Exception(result.error);
-                                }
-                              } catch (e) {
-                                _showErrorMessage(
-                                  'Failed to send reset email. Please try again.',
-                                );
-                              } finally {
-                                setState(() => isResetting = false);
-                              }
-                            },
+                            onPressed: isResetting
+                                ? null
+                                : () async {
+                                    // Validate email
+                                    if (resetEmailController.text
+                                        .trim()
+                                        .isEmpty) {
+                                      _showErrorMessage(
+                                        'Please enter your email address',
+                                      );
+                                      return;
+                                    }
+
+                                    setState(() => isResetting = true);
+
+                                    try {
+                                      // Initialize auth service if needed
+                                      await _authService.initialize();
+
+                                      final result = await _authService
+                                          .resetPassword(
+                                            resetEmailController.text.trim(),
+                                          );
+
+                                      if (result.isSuccess) {
+                                        Navigator.of(dialogContext).pop();
+                                        _showSuccessMessage(
+                                          'Password reset link sent! Check your email.',
+                                        );
+                                      } else {
+                                        throw Exception(result.error);
+                                      }
+                                    } catch (e) {
+                                      _showErrorMessage(
+                                        'Failed to send reset email. Please try again.',
+                                      );
+                                    } finally {
+                                      setState(() => isResetting = false);
+                                    }
+                                  },
                             size: ModernButtonSize.medium,
                           ),
                         ),
@@ -789,22 +951,108 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       },
     );
   }
-  
+
   void _showSuccessMessage(String message) {
     if (mounted) {
       AdaptiveMessages.showSuccess(context, message);
     }
   }
-  
+
   void _showErrorMessage(String message) {
     if (mounted) {
       AdaptiveMessages.showError(context, message);
     }
   }
-  
+
   void _showInfoMessage(String message) {
     if (mounted) {
       AdaptiveMessages.showInfo(context, message);
+    }
+  }
+
+  Widget _buildDemoAccountButton(ThemeData theme) {
+    return AdaptiveComponents.adaptiveButton(
+          context: context,
+          text: 'Demo',
+          onPressed: _isLoading ? null : _handleDemoAccountFill,
+          isPrimary: false,
+          height: 48,
+        )
+        .animate(controller: _socialController)
+        .fadeIn(delay: 400.ms)
+        .slideY(begin: 0.2, end: 0, delay: 400.ms);
+  }
+
+  Future<void> _handleDemoAccountFill() async {
+    // Demo credentials
+    const demoEmail = 'demo@flowai.app';
+    const demoPassword = 'FlowAiDemo2025!';
+
+    // Show loading state
+    setState(() {
+      _isLoading = true;
+      _isLogin = true; // Ensure we're in login mode
+    });
+
+    // Fill credentials with animation
+    _emailController.text = demoEmail;
+    _passwordController.text = demoPassword;
+
+    // Provide haptic feedback
+    HapticFeedback.mediumImpact();
+
+    // Show info message
+    _showInfoMessage('Demo credentials loaded. Signing in...');
+
+    // Wait a moment for visual feedback
+    await Future.delayed(const Duration(milliseconds: 800));
+
+    // Automatically sign in
+    try {
+      // Initialize auth service if needed
+      await _authService.initialize();
+
+      final result = await _authService.signInWithEmail(
+        email: demoEmail,
+        password: demoPassword,
+      );
+
+      if (result.isSuccess) {
+        _showSuccessMessage(
+          'Welcome to Flow Ai Demo! Exploring sample data...',
+        );
+
+        // Sync user data
+        try {
+          final settingsProvider = Provider.of<SettingsProvider>(
+            context,
+            listen: false,
+          );
+          await settingsProvider.initializeSettings();
+          await settingsProvider.forceUserDataSync();
+          debugPrint('✅ User settings synced for demo account');
+        } catch (syncError) {
+          debugPrint('⚠️ Warning: Could not sync user settings: $syncError');
+        }
+
+        // Navigate to home
+        await Future.delayed(const Duration(milliseconds: 1000));
+        if (mounted) {
+          context.go('/home');
+        }
+      } else {
+        throw Exception(result.error);
+      }
+    } catch (e) {
+      debugPrint('❌ Demo account sign-in error: $e');
+      final errorMessage = e.toString().replaceFirst('Exception: ', '');
+      _showErrorMessage('Demo sign-in failed: $errorMessage');
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 }

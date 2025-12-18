@@ -189,13 +189,15 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
       final startDate = DateTime.now().subtract(Duration(days: 28 * (i + 1)));
       cycles.add(CycleData(
         id: 'cycle_$i',
+        userId: 'demo_user',
         startDate: startDate,
-        length: 26 + random.nextInt(6), // 26-31 days
-        flowIntensity: FlowIntensity.values[random.nextInt(FlowIntensity.values.length)],
+        cycleLength: 26 + random.nextInt(6), // 26-31 days
+        averageFlow: FlowIntensity.values[random.nextInt(FlowIntensity.values.length)],
+        dailyData: {},
         symptoms: ['cramps', 'bloating', 'headache'].where((_) => random.nextBool()).toList(),
         pain: 1.0 + random.nextDouble() * 4.0, // 1-5 scale
         createdAt: startDate,
-        updatedAt: startDate,
+        lastUpdated: startDate,
       ));
     }
     

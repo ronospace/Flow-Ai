@@ -28,12 +28,14 @@ class AdvancedVisualizationService {
     try {
       _currentTheme = theme ?? ThemeData.light();
       _setupDefaultConfigurations();
-      
+
       _isInitialized = true;
       debugPrint('📊 Advanced visualization service initialized');
     } catch (e) {
       debugPrint('❌ Failed to initialize visualization service: $e');
-      throw VisualizationException('Failed to initialize visualization service: $e');
+      throw VisualizationException(
+        'Failed to initialize visualization service: $e',
+      );
     }
   }
 
@@ -66,7 +68,7 @@ class AdvancedVisualizationService {
 
       // Process data for visualization
       final List<DataPoint> dataPoints = [];
-      
+
       for (final entry in entries) {
         if (moodCategory != null) {
           // Specific mood category
@@ -74,24 +76,28 @@ class AdvancedVisualizationService {
             (e) => e.name == moodCategory,
             orElse: () => MoodCategory.happiness,
           );
-          
+
           final double? value = entry.moodScores[categoryEnum];
           if (value != null) {
-            dataPoints.add(DataPoint(
-              x: entry.date.millisecondsSinceEpoch.toDouble(),
-              y: value,
-              label: entry.date.toString().split(' ')[0],
-              metadata: {'mood_category': moodCategory},
-            ));
+            dataPoints.add(
+              DataPoint(
+                x: entry.date.millisecondsSinceEpoch.toDouble(),
+                y: value,
+                label: entry.date.toString().split(' ')[0],
+                metadata: {'mood_category': moodCategory},
+              ),
+            );
           }
         } else {
           // Overall wellbeing
-          dataPoints.add(DataPoint(
-            x: entry.date.millisecondsSinceEpoch.toDouble(),
-            y: entry.overallWellbeing,
-            label: entry.date.toString().split(' ')[0],
-            metadata: {'type': 'wellbeing'},
-          ));
+          dataPoints.add(
+            DataPoint(
+              x: entry.date.millisecondsSinceEpoch.toDouble(),
+              y: entry.overallWellbeing,
+              label: entry.date.toString().split(' ')[0],
+              metadata: {'type': 'wellbeing'},
+            ),
+          );
         }
       }
 
@@ -100,7 +106,9 @@ class AdvancedVisualizationService {
 
       // Create series
       final series = ChartSeries(
-        name: moodCategory != null ? 'Mood: ${moodCategory.replaceAll('_', ' ').toUpperCase()}' : 'Overall Wellbeing',
+        name: moodCategory != null
+            ? 'Mood: ${moodCategory.replaceAll('_', ' ').toUpperCase()}'
+            : 'Overall Wellbeing',
         data: dataPoints,
         color: _getMoodCategoryColor(moodCategory),
         style: ChartSeriesStyle(
@@ -128,10 +136,7 @@ class AdvancedVisualizationService {
           maximum: 10,
           showGridLines: true,
         ),
-        legend: ChartLegend(
-          show: true,
-          position: LegendPosition.bottom,
-        ),
+        legend: ChartLegend(show: true, position: LegendPosition.bottom),
         interactivity: ChartInteractivity(
           enableZoom: true,
           enablePan: true,
@@ -156,7 +161,7 @@ class AdvancedVisualizationService {
     try {
       // Mock cycle data - in a real app, this would come from cycle tracking service
       final List<DataPoint> cycleData = _generateMockCycleData(dateRange);
-      final List<DataPoint> predictionData = showPredictions 
+      final List<DataPoint> predictionData = showPredictions
           ? _generateMockPredictionData(dateRange)
           : [];
 
@@ -175,18 +180,20 @@ class AdvancedVisualizationService {
       ];
 
       if (predictionData.isNotEmpty) {
-        series.add(ChartSeries(
-          name: 'Predictions',
-          data: predictionData,
-          color: Colors.red.withValues(alpha: 0.1),
-          style: ChartSeriesStyle(
-            strokeWidth: 2.0,
-            strokeDashPattern: [5, 5],
-            showPoints: true,
-            pointRadius: 4.0,
-            pointShape: PointShape.diamond,
+        series.add(
+          ChartSeries(
+            name: 'Predictions',
+            data: predictionData,
+            color: Colors.red.withValues(alpha: 0.1),
+            style: ChartSeriesStyle(
+              strokeWidth: 2.0,
+              strokeDashPattern: [5, 5],
+              showPoints: true,
+              pointRadius: 4.0,
+              pointShape: PointShape.diamond,
+            ),
           ),
-        ));
+        );
       }
 
       return ChartData(
@@ -229,9 +236,12 @@ class AdvancedVisualizationService {
 
     try {
       // Mock symptom correlation data
-      final Map<String, Map<String, double>> correlationMatrix = _generateMockCorrelationMatrix(
-        symptoms: symptomFilter ?? ['Headache', 'Fatigue', 'Cramps', 'Mood Swings', 'Bloating'],
-      );
+      final Map<String, Map<String, double>> correlationMatrix =
+          _generateMockCorrelationMatrix(
+            symptoms:
+                symptomFilter ??
+                ['Headache', 'Fatigue', 'Cramps', 'Mood Swings', 'Bloating'],
+          );
 
       final List<DataPoint> heatmapData = [];
       int xIndex = 0;
@@ -239,17 +249,19 @@ class AdvancedVisualizationService {
       for (final xSymptom in correlationMatrix.keys) {
         int yIndex = 0;
         for (final ySymptom in correlationMatrix[xSymptom]!.keys) {
-          heatmapData.add(DataPoint(
-            x: xIndex.toDouble(),
-            y: yIndex.toDouble(),
-            z: correlationMatrix[xSymptom]![ySymptom]!,
-            label: '$xSymptom vs $ySymptom',
-            metadata: {
-              'x_symptom': xSymptom,
-              'y_symptom': ySymptom,
-              'correlation': correlationMatrix[xSymptom]![ySymptom]!,
-            },
-          ));
+          heatmapData.add(
+            DataPoint(
+              x: xIndex.toDouble(),
+              y: yIndex.toDouble(),
+              z: correlationMatrix[xSymptom]![ySymptom]!,
+              label: '$xSymptom vs $ySymptom',
+              metadata: {
+                'x_symptom': xSymptom,
+                'y_symptom': ySymptom,
+                'correlation': correlationMatrix[xSymptom]![ySymptom]!,
+              },
+            ),
+          );
           yIndex++;
         }
         xIndex++;
@@ -310,11 +322,13 @@ class AdvancedVisualizationService {
       final List<ChartData> charts = [];
 
       // 1. Mood trend chart
-      charts.add(await generateMoodTrendChart(
-        userId: userId,
-        dateRange: dateRange,
-        chartType: ChartType.areaChart,
-      ));
+      charts.add(
+        await generateMoodTrendChart(
+          userId: userId,
+          dateRange: dateRange,
+          chartType: ChartType.areaChart,
+        ),
+      );
 
       // 2. Sleep quality chart
       charts.add(await _generateSleepQualityChart(userId, dateRange));
@@ -342,7 +356,7 @@ class AdvancedVisualizationService {
     try {
       // Process custom data based on configuration
       final List<DataPoint> processedData = _processCustomData(data, config);
-      
+
       final series = ChartSeries(
         name: config.title,
         data: processedData,
@@ -430,45 +444,51 @@ class AdvancedVisualizationService {
     final List<DataPoint> data = [];
     final Duration rangeDuration = dateRange.end.difference(dateRange.start);
     final int cycleDays = 28;
-    
+
     DateTime currentDate = dateRange.start;
     int dayInCycle = 1;
-    
+
     while (currentDate.isBefore(dateRange.end)) {
       if (dayInCycle == 1) {
         // Menstruation start
-        data.add(DataPoint(
-          x: currentDate.millisecondsSinceEpoch.toDouble(),
-          y: 0,
-          label: 'Period Start',
-          metadata: {'event': 'menstruation', 'day': dayInCycle},
-        ));
+        data.add(
+          DataPoint(
+            x: currentDate.millisecondsSinceEpoch.toDouble(),
+            y: 0,
+            label: 'Period Start',
+            metadata: {'event': 'menstruation', 'day': dayInCycle},
+          ),
+        );
       } else if (dayInCycle == 14) {
         // Ovulation
-        data.add(DataPoint(
-          x: currentDate.millisecondsSinceEpoch.toDouble(),
-          y: 1,
-          label: 'Ovulation',
-          metadata: {'event': 'ovulation', 'day': dayInCycle},
-        ));
+        data.add(
+          DataPoint(
+            x: currentDate.millisecondsSinceEpoch.toDouble(),
+            y: 1,
+            label: 'Ovulation',
+            metadata: {'event': 'ovulation', 'day': dayInCycle},
+          ),
+        );
       } else if (dayInCycle >= 21) {
         // PMS phase
-        data.add(DataPoint(
-          x: currentDate.millisecondsSinceEpoch.toDouble(),
-          y: 2,
-          label: 'PMS Phase',
-          metadata: {'event': 'pms', 'day': dayInCycle},
-        ));
+        data.add(
+          DataPoint(
+            x: currentDate.millisecondsSinceEpoch.toDouble(),
+            y: 2,
+            label: 'PMS Phase',
+            metadata: {'event': 'pms', 'day': dayInCycle},
+          ),
+        );
       }
-      
+
       currentDate = currentDate.add(const Duration(days: 1));
       dayInCycle++;
-      
+
       if (dayInCycle > cycleDays) {
         dayInCycle = 1;
       }
     }
-    
+
     return data;
   }
 
@@ -476,22 +496,29 @@ class AdvancedVisualizationService {
   List<DataPoint> _generateMockPredictionData(DateRange dateRange) {
     final List<DataPoint> data = [];
     final DateTime futureDate = dateRange.end.add(const Duration(days: 30));
-    
+
     // Add predicted cycle events
-    data.add(DataPoint(
-      x: futureDate.millisecondsSinceEpoch.toDouble(),
-      y: 0,
-      label: 'Predicted Period',
-      metadata: {'event': 'prediction', 'type': 'menstruation'},
-    ));
-    
-    data.add(DataPoint(
-      x: futureDate.add(const Duration(days: 14)).millisecondsSinceEpoch.toDouble(),
-      y: 1,
-      label: 'Predicted Ovulation',
-      metadata: {'event': 'prediction', 'type': 'ovulation'},
-    ));
-    
+    data.add(
+      DataPoint(
+        x: futureDate.millisecondsSinceEpoch.toDouble(),
+        y: 0,
+        label: 'Predicted Period',
+        metadata: {'event': 'prediction', 'type': 'menstruation'},
+      ),
+    );
+
+    data.add(
+      DataPoint(
+        x: futureDate
+            .add(const Duration(days: 14))
+            .millisecondsSinceEpoch
+            .toDouble(),
+        y: 1,
+        label: 'Predicted Ovulation',
+        metadata: {'event': 'prediction', 'type': 'ovulation'},
+      ),
+    );
+
     return data;
   }
 
@@ -516,8 +543,8 @@ class AdvancedVisualizationService {
     required List<String> symptoms,
   }) {
     final Map<String, Map<String, double>> matrix = {};
-    final Random random = math.Random();
-    
+    final random = math.Random();
+
     for (final symptom1 in symptoms) {
       matrix[symptom1] = {};
       for (final symptom2 in symptoms) {
@@ -529,23 +556,28 @@ class AdvancedVisualizationService {
         }
       }
     }
-    
+
     return matrix;
   }
 
   /// Generate sleep quality chart
-  Future<ChartData> _generateSleepQualityChart(String userId, DateRange dateRange) async {
+  Future<ChartData> _generateSleepQualityChart(
+    String userId,
+    DateRange dateRange,
+  ) async {
     final List<DataPoint> sleepData = [];
-    final Random random = math.Random();
-    
+    final random = math.Random();
+
     DateTime currentDate = dateRange.start;
     while (currentDate.isBefore(dateRange.end)) {
-      sleepData.add(DataPoint(
-        x: currentDate.millisecondsSinceEpoch.toDouble(),
-        y: 5 + random.nextDouble() * 4, // 5-9 hours
-        label: currentDate.toString().split(' ')[0],
-        metadata: {'type': 'sleep_hours'},
-      ));
+      sleepData.add(
+        DataPoint(
+          x: currentDate.millisecondsSinceEpoch.toDouble(),
+          y: 5 + random.nextDouble() * 4, // 5-9 hours
+          label: currentDate.toString().split(' ')[0],
+          metadata: {'type': 'sleep_hours'},
+        ),
+      );
       currentDate = currentDate.add(const Duration(days: 1));
     }
 
@@ -558,16 +590,10 @@ class AdvancedVisualizationService {
           name: 'Sleep Hours',
           data: sleepData,
           color: Colors.indigo,
-          style: ChartSeriesStyle(
-            strokeWidth: 1.0,
-            fillOpacity: 0.8,
-          ),
+          style: ChartSeriesStyle(strokeWidth: 1.0, fillOpacity: 0.8),
         ),
       ],
-      xAxisConfig: AxisConfiguration(
-        title: 'Date',
-        type: AxisType.datetime,
-      ),
+      xAxisConfig: AxisConfiguration(title: 'Date', type: AxisType.datetime),
       yAxisConfig: AxisConfiguration(
         title: 'Hours',
         type: AxisType.numeric,
@@ -579,18 +605,23 @@ class AdvancedVisualizationService {
   }
 
   /// Generate activity level chart
-  Future<ChartData> _generateActivityLevelChart(String userId, DateRange dateRange) async {
+  Future<ChartData> _generateActivityLevelChart(
+    String userId,
+    DateRange dateRange,
+  ) async {
     final List<DataPoint> activityData = [];
-    final Random random = math.Random();
-    
+    final random = math.Random();
+
     DateTime currentDate = dateRange.start;
     while (currentDate.isBefore(dateRange.end)) {
-      activityData.add(DataPoint(
-        x: currentDate.millisecondsSinceEpoch.toDouble(),
-        y: random.nextDouble() * 100, // 0-100% activity
-        label: currentDate.toString().split(' ')[0],
-        metadata: {'type': 'activity_percentage'},
-      ));
+      activityData.add(
+        DataPoint(
+          x: currentDate.millisecondsSinceEpoch.toDouble(),
+          y: random.nextDouble() * 100, // 0-100% activity
+          label: currentDate.toString().split(' ')[0],
+          metadata: {'type': 'activity_percentage'},
+        ),
+      );
       currentDate = currentDate.add(const Duration(days: 1));
     }
 
@@ -603,16 +634,10 @@ class AdvancedVisualizationService {
           name: 'Activity %',
           data: activityData,
           color: Colors.green,
-          style: ChartSeriesStyle(
-            strokeWidth: 2.0,
-            fillOpacity: 0.3,
-          ),
+          style: ChartSeriesStyle(strokeWidth: 2.0, fillOpacity: 0.3),
         ),
       ],
-      xAxisConfig: AxisConfiguration(
-        title: 'Date',
-        type: AxisType.datetime,
-      ),
+      xAxisConfig: AxisConfiguration(title: 'Date', type: AxisType.datetime),
       yAxisConfig: AxisConfiguration(
         title: 'Activity %',
         type: AxisType.numeric,
@@ -624,7 +649,10 @@ class AdvancedVisualizationService {
   }
 
   /// Generate symptom frequency chart
-  Future<ChartData> _generateSymptomFrequencyChart(String userId, DateRange dateRange) async {
+  Future<ChartData> _generateSymptomFrequencyChart(
+    String userId,
+    DateRange dateRange,
+  ) async {
     final Map<String, int> symptomCounts = {
       'Headache': 15,
       'Fatigue': 12,
@@ -652,10 +680,7 @@ class AdvancedVisualizationService {
           name: 'Frequency',
           data: frequencyData,
           color: Colors.orange,
-          style: ChartSeriesStyle(
-            strokeWidth: 1.0,
-            fillOpacity: 0.8,
-          ),
+          style: ChartSeriesStyle(strokeWidth: 1.0, fillOpacity: 0.8),
         ),
       ],
       xAxisConfig: AxisConfiguration(
@@ -673,7 +698,10 @@ class AdvancedVisualizationService {
   }
 
   /// Process custom data for visualization
-  List<DataPoint> _processCustomData(Map<String, dynamic> data, VisualizationConfig config) {
+  List<DataPoint> _processCustomData(
+    Map<String, dynamic> data,
+    VisualizationConfig config,
+  ) {
     // This is a simplified implementation
     // In a real app, this would process data based on the configuration
     return [];

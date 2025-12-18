@@ -72,9 +72,9 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
         }
       } catch (e) {
         debugPrint('❌ Error determining route: $e');
-        // Fallback to auth screen
+        // Fallback to auth choice screen
         if (mounted) {
-          context.go('/auth');
+          context.go('/auth/choice');
         }
       }
     }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 /// Flow Ai Logo Widget - Provides consistent branding across the app
-/// 
+///
 /// Supports different sizes, colors, and layouts for various use cases:
 /// - App bars and headers
 /// - Splash screens
@@ -20,16 +20,16 @@ class FlowAiLogo extends StatelessWidget {
 
   /// The size of the logo (applies to icon portion)
   final double size;
-  
+
   /// Whether to show the text "Flow Ai" alongside the icon
   final bool showWordmark;
-  
+
   /// Layout arrangement of icon and wordmark
   final LogoLayout layout;
-  
+
   /// Optional color override (defaults to theme primary color)
   final Color? color;
-  
+
   /// Optional tap handler for interactive logos
   final VoidCallback? onTap;
 
@@ -37,25 +37,22 @@ class FlowAiLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final logoColor = color ?? theme.colorScheme.primary;
-    
+
     Widget logoContent;
-    
+
     if (showWordmark) {
       logoContent = _buildWithWordmark(context, logoColor);
     } else {
       logoContent = _buildIconOnly(logoColor);
     }
-    
+
     if (onTap != null) {
-      return GestureDetector(
-        onTap: onTap,
-        child: logoContent,
-      );
+      return GestureDetector(onTap: onTap, child: logoContent);
     }
-    
+
     return logoContent;
   }
-  
+
   Widget _buildIconOnly(Color logoColor) {
     return Container(
       width: size,
@@ -110,11 +107,9 @@ class FlowAiLogo extends StatelessWidget {
           children: [
             // Enhanced flower/cycle design
             Positioned.fill(
-              child: CustomPaint(
-                painter: FlowAiIconPainter(size: size),
-              ),
+              child: CustomPaint(painter: FlowAiIconPainter(size: size)),
             ),
-            
+
             // Central AI symbol with enhanced styling
             Center(
               child: Container(
@@ -125,10 +120,7 @@ class FlowAiLogo extends StatelessWidget {
                   gradient: const LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [
-                      Color(0xFFFFFFFF),
-                      Color(0xFFF8FAFC),
-                    ],
+                    colors: [Color(0xFFFFFFFF), Color(0xFFF8FAFC)],
                   ),
                   boxShadow: [
                     BoxShadow(
@@ -161,36 +153,31 @@ class FlowAiLogo extends StatelessWidget {
                       bottom: size * 0.07,
                       child: _buildEnhancedDataPoint(size, 3),
                     ),
-                    
-                    // Enhanced central flow symbol
+
+                    // Three stars icon
                     Center(
-                      child: Container(
-                        width: size * 0.14,
-                        height: size * 0.14,
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              Color(0xFFE879F9),
-                              Color(0xFFD946EF),
-                              Color(0xFFA855F7),
-                            ],
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.star,
+                            size: size * 0.06,
+                            color: const Color(0xFFA855F7),
                           ),
-                          borderRadius: BorderRadius.circular(size * 0.07),
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color(0xFFD946EF).withValues(alpha: 0.5),
-                              blurRadius: 4,
-                              offset: const Offset(0, 1),
-                            ),
-                          ],
-                        ),
-                        child: Icon(
-                          Icons.auto_awesome,
-                          size: size * 0.08,
-                          color: Colors.white,
-                        ),
+                          SizedBox(width: size * 0.02),
+                          Icon(
+                            Icons.star,
+                            size: size * 0.06,
+                            color: const Color(0xFFE879F9),
+                          ),
+                          SizedBox(width: size * 0.02),
+                          Icon(
+                            Icons.star,
+                            size: size * 0.06,
+                            color: const Color(0xFFD946EF),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -202,18 +189,7 @@ class FlowAiLogo extends StatelessWidget {
       ),
     );
   }
-  
-  Widget _buildDataPoint(double parentSize) {
-    return Container(
-      width: parentSize * 0.04,
-      height: parentSize * 0.04,
-      decoration: BoxDecoration(
-        color: const Color(0xFF7C3AED).withValues(alpha: 0.7),
-        borderRadius: BorderRadius.circular(parentSize * 0.02),
-      ),
-    );
-  }
-  
+
   Widget _buildEnhancedDataPoint(double parentSize, int index) {
     final colors = [
       [const Color(0xFFE879F9), const Color(0xFFD946EF)], // Magenta to rose
@@ -221,7 +197,7 @@ class FlowAiLogo extends StatelessWidget {
       [const Color(0xFFA855F7), const Color(0xFF7C3AED)], // Purple to violet
       [const Color(0xFF06B6D4), const Color(0xFF0891B2)], // Cyan to blue
     ];
-    
+
     return Container(
       width: parentSize * 0.05,
       height: parentSize * 0.05,
@@ -242,10 +218,10 @@ class FlowAiLogo extends StatelessWidget {
       ),
     );
   }
-  
+
   Widget _buildWithWordmark(BuildContext context, Color logoColor) {
     final theme = Theme.of(context);
-    
+
     final wordmark = Text(
       'Flow Ai',
       style: theme.textTheme.headlineMedium?.copyWith(
@@ -254,9 +230,9 @@ class FlowAiLogo extends StatelessWidget {
         letterSpacing: -0.5,
       ),
     );
-    
+
     final icon = _buildIconOnly(logoColor);
-    
+
     switch (layout) {
       case LogoLayout.horizontal:
         return Row(
@@ -267,7 +243,7 @@ class FlowAiLogo extends StatelessWidget {
             wordmark,
           ],
         );
-        
+
       case LogoLayout.vertical:
         return Column(
           mainAxisSize: MainAxisSize.min,
@@ -282,30 +258,27 @@ class FlowAiLogo extends StatelessWidget {
 }
 
 /// Layout options for logo presentation
-enum LogoLayout {
-  horizontal,
-  vertical,
-}
+enum LogoLayout { horizontal, vertical }
 
 /// Custom painter for the Flow Ai icon design with enhanced dimensional effects
 class FlowAiIconPainter extends CustomPainter {
   final double size;
-  
+
   FlowAiIconPainter({required this.size});
-  
+
   @override
   void paint(Canvas canvas, Size canvasSize) {
     final center = Offset(canvasSize.width / 2, canvasSize.height / 2);
     final radius = canvasSize.width * 0.28;
-    
+
     // Enhanced petals with multiple gradient layers for depth
     final petalColors = [
       [const Color(0xFFE879F9), const Color(0xFFD946EF)], // Magenta
-      [const Color(0xFFF97316), const Color(0xFFEAB308)], // Orange  
+      [const Color(0xFFF97316), const Color(0xFFEAB308)], // Orange
       [const Color(0xFFA855F7), const Color(0xFF7C3AED)], // Purple
       [const Color(0xFF06B6D4), const Color(0xFF3B82F6)], // Blue
     ];
-    
+
     // Draw 8 enhanced petals in circular arrangement
     for (int i = 0; i < 8; i++) {
       final angle = (i * 45) * (math.pi / 180);
@@ -313,28 +286,29 @@ class FlowAiIconPainter extends CustomPainter {
         center.dx + radius * 0.6 * math.cos(angle),
         center.dy + radius * 0.6 * math.sin(angle),
       );
-      
+
       final colorIndex = i % petalColors.length;
-      
+
       // Create gradient paint for each petal
       final petalPaint = Paint()
-        ..shader = LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            petalColors[colorIndex][0].withValues(alpha: 0.7),
-            petalColors[colorIndex][1].withValues(alpha: 0.4),
-            petalColors[colorIndex][0].withValues(alpha: 0.2),
-          ],
-          stops: const [0.0, 0.6, 1.0],
-        ).createShader(
-          Rect.fromCenter(
-            center: petalCenter,
-            width: canvasSize.width * 0.22,
-            height: canvasSize.width * 0.35,
-          ),
-        );
-      
+        ..shader =
+            LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                petalColors[colorIndex][0].withValues(alpha: 0.7),
+                petalColors[colorIndex][1].withValues(alpha: 0.4),
+                petalColors[colorIndex][0].withValues(alpha: 0.2),
+              ],
+              stops: const [0.0, 0.6, 1.0],
+            ).createShader(
+              Rect.fromCenter(
+                center: petalCenter,
+                width: canvasSize.width * 0.22,
+                height: canvasSize.width * 0.35,
+              ),
+            );
+
       // Draw petal with rounded rectangle for smoother appearance
       final petalRect = RRect.fromRectAndRadius(
         Rect.fromCenter(
@@ -344,29 +318,27 @@ class FlowAiIconPainter extends CustomPainter {
         ),
         Radius.circular(canvasSize.width * 0.08),
       );
-      
+
       canvas.drawRRect(petalRect, petalPaint);
-      
+
       // Add subtle highlight to each petal for 3D effect
       final highlightPaint = Paint()
-        ..shader = LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.center,
-          colors: [
-            Colors.white.withValues(alpha: 0.3),
-            Colors.transparent,
-          ],
-        ).createShader(
-          Rect.fromCenter(
-            center: Offset(
-              petalCenter.dx - canvasSize.width * 0.03,
-              petalCenter.dy - canvasSize.width * 0.05,
-            ),
-            width: canvasSize.width * 0.1,
-            height: canvasSize.width * 0.15,
-          ),
-        );
-      
+        ..shader =
+            LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.center,
+              colors: [Colors.white.withValues(alpha: 0.3), Colors.transparent],
+            ).createShader(
+              Rect.fromCenter(
+                center: Offset(
+                  petalCenter.dx - canvasSize.width * 0.03,
+                  petalCenter.dy - canvasSize.width * 0.05,
+                ),
+                width: canvasSize.width * 0.1,
+                height: canvasSize.width * 0.15,
+              ),
+            );
+
       final highlightRect = RRect.fromRectAndRadius(
         Rect.fromCenter(
           center: Offset(
@@ -378,14 +350,13 @@ class FlowAiIconPainter extends CustomPainter {
         ),
         Radius.circular(canvasSize.width * 0.04),
       );
-      
+
       canvas.drawRRect(highlightRect, highlightPaint);
     }
   }
-  
+
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
     return oldDelegate is! FlowAiIconPainter || oldDelegate.size != size;
   }
 }
-

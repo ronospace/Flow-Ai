@@ -7,7 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:crypto/crypto.dart';
-import 'package:encrypt/encrypt.dart';
+import 'package:encrypt/encrypt.dart' hide Key;
+import 'package:encrypt/encrypt.dart' as encrypt show Key;
 
 /// Security and privacy service for healthcare data protection
 class SecurityPrivacyService {
@@ -23,7 +24,7 @@ class SecurityPrivacyService {
   SharedPreferences? _prefs;
   final LocalAuthentication _localAuth = LocalAuthentication();
   late Encrypter _dataEncrypter;
-  late Key _masterKey;
+  late encrypt.Key _masterKey;
   SecurityConfig? _securityConfig;
 
   // Security constants
@@ -44,16 +45,16 @@ class SecurityPrivacyService {
 
     try {
       _prefs = await SharedPreferences.getInstance();
-      
+
       // Initialize encryption
       await _initializeEncryption();
-      
+
       // Load security configuration
       await _loadSecurityConfig();
-      
+
       // Initialize biometric authentication
       await _initializeBiometrics();
-      
+
       _isInitialized = true;
       debugPrint('🔒 Security and privacy service initialized');
     } catch (e) {
@@ -68,16 +69,16 @@ class SecurityPrivacyService {
       // Generate or retrieve master key
       String? storedKey = _prefs?.getString(_masterKeyAlias);
       if (storedKey != null) {
-        _masterKey = Key.fromBase64(storedKey);
+        _masterKey = encrypt.Key.fromBase64(storedKey);
       } else {
-        _masterKey = Key.fromSecureRandom(32);
+        _masterKey = encrypt.Key.fromSecureRandom(32);
         await _prefs?.setString(_masterKeyAlias, _masterKey.base64);
       }
-      
+
       // Initialize AES encrypter
       final iv = IV.fromSecureRandom(16);
       _dataEncrypter = Encrypter(AES(_masterKey));
-      
+
       debugPrint('🔐 Encryption system initialized');
     } catch (e) {
       debugPrint('❌ Failed to initialize encryption: $e');
@@ -90,9 +91,10 @@ class SecurityPrivacyService {
     try {
       final bool isAvailable = await _localAuth.canCheckBiometrics;
       final bool isDeviceSupported = await _localAuth.isDeviceSupported();
-      
+
       if (isAvailable && isDeviceSupported) {
-        final List<BiometricType> availableBiometrics = await _localAuth.getAvailableBiometrics();
+        final List<BiometricType> availableBiometrics = await _localAuth
+            .getAvailableBiometrics();
         debugPrint('🔓 Available biometrics: $availableBiometrics');
       }
     } catch (e) {
@@ -122,7 +124,10 @@ class SecurityPrivacyService {
   /// Save security configuration
   Future<void> _saveSecurityConfig() async {
     if (_securityConfig != null) {
-      await _prefs?.setString(_securityConfigKey, json.encode(_securityConfig!.toJson()));
+      await _prefs?.setString(
+        _securityConfigKey,
+        json.encode(_securityConfig!.toJson()),
+      );
     }
   }
 
@@ -135,7 +140,8 @@ class SecurityPrivacyService {
 
     try {
       // Check if biometrics are enabled
-      final bool biometricEnabled = _prefs?.getBool(_biometricEnabledKey) ?? false;
+      final bool biometricEnabled =
+          _prefs?.getBool(_biometricEnabledKey) ?? false;
       if (!biometricEnabled && requireBiometrics) {
         return BiometricAuthResult(
           success: false,
@@ -188,7 +194,7 @@ class SecurityPrivacyService {
       }
     } on PlatformException catch (e) {
       await _handleFailedAuth();
-      
+
       BiometricErrorType errorType;
       switch (e.code) {
         case 'NotAvailable':
@@ -232,14 +238,16 @@ class SecurityPrivacyService {
         reason: 'Verify biometric authentication to enable this feature',
         requireBiometrics: false,
       );
-      
+
       if (!result.success) {
         throw SecurityException('Cannot enable biometrics: ${result.error}');
       }
     }
 
     await _prefs?.setBool(_biometricEnabledKey, enabled);
-    debugPrint('🔓 Biometric authentication ${enabled ? 'enabled' : 'disabled'}');
+    debugPrint(
+      '🔓 Biometric authentication ${enabled ? 'enabled' : 'disabled'}',
+    );
   }
 
   /// Check if biometric authentication is enabled
@@ -248,7 +256,8 @@ class SecurityPrivacyService {
   }
 
   /// Encrypt sensitive data
-  Future<EncryptedData> encryptData(String data, {
+  Future<EncryptedData> encryptData(
+    String data, {
     String? additionalContext,
   }) async {
     if (!_isInitialized) await initialize();
@@ -256,7 +265,7 @@ class SecurityPrivacyService {
     try {
       final IV iv = IV.fromSecureRandom(16);
       final Encrypted encrypted = _dataEncrypter.encrypt(data, iv: iv);
-      
+
       final EncryptedData result = EncryptedData(
         encryptedContent: encrypted.base64,
         iv: iv.base64,
@@ -279,10 +288,12 @@ class SecurityPrivacyService {
 
     try {
       final IV iv = IV.fromBase64(encryptedData.iv);
-      final Encrypted encrypted = Encrypted.fromBase64(encryptedData.encryptedContent);
-      
+      final Encrypted encrypted = Encrypted.fromBase64(
+        encryptedData.encryptedContent,
+      );
+
       final String decrypted = _dataEncrypter.decrypt(encrypted, iv: iv);
-      
+
       debugPrint('🔓 Data decrypted successfully');
       return decrypted;
     } catch (e) {
@@ -292,7 +303,9 @@ class SecurityPrivacyService {
   }
 
   /// Securely store encrypted health data
-  Future<void> storeHealthData(String key, String data, {
+  Future<void> storeHealthData(
+    String key,
+    String data, {
     DataSensitivityLevel sensitivity = DataSensitivityLevel.high,
   }) async {
     if (!_isInitialized) await initialize();
@@ -307,13 +320,19 @@ class SecurityPrivacyService {
       };
 
       final String dataStr = json.encode(dataWithMetadata);
-      final EncryptedData encrypted = await encryptData(dataStr, additionalContext: key);
-      
-      await _prefs?.setString('encrypted_$key', json.encode(encrypted.toJson()));
-      
+      final EncryptedData encrypted = await encryptData(
+        dataStr,
+        additionalContext: key,
+      );
+
+      await _prefs?.setString(
+        'encrypted_$key',
+        json.encode(encrypted.toJson()),
+      );
+
       // Log access for audit trail
       await _logDataAccess(DataAccessType.write, key, sensitivity);
-      
+
       debugPrint('💾 Health data stored securely: $key');
     } catch (e) {
       debugPrint('❌ Failed to store health data: $e');
@@ -322,7 +341,8 @@ class SecurityPrivacyService {
   }
 
   /// Retrieve encrypted health data
-  Future<String?> retrieveHealthData(String key, {
+  Future<String?> retrieveHealthData(
+    String key, {
     bool requireAuth = true,
   }) async {
     if (!_isInitialized) await initialize();
@@ -330,7 +350,9 @@ class SecurityPrivacyService {
     try {
       // Check authentication if required
       if (requireAuth && !await _isSessionValid()) {
-        throw SecurityException('Authentication required to access health data');
+        throw SecurityException(
+          'Authentication required to access health data',
+        );
       }
 
       final String? encryptedStr = _prefs?.getString('encrypted_$key');
@@ -338,15 +360,15 @@ class SecurityPrivacyService {
 
       final Map<String, dynamic> encryptedJson = json.decode(encryptedStr);
       final EncryptedData encrypted = EncryptedData.fromJson(encryptedJson);
-      
+
       final String decryptedStr = await decryptData(encrypted);
       final Map<String, dynamic> dataWithMetadata = json.decode(decryptedStr);
-      
+
       // Verify data integrity
       final String data = dataWithMetadata['data'];
       final String storedChecksum = dataWithMetadata['checksum'];
       final String calculatedChecksum = _calculateChecksum(data);
-      
+
       if (storedChecksum != calculatedChecksum) {
         throw SecurityException('Data integrity check failed');
       }
@@ -355,7 +377,7 @@ class SecurityPrivacyService {
       final DataSensitivityLevel sensitivity = DataSensitivityLevel.values
           .firstWhere((e) => e.name == dataWithMetadata['sensitivity']);
       await _logDataAccess(DataAccessType.read, key, sensitivity);
-      
+
       debugPrint('📖 Health data retrieved securely: $key');
       return data;
     } catch (e) {
@@ -370,7 +392,11 @@ class SecurityPrivacyService {
 
     try {
       await _prefs?.remove('encrypted_$key');
-      await _logDataAccess(DataAccessType.delete, key, DataSensitivityLevel.high);
+      await _logDataAccess(
+        DataAccessType.delete,
+        key,
+        DataSensitivityLevel.high,
+      );
       debugPrint('🗑️ Health data deleted securely: $key');
     } catch (e) {
       debugPrint('❌ Failed to delete health data: $e');
@@ -401,7 +427,10 @@ class SecurityPrivacyService {
     if (!_isInitialized) await initialize();
 
     try {
-      await _prefs?.setString(_privacySettingsKey, json.encode(settings.toJson()));
+      await _prefs?.setString(
+        _privacySettingsKey,
+        json.encode(settings.toJson()),
+      );
       debugPrint('⚙️ Privacy settings updated');
     } catch (e) {
       debugPrint('❌ Failed to update privacy settings: $e');
@@ -417,8 +446,9 @@ class SecurityPrivacyService {
     if (!_isInitialized) await initialize();
 
     try {
-      final List<String> auditEntries = _prefs?.getStringList('security_audit') ?? [];
-      
+      final List<String> auditEntries =
+          _prefs?.getStringList('security_audit') ?? [];
+
       final List<SecurityAuditEntry> entries = auditEntries
           .map((entryStr) {
             try {
@@ -435,7 +465,9 @@ class SecurityPrivacyService {
       // Filter by date if specified
       List<SecurityAuditEntry> filteredEntries = entries;
       if (since != null) {
-        filteredEntries = entries.where((entry) => entry.timestamp.isAfter(since)).toList();
+        filteredEntries = entries
+            .where((entry) => entry.timestamp.isAfter(since))
+            .toList();
       }
 
       // Sort by timestamp (newest first) and limit
@@ -456,7 +488,7 @@ class SecurityPrivacyService {
 
     try {
       final Map<String, String> backupData = {};
-      
+
       // Collect all requested data
       for (final key in dataKeys) {
         final String? data = await retrieveHealthData(key, requireAuth: false);
@@ -480,7 +512,7 @@ class SecurityPrivacyService {
         'data': backupData,
       });
 
-      Key backupKey = _masterKey;
+      encrypt.Key backupKey = _masterKey;
       if (passphrase != null) {
         // Use passphrase-derived key if provided
         backupKey = _deriveKeyFromPassphrase(passphrase);
@@ -510,7 +542,7 @@ class SecurityPrivacyService {
     if (!_isInitialized) await initialize();
 
     try {
-      Key restoreKey = _masterKey;
+      encrypt.Key restoreKey = _masterKey;
       if (backup.isPassphraseProtected) {
         if (passphrase == null) {
           throw SecurityException('Passphrase required for backup restore');
@@ -522,14 +554,18 @@ class SecurityPrivacyService {
       final IV iv = IV.fromBase64(backup.iv);
       final Encrypter restoreEncrypter = Encrypter(AES(restoreKey));
       final Encrypted encrypted = Encrypted.fromBase64(backup.encryptedData);
-      
+
       final String decryptedJson = restoreEncrypter.decrypt(encrypted, iv: iv);
       final Map<String, dynamic> backupContent = json.decode(decryptedJson);
-      
+
       // Verify backup integrity
-      final Map<String, String> restoredData = Map<String, String>.from(backupContent['data']);
-      final String calculatedChecksum = _calculateChecksum(json.encode(restoredData));
-      
+      final Map<String, String> restoredData = Map<String, String>.from(
+        backupContent['data'],
+      );
+      final String calculatedChecksum = _calculateChecksum(
+        json.encode(restoredData),
+      );
+
       if (calculatedChecksum != backup.metadata.checksum) {
         throw SecurityException('Backup integrity verification failed');
       }
@@ -564,12 +600,12 @@ class SecurityPrivacyService {
   Future<bool> _isSessionValid() async {
     final String? sessionToken = _prefs?.getString(_sessionTokenKey);
     final int? lastAuth = _prefs?.getInt(_lastAuthKey);
-    
+
     if (sessionToken == null || lastAuth == null) return false;
-    
+
     final DateTime lastAuthTime = DateTime.fromMillisecondsSinceEpoch(lastAuth);
     final Duration elapsed = DateTime.now().difference(lastAuthTime);
-    
+
     return elapsed.inMinutes <= _sessionTimeoutMinutes;
   }
 
@@ -581,7 +617,7 @@ class SecurityPrivacyService {
   }
 
   String _generateSecureToken() {
-    final Random random = math.Random.secure();
+    final random = math.Random.secure();
     final List<int> bytes = List<int>.generate(32, (i) => random.nextInt(256));
     return base64Encode(bytes);
   }
@@ -592,10 +628,10 @@ class SecurityPrivacyService {
     return digest.toString();
   }
 
-  Key _deriveKeyFromPassphrase(String passphrase) {
+  encrypt.Key _deriveKeyFromPassphrase(String passphrase) {
     final List<int> passphraseBytes = utf8.encode(passphrase);
     final Digest digest = sha256.convert(passphraseBytes);
-    return Key(Uint8List.fromList(digest.bytes));
+    return encrypt.Key(Uint8List.fromList(digest.bytes));
   }
 
   Future<void> _handleSuccessfulAuth() async {
@@ -606,28 +642,38 @@ class SecurityPrivacyService {
   Future<void> _handleFailedAuth() async {
     final int failedCount = (_prefs?.getInt('failed_auth_count') ?? 0) + 1;
     await _prefs?.setInt('failed_auth_count', failedCount);
-    
+
     if (failedCount >= _maxFailedAttempts) {
-      final int lockoutTime = DateTime.now().add(Duration(minutes: _lockoutDurationMinutes)).millisecondsSinceEpoch;
+      final int lockoutTime = DateTime.now()
+          .add(Duration(minutes: _lockoutDurationMinutes))
+          .millisecondsSinceEpoch;
       await _prefs?.setInt('lockout_timestamp', lockoutTime);
     }
 
-    await _logSecurityEvent(SecurityEventType.authFailed, 'Failed authentication attempt #$failedCount');
+    await _logSecurityEvent(
+      SecurityEventType.authFailed,
+      'Failed authentication attempt #$failedCount',
+    );
   }
 
   Future<bool> _isAccountLocked() async {
     final int? lockoutTime = _prefs?.getInt('lockout_timestamp');
     if (lockoutTime == null) return false;
-    
+
     return DateTime.now().millisecondsSinceEpoch < lockoutTime;
   }
 
-  Future<void> _logDataAccess(DataAccessType accessType, String key, DataSensitivityLevel sensitivity) async {
+  Future<void> _logDataAccess(
+    DataAccessType accessType,
+    String key,
+    DataSensitivityLevel sensitivity,
+  ) async {
     final SecurityAuditEntry entry = SecurityAuditEntry(
       id: _generateSecureToken(),
       timestamp: DateTime.now(),
       eventType: SecurityEventType.dataAccess,
-      description: '${accessType.name.toUpperCase()} access to $key (${sensitivity.name})',
+      description:
+          '${accessType.name.toUpperCase()} access to $key (${sensitivity.name})',
       severity: SecuritySeverity.info,
       additionalData: {
         'access_type': accessType.name,
@@ -639,7 +685,9 @@ class SecurityPrivacyService {
     await _addAuditEntry(entry);
   }
 
-  Future<void> _logSecurityEvent(SecurityEventType eventType, String description, {
+  Future<void> _logSecurityEvent(
+    SecurityEventType eventType,
+    String description, {
     SecuritySeverity severity = SecuritySeverity.warning,
     Map<String, dynamic>? additionalData,
   }) async {
@@ -657,14 +705,15 @@ class SecurityPrivacyService {
 
   Future<void> _addAuditEntry(SecurityAuditEntry entry) async {
     try {
-      final List<String> auditEntries = _prefs?.getStringList('security_audit') ?? [];
+      final List<String> auditEntries =
+          _prefs?.getStringList('security_audit') ?? [];
       auditEntries.add(json.encode(entry.toJson()));
-      
+
       // Keep only recent entries (last 1000)
       if (auditEntries.length > 1000) {
         auditEntries.removeRange(0, auditEntries.length - 1000);
       }
-      
+
       await _prefs?.setStringList('security_audit', auditEntries);
     } catch (e) {
       debugPrint('⚠️ Failed to log audit entry: $e');
@@ -678,19 +727,19 @@ class SecurityPrivacyService {
     try {
       // Clear encryption keys
       await _prefs?.remove(_masterKeyAlias);
-      
+
       // Clear session data
       await _prefs?.remove(_sessionTokenKey);
       await _prefs?.remove(_lastAuthKey);
-      
+
       // Clear settings
       await _prefs?.remove(_biometricEnabledKey);
       await _prefs?.remove(_privacySettingsKey);
       await _prefs?.remove(_securityConfigKey);
-      
+
       // Clear audit log
       await _prefs?.remove('security_audit');
-      
+
       // Clear all encrypted health data
       final Set<String> allKeys = _prefs?.getKeys() ?? {};
       for (final key in allKeys) {
@@ -698,7 +747,7 @@ class SecurityPrivacyService {
           await _prefs?.remove(key);
         }
       }
-      
+
       debugPrint('🧹 All security data cleared');
     } catch (e) {
       debugPrint('❌ Failed to clear security data: $e');
@@ -714,19 +763,9 @@ class SecurityPrivacyService {
 
 // === ENUMS ===
 
-enum DataSensitivityLevel {
-  low,
-  medium,
-  high,
-  critical,
-}
+enum DataSensitivityLevel { low, medium, high, critical }
 
-enum DataAccessType {
-  read,
-  write,
-  delete,
-  export,
-}
+enum DataAccessType { read, write, delete, export }
 
 enum SecurityEventType {
   authSuccess,
@@ -738,12 +777,7 @@ enum SecurityEventType {
   securityViolation,
 }
 
-enum SecuritySeverity {
-  info,
-  warning,
-  error,
-  critical,
-}
+enum SecuritySeverity { info, warning, error, critical }
 
 enum BiometricErrorType {
   notAvailable,
@@ -809,9 +843,10 @@ class SecurityConfig {
       maxFailedAttempts: json['max_failed_attempts'] ?? 5,
       lockoutDurationMinutes: json['lockout_duration_minutes'] ?? 30,
       auditLoggingEnabled: json['audit_logging_enabled'] ?? true,
-      defaultSensitivity: DataSensitivityLevel.values
-          .firstWhere((e) => e.name == json['default_sensitivity'], 
-          orElse: () => DataSensitivityLevel.high),
+      defaultSensitivity: DataSensitivityLevel.values.firstWhere(
+        (e) => e.name == json['default_sensitivity'],
+        orElse: () => DataSensitivityLevel.high,
+      ),
     );
   }
 }
@@ -873,7 +908,9 @@ class PrivacySettings {
       shareWithHealthProviders: json['share_with_health_providers'] ?? false,
       allowBackupToCloud: json['allow_backup_to_cloud'] ?? false,
       allowDataExport: json['allow_data_export'] ?? true,
-      dataTypesSharing: Map<String, bool>.from(json['data_types_sharing'] ?? {}),
+      dataTypesSharing: Map<String, bool>.from(
+        json['data_types_sharing'] ?? {},
+      ),
     );
   }
 }
@@ -960,11 +997,13 @@ class SecurityAuditEntry {
     return SecurityAuditEntry(
       id: json['id'],
       timestamp: DateTime.parse(json['timestamp']),
-      eventType: SecurityEventType.values
-          .firstWhere((e) => e.name == json['event_type']),
+      eventType: SecurityEventType.values.firstWhere(
+        (e) => e.name == json['event_type'],
+      ),
       description: json['description'],
-      severity: SecuritySeverity.values
-          .firstWhere((e) => e.name == json['severity']),
+      severity: SecuritySeverity.values.firstWhere(
+        (e) => e.name == json['severity'],
+      ),
       additionalData: json['additional_data'],
     );
   }

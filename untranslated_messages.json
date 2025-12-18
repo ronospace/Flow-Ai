@@ -3,6 +3,7 @@
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -92,6 +93,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -497,13 +500,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "bg": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -593,6 +601,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -998,13 +1008,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "bn": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -1094,6 +1109,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -1499,13 +1516,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "cs": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -1595,6 +1617,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -2000,13 +2024,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "cy": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -2096,6 +2125,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -2501,13 +2532,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "da": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -2597,6 +2633,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -3002,13 +3040,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "de": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -3098,6 +3141,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -3503,13 +3548,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "el": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -3599,6 +3649,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -4004,10 +4056,17 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "es": [
+    "cycleLengthLabel",
+    "login",
+    "signUp",
     "selectTodaysFlowIntensity",
     "selectAllSymptoms",
     "howAreYouFeelingToday",
@@ -4193,13 +4252,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "et": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -4289,6 +4353,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -4694,13 +4760,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "fi": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -4790,6 +4861,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -5195,10 +5268,17 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "fr": [
+    "cycleLengthLabel",
+    "login",
+    "signUp",
     "medicalDisclaimer",
     "medicalDisclaimerShort",
     "aiGeneratedContent",
@@ -5217,6 +5297,7 @@
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -5306,6 +5387,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -5711,13 +5794,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "he": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -5807,6 +5895,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -6212,13 +6302,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "hi": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -6308,6 +6403,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -6713,13 +6810,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "hr": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -6809,6 +6911,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -7214,13 +7318,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "hu": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -7310,6 +7419,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -7715,13 +7826,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "is": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -7811,6 +7927,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -8216,13 +8334,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "it": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -8312,6 +8435,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -8717,13 +8842,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "ja": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -8813,6 +8943,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -9218,13 +9350,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "ko": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -9314,6 +9451,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -9719,13 +9858,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "lt": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -9815,6 +9959,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -10220,13 +10366,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "lv": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -10316,6 +10467,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -10721,13 +10874,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "mt": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -10817,6 +10975,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -11222,13 +11382,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "nl": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -11318,6 +11483,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -11723,13 +11890,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "no": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -11819,6 +11991,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -12224,13 +12398,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "pl": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -12320,6 +12499,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -12725,13 +12906,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "pt": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -12821,6 +13007,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -13226,13 +13414,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "ro": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -13322,6 +13515,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -13727,13 +13922,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "ru": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -13823,6 +14023,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -14228,13 +14430,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "sk": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -14324,6 +14531,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -14729,13 +14938,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "sl": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -14825,6 +15039,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -15230,13 +15446,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "sv": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -15326,6 +15547,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -15731,13 +15954,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "th": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -15827,6 +16055,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -16232,13 +16462,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "tr": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -16328,6 +16563,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -16733,13 +16970,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "uk": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -16829,6 +17071,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -17234,13 +17478,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "vi": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -17330,6 +17579,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -17735,13 +17986,18 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ],
 
   "zh": [
     "appDescription",
     "cycleDay",
     "cycleLength",
+    "cycleLengthLabel",
     "daysUntilPeriod",
     "daysUntilOvulation",
     "currentPhase",
@@ -17831,6 +18087,8 @@
     "delete",
     "edit",
     "update",
+    "login",
+    "signUp",
     "confirm",
     "thisMonth",
     "nextMonth",
@@ -18236,6 +18494,10 @@
     "personalizedEstimates",
     "cyclePatternAwareness",
     "mayHelpIncreaseAwareness",
-    "estimatedBasedOnPatterns"
+    "estimatedBasedOnPatterns",
+    "healthDashboardMatrix",
+    "realTimeBiometricAnalysis",
+    "predictiveAnalyticsCenter",
+    "aiPoweredCycleForecast"
   ]
 }

@@ -15,18 +15,20 @@ class ConsumerIntelligenceDashboard extends StatefulWidget {
   const ConsumerIntelligenceDashboard({super.key});
 
   @override
-  State<ConsumerIntelligenceDashboard> createState() => _ConsumerIntelligenceDashboardState();
+  State<ConsumerIntelligenceDashboard> createState() =>
+      _ConsumerIntelligenceDashboardState();
 }
 
-class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDashboard>
+class _ConsumerIntelligenceDashboardState
+    extends State<ConsumerIntelligenceDashboard>
     with TickerProviderStateMixin {
-  
-  final BiometricIntegrationService _biometricService = BiometricIntegrationService.instance;
+  final BiometricIntegrationService _biometricService =
+      BiometricIntegrationService.instance;
   final EnhancedAIChatService _aiService = EnhancedAIChatService();
-  
+
   late AnimationController _animationController;
   late AnimationController _refreshController;
-  
+
   // Dashboard state
   BiometricAnalysis? _currentAnalysis;
   List<IntelligenceInsight> _insights = [];
@@ -35,21 +37,21 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
   bool _isLoading = true;
   bool _isRefreshing = false;
   String _selectedTimeframe = '7d';
-  
+
   @override
   void initState() {
     super.initState();
-    
+
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
     );
-    
+
     _refreshController = AnimationController(
       duration: const Duration(milliseconds: 1200),
       vsync: this,
     );
-    
+
     _initializeDashboard();
   }
 
@@ -63,7 +65,7 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
   /// Initialize dashboard data
   Future<void> _initializeDashboard() async {
     setState(() => _isLoading = true);
-    
+
     try {
       await _biometricService.initialize();
       await _loadDashboardData();
@@ -79,30 +81,31 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
   Future<void> _loadDashboardData() async {
     final endDate = DateTime.now();
     final startDate = _getStartDateForTimeframe(_selectedTimeframe, endDate);
-    
+
     try {
       // Load biometric analysis
       final analysis = await _biometricService.getBiometricAnalysis(
         startDate: startDate,
         endDate: endDate,
       );
-      
+
       // Generate AI insights
       final insights = await _generateIntelligenceInsights(analysis);
-      
+
       // Generate personalized recommendations
-      final recommendations = await _generatePersonalizedRecommendations(analysis);
-      
+      final recommendations = await _generatePersonalizedRecommendations(
+        analysis,
+      );
+
       // Calculate metrics
       final metrics = await _calculateDashboardMetrics(analysis);
-      
+
       setState(() {
         _currentAnalysis = analysis;
         _insights = insights;
         _recommendations = recommendations;
         _metrics = metrics;
       });
-      
     } catch (e) {
       debugPrint('Failed to load dashboard data: $e');
     }
@@ -111,10 +114,10 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
   /// Refresh dashboard data
   Future<void> _refreshDashboard() async {
     if (_isRefreshing) return;
-    
+
     setState(() => _isRefreshing = true);
     _refreshController.forward();
-    
+
     try {
       await _biometricService.refreshCache();
       await _loadDashboardData();
@@ -128,41 +131,39 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localizations = AppLocalizations.of(context);
-    
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
           // Enhanced App Bar
           _buildAppBar(context, localizations),
-          
+
           if (_isLoading)
-            SliverFillRemaining(
-              child: _buildLoadingState(),
-            )
+            SliverFillRemaining(child: _buildLoadingState())
           else ...[
             // Metrics Overview
             _buildMetricsOverview(theme),
-            
+
             // AI Insights Section
             _buildInsightsSection(theme),
-            
+
             // Biometric Trends
             _buildTrendsSection(theme),
-            
+
             // Personalized Recommendations
             _buildRecommendationsSection(theme),
-            
+
             // Interactive Analytics
             _buildAnalyticsSection(theme),
-            
+
             // Quick Actions
             _buildQuickActionsSection(theme),
-            
+
             const SliverPadding(padding: EdgeInsets.only(bottom: 100)),
           ],
         ],
       ),
-      
+
       // Floating refresh button
       floatingActionButton: _buildFloatingActionButton(),
     );
@@ -216,17 +217,24 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Intelligence Dashboard',
-                              style: theme.textTheme.headlineSmall?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ).animate().fadeIn(delay: 400.ms).slideX(begin: 0.3),
+                                  'Intelligence Dashboard',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineSmall
+                                      ?.copyWith(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                )
+                                .animate()
+                                .fadeIn(delay: 400.ms)
+                                .slideX(begin: 0.3),
                             Text(
                               'AI-powered health insights',
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                color: Colors.white.withValues(alpha: 0.1),
-                              ),
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(
+                                    color: Colors.white.withValues(alpha: 0.1),
+                                  ),
                             ).animate().fadeIn(delay: 600.ms),
                           ],
                         ),
@@ -264,7 +272,7 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
               duration: const Duration(milliseconds: 300),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: isSelected 
+                color: isSelected
                     ? Colors.white.withValues(alpha: 0.1)
                     : Colors.white.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(20),
@@ -300,16 +308,16 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
           const SizedBox(height: 24),
           Text(
             'Analyzing your health data...',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: AppTheme.mediumGrey,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(color: AppTheme.mediumGrey),
           ),
           const SizedBox(height: 8),
           Text(
             'This may take a few moments',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: AppTheme.lightGrey,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: AppTheme.lightGrey),
           ),
         ],
       ),
@@ -318,8 +326,9 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
 
   /// Build metrics overview
   Widget _buildMetricsOverview(ThemeData theme) {
-    if (_metrics == null) return const SliverToBoxAdapter(child: SizedBox.shrink());
-    
+    if (_metrics == null)
+      return const SliverToBoxAdapter(child: SizedBox.shrink());
+
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -388,7 +397,13 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
   }
 
   /// Build metric card
-  Widget _buildMetricCard(String title, String value, IconData icon, Color iconColor, Color valueColor) {
+  Widget _buildMetricCard(
+    String title,
+    String value,
+    IconData icon,
+    Color iconColor,
+    Color valueColor,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -414,11 +429,7 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
                   color: iconColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(
-                  icon,
-                  color: iconColor,
-                  size: 18,
-                ),
+                child: Icon(icon, color: iconColor, size: 18),
               ),
               const Spacer(),
               Container(
@@ -456,8 +467,9 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
 
   /// Build insights section
   Widget _buildInsightsSection(ThemeData theme) {
-    if (_insights.isEmpty) return const SliverToBoxAdapter(child: SizedBox.shrink());
-    
+    if (_insights.isEmpty)
+      return const SliverToBoxAdapter(child: SizedBox.shrink());
+
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -475,7 +487,10 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
                 ),
                 const SizedBox(width: 8),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
                       colors: [AppTheme.primaryPurple, AppTheme.primaryRose],
@@ -546,7 +561,9 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
                 width: 32,
                 height: 32,
                 decoration: BoxDecoration(
-                  color: _getInsightColor(insight.priority).withValues(alpha: 0.1),
+                  color: _getInsightColor(
+                    insight.priority,
+                  ).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
@@ -582,7 +599,9 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: _getInsightColor(insight.priority).withValues(alpha: 0.1),
+                  color: _getInsightColor(
+                    insight.priority,
+                  ).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
@@ -627,7 +646,10 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
                 TextButton(
                   onPressed: () => _showInsightDetails(insight),
                   style: TextButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 4,
+                    ),
                     minimumSize: Size.zero,
                   ),
                   child: Text(
@@ -649,8 +671,9 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
 
   /// Build trends section
   Widget _buildTrendsSection(ThemeData theme) {
-    if (_currentAnalysis == null) return const SliverToBoxAdapter(child: SizedBox.shrink());
-    
+    if (_currentAnalysis == null)
+      return const SliverToBoxAdapter(child: SizedBox.shrink());
+
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -701,10 +724,7 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
     final spots = _currentAnalysis!.heartRateData
         .asMap()
         .entries
-        .map((entry) => FlSpot(
-              entry.key.toDouble(),
-              entry.value.value,
-            ))
+        .map((entry) => FlSpot(entry.key.toDouble(), entry.value.value))
         .toList();
 
     return LineChart(
@@ -733,11 +753,7 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
               ),
             ),
           ),
-          bottomTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: false,
-            ),
-          ),
+          bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
           topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
           rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
         ),
@@ -769,8 +785,9 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
 
   /// Build recommendations section
   Widget _buildRecommendationsSection(ThemeData theme) {
-    if (_recommendations.isEmpty) return const SliverToBoxAdapter(child: SizedBox.shrink());
-    
+    if (_recommendations.isEmpty)
+      return const SliverToBoxAdapter(child: SizedBox.shrink());
+
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -979,10 +996,7 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: color.withValues(alpha: 0.1),
-            width: 1,
-          ),
+          border: Border.all(color: color.withValues(alpha: 0.1), width: 1),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.1),
@@ -1001,11 +1015,7 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
                 color: color.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Icon(
-                icon,
-                color: color,
-                size: 22,
-              ),
+              child: Icon(icon, color: color, size: 22),
             ),
             const SizedBox(height: 12),
             Text(
@@ -1019,10 +1029,7 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
             const SizedBox(height: 4),
             Text(
               subtitle,
-              style: const TextStyle(
-                fontSize: 12,
-                color: AppTheme.mediumGrey,
-              ),
+              style: const TextStyle(fontSize: 12, color: AppTheme.mediumGrey),
             ),
           ],
         ),
@@ -1050,12 +1057,36 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
               spacing: 12,
               runSpacing: 12,
               children: [
-                _buildQuickActionChip('Log Symptoms', Icons.add_circle_outline, () => _logSymptoms(context)),
-                _buildQuickActionChip('Track Mood', Icons.sentiment_satisfied_alt, () => _trackMood(context)),
-                _buildQuickActionChip('Record Temperature', Icons.thermostat, () => _recordTemperature(context)),
-                _buildQuickActionChip('Ask Mira AI', Icons.psychology, () => _askMiraAI(context)),
-                _buildQuickActionChip('View Calendar', Icons.calendar_today, () => _viewCalendar(context)),
-                _buildQuickActionChip('Settings', Icons.settings, () => _openSettings(context)),
+                _buildQuickActionChip(
+                  'Log Symptoms',
+                  Icons.add_circle_outline,
+                  () => _logSymptoms(context),
+                ),
+                _buildQuickActionChip(
+                  'Track Mood',
+                  Icons.sentiment_satisfied_alt,
+                  () => _trackMood(context),
+                ),
+                _buildQuickActionChip(
+                  'Record Temperature',
+                  Icons.thermostat,
+                  () => _recordTemperature(context),
+                ),
+                _buildQuickActionChip(
+                  'Ask Mira AI',
+                  Icons.psychology,
+                  () => _askMiraAI(context),
+                ),
+                _buildQuickActionChip(
+                  'View Calendar',
+                  Icons.calendar_today,
+                  () => _viewCalendar(context),
+                ),
+                _buildQuickActionChip(
+                  'Settings',
+                  Icons.settings,
+                  () => _openSettings(context),
+                ),
               ],
             ),
           ],
@@ -1065,7 +1096,11 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
   }
 
   /// Build quick action chip
-  Widget _buildQuickActionChip(String label, IconData icon, VoidCallback onTap) {
+  Widget _buildQuickActionChip(
+    String label,
+    IconData icon,
+    VoidCallback onTap,
+  ) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -1081,11 +1116,7 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              icon,
-              size: 16,
-              color: AppTheme.primaryPurple,
-            ),
+            Icon(icon, size: 16, color: AppTheme.primaryPurple),
             const SizedBox(width: 8),
             Text(
               label,
@@ -1109,10 +1140,7 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
       child: FloatingActionButton(
         onPressed: _refreshDashboard,
         backgroundColor: AppTheme.primaryPurple,
-        child: const Icon(
-          Icons.refresh,
-          color: Colors.white,
-        ),
+        child: const Icon(Icons.refresh, color: Colors.white),
       ),
     ).animate().scale(delay: 1400.ms);
   }
@@ -1224,13 +1252,16 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
 
   // === AI DATA GENERATION ===
 
-  Future<List<IntelligenceInsight>> _generateIntelligenceInsights(BiometricAnalysis analysis) async {
+  Future<List<IntelligenceInsight>> _generateIntelligenceInsights(
+    BiometricAnalysis analysis,
+  ) async {
     // This would use AI service to generate insights
     return [
       IntelligenceInsight(
         id: 'insight_1',
         title: 'Sleep Quality Trend',
-        description: 'Your sleep quality has improved by 15% over the last 7 days. This correlates with your increased evening routine consistency.',
+        description:
+            'Your sleep quality has improved by 15% over the last 7 days. This correlates with your increased evening routine consistency.',
         category: 'sleep',
         priority: InsightPriority.medium,
         confidence: 0.85,
@@ -1241,7 +1272,8 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
       IntelligenceInsight(
         id: 'insight_2',
         title: 'Stress-Cycle Correlation',
-        description: 'Higher stress levels detected 3-5 days before your period. Consider stress management techniques during this phase.',
+        description:
+            'Higher stress levels detected 3-5 days before your period. Consider stress management techniques during this phase.',
         category: 'cycle',
         priority: InsightPriority.high,
         confidence: 0.92,
@@ -1252,7 +1284,8 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
       IntelligenceInsight(
         id: 'insight_3',
         title: 'Heart Rate Variability',
-        description: 'Your HRV shows excellent recovery patterns after exercise, indicating good cardiovascular fitness.',
+        description:
+            'Your HRV shows excellent recovery patterns after exercise, indicating good cardiovascular fitness.',
         category: 'health',
         priority: InsightPriority.low,
         confidence: 0.78,
@@ -1263,12 +1296,15 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
     ];
   }
 
-  Future<List<PersonalizedRecommendation>> _generatePersonalizedRecommendations(BiometricAnalysis analysis) async {
+  Future<List<PersonalizedRecommendation>> _generatePersonalizedRecommendations(
+    BiometricAnalysis analysis,
+  ) async {
     return [
       PersonalizedRecommendation(
         id: 'rec_1',
         title: 'Optimize Pre-Period Nutrition',
-        description: 'Increase magnesium and B6 intake 5 days before your expected period to reduce cramping and mood fluctuations.',
+        description:
+            'Increase magnesium and B6 intake 5 days before your expected period to reduce cramping and mood fluctuations.',
         type: RecommendationType.nutrition,
         priority: RecommendationPriority.high,
         potentialImpact: 0.8,
@@ -1280,7 +1316,8 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
       PersonalizedRecommendation(
         id: 'rec_2',
         title: 'Evening Wind-Down Routine',
-        description: 'Establish a consistent 30-minute wind-down routine starting at 9 PM to improve sleep quality further.',
+        description:
+            'Establish a consistent 30-minute wind-down routine starting at 9 PM to improve sleep quality further.',
         type: RecommendationType.sleep,
         priority: RecommendationPriority.medium,
         potentialImpact: 0.65,
@@ -1292,7 +1329,9 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
     ];
   }
 
-  Future<DashboardMetrics> _calculateDashboardMetrics(BiometricAnalysis analysis) async {
+  Future<DashboardMetrics> _calculateDashboardMetrics(
+    BiometricAnalysis analysis,
+  ) async {
     return DashboardMetrics(
       overallHealthScore: 0.75,
       cycleRegularity: 0.85,
@@ -1351,7 +1390,7 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
                   ),
                 ),
               ),
-              
+
               // Header
               Row(
                 children: [
@@ -1359,7 +1398,9 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: _getInsightColor(insight.priority).withValues(alpha: 0.1),
+                      color: _getInsightColor(
+                        insight.priority,
+                      ).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Icon(
@@ -1394,9 +1435,9 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
                   ),
                 ],
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               // Description
               Text(
                 insight.description,
@@ -1406,9 +1447,9 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
                   height: 1.5,
                 ),
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               // Confidence and data points
               Row(
                 children: [
@@ -1477,7 +1518,7 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
                   ),
                 ],
               ),
-              
+
               if (insight.actionable) ...[
                 const SizedBox(height: 24),
                 Container(
@@ -1522,9 +1563,9 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
                   ),
                 ),
               ],
-              
+
               const SizedBox(height: 32),
-              
+
               // Actions
               Row(
                 children: [
@@ -1618,10 +1659,7 @@ class _ConsumerIntelligenceDashboardState extends State<ConsumerIntelligenceDash
           children: [
             const Text(
               'Share Health Report',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
             ListTile(
@@ -1746,7 +1784,18 @@ class DashboardMetrics {
 // === ENUMS ===
 
 enum InsightPriority { low, medium, high }
-enum RecommendationType { lifestyle, nutrition, exercise, sleep, stress, medical }
+
+enum RecommendationType {
+  lifestyle,
+  nutrition,
+  exercise,
+  sleep,
+  stress,
+  medical,
+}
+
 enum RecommendationPriority { low, medium, high }
+
 enum RecommendationDifficulty { easy, medium, hard }
+
 enum TrendsDirection { improving, stable, declining }

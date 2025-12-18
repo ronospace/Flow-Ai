@@ -8,11 +8,15 @@ class PartnerCareActionsWidget extends StatefulWidget {
   final List<CareAction> careActions;
   final Function(CareAction) onSendCareAction;
   final bool isLoading;
+  final String currentUserId;
+  final String partnershipId;
 
   const PartnerCareActionsWidget({
     super.key,
     required this.careActions,
     required this.onSendCareAction,
+    required this.currentUserId,
+    required this.partnershipId,
     this.isLoading = false,
   });
 
@@ -29,7 +33,7 @@ class _PartnerCareActionsWidgetState extends State<PartnerCareActionsWidget>
 
   final List<Map<String, dynamic>> _quickCareActions = [
     {
-      'type': CareActionType.encouragement,
+      'type': CareActionType.support,
       'title': 'Send Love',
       'description': 'Share encouraging words',
       'icon': Icons.favorite,
@@ -47,7 +51,7 @@ class _PartnerCareActionsWidgetState extends State<PartnerCareActionsWidget>
       'emoji': '⏰',
     },
     {
-      'type': CareActionType.sympathy,
+      'type': CareActionType.checkIn,
       'title': 'Comfort',
       'description': 'Offer emotional support',
       'icon': Icons.volunteer_activism,
@@ -56,12 +60,12 @@ class _PartnerCareActionsWidgetState extends State<PartnerCareActionsWidget>
       'emoji': '🤗',
     },
     {
-      'type': CareActionType.celebration,
+      'type': CareActionType.gift,
       'title': 'Celebrate',
       'description': 'Acknowledge achievements',
       'icon': Icons.celebration,
-      'color': AppTheme.accentYellow,
-      'gradient': [AppTheme.accentYellow, Color(0xFFFFE066)],
+      'color': AppTheme.warningOrange,
+      'gradient': [AppTheme.warningOrange, Color(0xFFFFE066)],
       'emoji': '🎉',
     },
   ];
@@ -113,17 +117,17 @@ class _PartnerCareActionsWidgetState extends State<PartnerCareActionsWidget>
                 end: Alignment.bottomRight,
                 colors: [
                   Colors.white,
-                  AppTheme.accentYellow.withValues(alpha: 0.03),
+                  AppTheme.warningOrange.withValues(alpha: 0.03),
                 ],
               ),
               borderRadius: BorderRadius.circular(24),
               border: Border.all(
-                color: AppTheme.accentYellow.withValues(alpha: 0.3),
+                color: AppTheme.warningOrange.withValues(alpha: 0.3),
                 width: 2,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: AppTheme.accentYellow.withValues(alpha: 0.15),
+                  color: AppTheme.warningOrange.withValues(alpha: 0.15),
                   blurRadius: 20,
                   offset: const Offset(0, 8),
                 ),
@@ -152,7 +156,7 @@ class _PartnerCareActionsWidgetState extends State<PartnerCareActionsWidget>
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [AppTheme.accentYellow.withValues(alpha: 0.1), AppTheme.primaryRose.withValues(alpha: 0.05)],
+          colors: [AppTheme.warningOrange.withValues(alpha: 0.1), AppTheme.primaryRose.withValues(alpha: 0.05)],
         ),
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(24),
@@ -170,7 +174,7 @@ class _PartnerCareActionsWidgetState extends State<PartnerCareActionsWidget>
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
-                      colors: [AppTheme.accentYellow, AppTheme.primaryRose],
+                      colors: [AppTheme.warningOrange, AppTheme.primaryRose],
                     ),
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -212,7 +216,7 @@ class _PartnerCareActionsWidgetState extends State<PartnerCareActionsWidget>
                 onPressed: () => setState(() => _showQuickActions = !_showQuickActions),
                 icon: Icon(
                   _showQuickActions ? Icons.history : Icons.send,
-                  color: AppTheme.accentYellow,
+                  color: AppTheme.warningOrange,
                 ),
                 tooltip: _showQuickActions ? 'View History' : 'Quick Actions',
               ),
@@ -220,13 +224,13 @@ class _PartnerCareActionsWidgetState extends State<PartnerCareActionsWidget>
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: AppTheme.accentYellow.withValues(alpha: 0.2),
+                    color: AppTheme.warningOrange.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
                     '${widget.careActions.length}',
                     style: TextStyle(
-                      color: AppTheme.accentYellow,
+                      color: AppTheme.warningOrange,
                       fontWeight: FontWeight.bold,
                       fontSize: 12,
                     ),
@@ -460,7 +464,7 @@ class _PartnerCareActionsWidgetState extends State<PartnerCareActionsWidget>
                 child: Text(
                   'View all ${widget.careActions.length} actions',
                   style: TextStyle(
-                    color: AppTheme.accentYellow,
+                    color: AppTheme.warningOrange,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -515,7 +519,7 @@ class _PartnerCareActionsWidgetState extends State<PartnerCareActionsWidget>
                 Row(
                   children: [
                     Text(
-                      action.isFromCurrentUser ? 'You sent' : 'Received',
+                      action.senderId == widget.currentUserId ? 'You sent' : 'Received',
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         color: AppTheme.darkGrey,
@@ -524,7 +528,7 @@ class _PartnerCareActionsWidgetState extends State<PartnerCareActionsWidget>
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      actionInfo['title'],
+                      action.title,
                       style: TextStyle(
                         color: actionInfo['color'],
                         fontWeight: FontWeight.w500,
@@ -535,7 +539,7 @@ class _PartnerCareActionsWidgetState extends State<PartnerCareActionsWidget>
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  action.message,
+                  action.description ?? action.title,
                   style: TextStyle(
                     color: AppTheme.mediumGrey,
                     fontSize: 13,
@@ -545,7 +549,7 @@ class _PartnerCareActionsWidgetState extends State<PartnerCareActionsWidget>
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  _formatDateTime(action.sentAt),
+                  _formatDateTime(action.createdAt),
                   style: TextStyle(
                     color: AppTheme.lightGrey,
                     fontSize: 11,
@@ -566,7 +570,7 @@ class _PartnerCareActionsWidgetState extends State<PartnerCareActionsWidget>
         child: Column(
           children: [
             CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(AppTheme.accentYellow),
+              valueColor: AlwaysStoppedAnimation<Color>(AppTheme.warningOrange),
               strokeWidth: 3,
             ),
             const SizedBox(height: 12),
@@ -646,15 +650,18 @@ class _PartnerCareActionsWidgetState extends State<PartnerCareActionsWidget>
           ),
           ElevatedButton(
             onPressed: () {
+              final defaultDesc = _getDefaultMessage(actionInfo['type'] as CareActionType);
               final careAction = CareAction(
                 id: DateTime.now().millisecondsSinceEpoch.toString(),
-                type: actionInfo['type'],
-                message: messageController.text.isNotEmpty 
+                partnershipId: widget.partnershipId,
+                senderId: widget.currentUserId,
+                receiverId: '', // Will be set by service
+                type: actionInfo['type'] as CareActionType,
+                title: actionInfo['title'] as String,
+                description: messageController.text.isNotEmpty 
                   ? messageController.text
-                  : _getDefaultMessage(actionInfo['type']),
-                sentAt: DateTime.now(),
-                isFromCurrentUser: true,
-                partnershipId: 'current_partnership', // Replace with actual ID
+                  : defaultDesc,
+                createdAt: DateTime.now(),
               );
               widget.onSendCareAction(careAction);
               Navigator.pop(context);
@@ -674,7 +681,7 @@ class _PartnerCareActionsWidgetState extends State<PartnerCareActionsWidget>
 
   void _showCustomCareActionDialog() {
     final TextEditingController messageController = TextEditingController();
-    CareActionType selectedType = CareActionType.encouragement;
+    CareActionType selectedType = CareActionType.support;
     
     showDialog(
       context: context,
@@ -771,11 +778,13 @@ class _PartnerCareActionsWidgetState extends State<PartnerCareActionsWidget>
                 ? () {
                     final careAction = CareAction(
                       id: DateTime.now().millisecondsSinceEpoch.toString(),
+                      partnershipId: widget.partnershipId,
+                      senderId: widget.currentUserId,
+                      receiverId: '', // Will be set by service
                       type: selectedType,
-                      message: messageController.text.trim(),
-                      sentAt: DateTime.now(),
-                      isFromCurrentUser: true,
-                      partnershipId: 'current_partnership',
+                      title: _getDefaultTitle(selectedType),
+                      description: messageController.text.trim(),
+                      createdAt: DateTime.now(),
                     );
                     widget.onSendCareAction(careAction);
                     Navigator.pop(context);
@@ -797,14 +806,35 @@ class _PartnerCareActionsWidgetState extends State<PartnerCareActionsWidget>
 
   String _getDefaultMessage(CareActionType type) {
     switch (type) {
-      case CareActionType.encouragement:
+      case CareActionType.support:
         return 'You\'re doing amazing! Keep going! 💪';
       case CareActionType.reminder:
         return 'Gentle reminder to take care of yourself today 🌸';
-      case CareActionType.sympathy:
+      case CareActionType.checkIn:
         return 'I\'m here for you, sending you love and comfort ❤️';
-      case CareActionType.celebration:
+      case CareActionType.gift:
         return 'Celebrating you and your achievements! 🎉';
+      case CareActionType.symptomsHelp:
+        return 'I\'m here to help with anything you need 🌸';
+      case CareActionType.emergency:
+        return 'Please let me know if you need immediate help 🆘';
+    }
+  }
+
+  String _getDefaultTitle(CareActionType type) {
+    switch (type) {
+      case CareActionType.support:
+        return 'Emotional Support';
+      case CareActionType.reminder:
+        return 'Gentle Reminder';
+      case CareActionType.checkIn:
+        return 'Comfort';
+      case CareActionType.gift:
+        return 'Celebration';
+      case CareActionType.symptomsHelp:
+        return 'Symptom Support';
+      case CareActionType.emergency:
+        return 'Emergency Support';
     }
   }
 

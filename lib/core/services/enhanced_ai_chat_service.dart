@@ -8,24 +8,27 @@ import 'ai_conversation_memory.dart';
 import 'flowai_service.dart';
 import '../config/flowiq_config.dart';
 import '../../generated/app_localizations.dart';
+import '../../core/models/medical_citation.dart';
 
 /// Enhanced AI Chat Service with comprehensive FAQ and general knowledge
 class EnhancedAIChatService {
-  static final EnhancedAIChatService _instance = EnhancedAIChatService._internal();
+  static final EnhancedAIChatService _instance =
+      EnhancedAIChatService._internal();
   factory EnhancedAIChatService() => _instance;
   EnhancedAIChatService._internal();
 
   final List<types.Message> _messages = [];
-  final StreamController<List<types.Message>> _messagesController = StreamController<List<types.Message>>.broadcast();
+  final StreamController<List<types.Message>> _messagesController =
+      StreamController<List<types.Message>>.broadcast();
   final Uuid _uuid = const Uuid();
-  
+
   // AI User representation
   types.User? _aiUser;
   types.User? _currentUser;
   AIConversationMemory? _conversationMemory;
   bool _isInitialized = false;
   AppLocalizations? _localizations;
-  
+
   // FlowAI Integration
   final FlowAIService _flowAIService = FlowAIService();
   bool _useFlowAI = false;
@@ -33,54 +36,131 @@ class EnhancedAIChatService {
   // FAQ Knowledge Base
   final Map<String, List<FAQItem>> _faqDatabase = {
     'health': [
-      FAQItem('What is a normal menstrual cycle?', 'A normal menstrual cycle is typically 21-35 days long, with menstrual flow lasting 2-7 days. The average cycle length is 28 days.'),
-      FAQItem('What causes irregular periods?', 'Irregular periods can be caused by stress, significant weight changes, hormonal imbalances, certain medications, underlying health conditions, or lifestyle factors.'),
-      FAQItem('How can I track my fertility?', 'You can track fertility by monitoring your menstrual cycle, basal body temperature, cervical mucus changes, and using ovulation prediction kits.'),
-      FAQItem('What are common PMS symptoms?', 'Common PMS symptoms include mood swings, bloating, breast tenderness, headaches, fatigue, food cravings, and irritability.'),
-      FAQItem('When should I see a doctor about my period?', 'See a doctor if you have severe pain, very heavy bleeding, periods lasting longer than 7 days, or if your cycle changes significantly.'),
+      FAQItem(
+        'What is a normal menstrual cycle?',
+        'A normal menstrual cycle is typically 21-35 days long, with menstrual flow lasting 2-7 days. The average cycle length is 28 days.',
+      ),
+      FAQItem(
+        'What causes irregular periods?',
+        'Irregular periods can be caused by stress, significant weight changes, hormonal imbalances, certain medications, underlying health conditions, or lifestyle factors.',
+      ),
+      FAQItem(
+        'How can I track my fertility?',
+        'You can track fertility by monitoring your menstrual cycle, basal body temperature, cervical mucus changes, and using ovulation prediction kits.',
+      ),
+      FAQItem(
+        'What are common PMS symptoms?',
+        'Common PMS symptoms include mood swings, bloating, breast tenderness, headaches, fatigue, food cravings, and irritability.',
+      ),
+      FAQItem(
+        'When should I see a doctor about my period?',
+        'See a doctor if you have severe pain, very heavy bleeding, periods lasting longer than 7 days, or if your cycle changes significantly.',
+      ),
     ],
     'general': [
-      FAQItem('What is artificial intelligence?', 'Artificial Intelligence (AI) is the simulation of human intelligence in machines that are programmed to think and learn like humans.'),
-      FAQItem('How does machine learning work?', 'Machine learning is a subset of AI where computers learn to make predictions or decisions by finding patterns in data without being explicitly programmed.'),
-      FAQItem('What is the difference between weather and climate?', 'Weather refers to short-term atmospheric conditions, while climate is the long-term average of weather patterns in a region over many years.'),
-      FAQItem('How do vaccines work?', 'Vaccines work by training your immune system to recognize and fight specific diseases by exposing it to a safe version of the virus or bacteria.'),
-      FAQItem('What causes seasons?', 'Seasons are caused by the tilt of Earth\'s axis as it orbits the sun, creating different amounts of sunlight in different parts of the world throughout the year.'),
+      FAQItem(
+        'What is artificial intelligence?',
+        'Artificial Intelligence (AI) is the simulation of human intelligence in machines that are programmed to think and learn like humans.',
+      ),
+      FAQItem(
+        'How does machine learning work?',
+        'Machine learning is a subset of AI where computers learn to make predictions or decisions by finding patterns in data without being explicitly programmed.',
+      ),
+      FAQItem(
+        'What is the difference between weather and climate?',
+        'Weather refers to short-term atmospheric conditions, while climate is the long-term average of weather patterns in a region over many years.',
+      ),
+      FAQItem(
+        'How do vaccines work?',
+        'Vaccines work by training your immune system to recognize and fight specific diseases by exposing it to a safe version of the virus or bacteria.',
+      ),
+      FAQItem(
+        'What causes seasons?',
+        'Seasons are caused by the tilt of Earth\'s axis as it orbits the sun, creating different amounts of sunlight in different parts of the world throughout the year.',
+      ),
     ],
     'technology': [
-      FAQItem('What is cloud computing?', 'Cloud computing is the delivery of computing services like servers, storage, databases, and software over the internet (the cloud).'),
-      FAQItem('How does GPS work?', 'GPS works using a network of satellites that send signals to GPS receivers, which calculate location based on the time it takes to receive signals from multiple satellites.'),
-      FAQItem('What is cryptocurrency?', 'Cryptocurrency is a digital currency that uses cryptography for security and operates independently of traditional banks and governments.'),
-      FAQItem('How do smartphones work?', 'Smartphones combine cellular communication, computing capabilities, and internet connectivity to provide a portable communication and computing device.'),
-      FAQItem('What is the internet of things?', 'The Internet of Things (IoT) refers to the network of physical devices connected to the internet that can collect and share data.'),
+      FAQItem(
+        'What is cloud computing?',
+        'Cloud computing is the delivery of computing services like servers, storage, databases, and software over the internet (the cloud).',
+      ),
+      FAQItem(
+        'How does GPS work?',
+        'GPS works using a network of satellites that send signals to GPS receivers, which calculate location based on the time it takes to receive signals from multiple satellites.',
+      ),
+      FAQItem(
+        'What is cryptocurrency?',
+        'Cryptocurrency is a digital currency that uses cryptography for security and operates independently of traditional banks and governments.',
+      ),
+      FAQItem(
+        'How do smartphones work?',
+        'Smartphones combine cellular communication, computing capabilities, and internet connectivity to provide a portable communication and computing device.',
+      ),
+      FAQItem(
+        'What is the internet of things?',
+        'The Internet of Things (IoT) refers to the network of physical devices connected to the internet that can collect and share data.',
+      ),
     ],
     'science': [
-      FAQItem('What is DNA?', 'DNA (Deoxyribonucleic acid) is the molecule that carries genetic information in all living things, determining inherited traits.'),
-      FAQItem('How does photosynthesis work?', 'Photosynthesis is the process plants use to convert sunlight, carbon dioxide, and water into glucose and oxygen.'),
-      FAQItem('What is gravity?', 'Gravity is a fundamental force that attracts objects with mass toward each other, keeping us on Earth and planets in orbit around the sun.'),
-      FAQItem('Why is the sky blue?', 'The sky appears blue because when sunlight enters Earth\'s atmosphere, blue light is scattered more than other colors due to its shorter wavelength.'),
-      FAQItem('What are black holes?', 'Black holes are extremely dense regions in space where gravity is so strong that nothing, not even light, can escape once it crosses the event horizon.'),
+      FAQItem(
+        'What is DNA?',
+        'DNA (Deoxyribonucleic acid) is the molecule that carries genetic information in all living things, determining inherited traits.',
+      ),
+      FAQItem(
+        'How does photosynthesis work?',
+        'Photosynthesis is the process plants use to convert sunlight, carbon dioxide, and water into glucose and oxygen.',
+      ),
+      FAQItem(
+        'What is gravity?',
+        'Gravity is a fundamental force that attracts objects with mass toward each other, keeping us on Earth and planets in orbit around the sun.',
+      ),
+      FAQItem(
+        'Why is the sky blue?',
+        'The sky appears blue because when sunlight enters Earth\'s atmosphere, blue light is scattered more than other colors due to its shorter wavelength.',
+      ),
+      FAQItem(
+        'What are black holes?',
+        'Black holes are extremely dense regions in space where gravity is so strong that nothing, not even light, can escape once it crosses the event horizon.',
+      ),
     ],
     'lifestyle': [
-      FAQItem('How much sleep do I need?', 'Most adults need 7-9 hours of sleep per night for optimal health and well-being.'),
-      FAQItem('What is a balanced diet?', 'A balanced diet includes a variety of foods from all food groups: fruits, vegetables, whole grains, lean proteins, and healthy fats.'),
-      FAQItem('How much water should I drink daily?', 'The general recommendation is about 8 cups (64 ounces) of water per day, but individual needs vary based on activity level and climate.'),
-      FAQItem('What are the benefits of exercise?', 'Regular exercise improves cardiovascular health, strengthens muscles and bones, boosts mood, helps with weight management, and reduces disease risk.'),
-      FAQItem('How can I manage stress?', 'Effective stress management techniques include regular exercise, adequate sleep, meditation, deep breathing, time management, and social support.'),
-    ]
+      FAQItem(
+        'How much sleep do I need?',
+        'Most adults need 7-9 hours of sleep per night for optimal health and well-being.',
+      ),
+      FAQItem(
+        'What is a balanced diet?',
+        'A balanced diet includes a variety of foods from all food groups: fruits, vegetables, whole grains, lean proteins, and healthy fats.',
+      ),
+      FAQItem(
+        'How much water should I drink daily?',
+        'The general recommendation is about 8 cups (64 ounces) of water per day, but individual needs vary based on activity level and climate.',
+      ),
+      FAQItem(
+        'What are the benefits of exercise?',
+        'Regular exercise improves cardiovascular health, strengthens muscles and bones, boosts mood, helps with weight management, and reduces disease risk.',
+      ),
+      FAQItem(
+        'How can I manage stress?',
+        'Effective stress management techniques include regular exercise, adequate sleep, meditation, deep breathing, time management, and social support.',
+      ),
+    ],
   };
 
   Stream<List<types.Message>> get messagesStream => _messagesController.stream;
   List<types.Message> get messages => List.unmodifiable(_messages);
 
-  Future<void> initialize({required String userId, required String userName, AppLocalizations? localizations, String? flowAIApiKey}) async {
+  Future<void> initialize({
+    required String userId,
+    required String userName,
+    AppLocalizations? localizations,
+    String? flowAIApiKey,
+  }) async {
     if (_isInitialized) return;
-    
+
     _localizations = localizations;
-    
-    _currentUser = types.User(
-      id: userId,
-      firstName: userName,
-    );
+
+    _currentUser = types.User(id: userId, firstName: userName);
 
     _aiUser = types.User(
       id: 'ai_flowai_enhanced',
@@ -88,35 +168,39 @@ class EnhancedAIChatService {
       lastName: 'AI',
       imageUrl: 'https://i.pravatar.cc/300?img=47', // AI avatar
     );
-    
+
     // Initialize FlowAI if API key is provided
     if (flowAIApiKey != null && flowAIApiKey.isNotEmpty) {
       try {
         await _initializeFlowAI(flowAIApiKey);
       } catch (e) {
-        debugPrint('FlowAI initialization failed, using fallback responses: $e');
+        debugPrint(
+          'FlowAI initialization failed, using fallback responses: $e',
+        );
       }
-        } else if (FlowIQConfig.isConfigured) {
+    } else if (FlowIQConfig.isConfigured) {
       try {
-            await _initializeFlowAI(FlowIQConfig.apiKey!);
+        await _initializeFlowAI(FlowIQConfig.apiKey!);
       } catch (e) {
-        debugPrint('FlowAI initialization failed, using fallback responses: $e');
+        debugPrint(
+          'FlowAI initialization failed, using fallback responses: $e',
+        );
       }
     }
-    
+
     // Initialize conversation memory with user ID for data isolation
     _conversationMemory = AIConversationMemory();
     await _conversationMemory?.initialize(userId: userId);
-    
+
     // Clear any existing conversation history to ensure clean state
     await _conversationMemory?.clearMemory();
     _messages.clear();
-    
+
     // Add enhanced welcome message
     _addAIMessage(
-      "Hi $userName! 👋 I'm Mira, your enhanced AI assistant. I can help you with:\n\n🩸 Reproductive health & cycle tracking\n💡 General knowledge & science\n🔬 Technology & lifestyle questions\n❓ FAQs on various topics\n\nWhat would you like to explore today?"
+      "Hi $userName! 👋 I'm Mira, your enhanced AI assistant. I can help you with:\n\n🩸 Reproductive health & cycle tracking\n💡 General knowledge & science\n🔬 Technology & lifestyle questions\n❓ FAQs on various topics\n\nWhat would you like to explore today?",
     );
-    
+
     _isInitialized = true;
   }
 
@@ -125,7 +209,7 @@ class EnhancedAIChatService {
     // Add user message
     _messages.insert(0, message);
     _notifyListeners();
-    
+
     // Store in conversation memory
     await _conversationMemory?.storeMessage(message);
 
@@ -133,15 +217,20 @@ class EnhancedAIChatService {
     await Future.delayed(const Duration(milliseconds: 800));
 
     // Generate AI response with context
-    final contextPrompt = _conversationMemory?.getContextualPrompt(message.text);
-    final response = await _generateEnhancedAIResponse(message.text, contextPrompt: contextPrompt);
+    final contextPrompt = _conversationMemory?.getContextualPrompt(
+      message.text,
+    );
+    final response = await _generateEnhancedAIResponse(
+      message.text,
+      contextPrompt: contextPrompt,
+    );
     _addAIMessage(response);
   }
 
   /// Add AI message to conversation
   Future<void> _addAIMessage(String text) async {
     if (_aiUser == null) return;
-    
+
     final aiMessage = types.TextMessage(
       author: _aiUser!,
       createdAt: DateTime.now().millisecondsSinceEpoch,
@@ -151,46 +240,66 @@ class EnhancedAIChatService {
 
     _messages.insert(0, aiMessage);
     _notifyListeners();
-    
+
     // Store in conversation memory
     await _conversationMemory?.storeMessage(aiMessage);
   }
 
   /// Generate enhanced AI response with comprehensive knowledge
-  Future<String> _generateEnhancedAIResponse(String userMessage, {String? contextPrompt}) async {
+  Future<String> _generateEnhancedAIResponse(
+    String userMessage, {
+    String? contextPrompt,
+  }) async {
     // Try FlowAI first if available
     if (_useFlowAI && _currentUser != null) {
       try {
-        final flowAIResponse = await _getFlowAIResponse(userMessage, contextPrompt);
+        final flowAIResponse = await _getFlowAIResponse(
+          userMessage,
+          contextPrompt,
+        );
         if (flowAIResponse != null && flowAIResponse.isNotEmpty) {
-          return flowAIResponse;
+          // Add medical citations to FlowAI responses for App Store compliance (1.4.1)
+          return _addMedicalCitationToHealthResponse(
+            flowAIResponse,
+            userMessage.toLowerCase(),
+          );
         }
       } catch (e) {
-        debugPrint('FlowAI request failed, falling back to enhanced local responses: $e');
+        debugPrint(
+          'FlowAI request failed, falling back to enhanced local responses: $e',
+        );
       }
     }
-    
+
     // Enhanced fallback responses with comprehensive knowledge
     return _getEnhancedLocalResponse(userMessage, contextPrompt: contextPrompt);
   }
-  
+
   /// Generate enhanced local AI response with comprehensive knowledge
-  Future<String> _getEnhancedLocalResponse(String userMessage, {String? contextPrompt}) async {
+  Future<String> _getEnhancedLocalResponse(
+    String userMessage, {
+    String? contextPrompt,
+  }) async {
     final lowerMessage = userMessage.toLowerCase();
-    
+
     // Analyze context and user patterns for more personalized responses
     final conversationHistory = _conversationMemory?.getRelevantContext() ?? [];
-    final personalizedInsights = _conversationMemory?.getPersonalizedInsights() ?? {};
-    
+    final personalizedInsights =
+        _conversationMemory?.getPersonalizedInsights() ?? {};
+
     // Check FAQ database first with enhanced matching
     final faqResponse = _searchFAQDatabase(lowerMessage);
     if (faqResponse != null) {
-      return _enhanceResponseWithContext(faqResponse, contextPrompt, personalizedInsights);
+      return _enhanceResponseWithContext(
+        faqResponse,
+        contextPrompt,
+        personalizedInsights,
+      );
     }
-    
+
     // Enhanced topic detection with context awareness
     String baseResponse;
-    
+
     // Health and cycle related responses (priority for this app)
     if (_isHealthRelated(lowerMessage)) {
       baseResponse = _getHealthResponse(lowerMessage);
@@ -221,7 +330,10 @@ class EnhancedAIChatService {
     }
     // Greetings and personal questions with memory
     else if (_isPersonalRelated(lowerMessage)) {
-      baseResponse = _getPersonalResponseWithMemory(lowerMessage, conversationHistory);
+      baseResponse = _getPersonalResponseWithMemory(
+        lowerMessage,
+        conversationHistory,
+      );
     }
     // App usage and features
     else if (_isAppRelated(lowerMessage)) {
@@ -229,30 +341,118 @@ class EnhancedAIChatService {
     }
     // Enhanced default response with intelligent analysis
     else {
-      baseResponse = _getIntelligentDefaultResponse(lowerMessage, conversationHistory);
+      baseResponse = _getIntelligentDefaultResponse(
+        lowerMessage,
+        conversationHistory,
+      );
     }
-    
+
     // Apply contextual enhancement to all responses
-    return _enhanceResponseWithContext(baseResponse, contextPrompt, personalizedInsights);
+    var enhancedResponse = _enhanceResponseWithContext(
+      baseResponse,
+      contextPrompt,
+      personalizedInsights,
+    );
+
+    // Add medical citations for health-related responses (App Store compliance 1.4.1)
+    if (_isHealthRelated(lowerMessage)) {
+      enhancedResponse = _addMedicalCitationToHealthResponse(
+        enhancedResponse,
+        lowerMessage,
+      );
+    }
+
+    return enhancedResponse;
+  }
+
+  /// Add medical citation to health responses for App Store compliance (1.4.1)
+  String _addMedicalCitationToHealthResponse(
+    String response,
+    String userMessage,
+  ) {
+    final lowerResponse = response.toLowerCase();
+
+    // Check if response contains medical/health content - required for App Store compliance
+    final hasMedicalContent =
+        lowerResponse.contains('period') ||
+        lowerResponse.contains('menstrual') ||
+        lowerResponse.contains('cycle') ||
+        lowerResponse.contains('fertility') ||
+        lowerResponse.contains('ovulation') ||
+        lowerResponse.contains('symptom') ||
+        lowerResponse.contains('hormone') ||
+        lowerResponse.contains('pms') ||
+        lowerResponse.contains('cramp') ||
+        lowerResponse.contains('health') ||
+        lowerResponse.contains('medical') ||
+        lowerResponse.contains('pregnancy');
+
+    // If no medical content detected, return as-is (non-medical questions)
+    if (!hasMedicalContent) {
+      return response;
+    }
+
+    String? citationCategory;
+
+    // Determine citation category based on both message and response content
+    if (userMessage.contains('period') ||
+        userMessage.contains('menstruation') ||
+        lowerResponse.contains('cycle length') ||
+        lowerResponse.contains('cycle pattern')) {
+      citationCategory = 'cycle_length';
+    } else if (userMessage.contains('fertile') ||
+        userMessage.contains('ovulation') ||
+        userMessage.contains('pregnancy') ||
+        lowerResponse.contains('fertility window')) {
+      citationCategory = 'fertility_window';
+    } else if (userMessage.contains('mood') ||
+        userMessage.contains('pms') ||
+        userMessage.contains('cramp') ||
+        userMessage.contains('symptom') ||
+        lowerResponse.contains('symptom') ||
+        lowerResponse.contains('cramp')) {
+      citationCategory = 'menstrual_symptoms';
+    } else if (userMessage.contains('health') ||
+        userMessage.contains('exercise') ||
+        userMessage.contains('diet') ||
+        userMessage.contains('lifestyle') ||
+        lowerResponse.contains('lifestyle') ||
+        lowerResponse.contains('exercise')) {
+      citationCategory = 'lifestyle_recommendations';
+    } else {
+      // Default to general health tracking citation
+      citationCategory = 'health_tracking';
+    }
+
+    final citations = MedicalCitationsDatabase.getCitationsForInsightType(
+      citationCategory,
+    );
+    if (citations.isEmpty) {
+      // Still add disclaimer even if no specific citation found
+      return '$response\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n⚠️ Medical Information Disclosure (App Store Guideline 1.4.1)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nThis information is for awareness only and is not medical advice. Consult a healthcare provider for medical concerns.\n\n📚 View all medical sources and citations: Settings → Medical Sources & Citations\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━';
+    }
+
+    final citation = citations.first;
+    return '$response\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n📚 Medical Source & Citation (Required Disclosure - App Store 1.4.1)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n📖 Source: ${citation.source}\n📝 ${citation.title}${citation.year != null ? ' (${citation.year})' : ''}\n🔗 View Full Source: ${citation.url}\n\n⚠️ This information is for awareness only. Not medical advice. Consult a healthcare provider for medical concerns.\n\n💡 View all medical sources: Settings → Medical Sources & Citations\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━';
   }
 
   // FAQ Database search
   String? _searchFAQDatabase(String query) {
     final keywords = query.split(' ');
-    
+
     for (final category in _faqDatabase.keys) {
       final faqs = _faqDatabase[category]!;
-      
+
       for (final faq in faqs) {
         // Check if question matches closely
         if (_calculateSimilarity(query, faq.question.toLowerCase()) > 0.6) {
           return "${faq.answer}\n\n💡 This is from my $category knowledge base. Feel free to ask follow-up questions!";
         }
-        
+
         // Check if answer contains relevant keywords
         final questionWords = faq.question.toLowerCase().split(' ');
         final answerWords = faq.answer.toLowerCase().split(' ');
-        
+
         int matchCount = 0;
         for (final keyword in keywords) {
           if (questionWords.any((word) => word.contains(keyword)) ||
@@ -260,67 +460,164 @@ class EnhancedAIChatService {
             matchCount++;
           }
         }
-        
+
         if (matchCount >= 2 && keywords.length >= 2) {
           return "${faq.answer}\n\n📚 Related question: \"${faq.question}\"\n\nWould you like to know more about this topic?";
         }
       }
     }
-    
+
     return null;
   }
 
   // Helper methods for topic detection
   bool _isHealthRelated(String message) {
-    final healthKeywords = ['period', 'menstruation', 'cycle', 'ovulation', 'fertility', 'pms', 'cramps', 
-                            'symptoms', 'pain', 'bloating', 'mood', 'hormone', 'pregnancy', 'contraception'];
+    final healthKeywords = [
+      'period',
+      'menstruation',
+      'cycle',
+      'ovulation',
+      'fertility',
+      'pms',
+      'cramps',
+      'symptoms',
+      'pain',
+      'bloating',
+      'mood',
+      'hormone',
+      'pregnancy',
+      'contraception',
+    ];
     return healthKeywords.any((keyword) => message.contains(keyword));
   }
 
   bool _isTechnologyRelated(String message) {
-    final techKeywords = ['computer', 'smartphone', 'internet', 'wifi', 'bluetooth', 'app', 'software', 
-                          'hardware', 'ai', 'artificial intelligence', 'machine learning', 'cloud', 'bitcoin'];
+    final techKeywords = [
+      'computer',
+      'smartphone',
+      'internet',
+      'wifi',
+      'bluetooth',
+      'app',
+      'software',
+      'hardware',
+      'ai',
+      'artificial intelligence',
+      'machine learning',
+      'cloud',
+      'bitcoin',
+    ];
     return techKeywords.any((keyword) => message.contains(keyword));
   }
 
   bool _isScienceRelated(String message) {
-    final scienceKeywords = ['science', 'physics', 'chemistry', 'biology', 'dna', 'atoms', 'gravity', 
-                            'photosynthesis', 'evolution', 'space', 'planets', 'solar system'];
+    final scienceKeywords = [
+      'science',
+      'physics',
+      'chemistry',
+      'biology',
+      'dna',
+      'atoms',
+      'gravity',
+      'photosynthesis',
+      'evolution',
+      'space',
+      'planets',
+      'solar system',
+    ];
     return scienceKeywords.any((keyword) => message.contains(keyword));
   }
 
   bool _isLifestyleRelated(String message) {
-    final lifestyleKeywords = ['diet', 'exercise', 'sleep', 'nutrition', 'fitness', 'meditation', 
-                              'stress', 'wellness', 'health', 'lifestyle', 'habits'];
+    final lifestyleKeywords = [
+      'diet',
+      'exercise',
+      'sleep',
+      'nutrition',
+      'fitness',
+      'meditation',
+      'stress',
+      'wellness',
+      'health',
+      'lifestyle',
+      'habits',
+    ];
     return lifestyleKeywords.any((keyword) => message.contains(keyword));
   }
 
   bool _isMathRelated(String message) {
-    final mathKeywords = ['calculate', 'math', 'mathematics', 'equation', 'formula', 'percentage', 
-                          'statistics', 'probability', 'geometry', 'algebra'];
+    final mathKeywords = [
+      'calculate',
+      'math',
+      'mathematics',
+      'equation',
+      'formula',
+      'percentage',
+      'statistics',
+      'probability',
+      'geometry',
+      'algebra',
+    ];
     return mathKeywords.any((keyword) => message.contains(keyword));
   }
 
   bool _isGeneralKnowledgeRelated(String message) {
-    final generalKeywords = ['history', 'geography', 'culture', 'language', 'country', 'capital', 
-                            'population', 'economy', 'politics', 'current events'];
+    final generalKeywords = [
+      'history',
+      'geography',
+      'culture',
+      'language',
+      'country',
+      'capital',
+      'population',
+      'economy',
+      'politics',
+      'current events',
+    ];
     return generalKeywords.any((keyword) => message.contains(keyword));
   }
 
   bool _isEntertainmentRelated(String message) {
-    final entertainmentKeywords = ['movie', 'music', 'book', 'game', 'sport', 'celebrity', 
-                                  'entertainment', 'fun fact', 'trivia', 'joke'];
+    final entertainmentKeywords = [
+      'movie',
+      'music',
+      'book',
+      'game',
+      'sport',
+      'celebrity',
+      'entertainment',
+      'fun fact',
+      'trivia',
+      'joke',
+    ];
     return entertainmentKeywords.any((keyword) => message.contains(keyword));
   }
 
   bool _isPersonalRelated(String message) {
-    final personalKeywords = ['who are you', 'your name', 'about you', 'hello', 'hi', 'thank', 
-                             'how are you', 'what can you do', 'help me'];
+    final personalKeywords = [
+      'who are you',
+      'your name',
+      'about you',
+      'hello',
+      'hi',
+      'thank',
+      'how are you',
+      'what can you do',
+      'help me',
+    ];
     return personalKeywords.any((keyword) => message.contains(keyword));
   }
 
   bool _isAppRelated(String message) {
-    final appKeywords = ['app', 'track', 'log', 'feature', 'how to use', 'navigation', 'settings'];
+    final appKeywords = [
+      'app',
+      'track',
+      'log',
+      'feature',
+      'how to use',
+      'navigation',
+      'settings',
+    ];
     return appKeywords.any((keyword) => message.contains(keyword));
   }
 
@@ -409,41 +706,48 @@ class EnhancedAIChatService {
     return responses[math.Random().nextInt(responses.length)];
   }
 
-  String _getIntelligentDefaultResponse(String message, [List<types.Message>? conversationHistory]) {
+  String _getIntelligentDefaultResponse(
+    String message, [
+    List<types.Message>? conversationHistory,
+  ]) {
     // Attempt to provide an intelligent response even for unknown topics
     if (message.length < 3) {
       return "I'd love to help you! Could you tell me a bit more about what you're thinking about? 😊";
     }
-    
+
     // Analyze the conversation history for more intelligent responses
     String contextualNote = "";
     if (conversationHistory != null && conversationHistory.isNotEmpty) {
-      contextualNote = "\n\nI notice we've been chatting about various topics - I'm always happy to dive deeper into any subject that interests you! ";
+      contextualNote =
+          "\n\nI notice we've been chatting about various topics - I'm always happy to dive deeper into any subject that interests you! ";
     }
-    
+
     final responses = [
       "That's an interesting topic! 🤔 While I might not have specific expertise in that area, I'd be happy to discuss what I know or help you think through it. Can you share more details?$contextualNote",
       "I appreciate you bringing this up! 💭 Though this might be outside my main areas of expertise, I'm always eager to learn and explore new topics with you. What specific aspect interests you most?$contextualNote",
       "You've got me curious! 🔍 Even if I don't have detailed knowledge about this particular topic, I can try to help you think about it or suggest related areas I do know about. What's your main question?$contextualNote",
       "Interesting question! 🌟 I might not be an expert on everything, but I enjoy exploring ideas together. Could you help me understand what specifically you'd like to know more about?$contextualNote",
     ];
-    
+
     return responses[math.Random().nextInt(responses.length)];
   }
 
   /// Enhanced personal response with memory
-  String _getPersonalResponseWithMemory(String message, List<types.Message> conversationHistory) {
+  String _getPersonalResponseWithMemory(
+    String message,
+    List<types.Message> conversationHistory,
+  ) {
     if (message.contains('who are you') || message.contains('about you')) {
       return "I'm Mira, your enhanced AI assistant! ✨ I'm designed to help with reproductive health tracking, but I also love discussing science, technology, lifestyle, and general knowledge. I remember our conversations to provide better, more personalized responses. What would you like to explore together?";
     } else if (message.contains('hello') || message.contains('hi')) {
-      final greeting = conversationHistory.isEmpty 
+      final greeting = conversationHistory.isEmpty
           ? "Hello! 👋 I'm excited to meet you and chat today."
           : "Hello again! 👋 Great to continue our conversation.";
       return "$greeting I can help with cycle tracking, answer health questions, discuss science and technology, share interesting facts, or just have a friendly conversation. What's on your mind?";
     } else if (message.contains('thank')) {
       return "You're so welcome! 💕 I genuinely enjoy helping and learning together. Whether it's health questions, curious facts, or just chatting - I'm here for it all. Feel free to ask me anything!";
     } else {
-      final personalNote = conversationHistory.isNotEmpty 
+      final personalNote = conversationHistory.isNotEmpty
           ? "I remember our previous chats and I'm here to continue helping! "
           : "";
       return "${personalNote}I'm here and ready to help! 😊 As your AI companion, I can discuss health topics, answer questions about science and technology, share interesting facts, or help you navigate the app. What would you like to explore?";
@@ -451,22 +755,29 @@ class EnhancedAIChatService {
   }
 
   /// Enhance response with contextual information and personalized insights
-  String _enhanceResponseWithContext(String baseResponse, String? contextPrompt, Map<String, dynamic> personalizedInsights) {
+  String _enhanceResponseWithContext(
+    String baseResponse,
+    String? contextPrompt,
+    Map<String, dynamic> personalizedInsights,
+  ) {
     var enhancedResponse = baseResponse;
-    
+
     // Add contextual information if available
     if (contextPrompt != null && contextPrompt.isNotEmpty) {
-      enhancedResponse += "\n\n💡 Based on our conversation, I wanted to add: This connects to what we discussed earlier about similar topics.";
+      enhancedResponse +=
+          "\n\n💡 Based on our conversation, I wanted to add: This connects to what we discussed earlier about similar topics.";
     }
-    
+
     // Add personalized insights if relevant
-    if (personalizedInsights.isNotEmpty && personalizedInsights.containsKey('interests')) {
+    if (personalizedInsights.isNotEmpty &&
+        personalizedInsights.containsKey('interests')) {
       final interests = personalizedInsights['interests'] as String? ?? '';
       if (interests.isNotEmpty) {
-        enhancedResponse += "\n\n🎯 Since you're interested in $interests, you might also enjoy exploring related topics!";
+        enhancedResponse +=
+            "\n\n🎯 Since you're interested in $interests, you might also enjoy exploring related topics!";
       }
     }
-    
+
     return enhancedResponse;
   }
 
@@ -705,10 +1016,10 @@ class EnhancedAIChatService {
   // String similarity calculation
   double _calculateSimilarity(String str1, String str2) {
     if (str1.isEmpty || str2.isEmpty) return 0.0;
-    
+
     final words1 = str1.toLowerCase().split(' ');
     final words2 = str2.toLowerCase().split(' ');
-    
+
     int matches = 0;
     for (final word1 in words1) {
       for (final word2 in words2) {
@@ -718,20 +1029,21 @@ class EnhancedAIChatService {
         }
       }
     }
-    
+
     return matches / math.max(words1.length, words2.length);
   }
 
   /// Get enhanced suggested replies based on conversation context
   List<String> getSuggestedReplies() {
     // Get personalized suggestions based on conversation history
-    final personalizedSuggestions = _conversationMemory?.getPersonalizedSuggestions() ?? [];
-    
+    final personalizedSuggestions =
+        _conversationMemory?.getPersonalizedSuggestions() ?? [];
+
     // If we have personalized suggestions, use them
     if (personalizedSuggestions.isNotEmpty) {
       return personalizedSuggestions;
     }
-    
+
     // Enhanced default suggestions covering multiple topics
     final suggestions = [
       // Health & cycle (15+ questions)
@@ -753,7 +1065,7 @@ class EnhancedAIChatService {
       "When to see a gynecologist?",
       "Menopause preparation",
       "Fertility diet tips",
-      
+
       // Science & knowledge (20+ questions)
       "How does photosynthesis work?",
       "What is artificial intelligence?",
@@ -777,7 +1089,7 @@ class EnhancedAIChatService {
       "Weather patterns",
       "Animal behavior insights",
       "Plant biology basics",
-      
+
       // Technology (15+ questions)
       "How does GPS work?",
       "What is cloud computing?",
@@ -797,7 +1109,7 @@ class EnhancedAIChatService {
       "Tech career advice",
       "Gaming technology",
       "Smart home devices",
-      
+
       // Lifestyle & wellness (20+ questions)
       "Healthy lifestyle tips",
       "How much sleep do I need?",
@@ -821,7 +1133,7 @@ class EnhancedAIChatService {
       "Confidence building",
       "Goal setting strategies",
       "Productivity hacks",
-      
+
       // General knowledge (15+ questions)
       "Random interesting facts",
       "Math in daily life",
@@ -839,7 +1151,7 @@ class EnhancedAIChatService {
       "Political systems",
       "Current events discussion",
       "Travel knowledge",
-      
+
       // App features (10+ questions)
       "How to use the app",
       "App features overview",
@@ -852,7 +1164,7 @@ class EnhancedAIChatService {
       "Sync across devices",
       "AI recommendations",
       "Troubleshooting help",
-      
+
       // Personal development (10+ questions)
       "Career growth tips",
       "Leadership skills",
@@ -864,7 +1176,7 @@ class EnhancedAIChatService {
       "Memory improvement",
       "Focus and concentration",
       "Overcoming procrastination",
-      
+
       // Fun & entertainment (10+ questions)
       "Tell me a joke",
       "Fun trivia questions",
@@ -877,7 +1189,7 @@ class EnhancedAIChatService {
       "Travel destinations",
       "Cultural experiences",
     ];
-    
+
     // Return 8-12 random suggestions for better variety
     final shuffled = List<String>.from(suggestions)..shuffle();
     return shuffled.take(12).toList();
@@ -887,22 +1199,27 @@ class EnhancedAIChatService {
   List<FAQItem> searchFAQs(String query, {String? category}) {
     final results = <FAQItem>[];
     final lowerQuery = query.toLowerCase();
-    
-    final categoriesToSearch = category != null ? [category] : _faqDatabase.keys;
-    
+
+    final categoriesToSearch = category != null
+        ? [category]
+        : _faqDatabase.keys;
+
     for (final cat in categoriesToSearch) {
       final faqs = _faqDatabase[cat] ?? [];
-      
+
       for (final faq in faqs) {
-        final similarity = _calculateSimilarity(lowerQuery, faq.question.toLowerCase());
-        if (similarity > 0.3 || 
+        final similarity = _calculateSimilarity(
+          lowerQuery,
+          faq.question.toLowerCase(),
+        );
+        if (similarity > 0.3 ||
             faq.question.toLowerCase().contains(lowerQuery) ||
             faq.answer.toLowerCase().contains(lowerQuery)) {
           results.add(faq);
         }
       }
     }
-    
+
     return results;
   }
 
@@ -920,13 +1237,13 @@ class EnhancedAIChatService {
   Future<void> clearMessages() async {
     _messages.clear();
     _notifyListeners();
-    
+
     // Clear conversation memory
     await _conversationMemory?.clearMemory();
-    
+
     // Re-add enhanced welcome message
     await _addAIMessage(
-      "Hello again! 👋 I'm your enhanced AI assistant Mira. I can help with health questions, discuss science and technology, share fascinating facts, or just chat about whatever interests you. What's on your mind today?"
+      "Hello again! 👋 I'm your enhanced AI assistant Mira. I can help with health questions, discuss science and technology, share fascinating facts, or just chat about whatever interests you. What's on your mind today?",
     );
   }
 
@@ -949,13 +1266,17 @@ class EnhancedAIChatService {
       _useFlowAI = false;
     }
   }
-  
-  Future<String?> _getFlowAIResponse(String userMessage, String? contextPrompt) async {
+
+  Future<String?> _getFlowAIResponse(
+    String userMessage,
+    String? contextPrompt,
+  ) async {
     if (!_useFlowAI || _currentUser == null) return null;
-    
+
     try {
-      final healthContext = _buildHealthContext(contextPrompt);
-      
+      // Build health context for FlowAI (currently unused but available for future use)
+      _buildHealthContext(contextPrompt);
+
       final response = await _flowAIService.sendHealthChatMessage(
         message: userMessage,
         userId: _currentUser!.id,
@@ -963,8 +1284,13 @@ class EnhancedAIChatService {
         recentSymptoms: _getRecentSymptoms(),
         currentPhase: _getCurrentCyclePhase(),
       );
-      
-      return response.content;
+
+      // Add medical citations to FlowAI responses for App Store compliance (1.4.1)
+      final content = response.content;
+      return _addMedicalCitationToHealthResponse(
+        content,
+        userMessage.toLowerCase(),
+      );
     } on FlowAIException catch (e) {
       debugPrint('FlowAI service error: $e');
       return null;
@@ -973,50 +1299,51 @@ class EnhancedAIChatService {
       return null;
     }
   }
-  
+
   String? _buildHealthContext(String? conversationContext) {
     final contextParts = <String>[];
-    
+
     if (conversationContext != null && conversationContext.isNotEmpty) {
       contextParts.add('Previous conversation: $conversationContext');
     }
-    
-    final personalizedInsights = _conversationMemory?.getPersonalizedInsights() ?? {};
+
+    final personalizedInsights =
+        _conversationMemory?.getPersonalizedInsights() ?? {};
     if (personalizedInsights.isNotEmpty) {
       final insightsText = personalizedInsights.entries
           .map((e) => '${e.key}: ${e.value}')
           .join(', ');
       contextParts.add('User insights: $insightsText');
     }
-    
+
     return contextParts.isNotEmpty ? contextParts.join('; ') : null;
   }
-  
+
   Map<String, dynamic>? _getCycleContextData() => null;
   List<String>? _getRecentSymptoms() => null;
   String? _getCurrentCyclePhase() => null;
 
   /// Get current user for message composition
   types.User? get currentUser => _currentUser;
-  
+
   /// Get memory statistics for debugging
-  Map<String, dynamic> getMemoryStats() {
-    return _conversationMemory?.getMemoryStats() ?? {};
+  Future<Map<String, dynamic>> getMemoryStats() async {
+    return await _conversationMemory?.getMemoryStats() ?? {};
   }
-  
+
   /// Store a personalized insight about the user
   Future<void> storePersonalizedInsight(String key, String insight) async {
     await _conversationMemory?.storePersonalizedInsight(key, insight);
   }
-  
+
   /// Get a personalized insight about the user
   String? getPersonalizedInsight(String key) {
     return _conversationMemory?.getPersonalizedInsight(key);
   }
-  
+
   /// Check if FlowAI is available and working
   bool get isFlowAIEnabled => _useFlowAI && _flowAIService.isInitialized;
-  
+
   /// Get FlowAI service status
   String get aiServiceStatus {
     if (!_isInitialized) return 'Not initialized';
@@ -1033,5 +1360,6 @@ class FAQItem {
   FAQItem(this.question, this.answer);
 
   @override
-  String toString() => 'FAQItem(question: $question, answer: ${answer.substring(0, math.min(50, answer.length))}...)';
+  String toString() =>
+      'FAQItem(question: $question, answer: ${answer.substring(0, math.min(50, answer.length))}...)';
 }

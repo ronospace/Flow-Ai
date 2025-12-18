@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../generated/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../providers/health_provider.dart';
+import '../widgets/healthkit_connection_card.dart';
 import 'dart:math' as math;
 
 class HealthScreen extends StatefulWidget {
@@ -14,7 +15,8 @@ class HealthScreen extends StatefulWidget {
   State<HealthScreen> createState() => _HealthScreenState();
 }
 
-class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMixin {
+class _HealthScreenState extends State<HealthScreen>
+    with TickerProviderStateMixin {
   late AnimationController _heartRateController;
   late AnimationController _temperatureController;
   late AnimationController _sleepController;
@@ -25,36 +27,41 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
   @override
   void initState() {
     super.initState();
-    
+
     _heartRateController = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
     )..repeat();
-    
+
     _temperatureController = AnimationController(
       duration: const Duration(seconds: 3),
       vsync: this,
     )..repeat();
-    
+
     _sleepController = AnimationController(
       duration: const Duration(seconds: 4),
       vsync: this,
     )..repeat();
-    
+
     _heartRateAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
     ).animate(_heartRateController);
-    
+
     _temperatureAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
     ).animate(_temperatureController);
-    
+
     _sleepAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
     ).animate(_sleepController);
+
+    // Load HealthKit connection state
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<HealthProvider>().loadConnectionState();
+    });
   }
 
   @override
@@ -69,11 +76,13 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localizations = AppLocalizations.of(context);
-    
+
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-        gradient: AppTheme.backgroundGradient(theme.brightness == Brightness.dark),
+          gradient: AppTheme.backgroundGradient(
+            theme.brightness == Brightness.dark,
+          ),
         ),
         child: SafeArea(
           child: Consumer<HealthProvider>(
@@ -85,19 +94,24 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
                   children: [
                     _buildHealthHeader(localizations),
                     const SizedBox(height: 24),
-                    
+
+                    // HealthKit Connection Card
+                    // Clearly identifies HealthKit functionality (App Store 2.5.1)
+                    const HealthKitConnectionCard(),
+                    const SizedBox(height: 24),
+
                     _buildHealthScoreCard(localizations),
                     const SizedBox(height: 24),
-                    
+
                     _buildBiometricGrid(localizations),
                     const SizedBox(height: 24),
-                    
+
                     _buildHealthInsightsSection(localizations),
                     const SizedBox(height: 24),
-                    
+
                     _buildSymptomTracker(localizations),
                     const SizedBox(height: 24),
-                    
+
                     _buildHealthGoals(localizations),
                   ],
                 ),
@@ -170,7 +184,9 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
                     Text(
                       'Comprehensive health monitoring',
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.7,
+                        ),
                       ),
                     ),
                   ],
@@ -186,7 +202,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
   Widget _buildHealthScoreCard(AppLocalizations localizations) {
     final theme = Theme.of(context);
     final healthScore = 0.82; // Mock data
-    
+
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -227,7 +243,10 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
                 ),
                 const SizedBox(height: 12),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: AppTheme.successGreen.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
@@ -243,7 +262,8 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
               ],
             ),
           ),
-          SizedBox(width: 100,
+          SizedBox(
+            width: 100,
             height: 100,
             child: AnimatedBuilder(
               animation: _heartRateAnimation,
@@ -331,89 +351,99 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
   ) {
     final theme = Theme.of(context);
     return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            theme.cardColor,
-            color.withValues(alpha: 0.05),
-          ],
-        ),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: color.withValues(alpha: 0.2),
-          width: 1,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: theme.shadowColor.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              AnimatedBuilder(
-                animation: animation,
-                builder: (context, child) {
-                  return Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: color.withValues(alpha: 0.1 + (animation.value * 0.1)),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Icon(
-                      icon,
-                      color: color,
-                      size: 24,
-                    ),
-                  );
-                },
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [theme.cardColor, color.withValues(alpha: 0.05)],
+            ),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: color.withValues(alpha: 0.2), width: 1),
+            boxShadow: [
+              BoxShadow(
+                color: theme.shadowColor.withValues(alpha: 0.05),
+                blurRadius: 10,
+                offset: const Offset(0, 5),
               ),
-              const Spacer(),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(
-                  color: AppTheme.successGreen.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  status,
-                  style: TextStyle(
-                    color: AppTheme.successGreen,
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  AnimatedBuilder(
+                    animation: animation,
+                    builder: (context, child) {
+                      return Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: color.withValues(
+                            alpha: 0.1 + (animation.value * 0.1),
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(icon, color: color, size: 24),
+                      );
+                    },
                   ),
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppTheme.successGreen.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      status,
+                      style: TextStyle(
+                        color: AppTheme.successGreen,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Text(
+                title,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                value,
+                style: theme.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: color,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
-            Text(
-              title,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          const SizedBox(height: 4),
-          Text(
-            value,
-            style: theme.textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: color,
-            ),
-          ),
-        ],
-      ),
-    ).animate().fadeIn(delay: (400 + [72, 98, 82, 25].indexOf(int.tryParse(value.split(' ')[0].replaceAll(RegExp(r'[^0-9]'), '')) ?? 0) * 100).ms)
-     .scale(begin: const Offset(0.8, 0.8));
+        )
+        .animate()
+        .fadeIn(
+          delay:
+              (400 +
+                      [72, 98, 82, 25].indexOf(
+                            int.tryParse(
+                                  value
+                                      .split(' ')[0]
+                                      .replaceAll(RegExp(r'[^0-9]'), ''),
+                                ) ??
+                                0,
+                          ) *
+                          100)
+                  .ms,
+        )
+        .scale(begin: const Offset(0.8, 0.8));
   }
 
   Widget _buildHealthInsightsSection(AppLocalizations localizations) {
@@ -421,19 +451,22 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
     final insights = [
       {
         'title': 'Excellent Sleep Pattern',
-        'description': 'Your sleep quality has improved by 15% this week. Keep maintaining your bedtime routine.',
+        'description':
+            'Your sleep quality has improved by 15% this week. Keep maintaining your bedtime routine.',
         'type': 'positive',
         'icon': Icons.bedtime,
       },
       {
         'title': 'Heart Rate Variability',
-        'description': 'Consider adding more cardio exercises to improve your heart rate variability.',
+        'description':
+            'Consider adding more cardio exercises to improve your heart rate variability.',
         'type': 'suggestion',
         'icon': Icons.favorite,
       },
       {
         'title': 'Hydration Reminder',
-        'description': 'Your hydration levels are optimal. Continue drinking 8 glasses of water daily.',
+        'description':
+            'Your hydration levels are optimal. Continue drinking 8 glasses of water daily.',
         'type': 'neutral',
         'icon': Icons.water_drop,
       },
@@ -463,64 +496,66 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
           }
 
           return Container(
-            margin: const EdgeInsets.only(bottom: 16),
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: theme.cardColor,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: getColor().withValues(alpha: 0.2),
-                width: 1,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: theme.shadowColor.withValues(alpha: 0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 5),
-                ),
-              ],
-            ),
-            child: Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: getColor().withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(12),
+                margin: const EdgeInsets.only(bottom: 16),
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: theme.cardColor,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: getColor().withValues(alpha: 0.2),
+                    width: 1,
                   ),
-                  child: Icon(
-                    insight['icon'] as IconData,
-                    color: getColor(),
-                    size: 24,
-                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: theme.shadowColor.withValues(alpha: 0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        insight['title'] as String,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppTheme.darkGrey,
-                        ),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: getColor().withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        insight['description'] as String,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: AppTheme.mediumGrey,
-                          height: 1.3,
-                        ),
+                      child: Icon(
+                        insight['icon'] as IconData,
+                        color: getColor(),
+                        size: 24,
                       ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            insight['title'] as String,
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: AppTheme.darkGrey,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            insight['description'] as String,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: AppTheme.mediumGrey,
+                              height: 1.3,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ).animate().fadeIn(delay: (600 + insights.indexOf(insight) * 200).ms)
-           .slideX(begin: 0.2, end: 0);
+              )
+              .animate()
+              .fadeIn(delay: (600 + insights.indexOf(insight) * 200).ms)
+              .slideX(begin: 0.2, end: 0);
         }),
       ],
     );
@@ -558,11 +593,7 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
                   ),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(
-                  Icons.healing,
-                  color: Colors.white,
-                  size: 20,
-                ),
+                child: const Icon(Icons.healing, color: Colors.white, size: 20),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -592,39 +623,47 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
           Wrap(
             spacing: 12,
             runSpacing: 12,
-            children: [
-              'Headache',
-              'Fatigue',
-              'Mood Swings',
-              'Cramps',
-              'Bloating',
-              'Back Pain'
-            ].map((symptom) {
-              final isActive = ['Fatigue', 'Mood Swings'].contains(symptom);
-              return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                decoration: BoxDecoration(
-                  color: isActive 
-                      ? AppTheme.accentMint.withValues(alpha: 0.1)
-                      : AppTheme.lightGrey.withValues(alpha: 0.3),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: isActive 
-                        ? AppTheme.accentMint
-                        : AppTheme.mediumGrey.withValues(alpha: 0.3),
-                    width: 1,
-                  ),
-                ),
-                child: Text(
-                  symptom,
-                  style: TextStyle(
-                    color: isActive ? AppTheme.accentMint : AppTheme.mediumGrey,
-                    fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
-                    fontSize: 12,
-                  ),
-                ),
-              );
-            }).toList(),
+            children:
+                [
+                  'Headache',
+                  'Fatigue',
+                  'Mood Swings',
+                  'Cramps',
+                  'Bloating',
+                  'Back Pain',
+                ].map((symptom) {
+                  final isActive = ['Fatigue', 'Mood Swings'].contains(symptom);
+                  return Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isActive
+                          ? AppTheme.accentMint.withValues(alpha: 0.1)
+                          : AppTheme.lightGrey.withValues(alpha: 0.3),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: isActive
+                            ? AppTheme.accentMint
+                            : AppTheme.mediumGrey.withValues(alpha: 0.3),
+                        width: 1,
+                      ),
+                    ),
+                    child: Text(
+                      symptom,
+                      style: TextStyle(
+                        color: isActive
+                            ? AppTheme.accentMint
+                            : AppTheme.mediumGrey,
+                        fontWeight: isActive
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                        fontSize: 12,
+                      ),
+                    ),
+                  );
+                }).toList(),
           ),
         ],
       ),
@@ -634,9 +673,19 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
   Widget _buildHealthGoals(AppLocalizations localizations) {
     final theme = Theme.of(context);
     final goals = [
-      {'title': 'Daily Steps', 'current': 8420, 'target': 10000, 'unit': 'steps'},
+      {
+        'title': 'Daily Steps',
+        'current': 8420,
+        'target': 10000,
+        'unit': 'steps',
+      },
       {'title': 'Water Intake', 'current': 6, 'target': 8, 'unit': 'glasses'},
-      {'title': 'Sleep Duration', 'current': 7.5, 'target': 8.0, 'unit': 'hours'},
+      {
+        'title': 'Sleep Duration',
+        'current': 7.5,
+        'target': 8.0,
+        'unit': 'hours',
+      },
     ];
 
     return Column(
@@ -655,77 +704,85 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
           final isCompleted = progress >= 1.0;
 
           return Container(
-            margin: const EdgeInsets.only(bottom: 16),
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surface,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: isCompleted 
-                    ? AppTheme.successGreen.withValues(alpha: 0.3)
-                    : AppTheme.lightGrey.withValues(alpha: 0.5),
-                width: 1,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 5),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        goal['title'] as String,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppTheme.darkGrey,
-                        ),
-                      ),
+                margin: const EdgeInsets.only(bottom: 16),
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.surface,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: isCompleted
+                        ? AppTheme.successGreen.withValues(alpha: 0.3)
+                        : AppTheme.lightGrey.withValues(alpha: 0.5),
+                    width: 1,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 5),
                     ),
-                    if (isCompleted)
-                      Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: AppTheme.successGreen.withValues(alpha: 0.1),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          Icons.check,
-                          color: AppTheme.successGreen,
-                          size: 16,
-                        ),
-                      ),
                   ],
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  '${goal['current']} / ${goal['target']} ${goal['unit']}',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: AppTheme.mediumGrey,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: LinearProgressIndicator(
-                    value: progress.clamp(0.0, 1.0),
-                    backgroundColor: AppTheme.lightGrey.withValues(alpha: 0.3),
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      isCompleted ? AppTheme.successGreen : AppTheme.primaryRose,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            goal['title'] as String,
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: AppTheme.darkGrey,
+                            ),
+                          ),
+                        ),
+                        if (isCompleted)
+                          Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: AppTheme.successGreen.withValues(
+                                alpha: 0.1,
+                              ),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.check,
+                              color: AppTheme.successGreen,
+                              size: 16,
+                            ),
+                          ),
+                      ],
                     ),
-                    minHeight: 8,
-                  ),
+                    const SizedBox(height: 8),
+                    Text(
+                      '${goal['current']} / ${goal['target']} ${goal['unit']}',
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: AppTheme.mediumGrey,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: LinearProgressIndicator(
+                        value: progress.clamp(0.0, 1.0),
+                        backgroundColor: AppTheme.lightGrey.withValues(
+                          alpha: 0.3,
+                        ),
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          isCompleted
+                              ? AppTheme.successGreen
+                              : AppTheme.primaryRose,
+                        ),
+                        minHeight: 8,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ).animate().fadeIn(delay: (1400 + goals.indexOf(goal) * 100).ms)
-           .slideX(begin: 0.3, end: 0);
+              )
+              .animate()
+              .fadeIn(delay: (1400 + goals.indexOf(goal) * 100).ms)
+              .slideX(begin: 0.3, end: 0);
         }),
       ],
     );
@@ -736,23 +793,23 @@ class _HealthScreenState extends State<HealthScreen> with TickerProviderStateMix
 class HealthScorePainter extends CustomPainter {
   final double score;
   final double animation;
-  
+
   HealthScorePainter({required this.score, required this.animation});
-  
+
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2 - 8;
-    
+
     // Background ring
     final backgroundPaint = Paint()
       ..color = AppTheme.lightGrey.withValues(alpha: 0.3)
       ..strokeWidth = 8
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
-    
+
     canvas.drawCircle(center, radius, backgroundPaint);
-    
+
     // Animated score ring
     final scorePaint = Paint()
       ..shader = const LinearGradient(
@@ -761,7 +818,7 @@ class HealthScorePainter extends CustomPainter {
       ..strokeWidth = 8
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
-    
+
     final sweepAngle = (score * 2 * math.pi * animation);
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
@@ -770,18 +827,20 @@ class HealthScorePainter extends CustomPainter {
       false,
       scorePaint,
     );
-    
+
     // Pulsing effect
     if (animation > 0.7) {
       final pulsePaint = Paint()
-        ..color = AppTheme.primaryRose.withValues(alpha: 0.2 - (animation - 0.7) * 0.2)
+        ..color = AppTheme.primaryRose.withValues(
+          alpha: 0.2 - (animation - 0.7) * 0.2,
+        )
         ..strokeWidth = 12
         ..style = PaintingStyle.stroke;
-      
+
       canvas.drawCircle(center, radius + (animation - 0.7) * 8, pulsePaint);
     }
   }
-  
+
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }

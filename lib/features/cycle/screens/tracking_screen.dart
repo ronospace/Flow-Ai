@@ -35,6 +35,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
   double _pain = 1.0;
   final Map<String, double> _painAreas = {};
   String _notes = '';
+  final Set<String> _selectedQuickNotes = {}; // Multi-select state
   
   final TextEditingController _notesController = TextEditingController();
   bool _hasUnsavedChanges = false;
@@ -109,6 +110,12 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
           _notes = existingData['notes'] ?? '';
           _notesController.text = _notes;
           
+          // Load selected quick notes if stored
+          _selectedQuickNotes.clear();
+          if (existingData['quick_notes'] != null) {
+            _selectedQuickNotes.addAll(List<String>.from(existingData['quick_notes']));
+          }
+          
           // Reset unsaved changes since we just loaded
           _hasUnsavedChanges = false;
         });
@@ -124,6 +131,7 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
           _painAreas.clear();
           _notes = '';
           _notesController.text = '';
+          _selectedQuickNotes.clear();
           _hasUnsavedChanges = false;
         });
       }
@@ -160,6 +168,14 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
       final databaseService = DatabaseService();
       final localizations = AppLocalizations.of(context);
       
+      // Append quick notes tags to notes if selected
+      final quickNotesText = _selectedQuickNotes.isEmpty 
+          ? '' 
+          : '\n\n🏷️ Quick Tags: ${_selectedQuickNotes.join(', ')}';
+      final fullNotes = _notes.isNotEmpty || _selectedQuickNotes.isNotEmpty
+          ? (_notes + quickNotesText).trim()
+          : null;
+      
       // Save daily tracking data to database
       await databaseService.saveDailyTracking(
         date: _selectedDate,
@@ -170,7 +186,8 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
         energy: _energy,
         pain: _pain,
         painAreas: _painAreas.isNotEmpty ? _painAreas : null,
-        notes: _notes.isNotEmpty ? _notes : null,
+        notes: fullNotes,
+        // quickNotes are already embedded in fullNotes above
       );
       
       // Success haptic feedback
@@ -965,30 +982,35 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
           
           const SizedBox(height: 30),
           
-          // Quick Notes Suggestions
-          if (_notesController.text.isEmpty) ...[
-            Text(
-              'Quick Notes',
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: theme.colorScheme.onSurface,
-              ),
+          // Quick Notes - Always Visible Multi-Select
+          Text(
+            'Quick Tags',
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: theme.colorScheme.onSurface,
             ),
-            const SizedBox(height: 16),
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              children: [
-                _buildQuickNote('🌙', 'Sleep quality'),
-                _buildQuickNote('🍎', 'Food cravings'),
-                _buildQuickNote('💧', 'Hydration'),
-                _buildQuickNote('🏃‍♀️', 'Exercise'),
-                _buildQuickNote('😴', 'Energy levels'),
-                _buildQuickNote('🧘‍♀️', 'Stress management'),
-              ],
-            ).animate().fadeIn(delay: 400.ms),
-            const SizedBox(height: 20),
-          ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Tap to select multiple tags for quick tracking',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            children: [
+              _buildQuickNote('🌙', 'Sleep quality'),
+              _buildQuickNote('🍎', 'Food cravings'),
+              _buildQuickNote('💧', 'Hydration'),
+              _buildQuickNote('🏃‍♀️', 'Exercise'),
+              _buildQuickNote('😴', 'Energy levels'),
+              _buildQuickNote('🧘‍♀️', 'Stress management'),
+            ],
+          ).animate().fadeIn(delay: 400.ms),
+          const SizedBox(height: 20),
         ],
       ),
     );
@@ -996,33 +1018,41 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
   
   Widget _buildQuickNote(String emoji, String label) {
     final theme = Theme.of(context);
+    final isSelected = _selectedQuickNotes.contains(label);
+    
     return GestureDetector(
       onTap: () {
-        final currentText = _notesController.text;
-        final newText = currentText.isEmpty 
-            ? '$label: '
-            : '$currentText\n$label: ';
-        
-        _notesController.text = newText;
-        _notesController.selection = TextSelection.fromPosition(
-          TextPosition(offset: newText.length),
-        );
-        
         setState(() {
-          _notes = newText;
+          if (isSelected) {
+            _selectedQuickNotes.remove(label);
+          } else {
+            _selectedQuickNotes.add(label);
+          }
         });
         _markUnsavedChanges();
         HapticFeedback.selectionClick();
       },
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: theme.cardColor,
+          color: isSelected 
+              ? AppTheme.primaryRose.withValues(alpha: 0.15)
+              : theme.cardColor,
           borderRadius: BorderRadius.circular(25),
           border: Border.all(
-            color: theme.dividerColor,
+            color: isSelected 
+                ? AppTheme.primaryRose 
+                : theme.dividerColor,
+            width: isSelected ? 2 : 1,
           ),
-          boxShadow: [
+          boxShadow: isSelected ? [
+            BoxShadow(
+              color: AppTheme.primaryRose.withValues(alpha: 0.3),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ] : [
             BoxShadow(
               color: theme.shadowColor.withValues(alpha: 0.1),
               blurRadius: 8,
@@ -1035,21 +1065,33 @@ class _TrackingScreenState extends State<TrackingScreen> with TickerProviderStat
           children: [
             Text(
               emoji,
-              style: const TextStyle(fontSize: 16),
+              style: TextStyle(
+                fontSize: 16,
+                shadows: isSelected ? [
+                  Shadow(
+                    color: AppTheme.primaryRose.withValues(alpha: 0.3),
+                    blurRadius: 4,
+                  ),
+                ] : null,
+              ),
             ),
             const SizedBox(width: 8),
             Text(
               label,
               style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
-                fontWeight: FontWeight.w500,
+                color: isSelected 
+                    ? AppTheme.primaryRose 
+                    : theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
               ),
             ),
-            const SizedBox(width: 4),
+            const SizedBox(width: 6),
             Icon(
-              Icons.add_circle_outline,
+              isSelected ? Icons.check_circle : Icons.add_circle_outline,
               size: 16,
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+              color: isSelected 
+                  ? AppTheme.primaryRose 
+                  : theme.colorScheme.onSurface.withValues(alpha: 0.6),
             ),
           ],
         ),

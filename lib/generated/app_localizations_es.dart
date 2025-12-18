@@ -44,6 +44,9 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get cycleLengthLabel => 'Cycle Length';
+
+  @override
   String daysUntilPeriod(int days) {
     return '$days días hasta el período';
   }
@@ -327,6 +330,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get update => 'Actualizar';
+
+  @override
+  String get login => 'Login';
+
+  @override
+  String get signUp => 'Sign Up';
 
   @override
   String get confirm => 'Confirmar';
@@ -1628,4 +1637,16 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get estimatedBasedOnPatterns =>
       'Estimated based on your logged patterns';
+
+  @override
+  String get healthDashboardMatrix => 'Health Dashboard Matrix';
+
+  @override
+  String get realTimeBiometricAnalysis => 'Real-time Biometric Analysis';
+
+  @override
+  String get predictiveAnalyticsCenter => 'Predictive Analytics Center';
+
+  @override
+  String get aiPoweredCycleForecast => 'AI-Powered Cycle Forecast';
 }

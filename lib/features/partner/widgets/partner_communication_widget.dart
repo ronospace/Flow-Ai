@@ -244,7 +244,7 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      _formatTime(message.sentAt),
+                      _formatTime(message.createdAt),
                       style: TextStyle(
                         fontSize: 10,
                         color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
@@ -265,7 +265,7 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
               ],
             ),
           ),
-          if (message.type == PartnerMessageType.moodCheckIn)
+          if (message.type == PartnerMessageType.text)
             Container(
               padding: const EdgeInsets.all(4),
               decoration: BoxDecoration(
@@ -480,7 +480,7 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  _formatMessageTime(message.sentAt),
+                  _formatMessageTime(message.createdAt),
                   style: TextStyle(
                     fontSize: 10,
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.6),

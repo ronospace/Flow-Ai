@@ -291,7 +291,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
         ),
         const SizedBox(height: 8),
         Text(
-          'Enter the 6-digit code from your partner\'s invitation.',
+          'Enter the 8-character code from your partner\'s invitation.',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: AppTheme.mediumGrey,
           ),
@@ -343,8 +343,8 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                   if (value == null || value.isEmpty) {
                     return 'Please enter the invitation code';
                   }
-                  if (value.length != 6) {
-                    return 'Code must be 6 characters';
+                  if (value.length != 8) {
+                    return 'Code must be 8 characters';
                   }
                   return null;
                 },
@@ -529,7 +529,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
       child: SizedBox(
         width: double.infinity,
         child: ElevatedButton(
-          onPressed: (_isLoading || _codeController.text.length != 6) 
+          onPressed: (_isLoading || _codeController.text.length != 8) 
             ? null 
             : _handleJoin,
           style: ElevatedButton.styleFrom(
@@ -574,7 +574,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
       final data = await Clipboard.getData(Clipboard.kTextPlain);
       if (data?.text != null) {
         final text = data!.text!.toUpperCase().replaceAll(RegExp(r'[^A-Z0-9]'), '');
-        if (text.length >= 6) {
+        if (text.length >= 8) {
           setState(() {
             _codeController.text = text.substring(0, 6);
             _errorMessage = null;
@@ -594,40 +594,22 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
       });
 
       try {
-        await Future.delayed(const Duration(seconds: 1)); // Simulate API call
-        
-        // Validate code format (in real implementation, this would be server-side)
-        final code = _codeController.text.trim();
-        if (code.length != 6 || !RegExp(r'^[A-Z0-9]{6}$').hasMatch(code)) {
-          throw Exception('Invalid code format');
+        // Validate code format (8 characters, alphanumeric)
+        final code = _codeController.text.trim().toUpperCase();
+        if (code.length != 8 || !RegExp(r'^[A-Z0-9]{8}$').hasMatch(code)) {
+          throw Exception('Invalid code format. Code must be 8 characters.');
         }
 
+        // Call the callback - parent will handle PartnerService call
         widget.onJoinWithCode(code);
 
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Row(
-                children: [
-                  Icon(Icons.check_circle, color: Colors.white),
-                  const SizedBox(width: 12),
-                  Text('Successfully connected with partner!'),
-                ],
-              ),
-              backgroundColor: AppTheme.accentMint,
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-          );
-          
           Navigator.pop(context);
         }
       } catch (e) {
         setState(() {
           _isLoading = false;
-          _errorMessage = 'Invalid invitation code. Please check and try again.';
+          _errorMessage = e.toString().replaceAll('Exception: ', '');
         });
       }
     }

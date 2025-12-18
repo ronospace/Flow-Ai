@@ -9,11 +9,7 @@ class TrackingSummaryCard extends StatelessWidget {
   final CycleData cycleData;
   final VoidCallback? onEdit;
 
-  const TrackingSummaryCard({
-    super.key,
-    required this.cycleData,
-    this.onEdit,
-  });
+  const TrackingSummaryCard({super.key, required this.cycleData, this.onEdit});
 
   @override
   Widget build(BuildContext context) {
@@ -37,25 +33,25 @@ class TrackingSummaryCard extends StatelessWidget {
         children: [
           // Header with date and edit button
           _buildHeader(context),
-          
+
           const SizedBox(height: 20),
-          
+
           // Flow intensity
           _buildFlowSection(),
-          
+
           if (cycleData.symptoms.isNotEmpty) ...[
             const SizedBox(height: 16),
             _buildSymptomsSection(),
           ],
-          
+
           // Mood and Energy
           _buildMoodEnergySection(context),
-          
+
           if (cycleData.pain != null && cycleData.pain! > 1) ...[
             const SizedBox(height: 16),
             _buildPainSection(),
           ],
-          
+
           if (cycleData.notes?.isNotEmpty == true) ...[
             const SizedBox(height: 16),
             _buildNotesSection(context),
@@ -109,10 +105,7 @@ class TrackingSummaryCard extends StatelessWidget {
         if (onEdit != null)
           IconButton(
             onPressed: onEdit,
-            icon: const Icon(
-              Icons.edit_rounded,
-              color: AppTheme.mediumGrey,
-            ),
+            icon: const Icon(Icons.edit_rounded, color: AppTheme.mediumGrey),
           ),
       ],
     );
@@ -130,7 +123,7 @@ class TrackingSummaryCard extends StatelessWidget {
           ),
           child: Center(
             child: Text(
-              cycleData.flowIntensity.emoji,
+              cycleData.flowIntensity?.emoji ?? cycleData.averageFlow.emoji,
               style: const TextStyle(fontSize: 20),
             ),
           ),
@@ -259,10 +252,7 @@ class TrackingSummaryCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
           child: Center(
-            child: Text(
-              emoji,
-              style: const TextStyle(fontSize: 16),
-            ),
+            child: Text(emoji, style: const TextStyle(fontSize: 16)),
           ),
         ),
         const SizedBox(width: 8),
@@ -297,11 +287,7 @@ class TrackingSummaryCard extends StatelessWidget {
       children: [
         Row(
           children: [
-            Icon(
-              Icons.note_alt_rounded,
-              size: 16,
-              color: AppTheme.mediumGrey,
-            ),
+            Icon(Icons.note_alt_rounded, size: 16, color: AppTheme.mediumGrey),
             SizedBox(width: 6),
             Text(
               'Notes',
@@ -322,7 +308,11 @@ class TrackingSummaryCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
           ),
           child: Text(
-            cycleData.notes!,
+            cycleData.notes != null
+                ? (cycleData.notes is String
+                      ? cycleData.notes as String
+                      : (cycleData.notes as Map<String, dynamic>).toString())
+                : 'No notes',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: AppTheme.darkGrey,
               height: 1.4,
@@ -346,7 +336,8 @@ class TrackingSummaryCard extends StatelessWidget {
   }
 
   Color _getFlowColor() {
-    switch (cycleData.flowIntensity) {
+    final flow = cycleData.flowIntensity ?? cycleData.averageFlow;
+    switch (flow) {
       case FlowIntensity.none:
         return AppTheme.lightGrey;
       case FlowIntensity.spotting:
@@ -363,7 +354,8 @@ class TrackingSummaryCard extends StatelessWidget {
   }
 
   String _getFlowText() {
-    switch (cycleData.flowIntensity) {
+    final flow = cycleData.flowIntensity ?? cycleData.averageFlow;
+    switch (flow) {
       case FlowIntensity.none:
         return 'None';
       case FlowIntensity.spotting:

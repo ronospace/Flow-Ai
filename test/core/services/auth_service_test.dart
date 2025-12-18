@@ -5,7 +5,6 @@ import 'package:flow_ai/core/services/auth_service.dart';
 import 'package:flow_ai/core/services/local_user_service.dart';
 import 'package:flow_ai/core/services/apple_signin_service.dart';
 import 'package:flow_ai/core/services/biometric_auth_service.dart';
-import 'package:flow_ai/core/models/auth_result.dart';
 import 'package:flow_ai/core/models/user.dart';
 
 // Generate mocks

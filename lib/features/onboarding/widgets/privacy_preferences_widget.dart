@@ -31,8 +31,19 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
   bool _enableCloudBackup = true;
   bool _shareWithPartners = false;
   bool _marketingCommunications = false;
+  bool _enableHealthKitIntegration = false;
 
   final List<Map<String, dynamic>> _privacyOptions = [
+    {
+      'id': 'healthkit_integration',
+      'title': 'HealthKit / Health Connect Integration',
+      'subtitle': 'Sync with Apple HealthKit (iOS) or Google Fit (Android)',
+      'description': 'Flow Ai integrates with your device\'s health data to enhance predictions. We may access: heart rate, body temperature, sleep data, activity levels, and menstrual flow data. All data stays on your device unless you enable cloud backup.',
+      'icon': Icons.health_and_safety,
+      'color': Colors.red,
+      'recommended': true,
+      'defaultValue': false,
+    },
     {
       'id': 'ai_insights',
       'title': 'AI-Powered Insights',
@@ -293,6 +304,9 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
     bool currentValue;
     
     switch (option['id']) {
+      case 'healthkit_integration':
+        currentValue = _enableHealthKitIntegration;
+        break;
       case 'ai_insights':
         currentValue = _enableAIInsights;
         break;
@@ -680,6 +694,9 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
   void _toggleOption(String optionId) {
     setState(() {
       switch (optionId) {
+        case 'healthkit_integration':
+          _enableHealthKitIntegration = !_enableHealthKitIntegration;
+          break;
         case 'ai_insights':
           _enableAIInsights = !_enableAIInsights;
           break;
