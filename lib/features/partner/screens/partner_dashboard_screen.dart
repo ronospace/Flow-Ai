@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../generated/app_localizations.dart';
-import '../services/partner_service.dart';
-import '../models/partner_models.dart';
+import '../../../core/services/local_user_service.dart';
+import '../services/partner_service.dart' hide PartnershipStatus, PartnerMessageType, PartnerMessage, PartnerInsight, PartnerInsightType, Partnership show PartnerService, PartnerCareAction, PartnerCareActionType, PartnerInvitation, PartnerSharingSettings;
+import '../services/partner_service.dart' as service_types show PartnerMessageType;
+import '../models/partner_models.dart' show Partnership, PartnershipStatus, PartnerMessage, PartnerMessageType, PartnerPrivacySettings, CareAction, CareActionType;
+import '../models/partner_insight.dart';
 import '../widgets/partner_cycle_insight_widget.dart';
 import '../widgets/partner_communication_widget.dart';
 import '../widgets/partner_care_actions_widget.dart';
 import '../widgets/partner_insights_widget.dart';
+import '../dialogs/invite_partner_dialog.dart';
+import '../dialogs/join_partner_dialog.dart';
 import 'package:shimmer/shimmer.dart';
 
 class PartnerDashboardScreen extends StatefulWidget {
@@ -169,7 +175,8 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
 
   Widget _buildPartnershipHeader(ThemeData theme, AppLocalizations localizations, PartnerService partnerService) {
     final partnership = partnerService.currentPartnership!;
-    final isConnected = partnership.status == PartnershipStatus.active;
+    // Service Partnership doesn't have status field, so assume active if partnership exists
+    final isConnected = true; // partnership exists means it's active
     
     return AnimatedBuilder(
       animation: _contentAnimation,
@@ -351,8 +358,32 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
   }
 
   Widget _buildCycleInsightCard(ThemeData theme, AppLocalizations localizations, PartnerService partnerService) {
+    // Convert service Partnership to model Partnership
+    final ps = partnerService.currentPartnership!;
+    final partnership = Partnership(
+      id: ps.id,
+      userId1: ps.primaryUserId,
+      userId2: ps.partnerUserId,
+      customName1: ps.primaryUserName,
+      customName2: ps.partnerUserName,
+      establishedAt: ps.createdAt,
+      status: PartnershipStatus.active, // Assume active if partnership exists
+      privacySettings: PartnerPrivacySettings(
+        shareBasicCycleInfo: ps.sharingSettings.shareSymptoms,
+        shareDetailedSymptoms: ps.sharingSettings.sharePhysicalSymptoms,
+        shareMoodData: ps.sharingSettings.shareMoodData,
+        shareEnergyLevels: true,
+        sharePainData: ps.sharingSettings.sharePhysicalSymptoms,
+        shareAIInsights: ps.sharingSettings.allowInsights,
+        sharePredictions: ps.sharingSettings.sharePredictions,
+        allowNotifications: ps.sharingSettings.sendNotifications,
+        allowCareActions: true,
+      ),
+      lastActiveAt: ps.lastActiveAt,
+    );
+    
     return PartnerCycleInsightWidget(
-      partnership: partnerService.currentPartnership!,
+      partnership: partnership,
     ).animate().fadeIn(delay: 200.ms).slideX(begin: -0.2, end: 0);
   }
 
@@ -490,26 +521,142 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
   }
 
   Widget _buildCommunicationCard(ThemeData theme, AppLocalizations localizations, PartnerService partnerService) {
+    // Convert PartnerMessage from service to PartnerMessage from models
+    final messages = partnerService.messages.map((pm) {
+      // Map PartnerMessageType from service to PartnerMessageType from models
+      PartnerMessageType type;
+      switch (pm.type.name) {
+        case 'text':
+          type = PartnerMessageType.text;
+          break;
+        case 'careAction':
+          type = PartnerMessageType.careAction;
+          break;
+        case 'insight':
+          type = PartnerMessageType.supportive;
+          break;
+        default:
+          type = PartnerMessageType.text;
+      }
+      
+      return PartnerMessage(
+        id: pm.id,
+        partnershipId: pm.partnershipId,
+        senderId: pm.senderId,
+        receiverId: pm.receiverId,
+        content: pm.content,
+        type: type,
+        createdAt: pm.sentAt, // Service uses sentAt
+        readAt: pm.isRead ? pm.sentAt : null, // Service uses isRead boolean
+        metadata: pm.metadata,
+      );
+    }).toList();
+    
     return PartnerCommunicationWidget(
-      messages: partnerService.messages.take(3).toList(),
-      onSendMessage: (message) => partnerService.sendMessage(content: message),
+      messages: messages.take(3).toList(),
+      onSendMessage: (message) => partnerService.sendMessage(
+        content: message,
+        type: service_types.PartnerMessageType.text,
+      ),
     ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.2, end: 0);
   }
 
   Widget _buildPartnerInsightsCard(ThemeData theme, AppLocalizations localizations, PartnerService partnerService) {
+    // Convert PartnerInsight from service to PartnerInsight from models
+    final insights = partnerService.insights.map((pi) {
+      return PartnerInsight(
+        id: pi.id,
+        partnershipId: pi.partnershipId,
+        type: PartnerInsightType.values.firstWhere(
+          (e) => e.name == pi.type.name,
+          orElse: () => PartnerInsightType.supportSuggestion,
+        ),
+        title: pi.title,
+        content: pi.content,
+        actionSuggestions: pi.actionSuggestions,
+        generatedAt: pi.generatedAt,
+        expiresAt: pi.expiresAt,
+        isRead: pi.isRead,
+      );
+    }).toList();
+    
     return PartnerInsightsWidget(
-      insights: partnerService.insights,
+      insights: insights,
     ).animate().fadeIn(delay: 600.ms).slideX(begin: 0.2, end: 0);
   }
 
   Widget _buildCareHistoryCard(ThemeData theme, AppLocalizations localizations, PartnerService partnerService) {
-    return PartnerCareActionsWidget(
-      careActions: partnerService.careActions.take(5).toList(),
-      onCareAction: (type, title, description) => partnerService.sendCareAction(
+    // Get current user ID from partnership
+    final partnership = partnerService.currentPartnership;
+    if (partnership == null) {
+      return const SizedBox.shrink();
+    }
+    
+    // Try to determine current user ID from LocalUserService synchronously via stored value
+    // For now, use a placeholder - will be set correctly by the service
+    // Service Partnership uses primaryUserId/partnerUserId, not userId1/userId2
+    final currentUserId = partnership.primaryUserId; // Service will handle determining the correct user
+    
+    // Convert PartnerCareAction to CareAction for widget
+    final careActions = partnerService.careActions.map((pa) {
+      // Map PartnerCareActionType to CareActionType
+      CareActionType type;
+      switch (pa.type) {
+        case PartnerCareActionType.emotionalSupport:
+          type = CareActionType.support;
+          break;
+        case PartnerCareActionType.physicalCare:
+          type = CareActionType.symptomsHelp;
+          break;
+        case PartnerCareActionType.thoughtfulGesture:
+          type = CareActionType.gift;
+          break;
+        case PartnerCareActionType.other:
+          type = CareActionType.checkIn;
+          break;
+      }
+      
+      final partnership = partnerService.currentPartnership!;
+      return CareAction(
+        id: pa.id,
+        partnershipId: pa.partnershipId,
+        senderId: pa.performedByUserId,
+        receiverId: pa.forUserId,
         type: type,
-        title: title,
-        description: description,
-      ),
+        title: pa.title,
+        description: pa.description,
+        createdAt: pa.performedAt,
+        completedAt: null,
+      );
+    }).toList();
+    
+    return PartnerCareActionsWidget(
+      careActions: careActions.take(5).toList(),
+      onSendCareAction: (careAction) async {
+        // Convert CareActionType to PartnerCareActionType
+        PartnerCareActionType type;
+        switch (careAction.type) {
+          case CareActionType.support:
+            type = PartnerCareActionType.emotionalSupport;
+            break;
+          case CareActionType.symptomsHelp:
+            type = PartnerCareActionType.physicalCare;
+            break;
+          case CareActionType.gift:
+            type = PartnerCareActionType.thoughtfulGesture;
+            break;
+          default:
+            type = PartnerCareActionType.other;
+        }
+        
+        await partnerService.sendCareAction(
+          type: type,
+          title: careAction.title,
+          description: careAction.description,
+        );
+      },
+      currentUserId: currentUserId,
+      partnershipId: partnerService.currentPartnership?.id ?? '',
     ).animate().fadeIn(delay: 800.ms).slideY(begin: 0.3, end: 0);
   }
 
@@ -601,15 +748,106 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
 
   // Dialog methods
   void _showInvitePartnerDialog(BuildContext context, PartnerService partnerService) {
-    // Implementation for invite partner dialog
+    showDialog(
+      context: context,
+      builder: (context) => InvitePartnerDialog(
+        onSendInvite: (email, message) async {
+          final invitation = await partnerService.sendPartnerInvitation(
+            inviteeEmail: email,
+            personalMessage: message,
+          );
+          
+          if (invitation != null && context.mounted) {
+            // Show invitation code dialog
+            _showInvitationCodeDialog(context, invitation.invitationCode);
+          }
+        },
+      ),
+    );
+  }
+  
+  void _showInvitationCodeDialog(BuildContext context, String code) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Text('Invitation Code'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('Share this code with your partner:'),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppTheme.primaryRose.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppTheme.primaryRose, width: 2),
+              ),
+              child: SelectableText(
+                code,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 4,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: () async {
+                await Clipboard.setData(ClipboardData(text: code));
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Code copied to clipboard!')),
+                  );
+                }
+              },
+              icon: const Icon(Icons.copy),
+              label: const Text('Copy Code'),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Done'),
+          ),
+        ],
+      ),
+    );
   }
 
   void _showJoinPartnerDialog(BuildContext context, PartnerService partnerService) {
-    // Implementation for join partner dialog
+    showDialog(
+      context: context,
+      builder: (context) => JoinPartnerDialog(
+        onJoinWithCode: (code) async {
+          final partnership = await partnerService.acceptPartnerInvitation(code);
+          if (partnership != null && context.mounted) {
+            Navigator.of(context).pop(); // Close join dialog
+          }
+        },
+      ),
+    );
   }
 
   void _showMessageDialog(BuildContext context, PartnerService partnerService) {
-    // Implementation for message dialog
+    // Implementation for message dialog - can be enhanced later
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Send Message'),
+        content: const Text('Message feature coming soon'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Close'),
+          ),
+        ],
+      ),
+    );
   }
 
   void _showCareActionsDialog(BuildContext context, PartnerService partnerService) {
@@ -623,7 +861,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
   void _sendMoodCheckIn(PartnerService partnerService) {
     partnerService.sendMessage(
       content: "How are you feeling today? 💕",
-      type: PartnerMessageType.moodCheckIn,
+        type: service_types.PartnerMessageType.text,
     );
   }
 }

@@ -448,8 +448,12 @@ class DataExportImportService {
       }
 
       if (config.compressData) {
-        final List<int> compressed = GZipEncoder().encode(utf8.encode(jsonContent));
-        await File(filePath).writeAsBytes(compressed);
+        final compressed = GZipEncoder().encode(utf8.encode(jsonContent));
+        if (compressed != null) {
+          await File(filePath).writeAsBytes(compressed);
+        } else {
+          await File(filePath).writeAsString(jsonContent);
+        }
       } else {
         await File(filePath).writeAsString(jsonContent);
       }
@@ -582,7 +586,10 @@ class DataExportImportService {
       // Compress if requested
       List<int> finalContent = utf8.encode(jsonContent);
       if (config.compressData) {
-        finalContent = GZipEncoder().encode(finalContent);
+        final compressed = GZipEncoder().encode(finalContent);
+        if (compressed != null) {
+          finalContent = compressed;
+        }
       }
 
       await File(filePath).writeAsBytes(finalContent);

@@ -539,35 +539,18 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
   }
 
   Future<void> _sendInvitation() async {
+    if (!_formKey.currentState!.validate()) return;
+    
     setState(() => _isLoading = true);
 
     try {
-      await Future.delayed(const Duration(seconds: 1)); // Simulate API call
-      
+      // Call the callback - parent will handle PartnerService call
       widget.onSendInvite(
         _emailController.text.trim(),
         _messageController.text.trim().isEmpty ? null : _messageController.text.trim(),
       );
 
       if (mounted) {
-        // Show success feedback
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Row(
-              children: [
-                Icon(Icons.check_circle, color: Colors.white),
-                const SizedBox(width: 12),
-                Text('Invitation sent to ${_emailController.text}'),
-              ],
-            ),
-            backgroundColor: AppTheme.accentMint,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-        );
-        
         Navigator.pop(context);
       }
     } catch (e) {
@@ -578,9 +561,9 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
           SnackBar(
             content: Row(
               children: [
-                Icon(Icons.error, color: Colors.white),
+                const Icon(Icons.error, color: Colors.white),
                 const SizedBox(width: 12),
-                Text('Failed to send invitation. Please try again.'),
+                Text('Failed to create invitation: ${e.toString()}'),
               ],
             ),
             backgroundColor: Colors.red,

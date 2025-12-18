@@ -25,6 +25,9 @@ import 'core/services/platform_service.dart';
 import 'core/services/production_analytics_service.dart';
 import 'core/config/platform_config.dart';
 import 'core/services/progressive_disclosure_service.dart';
+import 'core/services/ai_notification_scheduler.dart';
+import 'core/services/performance_optimizer.dart';
+import 'core/services/tflite_prediction_service.dart';
 import 'features/onboarding/providers/onboarding_provider.dart';
 import 'features/cycle/providers/cycle_provider.dart';
 import 'features/insights/providers/insights_provider.dart';
@@ -34,18 +37,22 @@ import 'features/premium/providers/premium_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Configure Flutter for production performance
   if (kReleaseMode) {
     // Disable debug banner and optimize for production
-    debugPrint = (String? message, {int? wrapWidth}) {}; // Disable debug prints in release
+    debugPrint =
+        (
+          String? message, {
+          int? wrapWidth,
+        }) {}; // Disable debug prints in release
   }
-  
+
   // Initialize only critical services synchronously
   await _initializeCriticalServices();
-  
+
   runApp(const FlowAIApp());
-  
+
   // Initialize non-critical services asynchronously after app launch
   _initializeNonCriticalServices();
 }
@@ -55,25 +62,27 @@ Future<void> _initializeCriticalServices() async {
   try {
     await PlatformService().initialize();
     AppLogger.success('Platform Service initialized successfully');
-    
+
     // Initialize platform-specific configurations
     await PlatformConfig().initialize();
     AppLogger.success('Platform Configurations initialized successfully');
   } catch (e) {
     AppLogger.error('Platform Service initialization failed: $e');
   }
-  
+
   // Initialize Firebase service - skip on iOS for now due to Firebase Core compatibility issue
   try {
     // TODO: Re-enable when Firebase Core 4.x is released with iOS compatibility
     // await FirebaseService().initialize();
-    AppLogger.warning('Firebase temporarily disabled for iOS build compatibility');
+    AppLogger.warning(
+      'Firebase temporarily disabled for iOS build compatibility',
+    );
   } catch (e) {
     AppLogger.warning('Firebase initialization failed (app will continue): $e');
   }
-  
+
   ImageCacheConfig.configure();
-  
+
   // Initialize app state service which coordinates auth and preferences
   try {
     await AppStateService().initialize();
@@ -81,14 +90,14 @@ Future<void> _initializeCriticalServices() async {
   } catch (e) {
     AppLogger.warning('App State Service initialization failed: $e');
   }
-  
+
   // Note: System UI configuration is now handled by the PlatformService
 }
 
 Future<void> _initializeNonCriticalServices() async {
   // Defer heavy initializations to not block app startup
   await Future.delayed(const Duration(milliseconds: 100));
-  
+
   // Initialize services in parallel with optimized batching for faster startup
   await Future.wait([
     _initializeMemoryManager(),
@@ -101,7 +110,11 @@ Future<void> _initializeNonCriticalServices() async {
     _initializeAIMemory(),
     _initializeOfflineService(),
     _initializeProductionAnalytics(),
+    _initializeFuturisticServices(),
   ], eagerError: false); // Don't fail all services if one fails
+
+  // Background preloading for faster UI responsiveness
+  _preloadCriticalData();
 }
 
 Future<void> _initializeAdMob() async {
@@ -147,7 +160,9 @@ Future<void> _initializeNavigation() async {
 // Auth is now initialized by AppStateService
 Future<void> _initializeAuth() async {
   // Skip this since it's already handled by AppStateService
-  AppLogger.auth('Authentication Service already initialized via AppStateService');
+  AppLogger.auth(
+    'Authentication Service already initialized via AppStateService',
+  );
 }
 
 Future<void> _initializeLocalUserService() async {
@@ -181,7 +196,9 @@ Future<void> _initializeMemoryManager() async {
   try {
     await MemoryManager().initialize();
     await MemoryManager().enablePerformanceOptimizations();
-    AppLogger.memory('Memory Manager initialized with performance optimizations');
+    AppLogger.memory(
+      'Memory Manager initialized with performance optimizations',
+    );
   } catch (e) {
     AppLogger.warning('Memory Manager initialization failed: $e');
   }
@@ -194,6 +211,59 @@ Future<void> _initializeProductionAnalytics() async {
   } catch (e) {
     AppLogger.warning('Production Analytics Service initialization failed: $e');
   }
+}
+
+Future<void> _initializeFuturisticServices() async {
+  try {
+    // Initialize AI notification scheduler
+    await AINotificationScheduler.instance.initialize();
+    AppLogger.success('🤖 AI Notification Scheduler initialized');
+
+    // Initialize performance optimizer
+    await PerformanceOptimizer.instance.initialize();
+    AppLogger.success('⚡ Performance Optimizer initialized');
+
+    // Initialize TensorFlow Lite (non-blocking)
+    TFLitePredictionService.instance.initialize().catchError((e) {
+      AppLogger.warning(
+        'TensorFlow Lite initialization failed (using fallback): $e',
+      );
+    });
+  } catch (e) {
+    AppLogger.warning('Futuristic services initialization failed: $e');
+  }
+}
+
+/// Preload critical data in background to improve UI responsiveness
+void _preloadCriticalData() {
+  // Preload analytics data
+  PerformanceOptimizer.instance.preload(
+    key: 'cycle_analytics',
+    loader: () async {
+      try {
+        final cycleProvider = CycleProvider();
+        await cycleProvider.loadCycles();
+        return true;
+      } catch (e) {
+        return false;
+      }
+    },
+    cacheDuration: const Duration(minutes: 30),
+  );
+
+  // Preload health data
+  PerformanceOptimizer.instance.preload(
+    key: 'health_analytics',
+    loader: () async {
+      try {
+        // This will be loaded when needed
+        return true;
+      } catch (e) {
+        return false;
+      }
+    },
+    cacheDuration: const Duration(minutes: 30),
+  );
 }
 
 // Helper function to avoid awaiting futures we don't need to wait for
@@ -252,31 +322,41 @@ class _FlowAIAppState extends State<FlowAIApp> {
       child: Consumer<SettingsProvider>(
         builder: (context, settings, child) {
           // Update system UI overlay style based on theme
-          final isDark = settings.themeMode == ThemeMode.dark ||
+          final isDark =
+              settings.themeMode == ThemeMode.dark ||
               (settings.themeMode == ThemeMode.system &&
                   MediaQuery.platformBrightnessOf(context) == Brightness.dark);
-          
+
           SystemChrome.setSystemUIOverlayStyle(
             SystemUiOverlayStyle(
               statusBarColor: Colors.transparent,
-              statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
-              systemNavigationBarColor: isDark ? AppTheme.darkBackground : AppTheme.lightBackground,
-              systemNavigationBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+              statusBarIconBrightness: isDark
+                  ? Brightness.light
+                  : Brightness.dark,
+              systemNavigationBarColor: isDark
+                  ? AppTheme.darkBackground
+                  : AppTheme.lightBackground,
+              systemNavigationBarIconBrightness: isDark
+                  ? Brightness.light
+                  : Brightness.dark,
             ),
           );
-          
+
           final platformInfo = PlatformService().platformInfo;
-          
+
           // Use CupertinoApp for iOS devices
-          if (platformInfo.platform == TargetPlatform.iOS && platformInfo.isMobile) {
+          if (platformInfo.platform == TargetPlatform.iOS &&
+              platformInfo.isMobile) {
             return CupertinoApp.router(
               title: 'Flow Ai',
               debugShowCheckedModeBanner: false,
               theme: CupertinoThemeData(
-                brightness: settings.themeMode == ThemeMode.dark ? Brightness.dark : Brightness.light,
+                brightness: settings.themeMode == ThemeMode.dark
+                    ? Brightness.dark
+                    : Brightness.light,
                 primaryColor: AppTheme.primaryRose,
-                scaffoldBackgroundColor: settings.themeMode == ThemeMode.dark 
-                    ? AppTheme.darkBackground 
+                scaffoldBackgroundColor: settings.themeMode == ThemeMode.dark
+                    ? AppTheme.darkBackground
                     : AppTheme.lightBackground,
               ),
               locale: settings.locale,
@@ -290,15 +370,23 @@ class _FlowAIAppState extends State<FlowAIApp> {
               ],
               // Core 12 languages for global market reach (~4.5B people)
               supportedLocales: const [
-                Locale('en'), // English → Global default, US, UK, Africa, India, SEA
-                Locale('es'), // Spanish → Latin America, Spain, US Hispanic community
-                Locale('fr'), // French → France, Canada (Quebec), Africa (West & Central)
+                Locale(
+                  'en',
+                ), // English → Global default, US, UK, Africa, India, SEA
+                Locale(
+                  'es',
+                ), // Spanish → Latin America, Spain, US Hispanic community
+                Locale(
+                  'fr',
+                ), // French → France, Canada (Quebec), Africa (West & Central)
                 Locale('pt'), // Portuguese (Brazilian) → Brazil, Portugal
                 Locale('de'), // German → Germany, Austria, Switzerland
                 Locale('it'), // Italian → Italy + diaspora
                 Locale('ar'), // Arabic (MSA) → Middle East, North Africa
                 Locale('hi'), // Hindi → India
-                Locale('zh'), // Chinese (Simplified) → Mainland China, Singapore
+                Locale(
+                  'zh',
+                ), // Chinese (Simplified) → Mainland China, Singapore
                 Locale('ja'), // Japanese → Japan
                 Locale('ko'), // Korean → South Korea
                 Locale('ru'), // Russian → Eastern Europe, Central Asia
@@ -327,20 +415,28 @@ class _FlowAIAppState extends State<FlowAIApp> {
               ],
               // Core 12 languages for global market reach (~4.5B people)
               supportedLocales: const [
-                Locale('en'), // English → Global default, US, UK, Africa, India, SEA
-                Locale('es'), // Spanish → Latin America, Spain, US Hispanic community
-                Locale('fr'), // French → France, Canada (Quebec), Africa (West & Central)
+                Locale(
+                  'en',
+                ), // English → Global default, US, UK, Africa, India, SEA
+                Locale(
+                  'es',
+                ), // Spanish → Latin America, Spain, US Hispanic community
+                Locale(
+                  'fr',
+                ), // French → France, Canada (Quebec), Africa (West & Central)
                 Locale('pt'), // Portuguese (Brazilian) → Brazil, Portugal
                 Locale('de'), // German → Germany, Austria, Switzerland
                 Locale('it'), // Italian → Italy + diaspora
                 Locale('ar'), // Arabic (MSA) → Middle East, North Africa
                 Locale('hi'), // Hindi → India
-                Locale('zh'), // Chinese (Simplified) → Mainland China, Singapore
+                Locale(
+                  'zh',
+                ), // Chinese (Simplified) → Mainland China, Singapore
                 Locale('ja'), // Japanese → Japan
                 Locale('ko'), // Korean → South Korea
                 Locale('ru'), // Russian → Eastern Europe, Central Asia
               ],
-          ).animate().fadeIn(duration: 800.ms);
+            ).animate().fadeIn(duration: 800.ms);
           }
         },
       ),

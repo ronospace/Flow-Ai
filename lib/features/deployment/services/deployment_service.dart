@@ -83,7 +83,7 @@ Flow Ai transforms complex health data into actionable insights, helping women m
       supportUrl: 'https://support.flowiq.app',
       marketingUrl: 'https://www.flowiq.app',
       privacyPolicyUrl: 'https://www.flowiq.app/privacy',
-      copyrightText: '© 2024 Flow Ai Technologies. All rights reserved.',
+      copyrightText: '© 2026 Flow Ai Technologies. All rights reserved.',
       localizedDescriptions: {
         'en': 'Advanced women\'s health tracking with AI-powered cycle predictions',
         'es': 'Seguimiento avanzado de la salud femenina con predicciones de ciclo impulsadas por IA',

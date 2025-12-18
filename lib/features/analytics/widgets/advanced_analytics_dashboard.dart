@@ -3,6 +3,8 @@ import 'package:fl_chart/fl_chart.dart';
 import '../providers/analytics_provider.dart';
 import '../../../core/services/analytics_service.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/medical_citations_footer.dart';
+import '../../../core/widgets/medical_disclaimer_banner.dart';
 
 class AdvancedAnalyticsDashboard extends StatelessWidget {
   final AnalyticsProvider provider;
@@ -47,6 +49,14 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
           
           // Health Patterns Recognition
           _buildHealthPatternsSection(theme),
+          
+          const SizedBox(height: 24),
+          
+          // Medical Disclaimer Banner (App Store 1.4.1)
+          MedicalDisclaimerBanner(),
+          
+          // Medical Citations Footer (App Store 1.4.1)
+          MedicalCitationsFooter(),
         ],
       ),
     );

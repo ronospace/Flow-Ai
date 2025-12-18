@@ -10,33 +10,38 @@ import '../widgets/biometric_chart_widget.dart';
 import '../widgets/health_metrics_card.dart';
 import '../widgets/correlation_insights_card.dart';
 import '../widgets/biometric_sync_status.dart';
+import '../../health/widgets/healthkit_connection_card.dart';
+import '../../../core/widgets/medical_citations_footer.dart';
+import '../../../core/widgets/medical_disclaimer_banner.dart';
 
 class BiometricDashboardScreen extends StatefulWidget {
   const BiometricDashboardScreen({super.key});
 
   @override
-  State<BiometricDashboardScreen> createState() => _BiometricDashboardScreenState();
+  State<BiometricDashboardScreen> createState() =>
+      _BiometricDashboardScreenState();
 }
 
 class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
     with TickerProviderStateMixin {
   late TabController _tabController;
-  
+
   BiometricAnalysis? _currentAnalysis;
   bool _isLoading = true;
   bool _hasPermission = false;
   String? _errorMessage;
-  
+  final bool _showHealthKitBanner = true;
+
   // Data refresh state
   bool _isRefreshing = false;
   DateTime? _lastRefresh;
-  
+
   // Filter state
   DateTimeRange _selectedRange = DateTimeRange(
     start: DateTime.now().subtract(const Duration(days: 7)),
     end: DateTime.now(),
   );
-  
+
   @override
   void initState() {
     super.initState();
@@ -44,54 +49,57 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
     _initializeBiometricDashboard();
     _lastRefresh = DateTime.now();
   }
-  
+
   @override
   void dispose() {
     _tabController.dispose();
     super.dispose();
   }
-  
+
   Future<void> _initializeBiometricDashboard() async {
     try {
       setState(() {
         _isLoading = true;
         _errorMessage = null;
       });
-      
+
       final biometricService = BiometricIntegrationService.instance;
-      
+
       // Initialize service if not already done
       if (!biometricService.isInitialized) {
         await biometricService.initialize();
       }
-      
+
       _hasPermission = biometricService.hasHealthPermission;
-      
+
       if (_hasPermission) {
         await _loadBiometricData();
       } else {
         setState(() {
-          _errorMessage = AppLocalizations.of(context).healthDataAccessNotGranted;
+          _errorMessage = AppLocalizations.of(
+            context,
+          ).healthDataAccessNotGranted;
           _isLoading = false;
         });
       }
     } catch (e) {
       setState(() {
-        _errorMessage = '${AppLocalizations.of(context).failedToInitializeBiometricDashboard}: $e';
+        _errorMessage =
+            '${AppLocalizations.of(context).failedToInitializeBiometricDashboard}: $e';
         _isLoading = false;
       });
     }
   }
-  
+
   Future<void> _loadBiometricData() async {
     try {
       final biometricService = BiometricIntegrationService.instance;
-      
+
       final analysis = await biometricService.getBiometricAnalysis(
         startDate: _selectedRange.start,
         endDate: _selectedRange.end,
       );
-      
+
       setState(() {
         _currentAnalysis = analysis;
         _isLoading = false;
@@ -99,28 +107,29 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
       });
     } catch (e) {
       setState(() {
-        _errorMessage = '${AppLocalizations.of(context).failedToLoadBiometricData}: $e';
+        _errorMessage =
+            '${AppLocalizations.of(context).failedToLoadBiometricData}: $e';
         _isLoading = false;
       });
     }
   }
-  
+
   Future<void> _refreshData() async {
     if (_isRefreshing) return;
-    
+
     setState(() {
       _isRefreshing = true;
     });
-    
+
     HapticFeedback.lightImpact();
-    
+
     try {
       // Refresh cache in biometric service
       await BiometricIntegrationService.instance.refreshCache();
-      
+
       // Reload data
       await _loadBiometricData();
-      
+
       // Show success feedback
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -128,12 +137,16 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
             children: [
               const Icon(Icons.refresh, color: Colors.white),
               const SizedBox(width: 8),
-              Text('Biometric data refreshed at ${DateFormat('HH:mm').format(DateTime.now())}'),
+              Text(
+                'Biometric data refreshed at ${DateFormat('HH:mm').format(DateTime.now())}',
+              ),
             ],
           ),
           backgroundColor: AppTheme.accentMint,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
         ),
       );
     } catch (e) {
@@ -150,7 +163,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
       });
     }
   }
-  
+
   Future<void> _showDateRangePicker() async {
     final picked = await showDateRangePicker(
       context: context,
@@ -169,7 +182,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
         );
       },
     );
-    
+
     if (picked != null && picked != _selectedRange) {
       setState(() {
         _selectedRange = picked;
@@ -178,35 +191,47 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
       await _loadBiometricData();
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          gradient: AppTheme.backgroundGradient(theme.brightness == Brightness.dark),
+          gradient: AppTheme.backgroundGradient(
+            theme.brightness == Brightness.dark,
+          ),
         ),
         child: SafeArea(
           child: Column(
             children: [
               // Custom App Bar
               _buildAppBar(),
-              
+
+              // HealthKit Connection Card
+              // Allows users to connect/disconnect HealthKit integration
+              if (_showHealthKitBanner) ...[
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: const HealthKitConnectionCard(),
+                ),
+                const SizedBox(height: 8),
+              ],
+
               // Status Banner
               if (_hasPermission && _currentAnalysis != null)
                 _buildStatusBanner(),
-              
+
               // Tab Bar
               _buildTabBar(),
-              
+
               // Content
               Expanded(
                 child: _isLoading
                     ? _buildLoadingState()
                     : _hasPermission
-                        ? _buildDashboardContent()
-                        : _buildPermissionState(),
+                    ? _buildDashboardContent()
+                    : _buildPermissionState(),
               ),
             ],
           ),
@@ -214,7 +239,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
       ),
     );
   }
-  
+
   Widget _buildAppBar() {
     final theme = Theme.of(context);
     return Container(
@@ -230,22 +255,25 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
                   children: [
                     Text(
                       AppLocalizations.of(context).biometricDashboard,
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: theme.colorScheme.onSurface,
-                      ),
+                      style: Theme.of(context).textTheme.headlineMedium
+                          ?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: theme.colorScheme.onSurface,
+                          ),
                     ).animate().fadeIn().slideX(begin: -0.2, end: 0),
                     const SizedBox(height: 4),
                     Text(
                       AppLocalizations.of(context).aiPoweredHealthInsights,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.7,
+                        ),
                       ),
                     ).animate().fadeIn(delay: 100.ms),
                   ],
                 ),
               ),
-              
+
               // Actions
               Row(
                 children: [
@@ -253,7 +281,10 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
                   GestureDetector(
                     onTap: _showDateRangePicker,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
                       decoration: BoxDecoration(
                         color: theme.cardColor.withValues(alpha: 0.9),
                         borderRadius: BorderRadius.circular(12),
@@ -273,16 +304,18 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
-                              color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                              color: theme.colorScheme.onSurface.withValues(
+                                alpha: 0.8,
+                              ),
                             ),
                           ),
                         ],
                       ),
                     ),
                   ).animate().fadeIn(delay: 200.ms).scale(),
-                  
+
                   const SizedBox(width: 8),
-                  
+
                   // Refresh Button
                   GestureDetector(
                     onTap: _isRefreshing ? null : _refreshData,
@@ -296,11 +329,14 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: _isRefreshing
-                          ? const SizedBox(width: 20,
+                          ? const SizedBox(
+                              width: 20,
                               height: 20,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.white,
+                                ),
                               ),
                             ).animate().rotate()
                           : const Icon(
@@ -318,26 +354,34 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
       ),
     );
   }
-  
+
   Widget _buildStatusBanner() {
     if (_currentAnalysis == null) return const SizedBox.shrink();
-    
+
     final analysis = _currentAnalysis!;
     final completeness = analysis.dataCompleteness;
     final hasData = analysis.hasData;
-    
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: hasData
-              ? [AppTheme.successGreen.withValues(alpha: 0.1), AppTheme.accentMint.withValues(alpha: 0.1)]
-              : [AppTheme.warningOrange.withValues(alpha: 0.1), AppTheme.warningOrange.withValues(alpha: 0.05)],
+              ? [
+                  AppTheme.successGreen.withValues(alpha: 0.1),
+                  AppTheme.accentMint.withValues(alpha: 0.1),
+                ]
+              : [
+                  AppTheme.warningOrange.withValues(alpha: 0.1),
+                  AppTheme.warningOrange.withValues(alpha: 0.05),
+                ],
         ),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: hasData ? AppTheme.successGreen.withValues(alpha: 0.3) : AppTheme.warningOrange.withValues(alpha: 0.3),
+          color: hasData
+              ? AppTheme.successGreen.withValues(alpha: 0.3)
+              : AppTheme.warningOrange.withValues(alpha: 0.3),
         ),
       ),
       child: Row(
@@ -372,17 +416,21 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
                       ? 'Data completeness: ${(completeness * 100).round()}%'
                       : 'Connect more devices for better insights',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
                 ),
               ],
             ),
           ),
-          if (_lastRefresh != null) ...[ 
+          if (_lastRefresh != null) ...[
             Text(
               'Updated ${DateFormat('HH:mm').format(_lastRefresh!)}',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                color: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.6),
                 fontSize: 10,
               ),
             ),
@@ -391,7 +439,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
       ),
     ).animate().fadeIn(delay: 400.ms).slideY(begin: -0.2, end: 0);
   }
-  
+
   Widget _buildTabBar() {
     final theme = Theme.of(context);
     return Container(
@@ -419,51 +467,39 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
         ),
         dividerColor: Colors.transparent,
         labelColor: Colors.white,
-        unselectedLabelColor: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-        labelStyle: const TextStyle(
-          fontWeight: FontWeight.w600,
-          fontSize: 12,
+        unselectedLabelColor: theme.colorScheme.onSurface.withValues(
+          alpha: 0.6,
         ),
+        labelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
         tabs: [
-          Tab(
-            child: _buildTabContent(Icons.monitor_heart, 'Overview'),
-          ),
-          Tab(
-            child: _buildTabContent(Icons.timeline, 'Metrics'),
-          ),
-          Tab(
-            child: _buildTabContent(Icons.psychology, 'Insights'),
-          ),
-          Tab(
-            child: _buildTabContent(Icons.sync, 'Sync'),
-          ),
+          Tab(child: _buildTabContent(Icons.monitor_heart, 'Overview')),
+          Tab(child: _buildTabContent(Icons.timeline, 'Metrics')),
+          Tab(child: _buildTabContent(Icons.psychology, 'Insights')),
+          Tab(child: _buildTabContent(Icons.sync, 'Sync')),
         ],
       ),
     ).animate().fadeIn(delay: 500.ms).slideY(begin: -0.2, end: 0);
   }
-  
+
   Widget _buildTabContent(IconData icon, String label) {
-    return Padding(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 16),
-          const SizedBox(width: 4),
-          Text(label),
-        ],
+        children: [Icon(icon, size: 16), const SizedBox(width: 4), Text(label)],
       ),
     );
   }
-  
+
   Widget _buildDashboardContent() {
     if (_errorMessage != null) {
       return _buildErrorState();
     }
-    
+
     if (_currentAnalysis == null) {
       return _buildEmptyState();
     }
-    
+
     return TabBarView(
       controller: _tabController,
       children: [
@@ -474,10 +510,10 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
       ],
     );
   }
-  
+
   Widget _buildOverviewTab() {
     final analysis = _currentAnalysis!;
-    
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -485,19 +521,19 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
         children: [
           // Overall Health Score
           _buildHealthScoreCard(analysis),
-          
+
           const SizedBox(height: 20),
-          
+
           // Quick Metrics Grid
           _buildQuickMetricsGrid(analysis),
-          
+
           const SizedBox(height: 20),
-          
+
           // Recent Trends
           _buildRecentTrendsCard(analysis),
-          
+
           const SizedBox(height: 20),
-          
+
           // Cycle Correlations Preview
           if (analysis.cycleCorrelations.isNotEmpty)
             CorrelationInsightsCard(
@@ -508,10 +544,10 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
       ),
     );
   }
-  
+
   Widget _buildMetricsTab() {
     final analysis = _currentAnalysis!;
-    
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -526,7 +562,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
             ),
             const SizedBox(height: 20),
           ],
-          
+
           // Sleep Quality Chart
           if (analysis.sleepData.isNotEmpty) ...[
             BiometricChartWidget(
@@ -537,7 +573,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
             ),
             const SizedBox(height: 20),
           ],
-          
+
           // Temperature Chart
           if (analysis.temperatureData.isNotEmpty) ...[
             BiometricChartWidget(
@@ -548,7 +584,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
             ),
             const SizedBox(height: 20),
           ],
-          
+
           // HRV Chart
           if (analysis.hrvData.isNotEmpty) ...[
             BiometricChartWidget(
@@ -559,7 +595,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
             ),
             const SizedBox(height: 20),
           ],
-          
+
           // Stress Chart
           if (analysis.stressData.isNotEmpty) ...[
             BiometricChartWidget(
@@ -573,10 +609,10 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
       ),
     );
   }
-  
+
   Widget _buildInsightsTab() {
     final analysis = _currentAnalysis!;
-    
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -593,67 +629,79 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
           const SizedBox(height: 8),
           Text(
             'Personalized insights based on your biometric patterns',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppTheme.mediumGrey,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGrey),
           ),
           const SizedBox(height: 24),
-          
+
           // Insights List
-          if (analysis.insights.isNotEmpty) ...analysis.insights.map((insight) =>
-            _buildInsightCard(insight),
-          ) else
+          if (analysis.insights.isNotEmpty)
+            ...analysis.insights.map((insight) => _buildInsightCard(insight))
+          else
             _buildNoInsightsCard(),
-          
+
           const SizedBox(height: 20),
-          
+
           // Correlation Insights
           if (analysis.cycleCorrelations.isNotEmpty)
             CorrelationInsightsCard(
               correlations: analysis.cycleCorrelations,
               isPreview: false,
             ),
+
+          const SizedBox(height: 20),
+
+          // Medical Disclaimer Banner (App Store 1.4.1)
+          MedicalDisclaimerBanner(),
+
+          // Medical Citations Footer (App Store 1.4.1)
+          MedicalCitationsFooter(),
         ],
       ),
     );
   }
-  
+
   Widget _buildSyncTab() {
-    return Padding(padding: const EdgeInsets.all(20),
+    return Padding(
+      padding: const EdgeInsets.all(20),
       child: Column(
         children: [
           // Sync Status
           BiometricSyncStatus(),
-          
+
           const SizedBox(height: 20),
-          
+
           // Connected Devices (placeholder)
           _buildConnectedDevicesCard(),
-          
+
           const SizedBox(height: 20),
-          
+
           // Sync Settings
           _buildSyncSettingsCard(),
         ],
       ),
     );
   }
-  
+
   // === HELPER WIDGETS ===
-  
+
   Widget _buildHealthScoreCard(BiometricAnalysis analysis) {
     final score = analysis.overallHealthScore ?? 0.75;
     final scoreColor = score >= 0.8
         ? AppTheme.successGreen
         : score >= 0.6
-            ? AppTheme.warningOrange
-            : AppTheme.primaryRose;
-    
+        ? AppTheme.warningOrange
+        : AppTheme.primaryRose;
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [scoreColor.withValues(alpha: 0.1), scoreColor.withValues(alpha: 0.05)],
+          colors: [
+            scoreColor.withValues(alpha: 0.1),
+            scoreColor.withValues(alpha: 0.05),
+          ],
         ),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: scoreColor.withValues(alpha: 0.3)),
@@ -693,9 +741,9 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
                 const SizedBox(height: 4),
                 Text(
                   _getHealthScoreDescription(score),
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppTheme.mediumGrey,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGrey),
                 ),
                 const SizedBox(height: 8),
                 LinearProgressIndicator(
@@ -710,7 +758,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
       ),
     ).animate().fadeIn(delay: 600.ms).slideY(begin: 0.3, end: 0);
   }
-  
+
   Widget _buildQuickMetricsGrid(BiometricAnalysis analysis) {
     return GridView.count(
       crossAxisCount: 2,
@@ -729,7 +777,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
             color: AppTheme.primaryRose,
             trend: _getTrend(analysis.heartRateData),
           ),
-        
+
         if (analysis.sleepData.isNotEmpty)
           HealthMetricsCard(
             title: 'Sleep Quality',
@@ -739,17 +787,19 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
             color: AppTheme.secondaryBlue,
             trend: _getTrend(analysis.sleepData),
           ),
-        
+
         if (analysis.temperatureData.isNotEmpty)
           HealthMetricsCard(
             title: 'Body Temp',
-            value: _getAverageValue(analysis.temperatureData).toStringAsFixed(1),
+            value: _getAverageValue(
+              analysis.temperatureData,
+            ).toStringAsFixed(1),
             unit: '°F',
             icon: Icons.thermostat,
             color: AppTheme.warningOrange,
             trend: _getTrend(analysis.temperatureData),
           ),
-        
+
         if (analysis.stressData.isNotEmpty)
           HealthMetricsCard(
             title: 'Stress Level',
@@ -762,7 +812,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
       ],
     ).animate().fadeIn(delay: 700.ms);
   }
-  
+
   Widget _buildRecentTrendsCard(BiometricAnalysis analysis) {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -782,11 +832,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
         children: [
           Row(
             children: [
-              Icon(
-                Icons.trending_up,
-                color: AppTheme.primaryRose,
-                size: 24,
-              ),
+              Icon(Icons.trending_up, color: AppTheme.primaryRose, size: 24),
               const SizedBox(width: 12),
               Text(
                 'Recent Trends',
@@ -800,22 +846,43 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
           const SizedBox(height: 16),
           Text(
             'Based on the last ${_selectedRange.duration.inDays} days of data',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppTheme.mediumGrey,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGrey),
           ),
           const SizedBox(height: 16),
           // Trend items would go here
-          _buildTrendItem('Sleep quality', 'Improving', Icons.trending_up, AppTheme.successGreen),
-          _buildTrendItem('Stress levels', 'Stable', Icons.trending_flat, AppTheme.accentMint),
-          _buildTrendItem('Heart rate', 'Slightly elevated', Icons.trending_up, AppTheme.warningOrange),
+          _buildTrendItem(
+            'Sleep quality',
+            'Improving',
+            Icons.trending_up,
+            AppTheme.successGreen,
+          ),
+          _buildTrendItem(
+            'Stress levels',
+            'Stable',
+            Icons.trending_flat,
+            AppTheme.accentMint,
+          ),
+          _buildTrendItem(
+            'Heart rate',
+            'Slightly elevated',
+            Icons.trending_up,
+            AppTheme.warningOrange,
+          ),
         ],
       ),
     ).animate().fadeIn(delay: 800.ms);
   }
-  
-  Widget _buildTrendItem(String metric, String trend, IconData icon, Color color) {
-    return Padding(padding: const EdgeInsets.symmetric(vertical: 8),
+
+  Widget _buildTrendItem(
+    String metric,
+    String trend,
+    IconData icon,
+    Color color,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
           Icon(icon, color: color, size: 18),
@@ -823,9 +890,9 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
           Expanded(
             child: Text(
               metric,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w500,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
             ),
           ),
           Text(
@@ -839,7 +906,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
       ),
     );
   }
-  
+
   Widget _buildInsightCard(String insight) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -868,11 +935,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
               ),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Icon(
-              Icons.lightbulb,
-              color: Colors.white,
-              size: 20,
-            ),
+            child: const Icon(Icons.lightbulb, color: Colors.white, size: 20),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -888,7 +951,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
       ),
     );
   }
-  
+
   Widget _buildNoInsightsCard() {
     return Container(
       padding: const EdgeInsets.all(24),
@@ -916,15 +979,15 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
           Text(
             'Keep tracking your health data to get personalized AI insights',
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppTheme.mediumGrey,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGrey),
           ),
         ],
       ),
     );
   }
-  
+
   Widget _buildConnectedDevicesCard() {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -957,9 +1020,10 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
       ),
     );
   }
-  
+
   Widget _buildDeviceItem(String name, String status, bool isConnected) {
-    return Padding(padding: const EdgeInsets.symmetric(vertical: 8),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
           Container(
@@ -984,7 +1048,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
       ),
     );
   }
-  
+
   Widget _buildSyncSettingsCard() {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -1015,28 +1079,40 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
             subtitle: const Text('Automatically sync health data'),
             value: true,
             onChanged: (value) {},
-            thumbColor: WidgetStateProperty.resolveWith((states) => 
-              states.contains(WidgetState.selected) ? AppTheme.primaryRose : null),
-            trackColor: WidgetStateProperty.resolveWith((states) => 
-              states.contains(WidgetState.selected) ? AppTheme.primaryRose.withValues(alpha: 0.5) : null),
+            thumbColor: WidgetStateProperty.resolveWith(
+              (states) => states.contains(WidgetState.selected)
+                  ? AppTheme.primaryRose
+                  : null,
+            ),
+            trackColor: WidgetStateProperty.resolveWith(
+              (states) => states.contains(WidgetState.selected)
+                  ? AppTheme.primaryRose.withValues(alpha: 0.5)
+                  : null,
+            ),
           ),
           SwitchListTile(
             title: const Text('Background Sync'),
             subtitle: const Text('Sync data in the background'),
             value: true,
             onChanged: (value) {},
-            thumbColor: WidgetStateProperty.resolveWith((states) => 
-              states.contains(WidgetState.selected) ? AppTheme.primaryRose : null),
-            trackColor: WidgetStateProperty.resolveWith((states) => 
-              states.contains(WidgetState.selected) ? AppTheme.primaryRose.withValues(alpha: 0.5) : null),
+            thumbColor: WidgetStateProperty.resolveWith(
+              (states) => states.contains(WidgetState.selected)
+                  ? AppTheme.primaryRose
+                  : null,
+            ),
+            trackColor: WidgetStateProperty.resolveWith(
+              (states) => states.contains(WidgetState.selected)
+                  ? AppTheme.primaryRose.withValues(alpha: 0.5)
+                  : null,
+            ),
           ),
         ],
       ),
     );
   }
-  
+
   // === STATE WIDGETS ===
-  
+
   Widget _buildLoadingState() {
     return Center(
       child: Column(
@@ -1048,25 +1124,21 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
           const SizedBox(height: 16),
           Text(
             'Loading biometric data...',
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: AppTheme.mediumGrey,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyLarge?.copyWith(color: AppTheme.mediumGrey),
           ),
         ],
       ),
     );
   }
-  
+
   Widget _buildErrorState() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.error_outline,
-            size: 64,
-            color: AppTheme.warningOrange,
-          ),
+          Icon(Icons.error_outline, size: 64, color: AppTheme.warningOrange),
           const SizedBox(height: 16),
           Text(
             'Error Loading Data',
@@ -1081,9 +1153,9 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
             child: Text(
               _errorMessage ?? 'An unexpected error occurred',
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppTheme.mediumGrey,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGrey),
             ),
           ),
           const SizedBox(height: 24),
@@ -1095,7 +1167,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
       ),
     );
   }
-  
+
   Widget _buildEmptyState() {
     return Center(
       child: Column(
@@ -1120,16 +1192,16 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
             child: Text(
               'Connect your health devices to see biometric insights',
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppTheme.mediumGrey,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGrey),
             ),
           ),
         ],
       ),
     );
   }
-  
+
   Widget _buildPermissionState() {
     return Center(
       child: Column(
@@ -1154,9 +1226,9 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
             child: Text(
               'Please grant access to health data to view biometric insights',
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppTheme.mediumGrey,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGrey),
             ),
           ),
           const SizedBox(height: 24),
@@ -1168,9 +1240,9 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
       ),
     );
   }
-  
+
   // === HELPER METHODS ===
-  
+
   String _getHealthScoreDescription(double score) {
     if (score >= 0.9) return 'Excellent health metrics';
     if (score >= 0.8) return 'Very good health patterns';
@@ -1178,23 +1250,27 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
     if (score >= 0.6) return 'Moderate health indicators';
     return 'Focus on health improvement';
   }
-  
+
   double _getAverageValue(List<BiometricReading> data) {
     if (data.isEmpty) return 0.0;
     return data.map((r) => r.value).reduce((a, b) => a + b) / data.length;
   }
-  
+
   double _getTrend(List<BiometricReading> data) {
     if (data.length < 2) return 0.0;
-    
+
     // Simple trend calculation: compare first half vs second half
     final midPoint = data.length ~/ 2;
     final firstHalf = data.take(midPoint);
     final secondHalf = data.skip(midPoint);
-    
-    final firstAvg = firstHalf.map((r) => r.value).reduce((a, b) => a + b) / firstHalf.length;
-    final secondAvg = secondHalf.map((r) => r.value).reduce((a, b) => a + b) / secondHalf.length;
-    
+
+    final firstAvg =
+        firstHalf.map((r) => r.value).reduce((a, b) => a + b) /
+        firstHalf.length;
+    final secondAvg =
+        secondHalf.map((r) => r.value).reduce((a, b) => a + b) /
+        secondHalf.length;
+
     return (secondAvg - firstAvg) / firstAvg;
   }
 }

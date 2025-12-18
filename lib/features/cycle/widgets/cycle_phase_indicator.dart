@@ -107,9 +107,9 @@ class CyclePhaseIndicator extends StatelessWidget {
               ),
             ],
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Description
           Text(
             phaseInfo.description,
@@ -119,9 +119,9 @@ class CyclePhaseIndicator extends StatelessWidget {
               height: 1.4,
             ),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Progress bar
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,10 +162,7 @@ class CyclePhaseIndicator extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            phaseInfo.emoji,
-            style: const TextStyle(fontSize: 16),
-          ),
+          Text(phaseInfo.emoji, style: const TextStyle(fontSize: 16)),
           const SizedBox(width: 8),
           Text(
             phaseInfo.name,
@@ -203,7 +200,7 @@ class CyclePhaseIndicator extends StatelessWidget {
     final phaseRange = _getPhaseRange(phase, cycleLength);
     final dayInPhase = currentDay - phaseRange.start + 1;
     final phaseDuration = phaseRange.end - phaseRange.start + 1;
-    
+
     return (dayInPhase / phaseDuration).clamp(0.0, 1.0);
   }
 
@@ -213,7 +210,7 @@ class CyclePhaseIndicator extends StatelessWidget {
         return PhaseRange(1, 7);
       case CyclePhase.follicular:
         return PhaseRange(8, cycleLength ~/ 2);
-      case CyclePhase.ovulation:
+      case CyclePhase.ovulatory:
         return PhaseRange((cycleLength ~/ 2) + 1, (cycleLength ~/ 2) + 3);
       case CyclePhase.luteal:
         return PhaseRange((cycleLength ~/ 2) + 4, cycleLength);
@@ -236,21 +233,24 @@ class CyclePhaseIndicator extends StatelessWidget {
           name: 'Follicular',
           emoji: '🌱',
           color: AppTheme.accentMint,
-          description: 'Your energy is building. Great time to start new projects.',
+          description:
+              'Your energy is building. Great time to start new projects.',
         );
-      case CyclePhase.ovulation:
+      case CyclePhase.ovulatory:
         return PhaseInfo(
           name: 'Ovulation',
           emoji: '🥚',
           color: AppTheme.secondaryBlue,
-          description: 'Peak fertility window. You may feel more social and confident.',
+          description:
+              'Peak fertility window. You may feel more social and confident.',
         );
       case CyclePhase.luteal:
         return PhaseInfo(
           name: 'Luteal',
           emoji: '🌙',
           color: AppTheme.primaryPurple,
-          description: 'Winding down phase. Focus on completion and reflection.',
+          description:
+              'Winding down phase. Focus on completion and reflection.',
         );
       case CyclePhase.unknown:
         return PhaseInfo(

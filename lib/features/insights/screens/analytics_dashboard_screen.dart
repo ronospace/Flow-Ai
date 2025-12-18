@@ -1,55 +1,61 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:intl/intl.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../generated/app_localizations.dart';
 import '../../cycle/providers/cycle_provider.dart';
 import '../../premium/providers/premium_provider.dart';
 import '../../premium/widgets/upgrade_prompt_dialog.dart';
+import '../../premium/models/premium_feature.dart';
+import '../../premium/models/subscription.dart';
 
 class AnalyticsDashboardScreen extends StatefulWidget {
   const AnalyticsDashboardScreen({super.key});
 
   @override
-  State<AnalyticsDashboardScreen> createState() => _AnalyticsDashboardScreenState();
+  State<AnalyticsDashboardScreen> createState() =>
+      _AnalyticsDashboardScreenState();
 }
 
-class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> with TickerProviderStateMixin {
+class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
+    with TickerProviderStateMixin {
   late final TabController _tabController;
-  
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
   }
-  
+
   @override
   void dispose() {
     _tabController.dispose();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
-    
+
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          gradient: AppTheme.backgroundGradient(theme.brightness == Brightness.dark),
+          gradient: AppTheme.backgroundGradient(
+            theme.brightness == Brightness.dark,
+          ),
         ),
         child: SafeArea(
           child: Column(
             children: [
               // Header
               _buildHeader(theme, l10n),
-              
+
               // Tab Bar
               _buildTabBar(theme),
-              
+
               // Tab Views
               Expanded(
                 child: TabBarView(
@@ -68,17 +74,13 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
       ),
     );
   }
-  
+
   Widget _buildHeader(ThemeData theme, AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.all(20),
       child: Row(
         children: [
-          Icon(
-            Icons.analytics_outlined,
-            color: AppTheme.primaryRose,
-            size: 32,
-          ),
+          Icon(Icons.analytics_outlined, color: AppTheme.primaryRose, size: 32),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -106,18 +108,20 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
       ),
     );
   }
-  
+
   Widget _buildExportButton(ThemeData theme) {
     return Consumer<PremiumProvider>(
       builder: (context, premiumProvider, child) {
         return Container(
           decoration: BoxDecoration(
-            gradient: premiumProvider.isPremium
+            gradient: premiumProvider.hasPremium
                 ? const LinearGradient(
                     colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
                   )
                 : null,
-            color: premiumProvider.isPremium ? null : theme.colorScheme.surface,
+            color: premiumProvider.hasPremium
+                ? null
+                : theme.colorScheme.surface,
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
@@ -131,7 +135,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
             color: Colors.transparent,
             child: InkWell(
               onTap: () {
-                if (premiumProvider.isPremium) {
+                if (premiumProvider.hasPremium) {
                   _exportData(context);
                 } else {
                   _showPremiumPrompt(context);
@@ -145,10 +149,12 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
                   children: [
                     Icon(
                       Icons.file_download_outlined,
-                      color: premiumProvider.isPremium ? Colors.white : AppTheme.primaryRose,
+                      color: premiumProvider.hasPremium
+                          ? Colors.white
+                          : AppTheme.primaryRose,
                       size: 20,
                     ),
-                    if (premiumProvider.isPremium) ...[
+                    if (premiumProvider.hasPremium) ...[
                       const SizedBox(width: 8),
                       Text(
                         'Export',
@@ -168,7 +174,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
       },
     );
   }
-  
+
   Widget _buildTabBar(ThemeData theme) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -193,10 +199,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
         ),
         labelColor: Colors.white,
         unselectedLabelColor: theme.colorScheme.onSurface.withOpacity(0.6),
-        labelStyle: const TextStyle(
-          fontWeight: FontWeight.w600,
-          fontSize: 12,
-        ),
+        labelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
         unselectedLabelStyle: const TextStyle(
           fontWeight: FontWeight.w500,
           fontSize: 12,
@@ -210,16 +213,19 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
       ),
     ).animate().fadeIn(delay: 300.ms).slideY(begin: -0.2, end: 0);
   }
-  
+
   Widget _buildCycleTrendsTab() {
     return Consumer<CycleProvider>(
       builder: (context, cycleProvider, child) {
         final cycles = cycleProvider.cycles;
-        
+
         if (cycles.isEmpty) {
-          return _buildEmptyState('No cycle data yet', 'Start tracking to see trends');
+          return _buildEmptyState(
+            'No cycle data yet',
+            'Start tracking to see trends',
+          );
         }
-        
+
         return SingleChildScrollView(
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -231,9 +237,9 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
                 subtitle: 'Last 6 cycles',
                 child: _buildCycleLengthChart(cycles),
               ),
-              
+
               const SizedBox(height: 16),
-              
+
               // Statistics Cards
               Row(
                 children: [
@@ -256,9 +262,9 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
                   ),
                 ],
               ),
-              
+
               const SizedBox(height: 16),
-              
+
               // Period Duration Chart
               _buildChartCard(
                 title: 'Period Duration',
@@ -271,7 +277,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
       },
     );
   }
-  
+
   Widget _buildSymptomsTab() {
     return Consumer<CycleProvider>(
       builder: (context, cycleProvider, child) {
@@ -285,9 +291,9 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
                 subtitle: 'Most common symptoms',
                 child: _buildSymptomFrequencyChart(),
               ),
-              
+
               const SizedBox(height: 16),
-              
+
               _buildChartCard(
                 title: 'Symptom Timeline',
                 subtitle: 'When symptoms occur',
@@ -299,7 +305,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
       },
     );
   }
-  
+
   Widget _buildMoodEnergyTab() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
@@ -311,17 +317,17 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
             subtitle: 'Throughout your cycle',
             child: _buildMoodPatternChart(),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           _buildChartCard(
             title: 'Energy Levels',
             subtitle: 'Daily energy trends',
             child: _buildEnergyLevelChart(),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           _buildChartCard(
             title: 'Mood-Energy Correlation',
             subtitle: 'How they relate',
@@ -331,7 +337,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
       ),
     );
   }
-  
+
   Widget _buildInsightsTab() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
@@ -341,37 +347,41 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
           _buildInsightCard(
             icon: Icons.lightbulb_outline,
             title: 'Cycle Patterns',
-            description: 'Your cycles are very regular with an average length of 28 days. This is within the healthy range.',
+            description:
+                'Your cycles are very regular with an average length of 28 days. This is within the healthy range.',
             confidence: 0.92,
             color: AppTheme.accentMint,
           ),
-          
+
           const SizedBox(height: 12),
-          
+
           _buildInsightCard(
             icon: Icons.favorite_outline,
             title: 'Health Trends',
-            description: 'Your symptom patterns suggest consistent hormonal balance. Continue tracking for deeper insights.',
+            description:
+                'Your symptom patterns suggest consistent hormonal balance. Continue tracking for deeper insights.',
             confidence: 0.85,
             color: AppTheme.primaryRose,
           ),
-          
+
           const SizedBox(height: 12),
-          
+
           _buildInsightCard(
             icon: Icons.psychology_outlined,
             title: 'Mood Insights',
-            description: 'Your mood tends to be most positive during the follicular phase. Consider scheduling important activities then.',
+            description:
+                'Your mood tends to be most positive during the follicular phase. Consider scheduling important activities then.',
             confidence: 0.78,
             color: AppTheme.secondaryBlue,
           ),
-          
+
           const SizedBox(height: 12),
-          
+
           _buildInsightCard(
             icon: Icons.analytics_outlined,
             title: 'Prediction Accuracy',
-            description: 'AI predictions have been 94% accurate over the last 3 cycles. Confidence is high for future predictions.',
+            description:
+                'AI predictions have been 94% accurate over the last 3 cycles. Confidence is high for future predictions.',
             confidence: 0.94,
             color: AppTheme.primaryPurple,
           ),
@@ -379,14 +389,14 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
       ),
     );
   }
-  
+
   Widget _buildChartCard({
     required String title,
     required String subtitle,
     required Widget child,
   }) {
     final theme = Theme.of(context);
-    
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -418,15 +428,12 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
             ),
           ),
           const SizedBox(height: 20),
-          SizedBox(
-            height: 200,
-            child: child,
-          ),
+          SizedBox(height: 200, child: child),
         ],
       ),
     ).animate().fadeIn().slideY(begin: 0.3, end: 0);
   }
-  
+
   Widget _buildStatCard({
     required IconData icon,
     required String label,
@@ -434,7 +441,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
     required Color color,
   }) {
     final theme = Theme.of(context);
-    
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -477,7 +484,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
       ),
     ).animate().fadeIn().scale();
   }
-  
+
   Widget _buildInsightCard({
     required IconData icon,
     required String title,
@@ -486,16 +493,13 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
     required Color color,
   }) {
     final theme = Theme.of(context);
-    
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: color.withOpacity(0.3),
-          width: 2,
-        ),
+        border: Border.all(color: color.withOpacity(0.3), width: 2),
         boxShadow: [
           BoxShadow(
             color: color.withOpacity(0.1),
@@ -530,7 +534,10 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: color.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(20),
@@ -565,7 +572,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
       ),
     ).animate().fadeIn().slideX(begin: -0.2, end: 0);
   }
-  
+
   // Chart implementations (simplified for now)
   Widget _buildCycleLengthChart(List<dynamic> cycles) {
     return LineChart(
@@ -589,7 +596,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
       ),
     );
   }
-  
+
   Widget _buildPeriodDurationChart(List<dynamic> cycles) {
     return BarChart(
       BarChartData(
@@ -616,7 +623,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
       ),
     );
   }
-  
+
   Widget _buildSymptomFrequencyChart() {
     return BarChart(
       BarChartData(
@@ -638,7 +645,9 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
                 toY: (5 - index).toDouble() * 2,
                 color: colors[index],
                 width: 30,
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(4),
+                ),
               ),
             ],
           );
@@ -646,7 +655,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
       ),
     );
   }
-  
+
   Widget _buildSymptomTimelineChart() {
     return LineChart(
       LineChartData(
@@ -681,7 +690,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
       ),
     );
   }
-  
+
   Widget _buildMoodPatternChart() {
     return LineChart(
       LineChartData(
@@ -691,7 +700,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
         lineBarsData: [
           LineChartBarData(
             spots: List.generate(28, (index) {
-              final double y = 3 + (index / 7).sin() * 2;
+              final double y = 3 + math.sin(index / 7) * 2;
               return FlSpot(index.toDouble(), y);
             }),
             isCurved: true,
@@ -705,7 +714,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
       ),
     );
   }
-  
+
   Widget _buildEnergyLevelChart() {
     return LineChart(
       LineChartData(
@@ -715,7 +724,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
         lineBarsData: [
           LineChartBarData(
             spots: List.generate(28, (index) {
-              final double y = 3.5 + (index / 8).cos() * 1.5;
+              final double y = 3.5 + math.cos(index / 8) * 1.5;
               return FlSpot(index.toDouble(), y);
             }),
             isCurved: true,
@@ -729,7 +738,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
       ),
     );
   }
-  
+
   Widget _buildCorrelationChart() {
     return ScatterChart(
       ScatterChartData(
@@ -747,10 +756,10 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
       ),
     );
   }
-  
+
   Widget _buildEmptyState(String title, String subtitle) {
     final theme = Theme.of(context);
-    
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -779,34 +788,32 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> wit
       ),
     );
   }
-  
+
   // Helper methods
   int _calculateAverageCycleLength(List<dynamic> cycles) {
     if (cycles.isEmpty) return 28;
     // Simplified calculation
     return 28;
   }
-  
+
   int _calculateRegularity(List<dynamic> cycles) {
     if (cycles.length < 2) return 100;
     // Simplified calculation
     return 92;
   }
-  
+
   void _exportData(BuildContext context) {
     // Export functionality
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Exporting analytics data...')),
     );
   }
-  
+
   void _showPremiumPrompt(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => const UpgradePromptDialog(
-        feature: 'Data Export',
-        description: 'Export your analytics data and charts to share with your healthcare provider.',
-      ),
+    UpgradePromptDialog.show(
+      context,
+      blockedFeature: PremiumFeatureType.unlimitedExports,
+      requiredTier: SubscriptionTier.premium,
     );
   }
 }
