@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'dart:math';
@@ -18,10 +18,11 @@ class LocalUserService {
 
   Future<void> initialize() async {
     _prefs = await SharedPreferences.getInstance();
-    
-    // Auto-create demo account for App Store review
+
+    // Auto-create demo account for App Store review and testing
+    // Always create demo account so it's available in release builds
     await _createDemoAccountIfNeeded();
-    
+
     debugPrint('✅ LocalUserService initialized');
   }
 
@@ -40,7 +41,9 @@ class LocalUserService {
       // Check if user already exists
       final existingUser = await getUserByEmail(email);
       if (existingUser != null) {
-        return LocalAuthResult.failure('An account with this email already exists');
+        return LocalAuthResult.failure(
+          'An account with this email already exists',
+        );
       }
 
       // Create new user with completely fresh data - no history
@@ -49,7 +52,8 @@ class LocalUserService {
         uid: userId,
         email: email,
         displayName: displayName,
-        username: username ?? displayName, // Use displayName as fallback for username
+        username:
+            username ?? displayName, // Use displayName as fallback for username
         passwordHash: _hashPassword(password),
         provider: 'local',
         createdAt: DateTime.now(),
@@ -71,12 +75,14 @@ class LocalUserService {
       await _storeUser(userData);
       await _setCurrentUser(userData);
       await _createUserSession(userData);
-      
+
       // Clear any existing cycle data for complete data isolation
       await _clearUserCycleData(userId);
-      
+
       debugPrint('✅ Local user created successfully: ${userData.email}');
-      debugPrint('✅ Local user profile saved: ${userData.displayName} (${userData.email})');
+      debugPrint(
+        '✅ Local user profile saved: ${userData.displayName} (${userData.email})',
+      );
       return LocalAuthResult.success(userData);
     } catch (e) {
       debugPrint('❌ Local user creation failed: $e');
@@ -117,7 +123,9 @@ class LocalUserService {
       await _createUserSession(updatedUser);
 
       debugPrint('✅ Local user signed in successfully: ${updatedUser.email}');
-      debugPrint('✅ User data restored: ${updatedUser.displayName} with ${updatedUser.profileData.notes.length} notes, cycle data: ${updatedUser.profileData.lastPeriodDate != null}');
+      debugPrint(
+        '✅ User data restored: ${updatedUser.displayName} with ${updatedUser.profileData.notes.length} notes, cycle data: ${updatedUser.profileData.lastPeriodDate != null}',
+      );
       return LocalAuthResult.success(updatedUser);
     } catch (e) {
       debugPrint('❌ Local user sign in failed: $e');
@@ -175,12 +183,14 @@ class LocalUserService {
 
       await _updateUser(user);
       await _setCurrentUser(user);
-      
+
       debugPrint('✅ User profile updated: ${user.email}');
       return LocalAuthResult.success(user);
     } catch (e) {
       debugPrint('❌ Profile update failed: $e');
-      return LocalAuthResult.failure('Failed to update profile: ${e.toString()}');
+      return LocalAuthResult.failure(
+        'Failed to update profile: ${e.toString()}',
+      );
     }
   }
 
@@ -216,7 +226,10 @@ class LocalUserService {
     try {
       final usersData = Map<String, dynamic>.from(json.decode(usersJson));
       return usersData.values
-          .map((userData) => LocalUser.fromJson(Map<String, dynamic>.from(userData)))
+          .map(
+            (userData) =>
+                LocalUser.fromJson(Map<String, dynamic>.from(userData)),
+          )
           .toList();
     } catch (e) {
       debugPrint('Error getting all users: $e');
@@ -228,11 +241,11 @@ class LocalUserService {
   Future<void> _storeUser(LocalUser user) async {
     final usersJson = _prefs!.getString(_usersKey);
     Map<String, dynamic> usersData = {};
-    
+
     if (usersJson != null) {
       usersData = Map<String, dynamic>.from(json.decode(usersJson));
     }
-    
+
     usersData[user.uid] = user.toJson();
     await _prefs!.setString(_usersKey, json.encode(usersData));
   }
@@ -250,7 +263,9 @@ class LocalUserService {
       'userId': user.uid,
       'email': user.email,
       'createdAt': DateTime.now().toIso8601String(),
-      'expiryTime': DateTime.now().add(const Duration(days: 30)).toIso8601String(),
+      'expiryTime': DateTime.now()
+          .add(const Duration(days: 30))
+          .toIso8601String(),
     };
     await _prefs!.setString(_userSessionKey, json.encode(sessionData));
   }
@@ -270,32 +285,34 @@ class LocalUserService {
   bool _verifyPassword(String password, String hash) {
     return _hashPassword(password) == hash;
   }
-  
+
   /// Clear user-specific cycle data and AI conversation data for complete data isolation (new users)
   Future<void> _clearUserCycleData(String userId) async {
     if (_prefs == null) return;
-    
+
     // Clear any cycle-specific data that might exist for this user
     final keysToRemove = [
       'cycle_data_$userId',
-      'tracking_data_$userId', 
+      'tracking_data_$userId',
       'predictions_$userId',
       'insights_$userId',
       'symptoms_history_$userId',
       'period_history_$userId',
       // Clear AI conversation data for complete user isolation
       'ai_conversation_history_$userId',
-      'ai_user_preferences_$userId', 
+      'ai_user_preferences_$userId',
       'ai_topics_interest_$userId',
       'ai_frequent_questions_$userId',
       'ai_personalized_insights_$userId',
     ];
-    
+
     for (final key in keysToRemove) {
       await _prefs!.remove(key);
     }
-    
-    debugPrint('✅ Cleared cycle data and AI conversation data for new user: $userId');
+
+    debugPrint(
+      '✅ Cleared cycle data and AI conversation data for new user: $userId',
+    );
   }
 
   /// Mark onboarding as completed for the current user
@@ -311,19 +328,19 @@ class LocalUserService {
     if (_prefs == null) return false;
     return _prefs!.getBool('onboarding_completed') ?? false;
   }
-  
+
   /// Auto-create demo account for Apple App Store review
   Future<void> _createDemoAccountIfNeeded() async {
     try {
       const demoEmail = 'demo@flowai.app';
-      
+
       // Check if demo account already exists
       final existingUser = await getUserByEmail(demoEmail);
       if (existingUser != null) {
         debugPrint('✅ Demo account already exists for App Store review');
         return;
       }
-      
+
       // Create demo account with complete profile for App Store reviewers
       final result = await createUser(
         email: demoEmail,
@@ -331,7 +348,7 @@ class LocalUserService {
         displayName: 'Demo User for App Review',
         username: 'demo_reviewer',
       );
-      
+
       if (result.isSuccess && result.user != null) {
         // Add some sample data for the demo account to show app functionality
         final demoUser = result.user!;
@@ -351,17 +368,17 @@ class LocalUserService {
             'Sample symptom: Energy boost (Day 7)',
           ],
         );
-        
-        final updatedUser = demoUser.copyWith(
-          profileData: updatedProfileData,
-        );
-        
+
+        final updatedUser = demoUser.copyWith(profileData: updatedProfileData);
+
         await updateUserProfile(updatedUser);
-        
+
         // Set onboarding as completed for smooth demo experience
         await setOnboardingCompleted(true);
-        
-        debugPrint('✅ Demo account auto-created for App Store review with sample data');
+
+        debugPrint(
+          '✅ Demo account auto-created for App Store review with sample data',
+        );
         debugPrint('📧 Demo credentials: demo@flowai.app / FlowAiDemo2025!');
       } else {
         debugPrint('❌ Failed to create demo account: ${result.error}');
@@ -371,11 +388,16 @@ class LocalUserService {
       // Don\'t throw error - this is a non-critical enhancement
     }
   }
-  
+
   /// Check if user exists by email
   Future<bool> userExists(String email) async {
     final user = await getUserByEmail(email);
     return user != null;
+  }
+
+  /// Check if email is already registered (alias for userExists)
+  Future<bool> isEmailRegistered(String email) async {
+    return await userExists(email);
   }
 
   /// Get user by ID (compatibility method)
@@ -391,20 +413,20 @@ class LocalUserService {
     final users = await getAllUsers();
     final user = users.where((u) => u.uid == userId).firstOrNull;
     if (user == null) return false;
-    
+
     try {
       final usersJson = _prefs!.getString(_usersKey);
       if (usersJson != null) {
         final usersData = Map<String, dynamic>.from(json.decode(usersJson));
         usersData.remove(userId);
         await _prefs!.setString(_usersKey, json.encode(usersData));
-        
+
         // Clear current user if it's the deleted user
         final currentUser = await getCurrentUser();
         if (currentUser?.uid == userId) {
           await signOut();
         }
-        
+
         return true;
       }
     } catch (e) {
@@ -501,9 +523,15 @@ class LocalUser {
       username: json['username'],
       passwordHash: json['passwordHash'] ?? '',
       provider: json['provider'] ?? 'local',
-      createdAt: DateTime.parse(json['createdAt'] ?? DateTime.now().toIso8601String()),
-      lastLogin: DateTime.parse(json['lastLogin'] ?? DateTime.now().toIso8601String()),
-      lastUpdated: DateTime.parse(json['lastUpdated'] ?? DateTime.now().toIso8601String()),
+      createdAt: DateTime.parse(
+        json['createdAt'] ?? DateTime.now().toIso8601String(),
+      ),
+      lastLogin: DateTime.parse(
+        json['lastLogin'] ?? DateTime.now().toIso8601String(),
+      ),
+      lastUpdated: DateTime.parse(
+        json['lastUpdated'] ?? DateTime.now().toIso8601String(),
+      ),
       isActive: json['isActive'] ?? true,
       profileData: UserProfileData.fromJson(json['profileData'] ?? {}),
     );
@@ -566,7 +594,7 @@ class UserProfileData {
     return UserProfileData(
       age: json['age'],
       cycleLength: json['cycleLength'] ?? 28,
-      lastPeriodDate: json['lastPeriodDate'] != null 
+      lastPeriodDate: json['lastPeriodDate'] != null
           ? DateTime.parse(json['lastPeriodDate'])
           : null,
       averageCycleLength: json['averageCycleLength'] ?? 28,
@@ -583,23 +611,13 @@ class LocalAuthResult {
   final LocalUser? user;
   final String? error;
 
-  LocalAuthResult._({
-    required this.isSuccess,
-    this.user,
-    this.error,
-  });
+  LocalAuthResult._({required this.isSuccess, this.user, this.error});
 
   factory LocalAuthResult.success(LocalUser user) {
-    return LocalAuthResult._(
-      isSuccess: true,
-      user: user,
-    );
+    return LocalAuthResult._(isSuccess: true, user: user);
   }
 
   factory LocalAuthResult.failure(String error) {
-    return LocalAuthResult._(
-      isSuccess: false,
-      error: error,
-    );
+    return LocalAuthResult._(isSuccess: false, error: error);
   }
 }

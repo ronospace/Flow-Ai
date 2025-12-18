@@ -45,51 +45,51 @@ class _FuturePlansScreenState extends State<FuturePlansScreen>
       const AIFeatureCard(
         title: 'AI Cycle Predictor',
         description: 'Advanced machine learning to predict your cycle with 95% accuracy using pattern recognition and health data.',
-        eta: 'Q2 2025',
+        eta: 'Q2 2026',
       ),
       const AIFeatureCard(
         title: 'Smart Symptom Analysis',
         description: 'AI-powered symptom tracking that learns your patterns and provides personalized health insights.',
-        eta: 'Q1 2025',
+        eta: 'Q1 2026',
       ),
       const AIFeatureCard(
         title: 'Personalized AI Coach',
         description: 'Your dedicated AI health coach that adapts to your lifestyle and provides real-time guidance.',
-        eta: 'Q3 2025',
+        eta: 'Q3 2026',
       ),
       
       // Health Features
       const HealthFeatureCard(
         title: 'Fertility Planning Hub',
         description: 'Comprehensive fertility tracking with ovulation prediction, conception probability, and family planning tools.',
-        eta: 'Q2 2025',
+        eta: 'Q2 2026',
       ),
       const HealthFeatureCard(
         title: 'Mental Health Companion',
         description: 'Mood tracking, mindfulness exercises, and personalized mental health support integrated with your cycle.',
-        eta: 'Q1 2025',
+        eta: 'Q1 2026',
       ),
       const HealthFeatureCard(
         title: 'Nutrition Intelligence',
         description: 'Smart meal planning based on your cycle phase, nutritional needs, and health goals.',
-        eta: 'Q3 2025',
+        eta: 'Q3 2026',
       ),
       
       // Tech Features
       const TechFeatureCard(
         title: 'Apple Watch Integration',
         description: 'Seamless health data sync, cycle reminders, and discreet notifications on your wrist.',
-        eta: 'Q1 2025',
+        eta: 'Q1 2026',
       ),
       const TechFeatureCard(
         title: 'Smart Device Ecosystem',
         description: 'Connect with smart scales, thermometers, and other IoT devices for automatic health tracking.',
-        eta: 'Q2 2025',
+        eta: 'Q2 2026',
       ),
       const TechFeatureCard(
         title: 'AR Body Insights',
         description: 'Augmented reality visualization of your cycle, health metrics, and body changes over time.',
-        eta: 'Q4 2025',
+        eta: 'Q4 2026',
       ),
       
       // Social Features
@@ -98,21 +98,21 @@ class _FuturePlansScreenState extends State<FuturePlansScreen>
         description: 'Connect with others on similar health journeys, share experiences, and get support.',
         icon: Icons.people_outline,
         gradientColors: const [Color(0xFF4CAF50), Color(0xFF8BC34A)],
-        eta: 'Q2 2025',
+        eta: 'Q2 2026',
       ),
       ComingSoonCard(
         title: 'Partner Sharing',
         description: 'Securely share selected health insights with your partner or healthcare provider.',
         icon: Icons.share_outlined,
         gradientColors: const [Color(0xFFFF9800), Color(0xFFFF5722)],
-        eta: 'Q1 2025',
+        eta: 'Q1 2026',
       ),
       ComingSoonCard(
         title: 'Telehealth Integration',
         description: 'Direct consultations with healthcare providers using your Flow Ai data.',
         icon: Icons.video_call_outlined,
         gradientColors: const [Color(0xFF3F51B5), Color(0xFF9C27B0)],
-        eta: 'Q3 2025',
+        eta: 'Q3 2026',
       ),
     ];
 

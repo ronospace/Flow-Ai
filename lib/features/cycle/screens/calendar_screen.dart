@@ -137,6 +137,8 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
             ),
           ),
           
+          // Settings icon removed - not necessary per user request
+          
           // View Toggle Button
           Container(
             decoration: BoxDecoration(

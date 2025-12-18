@@ -46,8 +46,8 @@ class AppStateService {
       final isAuthenticated = await _authService.isAuthenticated;
       
       if (!isAuthenticated) {
-        debugPrint('📱 User not authenticated -> /auth');
-        return '/auth';
+        debugPrint('📱 User not authenticated -> /auth/choice');
+        return '/auth/choice';
       }
 
       // Check if user has completed onboarding
@@ -64,8 +64,8 @@ class AppStateService {
       
     } catch (e) {
       debugPrint('❌ Error determining initial route: $e');
-      // Default to auth screen on error
-      return '/auth';
+      // Default to auth choice screen
+      return '/auth/choice';
     }
   }
 

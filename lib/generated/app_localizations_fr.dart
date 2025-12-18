@@ -44,6 +44,9 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get cycleLengthLabel => 'Cycle Length';
+
+  @override
   String daysUntilPeriod(int days) {
     return '$days jours avant les règles';
   }
@@ -327,6 +330,12 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get update => 'Mettre à Jour';
+
+  @override
+  String get login => 'Login';
+
+  @override
+  String get signUp => 'Sign Up';
 
   @override
   String get confirm => 'Confirmer';
@@ -1637,4 +1646,17 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get estimatedBasedOnPatterns =>
       'Estimated based on your logged patterns';
+
+  @override
+  String get healthDashboardMatrix => 'Matrice du Tableau de Bord Santé';
+
+  @override
+  String get realTimeBiometricAnalysis => 'Analyse biométrique en temps réel';
+
+  @override
+  String get predictiveAnalyticsCenter => 'Centre d\'Analyses Prédictives';
+
+  @override
+  String get aiPoweredCycleForecast =>
+      'Prévisions de cycle alimentées par l\'IA';
 }

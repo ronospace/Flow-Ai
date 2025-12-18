@@ -213,7 +213,7 @@ class _ComingSoonScreenState extends State<ComingSoonScreen>
             title: 'FlowSense Pro',
             description: 'Unlock the full potential of FlowSense with premium features designed for power users who want the ultimate tracking experience.',
             icon: Icons.workspace_premium_rounded,
-            releaseEstimate: 'Q2 2025',
+            releaseEstimate: 'Q2 2026',
             features: [
               'Unlimited data history and backups',
               'Advanced AI coaching and recommendations',
@@ -229,7 +229,7 @@ class _ComingSoonScreenState extends State<ComingSoonScreen>
             title: 'Telehealth Integration',
             description: 'Connect directly with healthcare providers and share your data securely for better reproductive health care.',
             icon: Icons.video_call_rounded,
-            releaseEstimate: 'Q3 2025',
+            releaseEstimate: 'Q3 2026',
             features: [
               'In-app video consultations',
               'Secure health data sharing',
@@ -244,7 +244,7 @@ class _ComingSoonScreenState extends State<ComingSoonScreen>
             title: 'Couple\'s Sync',
             description: 'Share important cycle information with your partner while maintaining privacy and improving communication.',
             icon: Icons.favorite_rounded,
-            releaseEstimate: 'Q4 2025',
+            releaseEstimate: 'Q4 2026',
             features: [
               'Partner notification preferences',
               'Shared calendar view',

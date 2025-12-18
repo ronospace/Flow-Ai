@@ -2,7 +2,7 @@ name: flow_ai
 description: "Flow Ai - AI-Powered Menstrual Health platform with advanced machine learning predictions, intelligent insights, and personalized health analytics."
 publish_to: 'none'
 
-version: 2.1.2+13
+version: 2.1.6+17
 
 environment:
   sdk: ^3.8.1
@@ -31,6 +31,10 @@ dependencies:
   # UI Components
   flutter_animate: ^4.2.0
   lottie: ^3.0.0
+  shimmer: ^3.0.0
+  confetti: ^0.7.0
+  animations: ^2.0.11
+  rive: ^0.12.4
   
   # Date & Time
   intl: ^0.20.2

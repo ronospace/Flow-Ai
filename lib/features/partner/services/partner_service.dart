@@ -3,17 +3,19 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import '../models/partner_models.dart';
 import '../../../core/services/notification_service.dart';
-import '../../../core/services/email_service.dart';
+import '../../../core/services/local_user_service.dart';
+import 'local_partner_service.dart';
 
-/// Partner service stub - Firebase disabled for iOS build
-/// This provides a local-only implementation until Firebase is re-enabled
+/// Partner service - Uses local storage for partner features
+/// Works offline without Firebase
 class PartnerService extends ChangeNotifier {
   static final PartnerService _instance = PartnerService._internal();
   factory PartnerService() => _instance;
   PartnerService._internal() {
-    debugPrint('⚠️ PartnerService: Firebase disabled, partner features unavailable');
+    debugPrint('✅ PartnerService: Using local partner service');
   }
 
+  final LocalPartnerService _localService = LocalPartnerService();
   final bool _firebaseAvailable = false;
   
   Partnership? _currentPartnership;
@@ -31,95 +33,264 @@ class PartnerService extends ChangeNotifier {
   List<PartnerInsight> get insights => _insights;
   bool get isLoading => _isLoading;
   String? get error => _error;
-  bool get hasPartner => false; // Always false when Firebase is disabled
+  bool get hasPartner => _currentPartnership != null;
   bool get isFirebaseAvailable => _firebaseAvailable;
 
   /// Initialize the partner service
   Future<void> initialize() async {
-    debugPrint('⚠️ PartnerService: Firebase disabled, initialization skipped');
-    // No-op when Firebase is disabled
+    _setLoading(true);
+    try {
+      await _localService.initialize();
+      await _loadPartnership();
+      await _loadMessages();
+      await _loadCareActions();
+      debugPrint('✅ PartnerService initialized');
+    } catch (e) {
+      _setError('Failed to initialize: $e');
+    } finally {
+      _setLoading(false);
+    }
+  }
+  
+  /// Load partnership for current user
+  Future<void> _loadPartnership() async {
+    try {
+      final partnership = await _localService.getCurrentPartnership();
+      if (partnership != null) {
+        // Convert model Partnership to service Partnership
+        _currentPartnership = Partnership(
+          id: partnership.id,
+          primaryUserId: partnership.userId1,
+          partnerUserId: partnership.userId2,
+          primaryUserName: partnership.customName1 ?? partnership.userId1,
+          partnerUserName: partnership.customName2 ?? partnership.userId2,
+          primaryUserEmail: null,
+          partnerUserEmail: null,
+          createdAt: partnership.establishedAt,
+          lastActiveAt: partnership.lastActiveAt ?? partnership.establishedAt,
+          sharingSettings: PartnerSharingSettings(
+            shareSymptoms: partnership.privacySettings.shareDetailedSymptoms,
+            shareMoodData: partnership.privacySettings.shareMoodData,
+            sharePhysicalSymptoms: partnership.privacySettings.sharePainData,
+            sharePredictions: partnership.privacySettings.sharePredictions,
+            allowInsights: partnership.privacySettings.shareAIInsights,
+            sendNotifications: partnership.privacySettings.allowNotifications,
+          ),
+        );
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint('Error loading partnership: $e');
+    }
+  }
+  
+  /// Load messages for current partnership
+  Future<void> _loadMessages() async {
+    if (_currentPartnership == null) return;
+    
+    try {
+      final messages = await _localService.getMessages(_currentPartnership!.id);
+      _messages = messages;
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error loading messages: $e');
+    }
+  }
+  
+  /// Load care actions for current partnership
+  Future<void> _loadCareActions() async {
+    if (_currentPartnership == null) return;
+    
+    try {
+      final actions = await _localService.getCareActions(_currentPartnership!.id);
+      _careActions = actions;
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error loading care actions: $e');
+    }
   }
 
-  /// Send invitation to partner (stub)
+  /// Send invitation to partner
   Future<PartnerInvitation?> sendPartnerInvitation({
     required String inviteeEmail,
     String? inviteePhone,
     String? personalMessage,
   }) async {
-    debugPrint('⚠️ PartnerService: Partner invitations disabled (Firebase unavailable)');
-    _setError('Partner features are disabled in this build. Firebase authentication required.');
-    return null;
+    _setLoading(true);
+    try {
+      final invitation = await _localService.createPartnerInvitation(
+        personalMessage: personalMessage,
+      );
+      
+      if (invitation != null) {
+        debugPrint('✅ Partner invitation created: ${invitation.invitationCode}');
+      }
+      
+      return invitation;
+    } catch (e) {
+      _setError('Failed to create invitation: $e');
+      return null;
+    } finally {
+      _setLoading(false);
+    }
   }
 
-  /// Accept partner invitation (stub)
+  /// Accept partner invitation
   Future<Partnership?> acceptPartnerInvitation(String invitationCode) async {
-    debugPrint('⚠️ PartnerService: Partner invitations disabled (Firebase unavailable)');
-    _setError('Partner features are disabled in this build. Firebase authentication required.');
-    return null;
+    _setLoading(true);
+    try {
+      final partnershipData = await _localService.acceptPartnerInvitation(invitationCode);
+      
+      if (partnershipData != null) {
+        // Reload partnership to get updated state
+        await _loadPartnership();
+        await _loadMessages();
+        await _loadCareActions();
+        notifyListeners();
+        debugPrint('✅ Partnership accepted');
+        return _currentPartnership;
+      }
+      
+      _setError('Failed to accept invitation');
+      return null;
+    } catch (e) {
+      _setError('Failed to accept invitation: $e');
+      return null;
+    } finally {
+      _setLoading(false);
+    }
   }
 
-  /// Send message to partner (stub)
+  /// Send message to partner
   Future<PartnerMessage?> sendMessage({
     required String content,
     PartnerMessageType type = PartnerMessageType.text,
     Map<String, dynamic>? metadata,
   }) async {
-    debugPrint('⚠️ PartnerService: Partner messaging disabled (Firebase unavailable)');
-    _setError('Partner features are disabled in this build. Firebase authentication required.');
-    return null;
+    if (_currentPartnership == null) {
+      _setError('No active partnership');
+      return null;
+    }
+    
+    try {
+      await _localService.sendMessage(
+        content: content,
+        type: type,
+        metadata: metadata,
+      );
+      
+      // Reload messages
+      await _loadMessages();
+      
+      // Return the most recent message
+      if (_messages.isNotEmpty) {
+        return _messages.first;
+      }
+      return null;
+    } catch (e) {
+      _setError('Failed to send message: $e');
+      return null;
+    }
   }
 
-  /// Send care action to partner (stub)
+  /// Send care action to partner
   Future<PartnerCareAction?> sendCareAction({
     required PartnerCareActionType type,
     required String title,
     String? description,
     Map<String, dynamic>? actionData,
   }) async {
-    debugPrint('⚠️ PartnerService: Partner care actions disabled (Firebase unavailable)');
-    _setError('Partner features are disabled in this build. Firebase authentication required.');
-    return null;
+    if (_currentPartnership == null) {
+      _setError('No active partnership');
+      return null;
+    }
+    
+    try {
+      await _localService.sendCareAction(
+        type: type,
+        title: title,
+        description: description,
+        data: actionData,
+      );
+      
+      // Reload care actions
+      await _loadCareActions();
+      
+      // Return the most recent action
+      if (_careActions.isNotEmpty) {
+        return _careActions.first;
+      }
+      return null;
+    } catch (e) {
+      _setError('Failed to send care action: $e');
+      return null;
+    }
   }
 
-  /// Update sharing settings (stub)
+  /// Update sharing settings
   Future<void> updateSharingSettings(PartnerSharingSettings newSettings) async {
-    debugPrint('⚠️ PartnerService: Partner sharing disabled (Firebase unavailable)');
-    _setError('Partner features are disabled in this build. Firebase authentication required.');
+    if (_currentPartnership == null) {
+      _setError('No active partnership');
+      return;
+    }
+    
+    try {
+      await _localService.updateSharingSettings(_currentPartnership!.id, newSettings);
+      await _loadPartnership();
+      debugPrint('✅ Sharing settings updated');
+    } catch (e) {
+      _setError('Failed to update settings: $e');
+    }
   }
 
-  /// Generate AI insights for partner (stub)
+  /// Generate AI insights for partner
   Future<void> generatePartnerInsights() async {
-    debugPrint('⚠️ PartnerService: Partner insights disabled (Firebase unavailable)');
-    _setError('Partner features are disabled in this build. Firebase authentication required.');
+    // TODO: Implement AI insights generation based on shared data
+    debugPrint('🔄 Generating partner insights...');
+    // For now, just reload data
+    await _loadPartnership();
+    await _loadMessages();
+    await _loadCareActions();
   }
 
-  /// Disconnect partnership (stub)
+  /// Disconnect partnership
   Future<void> disconnectPartnership() async {
-    debugPrint('⚠️ PartnerService: Partner features disabled (Firebase unavailable)');
-    // No-op since there are no partnerships when Firebase is disabled
+    if (_currentPartnership == null) return;
+    
+    try {
+      await _localService.disconnectPartnership(_currentPartnership!.id);
+      _currentPartnership = null;
+      _messages.clear();
+      _careActions.clear();
+      _insights.clear();
+      notifyListeners();
+      debugPrint('✅ Partnership disconnected');
+    } catch (e) {
+      _setError('Failed to disconnect: $e');
+    }
   }
 
   /// Get partner feature status
   Future<Map<String, dynamic>> getPartnerFeatureStatus() async {
     return {
       'firebaseAvailable': _firebaseAvailable,
-      'partnerFeaturesEnabled': false,
-      'hasActivePartnership': false,
-      'message': 'Partner features require Firebase authentication which is disabled in this build',
+      'partnerFeaturesEnabled': true, // Local service is enabled
+      'hasActivePartnership': hasPartner,
+      'message': 'Partner features available via local storage',
     };
   }
 
   /// Check if partner features are available
-  bool get arePartnerFeaturesAvailable => _firebaseAvailable;
+  bool get arePartnerFeaturesAvailable => true; // Local service is always available
 
-  /// Get local partner data (empty when Firebase disabled)
+  /// Get local partner data
   Map<String, dynamic> getLocalPartnerData() {
     return {
-      'hasPartner': false,
-      'messageCount': 0,
-      'careActionCount': 0,
-      'insightCount': 0,
-      'lastActivity': null,
+      'hasPartner': hasPartner,
+      'messageCount': _messages.length,
+      'careActionCount': _careActions.length,
+      'insightCount': _insights.length,
+      'lastActivity': _currentPartnership?.lastActiveAt?.toIso8601String(),
     };
   }
 

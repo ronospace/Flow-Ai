@@ -53,6 +53,10 @@
       }
     }
   },
+  "cycleLengthLabel": "Cycle Length",
+  "@cycleLengthLabel": {
+    "description": "Label for cycle length"
+  },
   "daysUntilPeriod": "{days} days until period",
   "@daysUntilPeriod": {
     "description": "Days remaining until next period",
@@ -198,6 +202,14 @@
   "delete": "Delete",
   "edit": "Edit",
   "update": "Update",
+  "login": "Login",
+  "@login": {
+    "description": "Login button text"
+  },
+  "signUp": "Sign Up",
+  "@signUp": {
+    "description": "Sign up button text"
+  },
   "confirm": "Confirm",
   "thisMonth": "This Month",
   "nextMonth": "Next Month",
@@ -1669,5 +1681,22 @@
   "estimatedBasedOnPatterns": "Estimated based on your logged patterns",
   "@estimatedBasedOnPatterns": {
     "description": "Safe prediction language"
+  },
+  
+  "healthDashboardMatrix": "Health Dashboard Matrix",
+  "@healthDashboardMatrix": {
+    "description": "Health dashboard matrix title"
+  },
+  "realTimeBiometricAnalysis": "Real-time Biometric Analysis",
+  "@realTimeBiometricAnalysis": {
+    "description": "Real-time biometric analysis title"
+  },
+  "predictiveAnalyticsCenter": "Predictive Analytics Center",
+  "@predictiveAnalyticsCenter": {
+    "description": "Predictive analytics center title"
+  },
+  "aiPoweredCycleForecast": "AI-Powered Cycle Forecast",
+  "@aiPoweredCycleForecast": {
+    "description": "AI-powered cycle forecast subtitle"
   }
 }

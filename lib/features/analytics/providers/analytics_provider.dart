@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import '../../../core/services/analytics_service.dart';
 
 class AnalyticsProvider extends ChangeNotifier {
-  final AnalyticsService _analyticsService = AnalyticsService();
+  final AnalyticsService _analyticsService = AnalyticsService.instance;
   
   // State
   bool _isLoading = false;

@@ -10,18 +10,22 @@ import '../widgets/advanced_analytics_dashboard.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/services/analytics_service.dart';
 import '../../../generated/app_localizations.dart';
+import '../../../core/widgets/medical_disclaimer_banner.dart';
+import '../../../core/widgets/medical_citations_footer.dart';
 
 class EnhancedAnalyticsDashboardScreen extends StatefulWidget {
   const EnhancedAnalyticsDashboardScreen({super.key});
 
   @override
-  State<EnhancedAnalyticsDashboardScreen> createState() => _EnhancedAnalyticsDashboardScreenState();
+  State<EnhancedAnalyticsDashboardScreen> createState() =>
+      _EnhancedAnalyticsDashboardScreenState();
 }
 
-class _EnhancedAnalyticsDashboardScreenState extends State<EnhancedAnalyticsDashboardScreen>
+class _EnhancedAnalyticsDashboardScreenState
+    extends State<EnhancedAnalyticsDashboardScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  
+
   @override
   void initState() {
     super.initState();
@@ -41,7 +45,7 @@ class _EnhancedAnalyticsDashboardScreenState extends State<EnhancedAnalyticsDash
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localizations = AppLocalizations.of(context);
-    
+
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       body: Container(
@@ -61,7 +65,7 @@ class _EnhancedAnalyticsDashboardScreenState extends State<EnhancedAnalyticsDash
                     if (provider.isLoading) {
                       return _buildLoadingState(theme);
                     }
-                    
+
                     return TabBarView(
                       controller: _tabController,
                       children: [
@@ -69,7 +73,11 @@ class _EnhancedAnalyticsDashboardScreenState extends State<EnhancedAnalyticsDash
                         _buildCycleTab(provider, theme, localizations),
                         _buildHealthTab(provider, theme, localizations),
                         _buildTrendsTab(provider, theme, localizations),
-                        _buildRecommendationsTab(provider, theme, localizations),
+                        _buildRecommendationsTab(
+                          provider,
+                          theme,
+                          localizations,
+                        ),
                       ],
                     );
                   },
@@ -156,11 +164,7 @@ class _EnhancedAnalyticsDashboardScreenState extends State<EnhancedAnalyticsDash
                   color: AppTheme.accentMint.withValues(alpha: 0.3),
                 ),
               ),
-              child: Icon(
-                Icons.download,
-                color: AppTheme.accentMint,
-                size: 20,
-              ),
+              child: Icon(Icons.download, color: AppTheme.accentMint, size: 20),
             ),
           ),
         ],
@@ -190,14 +194,13 @@ class _EnhancedAnalyticsDashboardScreenState extends State<EnhancedAnalyticsDash
         indicator: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           gradient: LinearGradient(
-            colors: [
-              AppTheme.primaryPurple,
-              AppTheme.secondaryBlue,
-            ],
+            colors: [AppTheme.primaryPurple, AppTheme.secondaryBlue],
           ),
         ),
         labelColor: Colors.white,
-        unselectedLabelColor: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+        unselectedLabelColor: theme.colorScheme.onSurface.withValues(
+          alpha: 0.7,
+        ),
         labelStyle: theme.textTheme.bodySmall?.copyWith(
           fontWeight: FontWeight.w600,
         ),
@@ -234,10 +237,7 @@ class _EnhancedAnalyticsDashboardScreenState extends State<EnhancedAnalyticsDash
               height: 60,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [
-                    AppTheme.primaryPurple,
-                    AppTheme.secondaryBlue,
-                  ],
+                  colors: [AppTheme.primaryPurple, AppTheme.secondaryBlue],
                 ),
                 borderRadius: BorderRadius.circular(30),
               ),
@@ -263,6 +263,8 @@ class _EnhancedAnalyticsDashboardScreenState extends State<EnhancedAnalyticsDash
                 color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
               ),
             ),
+            // Medical Citations Footer (App Store 1.4.1)
+            MedicalCitationsFooter(),
           ],
         ),
       ),
@@ -299,6 +301,14 @@ class _EnhancedAnalyticsDashboardScreenState extends State<EnhancedAnalyticsDash
           const SizedBox(height: 20),
           if (provider.predictionAnalytics != null)
             PredictionAnalyticsCard(analytics: provider.predictionAnalytics!),
+
+          const SizedBox(height: 20),
+
+          // Medical Disclaimer Banner (App Store 1.4.1)
+          MedicalDisclaimerBanner(),
+
+          // Medical Citations Footer (App Store 1.4.1)
+          MedicalCitationsFooter(),
         ],
       ),
     );
@@ -331,6 +341,14 @@ class _EnhancedAnalyticsDashboardScreenState extends State<EnhancedAnalyticsDash
           const SizedBox(height: 20),
           if (provider.healthAnalytics != null)
             HealthAnalyticsCard(analytics: provider.healthAnalytics!),
+
+          const SizedBox(height: 20),
+
+          // Medical Disclaimer Banner (App Store 1.4.1)
+          MedicalDisclaimerBanner(),
+
+          // Medical Citations Footer (App Store 1.4.1)
+          MedicalCitationsFooter(),
         ],
       ),
     );
@@ -399,6 +417,14 @@ class _EnhancedAnalyticsDashboardScreenState extends State<EnhancedAnalyticsDash
               _showRecommendationDetails(context, recommendation);
             },
           ),
+
+          const SizedBox(height: 20),
+
+          // Medical Disclaimer Banner (App Store 1.4.1)
+          MedicalDisclaimerBanner(),
+
+          // Medical Citations Footer (App Store 1.4.1)
+          MedicalCitationsFooter(),
         ],
       ),
     );
@@ -420,17 +446,13 @@ class _EnhancedAnalyticsDashboardScreenState extends State<EnhancedAnalyticsDash
           children: [
             Row(
               children: [
-                Icon(
-                  Icons.date_range,
-                  color: AppTheme.primaryPurple,
-                  size: 24,
-                ),
+                Icon(Icons.date_range, color: AppTheme.primaryPurple, size: 24),
                 const SizedBox(width: 12),
                 Text(
                   'Select Time Range',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -462,9 +484,7 @@ class _EnhancedAnalyticsDashboardScreenState extends State<EnhancedAnalyticsDash
           onTap();
           Navigator.pop(context);
         },
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         tileColor: Theme.of(context).colorScheme.surface.withValues(alpha: 0.5),
       ),
     );
@@ -498,36 +518,38 @@ class _EnhancedAnalyticsDashboardScreenState extends State<EnhancedAnalyticsDash
           children: [
             Row(
               children: [
-                Icon(
-                  Icons.download,
-                  color: AppTheme.accentMint,
-                  size: 24,
-                ),
+                Icon(Icons.download, color: AppTheme.accentMint, size: 24),
                 const SizedBox(width: 12),
                 Text(
                   'Export Analytics',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
               ],
             ),
             const SizedBox(height: 20),
             ...[
               ('PDF Report', Icons.picture_as_pdf, () => _exportData('pdf')),
-              ('Excel Spreadsheet', Icons.table_chart, () => _exportData('excel')),
-              ('Share Summary', Icons.share, () => _shareData()),
-            ].map((option) => ListTile(
-              title: Text(option.$1),
-              leading: Icon(option.$2, color: AppTheme.accentMint),
-              onTap: () {
-                Navigator.pop(context);
-                option.$3();
-              },
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+              (
+                'Excel Spreadsheet',
+                Icons.table_chart,
+                () => _exportData('excel'),
               ),
-            )),
+              ('Share Summary', Icons.share, () => _shareData()),
+            ].map(
+              (option) => ListTile(
+                title: Text(option.$1),
+                leading: Icon(option.$2, color: AppTheme.accentMint),
+                onTap: () {
+                  Navigator.pop(context);
+                  option.$3();
+                },
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
             const SizedBox(height: 20),
           ],
         ),
@@ -560,9 +582,7 @@ class _EnhancedAnalyticsDashboardScreenState extends State<EnhancedAnalyticsDash
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Row(
           children: [
             Container(
@@ -589,29 +609,31 @@ class _EnhancedAnalyticsDashboardScreenState extends State<EnhancedAnalyticsDash
             const SizedBox(height: 16),
             Text(
               'Action Items:',
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            ...recommendation.actionItems.map((item) => Padding(
-              padding: const EdgeInsets.only(bottom: 4),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 6,
-                    height: 6,
-                    margin: const EdgeInsets.only(top: 6, right: 8),
-                    decoration: BoxDecoration(
-                      color: AppTheme.primaryPurple,
-                      shape: BoxShape.circle,
+            ...recommendation.actionItems.map(
+              (item) => Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 6,
+                      height: 6,
+                      margin: const EdgeInsets.only(top: 6, right: 8),
+                      decoration: BoxDecoration(
+                        color: AppTheme.primaryPurple,
+                        shape: BoxShape.circle,
+                      ),
                     ),
-                  ),
-                  Expanded(child: Text(item)),
-                ],
+                    Expanded(child: Text(item)),
+                  ],
+                ),
               ),
-            )),
+            ),
           ],
         ),
         actions: [

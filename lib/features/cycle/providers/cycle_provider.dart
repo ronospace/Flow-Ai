@@ -3,6 +3,7 @@ import '../../../core/models/cycle_data.dart';
 import '../../../core/database/database_service.dart';
 import '../../../core/services/real_cycle_service.dart';
 import '../../../core/services/cycle_calculation_engine.dart';
+import '../../../core/services/performance_optimizer.dart';
 
 class CycleProvider extends ChangeNotifier {
   RealCycleService? _realCycleService;
@@ -10,7 +11,6 @@ class CycleProvider extends ChangeNotifier {
   RealCycleData? _cycleData;
   CycleInsights? _insights;
   bool _isLoading = false;
-  bool _isInitialized = false;
   
   CycleProvider() {
     _initializeService();
@@ -19,11 +19,9 @@ class CycleProvider extends ChangeNotifier {
   Future<void> _initializeService() async {
     try {
       _realCycleService = RealCycleService(DatabaseService());
-      _isInitialized = true;
     } catch (e) {
       debugPrint('CycleProvider initialization failed: $e');
       // Continue without the service - UI will show fallback content
-      _isInitialized = false;
     }
   }
 
@@ -44,15 +42,31 @@ class CycleProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
+      // Use performance optimizer for caching
       if (_realCycleService != null) {
-        // Load real cycle data and predictions
-        _cycleData = await _realCycleService!.getRealCycleData();
-        _insights = await _realCycleService!.getCycleInsights();
+        // Use performance optimizer for caching
+        final cycleData = await PerformanceOptimizer.instance.getOrCompute<RealCycleData>(
+          key: 'cycle_data',
+          compute: () => _realCycleService!.getRealCycleData(),
+          cacheDuration: const Duration(minutes: 10),
+        );
+        
+        final insights = await PerformanceOptimizer.instance.getOrCompute<CycleInsights>(
+          key: 'cycle_insights',
+          compute: () => _realCycleService!.getCycleInsights(),
+          cacheDuration: const Duration(minutes: 10),
+        );
+        
+        _cycleData = cycleData;
+        _insights = insights;
       } else {
         // Set demo data when service is not available
         _cycleData = null;
         _insights = null;
       }
+      
+      _cycleData = cycleData;
+      _insights = insights;
     } catch (e) {
       debugPrint('Error loading cycle data: $e');
       // Set default empty data on error

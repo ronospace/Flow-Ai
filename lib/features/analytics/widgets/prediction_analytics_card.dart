@@ -83,7 +83,7 @@ class PredictionAnalyticsCard extends StatelessWidget {
                 child: _buildAccuracyCard(
                   'Avg Accuracy',
                   '±${analytics.averageAccuracyDays.round()} days',
-                  Icons.target,
+                  Icons.center_focus_strong,
                   _getAccuracyColor(analytics.averageAccuracyDays),
                   theme,
                 ),
