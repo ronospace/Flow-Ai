@@ -28,10 +28,12 @@ class _LanguageSelectorState extends State<LanguageSelector> {
     if (_searchQuery.isEmpty) {
       return AppLanguage.values;
     }
-    
+
     return AppLanguage.values.where((language) {
-      return language.displayName.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-             language.code.toLowerCase().contains(_searchQuery.toLowerCase());
+      return language.displayName.toLowerCase().contains(
+            _searchQuery.toLowerCase(),
+          ) ||
+          language.code.toLowerCase().contains(_searchQuery.toLowerCase());
     }).toList();
   }
 
@@ -110,9 +112,15 @@ class _LanguageSelectorState extends State<LanguageSelector> {
                 },
                 decoration: InputDecoration(
                   hintText: AppLocalizations.of(context).searchLanguages,
-                  prefixIcon: Icon(Icons.search, color: theme.colorScheme.onSurfaceVariant),
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
                   border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                 ),
               ),
             ),
@@ -125,95 +133,113 @@ class _LanguageSelectorState extends State<LanguageSelector> {
             child: Consumer<SettingsProvider>(
               builder: (context, settings, child) {
                 final currentLanguage = settings.preferences.language;
-                
+
                 return ListView.builder(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   itemCount: _filteredLanguages.length,
                   itemBuilder: (context, index) {
                     final language = _filteredLanguages[index];
                     final isSelected = language == currentLanguage;
-                    
+
                     return Container(
-                      margin: const EdgeInsets.only(bottom: 8),
-                      decoration: BoxDecoration(
-                        color: isSelected 
-                            ? AppTheme.accentMint.withValues(alpha: 0.1)
-                            : Colors.transparent,
-                        borderRadius: BorderRadius.circular(12),
-                        border: isSelected 
-                            ? Border.all(color: AppTheme.accentMint, width: 2)
-                            : null,
-                      ),
-                      child: ListTile(
-                        leading: Container(
-                          width: 40,
-                          height: 40,
+                          margin: const EdgeInsets.only(bottom: 8),
                           decoration: BoxDecoration(
-                            color: isSelected 
-                                ? AppTheme.accentMint
-                                : theme.colorScheme.surfaceContainerHighest,
-                            borderRadius: BorderRadius.circular(8),
+                            color: isSelected
+                                ? AppTheme.accentMint.withValues(alpha: 0.1)
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(12),
+                            border: isSelected
+                                ? Border.all(
+                                    color: AppTheme.accentMint,
+                                    width: 2,
+                                  )
+                                : null,
                           ),
-                          child: Center(
-                            child: Text(
-                              language.code.toUpperCase(),
+                          child: ListTile(
+                            leading: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? AppTheme.accentMint
+                                    : theme.colorScheme.surfaceContainerHighest,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  language.code.toUpperCase(),
+                                  style: TextStyle(
+                                    color: isSelected
+                                        ? Colors.white
+                                        : theme.colorScheme.onSurfaceVariant,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            title: Text(
+                              language.displayName,
                               style: TextStyle(
-                                color: isSelected ? Colors.white : theme.colorScheme.onSurfaceVariant,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: isSelected
+                                    ? FontWeight.bold
+                                    : FontWeight.w500,
+                                color: isSelected
+                                    ? AppTheme.accentMint
+                                    : theme.textTheme.bodyLarge?.color,
+                              ),
+                            ),
+                            subtitle: Text(
+                              language.code,
+                              style: TextStyle(
+                                color: theme.textTheme.bodyMedium?.color
+                                    ?.withValues(alpha: 0.7),
                                 fontSize: 12,
                               ),
                             ),
-                          ),
-                        ),
-                        title: Text(
-                          language.displayName,
-                          style: TextStyle(
-                            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                            color: isSelected ? AppTheme.accentMint : theme.textTheme.bodyLarge?.color,
-                          ),
-                        ),
-                        subtitle: Text(
-                          language.code,
-                          style: TextStyle(
-                            color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
-                            fontSize: 12,
-                          ),
-                        ),
-                        trailing: isSelected 
-                            ? const Icon(
-                                Icons.check_circle,
-                                color: AppTheme.accentMint,
-                              )
-                            : Icon(
-                                Icons.circle_outlined,
-                                color: theme.colorScheme.outline,
-                              ),
-                        onTap: () async {
-                          if (!isSelected) {
-                            HapticFeedback.mediumImpact();
-                            await settings.updateLanguage(language);
-                            
-                            if (mounted) {
-                              // Show confirmation
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('${AppLocalizations.of(context).languageChangedTo} ${language.displayName}'),
-                                  backgroundColor: AppTheme.accentMint,
-                                  behavior: SnackBarBehavior.floating,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                            trailing: isSelected
+                                ? const Icon(
+                                    Icons.check_circle,
+                                    color: AppTheme.accentMint,
+                                  )
+                                : Icon(
+                                    Icons.circle_outlined,
+                                    color: theme.colorScheme.outline,
                                   ),
-                                ),
-                              );
-                              
-                              Navigator.pop(context);
-                            }
-                          }
-                        },
-                      ),
-                    ).animate(delay: Duration(milliseconds: index * 50))
-                      .slideX(begin: 0.3, end: 0)
-                      .fadeIn();
+                            onTap: () async {
+                              if (!isSelected) {
+                                HapticFeedback.mediumImpact();
+
+                                // Capture context-dependent things BEFORE the await
+                                final messenger = ScaffoldMessenger.of(context);
+                                final navigator = Navigator.of(context);
+                                final l10n = AppLocalizations.of(context);
+
+                                await settings.updateLanguage(language);
+
+                                if (!context.mounted) return;
+
+                                messenger.showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      '${l10n.languageChangedTo} ${language.displayName}',
+                                    ),
+                                    backgroundColor: AppTheme.accentMint,
+                                    behavior: SnackBarBehavior.floating,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                );
+
+                                navigator.pop();
+                              }
+                            },
+                          ),
+                        )
+                        .animate(delay: Duration(milliseconds: index * 50))
+                        .slideX(begin: 0.3, end: 0)
+                        .fadeIn();
                   },
                 );
               },
