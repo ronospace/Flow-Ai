@@ -230,7 +230,7 @@ The app uses GoRouter with ShellRoute which doesn't easily support PageView-base
 As implemented, Flow Ai remains the consumer-facing app with enhanced UX:
 
 ```
-ZyraFlow Inc. ™
+ZyraFlow GmbH ™ ™
 │
 ├── 🌸 Flow Ai (Consumer Division) ✅
 │   ├─ AI-powered period & wellness companion

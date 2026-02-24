@@ -306,9 +306,9 @@ This is a private development project. For collaboration inquiries, please conta
 
 ## 📄 License
 
-This project is proprietary software developed and maintained by **ZyraFlow Inc.™**
+This project is proprietary software developed and maintained by **ZyraFlow GmbH ™™**
 
-© 2025 ZyraFlow Inc.™ All rights reserved.
+© 2025 ZyraFlow GmbH ™™ All rights reserved.
 
 ## 📧 Contact
 
@@ -330,12 +330,12 @@ This project is proprietary software developed and maintained by **ZyraFlow Inc.
 
 ---
 
-### 🏢 About ZyraFlow Inc.
+### 🏢 About ZyraFlow GmbH ™
 
-ZyraFlow Inc.™ is dedicated to empowering women through innovative AI-powered health technology. Our mission is to provide accessible, privacy-first menstrual health tracking with transparency and scientific rigor.
+ZyraFlow GmbH ™™ is dedicated to empowering women through innovative AI-powered health technology. Our mission is to provide accessible, privacy-first menstrual health tracking with transparency and scientific rigor.
 
-**Developed and Maintained by ZyraFlow Inc.™**  
-© 2025 ZyraFlow Inc. All rights reserved.
+**Developed and Maintained by ZyraFlow GmbH ™™**  
+© 2025 ZyraFlow GmbH ™ All rights reserved.
 
 **Related Projects:**
 - **Flow iQ** - [AI-powered clinical app for healthcare providers](https://github.com/ronospace/Flow-iQ)
