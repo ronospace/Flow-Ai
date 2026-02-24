@@ -216,7 +216,7 @@ Thank you for your review and guidance.
 
 ---
 
-**Developer**: ZyraFlow Inc.™  
+**Developer**: ZyraFlow GmbH ™™  
 **App**: Flow Ai  
 **Version**: 2.1.4 (Build 15)  
 **Submission ID**: e30f24d8-7bc8-4034-9f57-646b0328dc0c

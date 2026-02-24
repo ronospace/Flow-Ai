@@ -1,4 +1,4 @@
-# Pain Tracking UI Fix & ZyraFlow Inc.™ Branding Update
+# Pain Tracking UI Fix & ZyraFlow GmbH ™™ Branding Update
 
 **Date**: November 1, 2024  
 **Version**: 2.1.2+13
@@ -117,7 +117,7 @@ onPressed: () {
 
 ---
 
-## 🏢 ZyraFlow Inc.™ Branding Added
+## 🏢 ZyraFlow GmbH ™™ Branding Added
 
 ### **README.md Updates**
 
@@ -125,21 +125,21 @@ onPressed: () {
 ```markdown
 ## 📄 License
 
-This project is proprietary software developed and maintained by **ZyraFlow Inc.™**
+This project is proprietary software developed and maintained by **ZyraFlow GmbH ™™**
 
-© 2025 ZyraFlow Inc.™ All rights reserved.
+© 2025 ZyraFlow GmbH ™™ All rights reserved.
 ```
 
-#### About ZyraFlow Inc. Section (New)
+#### About ZyraFlow GmbH ™ Section (New)
 ```markdown
-### 🏢 About ZyraFlow Inc.
+### 🏢 About ZyraFlow GmbH ™
 
-ZyraFlow Inc.™ is dedicated to empowering women through innovative AI-powered 
+ZyraFlow GmbH ™™ is dedicated to empowering women through innovative AI-powered 
 health technology. Our mission is to provide accessible, privacy-first menstrual 
 health tracking with transparency and scientific rigor.
 
-**Developed and Maintained by ZyraFlow Inc.™**  
-© 2025 ZyraFlow Inc. All rights reserved.
+**Developed and Maintained by ZyraFlow GmbH ™™**  
+© 2025 ZyraFlow GmbH ™ All rights reserved.
 
 **Related Projects:**
 - **Flow iQ** - [AI-powered clinical app for healthcare providers](https://github.com/ronospace/Flow-iQ)
@@ -182,7 +182,7 @@ health tracking with transparency and scientific rigor.
 - ✅ **Reduced friction**: Easier multi-body-part tracking
 - ✅ **Better retention**: Less frustration = happier users
 - ✅ **App Store ready**: Professional UX for reviewers
-- ✅ **Brand aligned**: Matches ZyraFlow Inc.™ quality standards
+- ✅ **Brand aligned**: Matches ZyraFlow GmbH ™™ quality standards
 
 ---
 
@@ -251,7 +251,7 @@ Based on the provided screenshots, the issues were:
 
 **Commit Message:**
 ```
-Fix pain tracking UI and add ZyraFlow Inc.™ branding
+Fix pain tracking UI and add ZyraFlow GmbH ™™ branding
 
 Pain Tracking UX Improvements:
 - Fix body part selection overlay issue
@@ -301,5 +301,5 @@ Pain Tracking UX Improvements:
 
 ---
 
-**Developed and Maintained by ZyraFlow Inc.™**  
-© 2025 ZyraFlow Inc. All rights reserved.
+**Developed and Maintained by ZyraFlow GmbH ™™**  
+© 2025 ZyraFlow GmbH ™ All rights reserved.
