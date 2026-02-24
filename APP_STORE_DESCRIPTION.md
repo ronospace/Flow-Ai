@@ -1,4 +1,4 @@
-# Flow Ai — by ZyraFlow Inc.™
+# Flow Ai — by ZyraFlow GmbH ™™
 ## App Store Description
 
 **Your AI-powered menstrual health companion**
@@ -107,7 +107,7 @@ Stay tuned for exciting new features designed to support your health journey.
 
 Whether you are planning pregnancy, tracking for health awareness, or managing symptoms, Flow Ai adapts to your goals with evolving, personalized insights.
 
-**Download Flow Ai — by ZyraFlow Inc.™ today and take control of your menstrual health with the power of artificial intelligence.**
+**Download Flow Ai — by ZyraFlow GmbH ™™ today and take control of your menstrual health with the power of artificial intelligence.**
 
 ---
 
@@ -119,7 +119,7 @@ The AI-powered insights and predictions in Flow Ai are based on pattern recognit
 
 ---
 
-**Developer**: ZyraFlow Inc.™  
+**Developer**: ZyraFlow GmbH ™™  
 **Category**: Health & Fitness  
 **Privacy Policy**: Available in-app and on our website  
 **Support**: Available through in-app help center
