@@ -9,9 +9,21 @@ Flow Ai is a comprehensive period tracking application featuring advanced machin
 [![iOS](https://img.shields.io/badge/iOS-16.0+-000000?logo=apple)](https://www.apple.com/ios)
 [![Android](https://img.shields.io/badge/Android-7.0+-3DDC84?logo=android)](https://www.android.com)
 
-## ✨ Current Version: 2.2.0
+## ✨ Current Version: 2.1.2+13
 
-### 🆕 Latest Features (v2.2.0 - December 2024)
+### 📱 App Store Status
+- **iOS**: Submitted for review (Build 13) - Addressing privacy policy and demo account requirements
+- **Android**: Ready for release
+- **Privacy Policy**: [https://ronospace.github.io/ZyraFlow/](https://ronospace.github.io/ZyraFlow/)
+
+### 🆕 Latest Features (v2.2.0 - November 2024)
+
+#### **App Store Compliance & Privacy**
+- 🔒 **Privacy Policy**: Comprehensive GDPR/CCPA/HIPAA compliant privacy policy
+- 👤 **Demo Account**: Auto-created reviewer account (`demo@flowai.app`)
+- 🛡️ **HealthKit Integration**: Full privacy disclosure and user consent flows
+- 📄 **Data Export**: Complete user data export in PDF, CSV, JSON formats
+- 🗑️ **Right to Delete**: GDPR-compliant account deletion with 30-day retention
 
 #### **Enhanced Onboarding & User Experience**
 - 🎓 **Progressive Disclosure**: Smart onboarding with interactive tutorials and feature discovery
@@ -48,9 +60,11 @@ Flow Ai is a comprehensive period tracking application featuring advanced machin
 ### 🎨 User Experience
 - 🌗 **Dark/Light Themes**: Full theme support with smooth transitions
 - 🌍 **Multi-Language Support**: 36 languages with complete localization
-- 🔒 **Privacy-First**: Local data storage with optional cloud sync
+- 🔒 **Privacy-First**: Local data storage with optional encrypted EU cloud sync
 - ♿ **Accessibility**: Screen reader support and inclusive design
 - 🎭 **Beautiful UI**: Feminine gradients and smooth animations
+- 🔐 **Biometric Auth**: Face ID, Touch ID, Fingerprint authentication
+- 📤 **Data Portability**: Export all your data in multiple formats (PDF, CSV, JSON)
 
 ## 🏗️ Architecture
 
@@ -59,16 +73,21 @@ Flow Ai is a comprehensive period tracking application featuring advanced machin
 - MLPredictionProvider for advanced ML integration
 - CycleProvider, InsightsProvider, HealthProvider hierarchy
 
-### **AI Engine**
+### **AI Engine Architecture**
 ```
 lib/core/
 ├── services/
-│   ├── ai_engine.dart              # Legacy AI with cycle predictions
-│   ├── enhanced_ai_engine.dart     # Advanced AI with biometrics
-│   └── ml_integration_service.dart # Ensemble ML models
+│ ├── ai_engine.dart # Legacy AI with cycle predictions
+│ ├── enhanced_ai_engine.dart # Advanced AI with biometrics
+│ ├── ml_integration_service.dart # Ensemble ML models
+│ ├── auth_service.dart # Multi-provider authentication
+│ ├── local_user_service.dart # Offline-first local auth
+│ ├── data_export_service.dart # GDPR-compliant data export
+│ └── progressive_disclosure_service.dart # Tutorial system
 ├── ml/
-│   ├── advanced_prediction_models.dart
-│   └── advanced_prediction_models_impl.dart
+│ ├── advanced_prediction_models.dart # Core ML algorithms
+│ └── advanced_prediction_models_impl.dart # Implementation extens
+
 ```
 
 ### **Feature Organization**

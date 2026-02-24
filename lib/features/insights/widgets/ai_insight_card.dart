@@ -9,10 +9,7 @@ import '../../../core/models/medical_citation.dart';
 class AIInsightCard extends StatelessWidget {
   final AIInsight insight;
 
-  const AIInsightCard({
-    super.key,
-    required this.insight,
-  });
+  const AIInsightCard({super.key, required this.insight});
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +54,7 @@ class AIInsightCard extends StatelessWidget {
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
-                    AppLocalizations.of(context)!.medicalDisclaimerShort,
+                    AppLocalizations.of(context).medicalDisclaimerShort,
                     style: TextStyle(
                       fontSize: 11,
                       color: AppTheme.warningOrange,
@@ -69,7 +66,7 @@ class AIInsightCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          
+
           // Header with type icon and confidence
           Row(
             children: [
@@ -112,9 +109,9 @@ class AIInsightCard extends StatelessWidget {
               ),
             ],
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Description
           Text(
             insight.description,
@@ -123,7 +120,7 @@ class AIInsightCard extends StatelessWidget {
               height: 1.5,
             ),
           ),
-          
+
           // Recommendations
           if (insight.recommendations.isNotEmpty) ...[
             const SizedBox(height: 16),
@@ -135,8 +132,9 @@ class AIInsightCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            ...insight.recommendations.map((recommendation) => 
-              Padding(padding: const EdgeInsets.only(bottom: 6),
+            ...insight.recommendations.map(
+              (recommendation) => Padding(
+                padding: const EdgeInsets.only(bottom: 6),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -153,7 +151,9 @@ class AIInsightCard extends StatelessWidget {
                       child: Text(
                         recommendation,
                         style: TextStyle(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.7,
+                          ),
                           fontSize: 14,
                           height: 1.4,
                         ),
@@ -164,7 +164,7 @@ class AIInsightCard extends StatelessWidget {
               ),
             ),
           ],
-          
+
           // Actionable indicator
           if (insight.actionable)
             Container(
@@ -197,7 +197,7 @@ class AIInsightCard extends StatelessWidget {
                 ],
               ),
             ),
-            
+
           // Medical Citations Section
           if (insight.allCitations.isNotEmpty) ...[
             const SizedBox(height: 20),
@@ -239,8 +239,8 @@ class AIInsightCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  ...insight.allCitations.map((citation) => 
-                    _buildCitationItem(context, citation),
+                  ...insight.allCitations.map(
+                    (citation) => _buildCitationItem(context, citation),
                   ),
                 ],
               ),
@@ -322,7 +322,7 @@ class AIInsightCard extends StatelessWidget {
       return AppTheme.mediumGrey;
     }
   }
-  
+
   Widget _buildCitationItem(BuildContext context, MedicalCitation citation) {
     final theme = Theme.of(context);
     return Container(
@@ -331,9 +331,7 @@ class AIInsightCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: theme.dividerColor.withValues(alpha: 0.2),
-        ),
+        border: Border.all(color: theme.dividerColor.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -401,7 +399,7 @@ class AIInsightCard extends StatelessWidget {
       ),
     );
   }
-  
+
   Future<void> _launchCitationUrl(String url) async {
     final Uri uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {

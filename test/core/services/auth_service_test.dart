@@ -5,15 +5,10 @@ import 'package:flow_ai/core/services/auth_service.dart';
 import 'package:flow_ai/core/services/local_user_service.dart';
 import 'package:flow_ai/core/services/apple_signin_service.dart';
 import 'package:flow_ai/core/services/biometric_auth_service.dart';
-import 'package:flow_ai/core/models/auth_result.dart';
 import 'package:flow_ai/core/models/user.dart';
 
 // Generate mocks
-@GenerateMocks([
-  LocalUserService,
-  AppleSignInService,
-  BiometricAuthService,
-])
+@GenerateMocks([LocalUserService, AppleSignInService, BiometricAuthService])
 import 'auth_service_test.mocks.dart';
 
 void main() {
@@ -52,8 +47,9 @@ void main() {
         isDemo: true,
       );
 
-      when(mockLocalUserService.createDemoAccount())
-          .thenAnswer((_) async => expectedUser);
+      when(
+        mockLocalUserService.createDemoAccount(),
+      ).thenAnswer((_) async => expectedUser);
 
       // Act
       final result = await authService.createDemoAccount();
@@ -76,8 +72,9 @@ void main() {
         provider: 'local',
       );
 
-      when(mockLocalUserService.signInWithEmailPassword(email, password))
-          .thenAnswer((_) async => expectedUser);
+      when(
+        mockLocalUserService.signInWithEmailPassword(email, password),
+      ).thenAnswer((_) async => expectedUser);
 
       // Act
       final result = await authService.signInWithEmailPassword(email, password);
@@ -94,8 +91,9 @@ void main() {
       const email = 'invalid@example.com';
       const password = 'REDACTED_VALUE';
 
-      when(mockLocalUserService.signInWithEmailPassword(email, password))
-          .thenThrow(Exception('Invalid credentials'));
+      when(
+        mockLocalUserService.signInWithEmailPassword(email, password),
+      ).thenThrow(Exception('Invalid credentials'));
 
       // Act
       final result = await authService.signInWithEmailPassword(email, password);
@@ -118,11 +116,16 @@ void main() {
         provider: 'local',
       );
 
-      when(mockLocalUserService.createAccount(email, password, displayName))
-          .thenAnswer((_) async => expectedUser);
+      when(
+        mockLocalUserService.createAccount(email, password, displayName),
+      ).thenAnswer((_) async => expectedUser);
 
       // Act
-      final result = await authService.signUpWithEmailPassword(email, password, displayName);
+      final result = await authService.signUpWithEmailPassword(
+        email,
+        password,
+        displayName,
+      );
 
       // Assert
       expect(result.success, true);
@@ -140,8 +143,9 @@ void main() {
         provider: 'apple',
       );
 
-      when(mockAppleSignInService.signIn())
-          .thenAnswer((_) async => expectedUser);
+      when(
+        mockAppleSignInService.signIn(),
+      ).thenAnswer((_) async => expectedUser);
 
       // Act
       final result = await authService.signInWithApple();
@@ -154,8 +158,9 @@ void main() {
 
     test('should handle Apple Sign-In cancellation', () async {
       // Arrange
-      when(mockAppleSignInService.signIn())
-          .thenThrow(Exception('User cancelled Apple Sign-In'));
+      when(
+        mockAppleSignInService.signIn(),
+      ).thenThrow(Exception('User cancelled Apple Sign-In'));
 
       // Act
       final result = await authService.signInWithApple();
@@ -183,7 +188,7 @@ void main() {
       // Test valid emails
       expect(authService.isValidEmail('user@example.com'), true);
       expect(authService.isValidEmail('test.email@domain.co.uk'), true);
-      
+
       // Test invalid emails
       expect(authService.isValidEmail('invalid-email'), false);
       expect(authService.isValidEmail('user@'), false);
@@ -195,7 +200,7 @@ void main() {
       // Test strong passwords
       expect(authService.isValidPassword('SecurePass123!'), true);
       expect(authService.isValidPassword('MyP@ssw0rd'), true);
-      
+
       // Test weak passwords
       expect(authService.isValidPassword('123'), false);
       expect(authService.isValidPassword('password'), false);
@@ -212,8 +217,9 @@ void main() {
         provider: 'local',
       );
 
-      when(mockLocalUserService.getCurrentUser())
-          .thenAnswer((_) async => savedUser);
+      when(
+        mockLocalUserService.getCurrentUser(),
+      ).thenAnswer((_) async => savedUser);
 
       // Act
       await authService.checkAuthState();
@@ -227,8 +233,9 @@ void main() {
     test('should reset password successfully', () async {
       // Arrange
       const email = 'reset@example.com';
-      when(mockLocalUserService.resetPassword(email))
-          .thenAnswer((_) async => true);
+      when(
+        mockLocalUserService.resetPassword(email),
+      ).thenAnswer((_) async => true);
 
       // Act
       final result = await authService.resetPassword(email);
@@ -255,9 +262,14 @@ void main() {
       );
 
       authService.setCurrentUser(currentUser);
-      
-      when(mockLocalUserService.updateUserProfile('update_user_123', 'New Name', null))
-          .thenAnswer((_) async => updatedUser);
+
+      when(
+        mockLocalUserService.updateUserProfile(
+          'update_user_123',
+          'New Name',
+          null,
+        ),
+      ).thenAnswer((_) async => updatedUser);
 
       // Act
       final result = await authService.updateUserProfile('New Name', null);
@@ -297,7 +309,7 @@ void main() {
 
       // Note: This would require platform-specific mocking in a real test
       // For now, we'll test the structure and error handling
-      
+
       // Act & Assert
       expect(
         () => biometricService.authenticateWithBiometrics(reason),
@@ -337,7 +349,7 @@ void main() {
     test('should handle Apple Sign-In not available gracefully', () async {
       // This test would require platform-specific mocking
       // Testing the structure for now
-      
+
       expect(() => appleService.isAvailable(), returnsNormally);
     });
 
@@ -363,7 +375,7 @@ void main() {
     test('should complete full authentication flow', () async {
       // This would test the complete flow from sign-up to sign-in to sign-out
       // Requires integration with actual services or detailed mocking
-      
+
       expect(authService, isNotNull);
       expect(() => authService.initialize(), returnsNormally);
     });

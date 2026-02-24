@@ -47,31 +47,30 @@ class FirebaseService {
 
     try {
       debugPrint('🔥 Initializing Firebase...');
-      
+
       // Initialize Firebase
       await Firebase.initializeApp();
-      
+
       // Get instances
       _auth = FirebaseAuth.instance;
       _firestore = FirebaseFirestore.instance;
-      
+
       // Configure Firestore settings for optimal performance
       _firestore!.settings = const Settings(
         persistenceEnabled: true,
         cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
       );
-      
+
       _initialized = true;
-      
+
       debugPrint('✅ Firebase initialized successfully');
       debugPrint('   Auth: ${_auth != null}');
       debugPrint('   Firestore: ${_firestore != null}');
       debugPrint('   User: ${currentUser?.email ?? "Not signed in"}');
-      
-    } catch (e, stackTrace) {
+    } catch (e) {
       debugPrint('❌ Firebase initialization failed: $e');
       debugPrint('⚠️ App will continue without Firebase');
-      
+
       // Don't throw - allow app to continue without Firebase
       _initialized = false;
       _auth = null;
@@ -158,18 +157,12 @@ class FirebaseService {
 
   /// Get user cycles collection reference
   CollectionReference getUserCyclesCollection(String userId) {
-    return firestore
-        .collection('users')
-        .doc(userId)
-        .collection('cycles');
+    return firestore.collection('users').doc(userId).collection('cycles');
   }
 
   /// Get user tracking data collection reference
   CollectionReference getUserTrackingCollection(String userId) {
-    return firestore
-        .collection('users')
-        .doc(userId)
-        .collection('tracking');
+    return firestore.collection('users').doc(userId).collection('tracking');
   }
 
   /// Save user data to Firestore
@@ -181,13 +174,10 @@ class FirebaseService {
 
     try {
       debugPrint('💾 Saving user data for: ${currentUser!.uid}');
-      await getUserDocument(currentUser!.uid).set(
-        {
-          ...data,
-          'lastUpdated': FieldValue.serverTimestamp(),
-        },
-        SetOptions(merge: true),
-      );
+      await getUserDocument(currentUser!.uid).set({
+        ...data,
+        'lastUpdated': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
       debugPrint('✅ User data saved successfully');
       return true;
     } catch (e) {
@@ -206,7 +196,7 @@ class FirebaseService {
     try {
       debugPrint('📖 Loading user data for: ${currentUser!.uid}');
       final doc = await getUserDocument(currentUser!.uid).get();
-      
+
       if (doc.exists) {
         debugPrint('✅ User data loaded successfully');
         return doc.data() as Map<String, dynamic>?;
@@ -228,17 +218,15 @@ class FirebaseService {
     }
 
     try {
-      final cycleId = cycleData['id'] ?? DateTime.now().millisecondsSinceEpoch.toString();
+      final cycleId =
+          cycleData['id'] ?? DateTime.now().millisecondsSinceEpoch.toString();
       debugPrint('🔄 Syncing cycle data: $cycleId');
-      
-      await getUserCyclesCollection(currentUser!.uid).doc(cycleId).set(
-        {
-          ...cycleData,
-          'syncedAt': FieldValue.serverTimestamp(),
-        },
-        SetOptions(merge: true),
-      );
-      
+
+      await getUserCyclesCollection(currentUser!.uid).doc(cycleId).set({
+        ...cycleData,
+        'syncedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+
       debugPrint('✅ Cycle data synced successfully');
       return true;
     } catch (e) {
@@ -260,16 +248,13 @@ class FirebaseService {
     try {
       final dateKey = date.toIso8601String().split('T')[0];
       debugPrint('🔄 Syncing tracking data for: $dateKey');
-      
-      await getUserTrackingCollection(currentUser!.uid).doc(dateKey).set(
-        {
-          ...trackingData,
-          'date': Timestamp.fromDate(date),
-          'syncedAt': FieldValue.serverTimestamp(),
-        },
-        SetOptions(merge: true),
-      );
-      
+
+      await getUserTrackingCollection(currentUser!.uid).doc(dateKey).set({
+        ...trackingData,
+        'date': Timestamp.fromDate(date),
+        'syncedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+
       debugPrint('✅ Tracking data synced successfully');
       return true;
     } catch (e) {
@@ -291,9 +276,9 @@ class FirebaseService {
     if (!isSignedIn) {
       throw Exception('Cannot watch cycles: Not signed in');
     }
-    return getUserCyclesCollection(currentUser!.uid)
-        .orderBy('startDate', descending: true)
-        .snapshots();
+    return getUserCyclesCollection(
+      currentUser!.uid,
+    ).orderBy('startDate', descending: true).snapshots();
   }
 
   /// Delete user account and all data
@@ -306,13 +291,13 @@ class FirebaseService {
     try {
       final userId = currentUser!.uid;
       debugPrint('🗑️ Deleting account: $userId');
-      
+
       // Delete user data from Firestore
       await getUserDocument(userId).delete();
-      
+
       // Delete user account from Firebase Auth
       await currentUser!.delete();
-      
+
       debugPrint('✅ Account deleted successfully');
       return true;
     } catch (e) {
