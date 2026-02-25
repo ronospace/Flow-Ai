@@ -13,7 +13,6 @@ class HelpScreen extends StatefulWidget {
 }
 
 class _HelpScreenState extends State<HelpScreen> {
-  int _expandedIndex = -1;
 
   final List<HelpItem> _helpItems = [
     HelpItem(
@@ -176,7 +175,6 @@ class _HelpScreenState extends State<HelpScreen> {
             // FAQ Items
             ...List.generate(_helpItems.length, (index) {
               final item = _helpItems[index];
-              final isExpanded = _expandedIndex == index;
               
               return Container(
                 margin: const EdgeInsets.only(bottom: 12),
@@ -228,7 +226,6 @@ class _HelpScreenState extends State<HelpScreen> {
                   onExpansionChanged: (expanded) {
                     HapticFeedback.lightImpact();
                     setState(() {
-                      _expandedIndex = expanded ? index : -1;
                     });
                   },
                 ),

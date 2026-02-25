@@ -35,7 +35,7 @@ class PremiumService {
   }
 
   /// Check if user has active premium subscription
-  bool get hasPremium => _currentSubscription?.isActive ?? false;
+  bool get hasPremium => _currentSubscription?.isActive == true;
 
   /// Get current subscription
   Subscription? get currentSubscription => _currentSubscription;
@@ -156,9 +156,9 @@ class PremiumService {
       'subscription_tier': subscription.tier.name,
       'days_active': daysSinceStart,
       'features_used': await _getUsedFeaturesCount(),
-      'reports_generated': _preferences.getInt('reports_generated') ?? 0,
-      'providers_connected': _preferences.getInt('providers_connected') ?? 0,
-      'data_exports': _preferences.getInt('data_exports') ?? 0,
+      'reports_generated': _preferences.getInt('reports_generated'),
+      'providers_connected': _preferences.getInt('providers_connected'),
+      'data_exports': _preferences.getInt('data_exports'),
     };
   }
 
@@ -361,7 +361,7 @@ class PremiumService {
   Future<int> _getUsedFeaturesCount() async {
     int count = 0;
     for (final feature in _availableFeatures) {
-      final used = _preferences.getBool('feature_${feature.type.name}_used') ?? false;
+      final used = _preferences.getBool('feature_${feature.type.name}_used');
       if (used) count++;
     }
     return count;

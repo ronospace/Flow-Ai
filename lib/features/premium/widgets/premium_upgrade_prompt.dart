@@ -229,7 +229,6 @@ class FreeInsightsLimitBanner extends StatelessWidget {
         }
 
         final remaining = subscriptionProvider.remainingFreeInsights;
-        final used = subscriptionProvider.aiInsightsUsed;
         final limit = subscriptionProvider.aiInsightsLimit;
 
         if (!subscriptionProvider.shouldShowUpgradePrompt()) {
