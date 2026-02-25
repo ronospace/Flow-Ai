@@ -6,8 +6,7 @@ import '../widgets/cycle_history_import_widget.dart';
 import '../widgets/goal_selection_widget.dart';
 import '../widgets/privacy_preferences_widget.dart';
 import '../widgets/onboarding_progress_widget.dart';
-import '../../../core/ui/adaptive_components.dart';
-import '../../../core/theme/app_theme.dart';
+import '../models/onboarding_data.dart';
 
 /// 🎯 Interactive Onboarding Screen - Week 2 Implementation
 /// Features: Personality-based setup, cycle history import wizard, 
@@ -149,6 +148,8 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
         return _buildWelcomeStep(context, controller);
       case OnboardingStep.personalInfo:
         return _buildPersonalityQuizStep(context, controller);
+      case OnboardingStep.healthBasics:
+        return _buildLifestyleStep(context, controller);
       case OnboardingStep.cycleHistory:
         return _buildCycleHistoryStep(context, controller);
       case OnboardingStep.lifestyle:
@@ -289,9 +290,9 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
   Widget _buildGoalsStep(BuildContext context, EnhancedOnboardingController controller) {
     return GoalSelectionWidget(
       onGoalsChanged: (goals) {
-        controller.updateData(controller.data.copyWith(healthGoals: goals));
+        controller.updateData(controller.data.copyWith(healthGoals: HealthGoals(customGoals: (goals as List).map((e) => e.toString()).toList())));
       },
-      initialGoals: controller.data.healthGoals,
+      initialGoals: controller.data.healthGoals?.customGoals ?? <String>[],
     );
   }
 
@@ -662,6 +663,8 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
         return true;
       case OnboardingStep.personalInfo:
         return controller.data.fullName?.isNotEmpty == true;
+      case OnboardingStep.healthBasics:
+        return true;
       case OnboardingStep.cycleHistory:
         return true; // Optional step
       case OnboardingStep.lifestyle:
@@ -700,22 +703,26 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
   }
 
   Future<void> _completeOnboarding(BuildContext context, EnhancedOnboardingController controller) async {
+    final navigator = Navigator.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    final errorColor = Theme.of(context).colorScheme.error;
+
     try {
       await controller.completeOnboarding();
-      
-      if (mounted) {
-        // Navigate to main app
-        Navigator.of(context).pushReplacementNamed('/home');
-      }
+
+      if (!mounted) return;
+
+      // Navigate to main app
+      navigator.pushReplacementNamed('/home');
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to complete onboarding: ${e.toString()}'),
-            backgroundColor: Theme.of(context).colorScheme.error,
-          ),
-        );
-      }
+      if (!mounted) return;
+
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text('Failed to complete onboarding: ${e.toString()}'),
+          backgroundColor: errorColor,
+        ),
+      );
     }
   }
 
@@ -743,6 +750,39 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
             child: const Text('Skip'),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class AdaptiveButton extends StatelessWidget {
+  final String text;
+  final VoidCallback? onPressed;
+  final bool isPrimary;
+  final bool isLoading;
+
+  const AdaptiveButton({
+    super.key,
+    required this.text,
+    required this.onPressed,
+    this.isPrimary = false,
+    this.isLoading = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return SizedBox(
+      width: double.infinity,
+      height: 52,
+      child: FilledButton(
+        onPressed: isLoading ? null : onPressed,
+        style: FilledButton.styleFrom(
+          backgroundColor: isPrimary ? theme.colorScheme.primary : theme.colorScheme.secondary,
+        ),
+        child: isLoading
+            ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+            : Text(text),
       ),
     );
   }

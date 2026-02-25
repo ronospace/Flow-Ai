@@ -21,6 +21,7 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace = "com.flowai.health"
     compileSdk = flutter.compileSdkVersion
+    ndkVersion = "28.2.13676358"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -34,24 +35,14 @@ android {
 
     defaultConfig {
         applicationId = "com.flowai.health"
-        minSdk = 26  // Required for health plugin (Android 8.0+)
-        targetSdk = flutter.targetSdkVersion  // Updated target SDK for latest Play Store requirements
+        minSdk = 26
+        targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
-        
-        // Add multiDex support for large apps
+
         multiDexEnabled = true
-        
-        // Vector drawables support
         vectorDrawables.useSupportLibrary = true
-        
-        // Add test instrumentation runner
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        
-        // Support 16 KB memory page sizes for Android 15+ (required by Google Play)
-        // This ensures compatibility with devices using 16 KB page sizes
-        // NDK filters removed for maximum device compatibility
-        // Google Play will automatically optimize per-device
     }
 
     signingConfigs {
@@ -67,31 +58,29 @@ android {
 
     buildTypes {
         release {
-            // Enable R8 optimization for production
             isMinifyEnabled = true
             isShrinkResources = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            
-            // Production signing with proper keystore
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+
             signingConfig = if (keystorePropertiesFile.exists()) {
                 signingConfigs.getByName("release")
             } else {
                 signingConfigs.getByName("debug")
             }
-            
-            // Optimize for production
+
             isDebuggable = false
             isJniDebuggable = false
             isRenderscriptDebuggable = false
             isPseudoLocalesEnabled = false
         }
+
         debug {
-            // Keep debug builds fast
             isMinifyEnabled = false
             isShrinkResources = false
             isDebuggable = true
-            // Temporarily removed debug suffix to match Firebase config
-            // applicationIdSuffix = ".debug"
         }
     }
 }
@@ -100,14 +89,13 @@ flutter {
     source = "../.."
 }
 
-// Exclude duplicate Play Core Common classes from all configurations to avoid R8 duplicate class errors
+// Exclude duplicate Play Core Common classes
 configurations.configureEach {
     exclude(group = "com.google.android.play", module = "core-common")
 }
 
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.2")
-    // Updated Play Core libraries compatible with Android 14 (API 34)
     implementation("com.google.android.play:app-update:2.1.0")
     implementation("com.google.android.play:review:2.0.1")
     implementation("androidx.multidex:multidex:2.0.1")

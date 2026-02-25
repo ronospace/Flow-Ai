@@ -303,9 +303,9 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
 
     try {
       HapticFeedback.mediumImpact();
-      
+      _showComingSoonDialog(context);      
       // Show coming soon message instead of actual functionality
-      _showComingSoonDialog(context);
+      _connectToCycleSync(context, settings);
     } finally {
       if (mounted) {
         setState(() {

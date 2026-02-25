@@ -681,3 +681,22 @@ extension ListExtension<T> on List<T> {
     return sublist(length - count);
   }
 }
+
+extension BiometricInsightTypeEmoji on BiometricInsightType {
+  String get emoji {
+    switch (this) {
+      case BiometricInsightType.recovery:
+        return '🧘';
+      case BiometricInsightType.sleepQuality:
+        return '😴';
+      case BiometricInsightType.stressLevel:
+        return '😮‍💨';
+      case BiometricInsightType.cycleCorrelation:
+        return '🌙';
+      case BiometricInsightType.trend:
+        return '📈';
+      default:
+        return '✨';
+    }
+  }
+}

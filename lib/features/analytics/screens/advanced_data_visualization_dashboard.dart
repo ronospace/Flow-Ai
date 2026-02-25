@@ -850,20 +850,20 @@ class _AdvancedDataVisualizationDashboardState
               subtitle: const Text('Display AI-powered predictions', style: TextStyle(color: Colors.white70)),
               value: _showPredictions,
               onChanged: (value) => setState(() => _showPredictions = value),
-              thumbColor: WidgetStateProperty.resolveWith((states) => 
-                states.contains(WidgetState.selected) ? AppTheme.primaryColor : null),
-              trackColor: WidgetStateProperty.resolveWith((states) => 
-                states.contains(WidgetState.selected) ? AppTheme.primaryColor.withValues(alpha: 0.5) : null),
+              thumbColor: MaterialStateProperty.resolveWith((states) => 
+                states.contains(MaterialState.selected) ? AppTheme.primaryColor : null),
+              trackColor: MaterialStateProperty.resolveWith((states) => 
+                states.contains(MaterialState.selected) ? AppTheme.primaryColor.withValues(alpha: 0.5) : null),
             ),
             SwitchListTile(
               title: const Text('Show Correlations', style: TextStyle(color: Colors.white)),
               subtitle: const Text('Display metric correlations', style: TextStyle(color: Colors.white70)),
               value: _showCorrelations,
               onChanged: (value) => setState(() => _showCorrelations = value),
-              thumbColor: WidgetStateProperty.resolveWith((states) => 
-                states.contains(WidgetState.selected) ? AppTheme.primaryColor : null),
-              trackColor: WidgetStateProperty.resolveWith((states) => 
-                states.contains(WidgetState.selected) ? AppTheme.primaryColor.withValues(alpha: 0.5) : null),
+              thumbColor: MaterialStateProperty.resolveWith((states) => 
+                states.contains(MaterialState.selected) ? AppTheme.primaryColor : null),
+              trackColor: MaterialStateProperty.resolveWith((states) => 
+                states.contains(MaterialState.selected) ? AppTheme.primaryColor.withValues(alpha: 0.5) : null),
             ),
           ],
         ),
@@ -893,10 +893,8 @@ class _AdvancedDataVisualizationDashboardState
                 });
                 Navigator.pop(context);
               },
-              checkColor: WidgetStateProperty.resolveWith((states) => 
-                states.contains(WidgetState.selected) ? Colors.white : null),
-              fillColor: WidgetStateProperty.resolveWith((states) => 
-                states.contains(WidgetState.selected) ? AppTheme.primaryColor : null),
+              checkColor: Colors.white,
+              fillColor: AppTheme.primaryColor,
             );
           }).toList(),
         ),

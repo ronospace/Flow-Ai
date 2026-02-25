@@ -721,7 +721,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
-                  Icons.crystal_ball,
+                  Icons.auto_awesome,
                   color: AppTheme.accentMint,
                   size: 20,
                 ),

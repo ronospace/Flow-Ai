@@ -8,29 +8,29 @@ import '../services/feelings_analytics_service.dart';
 /// Enhanced daily feelings tracker with advanced analytics and insights
 class EnhancedDailyFeelingsTracker extends StatefulWidget {
   final DateTime? selectedDate;
-  
-  const EnhancedDailyFeelingsTracker({
-    super.key,
-    this.selectedDate,
-  });
+
+  const EnhancedDailyFeelingsTracker({super.key, this.selectedDate});
 
   @override
-  State<EnhancedDailyFeelingsTracker> createState() => _EnhancedDailyFeelingsTrackerState();
+  State<EnhancedDailyFeelingsTracker> createState() =>
+      _EnhancedDailyFeelingsTrackerState();
 }
 
-class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTracker>
+class _EnhancedDailyFeelingsTrackerState
+    extends State<EnhancedDailyFeelingsTracker>
     with TickerProviderStateMixin {
-  
-  final FeelingsDatabaseService _databaseService = FeelingsDatabaseService.instance;
-  final FeelingsAnalyticsService _analyticsService = FeelingsAnalyticsService.instance;
-  
+  final FeelingsDatabaseService _databaseService =
+      FeelingsDatabaseService.instance;
+  final FeelingsAnalyticsService _analyticsService =
+      FeelingsAnalyticsService.instance;
+
   late AnimationController _animationController;
   late AnimationController _saveController;
   late TabController _tabController;
-  
+
   DateTime _selectedDate = DateTime.now();
   DailyFeelingsEntry? _currentEntry;
-  
+
   // Tracking state
   Map<MoodCategory, double> _moodScores = {};
   Map<EnergyType, double> _energyLevels = {};
@@ -38,31 +38,30 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
   Map<String, String> _customTags = {};
   String _notes = '';
   double _overallWellbeing = 5.0;
-  
+
   // UI state
   bool _isLoading = true;
   bool _isSaving = false;
   bool _hasUnsavedChanges = false;
-  final String _selectedFeelingsCategory = 'mood';
-  
+
   @override
   void initState() {
     super.initState();
-    
+
     _selectedDate = widget.selectedDate ?? DateTime.now();
-    
+
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
     );
-    
+
     _saveController = AnimationController(
       duration: const Duration(milliseconds: 600),
       vsync: this,
     );
-    
+
     _tabController = TabController(length: 4, vsync: this);
-    
+
     _initializeTracker();
   }
 
@@ -77,7 +76,7 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
   /// Initialize the feelings tracker
   Future<void> _initializeTracker() async {
     setState(() => _isLoading = true);
-    
+
     try {
       await _databaseService.initialize();
       await _loadExistingEntry();
@@ -92,7 +91,7 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
   /// Load existing entry for selected date
   Future<void> _loadExistingEntry() async {
     final entry = await _databaseService.getEntryForDate(_selectedDate);
-    
+
     if (entry != null) {
       setState(() {
         _currentEntry = entry;
@@ -111,12 +110,8 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
   /// Initialize empty entry with default values
   void _initializeEmptyEntry() {
     setState(() {
-      _moodScores = {
-        for (var category in MoodCategory.values) category: 5.0
-      };
-      _energyLevels = {
-        for (var type in EnergyType.values) type: 5.0
-      };
+      _moodScores = {for (var category in MoodCategory.values) category: 5.0};
+      _energyLevels = {for (var type in EnergyType.values) type: 5.0};
       _symptoms = {};
       _customTags = {};
       _notes = '';
@@ -127,13 +122,15 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
   /// Save current entry
   Future<void> _saveEntry() async {
     if (_isSaving) return;
-    
+
     setState(() => _isSaving = true);
     _saveController.forward();
-    
+
     try {
       final entry = DailyFeelingsEntry(
-        id: _currentEntry?.id ?? DateTime.now().millisecondsSinceEpoch.toString(),
+        id:
+            _currentEntry?.id ??
+            DateTime.now().millisecondsSinceEpoch.toString(),
         date: _selectedDate,
         moodScores: Map.from(_moodScores),
         energyLevels: Map.from(_energyLevels),
@@ -143,17 +140,17 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
         overallWellbeing: _overallWellbeing,
         timestamp: DateTime.now(),
       );
-      
+
       await _databaseService.saveEntry(entry);
-      
+
       // Trigger analytics processing
       await _analyticsService.processNewEntry(entry);
-      
+
       setState(() {
         _currentEntry = entry;
         _hasUnsavedChanges = false;
       });
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -163,7 +160,6 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
           ),
         );
       }
-      
     } catch (e) {
       debugPrint('Failed to save entry: $e');
       if (mounted) {
@@ -184,44 +180,42 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
           // Enhanced App Bar
           _buildAppBar(context, theme),
-          
+
           if (_isLoading)
-            SliverFillRemaining(
-              child: _buildLoadingState(),
-            )
+            SliverFillRemaining(child: _buildLoadingState())
           else ...[
             // Date Selector
             _buildDateSelector(theme),
-            
+
             // Overall Wellbeing
             _buildOverallWellbeingSection(theme),
-            
+
             // Feelings Categories Tabs
             _buildCategoriesTabs(theme),
-            
+
             // Feelings Content
             _buildFeelingsContent(theme),
-            
+
             // Quick Insights
             _buildQuickInsights(theme),
-            
+
             // Notes Section
             _buildNotesSection(theme),
-            
+
             // Historical Trends
             _buildHistoricalTrends(theme),
-            
+
             const SliverPadding(padding: EdgeInsets.only(bottom: 100)),
           ],
         ],
       ),
-      
+
       // Floating save button
       floatingActionButton: _buildSaveButton(),
     );
@@ -275,12 +269,16 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Daily Feelings',
-                              style: theme.textTheme.headlineSmall?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ).animate().fadeIn(delay: 400.ms).slideX(begin: 0.3),
+                                  'Daily Feelings',
+                                  style: theme.textTheme.headlineSmall
+                                      ?.copyWith(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                )
+                                .animate()
+                                .fadeIn(delay: 400.ms)
+                                .slideX(begin: 0.3),
                             Text(
                               'Track your emotional wellbeing',
                               style: theme.textTheme.bodyMedium?.copyWith(
@@ -314,10 +312,7 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
           SizedBox(height: 24),
           Text(
             'Loading your feelings data...',
-            style: TextStyle(
-              color: AppTheme.mediumGrey,
-              fontSize: 16,
-            ),
+            style: TextStyle(color: AppTheme.mediumGrey, fontSize: 16),
           ),
         ],
       ),
@@ -374,10 +369,7 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
               ),
               IconButton(
                 onPressed: () => _selectDate(context),
-                icon: Icon(
-                  Icons.edit_calendar,
-                  color: AppTheme.primaryPurple,
-                ),
+                icon: Icon(Icons.edit_calendar, color: AppTheme.primaryPurple),
               ),
             ],
           ),
@@ -402,7 +394,9 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
             ),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: _getWellbeingColor(_overallWellbeing).withValues(alpha: 0.1),
+              color: _getWellbeingColor(
+                _overallWellbeing,
+              ).withValues(alpha: 0.1),
             ),
           ),
           child: Column(
@@ -439,11 +433,17 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
               SliderTheme(
                 data: SliderTheme.of(context).copyWith(
                   activeTrackColor: _getWellbeingColor(_overallWellbeing),
-                  inactiveTrackColor: _getWellbeingColor(_overallWellbeing).withValues(alpha: 0.1),
+                  inactiveTrackColor: _getWellbeingColor(
+                    _overallWellbeing,
+                  ).withValues(alpha: 0.1),
                   thumbColor: _getWellbeingColor(_overallWellbeing),
-                  overlayColor: _getWellbeingColor(_overallWellbeing).withValues(alpha: 0.1),
+                  overlayColor: _getWellbeingColor(
+                    _overallWellbeing,
+                  ).withValues(alpha: 0.1),
                   trackHeight: 6,
-                  thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 12),
+                  thumbShape: const RoundSliderThumbShape(
+                    enabledThumbRadius: 12,
+                  ),
                 ),
                 child: Slider(
                   value: _overallWellbeing,
@@ -464,10 +464,7 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
                 children: [
                   const Text(
                     'Poor',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: AppTheme.mediumGrey,
-                    ),
+                    style: TextStyle(fontSize: 12, color: AppTheme.mediumGrey),
                   ),
                   Text(
                     _getWellbeingDescription(_overallWellbeing),
@@ -479,10 +476,7 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
                   ),
                   const Text(
                     'Excellent',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: AppTheme.mediumGrey,
-                    ),
+                    style: TextStyle(fontSize: 12, color: AppTheme.mediumGrey),
                   ),
                 ],
               ),
@@ -556,10 +550,12 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         children: [
-          ...MoodCategory.values.map((category) => Padding(
-            padding: const EdgeInsets.only(bottom: 16),
-            child: _buildMoodSlider(category),
-          )),
+          ...MoodCategory.values.map(
+            (category) => Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: _buildMoodSlider(category),
+            ),
+          ),
         ],
       ),
     );
@@ -569,15 +565,13 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
   Widget _buildMoodSlider(MoodCategory category) {
     final value = _moodScores[category] ?? 5.0;
     final color = _getMoodCategoryColor(category);
-    
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: color.withValues(alpha: 0.1),
-        ),
+        border: Border.all(color: color.withValues(alpha: 0.1)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.1),
@@ -591,11 +585,7 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
         children: [
           Row(
             children: [
-              Icon(
-                _getMoodCategoryIcon(category),
-                color: color,
-                size: 20,
-              ),
+              Icon(_getMoodCategoryIcon(category), color: color, size: 20),
               const SizedBox(width: 12),
               Text(
                 category.displayName,
@@ -650,10 +640,12 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         children: [
-          ...EnergyType.values.map((type) => Padding(
-            padding: const EdgeInsets.only(bottom: 16),
-            child: _buildEnergySlider(type),
-          )),
+          ...EnergyType.values.map(
+            (type) => Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: _buildEnergySlider(type),
+            ),
+          ),
         ],
       ),
     );
@@ -663,15 +655,13 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
   Widget _buildEnergySlider(EnergyType type) {
     final value = _energyLevels[type] ?? 5.0;
     final color = _getEnergyTypeColor(type);
-    
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: color.withValues(alpha: 0.1),
-        ),
+        border: Border.all(color: color.withValues(alpha: 0.1)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.1),
@@ -685,11 +675,7 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
         children: [
           Row(
             children: [
-              Icon(
-                _getEnergyTypeIcon(type),
-                color: color,
-                size: 20,
-              ),
+              Icon(_getEnergyTypeIcon(type), color: color, size: 20),
               const SizedBox(width: 12),
               Text(
                 type.displayName,
@@ -757,20 +743,20 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
                 final symptom = _commonSymptoms[index];
                 final isSelected = _symptoms.containsKey(symptom);
                 final intensity = _symptoms[symptom] ?? 0;
-                
+
                 return GestureDetector(
                   onTap: () => _toggleSymptom(symptom),
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: isSelected 
+                      color: isSelected
                           ? AppTheme.primaryRose.withValues(alpha: 0.1)
                           : Colors.white,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: isSelected 
-                            ? AppTheme.primaryRose 
+                        color: isSelected
+                            ? AppTheme.primaryRose
                             : AppTheme.mediumGrey.withValues(alpha: 0.1),
                         width: isSelected ? 2 : 1,
                       ),
@@ -782,11 +768,11 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
                           symptom,
                           style: TextStyle(
                             fontSize: 14,
-                            fontWeight: isSelected 
-                                ? FontWeight.w600 
+                            fontWeight: isSelected
+                                ? FontWeight.w600
                                 : FontWeight.normal,
-                            color: isSelected 
-                                ? AppTheme.primaryRose 
+                            color: isSelected
+                                ? AppTheme.primaryRose
                                 : AppTheme.darkGrey,
                           ),
                           textAlign: TextAlign.center,
@@ -795,17 +781,24 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
                           const SizedBox(height: 4),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: List.generate(3, (i) => Container(
-                              width: 6,
-                              height: 6,
-                              margin: const EdgeInsets.symmetric(horizontal: 1),
-                              decoration: BoxDecoration(
-                                color: i < intensity 
-                                    ? AppTheme.primaryRose 
-                                    : AppTheme.mediumGrey.withValues(alpha: 0.1),
-                                shape: BoxShape.circle,
+                            children: List.generate(
+                              3,
+                              (i) => Container(
+                                width: 6,
+                                height: 6,
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 1,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: i < intensity
+                                      ? AppTheme.primaryRose
+                                      : AppTheme.mediumGrey.withValues(
+                                          alpha: 0.1,
+                                        ),
+                                  shape: BoxShape.circle,
+                                ),
                               ),
-                            )),
+                            ),
                           ),
                         ],
                       ],
@@ -840,25 +833,27 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
             spacing: 8,
             runSpacing: 8,
             children: [
-              ..._customTags.entries.map((entry) => Chip(
-                label: Text(entry.key),
-                backgroundColor: AppTheme.accentMint.withValues(alpha: 0.1),
-                labelStyle: const TextStyle(
-                  color: AppTheme.darkGrey,
-                  fontWeight: FontWeight.w500,
+              ..._customTags.entries.map(
+                (entry) => Chip(
+                  label: Text(entry.key),
+                  backgroundColor: AppTheme.accentMint.withValues(alpha: 0.1),
+                  labelStyle: const TextStyle(
+                    color: AppTheme.darkGrey,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  deleteIcon: const Icon(
+                    Icons.close,
+                    size: 16,
+                    color: AppTheme.mediumGrey,
+                  ),
+                  onDeleted: () {
+                    setState(() {
+                      _customTags.remove(entry.key);
+                      _hasUnsavedChanges = true;
+                    });
+                  },
                 ),
-                deleteIcon: const Icon(
-                  Icons.close,
-                  size: 16,
-                  color: AppTheme.mediumGrey,
-                ),
-                onDeleted: () {
-                  setState(() {
-                    _customTags.remove(entry.key);
-                    _hasUnsavedChanges = true;
-                  });
-                },
-              )),
+              ),
               ActionChip(
                 label: const Text('Add Tag'),
                 avatar: const Icon(
@@ -888,23 +883,27 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: _suggestedTags.map((tag) => ActionChip(
-              label: Text(tag),
-              backgroundColor: Colors.white,
-              labelStyle: const TextStyle(
-                color: AppTheme.mediumGrey,
-                fontSize: 12,
-              ),
-              side: BorderSide(
-                color: AppTheme.mediumGrey.withValues(alpha: 0.1),
-              ),
-              onPressed: () {
-                setState(() {
-                  _customTags[tag] = 'suggested';
-                  _hasUnsavedChanges = true;
-                });
-              },
-            )).toList(),
+            children: _suggestedTags
+                .map(
+                  (tag) => ActionChip(
+                    label: Text(tag),
+                    backgroundColor: Colors.white,
+                    labelStyle: const TextStyle(
+                      color: AppTheme.mediumGrey,
+                      fontSize: 12,
+                    ),
+                    side: BorderSide(
+                      color: AppTheme.mediumGrey.withValues(alpha: 0.1),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _customTags[tag] = 'suggested';
+                        _hasUnsavedChanges = true;
+                      });
+                    },
+                  ),
+                )
+                .toList(),
           ),
         ],
       ),
@@ -914,11 +913,11 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
   /// Build quick insights
   Widget _buildQuickInsights(ThemeData theme) {
     final insights = _generateQuickInsights();
-    
+
     if (insights.isEmpty) {
       return const SliverToBoxAdapter(child: SizedBox.shrink());
     }
-    
+
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -934,38 +933,40 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
               ),
             ),
             const SizedBox(height: 12),
-            ...insights.map((insight) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: AppTheme.accentMint.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
+            ...insights.map(
+              (insight) => Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
                     color: AppTheme.accentMint.withValues(alpha: 0.1),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.lightbulb_outline,
-                      color: AppTheme.accentMint,
-                      size: 16,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: AppTheme.accentMint.withValues(alpha: 0.1),
                     ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        insight,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: AppTheme.darkGrey,
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.lightbulb_outline,
+                        color: AppTheme.accentMint,
+                        size: 16,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          insight,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: AppTheme.darkGrey,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            )),
+            ),
           ],
         ),
       ).animate().fadeIn(delay: 1000.ms).slideY(begin: 0.2),
@@ -1016,7 +1017,8 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
                 controller: TextEditingController(text: _notes),
                 maxLines: 4,
                 decoration: InputDecoration(
-                  hintText: 'How are you feeling today? Any specific thoughts or events you\'d like to remember?',
+                  hintText:
+                      'How are you feeling today? Any specific thoughts or events you\'d like to remember?',
                   hintStyle: TextStyle(
                     color: AppTheme.mediumGrey.withValues(alpha: 0.1),
                     fontSize: 14,
@@ -1029,9 +1031,7 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: AppTheme.primaryPurple,
-                    ),
+                    borderSide: const BorderSide(color: AppTheme.primaryPurple),
                   ),
                   contentPadding: const EdgeInsets.all(12),
                 ),
@@ -1101,14 +1101,14 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
               ),
               const SizedBox(height: 12),
               FutureBuilder<List<TrendInsight>>(
-                future: _analyticsService.getRecentTrends(userId: 'current_user'),
+                future: _analyticsService.getRecentTrends(
+                  userId: 'current_user',
+                ),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
+                    return const Center(child: CircularProgressIndicator());
                   }
-                  
+
                   if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return const Text(
                       'Track your feelings for a few more days to see trends',
@@ -1118,30 +1118,35 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
                       ),
                     );
                   }
-                  
+
                   return Column(
-                    children: snapshot.data!.take(3).map((trend) => Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Row(
-                        children: [
-                          Icon(
-                            _getTrendIcon(trend.direction),
-                            color: _getTrendColor(trend.direction),
-                            size: 16,
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              trend.description,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: AppTheme.darkGrey,
-                              ),
+                    children: snapshot.data!
+                        .take(3)
+                        .map(
+                          (trend) => Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  _getTrendIcon(trend.direction),
+                                  color: _getTrendColor(trend.direction),
+                                  size: 16,
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    trend.description,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: AppTheme.darkGrey,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
-                    )).toList(),
+                        )
+                        .toList(),
                   );
                 },
               ),
@@ -1159,12 +1164,12 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
       duration: const Duration(milliseconds: 200),
       child: FloatingActionButton.extended(
         onPressed: _hasUnsavedChanges ? _saveEntry : null,
-        backgroundColor: _hasUnsavedChanges 
-            ? AppTheme.primaryPurple 
+        backgroundColor: _hasUnsavedChanges
+            ? AppTheme.primaryPurple
             : AppTheme.mediumGrey,
         icon: AnimatedSwitcher(
           duration: const Duration(milliseconds: 300),
-          child: _isSaving 
+          child: _isSaving
               ? const SizedBox(
                   width: 16,
                   height: 16,
@@ -1173,10 +1178,7 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
                     valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                   ),
                 )
-              : const Icon(
-                  Icons.save,
-                  color: Colors.white,
-                ),
+              : const Icon(Icons.save, color: Colors.white),
         ),
         label: Text(
           _isSaving ? 'Saving...' : 'Save',
@@ -1195,15 +1197,25 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final selectedDay = DateTime(date.year, date.month, date.day);
-    
+
     if (selectedDay == today) {
       return 'Today';
     } else if (selectedDay == today.subtract(const Duration(days: 1))) {
       return 'Yesterday';
     } else {
       final months = [
-        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
       ];
       return '${months[date.month - 1]} ${date.day}, ${date.year}';
     }
@@ -1212,7 +1224,7 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
   String _getDateRelativeString(DateTime date) {
     final now = DateTime.now();
     final difference = now.difference(date).inDays;
-    
+
     if (difference == 0) {
       return 'Track your feelings today';
     } else if (difference == 1) {
@@ -1305,32 +1317,38 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
 
   List<String> _generateQuickInsights() {
     final insights = <String>[];
-    
+
     // Analyze current mood patterns
-    final moodAverage = _moodScores.values.isEmpty 
-        ? 5.0 
+    final moodAverage = _moodScores.values.isEmpty
+        ? 5.0
         : _moodScores.values.reduce((a, b) => a + b) / _moodScores.length;
-    
+
     if (moodAverage >= 7) {
-      insights.add('Your mood is looking great today! Keep up the positive energy.');
+      insights.add(
+        'Your mood is looking great today! Keep up the positive energy.',
+      );
     } else if (moodAverage <= 4) {
       insights.add('Consider some self-care activities to boost your mood.');
     }
-    
+
     // Analyze energy patterns
-    final energyAverage = _energyLevels.values.isEmpty 
-        ? 5.0 
+    final energyAverage = _energyLevels.values.isEmpty
+        ? 5.0
         : _energyLevels.values.reduce((a, b) => a + b) / _energyLevels.length;
-    
+
     if (energyAverage <= 4) {
-      insights.add('Low energy detected. Make sure you\'re getting enough rest.');
+      insights.add(
+        'Low energy detected. Make sure you\'re getting enough rest.',
+      );
     }
-    
+
     // Analyze symptoms
     if (_symptoms.isNotEmpty) {
-      insights.add('You\'ve logged ${_symptoms.length} symptoms today. Consider tracking patterns over time.');
+      insights.add(
+        'You\'ve logged ${_symptoms.length} symptoms today. Consider tracking patterns over time.',
+      );
     }
-    
+
     return insights;
   }
 
@@ -1359,9 +1377,7 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
           title: const Text('Add Custom Tag'),
           content: TextField(
             onChanged: (value) => newTag = value,
-            decoration: const InputDecoration(
-              hintText: 'Enter tag name',
-            ),
+            decoration: const InputDecoration(hintText: 'Enter tag name'),
           ),
           actions: [
             TextButton(
@@ -1393,7 +1409,7 @@ class _EnhancedDailyFeelingsTrackerState extends State<EnhancedDailyFeelingsTrac
       firstDate: DateTime.now().subtract(const Duration(days: 365)),
       lastDate: DateTime.now(),
     );
-    
+
     if (picked != null && picked != _selectedDate) {
       setState(() {
         _selectedDate = picked;
@@ -1541,14 +1557,7 @@ class TrendInsight {
 
 // === ENUMS ===
 
-enum MoodCategory {
-  happiness,
-  anxiety,
-  sadness,
-  anger,
-  excitement,
-  calmness,
-}
+enum MoodCategory { happiness, anxiety, sadness, anger, excitement, calmness }
 
 extension MoodCategoryExtension on MoodCategory {
   String get displayName {
@@ -1569,12 +1578,7 @@ extension MoodCategoryExtension on MoodCategory {
   }
 }
 
-enum EnergyType {
-  physical,
-  mental,
-  emotional,
-  social,
-}
+enum EnergyType { physical, mental, emotional, social }
 
 extension EnergyTypeExtension on EnergyType {
   String get displayName {
@@ -1591,8 +1595,4 @@ extension EnergyTypeExtension on EnergyType {
   }
 }
 
-enum TrendDirection {
-  up,
-  down,
-  stable,
-}
+enum TrendDirection { up, down, stable }

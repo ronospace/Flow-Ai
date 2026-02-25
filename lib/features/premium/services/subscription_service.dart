@@ -109,11 +109,6 @@ class SubscriptionService {
   /// Convert product details to our model
   SubscriptionProduct _convertToSubscriptionProduct(ProductDetails product) {
     final isYearly = product.id == yearlyProductId;
-    final monthlyProduct = _products.firstWhere(
-      (p) => p.id == monthlyProductId,
-      orElse: () => product,
-    );
-
     return SubscriptionProduct(
       id: product.id,
       name: isYearly ? 'Flow Ai Premium (Yearly)' : 'Flow Ai Premium (Monthly)',
