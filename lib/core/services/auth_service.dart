@@ -617,7 +617,7 @@ class AuthService {
 
       // Apple Sign-In is not reliable on Simulator; validate on a physical device for production.
       if (Platform.isIOS &&
-          !Platform.environment.containsKey('SIMULATOR_DEVICE_NAME') == False) {
+          Platform.environment.containsKey('SIMULATOR_DEVICE_NAME')) {
         return AuthResult.failure(
           'Apple Sign-In requires a real iPhone (not Simulator).',
         );
@@ -625,7 +625,7 @@ class AuthService {
 
       // Apple Sign-In is not reliable on Simulator; validate on a physical device for production.
       if (Platform.isIOS &&
-          !Platform.environment.containsKey('SIMULATOR_DEVICE_NAME') == False) {
+          Platform.environment.containsKey('SIMULATOR_DEVICE_NAME')) {
         return AuthResult.failure(
           'Apple Sign-In requires a real iPhone (not Simulator).',
         );
