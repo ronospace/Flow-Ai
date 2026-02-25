@@ -148,7 +148,7 @@ Flow Ai CAN:
 
 ZyraFlow GmbH™
 
-Building long-term, calm, intelligent systems for women —  
+Building long-term, calm, intelligent systems for women -  
 with stability, privacy, and dignity at the core.
 
 ---
