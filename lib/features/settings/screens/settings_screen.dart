@@ -19,7 +19,6 @@ import '../models/user_preferences.dart';
 import '../widgets/settings_section.dart';
 import '../widgets/settings_tile.dart';
 import '../widgets/language_selector.dart';
-import '../widgets/theme_selector.dart';
 import '../widgets/profile_section.dart';
 import '../widgets/cyclesync_integration.dart';
 import '../widgets/theme_switcher_card.dart';
@@ -765,26 +764,6 @@ class _SettingsScreenState extends State<SettingsScreen>
     );
   }
 
-  String _getThemeName(AppThemeMode themeMode) {
-    final l10n = AppLocalizations.of(context);
-    switch (themeMode) {
-      case AppThemeMode.light:
-        return l10n.light;
-      case AppThemeMode.dark:
-        return l10n.dark;
-      case AppThemeMode.system:
-        return l10n.system;
-    }
-  }
-
-  void _showThemeSelector(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      builder: (context) => const ThemeSelector(),
-    );
-  }
 
   void _showLanguageSelector(BuildContext context) {
     showModalBottomSheet(
@@ -1480,10 +1459,14 @@ class _SettingsScreenState extends State<SettingsScreen>
   Future<void> _exportData(BuildContext context, ExportFormat format) async {
     // Show date range selector
     final dateRange = await _showDateRangeSelector(context);
-    if (dateRange == null) return;
+    if (dateRange == null || !context.mounted) return;
+    // Capture before async gap
+    final navigator = Navigator.of(context);
+    final messenger = ScaffoldMessenger.of(context);
 
     // Show loading
-    if (!mounted) return;
+    // Show loading
+    if (!context.mounted) return;
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -1503,7 +1486,6 @@ class _SettingsScreenState extends State<SettingsScreen>
         ),
       ),
     );
-
     try {
       final exportService = DataExportService();
       final filePath = await exportService.exportData(
@@ -1512,13 +1494,13 @@ class _SettingsScreenState extends State<SettingsScreen>
       );
 
       if (!mounted) return;
-      Navigator.pop(context); // Close loading
+      navigator.pop(); // Close loading
 
       if (filePath != null) {
         // Show success with share option
-        _showExportSuccess(context, filePath, format);
+        _showExportSuccessAfterExport(messenger, navigator, filePath, format);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
+        messenger.showSnackBar(
           const SnackBar(
             content: Text('Export failed. Please try again.'),
             backgroundColor: Colors.red,
@@ -1527,15 +1509,14 @@ class _SettingsScreenState extends State<SettingsScreen>
       }
     } catch (e) {
       if (!mounted) return;
-      Navigator.pop(context); // Close loading
-      ScaffoldMessenger.of(context).showSnackBar(
+      navigator.pop(); // Close loading
+      messenger.showSnackBar(
         SnackBar(
           content: Text('Export error: $e'),
           backgroundColor: Colors.red,
         ),
       );
-    }
-  }
+    }  }
 
   Future<ExportDateRange?> _showDateRangeSelector(BuildContext context) async {
     return await showDialog<ExportDateRange>(
@@ -1574,7 +1555,15 @@ class _SettingsScreenState extends State<SettingsScreen>
     );
   }
 
-  void _showExportSuccess(
+
+  void _showExportSuccessAfterExport(
+    ScaffoldMessengerState messenger,
+    NavigatorState navigator,
+    String filePath,
+    ExportFormat format,
+  ) {
+    _showExportSuccess(navigator.context, filePath, format);
+  }  void _showExportSuccess(
     BuildContext context,
     String filePath,
     ExportFormat format,
@@ -1671,6 +1660,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   Future<void> _startTutorial(BuildContext context, String tutorialId) async {
+    final messenger = ScaffoldMessenger.of(context);
     try {
       final onboardingProvider = Provider.of<OnboardingProvider>(
         context,
@@ -1678,23 +1668,23 @@ class _SettingsScreenState extends State<SettingsScreen>
       );
       await onboardingProvider.startTutorial(tutorialId);
 
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Tutorial "$tutorialId" will start shortly'),
-            backgroundColor: AppTheme.successGreen,
-          ),
-        );
-      }
+      if (!mounted) return;
+
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text('Tutorial "$tutorialId" will start shortly'),
+          backgroundColor: AppTheme.successGreen,
+        ),
+      );
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to start tutorial: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+      if (!mounted) return;
+
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text('Failed to start tutorial: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
@@ -1728,7 +1718,10 @@ class _SettingsScreenState extends State<SettingsScreen>
       ),
     );
 
-    if (confirm == true && mounted) {
+    if (confirm == true) {
+      if (!context.mounted) return;
+      // Capture before async gap
+      final messenger = ScaffoldMessenger.of(context);
       try {
         final onboardingProvider = Provider.of<OnboardingProvider>(
           context,
@@ -1736,26 +1729,24 @@ class _SettingsScreenState extends State<SettingsScreen>
         );
         await onboardingProvider.resetAllTutorials();
 
-        if (mounted) {
-          HapticFeedback.mediumImpact();
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('All tutorials have been reset'),
-              backgroundColor: AppTheme.successGreen,
-            ),
-          );
-        }
+        if (!mounted) return;
+        HapticFeedback.mediumImpact();
+        messenger.showSnackBar(
+          const SnackBar(
+            content: Text('All tutorials have been reset'),
+            backgroundColor: AppTheme.successGreen,
+          ),
+        );
       } catch (e) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Failed to reset tutorials: $e'),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
+        if (!mounted) return;
+        messenger.showSnackBar(
+          SnackBar(
+            content: Text('Failed to reset tutorials: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
-    }
+    }    }
   }
 
   void _showFeatureProgress(BuildContext context) {
@@ -1834,4 +1825,3 @@ class _SettingsScreenState extends State<SettingsScreen>
       ),
     );
   }
-}

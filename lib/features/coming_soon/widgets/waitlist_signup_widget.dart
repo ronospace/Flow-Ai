@@ -430,10 +430,14 @@ class _WaitlistSignupWidgetState extends State<WaitlistSignupWidget> {
     if (!_formKey.currentState!.validate()) return;
     
     setState(() => _isLoading = true);
+
+    final messenger = ScaffoldMessenger.of(context);
     
     try {
       // Simulate API call
       await Future.delayed(const Duration(seconds: 2));
+
+      if (!mounted) return;
       
       // Here you would typically send data to your backend
       final userData = {
@@ -451,9 +455,11 @@ class _WaitlistSignupWidgetState extends State<WaitlistSignupWidget> {
       });
       
     } catch (e) {
+      if (!mounted) return;
+
       setState(() => _isLoading = false);
       
-      ScaffoldMessenger.of(context).showSnackBar(
+      messenger.showSnackBar(
         SnackBar(
           content: Text('Error signing up: $e'),
           backgroundColor: AppTheme.warningOrange,

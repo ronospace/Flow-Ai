@@ -617,7 +617,6 @@ class AdvancedCache<T> {
   }
 
   void removeExpired() {
-    final now = DateTime.now();
     final keysToRemove = <String>[];
     
     for (final entry in _cache.entries) {
@@ -711,7 +710,6 @@ class AdvancedCache<T> {
   }
 
   void _optimizeAdaptive() {
-    final now = DateTime.now();
     final oneHourAgo = now.subtract(const Duration(hours: 1));
     
     // Remove entries not accessed in the last hour and with low access count

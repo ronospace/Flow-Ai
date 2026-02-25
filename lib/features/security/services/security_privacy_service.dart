@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
-import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,7 +29,6 @@ class SecurityPrivacyService {
   // Security constants
   static const String _masterKeyAlias = 'flowai_master_key';
   static const String _biometricEnabledKey = 'biometric_enabled';
-  static const String _encryptionEnabledKey = 'encryption_enabled';
   static const String _privacySettingsKey = 'privacy_settings';
   static const String _securityConfigKey = 'security_config';
   static const String _sessionTokenKey = 'session_token';
@@ -76,7 +74,6 @@ class SecurityPrivacyService {
       }
 
       // Initialize AES encrypter
-      final iv = IV.fromSecureRandom(16);
       _dataEncrypter = Encrypter(AES(_masterKey));
 
       debugPrint('🔐 Encryption system initialized');
@@ -793,6 +790,7 @@ enum BiometricErrorType {
 // === DATA MODELS ===
 
 class SecurityConfig {
+  static const String _encryptionEnabledJsonKey = 'encryption_enabled';
   final bool encryptionEnabled;
   final bool biometricRequired;
   final int sessionTimeoutMinutes;
@@ -825,7 +823,7 @@ class SecurityConfig {
 
   Map<String, dynamic> toJson() {
     return {
-      'encryption_enabled': encryptionEnabled,
+      _encryptionEnabledJsonKey: encryptionEnabled,
       'biometric_required': biometricRequired,
       'session_timeout_minutes': sessionTimeoutMinutes,
       'max_failed_attempts': maxFailedAttempts,
@@ -837,7 +835,7 @@ class SecurityConfig {
 
   factory SecurityConfig.fromJson(Map<String, dynamic> json) {
     return SecurityConfig(
-      encryptionEnabled: json['encryption_enabled'] ?? true,
+      encryptionEnabled: json[_encryptionEnabledJsonKey] ?? true,
       biometricRequired: json['biometric_required'] ?? false,
       sessionTimeoutMinutes: json['session_timeout_minutes'] ?? 15,
       maxFailedAttempts: json['max_failed_attempts'] ?? 5,

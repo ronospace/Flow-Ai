@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
-// Firebase temporarily disabled for iOS build
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:firebase_core/firebase_core.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:local_auth/local_auth.dart';
@@ -20,7 +20,7 @@ class AuthService {
   factory AuthService() => _instance;
   AuthService._internal();
 
-  // FirebaseAuth? _auth; // Firebase temporarily disabled for iOS build
+  FirebaseAuth? _auth;
   LocalAuthentication? _localAuth;
   GoogleSignIn? _googleSignIn;
   SharedPreferences? _prefs;

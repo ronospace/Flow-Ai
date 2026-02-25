@@ -1028,4 +1028,22 @@ class DatabaseService {
 
   // Add a static instance getter for singleton access
   static DatabaseService get instance => _instance;
+
+
+  // --- Compatibility wrappers for services ---
+
+  /// Returns all daily tracking rows as raw maps (service-level export/sync).
+  Future<List<Map<String, dynamic>>> getAllTrackingData() async {
+    final db = await database;
+    return db.query('daily_tracking', orderBy: 'date ASC');
+  }
+
+  /// Returns a daily tracking row for a specific date.
+  Future<Map<String, dynamic>?> getTrackingByDate({required DateTime date}) async {
+    final db = await database;
+    final key = DateTime(date.year, date.month, date.day).toIso8601String().split('T').first;
+    final rows = await db.query('daily_tracking', where: 'date = ?', whereArgs: [key], limit: 1);
+    return rows.isEmpty ? null : rows.first;
+  }
+
 }

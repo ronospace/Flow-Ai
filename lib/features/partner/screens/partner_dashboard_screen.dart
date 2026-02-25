@@ -176,7 +176,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
   Widget _buildPartnershipHeader(ThemeData theme, AppLocalizations localizations, PartnerService partnerService) {
     final partnership = partnerService.currentPartnership!;
     // Service Partnership doesn't have status field, so assume active if partnership exists
-    final isConnected = true; // partnership exists means it's active
+    final isConnected = partnerService.hasPartner && (partnership.partnerUserName?.isNotEmpty ?? false);
     
     return AnimatedBuilder(
       animation: _contentAnimation,
@@ -228,7 +228,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                             decoration: BoxDecoration(
-                              color: isConnected ? AppTheme.sweetPeach.withValues(alpha: 0.15) : AppTheme.warningOrange.withValues(alpha: 0.1),
+                              color: AppTheme.warningOrange.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Row(
@@ -238,15 +238,15 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                                   width: 8,
                                   height: 8,
                                   decoration: BoxDecoration(
-                                    color: isConnected ? AppTheme.sweetPeach : AppTheme.warningOrange,
+                                    color: AppTheme.warningOrange,
                                     shape: BoxShape.circle,
                                   ),
                                 ),
                                 const SizedBox(width: 6),
                                 Text(
-                                  isConnected ? 'Connected' : 'Reconnecting',
+                                  'Partner sync disabled',
                                   style: TextStyle(
-                                    color: isConnected ? AppTheme.sweetPeach : AppTheme.warningOrange,
+                                    color: AppTheme.warningOrange,
                                     fontSize: 12,
                                     fontWeight: FontWeight.w600,
                                   ),

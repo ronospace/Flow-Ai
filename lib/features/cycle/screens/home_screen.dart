@@ -2725,8 +2725,10 @@ extension _NavigationMethods on _HomeScreenState {
     _adMobService.showInterstitialAdWithFrequency();
 
     // Navigate to tracking screen with GoRouter
+    final router = GoRouter.of(context);
     Future.delayed(const Duration(milliseconds: 500), () {
-      context.go('/tracking');
+      if (!mounted) return;
+      router.go('/tracking');
     });
   }
 

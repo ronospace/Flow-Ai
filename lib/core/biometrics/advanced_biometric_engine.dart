@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 
+import 'dart:math';
 /// 🎯 Revolutionary Real-time Biometric Integration Engine
 /// Advanced data fusion with multiple wearable devices and sensors
 /// Ultra-precise health monitoring with AI-powered insights
@@ -798,3 +799,26 @@ class AnomalyResult {
     this.recommendation,
   });
 }
+
+extension BiometricSnapshotX on BiometricSnapshot {
+  /// Convenience: whether snapshot contains usable values for UI.
+  bool get hasData =>
+      fusedData['hrv'] != null || fusedData['temperature'] != null || fusedData['steps'] != null;
+
+  /// Convenience: demo/test snapshot.
+  static BiometricSnapshot mock({DateTime? timestamp, int? seed}) {
+    // keep seed for determinism if needed later
+    // ignore: unused_local_variable
+    final rnd = Random(seed ?? DateTime.now().millisecondsSinceEpoch);
+
+    return BiometricSnapshot(
+      timestamp: timestamp ?? DateTime.now(),
+      fusedData: const {},
+      insights: const {},
+      confidence: 0.0,
+      trends: const {},
+      anomalies: const [],
+    );
+  }
+}
+

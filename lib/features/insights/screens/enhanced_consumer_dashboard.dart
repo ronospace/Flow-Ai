@@ -4,9 +4,9 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../../../core/services/advanced_biometric_service.dart';
 import '../../../core/services/ai_engine.dart';
-import '../../../core/models/ai_insights.dart';
 import '../../../core/utils/app_logger.dart';
 
+import 'package:flow_ai/core/models/cycle_data.dart';
 /// Enhanced Consumer Intelligence Dashboard with real-time biometric integration
 class EnhancedConsumerDashboard extends StatefulWidget {
   const EnhancedConsumerDashboard({super.key});
@@ -22,7 +22,6 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
   
   BiometricSnapshot? _currentSnapshot;
   List<BiometricInsight> _insights = [];
-  List<AIInsight> _aiInsights = [];
   bool _isLoading = true;
   StreamSubscription? _dataSubscription;
   
@@ -87,15 +86,9 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
       // Load current biometric snapshot
       _currentSnapshot = await AdvancedBiometricService.instance.getCurrentBiometricSnapshot();
       
-      // If no real data, use mock data for demonstration
-      if (!_currentSnapshot!.hasData) {
-        _currentSnapshot = BiometricSnapshot.mock();
-      }
-      
-      // Generate AI insights based on current data
-      final cycles = <CycleData>[]; // This would come from your cycle data service
-      _aiInsights = await AIEngine.instance.generateInsights(cycles);
-      
+      // If no real data, use mock data for demonstration// Generate AI insights based on current data
+      final List<CycleData> cycles = <CycleData>[]; // This would come from your cycle data service
+      await AIEngine.instance.generateInsights(cycles);      
       // Load recent biometric insights
       _insights = await _generateMockInsights(); // This would come from the biometric service
       
@@ -120,7 +113,7 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
     try {
       final newSnapshot = await AdvancedBiometricService.instance.getCurrentBiometricSnapshot();
       
-      if (newSnapshot.hasData && mounted) {
+      if (mounted) {
         setState(() {
           _currentSnapshot = newSnapshot;
         });
@@ -343,7 +336,7 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
   }
 
   Widget _buildBiometricOverview() {
-    if (_currentSnapshot == null || !_currentSnapshot!.hasData) {
+    if (_currentSnapshot == null) {
       return Card(
         child: Padding(
           padding: const EdgeInsets.all(20),

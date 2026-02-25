@@ -111,7 +111,7 @@ class ChartSeries {
     return {
       'name': name,
       'data': data.map((d) => d.toJson()).toList(),
-      'color': color.value,
+      'color': color.toARGB32(),
       'style': style.toJson(),
     };
   }
@@ -154,9 +154,9 @@ class ChartSeriesStyle {
       'show_points': showPoints,
       'point_radius': pointRadius,
       'point_shape': pointShape.name,
-      'point_color': pointColor?.value,
+      'point_color': pointColor?.toARGB32(),
       'fill_opacity': fillOpacity,
-      'heatmap_color_scheme': heatmapColorScheme.map((c) => c.value).toList(),
+      'heatmap_color_scheme': heatmapColorScheme.map((c) => c.toARGB32()).toList(),
     };
   }
 
@@ -458,7 +458,7 @@ class AnnotationStyle {
 
   Map<String, dynamic> toJson() {
     return {
-      'color': color.value,
+      'color': color.toARGB32(),
       'stroke_width': strokeWidth,
       'stroke_dash_pattern': strokeDashPattern,
       'opacity': opacity,
@@ -467,7 +467,7 @@ class AnnotationStyle {
 
   factory AnnotationStyle.fromJson(Map<String, dynamic> json) {
     return AnnotationStyle(
-      color: Color(json['color'] ?? Colors.grey.value),
+      color: Color(json['color'] ?? Colors.grey.toARGB32()),
       strokeWidth: json['stroke_width'] ?? 1.0,
       strokeDashPattern: List<double>.from(json['stroke_dash_pattern'] ?? []),
       opacity: json['opacity'] ?? 1.0,
@@ -666,7 +666,7 @@ class VisualizationConfig {
       'title': title,
       'subtitle': subtitle,
       'chart_type': chartType.name,
-      'primary_color': primaryColor?.value,
+      'primary_color': primaryColor?.toARGB32(),
       'series_style': seriesStyle?.toJson(),
       'x_axis_config': xAxisConfig?.toJson(),
       'y_axis_config': yAxisConfig?.toJson(),

@@ -8,6 +8,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'generated/app_localizations.dart';
 // import 'core/services/firebase_service.dart'; // Temporarily disabled for iOS build
 import 'core/utils/app_logger.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'core/theme/app_theme.dart';
 import 'core/utils/image_cache_config.dart';
@@ -70,15 +71,12 @@ Future<void> _initializeCriticalServices() async {
     AppLogger.error('Platform Service initialization failed: $e');
   }
 
-  // Initialize Firebase service - skip on iOS for now due to Firebase Core compatibility issue
+  // Initialize Firebase
   try {
-    // TODO: Re-enable when Firebase Core 4.x is released with iOS compatibility
-    // await FirebaseService().initialize();
-    AppLogger.warning(
-      'Firebase temporarily disabled for iOS build compatibility',
-    );
+    await Firebase.initializeApp();
+    AppLogger.success('Firebase initialized');
   } catch (e) {
-    AppLogger.warning('Firebase initialization failed (app will continue): $e');
+    AppLogger.warning('Firebase initialization failed (app will continue): ');
   }
 
   ImageCacheConfig.configure();
@@ -443,3 +441,5 @@ class _FlowAIAppState extends State<FlowAIApp> {
     );
   }
 }
+// hot-reload-test Tue Feb 24 23:29:29 CET 2026
+// hot-reload-test Tue Feb 24 23:29:33 CET 2026

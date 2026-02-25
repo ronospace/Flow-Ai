@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/services/auth_service.dart';
-import '../../../generated/app_localizations.dart';
 import '../providers/settings_provider.dart';
 import '../widgets/settings_section.dart';
 import '../widgets/settings_tile.dart';
@@ -16,6 +15,12 @@ class AccountManagementScreen extends StatefulWidget {
 }
 
 class _AccountManagementScreenState extends State<AccountManagementScreen> {
+  void _snack(SnackBar bar) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(bar);
+  }
+
+
   final _displayNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -46,7 +51,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
 
   Future<void> _loadUserData() async {
     final settings = Provider.of<SettingsProvider>(context, listen: false);
-    _displayNameController.text = settings.preferences.displayName ?? '';
+    _displayNameController.text = settings.preferences.displayName;
     
     // Force a fresh sync first
     try {
@@ -88,7 +93,6 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
     
     return Scaffold(
       body: Container(
@@ -256,14 +260,14 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
               ] else ...[
                 Consumer<SettingsProvider>(
                   builder: (context, settings, child) {
+                    final theme = Theme.of(context);
                     return Text(
-                      settings.preferences.displayName ?? 'Not set',
+                      settings.preferences.displayName, 
                       style: theme.textTheme.bodyLarge?.copyWith(
                         color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
                       ),
                     );
-                  },
-                ),
+                  },                ),
               ],
             ],
           ),
@@ -329,7 +333,6 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
   }
 
   Widget _buildSecuritySection() {
-    final theme = Theme.of(context);
     
     return SettingsSection(
       title: 'Security & Privacy',
@@ -362,7 +365,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
           subtitle: 'Control your data privacy',
           onTap: () {
             // TODO: Navigate to privacy settings
-            ScaffoldMessenger.of(context).showSnackBar(
+            _snack(
               const SnackBar(
                 content: Text('Privacy settings coming soon!'),
                 backgroundColor: AppTheme.primaryPurple,
@@ -378,7 +381,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
           subtitle: 'Add extra security to your account',
           onTap: () {
             // TODO: Implement 2FA setup
-            ScaffoldMessenger.of(context).showSnackBar(
+            _snack(
               const SnackBar(
                 content: Text('2FA setup coming soon!'),
                 backgroundColor: AppTheme.successGreen,
@@ -435,7 +438,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
           subtitle: 'Save your data to cloud storage',
           onTap: () {
             // TODO: Implement data backup
-            ScaffoldMessenger.of(context).showSnackBar(
+            _snack(
               const SnackBar(
                 content: Text('Data backup coming soon!'),
                 backgroundColor: AppTheme.secondaryBlue,
@@ -475,7 +478,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
           subtitle: 'Manage linked social accounts',
           onTap: () {
             // TODO: Show connected accounts
-            ScaffoldMessenger.of(context).showSnackBar(
+            _snack(
               const SnackBar(
                 content: Text('Connected accounts coming soon!'),
                 backgroundColor: AppTheme.primaryPurple,
@@ -522,7 +525,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
         _isEditingProfile = false;
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(
+      _snack(
         const SnackBar(
           content: Row(
             children: [
@@ -535,7 +538,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
         ),
       );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      _snack(
         SnackBar(
           content: Text('Failed to update display name: $e'),
           backgroundColor: AppTheme.primaryRose,
@@ -637,7 +640,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
 
     // TODO: Implement actual password change
     Navigator.pop(context);
-    ScaffoldMessenger.of(context).showSnackBar(
+    _snack(
       const SnackBar(
         content: Text('Password change functionality coming soon!'),
         backgroundColor: AppTheme.warningOrange,
@@ -646,25 +649,21 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
   }
 
   Future<void> _exportUserData() async {
+
     setState(() => _isExporting = true);
 
     try {
-      // Simulate data export
       await Future.delayed(const Duration(seconds: 2));
-      
-      // Create sample CSV data
+
       const csvData = '''Date,Cycle Day,Flow Intensity,Symptoms,Mood,Energy
 2024-01-15,1,Heavy,Cramps;Headache,3,2
 2024-01-16,2,Medium,Fatigue,4,3
 2024-01-17,3,Light,None,5,4''';
 
-      // Share the data
-      await Share.share(
-        csvData,
-        subject: 'Flow Ai Data Export',
-      );
+      await Share.share(csvData, subject: 'Flow Ai Data Export');
 
-      ScaffoldMessenger.of(context).showSnackBar(
+      if (!mounted) return;
+      _snack(
         const SnackBar(
           content: Row(
             children: [
@@ -677,14 +676,15 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
         ),
       );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      if (!mounted) return;
+      _snack(
         SnackBar(
           content: Text('Export failed: $e'),
           backgroundColor: AppTheme.primaryRose,
         ),
       );
     } finally {
-      setState(() => _isExporting = false);
+      if (mounted) setState(() => _isExporting = false);
     }
   }
 
@@ -712,7 +712,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
             onPressed: () {
               Navigator.pop(context);
               // TODO: Implement cache clearing
-              ScaffoldMessenger.of(context).showSnackBar(
+              _snack(
                 const SnackBar(
                   content: Text('Cache cleared successfully'),
                   backgroundColor: AppTheme.successGreen,
@@ -751,7 +751,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
             onPressed: () {
               Navigator.pop(context);
               // TODO: Implement account deactivation
-              ScaffoldMessenger.of(context).showSnackBar(
+              _snack(
                 const SnackBar(
                   content: Text('Account deactivation coming soon!'),
                   backgroundColor: AppTheme.warningOrange,
@@ -821,8 +821,10 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
   }
 
   Future<void> _performDataDeletion() async {
+    final navigator = Navigator.of(context);
+    final settings = Provider.of<SettingsProvider>(context, listen: false);
+
     try {
-      // Show loading dialog
       showDialog(
         context: context,
         barrierDismissible: false,
@@ -837,27 +839,14 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
           ),
         ),
       );
-      
-      // Simulate data deletion process
+
       await Future.delayed(const Duration(seconds: 3));
-      
-      // TODO: Implement actual data deletion logic here
-      // This would include:
-      // - Clear all SharedPreferences data
-      // - Clear conversation memory
-      // - Reset user preferences
-      // - Clear any cached files
-      // - Reset AI chat history
-      
-      // For now, just reset settings to demonstrate
-      final settings = Provider.of<SettingsProvider>(context, listen: false);
       await settings.resetToDefaults();
-      
-      // Close loading dialog
-      Navigator.pop(context);
-      
-      // Show success message
-      ScaffoldMessenger.of(context).showSnackBar(
+
+      if (!mounted) return;
+      navigator.pop();
+
+      _snack(
         const SnackBar(
           content: Row(
             children: [
@@ -870,16 +859,13 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
           duration: Duration(seconds: 4),
         ),
       );
-      
-      // Refresh the screen
+
       setState(() {});
       _loadUserData();
-      
     } catch (e) {
-      // Close loading dialog
-      Navigator.pop(context);
-      
-      ScaffoldMessenger.of(context).showSnackBar(
+      if (!mounted) return;
+      navigator.pop();
+      _snack(
         SnackBar(
           content: Text('Failed to delete data: $e'),
           backgroundColor: AppTheme.primaryRose,
@@ -912,7 +898,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
             onPressed: () {
               Navigator.pop(context);
               // TODO: Implement account deletion
-              ScaffoldMessenger.of(context).showSnackBar(
+              _snack(
                 const SnackBar(
                   content: Text('Account deletion coming soon!'),
                   backgroundColor: AppTheme.primaryRose,

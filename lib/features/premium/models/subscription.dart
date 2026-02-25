@@ -110,6 +110,16 @@ class Subscription {
   /// Get renewal date (same as end date for active subscriptions)
   DateTime get renewalDate => endDate;
 
+  /// Number of renewals (stored in metadata if present)
+  int get renewalCount => (metadata['renewal_count'] as int?) ?? 0;
+
+  /// Days active since start date
+  int get daysActive {
+    final now = DateTime.now();
+    if (now.isBefore(startDate)) return 0;
+    return now.difference(startDate).inDays;
+  }
+
   /// Create copy with updated fields
   Subscription copyWith({
     String? id,

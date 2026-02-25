@@ -43,13 +43,14 @@ post_install do |installer|
     target.build_configurations.each do |config|
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
       
+      config.build_settings['GCC_C_LANGUAGE_STANDARD'] = 'compiler-default'
+      config.build_settings['GCC_CXX_LANGUAGE_STANDARD'] = 'gnu++17'
       # Fix C++ standard for Firebase v4+
       config.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++17'
       config.build_settings['CLANG_CXX_LIBRARY'] = 'libc++'
       
       # Fix compiler flags
       config.build_settings.delete('OTHER_CPLUSPLUSFLAGS')
-      config.build_settings.delete('OTHER_CFLAGS')
       config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= []
       config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << 'COCOAPODS=1'
       

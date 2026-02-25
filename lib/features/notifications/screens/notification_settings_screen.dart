@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/notifications/smart_notification_system.dart';
-import '../../../core/theme/app_theme.dart';
 import '../../../core/services/user_service.dart';
 
 /// 🔔 Notification Settings Screen
@@ -72,7 +71,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: _buildAppBar(context),
       body: _isLoading ? _buildLoadingScreen() : _buildSettingsContent(),
     );
@@ -107,7 +106,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
           icon: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: AppTheme.primaryColor.withValues(alpha: 0.1),
+              color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: const Icon(Icons.save_outlined, color: Colors.white),
@@ -120,12 +119,12 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
   }
   
   Widget _buildLoadingScreen() {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
+            valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.primary),
           ),
           SizedBox(height: 16),
           Text(
@@ -168,8 +167,8 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            AppTheme.primaryColor.withValues(alpha: 0.1),
-            AppTheme.secondaryColor.withValues(alpha: 0.1),
+            Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+            Theme.of(context).colorScheme.secondary.withValues(alpha: 0.1),
           ],
         ),
         borderRadius: BorderRadius.circular(16),
@@ -180,11 +179,11 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: AppTheme.primaryColor,
+              color: Theme.of(context).colorScheme.primary,
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: AppTheme.primaryColor.withValues(alpha: 0.1),
+                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),
@@ -253,7 +252,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isEnabled 
-              ? AppTheme.primaryColor.withValues(alpha: 0.1)
+              ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)
               : Colors.white.withValues(alpha: 0.1),
         ),
       ),
@@ -387,8 +386,8 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
           builder: (context, child) {
             return Theme(
               data: Theme.of(context).copyWith(
-                colorScheme: const ColorScheme.dark(
-                  primary: AppTheme.primaryColor,
+                colorScheme: ColorScheme.dark(
+                  primary: Theme.of(context).colorScheme.primary,
                   onPrimary: Colors.white,
                   surface: Color(0xFF1E1E2E),
                   onSurface: Colors.white,
@@ -405,9 +404,9 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: AppTheme.primaryColor.withValues(alpha: 0.1),
+          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: AppTheme.primaryColor.withValues(alpha: 0.1)),
+          border: Border.all(color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)),
         ),
         child: Column(
           children: [
@@ -449,9 +448,9 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
-            color: AppTheme.primaryColor.withValues(alpha: 0.1),
+            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: AppTheme.primaryColor.withValues(alpha: 0.1)),
+            border: Border.all(color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)),
           ),
           child: Text(
             '${_preferences.maxDailyNotifications}',
@@ -493,9 +492,9 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
         Switch.adaptive(
           value: _preferences.allowWeekends,
           thumbColor: WidgetStateProperty.resolveWith((states) => 
-            states.contains(WidgetState.selected) ? AppTheme.primaryColor : null),
+            states.contains(WidgetState.selected) ? Theme.of(context).colorScheme.primary : null),
           trackColor: WidgetStateProperty.resolveWith((states) => 
-            states.contains(WidgetState.selected) ? AppTheme.primaryColor.withValues(alpha: 0.5) : null),
+            states.contains(WidgetState.selected) ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.5) : null),
           onChanged: (value) {
             setState(() {
               // This would update the preference
@@ -574,10 +573,10 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: AppTheme.primaryColor.withValues(alpha: 0.1),
+            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(icon, color: AppTheme.primaryColor, size: 20),
+          child: Icon(icon, color: Theme.of(context).colorScheme.primary, size: 20),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -605,9 +604,9 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
         Switch.adaptive(
           value: value,
           thumbColor: WidgetStateProperty.resolveWith((states) => 
-            states.contains(WidgetState.selected) ? AppTheme.primaryColor : null),
+            states.contains(WidgetState.selected) ? Theme.of(context).colorScheme.primary : null),
           trackColor: WidgetStateProperty.resolveWith((states) => 
-            states.contains(WidgetState.selected) ? AppTheme.primaryColor.withValues(alpha: 0.5) : null),
+            states.contains(WidgetState.selected) ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.5) : null),
           onChanged: onChanged,
         ),
       ],
@@ -638,7 +637,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
       child: ElevatedButton(
         onPressed: _sendTestNotification,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppTheme.primaryColor,
+          backgroundColor: Theme.of(context).colorScheme.primary,
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
@@ -667,7 +666,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
       case NotificationType.healthAlert:
         return Colors.red;
       case NotificationType.cyclePhase:
-        return AppTheme.primaryColor;
+        return Theme.of(context).colorScheme.primary;
       case NotificationType.medication:
         return Colors.orange;
       case NotificationType.aiInsight:
@@ -675,7 +674,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
       case NotificationType.wellnessTip:
         return Colors.green;
       default:
-        return AppTheme.secondaryColor;
+        return Theme.of(context).colorScheme.secondary;
     }
   }
   
@@ -760,7 +759,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: const Text('Test notification sent!'),
-              backgroundColor: AppTheme.primaryColor,
+              backgroundColor: Theme.of(context).colorScheme.primary,
               behavior: SnackBarBehavior.floating,
             ),
           );
@@ -789,7 +788,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: const Text('Preferences saved successfully!'),
-            backgroundColor: AppTheme.primaryColor,
+            backgroundColor: Theme.of(context).colorScheme.primary,
             behavior: SnackBarBehavior.floating,
           ),
         );

@@ -11,14 +11,14 @@ import 'package:share_plus/share_plus.dart';
 import '../models/cycle_data.dart';
 import '../models/daily_tracking_data.dart';
 import '../models/biometric_data.dart';
-import 'database_service.dart';
+import '../database/database_service.dart';
 import 'user_preferences_service.dart';
 import 'analytics_service.dart';
 
 class ExportImportService {
   final DatabaseService _databaseService = DatabaseService();
   final UserPreferencesService _preferencesService = UserPreferencesService();
-  final AnalyticsService _analyticsService = AnalyticsService();
+  final AnalyticsService _analyticsService = AnalyticsService.instance;
 
   // Export data to various formats
   Future<String> exportToJSON({
@@ -42,8 +42,8 @@ class ExportImportService {
           'endDate': endDate.toIso8601String(),
           'appName': 'FlowSense',
         },
-        'cycles': cycles.map((c) => c.toMap()).toList(),
-        'trackingData': trackingData.map((t) => t.toMap()).toList(),
+        'cycles': cycles.map((c) => c.toJson()).toList(),
+        'trackingData': trackingData,
         'preferences': preferences,
       };
 
@@ -151,7 +151,7 @@ class ExportImportService {
       // Import cycles
       if (data.containsKey('cycles')) {
         final cycles = (data['cycles'] as List)
-            .map((c) => CycleData.fromMap(c))
+            .map((c) => CycleData.fromJson(c))
             .toList();
         
         for (final cycle in cycles) {
@@ -168,13 +168,49 @@ class ExportImportService {
       // Import tracking data
       if (data.containsKey('trackingData')) {
         final trackingList = (data['trackingData'] as List)
-            .map((t) => DailyTrackingData.fromMap(t))
+            .whereType<Map>()
+            .map((m) => Map<String, dynamic>.from(m))
             .toList();
-        
+
+        DateTime _parseDate(dynamic v) {
+          if (v is DateTime) return v;
+          if (v is int) return DateTime.fromMillisecondsSinceEpoch(v);
+          final s = v?.toString() ?? '';
+          // support YYYY-MM-DD or ISO
+          return DateTime.tryParse(s) ?? DateTime.now();
+        }
+
+        FlowIntensity? _parseFlow(dynamic v) {
+          if (v is FlowIntensity) return v;
+          if (v is int) {
+            final idx = v - 1;
+            if (0 <= idx < FlowIntensity.values.length) return FlowIntensity.values[idx];
+            return null;
+          }
+          final name = v?.toString();
+          if (name == null) return null;
+          for (final f in FlowIntensity.values) {
+            if (f.name == name) return f;
+          }
+          return null;
+        }
+
         for (final tracking in trackingList) {
-          final existing = await _databaseService.getTrackingByDate(tracking.date);
+          final date = _parseDate(tracking['date'] ?? tracking['recordedAt']);
+          final existing = await _databaseService.getTrackingByDate(date: date: date);
+
           if (existing == null) {
-            await _databaseService.saveDailyTracking(tracking);
+            await _databaseService.saveDailyTracking(
+              date: date,
+              flowIntensity: _parseFlow(tracking['flowIntensity'] ?? tracking['flow_intensity']),
+              symptoms: (tracking['symptoms'] is List)
+                  ? List<String>.from(tracking['symptoms'] as List)
+                  : null,
+              mood: (tracking['mood'] as num?)?.toDouble(),
+              energy: (tracking['energy'] as num?)?.toDouble(),
+              pain: (tracking['pain'] as num?)?.toDouble(),
+              notes: tracking['notes'] as String?,
+            );
             importedTracking++;
           } else {
             skippedDuplicates++;
@@ -184,7 +220,12 @@ class ExportImportService {
 
       // Import preferences (optional)
       if (data.containsKey('preferences')) {
-        final preferences = data['preferences'] as Map<String, dynamic>;
+        final preferencesDyn = data['preferences'] as Map<String, dynamic>;
+        final preferences = <String, Object>{};
+        for (final e in preferencesDyn.entries) {
+          final v = e.value;
+          if (v != null) preferences[e.key] = v as Object;
+        }
         await _preferencesService.setAllPreferences(preferences);
       }
 
@@ -266,7 +307,7 @@ class ExportImportService {
       }
       
       for (final tracking in trackingData) {
-        await _databaseService.saveDailyTracking(tracking);
+        await _databaseService.saveDailyTracking(date: tracking['date']);
         importedTracking++;
       }
 
@@ -366,7 +407,7 @@ class ExportImportService {
         cycle.endDate?.toIso8601String() ?? '',
         cycle.length,
         cycle.periodLength ?? '',
-        cycle.ovulationDay ?? '',
+        cycle.ovulationDate ?? '',
         cycle.notes ?? '',
       ]);
     }
@@ -383,13 +424,13 @@ class ExportImportService {
     
     for (final tracking in trackingData) {
       csvData.add([
-        tracking.date.toIso8601String(),
-        tracking.flowIntensity?.toString() ?? '',
-        tracking.mood ?? '',
-        tracking.energy ?? '',
-        tracking.sleepHours ?? '',
-        tracking.symptoms?.join(', ') ?? '',
-        tracking.notes ?? '',
+        tracking['date'].toIso8601String(),
+        tracking['flowIntensity']?.toString() ?? '',
+        tracking['mood'] ?? '',
+        tracking['energy'] ?? '',
+        tracking['sleepHours'] ?? '',
+        tracking['symptoms']?.join(', ') ?? '',
+        tracking['notes'] ?? '',
       ]);
     }
     
@@ -404,10 +445,10 @@ class ExportImportService {
     ];
     
     for (final tracking in trackingData) {
-      if (tracking.symptoms != null && tracking.symptoms!.isNotEmpty) {
-        for (final symptom in tracking.symptoms!) {
+      if (tracking['symptoms'] != null && tracking['symptoms']!.isNotEmpty) {
+        for (final symptom in tracking['symptoms']!) {
           csvData.add([
-            tracking.date.toIso8601String(),
+            tracking['date'].toIso8601String(),
             symptom,
           ]);
         }
@@ -429,15 +470,15 @@ class ExportImportService {
     
     for (final tracking in trackingData) {
       csvData.add([
-        tracking.date.toIso8601String(),
-        tracking.flowIntensity?.toString() ?? '',
-        tracking.mood ?? '',
-        tracking.energy ?? '',
-        tracking.sleepHours ?? '',
+        tracking['date'].toIso8601String(),
+        tracking['flowIntensity']?.toString() ?? '',
+        tracking['mood'] ?? '',
+        tracking['energy'] ?? '',
+        tracking['sleepHours'] ?? '',
         tracking.temperature ?? '',
         tracking.weight ?? '',
-        tracking.symptoms?.join(', ') ?? '',
-        tracking.notes ?? '',
+        tracking['symptoms']?.join(', ') ?? '',
+        tracking['notes'] ?? '',
       ]);
     }
     
@@ -550,9 +591,9 @@ class ExportImportService {
           notes: row[6].toString().isEmpty ? null : row[6].toString(),
         );
         
-        final existing = await _databaseService.getTrackingByDate(tracking.date);
+        final existing = await _databaseService.getTrackingByDate(date: tracking['date']);
         if (existing == null) {
-          await _databaseService.saveDailyTracking(tracking);
+          await _databaseService.saveDailyTracking(date: tracking['date']);
           imported++;
         } else {
           skipped++;

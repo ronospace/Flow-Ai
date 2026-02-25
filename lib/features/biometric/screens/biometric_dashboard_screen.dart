@@ -83,6 +83,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
         });
       }
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         _errorMessage =
             '${AppLocalizations.of(context).failedToInitializeBiometricDashboard}: $e';
@@ -123,6 +124,8 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
 
     HapticFeedback.lightImpact();
 
+    final messenger = ScaffoldMessenger.of(context);
+
     try {
       // Refresh cache in biometric service
       await BiometricIntegrationService.instance.refreshCache();
@@ -131,7 +134,9 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
       await _loadBiometricData();
 
       // Show success feedback
-      ScaffoldMessenger.of(context).showSnackBar(
+      if (!mounted) return;
+
+      messenger.showSnackBar(
         SnackBar(
           content: Row(
             children: [
@@ -150,7 +155,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
         ),
       );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      messenger.showSnackBar(
         SnackBar(
           content: Text('Failed to refresh data: $e'),
           backgroundColor: AppTheme.warningOrange,

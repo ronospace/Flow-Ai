@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../models/visualization_models.dart';
 import '../../tracking/services/feelings_database_service.dart';
+import '../../tracking/screens/enhanced_daily_feelings_tracker.dart' show MoodCategory;
 
 /// Advanced visualization service for interactive charts and data presentation
 class AdvancedVisualizationService {
@@ -367,13 +368,21 @@ class AdvancedVisualizationService {
       return ChartData(
         type: config.chartType,
         title: config.title,
-        subtitle: config.subtitle,
+        subtitle: config.subtitle ?? "",
         series: [series],
-        xAxisConfig: config.xAxisConfig,
-        yAxisConfig: config.yAxisConfig,
+        xAxisConfig: config.xAxisConfig ?? AxisConfiguration(
+          title: "X",
+          type: AxisType.numeric,
+          showGridLines: true,
+        ),
+        yAxisConfig: config.yAxisConfig ?? AxisConfiguration(
+          title: "Y",
+          type: AxisType.numeric,
+          showGridLines: true,
+        ),
         legend: config.legend ?? ChartLegend(show: true),
         interactivity: config.interactivity ?? ChartInteractivity(),
-        annotations: config.annotations,
+        annotations: config.annotations ?? const <ChartAnnotation>[],
       );
     } catch (e) {
       debugPrint('❌ Failed to generate custom visualization: $e');
@@ -442,7 +451,6 @@ class AdvancedVisualizationService {
   /// Generate mock cycle data
   List<DataPoint> _generateMockCycleData(DateRange dateRange) {
     final List<DataPoint> data = [];
-    final Duration rangeDuration = dateRange.end.difference(dateRange.start);
     final int cycleDays = 28;
 
     DateTime currentDate = dateRange.start;

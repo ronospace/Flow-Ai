@@ -215,6 +215,50 @@ class UserPreferencesService {
     await _prefs.clear();
   }
 
+
+  // --- Cloud sync helpers (wrappers) ---
+  Future<void> setLastSyncTime(DateTime time) async {
+    await _ensureInitialized();
+    await _prefs.setString('last_sync_time', time.toIso8601String());
+  }
+
+  DateTime? getLastSyncTime() {
+    if (!_isInitialized) return null;
+    final v = _prefs.getString('last_sync_time');
+    if (v == null) return null;
+    return DateTime.tryParse(v);
+  }
+
+  Map<String, Object> getAllPreferences() {
+    if (!_isInitialized) return const {};
+    final keys = _prefs.getKeys();
+    final out = <String, Object>{};
+    for (final k in keys) {
+      final v = _prefs.get(k);
+      if (v is Object) out[k] = v;
+    }
+    return out;
+  }
+
+  Future<void> setAllPreferences(Map<String, Object> values) async {
+    await _ensureInitialized();
+    for (final e in values.entries) {
+      final k = e.key;
+      final v = e.value;
+      if (v is String) {
+        await _prefs.setString(k, v);
+      } else if (v is bool) {
+        await _prefs.setBool(k, v);
+      } else if (v is int) {
+        await _prefs.setInt(k, v);
+      } else if (v is double) {
+        await _prefs.setDouble(k, v);
+      } else {
+        await _prefs.setString(k, v.toString());
+      }
+    }
+  }
+
   // Additional methods for onboarding support
   Future<void> setDisplayName(String name) async {
     await setString('display_name', name);

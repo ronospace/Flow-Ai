@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:crypto/crypto.dart';
-import 'package:encrypt/encrypt.dart';
+import 'package:encrypt/encrypt.dart' as enc;
 import '../models/cycle_data.dart';
 import '../models/daily_tracking_data.dart';
 import '../models/biometric_data.dart';
-import 'database_service.dart';
+import '../database/database_service.dart';
 import 'user_preferences_service.dart';
 
 /// Cloud sync service stub - Firebase disabled for iOS build
@@ -16,8 +16,8 @@ class CloudSyncService {
   final bool _firebaseAvailable = false;
   
   // Encryption
-  late final Encrypter _encrypter;
-  late final IV _iv;
+  late final enc.Encrypter _encrypter;
+  late final enc.IV _iv;
   
   // Sync state
   bool _isSyncing = false;
@@ -30,9 +30,9 @@ class CloudSyncService {
   
   void _initializeEncryption() {
     // Generate encryption key from user's device ID and app secret
-    final key = Key.fromSecureRandom(32);
-    _encrypter = Encrypter(AES(key));
-    _iv = IV.fromSecureRandom(16);
+    final key = enc.Key.fromSecureRandom(32);
+    _encrypter = enc.Encrypter(enc.AES(key));
+    _iv = enc.IV.fromSecureRandom(16);
   }
   
   // Getters (Firebase-free)
@@ -110,8 +110,8 @@ class CloudSyncService {
   }
   
   Map<String, dynamic> _decryptData(Map<String, dynamic> encryptedData) {
-    final encrypted = Encrypted.fromBase64(encryptedData['encryptedData']);
-    final iv = IV.fromBase64(encryptedData['iv']);
+    final encrypted = enc.Encrypted.fromBase64(encryptedData['encryptedData']);
+    final iv = enc.IV.fromBase64(encryptedData['iv']);
     final decrypted = _encrypter.decrypt(encrypted, iv: iv);
     return jsonDecode(decrypted);
   }
@@ -162,11 +162,18 @@ class CloudSyncService {
       // Restore tracking data
       if (backupData['tracking'] != null) {
         final trackingData = (backupData['tracking'] as List)
-            .map((data) => DailyTrackingData.fromJson(data))
+            .map((data) => DailyTrackingData.fromMap(data))
             .toList();
         
         for (final data in trackingData) {
-          await _databaseService.saveDailyTracking(data);
+          await _databaseService.saveDailyTracking(
+            date: data.date,
+            flowIntensity: data.flowIntensity == null ? null : FlowIntensity.values[data.flowIntensity! - 1],
+            symptoms: data.symptoms,
+            mood: data.mood?.toDouble(),
+            energy: data.energy?.toDouble(),
+            notes: data.notes,
+          );
         }
       }
       

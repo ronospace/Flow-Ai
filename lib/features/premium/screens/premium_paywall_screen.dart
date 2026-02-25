@@ -523,25 +523,28 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
     SubscriptionProvider provider,
     String productId,
   ) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+
     final result = await provider.purchaseSubscription(productId);
-    
+
     if (!mounted) return;
-    
+
     if (result.success) {
       // Show success message
-      ScaffoldMessenger.of(context).showSnackBar(
+      messenger.showSnackBar(
         const SnackBar(
           content: Text('🎉 Welcome to Premium!'),
           backgroundColor: Colors.green,
         ),
       );
-      
+
       // Close paywall
-      Navigator.of(context).pop(true);
+      navigator.pop(true);
     } else {
       // Show error
       if (result.error != PurchaseError.cancelled) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        messenger.showSnackBar(
           SnackBar(
             content: Text(result.errorMessage ?? 'Purchase failed'),
             backgroundColor: Colors.red,
@@ -555,23 +558,26 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
     BuildContext context,
     SubscriptionProvider provider,
   ) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+
     // Get user ID (you'll need to implement this)
     const userId = 'current_user_id'; // TODO: Get from auth provider
-    
+
     final restored = await provider.restorePurchases(userId);
-    
+
     if (!mounted) return;
-    
+
     if (restored) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      messenger.showSnackBar(
         const SnackBar(
           content: Text('✅ Purchases restored successfully!'),
           backgroundColor: Colors.green,
         ),
       );
-      Navigator.of(context).pop(true);
+      navigator.pop(true);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
+      messenger.showSnackBar(
         const SnackBar(
           content: Text('No purchases found to restore'),
         ),

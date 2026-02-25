@@ -25,6 +25,10 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
+  GoRouter get _router => GoRouter.of(context);
+  SettingsProvider get _settingsProvider => context.read<SettingsProvider>();
+
+
   late AnimationController _headerController;
   late AnimationController _formController;
   late AnimationController _socialController;
@@ -488,9 +492,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         'Biometric authentication is not available on this device',
       );
       return;
-    }
-
-    setState(() {
+    }    setState(() {
       _isLoading = true;
     });
 
@@ -498,7 +500,10 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       // Initialize auth service first
       await _authService.initialize();
 
+      if (!mounted) return;
       final result = await _authService.authenticateWithBiometrics();
+
+      if (!mounted) return;
 
       if (result.isSuccess) {
         HapticFeedback.lightImpact();
@@ -506,12 +511,11 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
         // Sync user data immediately to ensure username is captured and available
         try {
-          final settingsProvider = Provider.of<SettingsProvider>(
-            context,
-            listen: false,
-          );
+          // _settingsProvider captured above
           // Force an immediate sync to capture fresh auth data
-          await settingsProvider.forceUserDataSync();
+          await _settingsProvider.forceUserDataSync();
+
+          if (!mounted) return;
           debugPrint(
             '✅ User settings synced successfully after biometric authentication',
           );
@@ -523,14 +527,15 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
         await Future.delayed(const Duration(milliseconds: 500));
 
+        if (!mounted) return;
+
         // Navigate to main app
         if (mounted) {
-          context.go('/home');
+          _router.go('/home');
         }
       } else {
         _showErrorMessage(result.error ?? 'Biometric authentication failed');
-      }
-    } catch (e) {
+      }    } catch (e) {
       debugPrint('Biometric authentication error: $e');
       _showErrorMessage('Biometric authentication failed. Please try again.');
     } finally {
@@ -606,6 +611,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         _showSuccessMessage('Welcome back!');
       } else {
         // Check if email already exists before attempting sign up
+        // router + _settingsProvider captured before async gaps
+
         final emailExists = await _authService.isEmailRegistered(
           _emailController.text.trim(),
         );
@@ -636,13 +643,11 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
       // Sync user data immediately to ensure username is captured and available
       try {
-        final settingsProvider = Provider.of<SettingsProvider>(
-          context,
-          listen: false,
-        );
-        await settingsProvider.initializeSettings();
+        await _settingsProvider.initializeSettings();
+        if (!mounted) return;
         // Force an immediate sync to capture fresh auth data
-        await settingsProvider.forceUserDataSync();
+        await _settingsProvider.forceUserDataSync();
+        if (!mounted) return;
         debugPrint('✅ User settings synced successfully after authentication');
       } catch (syncError) {
         debugPrint(
@@ -652,9 +657,9 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
       // Navigate to main app
       await Future.delayed(const Duration(milliseconds: 1000));
-      if (mounted) {
-        context.go('/home');
-      }
+      if (!mounted) return;
+
+      _router.go('/home');
     } catch (e) {
       debugPrint('❌ Auth error: $e');
       final errorMessage = e.toString().replaceFirst('Exception: ', '');
@@ -679,12 +684,13 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       _isLoading = true;
     });
 
-    try {
-      // Initialize auth service
+    try {      // Initialize auth service
       await _authService.initialize();
 
       // Perform Google Sign-In
       final result = await _authService.signInWithGoogle();
+
+      if (!mounted) return;
 
       if (result.isSuccess) {
         HapticFeedback.lightImpact();
@@ -692,11 +698,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
         // Sync user data
         try {
-          final settingsProvider = Provider.of<SettingsProvider>(
-            context,
-            listen: false,
-          );
-          await settingsProvider.forceUserDataSync();
+          // _settingsProvider captured above
+          await _settingsProvider.forceUserDataSync();
           debugPrint('✅ User settings synced after Google sign-in');
         } catch (syncError) {
           debugPrint('⚠️ Warning: Could not sync user settings: $syncError');
@@ -706,7 +709,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
         // Navigate to main app
         if (mounted) {
-          context.go('/home');
+          _router.go('/home');
         }
       } else {
         _showErrorMessage(result.error ?? 'Google sign-in failed');
@@ -730,12 +733,15 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       _isLoading = true;
     });
 
-    try {
-      // Initialize auth service
+    try {      // Initialize auth service
       await _authService.initialize();
+
+      if (!mounted) return;
 
       // Perform Apple Sign-In
       final result = await _authService.signInWithApple();
+
+      if (!mounted) return;
 
       if (result.isSuccess) {
         HapticFeedback.lightImpact();
@@ -743,11 +749,10 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
         // Sync user data
         try {
-          final settingsProvider = Provider.of<SettingsProvider>(
-            context,
-            listen: false,
-          );
-          await settingsProvider.forceUserDataSync();
+          // _settingsProvider captured above
+          await _settingsProvider.forceUserDataSync();
+
+          if (!mounted) return;
           debugPrint('✅ User settings synced after Apple sign-in');
         } catch (syncError) {
           debugPrint('⚠️ Warning: Could not sync user settings: $syncError');
@@ -755,9 +760,11 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
         await Future.delayed(const Duration(milliseconds: 500));
 
+        if (!mounted) return;
+
         // Navigate to main app
         if (mounted) {
-          context.go('/home');
+          _router.go('/home');
         }
       } else {
         _showErrorMessage(result.error ?? 'Apple sign-in failed');
@@ -913,16 +920,22 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                                     setState(() => isResetting = true);
 
                                     try {
+                                      final dialogNavigator = Navigator.of(dialogContext);
+
                                       // Initialize auth service if needed
                                       await _authService.initialize();
+
+                                      if (!mounted) return;
 
                                       final result = await _authService
                                           .resetPassword(
                                             resetEmailController.text.trim(),
                                           );
 
+
+                                      if (!mounted) return;
                                       if (result.isSuccess) {
-                                        Navigator.of(dialogContext).pop();
+                                        dialogNavigator.pop();
                                         _showSuccessMessage(
                                           'Password reset link sent! Check your email.',
                                         );
@@ -1002,10 +1015,10 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     HapticFeedback.mediumImpact();
 
     // Show info message
-    _showInfoMessage('Demo credentials loaded. Signing in...');
-
-    // Wait a moment for visual feedback
+    _showInfoMessage('Demo credentials loaded. Signing in...');    // Wait a moment for visual feedback
     await Future.delayed(const Duration(milliseconds: 800));
+
+    if (!mounted) return;
 
     // Automatically sign in
     try {
@@ -1024,12 +1037,11 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
         // Sync user data
         try {
-          final settingsProvider = Provider.of<SettingsProvider>(
-            context,
-            listen: false,
-          );
-          await settingsProvider.initializeSettings();
-          await settingsProvider.forceUserDataSync();
+          // _settingsProvider captured above
+          await _settingsProvider.initializeSettings();
+          if (!mounted) return;
+          await _settingsProvider.forceUserDataSync();
+          if (!mounted) return;
           debugPrint('✅ User settings synced for demo account');
         } catch (syncError) {
           debugPrint('⚠️ Warning: Could not sync user settings: $syncError');
@@ -1037,8 +1049,10 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
         // Navigate to home
         await Future.delayed(const Duration(milliseconds: 1000));
+        if (!mounted) return;
+
         if (mounted) {
-          context.go('/home');
+          _router.go('/home');
         }
       } else {
         throw Exception(result.error);
