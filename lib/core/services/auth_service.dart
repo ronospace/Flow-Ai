@@ -32,8 +32,7 @@ class AuthService {
   static const String _biometricEnabledKey = 'biometric_enabled';
   static const String _lastLoginMethodKey = 'last_login_method';
 
-  // User? get currentUser => _auth?.currentUser; // Firebase temporarily disabled for iOS build
-  dynamic get currentUser => null;
+  User? get currentUser => _auth?.currentUser;
   bool get isInitialized => _isInitialized;
   Future<bool> get isAuthenticated async => /* _auth?.currentUser != null || */
       await _hasLocalUser();
@@ -116,29 +115,25 @@ class AuthService {
     if (_isInitialized) return; // Prevent re-initialization
 
     try {
-      // Firebase temporarily disabled for iOS build
-      // try {
-      //   // Check if Firebase is already initialized
-      //   if (Firebase.apps.isNotEmpty) {
-      //     _auth = FirebaseAuth.instance;
-      //     _firebaseAvailable = true;
-      //   } else {
-      //     // Initialize Firebase with timeout
-      //     await Firebase.initializeApp().timeout(
-      //       const Duration(seconds: 10),
-      //       onTimeout: () => throw TimeoutException('Firebase initialization timeout'),
-      //     );
-      //     _auth = FirebaseAuth.instance;
-      //     _firebaseAvailable = true;
-      //   }
-      //   AppLogger.auth('Firebase initialized successfully');
-      // } catch (e) {
-      AppLogger.warning(
-        'Firebase disabled for iOS build, using local auth only',
-      );
-      _firebaseAvailable = false;
-      // _auth = null; // Ensure auth is null on failure
-      // }
+      // Initialize Firebase (with timeout + safe fallback)
+      try {
+        if (Firebase.apps.isEmpty) {
+          await Firebase.initializeApp().timeout(
+            const Duration(seconds: 10),
+            onTimeout: () =>
+                throw TimeoutException('Firebase initialization timeout'),
+          );
+        }
+        _auth = FirebaseAuth.instance;
+        _firebaseAvailable = true;
+        AppLogger.auth('Firebase initialized successfully');
+      } catch (e) {
+        AppLogger.warning(
+          'Firebase init failed, falling back to local auth: $e',
+        );
+        _firebaseAvailable = false;
+        _auth = null;
+      }
 
       // Initialize local components (always initialize these)
       _localAuth = LocalAuthentication();
@@ -578,303 +573,81 @@ class AuthService {
   }
 
   /// Sign in with Google
+
+  /// Sign in with Google (Firebase)
   Future<AuthResult> signInWithGoogle() async {
     try {
-      // Check if Google Sign-In is initialized
-      if (_googleSignIn == null) {
-        return AuthResult.failure(
-          'Google Sign-In not initialized. Please restart the app.',
-        );
+      if (_googleSignIn == null || _auth == null) {
+        return AuthResult.failure('Authentication not initialized.');
       }
 
-      // Attempt Google Sign-In
       final GoogleSignInAccount? googleUser = await _googleSignIn!.signIn();
       if (googleUser == null) {
-        return AuthResult.failure('Google sign-in cancelled by user');
+        return AuthResult.failure('Google sign-in cancelled.');
       }
 
-      // Note: We use Google user ID for consistent password, not idToken which changes
-      // final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
 
-      // Create local user from Google account
-      // Handle null email case (shouldn't happen with Google, but safety first)
-      final String email = googleUser.email;
-      if (email.isEmpty) {
-        return AuthResult.failure(
-          'Google account email is not available. Please use a different sign-in method.',
-        );
-      }
-
-      // Extract display name (fallback to email username if display name is null)
-      final displayName = googleUser.displayName ?? email.split('@')[0];
-
-      // Store user data
-      if (_localUserService != null) {
-        // Check if user already exists
-        final emailExists = await _localUserService!.isEmailRegistered(email);
-
-        // Use Google user ID as a consistent password (idToken changes between sessions)
-        final googlePassword = 'google_${googleUser.id}';
-
-        if (!emailExists) {
-          // Create new local user with Google data
-          final result = await _localUserService!.createUser(
-            email: email,
-            password: googlePassword,
-            displayName: displayName,
-          );
-
-          if (!result.isSuccess) {
-            return AuthResult.failure(
-              'Failed to create user account: ${result.error}',
-            );
-          }
-        } else {
-          // Sign in existing user
-          final result = await _localUserService!.signInUser(
-            email: email,
-            password: googlePassword,
-          );
-
-          if (!result.isSuccess) {
-            return AuthResult.failure('Failed to sign in: ${result.error}');
-          }
-        }
-
-        // Store user data with Google info
-        await _storeUserData({
-          'uid': googleUser.id,
-          'email': email,
-          'displayName': displayName,
-          'photoURL': googleUser.photoUrl,
-          'provider': 'google',
-          'username': displayName,
-          'lastLogin': DateTime.now().toIso8601String(),
-          'createdAt': DateTime.now().toIso8601String(),
-          'profileComplete': true,
-        });
-
-        if (_prefs != null) {
-          await _prefs!.setString(_lastLoginMethodKey, 'google');
-        }
-
-        AppLogger.auth('✅ Google Sign-In successful: $email');
-        return AuthResult.success(null);
-      }
-
-      return AuthResult.failure(
-        'Authentication service not properly initialized',
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
       );
-    } on PlatformException catch (e) {
-      debugPrint('❌ Google Sign-In Platform Error: ${e.code} - ${e.message}');
 
-      // Handle specific Google Sign-In platform errors
-      switch (e.code) {
-        case 'sign_in_canceled':
-        case 'sign_in_cancelled':
-          return AuthResult.failure('Google sign-in was cancelled.');
-        case 'sign_in_failed':
-        case 'network_error':
-          return AuthResult.failure(
-            'Network error. Please check your connection and try again.',
-          );
-        case 'sign_in_required':
-          return AuthResult.failure(
-            'Google sign-in is required. Please try again.',
-          );
-        default:
-          return AuthResult.failure(
-            'Google sign-in error: ${e.message ?? e.code}. Please try again.',
-          );
-      }
+      final userCredential = await _auth!.signInWithCredential(credential);
+
+      return AuthResult.success(userCredential.user);
     } catch (e) {
-      debugPrint('❌ Google Sign-In error: $e');
-      final errorStr = e.toString().toLowerCase();
-
-      // Provide more specific error messages based on error content
-      if (errorStr.contains('cancel')) {
-        return AuthResult.failure('Google sign-in was cancelled.');
-      } else if (errorStr.contains('network') ||
-          errorStr.contains('connection') ||
-          errorStr.contains('timeout')) {
-        return AuthResult.failure(
-          'Network error. Please check your connection and try again.',
-        );
-      } else if (errorStr.contains('sign_in_required')) {
-        return AuthResult.failure(
-          'Google sign-in is required. Please try again.',
-        );
-      } else {
-        return AuthResult.failure(
-          'Google sign-in failed. Please try again or use email authentication.',
-        );
-      }
+      return AuthResult.failure('Google sign-in failed: $e');
     }
   }
 
   /// Sign in with Apple (iOS only)
+
+  /// Sign in with Apple (Firebase)
   Future<AuthResult> signInWithApple() async {
     try {
-      // Check platform availability
+      if (_auth == null) {
+        return AuthResult.failure('Authentication not initialized.');
+      }
+
       if (kIsWeb) {
+        return AuthResult.failure('Apple Sign-In not supported on web.');
+      }
+
+      // Apple Sign-In is not reliable on Simulator; validate on a physical device for production.
+      if (Platform.isIOS &&
+          !Platform.environment.containsKey('SIMULATOR_DEVICE_NAME') == False) {
         return AuthResult.failure(
-          'Apple Sign-In is not available on web. Please use email authentication instead.',
+          'Apple Sign-In requires a real iPhone (not Simulator).',
         );
       }
 
-      if (!Platform.isIOS) {
+      // Apple Sign-In is not reliable on Simulator; validate on a physical device for production.
+      if (Platform.isIOS &&
+          !Platform.environment.containsKey('SIMULATOR_DEVICE_NAME') == False) {
         return AuthResult.failure(
-          'Apple Sign-In is only available on iOS devices.',
+          'Apple Sign-In requires a real iPhone (not Simulator).',
         );
       }
 
-      // Request Apple Sign-In
-      final credential = await SignInWithApple.getAppleIDCredential(
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
         scopes: [
           AppleIDAuthorizationScopes.email,
           AppleIDAuthorizationScopes.fullName,
         ],
       );
 
-      // Extract user data
-      final email = credential.email;
-      final userIdentifier = credential.userIdentifier;
-      final givenName = credential.givenName;
-      final familyName = credential.familyName;
-
-      // Create display name from Apple data
-      String displayName = 'User';
-      if (givenName != null && familyName != null) {
-        displayName = '$givenName $familyName'.trim();
-      } else if (givenName != null) {
-        displayName = givenName;
-      } else if (email != null) {
-        displayName = email.split('@')[0];
-      }
-
-      // Store user data
-      if (_localUserService != null) {
-        // For Apple Sign-In, email might be null if user chose "Hide My Email"
-        final effectiveEmail =
-            email ?? '$userIdentifier@privaterelay.appleid.com';
-
-        // Check if user already exists
-        final emailExists = await _localUserService!.isEmailRegistered(
-          effectiveEmail,
-        );
-
-        if (!emailExists) {
-          // Create new local user with Apple data
-          final result = await _localUserService!.createUser(
-            email: effectiveEmail,
-            password: 'apple_$userIdentifier', // Use Apple ID as password
-            displayName: displayName,
-          );
-
-          if (!result.isSuccess) {
-            return AuthResult.failure(
-              'Failed to create user account: ${result.error}',
-            );
-          }
-        } else {
-          // Sign in existing user
-          final result = await _localUserService!.signInUser(
-            email: effectiveEmail,
-            password: 'apple_$userIdentifier',
-          );
-
-          if (!result.isSuccess) {
-            return AuthResult.failure('Failed to sign in: ${result.error}');
-          }
-        }
-
-        // Store user data with Apple info
-        await _storeUserData({
-          'uid': userIdentifier ?? 'apple_user',
-          'email': effectiveEmail,
-          'displayName': displayName,
-          'provider': 'apple',
-          'username': displayName,
-          'lastLogin': DateTime.now().toIso8601String(),
-          'createdAt': DateTime.now().toIso8601String(),
-          'profileComplete': true,
-        });
-
-        if (_prefs != null) {
-          await _prefs!.setString(_lastLoginMethodKey, 'apple');
-        }
-
-        AppLogger.auth('✅ Apple Sign-In successful: $effectiveEmail');
-        return AuthResult.success(null);
-      }
-
-      return AuthResult.failure(
-        'Authentication service not properly initialized',
+      final oauthCredential = OAuthProvider("apple.com").credential(
+        idToken: appleCredential.identityToken,
+        accessToken: appleCredential.authorizationCode,
       );
-    } on SignInWithAppleException catch (e) {
-      debugPrint('❌ Apple Sign-In Exception: $e');
 
-      // Check error message for common patterns
-      final errorStr = e.toString().toLowerCase();
+      final userCredential = await _auth!.signInWithCredential(oauthCredential);
 
-      if (errorStr.contains('cancel') ||
-          errorStr.contains('cancelled') ||
-          errorStr.contains('user_cancelled')) {
-        return AuthResult.failure('Apple sign-in was cancelled.');
-      } else if (errorStr.contains('network') ||
-          errorStr.contains('connection')) {
-        return AuthResult.failure(
-          'Network error. Please check your connection and try again.',
-        );
-      } else if (errorStr.contains('not_available') ||
-          errorStr.contains('notHandled')) {
-        return AuthResult.failure(
-          'Apple sign-in is not available. Please use email authentication.',
-        );
-      } else if (errorStr.contains('invalid') ||
-          errorStr.contains('unauthorized')) {
-        return AuthResult.failure(
-          'Invalid Apple credentials. Please try again.',
-        );
-      } else {
-        return AuthResult.failure('Apple sign-in failed. Please try again.');
-      }
-    } on PlatformException catch (e) {
-      debugPrint('❌ Apple Sign-In Platform Error: ${e.code} - ${e.message}');
-
-      // Handle specific platform error codes
-      switch (e.code) {
-        case 'sign_in_canceled':
-        case 'user_cancelled':
-          return AuthResult.failure('Apple sign-in was cancelled.');
-        case 'sign_in_failed':
-          return AuthResult.failure('Apple sign-in failed. Please try again.');
-        case 'not_available':
-          return AuthResult.failure(
-            'Apple sign-in is not available on this device. Please use email authentication.',
-          );
-        default:
-          return AuthResult.failure(
-            'Apple sign-in error: ${e.message ?? e.code}. Please try again.',
-          );
-      }
+      return AuthResult.success(userCredential.user);
     } catch (e) {
-      debugPrint('❌ Unexpected Apple Sign-In error: $e');
-      final errorStr = e.toString().toLowerCase();
-
-      // Provide more specific error messages based on error content
-      if (errorStr.contains('cancel')) {
-        return AuthResult.failure('Apple sign-in was cancelled.');
-      } else if (errorStr.contains('network') ||
-          errorStr.contains('connection')) {
-        return AuthResult.failure(
-          'Network error. Please check your connection and try again.',
-        );
-      } else {
-        return AuthResult.failure(
-          'Apple sign-in failed. Please try again or use email authentication.',
-        );
-      }
+      return AuthResult.failure('Apple sign-in failed: $e');
     }
   }
 
