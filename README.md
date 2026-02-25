@@ -16,16 +16,19 @@
 
 <p align="center">
   <a href="https://apps.apple.com/app/flow-ai/id6751801915">
-    <img src="https://linkmaker.itunes.apple.com/en-us/badge-lrg.svg?releaseDate=2026-02-01&kind=iossoftware&bubble=ios_app" width="150">
+    <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" height="60">
   </a>
   &nbsp;&nbsp;
   <a href="https://play.google.com/store/apps/details?id=com.flowai.app">
-    <img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" width="180">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" height="60">
   </a>
 </p>
 
-- 🍎 [Download on the App Store](https://apps.apple.com/app/flow-ai/id6751801915)  
-- 🤖 [Get it on Google Play](https://play.google.com/store/apps/details?id=com.flowai.app)
+<p align="center">
+  🍎 <a href="https://apps.apple.com/app/flow-ai/id6751801915">Download on the App Store</a>  
+  <br>
+  🤖 <a href="https://play.google.com/store/apps/details?id=com.flowai.app">Get it on Google Play</a>
+</p>
 
 ---
 
@@ -33,4 +36,134 @@
 
 Flow Ai is a Life Operating System for Women.
 
-… (rest unchanged, same structure from previous version) …
+Not a tracker.  
+Not a content feed.  
+Not a symptom database.
+
+It is an intelligence layer that evolves with a woman across decades.
+
+Supports:
+
+- 🌸 Cycle awareness  
+- 🌤 Emotional patterns  
+- 🥗 Nutrition & recovery  
+- 🧘 Movement & resilience  
+- 💼 Productivity (cycle-aware)  
+- 💛 Relationships  
+- 🌟 Personal evolution  
+
+---
+
+# 🌺 Core Principles
+
+- 🌸 Cycle-aware by default  
+- 🧠 Emotionally intelligent UX  
+- 🔒 Privacy + consent first  
+- 🚫 Non-addictive design  
+- 🌍 Culturally adaptive  
+- ⏳ Built for decades, not sessions  
+- 💬 Reflective — never prescriptive  
+
+---
+
+# 🌻 Architecture
+
+## Thin App. Thick Intelligence.
+
+### 🌼 Core Engine
+- Identity & authentication (Firebase)
+- Consent & security primitives
+- Feature flags
+- Localization
+- Offline-first cache
+- Cloud sync layer
+
+### 🌸 FlowSense™
+- Context resolution
+- Pattern aggregation
+- Insight generation
+- Safety filtering
+- Explainability logic
+
+### 🌷 Modular System
+All modules connect only to FlowSense™.  
+No module-to-module dependencies.
+
+Modules:
+
+- 🌸 Cycle Intelligence
+- 🧠 Emotional & Wellbeing Insights
+- 💼 Productivity & Career Layer
+- 💛 Relationship Context
+- 📊 Advanced Analytics
+- 💎 Premium Services
+
+---
+
+# 🔒 Safety Guardrails
+
+Flow Ai does NOT:
+- Diagnose medical conditions  
+- Provide treatment plans  
+- Predict pregnancy outcomes  
+- Replace clinicians  
+
+Flow Ai CAN:
+- Reflect personal baselines  
+- Provide educational context  
+- Encourage professional care when appropriate  
+
+---
+
+# 🌹 Technology
+
+- Flutter (multi-platform)
+- Firebase (Auth + Core)
+- AdMob monetization layer
+- Local-first data architecture
+- iOS, Android, macOS, Web, Windows
+
+---
+
+# 🌼 Development
+
+### Requirements
+- Flutter (stable)
+- Xcode (iOS)
+- Android Studio (Android)
+
+### Run
+
+    flutter pub get
+    flutter run
+
+### Test
+
+    flutter test
+
+---
+
+# 🌷 Roadmap
+
+- 🔐 Complete Google + Apple Auth wiring
+- ↔ Swipe navigation system
+- 🌸 Multi-select journal UX
+- 🏥 Flow Ai ↔ Flow iQ clinical sync architecture
+- 🤝 NGO & institutional partnerships
+
+---
+
+# 🌺 Company
+
+ZyraFlow GmbH™
+
+Building long-term, calm, intelligent systems for women —  
+with stability, privacy, and dignity at the core.
+
+---
+
+<p align="center">
+  🌸 Built for longevity.  
+  🌷 Built with intention.  
+  🌼 Built to evolve.
+</p>
