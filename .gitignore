@@ -96,3 +96,4 @@ build/
 *.pkg
 *.zip
 *.tar.gz
+ios/Flutter/Profile.xcconfig
