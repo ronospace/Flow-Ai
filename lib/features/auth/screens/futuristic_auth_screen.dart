@@ -906,8 +906,6 @@ class _FuturisticAuthScreenState extends State<FuturisticAuthScreen>
 
   Future<void> _handleDemoAccountFill() async {
     // Demo credentials
-    const demoEmail = 'demo@flowai.app';
-    const demoPassword = 'REDACTED_DEMO_PW!';
 
     // Show loading state
     setState(() {

@@ -189,7 +189,7 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
       final startDate = DateTime.now().subtract(Duration(days: 28 * (i + 1)));
       cycles.add(CycleData(
         id: 'cycle_$i',
-        userId: 'demo_user',
+        userId: 'anonymous_user',
         startDate: startDate,
         cycleLength: 26 + random.nextInt(6), // 26-31 days
         averageFlow: FlowIntensity.values[random.nextInt(FlowIntensity.values.length)],

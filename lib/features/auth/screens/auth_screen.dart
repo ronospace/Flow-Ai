@@ -1001,8 +1001,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
   Future<void> _handleDemoAccountFill() async {
     // Demo credentials
-    const demoEmail = 'demo@flowai.app';
-    const demoPassword = 'REDACTED_DEMO_PW!';
 
     // Show loading state
     setState(() {
