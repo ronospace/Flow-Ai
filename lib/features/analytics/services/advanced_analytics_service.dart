@@ -1,13 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
+import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 
-import '../../../core/models/user.dart';
 
 /// Advanced analytics service for user behavior tracking and business intelligence
 class AdvancedAnalyticsService {
@@ -82,9 +81,7 @@ class AdvancedAnalyticsService {
         manufacturer: androidInfo.manufacturer,
         osVersion: androidInfo.version.release,
         screenSize: '${androidInfo.displayMetrics.widthPx}x${androidInfo.displayMetrics.heightPx}',
-        locale: androidInfo.supportedLocales.isNotEmpty 
-          ? androidInfo.supportedLocales.first.toString() 
-          : 'unknown',
+        locale: ui.PlatformDispatcher.instance.locale.toString(),
       );
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       final IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
@@ -581,7 +578,6 @@ class AdvancedAnalyticsService {
       }
     }
     
-    final DateTime now = DateTime.now();
     int day1Retained = 0, day7Retained = 0, day30Retained = 0;
     
     for (final userId in userFirstSeen.keys) {

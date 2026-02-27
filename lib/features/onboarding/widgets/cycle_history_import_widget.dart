@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../models/onboarding_data.dart';
+import '../../../core/ui/adaptive_components.dart';
 
 /// 📊 Cycle History Import Widget - Advanced Data Import System  
 /// Features: Multiple import sources, CSV/JSON parsing, manual entry,
@@ -202,8 +203,6 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
               _buildFirstTimeTrackingSection(context),
               const SizedBox(height: 32),
               if (!_isFirstTimeTracking) ...[
-                _buildImportMethodSelection(context),
-                const SizedBox(height: 32),
                 _buildImportContent(context),
                 const SizedBox(height: 32),
               ],
@@ -262,132 +261,40 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
         children: [
           Row(
             children: [
-              Icon(
-                Icons.help_outline,
-                color: theme.colorScheme.primary,
-                size: 24,
-              ),
-              
-              const SizedBox(width: 12),
-              
               Expanded(
-                child: Text(
-                  'Is this your first time tracking periods?',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
+                child: TextFormField(
+                  controller: _cycleLengthController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: 'Average Cycle Length',
+                    hintText: '28',
+                    suffixText: 'days',
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: TextFormField(
+                  controller: _periodLengthController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: 'Average Period Length',
+                    hintText: '5',
+                    suffixText: 'days',
                   ),
                 ),
               ),
             ],
           ),
-          
           const SizedBox(height: 16),
-          
-          Row(
-            children: [
-              Expanded(
-                child: _buildTrackingOptionCard(
-                  context,
-                  title: 'Yes, first time',
-                  subtitle: 'I\'m new to period tracking',
-                  isSelected: _isFirstTimeTracking,
-                  onTap: () => _setFirstTimeTracking(true),
-                ),
-              ),
-              
-              const SizedBox(width: 12),
-              
-              Expanded(
-                child: _buildTrackingOptionCard(
-                  context,
-                  title: 'No, I have data',
-                  subtitle: 'I\'ve tracked before',
-                  isSelected: !_isFirstTimeTracking,
-                  onTap: () => _setFirstTimeTracking(false),
-                ),
-              ),
-            ],
+          ..._importMethods.map(
+            (method) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: _buildImportMethodCard(context, method),
+            ),
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildTrackingOptionCard(
-    BuildContext context, {
-    required String title,
-    required String subtitle,
-    required bool isSelected,
-    required VoidCallback onTap,
-  }) {
-    final theme = Theme.of(context);
-    
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? theme.colorScheme.primary.withValues(alpha: 0.1)
-              : theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isSelected
-                ? theme.colorScheme.primary
-                : theme.colorScheme.outline.withValues(alpha: 0.3),
-            width: isSelected ? 2 : 1,
-          ),
-        ),
-        child: Column(
-          children: [
-            Text(
-              title,
-              style: theme.textTheme.titleSmall?.copyWith(
-                fontWeight: FontWeight.w600,
-                color: isSelected
-                    ? theme.colorScheme.primary
-                    : theme.colorScheme.onSurface,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            
-            const SizedBox(height: 4),
-            
-            Text(
-              subtitle,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildImportMethodSelection(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'How would you like to add your data?',
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        
-        const SizedBox(height: 16),
-        
-        Column(
-          children: _importMethods.map((method) => Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: _buildImportMethodCard(context, method),
-          )).toList(),
-        ),
-      ],
     );
   }
 
@@ -548,8 +455,7 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
           Row(
             children: [
               Expanded(
-                child: AdaptiveButton(
-                  text: 'Choose CSV File',
+                child: AdaptiveComponents.adaptiveButton(context: context, text: 'Choose CSV File',
                   onPressed: _handleCSVImport,
                   isPrimary: false,
                   icon: Icons.folder_open,
@@ -559,8 +465,7 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
               const SizedBox(width: 12),
               
               Expanded(
-                child: AdaptiveButton(
-                  text: 'Download Template',
+                child: AdaptiveComponents.adaptiveButton(context: context, text: 'Download Template',
                   onPressed: _downloadCSVTemplate,
                   isPrimary: false,
                   icon: Icons.download,
@@ -700,11 +605,9 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
             ),
           ),
           
-          AdaptiveButton(
-            text: 'Import',
+          AdaptiveComponents.adaptiveButton(context: context, text: 'Import',
             onPressed: isSupported ? () => _handleAppImport(app['id']) : null,
             isPrimary: false,
-            isCompact: true,
           ),
         ],
       ),
@@ -752,12 +655,10 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
           
           const SizedBox(height: 24),
           
-          AdaptiveButton(
-            text: 'Connect Health App',
+          AdaptiveComponents.adaptiveButton(context: context, text: 'Connect Health App',
             onPressed: _handleHealthConnect,
             isPrimary: true,
             icon: Icons.sync,
-            isLoading: _isImporting,
           ),
         ],
       ),
@@ -784,32 +685,26 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
         Row(
           children: [
             Expanded(
-              child: AdaptiveTextFormField(
+              child: TextFormField(
                 controller: _cycleLengthController,
-                labelText: 'Average Cycle Length',
-                hintText: '28',
-                suffixText: 'days',
                 keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(2),
-                ],
+                decoration: const InputDecoration(
+                  labelText: 'Average Cycle Length',
+                  hintText: '28',
+                  suffixText: 'days',
+                ),
               ),
             ),
-            
             const SizedBox(width: 16),
-            
             Expanded(
-              child: AdaptiveTextFormField(
+              child: TextFormField(
                 controller: _periodLengthController,
-                labelText: 'Average Period Length',
-                hintText: '5',
-                suffixText: 'days',
                 keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(1),
-                ],
+                decoration: const InputDecoration(
+                  labelText: 'Average Period Length',
+                  hintText: '5',
+                  suffixText: 'days',
+                ),
               ),
             ),
           ],
@@ -821,6 +716,7 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
       ],
     );
   }
+
 
   Widget _buildLastPeriodDateField(BuildContext context) {
     final theme = Theme.of(context);

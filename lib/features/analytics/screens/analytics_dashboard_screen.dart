@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:fl_chart/fl_chart.dart';
 import '../providers/analytics_provider.dart';
 import '../widgets/cycle_analytics_card.dart';
 import '../widgets/health_analytics_card.dart';
 import '../widgets/prediction_analytics_card.dart';
 import '../widgets/trend_chart_widget.dart';
-import '../widgets/recommendations_list.dart';
-import '../widgets/advanced_analytics_dashboard.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/services/analytics_service.dart';
 import '../../../generated/app_localizations.dart';

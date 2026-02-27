@@ -4,9 +4,11 @@ import '../../../core/models/ai_insights.dart';
 class InsightsProvider extends ChangeNotifier {
   final List<AIInsight> _insights = [];
   bool _isLoading = false;
+  bool _premiumUnlocked = false;
 
   List<AIInsight> get insights => List.unmodifiable(_insights);
   bool get isLoading => _isLoading;
+  bool get premiumUnlocked => _premiumUnlocked;
 
   Future<void> loadInsights() async {
     _isLoading = true;
@@ -38,6 +40,7 @@ class InsightsProvider extends ChangeNotifier {
   }
   
   void addPremiumInsights() {
+    _premiumUnlocked = true;
     // Add premium AI insights when user watches rewarded ad
     _insights.addAll([
       AIInsight(

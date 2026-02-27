@@ -182,8 +182,8 @@ class AnalyticsService {
       endDate ??= DateTime.now();
 
       final trackingDataMaps = await _databaseService.getTrackingDataInRange(
-        startDate!,
-        endDate!,
+        startDate,
+        endDate,
       );
       final trackingData = trackingDataMaps.map((map) {
         final dateStr = map['date'] is String
@@ -225,8 +225,8 @@ class AnalyticsService {
         );
       }).toList();
       final cycles = await _databaseService.getCyclesInRange(
-        startDate!,
-        endDate!,
+        startDate,
+        endDate,
       );
 
       return _calculateTrendAnalytics(trackingData, cycles);
@@ -392,24 +392,22 @@ class AnalyticsService {
         ),
       );
 
-      if (actualCycle.startDate != null) {
-        final predictedStart = prediction.predictedStartDate;
-        final actualStart = actualCycle.startDate!;
-        final daysDifference = actualStart
-            .difference(predictedStart)
-            .inDays
-            .abs();
+      final predictedStart = prediction.predictedStartDate;
+      final actualStart = actualCycle.startDate;
+      final daysDifference = actualStart
+          .difference(predictedStart)
+          .inDays
+          .abs();
 
-        accuracyData.add(
-          PredictionAccuracy(
-            cycleNumber: i + 1,
-            predictedDate: predictedStart,
-            actualDate: actualStart,
-            accuracyDays: daysDifference,
-          ),
-        );
-      }
-    }
+      accuracyData.add(
+        PredictionAccuracy(
+          cycleNumber: i + 1,
+          predictedDate: predictedStart,
+          actualDate: actualStart,
+          accuracyDays: daysDifference,
+        ),
+      );
+        }
 
     final averageAccuracy = accuracyData.isNotEmpty
         ? accuracyData.map((a) => a.accuracyDays).fold(0, (a, b) => a + b) /
@@ -599,12 +597,10 @@ class AnalyticsService {
     final totalDays = trackingData.length;
 
     for (final data in trackingData) {
-      if (data.symptoms != null) {
-        for (final symptom in data.symptoms!) {
-          symptomCounts[symptom] = (symptomCounts[symptom] ?? 0) + 1;
-        }
+      for (final symptom in data.symptoms) {
+        symptomCounts[symptom] = (symptomCounts[symptom] ?? 0) + 1;
       }
-    }
+        }
 
     return symptomCounts.map(
       (symptom, count) => MapEntry(symptom, count / totalDays),

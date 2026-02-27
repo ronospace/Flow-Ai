@@ -50,8 +50,6 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final localizations = AppLocalizations.of(context);
-
     return Container(
       decoration: BoxDecoration(
         gradient: AppTheme.backgroundGradient(theme.brightness == Brightness.dark),
@@ -388,8 +386,8 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
               min: 21,
               max: 40,
               divisions: 19,
-              activeTrackColor: Colors.blue,
-        activeThumbColor: Colors.blue,
+              activeColor: Colors.blue,
+        
               onChanged: (value) {
                 setState(() {
                   _cycleLength = value.round();
@@ -461,8 +459,8 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
               min: 2,
               max: 10,
               divisions: 8,
-              activeTrackColor: Colors.blue,
-        activeThumbColor: Colors.blue,
+              activeColor: Colors.blue,
+        
               onChanged: (value) {
                 setState(() {
                   _periodLength = value.round();

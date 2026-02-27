@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../generated/app_localizations.dart';
 import '../services/partner_service.dart';
-import '../models/partner_models.dart';
 
 class PartnerPrivacySettingsScreen extends StatefulWidget {
   const PartnerPrivacySettingsScreen({super.key});
@@ -111,8 +110,6 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final localizations = AppLocalizations.of(context)!;
-
     if (_tempSettings == null) {
       return Scaffold(
         appBar: AppBar(
@@ -165,29 +162,29 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
                       _buildSwitchTile(
                         'Period Dates',
                         'Share when your period starts and ends',
-                        _tempSettings!.sharePeriodDates,
-                        (value) => _updateSetting((settings) => settings.copyWith(sharePeriodDates: value)),
+                        _tempSettings!.sharePredictions,
+                        (value) => _updateSetting((settings) => settings.copyWith(sharePredictions: value)),
                         Icons.calendar_today,
                       ),
                       _buildSwitchTile(
                         'Cycle Predictions',
                         'Share AI predictions for future cycles',
-                        _tempSettings!.shareCyclePredictions,
-                        (value) => _updateSetting((settings) => settings.copyWith(shareCyclePredictions: value)),
+                        _tempSettings!.sharePredictions,
+                        (value) => _updateSetting((settings) => settings.copyWith(sharePredictions: value)),
                         Icons.auto_graph,
                       ),
                       _buildSwitchTile(
                         'Ovulation Dates',
                         'Share fertile window and ovulation predictions',
-                        _tempSettings!.shareOvulationDates,
-                        (value) => _updateSetting((settings) => settings.copyWith(shareOvulationDates: value)),
+                        _tempSettings!.sharePredictions,
+                        (value) => _updateSetting((settings) => settings.copyWith(sharePredictions: value)),
                         Icons.favorite_border,
                       ),
                       _buildSwitchTile(
                         'Flow Intensity',
                         'Share detailed flow intensity information',
-                        _tempSettings!.shareFlowIntensity,
-                        (value) => _updateSetting((settings) => settings.copyWith(shareFlowIntensity: value)),
+                        _tempSettings!.sharePhysicalSymptoms,
+                        (value) => _updateSetting((settings) => settings.copyWith(sharePhysicalSymptoms: value)),
                         Icons.water_drop,
                         isAdvanced: true,
                       ),
@@ -205,15 +202,15 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
                       _buildSwitchTile(
                         'Basic Symptoms',
                         'Share common symptoms like cramps, headaches',
-                        _tempSettings!.shareBasicSymptoms,
-                        (value) => _updateSetting((settings) => settings.copyWith(shareBasicSymptoms: value)),
+                        _tempSettings!.shareSymptoms,
+                        (value) => _updateSetting((settings) => settings.copyWith(shareSymptoms: value)),
                         Icons.local_hospital,
                       ),
                       _buildSwitchTile(
                         'Detailed Symptoms',
                         'Share all symptoms and severity levels',
-                        _tempSettings!.shareDetailedSymptoms,
-                        (value) => _updateSetting((settings) => settings.copyWith(shareDetailedSymptoms: value)),
+                        _tempSettings!.sharePhysicalSymptoms,
+                        (value) => _updateSetting((settings) => settings.copyWith(sharePhysicalSymptoms: value)),
                         Icons.assignment,
                         isAdvanced: true,
                       ),
@@ -227,8 +224,8 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
                       _buildSwitchTile(
                         'Pain Levels',
                         'Share pain intensity and location details',
-                        _tempSettings!.sharePainLevels,
-                        (value) => _updateSetting((settings) => settings.copyWith(sharePainLevels: value)),
+                        _tempSettings!.sharePhysicalSymptoms,
+                        (value) => _updateSetting((settings) => settings.copyWith(sharePhysicalSymptoms: value)),
                         Icons.sentiment_very_dissatisfied,
                         isAdvanced: true,
                       ),
@@ -246,22 +243,22 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
                       _buildSwitchTile(
                         'AI Health Insights',
                         'Share personalized AI health recommendations',
-                        _tempSettings!.shareAIInsights,
-                        (value) => _updateSetting((settings) => settings.copyWith(shareAIInsights: value)),
+                        _tempSettings!.allowInsights,
+                        (value) => _updateSetting((settings) => settings.copyWith(allowInsights: value)),
                         Icons.psychology,
                       ),
                       _buildSwitchTile(
                         'Health Trends',
                         'Share long-term health pattern analysis',
-                        _tempSettings!.shareHealthTrends,
-                        (value) => _updateSetting((settings) => settings.copyWith(shareHealthTrends: value)),
+                        _tempSettings!.allowInsights,
+                        (value) => _updateSetting((settings) => settings.copyWith(allowInsights: value)),
                         Icons.trending_up,
                       ),
                       _buildSwitchTile(
                         'Personal Notes',
                         'Share your private journal entries and notes',
-                        _tempSettings!.sharePersonalNotes,
-                        (value) => _updateSetting((settings) => settings.copyWith(sharePersonalNotes: value)),
+                        _tempSettings!.shareSymptoms,
+                        (value) => _updateSetting((settings) => settings.copyWith(shareSymptoms: value)),
                         Icons.note,
                         isAdvanced: true,
                       ),
@@ -279,22 +276,22 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
                       _buildSwitchTile(
                         'Partner Messages',
                         'Allow your partner to send you messages',
-                        _tempSettings!.allowPartnerMessages,
-                        (value) => _updateSetting((settings) => settings.copyWith(allowPartnerMessages: value)),
+                        _tempSettings!.sendNotifications,
+                        (value) => _updateSetting((settings) => settings.copyWith(sendNotifications: value)),
                         Icons.chat,
                       ),
                       _buildSwitchTile(
                         'Care Reminders',
                         'Receive care suggestions from your partner',
-                        _tempSettings!.allowCareReminders,
-                        (value) => _updateSetting((settings) => settings.copyWith(allowCareReminders: value)),
+                        _tempSettings!.sendNotifications,
+                        (value) => _updateSetting((settings) => settings.copyWith(sendNotifications: value)),
                         Icons.favorite,
                       ),
                       _buildSwitchTile(
                         'Mood Check-ins',
                         'Allow partner to check on your mood',
-                        _tempSettings!.allowMoodCheckIns,
-                        (value) => _updateSetting((settings) => settings.copyWith(allowMoodCheckIns: value)),
+                        _tempSettings!.sendNotifications,
+                        (value) => _updateSetting((settings) => settings.copyWith(sendNotifications: value)),
                         Icons.sentiment_satisfied,
                       ),
                     ],
@@ -311,32 +308,32 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
                       _buildSwitchTile(
                         'Period Start/End',
                         'Notify partner when period starts or ends',
-                        _tempSettings!.notifyPeriodStart && _tempSettings!.notifyPeriodEnd,
+                        _tempSettings!.sendNotifications && _tempSettings!.sendNotifications,
                         (value) => _updateSetting((settings) => settings.copyWith(
-                          notifyPeriodStart: value,
-                          notifyPeriodEnd: value,
+                          sendNotifications: value,
+                          
                         )),
                         Icons.event,
                       ),
                       _buildSwitchTile(
                         'Ovulation Notifications',
                         'Notify partner about ovulation timing',
-                        _tempSettings!.notifyOvulation,
-                        (value) => _updateSetting((settings) => settings.copyWith(notifyOvulation: value)),
+                        _tempSettings!.sendNotifications,
+                        (value) => _updateSetting((settings) => settings.copyWith(sendNotifications: value)),
                         Icons.favorite_border,
                       ),
                       _buildSwitchTile(
                         'Mood Changes',
                         'Notify partner about significant mood changes',
-                        _tempSettings!.notifyMoodChanges,
-                        (value) => _updateSetting((settings) => settings.copyWith(notifyMoodChanges: value)),
+                        _tempSettings!.sendNotifications,
+                        (value) => _updateSetting((settings) => settings.copyWith(sendNotifications: value)),
                         Icons.psychology,
                       ),
                       _buildSwitchTile(
                         'Symptom Alerts',
                         'Notify partner about new or severe symptoms',
-                        _tempSettings!.notifySymptomChanges,
-                        (value) => _updateSetting((settings) => settings.copyWith(notifySymptomChanges: value)),
+                        _tempSettings!.sendNotifications,
+                        (value) => _updateSetting((settings) => settings.copyWith(sendNotifications: value)),
                         Icons.warning,
                         isAdvanced: true,
                       ),
@@ -354,24 +351,24 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
                       _buildSwitchTile(
                         'Hide During Period',
                         'Reduce visibility to partner during menstruation',
-                        _tempSettings!.hideFromPartnerDuringPeriod,
-                        (value) => _updateSetting((settings) => settings.copyWith(hideFromPartnerDuringPeriod: value)),
+                        _tempSettings!.allowInsights,
+                        (value) => _updateSetting((settings) => settings.copyWith(allowInsights: value)),
                         Icons.visibility_off,
                         isAdvanced: true,
                       ),
                       _buildSwitchTile(
                         'Hide Detailed Health Data',
                         'Hide sensitive health metrics and details',
-                        _tempSettings!.hideDetailedHealthData,
-                        (value) => _updateSetting((settings) => settings.copyWith(hideDetailedHealthData: value)),
+                        _tempSettings!.allowInsights,
+                        (value) => _updateSetting((settings) => settings.copyWith(allowInsights: value)),
                         Icons.shield,
                         isAdvanced: true,
                       ),
                       _buildSwitchTile(
                         'Allow History Access',
                         'Let partner view historical cycle data',
-                        _tempSettings!.allowPartnerViewHistory,
-                        (value) => _updateSetting((settings) => settings.copyWith(allowPartnerViewHistory: value)),
+                        _tempSettings!.allowInsights,
+                        (value) => _updateSetting((settings) => settings.copyWith(allowInsights: value)),
                         Icons.history,
                       ),
                     ],
@@ -744,20 +741,20 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
   int _getSharedCount() {
     if (_tempSettings == null) return 0;
     int count = 0;
-    if (_tempSettings!.sharePeriodDates) count++;
-    if (_tempSettings!.shareCyclePredictions) count++;
-    if (_tempSettings!.shareOvulationDates) count++;
-    if (_tempSettings!.shareBasicSymptoms) count++;
+    if (_tempSettings!.sharePredictions) count++;
+    if (_tempSettings!.sharePredictions) count++;
+    if (_tempSettings!.sharePredictions) count++;
+    if (_tempSettings!.shareSymptoms) count++;
     if (_tempSettings!.shareMoodData) count++;
-    if (_tempSettings!.shareAIInsights) count++;
-    if (_tempSettings!.shareHealthTrends) count++;
-    if (_tempSettings!.allowPartnerMessages) count++;
-    if (_tempSettings!.allowCareReminders) count++;
-    if (_tempSettings!.allowMoodCheckIns) count++;
-    if (_tempSettings!.notifyPeriodStart) count++;
-    if (_tempSettings!.notifyOvulation) count++;
-    if (_tempSettings!.notifyMoodChanges) count++;
-    if (_tempSettings!.allowPartnerViewHistory) count++;
+    if (_tempSettings!.allowInsights) count++;
+    if (_tempSettings!.allowInsights) count++;
+    if (_tempSettings!.sendNotifications) count++;
+    if (_tempSettings!.sendNotifications) count++;
+    if (_tempSettings!.sendNotifications) count++;
+    if (_tempSettings!.sendNotifications) count++;
+    if (_tempSettings!.sendNotifications) count++;
+    if (_tempSettings!.sendNotifications) count++;
+    if (_tempSettings!.allowInsights) count++;
     return count;
   }
 
@@ -768,13 +765,13 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
   int _getAdvancedCount() {
     if (_tempSettings == null) return 0;
     int count = 0;
-    if (_tempSettings!.shareFlowIntensity) count++;
-    if (_tempSettings!.shareDetailedSymptoms) count++;
-    if (_tempSettings!.sharePainLevels) count++;
-    if (_tempSettings!.sharePersonalNotes) count++;
-    if (_tempSettings!.notifySymptomChanges) count++;
-    if (_tempSettings!.hideFromPartnerDuringPeriod) count++;
-    if (_tempSettings!.hideDetailedHealthData) count++;
+    if (_tempSettings!.sharePhysicalSymptoms) count++;
+    if (_tempSettings!.sharePhysicalSymptoms) count++;
+    if (_tempSettings!.sharePhysicalSymptoms) count++;
+    if (_tempSettings!.shareSymptoms) count++;
+    if (_tempSettings!.sendNotifications) count++;
+    if (_tempSettings!.allowInsights) count++;
+    if (_tempSettings!.allowInsights) count++;
     return count;
   }
 }

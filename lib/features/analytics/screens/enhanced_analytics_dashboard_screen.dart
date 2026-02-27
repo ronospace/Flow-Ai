@@ -8,7 +8,6 @@ import '../widgets/trend_chart_widget.dart';
 import '../widgets/recommendations_list.dart';
 import '../widgets/advanced_analytics_dashboard.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/services/analytics_service.dart';
 import '../../../generated/app_localizations.dart';
 import '../../../core/widgets/medical_disclaimer_banner.dart';
 import '../../../core/widgets/medical_citations_footer.dart';
