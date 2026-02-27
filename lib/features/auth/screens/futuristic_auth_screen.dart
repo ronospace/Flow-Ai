@@ -1,15 +1,12 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:go_router/go_router.dart';
 import '../../../core/services/auth_service.dart';
 import '../../../core/services/platform_service.dart';
 import '../../../core/ui/adaptive_messages.dart';
 import '../widgets/biometric_button.dart';
-import '../../settings/providers/settings_provider.dart';
 
 /// 🚀 Futuristic Auth Screen - Gen Z & Alpha Design
 /// Features: Glassmorphism, 3D effects, smooth animations, modern color schemes
@@ -329,9 +326,6 @@ class _FuturisticAuthScreenState extends State<FuturisticAuthScreen>
                   _buildModernSocialButtons(),
 
                   const SizedBox(height: 24),
-
-                  // Demo Account Info Button
-                  _buildFuturisticDemoButton(),
                 ],
               ),
             ),
@@ -812,46 +806,6 @@ class _FuturisticAuthScreenState extends State<FuturisticAuthScreen>
     }
   }
 
-  Widget _buildFuturisticDemoButton() {
-    return Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                const Color(0xFF8B5CF6).withValues(alpha: 0.2),
-                const Color(0xFFEC4899).withValues(alpha: 0.2),
-              ],
-            ),
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: Colors.white.withValues(alpha: 0.3),
-              width: 1.5,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFF8B5CF6).withValues(alpha: 0.2),
-                blurRadius: 20,
-                offset: const Offset(0, 10),
-              ),
-            ],
-          ),
-          child: _buildFuturisticButton(
-            text: _isLoading ? 'Loading Demo...' : 'Demo Account Info',
-            onPressed: _isLoading ? null : _handleDemoAccountFill,
-            colors: [const Color(0xFFFBBF24), const Color(0xFFF59E0B)],
-            icon: Icons.touch_app_rounded,
-          ),
-        )
-        .animate(controller: _socialController)
-        .fadeIn(delay: 600.ms)
-        .slideY(begin: 0.3, end: 0, delay: 600.ms, curve: Curves.easeOut)
-        .shimmer(
-          delay: 1000.ms,
-          duration: 2000.ms,
-          color: Colors.white.withValues(alpha: 0.3),
-        );
-  }
-
   Widget _buildFuturisticButton({
     required String text,
     required VoidCallback? onPressed,
@@ -904,71 +858,4 @@ class _FuturisticAuthScreenState extends State<FuturisticAuthScreen>
     );
   }
 
-  Future<void> _handleDemoAccountFill() async {
-    // Demo credentials
-
-    // Show loading state
-    setState(() {
-      _isLoading = true;
-      _isLogin = true; // Ensure we're in login mode
-    });
-
-    // Fill credentials with animation
-    _emailController.text = demoEmail;
-    _passwordController.text = demoPassword;
-
-    // Provide haptic feedback
-    HapticFeedback.heavyImpact();
-
-    // Show info message
-    _showInfoMessage('⚡ Demo credentials loaded! Signing in...');
-
-    // Wait a moment for visual feedback
-    await Future.delayed(const Duration(milliseconds: 1000));
-
-    // Automatically sign in
-    try {
-      // Initialize auth service if needed
-      await _authService.initialize();
-
-      final result = await _authService.signInWithEmail(
-        email: demoEmail,
-        password: demoPassword,
-      );
-
-      if (result.isSuccess) {
-        _showSuccessMessage(
-          '✨ Welcome to Flow Ai Demo! Exploring sample data...',
-        );
-
-        // Sync user data
-        try {
-          final settingsProvider = SettingsProvider();
-          await settingsProvider.initializeSettings();
-          await settingsProvider.forceUserDataSync();
-          debugPrint('✅ User settings synced for demo account');
-        } catch (syncError) {
-          debugPrint('⚠️ Warning: Could not sync user settings: $syncError');
-        }
-
-        // Navigate to home
-        await Future.delayed(const Duration(milliseconds: 1200));
-        if (mounted) {
-          context.go('/home');
-        }
-      } else {
-        throw Exception(result.error);
-      }
-    } catch (e) {
-      debugPrint('❌ Demo account sign-in error: $e');
-      final errorMessage = e.toString().replaceFirst('Exception: ', '');
-      _showErrorMessage('Demo sign-in failed: $errorMessage');
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
-  }
 }

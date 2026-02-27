@@ -237,11 +237,13 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
       title: 'Basic Information',
       child: Column(
         children: [
-          AdaptiveTextFormField(
+          TextFormField(
             controller: _fullNameController,
-            labelText: 'Full Name',
-            hintText: 'Enter your full name',
-            prefixIcon: Icons.person,
+            decoration: const InputDecoration(
+              labelText: 'Full Name',
+              hintText: 'Enter your full name',
+              prefixIcon: Icon(Icons.person),
+            ),
             onChanged: (_) => _notifyDataChanged(),
             validator: (value) {
               if (value?.isEmpty ?? true) {
@@ -253,16 +255,18 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
           
           const SizedBox(height: 16),
           
-          AdaptiveTextFormField(
+          TextFormField(
             controller: _preferredNameController,
-            labelText: 'Preferred Name (Optional)',
-            hintText: 'What would you like us to call you?',
-            prefixIcon: Icons.badge,
+            decoration: const InputDecoration(
+              labelText: 'Preferred Name (Optional)',
+              hintText: 'What would you like us to call you?',
+              prefixIcon: Icon(Icons.badge),
+            ),
             onChanged: (_) => _notifyDataChanged(),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           _buildDateOfBirthField(context),
         ],
       ),
@@ -271,7 +275,7 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
 
   Widget _buildDateOfBirthField(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return InkWell(
       onTap: () => _selectDateOfBirth(context),
       borderRadius: BorderRadius.circular(12),
@@ -289,9 +293,7 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
               Icons.calendar_today,
               color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
             ),
-            
             const SizedBox(width: 12),
-            
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -302,26 +304,20 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
                       color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                     ),
                   ),
-                  
                   const SizedBox(height: 2),
-                  
                   Text(
                     _selectedDateOfBirth != null
                         ? _formatDate(_selectedDateOfBirth!)
                         : 'Select your date of birth',
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: _selectedDateOfBirth != null
-                          ? theme.colorScheme.onSurface
-                          : theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
               ),
             ),
-            
             Icon(
-              Icons.arrow_forward_ios,
-              size: 16,
+              Icons.chevron_right,
               color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
             ),
           ],
@@ -329,6 +325,8 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
       ),
     );
   }
+
+
 
   Widget _buildPersonalitySection(BuildContext context) {
     return _buildSection(

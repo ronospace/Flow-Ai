@@ -6,7 +6,6 @@ import '../../features/onboarding/screens/onboarding_screen.dart';
 import '../../features/onboarding/screens/setup_screen.dart';
 import '../../features/auth/screens/auth_screen.dart';
 import '../../features/auth/screens/auth_choice_screen.dart';
-import '../../features/auth/screens/futuristic_auth_screen.dart';
 import '../../features/cycle/screens/home_screen.dart';
 import '../../features/cycle/screens/calendar_screen.dart';
 import '../../features/cycle/screens/tracking_screen.dart';
@@ -54,12 +53,12 @@ class AppRouter {
       GoRoute(
         path: '/auth/login',
         name: 'auth-login',
-        builder: (context, state) => const FuturisticAuthScreen(),
+        builder: (context, state) => const AuthScreen(),
       ),
       GoRoute(
         path: '/auth/signup',
         name: 'auth-signup',
-        builder: (context, state) => const FuturisticAuthScreen(),
+        builder: (context, state) => const AuthScreen(),
       ),
       GoRoute(
         path: '/auth',

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:go_router/go_router.dart';
@@ -537,7 +536,9 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         }
       } else {
         _showErrorMessage(result.error ?? 'Biometric authentication failed');
-      }    } catch (e) {
+      }
+    }
+    catch (e) {
       debugPrint('Biometric authentication error: $e');
       _showErrorMessage('Biometric authentication failed. Please try again.');
     } finally {
@@ -716,7 +717,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       } else {
         _showErrorMessage(result.error ?? 'Google sign-in failed');
       }
-    } catch (e) {
+    }
+    catch (e) {
       debugPrint('Google sign-in error: $e');
       _showErrorMessage('Google sign-in failed. Please try again.');
     } finally {
@@ -771,7 +773,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       } else {
         _showErrorMessage(result.error ?? 'Apple sign-in failed');
       }
-    } catch (e) {
+    }
+    catch (e) {
       debugPrint('Apple sign-in error: $e');
       _showErrorMessage('Apple sign-in failed. Please try again.');
     } finally {
@@ -998,76 +1001,11 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         .fadeIn(delay: 400.ms)
         .slideY(begin: 0.2, end: 0, delay: 400.ms);
   }
-
   Future<void> _handleDemoAccountFill() async {
-    // Demo credentials
-
-    // Show loading state
-    setState(() {
-      _isLoading = true;
-      _isLogin = true; // Ensure we're in login mode
-    });
-
-    // Fill credentials with animation
-    _emailController.text = demoEmail;
-    _passwordController.text = demoPassword;
-
-    // Provide haptic feedback
-    HapticFeedback.mediumImpact();
-
-    // Show info message
-    _showInfoMessage('Demo credentials loaded. Signing in...');    // Wait a moment for visual feedback
-    await Future.delayed(const Duration(milliseconds: 800));
-
-    if (!mounted) return;
-
-    // Automatically sign in
-    try {
-      // Initialize auth service if needed
-      await _authService.initialize();
-
-      final result = await _authService.signInWithEmail(
-        email: demoEmail,
-        password: demoPassword,
-      );
-
-      if (result.isSuccess) {
-        _showSuccessMessage(
-          'Welcome to Flow Ai Demo! Exploring sample data...',
-        );
-
-        // Sync user data
-        try {
-          // _settingsProvider captured above
-          await _settingsProvider.initializeSettings();
-          if (!mounted) return;
-          await _settingsProvider.forceUserDataSync();
-          if (!mounted) return;
-          debugPrint('✅ User settings synced for demo account');
-        } catch (syncError) {
-          debugPrint('⚠️ Warning: Could not sync user settings: $syncError');
-        }
-
-        // Navigate to home
-        await Future.delayed(const Duration(milliseconds: 1000));
-        if (!mounted) return;
-
-        if (mounted) {
-          _router.go('/home');
-        }
-      } else {
-        throw Exception(result.error);
-      }
-    } catch (e) {
-      debugPrint('❌ Demo account sign-in error: $e');
-      final errorMessage = e.toString().replaceFirst('Exception: ', '');
-      _showErrorMessage('Demo sign-in failed: $errorMessage');
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
+    // Demo mode removed for store safety and clean analytics.
+    // Keep this handler to avoid breaking UI wiring.
+    HapticFeedback.lightImpact();
+    _showInfoMessage('Demo mode is no longer available. Please sign up or log in to continue.');
   }
+
 }

@@ -29,28 +29,27 @@ class AdMobService {
   static const String _iosRewardedInterstitialAdUnitId = 'ca-app-pub-8707491489514576/2881586612';
 
   // Ad unit getters
+  // Debug: defaults to TEST ads (safe). Override with:
+  // flutter run --dart-define=USE_TEST_ADS=false
+  static bool get _useTestAds => kDebugMode && const bool.fromEnvironment("USE_TEST_ADS", defaultValue: true);
+
   static String get bannerAdUnitId {
-    if (kDebugMode) {
-      return _testBannerAdUnitId;
-    } else {
-      return Platform.isAndroid ? _androidBannerAdUnitId : _iosBannerAdUnitId;
-    }
+    return _useTestAds
+        ? _testBannerAdUnitId
+        : (Platform.isAndroid ? _androidBannerAdUnitId : _iosBannerAdUnitId);
   }
 
   static String get interstitialAdUnitId {
-    if (kDebugMode) {
-      return _testInterstitialAdUnitId;
-    } else {
-      return Platform.isAndroid ? _androidInterstitialAdUnitId : _iosInterstitialAdUnitId;
-    }
+    return _useTestAds
+        ? _testInterstitialAdUnitId
+        : (Platform.isAndroid ? _androidInterstitialAdUnitId : _iosInterstitialAdUnitId);
   }
 
   static String get rewardedAdUnitId {
-    if (kDebugMode) {
-      return _testRewardedAdUnitId;
-    } else {
-      return Platform.isAndroid ? _androidRewardedAdUnitId : _iosRewardedAdUnitId;
-    }
+    return _useTestAds
+        ? _testRewardedAdUnitId
+        : (Platform.isAndroid ? _androidRewardedAdUnitId : _iosRewardedAdUnitId);
+
   }
 
   // Interstitial ad variables

@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../generated/app_localizations.dart';
-import '../../../core/services/local_user_service.dart';
 import '../services/partner_service.dart' hide PartnershipStatus, PartnerMessageType, PartnerMessage, PartnerInsight, PartnerInsightType, Partnership show PartnerService, PartnerCareAction, PartnerCareActionType, PartnerInvitation, PartnerSharingSettings;
 import '../services/partner_service.dart' as service_types show PartnerMessageType;
 import '../models/partner_models.dart' show Partnership, PartnershipStatus, PartnerMessage, PartnerMessageType, PartnerPrivacySettings, CareAction, CareActionType;
@@ -16,7 +14,6 @@ import '../widgets/partner_care_actions_widget.dart';
 import '../widgets/partner_insights_widget.dart';
 import '../dialogs/invite_partner_dialog.dart';
 import '../dialogs/join_partner_dialog.dart';
-import 'package:shimmer/shimmer.dart';
 
 class PartnerDashboardScreen extends StatefulWidget {
   const PartnerDashboardScreen({super.key});
@@ -78,7 +75,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = AppLocalizations.of(context);
     
     return Scaffold(
       body: Consumer<PartnerService>(
@@ -176,7 +173,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
   Widget _buildPartnershipHeader(ThemeData theme, AppLocalizations localizations, PartnerService partnerService) {
     final partnership = partnerService.currentPartnership!;
     // Service Partnership doesn't have status field, so assume active if partnership exists
-    final isConnected = partnerService.hasPartner && (partnership.partnerUserName?.isNotEmpty ?? false);
+    final isConnected = partnerService.hasPartner && (partnership.partnerUserName.isNotEmpty ?? false);
     
     return AnimatedBuilder(
       animation: _contentAnimation,

@@ -97,7 +97,7 @@ class PerformanceOptimizer {
   }) async {
     // Cancel previous debounce timer if exists
     if (_pendingOperations.containsKey('${key}_debounce')) {
-      (_pendingOperations['${key}_debounce']!.future as Future).ignore();
+      (_pendingOperations['${key}_debounce']!.future).ignore();
       _pendingOperations.remove('${key}_debounce');
     }
 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flow_ai/core/services/ads_service.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
@@ -10,13 +9,14 @@ import 'generated/app_localizations.dart';
 // import 'core/services/firebase_service.dart'; // Temporarily disabled for iOS build
 import 'core/utils/app_logger.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 import 'core/theme/app_theme.dart';
 import 'core/utils/image_cache_config.dart';
 import 'core/routing/app_router.dart';
 import 'core/services/ai_engine.dart';
 import 'core/services/notification_service.dart';
-import 'core/services/admob_service.dart';
+import 'core/services/admob_service.dart' as admob;
 import 'core/services/navigation_service.dart';
 import 'core/services/ai_conversation_memory.dart';
 import 'core/services/offline_service.dart';
@@ -40,7 +40,7 @@ import 'core/services/auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initAds();
+  await _initializeAdMob();
   // Configure Flutter for production performance
   if (kReleaseMode) {
     // Disable debug banner and optimize for production
@@ -75,7 +75,9 @@ Future<void> _initializeCriticalServices() async {
 
   // Initialize Firebase
   try {
-    await Firebase.initializeApp();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
     AppLogger.success('Firebase initialized');
   } catch (e) {
     AppLogger.warning('Firebase initialization failed (app will continue): ');
@@ -119,8 +121,8 @@ Future<void> _initializeNonCriticalServices() async {
 
 Future<void> _initializeAdMob() async {
   try {
-    await AdMobService.initialize();
-    final adMobService = AdMobService();
+    await admob.AdMobService.initialize();
+    final adMobService = admob.AdMobService();
     // Load ads without blocking - fire and forget
     adMobService.loadInterstitialAd();
     adMobService.loadRewardedAd();

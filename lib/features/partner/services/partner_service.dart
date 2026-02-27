@@ -1,9 +1,5 @@
 import 'dart:async';
-import 'dart:math';
 import 'package:flutter/foundation.dart';
-import '../models/partner_models.dart';
-import '../../../core/services/notification_service.dart';
-import '../../../core/services/local_user_service.dart';
 import 'local_partner_service.dart';
 
 /// Partner service - Uses local storage for partner features
@@ -122,10 +118,8 @@ class PartnerService extends ChangeNotifier {
         personalMessage: personalMessage,
       );
       
-      if (invitation != null) {
-        debugPrint('✅ Partner invitation created: ${invitation.invitationCode}');
-      }
-      
+      debugPrint('✅ Partner invitation created: ${invitation.invitationCode}');
+          
       return invitation;
     } catch (e) {
       _setError('Failed to create invitation: $e');
@@ -290,7 +284,7 @@ class PartnerService extends ChangeNotifier {
       'messageCount': _messages.length,
       'careActionCount': _careActions.length,
       'insightCount': _insights.length,
-      'lastActivity': _currentPartnership?.lastActiveAt?.toIso8601String(),
+      'lastActivity': _currentPartnership?.lastActiveAt.toIso8601String(),
     };
   }
 
