@@ -243,7 +243,3 @@ flutter_launcher_icons:
     image_path: "flow_ai_icon.png"
 
 dependency_overrides:
-  firebase_auth:
-    path: third_party/flutterfire/firebase_auth
-  firebase_core:
-    path: third_party/flutterfire/firebase_core

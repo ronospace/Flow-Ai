@@ -7,7 +7,7 @@ void main() {
       // Arrange
       final now = DateTime.now();
       final metadata = {'theme': 'dark', 'language': 'en'};
-      
+
       // Act
       final user = User(
         id: 'test_id_123',
@@ -19,7 +19,7 @@ void main() {
         profileImageUrl: 'https://example.com/avatar.png',
         metadata: metadata,
       );
-      
+
       // Assert
       expect(user.id, equals('test_id_123'));
       expect(user.email, equals('test@example.com'));
@@ -39,7 +39,7 @@ void main() {
         name: 'Minimal User',
         createdAt: DateTime.now(),
       );
-      
+
       // Assert
       expect(user.id, equals('minimal_id'));
       expect(user.email, equals('minimal@test.com'));
@@ -61,10 +61,10 @@ void main() {
         lastUpdated: DateTime(2024, 1, 2, 12, 0, 0),
         isEmailVerified: true,
       );
-      
+
       // Act
       final json = user.toJson();
-      
+
       // Assert
       expect(json['uid'], equals('json_uid'));
       expect(json['email'], equals('json@test.com'));
@@ -87,10 +87,10 @@ void main() {
         'createdAt': '2024-01-01T12:00:00.000',
         'lastUpdated': '2024-01-02T12:00:00.000',
       };
-      
+
       // Act
       final user = User.fromJson(json);
-      
+
       // Assert
       expect(user.uid, equals('from_json_uid'));
       expect(user.email, equals('fromjson@test.com'));
@@ -102,28 +102,31 @@ void main() {
       expect(user.lastUpdated, equals(DateTime(2024, 1, 2, 12, 0, 0)));
     });
 
-    test('should create copyWith maintaining original values when no changes provided', () {
-      // Arrange
-      final original = User(
-        uid: 'copy_uid',
-        email: 'copy@test.com',
-        displayName: 'Copy User',
-        username: 'copyuser',
-        createdAt: DateTime(2024, 1, 1),
-        lastUpdated: DateTime(2024, 1, 1),
-        isEmailVerified: true,
-      );
-      
-      // Act
-      final copy = original.copyWith();
-      
-      // Assert
-      expect(copy.uid, equals(original.uid));
-      expect(copy.email, equals(original.email));
-      expect(copy.displayName, equals(original.displayName));
-      expect(copy.username, equals(original.username));
-      expect(copy.isEmailVerified, equals(original.isEmailVerified));
-    });
+    test(
+      'should create copyWith maintaining original values when no changes provided',
+      () {
+        // Arrange
+        final original = User(
+          uid: 'copy_uid',
+          email: 'copy@test.com',
+          displayName: 'Copy User',
+          username: 'copyuser',
+          createdAt: DateTime(2024, 1, 1),
+          lastUpdated: DateTime(2024, 1, 1),
+          isEmailVerified: true,
+        );
+
+        // Act
+        final copy = original.copyWith();
+
+        // Assert
+        expect(copy.uid, equals(original.uid));
+        expect(copy.email, equals(original.email));
+        expect(copy.displayName, equals(original.displayName));
+        expect(copy.username, equals(original.username));
+        expect(copy.isEmailVerified, equals(original.isEmailVerified));
+      },
+    );
 
     test('should create copyWith with updated values', () {
       // Arrange
@@ -135,14 +138,14 @@ void main() {
         lastUpdated: DateTime(2024, 1, 1),
         isEmailVerified: false,
       );
-      
+
       // Act
       final updated = original.copyWith(
         displayName: 'Updated User',
         email: 'updated@test.com',
         isEmailVerified: true,
       );
-      
+
       // Assert
       expect(updated.uid, equals('update_uid')); // Unchanged
       expect(updated.email, equals('updated@test.com')); // Updated

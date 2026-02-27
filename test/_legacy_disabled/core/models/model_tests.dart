@@ -151,7 +151,7 @@ void main() {
         userId: 'user_1',
         recordedAt: DateTime(2024, 1, 1),
         symptoms: {
-          'headache': SymptomEntry(severity: 5.0, description: 'Mild headache')
+          'headache': SymptomEntry(severity: 5.0, description: 'Mild headache'),
         },
         context: SymptomContext.dailyTracking,
       );
@@ -167,7 +167,10 @@ void main() {
 
     test('should add and remove symptoms', () {
       final tracking = SymptomTracking.empty(userId: 'user_1');
-      final symptomEntry = SymptomEntry(severity: 7.0, description: 'Severe cramps');
+      final symptomEntry = SymptomEntry(
+        severity: 7.0,
+        description: 'Severe cramps',
+      );
 
       final withSymptom = tracking.addSymptom('cramps', symptomEntry);
       expect(withSymptom.symptoms.length, 1);
@@ -347,9 +350,18 @@ void main() {
     test('SeverityLevel should convert from numeric value', () {
       expect(SeverityLevelExtension.fromNumericValue(0.5), SeverityLevel.none);
       expect(SeverityLevelExtension.fromNumericValue(2.5), SeverityLevel.mild);
-      expect(SeverityLevelExtension.fromNumericValue(5.0), SeverityLevel.moderate);
-      expect(SeverityLevelExtension.fromNumericValue(8.0), SeverityLevel.severe);
-      expect(SeverityLevelExtension.fromNumericValue(10.0), SeverityLevel.extreme);
+      expect(
+        SeverityLevelExtension.fromNumericValue(5.0),
+        SeverityLevel.moderate,
+      );
+      expect(
+        SeverityLevelExtension.fromNumericValue(8.0),
+        SeverityLevel.severe,
+      );
+      expect(
+        SeverityLevelExtension.fromNumericValue(10.0),
+        SeverityLevel.extreme,
+      );
     });
   });
 
@@ -359,7 +371,10 @@ void main() {
       expect(getSymptomCategory('anxiety'), SymptomCategory.mood);
       expect(getSymptomCategory('headache'), SymptomCategory.physical);
       expect(getSymptomCategory('fatigue'), SymptomCategory.energy);
-      expect(getSymptomCategory('unknown'), SymptomCategory.physical); // default
+      expect(
+        getSymptomCategory('unknown'),
+        SymptomCategory.physical,
+      ); // default
     });
   });
 }

@@ -1,4 +1,3 @@
-
 // === ENUMS ===
 
 enum TestType {
@@ -12,22 +11,9 @@ enum TestType {
   regression,
 }
 
-enum TestStatus {
-  pending,
-  running,
-  passed,
-  failed,
-  skipped,
-  timeout,
-  error,
-}
+enum TestStatus { pending, running, passed, failed, skipped, timeout, error }
 
-enum TestPriority {
-  low,
-  medium,
-  high,
-  critical,
-}
+enum TestPriority { low, medium, high, critical }
 
 enum TestCategory {
   authentication,
@@ -83,7 +69,7 @@ class TestCase {
   final Duration timeout;
   final bool enabled;
   final Map<String, dynamic> metadata;
-  
+
   // Test execution details
   TestStatus status;
   Duration? executionTime;
@@ -91,7 +77,7 @@ class TestCase {
   String? stackTrace;
   DateTime? startTime;
   DateTime? endTime;
-  
+
   TestCase({
     required this.id,
     required this.name,
@@ -114,7 +100,8 @@ class TestCase {
   bool get isPassed => status == TestStatus.passed;
   bool get isFailed => status == TestStatus.failed;
   bool get isRunning => status == TestStatus.running;
-  bool get isCompleted => status == TestStatus.passed || status == TestStatus.failed;
+  bool get isCompleted =>
+      status == TestStatus.passed || status == TestStatus.failed;
 
   TestCase copyWith({
     TestStatus? status,
@@ -171,7 +158,9 @@ class TestCase {
       name: json['name'],
       description: json['description'],
       type: TestType.values.firstWhere((e) => e.name == json['type']),
-      category: TestCategory.values.firstWhere((e) => e.name == json['category']),
+      category: TestCategory.values.firstWhere(
+        (e) => e.name == json['category'],
+      ),
       priority: TestPriority.values.firstWhere(
         (e) => e.name == json['priority'],
         orElse: () => TestPriority.medium,
@@ -184,15 +173,15 @@ class TestCase {
         (e) => e.name == json['status'],
         orElse: () => TestStatus.pending,
       ),
-      executionTime: json['execution_time_ms'] != null 
+      executionTime: json['execution_time_ms'] != null
           ? Duration(milliseconds: json['execution_time_ms'])
           : null,
       errorMessage: json['error_message'],
       stackTrace: json['stack_trace'],
-      startTime: json['start_time'] != null 
+      startTime: json['start_time'] != null
           ? DateTime.parse(json['start_time'])
           : null,
-      endTime: json['end_time'] != null 
+      endTime: json['end_time'] != null
           ? DateTime.parse(json['end_time'])
           : null,
     );
@@ -209,7 +198,7 @@ class TestSuite {
   final Map<String, dynamic> configuration;
   final bool parallel;
   final int maxConcurrency;
-  
+
   // Execution state
   TestStatus status;
   DateTime? startTime;
@@ -239,7 +228,8 @@ class TestSuite {
   int get totalTests => testCases.length;
   int get enabledTests => testCases.where((t) => t.enabled).length;
   double get successRate => totalTests > 0 ? passedCount / totalTests : 0.0;
-  bool get isCompleted => status == TestStatus.passed || status == TestStatus.failed;
+  bool get isCompleted =>
+      status == TestStatus.passed || status == TestStatus.failed;
 
   List<TestCase> getTestsByType(TestType type) {
     return testCases.where((test) => test.type == type).toList();
@@ -260,8 +250,10 @@ class TestSuite {
   void updateStats() {
     passedCount = testCases.where((t) => t.status == TestStatus.passed).length;
     failedCount = testCases.where((t) => t.status == TestStatus.failed).length;
-    skippedCount = testCases.where((t) => t.status == TestStatus.skipped).length;
-    
+    skippedCount = testCases
+        .where((t) => t.status == TestStatus.skipped)
+        .length;
+
     totalExecutionTime = testCases
         .where((t) => t.executionTime != null)
         .fold(Duration.zero, (sum, test) => sum + test.executionTime!);
@@ -354,7 +346,9 @@ class TestConfiguration {
       generateCodeCoverage: json['generate_code_coverage'] ?? true,
       enableParallelExecution: json['enable_parallel_execution'] ?? true,
       maxConcurrency: json['max_concurrency'] ?? 4,
-      defaultTimeout: Duration(milliseconds: json['default_timeout_ms'] ?? 30000),
+      defaultTimeout: Duration(
+        milliseconds: json['default_timeout_ms'] ?? 30000,
+      ),
       testDataPath: json['test_data_path'] ?? 'test/fixtures',
       outputPath: json['output_path'] ?? 'test/reports',
       excludePatterns: List<String>.from(json['exclude_patterns'] ?? []),
@@ -485,11 +479,16 @@ class TestReport {
     this.environment = 'test',
   });
 
-  int get totalTests => testSuites.fold(0, (sum, suite) => sum + suite.totalTests);
-  int get totalPassed => testSuites.fold(0, (sum, suite) => sum + suite.passedCount);
-  int get totalFailed => testSuites.fold(0, (sum, suite) => sum + suite.failedCount);
-  int get totalSkipped => testSuites.fold(0, (sum, suite) => sum + suite.skippedCount);
-  double get overallSuccessRate => totalTests > 0 ? totalPassed / totalTests : 0.0;
+  int get totalTests =>
+      testSuites.fold(0, (sum, suite) => sum + suite.totalTests);
+  int get totalPassed =>
+      testSuites.fold(0, (sum, suite) => sum + suite.passedCount);
+  int get totalFailed =>
+      testSuites.fold(0, (sum, suite) => sum + suite.failedCount);
+  int get totalSkipped =>
+      testSuites.fold(0, (sum, suite) => sum + suite.skippedCount);
+  double get overallSuccessRate =>
+      totalTests > 0 ? totalPassed / totalTests : 0.0;
 
   Map<TestType, int> get testsByType {
     final map = <TestType, int>{};
@@ -639,7 +638,8 @@ class PerformanceTestResult {
   });
 
   bool get allMetricsPassed => metrics.every((m) => m.passed);
-  List<PerformanceMetric> get failedMetrics => metrics.where((m) => !m.passed).toList();
+  List<PerformanceMetric> get failedMetrics =>
+      metrics.where((m) => !m.passed).toList();
 
   Map<String, dynamic> toJson() {
     return {

@@ -11,7 +11,11 @@ void main() {
 
       final msg = 'Rest & restore';
       // Spanish locale expectation: prefix + translated string present
-      final adapted = svc.adaptTone(message: msg, targetLocale: 'es-ES', tone: ToneProfile.supportive);
+      final adapted = svc.adaptTone(
+        message: msg,
+        targetLocale: 'es-ES',
+        tone: ToneProfile.supportive,
+      );
 
       expect(adapted.contains('🤗 '), isTrue);
       expect(adapted.contains('Descansa y recupérate'), isTrue);
@@ -33,11 +37,13 @@ void main() {
         updatedAt: DateTime.now(),
       );
 
-      final payload = svc.buildPhaseNotification(phase: 'follicular', user: user);
+      final payload = svc.buildPhaseNotification(
+        phase: 'follicular',
+        user: user,
+      );
       expect(payload.title.isNotEmpty, isTrue);
       expect(payload.body.isNotEmpty, isTrue);
       expect(payload.data?['locale'], equals('es'));
     });
   });
 }
-

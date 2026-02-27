@@ -217,7 +217,7 @@ void main() {
         name: 'Test User',
         createdAt: DateTime.now(),
       );
-      
+
       // Act
       final result = AuthResult.success(userId: user.id, email: user.email);
 
@@ -344,7 +344,7 @@ void main() {
       expect([1, 2, 3, 4, 5].safeAverage(), equals(3.0));
       expect([10].safeAverage(), equals(10.0));
       expect(<int>[].safeAverage(), equals(0.0));
-      
+
       // Test with doubles
       expect([1.5, 2.5, 3.5].safeAverage(), equals(2.5));
     });
@@ -359,7 +359,7 @@ void main() {
     test('should create unique sets', () {
       final list1 = [1, 2, 3, 4, 5];
       final list2 = [3, 4, 5, 6, 7];
-      
+
       expect(list1.length, equals(5));
       expect(list2.length, equals(5));
       expect(list1.first, equals(1));
@@ -369,7 +369,7 @@ void main() {
     test('should find unique items', () {
       final list = [1, 2, 2, 3, 3, 3, 4];
       final unique = list.unique();
-      
+
       expect(unique.length, equals(4));
       expect(unique.toSet(), equals({1, 2, 3, 4}));
     });
@@ -377,13 +377,13 @@ void main() {
     test('should find most frequent item', () {
       final list = ['a', 'b', 'a', 'c', 'a', 'b'];
       final mostFrequent = list.mostFrequent();
-      
+
       expect(mostFrequent, equals('a'));
     });
 
     test('should safely get item by index', () {
       final list = [1, 2, 3];
-      
+
       expect(list.safeGet(0), equals(1));
       expect(list.safeGet(2), equals(3));
       expect(list.safeGet(5), isNull); // Out of bounds
@@ -394,61 +394,79 @@ void main() {
   group('Data Validation Tests', () {
     test('should validate cycle data constraints', () {
       // Valid cycle data
-      expect(() => CycleData(
-        id: 'valid',
-        userId: 'user',
-        startDate: DateTime.now(),
-        dailyData: {},
-        createdAt: DateTime.now(),
-        cycleLength: 28,
-        periodLength: 5,
-      ), returnsNormally);
+      expect(
+        () => CycleData(
+          id: 'valid',
+          userId: 'user',
+          startDate: DateTime.now(),
+          dailyData: {},
+          createdAt: DateTime.now(),
+          cycleLength: 28,
+          periodLength: 5,
+        ),
+        returnsNormally,
+      );
 
       // Test various cycle lengths (should all be valid in model)
-      expect(() => CycleData(
-        id: 'short_cycle',
-        userId: 'user',
-        startDate: DateTime.now(),
-        dailyData: {},
-        createdAt: DateTime.now(),
-        cycleLength: 21,
-        periodLength: 3,
-      ), returnsNormally);
+      expect(
+        () => CycleData(
+          id: 'short_cycle',
+          userId: 'user',
+          startDate: DateTime.now(),
+          dailyData: {},
+          createdAt: DateTime.now(),
+          cycleLength: 21,
+          periodLength: 3,
+        ),
+        returnsNormally,
+      );
 
       // Long cycle should also be valid
-      expect(() => CycleData(
-        id: 'long_cycle',
-        userId: 'user',
-        startDate: DateTime.now(),
-        dailyData: {},
-        createdAt: DateTime.now(),
-        cycleLength: 35,
-        periodLength: 7,
-      ), returnsNormally);
+      expect(
+        () => CycleData(
+          id: 'long_cycle',
+          userId: 'user',
+          startDate: DateTime.now(),
+          dailyData: {},
+          createdAt: DateTime.now(),
+          cycleLength: 35,
+          periodLength: 7,
+        ),
+        returnsNormally,
+      );
     });
 
     test('should validate mood scores', () {
-      expect(() => DailyTrackingData(
-        date: DateTime.now(),
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-        mood: 8,
-      ), returnsNormally);
+      expect(
+        () => DailyTrackingData(
+          date: DateTime.now(),
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+          mood: 8,
+        ),
+        returnsNormally,
+      );
 
       // Test range validation - model should accept various mood values
-      expect(() => DailyTrackingData(
-        date: DateTime.now(),
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-        mood: 1,
-      ), returnsNormally);
+      expect(
+        () => DailyTrackingData(
+          date: DateTime.now(),
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+          mood: 1,
+        ),
+        returnsNormally,
+      );
 
-      expect(() => DailyTrackingData(
-        date: DateTime.now(),
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-        mood: 10,
-      ), returnsNormally);
+      expect(
+        () => DailyTrackingData(
+          date: DateTime.now(),
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+          mood: 10,
+        ),
+        returnsNormally,
+      );
     });
   });
 
@@ -510,7 +528,7 @@ void main() {
       // Empty lists
       expect(<int>[].safeAverage(), equals(0.0));
       expect(<String>[].mostFrequent(), isNull);
-      
+
       // Null checks in models
       final user = User(
         id: 'test',

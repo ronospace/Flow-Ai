@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:go_router/go_router.dart';
@@ -984,6 +986,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildDemoAccountButton(ThemeData theme) {
+    if (kReleaseMode) return const SizedBox.shrink();
     return AdaptiveComponents.adaptiveButton(
           context: context,
           text: 'Demo',

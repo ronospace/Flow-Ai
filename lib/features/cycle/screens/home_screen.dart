@@ -22,6 +22,8 @@ import '../../../core/ai/period_prediction_engine.dart';
 import '../../ai_predictions/widgets/ai_prediction_card.dart';
 import '../../ai_predictions/screens/ai_predictions_screen.dart';
 import 'dart:math' as math;
+import '../../../core/widgets/pressable_avatar.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -395,6 +397,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localizations = AppLocalizations.of(context);
+    final authService = context.read<AuthService>();
+    final user = authService.currentUser;
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -406,7 +411,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
-      ),
+      
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: 16),
+          child: PressableAvatar(onTap: () { context.push('/settings'); }, displayName: user?.displayName, photoUrl: user?.photoURL),
+        ),
+      ],
+),
       body: Stack(
         children: [
           Consumer<SettingsProvider>(
