@@ -3,7 +3,6 @@ import 'package:permission_handler/permission_handler.dart';
 import '../models/onboarding_step.dart';
 import '../../../core/services/user_preferences_service.dart';
 import '../../../core/services/notification_service.dart';
-import '../../../core/services/demo_data_service.dart';
 import '../../../core/services/onboarding_tutorial_service.dart';
 
 class OnboardingProvider extends ChangeNotifier {

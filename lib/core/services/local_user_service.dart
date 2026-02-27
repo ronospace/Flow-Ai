@@ -332,7 +332,6 @@ class LocalUserService {
   /// Auto-create demo account for Apple App Store review
   Future<void> _createDemoAccountIfNeeded() async {
     try {
-      const demoEmail = 'demo@flowai.app';
 
       // Check if demo account already exists
       final existingUser = await getUserByEmail(demoEmail);
@@ -344,7 +343,6 @@ class LocalUserService {
       // Create demo account with complete profile for App Store reviewers
       final result = await createUser(
         email: demoEmail,
-        password: 'FlowAiDemo2025!',
         displayName: kReleaseMode ? 'Guest' : 'Demo User for App Review',
         username: 'demo_reviewer',
       );
@@ -379,7 +377,6 @@ class LocalUserService {
         debugPrint(
           '✅ Demo account auto-created for App Store review with sample data',
         );
-        debugPrint('📧 Demo credentials: demo@flowai.app / FlowAiDemo2025!');
       } else {
         debugPrint('❌ Failed to create demo account: ${result.error}');
       }

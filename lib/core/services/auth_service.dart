@@ -404,7 +404,11 @@ class AuthService {
     required String password,
   }) async {
     try {
-      // Firebase temporarily disabled for iOS build
+      
+      if (email.trim().toLowerCase() == "demo@flowai.app") {
+        return AuthResult.failure("Demo account disabled");
+      }
+// Firebase temporarily disabled for iOS build
       // if (_firebaseAvailable && _auth != null) {
       //   try {
       //     final UserCredential result = await _auth!.signInWithEmailAndPassword(
