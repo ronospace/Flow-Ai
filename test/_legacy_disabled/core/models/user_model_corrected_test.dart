@@ -7,7 +7,7 @@ void main() {
       // Arrange
       final now = DateTime.now();
       final metadata = {'theme': 'dark', 'language': 'en'};
-      
+
       // Act
       final user = User(
         id: 'test_id_123',
@@ -19,7 +19,7 @@ void main() {
         profileImageUrl: 'https://example.com/avatar.png',
         metadata: metadata,
       );
-      
+
       // Assert
       expect(user.id, equals('test_id_123'));
       expect(user.email, equals('test@example.com'));
@@ -34,7 +34,7 @@ void main() {
     test('should create User with minimal required fields', () {
       // Arrange
       final now = DateTime.now();
-      
+
       // Act
       final user = User(
         id: 'minimal_id',
@@ -42,7 +42,7 @@ void main() {
         name: 'Minimal User',
         createdAt: now,
       );
-      
+
       // Assert
       expect(user.id, equals('minimal_id'));
       expect(user.email, equals('minimal@test.com'));
@@ -65,10 +65,10 @@ void main() {
         profileImageUrl: 'https://example.com/json.png',
         metadata: {'key': 'value'},
       );
-      
+
       // Act
       final json = user.toJson();
-      
+
       // Assert
       expect(json['id'], equals('json_id'));
       expect(json['email'], equals('json@test.com'));
@@ -92,10 +92,10 @@ void main() {
         'profile_image_url': 'https://example.com/fromjson.png',
         'metadata': {'theme': 'light'},
       };
-      
+
       // Act
       final user = User.fromJson(json);
-      
+
       // Assert
       expect(user.id, equals('from_json_id'));
       expect(user.email, equals('fromjson@test.com'));
@@ -107,32 +107,35 @@ void main() {
       expect(user.metadata, equals({'theme': 'light'}));
     });
 
-    test('should create copyWith maintaining original values when no changes provided', () {
-      // Arrange
-      final original = User(
-        id: 'copy_id',
-        email: 'copy@test.com',
-        name: 'Copy User',
-        uid: 'copy_uid',
-        displayName: 'Copy Display Name',
-        createdAt: DateTime(2024, 1, 1),
-        profileImageUrl: 'https://example.com/copy.png',
-        metadata: {'original': 'data'},
-      );
-      
-      // Act
-      final copy = original.copyWith();
-      
-      // Assert
-      expect(copy.id, equals(original.id));
-      expect(copy.email, equals(original.email));
-      expect(copy.name, equals(original.name));
-      expect(copy.uid, equals(original.uid));
-      expect(copy.displayName, equals(original.displayName));
-      expect(copy.createdAt, equals(original.createdAt));
-      expect(copy.profileImageUrl, equals(original.profileImageUrl));
-      expect(copy.metadata, equals(original.metadata));
-    });
+    test(
+      'should create copyWith maintaining original values when no changes provided',
+      () {
+        // Arrange
+        final original = User(
+          id: 'copy_id',
+          email: 'copy@test.com',
+          name: 'Copy User',
+          uid: 'copy_uid',
+          displayName: 'Copy Display Name',
+          createdAt: DateTime(2024, 1, 1),
+          profileImageUrl: 'https://example.com/copy.png',
+          metadata: {'original': 'data'},
+        );
+
+        // Act
+        final copy = original.copyWith();
+
+        // Assert
+        expect(copy.id, equals(original.id));
+        expect(copy.email, equals(original.email));
+        expect(copy.name, equals(original.name));
+        expect(copy.uid, equals(original.uid));
+        expect(copy.displayName, equals(original.displayName));
+        expect(copy.createdAt, equals(original.createdAt));
+        expect(copy.profileImageUrl, equals(original.profileImageUrl));
+        expect(copy.metadata, equals(original.metadata));
+      },
+    );
 
     test('should create copyWith with updated values', () {
       // Arrange
@@ -142,7 +145,7 @@ void main() {
         name: 'Original User',
         createdAt: DateTime(2024, 1, 1),
       );
-      
+
       // Act
       final updated = original.copyWith(
         name: 'Updated User',
@@ -150,7 +153,7 @@ void main() {
         displayName: 'Updated Display Name',
         uid: 'updated_uid',
       );
-      
+
       // Assert
       expect(updated.id, equals('update_id')); // Unchanged
       expect(updated.email, equals('updated@test.com')); // Updated
@@ -165,7 +168,7 @@ void main() {
       expect(User.isValidEmail('user@example.com'), true);
       expect(User.isValidEmail('test.email@domain.co.uk'), true);
       expect(User.isValidEmail('user123@test-domain.org'), true);
-      
+
       // Invalid emails
       expect(User.isValidEmail('invalid-email'), false);
       expect(User.isValidEmail('user@'), false);

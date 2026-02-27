@@ -1,28 +1,20 @@
 {
   "project_info": {
-    "project_number": "1009671565006",
-    "project_id": "flowai-production",
-    "storage_bucket": "flowai-production.firebasestorage.app"
+    "project_number": "752724279049",
+    "project_id": "flow-ai-656b3",
+    "storage_bucket": "flow-ai-656b3.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1009671565006:android:67dcc937b380eff90e6a9f",
+        "mobilesdk_app_id": "1:752724279049:android:cbdbf2519e6167a50d1dd8",
         "android_client_info": {
-          "package_name": "com.flowai.health"
+          "package_name": "com.flowai.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1009671565006-7sf3cjmn9vn2kjdgjk5e7v2lmjv9s8qv.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.flowai.health",
-            "certificate_hash": "da39a3ee5e6b4b0d3255bfef95601890afd80709"
-          }
-        },
-        {
-          "client_id": "1009671565006-v7k7p1p5e7v2lnj9s8qv3r5l8m6k4n3j.apps.googleusercontent.com",
+          "client_id": "752724279049-e3432ijrrbud5d5l3plai26t1bbtji1k.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -33,9 +25,23 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "752724279049-e3432ijrrbud5d5l3plai26t1bbtji1k.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "752724279049-ei2380bh9o9ph6tq348lht6sf0ks52n2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.flowai.health",
+                "app_store_id": "6751801915"
+              }
+            }
+          ]
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-8707491489514576~2318954189"
     }
   ],
   "configuration_version": "1"

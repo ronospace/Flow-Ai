@@ -6,7 +6,7 @@ void main() {
     test('should create successful AuthResult', () {
       // Act
       final result = AuthResult.success('test_user');
-      
+
       // Assert
       expect(result, isA<AuthResult>());
       expect(result.isSuccess, true);
@@ -17,7 +17,7 @@ void main() {
     test('should create failure AuthResult', () {
       // Act
       final result = AuthResult.failure('Authentication failed');
-      
+
       // Assert
       expect(result, isA<AuthResult>());
       expect(result.isSuccess, false);
@@ -28,7 +28,7 @@ void main() {
     test('should handle null user in success result', () {
       // Act
       final result = AuthResult.success(null);
-      
+
       // Assert
       expect(result.isSuccess, true);
       expect(result.user, isNull);
@@ -38,7 +38,7 @@ void main() {
     test('should handle empty error message', () {
       // Act
       final result = AuthResult.failure('');
-      
+
       // Assert
       expect(result.isSuccess, false);
       expect(result.error, equals(''));

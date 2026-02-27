@@ -21,20 +21,20 @@ void main() {
 
     testWidgets('Login screen renders correctly', (WidgetTester tester) async {
       // Arrange
-      when(mockAuthService.isAuthenticated).thenReturn(false);
+      when(mockAuthService.isAuthenticated).thenAnswer((_) async => false);
 
       // Act
       await tester.pumpWidget(
         MultiProvider(
-          providers: [
-            Provider<AuthService>.value(value: mockAuthService),
-          ],
+          providers: [Provider<AuthService>.value(value: mockAuthService)],
           child: MaterialApp(
             home: Scaffold(
               body: Column(
                 children: [
                   const Text('Flow Ai'),
-                  const Text('Welcome to your intelligent menstrual health companion'),
+                  const Text(
+                    'Welcome to your intelligent menstrual health companion',
+                  ),
                   TextFormField(
                     key: const Key('email_field'),
                     decoration: const InputDecoration(
@@ -69,17 +69,22 @@ void main() {
 
       // Assert
       expect(find.text('Flow Ai'), findsOneWidget);
-      expect(find.text('Welcome to your intelligent menstrual health companion'), findsOneWidget);
+      expect(
+        find.text('Welcome to your intelligent menstrual health companion'),
+        findsOneWidget,
+      );
       expect(find.byKey(const Key('email_field')), findsOneWidget);
       expect(find.byKey(const Key('password_field')), findsOneWidget);
       expect(find.byKey(const Key('login_button')), findsOneWidget);
       expect(find.byKey(const Key('signup_button')), findsOneWidget);
     });
 
-    testWidgets('Email validation works correctly', (WidgetTester tester) async {
+    testWidgets('Email validation works correctly', (
+      WidgetTester tester,
+    ) async {
       // Arrange
       String? validationError;
-      
+
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -98,7 +103,9 @@ void main() {
                   },
                   onChanged: (value) {
                     // Trigger validation
-                    validationError = value.isEmpty ? 'Email is required' : null;
+                    validationError = value.isEmpty
+                        ? 'Email is required'
+                        : null;
                   },
                 ),
               ],
@@ -108,14 +115,19 @@ void main() {
       );
 
       // Act - Enter invalid email
-      await tester.enterText(find.byKey(const Key('email_field')), 'invalid-email');
+      await tester.enterText(
+        find.byKey(const Key('email_field')),
+        'invalid-email',
+      );
       await tester.pump();
 
       // Assert
       expect(find.text('invalid-email'), findsOneWidget);
     });
 
-    testWidgets('Apple Sign-In button renders on iOS', (WidgetTester tester) async {
+    testWidgets('Apple Sign-In button renders on iOS', (
+      WidgetTester tester,
+    ) async {
       // Arrange & Act
       await tester.pumpWidget(
         MaterialApp(
@@ -135,7 +147,10 @@ void main() {
                     SizedBox(width: 8),
                     Text(
                       'Sign in with Apple',
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ],
                 ),
@@ -153,7 +168,9 @@ void main() {
   });
 
   group('Period Tracking UI Tests', () {
-    testWidgets('Calendar widget displays correctly', (WidgetTester tester) async {
+    testWidgets('Calendar widget displays correctly', (
+      WidgetTester tester,
+    ) async {
       // Arrange & Act
       await tester.pumpWidget(
         MaterialApp(
@@ -165,21 +182,22 @@ void main() {
                   key: const Key('calendar_container'),
                   height: 400,
                   child: GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 7,
-                    ),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 7,
+                        ),
                     itemCount: 35, // 5 weeks
                     itemBuilder: (context, index) {
                       return Container(
                         margin: const EdgeInsets.all(2),
                         decoration: BoxDecoration(
-                          color: index % 28 < 5 ? Colors.red.shade100 : Colors.transparent,
+                          color: index % 28 < 5
+                              ? Colors.red.shade100
+                              : Colors.transparent,
                           border: Border.all(color: Colors.grey.shade300),
                           borderRadius: BorderRadius.circular(4),
                         ),
-                        child: Center(
-                          child: Text('${index + 1}'),
-                        ),
+                        child: Center(child: Text('${index + 1}')),
                       );
                     },
                   ),
@@ -196,7 +214,9 @@ void main() {
       expect(find.text('Period Calendar'), findsOneWidget);
     });
 
-    testWidgets('Period logging form works correctly', (WidgetTester tester) async {
+    testWidgets('Period logging form works correctly', (
+      WidgetTester tester,
+    ) async {
       // Arrange
       String selectedFlow = 'Medium';
       List<String> selectedSymptoms = [];
@@ -250,7 +270,9 @@ void main() {
       expect(find.byKey(const Key('save_period_button')), findsOneWidget);
     });
 
-    testWidgets('Symptom selection checkboxes work', (WidgetTester tester) async {
+    testWidgets('Symptom selection checkboxes work', (
+      WidgetTester tester,
+    ) async {
       // Arrange
       bool crampingSelected = false;
 
@@ -292,11 +314,17 @@ void main() {
       mockAIEngine = MockAIEngine();
     });
 
-    testWidgets('AI chat interface renders correctly', (WidgetTester tester) async {
+    testWidgets('AI chat interface renders correctly', (
+      WidgetTester tester,
+    ) async {
       // Arrange
       final chatMessages = [
         {'sender': 'user', 'message': 'Hello, I have period cramps'},
-        {'sender': 'ai', 'message': 'I understand you\'re experiencing period cramps. Here are some suggestions...'},
+        {
+          'sender': 'ai',
+          'message':
+              'I understand you\'re experiencing period cramps. Here are some suggestions...',
+        },
       ];
 
       await tester.pumpWidget(
@@ -312,18 +340,24 @@ void main() {
                     itemBuilder: (context, index) {
                       final message = chatMessages[index];
                       final isUser = message['sender'] == 'user';
-                      
+
                       return Container(
-                        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                        margin: const EdgeInsets.symmetric(
+                          vertical: 4,
+                          horizontal: 8,
+                        ),
                         child: Row(
-                          mainAxisAlignment: 
-                              isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+                          mainAxisAlignment: isUser
+                              ? MainAxisAlignment.end
+                              : MainAxisAlignment.start,
                           children: [
                             Container(
                               constraints: const BoxConstraints(maxWidth: 250),
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
-                                color: isUser ? Colors.blue : Colors.grey.shade200,
+                                color: isUser
+                                    ? Colors.blue
+                                    : Colors.grey.shade200,
                                 borderRadius: BorderRadius.circular(16),
                               ),
                               child: Text(
@@ -381,16 +415,17 @@ void main() {
           home: Scaffold(
             body: const TextField(
               key: Key('message_input'),
-              decoration: InputDecoration(
-                hintText: 'Type your message...',
-              ),
+              decoration: InputDecoration(hintText: 'Type your message...'),
             ),
           ),
         ),
       );
 
       // Act
-      await tester.enterText(find.byKey(const Key('message_input')), 'Test message');
+      await tester.enterText(
+        find.byKey(const Key('message_input')),
+        'Test message',
+      );
       await tester.pump();
 
       // Assert
@@ -399,7 +434,9 @@ void main() {
   });
 
   group('Dashboard UI Tests', () {
-    testWidgets('Health insights cards render correctly', (WidgetTester tester) async {
+    testWidgets('Health insights cards render correctly', (
+      WidgetTester tester,
+    ) async {
       // Arrange
       await tester.pumpWidget(
         MaterialApp(
@@ -418,7 +455,13 @@ void main() {
                           children: [
                             Icon(Icons.favorite, color: Colors.red.shade300),
                             const SizedBox(width: 8),
-                            const Text('Cycle Insights', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                            const Text(
+                              'Cycle Insights',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ],
                         ),
                         const SizedBox(height: 12),
@@ -440,7 +483,13 @@ void main() {
                           children: [
                             Icon(Icons.mood, color: Colors.orange.shade300),
                             const SizedBox(width: 8),
-                            const Text('Mood Tracker', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                            const Text(
+                              'Mood Tracker',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ],
                         ),
                         const SizedBox(height: 12),
@@ -465,7 +514,9 @@ void main() {
       expect(find.text('Your cycle is 28 days on average'), findsOneWidget);
     });
 
-    testWidgets('Progress indicators display correctly', (WidgetTester tester) async {
+    testWidgets('Progress indicators display correctly', (
+      WidgetTester tester,
+    ) async {
       // Arrange
       await tester.pumpWidget(
         MaterialApp(
@@ -480,7 +531,9 @@ void main() {
                       LinearProgressIndicator(
                         value: 0.6,
                         backgroundColor: Colors.grey.shade300,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.pink.shade300),
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Colors.pink.shade300,
+                        ),
                       ),
                       const Text('Day 17 of 28'),
                     ],
@@ -494,7 +547,9 @@ void main() {
                       CircularProgressIndicator(
                         value: 0.85,
                         backgroundColor: Colors.grey.shade300,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.green.shade400),
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Colors.green.shade400,
+                        ),
                       ),
                       const Text('85/100'),
                     ],
@@ -517,7 +572,9 @@ void main() {
   });
 
   group('Settings UI Tests', () {
-    testWidgets('Settings screen renders all options', (WidgetTester tester) async {
+    testWidgets('Settings screen renders all options', (
+      WidgetTester tester,
+    ) async {
       // Arrange
       bool notificationsEnabled = true;
       bool biometricsEnabled = false;
@@ -581,7 +638,9 @@ void main() {
       expect(find.text('Export Data'), findsOneWidget);
     });
 
-    testWidgets('Settings switches toggle correctly', (WidgetTester tester) async {
+    testWidgets('Settings switches toggle correctly', (
+      WidgetTester tester,
+    ) async {
       // Arrange
       bool switchValue = false;
 
@@ -617,7 +676,9 @@ void main() {
   });
 
   group('Error Handling UI Tests', () {
-    testWidgets('Error messages display correctly', (WidgetTester tester) async {
+    testWidgets('Error messages display correctly', (
+      WidgetTester tester,
+    ) async {
       // Arrange
       await tester.pumpWidget(
         MaterialApp(
@@ -655,7 +716,12 @@ void main() {
       // Assert
       expect(find.byKey(const Key('error_banner')), findsOneWidget);
       expect(find.byKey(const Key('dismiss_error')), findsOneWidget);
-      expect(find.text('Failed to sync data. Please check your internet connection.'), findsOneWidget);
+      expect(
+        find.text(
+          'Failed to sync data. Please check your internet connection.',
+        ),
+        findsOneWidget,
+      );
       expect(find.byIcon(Icons.error), findsOneWidget);
     });
 

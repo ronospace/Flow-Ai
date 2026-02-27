@@ -7,7 +7,11 @@ import 'package:flow_ai/core/services/performance_service.dart';
 import 'package:flow_ai/core/health/advanced_health_analytics.dart';
 
 // Generate mocks
-@GenerateMocks([ProductionAnalyticsService, PerformanceService, AdvancedHealthAnalytics])
+@GenerateMocks([
+  ProductionAnalyticsService,
+  PerformanceService,
+  AdvancedHealthAnalytics,
+])
 import 'analytics_service_test.mocks.dart';
 
 void main() {
@@ -95,7 +99,10 @@ void main() {
 
       // Assert
       expect(analyticsService.featureUsageStats.containsKey(featureName), true);
-      expect(analyticsService.featureUsageStats[featureName]!['usage_count'], greaterThan(0));
+      expect(
+        analyticsService.featureUsageStats[featureName]!['usage_count'],
+        greaterThan(0),
+      );
     });
 
     test('should track ad impressions and revenue', () async {
@@ -126,12 +133,20 @@ void main() {
       const userId = 'behavior_user_123';
 
       // Track some user activities
-      await analyticsService.trackUserEngagement(userId, {'screen': 'calendar'});
-      await analyticsService.trackUserEngagement(userId, {'screen': 'insights'});
-      await analyticsService.trackFeatureUsage('period_tracking', {'user_id': userId});
+      await analyticsService.trackUserEngagement(userId, {
+        'screen': 'calendar',
+      });
+      await analyticsService.trackUserEngagement(userId, {
+        'screen': 'insights',
+      });
+      await analyticsService.trackFeatureUsage('period_tracking', {
+        'user_id': userId,
+      });
 
       // Act
-      final insights = await analyticsService.generateUserBehaviorInsights(userId);
+      final insights = await analyticsService.generateUserBehaviorInsights(
+        userId,
+      );
 
       // Assert
       expect(insights, isNotNull);
@@ -151,7 +166,9 @@ void main() {
       };
 
       // Act
-      final retention = await analyticsService.calculateRetentionMetrics(userActivities);
+      final retention = await analyticsService.calculateRetentionMetrics(
+        userActivities,
+      );
 
       // Assert
       expect(retention, isNotNull);
@@ -162,8 +179,9 @@ void main() {
 
     test('should handle analytics errors gracefully', () async {
       // Arrange
-      when(mockProductionService.trackEvent(any, any))
-          .thenThrow(Exception('Network error'));
+      when(
+        mockProductionService.trackEvent(any, any),
+      ).thenThrow(Exception('Network error'));
 
       // Act & Assert
       expect(
@@ -301,10 +319,12 @@ void main() {
 
     test('should track app performance metrics', () async {
       // Arrange
-      when(mockPerformanceService.trackMemoryUsage())
-          .thenAnswer((_) async => 42.5);
-      when(mockPerformanceService.trackCPUUsage())
-          .thenAnswer((_) async => 15.3);
+      when(
+        mockPerformanceService.trackMemoryUsage(),
+      ).thenAnswer((_) async => 42.5);
+      when(
+        mockPerformanceService.trackCPUUsage(),
+      ).thenAnswer((_) async => 15.3);
 
       // Act
       final memoryUsage = await mockPerformanceService.trackMemoryUsage();
@@ -317,29 +337,32 @@ void main() {
 
     test('should track frame rendering performance', () async {
       // Arrange
-      when(mockPerformanceService.trackFrameMetrics())
-          .thenAnswer((_) async => {
-            'average_frame_time': 16.67,
-            'dropped_frames': 2,
-            'jank_percentage': 1.2,
-          });
+      when(mockPerformanceService.trackFrameMetrics()).thenAnswer(
+        (_) async => {
+          'average_frame_time': 16.67,
+          'dropped_frames': 2,
+          'jank_percentage': 1.2,
+        },
+      );
 
       // Act
       final frameMetrics = await mockPerformanceService.trackFrameMetrics();
 
       // Assert
-      expect(frameMetrics['average_frame_time'], lessThan(20.0)); // Good performance
+      expect(
+        frameMetrics['average_frame_time'],
+        lessThan(20.0),
+      ); // Good performance
       expect(frameMetrics['jank_percentage'], lessThan(5.0)); // Low jank
     });
 
     test('should track network request performance', () async {
       // Arrange
-      when(mockPerformanceService.trackNetworkRequest('api_call', any))
-          .thenAnswer((_) async => {
-            'duration_ms': 250,
-            'success': true,
-            'status_code': 200,
-          });
+      when(
+        mockPerformanceService.trackNetworkRequest('api_call', any),
+      ).thenAnswer(
+        (_) async => {'duration_ms': 250, 'success': true, 'status_code': 200},
+      );
 
       // Act
       final networkMetrics = await mockPerformanceService.trackNetworkRequest(
@@ -368,15 +391,18 @@ void main() {
         {'date': '2024-02-26', 'cycle_day': 1, 'flow': 'heavy'},
       ];
 
-      when(mockHealthAnalytics.analyzeCyclePatterns(cycleData))
-          .thenAnswer((_) async => {
-            'average_cycle_length': 28.0,
-            'cycle_regularity': 0.95,
-            'pattern_trends': ['regular_cycles', 'consistent_flow'],
-          });
+      when(mockHealthAnalytics.analyzeCyclePatterns(cycleData)).thenAnswer(
+        (_) async => {
+          'average_cycle_length': 28.0,
+          'cycle_regularity': 0.95,
+          'pattern_trends': ['regular_cycles', 'consistent_flow'],
+        },
+      );
 
       // Act
-      final analysis = await mockHealthAnalytics.analyzeCyclePatterns(cycleData);
+      final analysis = await mockHealthAnalytics.analyzeCyclePatterns(
+        cycleData,
+      );
 
       // Assert
       expect(analysis['average_cycle_length'], equals(28.0));
@@ -392,15 +418,20 @@ void main() {
         'mood_scores': [7, 6, 8, 7, 9],
       };
 
-      when(mockHealthAnalytics.generateHealthInsights(healthMetrics))
-          .thenAnswer((_) async => {
-            'health_score': 85.0,
-            'recommendations': ['maintain_regular_exercise', 'track_nutrition'],
-            'risk_factors': [],
-          });
+      when(
+        mockHealthAnalytics.generateHealthInsights(healthMetrics),
+      ).thenAnswer(
+        (_) async => {
+          'health_score': 85.0,
+          'recommendations': ['maintain_regular_exercise', 'track_nutrition'],
+          'risk_factors': [],
+        },
+      );
 
       // Act
-      final insights = await mockHealthAnalytics.generateHealthInsights(healthMetrics);
+      final insights = await mockHealthAnalytics.generateHealthInsights(
+        healthMetrics,
+      );
 
       // Assert
       expect(insights['health_score'], greaterThan(80.0)); // Good health score
@@ -435,7 +466,10 @@ void main() {
       final userEvents = analyticsService.getUserEvents(userId);
       expect(userEvents.length, equals(5));
       expect(userEvents.map((e) => e['event']), contains('app_opened'));
-      expect(userEvents.map((e) => e['event']), contains('first_period_logged'));
+      expect(
+        userEvents.map((e) => e['event']),
+        contains('first_period_logged'),
+      );
     });
 
     test('should generate comprehensive analytics dashboard data', () async {
@@ -446,7 +480,9 @@ void main() {
       for (int i = 0; i < 10; i++) {
         await analyticsService.trackEvent('user_action_$i', {
           'user_id': 'dashboard_user_$i',
-          'timestamp': DateTime.now().subtract(Duration(hours: i)).toIso8601String(),
+          'timestamp': DateTime.now()
+              .subtract(Duration(hours: i))
+              .toIso8601String(),
         });
       }
 

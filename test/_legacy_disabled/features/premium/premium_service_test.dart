@@ -26,22 +26,34 @@ void main() {
 
     test('should check free features correctly', () async {
       await premiumService.initialize();
-      
+
       // Free features should be available without subscription
-      expect(premiumService.hasFeature(PremiumFeatureType.basicTracking), isTrue);
-      expect(premiumService.hasFeature(PremiumFeatureType.basicPredictions), isTrue);
-      expect(premiumService.hasFeature(PremiumFeatureType.limitedExports), isTrue);
-      
+      expect(
+        premiumService.hasFeature(PremiumFeatureType.basicTracking),
+        isTrue,
+      );
+      expect(
+        premiumService.hasFeature(PremiumFeatureType.basicPredictions),
+        isTrue,
+      );
+      expect(
+        premiumService.hasFeature(PremiumFeatureType.limitedExports),
+        isTrue,
+      );
+
       // Premium features should not be available without subscription
       expect(premiumService.hasFeature(PremiumFeatureType.advancedAI), isFalse);
-      expect(premiumService.hasFeature(PremiumFeatureType.healthcareIntegration), isFalse);
+      expect(
+        premiumService.hasFeature(PremiumFeatureType.healthcareIntegration),
+        isFalse,
+      );
     });
 
     test('should handle subscription tiers correctly', () {
       expect(SubscriptionTier.basic.displayName, equals('Basic'));
       expect(SubscriptionTier.premium.displayName, equals('Premium'));
       expect(SubscriptionTier.ultimate.displayName, equals('Ultimate'));
-      
+
       expect(SubscriptionTier.basic.price, equals(4.99));
       expect(SubscriptionTier.premium.price, equals(9.99));
       expect(SubscriptionTier.ultimate.price, equals(19.99));
@@ -49,7 +61,7 @@ void main() {
 
     test('should create subscription correctly', () {
       final subscription = Subscription.sample();
-      
+
       expect(subscription.id, isNotNull);
       expect(subscription.userId, isNotNull);
       expect(subscription.tier, isNotNull);
@@ -60,20 +72,16 @@ void main() {
 
     test('should calculate subscription remaining days', () {
       final futureDate = DateTime.now().add(const Duration(days: 10));
-      final subscription = Subscription.sample().copyWith(
-        endDate: futureDate,
-      );
-      
+      final subscription = Subscription.sample().copyWith(endDate: futureDate);
+
       expect(subscription.remainingDays, greaterThanOrEqualTo(9));
       expect(subscription.remainingDays, lessThanOrEqualTo(10));
     });
 
     test('should handle expired subscriptions', () {
       final pastDate = DateTime.now().subtract(const Duration(days: 1));
-      final subscription = Subscription.sample().copyWith(
-        endDate: pastDate,
-      );
-      
+      final subscription = Subscription.sample().copyWith(endDate: pastDate);
+
       expect(subscription.isExpired, isTrue);
       expect(subscription.isActive, isFalse);
       expect(subscription.remainingDays, equals(0));
@@ -84,7 +92,7 @@ void main() {
       expect(freeLimits.maxExportsPerMonth, equals(3));
       expect(freeLimits.maxReportsPerMonth, equals(1));
       expect(freeLimits.unlimitedPredictions, isFalse);
-      
+
       final premiumLimits = FeatureLimits.forTier(SubscriptionTier.premium);
       expect(premiumLimits.hasUnlimitedExports, isTrue);
       expect(premiumLimits.hasUnlimitedReports, isTrue);
@@ -104,7 +112,7 @@ void main() {
       expect(PremiumFeatureType.basicTracking.isFreeFeature, isTrue);
       expect(PremiumFeatureType.basicPredictions.isFreeFeature, isTrue);
       expect(PremiumFeatureType.limitedExports.isFreeFeature, isTrue);
-      
+
       expect(PremiumFeatureType.advancedAI.isFreeFeature, isFalse);
       expect(PremiumFeatureType.healthcareIntegration.isFreeFeature, isFalse);
       expect(PremiumFeatureType.multiUserProfiles.isFreeFeature, isFalse);
@@ -130,7 +138,7 @@ void main() {
         featureUsageCount: {},
         satisfactionRating: 4.5,
       );
-      
+
       expect(analytics.engagementScore, greaterThan(0));
       expect(analytics.engagementScore, lessThanOrEqualTo(100));
     });
@@ -142,7 +150,7 @@ void main() {
         PremiumFeatureType.advancedAI,
         SubscriptionTier.premium,
       );
-      
+
       expect(feature.type, equals(PremiumFeatureType.advancedAI));
       expect(feature.tier, equals(SubscriptionTier.premium));
       expect(feature.isEnabled, isTrue);
@@ -154,11 +162,11 @@ void main() {
         PremiumFeatureType.customReports,
         SubscriptionTier.basic,
       );
-      
+
       final updatedFeature = feature.incrementUsage();
       expect(updatedFeature.usageCount, equals(1));
       expect(updatedFeature.lastUsed, isNotNull);
-      
+
       final resetFeature = updatedFeature.resetMonthlyUsage();
       expect(resetFeature.usageCount, equals(0));
     });
@@ -172,7 +180,7 @@ void main() {
         usageCount: 5,
         usageLimitPerMonth: 10.0,
       );
-      
+
       expect(feature.hasUsageLimit, isTrue);
       expect(feature.isWithinUsageLimit, isTrue);
       expect(feature.remainingUsage, equals(5.0));
@@ -184,7 +192,7 @@ void main() {
         PremiumFeatureType.advancedAI,
         DateTime(2024, 1, 1),
       );
-      
+
       expect(analytics.featureType, equals(PremiumFeatureType.advancedAI));
       expect(analytics.totalUsage, equals(0));
       expect(analytics.consistencyScore, equals(0.0));

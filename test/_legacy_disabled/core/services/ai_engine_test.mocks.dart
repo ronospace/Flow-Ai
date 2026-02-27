@@ -231,7 +231,9 @@ class MockAIChatService extends _i1.Mock implements _i7.AIChatService {
   Future<Map<String, dynamic>> getMemoryStats() =>
       (super.noSuchMethod(
             Invocation.method(#getMemoryStats, []),
-            returnValue: Future<Map<String, dynamic>>.value(<String, dynamic>{}),
+            returnValue: Future<Map<String, dynamic>>.value(
+              <String, dynamic>{},
+            ),
           )
           as Future<Map<String, dynamic>>);
 

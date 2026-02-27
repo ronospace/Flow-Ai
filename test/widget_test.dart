@@ -47,9 +47,9 @@ class TestSplashScreen extends StatelessWidget {
                   color: Color(0xFFE91E63),
                 ),
               ),
-              
+
               const SizedBox(height: 30),
-              
+
               // App Name (without animation)
               const Text(
                 'FlowSense',
@@ -60,9 +60,9 @@ class TestSplashScreen extends StatelessWidget {
                   letterSpacing: -1,
                 ),
               ),
-              
+
               const SizedBox(height: 10),
-              
+
               // Tagline (without animation)
               const Text(
                 'AI-Powered Period Tracking',
@@ -72,9 +72,9 @@ class TestSplashScreen extends StatelessWidget {
                   letterSpacing: 0.5,
                 ),
               ),
-              
+
               const SizedBox(height: 50),
-              
+
               // Loading indicator (without animation)
               const SizedBox(
                 width: 60,
@@ -92,43 +92,37 @@ class TestSplashScreen extends StatelessWidget {
 }
 
 void main() {
-  testWidgets('Basic UI elements render correctly', (WidgetTester tester) async {
+  testWidgets('Basic UI elements render correctly', (
+    WidgetTester tester,
+  ) async {
     // Test a clean splash screen without any timers or animations
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: TestSplashScreen(),
-      ),
-    );
-    
+    await tester.pumpWidget(const MaterialApp(home: TestSplashScreen()));
+
     // Verify splash screen content
     expect(find.text('FlowSense'), findsOneWidget);
     expect(find.text('AI-Powered Period Tracking'), findsOneWidget);
     expect(find.byIcon(Icons.favorite_rounded), findsOneWidget);
     expect(find.byType(LinearProgressIndicator), findsOneWidget);
   });
-  
-  testWidgets('Container and gradient styling works', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: TestSplashScreen(),
-      ),
-    );
-    
+
+  testWidgets('Container and gradient styling works', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const MaterialApp(home: TestSplashScreen()));
+
     // Verify the container with gradient exists
     final containerFinder = find.byType(Container);
     expect(containerFinder, findsWidgets);
-    
+
     // Verify the icon is rendered
     expect(find.byIcon(Icons.favorite_rounded), findsOneWidget);
   });
-  
-  testWidgets('Widget layout structure is correct', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: TestSplashScreen(),
-      ),
-    );
-    
+
+  testWidgets('Widget layout structure is correct', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const MaterialApp(home: TestSplashScreen()));
+
     // Test the overall structure
     expect(find.byType(Scaffold), findsOneWidget);
     expect(find.byType(Center), findsWidgets); // Can be multiple Center widgets
