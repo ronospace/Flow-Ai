@@ -44,7 +44,7 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
       // Simulate loading time for better UX
       await Future.delayed(const Duration(milliseconds: 800));
       
-      final prediction = await PeriodPredictionEngine().predictNextPeriod('demo_user_id');
+      final prediction = await PeriodPredictionEngine().predictNextPeriod('anonymous_user');
       
       if (mounted) {
         setState(() {
