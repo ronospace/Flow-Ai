@@ -92,7 +92,9 @@ void main() {
         userId: '',
         cycleLength: -1,
         periodLength: 0,
-        lastPeriodStart: DateTime.now().add(const Duration(days: 10)), // Future date
+        lastPeriodStart: DateTime.now().add(
+          const Duration(days: 10),
+        ), // Future date
         symptoms: [],
         mood: '',
         flow: '',
@@ -122,7 +124,10 @@ void main() {
       final secondPrediction = await aiEngine.predictNextPeriod(cycleData);
 
       // Assert
-      expect(firstPrediction.nextPeriodDate, equals(secondPrediction.nextPeriodDate));
+      expect(
+        firstPrediction.nextPeriodDate,
+        equals(secondPrediction.nextPeriodDate),
+      );
       expect(firstPrediction.confidence, equals(secondPrediction.confidence));
     });
   });
@@ -147,11 +152,14 @@ void main() {
       // Arrange
       await chatService.initialize();
       const userId = 'test_user';
-      
+
       // Act
       await chatService.sendMessage(userId, 'Hello, I have period cramps');
-      final response1 = await chatService.sendMessage(userId, 'What should I do?');
-      
+      final response1 = await chatService.sendMessage(
+        userId,
+        'What should I do?',
+      );
+
       // Assert
       expect(response1, contains('cramps'));
       expect(chatService.getConversationLength(userId), greaterThan(1));
@@ -161,10 +169,13 @@ void main() {
       // Arrange
       await chatService.initialize();
       const userId = 'health_advice_user';
-      
+
       // Act
-      final response = await chatService.getHealthAdvice(userId, 'irregular periods');
-      
+      final response = await chatService.getHealthAdvice(
+        userId,
+        'irregular periods',
+      );
+
       // Assert
       expect(response, isNotEmpty);
       expect(response, contains('irregular'));
@@ -176,14 +187,14 @@ void main() {
       await chatService.initialize();
       const user1 = 'user1';
       const user2 = 'user2';
-      
+
       // Act
       await chatService.sendMessage(user1, 'I track my period daily');
       await chatService.sendMessage(user2, 'I have mood swings');
-      
+
       final context1 = chatService.getConversationContext(user1);
       final context2 = chatService.getConversationContext(user2);
-      
+
       // Assert
       expect(context1, contains('period'));
       expect(context2, contains('mood'));
@@ -194,13 +205,13 @@ void main() {
       // Arrange
       await chatService.initialize();
       const userId = 'memory_clear_user';
-      
+
       await chatService.sendMessage(userId, 'Test message');
       expect(chatService.getConversationLength(userId), equals(1));
-      
+
       // Act
       chatService.clearConversationMemory(userId);
-      
+
       // Assert
       expect(chatService.getConversationLength(userId), equals(0));
     });
@@ -238,15 +249,20 @@ void main() {
 
     test('should detect cycle patterns and anomalies', () async {
       // Arrange
-      final historicalData = List.generate(12, (index) => CycleData(
-        userId: 'pattern_user',
-        cycleLength: 28 + (index % 3), // Variable cycle length
-        periodLength: 4 + (index % 2), // Variable period length
-        lastPeriodStart: DateTime.now().subtract(Duration(days: 28 * (12 - index))),
-        symptoms: index % 4 == 0 ? ['cramping'] : [],
-        mood: index % 3 == 0 ? 'irritable' : 'normal',
-        flow: 'medium',
-      ));
+      final historicalData = List.generate(
+        12,
+        (index) => CycleData(
+          userId: 'pattern_user',
+          cycleLength: 28 + (index % 3), // Variable cycle length
+          periodLength: 4 + (index % 2), // Variable period length
+          lastPeriodStart: DateTime.now().subtract(
+            Duration(days: 28 * (12 - index)),
+          ),
+          symptoms: index % 4 == 0 ? ['cramping'] : [],
+          mood: index % 3 == 0 ? 'irritable' : 'normal',
+          flow: 'medium',
+        ),
+      );
 
       // Act
       final patterns = await aiEngine.detectCyclePatterns(historicalData);
@@ -260,15 +276,20 @@ void main() {
 
     test('should provide mood and symptom correlations', () async {
       // Arrange
-      final trackingData = List.generate(30, (index) => {
-        'date': DateTime.now().subtract(Duration(days: index)),
-        'mood': index % 7 < 2 ? 'sad' : 'happy',
-        'symptoms': index % 5 == 0 ? ['headache'] : [],
-        'cycleDay': (index % 28) + 1,
-      });
+      final trackingData = List.generate(
+        30,
+        (index) => {
+          'date': DateTime.now().subtract(Duration(days: index)),
+          'mood': index % 7 < 2 ? 'sad' : 'happy',
+          'symptoms': index % 5 == 0 ? ['headache'] : [],
+          'cycleDay': (index % 28) + 1,
+        },
+      );
 
       // Act
-      final correlations = await aiEngine.analyzeMoodSymptomCorrelations(trackingData);
+      final correlations = await aiEngine.analyzeMoodSymptomCorrelations(
+        trackingData,
+      );
 
       // Assert
       expect(correlations, isNotNull);

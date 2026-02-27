@@ -398,73 +398,6 @@ class AuthService {
     }
   }
 
-  /// Sign in with demo account (for app review and testing)
-  Future<AuthResult> signInWithDemo() async {
-    try {
-      const demoEmail = 'demo@flowai.app';
-      const demoPassword = 'FlowAiDemo2025!';
-      const demoDisplayName = 'Demo User for App Review';
-
-      // Check if demo user exists, create if not
-      if (_localUserService != null) {
-        final emailExists = await _localUserService!.isEmailRegistered(
-          demoEmail,
-        );
-
-        if (!emailExists) {
-          // Create demo user
-          final result = await _localUserService!.createUser(
-            email: demoEmail,
-            password: demoPassword,
-            displayName: demoDisplayName,
-            username: 'demo_user',
-          );
-
-          if (!result.isSuccess) {
-            return AuthResult.failure(
-              'Failed to create demo account: ${result.error}',
-            );
-          }
-        }
-
-        // Sign in as demo user
-        final result = await _localUserService!.signInUser(
-          email: demoEmail,
-          password: demoPassword,
-        );
-
-        if (result.isSuccess) {
-          await _storeUserData({
-            'uid': result.user!.uid,
-            'email': demoEmail,
-            'displayName': demoDisplayName,
-            'username': 'demo_user',
-            'provider': 'demo',
-            'lastLogin': DateTime.now().toIso8601String(),
-            'createdAt': DateTime.now().toIso8601String(),
-            'profileComplete': true,
-          });
-
-          if (_prefs != null) {
-            await _prefs!.setString(_lastLoginMethodKey, 'demo');
-          }
-
-          debugPrint('✅ Demo user signed in successfully');
-          return AuthResult.success(null);
-        } else {
-          return AuthResult.failure(result.error!);
-        }
-      }
-
-      return AuthResult.failure(
-        'Authentication service not properly initialized',
-      );
-    } catch (e) {
-      debugPrint('❌ Demo sign in error: $e');
-      return AuthResult.failure('Demo sign in failed: ${e.toString()}');
-    }
-  }
-
   /// Sign in with email and password
   Future<AuthResult> signInWithEmail({
     required String email,
@@ -504,27 +437,29 @@ class AuthService {
 
       // Fallback to local authentication
       if (_localUserService != null) {
-        // Special handling for demo account - create if doesn't exist
-        const demoEmail = 'demo@flowai.app';
-        const demoPassword = 'FlowAiDemo2025!';
-        if (email == demoEmail && password == demoPassword) {
-          final emailExists = await _localUserService!.isEmailRegistered(
-            demoEmail,
-          );
-          if (!emailExists) {
-            // Create demo account if it doesn't exist
-            final createResult = await _localUserService!.createUser(
-              email: demoEmail,
-              password: demoPassword,
-              displayName: 'Demo User for App Review',
-              username: 'demo_user',
+              if (!kReleaseMode) {
+  // Special handling for demo account (debug only)
+          const demoEmail = 'demo@flowai.app';
+          const demoPassword = 'FlowAiDemo2025!';
+          if (email == demoEmail && password == demoPassword) {
+            final emailExists = await _localUserService!.isEmailRegistered(
+              demoEmail,
             );
-            if (!createResult.isSuccess) {
-              return AuthResult.failure(
-                'Failed to create demo account: ${createResult.error}',
+            if (!emailExists) {
+              // Create demo account if it doesn't exist
+              final createResult = await _localUserService!.createUser(
+                email: demoEmail,
+                password: demoPassword,
+                displayName: kReleaseMode ? 'User' : 'Demo User for App Review',
+                username: 'demo_user',
               );
+              if (!createResult.isSuccess) {
+                return AuthResult.failure(
+                  'Failed to create demo account: ${createResult.error}',
+                );
+              }
             }
-          }
+        }
         }
 
         final localResult = await _localUserService!.signInUser(
@@ -543,14 +478,14 @@ class AuthService {
                 existingData?['username'] ??
                 localResult.user!.username ??
                 localResult.user!.displayName, // Preserve username
-            'provider': email == demoEmail ? 'demo' : 'local',
+            'provider': 'local',
             'lastLogin': DateTime.now().toIso8601String(),
           });
 
           if (_prefs != null) {
             await _prefs!.setString(
               _lastLoginMethodKey,
-              email == demoEmail ? 'demo' : 'local',
+              'local',
             );
           }
 

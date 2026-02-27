@@ -7,7 +7,8 @@ import 'dart:convert';
 
 // The 36 languages Flow Ai supports
 final Map<String, Map<String, String>> languageTranslations = {
-  'ar': { // Arabic
+  'ar': {
+    // Arabic
     'locale': 'ar',
     'appName': 'Flow Ai',
     'appTagline': 'تتبع الدورة الشهرية بالذكاء الاصطناعي',
@@ -21,9 +22,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'نعم',
     'no': 'لا',
     'save': 'حفظ',
-    'cancel': 'إلغاء'
+    'cancel': 'إلغاء',
   },
-  'zh': { // Chinese Simplified
+  'zh': {
+    // Chinese Simplified
     'locale': 'zh',
     'appName': 'Flow Ai',
     'appTagline': 'AI 生理期和周期跟踪',
@@ -37,9 +39,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': '是',
     'no': '否',
     'save': '保存',
-    'cancel': '取消'
+    'cancel': '取消',
   },
-  'hi': { // Hindi
+  'hi': {
+    // Hindi
     'locale': 'hi',
     'appName': 'Flow Ai',
     'appTagline': 'AI-संचालित मासिक धर्म और चक्र ट्रैकिंग',
@@ -53,9 +56,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'हां',
     'no': 'नहीं',
     'save': 'सेव करें',
-    'cancel': 'रद्द करें'
+    'cancel': 'रद्द करें',
   },
-  'bn': { // Bengali
+  'bn': {
+    // Bengali
     'locale': 'bn',
     'appName': 'Flow Ai',
     'appTagline': 'AI-চালিত পিরিয়ড এবং সাইকেল ট্র্যাকিং',
@@ -69,9 +73,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'হ্যাঁ',
     'no': 'না',
     'save': 'সেভ করুন',
-    'cancel': 'বাতিল'
+    'cancel': 'বাতিল',
   },
-  'pt': { // Portuguese
+  'pt': {
+    // Portuguese
     'locale': 'pt',
     'appName': 'Flow Ai',
     'appTagline': 'Rastreamento de Período e Ciclo com IA',
@@ -85,9 +90,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'Sim',
     'no': 'Não',
     'save': 'Salvar',
-    'cancel': 'Cancelar'
+    'cancel': 'Cancelar',
   },
-  'ru': { // Russian
+  'ru': {
+    // Russian
     'locale': 'ru',
     'appName': 'Flow Ai',
     'appTagline': 'ИИ-трекер менструального цикла',
@@ -101,9 +107,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'Да',
     'no': 'Нет',
     'save': 'Сохранить',
-    'cancel': 'Отмена'
+    'cancel': 'Отмена',
   },
-  'ja': { // Japanese
+  'ja': {
+    // Japanese
     'locale': 'ja',
     'appName': 'Flow Ai',
     'appTagline': 'AIによる生理・月経周期トラッキング',
@@ -117,9 +124,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'はい',
     'no': 'いいえ',
     'save': '保存',
-    'cancel': 'キャンセル'
+    'cancel': 'キャンセル',
   },
-  'ko': { // Korean
+  'ko': {
+    // Korean
     'locale': 'ko',
     'appName': 'Flow Ai',
     'appTagline': 'AI 기반 생리주기 추적',
@@ -133,9 +141,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': '예',
     'no': '아니오',
     'save': '저장',
-    'cancel': '취소'
+    'cancel': '취소',
   },
-  'de': { // German
+  'de': {
+    // German
     'locale': 'de',
     'appName': 'Flow Ai',
     'appTagline': 'KI-gestütztes Periode & Zyklus Tracking',
@@ -149,9 +158,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'Ja',
     'no': 'Nein',
     'save': 'Speichern',
-    'cancel': 'Abbrechen'
+    'cancel': 'Abbrechen',
   },
-  'it': { // Italian
+  'it': {
+    // Italian
     'locale': 'it',
     'appName': 'Flow Ai',
     'appTagline': 'Tracciamento del Ciclo Mestruale con AI',
@@ -165,9 +175,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'Sì',
     'no': 'No',
     'save': 'Salva',
-    'cancel': 'Annulla'
+    'cancel': 'Annulla',
   },
-  'tr': { // Turkish
+  'tr': {
+    // Turkish
     'locale': 'tr',
     'appName': 'Flow Ai',
     'appTagline': 'AI Destekli Adet ve Döngü Takibi',
@@ -181,9 +192,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'Evet',
     'no': 'Hayır',
     'save': 'Kaydet',
-    'cancel': 'İptal'
+    'cancel': 'İptal',
   },
-  'vi': { // Vietnamese
+  'vi': {
+    // Vietnamese
     'locale': 'vi',
     'appName': 'Flow Ai',
     'appTagline': 'Theo dõi Chu kỳ và Kinh nguyệt với AI',
@@ -197,9 +209,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'Có',
     'no': 'Không',
     'save': 'Lưu',
-    'cancel': 'Hủy'
+    'cancel': 'Hủy',
   },
-  'th': { // Thai
+  'th': {
+    // Thai
     'locale': 'th',
     'appName': 'Flow Ai',
     'appTagline': 'การติดตามรอบเดือนด้วย AI',
@@ -213,9 +226,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'ใช่',
     'no': 'ไม่',
     'save': 'บันทึก',
-    'cancel': 'ยกเลิก'
+    'cancel': 'ยกเลิก',
   },
-  'pl': { // Polish
+  'pl': {
+    // Polish
     'locale': 'pl',
     'appName': 'Flow Ai',
     'appTagline': 'Śledzenie Cyklu Menstruacyjnego z AI',
@@ -229,9 +243,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'Tak',
     'no': 'Nie',
     'save': 'Zapisz',
-    'cancel': 'Anuluj'
+    'cancel': 'Anuluj',
   },
-  'nl': { // Dutch
+  'nl': {
+    // Dutch
     'locale': 'nl',
     'appName': 'Flow Ai',
     'appTagline': 'AI-gedreven Menstruatie Tracking',
@@ -245,9 +260,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'Ja',
     'no': 'Nee',
     'save': 'Opslaan',
-    'cancel': 'Annuleren'
+    'cancel': 'Annuleren',
   },
-  'sv': { // Swedish
+  'sv': {
+    // Swedish
     'locale': 'sv',
     'appName': 'Flow Ai',
     'appTagline': 'AI-driven Menstruationsspårning',
@@ -261,9 +277,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'Ja',
     'no': 'Nej',
     'save': 'Spara',
-    'cancel': 'Avbryt'
+    'cancel': 'Avbryt',
   },
-  'da': { // Danish
+  'da': {
+    // Danish
     'locale': 'da',
     'appName': 'Flow Ai',
     'appTagline': 'AI-drevet Menstruations Tracking',
@@ -277,9 +294,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'Ja',
     'no': 'Nej',
     'save': 'Gem',
-    'cancel': 'Annuller'
+    'cancel': 'Annuller',
   },
-  'no': { // Norwegian
+  'no': {
+    // Norwegian
     'locale': 'no',
     'appName': 'Flow Ai',
     'appTagline': 'AI-drevet Menstruasjonssporing',
@@ -293,9 +311,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'Ja',
     'no': 'Nei',
     'save': 'Lagre',
-    'cancel': 'Avbryt'
+    'cancel': 'Avbryt',
   },
-  'fi': { // Finnish
+  'fi': {
+    // Finnish
     'locale': 'fi',
     'appName': 'Flow Ai',
     'appTagline': 'AI-pohjainen Kuukautiskierron Seuranta',
@@ -309,9 +328,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'Kyllä',
     'no': 'Ei',
     'save': 'Tallenna',
-    'cancel': 'Peruuta'
+    'cancel': 'Peruuta',
   },
-  'he': { // Hebrew
+  'he': {
+    // Hebrew
     'locale': 'he',
     'appName': 'Flow Ai',
     'appTagline': 'מעקב מחזור חודשי מונע בינה מלאכותית',
@@ -325,9 +345,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'כן',
     'no': 'לא',
     'save': 'שמור',
-    'cancel': 'בטל'
+    'cancel': 'בטל',
   },
-  'cs': { // Czech
+  'cs': {
+    // Czech
     'locale': 'cs',
     'appName': 'Flow Ai',
     'appTagline': 'AI Sledování Menstruačního Cyklu',
@@ -341,9 +362,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'Ano',
     'no': 'Ne',
     'save': 'Uložit',
-    'cancel': 'Zrušit'
+    'cancel': 'Zrušit',
   },
-  'hu': { // Hungarian
+  'hu': {
+    // Hungarian
     'locale': 'hu',
     'appName': 'Flow Ai',
     'appTagline': 'MI-alapú Menstruációs Ciklus Követés',
@@ -357,9 +379,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'Igen',
     'no': 'Nem',
     'save': 'Mentés',
-    'cancel': 'Mégse'
+    'cancel': 'Mégse',
   },
-  'uk': { // Ukrainian
+  'uk': {
+    // Ukrainian
     'locale': 'uk',
     'appName': 'Flow Ai',
     'appTagline': 'ШІ-трекер менструального циклу',
@@ -373,9 +396,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'Так',
     'no': 'Ні',
     'save': 'Зберегти',
-    'cancel': 'Скасувати'
+    'cancel': 'Скасувати',
   },
-  'el': { // Greek
+  'el': {
+    // Greek
     'locale': 'el',
     'appName': 'Flow Ai',
     'appTagline': 'Παρακολούθηση Εμμηνορροίας με AI',
@@ -389,9 +413,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'Ναι',
     'no': 'Όχι',
     'save': 'Αποθήκευση',
-    'cancel': 'Ακύρωση'
+    'cancel': 'Ακύρωση',
   },
-  'bg': { // Bulgarian
+  'bg': {
+    // Bulgarian
     'locale': 'bg',
     'appName': 'Flow Ai',
     'appTagline': 'ИИ проследяване на менструалния цикъл',
@@ -405,9 +430,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'Да',
     'no': 'Не',
     'save': 'Запази',
-    'cancel': 'Отказ'
+    'cancel': 'Отказ',
   },
-  'ro': { // Romanian
+  'ro': {
+    // Romanian
     'locale': 'ro',
     'appName': 'Flow Ai',
     'appTagline': 'Urmărirea Ciclului Menstrual cu AI',
@@ -421,9 +447,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'Da',
     'no': 'Nu',
     'save': 'Salvați',
-    'cancel': 'Anulați'
+    'cancel': 'Anulați',
   },
-  'hr': { // Croatian
+  'hr': {
+    // Croatian
     'locale': 'hr',
     'appName': 'Flow Ai',
     'appTagline': 'AI Praćenje Menstrualnog Ciklusa',
@@ -437,9 +464,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'Da',
     'no': 'Ne',
     'save': 'Spremi',
-    'cancel': 'Otkaži'
+    'cancel': 'Otkaži',
   },
-  'sk': { // Slovak
+  'sk': {
+    // Slovak
     'locale': 'sk',
     'appName': 'Flow Ai',
     'appTagline': 'AI Sledovanie Menštruačného Cyklu',
@@ -453,9 +481,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'Áno',
     'no': 'Nie',
     'save': 'Uložiť',
-    'cancel': 'Zrušiť'
+    'cancel': 'Zrušiť',
   },
-  'sl': { // Slovenian
+  'sl': {
+    // Slovenian
     'locale': 'sl',
     'appName': 'Flow Ai',
     'appTagline': 'AI Sledenje Menstrualnega Cikla',
@@ -469,9 +498,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'Da',
     'no': 'Ne',
     'save': 'Shrani',
-    'cancel': 'Prekliči'
+    'cancel': 'Prekliči',
   },
-  'lt': { // Lithuanian
+  'lt': {
+    // Lithuanian
     'locale': 'lt',
     'appName': 'Flow Ai',
     'appTagline': 'II Menstruacinio Ciklo Stebėjimas',
@@ -485,9 +515,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'Taip',
     'no': 'Ne',
     'save': 'Išsaugoti',
-    'cancel': 'Atšaukti'
+    'cancel': 'Atšaukti',
   },
-  'lv': { // Latvian
+  'lv': {
+    // Latvian
     'locale': 'lv',
     'appName': 'Flow Ai',
     'appTagline': 'AI Menstruālā Cikla Uzraudzība',
@@ -501,9 +532,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'Jā',
     'no': 'Nē',
     'save': 'Saglabāt',
-    'cancel': 'Atcelt'
+    'cancel': 'Atcelt',
   },
-  'et': { // Estonian
+  'et': {
+    // Estonian
     'locale': 'et',
     'appName': 'Flow Ai',
     'appTagline': 'AI Menstruaaltsükli Jälgimine',
@@ -517,9 +549,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'Jah',
     'no': 'Ei',
     'save': 'Salvesta',
-    'cancel': 'Tühista'
+    'cancel': 'Tühista',
   },
-  'mt': { // Maltese
+  'mt': {
+    // Maltese
     'locale': 'mt',
     'appName': 'Flow Ai',
     'appTagline': 'Traċċjar taċ-Ċiklu Mestruwali bl-AI',
@@ -533,9 +566,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'Iva',
     'no': 'Le',
     'save': 'Ħżen',
-    'cancel': 'Ikkanċella'
+    'cancel': 'Ikkanċella',
   },
-  'is': { // Icelandic
+  'is': {
+    // Icelandic
     'locale': 'is',
     'appName': 'Flow Ai',
     'appTagline': 'AI Tíðablóðrásareftirlit',
@@ -549,9 +583,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'Já',
     'no': 'Nei',
     'save': 'Vista',
-    'cancel': 'Hætta við'
+    'cancel': 'Hætta við',
   },
-  'ga': { // Irish
+  'ga': {
+    // Irish
     'locale': 'ga',
     'appName': 'Flow Ai',
     'appTagline': 'Rianadh Timthriall Mhíosta le hAI',
@@ -565,9 +600,10 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'Tá',
     'no': 'Níl',
     'save': 'Sábháil',
-    'cancel': 'Cealaigh'
+    'cancel': 'Cealaigh',
   },
-  'cy': { // Welsh
+  'cy': {
+    // Welsh
     'locale': 'cy',
     'appName': 'Flow Ai',
     'appTagline': 'Olrhain Cylchred Misglwyf gyda AI',
@@ -581,13 +617,13 @@ final Map<String, Map<String, String>> languageTranslations = {
     'yes': 'Ie',
     'no': 'Na',
     'save': 'Cadw',
-    'cancel': 'Canslo'
-  }
+    'cancel': 'Canslo',
+  },
 };
 
 void main() async {
   print('🌍 Generating 36 language ARB files for Flow Ai...\n');
-  
+
   final l10nDir = Directory('lib/l10n');
   if (!await l10nDir.exists()) {
     await l10nDir.create(recursive: true);
@@ -597,38 +633,38 @@ void main() async {
   for (final entry in languageTranslations.entries) {
     final locale = entry.key;
     final translations = entry.value;
-    
+
     // Skip if we already have manually created comprehensive versions
     if (locale == 'en' || locale == 'es' || locale == 'fr') {
       print('📋 Skipping $locale (already has comprehensive version)');
       continue;
     }
-    
+
     final filename = 'app_$locale.arb';
     final filepath = 'lib/l10n/$filename';
     final file = File(filepath);
-    
+
     // Create ARB content
     final Map<String, dynamic> arbContent = {
       '@@locale': locale,
       '@@last_modified': DateTime.now().toUtc().toIso8601String(),
     };
-    
+
     // Add translations
     translations.forEach((key, value) {
       if (key != 'locale') {
         arbContent[key] = value;
       }
     });
-    
+
     // Write file
     final jsonContent = JsonEncoder.withIndent('  ').convert(arbContent);
     await file.writeAsString(jsonContent);
-    
+
     created++;
     print('✅ Created $filename (${translations.length - 1} strings)');
   }
-  
+
   print('\n🎉 Successfully generated $created language files!');
   print('📊 Total supported languages: ${languageTranslations.length}');
   print('\nSupported locales:');

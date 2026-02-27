@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flow_ai/core/services/ads_service.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
@@ -35,10 +36,11 @@ import 'features/insights/providers/insights_provider.dart';
 import 'features/health/providers/health_provider.dart';
 import 'features/settings/providers/settings_provider.dart';
 import 'features/premium/providers/premium_provider.dart';
+import 'core/services/auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await initAds();
   // Configure Flutter for production performance
   if (kReleaseMode) {
     // Disable debug banner and optimize for production
@@ -309,6 +311,7 @@ class _FlowAIAppState extends State<FlowAIApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        Provider<AuthService>(create: (_) => AuthService()),
         ChangeNotifierProvider(create: (_) => OnboardingProvider()),
         ChangeNotifierProvider(create: (_) => CycleProvider()),
         ChangeNotifierProvider(create: (_) => InsightsProvider()),
@@ -316,6 +319,7 @@ class _FlowAIAppState extends State<FlowAIApp> {
         ChangeNotifierProvider.value(value: settingsProvider),
         ChangeNotifierProvider.value(value: progressiveDisclosureService),
         ChangeNotifierProvider(create: (_) => PremiumProvider()),
+        Provider<AuthService>(create: (_) => AuthService()),
       ],
       child: Consumer<SettingsProvider>(
         builder: (context, settings, child) {

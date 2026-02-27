@@ -345,7 +345,7 @@ class LocalUserService {
       final result = await createUser(
         email: demoEmail,
         password: 'FlowAiDemo2025!',
-        displayName: 'Demo User for App Review',
+        displayName: kReleaseMode ? 'Guest' : 'Demo User for App Review',
         username: 'demo_reviewer',
       );
 

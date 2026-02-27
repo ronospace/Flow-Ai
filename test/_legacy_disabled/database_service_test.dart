@@ -46,16 +46,20 @@ void main() {
 
       // Assert
       verify(mockDatabase.execute(contains('CREATE TABLE users'))).called(1);
-      verify(mockDatabase.execute(contains('CREATE TABLE cycle_data'))).called(1);
+      verify(
+        mockDatabase.execute(contains('CREATE TABLE cycle_data')),
+      ).called(1);
       verify(mockDatabase.execute(contains('CREATE TABLE symptoms'))).called(1);
-      verify(mockDatabase.execute(contains('CREATE TABLE daily_tracking'))).called(1);
+      verify(
+        mockDatabase.execute(contains('CREATE TABLE daily_tracking')),
+      ).called(1);
     });
 
     test('should perform database migration successfully', () async {
       // Arrange
       const oldVersion = 1;
       const newVersion = 2;
-      
+
       when(mockDatabase.getVersion()).thenAnswer((_) async => oldVersion);
 
       // Act
@@ -77,15 +81,26 @@ void main() {
         flow: 'medium',
       );
 
-      when(mockDatabase.insert('cycle_data', any, conflictAlgorithm: anyNamed('conflictAlgorithm')))
-          .thenAnswer((_) async => 1);
+      when(
+        mockDatabase.insert(
+          'cycle_data',
+          any,
+          conflictAlgorithm: anyNamed('conflictAlgorithm'),
+        ),
+      ).thenAnswer((_) async => 1);
 
       // Act
       final result = await databaseService.insertCycleData(cycleData);
 
       // Assert
       expect(result, equals(1));
-      verify(mockDatabase.insert('cycle_data', any, conflictAlgorithm: ConflictAlgorithm.replace));
+      verify(
+        mockDatabase.insert(
+          'cycle_data',
+          any,
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        ),
+      );
     });
 
     test('should retrieve cycle data by user ID', () async {
@@ -102,11 +117,16 @@ void main() {
           'mood': 'normal',
           'flow': 'medium',
           'created_at': DateTime.now().millisecondsSinceEpoch,
-        }
+        },
       ];
 
-      when(mockDatabase.query('cycle_data', where: 'user_id = ?', whereArgs: [userId]))
-          .thenAnswer((_) async => mockResults);
+      when(
+        mockDatabase.query(
+          'cycle_data',
+          where: 'user_id = ?',
+          whereArgs: [userId],
+        ),
+      ).thenAnswer((_) async => mockResults);
 
       // Act
       final results = await databaseService.getCycleDataByUserId(userId);
@@ -130,30 +150,44 @@ void main() {
         flow: 'light',
       );
 
-      when(mockDatabase.update('cycle_data', any, where: 'id = ?', whereArgs: [1]))
-          .thenAnswer((_) async => 1);
+      when(
+        mockDatabase.update('cycle_data', any, where: 'id = ?', whereArgs: [1]),
+      ).thenAnswer((_) async => 1);
 
       // Act
       final result = await databaseService.updateCycleData(updatedCycleData);
 
       // Assert
       expect(result, equals(1));
-      verify(mockDatabase.update('cycle_data', any, where: 'id = ?', whereArgs: [1]));
+      verify(
+        mockDatabase.update('cycle_data', any, where: 'id = ?', whereArgs: [1]),
+      );
     });
 
     test('should delete cycle data', () async {
       // Arrange
       const cycleDataId = 1;
 
-      when(mockDatabase.delete('cycle_data', where: 'id = ?', whereArgs: [cycleDataId]))
-          .thenAnswer((_) async => 1);
+      when(
+        mockDatabase.delete(
+          'cycle_data',
+          where: 'id = ?',
+          whereArgs: [cycleDataId],
+        ),
+      ).thenAnswer((_) async => 1);
 
       // Act
       final result = await databaseService.deleteCycleData(cycleDataId);
 
       // Assert
       expect(result, equals(1));
-      verify(mockDatabase.delete('cycle_data', where: 'id = ?', whereArgs: [cycleDataId]));
+      verify(
+        mockDatabase.delete(
+          'cycle_data',
+          where: 'id = ?',
+          whereArgs: [cycleDataId],
+        ),
+      );
     });
 
     test('should insert symptom tracking data', () async {
@@ -167,15 +201,26 @@ void main() {
         cycleDay: 1,
       );
 
-      when(mockDatabase.insert('symptoms', any, conflictAlgorithm: anyNamed('conflictAlgorithm')))
-          .thenAnswer((_) async => 1);
+      when(
+        mockDatabase.insert(
+          'symptoms',
+          any,
+          conflictAlgorithm: anyNamed('conflictAlgorithm'),
+        ),
+      ).thenAnswer((_) async => 1);
 
       // Act
       final result = await databaseService.insertSymptomData(symptomData);
 
       // Assert
       expect(result, equals(1));
-      verify(mockDatabase.insert('symptoms', any, conflictAlgorithm: ConflictAlgorithm.replace));
+      verify(
+        mockDatabase.insert(
+          'symptoms',
+          any,
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        ),
+      );
     });
 
     test('should retrieve symptoms by date range', () async {
@@ -188,22 +233,34 @@ void main() {
         {
           'id': 1,
           'user_id': userId,
-          'date': DateTime.now().subtract(const Duration(days: 1)).millisecondsSinceEpoch,
+          'date': DateTime.now()
+              .subtract(const Duration(days: 1))
+              .millisecondsSinceEpoch,
           'symptoms': '["cramping", "headache"]',
           'severity': '{"cramping": 7, "headache": 5}',
           'notes': 'Period symptoms',
           'cycle_day': 1,
-        }
+        },
       ];
 
-      when(mockDatabase.query(
-        'symptoms',
-        where: 'user_id = ? AND date BETWEEN ? AND ?',
-        whereArgs: [userId, startDate.millisecondsSinceEpoch, endDate.millisecondsSinceEpoch],
-      )).thenAnswer((_) async => mockResults);
+      when(
+        mockDatabase.query(
+          'symptoms',
+          where: 'user_id = ? AND date BETWEEN ? AND ?',
+          whereArgs: [
+            userId,
+            startDate.millisecondsSinceEpoch,
+            endDate.millisecondsSinceEpoch,
+          ],
+        ),
+      ).thenAnswer((_) async => mockResults);
 
       // Act
-      final results = await databaseService.getSymptomsByDateRange(userId, startDate, endDate);
+      final results = await databaseService.getSymptomsByDateRange(
+        userId,
+        startDate,
+        endDate,
+      );
 
       // Assert
       expect(results, isNotEmpty);
@@ -225,8 +282,13 @@ void main() {
         cycleDay: 15,
       );
 
-      when(mockDatabase.insert('daily_tracking', any, conflictAlgorithm: anyNamed('conflictAlgorithm')))
-          .thenAnswer((_) async => 1);
+      when(
+        mockDatabase.insert(
+          'daily_tracking',
+          any,
+          conflictAlgorithm: anyNamed('conflictAlgorithm'),
+        ),
+      ).thenAnswer((_) async => 1);
 
       // Act
       final result = await databaseService.insertDailyTrackingData(dailyData);
@@ -238,7 +300,9 @@ void main() {
     test('should handle database transaction rollback on error', () async {
       // Arrange
       final transaction = MockDatabase();
-      when(mockDatabase.transaction(any)).thenThrow(Exception('Transaction failed'));
+      when(
+        mockDatabase.transaction(any),
+      ).thenThrow(Exception('Transaction failed'));
 
       // Act & Assert
       expect(
@@ -249,11 +313,17 @@ void main() {
 
     test('should backup database data', () async {
       // Arrange
-      final mockUserData = [{'id': 1, 'email': 'test@example.com'}];
-      final mockCycleData = [{'id': 1, 'user_id': 'user1', 'cycle_length': 28}];
+      final mockUserData = [
+        {'id': 1, 'email': 'test@example.com'},
+      ];
+      final mockCycleData = [
+        {'id': 1, 'user_id': 'user1', 'cycle_length': 28},
+      ];
 
       when(mockDatabase.query('users')).thenAnswer((_) async => mockUserData);
-      when(mockDatabase.query('cycle_data')).thenAnswer((_) async => mockCycleData);
+      when(
+        mockDatabase.query('cycle_data'),
+      ).thenAnswer((_) async => mockCycleData);
       when(mockDatabase.query('symptoms')).thenAnswer((_) async => []);
       when(mockDatabase.query('daily_tracking')).thenAnswer((_) async => []);
 
@@ -269,15 +339,24 @@ void main() {
     test('should restore database from backup', () async {
       // Arrange
       final backupData = {
-        'users': [{'id': 1, 'email': 'restored@example.com'}],
-        'cycle_data': [{'id': 1, 'user_id': 'user1', 'cycle_length': 30}],
+        'users': [
+          {'id': 1, 'email': 'restored@example.com'},
+        ],
+        'cycle_data': [
+          {'id': 1, 'user_id': 'user1', 'cycle_length': 30},
+        ],
         'symptoms': [],
         'daily_tracking': [],
       };
 
       when(mockDatabase.delete(any)).thenAnswer((_) async => 1);
-      when(mockDatabase.insert(any, any, conflictAlgorithm: anyNamed('conflictAlgorithm')))
-          .thenAnswer((_) async => 1);
+      when(
+        mockDatabase.insert(
+          any,
+          any,
+          conflictAlgorithm: anyNamed('conflictAlgorithm'),
+        ),
+      ).thenAnswer((_) async => 1);
 
       // Act
       await databaseService.restoreFromBackup(backupData);
@@ -285,7 +364,13 @@ void main() {
       // Assert
       verify(mockDatabase.delete('users')).called(1);
       verify(mockDatabase.delete('cycle_data')).called(1);
-      verify(mockDatabase.insert('users', any, conflictAlgorithm: ConflictAlgorithm.replace)).called(1);
+      verify(
+        mockDatabase.insert(
+          'users',
+          any,
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        ),
+      ).called(1);
     });
   });
 
@@ -299,8 +384,12 @@ void main() {
     test('should sync local data to cloud', () async {
       // Arrange
       final localData = {
-        'cycle_data': [{'id': 1, 'cycle_length': 28}],
-        'symptoms': [{'id': 1, 'symptoms': '["cramping"]'}],
+        'cycle_data': [
+          {'id': 1, 'cycle_length': 28},
+        ],
+        'symptoms': [
+          {'id': 1, 'symptoms': '["cramping"]'},
+        ],
       };
 
       when(mockCloudSync.syncToCloud(localData)).thenAnswer((_) async => true);
@@ -316,7 +405,9 @@ void main() {
     test('should sync cloud data to local', () async {
       // Arrange
       final cloudData = {
-        'cycle_data': [{'id': 2, 'cycle_length': 30}],
+        'cycle_data': [
+          {'id': 2, 'cycle_length': 30},
+        ],
         'last_sync': DateTime.now().toIso8601String(),
       };
 
@@ -333,12 +424,21 @@ void main() {
     test('should handle sync conflicts', () async {
       // Arrange
       final conflictData = {
-        'local_version': {'id': 1, 'cycle_length': 28, 'updated_at': '2024-01-01'},
-        'cloud_version': {'id': 1, 'cycle_length': 30, 'updated_at': '2024-01-02'},
+        'local_version': {
+          'id': 1,
+          'cycle_length': 28,
+          'updated_at': '2024-01-01',
+        },
+        'cloud_version': {
+          'id': 1,
+          'cycle_length': 30,
+          'updated_at': '2024-01-02',
+        },
       };
 
-      when(mockCloudSync.resolveConflict(any, any))
-          .thenAnswer((_) async => conflictData['cloud_version']); // Cloud wins
+      when(
+        mockCloudSync.resolveConflict(any, any),
+      ).thenAnswer((_) async => conflictData['cloud_version']); // Cloud wins
 
       // Act
       final resolved = await mockCloudSync.resolveConflict(
@@ -357,10 +457,7 @@ void main() {
           .thenAnswer((_) async => true); // Succeeds on retry
 
       // Act & Assert
-      expect(
-        () => mockCloudSync.syncToCloud({}),
-        throwsA(isA<Exception>()),
-      );
+      expect(() => mockCloudSync.syncToCloud({}), throwsA(isA<Exception>()));
     });
   });
 
@@ -374,15 +471,16 @@ void main() {
     test('should queue operations when offline', () async {
       // Arrange
       when(mockOfflineService.isOnline).thenReturn(false);
-      
+
       final operation = {
         'type': 'insert',
         'table': 'cycle_data',
         'data': {'cycle_length': 28},
       };
 
-      when(mockOfflineService.queueOperation(operation))
-          .thenAnswer((_) async => true);
+      when(
+        mockOfflineService.queueOperation(operation),
+      ).thenAnswer((_) async => true);
 
       // Act
       final result = await mockOfflineService.queueOperation(operation);
@@ -395,15 +493,25 @@ void main() {
     test('should execute queued operations when back online', () async {
       // Arrange
       final queuedOperations = [
-        {'type': 'insert', 'table': 'cycle_data', 'data': {'cycle_length': 28}},
-        {'type': 'update', 'table': 'symptoms', 'data': {'severity': 8}},
+        {
+          'type': 'insert',
+          'table': 'cycle_data',
+          'data': {'cycle_length': 28},
+        },
+        {
+          'type': 'update',
+          'table': 'symptoms',
+          'data': {'severity': 8},
+        },
       ];
 
       when(mockOfflineService.isOnline).thenReturn(true);
-      when(mockOfflineService.getQueuedOperations())
-          .thenAnswer((_) async => queuedOperations);
-      when(mockOfflineService.executeQueuedOperations())
-          .thenAnswer((_) async => 2);
+      when(
+        mockOfflineService.getQueuedOperations(),
+      ).thenAnswer((_) async => queuedOperations);
+      when(
+        mockOfflineService.executeQueuedOperations(),
+      ).thenAnswer((_) async => 2);
 
       // Act
       final executedCount = await mockOfflineService.executeQueuedOperations();
@@ -414,10 +522,9 @@ void main() {
 
     test('should handle network status changes', () async {
       // Arrange
-      when(mockOfflineService.onNetworkStatusChange(any))
-          .thenAnswer((_) async {
-            return null;
-          });
+      when(mockOfflineService.onNetworkStatusChange(any)).thenAnswer((_) async {
+        return null;
+      });
 
       // Act
       await mockOfflineService.onNetworkStatusChange(true); // Online
@@ -437,15 +544,21 @@ void main() {
     test('should handle complete user data lifecycle', () async {
       // This would test the full flow of user data management
       // from creation to deletion with proper cleanup
-      
+
       expect(databaseService, isNotNull);
       expect(() => databaseService.initialize(), returnsNormally);
     });
 
-    test('should maintain data integrity during concurrent operations', () async {
-      // Test concurrent reads and writes don't cause data corruption
-      expect(() => databaseService.performBatchOperations([]), returnsNormally);
-    });
+    test(
+      'should maintain data integrity during concurrent operations',
+      () async {
+        // Test concurrent reads and writes don't cause data corruption
+        expect(
+          () => databaseService.performBatchOperations([]),
+          returnsNormally,
+        );
+      },
+    );
 
     test('should handle database size optimization', () async {
       // Test database vacuum and optimization operations

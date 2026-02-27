@@ -7,20 +7,23 @@ import 'package:flow_ai/main.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-group('Flow Ai App End-to-End Tests', () {
-    
-    testWidgets('App launches and shows splash screen', (WidgetTester tester) async {
+  group('Flow Ai App End-to-End Tests', () {
+    testWidgets('App launches and shows splash screen', (
+      WidgetTester tester,
+    ) async {
       app.main();
       await tester.pumpAndSettle();
 
       // Verify splash screen is shown
       expect(find.text('Flow Ai'), findsOneWidget);
-      
+
       // Wait for splash screen to complete (adjust timing as needed)
       await tester.pumpAndSettle(const Duration(seconds: 3));
     });
 
-    testWidgets('Navigation between main screens works', (WidgetTester tester) async {
+    testWidgets('Navigation between main screens works', (
+      WidgetTester tester,
+    ) async {
       app.main();
       await tester.pumpAndSettle(const Duration(seconds: 3));
 
@@ -29,7 +32,7 @@ group('Flow Ai App End-to-End Tests', () {
       if (calendarTab.evaluate().isNotEmpty) {
         await tester.tap(calendarTab);
         await tester.pumpAndSettle();
-        
+
         // Verify calendar screen elements
         expect(find.text('Calendar'), findsWidgets);
       }
@@ -39,7 +42,7 @@ group('Flow Ai App End-to-End Tests', () {
       if (trackingTab.evaluate().isNotEmpty) {
         await tester.tap(trackingTab);
         await tester.pumpAndSettle();
-        
+
         // Verify tracking screen elements
         expect(find.text('Track'), findsWidgets);
       }
@@ -49,7 +52,7 @@ group('Flow Ai App End-to-End Tests', () {
       if (insightsTab.evaluate().isNotEmpty) {
         await tester.tap(insightsTab);
         await tester.pumpAndSettle();
-        
+
         // Verify insights screen elements
         expect(find.text('Insights'), findsWidgets);
       }
@@ -59,7 +62,7 @@ group('Flow Ai App End-to-End Tests', () {
       if (healthTab.evaluate().isNotEmpty) {
         await tester.tap(healthTab);
         await tester.pumpAndSettle();
-        
+
         // Verify health screen elements
         expect(find.text('Health'), findsWidgets);
       }
@@ -69,7 +72,7 @@ group('Flow Ai App End-to-End Tests', () {
       if (settingsTab.evaluate().isNotEmpty) {
         await tester.tap(settingsTab);
         await tester.pumpAndSettle();
-        
+
         // Verify settings screen elements
         expect(find.text('Settings'), findsWidgets);
       }
@@ -79,7 +82,7 @@ group('Flow Ai App End-to-End Tests', () {
       if (homeTab.evaluate().isNotEmpty) {
         await tester.tap(homeTab);
         await tester.pumpAndSettle();
-        
+
         // Verify home screen elements
         expect(find.text('Home'), findsWidgets);
       }
@@ -100,7 +103,7 @@ group('Flow Ai App End-to-End Tests', () {
         if (themeToggle.evaluate().isNotEmpty) {
           await tester.tap(themeToggle);
           await tester.pumpAndSettle();
-          
+
           // Verify theme change took effect
           // This would need to be adjusted based on how theme is displayed
           expect(find.byType(MaterialApp), findsOneWidget);
@@ -108,7 +111,9 @@ group('Flow Ai App End-to-End Tests', () {
       }
     });
 
-    testWidgets('Language switching works correctly', (WidgetTester tester) async {
+    testWidgets('Language switching works correctly', (
+      WidgetTester tester,
+    ) async {
       app.main();
       await tester.pumpAndSettle(const Duration(seconds: 3));
 
@@ -123,13 +128,13 @@ group('Flow Ai App End-to-End Tests', () {
         if (languageSelector.evaluate().isNotEmpty) {
           await tester.tap(languageSelector);
           await tester.pumpAndSettle();
-          
+
           // Select a different language (e.g., Spanish)
           final spanishOption = find.text('Español');
           if (spanishOption.evaluate().isNotEmpty) {
             await tester.tap(spanishOption);
             await tester.pumpAndSettle();
-            
+
             // Verify language change
             expect(find.text('Configuración'), findsWidgets);
           }
@@ -203,7 +208,10 @@ group('Flow Ai App End-to-End Tests', () {
           // Test sending a message
           final messageInput = find.byType(TextField);
           if (messageInput.evaluate().isNotEmpty) {
-            await tester.enterText(messageInput, 'When will my next period start?');
+            await tester.enterText(
+              messageInput,
+              'When will my next period start?',
+            );
             await tester.pumpAndSettle();
 
             // Send the message
@@ -211,12 +219,15 @@ group('Flow Ai App End-to-End Tests', () {
             if (sendButton.evaluate().isNotEmpty) {
               await tester.tap(sendButton);
               await tester.pumpAndSettle();
-              
+
               // Wait for AI response
               await tester.pumpAndSettle(const Duration(seconds: 2));
-              
+
               // Verify message was sent and response received
-              expect(find.text('When will my next period start?'), findsOneWidget);
+              expect(
+                find.text('When will my next period start?'),
+                findsOneWidget,
+              );
             }
           }
         }
@@ -276,7 +287,9 @@ group('Flow Ai App End-to-End Tests', () {
       }
     });
 
-    testWidgets('App handles back navigation correctly', (WidgetTester tester) async {
+    testWidgets('App handles back navigation correctly', (
+      WidgetTester tester,
+    ) async {
       app.main();
       await tester.pumpAndSettle(const Duration(seconds: 3));
 
@@ -296,12 +309,14 @@ group('Flow Ai App End-to-End Tests', () {
       // Test system back button
       await tester.pageBack();
       await tester.pumpAndSettle();
-      
+
       // Should handle navigation properly without crashing
       expect(find.byType(MaterialApp), findsOneWidget);
     });
 
-    testWidgets('App performance - no frame drops during navigation', (WidgetTester tester) async {
+    testWidgets('App performance - no frame drops during navigation', (
+      WidgetTester tester,
+    ) async {
       app.main();
       await tester.pumpAndSettle(const Duration(seconds: 3));
 
@@ -319,7 +334,8 @@ group('Flow Ai App End-to-End Tests', () {
         final tab = find.byIcon(tabIcon);
         if (tab.evaluate().isNotEmpty) {
           await tester.tap(tab);
-          await tester.pump(); // Use pump instead of pumpAndSettle for performance testing
+          await tester
+              .pump(); // Use pump instead of pumpAndSettle for performance testing
           await tester.pump(const Duration(milliseconds: 100));
         }
       }

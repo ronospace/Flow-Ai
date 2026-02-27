@@ -18,14 +18,14 @@ class TestHelpers {
   /// Initialize test environment
   static Future<void> setUp() async {
     TestWidgetsFlutterBinding.ensureInitialized();
-    
+
     // Initialize SharedPreferences with empty map for testing
     SharedPreferences.setMockInitialValues({});
     sharedPreferences = await SharedPreferences.getInstance();
 
     // Initialize mock services
     mockAuthService = MockAuthService();
-    
+
     // Setup App Enhancement Service for testing
     final enhancementService = AppEnhancementService();
     await enhancementService.initialize();
@@ -68,11 +68,7 @@ class TestHelpers {
 
   /// Create a minimal test widget for simple widget tests
   static Widget createMinimalTestWidget({required Widget child}) {
-    return MaterialApp(
-      home: Scaffold(
-        body: child,
-      ),
-    );
+    return MaterialApp(home: Scaffold(body: child));
   }
 
   /// Pump and settle with custom duration for animation testing
@@ -158,16 +154,16 @@ class TestHelpers {
     Duration timeout = const Duration(seconds: 10),
   }) async {
     await tester.pumpAndSettle();
-    
+
     final endTime = DateTime.now().add(timeout);
-    
+
     while (DateTime.now().isBefore(endTime)) {
       if (finder.evaluate().isNotEmpty) {
         return;
       }
       await tester.pump(const Duration(milliseconds: 100));
     }
-    
+
     throw TimeoutException('Widget not found within timeout', timeout);
   }
 
@@ -237,7 +233,9 @@ class TestHelpers {
   }
 
   /// Test performance of a specific operation
-  static Future<Duration> measurePerformance(Future<void> Function() operation) async {
+  static Future<Duration> measurePerformance(
+    Future<void> Function() operation,
+  ) async {
     final stopwatch = Stopwatch()..start();
     await operation();
     stopwatch.stop();
@@ -248,7 +246,7 @@ class TestHelpers {
   static List<Map<String, dynamic>> generateTestCycleData({int cycles = 3}) {
     final data = <Map<String, dynamic>>[];
     final now = DateTime.now();
-    
+
     for (int i = 0; i < cycles; i++) {
       final cycleStart = now.subtract(Duration(days: (i * 28) + (28 - i)));
       data.add({
@@ -261,7 +259,7 @@ class TestHelpers {
         'notes': 'Test cycle $i',
       });
     }
-    
+
     return data;
   }
 
@@ -274,11 +272,7 @@ class TestHelpers {
       'lastUpdated': DateTime.now().toIso8601String(),
       'sleepHours': 7.5,
       'waterIntake': 2.1,
-      'exercise': {
-        'type': 'cardio',
-        'duration': 30,
-        'intensity': 'moderate',
-      },
+      'exercise': {'type': 'cardio', 'duration': 30, 'intensity': 'moderate'},
     };
   }
 }
@@ -289,13 +283,13 @@ class MockAuthService extends Mock implements AuthService {}
 class MockUser extends Mock {
   @override
   String get uid => 'test-uid-123';
-  
+
   @override
   String? get email => 'test@example.com';
-  
+
   @override
   String? get displayName => 'Test User';
-  
+
   @override
   bool get emailVerified => true;
 }
@@ -304,11 +298,12 @@ class MockUser extends Mock {
 class TimeoutException implements Exception {
   final String message;
   final Duration timeout;
-  
+
   TimeoutException(this.message, this.timeout);
-  
+
   @override
-  String toString() => 'TimeoutException: $message (${timeout.inMilliseconds}ms)';
+  String toString() =>
+      'TimeoutException: $message (${timeout.inMilliseconds}ms)';
 }
 
 /// Test data generators
@@ -318,19 +313,23 @@ class TestDataGenerator {
     final random = DateTime.now().millisecondsSinceEpoch;
     return 'test$random@example.com';
   }
-  
+
   /// Generate random display name
   static String generateDisplayName() {
     final names = ['Alice', 'Bob', 'Carol', 'David', 'Eve', 'Frank'];
     final surnames = ['Smith', 'Johnson', 'Brown', 'Davis', 'Wilson', 'Miller'];
     return '${names[DateTime.now().millisecond % names.length]} ${surnames[DateTime.now().second % surnames.length]}';
   }
-  
+
   /// Generate random password
   static String generatePassword({int length = 12}) {
-    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#\$%^&*';
+    const chars =
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#\$%^&*';
     final random = DateTime.now().millisecondsSinceEpoch;
-    return List.generate(length, (index) => chars[(random + index) % chars.length]).join();
+    return List.generate(
+      length,
+      (index) => chars[(random + index) % chars.length],
+    ).join();
   }
 }
 
@@ -340,7 +339,7 @@ class CustomMatchers {
   static Matcher hasColor(Color expectedColor) {
     return _ColorMatcher(expectedColor);
   }
-  
+
   /// Matcher to verify text has specific font weight
   static Matcher hasFontWeight(FontWeight expectedWeight) {
     return _FontWeightMatcher(expectedWeight);
@@ -349,9 +348,9 @@ class CustomMatchers {
 
 class _ColorMatcher extends Matcher {
   final Color expectedColor;
-  
+
   _ColorMatcher(this.expectedColor);
-  
+
   @override
   bool matches(dynamic item, Map matchState) {
     if (item is Container && item.decoration is BoxDecoration) {
@@ -360,7 +359,7 @@ class _ColorMatcher extends Matcher {
     }
     return false;
   }
-  
+
   @override
   Description describe(Description description) {
     return description.add('has color $expectedColor');
@@ -369,9 +368,9 @@ class _ColorMatcher extends Matcher {
 
 class _FontWeightMatcher extends Matcher {
   final FontWeight expectedWeight;
-  
+
   _FontWeightMatcher(this.expectedWeight);
-  
+
   @override
   bool matches(dynamic item, Map matchState) {
     if (item is Text && item.style != null) {
@@ -379,7 +378,7 @@ class _FontWeightMatcher extends Matcher {
     }
     return false;
   }
-  
+
   @override
   Description describe(Description description) {
     return description.add('has font weight $expectedWeight');
