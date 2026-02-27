@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../../generated/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/services/admob_service.dart';
+import '../../../core/services/admob_service.dart' as admob;
 import '../../../core/services/auth_service.dart';
 import '../../../core/models/cycle_data.dart';
 import '../providers/cycle_provider.dart';
@@ -22,8 +22,8 @@ import '../../../core/ai/period_prediction_engine.dart';
 import '../../ai_predictions/widgets/ai_prediction_card.dart';
 import '../../ai_predictions/screens/ai_predictions_screen.dart';
 import 'dart:math' as math;
+import 'dart:ui';
 import '../../../core/widgets/pressable_avatar.dart';
-
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   // AdMob
   BannerAd? _bannerAd;
   bool _isBannerAdReady = false;
-  final AdMobService _adMobService = AdMobService();
+  final admob.AdMobService _adMobService = admob.AdMobService();
 
   // AI Prediction
   PeriodPrediction? _currentPrediction;
@@ -351,6 +351,127 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     ).animate().fadeIn(delay: 500.ms).scale(begin: const Offset(0.95, 0.95));
   }
 
+  Widget _buildLockedAdvancedInsightTeaserWidget() {
+    final localizations = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+
+    final teaser = Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: theme.dividerColor.withValues(alpha: 0.8)),
+        color: theme.colorScheme.surface.withValues(alpha: 0.65),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Advanced AI Analysis",
+            style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+          ...[
+            "6-month forecast & confidence",
+            "Hormone projection & correlations",
+            "Mood patterns + long-term modeling",
+          ].map((t) => Padding(
+                padding: const EdgeInsets.only(top: 6),
+                child: Row(
+                  children: [
+                    Icon(Icons.lock, size: 16, color: theme.colorScheme.onSurface.withValues(alpha: 0.55)),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        t,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.75),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )),
+        ],
+      ),
+    );
+
+    return Stack(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: ImageFiltered(
+            imageFilter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+            child: Opacity(opacity: 0.85, child: teaser),
+          ),
+        ),
+        Positioned.fill(
+          child: Container(
+            margin: const EdgeInsets.only(bottom: 16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.transparent,
+                  theme.colorScheme.surface.withValues(alpha: 0.85),
+                ],
+              ),
+            ),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: _showRewardedAdForInsights,
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [AppTheme.warningOrange, AppTheme.primaryRose],
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppTheme.warningOrange.withValues(alpha: 0.30),
+                            blurRadius: 10,
+                            offset: const Offset(0, 6),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.lock_open, color: theme.colorScheme.onPrimary, size: 18),
+                          const SizedBox(width: 10),
+                          Flexible(
+                            child: Text(
+                              localizations.watchAdUnlockInsights,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.titleSmall?.copyWith(
+                                color: theme.colorScheme.onPrimary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    ).animate().fadeIn(delay: 650.ms).slideX(begin: 0.15, end: 0);
+  }
+
   void _showRewardedAdForInsights() {
     final localizations = AppLocalizations.of(context);
     final theme = Theme.of(context);
@@ -359,6 +480,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         // User watched the full ad, unlock premium insights
         _unlockPremiumInsights();
 
+
+        // Completion-based interstitial (post-reward unlock)
+        _adMobService.showInterstitialAdWithFrequency();
         // Show success message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -1545,12 +1669,15 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           const SizedBox(height: 20),
 
           if (provider.insights.isNotEmpty) ...[
+            // Advanced insights lock
             // Premium AI insights unlock widget
-            if (provider.insights.length < 2)
+            if (!provider.premiumUnlocked)
               _buildPremiumInsightsUnlockWidget(),
 
+            if (!provider.premiumUnlocked) _buildLockedAdvancedInsightTeaserWidget(),
+
             ...provider.insights
-                .take(2)
+                .take(provider.premiumUnlocked ? 2 : 1)
                 .map(
                   (insight) =>
                       Container(
@@ -2733,9 +2860,6 @@ class NeuralNetworkPainter extends CustomPainter {
 
 extension _NavigationMethods on _HomeScreenState {
   void _navigateToTracking([int? tabIndex]) {
-    // Show interstitial ad before navigation
-    _adMobService.showInterstitialAdWithFrequency();
-
     // Navigate to tracking screen with GoRouter
     final router = GoRouter.of(context);
     Future.delayed(const Duration(milliseconds: 500), () {
@@ -2745,9 +2869,6 @@ extension _NavigationMethods on _HomeScreenState {
   }
 
   void _navigateToInsights() {
-    // Show interstitial ad before navigation
-    _adMobService.showInterstitialAdWithFrequency();
-
     // Navigate to insights screen with GoRouter
     // Use immediate navigation to prevent state issues
     if (mounted) {
@@ -2756,9 +2877,6 @@ extension _NavigationMethods on _HomeScreenState {
   }
 
   void _navigateToFAQ() {
-    // Show interstitial ad before navigation
-    _adMobService.showInterstitialAdWithFrequency();
-
     // Navigate to FAQ screen with GoRouter
     if (mounted) {
       context.go('/faq');
@@ -2766,9 +2884,6 @@ extension _NavigationMethods on _HomeScreenState {
   }
 
   void _navigateToAIPredictions() {
-    // Show interstitial ad before navigation
-    _adMobService.showInterstitialAdWithFrequency();
-
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => const AIPredictionsScreen()),
     );

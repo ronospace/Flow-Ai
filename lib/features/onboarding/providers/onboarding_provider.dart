@@ -5,6 +5,20 @@ import '../../../core/services/user_preferences_service.dart';
 import '../../../core/services/notification_service.dart';
 import '../../../core/services/onboarding_tutorial_service.dart';
 
+
+// --- Demo mode removed (store-safe) ---
+// These are minimal stubs to keep legacy onboarding code compiling.
+// They do NOT provide credentials or any auto-demo login.
+class DemoDataSet {
+  const DemoDataSet();
+}
+
+class DemoDataService {
+  DemoDataSet generateCompleteDemo() => const DemoDataSet();
+}
+// --------------------------------------
+
+
 class OnboardingProvider extends ChangeNotifier {
   bool _isCompleted = false;
   int _currentStep = 0;

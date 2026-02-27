@@ -1,4 +1,3 @@
-import '../../../core/models/user_profile.dart';
 
 /// Represents a partner connection request
 class PartnerRequest {

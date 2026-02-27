@@ -331,59 +331,8 @@ class LocalUserService {
 
   /// Auto-create demo account for Apple App Store review
   Future<void> _createDemoAccountIfNeeded() async {
-    try {
-
-      // Check if demo account already exists
-      final existingUser = await getUserByEmail(demoEmail);
-      if (existingUser != null) {
-        debugPrint('✅ Demo account already exists for App Store review');
-        return;
-      }
-
-      // Create demo account with complete profile for App Store reviewers
-      final result = await createUser(
-        email: demoEmail,
-        displayName: kReleaseMode ? 'Guest' : 'Demo User for App Review',
-        username: 'demo_reviewer',
-      );
-
-      if (result.isSuccess && result.user != null) {
-        // Add some sample data for the demo account to show app functionality
-        final demoUser = result.user!;
-        final updatedProfileData = demoUser.profileData.copyWith(
-          age: 28,
-          cycleLength: 28,
-          lastPeriodDate: DateTime.now().subtract(const Duration(days: 15)),
-          averageCycleLength: 28,
-          notes: [
-            'Welcome to Flow Ai! This is a demo account for App Store reviewers.',
-            'You can explore all features including cycle tracking, mood logging, and AI insights.',
-            'This account has sample data to demonstrate the app\'s capabilities.',
-          ],
-          symptoms: [
-            'Sample symptom: Mild cramping (Day 1)',
-            'Sample symptom: Light flow (Day 2-3)',
-            'Sample symptom: Energy boost (Day 7)',
-          ],
-        );
-
-        final updatedUser = demoUser.copyWith(profileData: updatedProfileData);
-
-        await updateUserProfile(updatedUser);
-
-        // Set onboarding as completed for smooth demo experience
-        await setOnboardingCompleted(true);
-
-        debugPrint(
-          '✅ Demo account auto-created for App Store review with sample data',
-        );
-      } else {
-        debugPrint('❌ Failed to create demo account: ${result.error}');
-      }
-    } catch (e) {
-      debugPrint('⚠️ Error creating demo account: $e');
-      // Don\'t throw error - this is a non-critical enhancement
-    }
+    // Demo mode removed (store-safe). Keep method to avoid breaking call sites.
+    return;
   }
 
   /// Check if user exists by email
