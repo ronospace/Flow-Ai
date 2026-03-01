@@ -1,3 +1,4 @@
+import 'features/partner/services/partner_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
@@ -313,6 +314,7 @@ class _FlowAIAppState extends State<FlowAIApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => PartnerService()),
         Provider<AuthService>(create: (_) => AuthService()),
         ChangeNotifierProvider(create: (_) => OnboardingProvider()),
         ChangeNotifierProvider(create: (_) => CycleProvider()),

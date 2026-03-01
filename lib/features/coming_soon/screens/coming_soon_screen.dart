@@ -210,8 +210,8 @@ class _ComingSoonScreenState extends State<ComingSoonScreen>
           const SizedBox(height: 20),
           
           ComingSoonCards.premium(
-            title: 'FlowSense Pro',
-            description: 'Unlock the full potential of FlowSense with premium features designed for power users who want the ultimate tracking experience.',
+            title: 'Flow Ai Pro',
+            description: 'Unlock the full potential of Flow Ai with premium features designed for power users who want the ultimate tracking experience.',
             icon: Icons.workspace_premium_rounded,
             releaseEstimate: 'Q2 2026',
             features: [
@@ -222,7 +222,7 @@ class _ComingSoonScreenState extends State<ComingSoonScreen>
               'Custom reminder schedules',
               'Detailed medication tracking',
             ],
-            onNotifyMeTapped: () => _handleNotifyMe('FlowSense Pro'),
+            onNotifyMeTapped: () => _handleNotifyMe('Flow Ai Pro'),
           ),
           
           ComingSoonCards.premium(
@@ -297,7 +297,7 @@ class _ComingSoonScreenState extends State<ComingSoonScreen>
           
           ComingSoonCards.beta(
             title: 'Community Support Groups',
-            description: 'Connect with other FlowSense users in anonymous, supportive communities focused on reproductive health.',
+            description: 'Connect with other Flow Ai users in anonymous, supportive communities focused on reproductive health.',
             icon: Icons.groups_rounded,
             releaseEstimate: 'Beta Testing',
             features: [
@@ -406,7 +406,7 @@ class _ComingSoonScreenState extends State<ComingSoonScreen>
               const SizedBox(height: 12),
               
               Text(
-                'Be among the first to test $feature and help us make FlowSense even better!',
+                'Be among the first to test $feature and help us make Flow Ai even better!',
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppTheme.mediumGrey,

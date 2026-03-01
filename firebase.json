@@ -1,1 +1,70 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"flow-ai-656b3","appId":"1:752724279049:android:cbdbf2519e6167a50d1dd8","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"flow-ai-656b3","appId":"1:752724279049:ios:196dbadf2a6d76a80d1dd8","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"macos":{"default":{"projectId":"flowai-production","appId":"1:1009671565006:ios:5a9a268d9ec73b940e6a9f","uploadDebugSymbols":false,"fileOutput":"macos/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"flow-ai-656b3","configurations":{"android":"1:752724279049:android:cbdbf2519e6167a50d1dd8","ios":"1:752724279049:ios:196dbadf2a6d76a80d1dd8"}}}}},"hosting":{"public":"build/web","ignore":["firebase.json","**/.*","**/node_modules/**"],"rewrites":[{"source":"**","destination":"/index.html"}]}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "flow-ai-656b3",
+          "appId": "1:752724279049:android:cbdbf2519e6167a50d1dd8",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "flow-ai-656b3",
+          "appId": "1:752724279049:ios:196dbadf2a6d76a80d1dd8",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "macos": {
+        "default": {
+          "projectId": "flowai-production",
+          "appId": "1:1009671565006:ios:5a9a268d9ec73b940e6a9f",
+          "uploadDebugSymbols": false,
+          "fileOutput": "macos/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "flow-ai-656b3",
+          "configurations": {
+            "android": "1:752724279049:android:cbdbf2519e6167a50d1dd8",
+            "ios": "1:752724279049:ios:196dbadf2a6d76a80d1dd8"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "disallowLegacyRuntimeConfig": true,
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run lint",
+        "npm --prefix \"$RESOURCE_DIR\" run build"
+      ]
+    }
+  ]
+}

@@ -515,7 +515,7 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
               Text('✓ Complies with healthcare privacy standards'),
               SizedBox(height: 16),
               Text(
-                'Do you consent to connect your FlowSense data with CycleSync Enterprise?',
+                'Do you consent to connect your Flow Ai data with CycleSync Enterprise?',
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
                   color: AppTheme.darkGrey,

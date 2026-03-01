@@ -339,7 +339,7 @@ extension OnboardingStepExtension on OnboardingStep {
   String get title {
     switch (this) {
       case OnboardingStep.welcome:
-        return 'Welcome to FlowSense';
+        return 'Welcome to Flow Ai';
       case OnboardingStep.personalInfo:
         return 'Personal Information';
       case OnboardingStep.healthBasics:

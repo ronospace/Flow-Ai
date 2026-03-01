@@ -6,7 +6,7 @@ import '../../../core/services/notification_service.dart';
 import '../../../core/services/onboarding_tutorial_service.dart';
 
 
-// --- Demo mode removed (store-safe) ---
+// --- Sample mode removed (store-safe) ---
 // These are minimal stubs to keep legacy onboarding code compiling.
 // They do NOT provide credentials or any auto-demo login.
 class DemoDataSet {
@@ -176,7 +176,7 @@ class OnboardingProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Demo data management
+  // Sample data management
   void setUseDemoData(bool value) {
     _useDemoData = value;
     if (value) {

@@ -16,6 +16,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  qr_flutter: ^4.1.0
   flutter_localizations:
     sdk: flutter
 
@@ -110,7 +111,7 @@ dependencies:
   file_picker: ^8.0.7
   
   # Share Plus
-  share_plus: ^7.2.1
+  share_plus: ^12.0.1
   
   # Permission Handler
   permission_handler: ^11.1.0
@@ -122,7 +123,7 @@ dependencies:
   google_mobile_ads: ^5.1.0
   
   # In-App Purchases (Premium Subscriptions)
-  in_app_purchase: ^3.1.11
+  in_app_purchase: ^3.2.0
   in_app_purchase_android: ^0.3.3+1
   in_app_purchase_storekit: ^0.3.9+2
   
@@ -154,6 +155,7 @@ dependencies:
   
   # Archive (for data export/import compression)
   archive: ^3.6.1
+  cloud_functions: ^6.0.6
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -796,7 +796,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
               onPressed: () async {
                 await Clipboard.setData(ClipboardData(text: code));
                 if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  ScaffoldMessenger.maybeOf(context)?.showSnackBar(
                     const SnackBar(content: Text('Code copied to clipboard!')),
                   );
                 }

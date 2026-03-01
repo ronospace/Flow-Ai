@@ -243,7 +243,6 @@ class PlatformConfig {
       };
       
       AppLogger.system('✅ Platform Configuration initialized');
-      AppLogger.debug('Platform configs: $configs');
       
     } catch (e) {
       AppLogger.error('❌ Failed to initialize Platform Configuration', e);
@@ -309,12 +308,12 @@ class PlatformConfig {
 
   String _getiOSBundleId() {
     return const String.fromEnvironment('IOS_BUNDLE_ID',
-        defaultValue: 'com.flowai.app');
+        defaultValue: 'com.flowai.health');
   }
 
   String _getAndroidPackageName() {
     return const String.fromEnvironment('ANDROID_PACKAGE_NAME',
-        defaultValue: 'com.flowai.app');
+        defaultValue: 'com.flowai.health');
   }
 
   String _getBaseApiUrl() {
