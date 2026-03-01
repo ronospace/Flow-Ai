@@ -405,10 +405,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
           _buildSocialLogin(theme),
 
           const SizedBox(height: 24),
-
-          // Demo Account Button
-          _buildDemoAccountButton(theme),
-
           const SizedBox(height: 24),
         ],
       ),
@@ -987,25 +983,3 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       AdaptiveMessages.showInfo(context, message);
     }
   }
-
-  Widget _buildDemoAccountButton(ThemeData theme) {
-    if (kReleaseMode) return const SizedBox.shrink();
-    return AdaptiveComponents.adaptiveButton(
-          context: context,
-          text: 'Demo',
-          onPressed: _isLoading ? null : _handleDemoAccountFill,
-          isPrimary: false,
-          height: 48,
-        )
-        .animate(controller: _socialController)
-        .fadeIn(delay: 400.ms)
-        .slideY(begin: 0.2, end: 0, delay: 400.ms);
-  }
-  Future<void> _handleDemoAccountFill() async {
-    // Demo mode removed for store safety and clean analytics.
-    // Keep this handler to avoid breaking UI wiring.
-    HapticFeedback.lightImpact();
-    _showInfoMessage('Demo mode is no longer available. Please sign up or log in to continue.');
-  }
-
-}
