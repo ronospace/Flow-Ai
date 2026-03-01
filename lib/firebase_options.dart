@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -28,15 +25,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -50,7 +41,7 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'REMOVED_GOOGLE_API_KEY',
+    apiKey: 'AIzaSyDUex6NhYiUsxZ7-cTzO6QNCOnFyfx9IQo',
     appId: '1:752724279049:android:cbdbf2519e6167a50d1dd8',
     messagingSenderId: '752724279049',
     projectId: 'flow-ai-656b3',
@@ -58,7 +49,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'REMOVED_GOOGLE_API_KEY',
+    apiKey: 'AIzaSyC_1tl3UOeIKMjPdYLk_FtD65Dqe8m-27A',
     appId: '1:752724279049:ios:196dbadf2a6d76a80d1dd8',
     messagingSenderId: '752724279049',
     projectId: 'flow-ai-656b3',
@@ -66,4 +57,35 @@ class DefaultFirebaseOptions {
     iosClientId: '752724279049-ei2380bh9o9ph6tq348lht6sf0ks52n2.apps.googleusercontent.com',
     iosBundleId: 'com.flowai.health',
   );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyCMf0arbNCzW_ZAei9a4qGZIj3NyFwPXks',
+    appId: '1:752724279049:web:884c1adca145732d0d1dd8',
+    messagingSenderId: '752724279049',
+    projectId: 'flow-ai-656b3',
+    authDomain: 'flow-ai-656b3.firebaseapp.com',
+    storageBucket: 'flow-ai-656b3.firebasestorage.app',
+    measurementId: 'G-5XZ9JNL898',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyC_1tl3UOeIKMjPdYLk_FtD65Dqe8m-27A',
+    appId: '1:752724279049:ios:d9b610947a791a8b0d1dd8',
+    messagingSenderId: '752724279049',
+    projectId: 'flow-ai-656b3',
+    storageBucket: 'flow-ai-656b3.firebasestorage.app',
+    iosClientId: '752724279049-r7janjmcp2uehkg8qvrvjae9qlu8jsq2.apps.googleusercontent.com',
+    iosBundleId: 'com.flowai.app',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyCMf0arbNCzW_ZAei9a4qGZIj3NyFwPXks',
+    appId: '1:752724279049:web:f661a3bd8f87efd70d1dd8',
+    messagingSenderId: '752724279049',
+    projectId: 'flow-ai-656b3',
+    authDomain: 'flow-ai-656b3.firebaseapp.com',
+    storageBucket: 'flow-ai-656b3.firebasestorage.app',
+    measurementId: 'G-1X098QTRYG',
+  );
+
 }
