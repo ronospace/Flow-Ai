@@ -105,3 +105,8 @@ _dev_backups/
 *.bak
 # iOS Xcode project rescue copies
 *.pbxproj.bak*
+
+# local backups / vendor examples (never commit)
+android_broken_backup/
+ios_backup/
+third_party/
