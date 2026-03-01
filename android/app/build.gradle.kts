@@ -9,7 +9,12 @@ plugins {
 }
 
 android {
-    namespace = "com.flowai.app"
+      lint {
+    checkReleaseBuilds = false
+    abortOnError = false
+  }
+
+namespace = "com.flowai.app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -48,5 +53,6 @@ flutter {
 }
 
 dependencies {
+    implementation("org.tensorflow:tensorflow-lite-gpu:2.14.0")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 }

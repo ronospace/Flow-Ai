@@ -106,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       // Load ad even later to not impact startup
       Future.delayed(const Duration(milliseconds: 1000), () {
         if (mounted) {
-          _loadBannerAd();
+          _loadif(_adsEnabled) BannerAd();
         }
       });
 
@@ -128,8 +128,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  void _loadBannerAd() {
-    _bannerAd = _adMobService.createBannerAd();
+  void _loadif(_adsEnabled) BannerAd() {
+    _bannerAd = _adMobService.createif(_adsEnabled) BannerAd();
     _bannerAd!.load().then((_) {
       setState(() {
         _isBannerAdReady = true;
@@ -2914,7 +2914,7 @@ extension _NavigationMethods on _HomeScreenState {
   }
 
   void _navigateToAICoach() {
-    Navigator.of(context).pushNamed('/ai-coach');
+    context.push('/ai-coach');
   }
 
   Widget _buildAIPredictionSummary() {

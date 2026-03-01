@@ -863,6 +863,16 @@ class AuthService {
     // Force memory cleanup for better isolation between users
     debugPrint('🧠 Memory cache cleared for user isolation');
   }
+
+  Future<UserCredential> firebaseCreateUserWithEmailAndPassword(String email, String password) async {
+    _auth ??= FirebaseAuth.instance;
+    return await _auth!.createUserWithEmailAndPassword(email: email, password: password);
+  }
+
+  Future<UserCredential> firebaseSignInWithEmailAndPassword(String email, String password) async {
+    _auth ??= FirebaseAuth.instance;
+    return await _auth!.signInWithEmailAndPassword(email: email, password: password);
+  }
 }
 
 /// Authentication result model

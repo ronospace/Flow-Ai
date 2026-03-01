@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../generated/app_localizations.dart';
 
 class SetupForm extends StatefulWidget {
   final Function(Map<String, dynamic>) onSave;
@@ -27,8 +26,6 @@ class _SetupFormState extends State<SetupForm> {
     'medication': false,
     'symptoms': false,
   };
-  bool _useDemoData = false;
-
   // Available tracking goals
   final List<Map<String, dynamic>> _trackingGoals = [
     {'id': 'fertility', 'title': 'Fertility Tracking', 'icon': Icons.favorite},
@@ -42,7 +39,6 @@ class _SetupFormState extends State<SetupForm> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final localizations = AppLocalizations.of(context);
     
     return Form(
       key: _formKey,
@@ -83,9 +79,7 @@ class _SetupFormState extends State<SetupForm> {
             // Reminder Settings
             _buildReminderSettingsSection(theme),
             const SizedBox(height: 24),
-
-            // Demo Data Option
-            _buildDemoDataSection(theme),
+            const SizedBox.shrink(),
             const SizedBox(height: 32),
 
             // Save Button
@@ -384,74 +378,7 @@ class _SetupFormState extends State<SetupForm> {
     }
   }
 
-  Widget _buildDemoDataSection(ThemeData theme) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: theme.colorScheme.primary.withValues(alpha: 0.3),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(
-                Icons.lightbulb_outline,
-                color: theme.colorScheme.primary,
-                size: 24,
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  'Try Demo Data',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: theme.colorScheme.onSurface,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'New to period tracking? Enable demo data to explore the app with 3 months of sample cycle data. You can clear it anytime.',
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
-            ),
-          ),
-          const SizedBox(height: 12),
-          SwitchListTile(
-            title: Text(
-              'Use Demo Data',
-              style: theme.textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            subtitle: Text(
-              _useDemoData 
-                  ? '✓ Demo data will be loaded' 
-                  : 'Start with a clean slate',
-              style: theme.textTheme.bodySmall,
-            ),
-            value: _useDemoData,
-            onChanged: (value) {
-              setState(() {
-                _useDemoData = value;
-              });
-            },
-            activeTrackColor: theme.colorScheme.primary,
-            activeThumbColor: theme.colorScheme.primary,
-            contentPadding: EdgeInsets.zero,
-            dense: true,
-          ),
-        ],
-      ),
-    );
-  }
+  
 
   void _saveSetup() {
     if (_formKey.currentState?.validate() ?? false) {

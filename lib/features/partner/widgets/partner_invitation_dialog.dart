@@ -7,17 +7,16 @@ import '../../../core/theme/app_theme.dart';
 import '../../../generated/app_localizations.dart';
 import '../services/partner_service.dart';
 import '../models/partner_models.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PartnerInvitationDialog extends StatefulWidget {
   final PartnerService partnerService;
 
-  const PartnerInvitationDialog({
-    super.key,
-    required this.partnerService,
-  });
+  const PartnerInvitationDialog({super.key, required this.partnerService});
 
   @override
-  State<PartnerInvitationDialog> createState() => _PartnerInvitationDialogState();
+  State<PartnerInvitationDialog> createState() =>
+      _PartnerInvitationDialogState();
 }
 
 class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
@@ -37,18 +36,18 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
   @override
   void initState() {
     super.initState();
-    
+
     _tabController = TabController(length: 3, vsync: this);
     _dialogController = AnimationController(
       duration: const Duration(milliseconds: 600),
       vsync: this,
     );
-    
+
     _scaleAnimation = CurvedAnimation(
       parent: _dialogController,
       curve: Curves.elasticOut,
     );
-    
+
     _fadeAnimation = CurvedAnimation(
       parent: _dialogController,
       curve: Curves.easeIn,
@@ -146,11 +145,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
               ),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: const Icon(
-              Icons.favorite,
-              color: Colors.white,
-              size: 24,
-            ),
+            child: const Icon(Icons.favorite, color: Colors.white, size: 24),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -175,10 +170,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
           ),
           IconButton(
             onPressed: () => Navigator.of(context).pop(),
-            icon: Icon(
-              Icons.close,
-              color: AppTheme.mediumGrey,
-            ),
+            icon: Icon(Icons.close, color: AppTheme.mediumGrey),
           ),
         ],
       ),
@@ -204,23 +196,11 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
         dividerColor: Colors.transparent,
         labelColor: Colors.white,
         unselectedLabelColor: AppTheme.mediumGrey,
-        labelStyle: const TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
-        ),
+        labelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
         tabs: const [
-          Tab(
-            icon: Icon(Icons.email, size: 20),
-            text: 'Email',
-          ),
-          Tab(
-            icon: Icon(Icons.qr_code, size: 20),
-            text: 'QR Code',
-          ),
-          Tab(
-            icon: Icon(Icons.share, size: 20),
-            text: 'Share Link',
-          ),
+          Tab(icon: Icon(Icons.email, size: 20), text: 'Email'),
+          Tab(icon: Icon(Icons.qr_code, size: 20), text: 'QR Code'),
+          Tab(icon: Icon(Icons.share, size: 20), text: 'Share Link'),
         ],
       ),
     ).animate().fadeIn(delay: 200.ms);
@@ -250,7 +230,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
               ),
             ),
             const SizedBox(height: 24),
-            
+
             TextFormField(
               controller: _emailController,
               decoration: InputDecoration(
@@ -269,14 +249,16 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                 if (value == null || value.isEmpty) {
                   return 'Please enter an email address';
                 }
-                if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                if (!RegExp(
+                  r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                ).hasMatch(value)) {
                   return 'Please enter a valid email address';
                 }
                 return null;
               },
             ),
             const SizedBox(height: 16),
-            
+
             TextFormField(
               controller: _messageController,
               maxLines: 3,
@@ -293,23 +275,25 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                 ),
               ),
             ),
-            
+
             const Spacer(),
-            
+
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed: _isLoading ? null : _sendEmailInvitation,
-                icon: _isLoading 
-                  ? SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      ),
-                    )
-                  : const Icon(Icons.send),
+                icon: _isLoading
+                    ? SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Colors.white,
+                          ),
+                        ),
+                      )
+                    : const Icon(Icons.send),
                 label: Text(_isLoading ? 'Sending...' : 'Send Invitation'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppTheme.primaryRose,
@@ -349,82 +333,87 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
             ),
           ),
           const SizedBox(height: 32),
-          
+
           Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: AppTheme.primaryRose.withValues(alpha: 0.2),
-                  blurRadius: 20,
-                  offset: const Offset(0, 8),
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppTheme.primaryRose.withValues(alpha: 0.2),
+                      blurRadius: 20,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            child: Column(
-              children: [
-                if (_generatedInvitation != null)
-                  QrImageView(
-                    data: _generateInvitationLink(_generatedInvitation!),
-                    version: QrVersions.auto,
-                    size: 200.0,
-                    foregroundColor: AppTheme.darkGrey,
-                    embeddedImage: const AssetImage('assets/images/logo.png'),
-                    embeddedImageStyle: const QrEmbeddedImageStyle(
-                      size: Size(40, 40),
-                    ),
-                  )
-                else
-                  Container(
-                    width: 200,
-                    height: 200,
-                    decoration: BoxDecoration(
-                      color: AppTheme.lightGrey.withValues(alpha: 0.3),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.qr_code,
-                          size: 60,
-                          color: AppTheme.mediumGrey,
+                child: Column(
+                  children: [
+                    if (_generatedInvitation != null)
+                      QrImageView(
+                        data: _generateInvitationLink(_generatedInvitation!),
+                        version: QrVersions.auto,
+                        size: 200.0,
+                        foregroundColor: AppTheme.darkGrey,
+                        embeddedImage: const AssetImage(
+                          'assets/images/logo.png',
                         ),
-                        const SizedBox(height: 12),
-                        Text(
-                          'Generate QR Code',
-                          style: TextStyle(
-                            color: AppTheme.mediumGrey,
-                            fontWeight: FontWeight.w500,
-                          ),
+                        embeddedImageStyle: const QrEmbeddedImageStyle(
+                          size: Size(40, 40),
                         ),
-                      ],
+                      )
+                    else
+                      Container(
+                        width: 200,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          color: AppTheme.lightGrey.withValues(alpha: 0.3),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.qr_code,
+                              size: 60,
+                              color: AppTheme.mediumGrey,
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              'Generate QR Code',
+                              style: TextStyle(
+                                color: AppTheme.mediumGrey,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                    const SizedBox(height: 16),
+
+                    Text(
+                      'Flow Ai Partner Invitation',
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.darkGrey,
+                      ),
                     ),
-                  ),
-                
-                const SizedBox(height: 16),
-                
-                Text(
-                  'FlowSense Partner Invitation',
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: AppTheme.darkGrey,
-                  ),
+                    Text(
+                      'Scan to connect',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: AppTheme.mediumGrey,
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  'Scan to connect',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: AppTheme.mediumGrey,
-                  ),
-                ),
-              ],
-            ),
-          ).animate().scale(begin: const Offset(0.8, 0.8)).fadeIn(delay: 200.ms),
-          
+              )
+              .animate()
+              .scale(begin: const Offset(0.8, 0.8))
+              .fadeIn(delay: 200.ms),
+
           const Spacer(),
-          
+
           Row(
             children: [
               Expanded(
@@ -487,7 +476,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
             ),
           ),
           const SizedBox(height: 32),
-          
+
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -507,23 +496,16 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
             ),
             child: Column(
               children: [
-                Icon(
-                  Icons.link,
-                  size: 48,
-                  color: AppTheme.primaryRose,
-                ),
+                Icon(Icons.link, size: 48, color: AppTheme.primaryRose),
                 const SizedBox(height: 16),
-                
+
                 if (_generatedInvitation != null) ...[
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: AppTheme.lightGrey,
-                        width: 1,
-                      ),
+                      border: Border.all(color: AppTheme.lightGrey, width: 1),
                     ),
                     child: Row(
                       children: [
@@ -538,7 +520,9 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                           ),
                         ),
                         IconButton(
-                          onPressed: () => _copyToClipboard(_generateInvitationLink(_generatedInvitation!)),
+                          onPressed: () => _copyToClipboard(
+                            _generateInvitationLink(_generatedInvitation!),
+                          ),
                           icon: Icon(
                             Icons.copy,
                             color: AppTheme.primaryRose,
@@ -551,17 +535,15 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                 ] else ...[
                   Text(
                     'Link will appear here after generation',
-                    style: TextStyle(
-                      color: AppTheme.mediumGrey,
-                    ),
+                    style: TextStyle(color: AppTheme.mediumGrey),
                   ),
                 ],
               ],
             ),
           ).animate().fadeIn(delay: 200.ms),
-          
+
           const Spacer(),
-          
+
           Row(
             children: [
               Expanded(
@@ -611,9 +593,9 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
     try {
       final invitation = await widget.partnerService.sendPartnerInvitation(
         inviteeEmail: _emailController.text.trim(),
-        personalMessage: _messageController.text.trim().isNotEmpty 
-          ? _messageController.text.trim() 
-          : null,
+        personalMessage: _messageController.text.trim().isNotEmpty
+            ? _messageController.text.trim()
+            : null,
       );
 
       if (invitation != null) {
@@ -663,7 +645,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
 
   void _copyToClipboard(String text) {
     Clipboard.setData(ClipboardData(text: text));
-    ScaffoldMessenger.of(context).showSnackBar(
+    ScaffoldMessenger.maybeOf(context)?.showSnackBar(
       SnackBar(
         content: const Text('Link copied to clipboard!'),
         backgroundColor: AppTheme.successGreen,
@@ -677,8 +659,8 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
     if (_generatedInvitation != null) {
       final link = _generateInvitationLink(_generatedInvitation!);
       Share.share(
-        'Join me on FlowSense! Use this link to connect and share our cycle journey together: $link',
-        subject: 'FlowSense Partner Invitation',
+        'Join me on Flow Ai! Use this link to connect and share our cycle journey together: $link',
+        subject: 'Flow Ai Partner Invitation',
       );
     }
   }
@@ -689,7 +671,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
   }
 
   void _showSuccessMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
+    ScaffoldMessenger.maybeOf(context)?.showSnackBar(
       SnackBar(
         content: Text(message),
         backgroundColor: AppTheme.successGreen,
@@ -699,8 +681,40 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
     );
   }
 
+  Future<void> _shareWhatsApp() async {
+    if (_generatedInvitation == null) {
+      await _generateInvitation();
+    }
+    if (_generatedInvitation == null) return;
+
+    final link = _generateInvitationLink(_generatedInvitation!);
+    final text =
+        'Join me on Flow Ai! Use this link to connect and share our cycle journey together: $link';
+
+    final uri = Uri.parse('https://wa.me/?text=${Uri.encodeComponent(text)}');
+    final ok = await canLaunchUrl(uri);
+    if (!ok) {
+      _showErrorMessage('WhatsApp is not available on this device.');
+      return;
+    }
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  }
+
+  Future<void> _shareSystemSheet() async {
+    if (_generatedInvitation == null) {
+      await _generateInvitation();
+    }
+    if (_generatedInvitation == null) return;
+
+    final link = _generateInvitationLink(_generatedInvitation!);
+    Share.share(
+      'Join me on Flow Ai! Use this link to connect and share our cycle journey together: $link',
+      subject: 'Flow Ai Partner Invitation',
+    );
+  }
+
   void _showErrorMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
+    ScaffoldMessenger.maybeOf(context)?.showSnackBar(
       SnackBar(
         content: Text(message),
         backgroundColor: AppTheme.errorRed,

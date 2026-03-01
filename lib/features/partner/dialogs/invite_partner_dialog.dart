@@ -28,8 +28,8 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
   int _currentStep = 0;
 
   final List<String> _predefinedMessages = [
-    "Hi! I'd love to share my cycle journey with you for mutual support. Would you like to connect on FlowSense? 💕",
-    "Hey! I'm using FlowSense to track my cycle and would love to have you as my support partner. Want to join me? 🌸",
+    "Hi! I'd love to share my cycle journey with you for mutual support. Would you like to connect on Flow Ai? 💕",
+    "Hey! I'm using Flow Ai to track my cycle and would love to have you as my support partner. Want to join me? 🌸",
     "Hi there! I think it would be amazing if we could support each other through our cycle journeys. Care to connect? ❤️",
   ];
 
@@ -213,7 +213,7 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
         ),
         const SizedBox(height: 8),
         Text(
-          'We\'ll send them an invitation to connect with you on FlowSense.',
+          'We\'ll send them an invitation to connect with you on Flow Ai.',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: AppTheme.mediumGrey,
           ),
@@ -556,7 +556,7 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
       setState(() => _isLoading = false);
       
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        ScaffoldMessenger.maybeOf(context)?.showSnackBar(
           SnackBar(
             content: Row(
               children: [

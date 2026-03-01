@@ -252,7 +252,7 @@ class PerformanceOptimizationService {
   void _triggerGarbageCollection() {
     if (kDebugMode) {
       // In debug mode, we can't force GC, but we can hint
-      SystemChannels.system.invokeMethod('SystemNavigator.routeUpdated');
+      SystemChannels.platform.invokeMethod('SystemNavigator.routeUpdated');
     }
   }
 
@@ -710,7 +710,7 @@ class AdvancedCache<T> {
   }
 
   void _optimizeAdaptive() {
-    final oneHourAgo = now.subtract(const Duration(hours: 1));
+    final oneHourAgo = DateTime.now().subtract(const Duration(hours: 1));
     
     // Remove entries not accessed in the last hour and with low access count
     final keysToRemove = <String>[];

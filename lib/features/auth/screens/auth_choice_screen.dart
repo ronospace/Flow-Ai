@@ -7,7 +7,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../generated/app_localizations.dart';
 import 'dart:math' as math;
 
-/// 🚀 Auth Choice Screen - Demo, Login, or Sign Up
+/// 🚀 Auth Choice Screen - Login, or Sign Up
 /// Provides users with three clear options on app launch
 class AuthChoiceScreen extends StatefulWidget {
   const AuthChoiceScreen({super.key});

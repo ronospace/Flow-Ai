@@ -343,7 +343,7 @@ class EnhancedOnboardingController extends ChangeNotifier {
       final userName = _data.preferredName ?? _data.fullName ?? 'there';
       await _notificationService.scheduleNotification(
         id: 0,
-        title: 'Welcome to FlowSense, $userName! 🌸',
+        title: 'Welcome to Flow Ai, $userName! 🌸',
         body: 'Ready to start your personalized health journey?',
         scheduledDate: DateTime.now().add(const Duration(hours: 2)),
       );

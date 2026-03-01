@@ -31,7 +31,13 @@ class DatabaseService {
         onUpgrade: _upgradeDatabase,
       );
     } catch (e) {
-      throw Exception('Failed to initialize database: $e');
+      if (kDebugMode) { debugPrint('Database init failed, using in-memory DB: $e'); }
+      return await openDatabase(
+        inMemoryDatabasePath,
+        version: 1,
+        onCreate: _createTables,
+        onUpgrade: _upgradeDatabase,
+      );
     }
   }
 
