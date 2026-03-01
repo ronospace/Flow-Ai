@@ -37,7 +37,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
   void initState() {
     super.initState();
 
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     _dialogController = AnimationController(
       duration: const Duration(milliseconds: 600),
       vsync: this,
@@ -104,6 +104,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                         children: [
                           _buildEmailInviteTab(theme, localizations),
                           _buildQRCodeTab(theme, localizations),
+                          _buildWhatsAppTab(theme, localizations),
                           _buildLinkShareTab(theme, localizations),
                         ],
                       ),
@@ -198,9 +199,10 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
         unselectedLabelColor: AppTheme.mediumGrey,
         labelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
         tabs: const [
-          Tab(icon: Icon(Icons.email, size: 20), text: 'Email'),
-          Tab(icon: Icon(Icons.qr_code, size: 20), text: 'QR Code'),
-          Tab(icon: Icon(Icons.share, size: 20), text: 'Share Link'),
+          Tab(icon: Icon(Icons.email, size: 20), text: "Email"),
+          Tab(icon: Icon(Icons.qr_code, size: 20), text: "QR Code"),
+          Tab(icon: Icon(Icons.whatsapp, size: 20), text: "WhatsApp"),
+          Tab(icon: Icon(Icons.share, size: 20), text: "Share Link"),
         ],
       ),
     ).animate().fadeIn(delay: 200.ms);

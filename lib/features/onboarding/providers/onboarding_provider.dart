@@ -9,28 +9,6 @@ import '../../../core/services/onboarding_tutorial_service.dart';
 // --- Sample mode removed (store-safe) ---
 // These are minimal stubs to keep legacy onboarding code compiling.
 // They do NOT provide credentials or any auto-demo login.
-class DemoDataSet {
-  const DemoDataSet();
-}
-
-class DemoDataService {
-  DemoDataSet generateCompleteDemo() => const DemoDataSet();
-}
-// --------------------------------------
-
-
-class OnboardingProvider extends ChangeNotifier {
-  bool _isCompleted = false;
-  int _currentStep = 0;
-  bool _isLoading = false;
-  final List<OnboardingStep> _steps = OnboardingData.steps;
-  UserPreferencesService? _preferencesService;
-  final NotificationService _notificationService = NotificationService.instance;
-  final DemoDataService _demoDataService = DemoDataService();
-  final OnboardingTutorialService _tutorialService = OnboardingTutorialService();
-  bool _isInitialized = false;
-  bool _useDemoData = false;
-  DemoDataSet? _demoDataSet;
 
   OnboardingProvider() {
     _initializeServices();
@@ -57,8 +35,6 @@ class OnboardingProvider extends ChangeNotifier {
   bool get isFirstStep => _currentStep == 0;
   bool get isLastStep => _currentStep == _steps.length - 1;
   double get progress => (_currentStep + 1) / _steps.length;
-  bool get useDemoData => _useDemoData;
-  DemoDataSet? get demoDataSet => _demoDataSet;
   OnboardingTutorialService get tutorialService => _tutorialService;
 
   Future<void> completeOnboarding() async {
@@ -177,30 +153,6 @@ class OnboardingProvider extends ChangeNotifier {
   }
 
   // Sample data management
-  void setUseDemoData(bool value) {
-    _useDemoData = value;
-    if (value) {
-      _demoDataSet = _demoDataService.generateCompleteDemo();
-    } else {
-      _demoDataSet = null;
-    }
-    notifyListeners();
-  }
-
-  /// Generate demo data for exploration
-  Future<DemoDataSet> generateDemoData() async {
-    _setLoading(true);
-    try {
-      final demoData = _demoDataService.generateCompleteDemo();
-      _demoDataSet = demoData;
-      return demoData;
-    } finally {
-      _setLoading(false);
-    }
-  }
-
-  /// Start a tutorial for a specific feature
-  Future<void> startTutorial(String tutorialId) async {
     final completed = await _tutorialService.isTutorialCompleted(tutorialId);
     if (!completed) {
       // Tutorial will be shown by the UI layer
