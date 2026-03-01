@@ -540,7 +540,7 @@ class _HealthcareProviderPortalScreenState
         });
 
         if (mounted) {
-          ScaffoldMessenger.maybeOf(context).showSnackBar(
+          ScaffoldMessenger.maybeOf(context)?.showSnackBar(
             SnackBar(
               content: const Text('Health data exported successfully!'),
               backgroundColor: AppTheme.successGreen,
@@ -561,7 +561,7 @@ class _HealthcareProviderPortalScreenState
       });
 
       if (mounted) {
-        ScaffoldMessenger.maybeOf(context).showSnackBar(
+        ScaffoldMessenger.maybeOf(context)?.showSnackBar(
           SnackBar(
             content: Text('Export failed: ${e.toString()}'),
             backgroundColor: AppTheme.errorRed,
@@ -581,7 +581,7 @@ class _HealthcareProviderPortalScreenState
       );
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.maybeOf(context).showSnackBar(
+        ScaffoldMessenger.maybeOf(context)?.showSnackBar(
           SnackBar(
             content: Text('Failed to share: ${e.toString()}'),
             backgroundColor: AppTheme.errorRed,

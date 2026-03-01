@@ -529,13 +529,13 @@ class _EnhancedAnalyticsDashboardScreenState
             ),
             const SizedBox(height: 20),
             ...[
-              ('PDF Report', Icons.picture_as_pdf, () => _exportData('pdf')),
+              ('PDF Report', Icons.picture_as_pdf, () => _exportData(context, 'pdf')),
               (
                 'Excel Spreadsheet',
                 Icons.table_chart,
-                () => _exportData('excel'),
+                () => _exportData(context, 'excel'),
               ),
-              ('Share Summary', Icons.share, () => _shareData()),
+              ('Share Summary', Icons.share, () => _shareData(context)),
             ].map(
               (option) => ListTile(
                 title: Text(option.$1),
@@ -556,9 +556,9 @@ class _EnhancedAnalyticsDashboardScreenState
     );
   }
 
-  void _exportData(String format) {
+  void _exportData(BuildContext context, String format) {
     // TODO: Implement data export functionality
-    ScaffoldMessenger.of(context).showSnackBar(
+    ScaffoldMessenger.maybeOf(context)?.showSnackBar(
       SnackBar(
         content: Text('Exporting analytics as $format...'),
         behavior: SnackBarBehavior.floating,
@@ -567,9 +567,9 @@ class _EnhancedAnalyticsDashboardScreenState
     );
   }
 
-  void _shareData() {
+  void _shareData(BuildContext context) {
     // TODO: Implement data sharing functionality
-    ScaffoldMessenger.of(context).showSnackBar(
+    ScaffoldMessenger.maybeOf(context)?.showSnackBar(
       const SnackBar(
         content: Text('Preparing analytics summary for sharing...'),
         behavior: SnackBarBehavior.floating,
@@ -658,7 +658,7 @@ class _EnhancedAnalyticsDashboardScreenState
 
   void _setReminder(recommendation) {
     // TODO: Implement reminder functionality
-    ScaffoldMessenger.of(context).showSnackBar(
+    ScaffoldMessenger.maybeOf(context)?.showSnackBar(
       SnackBar(
         content: Text('Reminder set for: ${recommendation.title}'),
         behavior: SnackBarBehavior.floating,
