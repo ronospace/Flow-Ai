@@ -389,7 +389,6 @@ class _SetupFormState extends State<SetupForm> {
         'periodLength': _periodLength,
         'goals': _selectedGoals.toList(),
         'reminders': _reminderSettings,
-        'useDemoData': _useDemoData,
       };
       
       widget.onSave(data);

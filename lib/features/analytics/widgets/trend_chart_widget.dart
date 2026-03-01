@@ -57,7 +57,8 @@ class TrendChartWidget extends StatelessWidget {
                     Text(
                       'Health trends over ${analytics.timeframe}',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                      height: 1.0,
+color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                       ),
                     ),
                   ],
@@ -133,8 +134,11 @@ class TrendChartWidget extends StatelessWidget {
               children: [
                 Text(
                   title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.w600,
+                    height: 1.0,
                     color: theme.colorScheme.onSurface,
                   ),
                 ),
@@ -148,8 +152,11 @@ class TrendChartWidget extends StatelessWidget {
                     const SizedBox(width: 4),
                     Text(
                       _getTrendDirectionLabel(trend.direction),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: _getTrendDirectionColor(trend.direction),
+                      height: 1.0,
+color: _getTrendDirectionColor(trend.direction),
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -205,7 +212,8 @@ class TrendChartWidget extends StatelessWidget {
                       return Text(
                         value.toInt().toString(),
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                      height: 1.0,
+color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                         ),
                       );
                     },
@@ -220,7 +228,8 @@ class TrendChartWidget extends StatelessWidget {
                       return Text(
                         '${(value / 30).round()}M',
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                      height: 1.0,
+color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                         ),
                       );
                     },
@@ -325,8 +334,11 @@ class TrendChartWidget extends StatelessWidget {
                     const SizedBox(width: 4),
                     Text(
                       _getTrendDirectionLabel(trend.direction),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: _getTrendDirectionColor(trend.direction),
+                      height: 1.0,
+color: _getTrendDirectionColor(trend.direction),
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -371,13 +383,15 @@ class TrendChartWidget extends StatelessWidget {
               Text(
                 'Confidence: ${(trend.confidence * 100).round()}%',
                 style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                      height: 1.0,
+color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                 ),
               ),
               Text(
                 'Magnitude: ${(trend.magnitude * 100).round()}%',
                 style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                      height: 1.0,
+color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                 ),
               ),
             ],
@@ -403,7 +417,8 @@ class TrendChartWidget extends StatelessWidget {
         Text(
           label,
           style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                      height: 1.0,
+color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
           ),
         ),
       ],
