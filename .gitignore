@@ -99,3 +99,9 @@ build/
 ios/Flutter/Profile.xcconfig
 
 _dev_backups/
+
+# --- local rescue backups (never commit) ---
+*.bak_*
+*.bak
+# iOS Xcode project rescue copies
+*.pbxproj.bak*
