@@ -106,8 +106,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       // Load ad even later to not impact startup
       Future.delayed(const Duration(milliseconds: 1000), () {
         if (mounted) {
-          _loadif(_adsEnabled) BannerAd();
-        }
+      _loadBannerAd();        }
       });
 
       // Load AI prediction
@@ -128,12 +127,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  void _loadif(_adsEnabled) BannerAd() {
-    _bannerAd = _adMobService.createif(_adsEnabled) BannerAd();
-    _bannerAd!.load().then((_) {
-      setState(() {
-        _isBannerAdReady = true;
-      });
+  void _loadBannerAd() {
+    _bannerAd = _adMobService.createBannerAd();
+    _bannerAd!.load();
+    setState(() {
+      _isBannerAdReady = true;
     });
   }
 

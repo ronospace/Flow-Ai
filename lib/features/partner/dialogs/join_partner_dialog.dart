@@ -97,13 +97,14 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _buildHeader(),
-                    _buildContent(),
-                    _buildFooter(),
-                  ],
+                    children: [
+                      _buildHeader(),
+                      _buildContent(),
+                      _buildFooter(),
+                    ],
                   ),
-                  ),
+                ),
+              ),
             ),
           ),
         );

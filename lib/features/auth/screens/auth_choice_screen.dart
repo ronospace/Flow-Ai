@@ -34,7 +34,7 @@ class _AuthChoiceScreenState extends State<AuthChoiceScreen>
     )..repeat();
 
     _contentController = AnimationController(
-      duration: const Duration(milliseconds: 1500),
+      duration: const Duration(milliseconds: 2600),
       vsync: this,
     )..forward();
   }

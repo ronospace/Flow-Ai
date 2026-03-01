@@ -38,6 +38,7 @@ import 'features/health/providers/health_provider.dart';
 import 'features/settings/providers/settings_provider.dart';
 import 'features/premium/providers/premium_provider.dart';
 import 'core/services/auth_service.dart';
+import 'features/analytics/providers/analytics_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -319,6 +320,7 @@ class _FlowAIAppState extends State<FlowAIApp> {
         ChangeNotifierProvider(create: (_) => OnboardingProvider()),
         ChangeNotifierProvider(create: (_) => CycleProvider()),
         ChangeNotifierProvider(create: (_) => InsightsProvider()),
+        ChangeNotifierProvider(create: (_) => AnalyticsProvider()),
         ChangeNotifierProvider(create: (_) => HealthProvider()),
         ChangeNotifierProvider.value(value: settingsProvider),
         ChangeNotifierProvider.value(value: progressiveDisclosureService),
