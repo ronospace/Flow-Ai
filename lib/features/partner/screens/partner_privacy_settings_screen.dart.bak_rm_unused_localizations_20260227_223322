@@ -78,7 +78,7 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
         _hasChanges = false;
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.maybeOf(context).showSnackBar(
         SnackBar(
           content: const Text('Privacy settings updated successfully!'),
           backgroundColor: AppTheme.successGreen,
@@ -87,7 +87,7 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
         ),
       );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.maybeOf(context).showSnackBar(
         SnackBar(
           content: Text('Failed to update settings: $e'),
           backgroundColor: AppTheme.errorRed,

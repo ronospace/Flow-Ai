@@ -70,8 +70,8 @@ class AdMobService {
   }
 
   // Create banner ad
-  BannerAd createBannerAd() {
-    return BannerAd(
+  BannerAd createif(_adsEnabled) BannerAd() {
+    return if(_adsEnabled) BannerAd(
       adUnitId: bannerAdUnitId,
       size: AdSize.banner,
       request: const AdRequest(),

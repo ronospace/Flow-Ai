@@ -31,7 +31,7 @@ class TrendChartWidget extends StatelessWidget {
           ),
         ],
       ),
-      child: Column(
+      child: Column(mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header
@@ -44,7 +44,7 @@ class TrendChartWidget extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: Column(
+                child: Column(mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -127,7 +127,7 @@ class TrendChartWidget extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           Expanded(
-            child: Column(
+            child: Column(mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -164,7 +164,7 @@ class TrendChartWidget extends StatelessWidget {
   }
 
   Widget _buildMainTrendChart(ThemeData theme) {
-    return Column(
+    return Column(mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
@@ -254,7 +254,7 @@ class TrendChartWidget extends StatelessWidget {
   }
 
   Widget _buildIndividualMetricCharts(ThemeData theme) {
-    return Column(
+    return Column(mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
@@ -295,7 +295,7 @@ class TrendChartWidget extends StatelessWidget {
           color: color.withValues(alpha: 0.2),
         ),
       ),
-      child: Column(
+      child: Column(mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(

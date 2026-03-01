@@ -17,7 +17,7 @@ class _HelpScreenState extends State<HelpScreen> {
   final List<HelpItem> _helpItems = [
     HelpItem(
       question: "How do I start tracking my cycle?",
-      answer: "Navigate to the Track tab and log your period start date. FlowSense will automatically begin tracking your cycle and provide predictions based on your data.",
+      answer: "Navigate to the Track tab and log your period start date. Flow Ai will automatically begin tracking your cycle and provide predictions based on your data.",
       icon: Icons.play_circle_outline,
       color: AppTheme.primaryRose,
     ),
@@ -29,7 +29,7 @@ class _HelpScreenState extends State<HelpScreen> {
     ),
     HelpItem(
       question: "Can I sync with other health apps?",
-      answer: "Yes! FlowSense integrates with Apple Health and can sync data with other compatible health tracking applications through the Settings > Health Data section.",
+      answer: "Yes! Flow Ai integrates with Apple Health and can sync data with other compatible health tracking applications through the Settings > Health Data section.",
       icon: Icons.sync,
       color: AppTheme.secondaryBlue,
     ),
@@ -59,7 +59,7 @@ class _HelpScreenState extends State<HelpScreen> {
     ),
     HelpItem(
       question: "What if my cycle is irregular?",
-      answer: "FlowSense is designed to work with irregular cycles too. The AI learns your unique patterns and adjusts predictions accordingly. Track consistently for best results.",
+      answer: "Flow Ai is designed to work with irregular cycles too. The AI learns your unique patterns and adjusts predictions accordingly. Track consistently for best results.",
       icon: Icons.timeline,
       color: AppTheme.errorRed,
     ),
@@ -147,7 +147,7 @@ class _HelpScreenState extends State<HelpScreen> {
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'Find answers to common questions about FlowSense',
+                    'Find answers to common questions about Flow Ai',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -413,7 +413,7 @@ class _HelpScreenState extends State<HelpScreen> {
     final Uri emailLaunchUri = Uri(
       scheme: 'mailto',
       path: 'support@flowsense.app',
-      query: Uri.encodeComponent('subject=FlowSense Support Request&body=Hello FlowSense Support Team,\n\nI need help with:\n\nPlease describe your issue here...\n\nBest regards'),
+      query: Uri.encodeComponent('subject=Flow Ai Support Request&body=Hello Flow Ai Support Team,\n\nI need help with:\n\nPlease describe your issue here...\n\nBest regards'),
     );
 
     try {
@@ -422,7 +422,7 @@ class _HelpScreenState extends State<HelpScreen> {
         await launchUrl(emailLaunchUri, mode: LaunchMode.externalApplication);
       } else {
         // Fallback: Try alternative email URI format
-        final fallbackUri = Uri.parse('mailto:support@flowsense.app?subject=FlowSense Support Request');
+        final fallbackUri = Uri.parse('mailto:support@flowsense.app?subject=Flow Ai Support Request');
         if (await canLaunchUrl(fallbackUri)) {
           await launchUrl(fallbackUri, mode: LaunchMode.externalApplication);
         } else {
@@ -693,8 +693,8 @@ class _HelpScreenState extends State<HelpScreen> {
   }
 
   void _launchWhatsApp() async {
-    const phoneNumber = '+4917627702411'; // FlowSense WhatsApp Support
-    const message = 'Hello! I need help with FlowSense app.';
+    const phoneNumber = '+4917627702411'; // Flow Ai WhatsApp Support
+    const message = 'Hello! I need help with Flow Ai app.';
     final Uri whatsappUri = Uri.parse(
       'https://wa.me/$phoneNumber?text=${Uri.encodeComponent(message)}',
     );
@@ -711,7 +711,7 @@ class _HelpScreenState extends State<HelpScreen> {
   }
 
   void _launchTelegram() async {
-    const username = 'flowsense_support'; // FlowSense Telegram Support
+    const username = 'flowsense_support'; // Flow Ai Telegram Support
     final Uri telegramUri = Uri.parse('https://t.me/$username');
 
     try {

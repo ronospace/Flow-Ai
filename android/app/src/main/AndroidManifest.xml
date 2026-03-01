@@ -2,7 +2,7 @@
     <application
         android:label="flow_ai"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon" android:roundIcon="@mipmap/ic_launcher_round">
         <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-8707491489514576~2318954189"/>
 <activity
             android:name=".MainActivity"

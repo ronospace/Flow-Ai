@@ -25,7 +25,6 @@ class _FuturisticAuthScreenState extends State<FuturisticAuthScreen>
   late AnimationController _socialController;
 
   final LocalAuthentication _localAuth = LocalAuthentication();
-  final AuthService _authService = AuthService();
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();

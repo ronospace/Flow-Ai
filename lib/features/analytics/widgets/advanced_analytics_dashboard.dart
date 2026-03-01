@@ -151,7 +151,7 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
                         color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 8),
                     Row(
                       children: [
                         Icon(
@@ -237,7 +237,7 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       crossAxisSpacing: 16,
       mainAxisSpacing: 16,
-      childAspectRatio: 1.1,
+      mainAxisExtent: 185,
       children: [
         _buildAdvancedMetricCard(
           title: 'Cycle Precision',
@@ -294,7 +294,7 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
     required ThemeData theme,
   }) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(13),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
@@ -351,11 +351,10 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
           Text(
             value,
-            style: theme.textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.bold,
+            style: theme.textTheme.headlineMedium?.copyWith(fontSize: 26, fontWeight: FontWeight.bold,
               color: theme.colorScheme.onSurface,
             ),
           ),
@@ -370,14 +369,16 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
           const SizedBox(height: 2),
           Text(
             subtitle,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: theme.textTheme.bodySmall?.copyWith(
               color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-            ),
           ),
-          const SizedBox(height: 12),
+          ),
+          const SizedBox(height: 8),
           // Mini Chart
           SizedBox(
-            height: 30,
+            height: 20,
             child: LineChart(
               LineChartData(
                 gridData: FlGridData(show: false),
@@ -585,7 +586,7 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
                       true,
                       theme,
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 8),
                     _buildComparisonMetric(
                       'Last Month',
                       '77%',
@@ -593,7 +594,7 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
                       false,
                       theme,
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 8),
                     _buildComparisonMetric(
                       '3 Months Ago',
                       '71%',
@@ -949,7 +950,7 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             crossAxisSpacing: 16,
             mainAxisSpacing: 16,
-            childAspectRatio: 1.2,
+            childAspectRatio: 0.9,
             children: [
               _buildPredictionCard(
                 'Next Period',
@@ -999,7 +1000,7 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
     ThemeData theme,
   ) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(13),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
@@ -1121,7 +1122,7 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
   Widget _buildPatternItem(Map<String, dynamic> pattern, ThemeData theme) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(13),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.centerLeft,

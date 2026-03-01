@@ -356,7 +356,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       if (useDemoData) {
         provider.setUseDemoData(true);
         if (mounted) {
-          _showSuccessMessage('Demo data loaded! Explore the app with sample cycle data.');
+          _showSuccessMessage('Sample data loaded.');
         }
       }
       

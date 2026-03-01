@@ -94,15 +94,16 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                     ),
                   ],
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                   children: [
                     _buildHeader(),
                     _buildContent(),
                     _buildFooter(),
                   ],
-                ),
-              ),
+                  ),
+                  ),
             ),
           ),
         );
@@ -617,7 +618,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
 
   void _showRequestInvitationDialog() {
     // TODO: Implement request invitation dialog
-    ScaffoldMessenger.of(context).showSnackBar(
+    ScaffoldMessenger.maybeOf(context)?.showSnackBar(
       SnackBar(
         content: Text('Request invitation feature coming soon'),
         behavior: SnackBarBehavior.floating,
@@ -627,7 +628,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
 
   void _showManualConnectionDialog() {
     // TODO: Implement manual connection dialog
-    ScaffoldMessenger.of(context).showSnackBar(
+    ScaffoldMessenger.maybeOf(context)?.showSnackBar(
       SnackBar(
         content: Text('Manual connection feature coming soon'),
         behavior: SnackBarBehavior.floating,
