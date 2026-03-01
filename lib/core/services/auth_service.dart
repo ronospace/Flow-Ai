@@ -405,11 +405,6 @@ class AuthService {
   }) async {
     try {
       
-      if (email.trim().toLowerCase() == "demo@flowai.app") {
-        return AuthResult.failure("Demo account disabled");
-      }
-// Firebase temporarily disabled for iOS build
-      // if (_firebaseAvailable && _auth != null) {
       //   try {
       //     final UserCredential result = await _auth!.signInWithEmailAndPassword(
       //       email: email,
@@ -442,26 +437,6 @@ class AuthService {
       // Fallback to local authentication
       if (_localUserService != null) {
               if (!kReleaseMode) {
-  // Special handling for demo account (debug only)
-          const demoEmail = 'demo@flowai.app';
-          const demoPassword = 'FlowAiDemo2025!';
-          if (email == demoEmail && password == demoPassword) {
-            final emailExists = await _localUserService!.isEmailRegistered(
-              demoEmail,
-            );
-            if (!emailExists) {
-              // Create demo account if it doesn't exist
-              final createResult = await _localUserService!.createUser(
-                email: demoEmail,
-                password: demoPassword,
-                displayName: kReleaseMode ? 'User' : 'Demo User for App Review',
-                username: 'demo_user',
-              );
-              if (!createResult.isSuccess) {
-                return AuthResult.failure(
-                  'Failed to create demo account: ${createResult.error}',
-                );
-              }
             }
         }
         }

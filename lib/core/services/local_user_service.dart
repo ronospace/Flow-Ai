@@ -19,10 +19,6 @@ class LocalUserService {
   Future<void> initialize() async {
     _prefs = await SharedPreferences.getInstance();
 
-    // Auto-create demo account for App Store review and testing
-    // Always create demo account so it's available in release builds
-    await _createDemoAccountIfNeeded();
-
     debugPrint('✅ LocalUserService initialized');
   }
 
@@ -329,10 +325,6 @@ class LocalUserService {
     return _prefs!.getBool('onboarding_completed') ?? false;
   }
 
-  /// Auto-create demo account for Apple App Store review
-  Future<void> _createDemoAccountIfNeeded() async {
-    // Demo mode removed (store-safe). Keep method to avoid breaking call sites.
-    return;
   }
 
   /// Check if user exists by email
