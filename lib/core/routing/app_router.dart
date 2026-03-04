@@ -25,7 +25,11 @@ class AppRouter {
     initialLocation: '/splash',
     // Handle navigation and back button behavior
     redirect: (context, state) {
-      // Allow proper back navigation by not forcing redirects
+      // Normalize custom scheme launches like: flowai://invite/TEST123
+      final uri = state.uri;
+      if (uri.scheme == 'flowai') {
+        return '/home';
+      }
       return null;
     },
     routes: [
