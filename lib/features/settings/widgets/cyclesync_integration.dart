@@ -22,7 +22,7 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
     return Consumer<SettingsProvider>(
       builder: (context, settings, child) {
         final isConnected = settings.preferences.syncWithCycleSync;
-        
+
         return SettingsSection(
           title: 'Flow iQ Integration',
           icon: Icons.local_hospital_outlined,
@@ -36,17 +36,17 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    isConnected 
+                    isConnected
                         ? AppTheme.successGreen.withValues(alpha: 0.1)
                         : AppTheme.warningOrange.withValues(alpha: 0.1),
-                    isConnected 
+                    isConnected
                         ? AppTheme.accentMint.withValues(alpha: 0.05)
                         : AppTheme.primaryRose.withValues(alpha: 0.05),
                   ],
                 ),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: isConnected 
+                  color: isConnected
                       ? AppTheme.successGreen.withValues(alpha: 0.3)
                       : AppTheme.warningOrange.withValues(alpha: 0.3),
                 ),
@@ -60,9 +60,12 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                         height: 50,
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
-                            colors: isConnected 
+                            colors: isConnected
                                 ? [AppTheme.successGreen, AppTheme.accentMint]
-                                : [AppTheme.warningOrange, AppTheme.primaryRose],
+                                : [
+                                    AppTheme.warningOrange,
+                                    AppTheme.primaryRose,
+                                  ],
                           ),
                           borderRadius: BorderRadius.circular(16),
                         ),
@@ -84,25 +87,29 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
-                                    color: isConnected 
+                                    color: isConnected
                                         ? AppTheme.successGreen
                                         : AppTheme.warningOrange,
                                   ),
                                 ),
                                 const SizedBox(width: 8),
                                 Container(
-                                  width: 8,
-                                  height: 8,
-                                  decoration: BoxDecoration(
-                                    color: isConnected 
-                                        ? AppTheme.successGreen
-                                        : AppTheme.warningOrange,
-                                    shape: BoxShape.circle,
-                                  ),
-                                ).animate(onPlay: (controller) => controller.repeat())
-                                  .fadeIn(duration: 1000.ms)
-                                  .then(delay: 500.ms)
-                                  .fadeOut(duration: 1000.ms),
+                                      width: 8,
+                                      height: 8,
+                                      decoration: BoxDecoration(
+                                        color: isConnected
+                                            ? AppTheme.successGreen
+                                            : AppTheme.warningOrange,
+                                        shape: BoxShape.circle,
+                                      ),
+                                    )
+                                    .animate(
+                                      onPlay: (controller) =>
+                                          controller.repeat(),
+                                    )
+                                    .fadeIn(duration: 1000.ms)
+                                    .then(delay: 500.ms)
+                                    .fadeOut(duration: 1000.ms),
                               ],
                             ),
                             const SizedBox(height: 4),
@@ -112,7 +119,9 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                                   : 'Connect to sync your cycle data with clinical app',
                               style: TextStyle(
                                 fontSize: 14,
-                                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurface.withValues(alpha: 0.7),
                               ),
                             ),
                           ],
@@ -120,7 +129,7 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                       ),
                     ],
                   ),
-                  
+
                   if (isConnected) ...[
                     const SizedBox(height: 16),
                     Container(
@@ -145,12 +154,16 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                                   'Synced Account',
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface
+                                        .withValues(alpha: 0.7),
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
                                 Text(
-                                  settings.preferences.cycleSyncUserId ?? 'Unknown',
+                                  settings.preferences.cycleSyncUserId ??
+                                      'Unknown',
                                   style: const TextStyle(
                                     fontSize: 14,
                                     color: AppTheme.successGreen,
@@ -174,43 +187,60 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
             SettingsTile(
               leading: Icon(
                 isConnected ? Icons.sync : Icons.sync_disabled,
-                color: isConnected ? AppTheme.successGreen : AppTheme.warningOrange,
+                color: isConnected
+                    ? AppTheme.successGreen
+                    : AppTheme.warningOrange,
               ),
               title: isConnected ? 'Disconnect Flow iQ' : 'Connect to Flow iQ',
-              subtitle: isConnected 
+              subtitle: isConnected
                   ? 'Stop syncing with Flow iQ Clinical'
                   : 'Sync your cycle data with Flow iQ Clinical',
               trailing: _isConnecting
-                  ? const SizedBox(width: 20,
+                  ? const SizedBox(
+                      width: 20,
                       height: 20,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryRose),
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          AppTheme.primaryRose,
+                        ),
                       ),
                     )
                   : Switch.adaptive(
                       value: isConnected,
-                      onChanged: (value) => _toggleConnection(context, settings, value),
-                      thumbColor: WidgetStateProperty.resolveWith((states) => 
-                        states.contains(WidgetState.selected) ? AppTheme.successGreen : null),
-                      trackColor: WidgetStateProperty.resolveWith((states) => 
-                        states.contains(WidgetState.selected) ? AppTheme.successGreen.withValues(alpha: 0.5) : null),
+                      onChanged: (value) =>
+                          _toggleConnection(context, settings, value),
+                      thumbColor: WidgetStateProperty.resolveWith(
+                        (states) => states.contains(WidgetState.selected)
+                            ? AppTheme.successGreen
+                            : null,
+                      ),
+                      trackColor: WidgetStateProperty.resolveWith(
+                        (states) => states.contains(WidgetState.selected)
+                            ? AppTheme.successGreen.withValues(alpha: 0.5)
+                            : null,
+                      ),
                     ),
             ),
 
             if (isConnected) ...[
               SettingsTile(
-                leading: const Icon(Icons.cloud_sync, color: AppTheme.secondaryBlue),
+                leading: const Icon(
+                  Icons.cloud_sync,
+                  color: AppTheme.secondaryBlue,
+                ),
                 title: 'Sync Now',
                 subtitle: 'Manually sync your latest data',
                 onTap: () => _syncNow(context, settings),
                 trailing: Icon(
                   Icons.arrow_forward_ios,
-                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withValues(alpha: 0.5),
                   size: 16,
                 ),
               ),
-              
+
               SettingsTile(
                 leading: const Icon(Icons.history, color: AppTheme.accentMint),
                 title: 'Sync History',
@@ -218,7 +248,9 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                 onTap: () => _showSyncHistory(context),
                 trailing: Icon(
                   Icons.arrow_forward_ios,
-                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withValues(alpha: 0.5),
                   size: 16,
                 ),
               ),
@@ -261,7 +293,9 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                     'Connect Flow Ai with Flow iQ Clinical to sync your menstrual cycle data across platforms. Flow iQ is our clinical app project (https://github.com/ronospace/Flow-iQ) for healthcare providers. Your data remains secure and encrypted during transfer.',
                     style: TextStyle(
                       fontSize: 12,
-                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withValues(alpha: 0.7),
                       height: 1.4,
                     ),
                   ),
@@ -296,14 +330,18 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
     );
   }
 
-  Future<void> _toggleConnection(BuildContext context, SettingsProvider settings, bool value) async {
+  Future<void> _toggleConnection(
+    BuildContext context,
+    SettingsProvider settings,
+    bool value,
+  ) async {
     setState(() {
       _isConnecting = true;
     });
 
     try {
       HapticFeedback.mediumImpact();
-      _showComingSoonDialog(context);      
+      _showComingSoonDialog(context);
       // Show coming soon message instead of actual functionality
       _connectToCycleSync(context, settings);
     } finally {
@@ -315,22 +353,26 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
     }
   }
 
-  Future<void> _connectToCycleSync(BuildContext context, SettingsProvider settings) async {
+  Future<void> _connectToCycleSync(
+    BuildContext context,
+    SettingsProvider settings,
+  ) async {
     // Show consent dialog first
     final consent = await _showConsentDialog(context);
-    
+
     if (!consent) {
       return; // User declined consent
     }
-    
+
     // Proceed with connection if user consented
     await Future.delayed(const Duration(seconds: 2));
-    
+
     // Generate a mock user ID for CycleSync
-    final cycleSyncUserId = 'cyclesync_${DateTime.now().millisecondsSinceEpoch}';
-    
+    final cycleSyncUserId =
+        'cyclesync_${DateTime.now().millisecondsSinceEpoch}';
+
     await settings.updateCycleSyncIntegration(true, cycleSyncUserId);
-    
+
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -348,7 +390,7 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
 
   void _syncNow(BuildContext context, SettingsProvider settings) {
     HapticFeedback.lightImpact();
-    
+
     // Show sync in progress
     showDialog(
       context: context,
@@ -366,12 +408,15 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
         ),
       ),
     );
-    
+
     // Simulate sync process
     Future.delayed(const Duration(seconds: 3), () {
       if (context.mounted) {
-        Navigator.of(context, rootNavigator: true).pop(); // Close loading dialog
-        
+        Navigator.of(
+          context,
+          rootNavigator: true,
+        ).pop(); // Close loading dialog
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Sync completed successfully!'),
@@ -423,11 +468,7 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      Icons.history,
-                      size: 64,
-                      color: AppTheme.lightGrey,
-                    ),
+                    Icon(Icons.history, size: 64, color: AppTheme.lightGrey),
                     SizedBox(height: 16),
                     Text(
                       'Sync history will appear here',
@@ -448,121 +489,110 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
 
   Future<bool> _showConsentDialog(BuildContext context) async {
     return await showDialog<bool>(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        title: Row(
-          children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [AppTheme.primaryRose, AppTheme.secondaryBlue],
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            title: Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [AppTheme.primaryRose, AppTheme.secondaryBlue],
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(Icons.sync, color: Colors.white, size: 20),
                 ),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Icon(
-                Icons.sync,
-                color: Colors.white,
-                size: 20,
+                const SizedBox(width: 12),
+                const Expanded(
+                  child: Text(
+                    'Connect to CycleSync',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            content: const SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'By connecting to CycleSync Enterprise, you agree to:',
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                  ),
+                  SizedBox(height: 16),
+                  Text('• Share your menstrual cycle data with CycleSync'),
+                  Text('• Allow data synchronization across platforms'),
+                  Text('• Enable enhanced AI-powered health insights'),
+                  Text('• Receive personalized recommendations'),
+                  SizedBox(height: 16),
+                  Text(
+                    'Your data privacy:',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: AppTheme.successGreen,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text('✓ Data is encrypted during transfer'),
+                  Text('✓ You can disconnect at any time'),
+                  Text('✓ Your data remains under your control'),
+                  Text('✓ Complies with healthcare privacy standards'),
+                  SizedBox(height: 16),
+                  Text(
+                    'Do you consent to connect your Flow Ai data with CycleSync Enterprise?',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: AppTheme.darkGrey,
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(width: 12),
-            const Expanded(
-              child: Text(
-                'Connect to CycleSync',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+            actions: [
+              TextButton(
+                onPressed: () =>
+                    Navigator.of(context, rootNavigator: true).pop(false),
+                child: const Text(
+                  'Decline',
+                  style: TextStyle(
+                    color: AppTheme.warningOrange,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        content: const SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'By connecting to CycleSync Enterprise, you agree to:',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
+              ElevatedButton(
+                onPressed: () =>
+                    Navigator.of(context, rootNavigator: true).pop(true),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.successGreen,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
-              ),
-              SizedBox(height: 16),
-              Text('• Share your menstrual cycle data with CycleSync'),
-              Text('• Allow data synchronization across platforms'),
-              Text('• Enable enhanced AI-powered health insights'),
-              Text('• Receive personalized recommendations'),
-              SizedBox(height: 16),
-              Text(
-                'Your data privacy:',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: AppTheme.successGreen,
-                ),
-              ),
-              SizedBox(height: 8),
-              Text('✓ Data is encrypted during transfer'),
-              Text('✓ You can disconnect at any time'),
-              Text('✓ Your data remains under your control'),
-              Text('✓ Complies with healthcare privacy standards'),
-              SizedBox(height: 16),
-              Text(
-                'Do you consent to connect your Flow Ai data with CycleSync Enterprise?',
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  color: AppTheme.darkGrey,
+                child: const Text(
+                  'Accept & Connect',
+                  style: TextStyle(fontWeight: FontWeight.w600),
                 ),
               ),
             ],
           ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context, rootNavigator: true).pop(false),
-            child: const Text(
-              'Decline',
-              style: TextStyle(
-                color: AppTheme.warningOrange,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.of(context, rootNavigator: true).pop(true),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme.successGreen,
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            child: const Text(
-              'Accept & Connect',
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ],
-      ),
-    ) ?? false; // Return false if dialog is dismissed
+        ) ??
+        false; // Return false if dialog is dismissed
   }
 
   void _showComingSoonDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         child: Container(
           padding: const EdgeInsets.all(28),
           decoration: BoxDecoration(
@@ -606,9 +636,9 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                   size: 40,
                 ),
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               Text(
                 'Flow iQ Coming Soon! 🏥',
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -617,9 +647,9 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              
+
               const SizedBox(height: 16),
-              
+
               Text(
                 'We\'re developing the Flow iQ integration to connect with healthcare providers and clinical systems for enhanced cycle tracking and medical insights. Flow iQ (https://github.com/ronospace/Flow-iQ) is our AI-powered clinical app for reproductive health professionals.',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -628,9 +658,9 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              
+
               const SizedBox(height: 20),
-              
+
               // Features preview
               Container(
                 padding: const EdgeInsets.all(16),
@@ -661,9 +691,9 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                   ],
                 ),
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               // Close Button
               SizedBox(
                 width: double.infinity,
@@ -703,16 +733,13 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
       ),
     );
   }
-  
+
   Widget _buildFeatureItem(String emoji, String text) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
         children: [
-          Text(
-            emoji,
-            style: const TextStyle(fontSize: 14),
-          ),
+          Text(emoji, style: const TextStyle(fontSize: 14)),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
@@ -740,10 +767,7 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
             children: [
               Text(
                 'What is CycleSync?',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               SizedBox(height: 8),
               Text(
@@ -752,10 +776,7 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
               SizedBox(height: 16),
               Text(
                 'Benefits of Integration:',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               SizedBox(height: 8),
               Text('• Sync data across all your devices'),

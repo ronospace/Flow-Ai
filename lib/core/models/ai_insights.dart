@@ -16,19 +16,9 @@ enum InsightType {
   sleepOptimization,
 }
 
-enum PatternType {
-  regularity,
-  irregularity,
-  lengthVariation,
-  symptomCluster,
-}
+enum PatternType { regularity, irregularity, lengthVariation, symptomCluster }
 
-enum ImpactLevel {
-  low,
-  medium,
-  high,
-  critical,
-}
+enum ImpactLevel { low, medium, high, critical }
 
 class AIInsight {
   final InsightType type;
@@ -37,9 +27,11 @@ class AIInsight {
   final double confidence; // 0-1
   final bool actionable;
   final List<String> recommendations;
-  final String? recommendation; // Single recommendation for backward compatibility
+  final String?
+  recommendation; // Single recommendation for backward compatibility
   final DateTime generatedAt;
-  final List<MedicalCitation> citations; // Medical sources for health information
+  final List<MedicalCitation>
+  citations; // Medical sources for health information
   final String? citationCategory; // Category for automatic citation lookup
 
   AIInsight({
@@ -54,13 +46,13 @@ class AIInsight {
     this.citations = const [],
     this.citationCategory,
   }) : generatedAt = generatedAt ?? DateTime.now();
-  
+
   /// Get all applicable citations including auto-loaded from category
   List<MedicalCitation> get allCitations {
     final List<MedicalCitation> allCites = List.from(citations);
     if (citationCategory != null) {
       allCites.addAll(
-        MedicalCitationsDatabase.getCitationsForInsightType(citationCategory!)
+        MedicalCitationsDatabase.getCitationsForInsightType(citationCategory!),
       );
     }
     return allCites;

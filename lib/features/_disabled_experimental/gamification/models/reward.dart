@@ -171,7 +171,7 @@ class Reward {
   String get expiryText {
     final duration = timeUntilExpiry;
     if (duration == null) return '';
-    
+
     if (duration.inDays > 0) {
       return 'Expires in ${duration.inDays} days';
     } else if (duration.inHours > 0) {
@@ -184,22 +184,22 @@ class Reward {
   }
 
   bool get isHighDemand {
-    return isLimited && 
-           remainingQuantity != null && 
-           limitedQuantity != null &&
-           (remainingQuantity! / limitedQuantity!) < 0.3;
+    return isLimited &&
+        remainingQuantity != null &&
+        limitedQuantity != null &&
+        (remainingQuantity! / limitedQuantity!) < 0.3;
   }
 
   String get urgencyText {
     if (isHighDemand) return 'High Demand!';
     if (isExpired) return 'Expired';
     if (isOutOfStock) return 'Sold Out';
-    
+
     final duration = timeUntilExpiry;
     if (duration != null && duration.inHours < 24) {
       return 'Hurry Up!';
     }
-    
+
     return '';
   }
 
@@ -247,8 +247,8 @@ class Reward {
       remainingQuantity: json['remainingQuantity'] as int?,
       isPremium: json['isPremium'] as bool? ?? false,
       requirements: List<String>.from(json['requirements'] as List? ?? []),
-      expiresAt: json['expiresAt'] != null 
-          ? DateTime.parse(json['expiresAt'] as String) 
+      expiresAt: json['expiresAt'] != null
+          ? DateTime.parse(json['expiresAt'] as String)
           : null,
       createdAt: DateTime.parse(json['createdAt'] as String),
       metadata: json['metadata'] as Map<String, dynamic>?,

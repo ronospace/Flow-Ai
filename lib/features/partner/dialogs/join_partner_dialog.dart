@@ -4,12 +4,10 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
 
 class JoinPartnerDialog extends StatefulWidget {
+  final String? initialCode;
   final Function(String) onJoinWithCode;
 
-  const JoinPartnerDialog({
-    super.key,
-    required this.onJoinWithCode,
-  });
+  const JoinPartnerDialog({super.key, this.initialCode, required this.onJoinWithCode});
 
   @override
   State<JoinPartnerDialog> createState() => _JoinPartnerDialogState();
@@ -20,30 +18,30 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
   late Animation<double> _fadeAnimation;
-  
+
   final TextEditingController _codeController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  
+
   bool _isLoading = false;
   String? _errorMessage;
 
   @override
   void initState() {
     super.initState();
-    
+
+    if (widget.initialCode != null && widget.initialCode!.isNotEmpty) {
+      _codeController.text = widget.initialCode!;
+    }
+
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
     );
-    
-    _scaleAnimation = Tween<double>(
-      begin: 0.8,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.elasticOut,
-    ));
-    
+
+    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.elasticOut),
+    );
+
     _fadeAnimation = CurvedAnimation(
       parent: _animationController,
       curve: Curves.easeInOut,
@@ -97,11 +95,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _buildHeader(),
-                      _buildContent(),
-                      _buildFooter(),
-                    ],
+                    children: [_buildHeader(), _buildContent(), _buildFooter()],
                   ),
                 ),
               ),
@@ -137,11 +131,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
               ),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: const Icon(
-              Icons.group_add,
-              color: Colors.white,
-              size: 24,
-            ),
+            child: const Icon(Icons.group_add, color: Colors.white, size: 24),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -157,9 +147,9 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                 ),
                 Text(
                   'Connect using invitation code',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppTheme.mediumGrey,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGrey),
                 ),
               ],
             ),
@@ -202,11 +192,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
       children: [
         Row(
           children: [
-            Icon(
-              Icons.info_outline,
-              color: AppTheme.secondaryBlue,
-              size: 20,
-            ),
+            Icon(Icons.info_outline, color: AppTheme.secondaryBlue, size: 20),
             const SizedBox(width: 8),
             Text(
               'How to Join',
@@ -261,19 +247,12 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
           ),
         ),
         const SizedBox(width: 12),
-        Icon(
-          icon,
-          size: 16,
-          color: AppTheme.mediumGrey,
-        ),
+        Icon(icon, size: 16, color: AppTheme.mediumGrey),
         const SizedBox(width: 8),
         Expanded(
           child: Text(
             text,
-            style: TextStyle(
-              color: AppTheme.mediumGrey,
-              fontSize: 14,
-            ),
+            style: TextStyle(color: AppTheme.mediumGrey, fontSize: 14),
           ),
         ),
       ],
@@ -294,9 +273,9 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
         const SizedBox(height: 8),
         Text(
           'Enter the 8-character code from your partner\'s invitation.',
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: AppTheme.mediumGrey,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGrey),
         ),
         const SizedBox(height: 16),
         Row(
@@ -331,7 +310,10 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide(color: AppTheme.secondaryBlue, width: 2),
+                    borderSide: BorderSide(
+                      color: AppTheme.secondaryBlue,
+                      width: 2,
+                    ),
                   ),
                   errorBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
@@ -361,10 +343,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
             const SizedBox(width: 12),
             IconButton(
               onPressed: _pasteFromClipboard,
-              icon: Icon(
-                Icons.content_paste,
-                color: AppTheme.secondaryBlue,
-              ),
+              icon: Icon(Icons.content_paste, color: AppTheme.secondaryBlue),
               tooltip: 'Paste from clipboard',
               style: IconButton.styleFrom(
                 backgroundColor: AppTheme.secondaryBlue.withValues(alpha: 0.1),
@@ -385,26 +364,16 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
       decoration: BoxDecoration(
         color: Colors.red.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: Colors.red.withValues(alpha: 0.3),
-          width: 1,
-        ),
+        border: Border.all(color: Colors.red.withValues(alpha: 0.3), width: 1),
       ),
       child: Row(
         children: [
-          Icon(
-            Icons.error_outline,
-            color: Colors.red,
-            size: 20,
-          ),
+          Icon(Icons.error_outline, color: Colors.red, size: 20),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
               _errorMessage!,
-              style: const TextStyle(
-                color: Colors.red,
-                fontSize: 14,
-              ),
+              style: const TextStyle(color: Colors.red, fontSize: 14),
             ),
           ),
         ],
@@ -418,28 +387,15 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
       children: [
         Row(
           children: [
-            Expanded(
-              child: Divider(
-                color: AppTheme.lightGrey,
-                thickness: 1,
-              ),
-            ),
+            Expanded(child: Divider(color: AppTheme.lightGrey, thickness: 1)),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
                 'or',
-                style: TextStyle(
-                  color: AppTheme.mediumGrey,
-                  fontSize: 12,
-                ),
+                style: TextStyle(color: AppTheme.mediumGrey, fontSize: 12),
               ),
             ),
-            Expanded(
-              child: Divider(
-                color: AppTheme.lightGrey,
-                thickness: 1,
-              ),
-            ),
+            Expanded(child: Divider(color: AppTheme.lightGrey, thickness: 1)),
           ],
         ),
         const SizedBox(height: 16),
@@ -478,19 +434,12 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          border: Border.all(
-            color: AppTheme.lightGrey,
-            width: 1,
-          ),
+          border: Border.all(color: AppTheme.lightGrey, width: 1),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
           children: [
-            Icon(
-              icon,
-              color: AppTheme.mediumGrey,
-              size: 20,
-            ),
+            Icon(icon, color: AppTheme.mediumGrey, size: 20),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
@@ -506,19 +455,12 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                   ),
                   Text(
                     subtitle,
-                    style: TextStyle(
-                      color: AppTheme.mediumGrey,
-                      fontSize: 12,
-                    ),
+                    style: TextStyle(color: AppTheme.mediumGrey, fontSize: 12),
                   ),
                 ],
               ),
             ),
-            Icon(
-              Icons.arrow_forward_ios,
-              color: AppTheme.lightGrey,
-              size: 16,
-            ),
+            Icon(Icons.arrow_forward_ios, color: AppTheme.lightGrey, size: 16),
           ],
         ),
       ),
@@ -531,9 +473,9 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
       child: SizedBox(
         width: double.infinity,
         child: ElevatedButton(
-          onPressed: (_isLoading || _codeController.text.length != 8) 
-            ? null 
-            : _handleJoin,
+          onPressed: (_isLoading || _codeController.text.length != 8)
+              ? null
+              : _handleJoin,
           style: ElevatedButton.styleFrom(
             backgroundColor: AppTheme.secondaryBlue,
             foregroundColor: Colors.white,
@@ -544,28 +486,28 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
             elevation: 0,
           ),
           child: _isLoading
-            ? SizedBox(
-                height: 20,
-                width: 20,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                ),
-              )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.link, size: 18),
-                  const SizedBox(width: 8),
-                  const Text(
-                    'Connect with Partner',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                    ),
+              ? SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                   ),
-                ],
-              ),
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.link, size: 18),
+                    const SizedBox(width: 8),
+                    const Text(
+                      'Connect with Partner',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
         ),
       ),
     );
@@ -575,7 +517,10 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
     try {
       final data = await Clipboard.getData(Clipboard.kTextPlain);
       if (data?.text != null) {
-        final text = data!.text!.toUpperCase().replaceAll(RegExp(r'[^A-Z0-9]'), '');
+        final text = data!.text!.toUpperCase().replaceAll(
+          RegExp(r'[^A-Z0-9]'),
+          '',
+        );
         if (text.length >= 8) {
           setState(() {
             _codeController.text = text.substring(0, 6);

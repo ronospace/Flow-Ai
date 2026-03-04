@@ -54,7 +54,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '752724279049',
     projectId: 'flow-ai-656b3',
     storageBucket: 'flow-ai-656b3.firebasestorage.app',
-    iosClientId: '752724279049-ei2380bh9o9ph6tq348lht6sf0ks52n2.apps.googleusercontent.com',
+    iosClientId:
+        '752724279049-ei2380bh9o9ph6tq348lht6sf0ks52n2.apps.googleusercontent.com',
     iosBundleId: 'com.flowai.health',
   );
 
@@ -74,7 +75,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '752724279049',
     projectId: 'flow-ai-656b3',
     storageBucket: 'flow-ai-656b3.firebasestorage.app',
-    iosClientId: '752724279049-r7janjmcp2uehkg8qvrvjae9qlu8jsq2.apps.googleusercontent.com',
+    iosClientId:
+        '752724279049-r7janjmcp2uehkg8qvrvjae9qlu8jsq2.apps.googleusercontent.com',
     iosBundleId: 'com.flowai.app',
   );
 
@@ -87,5 +89,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'flow-ai-656b3.firebasestorage.app',
     measurementId: 'G-1X098QTRYG',
   );
-
 }

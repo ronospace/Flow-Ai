@@ -52,14 +52,16 @@ class _ComingSoonScreenState extends State<ComingSoonScreen>
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          gradient: AppTheme.backgroundGradient(theme.brightness == Brightness.dark),
+          gradient: AppTheme.backgroundGradient(
+            theme.brightness == Brightness.dark,
+          ),
         ),
         child: SafeArea(
           child: Column(
             children: [
               // Header
               _buildHeader(theme),
-              
+
               // Coming Soon Cards
               Expanded(
                 child: PageView(
@@ -74,10 +76,10 @@ class _ComingSoonScreenState extends State<ComingSoonScreen>
                   ],
                 ),
               ),
-              
+
               // Page Indicator
               _buildPageIndicator(),
-              
+
               const SizedBox(height: 20),
             ],
           ),
@@ -93,57 +95,60 @@ class _ComingSoonScreenState extends State<ComingSoonScreen>
         children: [
           // Header Icon
           Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
-              ),
-              borderRadius: BorderRadius.circular(24),
-              boxShadow: [
-                BoxShadow(
-                  color: AppTheme.primaryRose.withValues(alpha: 0.3),
-                  blurRadius: 20,
-                  offset: const Offset(0, 8),
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+                  ),
+                  borderRadius: BorderRadius.circular(24),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppTheme.primaryRose.withValues(alpha: 0.3),
+                      blurRadius: 20,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            child: const Icon(
-              Icons.auto_awesome_rounded,
-              color: Colors.white,
-              size: 40,
-            ),
-          ).animate(controller: _headerController)
-            .scale(begin: const Offset(0.5, 0.5))
-            .fadeIn(),
+                child: const Icon(
+                  Icons.auto_awesome_rounded,
+                  color: Colors.white,
+                  size: 40,
+                ),
+              )
+              .animate(controller: _headerController)
+              .scale(begin: const Offset(0.5, 0.5))
+              .fadeIn(),
 
           const SizedBox(height: 24),
 
           // Title
           Text(
-            'Exciting Features Coming Soon',
-            style: theme.textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: AppTheme.darkGrey,
-            ),
-            textAlign: TextAlign.center,
-          ).animate(controller: _headerController)
-            .slideY(begin: 0.3, end: 0)
-            .fadeIn(delay: 200.ms),
+                'Exciting Features Coming Soon',
+                style: theme.textTheme.headlineMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: AppTheme.darkGrey,
+                ),
+                textAlign: TextAlign.center,
+              )
+              .animate(controller: _headerController)
+              .slideY(begin: 0.3, end: 0)
+              .fadeIn(delay: 200.ms),
 
           const SizedBox(height: 12),
 
           // Subtitle
           Text(
-            'We\'re working hard to bring you the most advanced period and health tracking experience. Here\'s what\'s coming next!',
-            style: theme.textTheme.bodyLarge?.copyWith(
-              color: AppTheme.mediumGrey,
-              height: 1.5,
-            ),
-            textAlign: TextAlign.center,
-          ).animate(controller: _headerController)
-            .slideY(begin: 0.3, end: 0)
-            .fadeIn(delay: 400.ms),
+                'We\'re working hard to bring you the most advanced period and health tracking experience. Here\'s what\'s coming next!',
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: AppTheme.mediumGrey,
+                  height: 1.5,
+                ),
+                textAlign: TextAlign.center,
+              )
+              .animate(controller: _headerController)
+              .slideY(begin: 0.3, end: 0)
+              .fadeIn(delay: 400.ms),
         ],
       ),
     );
@@ -154,10 +159,11 @@ class _ComingSoonScreenState extends State<ComingSoonScreen>
       child: Column(
         children: [
           const SizedBox(height: 20),
-          
+
           ComingSoonCards.feature(
             title: 'Advanced AI Cycle Predictions',
-            description: 'Get hyper-accurate cycle predictions powered by machine learning algorithms that learn from your unique patterns and health data.',
+            description:
+                'Get hyper-accurate cycle predictions powered by machine learning algorithms that learn from your unique patterns and health data.',
             icon: Icons.psychology_rounded,
             releaseEstimate: 'Next Month',
             features: [
@@ -168,10 +174,11 @@ class _ComingSoonScreenState extends State<ComingSoonScreen>
             ],
             onNotifyMeTapped: () => _handleNotifyMe('AI Predictions'),
           ),
-          
+
           ComingSoonCards.feature(
             title: 'Smart Health Insights Dashboard',
-            description: 'Comprehensive health analytics with beautiful visualizations and actionable insights based on your tracking data.',
+            description:
+                'Comprehensive health analytics with beautiful visualizations and actionable insights based on your tracking data.',
             icon: Icons.dashboard_rounded,
             releaseEstimate: '6-8 Weeks',
             features: [
@@ -182,10 +189,11 @@ class _ComingSoonScreenState extends State<ComingSoonScreen>
             ],
             onNotifyMeTapped: () => _handleNotifyMe('Health Dashboard'),
           ),
-          
+
           ComingSoonCards.enhancement(
             title: 'Wearable Device Integration',
-            description: 'Seamlessly connect your smartwatch and fitness trackers to automatically sync health data and enhance predictions.',
+            description:
+                'Seamlessly connect your smartwatch and fitness trackers to automatically sync health data and enhance predictions.',
             icon: Icons.watch_rounded,
             releaseEstimate: '2-3 Months',
             features: [
@@ -208,10 +216,11 @@ class _ComingSoonScreenState extends State<ComingSoonScreen>
       child: Column(
         children: [
           const SizedBox(height: 20),
-          
+
           ComingSoonCards.premium(
             title: 'Flow Ai Pro',
-            description: 'Unlock the full potential of Flow Ai with premium features designed for power users who want the ultimate tracking experience.',
+            description:
+                'Unlock the full potential of Flow Ai with premium features designed for power users who want the ultimate tracking experience.',
             icon: Icons.workspace_premium_rounded,
             releaseEstimate: 'Q2 2026',
             features: [
@@ -224,10 +233,11 @@ class _ComingSoonScreenState extends State<ComingSoonScreen>
             ],
             onNotifyMeTapped: () => _handleNotifyMe('Flow Ai Pro'),
           ),
-          
+
           ComingSoonCards.premium(
             title: 'Telehealth Integration',
-            description: 'Connect directly with healthcare providers and share your data securely for better reproductive health care.',
+            description:
+                'Connect directly with healthcare providers and share your data securely for better reproductive health care.',
             icon: Icons.video_call_rounded,
             releaseEstimate: 'Q3 2026',
             features: [
@@ -239,10 +249,11 @@ class _ComingSoonScreenState extends State<ComingSoonScreen>
             ],
             onNotifyMeTapped: () => _handleNotifyMe('Telehealth'),
           ),
-          
+
           ComingSoonCards.premium(
             title: 'Couple\'s Sync',
-            description: 'Share important cycle information with your partner while maintaining privacy and improving communication.',
+            description:
+                'Share important cycle information with your partner while maintaining privacy and improving communication.',
             icon: Icons.favorite_rounded,
             releaseEstimate: 'Q4 2026',
             features: [
@@ -266,10 +277,11 @@ class _ComingSoonScreenState extends State<ComingSoonScreen>
       child: Column(
         children: [
           const SizedBox(height: 20),
-          
+
           ComingSoonCards.beta(
             title: 'Voice Assistant Integration',
-            description: 'Log your daily symptoms and ask questions about your cycle using natural voice commands with our AI assistant.',
+            description:
+                'Log your daily symptoms and ask questions about your cycle using natural voice commands with our AI assistant.',
             icon: Icons.mic_rounded,
             releaseEstimate: 'Beta Testing',
             features: [
@@ -280,10 +292,11 @@ class _ComingSoonScreenState extends State<ComingSoonScreen>
             ],
             onNotifyMeTapped: () => _handleJoinBeta('Voice Assistant'),
           ),
-          
+
           ComingSoonCards.beta(
             title: 'Augmented Reality Body Map',
-            description: 'Use your camera to visualize and track symptoms on a 3D body map using cutting-edge AR technology.',
+            description:
+                'Use your camera to visualize and track symptoms on a 3D body map using cutting-edge AR technology.',
             icon: Icons.view_in_ar_rounded,
             releaseEstimate: 'Beta Testing',
             features: [
@@ -294,10 +307,11 @@ class _ComingSoonScreenState extends State<ComingSoonScreen>
             ],
             onNotifyMeTapped: () => _handleJoinBeta('AR Body Map'),
           ),
-          
+
           ComingSoonCards.beta(
             title: 'Community Support Groups',
-            description: 'Connect with other Flow Ai users in anonymous, supportive communities focused on reproductive health.',
+            description:
+                'Connect with other Flow Ai users in anonymous, supportive communities focused on reproductive health.',
             icon: Icons.groups_rounded,
             releaseEstimate: 'Beta Testing',
             features: [
@@ -326,8 +340,8 @@ class _ComingSoonScreenState extends State<ComingSoonScreen>
           width: _currentPage == index ? 24 : 8,
           height: 8,
           decoration: BoxDecoration(
-            color: _currentPage == index 
-                ? AppTheme.primaryRose 
+            color: _currentPage == index
+                ? AppTheme.primaryRose
                 : AppTheme.mediumGrey.withValues(alpha: 0.3),
             borderRadius: BorderRadius.circular(4),
           ),
@@ -393,28 +407,28 @@ class _ComingSoonScreenState extends State<ComingSoonScreen>
                   size: 30,
                 ),
               ),
-              
+
               const SizedBox(height: 16),
-              
+
               Text(
                 'Join Beta Testing',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
               ),
-              
+
               const SizedBox(height: 12),
-              
+
               Text(
                 'Be among the first to test $feature and help us make Flow Ai even better!',
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppTheme.mediumGrey,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGrey),
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               Row(
                 children: [
                   Expanded(
@@ -433,14 +447,19 @@ class _ComingSoonScreenState extends State<ComingSoonScreen>
                           SnackBar(
                             content: Row(
                               children: [
-                                const Icon(Icons.rocket_launch, color: Colors.white),
+                                const Icon(
+                                  Icons.rocket_launch,
+                                  color: Colors.white,
+                                ),
                                 const SizedBox(width: 8),
                                 Text('Welcome to the $feature beta program!'),
                               ],
                             ),
                             backgroundColor: AppTheme.accentMint,
                             behavior: SnackBarBehavior.floating,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                           ),
                         );
                       },

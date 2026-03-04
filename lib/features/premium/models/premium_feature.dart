@@ -241,10 +241,7 @@ class PremiumFeature {
 
   /// Increment usage count
   PremiumFeature incrementUsage() {
-    return copyWith(
-      usageCount: usageCount + 1,
-      lastUsed: DateTime.now(),
-    );
+    return copyWith(usageCount: usageCount + 1, lastUsed: DateTime.now());
   }
 
   /// Reset monthly usage
@@ -287,7 +284,7 @@ class PremiumFeature {
   @override
   String toString() {
     return 'PremiumFeature{type: $type, name: $name, tier: $tier, '
-           'enabled: $isEnabled, usageCount: $usageCount}';
+        'enabled: $isEnabled, usageCount: $usageCount}';
   }
 }
 
@@ -325,12 +322,12 @@ class FeatureUsageAnalytics {
   /// Get usage trend (positive = increasing, negative = decreasing)
   double get usageTrend {
     if (usageDates.length < 2) return 0;
-    
+
     // Simple linear trend calculation
     final sortedDates = List<DateTime>.from(usageDates)..sort();
     final firstHalf = sortedDates.take(sortedDates.length ~/ 2).length;
     final secondHalf = sortedDates.skip(sortedDates.length ~/ 2).length;
-    
+
     return (secondHalf - firstHalf) / sortedDates.length;
   }
 
@@ -342,7 +339,10 @@ class FeatureUsageAnalytics {
       _$FeatureUsageAnalyticsFromJson(json);
 
   /// Create empty analytics for a month
-  factory FeatureUsageAnalytics.empty(PremiumFeatureType featureType, DateTime month) {
+  factory FeatureUsageAnalytics.empty(
+    PremiumFeatureType featureType,
+    DateTime month,
+  ) {
     return FeatureUsageAnalytics(
       featureType: featureType,
       month: DateTime(month.year, month.month),
@@ -356,7 +356,7 @@ class FeatureUsageAnalytics {
   @override
   String toString() {
     return 'FeatureUsageAnalytics{feature: $featureType, month: ${month.month}/${month.year}, '
-           'usage: $totalUsage, consistency: ${consistencyScore.toStringAsFixed(1)}%}';
+        'usage: $totalUsage, consistency: ${consistencyScore.toStringAsFixed(1)}%}';
   }
 }
 
@@ -415,18 +415,14 @@ class FeatureUsage {
 
   /// Create usage with unlimited access
   factory FeatureUsage.unlimited() {
-    return const FeatureUsage(
-      limit: null,
-      current: 0,
-      limitType: 'unlimited',
-    );
+    return const FeatureUsage(limit: null, current: 0, limitType: 'unlimited');
   }
 
   /// Create usage with monthly limit
   factory FeatureUsage.monthly(int limit, [int current = 0]) {
     final now = DateTime.now();
     final nextMonth = DateTime(now.year, now.month + 1, 1);
-    
+
     return FeatureUsage(
       limit: limit,
       current: current,

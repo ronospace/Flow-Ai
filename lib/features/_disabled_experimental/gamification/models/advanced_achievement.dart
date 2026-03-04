@@ -51,14 +51,18 @@ class AdvancedAchievement {
 
   // Computed properties
   bool get isCompleted => progress >= maxProgress;
-  double get progressPercentage => maxProgress > 0 ? (progress / maxProgress * 100).clamp(0, 100) : 0;
-  bool get isExpired => isTimeLimited && expiryDate != null && DateTime.now().isAfter(expiryDate!);
+  double get progressPercentage =>
+      maxProgress > 0 ? (progress / maxProgress * 100).clamp(0, 100) : 0;
+  bool get isExpired =>
+      isTimeLimited &&
+      expiryDate != null &&
+      DateTime.now().isAfter(expiryDate!);
   bool get canBeEarned => !isExpired && !isEarned && _prerequisitesMet();
-  
+
   /// Get current tier based on progress
   AchievementTier? get currentTier {
     if (tiers.isEmpty) return null;
-    
+
     for (final tier in tiers.reversed) {
       if (progress >= tier.requiredProgress) {
         return tier;
@@ -70,7 +74,7 @@ class AdvancedAchievement {
   /// Get next tier to unlock
   AchievementTier? get nextTier {
     if (tiers.isEmpty) return null;
-    
+
     for (final tier in tiers) {
       if (progress < tier.requiredProgress) {
         return tier;
@@ -83,19 +87,23 @@ class AdvancedAchievement {
   double get progressToNextTier {
     final next = nextTier;
     if (next == null) return 0.0;
-    
+
     final current = currentTier;
     if (current == null) return next.requiredProgress - progress;
-    
+
     return next.requiredProgress - progress;
   }
 
   /// Get achievement difficulty
   AchievementDifficulty get difficulty {
-    if (maxProgress >= 1000 || tiers.length >= 5) return AchievementDifficulty.legendary;
-    if (maxProgress >= 100 || tiers.length >= 3) return AchievementDifficulty.epic;
-    if (maxProgress >= 50 || rarity == AchievementRarity.rare) return AchievementDifficulty.hard;
-    if (maxProgress >= 10 || rarity == AchievementRarity.uncommon) return AchievementDifficulty.medium;
+    if (maxProgress >= 1000 || tiers.length >= 5)
+      return AchievementDifficulty.legendary;
+    if (maxProgress >= 100 || tiers.length >= 3)
+      return AchievementDifficulty.epic;
+    if (maxProgress >= 50 || rarity == AchievementRarity.rare)
+      return AchievementDifficulty.hard;
+    if (maxProgress >= 10 || rarity == AchievementRarity.uncommon)
+      return AchievementDifficulty.medium;
     return AchievementDifficulty.easy;
   }
 
@@ -126,7 +134,7 @@ class AdvancedAchievement {
     return true; // Simplified for now
   }
 
-  factory AdvancedAchievement.fromJson(Map<String, dynamic> json) => 
+  factory AdvancedAchievement.fromJson(Map<String, dynamic> json) =>
       _$AdvancedAchievementFromJson(json);
   Map<String, dynamic> toJson() => _$AdvancedAchievementToJson(this);
 
@@ -226,7 +234,12 @@ enum AchievementRarity {
   epic('Epic', 'Very challenging achievements', 0.1, Colors.purple),
   legendary('Legendary', 'Extremely rare achievements', 0.05, Colors.orange);
 
-  const AchievementRarity(this.displayName, this.description, this.dropRate, this.color);
+  const AchievementRarity(
+    this.displayName,
+    this.description,
+    this.dropRate,
+    this.color,
+  );
 
   final String displayName;
   final String description;
@@ -305,9 +318,11 @@ class AchievementTier {
   });
 
   /// Check if tier is unlocked
-  bool isUnlocked(double currentProgress) => currentProgress >= requiredProgress;
+  bool isUnlocked(double currentProgress) =>
+      currentProgress >= requiredProgress;
 
-  factory AchievementTier.fromJson(Map<String, dynamic> json) => _$AchievementTierFromJson(json);
+  factory AchievementTier.fromJson(Map<String, dynamic> json) =>
+      _$AchievementTierFromJson(json);
   Map<String, dynamic> toJson() => _$AchievementTierToJson(this);
 }
 
@@ -338,7 +353,7 @@ class AchievementMetadata {
     this.deprecationReason,
   });
 
-  factory AchievementMetadata.fromJson(Map<String, dynamic> json) => 
+  factory AchievementMetadata.fromJson(Map<String, dynamic> json) =>
       _$AchievementMetadataFromJson(json);
   Map<String, dynamic> toJson() => _$AchievementMetadataToJson(this);
 }
@@ -376,21 +391,23 @@ class AchievementCollection {
   /// Get completion progress
   double getProgress(List<String> earnedAchievementIds) {
     if (achievementIds.isEmpty) return 0.0;
-    
-    final earned = achievementIds.where((id) => earnedAchievementIds.contains(id)).length;
+
+    final earned = achievementIds
+        .where((id) => earnedAchievementIds.contains(id))
+        .length;
     return earned / achievementIds.length;
   }
 
   /// Check if collection is active
   bool get isActive {
     if (!isLimitedTime) return true;
-    
+
     final now = DateTime.now();
     return (startDate == null || now.isAfter(startDate!)) &&
-           (endDate == null || now.isBefore(endDate!));
+        (endDate == null || now.isBefore(endDate!));
   }
 
-  factory AchievementCollection.fromJson(Map<String, dynamic> json) => 
+  factory AchievementCollection.fromJson(Map<String, dynamic> json) =>
       _$AchievementCollectionFromJson(json);
   Map<String, dynamic> toJson() => _$AchievementCollectionToJson(this);
 }
@@ -420,7 +437,7 @@ class CollectionReward {
     this.metadata = const {},
   });
 
-  factory CollectionReward.fromJson(Map<String, dynamic> json) => 
+  factory CollectionReward.fromJson(Map<String, dynamic> json) =>
       _$CollectionRewardFromJson(json);
   Map<String, dynamic> toJson() => _$CollectionRewardToJson(this);
 }
@@ -491,7 +508,7 @@ class AchievementStats {
     return AchievementHunterLevel.novice;
   }
 
-  factory AchievementStats.fromJson(Map<String, dynamic> json) => 
+  factory AchievementStats.fromJson(Map<String, dynamic> json) =>
       _$AchievementStatsFromJson(json);
   Map<String, dynamic> toJson() => _$AchievementStatsToJson(this);
 }

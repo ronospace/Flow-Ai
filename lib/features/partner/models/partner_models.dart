@@ -1,4 +1,3 @@
-
 /// Represents a partner connection request
 class PartnerRequest {
   final String id;
@@ -71,12 +70,7 @@ class PartnerRequest {
 }
 
 /// Status of a partner request
-enum PartnerRequestStatus {
-  pending,
-  accepted,
-  declined,
-  cancelled,
-}
+enum PartnerRequestStatus { pending, accepted, declined, cancelled }
 
 /// Represents a partnership between two users
 class Partnership {
@@ -112,7 +106,8 @@ class Partnership {
       establishedAt: DateTime.parse(json['establishedAt'] as String),
       status: PartnershipStatus.values.byName(json['status'] as String),
       privacySettings: PartnerPrivacySettings.fromJson(
-          json['privacySettings'] as Map<String, dynamic>),
+        json['privacySettings'] as Map<String, dynamic>,
+      ),
       lastActiveAt: json['lastActiveAt'] != null
           ? DateTime.parse(json['lastActiveAt'] as String)
           : null,
@@ -171,11 +166,7 @@ class Partnership {
 }
 
 /// Status of a partnership
-enum PartnershipStatus {
-  active,
-  paused,
-  ended,
-}
+enum PartnershipStatus { active, paused, ended }
 
 /// Privacy settings for partner data sharing
 class PartnerPrivacySettings {
@@ -218,7 +209,8 @@ class PartnerPrivacySettings {
       allowCareActions: json['allowCareActions'] as bool? ?? true,
       shareHistoricalData: json['shareHistoricalData'] as bool? ?? false,
       restrictedDataTypes: List<String>.from(
-          json['restrictedDataTypes'] as List? ?? []),
+        json['restrictedDataTypes'] as List? ?? [],
+      ),
     );
   }
 
@@ -253,7 +245,8 @@ class PartnerPrivacySettings {
   }) {
     return PartnerPrivacySettings(
       shareBasicCycleInfo: shareBasicCycleInfo ?? this.shareBasicCycleInfo,
-      shareDetailedSymptoms: shareDetailedSymptoms ?? this.shareDetailedSymptoms,
+      shareDetailedSymptoms:
+          shareDetailedSymptoms ?? this.shareDetailedSymptoms,
       shareMoodData: shareMoodData ?? this.shareMoodData,
       shareEnergyLevels: shareEnergyLevels ?? this.shareEnergyLevels,
       sharePainData: sharePainData ?? this.sharePainData,
@@ -349,13 +342,7 @@ class PartnerMessage {
 }
 
 /// Type of partner message
-enum PartnerMessageType {
-  text,
-  careAction,
-  cycleUpdate,
-  reminder,
-  supportive,
-}
+enum PartnerMessageType { text, careAction, cycleUpdate, reminder, supportive }
 
 /// Represents a care action between partners
 class CareAction {

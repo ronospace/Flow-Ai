@@ -17,22 +17,23 @@ class OnboardingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localizations = AppLocalizations.of(context);
-    
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24.0),
       child: ConstrainedBox(
         constraints: BoxConstraints(
-          minHeight: MediaQuery.of(context).size.height - 200, // Account for navigation bars
+          minHeight:
+              MediaQuery.of(context).size.height -
+              200, // Account for navigation bars
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(height: 20), // Top spacing
-            
             // Illustration
             _buildIllustration(theme),
             const SizedBox(height: 32),
-            
+
             // Title
             Text(
               step.title,
@@ -43,7 +44,7 @@ class OnboardingPage extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
-            
+
             // Description
             Text(
               step.description,
@@ -54,14 +55,14 @@ class OnboardingPage extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
-            
+
             // Highlights
             _buildHighlights(theme),
-            
+
             // Permission-specific content
             if (step.type == OnboardingStepType.permissions)
               _buildPermissionContent(theme, localizations),
-              
+
             const SizedBox(height: 20), // Bottom spacing
           ],
         ),
@@ -78,11 +79,7 @@ class OnboardingPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: Center(
-        child: Icon(
-          _getStepIcon(),
-          size: 80,
-          color: theme.colorScheme.primary,
-        ),
+        child: Icon(_getStepIcon(), size: 80, color: theme.colorScheme.primary),
       ),
     );
   }
@@ -132,7 +129,10 @@ class OnboardingPage extends StatelessWidget {
     );
   }
 
-  Widget _buildPermissionContent(ThemeData theme, AppLocalizations localizations) {
+  Widget _buildPermissionContent(
+    ThemeData theme,
+    AppLocalizations localizations,
+  ) {
     return Column(
       children: [
         const SizedBox(height: 24),
@@ -147,10 +147,7 @@ class OnboardingPage extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Icon(
-                Icons.info_outline,
-                color: theme.colorScheme.primary,
-              ),
+              Icon(Icons.info_outline, color: theme.colorScheme.primary),
               const SizedBox(width: 12),
               Expanded(
                 child: Text(

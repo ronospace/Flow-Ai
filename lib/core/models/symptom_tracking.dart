@@ -1,4 +1,3 @@
-
 /// Symptom tracking model for comprehensive health monitoring
 class SymptomTracking {
   final String id;
@@ -348,13 +347,7 @@ SymptomCategory getSymptomCategory(String symptomType) {
 }
 
 /// Severity levels with descriptions
-enum SeverityLevel {
-  none,
-  mild,
-  moderate,
-  severe,
-  extreme,
-}
+enum SeverityLevel { none, mild, moderate, severe, extreme }
 
 /// Extension for severity level
 extension SeverityLevelExtension on SeverityLevel {

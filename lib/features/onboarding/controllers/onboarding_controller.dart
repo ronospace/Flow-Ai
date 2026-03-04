@@ -12,8 +12,8 @@ class OnboardingController extends ChangeNotifier {
   OnboardingController({
     required AuthService authService,
     required LocalUserService localUserService,
-  })  : _authService = authService,
-        _localUserService = localUserService;
+  }) : _authService = authService,
+       _localUserService = localUserService;
 
   // Current state
   OnboardingStep _currentStep = OnboardingStep.welcome;
@@ -73,7 +73,9 @@ class OnboardingController extends ChangeNotifier {
         _data = _data.copyWith(healthGoals: value as HealthGoals?);
         break;
       case 'notificationPrefs':
-        _data = _data.copyWith(notificationPrefs: value as NotificationPreferences?);
+        _data = _data.copyWith(
+          notificationPrefs: value as NotificationPreferences?,
+        );
         break;
       case 'isFirstTimeTracking':
         _data = _data.copyWith(isFirstTimeTracking: value as bool);
@@ -106,7 +108,7 @@ class OnboardingController extends ChangeNotifier {
     if (!canGoNext) return;
 
     _clearError();
-    
+
     // Handle completion step separately
     if (_currentStep == OnboardingStep.privacy) {
       await _completeOnboarding();
@@ -147,34 +149,33 @@ class OnboardingController extends ChangeNotifier {
     switch (_currentStep) {
       case OnboardingStep.welcome:
         return true;
-        
+
       case OnboardingStep.personalInfo:
-        return _data.fullName?.isNotEmpty == true &&
-               _data.dateOfBirth != null;
-               
+        return _data.fullName?.isNotEmpty == true && _data.dateOfBirth != null;
+
       case OnboardingStep.healthBasics:
         return true; // Optional fields
-        
+
       case OnboardingStep.cycleHistory:
         if (_data.isFirstTimeTracking) {
           return true; // Can skip if first time
         }
         return _data.lastPeriodDate != null &&
-               _data.averageCycleLength != null &&
-               _data.averagePeriodLength != null;
-               
+            _data.averageCycleLength != null &&
+            _data.averagePeriodLength != null;
+
       case OnboardingStep.lifestyle:
         return true; // All optional
-        
+
       case OnboardingStep.goals:
         return _data.healthGoals != null;
-        
+
       case OnboardingStep.notifications:
         return _data.notificationPrefs != null;
-        
+
       case OnboardingStep.privacy:
         return true; // Optional
-        
+
       case OnboardingStep.complete:
         return true;
     }
@@ -183,26 +184,25 @@ class OnboardingController extends ChangeNotifier {
   /// Complete onboarding and save user data
   Future<void> _completeOnboarding() async {
     _setLoading(true);
-    
+
     try {
       // Create or update user profile
       final currentUser = await _authService.getCurrentUser();
       if (currentUser != null) {
         // Update user profile with onboarding data
         await _saveUserProfile();
-        
+
         // Initialize tracking data if cycle history provided
         if (!_data.isFirstTimeTracking && _data.lastPeriodDate != null) {
           await _initializeTrackingData();
         }
-        
+
         // Set onboarding as completed
         await _markOnboardingCompleted();
-        
+
         // Move to complete step
         _currentStep = OnboardingStep.complete;
         notifyListeners();
-        
       } else {
         _setError('Please sign in to complete onboarding');
       }
@@ -237,7 +237,9 @@ class OnboardingController extends ChangeNotifier {
 
     // For now, we'll save this data to the LocalUserService
     // In the future, this can be extended to save to a proper user profile system
-    debugPrint('Saving user profile data from onboarding: ${profileData.keys.join(', ')}');
+    debugPrint(
+      'Saving user profile data from onboarding: ${profileData.keys.join(', ')}',
+    );
   }
 
   /// Initialize tracking data with cycle history
@@ -262,9 +264,12 @@ class OnboardingController extends ChangeNotifier {
         final irregularitiesNote = {
           'date': DateTime.now().toIso8601String(),
           'type': 'note',
-          'content': 'Cycle irregularities reported during onboarding: ${_data.cycleIrregularities.join(", ")}',
+          'content':
+              'Cycle irregularities reported during onboarding: ${_data.cycleIrregularities.join(", ")}',
         };
-        debugPrint('Cycle irregularities note would be saved: $irregularitiesNote');
+        debugPrint(
+          'Cycle irregularities note would be saved: $irregularitiesNote',
+        );
       }
     } catch (e) {
       // Log error but don't fail onboarding
@@ -350,9 +355,11 @@ class OnboardingController extends ChangeNotifier {
     if (_data.dateOfBirth != null) {
       final now = DateTime.now();
       final age = now.year - _data.dateOfBirth!.year;
-      final hasHadBirthdayThisYear = now.month > _data.dateOfBirth!.month ||
-          (now.month == _data.dateOfBirth!.month && now.day >= _data.dateOfBirth!.day);
-      
+      final hasHadBirthdayThisYear =
+          now.month > _data.dateOfBirth!.month ||
+          (now.month == _data.dateOfBirth!.month &&
+              now.day >= _data.dateOfBirth!.day);
+
       updateField('age', hasHadBirthdayThisYear ? age : age - 1);
     }
   }
@@ -361,9 +368,9 @@ class OnboardingController extends ChangeNotifier {
   double get progressPercentage => _currentStep.progress;
 
   /// Get total number of steps
-  int get totalSteps => OnboardingStep.values.length - 1; // Exclude complete step
+  int get totalSteps =>
+      OnboardingStep.values.length - 1; // Exclude complete step
 
   /// Get current step number (1-indexed)
   int get currentStepNumber => OnboardingStep.values.indexOf(_currentStep) + 1;
-
 }

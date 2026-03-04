@@ -9,7 +9,8 @@ import '../models/biometric_insights.dart';
 /// Advanced Biometric Integration Service
 /// Handles integration with Apple Health, Google Fit, and various wearable devices
 class BiometricIntegrationService {
-  static final BiometricIntegrationService _instance = BiometricIntegrationService._internal();
+  static final BiometricIntegrationService _instance =
+      BiometricIntegrationService._internal();
   factory BiometricIntegrationService() => _instance;
   BiometricIntegrationService._internal();
 
@@ -17,33 +18,36 @@ class BiometricIntegrationService {
   final Map<String, WearableDevice> _connectedDevices = {};
   final List<BiometricData> _biometricHistory = [];
   HealthSyncStatus _syncStatus = HealthSyncStatus.disconnected;
-  final StreamController<BiometricData> _biometricStreamController = StreamController.broadcast();
-  final StreamController<HealthSyncStatus> _syncStatusController = StreamController.broadcast();
+  final StreamController<BiometricData> _biometricStreamController =
+      StreamController.broadcast();
+  final StreamController<HealthSyncStatus> _syncStatusController =
+      StreamController.broadcast();
 
   // Real-time data streams
-  Stream<BiometricData> get biometricDataStream => _biometricStreamController.stream;
+  Stream<BiometricData> get biometricDataStream =>
+      _biometricStreamController.stream;
   Stream<HealthSyncStatus> get syncStatusStream => _syncStatusController.stream;
 
   /// Initialize biometric integration service
   Future<void> initialize() async {
     try {
       debugPrint('🫀 Initializing Biometric Integration Service...');
-      
+
       // Check platform permissions
       await _requestHealthPermissions();
-      
+
       // Initialize platform-specific health services
       await _initializePlatformHealth();
-      
+
       // Discover and connect to available wearable devices
       await _discoverWearableDevices();
-      
+
       // Start background sync
       await _startBackgroundSync();
-      
+
       _isInitialized = true;
       _updateSyncStatus(HealthSyncStatus.connected);
-      
+
       debugPrint('✅ Biometric Integration Service initialized successfully');
     } catch (e) {
       debugPrint('❌ Failed to initialize Biometric Integration Service: $e');
@@ -57,7 +61,7 @@ class BiometricIntegrationService {
   /// Connect to Apple Health
   Future<bool> connectAppleHealth() async {
     debugPrint('🍎 Connecting to Apple Health...');
-    
+
     try {
       // Request Apple Health permissions
       final permissions = [
@@ -76,13 +80,13 @@ class BiometricIntegrationService {
         HealthDataType.ovulationTestResult,
         HealthDataType.basalBodyTemperature,
       ];
-      
+
       // Simulate permission request (in real app, use health plugin)
       await Future.delayed(const Duration(seconds: 2));
-      
+
       // Start syncing recent data
       await _syncAppleHealthData();
-      
+
       debugPrint('✅ Apple Health connected successfully');
       return true;
     } catch (e) {
@@ -94,7 +98,7 @@ class BiometricIntegrationService {
   /// Connect to Google Fit
   Future<bool> connectGoogleFit() async {
     debugPrint('🏃‍♀️ Connecting to Google Fit...');
-    
+
     try {
       // Request Google Fit permissions
       final scopes = [
@@ -104,13 +108,13 @@ class BiometricIntegrationService {
         'FITNESS_SLEEP_READ',
         'FITNESS_REPRODUCTIVE_HEALTH_READ',
       ];
-      
+
       // Simulate connection (in real app, use google_fit plugin)
       await Future.delayed(const Duration(seconds: 2));
-      
+
       // Start syncing recent data
       await _syncGoogleFitData();
-      
+
       debugPrint('✅ Google Fit connected successfully');
       return true;
     } catch (e) {
@@ -124,14 +128,14 @@ class BiometricIntegrationService {
   /// Discover and connect to wearable devices
   Future<List<WearableDevice>> discoverWearableDevices() async {
     debugPrint('🔍 Discovering wearable devices...');
-    
+
     _updateSyncStatus(HealthSyncStatus.syncing);
-    
+
     final devices = <WearableDevice>[];
-    
+
     // Simulate device discovery
     await Future.delayed(const Duration(seconds: 3));
-    
+
     // Mock discovered devices
     devices.addAll([
       WearableDevice(
@@ -190,42 +194,42 @@ class BiometricIntegrationService {
         firmwareVersion: '3.1.2',
       ),
     ]);
-    
+
     // Store discovered devices
     for (final device in devices) {
       _connectedDevices[device.deviceId] = device;
     }
-    
+
     _updateSyncStatus(HealthSyncStatus.connected);
     debugPrint('✅ Discovered ${devices.length} wearable devices');
-    
+
     return devices;
   }
 
   /// Connect to specific wearable device
   Future<bool> connectWearableDevice(String deviceId) async {
     debugPrint('🔗 Connecting to device: $deviceId');
-    
+
     final device = _connectedDevices[deviceId];
     if (device == null) {
       debugPrint('❌ Device not found: $deviceId');
       return false;
     }
-    
+
     try {
       // Simulate device connection
       await Future.delayed(const Duration(seconds: 2));
-      
+
       // Update device connection status
       final updatedDevice = device.copyWith(
         isConnected: true,
         lastSync: DateTime.now(),
       );
       _connectedDevices[deviceId] = updatedDevice;
-      
+
       // Start syncing data from device
       await _syncWearableDeviceData(deviceId);
-      
+
       debugPrint('✅ Connected to ${device.name}');
       return true;
     } catch (e) {
@@ -237,7 +241,7 @@ class BiometricIntegrationService {
   /// Disconnect from wearable device
   Future<void> disconnectWearableDevice(String deviceId) async {
     debugPrint('🔌 Disconnecting from device: $deviceId');
-    
+
     final device = _connectedDevices[deviceId];
     if (device != null) {
       final updatedDevice = device.copyWith(isConnected: false);
@@ -251,14 +255,14 @@ class BiometricIntegrationService {
   /// Start real-time biometric data streaming
   Future<void> startRealTimeMonitoring() async {
     debugPrint('📡 Starting real-time biometric monitoring...');
-    
+
     // Simulate real-time data streaming
     Timer.periodic(const Duration(minutes: 1), (timer) async {
       if (_connectedDevices.values.any((device) => device.isConnected)) {
         final biometricData = await _generateRealtimeBiometricData();
         _biometricStreamController.add(biometricData);
         _biometricHistory.add(biometricData);
-        
+
         // Trigger AI analysis for anomaly detection
         await _analyzeRealTimeData(biometricData);
       }
@@ -277,7 +281,7 @@ class BiometricIntegrationService {
   Future<void> syncAllBiometricData() async {
     debugPrint('🔄 Syncing all biometric data...');
     _updateSyncStatus(HealthSyncStatus.syncing);
-    
+
     try {
       // Sync from all connected sources
       await Future.wait([
@@ -285,10 +289,10 @@ class BiometricIntegrationService {
         _syncGoogleFitData(),
         _syncConnectedWearableDevices(),
       ]);
-      
+
       // Generate insights after sync
       await _generateBiometricInsights();
-      
+
       _updateSyncStatus(HealthSyncStatus.connected);
       debugPrint('✅ All biometric data synced successfully');
     } catch (e) {
@@ -303,31 +307,34 @@ class BiometricIntegrationService {
     required DateTime endDate,
     List<BiometricType>? types,
   }) async {
-    debugPrint('📊 Retrieving biometric data from ${startDate.toIso8601String()} to ${endDate.toIso8601String()}');
-    
+    debugPrint(
+      '📊 Retrieving biometric data from ${startDate.toIso8601String()} to ${endDate.toIso8601String()}',
+    );
+
     var filteredData = _biometricHistory.where((data) {
-      final isInRange = data.timestamp.isAfter(startDate) && data.timestamp.isBefore(endDate);
+      final isInRange =
+          data.timestamp.isAfter(startDate) && data.timestamp.isBefore(endDate);
       final isTypeMatch = types == null || types.contains(data.type);
       return isInRange && isTypeMatch;
     }).toList();
-    
+
     // Sort by timestamp
     filteredData.sort((a, b) => a.timestamp.compareTo(b.timestamp));
-    
+
     return filteredData;
   }
 
   /// Get latest biometric readings
   Map<BiometricType, BiometricData> getLatestReadings() {
     final latestReadings = <BiometricType, BiometricData>{};
-    
+
     for (final data in _biometricHistory) {
       if (!latestReadings.containsKey(data.type) ||
           data.timestamp.isAfter(latestReadings[data.type]!.timestamp)) {
         latestReadings[data.type] = data;
       }
     }
-    
+
     return latestReadings;
   }
 
@@ -339,12 +346,13 @@ class BiometricIntegrationService {
     DateTime? endDate,
   }) async {
     debugPrint('🧠 Generating biometric insights...');
-    
-    final start = startDate ?? DateTime.now().subtract(const Duration(days: 30));
+
+    final start =
+        startDate ?? DateTime.now().subtract(const Duration(days: 30));
     final end = endDate ?? DateTime.now();
-    
+
     final data = await getBiometricData(startDate: start, endDate: end);
-    
+
     // Generate insights based on data patterns
     final insights = BiometricInsights(
       insightsId: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -362,18 +370,24 @@ class BiometricIntegrationService {
       riskFactors: _identifyRiskFactors(data),
       summary: _generateInsightsSummary(data),
     );
-    
-    debugPrint('✅ Generated insights with ${insights.keyMetrics.length} key metrics');
+
+    debugPrint(
+      '✅ Generated insights with ${insights.keyMetrics.length} key metrics',
+    );
     return insights;
   }
 
   /// Get health score based on biometric data
   double calculateHealthScore({DateTime? date}) {
     final targetDate = date ?? DateTime.now();
-    final recentData = _biometricHistory.where((data) =>
-        data.timestamp.isAfter(targetDate.subtract(const Duration(days: 7)))
-    ).toList();
-    
+    final recentData = _biometricHistory
+        .where(
+          (data) => data.timestamp.isAfter(
+            targetDate.subtract(const Duration(days: 7)),
+          ),
+        )
+        .toList();
+
     return _calculateHealthScore(recentData);
   }
 
@@ -383,10 +397,10 @@ class BiometricIntegrationService {
     DateTime? endDate,
   }) async {
     debugPrint('🔍 Detecting biometric anomalies...');
-    
+
     final start = startDate ?? DateTime.now().subtract(const Duration(days: 7));
     final end = endDate ?? DateTime.now();
-    
+
     final data = await getBiometricData(startDate: start, endDate: end);
     return _detectAnomalies(data);
   }
@@ -395,7 +409,9 @@ class BiometricIntegrationService {
 
   /// Get all connected devices
   List<WearableDevice> getConnectedDevices() {
-    return _connectedDevices.values.where((device) => device.isConnected).toList();
+    return _connectedDevices.values
+        .where((device) => device.isConnected)
+        .toList();
   }
 
   /// Get device battery levels
@@ -467,7 +483,7 @@ class BiometricIntegrationService {
     final device = _connectedDevices[deviceId];
     if (device != null && device.isConnected) {
       await _addMockBiometricData(device.name);
-      
+
       // Update last sync time
       final updatedDevice = device.copyWith(lastSync: DateTime.now());
       _connectedDevices[deviceId] = updatedDevice;
@@ -482,11 +498,11 @@ class BiometricIntegrationService {
       BiometricType.activeCalories,
       BiometricType.bloodOxygen,
     ];
-    
+
     final type = types[random.nextInt(types.length)];
     double value;
     String unit;
-    
+
     switch (type) {
       case BiometricType.heartRate:
         value = 60 + random.nextDouble() * 40; // 60-100 bpm
@@ -508,7 +524,7 @@ class BiometricIntegrationService {
         value = random.nextDouble() * 100;
         unit = 'unit';
     }
-    
+
     return BiometricData(
       dataId: DateTime.now().millisecondsSinceEpoch.toString(),
       type: type,
@@ -524,7 +540,7 @@ class BiometricIntegrationService {
   Future<void> _addMockBiometricData(String source) async {
     final random = Random();
     final now = DateTime.now();
-    
+
     // Add various types of biometric data
     final mockData = [
       BiometricData(
@@ -555,7 +571,7 @@ class BiometricIntegrationService {
         confidence: 0.92,
       ),
     ];
-    
+
     _biometricHistory.addAll(mockData);
   }
 
@@ -565,7 +581,7 @@ class BiometricIntegrationService {
       startDate: DateTime.now().subtract(const Duration(hours: 1)),
       endDate: DateTime.now(),
     );
-    
+
     if (anomalies.isNotEmpty) {
       debugPrint('⚠️ Detected ${anomalies.length} anomalies in real-time data');
       // Trigger notifications or alerts
@@ -574,33 +590,37 @@ class BiometricIntegrationService {
 
   Future<void> _generateBiometricInsights() async {
     final insights = await generateInsights();
-    debugPrint('📈 Generated biometric insights: Health Score ${insights.healthScore}');
+    debugPrint(
+      '📈 Generated biometric insights: Health Score ${insights.healthScore}',
+    );
   }
 
   Map<BiometricType, double> _calculateKeyMetrics(List<BiometricData> data) {
     final metrics = <BiometricType, double>{};
-    
+
     for (final type in BiometricType.values) {
       final typeData = data.where((d) => d.type == type).toList();
       if (typeData.isNotEmpty) {
-        final average = typeData.map((d) => d.value).reduce((a, b) => a + b) / typeData.length;
+        final average =
+            typeData.map((d) => d.value).reduce((a, b) => a + b) /
+            typeData.length;
         metrics[type] = average;
       }
     }
-    
+
     return metrics;
   }
 
   Map<BiometricType, TrendDirection> _analyzeTrends(List<BiometricData> data) {
     final trends = <BiometricType, TrendDirection>{};
-    
+
     for (final type in BiometricType.values) {
       final typeData = data.where((d) => d.type == type).toList();
       if (typeData.length >= 2) {
         typeData.sort((a, b) => a.timestamp.compareTo(b.timestamp));
         final first = typeData.first.value;
         final last = typeData.last.value;
-        
+
         if (last > first * 1.05) {
           trends[type] = TrendDirection.increasing;
         } else if (last < first * 0.95) {
@@ -610,66 +630,79 @@ class BiometricIntegrationService {
         }
       }
     }
-    
+
     return trends;
   }
 
   List<BiometricAnomaly> _detectAnomalies(List<BiometricData> data) {
     final anomalies = <BiometricAnomaly>[];
-    
+
     for (final type in BiometricType.values) {
       final typeData = data.where((d) => d.type == type).toList();
       if (typeData.length >= 5) {
         final values = typeData.map((d) => d.value).toList();
         final mean = values.reduce((a, b) => a + b) / values.length;
-        final variance = values.map((v) => pow(v - mean, 2)).reduce((a, b) => a + b) / values.length;
+        final variance =
+            values.map((v) => pow(v - mean, 2)).reduce((a, b) => a + b) /
+            values.length;
         final stdDev = sqrt(variance);
-        
+
         for (final dataPoint in typeData) {
           final zScore = (dataPoint.value - mean) / stdDev;
           if (zScore.abs() > 2.5) {
-            anomalies.add(BiometricAnomaly(
-              anomalyId: dataPoint.dataId,
-              type: type,
-              value: dataPoint.value,
-              expectedRange: Range(mean - 2 * stdDev, mean + 2 * stdDev),
-              severity: zScore.abs() > 3.0 ? AnomalySeverity.high : AnomalySeverity.medium,
-              timestamp: dataPoint.timestamp,
-              description: 'Value ${dataPoint.value.toStringAsFixed(1)} is ${zScore.toStringAsFixed(1)} standard deviations from normal',
-            ));
+            anomalies.add(
+              BiometricAnomaly(
+                anomalyId: dataPoint.dataId,
+                type: type,
+                value: dataPoint.value,
+                expectedRange: Range(mean - 2 * stdDev, mean + 2 * stdDev),
+                severity: zScore.abs() > 3.0
+                    ? AnomalySeverity.high
+                    : AnomalySeverity.medium,
+                timestamp: dataPoint.timestamp,
+                description:
+                    'Value ${dataPoint.value.toStringAsFixed(1)} is ${zScore.toStringAsFixed(1)} standard deviations from normal',
+              ),
+            );
           }
         }
       }
     }
-    
+
     return anomalies;
   }
 
   Map<String, double> _findCorrelations(List<BiometricData> data) {
     // Simplified correlation analysis
     final correlations = <String, double>{};
-    
+
     // Example: Heart rate vs activity correlation
-    final heartRateData = data.where((d) => d.type == BiometricType.heartRate).toList();
+    final heartRateData = data
+        .where((d) => d.type == BiometricType.heartRate)
+        .toList();
     final stepsData = data.where((d) => d.type == BiometricType.steps).toList();
-    
+
     if (heartRateData.isNotEmpty && stepsData.isNotEmpty) {
       correlations['Heart Rate vs Steps'] = 0.65; // Mock correlation
     }
-    
+
     return correlations;
   }
 
   double _calculateHealthScore(List<BiometricData> data) {
     if (data.isEmpty) return 0.0;
-    
+
     var score = 0.0;
     var factors = 0;
-    
+
     // Heart rate score
-    final heartRateData = data.where((d) => d.type == BiometricType.heartRate).toList();
+    final heartRateData = data
+        .where((d) => d.type == BiometricType.heartRate)
+        .toList();
     if (heartRateData.isNotEmpty) {
-      final avgHeartRate = heartRateData.map((d) => d.value).reduce((a, b) => a + b) / heartRateData.length;
+      final avgHeartRate =
+          heartRateData.map((d) => d.value).reduce((a, b) => a + b) /
+          heartRateData.length;
       if (avgHeartRate >= 60 && avgHeartRate <= 100) {
         score += 25;
       } else {
@@ -677,87 +710,107 @@ class BiometricIntegrationService {
       }
       factors++;
     }
-    
+
     // Steps score
     final stepsData = data.where((d) => d.type == BiometricType.steps).toList();
     if (stepsData.isNotEmpty) {
       final totalSteps = stepsData.map((d) => d.value).reduce((a, b) => a + b);
-      final dailySteps = totalSteps / max(1, data.length / 1440); // Approximate daily steps
+      final dailySteps =
+          totalSteps / max(1, data.length / 1440); // Approximate daily steps
       score += min(25, dailySteps / 400); // Max 25 points for 10,000 steps
       factors++;
     }
-    
+
     // Add other factors...
     if (factors > 0) {
       score = score / factors * 4; // Normalize to 100
     }
-    
+
     return score.clamp(0.0, 100.0);
   }
 
-  List<HealthRecommendation> _generateRecommendations(List<BiometricData> data) {
+  List<HealthRecommendation> _generateRecommendations(
+    List<BiometricData> data,
+  ) {
     final recommendations = <HealthRecommendation>[];
-    
+
     // Heart rate recommendations
-    final heartRateData = data.where((d) => d.type == BiometricType.heartRate).toList();
+    final heartRateData = data
+        .where((d) => d.type == BiometricType.heartRate)
+        .toList();
     if (heartRateData.isNotEmpty) {
-      final avgHeartRate = heartRateData.map((d) => d.value).reduce((a, b) => a + b) / heartRateData.length;
+      final avgHeartRate =
+          heartRateData.map((d) => d.value).reduce((a, b) => a + b) /
+          heartRateData.length;
       if (avgHeartRate > 100) {
-        recommendations.add(HealthRecommendation(
-          recommendationId: 'hr_high',
-          type: RecommendationType.lifestyle,
-          title: 'Elevated Heart Rate',
-          description: 'Your average heart rate is elevated. Consider stress reduction techniques.',
-          priority: RecommendationPriority.medium,
-        ));
+        recommendations.add(
+          HealthRecommendation(
+            recommendationId: 'hr_high',
+            type: RecommendationType.lifestyle,
+            title: 'Elevated Heart Rate',
+            description:
+                'Your average heart rate is elevated. Consider stress reduction techniques.',
+            priority: RecommendationPriority.medium,
+          ),
+        );
       }
     }
-    
+
     // Steps recommendations
     final stepsData = data.where((d) => d.type == BiometricType.steps).toList();
     if (stepsData.isNotEmpty) {
       final totalSteps = stepsData.map((d) => d.value).reduce((a, b) => a + b);
       final dailySteps = totalSteps / max(1, data.length / 1440);
       if (dailySteps < 8000) {
-        recommendations.add(HealthRecommendation(
-          recommendationId: 'steps_low',
-          type: RecommendationType.activity,
-          title: 'Increase Daily Activity',
-          description: 'Aim for at least 8,000-10,000 steps per day for optimal health.',
-          priority: RecommendationPriority.high,
-        ));
+        recommendations.add(
+          HealthRecommendation(
+            recommendationId: 'steps_low',
+            type: RecommendationType.activity,
+            title: 'Increase Daily Activity',
+            description:
+                'Aim for at least 8,000-10,000 steps per day for optimal health.',
+            priority: RecommendationPriority.high,
+          ),
+        );
       }
     }
-    
+
     return recommendations;
   }
 
   List<RiskFactor> _identifyRiskFactors(List<BiometricData> data) {
     final riskFactors = <RiskFactor>[];
-    
+
     // Identify potential health risks based on biometric patterns
-    final heartRateData = data.where((d) => d.type == BiometricType.heartRate).toList();
+    final heartRateData = data
+        .where((d) => d.type == BiometricType.heartRate)
+        .toList();
     if (heartRateData.isNotEmpty) {
-      final avgHeartRate = heartRateData.map((d) => d.value).reduce((a, b) => a + b) / heartRateData.length;
+      final avgHeartRate =
+          heartRateData.map((d) => d.value).reduce((a, b) => a + b) /
+          heartRateData.length;
       if (avgHeartRate > 100) {
-        riskFactors.add(RiskFactor(
-          factorId: 'elevated_hr',
-          name: 'Elevated Resting Heart Rate',
-          riskLevel: RiskLevel.medium,
-          description: 'Consistently elevated heart rate may indicate cardiovascular stress.',
-          relatedMetrics: [BiometricType.heartRate],
-          riskScore: ((avgHeartRate - 100) / 100 * 75).clamp(0, 75),
-          identifiedDate: DateTime.now(),
-        ));
+        riskFactors.add(
+          RiskFactor(
+            factorId: 'elevated_hr',
+            name: 'Elevated Resting Heart Rate',
+            riskLevel: RiskLevel.medium,
+            description:
+                'Consistently elevated heart rate may indicate cardiovascular stress.',
+            relatedMetrics: [BiometricType.heartRate],
+            riskScore: ((avgHeartRate - 100) / 100 * 75).clamp(0, 75),
+            identifiedDate: DateTime.now(),
+          ),
+        );
       }
     }
-    
+
     return riskFactors;
   }
-  
+
   InsightsSummary _generateInsightsSummary(List<BiometricData> data) {
     final healthScore = _calculateHealthScore(data);
-    
+
     // Generate overall assessment
     String assessment;
     InsightsCategory category;
@@ -765,21 +818,23 @@ class BiometricIntegrationService {
       assessment = 'Your biometric data shows excellent health patterns';
       category = InsightsCategory.excellent;
     } else if (healthScore >= 70) {
-      assessment = 'Your health metrics are generally good with room for optimization';
+      assessment =
+          'Your health metrics are generally good with room for optimization';
       category = InsightsCategory.good;
     } else if (healthScore >= 55) {
-      assessment = 'Your health data shows moderate patterns that could be improved';
+      assessment =
+          'Your health data shows moderate patterns that could be improved';
       category = InsightsCategory.fair;
     } else {
       assessment = 'Your biometric data suggests several areas need attention';
       category = InsightsCategory.poor;
     }
-    
+
     // Key findings
     final keyFindings = <String>[];
     final improvements = <String>[];
     final concerns = <String>[];
-    
+
     final metrics = _calculateKeyMetrics(data);
     if (metrics.containsKey(BiometricType.steps)) {
       final avgSteps = metrics[BiometricType.steps]!;
@@ -790,7 +845,7 @@ class BiometricIntegrationService {
       }
       keyFindings.add('Average daily steps: ${avgSteps.toInt()}');
     }
-    
+
     if (metrics.containsKey(BiometricType.heartRate)) {
       final avgHR = metrics[BiometricType.heartRate]!;
       keyFindings.add('Average heart rate: ${avgHR.toInt()} bpm');
@@ -800,11 +855,11 @@ class BiometricIntegrationService {
         improvements.add('Heart rate within healthy range');
       }
     }
-    
+
     final nextSteps = concerns.isNotEmpty
         ? 'Focus on addressing identified concerns and continue regular tracking'
         : 'Continue maintaining your healthy patterns and regular tracking';
-    
+
     return InsightsSummary(
       overallAssessment: assessment,
       keyFindings: keyFindings,

@@ -9,16 +9,18 @@ import '../widgets/onboarding_progress_widget.dart';
 import '../models/onboarding_data.dart';
 
 /// 🎯 Interactive Onboarding Screen - Week 2 Implementation
-/// Features: Personality-based setup, cycle history import wizard, 
+/// Features: Personality-based setup, cycle history import wizard,
 /// goal setting interface, privacy preference selection, and advanced personalization engine
 class InteractiveOnboardingScreen extends StatefulWidget {
   const InteractiveOnboardingScreen({super.key});
 
   @override
-  State<InteractiveOnboardingScreen> createState() => _InteractiveOnboardingScreenState();
+  State<InteractiveOnboardingScreen> createState() =>
+      _InteractiveOnboardingScreenState();
 }
 
-class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScreen>
+class _InteractiveOnboardingScreenState
+    extends State<InteractiveOnboardingScreen>
     with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
@@ -28,7 +30,7 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
   void initState() {
     super.initState();
     _initializeAnimations();
-    
+
     // Initialize onboarding controller
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<EnhancedOnboardingController>().initialize();
@@ -41,21 +43,17 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
       vsync: this,
     );
 
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
 
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(1.0, 0.0),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOutCubic,
-    ));
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(1.0, 0.0), end: Offset.zero).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Curves.easeOutCubic,
+          ),
+        );
 
     _animationController.forward();
   }
@@ -77,7 +75,7 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
               children: [
                 // Progress indicator
                 _buildProgressHeader(context, controller),
-                
+
                 // Main content
                 Expanded(
                   child: FadeTransition(
@@ -88,7 +86,7 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
                     ),
                   ),
                 ),
-                
+
                 // Navigation buttons
                 _buildNavigationButtons(context, controller),
               ],
@@ -99,9 +97,12 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
     );
   }
 
-  Widget _buildProgressHeader(BuildContext context, EnhancedOnboardingController controller) {
+  Widget _buildProgressHeader(
+    BuildContext context,
+    EnhancedOnboardingController controller,
+  ) {
     final theme = Theme.of(context);
-    
+
     return Container(
       padding: const EdgeInsets.all(24),
       child: Column(
@@ -126,9 +127,9 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
               ),
             ],
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Progress bar
           OnboardingProgressWidget(
             progress: controller.progress,
@@ -140,9 +141,12 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
     );
   }
 
-  Widget _buildCurrentStep(BuildContext context, EnhancedOnboardingController controller) {
+  Widget _buildCurrentStep(
+    BuildContext context,
+    EnhancedOnboardingController controller,
+  ) {
     final currentStepType = controller.currentStepType;
-    
+
     switch (currentStepType) {
       case OnboardingStep.welcome:
         return _buildWelcomeStep(context, controller);
@@ -165,9 +169,12 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
     }
   }
 
-  Widget _buildWelcomeStep(BuildContext context, EnhancedOnboardingController controller) {
+  Widget _buildWelcomeStep(
+    BuildContext context,
+    EnhancedOnboardingController controller,
+  ) {
     final theme = Theme.of(context);
-    
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
       child: Column(
@@ -196,9 +203,9 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
               ),
             ),
           ),
-          
+
           const SizedBox(height: 32),
-          
+
           // Welcome text
           Text(
             'Welcome to ZyraFlow! 🌸',
@@ -207,9 +214,9 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
               color: theme.colorScheme.onSurface,
             ),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           Text(
             'Your intelligent companion for personalized menstrual health tracking and insights.',
             style: theme.textTheme.bodyLarge?.copyWith(
@@ -217,9 +224,9 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
               height: 1.5,
             ),
           ),
-          
+
           const SizedBox(height: 32),
-          
+
           // Features preview
           _buildFeaturesList(context),
         ],
@@ -227,36 +234,49 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
     );
   }
 
-  Widget _buildPersonalityQuizStep(BuildContext context, EnhancedOnboardingController controller) {
+  Widget _buildPersonalityQuizStep(
+    BuildContext context,
+    EnhancedOnboardingController controller,
+  ) {
     return PersonalityQuizWidget(
       onDataChanged: (data) {
-        controller.updateData(controller.data.copyWith(
-          fullName: data['fullName'],
-          preferredName: data['preferredName'],
-          dateOfBirth: data['dateOfBirth'],
-          age: data['age'],
-        ));
+        controller.updateData(
+          controller.data.copyWith(
+            fullName: data['fullName'],
+            preferredName: data['preferredName'],
+            dateOfBirth: data['dateOfBirth'],
+            age: data['age'],
+          ),
+        );
       },
       initialData: controller.data,
     );
   }
 
-  Widget _buildCycleHistoryStep(BuildContext context, EnhancedOnboardingController controller) {
+  Widget _buildCycleHistoryStep(
+    BuildContext context,
+    EnhancedOnboardingController controller,
+  ) {
     return CycleHistoryImportWidget(
       onDataChanged: (data) {
-        controller.updateData(controller.data.copyWith(
-          lastPeriodDate: data['lastPeriodDate'],
-          averageCycleLength: data['averageCycleLength'],
-          averagePeriodLength: data['averagePeriodLength'],
-          isFirstTimeTracking: data['isFirstTimeTracking'],
-          previousTrackingMethod: data['previousTrackingMethod'],
-        ));
+        controller.updateData(
+          controller.data.copyWith(
+            lastPeriodDate: data['lastPeriodDate'],
+            averageCycleLength: data['averageCycleLength'],
+            averagePeriodLength: data['averagePeriodLength'],
+            isFirstTimeTracking: data['isFirstTimeTracking'],
+            previousTrackingMethod: data['previousTrackingMethod'],
+          ),
+        );
       },
       initialData: controller.data,
     );
   }
 
-  Widget _buildLifestyleStep(BuildContext context, EnhancedOnboardingController controller) {
+  Widget _buildLifestyleStep(
+    BuildContext context,
+    EnhancedOnboardingController controller,
+  ) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
       child: Column(
@@ -264,22 +284,24 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
         children: [
           Text(
             'Tell us about your lifestyle',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
           ),
-          
+
           const SizedBox(height: 8),
-          
+
           Text(
             'This helps us provide more accurate predictions and personalized insights.',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+              color: Theme.of(
+                context,
+              ).colorScheme.onSurface.withValues(alpha: 0.7),
             ),
           ),
-          
+
           const SizedBox(height: 32),
-          
+
           // Lifestyle questions will be implemented here
           _buildLifestyleQuestions(context, controller),
         ],
@@ -287,16 +309,28 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
     );
   }
 
-  Widget _buildGoalsStep(BuildContext context, EnhancedOnboardingController controller) {
+  Widget _buildGoalsStep(
+    BuildContext context,
+    EnhancedOnboardingController controller,
+  ) {
     return GoalSelectionWidget(
       onGoalsChanged: (goals) {
-        controller.updateData(controller.data.copyWith(healthGoals: HealthGoals(customGoals: (goals as List).map((e) => e.toString()).toList())));
+        controller.updateData(
+          controller.data.copyWith(
+            healthGoals: HealthGoals(
+              customGoals: (goals as List).map((e) => e.toString()).toList(),
+            ),
+          ),
+        );
       },
       initialGoals: controller.data.healthGoals?.customGoals ?? <String>[],
     );
   }
 
-  Widget _buildNotificationsStep(BuildContext context, EnhancedOnboardingController controller) {
+  Widget _buildNotificationsStep(
+    BuildContext context,
+    EnhancedOnboardingController controller,
+  ) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
       child: Column(
@@ -304,22 +338,24 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
         children: [
           Text(
             'Stay on track with smart reminders',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
           ),
-          
+
           const SizedBox(height: 8),
-          
+
           Text(
             'We\'ll send you gentle, personalized reminders to help you maintain your tracking routine.',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+              color: Theme.of(
+                context,
+              ).colorScheme.onSurface.withValues(alpha: 0.7),
             ),
           ),
-          
+
           const SizedBox(height: 32),
-          
+
           // Notification preferences
           _buildNotificationPreferences(context, controller),
         ],
@@ -327,32 +363,42 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
     );
   }
 
-  Widget _buildPrivacyStep(BuildContext context, EnhancedOnboardingController controller) {
+  Widget _buildPrivacyStep(
+    BuildContext context,
+    EnhancedOnboardingController controller,
+  ) {
     return PrivacyPreferencesWidget(
       onPrivacyChanged: (shareForResearch, enableAI) {
-        controller.updateData(controller.data.copyWith(
-          shareDataForResearch: shareForResearch,
-          enableAIInsights: enableAI,
-        ));
+        controller.updateData(
+          controller.data.copyWith(
+            shareDataForResearch: shareForResearch,
+            enableAIInsights: enableAI,
+          ),
+        );
       },
       initialShareForResearch: controller.data.shareDataForResearch,
       initialEnableAI: controller.data.enableAIInsights,
     );
   }
 
-  Widget _buildCompleteStep(BuildContext context, EnhancedOnboardingController controller) {
+  Widget _buildCompleteStep(
+    BuildContext context,
+    EnhancedOnboardingController controller,
+  ) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
       child: Column(
         children: [
           const SizedBox(height: 40),
-          
+
           // Success animation
           Container(
             height: 200,
             width: 200,
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+              color: Theme.of(
+                context,
+              ).colorScheme.primary.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -361,34 +407,36 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
               color: Theme.of(context).colorScheme.primary,
             ),
           ),
-          
+
           const SizedBox(height: 32),
-          
+
           Text(
             'You\'re all set! 🎉',
-            style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           Text(
             'Your personalized ZyraFlow experience is ready. Let\'s start your health journey!',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.8),
+              color: Theme.of(
+                context,
+              ).colorScheme.onSurface.withValues(alpha: 0.8),
             ),
             textAlign: TextAlign.center,
           ),
-          
+
           const SizedBox(height: 40),
-          
+
           // Personalization summary
           _buildPersonalizationSummary(context, controller),
-          
+
           const SizedBox(height: 32),
-          
+
           AdaptiveButton(
             text: 'Start Tracking',
             onPressed: () => _completeOnboarding(context, controller),
@@ -405,7 +453,8 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
       {
         'icon': Icons.analytics_outlined,
         'title': '95% Accurate AI Predictions',
-        'description': 'Advanced machine learning for precise cycle forecasting',
+        'description':
+            'Advanced machine learning for precise cycle forecasting',
       },
       {
         'icon': Icons.psychology_outlined,
@@ -425,68 +474,85 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
     ];
 
     return Column(
-      children: features.map((feature) => Padding(
-        padding: const EdgeInsets.only(bottom: 24),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                feature['icon'] as IconData,
-                color: Theme.of(context).colorScheme.primary,
-                size: 24,
-              ),
-            ),
-            
-            const SizedBox(width: 16),
-            
-            Expanded(
-              child: Column(
+      children: features
+          .map(
+            (feature) => Padding(
+              padding: const EdgeInsets.only(bottom: 24),
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    feature['title'] as String,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.primary.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      feature['icon'] as IconData,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 24,
                     ),
                   ),
-                  
-                  const SizedBox(height: 4),
-                  
-                  Text(
-                    feature['description'] as String,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+
+                  const SizedBox(width: 16),
+
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          feature['title'] as String,
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(fontWeight: FontWeight.w600),
+                        ),
+
+                        const SizedBox(height: 4),
+
+                        Text(
+                          feature['description'] as String,
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurface.withValues(alpha: 0.7),
+                              ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
-      )).toList(),
+          )
+          .toList(),
     );
   }
 
-  Widget _buildLifestyleQuestions(BuildContext context, EnhancedOnboardingController controller) {
+  Widget _buildLifestyleQuestions(
+    BuildContext context,
+    EnhancedOnboardingController controller,
+  ) {
     // This would implement lifestyle questions
     return const Placeholder(fallbackHeight: 300);
   }
 
-  Widget _buildNotificationPreferences(BuildContext context, EnhancedOnboardingController controller) {
+  Widget _buildNotificationPreferences(
+    BuildContext context,
+    EnhancedOnboardingController controller,
+  ) {
     // This would implement notification preferences UI
     return const Placeholder(fallbackHeight: 300);
   }
 
-  Widget _buildPersonalizationSummary(BuildContext context, EnhancedOnboardingController controller) {
+  Widget _buildPersonalizationSummary(
+    BuildContext context,
+    EnhancedOnboardingController controller,
+  ) {
     final theme = Theme.of(context);
     final data = controller.data;
-    
+
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -505,9 +571,9 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
               fontWeight: FontWeight.bold,
             ),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           if (data.preferredName != null) ...[
             _buildSummaryItem(
               context,
@@ -517,7 +583,7 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
             ),
             const SizedBox(height: 12),
           ],
-          
+
           if (data.averageCycleLength != null) ...[
             _buildSummaryItem(
               context,
@@ -527,7 +593,7 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
             ),
             const SizedBox(height: 12),
           ],
-          
+
           if (data.healthGoals != null) ...[
             _buildSummaryItem(
               context,
@@ -537,12 +603,12 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
             ),
             const SizedBox(height: 12),
           ],
-          
+
           _buildSummaryItem(
             context,
             icon: Icons.security,
             title: 'Privacy Protected',
-            subtitle: data.enableAIInsights 
+            subtitle: data.enableAIInsights
                 ? 'AI insights enabled with privacy protection'
                 : 'Basic tracking mode selected',
           ),
@@ -558,17 +624,13 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
     required String subtitle,
   }) {
     final theme = Theme.of(context);
-    
+
     return Row(
       children: [
-        Icon(
-          icon,
-          color: theme.colorScheme.primary,
-          size: 20,
-        ),
-        
+        Icon(icon, color: theme.colorScheme.primary, size: 20),
+
         const SizedBox(width: 12),
-        
+
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -579,7 +641,7 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              
+
               Text(
                 subtitle,
                 style: theme.textTheme.bodySmall?.copyWith(
@@ -593,7 +655,10 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
     );
   }
 
-  Widget _buildNavigationButtons(BuildContext context, EnhancedOnboardingController controller) {
+  Widget _buildNavigationButtons(
+    BuildContext context,
+    EnhancedOnboardingController controller,
+  ) {
     return Container(
       padding: const EdgeInsets.all(24),
       child: Row(
@@ -612,12 +677,14 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
             ),
             const SizedBox(width: 16),
           ],
-          
+
           Expanded(
             flex: controller.isFirstStep ? 1 : 2,
             child: AdaptiveButton(
               text: _getNextButtonText(controller),
-              onPressed: controller.isLoading ? null : () => _handleNextStep(context, controller),
+              onPressed: controller.isLoading
+                  ? null
+                  : () => _handleNextStep(context, controller),
               isPrimary: true,
               isLoading: controller.isLoading,
             ),
@@ -637,7 +704,10 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
     }
   }
 
-  Future<void> _handleNextStep(BuildContext context, EnhancedOnboardingController controller) async {
+  Future<void> _handleNextStep(
+    BuildContext context,
+    EnhancedOnboardingController controller,
+  ) async {
     if (controller.currentStepType == OnboardingStep.complete) {
       await _completeOnboarding(context, controller);
       return;
@@ -680,9 +750,12 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
     }
   }
 
-  void _showValidationError(BuildContext context, EnhancedOnboardingController controller) {
+  void _showValidationError(
+    BuildContext context,
+    EnhancedOnboardingController controller,
+  ) {
     String message = 'Please complete the required fields before continuing.';
-    
+
     switch (controller.currentStepType) {
       case OnboardingStep.personalInfo:
         message = 'Please enter your name to continue.';
@@ -702,7 +775,10 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
     );
   }
 
-  Future<void> _completeOnboarding(BuildContext context, EnhancedOnboardingController controller) async {
+  Future<void> _completeOnboarding(
+    BuildContext context,
+    EnhancedOnboardingController controller,
+  ) async {
     final navigator = Navigator.of(context);
     final messenger = ScaffoldMessenger.of(context);
     final errorColor = Theme.of(context).colorScheme.error;
@@ -726,7 +802,10 @@ class _InteractiveOnboardingScreenState extends State<InteractiveOnboardingScree
     }
   }
 
-  void _showSkipDialog(BuildContext context, EnhancedOnboardingController controller) {
+  void _showSkipDialog(
+    BuildContext context,
+    EnhancedOnboardingController controller,
+  ) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -778,10 +857,16 @@ class AdaptiveButton extends StatelessWidget {
       child: FilledButton(
         onPressed: isLoading ? null : onPressed,
         style: FilledButton.styleFrom(
-          backgroundColor: isPrimary ? theme.colorScheme.primary : theme.colorScheme.secondary,
+          backgroundColor: isPrimary
+              ? theme.colorScheme.primary
+              : theme.colorScheme.secondary,
         ),
         child: isLoading
-            ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+            ? const SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              )
             : Text(text),
       ),
     );

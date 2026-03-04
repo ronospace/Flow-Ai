@@ -24,7 +24,7 @@ class SocialLoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final effectiveTextColor = textColor ?? AppTheme.darkGrey;
-    
+
     return Container(
       height: 56,
       decoration: BoxDecoration(
@@ -59,11 +59,7 @@ class SocialLoginButton extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  icon,
-                  color: iconColor,
-                  size: 24,
-                ),
+                Icon(icon, color: iconColor, size: 24),
                 const SizedBox(width: 12),
                 Text(
                   label,

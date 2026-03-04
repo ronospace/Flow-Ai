@@ -22,7 +22,7 @@ class LifestyleAICoach {
   late Map<String, dynamic> _stressManagementModel;
   late Map<String, dynamic> _exerciseCoachModel;
   late Map<String, dynamic> _wearableIntegrationModel;
-  
+
   // Cycle phase-specific recommendations
   late Map<String, Map<String, dynamic>> _phaseSpecificGuidance;
   late Map<String, List<String>> _hormonalPhaseNutrition;
@@ -85,7 +85,9 @@ class LifestyleAICoach {
     _initializePhaseSpecificGuidance();
 
     // Touch models so analyzer sees them used
-    debugPrint('Models ready: sleep=${_sleepOptimizationModel.length}, nutrition=${_nutritionCoachModel.length}, stress=${_stressManagementModel.length}, exercise=${_exerciseCoachModel.length}, wearable=${_wearableIntegrationModel.length}');
+    debugPrint(
+      'Models ready: sleep=${_sleepOptimizationModel.length}, nutrition=${_nutritionCoachModel.length}, stress=${_stressManagementModel.length}, exercise=${_exerciseCoachModel.length}, wearable=${_wearableIntegrationModel.length}',
+    );
 
     _isInitialized = true;
     debugPrint('✅ Lifestyle & Behavior AI Coach initialized successfully');
@@ -102,36 +104,65 @@ class LifestyleAICoach {
   }) async {
     if (!_isInitialized) await initialize();
 
-    debugPrint('🎯 Generating personalized lifestyle coaching recommendations...');
+    debugPrint(
+      '🎯 Generating personalized lifestyle coaching recommendations...',
+    );
 
     // Sleep optimization recommendations
     final sleepRecommendations = await _generateSleepRecommendations(
-      recentCycles, currentCyclePhase, wearableData, userProfile);
+      recentCycles,
+      currentCyclePhase,
+      wearableData,
+      userProfile,
+    );
 
     // Nutrition coaching
     final nutritionRecommendations = await _generateNutritionRecommendations(
-      recentCycles, currentCyclePhase, userProfile, lifestyleData);
+      recentCycles,
+      currentCyclePhase,
+      userProfile,
+      lifestyleData,
+    );
 
     // Stress management guidance
     final stressManagementPlan = await _generateStressManagementPlan(
-      recentCycles, currentCyclePhase, wearableData, lifestyleData);
+      recentCycles,
+      currentCyclePhase,
+      wearableData,
+      lifestyleData,
+    );
 
     // Exercise coaching
     final exercisePlan = await _generateExercisePlan(
-      recentCycles, currentCyclePhase, userProfile, wearableData, userGoals);
+      recentCycles,
+      currentCyclePhase,
+      userProfile,
+      wearableData,
+      userGoals,
+    );
 
     // Wearable-based insights
     final wearableInsights = await _analyzeWearableData(
-      wearableData, currentCyclePhase, recentCycles);
+      wearableData,
+      currentCyclePhase,
+      recentCycles,
+    );
 
     // Generate daily action plan
     final dailyActionPlan = _createDailyActionPlan(
-      sleepRecommendations, nutritionRecommendations, 
-      stressManagementPlan, exercisePlan, currentCyclePhase);
+      sleepRecommendations,
+      nutritionRecommendations,
+      stressManagementPlan,
+      exercisePlan,
+      currentCyclePhase,
+    );
 
     // Weekly coaching focus
     final weeklyFocus = _determineWeeklyFocus(
-      recentCycles, currentCyclePhase, userGoals);
+      recentCycles,
+      currentCyclePhase,
+      userGoals,
+    );
 
     return LifestyleCoachingReport(
       userId: userProfile.id,
@@ -145,9 +176,14 @@ class LifestyleAICoach {
       dailyActionPlan: dailyActionPlan,
       weeklyFocus: weeklyFocus,
       personalizedTips: _generatePersonalizedTips(
-        userProfile, currentCyclePhase, recentCycles),
+        userProfile,
+        currentCyclePhase,
+        recentCycles,
+      ),
       motivationalMessage: _adaptMotivationalMessage(
-        _generateMotivationalMessage(currentCyclePhase, userProfile), userProfile),
+        _generateMotivationalMessage(currentCyclePhase, userProfile),
+        userProfile,
+      ),
       nextCheckInDate: _calculateNextCheckIn(currentCyclePhase),
     );
   }
@@ -159,26 +195,37 @@ class LifestyleAICoach {
     Map<String, dynamic>? wearableData,
     UserProfile userProfile,
   ) async {
-    debugPrint('😴 Generating sleep recommendations for $currentPhase phase...');
+    debugPrint(
+      '😴 Generating sleep recommendations for $currentPhase phase...',
+    );
 
     // Analyze current sleep patterns from wearable data
     final sleepAnalysis = _analyzeSleepPatterns(wearableData, cycles);
-    
+
     // Phase-specific sleep recommendations
-    final phaseRecommendations = _phaseSpecificGuidance[currentPhase]?['sleep'] ?? {};
-    
+    final phaseRecommendations =
+        _phaseSpecificGuidance[currentPhase]?['sleep'] ?? {};
+
     // Optimal sleep duration for current phase
     final optimalSleepDuration = _calculateOptimalSleepDuration(
-      currentPhase, sleepAnalysis, userProfile.age);
-    
+      currentPhase,
+      sleepAnalysis,
+      userProfile.age,
+    );
+
     // Sleep quality optimization tips
     final qualityTips = _generateSleepQualityTips(
-      currentPhase, sleepAnalysis, wearableData);
-    
+      currentPhase,
+      sleepAnalysis,
+      wearableData,
+    );
+
     // Circadian rhythm optimization
     final circadianTips = _generateCircadianRhythmTips(
-      currentPhase, wearableData);
-    
+      currentPhase,
+      wearableData,
+    );
+
     // Sleep environment optimization
     final environmentTips = _generateSleepEnvironmentTips(currentPhase);
 
@@ -190,7 +237,9 @@ class LifestyleAICoach {
       sleepQualityTips: qualityTips,
       circadianRhythmTips: circadianTips,
       environmentOptimization: environmentTips,
-      supplementRecommendations: _getSleepSupplementRecommendations(currentPhase),
+      supplementRecommendations: _getSleepSupplementRecommendations(
+        currentPhase,
+      ),
       sleepTrackingMetrics: _getSleepTrackingMetrics(),
       phaseSpecificInsights: phaseRecommendations,
     );
@@ -203,27 +252,39 @@ class LifestyleAICoach {
     UserProfile userProfile,
     Map<String, dynamic>? lifestyleData,
   ) async {
-    debugPrint('🥗 Generating nutrition recommendations for $currentPhase phase...');
+    debugPrint(
+      '🥗 Generating nutrition recommendations for $currentPhase phase...',
+    );
 
     // Phase-specific nutritional needs
     final phaseNutrition = _hormonalPhaseNutrition[currentPhase] ?? [];
-    
+
     // Micronutrient recommendations
     final micronutrients = _getMicronutrientRecommendations(
-      currentPhase, cycles, userProfile);
-    
+      currentPhase,
+      cycles,
+      userProfile,
+    );
+
     // Anti-inflammatory food suggestions
     final antiInflammatoryFoods = _getAntiInflammatoryFoods(
-      currentPhase, cycles);
-    
+      currentPhase,
+      cycles,
+    );
+
     // Blood sugar management
     final bloodSugarTips = _getBloodSugarManagementTips(
-      currentPhase, userProfile, lifestyleData);
-    
+      currentPhase,
+      userProfile,
+      lifestyleData,
+    );
+
     // Hydration guidance
     final hydrationGuidance = _getHydrationGuidance(
-      currentPhase, wearableData: lifestyleData);
-    
+      currentPhase,
+      wearableData: lifestyleData,
+    );
+
     // Meal timing optimization
     final mealTiming = _optimizeMealTiming(currentPhase, userProfile);
 
@@ -236,7 +297,10 @@ class LifestyleAICoach {
       bloodSugarTips: bloodSugarTips,
       hydrationGuidance: hydrationGuidance,
       mealTimingOptimization: mealTiming,
-      supplementSuggestions: _getNutritionalSupplements(currentPhase, userProfile),
+      supplementSuggestions: _getNutritionalSupplements(
+        currentPhase,
+        userProfile,
+      ),
       cookingTips: _getCookingTips(currentPhase),
       phaseSpecificRecipes: _getPhaseSpecificRecipes(currentPhase),
     );
@@ -249,28 +313,39 @@ class LifestyleAICoach {
     Map<String, dynamic>? wearableData,
     Map<String, dynamic>? lifestyleData,
   ) async {
-    debugPrint('🧘‍♀️ Generating stress management plan for $currentPhase phase...');
+    debugPrint(
+      '🧘‍♀️ Generating stress management plan for $currentPhase phase...',
+    );
 
     // Analyze current stress levels
     final stressAnalysis = _analyzeStressLevels(wearableData, cycles);
-    
+
     // Phase-specific stress management techniques
-    final phaseTechniques = _phaseSpecificGuidance[currentPhase]?['stress'] ?? {};
-    
+    final phaseTechniques =
+        _phaseSpecificGuidance[currentPhase]?['stress'] ?? {};
+
     // Breathing exercises for current phase
-    final breathingExercises = _getPhaseSpecificBreathingExercises(currentPhase);
-    
+    final breathingExercises = _getPhaseSpecificBreathingExercises(
+      currentPhase,
+    );
+
     // Mindfulness practices
     final mindfulnessPractices = _getMindfulnessPractices(
-      currentPhase, stressAnalysis);
-    
+      currentPhase,
+      stressAnalysis,
+    );
+
     // Cortisol management strategies
     final cortisolManagement = _getCortisolManagementStrategies(
-      currentPhase, stressAnalysis);
-    
+      currentPhase,
+      stressAnalysis,
+    );
+
     // Stress resilience building
     final resilienceActivities = _getResilienceBuildingActivities(
-      currentPhase, stressAnalysis);
+      currentPhase,
+      stressAnalysis,
+    );
 
     return StressManagementPlan(
       currentPhase: currentPhase,
@@ -298,21 +373,27 @@ class LifestyleAICoach {
 
     // Phase-specific exercise recommendations
     final phaseWorkouts = _phaseBasedWorkouts[currentPhase] ?? {};
-    
+
     // Analyze current fitness level and recovery
     final fitnessAnalysis = _analyzeFitnessData(wearableData, cycles);
-    
+
     // Generate workout schedule
     final workoutSchedule = _generateWorkoutSchedule(
-      currentPhase, fitnessAnalysis, userProfile, userGoals);
-    
+      currentPhase,
+      fitnessAnalysis,
+      userProfile,
+      userGoals,
+    );
+
     // Recovery optimization
     final recoveryPlan = _generateRecoveryPlan(
-      currentPhase, fitnessAnalysis, wearableData);
-    
+      currentPhase,
+      fitnessAnalysis,
+      wearableData,
+    );
+
     // Flexibility and mobility work
-    final flexibilityPlan = _generateFlexibilityPlan(
-      currentPhase, cycles);
+    final flexibilityPlan = _generateFlexibilityPlan(currentPhase, cycles);
 
     return ExercisePlan(
       currentPhase: currentPhase,
@@ -344,27 +425,40 @@ class LifestyleAICoach {
 
     // Heart rate variability analysis
     final hrvAnalysis = _analyzeHeartRateVariability(
-      wearableData['hrv_data'], currentPhase);
-    
+      wearableData['hrv_data'],
+      currentPhase,
+    );
+
     // Sleep quality analysis
     final sleepQualityAnalysis = _analyzeSleepQualityFromWearable(
-      wearableData['sleep_data'], currentPhase);
-    
+      wearableData['sleep_data'],
+      currentPhase,
+    );
+
     // Activity and exercise analysis
     final activityAnalysis = _analyzeActivityData(
-      wearableData['activity_data'], currentPhase);
-    
+      wearableData['activity_data'],
+      currentPhase,
+    );
+
     // Stress and recovery metrics
     final stressRecoveryAnalysis = _analyzeStressRecoveryMetrics(
-      wearableData, currentPhase);
-    
+      wearableData,
+      currentPhase,
+    );
+
     // Generate actionable insights
     final actionableInsights = _generateWearableActionableInsights([
-      hrvAnalysis, sleepQualityAnalysis, activityAnalysis, stressRecoveryAnalysis]);
+      hrvAnalysis,
+      sleepQualityAnalysis,
+      activityAnalysis,
+      stressRecoveryAnalysis,
+    ]);
 
     return WearableInsights(
       dataSource: wearableData['source'] ?? 'unknown',
-      lastSyncTime: DateTime.tryParse(wearableData['last_sync'] ?? '') ?? DateTime.now(),
+      lastSyncTime:
+          DateTime.tryParse(wearableData['last_sync'] ?? '') ?? DateTime.now(),
       hrvAnalysis: hrvAnalysis,
       sleepQualityAnalysis: sleepQualityAnalysis,
       activityAnalysis: activityAnalysis,
@@ -372,7 +466,9 @@ class LifestyleAICoach {
       actionableInsights: actionableInsights,
       trendAnalysis: _analyzeTrends(wearableData, cycles),
       personalizedRecommendations: _generateWearableRecommendations(
-        wearableData, currentPhase),
+        wearableData,
+        currentPhase,
+      ),
     );
   }
 
@@ -387,12 +483,14 @@ class LifestyleAICoach {
     return {
       'morning_routine': [
         'Wake up at ${sleepRecs.optimalWakeTime}',
-        nutritionRecs.hydrationGuidance['morning_hydration']?.toString() ?? 'Stay hydrated',
+        nutritionRecs.hydrationGuidance['morning_hydration']?.toString() ??
+            'Stay hydrated',
         stressRecs.breathingExercises.first,
       ],
       'afternoon_focus': [
         exercisePlan.recommendedWorkouts.first,
-        nutritionRecs.mealTimingOptimization['lunch_timing']?.toString() ?? 'Lunch 12:00-2:00 PM',
+        nutritionRecs.mealTimingOptimization['lunch_timing']?.toString() ??
+            'Lunch 12:00-2:00 PM',
         stressRecs.mindfulnessPractices.first,
       ],
       'evening_wind_down': [
@@ -413,7 +511,10 @@ class LifestyleAICoach {
           'duration_adjustment': '+1 hour',
           'quality_focus': 'Deep sleep recovery',
           'temperature': 'Keep cool',
-          'tips': ['Use heating pad for comfort', 'Practice gentle yoga before bed'],
+          'tips': [
+            'Use heating pad for comfort',
+            'Practice gentle yoga before bed',
+          ],
         },
         'stress': {
           'priority': 'Rest and nurture',
@@ -519,7 +620,11 @@ class LifestyleAICoach {
         'cardio': {'type': 'gentle', 'duration': 20, 'intensity': 'low'},
       },
       'follicular': {
-        'recommended_workouts': ['Strength training', 'Cardio', 'New activities'],
+        'recommended_workouts': [
+          'Strength training',
+          'Cardio',
+          'New activities',
+        ],
         'intensity': 'moderate-high',
         'frequency': 4,
         'duration': 45,
@@ -527,34 +632,55 @@ class LifestyleAICoach {
         'cardio': {'type': 'varied', 'duration': 30, 'intensity': 'moderate'},
       },
       'ovulatory': {
-        'recommended_workouts': ['HIIT', 'Competitive sports', 'Peak challenges'],
+        'recommended_workouts': [
+          'HIIT',
+          'Competitive sports',
+          'Peak challenges',
+        ],
         'intensity': 'high',
         'frequency': 5,
         'duration': 60,
         'strength_focus': ['Max efforts', 'Power training'],
-        'cardio': {'type': 'high-intensity', 'duration': 25, 'intensity': 'high'},
+        'cardio': {
+          'type': 'high-intensity',
+          'duration': 25,
+          'intensity': 'high',
+        },
       },
       'luteal': {
-        'recommended_workouts': ['Strength training', 'Pilates', 'Moderate cardio'],
+        'recommended_workouts': [
+          'Strength training',
+          'Pilates',
+          'Moderate cardio',
+        ],
         'intensity': 'moderate',
         'frequency': 3,
         'duration': 45,
         'strength_focus': ['Stability', 'Controlled movements'],
-        'cardio': {'type': 'steady-state', 'duration': 35, 'intensity': 'moderate'},
+        'cardio': {
+          'type': 'steady-state',
+          'duration': 35,
+          'intensity': 'moderate',
+        },
       },
     };
   }
 
   // Placeholder implementations for complex analysis methods
   Map<String, dynamic> _initializeHormonalSleepPatterns() => {
-    'menstrual': {'deep_sleep_need': 'increased', 'temperature_sensitivity': 'high'},
+    'menstrual': {
+      'deep_sleep_need': 'increased',
+      'temperature_sensitivity': 'high',
+    },
     'follicular': {'sleep_efficiency': 'optimal', 'wake_time': 'consistent'},
     'ovulatory': {'sleep_quality': 'peak', 'duration_need': 'standard'},
     'luteal': {'sleep_onset': 'earlier', 'duration_need': 'increased'},
   };
 
   Map<String, dynamic> _analyzeSleepPatterns(
-    Map<String, dynamic>? wearableData, List<CycleData> cycles) => {
+    Map<String, dynamic>? wearableData,
+    List<CycleData> cycles,
+  ) => {
     'average_duration': 7.5,
     'quality_score': 0.75,
     'deep_sleep_percentage': 0.20,
@@ -571,7 +697,10 @@ class LifestyleAICoach {
     return baseTime[phase] ?? '22:00';
   }
 
-  String _calculateOptimalWakeTime(String phase, Map<String, dynamic> analysis) {
+  String _calculateOptimalWakeTime(
+    String phase,
+    Map<String, dynamic> analysis,
+  ) {
     final baseTime = {
       'menstrual': '07:30',
       'follicular': '07:00',
@@ -582,7 +711,11 @@ class LifestyleAICoach {
   }
 
   // Additional placeholder methods for missing implementation
-  double _calculateOptimalSleepDuration(String phase, Map<String, dynamic> analysis, int? age) {
+  double _calculateOptimalSleepDuration(
+    String phase,
+    Map<String, dynamic> analysis,
+    int? age,
+  ) {
     final baseDuration = {
       'menstrual': 8.5,
       'follicular': 8.0,
@@ -592,17 +725,40 @@ class LifestyleAICoach {
     return baseDuration[phase] ?? 8.0;
   }
 
-  List<String> _generateSleepQualityTips(String phase, Map<String, dynamic> analysis, Map<String, dynamic>? wearableData) {
+  List<String> _generateSleepQualityTips(
+    String phase,
+    Map<String, dynamic> analysis,
+    Map<String, dynamic>? wearableData,
+  ) {
     final tips = {
-      'menstrual': ['Use a heating pad', 'Keep bedroom cool', 'Practice gentle stretches'],
-      'follicular': ['Maintain consistent bedtime', 'Get morning sunlight', 'Limit screen time'],
-      'ovulatory': ['Optimize sleep efficiency', 'Cool sleeping environment', 'Light evening meals'],
-      'luteal': ['Earlier bedtime routine', 'Relaxation techniques', 'Warm bath before bed'],
+      'menstrual': [
+        'Use a heating pad',
+        'Keep bedroom cool',
+        'Practice gentle stretches',
+      ],
+      'follicular': [
+        'Maintain consistent bedtime',
+        'Get morning sunlight',
+        'Limit screen time',
+      ],
+      'ovulatory': [
+        'Optimize sleep efficiency',
+        'Cool sleeping environment',
+        'Light evening meals',
+      ],
+      'luteal': [
+        'Earlier bedtime routine',
+        'Relaxation techniques',
+        'Warm bath before bed',
+      ],
     };
     return tips[phase] ?? [];
   }
 
-  List<String> _generateCircadianRhythmTips(String phase, Map<String, dynamic>? wearableData) {
+  List<String> _generateCircadianRhythmTips(
+    String phase,
+    Map<String, dynamic>? wearableData,
+  ) {
     return [
       'Get 15-20 minutes of morning sunlight',
       'Avoid blue light 2 hours before bed',
@@ -637,7 +793,11 @@ class LifestyleAICoach {
     'Deep sleep percentage',
   ];
 
-  List<String> _getMicronutrientRecommendations(String phase, List<CycleData> cycles, UserProfile profile) {
+  List<String> _getMicronutrientRecommendations(
+    String phase,
+    List<CycleData> cycles,
+    UserProfile profile,
+  ) {
     final nutrients = {
       'menstrual': ['Iron', 'Vitamin C', 'Magnesium', 'B-vitamins'],
       'follicular': ['Folate', 'Vitamin D', 'Omega-3', 'Protein'],
@@ -647,7 +807,10 @@ class LifestyleAICoach {
     return nutrients[phase] ?? [];
   }
 
-  List<String> _getAntiInflammatoryFoods(String phase, List<CycleData> cycles) => [
+  List<String> _getAntiInflammatoryFoods(
+    String phase,
+    List<CycleData> cycles,
+  ) => [
     'Fatty fish (salmon, sardines)',
     'Leafy greens (spinach, kale)',
     'Berries (blueberries, cherries)',
@@ -658,7 +821,11 @@ class LifestyleAICoach {
 
   List<String> _getFoodsToAvoid(String phase) {
     final avoid = {
-      'menstrual': ['Excessive caffeine', 'High sodium foods', 'Refined sugars'],
+      'menstrual': [
+        'Excessive caffeine',
+        'High sodium foods',
+        'Refined sugars',
+      ],
       'follicular': ['Processed foods', 'Trans fats'],
       'ovulatory': ['Heavy meals', 'Excessive alcohol'],
       'luteal': ['High sugar foods', 'Excessive caffeine', 'Refined carbs'],
@@ -666,36 +833,46 @@ class LifestyleAICoach {
     return avoid[phase] ?? [];
   }
 
-  Map<String, dynamic> _getBloodSugarManagementTips(String phase, UserProfile profile, Map<String, dynamic>? data) => {
+  Map<String, dynamic> _getBloodSugarManagementTips(
+    String phase,
+    UserProfile profile,
+    Map<String, dynamic>? data,
+  ) => {
     'tips': [
       'Eat balanced meals with protein, fiber, and healthy fats',
       'Avoid skipping meals',
       'Include complex carbohydrates',
     ],
     'timing': 'Eat every 3-4 hours',
-    'portion_control': 'Use the plate method: 1/2 vegetables, 1/4 protein, 1/4 complex carbs',
+    'portion_control':
+        'Use the plate method: 1/2 vegetables, 1/4 protein, 1/4 complex carbs',
   };
 
-  Map<String, dynamic> _getHydrationGuidance(String phase, {Map<String, dynamic>? wearableData}) => {
+  Map<String, dynamic> _getHydrationGuidance(
+    String phase, {
+    Map<String, dynamic>? wearableData,
+  }) => {
     'daily_goal': '2.5-3 liters',
     'morning_hydration': 'Start with 16-20 oz upon waking',
     'timing': 'Drink water throughout the day, not just when thirsty',
     'quality': 'Filtered water, herbal teas count towards goal',
   };
 
-  Map<String, dynamic> _optimizeMealTiming(String phase, UserProfile profile) => {
-    'breakfast': '7:00-9:00 AM',
-    'lunch_timing': '12:00-2:00 PM',
-    'dinner': '6:00-8:00 PM',
-    'snacks': 'If needed, 3-4 hours between meals',
-  };
+  Map<String, dynamic> _optimizeMealTiming(String phase, UserProfile profile) =>
+      {
+        'breakfast': '7:00-9:00 AM',
+        'lunch_timing': '12:00-2:00 PM',
+        'dinner': '6:00-8:00 PM',
+        'snacks': 'If needed, 3-4 hours between meals',
+      };
 
-  List<String> _getNutritionalSupplements(String phase, UserProfile profile) => [
-    'High-quality multivitamin',
-    'Omega-3 fatty acids',
-    'Vitamin D3',
-    'Magnesium',
-  ];
+  List<String> _getNutritionalSupplements(String phase, UserProfile profile) =>
+      [
+        'High-quality multivitamin',
+        'Omega-3 fatty acids',
+        'Vitamin D3',
+        'Magnesium',
+      ];
 
   List<String> _getCookingTips(String phase) => [
     'Steam or roast vegetables to preserve nutrients',
@@ -706,15 +883,30 @@ class LifestyleAICoach {
 
   List<String> _getPhaseSpecificRecipes(String phase) {
     final recipes = {
-      'menstrual': ['Iron-rich lentil soup', 'Ginger turmeric tea', 'Dark chocolate energy balls'],
+      'menstrual': [
+        'Iron-rich lentil soup',
+        'Ginger turmeric tea',
+        'Dark chocolate energy balls',
+      ],
       'follicular': ['Green smoothie bowl', 'Quinoa salad', 'Grilled salmon'],
-      'ovulatory': ['Antioxidant berry bowl', 'Colorful vegetable stir-fry', 'Avocado toast'],
-      'luteal': ['Sweet potato and black bean bowl', 'Magnesium-rich trail mix', 'Calming herbal tea'],
+      'ovulatory': [
+        'Antioxidant berry bowl',
+        'Colorful vegetable stir-fry',
+        'Avocado toast',
+      ],
+      'luteal': [
+        'Sweet potato and black bean bowl',
+        'Magnesium-rich trail mix',
+        'Calming herbal tea',
+      ],
     };
     return recipes[phase] ?? [];
   }
 
-  Map<String, dynamic> _analyzeStressLevels(Map<String, dynamic>? wearableData, List<CycleData> cycles) => {
+  Map<String, dynamic> _analyzeStressLevels(
+    Map<String, dynamic>? wearableData,
+    List<CycleData> cycles,
+  ) => {
     'current_stress_level': 0.5,
     'primary_stressors': ['Work deadlines', 'Sleep disruption'],
     'stress_trends': {'increasing': false, 'stable': true},
@@ -723,25 +915,63 @@ class LifestyleAICoach {
 
   List<String> _getPhaseSpecificBreathingExercises(String phase) {
     final exercises = {
-      'menstrual': ['4-7-8 breathing', 'Box breathing', 'Gentle belly breathing'],
-      'follicular': ['Energizing breath work', '4-4-4-4 breathing', 'Morning breath exercises'],
-      'ovulatory': ['Breath of fire', 'Alternate nostril breathing', 'Victory breath'],
-      'luteal': ['Calming breath work', '4-7-8 breathing', 'Progressive relaxation'],
+      'menstrual': [
+        '4-7-8 breathing',
+        'Box breathing',
+        'Gentle belly breathing',
+      ],
+      'follicular': [
+        'Energizing breath work',
+        '4-4-4-4 breathing',
+        'Morning breath exercises',
+      ],
+      'ovulatory': [
+        'Breath of fire',
+        'Alternate nostril breathing',
+        'Victory breath',
+      ],
+      'luteal': [
+        'Calming breath work',
+        '4-7-8 breathing',
+        'Progressive relaxation',
+      ],
     };
     return exercises[phase] ?? [];
   }
 
-  List<String> _getMindfulnessPractices(String phase, Map<String, dynamic> stressAnalysis) {
+  List<String> _getMindfulnessPractices(
+    String phase,
+    Map<String, dynamic> stressAnalysis,
+  ) {
     final practices = {
-      'menstrual': ['Body scan meditation', 'Gentle loving-kindness', 'Rest and restore'],
-      'follicular': ['Walking meditation', 'Goal-setting mindfulness', 'Creative visualization'],
-      'ovulatory': ['Active meditation', 'Social connection mindfulness', 'Gratitude practice'],
-      'luteal': ['Self-compassion meditation', 'Emotional regulation', 'Mindful journaling'],
+      'menstrual': [
+        'Body scan meditation',
+        'Gentle loving-kindness',
+        'Rest and restore',
+      ],
+      'follicular': [
+        'Walking meditation',
+        'Goal-setting mindfulness',
+        'Creative visualization',
+      ],
+      'ovulatory': [
+        'Active meditation',
+        'Social connection mindfulness',
+        'Gratitude practice',
+      ],
+      'luteal': [
+        'Self-compassion meditation',
+        'Emotional regulation',
+        'Mindful journaling',
+      ],
     };
     return practices[phase] ?? [];
   }
 
-  List<String> _getCortisolManagementStrategies(String phase, Map<String, dynamic> stressAnalysis) => [
+  List<String> _getCortisolManagementStrategies(
+    String phase,
+    Map<String, dynamic> stressAnalysis,
+  ) => [
     'Regular sleep schedule',
     'Moderate exercise',
     'Stress reduction techniques',
@@ -749,7 +979,10 @@ class LifestyleAICoach {
     'Social support and connection',
   ];
 
-  List<String> _getResilienceBuildingActivities(String phase, Map<String, dynamic> stressAnalysis) => [
+  List<String> _getResilienceBuildingActivities(
+    String phase,
+    Map<String, dynamic> stressAnalysis,
+  ) => [
     'Daily gratitude practice',
     'Building social connections',
     'Learning new skills',
@@ -773,121 +1006,208 @@ class LifestyleAICoach {
     'End day with reflection',
   ];
 
-  Map<String, dynamic> _analyzeFitnessData(Map<String, dynamic>? wearableData, List<CycleData> cycles) => {
+  Map<String, dynamic> _analyzeFitnessData(
+    Map<String, dynamic>? wearableData,
+    List<CycleData> cycles,
+  ) => {
     'fitness_level': 'moderate',
     'recovery_status': 'good',
     'energy_availability': 0.7,
     'injury_risk': 'low',
   };
 
-  Map<String, dynamic> _generateWorkoutSchedule(String phase, Map<String, dynamic> fitness, UserProfile profile, List<String>? goals) => {
-    'monday': _phaseBasedWorkouts[phase]?['recommended_workouts']?.first ?? 'Rest',
+  Map<String, dynamic> _generateWorkoutSchedule(
+    String phase,
+    Map<String, dynamic> fitness,
+    UserProfile profile,
+    List<String>? goals,
+  ) => {
+    'monday':
+        _phaseBasedWorkouts[phase]?['recommended_workouts']?.first ?? 'Rest',
     'tuesday': 'Active recovery or light activity',
-    'wednesday': _phaseBasedWorkouts[phase]?['recommended_workouts']?.first ?? 'Moderate activity',
+    'wednesday':
+        _phaseBasedWorkouts[phase]?['recommended_workouts']?.first ??
+        'Moderate activity',
     'thursday': 'Flexibility and mobility',
-    'friday': _phaseBasedWorkouts[phase]?['recommended_workouts']?.first ?? 'Activity',
+    'friday':
+        _phaseBasedWorkouts[phase]?['recommended_workouts']?.first ??
+        'Activity',
     'weekend': 'Outdoor activities or fun movement',
   };
 
-  Map<String, dynamic> _generateRecoveryPlan(String phase, Map<String, dynamic> fitness, Map<String, dynamic>? wearable) => {
+  Map<String, dynamic> _generateRecoveryPlan(
+    String phase,
+    Map<String, dynamic> fitness,
+    Map<String, dynamic>? wearable,
+  ) => {
     'sleep_priority': 'Ensure 7-9 hours of quality sleep',
     'active_recovery': 'Gentle yoga or walking on rest days',
     'nutrition': 'Post-workout protein and hydration',
     'stress_management': 'Include relaxation in routine',
   };
 
-  Map<String, dynamic> _generateFlexibilityPlan(String phase, List<CycleData> cycles) => {
+  Map<String, dynamic> _generateFlexibilityPlan(
+    String phase,
+    List<CycleData> cycles,
+  ) => {
     'frequency': 'Daily 10-15 minutes',
     'focus_areas': ['Hips', 'Shoulders', 'Spine'],
-    'best_time': phase == 'menstrual' ? 'Gentle morning stretches' : 'Post-workout stretching',
+    'best_time': phase == 'menstrual'
+        ? 'Gentle morning stretches'
+        : 'Post-workout stretching',
   };
 
   List<String> _getExerciseModifications(String phase, List<CycleData> cycles) {
     final modifications = {
-      'menstrual': ['Reduce intensity by 20-30%', 'Focus on gentle movement', 'Listen to your body'],
-      'follicular': ['Gradually increase intensity', 'Try new activities', 'Build strength'],
-      'ovulatory': ['Peak performance training', 'High intensity intervals', 'Challenge yourself'],
-      'luteal': ['Maintain moderate intensity', 'Focus on strength', 'Include recovery time'],
+      'menstrual': [
+        'Reduce intensity by 20-30%',
+        'Focus on gentle movement',
+        'Listen to your body',
+      ],
+      'follicular': [
+        'Gradually increase intensity',
+        'Try new activities',
+        'Build strength',
+      ],
+      'ovulatory': [
+        'Peak performance training',
+        'High intensity intervals',
+        'Challenge yourself',
+      ],
+      'luteal': [
+        'Maintain moderate intensity',
+        'Focus on strength',
+        'Include recovery time',
+      ],
     };
     return modifications[phase] ?? [];
   }
 
   List<String> _getExerciseMotivationalTips(String phase) {
     final tips = {
-      'menstrual': ['Movement is medicine', 'Gentle is powerful', 'Honor your body'],
-      'follicular': ['Build your strength', 'Energy is rising', 'Try something new'],
-      'ovulatory': ['Peak power time', 'Push your limits', 'Feel your strength'],
-      'luteal': ['Steady and strong', 'Consistency counts', 'Support your body'],
+      'menstrual': [
+        'Movement is medicine',
+        'Gentle is powerful',
+        'Honor your body',
+      ],
+      'follicular': [
+        'Build your strength',
+        'Energy is rising',
+        'Try something new',
+      ],
+      'ovulatory': [
+        'Peak power time',
+        'Push your limits',
+        'Feel your strength',
+      ],
+      'luteal': [
+        'Steady and strong',
+        'Consistency counts',
+        'Support your body',
+      ],
     };
     return tips[phase] ?? [];
   }
 
   // Additional wearable and analysis methods
-  Map<String, dynamic> _analyzeHeartRateVariability(dynamic hrvData, String phase) => {
+  Map<String, dynamic> _analyzeHeartRateVariability(
+    dynamic hrvData,
+    String phase,
+  ) => {
     'hrv_score': 45.0,
     'recovery_status': 'good',
     'stress_level': 'moderate',
     'recommendations': ['Maintain consistent sleep', 'Manage stress levels'],
   };
 
-  Map<String, dynamic> _analyzeSleepQualityFromWearable(dynamic sleepData, String phase) => {
+  Map<String, dynamic> _analyzeSleepQualityFromWearable(
+    dynamic sleepData,
+    String phase,
+  ) => {
     'efficiency': 0.85,
     'deep_sleep_percentage': 0.20,
     'rem_percentage': 0.25,
     'recommendations': ['Consistent bedtime', 'Cool room temperature'],
   };
 
-  Map<String, dynamic> _analyzeActivityData(dynamic activityData, String phase) => {
+  Map<String, dynamic> _analyzeActivityData(
+    dynamic activityData,
+    String phase,
+  ) => {
     'daily_steps': 8500,
     'active_minutes': 45,
     'calorie_burn': 2100,
     'activity_level': 'moderate',
   };
 
-  Map<String, dynamic> _analyzeStressRecoveryMetrics(Map<String, dynamic> wearableData, String phase) => {
-    'stress_score': 0.6,
-    'recovery_score': 0.7,
-    'readiness': 'good',
-  };
+  Map<String, dynamic> _analyzeStressRecoveryMetrics(
+    Map<String, dynamic> wearableData,
+    String phase,
+  ) => {'stress_score': 0.6, 'recovery_score': 0.7, 'readiness': 'good'};
 
-  List<String> _generateWearableActionableInsights(List<Map<String, dynamic>> analyses) => [
+  List<String> _generateWearableActionableInsights(
+    List<Map<String, dynamic>> analyses,
+  ) => [
     'Your sleep efficiency is good - maintain current bedtime routine',
     'HRV indicates moderate stress - consider relaxation techniques',
     'Activity level is appropriate for your cycle phase',
   ];
 
-  Map<String, dynamic> _analyzeTrends(Map<String, dynamic> wearableData, List<CycleData> cycles) => {
+  Map<String, dynamic> _analyzeTrends(
+    Map<String, dynamic> wearableData,
+    List<CycleData> cycles,
+  ) => {
     'sleep_trend': 'stable',
     'activity_trend': 'increasing',
     'stress_trend': 'decreasing',
   };
 
-  List<String> _generateWearableRecommendations(Map<String, dynamic> wearableData, String phase) => [
+  List<String> _generateWearableRecommendations(
+    Map<String, dynamic> wearableData,
+    String phase,
+  ) => [
     'Continue current sleep routine',
     'Increase activity slightly for current phase',
     'Monitor stress levels during busy periods',
   ];
 
-  Map<String, dynamic> _determineWeeklyFocus(List<CycleData> cycles, String phase, List<String>? goals) => {
+  Map<String, dynamic> _determineWeeklyFocus(
+    List<CycleData> cycles,
+    String phase,
+    List<String>? goals,
+  ) => {
     'primary_focus': _getPhaseSpecificPriority(phase),
     'secondary_focus': 'Consistent healthy habits',
     'challenge': 'Try one new $phase-friendly activity',
   };
 
-  List<String> _generatePersonalizedTips(UserProfile profile, String phase, List<CycleData> cycles) => [
-    'Your energy naturally ${phase == 'ovulatory' ? 'peaks' : phase == 'menstrual' ? 'ebbs' : 'flows'} during this phase',
+  List<String> _generatePersonalizedTips(
+    UserProfile profile,
+    String phase,
+    List<CycleData> cycles,
+  ) => [
+    'Your energy naturally ${phase == 'ovulatory'
+        ? 'peaks'
+        : phase == 'menstrual'
+        ? 'ebbs'
+        : 'flows'} during this phase',
     'Focus on ${_getPhaseSpecificPriority(phase)} this week',
     'Remember: every cycle is unique, listen to your body',
   ];
 
   String _generateMotivationalMessage(String phase, UserProfile profile) {
     final messages = {
-      'menstrual': '🌙 This is your time to rest, restore, and nurture yourself. Your body is doing incredible work.',
-      'follicular': '🌱 Fresh energy is building! This is perfect timing for new goals and creative projects.',
-      'ovulatory': '⭐ You\'re in your power phase! Channel this peak energy into your biggest challenges.',
-      'luteal': '🍂 Time to focus inward and practice self-care. Your body is preparing and deserves support.',
+      'menstrual':
+          '🌙 This is your time to rest, restore, and nurture yourself. Your body is doing incredible work.',
+      'follicular':
+          '🌱 Fresh energy is building! This is perfect timing for new goals and creative projects.',
+      'ovulatory':
+          '⭐ You\'re in your power phase! Channel this peak energy into your biggest challenges.',
+      'luteal':
+          '🍂 Time to focus inward and practice self-care. Your body is preparing and deserves support.',
     };
-    return messages[phase] ?? 'You\'re doing great! Keep listening to your body and honoring your needs.';
+    return messages[phase] ??
+        'You\'re doing great! Keep listening to your body and honoring your needs.';
   }
 
   // Adapt motivational copy through HyperPersonalizationService
@@ -898,7 +1218,9 @@ class LifestyleAICoach {
         // Fire and forget initialization; adaptation can proceed with defaults
         svc.initialize();
       }
-      final locale = (profile.preferences['locale'] is String && (profile.preferences['locale'] as String).isNotEmpty)
+      final locale =
+          (profile.preferences['locale'] is String &&
+              (profile.preferences['locale'] as String).isNotEmpty)
           ? (profile.preferences['locale'] as String)
           : 'en';
       return svc.adaptTone(
@@ -1160,9 +1482,13 @@ class WearableInsights {
       sleepQualityAnalysis: {'status': 'no_data'},
       activityAnalysis: {'status': 'no_data'},
       stressRecoveryAnalysis: {'status': 'no_data'},
-      actionableInsights: ['Connect a wearable device for personalized insights'],
+      actionableInsights: [
+        'Connect a wearable device for personalized insights',
+      ],
       trendAnalysis: {'status': 'no_data'},
-      personalizedRecommendations: ['Consider using a fitness tracker for better insights'],
+      personalizedRecommendations: [
+        'Consider using a fitness tracker for better insights',
+      ],
     );
   }
 }

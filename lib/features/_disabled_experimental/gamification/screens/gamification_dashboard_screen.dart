@@ -16,10 +16,12 @@ class GamificationDashboardScreen extends StatefulWidget {
   const GamificationDashboardScreen({super.key});
 
   @override
-  State<GamificationDashboardScreen> createState() => _GamificationDashboardScreenState();
+  State<GamificationDashboardScreen> createState() =>
+      _GamificationDashboardScreenState();
 }
 
-class _GamificationDashboardScreenState extends State<GamificationDashboardScreen>
+class _GamificationDashboardScreenState
+    extends State<GamificationDashboardScreen>
     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   late AnimationController _heroAnimationController;
   late AnimationController _contentAnimationController;
@@ -47,21 +49,20 @@ class _GamificationDashboardScreenState extends State<GamificationDashboardScree
       vsync: this,
     );
 
-    _heroAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _heroAnimationController,
-      curve: Curves.elasticOut,
-    ));
+    _heroAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _heroAnimationController,
+        curve: Curves.elasticOut,
+      ),
+    );
 
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0.0, 1.0),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _contentAnimationController,
-      curve: Curves.easeOutCubic,
-    ));
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0.0, 1.0), end: Offset.zero).animate(
+          CurvedAnimation(
+            parent: _contentAnimationController,
+            curve: Curves.easeOutCubic,
+          ),
+        );
 
     _heroAnimationController.forward();
     Future.delayed(const Duration(milliseconds: 300), () {
@@ -84,7 +85,7 @@ class _GamificationDashboardScreenState extends State<GamificationDashboardScree
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    
+
     return Consumer<GamificationController>(
       builder: (context, controller, child) {
         return Scaffold(
@@ -103,9 +104,12 @@ class _GamificationDashboardScreenState extends State<GamificationDashboardScree
     );
   }
 
-  SliverAppBar _buildHeroSection(BuildContext context, GamificationController controller) {
+  SliverAppBar _buildHeroSection(
+    BuildContext context,
+    GamificationController controller,
+  ) {
     final theme = Theme.of(context);
-    
+
     return SliverAppBar(
       expandedHeight: 280,
       floating: false,
@@ -146,7 +150,7 @@ class _GamificationDashboardScreenState extends State<GamificationDashboardScree
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Spacer(),
-                  
+
                   // Progress Overview
                   AnimatedBuilder(
                     animation: _heroAnimation,
@@ -163,9 +167,9 @@ class _GamificationDashboardScreenState extends State<GamificationDashboardScree
                       );
                     },
                   ),
-                  
+
                   const SizedBox(height: 16),
-                  
+
                   // Quick stats row
                   AnimatedBuilder(
                     animation: _heroAnimation,
@@ -184,27 +188,24 @@ class _GamificationDashboardScreenState extends State<GamificationDashboardScree
       ),
       actions: [
         IconButton(
-          icon: Icon(
-            Icons.emoji_events,
-            color: theme.colorScheme.onPrimary,
-          ),
+          icon: Icon(Icons.emoji_events, color: theme.colorScheme.onPrimary),
           onPressed: () => _showRewardCenter(context, controller),
         ),
-        
+
         IconButton(
-          icon: Icon(
-            Icons.leaderboard,
-            color: theme.colorScheme.onPrimary,
-          ),
+          icon: Icon(Icons.leaderboard, color: theme.colorScheme.onPrimary),
           onPressed: () => _showGlobalLeaderboard(context, controller),
         ),
       ],
     );
   }
 
-  Widget _buildQuickStats(BuildContext context, GamificationController controller) {
+  Widget _buildQuickStats(
+    BuildContext context,
+    GamificationController controller,
+  ) {
     final theme = Theme.of(context);
-    
+
     return Row(
       children: [
         Expanded(
@@ -216,9 +217,9 @@ class _GamificationDashboardScreenState extends State<GamificationDashboardScree
             color: Colors.orange,
           ),
         ),
-        
+
         const SizedBox(width: 12),
-        
+
         Expanded(
           child: _buildStatCard(
             context,
@@ -228,9 +229,9 @@ class _GamificationDashboardScreenState extends State<GamificationDashboardScree
             color: Colors.yellow,
           ),
         ),
-        
+
         const SizedBox(width: 12),
-        
+
         Expanded(
           child: _buildStatCard(
             context,
@@ -252,7 +253,7 @@ class _GamificationDashboardScreenState extends State<GamificationDashboardScree
     required Color color,
   }) {
     final theme = Theme.of(context);
-    
+
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -264,14 +265,10 @@ class _GamificationDashboardScreenState extends State<GamificationDashboardScree
       ),
       child: Column(
         children: [
-          Icon(
-            icon,
-            color: color,
-            size: 20,
-          ),
-          
+          Icon(icon, color: color, size: 20),
+
           const SizedBox(height: 4),
-          
+
           Text(
             title,
             style: theme.textTheme.titleMedium?.copyWith(
@@ -279,7 +276,7 @@ class _GamificationDashboardScreenState extends State<GamificationDashboardScree
               color: theme.colorScheme.onPrimary,
             ),
           ),
-          
+
           Text(
             subtitle,
             style: theme.textTheme.bodySmall?.copyWith(
@@ -291,7 +288,10 @@ class _GamificationDashboardScreenState extends State<GamificationDashboardScree
     );
   }
 
-  SliverList _buildContentSections(BuildContext context, GamificationController controller) {
+  SliverList _buildContentSections(
+    BuildContext context,
+    GamificationController controller,
+  ) {
     return SliverList(
       delegate: SliverChildListDelegate([
         SlideTransition(
@@ -309,9 +309,9 @@ class _GamificationDashboardScreenState extends State<GamificationDashboardScree
                   icon: Icons.local_fire_department,
                   color: Colors.orange,
                 ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 DailyStreakWidget(
                   currentStreak: controller.currentStreak,
                   longestStreak: controller.longestStreak,
@@ -319,9 +319,9 @@ class _GamificationDashboardScreenState extends State<GamificationDashboardScree
                   onCheckIn: controller.performDailyCheckIn,
                   canCheckInToday: controller.canCheckInToday,
                 ),
-                
+
                 const SizedBox(height: 32),
-                
+
                 // Achievement Badges Section
                 _buildSectionHeader(
                   context,
@@ -330,17 +330,17 @@ class _GamificationDashboardScreenState extends State<GamificationDashboardScree
                   icon: Icons.military_tech,
                   color: Colors.purple,
                 ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 AchievementBadgesWidget(
                   achievements: controller.achievements,
                   onClaimAchievement: controller.claimAchievement,
                   onShareAchievement: controller.shareAchievement,
                 ),
-                
+
                 const SizedBox(height: 32),
-                
+
                 // Wellness Challenges Section
                 _buildSectionHeader(
                   context,
@@ -349,18 +349,18 @@ class _GamificationDashboardScreenState extends State<GamificationDashboardScree
                   icon: Icons.fitness_center,
                   color: Colors.green,
                 ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 WellnessChallengesWidget(
                   challenges: controller.activeChallenges,
                   completedChallenges: controller.completedChallenges,
                   onJoinChallenge: controller.joinChallenge,
                   onCompleteChallenge: controller.completeChallenge,
                 ),
-                
+
                 const SizedBox(height: 32),
-                
+
                 // Community Leaderboard Section
                 _buildSectionHeader(
                   context,
@@ -369,29 +369,31 @@ class _GamificationDashboardScreenState extends State<GamificationDashboardScree
                   icon: Icons.leaderboard,
                   color: Colors.blue,
                 ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 LeaderboardWidget(
                   leaderboard: controller.friendsLeaderboard,
                   userRank: controller.leaderboardRank,
-                  onViewGlobalLeaderboard: () => _showGlobalLeaderboard(context, controller),
+                  onViewGlobalLeaderboard: () =>
+                      _showGlobalLeaderboard(context, controller),
                   onInviteFriends: () => _inviteFriends(context, controller),
                 ),
-                
+
                 const SizedBox(height: 32),
-                
+
                 // Educational Content Section
                 _buildSectionHeader(
                   context,
                   title: 'Learn & Grow',
-                  subtitle: 'Educational content to boost your health knowledge',
+                  subtitle:
+                      'Educational content to boost your health knowledge',
                   icon: Icons.school,
                   color: Colors.teal,
                 ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 EducationalContentWidget(
                   dailyTip: controller.dailyHealthTip,
                   articles: controller.educationalArticles,
@@ -399,12 +401,12 @@ class _GamificationDashboardScreenState extends State<GamificationDashboardScree
                   onCompleteQuiz: controller.completeQuiz,
                   onReadArticle: controller.markArticleAsRead,
                 ),
-                
+
                 const SizedBox(height: 32),
-                
+
                 // Reward Center Preview
                 _buildRewardCenterPreview(context, controller),
-                
+
                 const SizedBox(height: 20),
               ],
             ),
@@ -422,7 +424,7 @@ class _GamificationDashboardScreenState extends State<GamificationDashboardScree
     required Color color,
   }) {
     final theme = Theme.of(context);
-    
+
     return Row(
       children: [
         Container(
@@ -431,15 +433,11 @@ class _GamificationDashboardScreenState extends State<GamificationDashboardScree
             color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(
-            icon,
-            color: color,
-            size: 24,
-          ),
+          child: Icon(icon, color: color, size: 24),
         ),
-        
+
         const SizedBox(width: 12),
-        
+
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -450,7 +448,7 @@ class _GamificationDashboardScreenState extends State<GamificationDashboardScree
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              
+
               Text(
                 subtitle,
                 style: theme.textTheme.bodyMedium?.copyWith(
@@ -464,9 +462,12 @@ class _GamificationDashboardScreenState extends State<GamificationDashboardScree
     );
   }
 
-  Widget _buildRewardCenterPreview(BuildContext context, GamificationController controller) {
+  Widget _buildRewardCenterPreview(
+    BuildContext context,
+    GamificationController controller,
+  ) {
     final theme = Theme.of(context);
-    
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -492,9 +493,9 @@ class _GamificationDashboardScreenState extends State<GamificationDashboardScree
                 color: theme.colorScheme.tertiary,
                 size: 32,
               ),
-              
+
               const SizedBox(width: 12),
-              
+
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -505,17 +506,19 @@ class _GamificationDashboardScreenState extends State<GamificationDashboardScree
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    
+
                     Text(
                       'You have ${controller.totalPoints} points to spend!',
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.7,
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
-              
+
               AdaptiveButton(
                 text: 'View Rewards',
                 onPressed: () => _showRewardCenter(context, controller),
@@ -524,53 +527,58 @@ class _GamificationDashboardScreenState extends State<GamificationDashboardScree
               ),
             ],
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Featured rewards preview
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: controller.featuredRewards.take(3).map((reward) => Container(
-                width: 120,
-                margin: const EdgeInsets.only(right: 12),
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.surface,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  children: [
-                    Icon(
-                      reward.icon,
-                      color: theme.colorScheme.primary,
-                      size: 32,
-                    ),
-                    
-                    const SizedBox(height: 8),
-                    
-                    Text(
-                      reward.title,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        fontWeight: FontWeight.w600,
+              children: controller.featuredRewards
+                  .take(3)
+                  .map(
+                    (reward) => Container(
+                      width: 120,
+                      margin: const EdgeInsets.only(right: 12),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.surface,
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                    ),
-                    
-                    const SizedBox(height: 4),
-                    
-                    Text(
-                      '${reward.cost} pts',
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.primary,
-                        fontWeight: FontWeight.bold,
+                      child: Column(
+                        children: [
+                          Icon(
+                            reward.icon,
+                            color: theme.colorScheme.primary,
+                            size: 32,
+                          ),
+
+                          const SizedBox(height: 8),
+
+                          Text(
+                            reward.title,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                          ),
+
+                          const SizedBox(height: 4),
+
+                          Text(
+                            '${reward.cost} pts',
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.colorScheme.primary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              )).toList(),
+                  )
+                  .toList(),
             ),
           ),
         ],
@@ -578,7 +586,10 @@ class _GamificationDashboardScreenState extends State<GamificationDashboardScree
     );
   }
 
-  void _showRewardCenter(BuildContext context, GamificationController controller) {
+  void _showRewardCenter(
+    BuildContext context,
+    GamificationController controller,
+  ) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -603,7 +614,10 @@ class _GamificationDashboardScreenState extends State<GamificationDashboardScree
     );
   }
 
-  void _showGlobalLeaderboard(BuildContext context, GamificationController controller) {
+  void _showGlobalLeaderboard(
+    BuildContext context,
+    GamificationController controller,
+  ) {
     Navigator.pushNamed(
       context,
       '/gamification/global-leaderboard',
@@ -619,14 +633,18 @@ class _GamificationDashboardScreenState extends State<GamificationDashboardScree
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('Invite your friends to join ZyraFlow and compete together!'),
-            
+            const Text(
+              'Invite your friends to join ZyraFlow and compete together!',
+            ),
+
             const SizedBox(height: 16),
-            
+
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                color: Theme.of(
+                  context,
+                ).colorScheme.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(

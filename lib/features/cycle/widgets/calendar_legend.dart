@@ -26,11 +26,7 @@ class CalendarLegend extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(
-                Icons.info_outline,
-                color: AppTheme.primaryRose,
-                size: 18,
-              ),
+              Icon(Icons.info_outline, color: AppTheme.primaryRose, size: 18),
               const SizedBox(width: 8),
               Text(
                 'Cycle Phases',
@@ -42,7 +38,7 @@ class CalendarLegend extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          
+
           // Legend items in a grid
           IntrinsicHeight(
             child: Row(
@@ -90,7 +86,7 @@ class CalendarLegend extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          
+
           // Additional info with improved flow intensity indicators
           Row(
             children: [
@@ -99,13 +95,17 @@ class CalendarLegend extends StatelessWidget {
               _buildFlowIntensityIndicator('Heavy Flow', '🔴', 12),
             ],
           ),
-          
+
           const SizedBox(height: 8),
-          
+
           // Status indicators
           Row(
             children: [
-              _buildIndicator(context, AppTheme.accentMint.withValues(alpha: 0.8), 'Today'),
+              _buildIndicator(
+                context,
+                AppTheme.accentMint.withValues(alpha: 0.8),
+                'Today',
+              ),
               const Spacer(),
               _buildIndicator(
                 context,
@@ -137,15 +137,15 @@ class CalendarLegend extends StatelessWidget {
           height: 20,
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [color.withValues(alpha: 0.3), color.withValues(alpha: 0.6)],
+              colors: [
+                color.withValues(alpha: 0.3),
+                color.withValues(alpha: 0.6),
+              ],
             ),
             shape: BoxShape.circle,
           ),
           child: Center(
-            child: Text(
-              emoji,
-              style: const TextStyle(fontSize: 10),
-            ),
+            child: Text(emoji, style: const TextStyle(fontSize: 10)),
           ),
         ),
         const SizedBox(width: 6),
@@ -160,7 +160,9 @@ class CalendarLegend extends StatelessWidget {
           ),
         ),
       ],
-    ).animate().fadeIn(delay: Duration(milliseconds: 100 + label.hashCode % 300));
+    ).animate().fadeIn(
+      delay: Duration(milliseconds: 100 + label.hashCode % 300),
+    );
   }
 
   Widget _buildIndicator(
@@ -186,12 +188,7 @@ class CalendarLegend extends StatelessWidget {
                 : null,
           ),
           child: hasRobotIcon
-              ? const Center(
-                  child: Text(
-                    '🤖',
-                    style: TextStyle(fontSize: 8),
-                  ),
-                )
+              ? const Center(child: Text('🤖', style: TextStyle(fontSize: 8)))
               : null,
         ),
         const SizedBox(width: 6),
@@ -209,7 +206,7 @@ class CalendarLegend extends StatelessWidget {
       ],
     );
   }
-  
+
   Widget _buildFlowIntensityIndicator(String label, String emoji, double size) {
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -226,10 +223,7 @@ class CalendarLegend extends StatelessWidget {
             ),
           ),
           child: Center(
-            child: Text(
-              emoji,
-              style: TextStyle(fontSize: size),
-            ),
+            child: Text(emoji, style: TextStyle(fontSize: size)),
           ),
         ),
         const SizedBox(width: 6),

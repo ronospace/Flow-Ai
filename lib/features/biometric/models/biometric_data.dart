@@ -35,11 +35,12 @@ class BiometricData {
   // Computed properties
   bool get isRecent => DateTime.now().difference(timestamp).inHours < 24;
   bool get isHighConfidence => confidence != null && confidence! >= 0.85;
-  bool get isReliable => quality == DataQuality.excellent || quality == DataQuality.good;
-  
+  bool get isReliable =>
+      quality == DataQuality.excellent || quality == DataQuality.good;
+
   /// Get age of data in hours
   int get ageInHours => DateTime.now().difference(timestamp).inHours;
-  
+
   /// Get age of data in minutes
   int get ageInMinutes => DateTime.now().difference(timestamp).inMinutes;
 
@@ -70,7 +71,7 @@ class BiometricData {
   /// Get severity level for abnormal values
   BiometricSeverity get severity {
     if (isWithinNormalRange) return BiometricSeverity.normal;
-    
+
     switch (type) {
       case BiometricType.heartRate:
         if (value < 50 || value > 120) return BiometricSeverity.high;
@@ -123,26 +124,29 @@ class BiometricData {
     if (previousData == null || previousData.type != type) {
       return BiometricTrend.noChange;
     }
-    
+
     final difference = value - previousData.value;
     final percentChange = (difference / previousData.value) * 100;
-    
+
     if (percentChange.abs() < 2.0) return BiometricTrend.noChange;
-    
-    return percentChange > 0 ? BiometricTrend.increasing : BiometricTrend.decreasing;
+
+    return percentChange > 0
+        ? BiometricTrend.increasing
+        : BiometricTrend.decreasing;
   }
 
   /// Get recommended action based on value
   String? get recommendedAction {
     if (isWithinNormalRange) return null;
-    
+
     switch (type) {
       case BiometricType.heartRate:
         if (value > 120) return 'Consider rest and relaxation techniques';
         if (value < 50) return 'Consult healthcare provider if symptomatic';
         return null;
       case BiometricType.bloodOxygen:
-        if (value < 95) return 'Ensure good ventilation and consider medical consultation';
+        if (value < 95)
+          return 'Ensure good ventilation and consider medical consultation';
         return null;
       case BiometricType.bodyTemperature:
         if (value > 38.0) return 'Monitor for fever symptoms and stay hydrated';
@@ -156,7 +160,8 @@ class BiometricData {
     }
   }
 
-  factory BiometricData.fromJson(Map<String, dynamic> json) => _$BiometricDataFromJson(json);
+  factory BiometricData.fromJson(Map<String, dynamic> json) =>
+      _$BiometricDataFromJson(json);
   Map<String, dynamic> toJson() => _$BiometricDataToJson(this);
 
   BiometricData copyWith({
@@ -192,53 +197,118 @@ class BiometricData {
 enum BiometricType {
   // Cardiovascular
   heartRate('Heart Rate', 'bpm', '❤️', BiometricCategory.cardiovascular),
-  restingHeartRate('Resting Heart Rate', 'bpm', '💗', BiometricCategory.cardiovascular),
-  heartRateVariability('Heart Rate Variability', 'ms', '📈', BiometricCategory.cardiovascular),
-  bloodPressureSystolic('Blood Pressure (Systolic)', 'mmHg', '🩸', BiometricCategory.cardiovascular),
-  bloodPressureDiastolic('Blood Pressure (Diastolic)', 'mmHg', '🩸', BiometricCategory.cardiovascular),
+  restingHeartRate(
+    'Resting Heart Rate',
+    'bpm',
+    '💗',
+    BiometricCategory.cardiovascular,
+  ),
+  heartRateVariability(
+    'Heart Rate Variability',
+    'ms',
+    '📈',
+    BiometricCategory.cardiovascular,
+  ),
+  bloodPressureSystolic(
+    'Blood Pressure (Systolic)',
+    'mmHg',
+    '🩸',
+    BiometricCategory.cardiovascular,
+  ),
+  bloodPressureDiastolic(
+    'Blood Pressure (Diastolic)',
+    'mmHg',
+    '🩸',
+    BiometricCategory.cardiovascular,
+  ),
   bloodOxygen('Blood Oxygen', '%', '🫁', BiometricCategory.respiratory),
-  
+
   // Activity & Fitness
   steps('Steps', 'steps', '👣', BiometricCategory.activity),
   distance('Distance', 'm', '📏', BiometricCategory.activity),
   activeCalories('Active Calories', 'cal', '🔥', BiometricCategory.activity),
   totalCalories('Total Calories', 'cal', '⚡', BiometricCategory.activity),
   activeMinutes('Active Minutes', 'min', '⏱️', BiometricCategory.activity),
-  exerciseMinutes('Exercise Minutes', 'min', '🏃‍♀️', BiometricCategory.activity),
-  
+  exerciseMinutes(
+    'Exercise Minutes',
+    'min',
+    '🏃‍♀️',
+    BiometricCategory.activity,
+  ),
+
   // Body Composition
   weight('Weight', 'kg', '⚖️', BiometricCategory.bodyComposition),
   bodyFat('Body Fat', '%', '🧠', BiometricCategory.bodyComposition),
   muscleMass('Muscle Mass', 'kg', '💪', BiometricCategory.bodyComposition),
   boneDensity('Bone Density', 'g/cm²', '🦴', BiometricCategory.bodyComposition),
-  waterPercentage('Water Percentage', '%', '💧', BiometricCategory.bodyComposition),
-  
+  waterPercentage(
+    'Water Percentage',
+    '%',
+    '💧',
+    BiometricCategory.bodyComposition,
+  ),
+
   // Temperature & Environment
-  bodyTemperature('Body Temperature', '°C', '🌡️', BiometricCategory.temperature),
-  skinTemperature('Skin Temperature', '°C', '🔥', BiometricCategory.temperature),
-  basalBodyTemperature('Basal Body Temperature', '°C', '🌡️', BiometricCategory.reproductive),
-  
+  bodyTemperature(
+    'Body Temperature',
+    '°C',
+    '🌡️',
+    BiometricCategory.temperature,
+  ),
+  skinTemperature(
+    'Skin Temperature',
+    '°C',
+    '🔥',
+    BiometricCategory.temperature,
+  ),
+  basalBodyTemperature(
+    'Basal Body Temperature',
+    '°C',
+    '🌡️',
+    BiometricCategory.reproductive,
+  ),
+
   // Sleep & Recovery
   sleep('Sleep Duration', 'h', '😴', BiometricCategory.sleep),
   sleepQuality('Sleep Quality', 'score', '⭐', BiometricCategory.sleep),
   deepSleep('Deep Sleep', 'h', '🌙', BiometricCategory.sleep),
   remSleep('REM Sleep', 'h', '💭', BiometricCategory.sleep),
   sleepEfficiency('Sleep Efficiency', '%', '📊', BiometricCategory.sleep),
-  
+
   // Stress & Mental Health
   stressLevel('Stress Level', 'score', '😰', BiometricCategory.stress),
   mentalWellbeing('Mental Wellbeing', 'score', '🧠', BiometricCategory.stress),
-  mindfulnessMinutes('Mindfulness Minutes', 'min', '🧘‍♀️', BiometricCategory.stress),
-  
+  mindfulnessMinutes(
+    'Mindfulness Minutes',
+    'min',
+    '🧘‍♀️',
+    BiometricCategory.stress,
+  ),
+
   // Respiratory
-  respiratoryRate('Respiratory Rate', '/min', '🫁', BiometricCategory.respiratory),
+  respiratoryRate(
+    'Respiratory Rate',
+    '/min',
+    '🫁',
+    BiometricCategory.respiratory,
+  ),
   vo2Max('VO₂ Max', 'ml/kg/min', '🏃‍♂️', BiometricCategory.respiratory),
-  
+
   // Reproductive Health
-  menstrualFlow('Menstrual Flow', 'level', '🩸', BiometricCategory.reproductive),
-  ovulationTest('Ovulation Test', 'result', '🥚', BiometricCategory.reproductive),
+  menstrualFlow(
+    'Menstrual Flow',
+    'level',
+    '🩸',
+    BiometricCategory.reproductive,
+  ),
+  ovulationTest(
+    'Ovulation Test',
+    'result',
+    '🥚',
+    BiometricCategory.reproductive,
+  ),
   cervicalMucus('Cervical Mucus', 'type', '💧', BiometricCategory.reproductive),
-  
+
   // General Health
   activity('General Activity', 'score', '📊', BiometricCategory.activity),
   readiness('Readiness Score', 'score', '⚡', BiometricCategory.general),
@@ -413,8 +483,9 @@ class BiometricDataCollection {
   double? getAverageValue(BiometricType type) {
     final typeData = getDataByType(type);
     if (typeData.isEmpty) return null;
-    
-    return typeData.map((d) => d.value).reduce((a, b) => a + b) / typeData.length;
+
+    return typeData.map((d) => d.value).reduce((a, b) => a + b) /
+        typeData.length;
   }
 
   /// Get data quality summary
@@ -426,7 +497,7 @@ class BiometricDataCollection {
     return summary;
   }
 
-  factory BiometricDataCollection.fromJson(Map<String, dynamic> json) => 
+  factory BiometricDataCollection.fromJson(Map<String, dynamic> json) =>
       _$BiometricDataCollectionFromJson(json);
   Map<String, dynamic> toJson() => _$BiometricDataCollectionToJson(this);
 }
@@ -453,7 +524,7 @@ class BiometricDataSummary {
   /// Get summary for specific biometric type
   BiometricTypeSummary? getSummaryForType(BiometricType type) {
     if (!averageValues.containsKey(type)) return null;
-    
+
     return BiometricTypeSummary(
       type: type,
       average: averageValues[type]!,
@@ -463,7 +534,7 @@ class BiometricDataSummary {
     );
   }
 
-  factory BiometricDataSummary.fromJson(Map<String, dynamic> json) => 
+  factory BiometricDataSummary.fromJson(Map<String, dynamic> json) =>
       _$BiometricDataSummaryFromJson(json);
   Map<String, dynamic> toJson() => _$BiometricDataSummaryToJson(this);
 }

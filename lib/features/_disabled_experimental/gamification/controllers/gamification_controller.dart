@@ -13,9 +13,8 @@ import '../services/gamification_service.dart';
 class GamificationController extends ChangeNotifier {
   final GamificationService _gamificationService;
 
-  GamificationController({
-    required GamificationService gamificationService,
-  }) : _gamificationService = gamificationService;
+  GamificationController({required GamificationService gamificationService})
+    : _gamificationService = gamificationService;
 
   // Loading states
   bool _isLoading = false;
@@ -93,14 +92,19 @@ class GamificationController extends ChangeNotifier {
 
   List<Achievement> get achievements => List.unmodifiable(_achievements);
   int get unlockedAchievements => _unlockedAchievements;
-  List<Achievement> get recentlyUnlocked => List.unmodifiable(_recentlyUnlocked);
+  List<Achievement> get recentlyUnlocked =>
+      List.unmodifiable(_recentlyUnlocked);
 
   List<Challenge> get activeChallenges => List.unmodifiable(_activeChallenges);
-  List<Challenge> get completedChallenges => List.unmodifiable(_completedChallenges);
-  List<Challenge> get featuredChallenges => List.unmodifiable(_featuredChallenges);
+  List<Challenge> get completedChallenges =>
+      List.unmodifiable(_completedChallenges);
+  List<Challenge> get featuredChallenges =>
+      List.unmodifiable(_featuredChallenges);
 
-  List<LeaderboardEntry> get friendsLeaderboard => List.unmodifiable(_friendsLeaderboard);
-  List<LeaderboardEntry> get globalLeaderboard => List.unmodifiable(_globalLeaderboard);
+  List<LeaderboardEntry> get friendsLeaderboard =>
+      List.unmodifiable(_friendsLeaderboard);
+  List<LeaderboardEntry> get globalLeaderboard =>
+      List.unmodifiable(_globalLeaderboard);
   int get leaderboardRank => _leaderboardRank;
 
   List<Reward> get availableRewards => List.unmodifiable(_availableRewards);
@@ -108,7 +112,8 @@ class GamificationController extends ChangeNotifier {
   List<Reward> get purchasedRewards => List.unmodifiable(_purchasedRewards);
 
   EducationalTip? get dailyHealthTip => _dailyHealthTip;
-  List<EducationalArticle> get educationalArticles => List.unmodifiable(_educationalArticles);
+  List<EducationalArticle> get educationalArticles =>
+      List.unmodifiable(_educationalArticles);
   List<HealthQuiz> get healthQuizzes => List.unmodifiable(_healthQuizzes);
 
   /// Load all gamification data
@@ -175,13 +180,13 @@ class GamificationController extends ChangeNotifier {
 
   bool _canPerformCheckInToday() {
     if (_lastCheckInDate == null) return true;
-    
+
     final today = DateTime.now();
     final lastCheckIn = _lastCheckInDate!;
-    
+
     return today.year != lastCheckIn.year ||
-           today.month != lastCheckIn.month ||
-           today.day != lastCheckIn.day;
+        today.month != lastCheckIn.month ||
+        today.day != lastCheckIn.day;
   }
 
   Future<void> performDailyCheckIn() async {
@@ -189,21 +194,21 @@ class GamificationController extends ChangeNotifier {
 
     try {
       final result = await _gamificationService.performDailyCheckIn();
-      
+
       _currentStreak = result.newStreak;
       _lastCheckInDate = result.checkInDate;
       _canCheckInToday = false;
       _totalPoints += result.pointsEarned;
       _currentXP += result.xpEarned;
-      
+
       // Check for level up
       if (_currentXP >= _nextLevelXP) {
         await _handleLevelUp();
       }
-      
+
       // Check for new achievements
       await _checkForNewAchievements();
-      
+
       notifyListeners();
     } catch (e) {
       throw Exception('Failed to perform daily check-in: ${e.toString()}');
@@ -230,7 +235,7 @@ class GamificationController extends ChangeNotifier {
   Future<void> claimAchievement(String achievementId) async {
     try {
       final result = await _gamificationService.claimAchievement(achievementId);
-      
+
       final index = _achievements.indexWhere((a) => a.id == achievementId);
       if (index != -1) {
         _achievements[index] = _achievements[index].copyWith(
@@ -240,7 +245,7 @@ class GamificationController extends ChangeNotifier {
         _unlockedAchievements++;
         _totalPoints += result.pointsEarned;
       }
-      
+
       notifyListeners();
     } catch (e) {
       throw Exception('Failed to claim achievement: ${e.toString()}');
@@ -257,8 +262,9 @@ class GamificationController extends ChangeNotifier {
 
   Future<void> _checkForNewAchievements() async {
     try {
-      final newAchievements = await _gamificationService.checkForNewAchievements();
-      
+      final newAchievements = await _gamificationService
+          .checkForNewAchievements();
+
       for (final achievement in newAchievements) {
         final index = _achievements.indexWhere((a) => a.id == achievement.id);
         if (index != -1) {
@@ -267,7 +273,7 @@ class GamificationController extends ChangeNotifier {
           _unlockedAchievements++;
         }
       }
-      
+
       if (newAchievements.isNotEmpty) {
         _showAchievementNotifications(newAchievements);
       }
@@ -292,7 +298,7 @@ class GamificationController extends ChangeNotifier {
         _gamificationService.getCompletedChallenges(),
         _gamificationService.getFeaturedChallenges(),
       ]);
-      
+
       _activeChallenges = challengeData[0] as List<Challenge>;
       _completedChallenges = challengeData[1] as List<Challenge>;
       _featuredChallenges = challengeData[2] as List<Challenge>;
@@ -308,9 +314,11 @@ class GamificationController extends ChangeNotifier {
   Future<void> joinChallenge(String challengeId) async {
     try {
       await _gamificationService.joinChallenge(challengeId);
-      
+
       // Move challenge from featured to active
-      final challengeIndex = _featuredChallenges.indexWhere((c) => c.id == challengeId);
+      final challengeIndex = _featuredChallenges.indexWhere(
+        (c) => c.id == challengeId,
+      );
       if (challengeIndex != -1) {
         final challenge = _featuredChallenges.removeAt(challengeIndex);
         _activeChallenges.add(challenge.copyWith(isJoined: true));
@@ -324,24 +332,25 @@ class GamificationController extends ChangeNotifier {
   Future<void> completeChallenge(String challengeId) async {
     try {
       final result = await _gamificationService.completeChallenge(challengeId);
-      
+
       // Move challenge from active to completed
-      final challengeIndex = _activeChallenges.indexWhere((c) => c.id == challengeId);
+      final challengeIndex = _activeChallenges.indexWhere(
+        (c) => c.id == challengeId,
+      );
       if (challengeIndex != -1) {
         final challenge = _activeChallenges.removeAt(challengeIndex);
-        _completedChallenges.add(challenge.copyWith(
-          isCompleted: true,
-          completedAt: DateTime.now(),
-        ));
-        
+        _completedChallenges.add(
+          challenge.copyWith(isCompleted: true, completedAt: DateTime.now()),
+        );
+
         _totalPoints += result.pointsEarned;
         _currentXP += result.xpEarned;
-        
+
         // Check for level up
         if (_currentXP >= _nextLevelXP) {
           await _handleLevelUp();
         }
-        
+
         notifyListeners();
       }
     } catch (e) {
@@ -360,7 +369,7 @@ class GamificationController extends ChangeNotifier {
         _gamificationService.getGlobalLeaderboard(),
         _gamificationService.getUserRank(),
       ]);
-      
+
       _friendsLeaderboard = leaderboardData[0] as List<LeaderboardEntry>;
       _globalLeaderboard = leaderboardData[1] as List<LeaderboardEntry>;
       _leaderboardRank = leaderboardData[2] as int;
@@ -384,7 +393,7 @@ class GamificationController extends ChangeNotifier {
         _gamificationService.getFeaturedRewards(),
         _gamificationService.getPurchasedRewards(),
       ]);
-      
+
       _availableRewards = rewardData[0] as List<Reward>;
       _featuredRewards = rewardData[1] as List<Reward>;
       _purchasedRewards = rewardData[2] as List<Reward>;
@@ -400,19 +409,18 @@ class GamificationController extends ChangeNotifier {
   Future<void> purchaseReward(String rewardId) async {
     try {
       final reward = _availableRewards.firstWhere((r) => r.id == rewardId);
-      
+
       if (_totalPoints < reward.cost) {
         throw Exception('Insufficient points to purchase this reward');
       }
-      
+
       await _gamificationService.purchaseReward(rewardId);
-      
+
       _totalPoints -= reward.cost;
-      _purchasedRewards.add(reward.copyWith(
-        isPurchased: true,
-        purchasedAt: DateTime.now(),
-      ));
-      
+      _purchasedRewards.add(
+        reward.copyWith(isPurchased: true, purchasedAt: DateTime.now()),
+      );
+
       notifyListeners();
     } catch (e) {
       throw Exception('Failed to purchase reward: ${e.toString()}');
@@ -427,7 +435,7 @@ class GamificationController extends ChangeNotifier {
         _gamificationService.getEducationalArticles(),
         _gamificationService.getHealthQuizzes(),
       ]);
-      
+
       _dailyHealthTip = contentData[0] as EducationalTip?;
       _educationalArticles = contentData[1] as List<EducationalArticle>;
       _healthQuizzes = contentData[2] as List<HealthQuiz>;
@@ -440,7 +448,7 @@ class GamificationController extends ChangeNotifier {
   Future<void> completeQuiz(String quizId, Map<String, dynamic> answers) async {
     try {
       final result = await _gamificationService.completeQuiz(quizId, answers);
-      
+
       final quizIndex = _healthQuizzes.indexWhere((q) => q.id == quizId);
       if (quizIndex != -1) {
         _healthQuizzes[quizIndex] = _healthQuizzes[quizIndex].copyWith(
@@ -448,15 +456,15 @@ class GamificationController extends ChangeNotifier {
           score: result.score,
           completedAt: DateTime.now(),
         );
-        
+
         _totalPoints += result.pointsEarned;
         _currentXP += result.xpEarned;
-        
+
         // Check for level up
         if (_currentXP >= _nextLevelXP) {
           await _handleLevelUp();
         }
-        
+
         notifyListeners();
       }
     } catch (e) {
@@ -467,14 +475,14 @@ class GamificationController extends ChangeNotifier {
   Future<void> markArticleAsRead(String articleId) async {
     try {
       final result = await _gamificationService.markArticleAsRead(articleId);
-      
-      final articleIndex = _educationalArticles.indexWhere((a) => a.id == articleId);
+
+      final articleIndex = _educationalArticles.indexWhere(
+        (a) => a.id == articleId,
+      );
       if (articleIndex != -1) {
-        _educationalArticles[articleIndex] = _educationalArticles[articleIndex].copyWith(
-          isRead: true,
-          readAt: DateTime.now(),
-        );
-        
+        _educationalArticles[articleIndex] = _educationalArticles[articleIndex]
+            .copyWith(isRead: true, readAt: DateTime.now());
+
         _totalPoints += result.pointsEarned;
         notifyListeners();
       }
@@ -487,14 +495,14 @@ class GamificationController extends ChangeNotifier {
   Future<void> _handleLevelUp() async {
     try {
       final newLevel = await _gamificationService.handleLevelUp(_currentXP);
-      
+
       if (newLevel > _userLevel) {
         _userLevel = newLevel;
         _nextLevelXP = _calculateNextLevelXP(newLevel);
-        
+
         // Show level up celebration
         _showLevelUpCelebration(newLevel);
-        
+
         // Check for level-based achievements
         await _checkForNewAchievements();
       }

@@ -44,7 +44,7 @@ class DayDetailSheet extends StatelessWidget {
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
-              
+
               // Content
               Expanded(
                 child: SingleChildScrollView(
@@ -56,27 +56,27 @@ class DayDetailSheet extends StatelessWidget {
                       children: [
                         // Header
                         _buildHeader(),
-                        
+
                         const SizedBox(height: 24),
-                        
+
                         // Day Information
                         if (dayInfo.cycleDay != null) ...[
                           _buildCycleInfo(),
                           const SizedBox(height: 24),
                         ],
-                        
+
                         // Phase Information
                         if (dayInfo.phase != null) ...[
                           _buildPhaseInfo(),
                           const SizedBox(height: 24),
                         ],
-                        
+
                         // Prediction Info
                         if (dayInfo.isPredicted) ...[
                           _buildPredictionInfo(),
                           const SizedBox(height: 24),
                         ],
-                        
+
                         // Quick Actions
                         _buildQuickActions(context),
                       ],
@@ -101,7 +101,10 @@ class DayDetailSheet extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: dayInfo.color != null
                 ? LinearGradient(
-                    colors: [dayInfo.color!.withValues(alpha: 0.3), dayInfo.color!],
+                    colors: [
+                      dayInfo.color!.withValues(alpha: 0.3),
+                      dayInfo.color!,
+                    ],
                   )
                 : const LinearGradient(
                     colors: [AppTheme.lightGrey, AppTheme.mediumGrey],
@@ -122,9 +125,9 @@ class DayDetailSheet extends StatelessWidget {
             ),
           ),
         ),
-        
+
         const SizedBox(width: 16),
-        
+
         // Date info
         Expanded(
           child: Column(
@@ -140,15 +143,15 @@ class DayDetailSheet extends StatelessWidget {
               ),
               Text(
                 DateFormat('y').format(selectedDate),
-                style: TextStyle(
-                  color: AppTheme.mediumGrey,
-                  fontSize: 16,
-                ),
+                style: TextStyle(color: AppTheme.mediumGrey, fontSize: 16),
               ),
               if (dayInfo.isPredicted)
                 Container(
                   margin: const EdgeInsets.only(top: 4),
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
                     color: AppTheme.secondaryBlue.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
@@ -184,7 +187,9 @@ class DayDetailSheet extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: dayInfo.color?.withValues(alpha: 0.1) ?? AppTheme.lightGrey.withValues(alpha: 0.5),
+        color:
+            dayInfo.color?.withValues(alpha: 0.1) ??
+            AppTheme.lightGrey.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: dayInfo.color?.withValues(alpha: 0.3) ?? AppTheme.lightGrey,
@@ -211,7 +216,7 @@ class DayDetailSheet extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          
+
           Row(
             children: [
               Expanded(
@@ -238,7 +243,7 @@ class DayDetailSheet extends StatelessWidget {
 
   Widget _buildPhaseInfo() {
     final phaseInfo = _getPhaseInfo(dayInfo.phase!);
-    
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -256,10 +261,7 @@ class DayDetailSheet extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(
-                phaseInfo.emoji,
-                style: const TextStyle(fontSize: 24),
-              ),
+              Text(phaseInfo.emoji, style: const TextStyle(fontSize: 24)),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -285,7 +287,7 @@ class DayDetailSheet extends StatelessWidget {
               ),
             ],
           ),
-          
+
           if (phaseInfo.tips.isNotEmpty) ...[
             const SizedBox(height: 16),
             Text(
@@ -296,30 +298,32 @@ class DayDetailSheet extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            ...phaseInfo.tips.map((tip) => Padding(
-              padding: const EdgeInsets.only(bottom: 4),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '• ',
-                    style: TextStyle(
-                      color: phaseInfo.color,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      tip,
+            ...phaseInfo.tips.map(
+              (tip) => Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '• ',
                       style: TextStyle(
-                        color: AppTheme.mediumGrey,
-                        fontSize: 14,
+                        color: phaseInfo.color,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
-                ],
+                    Expanded(
+                      child: Text(
+                        tip,
+                        style: TextStyle(
+                          color: AppTheme.mediumGrey,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            )),
+            ),
           ],
         ],
       ),
@@ -337,7 +341,9 @@ class DayDetailSheet extends StatelessWidget {
           ],
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.secondaryBlue.withValues(alpha: 0.3)),
+        border: Border.all(
+          color: AppTheme.secondaryBlue.withValues(alpha: 0.3),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -408,7 +414,7 @@ class DayDetailSheet extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        
+
         Row(
           children: [
             Expanded(
@@ -464,11 +470,7 @@ class DayDetailSheet extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  icon,
-                  color: color,
-                  size: 20,
-                ),
+                Icon(icon, color: color, size: 20),
                 const SizedBox(height: 4),
                 Text(
                   label,
@@ -537,7 +539,8 @@ class DayDetailSheet extends StatelessWidget {
           name: 'Follicular Phase',
           emoji: '🌱',
           color: AppTheme.accentMint,
-          description: 'Your energy is building. Great time to start new projects.',
+          description:
+              'Your energy is building. Great time to start new projects.',
           tips: [
             'Try new workouts or activities',
             'Focus on goal setting',
@@ -550,7 +553,8 @@ class DayDetailSheet extends StatelessWidget {
           name: 'Ovulation Phase',
           emoji: '🥚',
           color: AppTheme.secondaryBlue,
-          description: 'Peak fertility window. You may feel more social and confident.',
+          description:
+              'Peak fertility window. You may feel more social and confident.',
           tips: [
             'Great time for important meetings',
             'Social activities and networking',
@@ -563,7 +567,8 @@ class DayDetailSheet extends StatelessWidget {
           name: 'Luteal Phase',
           emoji: '🌙',
           color: AppTheme.primaryPurple,
-          description: 'Winding down phase. Focus on completion and reflection.',
+          description:
+              'Winding down phase. Focus on completion and reflection.',
           tips: [
             'Finish up projects',
             'Practice self-reflection',
@@ -577,9 +582,7 @@ class DayDetailSheet extends StatelessWidget {
           emoji: '❓',
           color: AppTheme.mediumGrey,
           description: 'Phase information is not available.',
-          tips: [
-            'Continue tracking your cycle for better insights',
-          ],
+          tips: ['Continue tracking your cycle for better insights'],
         );
     }
   }

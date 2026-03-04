@@ -162,7 +162,7 @@ class LeaderboardEntry {
   String get activityStatus {
     final now = DateTime.now();
     final difference = now.difference(lastActiveAt);
-    
+
     if (difference.inMinutes < 5) return 'Online';
     if (difference.inMinutes < 60) return '${difference.inMinutes}m ago';
     if (difference.inHours < 24) return '${difference.inHours}h ago';
@@ -177,7 +177,7 @@ class LeaderboardEntry {
     final nextLevelXp = (level + 1) * (level + 1) * 1000;
     final progressXp = totalXp - currentLevelXp;
     final requiredXp = nextLevelXp - currentLevelXp;
-    
+
     return requiredXp > 0 ? (progressXp / requiredXp).clamp(0.0, 1.0) : 0.0;
   }
 
@@ -224,8 +224,12 @@ class LeaderboardEntry {
       level: json['level'] as int? ?? 1,
       tier: json['tier'] as String? ?? 'bronze',
       completionRate: json['completionRate'] as double? ?? 0.0,
-      recentAchievements: List<String>.from(json['recentAchievements'] as List? ?? []),
-      categoryScores: Map<String, int>.from(json['categoryScores'] as Map? ?? {}),
+      recentAchievements: List<String>.from(
+        json['recentAchievements'] as List? ?? [],
+      ),
+      categoryScores: Map<String, int>.from(
+        json['categoryScores'] as Map? ?? {},
+      ),
       isCurrentUser: json['isCurrentUser'] as bool? ?? false,
       isFriend: json['isFriend'] as bool? ?? false,
       lastActiveAt: DateTime.parse(json['lastActiveAt'] as String),

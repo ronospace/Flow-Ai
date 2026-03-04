@@ -8,30 +8,47 @@ class AdMobService {
   AdMobService._internal();
 
   // Test Ad Unit IDs (use these for development)
-  static const String _testBannerAdUnitId = 'ca-app-pub-3940256099942544/6300978111';
-  static const String _testInterstitialAdUnitId = 'ca-app-pub-3940256099942544/1033173712';
-  static const String _testRewardedAdUnitId = 'ca-app-pub-3940256099942544/5224354917';
+  static const String _testBannerAdUnitId =
+      'ca-app-pub-3940256099942544/6300978111';
+  static const String _testInterstitialAdUnitId =
+      'ca-app-pub-3940256099942544/1033173712';
+  static const String _testRewardedAdUnitId =
+      'ca-app-pub-3940256099942544/5224354917';
 
   // Android Production Ad Unit IDs (App ID: ca-app-pub-3053779336)
-  static const String _androidBannerAdUnitId = 'ca-app-pub-8707491489514576/9591267529';
-  static const String _androidInterstitialAdUnitId = 'ca-app-pub-8707491489514576/8812021403';
-  static const String _androidRewardedAdUnitId = 'ca-app-pub-8707491489514576/7894240148';
-  static const String _androidAppOpenAdUnitId = 'ca-app-pub-8707491489514576/7498939737';
-  static const String _androidNativeAdUnitId = 'ca-app-pub-8707491489514576/2837639998';
-  static const String _androidRewardedInterstitialAdUnitId = 'ca-app-pub-8707491489514576/8114534323';
-  
+  static const String _androidBannerAdUnitId =
+      'ca-app-pub-8707491489514576/9591267529';
+  static const String _androidInterstitialAdUnitId =
+      'ca-app-pub-8707491489514576/8812021403';
+  static const String _androidRewardedAdUnitId =
+      'ca-app-pub-8707491489514576/7894240148';
+  static const String _androidAppOpenAdUnitId =
+      'ca-app-pub-8707491489514576/7498939737';
+  static const String _androidNativeAdUnitId =
+      'ca-app-pub-8707491489514576/2837639998';
+  static const String _androidRewardedInterstitialAdUnitId =
+      'ca-app-pub-8707491489514576/8114534323';
+
   // iOS Production Ad Unit IDs (App ID: ca-app-pub-5064348089)
-  static const String _iosBannerAdUnitId = 'ca-app-pub-8707491489514576/4146566820';
-  static const String _iosInterstitialAdUnitId = 'ca-app-pub-8707491489514576/4558432692';
-  static const String _iosRewardedAdUnitId = 'ca-app-pub-8707491489514576/2833485150';
-  static const String _iosAppOpenAdUnitId = 'ca-app-pub-8707491489514576/1932269355';
-  static const String _iosNativeAdUnitId = 'ca-app-pub-8707491489514576/3245351026';
-  static const String _iosRewardedInterstitialAdUnitId = 'ca-app-pub-8707491489514576/2881586612';
+  static const String _iosBannerAdUnitId =
+      'ca-app-pub-8707491489514576/4146566820';
+  static const String _iosInterstitialAdUnitId =
+      'ca-app-pub-8707491489514576/4558432692';
+  static const String _iosRewardedAdUnitId =
+      'ca-app-pub-8707491489514576/2833485150';
+  static const String _iosAppOpenAdUnitId =
+      'ca-app-pub-8707491489514576/1932269355';
+  static const String _iosNativeAdUnitId =
+      'ca-app-pub-8707491489514576/3245351026';
+  static const String _iosRewardedInterstitialAdUnitId =
+      'ca-app-pub-8707491489514576/2881586612';
 
   // Ad unit getters
   // Debug: defaults to TEST ads (safe). Override with:
   // flutter run --dart-define=USE_TEST_ADS=false
-  static bool get _useTestAds => kDebugMode && const bool.fromEnvironment("USE_TEST_ADS", defaultValue: true);
+  static bool get _useTestAds =>
+      kDebugMode &&
+      const bool.fromEnvironment("USE_TEST_ADS", defaultValue: true);
 
   static String get bannerAdUnitId {
     return _useTestAds
@@ -42,14 +59,17 @@ class AdMobService {
   static String get interstitialAdUnitId {
     return _useTestAds
         ? _testInterstitialAdUnitId
-        : (Platform.isAndroid ? _androidInterstitialAdUnitId : _iosInterstitialAdUnitId);
+        : (Platform.isAndroid
+              ? _androidInterstitialAdUnitId
+              : _iosInterstitialAdUnitId);
   }
 
   static String get rewardedAdUnitId {
     return _useTestAds
         ? _testRewardedAdUnitId
-        : (Platform.isAndroid ? _androidRewardedAdUnitId : _iosRewardedAdUnitId);
-
+        : (Platform.isAndroid
+              ? _androidRewardedAdUnitId
+              : _iosRewardedAdUnitId);
   }
 
   // Interstitial ad variables
@@ -109,7 +129,7 @@ class AdMobService {
         onAdLoaded: (ad) {
           _interstitialAd = ad;
           _isInterstitialAdReady = true;
-          
+
           ad.fullScreenContentCallback = FullScreenContentCallback(
             onAdShowedFullScreenContent: (ad) {
               if (kDebugMode) {
@@ -242,18 +262,20 @@ class AdMobService {
   // Ad frequency management
   static DateTime? _lastInterstitialShown;
   static DateTime? _lastRewardedShown;
-  
+
   static const Duration _minInterstitialInterval = Duration(minutes: 3);
   static const Duration _minRewardedInterval = Duration(minutes: 1);
 
   bool canShowInterstitialAd() {
     if (_lastInterstitialShown == null) return true;
-    return DateTime.now().difference(_lastInterstitialShown!) >= _minInterstitialInterval;
+    return DateTime.now().difference(_lastInterstitialShown!) >=
+        _minInterstitialInterval;
   }
 
   bool canShowRewardedAd() {
     if (_lastRewardedShown == null) return true;
-    return DateTime.now().difference(_lastRewardedShown!) >= _minRewardedInterval;
+    return DateTime.now().difference(_lastRewardedShown!) >=
+        _minRewardedInterval;
   }
 
   void showInterstitialAdWithFrequency() {

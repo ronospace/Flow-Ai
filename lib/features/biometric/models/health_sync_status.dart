@@ -12,7 +12,11 @@ enum HealthSyncStatus {
   syncComplete('Sync Complete', 'All data synchronized successfully', '✅'),
   partialSync('Partial Sync', 'Some data synchronized with warnings', '⚠️'),
   error('Error', 'Sync failed due to an error', '❌'),
-  permissionDenied('Permission Denied', 'Health data access permission required', '🔒'),
+  permissionDenied(
+    'Permission Denied',
+    'Health data access permission required',
+    '🔒',
+  ),
   networkError('Network Error', 'Network connection required for sync', '📶'),
   serverError('Server Error', 'Health platform service unavailable', '🔴');
 
@@ -47,23 +51,23 @@ enum HealthSyncStatus {
   /// Check if status indicates an active connection
   bool get isConnected {
     return this == HealthSyncStatus.connected ||
-           this == HealthSyncStatus.syncing ||
-           this == HealthSyncStatus.syncComplete ||
-           this == HealthSyncStatus.partialSync;
+        this == HealthSyncStatus.syncing ||
+        this == HealthSyncStatus.syncComplete ||
+        this == HealthSyncStatus.partialSync;
   }
 
   /// Check if status indicates sync is in progress
   bool get isSyncing {
     return this == HealthSyncStatus.connecting ||
-           this == HealthSyncStatus.syncing;
+        this == HealthSyncStatus.syncing;
   }
 
   /// Check if status indicates an error state
   bool get isError {
     return this == HealthSyncStatus.error ||
-           this == HealthSyncStatus.permissionDenied ||
-           this == HealthSyncStatus.networkError ||
-           this == HealthSyncStatus.serverError;
+        this == HealthSyncStatus.permissionDenied ||
+        this == HealthSyncStatus.networkError ||
+        this == HealthSyncStatus.serverError;
   }
 
   /// Get recommended action for current status
@@ -156,11 +160,12 @@ class HealthSyncDetails {
 
   /// Get time since last successful sync
   Duration? get timeSinceLastSync {
-    return lastSuccessfulSync != null ? 
-        DateTime.now().difference(lastSuccessfulSync!) : null;
+    return lastSuccessfulSync != null
+        ? DateTime.now().difference(lastSuccessfulSync!)
+        : null;
   }
 
-  factory HealthSyncDetails.fromJson(Map<String, dynamic> json) => 
+  factory HealthSyncDetails.fromJson(Map<String, dynamic> json) =>
       _$HealthSyncDetailsFromJson(json);
   Map<String, dynamic> toJson() => _$HealthSyncDetailsToJson(this);
 }
@@ -199,7 +204,7 @@ class PlatformSyncStatus {
     if (!isConnected) return 'Not connected';
     if (hasError) return errorMessage ?? 'Sync error';
     if (lastSync == null) return 'Never synced';
-    
+
     final timeSince = DateTime.now().difference(lastSync!);
     if (timeSince.inMinutes < 5) return 'Just synced';
     if (timeSince.inHours < 1) return '${timeSince.inMinutes}m ago';
@@ -212,7 +217,7 @@ class PlatformSyncStatus {
     return syncedDataCounts.values.fold(0, (sum, count) => sum + count);
   }
 
-  factory PlatformSyncStatus.fromJson(Map<String, dynamic> json) => 
+  factory PlatformSyncStatus.fromJson(Map<String, dynamic> json) =>
       _$PlatformSyncStatusFromJson(json);
   Map<String, dynamic> toJson() => _$PlatformSyncStatusToJson(this);
 }
@@ -332,7 +337,8 @@ class SyncProgress {
     }
   }
 
-  factory SyncProgress.fromJson(Map<String, dynamic> json) => _$SyncProgressFromJson(json);
+  factory SyncProgress.fromJson(Map<String, dynamic> json) =>
+      _$SyncProgressFromJson(json);
   Map<String, dynamic> toJson() => _$SyncProgressToJson(this);
 }
 
@@ -382,7 +388,8 @@ class SyncError {
     }
   }
 
-  factory SyncError.fromJson(Map<String, dynamic> json) => _$SyncErrorFromJson(json);
+  factory SyncError.fromJson(Map<String, dynamic> json) =>
+      _$SyncErrorFromJson(json);
   Map<String, dynamic> toJson() => _$SyncErrorToJson(this);
 }
 
@@ -442,21 +449,21 @@ class SyncStatistics {
   /// Get most synced data type
   String? get mostSyncedDataType {
     if (dataTypesCounts.isEmpty) return null;
-    
+
     var maxCount = 0;
     String? maxType;
-    
+
     dataTypesCounts.forEach((type, count) {
       if (count > maxCount) {
         maxCount = count;
         maxType = type;
       }
     });
-    
+
     return maxType;
   }
 
-  factory SyncStatistics.fromJson(Map<String, dynamic> json) => 
+  factory SyncStatistics.fromJson(Map<String, dynamic> json) =>
       _$SyncStatisticsFromJson(json);
   Map<String, dynamic> toJson() => _$SyncStatisticsToJson(this);
 }

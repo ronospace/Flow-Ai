@@ -6,7 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/clinical_models.dart';
 import '../../tracking/services/feelings_database_service.dart';
-import '../../tracking/screens/enhanced_daily_feelings_tracker.dart' show TrendDirection, MoodCategory;
+import '../../tracking/screens/enhanced_daily_feelings_tracker.dart'
+    show TrendDirection, MoodCategory;
 
 /// Clinical intelligence service for healthcare provider features and medical analysis
 class ClinicalIntelligenceService {
@@ -20,7 +21,7 @@ class ClinicalIntelligenceService {
 
   bool _isInitialized = false;
   SharedPreferences? _prefs;
-  
+
   // Clinical analysis configuration
   static const int _analysisHistoryDays = 90;
   static const double _abnormalThreshold = 0.7;
@@ -51,8 +52,10 @@ class ClinicalIntelligenceService {
     if (!_isInitialized) await initialize();
 
     try {
-      final DateTime startDate = reportDate.subtract(Duration(days: analysisWindowDays));
-      
+      final DateTime startDate = reportDate.subtract(
+        Duration(days: analysisWindowDays),
+      );
+
       // Gather comprehensive health data
       final ClinicalDataSet dataSet = await _gatherClinicalData(
         userId: userId,
@@ -64,17 +67,22 @@ class ClinicalIntelligenceService {
       final ClinicalAnalysis analysis = await _performClinicalAnalysis(dataSet);
 
       // Generate risk assessments
-      final List<RiskAssessment> riskAssessments = await _generateRiskAssessments(dataSet, analysis);
+      final List<RiskAssessment> riskAssessments =
+          await _generateRiskAssessments(dataSet, analysis);
 
       // Create recommendations
-      final List<ClinicalRecommendation> recommendations = await _generateClinicalRecommendations(
-        dataSet, 
-        analysis, 
-        riskAssessments,
-      );
+      final List<ClinicalRecommendation> recommendations =
+          await _generateClinicalRecommendations(
+            dataSet,
+            analysis,
+            riskAssessments,
+          );
 
       // Generate medical insights
-      final List<MedicalInsight> insights = await _generateMedicalInsights(dataSet, analysis);
+      final List<MedicalInsight> insights = await _generateMedicalInsights(
+        dataSet,
+        analysis,
+      );
 
       return ClinicalReport(
         id: _generateReportId(),
@@ -104,19 +112,35 @@ class ClinicalIntelligenceService {
     required DateTime endDate,
   }) async {
     // Get feelings and mood data
-    final feelingsData = await _getFeelingsClinicalData(userId, startDate, endDate);
+    final feelingsData = await _getFeelingsClinicalData(
+      userId,
+      startDate,
+      endDate,
+    );
 
     // Get cycle data
     final cycleData = await _getCycleClinicalData(userId, startDate, endDate);
 
     // Get symptom data
-    final symptomData = await _getSymptomClinicalData(userId, startDate, endDate);
+    final symptomData = await _getSymptomClinicalData(
+      userId,
+      startDate,
+      endDate,
+    );
 
     // Get biometric data
-    final biometricData = await _getBiometricClinicalData(userId, startDate, endDate);
+    final biometricData = await _getBiometricClinicalData(
+      userId,
+      startDate,
+      endDate,
+    );
 
     // Get behavioral data
-    final behavioralData = await _getBehavioralClinicalData(userId, startDate, endDate);
+    final behavioralData = await _getBehavioralClinicalData(
+      userId,
+      startDate,
+      endDate,
+    );
 
     return ClinicalDataSet(
       userId: userId,
@@ -234,11 +258,7 @@ class ClinicalIntelligenceService {
         'fatigue': SymptomFrequency(frequency: 0.4, severity: 7.2),
         'anxiety': SymptomFrequency(frequency: 0.25, severity: 5.8),
       },
-      severityDistribution: {
-        'mild': 0.4,
-        'moderate': 0.45,
-        'severe': 0.15,
-      },
+      severityDistribution: {'mild': 0.4, 'moderate': 0.45, 'severe': 0.15},
       symptomPatterns: [
         'Headaches tend to occur during luteal phase',
         'Fatigue correlates with low mood scores',
@@ -329,52 +349,66 @@ class ClinicalIntelligenceService {
   }
 
   /// Perform comprehensive clinical analysis
-  Future<ClinicalAnalysis> _performClinicalAnalysis(ClinicalDataSet dataSet) async {
+  Future<ClinicalAnalysis> _performClinicalAnalysis(
+    ClinicalDataSet dataSet,
+  ) async {
     final List<ClinicalFinding> findings = [];
 
     // Analyze mood patterns
-    if (dataSet.feelingsData.wellbeingStatistics.daysBelow5 > 
+    if (dataSet.feelingsData.wellbeingStatistics.daysBelow5 >
         dataSet.feelingsData.dateRange * 0.3) {
-      findings.add(ClinicalFinding(
-        category: ClinicalCategory.mentalHealth,
-        severity: ClinicalSeverity.moderate,
-        description: 'Frequent low wellbeing scores indicating possible mood disorder',
-        evidenceScore: 0.8,
-        recommendation: 'Consider psychiatric evaluation and mood disorder screening',
-      ));
+      findings.add(
+        ClinicalFinding(
+          category: ClinicalCategory.mentalHealth,
+          severity: ClinicalSeverity.moderate,
+          description:
+              'Frequent low wellbeing scores indicating possible mood disorder',
+          evidenceScore: 0.8,
+          recommendation:
+              'Consider psychiatric evaluation and mood disorder screening',
+        ),
+      );
     }
 
     // Analyze cycle patterns
     if (dataSet.cycleData.cycleVariability > 7.0) {
-      findings.add(ClinicalFinding(
-        category: ClinicalCategory.reproductive,
-        severity: ClinicalSeverity.mild,
-        description: 'Irregular menstrual cycles detected',
-        evidenceScore: 0.65,
-        recommendation: 'Monitor cycle patterns and consider hormonal evaluation',
-      ));
+      findings.add(
+        ClinicalFinding(
+          category: ClinicalCategory.reproductive,
+          severity: ClinicalSeverity.mild,
+          description: 'Irregular menstrual cycles detected',
+          evidenceScore: 0.65,
+          recommendation:
+              'Monitor cycle patterns and consider hormonal evaluation',
+        ),
+      );
     }
 
     // Analyze vital signs
     if (dataSet.biometricData.heartRate.abnormalReadings > 5) {
-      findings.add(ClinicalFinding(
-        category: ClinicalCategory.cardiovascular,
-        severity: ClinicalSeverity.moderate,
-        description: 'Multiple abnormal heart rate readings',
-        evidenceScore: 0.75,
-        recommendation: 'Cardiology consultation and ECG monitoring recommended',
-      ));
+      findings.add(
+        ClinicalFinding(
+          category: ClinicalCategory.cardiovascular,
+          severity: ClinicalSeverity.moderate,
+          description: 'Multiple abnormal heart rate readings',
+          evidenceScore: 0.75,
+          recommendation:
+              'Cardiology consultation and ECG monitoring recommended',
+        ),
+      );
     }
 
     // Analyze sleep patterns
     if (dataSet.biometricData.sleepData.averageHours < 6.5) {
-      findings.add(ClinicalFinding(
-        category: ClinicalCategory.sleep,
-        severity: ClinicalSeverity.moderate,
-        description: 'Chronic sleep deprivation',
-        evidenceScore: 0.9,
-        recommendation: 'Sleep hygiene counseling and possible sleep study',
-      ));
+      findings.add(
+        ClinicalFinding(
+          category: ClinicalCategory.sleep,
+          severity: ClinicalSeverity.moderate,
+          description: 'Chronic sleep deprivation',
+          evidenceScore: 0.9,
+          recommendation: 'Sleep hygiene counseling and possible sleep study',
+        ),
+      );
     }
 
     // Calculate overall health score
@@ -399,36 +433,42 @@ class ClinicalIntelligenceService {
 
     // Depression risk assessment
     final depressionRisk = _assessDepressionRisk(dataSet);
-    assessments.add(RiskAssessment(
-      condition: 'Depression',
-      riskLevel: depressionRisk,
-      probability: _calculateRiskProbability(depressionRisk),
-      factors: _getDepressionRiskFactors(dataSet),
-      timeframe: 'Next 6 months',
-      recommendation: _getDepressionRecommendation(depressionRisk),
-    ));
+    assessments.add(
+      RiskAssessment(
+        condition: 'Depression',
+        riskLevel: depressionRisk,
+        probability: _calculateRiskProbability(depressionRisk),
+        factors: _getDepressionRiskFactors(dataSet),
+        timeframe: 'Next 6 months',
+        recommendation: _getDepressionRecommendation(depressionRisk),
+      ),
+    );
 
     // PCOS risk assessment
     final pcosRisk = _assessPCOSRisk(dataSet);
-    assessments.add(RiskAssessment(
-      condition: 'PCOS',
-      riskLevel: pcosRisk,
-      probability: _calculateRiskProbability(pcosRisk),
-      factors: _getPCOSRiskFactors(dataSet),
-      timeframe: 'Current',
-      recommendation: _getPCOSRecommendation(pcosRisk),
-    ));
+    assessments.add(
+      RiskAssessment(
+        condition: 'PCOS',
+        riskLevel: pcosRisk,
+        probability: _calculateRiskProbability(pcosRisk),
+        factors: _getPCOSRiskFactors(dataSet),
+        timeframe: 'Current',
+        recommendation: _getPCOSRecommendation(pcosRisk),
+      ),
+    );
 
     // Cardiovascular risk assessment
     final cvRisk = _assessCardiovascularRisk(dataSet);
-    assessments.add(RiskAssessment(
-      condition: 'Cardiovascular Disease',
-      riskLevel: cvRisk,
-      probability: _calculateRiskProbability(cvRisk),
-      factors: _getCardiovascularRiskFactors(dataSet),
-      timeframe: 'Next 10 years',
-      recommendation: _getCardiovascularRecommendation(cvRisk),
-    ));
+    assessments.add(
+      RiskAssessment(
+        condition: 'Cardiovascular Disease',
+        riskLevel: cvRisk,
+        probability: _calculateRiskProbability(cvRisk),
+        factors: _getCardiovascularRiskFactors(dataSet),
+        timeframe: 'Next 10 years',
+        recommendation: _getCardiovascularRecommendation(cvRisk),
+      ),
+    );
 
     return assessments;
   }
@@ -444,48 +484,58 @@ class ClinicalIntelligenceService {
     // High priority recommendations based on findings
     for (final finding in analysis.findings) {
       if (finding.severity == ClinicalSeverity.severe) {
-        recommendations.add(ClinicalRecommendation(
-          id: _generateRecommendationId(),
-          category: finding.category,
-          priority: RecommendationPriority.urgent,
-          title: 'Immediate Medical Attention Required',
-          description: finding.recommendation,
-          rationale: finding.description,
-          evidenceLevel: 'High',
-          timeframe: 'Within 24 hours',
-          followUpRequired: true,
-        ));
+        recommendations.add(
+          ClinicalRecommendation(
+            id: _generateRecommendationId(),
+            category: finding.category,
+            priority: RecommendationPriority.urgent,
+            title: 'Immediate Medical Attention Required',
+            description: finding.recommendation,
+            rationale: finding.description,
+            evidenceLevel: 'High',
+            timeframe: 'Within 24 hours',
+            followUpRequired: true,
+          ),
+        );
       }
     }
 
     // Lifestyle recommendations
     if (dataSet.biometricData.sleepData.averageHours < 7) {
-      recommendations.add(ClinicalRecommendation(
-        id: _generateRecommendationId(),
-        category: ClinicalCategory.lifestyle,
-        priority: RecommendationPriority.high,
-        title: 'Improve Sleep Hygiene',
-        description: 'Aim for 7-9 hours of sleep nightly with consistent bedtime routine',
-        rationale: 'Chronic sleep deprivation affects hormonal balance and mood regulation',
-        evidenceLevel: 'Strong',
-        timeframe: '2-4 weeks',
-        followUpRequired: true,
-      ));
+      recommendations.add(
+        ClinicalRecommendation(
+          id: _generateRecommendationId(),
+          category: ClinicalCategory.lifestyle,
+          priority: RecommendationPriority.high,
+          title: 'Improve Sleep Hygiene',
+          description:
+              'Aim for 7-9 hours of sleep nightly with consistent bedtime routine',
+          rationale:
+              'Chronic sleep deprivation affects hormonal balance and mood regulation',
+          evidenceLevel: 'Strong',
+          timeframe: '2-4 weeks',
+          followUpRequired: true,
+        ),
+      );
     }
 
     // Mental health recommendations
     if (dataSet.feelingsData.wellbeingStatistics.average < 5) {
-      recommendations.add(ClinicalRecommendation(
-        id: _generateRecommendationId(),
-        category: ClinicalCategory.mentalHealth,
-        priority: RecommendationPriority.high,
-        title: 'Mental Health Evaluation',
-        description: 'Schedule appointment with mental health professional for comprehensive assessment',
-        rationale: 'Persistent low wellbeing scores indicate potential mood disorder',
-        evidenceLevel: 'Moderate',
-        timeframe: '1-2 weeks',
-        followUpRequired: true,
-      ));
+      recommendations.add(
+        ClinicalRecommendation(
+          id: _generateRecommendationId(),
+          category: ClinicalCategory.mentalHealth,
+          priority: RecommendationPriority.high,
+          title: 'Mental Health Evaluation',
+          description:
+              'Schedule appointment with mental health professional for comprehensive assessment',
+          rationale:
+              'Persistent low wellbeing scores indicate potential mood disorder',
+          evidenceLevel: 'Moderate',
+          timeframe: '1-2 weeks',
+          followUpRequired: true,
+        ),
+      );
     }
 
     return recommendations;
@@ -499,40 +549,48 @@ class ClinicalIntelligenceService {
     final List<MedicalInsight> insights = [];
 
     // Cycle-mood correlation insight
-    if (dataSet.cycleData.totalCycles > 0 && 
+    if (dataSet.cycleData.totalCycles > 0 &&
         dataSet.feelingsData.moodStatistics.isNotEmpty) {
-      insights.add(MedicalInsight(
-        id: _generateInsightId(),
-        category: InsightCategory.correlation,
-        title: 'Menstrual Cycle and Mood Patterns',
-        description: 'Analysis shows correlation between luteal phase and mood symptoms',
-        significance: InsightSignificance.high,
-        confidence: 0.82,
-        clinicalRelevance: 'May indicate hormonal influence on mood regulation',
-        supportingData: [
-          'Mood scores decrease 3-5 days before menstruation',
-          'Anxiety levels peak during late luteal phase',
-          'Wellbeing improves during follicular phase',
-        ],
-      ));
+      insights.add(
+        MedicalInsight(
+          id: _generateInsightId(),
+          category: InsightCategory.correlation,
+          title: 'Menstrual Cycle and Mood Patterns',
+          description:
+              'Analysis shows correlation between luteal phase and mood symptoms',
+          significance: InsightSignificance.high,
+          confidence: 0.82,
+          clinicalRelevance:
+              'May indicate hormonal influence on mood regulation',
+          supportingData: [
+            'Mood scores decrease 3-5 days before menstruation',
+            'Anxiety levels peak during late luteal phase',
+            'Wellbeing improves during follicular phase',
+          ],
+        ),
+      );
     }
 
     // Sleep-performance insight
     if (dataSet.biometricData.sleepData.averageHours < 7) {
-      insights.add(MedicalInsight(
-        id: _generateInsightId(),
-        category: InsightCategory.behavioral,
-        title: 'Sleep Deprivation Impact',
-        description: 'Insufficient sleep correlates with decreased wellbeing and increased symptoms',
-        significance: InsightSignificance.high,
-        confidence: 0.91,
-        clinicalRelevance: 'Sleep optimization could improve overall health outcomes',
-        supportingData: [
-          'Wellbeing scores 15% lower on days following <6 hours sleep',
-          'Symptom severity increases with sleep debt',
-          'Heart rate variability decreases with poor sleep',
-        ],
-      ));
+      insights.add(
+        MedicalInsight(
+          id: _generateInsightId(),
+          category: InsightCategory.behavioral,
+          title: 'Sleep Deprivation Impact',
+          description:
+              'Insufficient sleep correlates with decreased wellbeing and increased symptoms',
+          significance: InsightSignificance.high,
+          confidence: 0.91,
+          clinicalRelevance:
+              'Sleep optimization could improve overall health outcomes',
+          supportingData: [
+            'Wellbeing scores 15% lower on days following <6 hours sleep',
+            'Symptom severity increases with sleep debt',
+            'Heart rate variability decreases with poor sleep',
+          ],
+        ),
+      );
     }
 
     return insights;
@@ -541,23 +599,25 @@ class ClinicalIntelligenceService {
   /// Calculate various statistics and helper methods
   double _calculateStandardDeviation(List<double> values) {
     if (values.isEmpty) return 0.0;
-    
+
     final mean = values.reduce((a, b) => a + b) / values.length;
-    final variance = values.map((v) => math.pow(v - mean, 2)).reduce((a, b) => a + b) / values.length;
+    final variance =
+        values.map((v) => math.pow(v - mean, 2)).reduce((a, b) => a + b) /
+        values.length;
     return math.sqrt(variance);
   }
 
   TrendDirection _calculateTrendDirection(List<double> values) {
     if (values.length < 3) return TrendDirection.stable;
-    
+
     final firstHalf = values.take(values.length ~/ 2).toList();
     final secondHalf = values.skip(values.length ~/ 2).toList();
-    
+
     final firstAvg = firstHalf.reduce((a, b) => a + b) / firstHalf.length;
     final secondAvg = secondHalf.reduce((a, b) => a + b) / secondHalf.length;
-    
+
     final difference = secondAvg - firstAvg;
-    
+
     if (difference > 0.5) return TrendDirection.up;
     if (difference < -0.5) return TrendDirection.down;
     return TrendDirection.stable;
@@ -565,12 +625,12 @@ class ClinicalIntelligenceService {
 
   double _calculateVolatility(List<double> values) {
     if (values.length < 2) return 0.0;
-    
+
     final changes = <double>[];
     for (int i = 1; i < values.length; i++) {
-      changes.add((values[i] - values[i-1]).abs());
+      changes.add((values[i] - values[i - 1]).abs());
     }
-    
+
     return changes.reduce((a, b) => a + b) / changes.length;
   }
 
@@ -588,13 +648,17 @@ class ClinicalIntelligenceService {
       biometrics.heartRate.average > 0 ? 1.0 : 0.0,
       behavioral.engagementScore,
     ];
-    
-    return completenessScores.reduce((a, b) => a + b) / completenessScores.length;
+
+    return completenessScores.reduce((a, b) => a + b) /
+        completenessScores.length;
   }
 
-  double _calculateHealthScore(ClinicalDataSet dataSet, List<ClinicalFinding> findings) {
+  double _calculateHealthScore(
+    ClinicalDataSet dataSet,
+    List<ClinicalFinding> findings,
+  ) {
     double score = 100.0;
-    
+
     for (final finding in findings) {
       switch (finding.severity) {
         case ClinicalSeverity.mild:
@@ -608,22 +672,24 @@ class ClinicalIntelligenceService {
           break;
       }
     }
-    
+
     // Adjust for data completeness
     score *= dataSet.dataCompleteness;
-    
+
     return math.max(0.0, math.min(100.0, score));
   }
 
   List<ClinicalFlag> _generateClinicalFlags(List<ClinicalFinding> findings) {
     return findings
         .where((f) => f.severity == ClinicalSeverity.severe)
-        .map((f) => ClinicalFlag(
-              type: ClinicalFlagType.critical,
-              message: f.description,
-              category: f.category,
-              urgency: ClinicalUrgency.immediate,
-            ))
+        .map(
+          (f) => ClinicalFlag(
+            type: ClinicalFlagType.critical,
+            message: f.description,
+            category: f.category,
+            urgency: ClinicalUrgency.immediate,
+          ),
+        )
         .toList();
   }
 
@@ -641,7 +707,9 @@ class ClinicalIntelligenceService {
     );
   }
 
-  CorrelationAnalysisResult _performCorrelationAnalysis(ClinicalDataSet dataSet) {
+  CorrelationAnalysisResult _performCorrelationAnalysis(
+    ClinicalDataSet dataSet,
+  ) {
     return CorrelationAnalysisResult(
       significantCorrelations: [
         CorrelationPair(
@@ -657,7 +725,8 @@ class ClinicalIntelligenceService {
           significance: 0.023,
         ),
       ],
-      networkAnalysis: 'Sleep quality is the strongest predictor of overall wellbeing',
+      networkAnalysis:
+          'Sleep quality is the strongest predictor of overall wellbeing',
     );
   }
 
@@ -670,7 +739,7 @@ class ClinicalIntelligenceService {
     final avgWellbeing = dataSet.feelingsData.wellbeingStatistics.average;
     final lowDays = dataSet.feelingsData.wellbeingStatistics.daysBelow5;
     final totalDays = dataSet.feelingsData.dateRange;
-    
+
     if (avgWellbeing < 4 || lowDays / totalDays > 0.5) {
       return RiskLevel.high;
     } else if (avgWellbeing < 6 || lowDays / totalDays > 0.3) {
@@ -682,7 +751,7 @@ class ClinicalIntelligenceService {
   RiskLevel _assessPCOSRisk(ClinicalDataSet dataSet) {
     final irregularCycles = dataSet.cycleData.irregularCycles;
     final cycleVariability = dataSet.cycleData.cycleVariability;
-    
+
     if (irregularCycles > 2 || cycleVariability > 10) {
       return RiskLevel.moderate;
     }
@@ -691,8 +760,9 @@ class ClinicalIntelligenceService {
 
   RiskLevel _assessCardiovascularRisk(ClinicalDataSet dataSet) {
     final abnormalHR = dataSet.biometricData.heartRate.abnormalReadings;
-    final hypertensive = dataSet.biometricData.bloodPressure.hypertensiveReadings;
-    
+    final hypertensive =
+        dataSet.biometricData.bloodPressure.hypertensiveReadings;
+
     if (abnormalHR > 10 || hypertensive > 5) {
       return RiskLevel.moderate;
     }
@@ -782,18 +852,19 @@ class ClinicalIntelligenceService {
   }
 
   /// Export clinical report
-  Future<String> exportClinicalReport(ClinicalReport report, {
+  Future<String> exportClinicalReport(
+    ClinicalReport report, {
     ClinicalReportFormat format = ClinicalReportFormat.pdf,
   }) async {
     try {
       // In a real implementation, this would generate actual report files
       final reportJson = report.toJson();
       final reportString = json.encode(reportJson);
-      
+
       // Save to device storage (mock implementation)
       final fileName = 'clinical_report_${report.id}.${format.name}';
       await _prefs?.setString('report_${report.id}', reportString);
-      
+
       debugPrint('📄 Clinical report exported: $fileName');
       return fileName;
     } catch (e) {

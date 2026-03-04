@@ -7,15 +7,15 @@ import '../../../core/services/performance_optimizer.dart';
 
 class CycleProvider extends ChangeNotifier {
   RealCycleService? _realCycleService;
-  
+
   RealCycleData? _cycleData;
   CycleInsights? _insights;
   bool _isLoading = false;
-  
+
   CycleProvider() {
     _initializeService();
   }
-  
+
   Future<void> _initializeService() async {
     try {
       _realCycleService = RealCycleService(DatabaseService());
@@ -44,36 +44,33 @@ class CycleProvider extends ChangeNotifier {
     try {
       // Use performance optimizer for caching
       if (_realCycleService != null) {
-        // Use performance optimizer for caching
-        final cycleData = await PerformanceOptimizer.instance.getOrCompute<RealCycleData>(
-          key: 'cycle_data',
-          compute: () => _realCycleService!.getRealCycleData(),
-          cacheDuration: const Duration(minutes: 10),
-        );
-        
-        final insights = await PerformanceOptimizer.instance.getOrCompute<CycleInsights>(
-          key: 'cycle_insights',
-          compute: () => _realCycleService!.getCycleInsights(),
-          cacheDuration: const Duration(minutes: 10),
-        );
-        
+        final cycleData = await PerformanceOptimizer.instance
+            .getOrCompute<RealCycleData>(
+              key: 'cycle_data',
+              compute: () => _realCycleService!.getRealCycleData(),
+              cacheDuration: const Duration(minutes: 10),
+            );
+
+        final insights = await PerformanceOptimizer.instance
+            .getOrCompute<CycleInsights>(
+              key: 'cycle_insights',
+              compute: () => _realCycleService!.getCycleInsights(),
+              cacheDuration: const Duration(minutes: 10),
+            );
+
         _cycleData = cycleData;
         _insights = insights;
       } else {
-        // Set demo data when service is not available
         _cycleData = null;
         _insights = null;
       }
-      
-      _cycleData = cycleData;
-      _insights = insights;
     } catch (e) {
       debugPrint('Error loading cycle data: $e');
       // Set default empty data on error
       _cycleData = null;
       _insights = null;
     }
-    
+
     _isLoading = false;
     notifyListeners();
   }
@@ -106,7 +103,7 @@ class CycleProvider extends ChangeNotifier {
       debugPrint('CycleService not available');
       return;
     }
-    
+
     try {
       await _realCycleService!.startNewCycle(
         startDate: startDate,
@@ -120,13 +117,13 @@ class CycleProvider extends ChangeNotifier {
       debugPrint('Error starting new cycle: $e');
     }
   }
-  
+
   Future<void> endCurrentCycle(DateTime endDate) async {
     if (_realCycleService == null) {
       debugPrint('CycleService not available');
       return;
     }
-    
+
     try {
       await _realCycleService!.endCurrentCycle(endDate);
       // Reload data after ending cycle
@@ -135,7 +132,7 @@ class CycleProvider extends ChangeNotifier {
       debugPrint('Error ending current cycle: $e');
     }
   }
-  
+
   /// Clear all user cycle data (used during sign out)
   void clearUserData() {
     _cycleData = null;

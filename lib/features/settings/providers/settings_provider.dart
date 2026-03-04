@@ -7,14 +7,14 @@ import '../../../core/services/app_state_service.dart';
 class SettingsProvider extends ChangeNotifier {
   static const String _preferencesKey = 'user_preferences';
   static const String _userMetadataKey = 'user_metadata';
-  
+
   UserPreferences _preferences = UserPreferences(
     userId: 'default_user',
     lastUpdated: DateTime.now(),
   );
 
   UserPreferences get preferences => _preferences;
-  
+
   bool get isDarkMode {
     switch (_preferences.themeMode) {
       case AppThemeMode.light:
@@ -22,7 +22,8 @@ class SettingsProvider extends ChangeNotifier {
       case AppThemeMode.dark:
         return true;
       case AppThemeMode.system:
-        return WidgetsBinding.instance.platformDispatcher.platformBrightness == Brightness.dark;
+        return WidgetsBinding.instance.platformDispatcher.platformBrightness ==
+            Brightness.dark;
     }
   }
 
@@ -44,7 +45,7 @@ class SettingsProvider extends ChangeNotifier {
     await _loadPreferences();
     await _syncUserDataFromAuth();
   }
-  
+
   // Sync user data from AuthService with comprehensive data management and immediate persistence
   Future<void> _syncUserDataFromAuth() async {
     try {
@@ -53,24 +54,24 @@ class SettingsProvider extends ChangeNotifier {
         await appState.initialize();
       }
       final userData = await appState.auth.getUserData();
-      
+
       debugPrint('🔄 Syncing user data: $userData');
-      
+
       if (userData != null) {
         String? displayName = userData['displayName'];
         String? username = userData['username'];
         String? uid = userData['uid'];
         String? email = userData['email'];
         String? photoURL = userData['photoURL'];
-        
+
         // Smart name resolution with multiple fallbacks
         String? finalDisplayName = displayName;
-        
+
         // Try displayName first
         if (finalDisplayName == null || finalDisplayName.isEmpty) {
           finalDisplayName = username;
         }
-        
+
         // If still empty, extract from email
         if (finalDisplayName == null || finalDisplayName.isEmpty) {
           if (email != null && email.isNotEmpty) {
@@ -80,42 +81,43 @@ class SettingsProvider extends ChangeNotifier {
               finalDisplayName = emailParts.first;
               // Capitalize first letter
               if (finalDisplayName.isNotEmpty) {
-                finalDisplayName = finalDisplayName[0].toUpperCase() + 
+                finalDisplayName =
+                    finalDisplayName[0].toUpperCase() +
                     finalDisplayName.substring(1).toLowerCase();
               }
             }
           }
         }
-        
+
         // Final fallback
         if (finalDisplayName == null || finalDisplayName.isEmpty) {
           finalDisplayName = 'User';
         }
-        
+
         // Always update if we have valid data - be more aggressive about syncing
         bool hasChanges = false;
-        
+
         // Update display name
         if (finalDisplayName.isNotEmpty) {
           _preferences = _preferences.copyWith(displayName: finalDisplayName);
           hasChanges = true;
           debugPrint('✅ Updated display name: $finalDisplayName');
         }
-        
+
         // Update user ID
         if (uid != null && uid.isNotEmpty) {
           _preferences = _preferences.copyWith(userId: uid);
           hasChanges = true;
           debugPrint('✅ Updated user ID: $uid');
         }
-        
+
         // Always mark as updated for proper sync
         if (hasChanges || _preferences.displayName != finalDisplayName) {
           _preferences = _preferences.copyWith(
             lastUpdated: DateTime.now(),
             displayName: finalDisplayName,
           );
-          
+
           // Store comprehensive user metadata for future sessions
           await storeUserMetadata({
             'email': email,
@@ -127,9 +129,11 @@ class SettingsProvider extends ChangeNotifier {
             'displayName': finalDisplayName,
             'uid': uid,
           });
-          
-          debugPrint('📝 User metadata stored: (email, photoURL, provider, profileComplete, lastSync)');
-          
+
+          debugPrint(
+            '📝 User metadata stored: (email, photoURL, provider, profileComplete, lastSync)',
+          );
+
           // Immediately save and notify
           await _savePreferences();
           notifyListeners();
@@ -144,7 +148,7 @@ class SettingsProvider extends ChangeNotifier {
       debugPrint('❌ Error syncing user data from auth: $e');
     }
   }
-  
+
   /// Force user data synchronization - called after authentication
   Future<void> forceUserDataSync() async {
     debugPrint('🔄 Forcing user data sync...');
@@ -156,7 +160,7 @@ class SettingsProvider extends ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       final preferencesJson = prefs.getString(_preferencesKey);
-      
+
       if (preferencesJson != null) {
         final json = jsonDecode(preferencesJson) as Map<String, dynamic>;
         _preferences = UserPreferences.fromJson(json);
@@ -357,7 +361,7 @@ class SettingsProvider extends ChangeNotifier {
       debugPrint('Error importing settings: $e');
     }
   }
-  
+
   // Store additional user metadata
   Future<void> storeUserMetadata(Map<String, dynamic> metadata) async {
     try {
@@ -368,7 +372,7 @@ class SettingsProvider extends ChangeNotifier {
       debugPrint('Error storing user metadata: $e');
     }
   }
-  
+
   // Retrieve user metadata
   Future<Map<String, dynamic>?> getUserMetadata() async {
     try {
@@ -382,5 +386,4 @@ class SettingsProvider extends ChangeNotifier {
     }
     return null;
   }
-  
 }

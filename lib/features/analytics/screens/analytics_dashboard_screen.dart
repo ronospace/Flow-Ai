@@ -13,13 +13,14 @@ class AnalyticsDashboardScreen extends StatefulWidget {
   const AnalyticsDashboardScreen({super.key});
 
   @override
-  State<AnalyticsDashboardScreen> createState() => _AnalyticsDashboardScreenState();
+  State<AnalyticsDashboardScreen> createState() =>
+      _AnalyticsDashboardScreenState();
 }
 
 class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  
+
   @override
   void initState() {
     super.initState();
@@ -39,7 +40,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localizations = AppLocalizations.of(context);
-    
+
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       body: Container(
@@ -59,7 +60,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
                     if (provider.isLoading) {
                       return _buildLoadingState(theme);
                     }
-                    
+
                     return TabBarView(
                       controller: _tabController,
                       children: [
@@ -86,10 +87,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
         children: [
           IconButton(
             onPressed: () => Navigator.of(context).pop(),
-            icon: Icon(
-              Icons.arrow_back,
-              color: theme.colorScheme.onSurface,
-            ),
+            icon: Icon(Icons.arrow_back, color: theme.colorScheme.onSurface),
           ),
           const SizedBox(width: 8),
           Expanded(
@@ -114,10 +112,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
           ),
           IconButton(
             onPressed: () => _showTimeRangeSelector(context),
-            icon: Icon(
-              Icons.date_range,
-              color: theme.colorScheme.primary,
-            ),
+            icon: Icon(Icons.date_range, color: theme.colorScheme.primary),
           ),
         ],
       ),
@@ -141,7 +136,9 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
           color: theme.colorScheme.primary,
         ),
         labelColor: theme.colorScheme.onPrimary,
-        unselectedLabelColor: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+        unselectedLabelColor: theme.colorScheme.onSurface.withValues(
+          alpha: 0.7,
+        ),
         labelStyle: theme.textTheme.bodySmall?.copyWith(
           fontWeight: FontWeight.w600,
         ),
@@ -161,9 +158,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircularProgressIndicator(
-            color: theme.colorScheme.primary,
-          ),
+          CircularProgressIndicator(color: theme.colorScheme.primary),
           const SizedBox(height: 16),
           Text(
             'Analyzing your data...',
@@ -189,19 +184,19 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
           // Advanced Health Score Card
           _buildAdvancedHealthScoreCard(provider, theme),
           const SizedBox(height: 24),
-          
+
           // Key Metrics Grid
           _buildAdvancedMetricsGrid(provider, theme),
           const SizedBox(height: 24),
-          
+
           // AI Insights Section
           _buildAIInsightsSection(provider, theme),
           const SizedBox(height: 24),
-          
+
           // Comparative Analysis
           _buildComparativeAnalysis(provider, theme),
           const SizedBox(height: 24),
-          
+
           // Predictive Insights
           _buildPredictiveInsights(provider, theme),
         ],
@@ -210,15 +205,21 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
   }
 
   // === ADVANCED ANALYTICS COMPONENTS ===
-  
-  Widget _buildAdvancedHealthScoreCard(AnalyticsProvider provider, ThemeData theme) {
+
+  Widget _buildAdvancedHealthScoreCard(
+    AnalyticsProvider provider,
+    ThemeData theme,
+  ) {
     final healthScore = provider.healthAnalytics?.overallHealthScore ?? 70.0;
-    final cycleRegularity = (provider.cycleAnalytics?.regularityScore ?? 0.8) * 100;
-    final predictionAccuracy = provider.predictionAnalytics?.confidenceScore ?? 85.0;
-    
-    final overallScore = (healthScore + cycleRegularity + predictionAccuracy) / 3;
+    final cycleRegularity =
+        (provider.cycleAnalytics?.regularityScore ?? 0.8) * 100;
+    final predictionAccuracy =
+        provider.predictionAnalytics?.confidenceScore ?? 85.0;
+
+    final overallScore =
+        (healthScore + cycleRegularity + predictionAccuracy) / 3;
     final scoreColor = _getScoreColor(overallScore);
-    
+
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -287,7 +288,9 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
                     Text(
                       _getScoreDescription(overallScore),
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.7,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -306,13 +309,25 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
           Row(
             children: [
               Expanded(
-                child: _buildScoreBreakdown('Health', healthScore, AppTheme.primaryRose),
+                child: _buildScoreBreakdown(
+                  'Health',
+                  healthScore,
+                  AppTheme.primaryRose,
+                ),
               ),
               Expanded(
-                child: _buildScoreBreakdown('Regularity', cycleRegularity, AppTheme.secondaryBlue),
+                child: _buildScoreBreakdown(
+                  'Regularity',
+                  cycleRegularity,
+                  AppTheme.secondaryBlue,
+                ),
               ),
               Expanded(
-                child: _buildScoreBreakdown('Predictions', predictionAccuracy, AppTheme.accentMint),
+                child: _buildScoreBreakdown(
+                  'Predictions',
+                  predictionAccuracy,
+                  AppTheme.accentMint,
+                ),
               ),
             ],
           ),
@@ -320,7 +335,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
       ),
     );
   }
-  
+
   Widget _buildScoreBreakdown(String label, double score, Color color) {
     return Column(
       children: [
@@ -337,14 +352,19 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
           label,
           style: TextStyle(
             fontSize: 12,
-            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+            color: Theme.of(
+              context,
+            ).colorScheme.onSurface.withValues(alpha: 0.6),
           ),
         ),
       ],
     );
   }
-  
-  Widget _buildAdvancedMetricsGrid(AnalyticsProvider provider, ThemeData theme) {
+
+  Widget _buildAdvancedMetricsGrid(
+    AnalyticsProvider provider,
+    ThemeData theme,
+  ) {
     return GridView.count(
       crossAxisCount: 2,
       shrinkWrap: true,
@@ -364,7 +384,8 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
         ),
         _buildAdvancedMetricCard(
           title: 'Prediction Score',
-          value: '${provider.predictionAnalytics?.confidenceScore.toInt() ?? 88}%',
+          value:
+              '${provider.predictionAnalytics?.confidenceScore.toInt() ?? 88}%',
           subtitle: 'AI Confidence',
           icon: Icons.psychology,
           color: AppTheme.secondaryBlue,
@@ -373,7 +394,8 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
         ),
         _buildAdvancedMetricCard(
           title: 'Health Trends',
-          value: '${provider.healthAnalytics?.overallHealthScore.toInt() ?? 82}%',
+          value:
+              '${provider.healthAnalytics?.overallHealthScore.toInt() ?? 82}%',
           subtitle: 'Overall wellness',
           icon: Icons.trending_up,
           color: AppTheme.accentMint,
@@ -392,7 +414,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
       ],
     );
   }
-  
+
   Widget _buildAdvancedMetricCard({
     required String title,
     required String value,
@@ -466,7 +488,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
       ),
     );
   }
-  
+
   Widget _buildAIInsightsSection(AnalyticsProvider provider, ThemeData theme) {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -528,14 +550,14 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
             ],
           ),
           const SizedBox(height: 16),
-          ..._getAIInsights(provider).take(3).map(
-            (insight) => _buildInsightItem(insight, theme),
-          ),
+          ..._getAIInsights(
+            provider,
+          ).take(3).map((insight) => _buildInsightItem(insight, theme)),
         ],
       ),
     );
   }
-  
+
   Widget _buildInsightItem(Map<String, dynamic> insight, ThemeData theme) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -561,8 +583,11 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
       ),
     );
   }
-  
-  Widget _buildComparativeAnalysis(AnalyticsProvider provider, ThemeData theme) {
+
+  Widget _buildComparativeAnalysis(
+    AnalyticsProvider provider,
+    ThemeData theme,
+  ) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -624,7 +649,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
       ),
     );
   }
-  
+
   Widget _buildComparisonMetric(
     String period,
     String value,
@@ -635,12 +660,12 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isImprovement 
+        color: isImprovement
             ? AppTheme.successGreen.withValues(alpha: 0.05)
             : theme.colorScheme.surface.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: isImprovement 
+          color: isImprovement
               ? AppTheme.successGreen.withValues(alpha: 0.3)
               : theme.colorScheme.outline.withValues(alpha: 0.2),
         ),
@@ -666,18 +691,14 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
           Row(
             children: [
               if (isImprovement)
-                Icon(
-                  Icons.trending_up,
-                  color: AppTheme.successGreen,
-                  size: 12,
-                ),
+                Icon(Icons.trending_up, color: AppTheme.successGreen, size: 12),
               const SizedBox(width: 4),
               Text(
                 change,
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
-                  color: isImprovement 
+                  color: isImprovement
                       ? AppTheme.successGreen
                       : theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
@@ -688,7 +709,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
       ),
     );
   }
-  
+
   Widget _buildPredictiveInsights(AnalyticsProvider provider, ThemeData theme) {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -702,9 +723,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
           ],
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: AppTheme.accentMint.withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: AppTheme.accentMint.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -774,7 +793,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
       ),
     );
   }
-  
+
   Widget _buildPredictionItem(
     String title,
     String value,
@@ -788,9 +807,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: color.withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -827,23 +844,23 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
       ),
     );
   }
-  
+
   // === HELPER FUNCTIONS ===
-  
+
   Color _getScoreColor(double score) {
     if (score >= 85) return AppTheme.successGreen;
     if (score >= 70) return AppTheme.accentMint;
     if (score >= 55) return AppTheme.warningOrange;
     return AppTheme.errorRed;
   }
-  
+
   String _getScoreDescription(double score) {
     if (score >= 85) return 'Excellent wellness patterns';
     if (score >= 70) return 'Good overall health trends';
     if (score >= 55) return 'Moderate wellness indicators';
     return 'Areas for improvement identified';
   }
-  
+
   IconData _getTrendIcon(TrendDirection direction) {
     switch (direction) {
       case TrendDirection.improving:
@@ -854,7 +871,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
         return Icons.trending_flat;
     }
   }
-  
+
   Color _getTrendColor(TrendDirection direction) {
     switch (direction) {
       case TrendDirection.improving:
@@ -865,73 +882,81 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
         return AppTheme.mediumGrey;
     }
   }
-  
+
   List<Map<String, dynamic>> _getAIInsights(AnalyticsProvider provider) {
     final insights = <Map<String, dynamic>>[];
-    
+
     // Cycle regularity insight
     final regularity = provider.cycleAnalytics?.regularityScore ?? 0.8;
     if (regularity > 0.85) {
       insights.add({
         'icon': Icons.check_circle,
         'color': AppTheme.successGreen,
-        'text': 'Your cycle regularity is excellent at ${(regularity * 100).toInt()}%. This indicates good hormonal balance.',
+        'text':
+            'Your cycle regularity is excellent at ${(regularity * 100).toInt()}%. This indicates good hormonal balance.',
       });
     } else if (regularity < 0.6) {
       insights.add({
         'icon': Icons.info,
         'color': AppTheme.warningOrange,
-        'text': 'Cycle irregularity detected. Consider tracking stress levels and sleep patterns for better insights.',
+        'text':
+            'Cycle irregularity detected. Consider tracking stress levels and sleep patterns for better insights.',
       });
     }
-    
+
     // Prediction accuracy insight
     final accuracy = provider.predictionAnalytics?.confidenceScore ?? 85.0;
     if (accuracy > 90) {
       insights.add({
         'icon': Icons.auto_awesome,
         'color': AppTheme.primaryPurple,
-        'text': 'AI predictions are highly accurate at ${accuracy.toInt()}%. Your data quality is excellent.',
+        'text':
+            'AI predictions are highly accurate at ${accuracy.toInt()}%. Your data quality is excellent.',
       });
     }
-    
+
     // Health trend insight
     final healthScore = provider.healthAnalytics?.overallHealthScore ?? 75.0;
     if (healthScore > 80) {
       insights.add({
         'icon': Icons.trending_up,
         'color': AppTheme.accentMint,
-        'text': 'Your overall health trends are positive. Keep up the great work with your wellness routine!',
+        'text':
+            'Your overall health trends are positive. Keep up the great work with your wellness routine!',
       });
     } else if (healthScore < 60) {
       insights.add({
         'icon': Icons.psychology,
         'color': AppTheme.secondaryBlue,
-        'text': 'Consider focusing on stress management and sleep quality to improve overall wellness.',
+        'text':
+            'Consider focusing on stress management and sleep quality to improve overall wellness.',
       });
     }
-    
+
     // Default insights if no specific conditions met
     if (insights.isEmpty) {
       insights.addAll([
         {
           'icon': Icons.insights,
           'color': AppTheme.primaryPurple,
-          'text': 'Your tracking consistency is helping improve prediction accuracy over time.',
+          'text':
+              'Your tracking consistency is helping improve prediction accuracy over time.',
         },
         {
           'icon': Icons.favorite,
           'color': AppTheme.primaryRose,
-          'text': 'Regular cycle patterns suggest healthy hormonal balance and lifestyle habits.',
+          'text':
+              'Regular cycle patterns suggest healthy hormonal balance and lifestyle habits.',
         },
         {
           'icon': Icons.psychology,
           'color': AppTheme.accentMint,
-          'text': 'AI analysis shows positive correlations between your mood and energy levels.',
+          'text':
+              'AI analysis shows positive correlations between your mood and energy levels.',
         },
       ]);
     }
-    
+
     return insights;
   }
 
@@ -1001,9 +1026,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
       decoration: BoxDecoration(
         color: theme.colorScheme.surface.withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: color.withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
         boxShadow: [
           BoxShadow(
             color: theme.shadowColor.withValues(alpha: 0.1),
@@ -1017,11 +1040,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
         children: [
           Row(
             children: [
-              Icon(
-                icon,
-                color: color,
-                size: 20,
-              ),
+              Icon(icon, color: color, size: 20),
               const Spacer(),
               Container(
                 padding: const EdgeInsets.all(4),
@@ -1029,11 +1048,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
                   color: color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(4),
                 ),
-                child: Icon(
-                  Icons.trending_up,
-                  color: color,
-                  size: 12,
-                ),
+                child: Icon(Icons.trending_up, color: color, size: 12),
               ),
             ],
           ),
@@ -1073,9 +1088,9 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
           children: [
             Text(
               'Select Time Range',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
             _buildTimeRangeOption('Last 3 months', () {
@@ -1114,9 +1129,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
     return ListTile(
       title: Text(title),
       onTap: onTap,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
     );
   }
 
@@ -1133,21 +1146,28 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
             const SizedBox(height: 16),
             Text(
               'Action Items:',
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            ...recommendation.actionItems.map((item) => Padding(
-              padding: const EdgeInsets.only(bottom: 4),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('• ', style: TextStyle(color: Theme.of(context).colorScheme.primary)),
-                  Expanded(child: Text(item)),
-                ],
+            ...recommendation.actionItems.map(
+              (item) => Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '• ',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    Expanded(child: Text(item)),
+                  ],
+                ),
               ),
-            )),
+            ),
           ],
         ),
         actions: [

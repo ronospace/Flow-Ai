@@ -31,10 +31,5 @@ class NotificationPayload {
   final String body;
   final Map<String, dynamic>? data;
 
-  NotificationPayload({
-    required this.title,
-    required this.body,
-    this.data,
-  });
+  NotificationPayload({required this.title, required this.body, this.data});
 }
-

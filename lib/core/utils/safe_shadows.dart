@@ -23,13 +23,17 @@ class SafeShadows {
 
   /// Creates a list of safe BoxShadows
   static List<BoxShadow> safeList(List<BoxShadow> shadows) {
-    return shadows.map((shadow) => safe(
-      color: shadow.color,
-      offset: shadow.offset,
-      blurRadius: math.max(0.0, shadow.blurRadius),
-      spreadRadius: math.max(0.0, shadow.spreadRadius),
-      blurStyle: shadow.blurStyle,
-    )).toList();
+    return shadows
+        .map(
+          (shadow) => safe(
+            color: shadow.color,
+            offset: shadow.offset,
+            blurRadius: math.max(0.0, shadow.blurRadius),
+            spreadRadius: math.max(0.0, shadow.spreadRadius),
+            blurStyle: shadow.blurStyle,
+          ),
+        )
+        .toList();
   }
 
   /// Common elevation shadow that's safe for animations
@@ -39,7 +43,7 @@ class SafeShadows {
     double opacity = 0.16,
   }) {
     if (elevation <= 0) return [];
-    
+
     return [
       safe(
         color: color.withValues(alpha: opacity * 0.6),
@@ -61,57 +65,192 @@ class SafeShadows {
         return [];
       case 1:
         return [
-          safe(color: Colors.black.withValues(alpha: 0.2), offset: const Offset(0, 2), blurRadius: 1, spreadRadius: -1),
-          safe(color: Colors.black.withValues(alpha: 0.14), offset: const Offset(0, 1), blurRadius: 1, spreadRadius: 0),
-          safe(color: Colors.black.withValues(alpha: 0.12), offset: const Offset(0, 1), blurRadius: 3, spreadRadius: 0),
+          safe(
+            color: Colors.black.withValues(alpha: 0.2),
+            offset: const Offset(0, 2),
+            blurRadius: 1,
+            spreadRadius: -1,
+          ),
+          safe(
+            color: Colors.black.withValues(alpha: 0.14),
+            offset: const Offset(0, 1),
+            blurRadius: 1,
+            spreadRadius: 0,
+          ),
+          safe(
+            color: Colors.black.withValues(alpha: 0.12),
+            offset: const Offset(0, 1),
+            blurRadius: 3,
+            spreadRadius: 0,
+          ),
         ];
       case 2:
         return [
-          safe(color: Colors.black.withValues(alpha: 0.2), offset: const Offset(0, 3), blurRadius: 1, spreadRadius: -2),
-          safe(color: Colors.black.withValues(alpha: 0.14), offset: const Offset(0, 2), blurRadius: 2, spreadRadius: 0),
-          safe(color: Colors.black.withValues(alpha: 0.12), offset: const Offset(0, 1), blurRadius: 5, spreadRadius: 0),
+          safe(
+            color: Colors.black.withValues(alpha: 0.2),
+            offset: const Offset(0, 3),
+            blurRadius: 1,
+            spreadRadius: -2,
+          ),
+          safe(
+            color: Colors.black.withValues(alpha: 0.14),
+            offset: const Offset(0, 2),
+            blurRadius: 2,
+            spreadRadius: 0,
+          ),
+          safe(
+            color: Colors.black.withValues(alpha: 0.12),
+            offset: const Offset(0, 1),
+            blurRadius: 5,
+            spreadRadius: 0,
+          ),
         ];
       case 3:
         return [
-          safe(color: Colors.black.withValues(alpha: 0.2), offset: const Offset(0, 3), blurRadius: 3, spreadRadius: -2),
-          safe(color: Colors.black.withValues(alpha: 0.14), offset: const Offset(0, 3), blurRadius: 4, spreadRadius: 0),
-          safe(color: Colors.black.withValues(alpha: 0.12), offset: const Offset(0, 1), blurRadius: 8, spreadRadius: 0),
+          safe(
+            color: Colors.black.withValues(alpha: 0.2),
+            offset: const Offset(0, 3),
+            blurRadius: 3,
+            spreadRadius: -2,
+          ),
+          safe(
+            color: Colors.black.withValues(alpha: 0.14),
+            offset: const Offset(0, 3),
+            blurRadius: 4,
+            spreadRadius: 0,
+          ),
+          safe(
+            color: Colors.black.withValues(alpha: 0.12),
+            offset: const Offset(0, 1),
+            blurRadius: 8,
+            spreadRadius: 0,
+          ),
         ];
       case 4:
         return [
-          safe(color: Colors.black.withValues(alpha: 0.2), offset: const Offset(0, 2), blurRadius: 4, spreadRadius: -1),
-          safe(color: Colors.black.withValues(alpha: 0.14), offset: const Offset(0, 4), blurRadius: 5, spreadRadius: 0),
-          safe(color: Colors.black.withValues(alpha: 0.12), offset: const Offset(0, 1), blurRadius: 10, spreadRadius: 0),
+          safe(
+            color: Colors.black.withValues(alpha: 0.2),
+            offset: const Offset(0, 2),
+            blurRadius: 4,
+            spreadRadius: -1,
+          ),
+          safe(
+            color: Colors.black.withValues(alpha: 0.14),
+            offset: const Offset(0, 4),
+            blurRadius: 5,
+            spreadRadius: 0,
+          ),
+          safe(
+            color: Colors.black.withValues(alpha: 0.12),
+            offset: const Offset(0, 1),
+            blurRadius: 10,
+            spreadRadius: 0,
+          ),
         ];
       case 6:
         return [
-          safe(color: Colors.black.withValues(alpha: 0.2), offset: const Offset(0, 3), blurRadius: 5, spreadRadius: -1),
-          safe(color: Colors.black.withValues(alpha: 0.14), offset: const Offset(0, 6), blurRadius: 10, spreadRadius: 0),
-          safe(color: Colors.black.withValues(alpha: 0.12), offset: const Offset(0, 1), blurRadius: 18, spreadRadius: 0),
+          safe(
+            color: Colors.black.withValues(alpha: 0.2),
+            offset: const Offset(0, 3),
+            blurRadius: 5,
+            spreadRadius: -1,
+          ),
+          safe(
+            color: Colors.black.withValues(alpha: 0.14),
+            offset: const Offset(0, 6),
+            blurRadius: 10,
+            spreadRadius: 0,
+          ),
+          safe(
+            color: Colors.black.withValues(alpha: 0.12),
+            offset: const Offset(0, 1),
+            blurRadius: 18,
+            spreadRadius: 0,
+          ),
         ];
       case 8:
         return [
-          safe(color: Colors.black.withValues(alpha: 0.2), offset: const Offset(0, 5), blurRadius: 5, spreadRadius: -3),
-          safe(color: Colors.black.withValues(alpha: 0.14), offset: const Offset(0, 8), blurRadius: 10, spreadRadius: 1),
-          safe(color: Colors.black.withValues(alpha: 0.12), offset: const Offset(0, 3), blurRadius: 14, spreadRadius: 2),
+          safe(
+            color: Colors.black.withValues(alpha: 0.2),
+            offset: const Offset(0, 5),
+            blurRadius: 5,
+            spreadRadius: -3,
+          ),
+          safe(
+            color: Colors.black.withValues(alpha: 0.14),
+            offset: const Offset(0, 8),
+            blurRadius: 10,
+            spreadRadius: 1,
+          ),
+          safe(
+            color: Colors.black.withValues(alpha: 0.12),
+            offset: const Offset(0, 3),
+            blurRadius: 14,
+            spreadRadius: 2,
+          ),
         ];
       case 12:
         return [
-          safe(color: Colors.black.withValues(alpha: 0.2), offset: const Offset(0, 7), blurRadius: 8, spreadRadius: -4),
-          safe(color: Colors.black.withValues(alpha: 0.14), offset: const Offset(0, 12), blurRadius: 17, spreadRadius: 2),
-          safe(color: Colors.black.withValues(alpha: 0.12), offset: const Offset(0, 5), blurRadius: 22, spreadRadius: 4),
+          safe(
+            color: Colors.black.withValues(alpha: 0.2),
+            offset: const Offset(0, 7),
+            blurRadius: 8,
+            spreadRadius: -4,
+          ),
+          safe(
+            color: Colors.black.withValues(alpha: 0.14),
+            offset: const Offset(0, 12),
+            blurRadius: 17,
+            spreadRadius: 2,
+          ),
+          safe(
+            color: Colors.black.withValues(alpha: 0.12),
+            offset: const Offset(0, 5),
+            blurRadius: 22,
+            spreadRadius: 4,
+          ),
         ];
       case 16:
         return [
-          safe(color: Colors.black.withValues(alpha: 0.2), offset: const Offset(0, 8), blurRadius: 10, spreadRadius: -5),
-          safe(color: Colors.black.withValues(alpha: 0.14), offset: const Offset(0, 16), blurRadius: 24, spreadRadius: 2),
-          safe(color: Colors.black.withValues(alpha: 0.12), offset: const Offset(0, 6), blurRadius: 30, spreadRadius: 5),
+          safe(
+            color: Colors.black.withValues(alpha: 0.2),
+            offset: const Offset(0, 8),
+            blurRadius: 10,
+            spreadRadius: -5,
+          ),
+          safe(
+            color: Colors.black.withValues(alpha: 0.14),
+            offset: const Offset(0, 16),
+            blurRadius: 24,
+            spreadRadius: 2,
+          ),
+          safe(
+            color: Colors.black.withValues(alpha: 0.12),
+            offset: const Offset(0, 6),
+            blurRadius: 30,
+            spreadRadius: 5,
+          ),
         ];
       case 24:
         return [
-          safe(color: Colors.black.withValues(alpha: 0.2), offset: const Offset(0, 11), blurRadius: 15, spreadRadius: -7),
-          safe(color: Colors.black.withValues(alpha: 0.14), offset: const Offset(0, 24), blurRadius: 38, spreadRadius: 3),
-          safe(color: Colors.black.withValues(alpha: 0.12), offset: const Offset(0, 9), blurRadius: 46, spreadRadius: 8),
+          safe(
+            color: Colors.black.withValues(alpha: 0.2),
+            offset: const Offset(0, 11),
+            blurRadius: 15,
+            spreadRadius: -7,
+          ),
+          safe(
+            color: Colors.black.withValues(alpha: 0.14),
+            offset: const Offset(0, 24),
+            blurRadius: 38,
+            spreadRadius: 3,
+          ),
+          safe(
+            color: Colors.black.withValues(alpha: 0.12),
+            offset: const Offset(0, 9),
+            blurRadius: 46,
+            spreadRadius: 8,
+          ),
         ];
       default:
         return SafeShadows.elevation(elevation.toDouble());

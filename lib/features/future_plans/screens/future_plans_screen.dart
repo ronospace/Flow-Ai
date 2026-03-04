@@ -12,7 +12,7 @@ class _FuturePlansScreenState extends State<FuturePlansScreen>
     with TickerProviderStateMixin {
   late AnimationController _headerAnimationController;
   late Animation<double> _headerAnimation;
-  
+
   String _selectedCategory = 'all';
   final List<String> _categories = ['all', 'ai', 'health', 'tech', 'social'];
 
@@ -23,13 +23,12 @@ class _FuturePlansScreenState extends State<FuturePlansScreen>
       duration: const Duration(seconds: 3),
       vsync: this,
     );
-    _headerAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _headerAnimationController,
-      curve: Curves.easeInOut,
-    ));
+    _headerAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _headerAnimationController,
+        curve: Curves.easeInOut,
+      ),
+    );
     _headerAnimationController.repeat();
   }
 
@@ -44,72 +43,84 @@ class _FuturePlansScreenState extends State<FuturePlansScreen>
       // AI Features
       const AIFeatureCard(
         title: 'AI Cycle Predictor',
-        description: 'Advanced machine learning to predict your cycle with 95% accuracy using pattern recognition and health data.',
+        description:
+            'Advanced machine learning to predict your cycle with 95% accuracy using pattern recognition and health data.',
         eta: 'Q2 2026',
       ),
       const AIFeatureCard(
         title: 'Smart Symptom Analysis',
-        description: 'AI-powered symptom tracking that learns your patterns and provides personalized health insights.',
+        description:
+            'AI-powered symptom tracking that learns your patterns and provides personalized health insights.',
         eta: 'Q1 2026',
       ),
       const AIFeatureCard(
         title: 'Personalized AI Coach',
-        description: 'Your dedicated AI health coach that adapts to your lifestyle and provides real-time guidance.',
+        description:
+            'Your dedicated AI health coach that adapts to your lifestyle and provides real-time guidance.',
         eta: 'Q3 2026',
       ),
-      
+
       // Health Features
       const HealthFeatureCard(
         title: 'Fertility Planning Hub',
-        description: 'Comprehensive fertility tracking with ovulation prediction, conception probability, and family planning tools.',
+        description:
+            'Comprehensive fertility tracking with ovulation prediction, conception probability, and family planning tools.',
         eta: 'Q2 2026',
       ),
       const HealthFeatureCard(
         title: 'Mental Health Companion',
-        description: 'Mood tracking, mindfulness exercises, and personalized mental health support integrated with your cycle.',
+        description:
+            'Mood tracking, mindfulness exercises, and personalized mental health support integrated with your cycle.',
         eta: 'Q1 2026',
       ),
       const HealthFeatureCard(
         title: 'Nutrition Intelligence',
-        description: 'Smart meal planning based on your cycle phase, nutritional needs, and health goals.',
+        description:
+            'Smart meal planning based on your cycle phase, nutritional needs, and health goals.',
         eta: 'Q3 2026',
       ),
-      
+
       // Tech Features
       const TechFeatureCard(
         title: 'Apple Watch Integration',
-        description: 'Seamless health data sync, cycle reminders, and discreet notifications on your wrist.',
+        description:
+            'Seamless health data sync, cycle reminders, and discreet notifications on your wrist.',
         eta: 'Q1 2026',
       ),
       const TechFeatureCard(
         title: 'Smart Device Ecosystem',
-        description: 'Connect with smart scales, thermometers, and other IoT devices for automatic health tracking.',
+        description:
+            'Connect with smart scales, thermometers, and other IoT devices for automatic health tracking.',
         eta: 'Q2 2026',
       ),
       const TechFeatureCard(
         title: 'AR Body Insights',
-        description: 'Augmented reality visualization of your cycle, health metrics, and body changes over time.',
+        description:
+            'Augmented reality visualization of your cycle, health metrics, and body changes over time.',
         eta: 'Q4 2026',
       ),
-      
+
       // Social Features
       ComingSoonCard(
         title: 'Community Connect',
-        description: 'Connect with others on similar health journeys, share experiences, and get support.',
+        description:
+            'Connect with others on similar health journeys, share experiences, and get support.',
         icon: Icons.people_outline,
         gradientColors: const [Color(0xFF4CAF50), Color(0xFF8BC34A)],
         eta: 'Q2 2026',
       ),
       ComingSoonCard(
         title: 'Partner Sharing',
-        description: 'Securely share selected health insights with your partner or healthcare provider.',
+        description:
+            'Securely share selected health insights with your partner or healthcare provider.',
         icon: Icons.share_outlined,
         gradientColors: const [Color(0xFFFF9800), Color(0xFFFF5722)],
         eta: 'Q1 2026',
       ),
       ComingSoonCard(
         title: 'Telehealth Integration',
-        description: 'Direct consultations with healthcare providers using your Flow Ai data.',
+        description:
+            'Direct consultations with healthcare providers using your Flow Ai data.',
         icon: Icons.video_call_outlined,
         gradientColors: const [Color(0xFF3F51B5), Color(0xFF9C27B0)],
         eta: 'Q3 2026',
@@ -117,7 +128,7 @@ class _FuturePlansScreenState extends State<FuturePlansScreen>
     ];
 
     if (_selectedCategory == 'all') return allFeatures;
-    
+
     return allFeatures.where((feature) {
       switch (_selectedCategory) {
         case 'ai':
@@ -127,9 +138,9 @@ class _FuturePlansScreenState extends State<FuturePlansScreen>
         case 'tech':
           return feature is TechFeatureCard;
         case 'social':
-          return feature is! AIFeatureCard && 
-                 feature is! HealthFeatureCard && 
-                 feature is! TechFeatureCard;
+          return feature is! AIFeatureCard &&
+              feature is! HealthFeatureCard &&
+              feature is! TechFeatureCard;
         default:
           return true;
       }
@@ -139,7 +150,7 @@ class _FuturePlansScreenState extends State<FuturePlansScreen>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -179,7 +190,7 @@ class _FuturePlansScreenState extends State<FuturePlansScreen>
                       );
                     },
                   ),
-                  
+
                   // Floating particles effect
                   AnimatedBuilder(
                     animation: _headerAnimation,
@@ -191,7 +202,7 @@ class _FuturePlansScreenState extends State<FuturePlansScreen>
                       );
                     },
                   ),
-                  
+
                   // Content
                   const Positioned(
                     bottom: 40,
@@ -224,7 +235,7 @@ class _FuturePlansScreenState extends State<FuturePlansScreen>
               ),
             ),
           ),
-          
+
           // Category Filter
           SliverToBoxAdapter(
             child: Container(
@@ -245,7 +256,8 @@ class _FuturePlansScreenState extends State<FuturePlansScreen>
                       children: _categories.map((category) {
                         final isSelected = _selectedCategory == category;
                         return GestureDetector(
-                          onTap: () => setState(() => _selectedCategory = category),
+                          onTap: () =>
+                              setState(() => _selectedCategory = category),
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 200),
                             margin: const EdgeInsets.only(right: 12),
@@ -254,20 +266,28 @@ class _FuturePlansScreenState extends State<FuturePlansScreen>
                               vertical: 10,
                             ),
                             decoration: BoxDecoration(
-                              color: isSelected ? const Color(0xFFFF6B9D) : Colors.grey.shade200,
+                              color: isSelected
+                                  ? const Color(0xFFFF6B9D)
+                                  : Colors.grey.shade200,
                               borderRadius: BorderRadius.circular(25),
-                              boxShadow: isSelected ? [
-                                BoxShadow(
-                                  color: const Color(0xFFFF6B9D).withValues(alpha: 0.3),
-                                  blurRadius: 8,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ] : null,
+                              boxShadow: isSelected
+                                  ? [
+                                      BoxShadow(
+                                        color: const Color(
+                                          0xFFFF6B9D,
+                                        ).withValues(alpha: 0.3),
+                                        blurRadius: 8,
+                                        offset: const Offset(0, 4),
+                                      ),
+                                    ]
+                                  : null,
                             ),
                             child: Text(
                               category.toUpperCase(),
                               style: TextStyle(
-                                color: isSelected ? Colors.white : Colors.grey.shade600,
+                                color: isSelected
+                                    ? Colors.white
+                                    : Colors.grey.shade600,
                                 fontWeight: FontWeight.w600,
                                 fontSize: 12,
                               ),
@@ -281,26 +301,23 @@ class _FuturePlansScreenState extends State<FuturePlansScreen>
               ),
             ),
           ),
-          
+
           // Features Grid
           SliverPadding(
             padding: const EdgeInsets.all(16),
             sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final features = _getFilteredFeatures();
-                  if (index >= features.length) return null;
-                  
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: features[index],
-                  );
-                },
-                childCount: _getFilteredFeatures().length,
-              ),
+              delegate: SliverChildBuilderDelegate((context, index) {
+                final features = _getFilteredFeatures();
+                if (index >= features.length) return null;
+
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: features[index],
+                );
+              }, childCount: _getFilteredFeatures().length),
             ),
           ),
-          
+
           // Footer
           SliverToBoxAdapter(
             child: Container(
@@ -331,10 +348,7 @@ class _FuturePlansScreenState extends State<FuturePlansScreen>
                   const SizedBox(height: 8),
                   const Text(
                     'We\'d love to hear your feature requests and ideas for the future of Flow Ai.',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                    ),
+                    style: TextStyle(color: Colors.white, fontSize: 14),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
@@ -378,7 +392,7 @@ class ParticlePainter extends CustomPainter {
       final x = (i * 0.05 * size.width + animationValue * 50) % size.width;
       final y = (i * 0.1 * size.height + animationValue * 30) % size.height;
       final radius = 2.0 + (i % 3);
-      
+
       canvas.drawCircle(Offset(x, y), radius, paint);
     }
   }

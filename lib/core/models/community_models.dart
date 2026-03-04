@@ -193,14 +193,8 @@ class BuddyRequest {
 // ExpertQuestion and ExpertAnswer models have been moved to separate dedicated files
 // for better organization and to avoid conflicts
 
-
 /// Question status enum
-enum QuestionStatus {
-  open,
-  answered,
-  closed,
-  featured
-}
+enum QuestionStatus { open, answered, closed, featured }
 
 /// Discussion post
 @JsonSerializable()
@@ -247,7 +241,7 @@ class DiscussionPost {
       _$DiscussionPostFromJson(json);
 
   Map<String, dynamic> toJson() => _$DiscussionPostToJson(this);
-  
+
   /// Create a copy with updated values
   DiscussionPost copyWith({
     String? id,
@@ -317,7 +311,7 @@ class CommunityStats {
       _$CommunityStatsFromJson(json);
 
   Map<String, dynamic> toJson() => _$CommunityStatsToJson(this);
-  
+
   /// Helper method to increment discussion count
   void incrementDiscussions() {
     // This would be implemented to update stats
@@ -356,8 +350,7 @@ class Expert {
     required this.joinDate,
   });
 
-  factory Expert.fromJson(Map<String, dynamic> json) =>
-      _$ExpertFromJson(json);
+  factory Expert.fromJson(Map<String, dynamic> json) => _$ExpertFromJson(json);
 
   Map<String, dynamic> toJson() => _$ExpertToJson(this);
 }
@@ -377,7 +370,7 @@ class ExpertQuestion {
   final int upvotes;
   final bool isBookmarked;
   final List<String> tags;
-  
+
   const ExpertQuestion({
     required this.id,
     required this.userId,
@@ -429,7 +422,7 @@ class ExpertQuestion {
       tags: tags ?? this.tags,
     );
   }
-  
+
   int get answerCount => answers.length;
 }
 
@@ -445,7 +438,7 @@ class ExpertAnswer {
   final int upvotes;
   final bool isVerified;
   final List<String> attachments;
-  
+
   const ExpertAnswer({
     required this.id,
     required this.questionId,

@@ -104,8 +104,9 @@ class Subscription {
   int get durationDays => endDate.difference(startDate).inDays;
 
   /// Check if subscription is cancelled but still active
-  bool get isCancelledButActive => 
-      status == SubscriptionStatus.cancelled && DateTime.now().isBefore(endDate);
+  bool get isCancelledButActive =>
+      status == SubscriptionStatus.cancelled &&
+      DateTime.now().isBefore(endDate);
 
   /// Get renewal date (same as end date for active subscriptions)
   DateTime get renewalDate => endDate;
@@ -155,7 +156,7 @@ class Subscription {
   Map<String, dynamic> toJson() => _$SubscriptionToJson(this);
 
   /// Create from JSON
-  factory Subscription.fromJson(Map<String, dynamic> json) => 
+  factory Subscription.fromJson(Map<String, dynamic> json) =>
       _$SubscriptionFromJson(json);
 
   /// Create a sample subscription for testing
@@ -168,7 +169,7 @@ class Subscription {
   }) {
     final now = DateTime.now();
     final startDate = now.subtract(const Duration(days: 15));
-    final endDate = isExpired == true 
+    final endDate = isExpired == true
         ? now.subtract(const Duration(days: 1))
         : now.add(const Duration(days: 15));
 
@@ -199,7 +200,7 @@ class Subscription {
   @override
   String toString() {
     return 'Subscription{id: $id, tier: $tier, status: $status, '
-           'remainingDays: $remainingDays, autoRenew: $autoRenew}';
+        'remainingDays: $remainingDays, autoRenew: $autoRenew}';
   }
 }
 
@@ -233,19 +234,19 @@ class SubscriptionAnalytics {
   /// Calculate engagement score (0-100)
   double get engagementScore {
     double score = 0;
-    
+
     // Feature usage contributes 40%
     score += (featuresUsed / 10.0).clamp(0, 1) * 40;
-    
+
     // Report generation contributes 30%
     score += (reportsGenerated / 5.0).clamp(0, 1) * 30;
-    
+
     // Data exports contributes 20%
     score += (exportsCompleted / 3.0).clamp(0, 1) * 20;
-    
+
     // Provider connections contributes 10%
     score += (providersConnected / 2.0).clamp(0, 1) * 10;
-    
+
     return score.clamp(0, 100);
   }
 
@@ -255,7 +256,7 @@ class SubscriptionAnalytics {
   /// Get most used feature
   String? get mostUsedFeature {
     if (featureUsageCount.isEmpty) return null;
-    
+
     return featureUsageCount.entries
         .reduce((a, b) => a.value > b.value ? a : b)
         .key;
@@ -265,7 +266,7 @@ class SubscriptionAnalytics {
   Map<String, dynamic> toJson() => _$SubscriptionAnalyticsToJson(this);
 
   /// Create from JSON
-  factory SubscriptionAnalytics.fromJson(Map<String, dynamic> json) => 
+  factory SubscriptionAnalytics.fromJson(Map<String, dynamic> json) =>
       _$SubscriptionAnalyticsFromJson(json);
 
   /// Create empty analytics
@@ -286,7 +287,7 @@ class SubscriptionAnalytics {
   @override
   String toString() {
     return 'SubscriptionAnalytics{subscriptionId: $subscriptionId, '
-           'engagementScore: ${engagementScore.toStringAsFixed(1)}, '
-           'mostUsedFeature: $mostUsedFeature}';
+        'engagementScore: ${engagementScore.toStringAsFixed(1)}, '
+        'mostUsedFeature: $mostUsedFeature}';
   }
 }

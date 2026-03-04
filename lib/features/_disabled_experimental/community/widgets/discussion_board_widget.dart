@@ -7,7 +7,14 @@ import '../../../core/utils/time_utils.dart';
 /// moderated discussions, voting system, and safe space community guidelines
 class DiscussionBoardWidget extends StatefulWidget {
   final List<Discussion> discussions;
-  final Function(String title, String content, String category, List<String>? tags, bool isAnonymous) onCreateDiscussion;
+  final Function(
+    String title,
+    String content,
+    String category,
+    List<String>? tags,
+    bool isAnonymous,
+  )
+  onCreateDiscussion;
   final Function(String discussionId) onJoinDiscussion;
   final Function(String postId) onLikePost;
   final Function(String postId, String reason) onReportPost;
@@ -29,10 +36,10 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
     with TickerProviderStateMixin {
   late AnimationController _listAnimationController;
   late Animation<double> _listAnimation;
-  
+
   String _selectedFilter = 'all';
   String _selectedSort = 'recent';
-  
+
   final List<String> _categories = [
     'all',
     'general',
@@ -43,7 +50,7 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
     'medical',
     'support',
   ];
-  
+
   final List<String> _sortOptions = [
     'recent',
     'popular',
@@ -63,13 +70,12 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
       vsync: this,
     );
 
-    _listAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _listAnimationController,
-      curve: Curves.easeInOut,
-    ));
+    _listAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _listAnimationController,
+        curve: Curves.easeInOut,
+      ),
+    );
 
     _listAnimationController.forward();
   }
@@ -85,16 +91,14 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
     return Column(
       children: [
         _buildFiltersAndSort(context),
-        Expanded(
-          child: _buildDiscussionList(context),
-        ),
+        Expanded(child: _buildDiscussionList(context)),
       ],
     );
   }
 
   Widget _buildFiltersAndSort(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -115,38 +119,43 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
                 size: 20,
                 color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
               ),
-              
+
               const SizedBox(width: 8),
-              
+
               Expanded(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    children: _categories.map((category) => Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: FilterChip(
-                        label: Text(_getCategoryLabel(category)),
-                        selected: _selectedFilter == category,
-                        onSelected: (selected) {
-                          if (selected) {
-                            setState(() {
-                              _selectedFilter = category;
-                            });
-                          }
-                        },
-                        backgroundColor: theme.colorScheme.surface,
-                        selectedColor: theme.colorScheme.primary.withValues(alpha: 0.2),
-                        checkmarkColor: theme.colorScheme.primary,
-                      ),
-                    )).toList(),
+                    children: _categories
+                        .map(
+                          (category) => Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: FilterChip(
+                              label: Text(_getCategoryLabel(category)),
+                              selected: _selectedFilter == category,
+                              onSelected: (selected) {
+                                if (selected) {
+                                  setState(() {
+                                    _selectedFilter = category;
+                                  });
+                                }
+                              },
+                              backgroundColor: theme.colorScheme.surface,
+                              selectedColor: theme.colorScheme.primary
+                                  .withValues(alpha: 0.2),
+                              checkmarkColor: theme.colorScheme.primary,
+                            ),
+                          ),
+                        )
+                        .toList(),
                   ),
                 ),
               ),
             ],
           ),
-          
+
           const SizedBox(height: 12),
-          
+
           // Sort options
           Row(
             children: [
@@ -155,29 +164,34 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
                 size: 20,
                 color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
               ),
-              
+
               const SizedBox(width: 8),
-              
+
               Expanded(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    children: _sortOptions.map((sort) => Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: ChoiceChip(
-                        label: Text(_getSortLabel(sort)),
-                        selected: _selectedSort == sort,
-                        onSelected: (selected) {
-                          if (selected) {
-                            setState(() {
-                              _selectedSort = sort;
-                            });
-                          }
-                        },
-                        backgroundColor: theme.colorScheme.surface,
-                        selectedColor: theme.colorScheme.secondary.withValues(alpha: 0.2),
-                      ),
-                    )).toList(),
+                    children: _sortOptions
+                        .map(
+                          (sort) => Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: ChoiceChip(
+                              label: Text(_getSortLabel(sort)),
+                              selected: _selectedSort == sort,
+                              onSelected: (selected) {
+                                if (selected) {
+                                  setState(() {
+                                    _selectedSort = sort;
+                                  });
+                                }
+                              },
+                              backgroundColor: theme.colorScheme.surface,
+                              selectedColor: theme.colorScheme.secondary
+                                  .withValues(alpha: 0.2),
+                            ),
+                          ),
+                        )
+                        .toList(),
                   ),
                 ),
               ),
@@ -216,9 +230,13 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
     );
   }
 
-  Widget _buildDiscussionCard(BuildContext context, Discussion discussion, int index) {
+  Widget _buildDiscussionCard(
+    BuildContext context,
+    Discussion discussion,
+    int index,
+  ) {
     final theme = Theme.of(context);
-    
+
     return AnimatedContainer(
       duration: Duration(milliseconds: 100 + (index * 50)),
       margin: const EdgeInsets.only(bottom: 16),
@@ -245,9 +263,14 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
                   children: [
                     // Category badge
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
-                        color: _getCategoryColor(discussion.category).withValues(alpha: 0.1),
+                        color: _getCategoryColor(
+                          discussion.category,
+                        ).withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
@@ -258,20 +281,23 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
                         ),
                       ),
                     ),
-                    
+
                     const Spacer(),
-                    
+
                     // Time ago
                     Text(
                       TimeUtils.getTimeAgo(discussion.createdAt),
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.6,
+                        ),
                       ),
                     ),
-                    
+
                     // More options
                     IconButton(
-                      onPressed: () => _showDiscussionOptions(context, discussion),
+                      onPressed: () =>
+                          _showDiscussionOptions(context, discussion),
                       icon: const Icon(Icons.more_vert, size: 20),
                       constraints: const BoxConstraints(
                         minWidth: 32,
@@ -280,9 +306,9 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
                     ),
                   ],
                 ),
-                
+
                 const SizedBox(height: 12),
-                
+
                 // Title
                 Text(
                   discussion.title,
@@ -292,9 +318,9 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-                
+
                 const SizedBox(height: 8),
-                
+
                 // Preview content
                 if (discussion.content.isNotEmpty)
                   Text(
@@ -305,9 +331,9 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                   ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 // Tags
                 if (discussion.tags.isNotEmpty)
                   Padding(
@@ -315,39 +341,49 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
                     child: Wrap(
                       spacing: 6,
                       runSpacing: 6,
-                      children: discussion.tags.take(3).map((tag) => Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: theme.colorScheme.primary.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          '#$tag',
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.primary,
-                          ),
-                        ),
-                      )).toList(),
+                      children: discussion.tags
+                          .take(3)
+                          .map(
+                            (tag) => Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.primary.withValues(
+                                  alpha: 0.1,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                '#$tag',
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: theme.colorScheme.primary,
+                                ),
+                              ),
+                            ),
+                          )
+                          .toList(),
                     ),
                   ),
-                
+
                 // Action buttons
                 Row(
                   children: [
                     // Like button
                     _buildActionButton(
                       context,
-                      icon: discussion.hasLiked 
-                          ? Icons.favorite 
+                      icon: discussion.hasLiked
+                          ? Icons.favorite
                           : Icons.favorite_border,
                       label: '${discussion.likeCount}',
                       onPressed: () => widget.onLikePost(discussion.id),
                       isActive: discussion.hasLiked,
                       color: Colors.red,
                     ),
-                    
+
                     const SizedBox(width: 16),
-                    
+
                     // Reply button
                     _buildActionButton(
                       context,
@@ -355,9 +391,9 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
                       label: '${discussion.replyCount}',
                       onPressed: () => _openDiscussion(context, discussion),
                     ),
-                    
+
                     const SizedBox(width: 16),
-                    
+
                     // Participants
                     _buildActionButton(
                       context,
@@ -365,9 +401,9 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
                       label: '${discussion.participantCount}',
                       onPressed: () => _showParticipants(context, discussion),
                     ),
-                    
+
                     const Spacer(),
-                    
+
                     // Join/Leave button
                     if (!discussion.hasJoined)
                       AdaptiveButton(
@@ -378,9 +414,14 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
                       )
                     else
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
-                          color: theme.colorScheme.primary.withValues(alpha: 0.1),
+                          color: theme.colorScheme.primary.withValues(
+                            alpha: 0.1,
+                          ),
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Row(
@@ -391,9 +432,9 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
                               size: 16,
                               color: theme.colorScheme.primary,
                             ),
-                            
+
                             const SizedBox(width: 4),
-                            
+
                             Text(
                               'Joined',
                               style: theme.textTheme.bodySmall?.copyWith(
@@ -423,10 +464,10 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
     Color? color,
   }) {
     final theme = Theme.of(context);
-    final buttonColor = isActive && color != null 
-        ? color 
+    final buttonColor = isActive && color != null
+        ? color
         : theme.colorScheme.onSurface.withValues(alpha: 0.7);
-    
+
     return InkWell(
       onTap: onPressed,
       borderRadius: BorderRadius.circular(20),
@@ -435,14 +476,10 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              icon,
-              size: 18,
-              color: buttonColor,
-            ),
-            
+            Icon(icon, size: 18, color: buttonColor),
+
             const SizedBox(width: 4),
-            
+
             Text(
               label,
               style: theme.textTheme.bodySmall?.copyWith(
@@ -458,7 +495,7 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
 
   Widget _buildEmptyState(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(48),
@@ -477,18 +514,18 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
                 color: theme.colorScheme.primary,
               ),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             Text(
               'No discussions yet',
               style: theme.textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
-            
+
             const SizedBox(height: 8),
-            
+
             Text(
               'Be the first to start a meaningful conversation in our supportive community.',
               style: theme.textTheme.bodyMedium?.copyWith(
@@ -496,9 +533,9 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
               ),
               textAlign: TextAlign.center,
             ),
-            
+
             const SizedBox(height: 32),
-            
+
             AdaptiveButton(
               text: 'Start a Discussion',
               onPressed: () {
@@ -515,12 +552,14 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
 
   List<Discussion> _getFilteredAndSortedDiscussions() {
     var discussions = widget.discussions;
-    
+
     // Apply filter
     if (_selectedFilter != 'all') {
-      discussions = discussions.where((d) => d.category == _selectedFilter).toList();
+      discussions = discussions
+          .where((d) => d.category == _selectedFilter)
+          .toList();
     }
-    
+
     // Apply sort
     switch (_selectedSort) {
       case 'popular':
@@ -542,15 +581,20 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
         discussions.sort((a, b) => b.createdAt.compareTo(a.createdAt));
         break;
     }
-    
+
     return discussions;
   }
 
   double _calculateTrendingScore(Discussion discussion) {
-    final hoursSinceCreated = DateTime.now().difference(discussion.createdAt).inHours;
+    final hoursSinceCreated = DateTime.now()
+        .difference(discussion.createdAt)
+        .inHours;
     if (hoursSinceCreated == 0) return 0;
-    
-    final engagement = discussion.likeCount + discussion.replyCount + discussion.participantCount;
+
+    final engagement =
+        discussion.likeCount +
+        discussion.replyCount +
+        discussion.participantCount;
     return engagement / (hoursSinceCreated + 1); // +1 to avoid division by zero
   }
 
@@ -638,7 +682,7 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
               _shareDiscussion(discussion);
             },
           ),
-          
+
           ListTile(
             leading: const Icon(Icons.bookmark_border),
             title: const Text('Save Discussion'),
@@ -647,7 +691,7 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
               _saveDiscussion(discussion);
             },
           ),
-          
+
           ListTile(
             leading: const Icon(Icons.report),
             title: const Text('Report Discussion'),
@@ -656,7 +700,7 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
               _showReportDialog(context, discussion);
             },
           ),
-          
+
           const SizedBox(height: 20),
         ],
       ),
@@ -677,20 +721,22 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
           children: [
             Text(
               'Discussion Participants',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             Text(
               '${discussion.participantCount} people are participating in this discussion',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                color: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.7),
               ),
             ),
-            
+
             const SizedBox(height: 32),
           ],
         ),
@@ -700,16 +746,16 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
 
   void _shareDiscussion(Discussion discussion) {
     // Implement sharing functionality
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Discussion shared!')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Discussion shared!')));
   }
 
   void _saveDiscussion(Discussion discussion) {
     // Implement save functionality
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Discussion saved!')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Discussion saved!')));
   }
 
   void _showReportDialog(BuildContext context, Discussion discussion) {

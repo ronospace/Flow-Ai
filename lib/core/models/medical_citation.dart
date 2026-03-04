@@ -23,9 +23,7 @@ class MedicalCitation {
 
   /// Formatted citation in APA style
   String get formattedCitation {
-    final authorStr = authors.isNotEmpty 
-        ? '${authors.join(', ')}. ' 
-        : '';
+    final authorStr = authors.isNotEmpty ? '${authors.join(', ')}. ' : '';
     final yearStr = year != null ? '($year). ' : '';
     final doiStr = doi != null ? ' DOI: $doi' : '';
     return '$authorStr$yearStr$title. $source.$doiStr';
@@ -39,27 +37,33 @@ class MedicalCitationsDatabase {
     'cycle_length': [
       MedicalCitation(
         id: 'acog_2015_menstruation',
-        title: 'Menstruation in Girls and Adolescents: Using the Menstrual Cycle as a Vital Sign',
+        title:
+            'Menstruation in Girls and Adolescents: Using the Menstrual Cycle as a Vital Sign',
         source: 'American College of Obstetricians and Gynecologists',
-        url: 'https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2015/12/menstruation-in-girls-and-adolescents-using-the-menstrual-cycle-as-a-vital-sign',
+        url:
+            'https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2015/12/menstruation-in-girls-and-adolescents-using-the-menstrual-cycle-as-a-vital-sign',
         year: '2015',
         authors: ['ACOG Committee on Adolescent Health Care'],
-        description: 'Clinical guidelines on normal menstrual cycle patterns and variations',
+        description:
+            'Clinical guidelines on normal menstrual cycle patterns and variations',
       ),
     ],
-    
+
     'cycle_regularity': [
       MedicalCitation(
         id: 'who_2020_reproductive',
-        title: 'Reproductive Health Indicators: Guidelines for their generation, interpretation and analysis',
+        title:
+            'Reproductive Health Indicators: Guidelines for their generation, interpretation and analysis',
         source: 'World Health Organization',
-        url: 'https://www.who.int/reproductive-health/publications/monitoring/indicators/en/',
+        url:
+            'https://www.who.int/reproductive-health/publications/monitoring/indicators/en/',
         year: '2020',
         authors: ['World Health Organization'],
-        description: 'WHO guidelines on reproductive health monitoring and cycle regularity',
+        description:
+            'WHO guidelines on reproductive health monitoring and cycle regularity',
       ),
     ],
-    
+
     'fertility_window': [
       MedicalCitation(
         id: 'wilcox_2000_timing',
@@ -75,50 +79,57 @@ class MedicalCitationsDatabase {
         id: 'acog_2019_fertility',
         title: 'Optimizing Natural Fertility',
         source: 'American College of Obstetricians and Gynecologists',
-        url: 'https://www.acog.org/womens-health/faqs/optimizing-natural-fertility',
+        url:
+            'https://www.acog.org/womens-health/faqs/optimizing-natural-fertility',
         year: '2019',
         authors: ['ACOG'],
         description: 'Evidence-based fertility awareness methods',
       ),
     ],
-    
+
     'pcos_detection': [
       MedicalCitation(
         id: 'rotterdam_2004_pcos',
-        title: 'Revised 2003 consensus on diagnostic criteria and long-term health risks related to polycystic ovary syndrome',
+        title:
+            'Revised 2003 consensus on diagnostic criteria and long-term health risks related to polycystic ovary syndrome',
         source: 'Fertility and Sterility',
         url: 'https://www.fertstert.org/article/S0015-0282(03)02853-1/fulltext',
         doi: '10.1016/j.fertnstert.2003.10.004',
         year: '2004',
-        authors: ['Rotterdam ESHRE/ASRM-Sponsored PCOS Consensus Workshop Group'],
+        authors: [
+          'Rotterdam ESHRE/ASRM-Sponsored PCOS Consensus Workshop Group',
+        ],
         description: 'Rotterdam diagnostic criteria for PCOS',
       ),
     ],
-    
+
     'endometriosis_detection': [
       MedicalCitation(
         id: 'acog_2021_endometriosis',
         title: 'Management of Endometriosis',
         source: 'American College of Obstetricians and Gynecologists',
-        url: 'https://www.acog.org/clinical/clinical-guidance/practice-bulletin/articles/2021/07/management-of-endometriosis',
+        url:
+            'https://www.acog.org/clinical/clinical-guidance/practice-bulletin/articles/2021/07/management-of-endometriosis',
         year: '2021',
         authors: ['ACOG Committee on Practice Bulletins'],
-        description: 'Clinical practice guidelines for endometriosis diagnosis and management',
+        description:
+            'Clinical practice guidelines for endometriosis diagnosis and management',
       ),
     ],
-    
+
     'menstrual_symptoms': [
       MedicalCitation(
         id: 'acog_2018_dysmenorrhea',
         title: 'Dysmenorrhea and Endometriosis in the Adolescent',
         source: 'American College of Obstetricians and Gynecologists',
-        url: 'https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2018/12/dysmenorrhea-and-endometriosis-in-the-adolescent',
+        url:
+            'https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2018/12/dysmenorrhea-and-endometriosis-in-the-adolescent',
         year: '2018',
         authors: ['ACOG Committee on Adolescent Health Care'],
         description: 'Guidelines on menstrual pain and symptoms',
       ),
     ],
-    
+
     'hormone_tracking': [
       MedicalCitation(
         id: 'reed_2016_hormones',
@@ -130,28 +141,32 @@ class MedicalCitationsDatabase {
         description: 'Comprehensive review of menstrual cycle hormonal control',
       ),
     ],
-    
+
     'health_tracking': [
       MedicalCitation(
         id: 'nih_2021_womens_health',
         title: 'Menstruation and the Menstrual Cycle',
-        source: 'National Institutes of Health - Office of Research on Women\'s Health',
-        url: 'https://orwh.od.nih.gov/sex-differences/menstruation-menstrual-cycle',
+        source:
+            'National Institutes of Health - Office of Research on Women\'s Health',
+        url:
+            'https://orwh.od.nih.gov/sex-differences/menstruation-menstrual-cycle',
         year: '2021',
         authors: ['National Institutes of Health'],
         description: 'Evidence-based information on menstrual health',
       ),
     ],
-    
+
     'lifestyle_recommendations': [
       MedicalCitation(
         id: 'acog_2020_lifestyle',
         title: 'Lifestyle Modifications and Behavioral Interventions',
         source: 'American College of Obstetricians and Gynecologists',
-        url: 'https://www.acog.org/womens-health/experts-and-stories/the-latest/lifestyle-modifications-for-health',
+        url:
+            'https://www.acog.org/womens-health/experts-and-stories/the-latest/lifestyle-modifications-for-health',
         year: '2020',
         authors: ['ACOG'],
-        description: 'Evidence-based lifestyle recommendations for reproductive health',
+        description:
+            'Evidence-based lifestyle recommendations for reproductive health',
       ),
     ],
   };

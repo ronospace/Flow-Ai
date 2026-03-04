@@ -15,12 +15,13 @@ class InsightsProvider extends ChangeNotifier {
     notifyListeners();
 
     await Future.delayed(const Duration(seconds: 1));
-    
+
     _insights.addAll([
       AIInsight(
         type: InsightType.cycleRegularity,
         title: 'Your cycles are very regular! 🎯',
-        description: 'Your cycles are consistently regular, which is a great sign of reproductive health.',
+        description:
+            'Your cycles are consistently regular, which is a great sign of reproductive health.',
         confidence: 0.87,
         actionable: false,
         recommendations: const ['Keep up your healthy routine!'],
@@ -31,14 +32,17 @@ class InsightsProvider extends ChangeNotifier {
         description: 'You experience cramps in 80% of your cycles.',
         confidence: 0.8,
         actionable: true,
-        recommendations: const ['Track timing of cramps', 'Note severity levels'],
+        recommendations: const [
+          'Track timing of cramps',
+          'Note severity levels',
+        ],
       ),
     ]);
 
     _isLoading = false;
     notifyListeners();
   }
-  
+
   void addPremiumInsights() {
     _premiumUnlocked = true;
     // Add premium AI insights when user watches rewarded ad
@@ -46,32 +50,47 @@ class InsightsProvider extends ChangeNotifier {
       AIInsight(
         type: InsightType.healthRecommendation,
         title: '🌟 Premium Insight: Optimal Exercise Timing',
-        description: 'Based on your cycle patterns, the best time for high-intensity workouts is days 7-14 of your cycle when energy levels peak.',
+        description:
+            'Based on your cycle patterns, the best time for high-intensity workouts is days 7-14 of your cycle when energy levels peak.',
         confidence: 0.92,
         actionable: true,
-        recommendations: const ['Schedule HIIT workouts days 7-14', 'Try gentle yoga during PMS phase', 'Listen to your body\'s energy cues'],
+        recommendations: const [
+          'Schedule HIIT workouts days 7-14',
+          'Try gentle yoga during PMS phase',
+          'Listen to your body\'s energy cues',
+        ],
       ),
       AIInsight(
         type: InsightType.nutritionGuidance,
         title: '🥗 Premium Insight: Cycle-Synced Nutrition',
-        description: 'Your data shows improved mood when iron-rich foods are consumed during menstruation. Magnesium intake correlates with reduced cramping.',
+        description:
+            'Your data shows improved mood when iron-rich foods are consumed during menstruation. Magnesium intake correlates with reduced cramping.',
         confidence: 0.89,
         actionable: true,
-        recommendations: const ['Increase iron intake days 1-5', 'Add magnesium supplements', 'Focus on leafy greens'],
+        recommendations: const [
+          'Increase iron intake days 1-5',
+          'Add magnesium supplements',
+          'Focus on leafy greens',
+        ],
       ),
       AIInsight(
         type: InsightType.sleepOptimization,
         title: '😴 Premium Insight: Sleep Pattern Analysis',
-        description: 'Your sleep quality directly impacts cycle regularity. Going to bed 30 minutes earlier during luteal phase improves overall wellness scores.',
+        description:
+            'Your sleep quality directly impacts cycle regularity. Going to bed 30 minutes earlier during luteal phase improves overall wellness scores.',
         confidence: 0.85,
         actionable: true,
-        recommendations: const ['Earlier bedtime days 15-28', 'Create calming bedtime routine', 'Avoid screens 1 hour before bed'],
+        recommendations: const [
+          'Earlier bedtime days 15-28',
+          'Create calming bedtime routine',
+          'Avoid screens 1 hour before bed',
+        ],
       ),
     ]);
-    
+
     notifyListeners();
   }
-  
+
   /// Clear all user insights data (used during sign out)
   void clearUserData() {
     _insights.clear();

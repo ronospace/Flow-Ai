@@ -13,12 +13,7 @@ enum ChartType {
   radialChart,
 }
 
-enum AxisType {
-  numeric,
-  categorical,
-  datetime,
-  logarithmic,
-}
+enum AxisType { numeric, categorical, datetime, logarithmic }
 
 enum LegendPosition {
   top,
@@ -40,21 +35,9 @@ enum AnnotationType {
   arrow,
 }
 
-enum PointShape {
-  circle,
-  square,
-  diamond,
-  triangle,
-  cross,
-  plus,
-}
+enum PointShape { circle, square, diamond, triangle, cross, plus }
 
-enum ImageFormat {
-  png,
-  jpg,
-  svg,
-  pdf,
-}
+enum ImageFormat { png, jpg, svg, pdf }
 
 // === CORE DATA MODELS ===
 
@@ -74,13 +57,7 @@ class DataPoint {
   });
 
   Map<String, dynamic> toJson() {
-    return {
-      'x': x,
-      'y': y,
-      'z': z,
-      'label': label,
-      'metadata': metadata,
-    };
+    return {'x': x, 'y': y, 'z': z, 'label': label, 'metadata': metadata};
   }
 
   factory DataPoint.fromJson(Map<String, dynamic> json) {
@@ -156,7 +133,9 @@ class ChartSeriesStyle {
       'point_shape': pointShape.name,
       'point_color': pointColor?.toARGB32(),
       'fill_opacity': fillOpacity,
-      'heatmap_color_scheme': heatmapColorScheme.map((c) => c.toARGB32()).toList(),
+      'heatmap_color_scheme': heatmapColorScheme
+          .map((c) => c.toARGB32())
+          .toList(),
     };
   }
 
@@ -170,11 +149,15 @@ class ChartSeriesStyle {
         (e) => e.name == json['point_shape'],
         orElse: () => PointShape.circle,
       ),
-      pointColor: json['point_color'] != null ? Color(json['point_color']) : null,
+      pointColor: json['point_color'] != null
+          ? Color(json['point_color'])
+          : null,
       fillOpacity: json['fill_opacity'] ?? 0.0,
-      heatmapColorScheme: (json['heatmap_color_scheme'] as List?)
-          ?.map((c) => Color(c))
-          .toList() ?? [],
+      heatmapColorScheme:
+          (json['heatmap_color_scheme'] as List?)
+              ?.map((c) => Color(c))
+              .toList() ??
+          [],
     );
   }
 }
@@ -316,14 +299,18 @@ class ChartData {
       type: ChartType.values.firstWhere((e) => e.name == json['type']),
       title: json['title'],
       subtitle: json['subtitle'] ?? '',
-      series: (json['series'] as List).map((s) => ChartSeries.fromJson(s)).toList(),
+      series: (json['series'] as List)
+          .map((s) => ChartSeries.fromJson(s))
+          .toList(),
       xAxisConfig: AxisConfiguration.fromJson(json['x_axis_config']),
       yAxisConfig: AxisConfiguration.fromJson(json['y_axis_config']),
       legend: ChartLegend.fromJson(json['legend']),
       interactivity: ChartInteractivity.fromJson(json['interactivity']),
-      annotations: (json['annotations'] as List?)
-          ?.map((a) => ChartAnnotation.fromJson(a))
-          .toList() ?? [],
+      annotations:
+          (json['annotations'] as List?)
+              ?.map((a) => ChartAnnotation.fromJson(a))
+              .toList() ??
+          [],
       hasError: json['has_error'] ?? false,
       errorMessage: json['error_message'],
     );
@@ -549,7 +536,10 @@ class ChartTheme {
       titleStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       subtitleStyle: const TextStyle(fontSize: 14),
       axisLabelStyle: const TextStyle(fontSize: 12),
-      axisTitleStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+      axisTitleStyle: const TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+      ),
       legendStyle: const TextStyle(fontSize: 12),
     );
   }
@@ -571,10 +561,18 @@ class ChartTheme {
         Colors.indigoAccent,
         Colors.pinkAccent,
       ],
-      titleStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+      titleStyle: const TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+      ),
       subtitleStyle: const TextStyle(fontSize: 14, color: Colors.white70),
       axisLabelStyle: const TextStyle(fontSize: 12, color: Colors.white60),
-      axisTitleStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.white70),
+      axisTitleStyle: const TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: Colors.white70,
+      ),
       legendStyle: const TextStyle(fontSize: 12, color: Colors.white70),
     );
   }
@@ -683,24 +681,18 @@ class DateRange {
   final DateTime start;
   final DateTime end;
 
-  DateRange({
-    required this.start,
-    required this.end,
-  });
+  DateRange({required this.start, required this.end});
 
   Duration get duration => end.difference(start);
 
   bool contains(DateTime date) {
     return date.isAfter(start) && date.isBefore(end) ||
-           date.isAtSameMomentAs(start) ||
-           date.isAtSameMomentAs(end);
+        date.isAtSameMomentAs(start) ||
+        date.isAtSameMomentAs(end);
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'start': start.toIso8601String(),
-      'end': end.toIso8601String(),
-    };
+    return {'start': start.toIso8601String(), 'end': end.toIso8601String()};
   }
 
   factory DateRange.fromJson(Map<String, dynamic> json) {
@@ -711,7 +703,8 @@ class DateRange {
   }
 
   @override
-  String toString() => '${start.toString().split(' ')[0]} - ${end.toString().split(' ')[0]}';
+  String toString() =>
+      '${start.toString().split(' ')[0]} - ${end.toString().split(' ')[0]}';
 }
 
 // === EXPORT MODELS ===

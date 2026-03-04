@@ -1,4 +1,3 @@
-
 /// Anonymous user profile for community interactions
 class AnonymousProfile {
   final String anonymousId;
@@ -189,7 +188,9 @@ class CommunityPost {
       type: PostType.values[json['type'] as int],
       tags: List<String>.from(json['tags'] as List),
       createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at'] as String) : null,
+      updatedAt: json['updated_at'] != null
+          ? DateTime.parse(json['updated_at'] as String)
+          : null,
       upvotes: json['upvotes'] as int? ?? 0,
       downvotes: json['downvotes'] as int? ?? 0,
       replyCount: json['reply_count'] as int? ?? 0,
@@ -283,7 +284,9 @@ class CommunityReply {
       authorId: json['author_id'] as String,
       content: json['content'] as String,
       createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at'] as String) : null,
+      updatedAt: json['updated_at'] != null
+          ? DateTime.parse(json['updated_at'] as String)
+          : null,
       upvotes: json['upvotes'] as int? ?? 0,
       downvotes: json['downvotes'] as int? ?? 0,
       isAnonymous: json['is_anonymous'] as bool? ?? true,
@@ -463,7 +466,9 @@ class CommunityAchievement {
       category: json['category'] as String,
       pointsRequired: json['points_required'] as int,
       isRare: json['is_rare'] as bool? ?? false,
-      unlockedAt: json['unlocked_at'] != null ? DateTime.parse(json['unlocked_at'] as String) : null,
+      unlockedAt: json['unlocked_at'] != null
+          ? DateTime.parse(json['unlocked_at'] as String)
+          : null,
     );
   }
 
@@ -484,23 +489,9 @@ class CommunityAchievement {
 }
 
 /// Enums for community features
-enum PostType {
-  question,
-  discussion,
-  experience,
-  support,
-  tip,
-  study,
-}
+enum PostType { question, discussion, experience, support, tip, study }
 
-enum ActionType {
-  warning,
-  hide,
-  remove,
-  ban,
-  promote,
-  feature,
-}
+enum ActionType { warning, hide, remove, ban, promote, feature }
 
 /// Content safety and filtering
 class ContentFilter {
@@ -518,21 +509,21 @@ class ContentFilter {
 
   bool isContentSafe(String content) {
     final lowerContent = content.toLowerCase();
-    
+
     // Check for banned words
     for (final word in bannedWords) {
       if (lowerContent.contains(word.toLowerCase())) {
         return false;
       }
     }
-    
+
     // Check for flagged phrases
     for (final phrase in flaggedPhrases) {
       if (lowerContent.contains(phrase.toLowerCase())) {
         return false;
       }
     }
-    
+
     return true;
   }
 
@@ -541,19 +532,19 @@ class ContentFilter {
     // In production, this would use ML models
     int toxicityIndicators = 0;
     final words = content.toLowerCase().split(' ');
-    
+
     for (final word in words) {
       if (bannedWords.contains(word)) {
         toxicityIndicators += 3;
       }
     }
-    
+
     for (final phrase in flaggedPhrases) {
       if (content.toLowerCase().contains(phrase)) {
         toxicityIndicators += 2;
       }
     }
-    
+
     return (toxicityIndicators / words.length).clamp(0.0, 1.0);
   }
 }

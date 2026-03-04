@@ -6,7 +6,6 @@ import 'package:share_plus/share_plus.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../generated/app_localizations.dart';
 import '../services/partner_service.dart';
-import '../models/partner_models.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PartnerInvitationDialog extends StatefulWidget {
@@ -211,110 +210,119 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
       padding: const EdgeInsets.all(24),
       child: Form(
         key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Send Email Invitation',
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: AppTheme.darkGrey,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Your partner will receive a beautiful invitation email with instructions to join.',
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: AppTheme.mediumGrey,
-                height: 1.4,
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            TextFormField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                labelText: 'Partner\'s Email',
-                hintText: 'Enter your partner\'s email address',
-                prefixIcon: Icon(Icons.email, color: AppTheme.primaryRose),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide(color: AppTheme.primaryRose, width: 2),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Send Email Invitation',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: AppTheme.darkGrey,
                 ),
               ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter an email address';
-                }
-                if (!RegExp(
-                  r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                ).hasMatch(value)) {
-                  return 'Please enter a valid email address';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 16),
-
-            TextFormField(
-              controller: _messageController,
-              maxLines: 3,
-              decoration: InputDecoration(
-                labelText: 'Personal Message (Optional)',
-                hintText: 'Add a personal touch to your invitation...',
-                prefixIcon: Icon(Icons.message, color: AppTheme.primaryRose),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide(color: AppTheme.primaryRose, width: 2),
+              const SizedBox(height: 8),
+              Text(
+                'Your partner will receive a beautiful invitation email with instructions to join.',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: AppTheme.mediumGrey,
+                  height: 1.4,
                 ),
               ),
-            ),
+              const SizedBox(height: 24),
 
-            const Spacer(),
-
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed: _isLoading ? null : _sendEmailInvitation,
-                icon: _isLoading
-                    ? SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            Colors.white,
-                          ),
-                        ),
-                      )
-                    : const Icon(Icons.send),
-                label: Text(_isLoading ? 'Sending...' : 'Send Invitation'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.primaryRose,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
+              TextFormField(
+                controller: _emailController,
+                decoration: InputDecoration(
+                  labelText: 'Partner\'s Email',
+                  hintText: 'Enter your partner\'s email address',
+                  prefixIcon: Icon(Icons.email, color: AppTheme.primaryRose),
+                  border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                      color: AppTheme.primaryRose,
+                      width: 2,
+                    ),
+                  ),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter an email address';
+                  }
+                  if (!RegExp(
+                    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                  ).hasMatch(value)) {
+                    return 'Please enter a valid email address';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+
+              TextFormField(
+                controller: _messageController,
+                maxLines: 3,
+                decoration: InputDecoration(
+                  labelText: 'Personal Message (Optional)',
+                  hintText: 'Add a personal touch to your invitation...',
+                  prefixIcon: Icon(Icons.message, color: AppTheme.primaryRose),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                      color: AppTheme.primaryRose,
+                      width: 2,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+
+              const SizedBox(height: 24),
+
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: _isLoading ? null : _openEmailInvite,
+                  icon: _isLoading
+                      ? SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Colors.white,
+                            ),
+                          ),
+                        )
+                      : const Icon(Icons.send),
+                  label: Text(_isLoading ? 'Sending...' : 'Send Invitation'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppTheme.primaryRose,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     ).animate().fadeIn(delay: 300.ms);
   }
 
   Widget _buildQRCodeTab(ThemeData theme, AppLocalizations localizations) {
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             'QR Code Invitation',
@@ -355,12 +363,6 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                         version: QrVersions.auto,
                         size: 200.0,
                         foregroundColor: AppTheme.darkGrey,
-                        embeddedImage: const AssetImage(
-                          'assets/images/logo.png',
-                        ),
-                        embeddedImageStyle: const QrEmbeddedImageStyle(
-                          size: Size(40, 40),
-                        ),
                       )
                     else
                       Container(
@@ -412,13 +414,13 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
               .scale(begin: const Offset(0.8, 0.8))
               .fadeIn(delay: 200.ms),
 
-          const Spacer(),
+          const SizedBox(height: 24),
 
           Row(
             children: [
               Expanded(
                 child: OutlinedButton.icon(
-                  onPressed: _generateQRCode,
+                  onPressed: _generateInvitation,
                   icon: const Icon(Icons.refresh),
                   label: const Text('Generate Code'),
                   style: OutlinedButton.styleFrom(
@@ -455,9 +457,10 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
   }
 
   Widget _buildLinkShareTab(ThemeData theme, AppLocalizations localizations) {
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             'Share Invitation Link',
@@ -542,13 +545,13 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
             ),
           ).animate().fadeIn(delay: 200.ms),
 
-          const Spacer(),
+          const SizedBox(height: 24),
 
           Row(
             children: [
               Expanded(
                 child: OutlinedButton.icon(
-                  onPressed: _generateLink,
+                  onPressed: _generateInvitation,
                   icon: const Icon(Icons.link),
                   label: const Text('Generate Link'),
                   style: OutlinedButton.styleFrom(
@@ -585,40 +588,27 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
   }
 
   // Action methods
-  Future<void> _sendEmailInvitation() async {
-    if (!_formKey.currentState!.validate()) return;
 
-    setState(() => _isLoading = true);
-
-    try {
-      final invitation = await widget.partnerService.sendPartnerInvitation(
-        inviteeEmail: _emailController.text.trim(),
-        personalMessage: _messageController.text.trim().isNotEmpty
-            ? _messageController.text.trim()
-            : null,
-      );
-
-      if (invitation != null) {
-        setState(() => _generatedInvitation = invitation);
-        _showSuccessMessage('Invitation sent successfully!');
-      } else {
-        _showErrorMessage('Failed to send invitation. Please try again.');
-      }
-    } catch (e) {
-      _showErrorMessage('Error: $e');
-    } finally {
-      setState(() => _isLoading = false);
+  Future<void> _openEmailInvite() async {
+    if (_generatedInvitation == null) {
+      await _generateInvitation();
     }
-  }
+    if (_generatedInvitation == null) return;
 
-  void _generateQRCode() async {
-    // Generate a temporary invitation for QR code
-    await _generateInvitation();
-  }
+    final link = _generateInvitationLink(_generatedInvitation!);
 
-  void _generateLink() async {
-    // Generate a temporary invitation for link sharing
-    await _generateInvitation();
+    final subject = Uri.encodeComponent('Flow AI Partner Invitation');
+    final body = Uri.encodeComponent(
+      'Join me on Flow AI!\n\nUse this link to connect:\n$link',
+    );
+
+    final uri = Uri.parse('mailto:?subject=$subject&body=$body');
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      _showErrorMessage('No email app available.');
+    }
   }
 
   Future<void> _generateInvitation() async {
@@ -640,7 +630,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
   }
 
   String _generateInvitationLink(PartnerInvitation invitation) {
-    return 'https://flowsense.app/join/${invitation.invitationCode}';
+    return 'https://flow-ai-656b3.web.app/invite/${invitation.invitationCode}';
   }
 
   void _copyToClipboard(String text) {
@@ -678,38 +668,6 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
-    );
-  }
-
-  Future<void> _shareWhatsApp() async {
-    if (_generatedInvitation == null) {
-      await _generateInvitation();
-    }
-    if (_generatedInvitation == null) return;
-
-    final link = _generateInvitationLink(_generatedInvitation!);
-    final text =
-        'Join me on Flow Ai! Use this link to connect and share our cycle journey together: $link';
-
-    final uri = Uri.parse('https://wa.me/?text=${Uri.encodeComponent(text)}');
-    final ok = await canLaunchUrl(uri);
-    if (!ok) {
-      _showErrorMessage('WhatsApp is not available on this device.');
-      return;
-    }
-    await launchUrl(uri, mode: LaunchMode.externalApplication);
-  }
-
-  Future<void> _shareSystemSheet() async {
-    if (_generatedInvitation == null) {
-      await _generateInvitation();
-    }
-    if (_generatedInvitation == null) return;
-
-    final link = _generateInvitationLink(_generatedInvitation!);
-    Share.share(
-      'Join me on Flow Ai! Use this link to connect and share our cycle journey together: $link',
-      subject: 'Flow Ai Partner Invitation',
     );
   }
 

@@ -9,15 +9,12 @@ import '../../../core/widgets/medical_disclaimer_banner.dart';
 class AdvancedAnalyticsDashboard extends StatelessWidget {
   final AnalyticsProvider provider;
 
-  const AdvancedAnalyticsDashboard({
-    super.key,
-    required this.provider,
-  });
+  const AdvancedAnalyticsDashboard({super.key, required this.provider});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -26,35 +23,35 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
           // Advanced Health Score Card
           _buildAdvancedHealthScoreCard(theme),
           const SizedBox(height: 24),
-          
+
           // Key Metrics Grid
           _buildAdvancedMetricsGrid(theme),
           const SizedBox(height: 24),
-          
+
           // AI Insights Section
           _buildAIInsightsSection(theme),
           const SizedBox(height: 24),
-          
+
           // Comparative Analysis
           _buildComparativeAnalysis(theme),
           const SizedBox(height: 24),
-          
+
           // Long-term Trend Analysis
           _buildLongTermTrendAnalysis(theme),
           const SizedBox(height: 24),
-          
+
           // Predictive Insights
           _buildPredictiveInsights(theme),
           const SizedBox(height: 24),
-          
+
           // Health Patterns Recognition
           _buildHealthPatternsSection(theme),
-          
+
           const SizedBox(height: 24),
-          
+
           // Medical Disclaimer Banner (App Store 1.4.1)
           MedicalDisclaimerBanner(),
-          
+
           // Medical Citations Footer (App Store 1.4.1)
           MedicalCitationsFooter(),
         ],
@@ -64,12 +61,15 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
 
   Widget _buildAdvancedHealthScoreCard(ThemeData theme) {
     final healthScore = provider.healthAnalytics?.overallHealthScore ?? 70.0;
-    final cycleRegularity = (provider.cycleAnalytics?.regularityScore ?? 0.8) * 100;
-    final predictionAccuracy = provider.predictionAnalytics?.confidenceScore ?? 85.0;
-    
-    final overallScore = (healthScore + cycleRegularity + predictionAccuracy) / 3;
+    final cycleRegularity =
+        (provider.cycleAnalytics?.regularityScore ?? 0.8) * 100;
+    final predictionAccuracy =
+        provider.predictionAnalytics?.confidenceScore ?? 85.0;
+
+    final overallScore =
+        (healthScore + cycleRegularity + predictionAccuracy) / 3;
     final scoreColor = _getScoreColor(overallScore);
-    
+
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -148,17 +148,15 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
                     Text(
                       _getScoreDescription(overallScore),
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.7,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        Icon(
-                          Icons.auto_awesome,
-                          color: scoreColor,
-                          size: 16,
-                        ),
+                        Icon(Icons.auto_awesome, color: scoreColor, size: 16),
                         const SizedBox(width: 4),
                         Text(
                           'AI-Enhanced Analysis',
@@ -180,13 +178,25 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: _buildScoreBreakdown('Health', healthScore, AppTheme.primaryRose),
+                child: _buildScoreBreakdown(
+                  'Health',
+                  healthScore,
+                  AppTheme.primaryRose,
+                ),
               ),
               Expanded(
-                child: _buildScoreBreakdown('Regularity', cycleRegularity, AppTheme.secondaryBlue),
+                child: _buildScoreBreakdown(
+                  'Regularity',
+                  cycleRegularity,
+                  AppTheme.secondaryBlue,
+                ),
               ),
               Expanded(
-                child: _buildScoreBreakdown('Predictions', predictionAccuracy, AppTheme.accentMint),
+                child: _buildScoreBreakdown(
+                  'Predictions',
+                  predictionAccuracy,
+                  AppTheme.accentMint,
+                ),
               ),
             ],
           ),
@@ -241,7 +251,8 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
       children: [
         _buildAdvancedMetricCard(
           title: 'Cycle Precision',
-          value: '${((provider.cycleAnalytics?.regularityScore ?? 0.85) * 100).toInt()}%',
+          value:
+              '${((provider.cycleAnalytics?.regularityScore ?? 0.85) * 100).toInt()}%',
           subtitle: 'Regularity index',
           icon: Icons.favorite,
           color: AppTheme.primaryRose,
@@ -251,7 +262,8 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
         ),
         _buildAdvancedMetricCard(
           title: 'AI Confidence',
-          value: '${provider.predictionAnalytics?.confidenceScore.toInt() ?? 88}%',
+          value:
+              '${provider.predictionAnalytics?.confidenceScore.toInt() ?? 88}%',
           subtitle: 'Prediction accuracy',
           icon: Icons.psychology,
           color: AppTheme.secondaryBlue,
@@ -261,7 +273,8 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
         ),
         _buildAdvancedMetricCard(
           title: 'Wellness Trend',
-          value: '${provider.healthAnalytics?.overallHealthScore.toInt() ?? 82}%',
+          value:
+              '${provider.healthAnalytics?.overallHealthScore.toInt() ?? 82}%',
           subtitle: 'Health trajectory',
           icon: Icons.trending_up,
           color: AppTheme.accentMint,
@@ -354,7 +367,9 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             value,
-            style: theme.textTheme.headlineMedium?.copyWith(fontSize: 26, fontWeight: FontWeight.bold,
+            style: theme.textTheme.headlineMedium?.copyWith(
+              fontSize: 26,
+              fontWeight: FontWeight.bold,
               color: theme.colorScheme.onSurface,
             ),
           ),
@@ -373,7 +388,7 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: theme.textTheme.bodySmall?.copyWith(
               color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-          ),
+            ),
           ),
           const SizedBox(height: 8),
           // Mini Chart
@@ -451,7 +466,9 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
                     Text(
                       'Personalized analysis from your data',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.6,
+                        ),
                       ),
                     ),
                   ],
@@ -486,9 +503,9 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          ..._getAIInsights().take(4).map(
-            (insight) => _buildInsightItem(insight, theme),
-          ),
+          ..._getAIInsights()
+              .take(4)
+              .map((insight) => _buildInsightItem(insight, theme)),
         ],
       ),
     );
@@ -572,9 +589,7 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
           const SizedBox(height: 20),
           Row(
             children: [
-              Expanded(
-                child: _buildComparisonChart(theme),
-              ),
+              Expanded(child: _buildComparisonChart(theme)),
               const SizedBox(width: 20),
               Expanded(
                 child: Column(
@@ -637,12 +652,30 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
           ),
           borderData: FlBorderData(show: false),
           barGroups: [
-            BarChartGroupData(x: 0, barRods: [BarChartRodData(toY: 71, color: AppTheme.lightGrey)]),
-            BarChartGroupData(x: 1, barRods: [BarChartRodData(toY: 75, color: AppTheme.mediumGrey)]),
-            BarChartGroupData(x: 2, barRods: [BarChartRodData(toY: 77, color: AppTheme.mediumGrey)]),
-            BarChartGroupData(x: 3, barRods: [BarChartRodData(toY: 79, color: AppTheme.accentMint)]),
-            BarChartGroupData(x: 4, barRods: [BarChartRodData(toY: 81, color: AppTheme.accentMint)]),
-            BarChartGroupData(x: 5, barRods: [BarChartRodData(toY: 82, color: AppTheme.successGreen)]),
+            BarChartGroupData(
+              x: 0,
+              barRods: [BarChartRodData(toY: 71, color: AppTheme.lightGrey)],
+            ),
+            BarChartGroupData(
+              x: 1,
+              barRods: [BarChartRodData(toY: 75, color: AppTheme.mediumGrey)],
+            ),
+            BarChartGroupData(
+              x: 2,
+              barRods: [BarChartRodData(toY: 77, color: AppTheme.mediumGrey)],
+            ),
+            BarChartGroupData(
+              x: 3,
+              barRods: [BarChartRodData(toY: 79, color: AppTheme.accentMint)],
+            ),
+            BarChartGroupData(
+              x: 4,
+              barRods: [BarChartRodData(toY: 81, color: AppTheme.accentMint)],
+            ),
+            BarChartGroupData(
+              x: 5,
+              barRods: [BarChartRodData(toY: 82, color: AppTheme.successGreen)],
+            ),
           ],
         ),
       ),
@@ -659,12 +692,12 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: isImprovement 
+        color: isImprovement
             ? AppTheme.successGreen.withValues(alpha: 0.05)
             : theme.colorScheme.surface.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: isImprovement 
+          color: isImprovement
               ? AppTheme.successGreen.withValues(alpha: 0.3)
               : theme.colorScheme.outline.withValues(alpha: 0.2),
         ),
@@ -690,18 +723,14 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
           Row(
             children: [
               if (isImprovement)
-                Icon(
-                  Icons.trending_up,
-                  color: AppTheme.successGreen,
-                  size: 10,
-                ),
+                Icon(Icons.trending_up, color: AppTheme.successGreen, size: 10),
               const SizedBox(width: 2),
               Text(
                 change,
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
-                  color: isImprovement 
+                  color: isImprovement
                       ? AppTheme.successGreen
                       : theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
@@ -735,11 +764,7 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(
-                Icons.show_chart,
-                color: AppTheme.secondaryBlue,
-                size: 20,
-              ),
+              Icon(Icons.show_chart, color: AppTheme.secondaryBlue, size: 20),
               const SizedBox(width: 8),
               Text(
                 'Long-term Health Patterns',
@@ -786,7 +811,14 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
                     sideTitles: SideTitles(
                       showTitles: true,
                       getTitlesWidget: (value, meta) {
-                        const months = ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                        const months = [
+                          'Jul',
+                          'Aug',
+                          'Sep',
+                          'Oct',
+                          'Nov',
+                          'Dec',
+                        ];
                         return Text(
                           months[value.toInt() % months.length],
                           style: TextStyle(fontSize: 10),
@@ -794,8 +826,12 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
                       },
                     ),
                   ),
-                  rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  rightTitles: AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  topTitles: AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
                 ),
                 borderData: FlBorderData(show: false),
                 lineBarsData: [
@@ -875,13 +911,7 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 6),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.grey[600],
-          ),
-        ),
+        Text(label, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
       ],
     );
   }
@@ -899,9 +929,7 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
           ],
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: AppTheme.accentMint.withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: AppTheme.accentMint.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -935,7 +963,9 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
                     Text(
                       'AI forecasts for next 30 days',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.6,
+                        ),
                       ),
                     ),
                   ],
@@ -1004,9 +1034,7 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: color.withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
         boxShadow: [
           BoxShadow(
             color: color.withValues(alpha: 0.1),
@@ -1047,10 +1075,7 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
               Container(
                 width: 4,
                 height: 4,
-                decoration: BoxDecoration(
-                  color: color,
-                  shape: BoxShape.circle,
-                ),
+                decoration: BoxDecoration(color: color, shape: BoxShape.circle),
               ),
               const SizedBox(width: 4),
               Text(
@@ -1088,11 +1113,7 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(
-                Icons.pattern,
-                color: AppTheme.primaryPurple,
-                size: 20,
-              ),
+              Icon(Icons.pattern, color: AppTheme.primaryPurple, size: 20),
               const SizedBox(width: 8),
               Text(
                 'Health Pattern Recognition',
@@ -1288,61 +1309,68 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
 
   List<Map<String, dynamic>> _getAIInsights() {
     final insights = <Map<String, dynamic>>[];
-    
+
     // Dynamic insights based on provider data
     final regularity = provider.cycleAnalytics?.regularityScore ?? 0.8;
     final accuracy = provider.predictionAnalytics?.confidenceScore ?? 85.0;
     final healthScore = provider.healthAnalytics?.overallHealthScore ?? 75.0;
-    
+
     if (regularity > 0.85) {
       insights.add({
         'icon': Icons.check_circle,
         'color': AppTheme.successGreen,
-        'text': 'Your cycle regularity is excellent at ${(regularity * 100).toInt()}%. This suggests optimal hormonal balance and healthy lifestyle patterns.',
+        'text':
+            'Your cycle regularity is excellent at ${(regularity * 100).toInt()}%. This suggests optimal hormonal balance and healthy lifestyle patterns.',
       });
     } else if (regularity < 0.6) {
       insights.add({
         'icon': Icons.info,
         'color': AppTheme.warningOrange,
-        'text': 'Cycle irregularity detected. Consider tracking stress levels, sleep patterns, and nutrition for deeper insights.',
+        'text':
+            'Cycle irregularity detected. Consider tracking stress levels, sleep patterns, and nutrition for deeper insights.',
       });
     }
-    
+
     if (accuracy > 90) {
       insights.add({
         'icon': Icons.auto_awesome,
         'color': AppTheme.primaryPurple,
-        'text': 'AI predictions achieve ${accuracy.toInt()}% accuracy thanks to your consistent tracking. This enables highly reliable forecasts.',
+        'text':
+            'AI predictions achieve ${accuracy.toInt()}% accuracy thanks to your consistent tracking. This enables highly reliable forecasts.',
       });
     }
-    
+
     if (healthScore > 80) {
       insights.add({
         'icon': Icons.trending_up,
         'color': AppTheme.accentMint,
-        'text': 'Your overall wellness trajectory shows positive trends. Current patterns suggest continued health optimization.',
+        'text':
+            'Your overall wellness trajectory shows positive trends. Current patterns suggest continued health optimization.',
       });
     }
-    
+
     // Default insights
     insights.addAll([
       {
         'icon': Icons.insights,
         'color': AppTheme.primaryPurple,
-        'text': 'Your tracking consistency enables AI to identify subtle patterns in your health data over time.',
+        'text':
+            'Your tracking consistency enables AI to identify subtle patterns in your health data over time.',
       },
       {
         'icon': Icons.psychology,
         'color': AppTheme.secondaryBlue,
-        'text': 'Machine learning analysis reveals strong correlations between your mood, energy, and cycle phases.',
+        'text':
+            'Machine learning analysis reveals strong correlations between your mood, energy, and cycle phases.',
       },
       {
         'icon': Icons.favorite,
         'color': AppTheme.primaryRose,
-        'text': 'Your data suggests healthy reproductive patterns and good responsiveness to lifestyle interventions.',
+        'text':
+            'Your data suggests healthy reproductive patterns and good responsiveness to lifestyle interventions.',
       },
     ]);
-    
+
     return insights;
   }
 
@@ -1350,28 +1378,32 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
     return [
       {
         'title': 'Sleep Quality Impact',
-        'description': 'Better sleep (7-9 hours) correlates with 23% improved cycle regularity',
+        'description':
+            'Better sleep (7-9 hours) correlates with 23% improved cycle regularity',
         'icon': Icons.bedtime,
         'color': AppTheme.secondaryBlue,
         'confidence': 87,
       },
       {
         'title': 'Stress Response Pattern',
-        'description': 'High stress periods show 15% increase in cycle variability within 2 weeks',
+        'description':
+            'High stress periods show 15% increase in cycle variability within 2 weeks',
         'icon': Icons.psychology,
         'color': AppTheme.warningOrange,
         'confidence': 92,
       },
       {
         'title': 'Exercise Correlation',
-        'description': 'Regular moderate exercise associates with 18% better mood scores',
+        'description':
+            'Regular moderate exercise associates with 18% better mood scores',
         'icon': Icons.fitness_center,
         'color': AppTheme.accentMint,
         'confidence': 84,
       },
       {
         'title': 'Nutritional Impact',
-        'description': 'Iron-rich foods during menstruation reduce fatigue by 31%',
+        'description':
+            'Iron-rich foods during menstruation reduce fatigue by 31%',
         'icon': Icons.restaurant,
         'color': AppTheme.primaryRose,
         'confidence': 79,

@@ -23,23 +23,23 @@ class PerformanceMonitor {
   final List<FramePerformanceData> _frameData = [];
   final List<MemorySnapshot> _memorySnapshots = [];
   final List<NetworkMetric> _networkMetrics = [];
-  
+
   // Performance configuration
   static const int _maxFrameDataPoints = 1000;
   static const int _maxMemorySnapshots = 100;
   static const int _maxNetworkMetrics = 500;
   static const Duration _memorySnapshotInterval = Duration(seconds: 30);
-  
+
   // Timers for periodic monitoring
   Timer? _memoryMonitorTimer;
   Timer? _performanceReportTimer;
-  
+
   // Frame timing observer
   late PerformanceFrameObserver _frameObserver;
-  
+
   // Current session metrics
   final PerformanceSession _currentSession = PerformanceSession();
-  
+
   /// Initialize performance monitoring
   Future<void> initialize() async {
     if (_isInitialized) return;
@@ -49,30 +49,34 @@ class PerformanceMonitor {
 
       // Initialize frame performance monitoring
       _initializeFrameMonitoring();
-      
+
       // Initialize memory monitoring
       _initializeMemoryMonitoring();
-      
+
       // Initialize network monitoring
       _initializeNetworkMonitoring();
-      
+
       // Start periodic monitoring
       _startPeriodicMonitoring();
-      
+
       // Register lifecycle callbacks
       _registerLifecycleCallbacks();
 
       _isInitialized = true;
-      
-      AppLogger.success('✅ Performance Monitor initialized with real-time tracking');
+
+      AppLogger.success(
+        '✅ Performance Monitor initialized with real-time tracking',
+      );
     } catch (e) {
-      await ErrorHandler.instance.handleError(AppError(
-        type: ErrorType.performance,
-        message: 'Failed to initialize Performance Monitor: $e',
-        timestamp: DateTime.now(),
-        severity: ErrorSeverity.high,
-        context: {'component': 'performance_monitor'},
-      ));
+      await ErrorHandler.instance.handleError(
+        AppError(
+          type: ErrorType.performance,
+          message: 'Failed to initialize Performance Monitor: $e',
+          timestamp: DateTime.now(),
+          severity: ErrorSeverity.high,
+          context: {'component': 'performance_monitor'},
+        ),
+      );
       rethrow;
     }
   }
@@ -89,7 +93,7 @@ class PerformanceMonitor {
     _memoryMonitorTimer = Timer.periodic(_memorySnapshotInterval, (_) {
       _captureMemorySnapshot();
     });
-    
+
     // Capture initial snapshot
     _captureMemorySnapshot();
     AppLogger.performance('🧠 Memory monitoring enabled');
@@ -117,7 +121,8 @@ class PerformanceMonitor {
   }
 
   /// Start measuring performance for a specific operation
-  PerformanceTimer startMeasurement(String operationName, {
+  PerformanceTimer startMeasurement(
+    String operationName, {
     Map<String, dynamic>? metadata,
   }) {
     final timer = PerformanceTimer(
@@ -125,13 +130,14 @@ class PerformanceMonitor {
       startTime: DateTime.now(),
       metadata: metadata ?? {},
     );
-    
+
     AppLogger.performance('⏱️ Started measuring: $operationName');
     return timer;
   }
 
   /// Complete a performance measurement
-  void completeMeasurement(PerformanceTimer timer, {
+  void completeMeasurement(
+    PerformanceTimer timer, {
     bool success = true,
     String? errorMessage,
     Map<String, dynamic>? additionalMetadata,
@@ -145,14 +151,11 @@ class PerformanceMonitor {
       timestamp: timer.startTime,
       success: success,
       errorMessage: errorMessage,
-      metadata: {
-        ...timer.metadata,
-        ...?additionalMetadata,
-      },
+      metadata: {...timer.metadata, ...?additionalMetadata},
     );
 
     _recordMetric(metric);
-    
+
     AppLogger.performance(
       '✅ Completed measuring: ${timer.operationName} (${duration.inMilliseconds}ms)',
     );
@@ -160,15 +163,16 @@ class PerformanceMonitor {
 
   /// Record a performance metric
   void _recordMetric(PerformanceMetric metric) {
-    final key = '${metric.operationName}_${DateTime.now().millisecondsSinceEpoch}';
+    final key =
+        '${metric.operationName}_${DateTime.now().millisecondsSinceEpoch}';
     _metrics[key] = metric;
-    
+
     // Keep metrics list manageable
     if (_metrics.length > 1000) {
       final oldestKey = _metrics.keys.first;
       _metrics.remove(oldestKey);
     }
-    
+
     // Update session statistics
     _currentSession.addMetric(metric);
   }
@@ -180,7 +184,7 @@ class PerformanceMonitor {
     Map<String, dynamic>? metadata,
   }) async {
     final timer = startMeasurement(operationName, metadata: metadata);
-    
+
     try {
       final result = await operation();
       completeMeasurement(timer, success: true);
@@ -202,7 +206,7 @@ class PerformanceMonitor {
     Map<String, dynamic>? metadata,
   }) {
     final timer = startMeasurement(operationName, metadata: metadata);
-    
+
     try {
       final result = operation();
       completeMeasurement(timer, success: true);
@@ -240,12 +244,12 @@ class PerformanceMonitor {
     );
 
     _networkMetrics.add(metric);
-    
+
     // Keep network metrics manageable
     if (_networkMetrics.length > _maxNetworkMetrics) {
       _networkMetrics.removeAt(0);
     }
-    
+
     AppLogger.performance(
       '🌐 Network: $method $url (${duration.inMilliseconds}ms, $statusCode)',
     );
@@ -255,7 +259,7 @@ class PerformanceMonitor {
   void _captureMemorySnapshot() {
     try {
       final info = developer.Service.getIsolateId(Isolate.current);
-      
+
       final snapshot = MemorySnapshot(
         timestamp: DateTime.now(),
         heapUsage: _getHeapUsage(),
@@ -264,15 +268,14 @@ class PerformanceMonitor {
       );
 
       _memorySnapshots.add(snapshot);
-      
+
       // Keep memory snapshots manageable
       if (_memorySnapshots.length > _maxMemorySnapshots) {
         _memorySnapshots.removeAt(0);
       }
-      
+
       // Check for memory pressure
       _checkMemoryPressure(snapshot);
-      
     } catch (e) {
       AppLogger.warning('Failed to capture memory snapshot: $e');
     }
@@ -303,13 +306,16 @@ class PerformanceMonitor {
     const int memoryCriticalThreshold = 1024 * 1024 * 1024; // 1GB
 
     if (snapshot.rssUsage > memoryCriticalThreshold) {
-      AppLogger.warning('🚨 CRITICAL: Memory usage very high (${snapshot.rssUsage ~/ (1024 * 1024)}MB)');
-      
+      AppLogger.warning(
+        '🚨 CRITICAL: Memory usage very high (${snapshot.rssUsage ~/ (1024 * 1024)}MB)',
+      );
+
       // Trigger garbage collection
       _forceGarbageCollection();
-      
     } else if (snapshot.rssUsage > memoryWarningThreshold) {
-      AppLogger.warning('⚠️ WARNING: Memory usage elevated (${snapshot.rssUsage ~/ (1024 * 1024)}MB)');
+      AppLogger.warning(
+        '⚠️ WARNING: Memory usage elevated (${snapshot.rssUsage ~/ (1024 * 1024)}MB)',
+      );
     }
   }
 
@@ -336,10 +342,16 @@ class PerformanceMonitor {
 
     AppLogger.performance('📊 Performance Report Generated:');
     AppLogger.performance('  - Operations: ${report.totalOperations}');
-    AppLogger.performance('  - Avg Duration: ${report.averageDuration.inMilliseconds}ms');
-    AppLogger.performance('  - Frame Rate: ${report.averageFrameRate.toStringAsFixed(1)} FPS');
-    AppLogger.performance('  - Memory Usage: ${report.currentMemoryUsage ~/ (1024 * 1024)}MB');
-    
+    AppLogger.performance(
+      '  - Avg Duration: ${report.averageDuration.inMilliseconds}ms',
+    );
+    AppLogger.performance(
+      '  - Frame Rate: ${report.averageFrameRate.toStringAsFixed(1)} FPS',
+    );
+    AppLogger.performance(
+      '  - Memory Usage: ${report.currentMemoryUsage ~/ (1024 * 1024)}MB',
+    );
+
     // Check for performance issues
     _analyzePerformanceIssues(report);
   }
@@ -350,25 +362,34 @@ class PerformanceMonitor {
 
     // Check frame rate
     if (report.averageFrameRate < 55.0) {
-      issues.add('Low frame rate detected: ${report.averageFrameRate.toStringAsFixed(1)} FPS');
+      issues.add(
+        'Low frame rate detected: ${report.averageFrameRate.toStringAsFixed(1)} FPS',
+      );
     }
 
     // Check slow operations
     final slowOperations = report.slowestOperations.take(3);
     for (final op in slowOperations) {
       if (op.duration.inMilliseconds > 1000) {
-        issues.add('Slow operation: ${op.operationName} (${op.duration.inMilliseconds}ms)');
+        issues.add(
+          'Slow operation: ${op.operationName} (${op.duration.inMilliseconds}ms)',
+        );
       }
     }
 
     // Check memory growth
-    if (report.memoryGrowthRate > 0.1) { // 10% growth
-      issues.add('High memory growth rate: ${(report.memoryGrowthRate * 100).toStringAsFixed(1)}%');
+    if (report.memoryGrowthRate > 0.1) {
+      // 10% growth
+      issues.add(
+        'High memory growth rate: ${(report.memoryGrowthRate * 100).toStringAsFixed(1)}%',
+      );
     }
 
     // Check network performance
     if (report.averageNetworkDuration.inMilliseconds > 5000) {
-      issues.add('Slow network requests: ${report.averageNetworkDuration.inMilliseconds}ms average');
+      issues.add(
+        'Slow network requests: ${report.averageNetworkDuration.inMilliseconds}ms average',
+      );
     }
 
     // Report issues
@@ -383,11 +404,19 @@ class PerformanceMonitor {
   /// Get current performance metrics
   PerformanceSnapshot getCurrentMetrics() {
     final recentMetrics = _metrics.values
-        .where((m) => DateTime.now().difference(m.timestamp) < const Duration(minutes: 5))
+        .where(
+          (m) =>
+              DateTime.now().difference(m.timestamp) <
+              const Duration(minutes: 5),
+        )
         .toList();
 
     final recentFrames = _frameData
-        .where((f) => DateTime.now().difference(f.timestamp) < const Duration(minutes: 1))
+        .where(
+          (f) =>
+              DateTime.now().difference(f.timestamp) <
+              const Duration(minutes: 1),
+        )
         .toList();
 
     return PerformanceSnapshot(
@@ -395,22 +424,27 @@ class PerformanceMonitor {
       operationCount: recentMetrics.length,
       averageDuration: recentMetrics.isNotEmpty
           ? Duration(
-              microseconds: recentMetrics
-                  .map((m) => m.duration.inMicroseconds)
-                  .reduce((a, b) => a + b) ~/
-              recentMetrics.length,
+              microseconds:
+                  recentMetrics
+                      .map((m) => m.duration.inMicroseconds)
+                      .reduce((a, b) => a + b) ~/
+                  recentMetrics.length,
             )
           : Duration.zero,
       frameRate: recentFrames.isNotEmpty
-          ? recentFrames.map((f) => f.fps).reduce((a, b) => a + b) / recentFrames.length
+          ? recentFrames.map((f) => f.fps).reduce((a, b) => a + b) /
+                recentFrames.length
           : 60.0,
-      memoryUsage: _memorySnapshots.isNotEmpty ? _memorySnapshots.last.rssUsage : 0,
+      memoryUsage: _memorySnapshots.isNotEmpty
+          ? _memorySnapshots.last.rssUsage
+          : 0,
       networkLatency: _networkMetrics.isNotEmpty
           ? Duration(
-              microseconds: _networkMetrics
-                  .map((m) => m.duration.inMicroseconds)
-                  .reduce((a, b) => a + b) ~/
-              _networkMetrics.length,
+              microseconds:
+                  _networkMetrics
+                      .map((m) => m.duration.inMicroseconds)
+                      .reduce((a, b) => a + b) ~/
+                  _networkMetrics.length,
             )
           : Duration.zero,
     );
@@ -419,29 +453,44 @@ class PerformanceMonitor {
   /// Get performance statistics
   Map<String, dynamic> getPerformanceStats() {
     final recentMetrics = _metrics.values
-        .where((m) => DateTime.now().difference(m.timestamp) < const Duration(hours: 1))
+        .where(
+          (m) =>
+              DateTime.now().difference(m.timestamp) < const Duration(hours: 1),
+        )
         .toList();
 
     final successfulOps = recentMetrics.where((m) => m.success).length;
     final failedOps = recentMetrics.length - successfulOps;
 
     return {
-      'session_duration_minutes': DateTime.now().difference(_currentSession.startTime).inMinutes,
+      'session_duration_minutes': DateTime.now()
+          .difference(_currentSession.startTime)
+          .inMinutes,
       'total_operations': recentMetrics.length,
       'successful_operations': successfulOps,
       'failed_operations': failedOps,
-      'success_rate': recentMetrics.isNotEmpty ? successfulOps / recentMetrics.length : 1.0,
+      'success_rate': recentMetrics.isNotEmpty
+          ? successfulOps / recentMetrics.length
+          : 1.0,
       'average_operation_duration_ms': recentMetrics.isNotEmpty
-          ? recentMetrics.map((m) => m.duration.inMilliseconds).reduce((a, b) => a + b) / recentMetrics.length
+          ? recentMetrics
+                    .map((m) => m.duration.inMilliseconds)
+                    .reduce((a, b) => a + b) /
+                recentMetrics.length
           : 0.0,
-      'current_memory_mb': _memorySnapshots.isNotEmpty 
-          ? _memorySnapshots.last.rssUsage / (1024 * 1024) 
+      'current_memory_mb': _memorySnapshots.isNotEmpty
+          ? _memorySnapshots.last.rssUsage / (1024 * 1024)
           : 0.0,
       'average_frame_rate': _frameData.isNotEmpty
-          ? _frameData.map((f) => f.fps).reduce((a, b) => a + b) / _frameData.length
+          ? _frameData.map((f) => f.fps).reduce((a, b) => a + b) /
+                _frameData.length
           : 60.0,
       'network_requests_last_hour': _networkMetrics
-          .where((m) => DateTime.now().difference(m.timestamp) < const Duration(hours: 1))
+          .where(
+            (m) =>
+                DateTime.now().difference(m.timestamp) <
+                const Duration(hours: 1),
+          )
           .length,
       'monitor_status': _isInitialized ? 'active' : 'inactive',
     };
@@ -451,11 +500,13 @@ class PerformanceMonitor {
   void dispose() {
     _memoryMonitorTimer?.cancel();
     _performanceReportTimer?.cancel();
-    
+
     if (_isInitialized) {
-      SchedulerBinding.instance.removeTimingsCallback(_frameObserver.onFrameTiming);
+      SchedulerBinding.instance.removeTimingsCallback(
+        _frameObserver.onFrameTiming,
+      );
     }
-    
+
     AppLogger.performance('📊 Performance Monitor disposed');
   }
 }
@@ -516,15 +567,18 @@ class PerformanceFrameObserver {
       );
 
       PerformanceMonitor.instance._frameData.add(frameData);
-      
+
       // Keep frame data manageable
-      if (PerformanceMonitor.instance._frameData.length > PerformanceMonitor._maxFrameDataPoints) {
+      if (PerformanceMonitor.instance._frameData.length >
+          PerformanceMonitor._maxFrameDataPoints) {
         PerformanceMonitor.instance._frameData.removeAt(0);
       }
 
       // Check for dropped frames
       if (frameData.fps < 55.0) {
-        AppLogger.warning('📉 Frame drop detected: ${frameData.fps.toStringAsFixed(1)} FPS');
+        AppLogger.warning(
+          '📉 Frame drop detected: ${frameData.fps.toStringAsFixed(1)} FPS',
+        );
       }
     }
   }
@@ -620,16 +674,17 @@ class PerformanceSession {
   }
 
   List<PerformanceMetric> get metrics => List.unmodifiable(_metrics);
-  
+
   Duration get sessionDuration => DateTime.now().difference(startTime);
-  
+
   int get totalOperations => _metrics.length;
-  
+
   int get successfulOperations => _metrics.where((m) => m.success).length;
-  
+
   int get failedOperations => totalOperations - successfulOperations;
-  
-  double get successRate => totalOperations > 0 ? successfulOperations / totalOperations : 1.0;
+
+  double get successRate =>
+      totalOperations > 0 ? successfulOperations / totalOperations : 1.0;
 }
 
 /// Performance report generation
@@ -664,10 +719,11 @@ class PerformanceReport {
     // Calculate average duration
     final avgDuration = metrics.isNotEmpty
         ? Duration(
-            microseconds: metrics
-                .map((m) => m.duration.inMicroseconds)
-                .reduce((a, b) => a + b) ~/
-            metrics.length,
+            microseconds:
+                metrics
+                    .map((m) => m.duration.inMicroseconds)
+                    .reduce((a, b) => a + b) ~/
+                metrics.length,
           )
         : Duration.zero;
 
@@ -687,10 +743,11 @@ class PerformanceReport {
     // Calculate average network duration
     final avgNetworkDuration = networkMetrics.isNotEmpty
         ? Duration(
-            microseconds: networkMetrics
-                .map((m) => m.duration.inMicroseconds)
-                .reduce((a, b) => a + b) ~/
-            networkMetrics.length,
+            microseconds:
+                networkMetrics
+                    .map((m) => m.duration.inMicroseconds)
+                    .reduce((a, b) => a + b) ~/
+                networkMetrics.length,
           )
         : Duration.zero;
 
@@ -704,7 +761,9 @@ class PerformanceReport {
       totalOperations: metrics.length,
       averageDuration: avgDuration,
       averageFrameRate: avgFrameRate,
-      currentMemoryUsage: memorySnapshots.isNotEmpty ? memorySnapshots.last.rssUsage : 0,
+      currentMemoryUsage: memorySnapshots.isNotEmpty
+          ? memorySnapshots.last.rssUsage
+          : 0,
       memoryGrowthRate: memoryGrowthRate,
       averageNetworkDuration: avgNetworkDuration,
       slowestOperations: slowestOps,
@@ -751,7 +810,7 @@ class PerformanceLifecycleObserver extends WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    
+
     switch (state) {
       case AppLifecycleState.resumed:
         AppLogger.performance('📱 App resumed - performance monitoring active');
@@ -760,7 +819,9 @@ class PerformanceLifecycleObserver extends WidgetsBindingObserver {
         AppLogger.performance('📱 App paused - performance monitoring reduced');
         break;
       case AppLifecycleState.detached:
-        AppLogger.performance('📱 App detached - performance monitoring stopped');
+        AppLogger.performance(
+          '📱 App detached - performance monitoring stopped',
+        );
         monitor.dispose();
         break;
       default:
@@ -768,12 +829,11 @@ class PerformanceLifecycleObserver extends WidgetsBindingObserver {
     }
   }
 
-
   @override
   void didHaveMemoryPressure() {
     super.didHaveMemoryPressure();
     AppLogger.warning('🚨 Memory pressure detected by system');
-    
+
     // Force garbage collection on memory pressure
     monitor._forceGarbageCollection();
   }
@@ -802,7 +862,8 @@ class PerformanceOptimizer {
   static void optimizeImages() {
     // Configure image cache size based on available memory
     PaintingBinding.instance.imageCache.maximumSize = 100;
-    PaintingBinding.instance.imageCache.maximumSizeBytes = 50 * 1024 * 1024; // 50MB
+    PaintingBinding.instance.imageCache.maximumSizeBytes =
+        50 * 1024 * 1024; // 50MB
     AppLogger.performance('🖼️ Image cache optimized');
   }
 
@@ -819,11 +880,11 @@ class PerformanceHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
     final client = super.createHttpClient(context);
-    
+
     // Configure timeouts
     client.connectionTimeout = const Duration(seconds: 15);
     client.idleTimeout = const Duration(seconds: 15);
-    
+
     return client;
   }
 }
@@ -835,18 +896,19 @@ class PerformanceUtils {
     return Builder(
       builder: (context) {
         final stopwatch = Stopwatch()..start();
-        
+
         return Builder(
           builder: (context) {
             final result = child;
             stopwatch.stop();
-            
-            if (stopwatch.elapsedMilliseconds > 16) { // More than one frame
+
+            if (stopwatch.elapsedMilliseconds > 16) {
+              // More than one frame
               AppLogger.warning(
                 '🐌 Slow widget build: $widgetName (${stopwatch.elapsedMilliseconds}ms)',
               );
             }
-            
+
             return result;
           },
         );
@@ -870,7 +932,8 @@ class PerformanceUtils {
       },
       itemCount: itemCount,
       cacheExtent: 1000.0, // Pre-cache items for smoother scrolling
-      addAutomaticKeepAlives: false, // Disable keep-alives for memory efficiency
+      addAutomaticKeepAlives:
+          false, // Disable keep-alives for memory efficiency
       addRepaintBoundaries: true, // Add repaint boundaries for performance
     );
   }

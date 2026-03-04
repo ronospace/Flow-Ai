@@ -5,10 +5,7 @@ import '../models/partner_models.dart';
 class PartnerCycleInsightWidget extends StatelessWidget {
   final Partnership partnership;
 
-  const PartnerCycleInsightWidget({
-    super.key,
-    required this.partnership,
-  });
+  const PartnerCycleInsightWidget({super.key, required this.partnership});
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +37,7 @@ class PartnerCycleInsightWidget extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               'Partner cycle insights coming soon',
-              style: TextStyle(
-                fontSize: 14,
-                color: AppTheme.textSecondary,
-              ),
+              style: TextStyle(fontSize: 14, color: AppTheme.textSecondary),
             ),
           ],
         ),
@@ -51,4 +45,3 @@ class PartnerCycleInsightWidget extends StatelessWidget {
     );
   }
 }
-

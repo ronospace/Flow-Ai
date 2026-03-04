@@ -77,7 +77,8 @@ class Achievement {
   }
 
   bool get isCompleted => progress >= target;
-  double get progressPercentage => target > 0 ? (progress / target).clamp(0.0, 1.0) : 0.0;
+  double get progressPercentage =>
+      target > 0 ? (progress / target).clamp(0.0, 1.0) : 0.0;
 
   Color get difficultyColor {
     switch (difficulty.toLowerCase()) {
@@ -128,11 +129,11 @@ class Achievement {
       difficulty: json['difficulty'] as String,
       isUnlocked: json['isUnlocked'] as bool? ?? false,
       isClaimed: json['isClaimed'] as bool? ?? false,
-      unlockedAt: json['unlockedAt'] != null 
-          ? DateTime.parse(json['unlockedAt'] as String) 
+      unlockedAt: json['unlockedAt'] != null
+          ? DateTime.parse(json['unlockedAt'] as String)
           : null,
-      claimedAt: json['claimedAt'] != null 
-          ? DateTime.parse(json['claimedAt'] as String) 
+      claimedAt: json['claimedAt'] != null
+          ? DateTime.parse(json['claimedAt'] as String)
           : null,
       progress: json['progress'] as double? ?? 0.0,
       target: json['target'] as double? ?? 1.0,

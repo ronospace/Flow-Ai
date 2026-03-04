@@ -1,15 +1,11 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:local_auth_platform_interface/local_auth_platform_interface.dart' as platform_types;
+import 'package:local_auth_platform_interface/local_auth_platform_interface.dart'
+    as platform_types;
 import 'package:local_auth/error_codes.dart' as auth_error;
 
-enum AppBiometricType {
-  none,
-  fingerprint,
-  face,
-  iris,
-}
+enum AppBiometricType { none, fingerprint, face, iris }
 
 enum AuthStatus {
   success,
@@ -39,7 +35,8 @@ class BiometricAuthResult {
 }
 
 class BiometricAuthService {
-  static final BiometricAuthService _instance = BiometricAuthService._internal();
+  static final BiometricAuthService _instance =
+      BiometricAuthService._internal();
   factory BiometricAuthService() => _instance;
   BiometricAuthService._internal();
 
@@ -71,19 +68,22 @@ class BiometricAuthService {
   Future<List<AppBiometricType>> getAvailableBiometrics() async {
     try {
       final availableBiometrics = await _localAuth.getAvailableBiometrics();
-      
-      return availableBiometrics.map((biometric) {
-        switch (biometric) {
-          case platform_types.BiometricType.fingerprint:
-            return AppBiometricType.fingerprint;
-          case platform_types.BiometricType.face:
-            return AppBiometricType.face;
-          case platform_types.BiometricType.iris:
-            return AppBiometricType.iris;
-          default:
-            return AppBiometricType.none;
-        }
-      }).where((type) => type != AppBiometricType.none).toList();
+
+      return availableBiometrics
+          .map((biometric) {
+            switch (biometric) {
+              case platform_types.BiometricType.fingerprint:
+                return AppBiometricType.fingerprint;
+              case platform_types.BiometricType.face:
+                return AppBiometricType.face;
+              case platform_types.BiometricType.iris:
+                return AppBiometricType.iris;
+              default:
+                return AppBiometricType.none;
+            }
+          })
+          .where((type) => type != AppBiometricType.none)
+          .toList();
     } catch (e) {
       return [];
     }
@@ -93,7 +93,7 @@ class BiometricAuthService {
   Future<List<String>> getAvailableBiometricNames() async {
     try {
       final availableBiometrics = await _localAuth.getAvailableBiometrics();
-      
+
       return availableBiometrics.map((biometric) {
         switch (biometric) {
           case platform_types.BiometricType.fingerprint:
@@ -133,7 +133,8 @@ class BiometricAuthService {
       if (!isAvailable) {
         return const BiometricAuthResult(
           status: AuthStatus.notAvailable,
-          errorMessage: 'Biometric authentication is not available on this device',
+          errorMessage:
+              'Biometric authentication is not available on this device',
         );
       }
 
@@ -142,7 +143,8 @@ class BiometricAuthService {
       if (!isEnrolled) {
         return const BiometricAuthResult(
           status: AuthStatus.notEnrolled,
-          errorMessage: 'No biometric credentials have been enrolled on this device',
+          errorMessage:
+              'No biometric credentials have been enrolled on this device',
         );
       }
 
@@ -159,8 +161,8 @@ class BiometricAuthService {
       if (didAuthenticate) {
         // Get the biometric type that was used (approximate)
         final availableBiometrics = await getAvailableBiometrics();
-        final usedBiometric = availableBiometrics.isNotEmpty 
-            ? availableBiometrics.first 
+        final usedBiometric = availableBiometrics.isNotEmpty
+            ? availableBiometrics.first
             : AppBiometricType.none;
 
         return BiometricAuthResult(
@@ -187,9 +189,7 @@ class BiometricAuthService {
   }
 
   /// Quick authentication method for app lock scenarios
-  Future<bool> authenticateQuick({
-    String reason = 'Unlock FlowSense',
-  }) async {
+  Future<bool> authenticateQuick({String reason = 'Unlock FlowSense'}) async {
     final result = await authenticate(
       localizedReason: reason,
       useErrorDialogs: false,
@@ -235,7 +235,9 @@ class BiometricAuthService {
   /// Get primary biometric type (first available)
   Future<AppBiometricType> getPrimaryBiometricType() async {
     final availableBiometrics = await getAvailableBiometrics();
-    return availableBiometrics.isNotEmpty ? availableBiometrics.first : AppBiometricType.none;
+    return availableBiometrics.isNotEmpty
+        ? availableBiometrics.first
+        : AppBiometricType.none;
   }
 
   /// Convert platform exception error code to AuthStatus
@@ -317,7 +319,9 @@ class BiometricAuthService {
         'availableBiometrics': availableBiometrics.map((b) => b.name).toList(),
         'availableTypes': availableTypes.map((t) => t.name).toList(),
         'availableNames': availableNames,
-        'primaryType': availableTypes.isNotEmpty ? availableTypes.first.name : null,
+        'primaryType': availableTypes.isNotEmpty
+            ? availableTypes.first.name
+            : null,
         'primaryName': availableNames.isNotEmpty ? availableNames.first : null,
       };
     } catch (e) {

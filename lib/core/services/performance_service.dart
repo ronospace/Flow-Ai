@@ -36,19 +36,18 @@ class PerformanceService {
 
     try {
       AppLogger.performance('🚀 Initializing Performance Service...');
-      
+
       // Configure Flutter performance settings
       _configureFlutterPerformance();
-      
+
       // Start background optimization tasks
       _startBackgroundTasks();
-      
+
       // Initialize memory monitoring
       _startMemoryMonitoring();
-      
+
       _isInitialized = true;
       AppLogger.performance('✅ Performance Service initialized successfully');
-      
     } catch (e) {
       AppLogger.error('❌ Failed to initialize Performance Service', e);
       rethrow;
@@ -60,7 +59,7 @@ class PerformanceService {
     // Configure image cache
     PaintingBinding.instance.imageCache.maximumSize = 150;
     PaintingBinding.instance.imageCache.maximumSizeBytes = maxImageCacheSize;
-    
+
     // Configure raster cache
     if (!kIsWeb) {
       // These settings are platform-specific and may not apply to web
@@ -71,7 +70,7 @@ class PerformanceService {
         AppLogger.warning('Hardware acceleration not available: $e');
       }
     }
-    
+
     AppLogger.performance('✅ Flutter performance settings configured');
   }
 
@@ -81,7 +80,7 @@ class PerformanceService {
       AppLogger.warning('Trace already active: $traceName');
       return;
     }
-    
+
     _activeTraces[traceName] = Stopwatch()..start();
     AppLogger.performance('📊 Started trace: $traceName');
   }
@@ -93,10 +92,10 @@ class PerformanceService {
       AppLogger.warning('No active trace found: $traceName');
       return null;
     }
-    
+
     stopwatch.stop();
     final duration = stopwatch.elapsed;
-    
+
     // Record the metric
     final metric = PerformanceMetric(
       name: traceName,
@@ -104,15 +103,20 @@ class PerformanceService {
       timestamp: DateTime.now(),
       type: PerformanceMetricType.timing,
     );
-    
+
     _recordMetric(metric);
-    AppLogger.performance('⏱️ Trace "$traceName" completed in ${duration.inMilliseconds}ms');
-    
+    AppLogger.performance(
+      '⏱️ Trace "$traceName" completed in ${duration.inMilliseconds}ms',
+    );
+
     return duration;
   }
 
   /// Measure the performance of a function
-  Future<T> measureAsync<T>(String traceName, Future<T> Function() function) async {
+  Future<T> measureAsync<T>(
+    String traceName,
+    Future<T> Function() function,
+  ) async {
     startTrace(traceName);
     try {
       final result = await function();
@@ -142,10 +146,10 @@ class PerformanceService {
       expiryTime: expiryTime,
       size: _estimateDataSize(data),
     );
-    
+
     _cache[key] = entry;
     _enforceCacheSize();
-    
+
     AppLogger.performance('💾 Cached data: $key (${entry.size} bytes)');
   }
 
@@ -153,14 +157,14 @@ class PerformanceService {
   T? getCachedData<T>(String key) {
     final entry = _cache[key];
     if (entry == null) return null;
-    
+
     // Check if expired
     if (DateTime.now().isAfter(entry.expiryTime)) {
       _cache.remove(key);
       AppLogger.performance('🗑️ Removed expired cache entry: $key');
       return null;
     }
-    
+
     return entry.data as T?;
   }
 
@@ -176,7 +180,7 @@ class PerformanceService {
       // Check if already cached
       final cached = _imageCache[key];
       if (cached != null) return cached;
-      
+
       // Optimize and cache the image
       final optimized = await _optimizeImage(
         imageData,
@@ -184,15 +188,14 @@ class PerformanceService {
         targetHeight: targetHeight,
         quality: quality,
       );
-      
+
       if (optimized != null) {
         _imageCache[key] = optimized;
         _enforceImageCacheSize();
         AppLogger.performance('🖼️ Image cached and optimized: $key');
       }
-      
+
       return optimized;
-      
     } catch (e) {
       AppLogger.error('❌ Failed to cache optimized image', e);
       return null;
@@ -212,10 +215,9 @@ class PerformanceService {
         targetWidth: targetWidth,
         targetHeight: targetHeight,
       );
-      
+
       final frameInfo = await codec.getNextFrame();
       return frameInfo.image;
-      
     } catch (e) {
       AppLogger.error('❌ Image optimization failed', e);
       return null;
@@ -225,7 +227,6 @@ class PerformanceService {
   /// Preload critical resources
   Future<void> preloadCriticalResources(BuildContext context) async {
     const criticalAssets = [
-      'assets/images/logo.png',
       'assets/images/onboarding_1.png',
       'assets/images/onboarding_2.png',
       'assets/images/onboarding_3.png',
@@ -249,16 +250,15 @@ class PerformanceService {
     try {
       // Clear expired cache entries
       _clearExpiredCache();
-      
+
       // Trim image cache if needed
       _trimImageCache();
-      
+
       // Force garbage collection in debug mode
       if (kDebugMode) {
         // Note: This is for debugging only and not recommended for production
         AppLogger.performance('🧹 Memory optimization completed');
       }
-      
     } catch (e) {
       AppLogger.error('❌ Memory optimization failed', e);
     }
@@ -266,10 +266,16 @@ class PerformanceService {
 
   /// Get current memory usage estimates
   MemoryUsage getMemoryUsage() {
-    final cacheSize = _cache.values.fold<int>(0, (sum, entry) => sum + entry.size);
+    final cacheSize = _cache.values.fold<int>(
+      0,
+      (sum, entry) => sum + entry.size,
+    );
     final imageCacheSize = _imageCache.length * 1024; // Rough estimate
-    final dataCacheSize = _dataCache.values.fold<int>(0, (sum, data) => sum + data.length);
-    
+    final dataCacheSize = _dataCache.values.fold<int>(
+      0,
+      (sum, data) => sum + data.length,
+    );
+
     return MemoryUsage(
       totalCacheSize: cacheSize,
       imageCacheSize: imageCacheSize,
@@ -283,20 +289,23 @@ class PerformanceService {
   /// Get performance metrics
   List<PerformanceMetric> getMetrics({Duration? since}) {
     if (since == null) return List.unmodifiable(_metrics);
-    
+
     final cutoff = DateTime.now().subtract(since);
     return _metrics.where((m) => m.timestamp.isAfter(cutoff)).toList();
   }
 
   /// Get average metric value
   double getAverageMetric(String metricName, {Duration? since}) {
-    final metrics = getMetrics(since: since)
-        .where((m) => m.name == metricName)
-        .toList();
-    
+    final metrics = getMetrics(
+      since: since,
+    ).where((m) => m.name == metricName).toList();
+
     if (metrics.isEmpty) return 0.0;
-    
-    final totalMs = metrics.fold<int>(0, (sum, m) => sum + m.duration.inMilliseconds);
+
+    final totalMs = metrics.fold<int>(
+      0,
+      (sum, m) => sum + m.duration.inMilliseconds,
+    );
     return totalMs / metrics.length;
   }
 
@@ -306,7 +315,7 @@ class PerformanceService {
     _imageCache.clear();
     _dataCache.clear();
     PaintingBinding.instance.imageCache.clear();
-    
+
     AppLogger.performance('🧹 All caches cleared');
   }
 
@@ -316,18 +325,20 @@ class PerformanceService {
     _memoryCleanupTimer = Timer.periodic(memoryCleanupInterval, (timer) {
       optimizeMemory();
     });
-    
+
     // Cache cleanup task
     _cacheCleanupTimer = Timer.periodic(const Duration(hours: 1), (timer) {
       _clearExpiredCache();
     });
-    
+
     AppLogger.performance('✅ Background optimization tasks started');
   }
 
   /// Start memory monitoring
   void _startMemoryMonitoring() {
-    _performanceMonitoringTimer = Timer.periodic(const Duration(minutes: 5), (timer) {
+    _performanceMonitoringTimer = Timer.periodic(const Duration(minutes: 5), (
+      timer,
+    ) {
       _recordMemoryMetrics();
     });
   }
@@ -336,21 +347,24 @@ class PerformanceService {
   void _recordMemoryMetrics() {
     try {
       final memoryUsage = getMemoryUsage();
-      
-      _recordMetric(PerformanceMetric(
-        name: 'memory.cache_size',
-        duration: Duration(microseconds: memoryUsage.totalCacheSize),
-        timestamp: DateTime.now(),
-        type: PerformanceMetricType.memory,
-      ));
-      
-      _recordMetric(PerformanceMetric(
-        name: 'memory.cache_entries',
-        duration: Duration(microseconds: memoryUsage.cacheEntries),
-        timestamp: DateTime.now(),
-        type: PerformanceMetricType.counter,
-      ));
-      
+
+      _recordMetric(
+        PerformanceMetric(
+          name: 'memory.cache_size',
+          duration: Duration(microseconds: memoryUsage.totalCacheSize),
+          timestamp: DateTime.now(),
+          type: PerformanceMetricType.memory,
+        ),
+      );
+
+      _recordMetric(
+        PerformanceMetric(
+          name: 'memory.cache_entries',
+          duration: Duration(microseconds: memoryUsage.cacheEntries),
+          timestamp: DateTime.now(),
+          type: PerformanceMetricType.counter,
+        ),
+      );
     } catch (e) {
       AppLogger.warning('Failed to record memory metrics: $e');
     }
@@ -359,11 +373,11 @@ class PerformanceService {
   /// Record a performance metric
   void _recordMetric(PerformanceMetric metric) {
     _metrics.add(metric);
-    
+
     // Keep only recent metrics (last 1000 or last hour)
     final cutoff = DateTime.now().subtract(const Duration(hours: 1));
     _metrics.removeWhere((m) => m.timestamp.isBefore(cutoff));
-    
+
     if (_metrics.length > 1000) {
       _metrics.removeRange(0, _metrics.length - 1000);
     }
@@ -379,35 +393,40 @@ class PerformanceService {
 
   /// Enforce cache size limits
   void _enforceCacheSize() {
-    var totalSize = _cache.values.fold<int>(0, (sum, entry) => sum + entry.size);
-    
+    var totalSize = _cache.values.fold<int>(
+      0,
+      (sum, entry) => sum + entry.size,
+    );
+
     if (totalSize <= maxCacheSize) return;
-    
+
     // Remove oldest entries until under limit
     final sortedEntries = _cache.entries.toList()
       ..sort((a, b) => a.value.timestamp.compareTo(b.value.timestamp));
-    
+
     for (final entry in sortedEntries) {
       _cache.remove(entry.key);
       totalSize -= entry.value.size;
-      
+
       if (totalSize <= maxCacheSize * 0.8) break; // Leave some headroom
     }
-    
+
     AppLogger.performance('🧹 Cache size enforced: ${_cache.length} entries');
   }
 
   /// Enforce image cache size limits
   void _enforceImageCacheSize() {
     if (_imageCache.length <= 50) return; // Reasonable limit
-    
+
     // Remove half of the oldest entries
     final keys = _imageCache.keys.take(_imageCache.length ~/ 2).toList();
     for (final key in keys) {
       _imageCache.remove(key);
     }
-    
-    AppLogger.performance('🧹 Image cache size enforced: ${_imageCache.length} images');
+
+    AppLogger.performance(
+      '🧹 Image cache size enforced: ${_imageCache.length} images',
+    );
   }
 
   /// Clear expired cache entries
@@ -417,24 +436,30 @@ class PerformanceService {
         .where((entry) => now.isAfter(entry.value.expiryTime))
         .map((entry) => entry.key)
         .toList();
-    
+
     for (final key in expiredKeys) {
       _cache.remove(key);
     }
-    
+
     if (expiredKeys.isNotEmpty) {
-      AppLogger.performance('🗑️ Cleared ${expiredKeys.length} expired cache entries');
+      AppLogger.performance(
+        '🗑️ Cleared ${expiredKeys.length} expired cache entries',
+      );
     }
   }
 
   /// Trim image cache
   void _trimImageCache() {
     if (_imageCache.length > 100) {
-      final keysToRemove = _imageCache.keys.take(_imageCache.length - 75).toList();
+      final keysToRemove = _imageCache.keys
+          .take(_imageCache.length - 75)
+          .toList();
       for (final key in keysToRemove) {
         _imageCache.remove(key);
       }
-      AppLogger.performance('✂️ Trimmed image cache to ${_imageCache.length} entries');
+      AppLogger.performance(
+        '✂️ Trimmed image cache to ${_imageCache.length} entries',
+      );
     }
   }
 
@@ -443,11 +468,11 @@ class PerformanceService {
     _memoryCleanupTimer?.cancel();
     _cacheCleanupTimer?.cancel();
     _performanceMonitoringTimer?.cancel();
-    
+
     clearAllCaches();
     _metrics.clear();
     _activeTraces.clear();
-    
+
     _isInitialized = false;
     AppLogger.performance('🔄 Performance Service disposed');
   }
@@ -484,12 +509,7 @@ class PerformanceMetric {
 }
 
 /// Performance metric types
-enum PerformanceMetricType {
-  timing,
-  memory,
-  counter,
-  network,
-}
+enum PerformanceMetricType { timing, memory, counter, network }
 
 /// Memory usage model
 class MemoryUsage {
@@ -532,10 +552,7 @@ class MemoryUsage {
 extension PerformanceWidget on Widget {
   /// Wrap widget with performance monitoring
   Widget withPerformanceTrace(String traceName) {
-    return PerformanceTraceWidget(
-      traceName: traceName,
-      child: this,
-    );
+    return PerformanceTraceWidget(traceName: traceName, child: this);
   }
 }
 

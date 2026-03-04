@@ -1,10 +1,4 @@
-enum TimePeriod {
-  week,
-  month,
-  threeMonths,
-  sixMonths,
-  year,
-}
+enum TimePeriod { week, month, threeMonths, sixMonths, year }
 
 extension TimePeriodExtension on TimePeriod {
   String get displayName {

@@ -16,7 +16,8 @@ class PrivacyPreferencesWidget extends StatefulWidget {
   });
 
   @override
-  State<PrivacyPreferencesWidget> createState() => _PrivacyPreferencesWidgetState();
+  State<PrivacyPreferencesWidget> createState() =>
+      _PrivacyPreferencesWidgetState();
 }
 
 class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
@@ -38,7 +39,8 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
       'id': 'healthkit_integration',
       'title': 'HealthKit / Health Connect Integration',
       'subtitle': 'Sync with Apple HealthKit (iOS) or Google Fit (Android)',
-      'description': 'Flow Ai integrates with your device\'s health data to enhance predictions. We may access: heart rate, body temperature, sleep data, activity levels, and menstrual flow data. All data stays on your device unless you enable cloud backup.',
+      'description':
+          'Flow Ai integrates with your device\'s health data to enhance predictions. We may access: heart rate, body temperature, sleep data, activity levels, and menstrual flow data. All data stays on your device unless you enable cloud backup.',
       'icon': Icons.health_and_safety,
       'color': Colors.red,
       'recommended': true,
@@ -48,7 +50,8 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
       'id': 'ai_insights',
       'title': 'AI-Powered Insights',
       'subtitle': 'Enable personalized AI recommendations and predictions',
-      'description': 'Uses your data locally and securely to provide smart insights about your cycle, symptoms, and health patterns. No personal data leaves your device.',
+      'description':
+          'Uses your data locally and securely to provide smart insights about your cycle, symptoms, and health patterns. No personal data leaves your device.',
       'icon': Icons.psychology,
       'color': Colors.purple,
       'recommended': true,
@@ -58,7 +61,8 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
       'id': 'anonymous_research',
       'title': 'Anonymous Research Participation',
       'subtitle': 'Help improve women\'s health research',
-      'description': 'Contribute anonymized, aggregated data to scientific research that helps advance understanding of women\'s health. Your identity remains completely protected.',
+      'description':
+          'Contribute anonymized, aggregated data to scientific research that helps advance understanding of women\'s health. Your identity remains completely protected.',
       'icon': Icons.science,
       'color': Colors.blue,
       'recommended': true,
@@ -68,7 +72,8 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
       'id': 'analytics',
       'title': 'Anonymous App Analytics',
       'subtitle': 'Help us improve the app experience',
-      'description': 'Shares anonymized usage patterns to help us understand how to make the app better. No personal health data is included.',
+      'description':
+          'Shares anonymized usage patterns to help us understand how to make the app better. No personal health data is included.',
       'icon': Icons.analytics,
       'color': Colors.green,
       'recommended': true,
@@ -78,7 +83,8 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
       'id': 'cloud_backup',
       'title': 'Secure Cloud Backup',
       'subtitle': 'Keep your data safe and synced across devices',
-      'description': 'Encrypts and backs up your data to secure cloud storage. You can always disable this and keep data local only.',
+      'description':
+          'Encrypts and backs up your data to secure cloud storage. You can always disable this and keep data local only.',
       'icon': Icons.cloud_queue,
       'color': Colors.cyan,
       'recommended': true,
@@ -88,7 +94,8 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
       'id': 'partner_sharing',
       'title': 'Trusted Partner Data Sharing',
       'subtitle': 'Share anonymized insights with healthcare partners',
-      'description': 'Allows sharing of anonymized health trends with trusted healthcare organizations and researchers to improve women\'s health outcomes.',
+      'description':
+          'Allows sharing of anonymized health trends with trusted healthcare organizations and researchers to improve women\'s health outcomes.',
       'icon': Icons.handshake,
       'color': Colors.orange,
       'recommended': false,
@@ -98,7 +105,8 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
       'id': 'marketing',
       'title': 'Personalized Communications',
       'subtitle': 'Receive health tips and app updates',
-      'description': 'Get personalized health content, tips, and important app updates via email or notifications. You can unsubscribe anytime.',
+      'description':
+          'Get personalized health content, tips, and important app updates via email or notifications. You can unsubscribe anytime.',
       'icon': Icons.email,
       'color': Colors.pink,
       'recommended': false,
@@ -119,21 +127,17 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
       vsync: this,
     );
 
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
 
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0.0, 0.5),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOutCubic,
-    ));
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0.0, 0.5), end: Offset.zero).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Curves.easeOutCubic,
+          ),
+        );
 
     _animationController.forward();
   }
@@ -184,20 +188,16 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
 
   Widget _buildHeader(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
-            Icon(
-              Icons.security,
-              color: theme.colorScheme.primary,
-              size: 28,
-            ),
-            
+            Icon(Icons.security, color: theme.colorScheme.primary, size: 28),
+
             const SizedBox(width: 12),
-            
+
             Expanded(
               child: Text(
                 'Your Privacy, Your Choice 🔐',
@@ -209,9 +209,9 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
             ),
           ],
         ),
-        
+
         const SizedBox(height: 16),
-        
+
         Text(
           'You have complete control over your data. Choose what you\'re comfortable sharing to help us provide the best possible experience while keeping your privacy protected.',
           style: theme.textTheme.bodyMedium?.copyWith(
@@ -225,7 +225,7 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
 
   Widget _buildPrivacyPromise(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -244,14 +244,10 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
       ),
       child: Column(
         children: [
-          Icon(
-            Icons.shield,
-            color: theme.colorScheme.primary,
-            size: 48,
-          ),
-          
+          Icon(Icons.shield, color: theme.colorScheme.primary, size: 48),
+
           const SizedBox(height: 16),
-          
+
           Text(
             'Our Privacy Promise',
             style: theme.textTheme.titleLarge?.copyWith(
@@ -259,9 +255,9 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
               color: theme.colorScheme.primary,
             ),
           ),
-          
+
           const SizedBox(height: 12),
-          
+
           Text(
             '• Your health data never leaves your device without your explicit consent\n'
             '• All data is encrypted using industry-leading security standards\n'
@@ -284,25 +280,30 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
       children: [
         Text(
           'Privacy Settings',
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
         ),
-        
+
         const SizedBox(height: 16),
-        
-        ...(_privacyOptions.map((option) => Padding(
-          padding: const EdgeInsets.only(bottom: 16),
-          child: _buildPrivacyOptionCard(context, option),
-        ))),
+
+        ...(_privacyOptions.map(
+          (option) => Padding(
+            padding: const EdgeInsets.only(bottom: 16),
+            child: _buildPrivacyOptionCard(context, option),
+          ),
+        )),
       ],
     );
   }
 
-  Widget _buildPrivacyOptionCard(BuildContext context, Map<String, dynamic> option) {
+  Widget _buildPrivacyOptionCard(
+    BuildContext context,
+    Map<String, dynamic> option,
+  ) {
     final theme = Theme.of(context);
     bool currentValue;
-    
+
     switch (option['id']) {
       case 'healthkit_integration':
         currentValue = _enableHealthKitIntegration;
@@ -328,7 +329,7 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
       default:
         currentValue = false;
     }
-    
+
     return Container(
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
@@ -351,7 +352,9 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: (option['color'] as Color).withValues(alpha: 0.1),
+                        color: (option['color'] as Color).withValues(
+                          alpha: 0.1,
+                        ),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Icon(
@@ -360,9 +363,9 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
                         size: 24,
                       ),
                     ),
-                    
+
                     const SizedBox(width: 16),
-                    
+
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -377,10 +380,13 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
                                   ),
                                 ),
                               ),
-                              
+
                               if (option['recommended'] == true) ...[
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 2,
+                                  ),
                                   decoration: BoxDecoration(
                                     color: Colors.green.withValues(alpha: 0.1),
                                     borderRadius: BorderRadius.circular(10),
@@ -397,34 +403,42 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
                               ],
                             ],
                           ),
-                          
+
                           const SizedBox(height: 4),
-                          
+
                           Text(
                             option['subtitle'],
                             style: theme.textTheme.bodyMedium?.copyWith(
-                              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                              color: theme.colorScheme.onSurface.withValues(
+                                alpha: 0.7,
+                              ),
                             ),
                           ),
                         ],
                       ),
                     ),
-                    
+
                     const SizedBox(width: 16),
-                    
+
                     Switch.adaptive(
                       value: currentValue,
                       onChanged: (_) => _toggleOption(option['id']),
-                      thumbColor: WidgetStateProperty.resolveWith((states) => 
-                        states.contains(WidgetState.selected) ? theme.colorScheme.primary : null),
-                      trackColor: WidgetStateProperty.resolveWith((states) => 
-                        states.contains(WidgetState.selected) ? theme.colorScheme.primary.withValues(alpha: 0.5) : null),
+                      thumbColor: WidgetStateProperty.resolveWith(
+                        (states) => states.contains(WidgetState.selected)
+                            ? theme.colorScheme.primary
+                            : null,
+                      ),
+                      trackColor: WidgetStateProperty.resolveWith(
+                        (states) => states.contains(WidgetState.selected)
+                            ? theme.colorScheme.primary.withValues(alpha: 0.5)
+                            : null,
+                      ),
                     ),
                   ],
                 ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(12),
@@ -450,7 +464,7 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
 
   Widget _buildDataRightsSection(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -465,14 +479,10 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
         children: [
           Row(
             children: [
-              Icon(
-                Icons.gavel,
-                color: theme.colorScheme.primary,
-                size: 24,
-              ),
-              
+              Icon(Icons.gavel, color: theme.colorScheme.primary, size: 24),
+
               const SizedBox(width: 12),
-              
+
               Text(
                 'Your Data Rights',
                 style: theme.textTheme.titleMedium?.copyWith(
@@ -481,36 +491,36 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
               ),
             ],
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           _buildDataRightItem(
             context,
             icon: Icons.download,
             title: 'Data Export',
             description: 'Download all your data in a portable format anytime',
           ),
-          
+
           const SizedBox(height: 12),
-          
+
           _buildDataRightItem(
             context,
             icon: Icons.edit,
             title: 'Data Correction',
             description: 'Request corrections to any inaccurate data',
           ),
-          
+
           const SizedBox(height: 12),
-          
+
           _buildDataRightItem(
             context,
             icon: Icons.delete_forever,
             title: 'Data Deletion',
             description: 'Permanently delete all your data from our systems',
           ),
-          
+
           const SizedBox(height: 12),
-          
+
           _buildDataRightItem(
             context,
             icon: Icons.visibility,
@@ -529,7 +539,7 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
     required String description,
   }) {
     final theme = Theme.of(context);
-    
+
     return Row(
       children: [
         Icon(
@@ -537,9 +547,9 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
           color: theme.colorScheme.primary.withValues(alpha: 0.7),
           size: 18,
         ),
-        
+
         const SizedBox(width: 12),
-        
+
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -550,7 +560,7 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              
+
               Text(
                 description,
                 style: theme.textTheme.bodySmall?.copyWith(
@@ -566,29 +576,23 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
 
   Widget _buildSecurityFeatures(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.green.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Colors.green.withValues(alpha: 0.2),
-        ),
+        border: Border.all(color: Colors.green.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(
-                Icons.security,
-                color: Colors.green,
-                size: 24,
-              ),
-              
+              Icon(Icons.security, color: Colors.green, size: 24),
+
               const SizedBox(width: 12),
-              
+
               Text(
                 'Security Features',
                 style: theme.textTheme.titleMedium?.copyWith(
@@ -598,9 +602,9 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
               ),
             ],
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           Row(
             children: [
               Expanded(
@@ -611,7 +615,7 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
                   subtitle: 'Military-grade security',
                 ),
               ),
-              
+
               Expanded(
                 child: _buildSecurityFeature(
                   context,
@@ -622,9 +626,9 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
               ),
             ],
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           Row(
             children: [
               Expanded(
@@ -635,7 +639,7 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
                   subtitle: 'We can\'t see your data',
                 ),
               ),
-              
+
               Expanded(
                 child: _buildSecurityFeature(
                   context,
@@ -658,17 +662,13 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
     required String subtitle,
   }) {
     final theme = Theme.of(context);
-    
+
     return Column(
       children: [
-        Icon(
-          icon,
-          color: Colors.green,
-          size: 32,
-        ),
-        
+        Icon(icon, color: Colors.green, size: 32),
+
         const SizedBox(height: 8),
-        
+
         Text(
           title,
           style: theme.textTheme.bodyMedium?.copyWith(
@@ -677,9 +677,9 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
           ),
           textAlign: TextAlign.center,
         ),
-        
+
         const SizedBox(height: 4),
-        
+
         Text(
           subtitle,
           style: theme.textTheme.bodySmall?.copyWith(
@@ -717,7 +717,7 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
           break;
       }
     });
-    
+
     _notifyPrivacyChanged();
   }
 }

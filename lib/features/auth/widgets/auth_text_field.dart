@@ -28,7 +28,7 @@ class AuthTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Container(
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
@@ -59,11 +59,7 @@ class AuthTextField extends StatelessWidget {
           ),
           prefixIcon: Container(
             margin: const EdgeInsets.only(right: 12),
-            child: Icon(
-              prefixIcon,
-              color: AppTheme.primaryRose,
-              size: 22,
-            ),
+            child: Icon(prefixIcon, color: AppTheme.primaryRose, size: 22),
           ),
           suffixIcon: suffixIcon,
           errorText: errorText,
@@ -84,24 +80,15 @@ class AuthTextField extends StatelessWidget {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(
-              color: AppTheme.primaryRose,
-              width: 2,
-            ),
+            borderSide: const BorderSide(color: AppTheme.primaryRose, width: 2),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(
-              color: AppTheme.primaryRose,
-              width: 2,
-            ),
+            borderSide: const BorderSide(color: AppTheme.primaryRose, width: 2),
           ),
           focusedErrorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(
-              color: AppTheme.primaryRose,
-              width: 2,
-            ),
+            borderSide: const BorderSide(color: AppTheme.primaryRose, width: 2),
           ),
           disabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
@@ -111,7 +98,11 @@ class AuthTextField extends StatelessWidget {
             ),
           ),
           filled: true,
-          fillColor: enabled ? theme.colorScheme.surface : theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+          fillColor: enabled
+              ? theme.colorScheme.surface
+              : theme.colorScheme.surfaceContainerHighest.withValues(
+                  alpha: 0.3,
+                ),
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 20,
             vertical: 18,

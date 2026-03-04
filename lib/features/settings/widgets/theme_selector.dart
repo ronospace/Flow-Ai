@@ -84,30 +84,36 @@ class ThemeSelector extends StatelessWidget {
                       Icons.light_mode,
                       Colors.orange,
                     ).animate().slideX(begin: 0.3, end: 0).fadeIn(),
-                    
+
                     const SizedBox(height: 12),
-                    
+
                     _buildThemeOption(
-                      context,
-                      settings,
-                      AppThemeMode.dark,
-                      AppLocalizations.of(context).darkTheme,
-                      AppLocalizations.of(context).darkThemeDescription,
-                      Icons.dark_mode,
-                      Colors.indigo,
-                    ).animate().slideX(begin: 0.3, end: 0).fadeIn(delay: 100.ms),
-                    
+                          context,
+                          settings,
+                          AppThemeMode.dark,
+                          AppLocalizations.of(context).darkTheme,
+                          AppLocalizations.of(context).darkThemeDescription,
+                          Icons.dark_mode,
+                          Colors.indigo,
+                        )
+                        .animate()
+                        .slideX(begin: 0.3, end: 0)
+                        .fadeIn(delay: 100.ms),
+
                     const SizedBox(height: 12),
-                    
+
                     _buildThemeOption(
-                      context,
-                      settings,
-                      AppThemeMode.system,
-                      AppLocalizations.of(context).systemTheme,
-                      AppLocalizations.of(context).systemThemeDescription,
-                      Icons.settings_brightness,
-                      Colors.purple,
-                    ).animate().slideX(begin: 0.3, end: 0).fadeIn(delay: 200.ms),
+                          context,
+                          settings,
+                          AppThemeMode.system,
+                          AppLocalizations.of(context).systemTheme,
+                          AppLocalizations.of(context).systemThemeDescription,
+                          Icons.settings_brightness,
+                          Colors.purple,
+                        )
+                        .animate()
+                        .slideX(begin: 0.3, end: 0)
+                        .fadeIn(delay: 200.ms),
                   ],
                 );
               },
@@ -129,14 +135,14 @@ class ThemeSelector extends StatelessWidget {
   ) {
     final theme = Theme.of(context);
     final isSelected = settings.preferences.themeMode == themeMode;
-    
+
     return Container(
       decoration: BoxDecoration(
-        color: isSelected 
+        color: isSelected
             ? AppTheme.primaryRose.withValues(alpha: 0.1)
             : Colors.transparent,
         borderRadius: BorderRadius.circular(16),
-        border: isSelected 
+        border: isSelected
             ? Border.all(color: AppTheme.primaryRose, width: 2)
             : Border.all(color: theme.colorScheme.outline),
       ),
@@ -146,7 +152,7 @@ class ThemeSelector extends StatelessWidget {
           width: 48,
           height: 48,
           decoration: BoxDecoration(
-            color: isSelected 
+            color: isSelected
                 ? iconColor.withValues(alpha: 0.2)
                 : theme.colorScheme.surfaceContainerHighest,
             borderRadius: BorderRadius.circular(12),
@@ -161,36 +167,34 @@ class ThemeSelector extends StatelessWidget {
           title,
           style: TextStyle(
             fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-            color: isSelected ? AppTheme.primaryRose : theme.textTheme.bodyLarge?.color,
+            color: isSelected
+                ? AppTheme.primaryRose
+                : theme.textTheme.bodyLarge?.color,
             fontSize: 16,
           ),
         ),
-          subtitle: Text(
+        subtitle: Text(
           subtitle,
           style: TextStyle(
             color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
             fontSize: 14,
           ),
         ),
-        trailing: isSelected 
-            ? const Icon(
-                Icons.check_circle,
-                color: AppTheme.primaryRose,
-              )
-            : Icon(
-                Icons.circle_outlined,
-                color: theme.colorScheme.outline,
-              ),
+        trailing: isSelected
+            ? const Icon(Icons.check_circle, color: AppTheme.primaryRose)
+            : Icon(Icons.circle_outlined, color: theme.colorScheme.outline),
         onTap: () async {
           if (!isSelected) {
             HapticFeedback.mediumImpact();
             await settings.updateThemeMode(themeMode);
-            
+
             if (context.mounted) {
               // Show confirmation
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('${AppLocalizations.of(context).themeChangedTo} $title'),
+                  content: Text(
+                    '${AppLocalizations.of(context).themeChangedTo} $title',
+                  ),
                   backgroundColor: AppTheme.sweetPeach,
                   behavior: SnackBarBehavior.floating,
                   shape: RoundedRectangleBorder(
@@ -198,7 +202,7 @@ class ThemeSelector extends StatelessWidget {
                   ),
                 ),
               );
-              
+
               Navigator.pop(context);
             }
           }

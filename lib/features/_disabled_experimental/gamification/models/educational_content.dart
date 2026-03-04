@@ -94,7 +94,8 @@ class EducationalContent {
       thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
       videoUrl: videoUrl ?? this.videoUrl,
       audioUrl: audioUrl ?? this.audioUrl,
-      estimatedReadTimeMinutes: estimatedReadTimeMinutes ?? this.estimatedReadTimeMinutes,
+      estimatedReadTimeMinutes:
+          estimatedReadTimeMinutes ?? this.estimatedReadTimeMinutes,
       pointsReward: pointsReward ?? this.pointsReward,
       xpReward: xpReward ?? this.xpReward,
       isUnlocked: isUnlocked ?? this.isUnlocked,
@@ -111,10 +112,10 @@ class EducationalContent {
   bool get hasVideo => videoUrl != null && videoUrl!.isNotEmpty;
   bool get hasAudio => audioUrl != null && audioUrl!.isNotEmpty;
   bool get hasThumbnail => thumbnailUrl != null && thumbnailUrl!.isNotEmpty;
-  
+
   bool get isInProgress => progress > 0.0 && progress < 1.0;
   bool get isStarted => progress > 0.0;
-  
+
   double get progressPercentage => (progress * 100).clamp(0.0, 100.0);
 
   String get typeDisplayName {
@@ -201,7 +202,7 @@ class EducationalContent {
   String get formattedPublishDate {
     final now = DateTime.now();
     final difference = now.difference(publishedAt);
-    
+
     if (difference.inDays > 365) {
       return '${(difference.inDays / 365).floor()} year${difference.inDays > 730 ? 's' : ''} ago';
     } else if (difference.inDays > 30) {

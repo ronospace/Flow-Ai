@@ -53,7 +53,11 @@ class _AdvancedDataVisualizationDashboardState
     'activity_level',
   ];
 
-  List<String> _selectedMetrics = ['cycle_length', 'mood_score', 'energy_level'];
+  List<String> _selectedMetrics = [
+    'cycle_length',
+    'mood_score',
+    'energy_level',
+  ];
   bool _showPredictions = true;
   bool _showCorrelations = true;
 
@@ -75,21 +79,17 @@ class _AdvancedDataVisualizationDashboardState
       vsync: this,
     );
 
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOutCubic,
-    ));
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOutCubic),
+    );
 
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.1),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOutBack,
-    ));
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0, 0.1), end: Offset.zero).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Curves.easeOutBack,
+          ),
+        );
 
     _animationController.forward();
   }
@@ -269,7 +269,9 @@ class _AdvancedDataVisualizationDashboardState
                 borderRadius: BorderRadius.circular(20),
               ),
               child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  AppTheme.primaryColor,
+                ),
               ),
             ),
             const SizedBox(height: 20),
@@ -284,10 +286,7 @@ class _AdvancedDataVisualizationDashboardState
             const SizedBox(height: 8),
             Text(
               'Analyzing your health patterns with AI',
-              style: TextStyle(
-                color: Colors.white54,
-                fontSize: 14,
-              ),
+              style: TextStyle(color: Colors.white54, fontSize: 14),
             ),
           ],
         ),
@@ -350,7 +349,10 @@ class _AdvancedDataVisualizationDashboardState
                 onTap: () => setState(() => _selectedTimeRange = range),
                 child: Container(
                   margin: const EdgeInsets.only(right: 8),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
                     color: isSelected
                         ? AppTheme.primaryColor
@@ -401,7 +403,10 @@ class _AdvancedDataVisualizationDashboardState
                 onTap: () => setState(() => _currentView = view),
                 child: Container(
                   margin: const EdgeInsets.only(right: 8),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
                     color: isSelected
                         ? AppTheme.secondaryColor
@@ -640,7 +645,9 @@ class _AdvancedDataVisualizationDashboardState
     final currentValue = data.isNotEmpty ? data.last : 0.0;
     final previousValue = data.length > 1 ? data[data.length - 2] : 0.0;
     final change = currentValue - previousValue;
-    final changePercent = previousValue != 0 ? (change / previousValue) * 100 : 0.0;
+    final changePercent = previousValue != 0
+        ? (change / previousValue) * 100
+        : 0.0;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -846,24 +853,48 @@ class _AdvancedDataVisualizationDashboardState
             ),
             const SizedBox(height: 20),
             SwitchListTile(
-              title: const Text('Show Predictions', style: TextStyle(color: Colors.white)),
-              subtitle: const Text('Display AI-powered predictions', style: TextStyle(color: Colors.white70)),
+              title: const Text(
+                'Show Predictions',
+                style: TextStyle(color: Colors.white),
+              ),
+              subtitle: const Text(
+                'Display AI-powered predictions',
+                style: TextStyle(color: Colors.white70),
+              ),
               value: _showPredictions,
               onChanged: (value) => setState(() => _showPredictions = value),
-              thumbColor: MaterialStateProperty.resolveWith((states) => 
-                states.contains(MaterialState.selected) ? AppTheme.primaryColor : null),
-              trackColor: MaterialStateProperty.resolveWith((states) => 
-                states.contains(MaterialState.selected) ? AppTheme.primaryColor.withValues(alpha: 0.5) : null),
+              thumbColor: MaterialStateProperty.resolveWith(
+                (states) => states.contains(MaterialState.selected)
+                    ? AppTheme.primaryColor
+                    : null,
+              ),
+              trackColor: MaterialStateProperty.resolveWith(
+                (states) => states.contains(MaterialState.selected)
+                    ? AppTheme.primaryColor.withValues(alpha: 0.5)
+                    : null,
+              ),
             ),
             SwitchListTile(
-              title: const Text('Show Correlations', style: TextStyle(color: Colors.white)),
-              subtitle: const Text('Display metric correlations', style: TextStyle(color: Colors.white70)),
+              title: const Text(
+                'Show Correlations',
+                style: TextStyle(color: Colors.white),
+              ),
+              subtitle: const Text(
+                'Display metric correlations',
+                style: TextStyle(color: Colors.white70),
+              ),
               value: _showCorrelations,
               onChanged: (value) => setState(() => _showCorrelations = value),
-              thumbColor: MaterialStateProperty.resolveWith((states) => 
-                states.contains(MaterialState.selected) ? AppTheme.primaryColor : null),
-              trackColor: MaterialStateProperty.resolveWith((states) => 
-                states.contains(MaterialState.selected) ? AppTheme.primaryColor.withValues(alpha: 0.5) : null),
+              thumbColor: MaterialStateProperty.resolveWith(
+                (states) => states.contains(MaterialState.selected)
+                    ? AppTheme.primaryColor
+                    : null,
+              ),
+              trackColor: MaterialStateProperty.resolveWith(
+                (states) => states.contains(MaterialState.selected)
+                    ? AppTheme.primaryColor.withValues(alpha: 0.5)
+                    : null,
+              ),
             ),
           ],
         ),
@@ -876,12 +907,18 @@ class _AdvancedDataVisualizationDashboardState
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: AppTheme.backgroundColor,
-        title: const Text('Select Metrics', style: TextStyle(color: Colors.white)),
+        title: const Text(
+          'Select Metrics',
+          style: TextStyle(color: Colors.white),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: _availableMetrics.map((metric) {
             return CheckboxListTile(
-              title: Text(_getMetricLabel(metric), style: const TextStyle(color: Colors.white)),
+              title: Text(
+                _getMetricLabel(metric),
+                style: const TextStyle(color: Colors.white),
+              ),
               value: _selectedMetrics.contains(metric),
               onChanged: (selected) {
                 setState(() {
@@ -901,7 +938,10 @@ class _AdvancedDataVisualizationDashboardState
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Done', style: TextStyle(color: AppTheme.primaryColor)),
+            child: const Text(
+              'Done',
+              style: TextStyle(color: AppTheme.primaryColor),
+            ),
           ),
         ],
       ),
@@ -927,7 +967,7 @@ class _AdvancedDataVisualizationDashboardState
             default:
               return 0.5 + (index % 10) * 0.05;
           }
-        })
+        }),
     };
   }
 
@@ -949,8 +989,10 @@ class _AdvancedDataVisualizationDashboardState
       for (String metric1 in metrics)
         metric1: {
           for (String metric2 in metrics)
-            metric2: metric1 == metric2 ? 1.0 : (0.2 + (metric1.hashCode + metric2.hashCode) % 60 / 100)
-        }
+            metric2: metric1 == metric2
+                ? 1.0
+                : (0.2 + (metric1.hashCode + metric2.hashCode) % 60 / 100),
+        },
     };
   }
 
@@ -965,4 +1007,5 @@ class _AdvancedDataVisualizationDashboardState
 }
 
 enum TimeRange { week, month, quarter, year }
+
 enum DashboardView { overview, trends, correlations, predictions }

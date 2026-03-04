@@ -13,7 +13,7 @@ class ProfileSection extends StatelessWidget {
     return Consumer<SettingsProvider>(
       builder: (context, settings, child) {
         final preferences = settings.preferences;
-        
+
         return Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
@@ -58,11 +58,7 @@ class ProfileSection extends StatelessWidget {
                     ],
                   ),
                   child: preferences.avatarUrl.isEmpty
-                      ? Icon(
-                          Icons.person,
-                          color: Colors.white,
-                          size: 40,
-                        )
+                      ? Icon(Icons.person, color: Colors.white, size: 40)
                       : ClipOval(
                           child: Image.network(
                             preferences.avatarUrl,
@@ -93,7 +89,7 @@ class ProfileSection extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              preferences.displayName.isEmpty 
+                              preferences.displayName.isEmpty
                                   ? 'Tap to add your name'
                                   : preferences.displayName,
                               style: TextStyle(
@@ -140,7 +136,9 @@ class ProfileSection extends StatelessWidget {
                           icon: preferences.notificationsEnabled
                               ? Icons.notifications_active
                               : Icons.notifications_off,
-                          label: preferences.notificationsEnabled ? 'ON' : 'OFF',
+                          label: preferences.notificationsEnabled
+                              ? 'ON'
+                              : 'OFF',
                           color: Colors.white.withValues(alpha: 0.2),
                         ),
                         const SizedBox(width: 8),
@@ -176,11 +174,7 @@ class ProfileSection extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon,
-            color: Colors.white,
-            size: 12,
-          ),
+          Icon(icon, color: Colors.white, size: 12),
           const SizedBox(width: 4),
           Text(
             label,
@@ -196,8 +190,10 @@ class ProfileSection extends StatelessWidget {
   }
 
   void _editDisplayName(BuildContext context, SettingsProvider settings) {
-    final controller = TextEditingController(text: settings.preferences.displayName);
-    
+    final controller = TextEditingController(
+      text: settings.preferences.displayName,
+    );
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -221,7 +217,7 @@ class ProfileSection extends StatelessWidget {
               if (name.isNotEmpty) {
                 HapticFeedback.lightImpact();
                 await settings.updateDisplayName(name);
-                
+
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -264,7 +260,9 @@ class ProfileSection extends StatelessWidget {
               height: 4,
               margin: const EdgeInsets.only(top: 12),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.2),
+                color: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -339,7 +337,9 @@ class ProfileSection extends StatelessWidget {
             label,
             style: TextStyle(
               fontSize: 12,
-              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+              color: Theme.of(
+                context,
+              ).colorScheme.onSurface.withValues(alpha: 0.7),
             ),
           ),
         ],
@@ -372,7 +372,7 @@ class ProfileSection extends StatelessWidget {
   void _removeAvatar(BuildContext context, SettingsProvider settings) async {
     HapticFeedback.lightImpact();
     await settings.updateAvatar('');
-    
+
     if (context.mounted) {
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(

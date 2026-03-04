@@ -42,13 +42,14 @@ class WearableDevice {
   // Computed properties
   bool get needsCharging => batteryLevel != null && batteryLevel! < 20;
   bool get isLowBattery => batteryLevel != null && batteryLevel! < 10;
-  bool get isRecentlySync => lastSync != null && 
-      DateTime.now().difference(lastSync!).inMinutes < 30;
-  bool get needsSync => lastSync != null && 
-      DateTime.now().difference(lastSync!).inHours > 24;
-  
+  bool get isRecentlySync =>
+      lastSync != null && DateTime.now().difference(lastSync!).inMinutes < 30;
+  bool get needsSync =>
+      lastSync != null && DateTime.now().difference(lastSync!).inHours > 24;
+
   /// Get time since last sync
-  Duration? get timeSinceSync => lastSync != null ? DateTime.now().difference(lastSync!) : null;
+  Duration? get timeSinceSync =>
+      lastSync != null ? DateTime.now().difference(lastSync!) : null;
 
   /// Get device health status based on battery, connectivity, and sync
   DeviceHealth get deviceHealth {
@@ -62,7 +63,7 @@ class WearableDevice {
   /// Get formatted battery status
   String get batteryStatus {
     if (batteryLevel == null) return 'Unknown';
-    
+
     final level = batteryLevel!;
     if (level >= 80) return 'Excellent ($level%)';
     if (level >= 50) return 'Good ($level%)';
@@ -73,7 +74,7 @@ class WearableDevice {
   /// Get connection status message
   String get connectionStatus {
     if (!isConnected) return 'Disconnected';
-    
+
     switch (connectionType) {
       case ConnectionType.bluetooth:
         return 'Connected via Bluetooth';
@@ -91,9 +92,9 @@ class WearableDevice {
   /// Get last sync status message
   String get syncStatusMessage {
     if (lastSync == null) return 'Never synced';
-    
+
     final timeSince = timeSinceSync!;
-    
+
     if (timeSince.inMinutes < 1) return 'Just synced';
     if (timeSince.inMinutes < 60) return '${timeSince.inMinutes}m ago';
     if (timeSince.inHours < 24) return '${timeSince.inHours}h ago';
@@ -109,36 +110,36 @@ class WearableDevice {
   /// Get supported metrics by category
   Map<BiometricCategory, List<BiometricType>> getSupportedMetricsByCategory() {
     final categoryMap = <BiometricCategory, List<BiometricType>>{};
-    
+
     for (final metric in supportedMetrics) {
       if (!categoryMap.containsKey(metric.category)) {
         categoryMap[metric.category] = [];
       }
       categoryMap[metric.category]!.add(metric);
     }
-    
+
     return categoryMap;
   }
 
   /// Get device compatibility score (0-100)
   int get compatibilityScore {
     var score = 0;
-    
+
     // Base score for connection
     if (isConnected) score += 30;
-    
+
     // Battery score
     if (batteryLevel != null) {
       score += (batteryLevel! / 5).round(); // Max 20 points
     }
-    
+
     // Metrics support score
     score += (supportedMetrics.length * 2).clamp(0, 30);
-    
+
     // Firmware/sync score
     if (isRecentlySync) score += 10;
     if (firmwareVersion != null) score += 10;
-    
+
     return score.clamp(0, 100);
   }
 
@@ -158,7 +159,8 @@ class WearableDevice {
     );
   }
 
-  factory WearableDevice.fromJson(Map<String, dynamic> json) => _$WearableDeviceFromJson(json);
+  factory WearableDevice.fromJson(Map<String, dynamic> json) =>
+      _$WearableDeviceFromJson(json);
   Map<String, dynamic> toJson() => _$WearableDeviceToJson(this);
 
   WearableDevice copyWith({
@@ -383,7 +385,8 @@ class DeviceSettings {
     this.backgroundSync = true,
   });
 
-  factory DeviceSettings.fromJson(Map<String, dynamic> json) => _$DeviceSettingsFromJson(json);
+  factory DeviceSettings.fromJson(Map<String, dynamic> json) =>
+      _$DeviceSettingsFromJson(json);
   Map<String, dynamic> toJson() => _$DeviceSettingsToJson(this);
 }
 
@@ -485,17 +488,22 @@ class DeviceSyncHistory {
 
   /// Get average sync duration
   Duration? get averageSyncDuration {
-    final completedSyncs = syncHistory.where((s) => s.duration != null).toList();
+    final completedSyncs = syncHistory
+        .where((s) => s.duration != null)
+        .toList();
     if (completedSyncs.isEmpty) return null;
-    
+
     final totalDuration = completedSyncs
         .map((s) => s.duration!.inMilliseconds)
         .reduce((a, b) => a + b);
-    
-    return Duration(milliseconds: (totalDuration / completedSyncs.length).round());
+
+    return Duration(
+      milliseconds: (totalDuration / completedSyncs.length).round(),
+    );
   }
 
-  factory DeviceSyncHistory.fromJson(Map<String, dynamic> json) => _$DeviceSyncHistoryFromJson(json);
+  factory DeviceSyncHistory.fromJson(Map<String, dynamic> json) =>
+      _$DeviceSyncHistoryFromJson(json);
   Map<String, dynamic> toJson() => _$DeviceSyncHistoryToJson(this);
 }
 
@@ -520,7 +528,8 @@ class SyncRecord {
     this.duration,
   });
 
-  factory SyncRecord.fromJson(Map<String, dynamic> json) => _$SyncRecordFromJson(json);
+  factory SyncRecord.fromJson(Map<String, dynamic> json) =>
+      _$SyncRecordFromJson(json);
   Map<String, dynamic> toJson() => _$SyncRecordToJson(this);
 }
 
@@ -557,6 +566,7 @@ class DevicePairingInfo {
     this.pairingMetadata = const {},
   });
 
-  factory DevicePairingInfo.fromJson(Map<String, dynamic> json) => _$DevicePairingInfoFromJson(json);
+  factory DevicePairingInfo.fromJson(Map<String, dynamic> json) =>
+      _$DevicePairingInfoFromJson(json);
   Map<String, dynamic> toJson() => _$DevicePairingInfoToJson(this);
 }

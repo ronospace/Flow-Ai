@@ -68,23 +68,16 @@ class _CommunityHubScreenState extends State<CommunityHubScreen>
   }
 
   void _initializeControllers() {
-    _tabController = TabController(
-      length: _communityTabs.length,
-      vsync: this,
-    );
+    _tabController = TabController(length: _communityTabs.length, vsync: this);
 
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
     );
 
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
 
     _animationController.forward();
   }
@@ -104,7 +97,7 @@ class _CommunityHubScreenState extends State<CommunityHubScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    
+
     return Consumer<CommunityController>(
       builder: (context, controller, child) {
         return Scaffold(
@@ -127,9 +120,12 @@ class _CommunityHubScreenState extends State<CommunityHubScreen>
     );
   }
 
-  SliverAppBar _buildSliverAppBar(BuildContext context, CommunityController controller) {
+  SliverAppBar _buildSliverAppBar(
+    BuildContext context,
+    CommunityController controller,
+  ) {
     final theme = Theme.of(context);
-    
+
     return SliverAppBar(
       expandedHeight: 200,
       floating: false,
@@ -148,10 +144,7 @@ class _CommunityHubScreenState extends State<CommunityHubScreen>
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [
-                theme.colorScheme.primary,
-                theme.colorScheme.secondary,
-              ],
+              colors: [theme.colorScheme.primary, theme.colorScheme.secondary],
             ),
           ),
           child: SafeArea(
@@ -168,18 +161,18 @@ class _CommunityHubScreenState extends State<CommunityHubScreen>
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  
+
                   const SizedBox(height: 8),
-                  
+
                   Text(
                     'A supportive community for your health journey',
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: theme.colorScheme.onPrimary.withValues(alpha: 0.9),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 16),
-                  
+
                   CommunityStatsWidget(stats: controller.communityStats),
                 ],
               ),
@@ -189,18 +182,12 @@ class _CommunityHubScreenState extends State<CommunityHubScreen>
       ),
       actions: [
         IconButton(
-          icon: Icon(
-            Icons.notifications,
-            color: theme.colorScheme.onPrimary,
-          ),
+          icon: Icon(Icons.notifications, color: theme.colorScheme.onPrimary),
           onPressed: () => _showNotifications(context),
         ),
-        
+
         IconButton(
-          icon: Icon(
-            Icons.search,
-            color: theme.colorScheme.onPrimary,
-          ),
+          icon: Icon(Icons.search, color: theme.colorScheme.onPrimary),
           onPressed: () => _showSearch(context),
         ),
       ],
@@ -216,7 +203,9 @@ class _CommunityHubScreenState extends State<CommunityHubScreen>
           tabAlignment: TabAlignment.start,
           indicatorColor: Theme.of(context).colorScheme.primary,
           labelColor: Theme.of(context).colorScheme.primary,
-          unselectedLabelColor: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+          unselectedLabelColor: Theme.of(
+            context,
+          ).colorScheme.onSurface.withValues(alpha: 0.7),
           tabs: _communityTabs.map((tab) => _buildTab(context, tab)).toList(),
         ),
       ),
@@ -226,17 +215,17 @@ class _CommunityHubScreenState extends State<CommunityHubScreen>
 
   Tab _buildTab(BuildContext context, Map<String, dynamic> tab) {
     final theme = Theme.of(context);
-    
+
     return Tab(
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(tab['icon'], size: 20),
-          
+
           const SizedBox(width: 8),
-          
+
           Text(tab['title']),
-          
+
           if (tab['badge'] > 0) ...[
             const SizedBox(width: 8),
             Container(
@@ -260,7 +249,10 @@ class _CommunityHubScreenState extends State<CommunityHubScreen>
     );
   }
 
-  Widget _buildTabBarView(BuildContext context, CommunityController controller) {
+  Widget _buildTabBarView(
+    BuildContext context,
+    CommunityController controller,
+  ) {
     return TabBarView(
       controller: _tabController,
       children: [
@@ -272,7 +264,7 @@ class _CommunityHubScreenState extends State<CommunityHubScreen>
           onLikePost: controller.likePost,
           onReportPost: controller.reportPost,
         ),
-        
+
         // Expert Q&A Tab
         ExpertQAWidget(
           questions: controller.expertQuestions,
@@ -282,7 +274,7 @@ class _CommunityHubScreenState extends State<CommunityHubScreen>
           onUpvoteAnswer: controller.upvoteAnswer,
           onBookmarkAnswer: controller.bookmarkAnswer,
         ),
-        
+
         // Cycle Buddies Tab
         CycleBuddyWidget(
           matches: controller.cycleBuddies,
@@ -292,7 +284,7 @@ class _CommunityHubScreenState extends State<CommunityHubScreen>
           onAcceptRequest: controller.acceptBuddyRequest,
           onDeclineRequest: controller.declineBuddyRequest,
         ),
-        
+
         // Symptom Stories Tab
         SymptomSharingWidget(
           stories: controller.symptomStories,
@@ -301,7 +293,7 @@ class _CommunityHubScreenState extends State<CommunityHubScreen>
           onReactToStory: controller.reactToStory,
           onFollowStory: controller.followStory,
         ),
-        
+
         // Achievements Tab
         CommunityAchievementsWidget(
           achievements: controller.communityAchievements,
@@ -314,9 +306,12 @@ class _CommunityHubScreenState extends State<CommunityHubScreen>
     );
   }
 
-  Widget? _buildFloatingActionButton(BuildContext context, CommunityController controller) {
+  Widget? _buildFloatingActionButton(
+    BuildContext context,
+    CommunityController controller,
+  ) {
     final currentIndex = _tabController.index;
-    
+
     switch (currentIndex) {
       case 0: // Discussions
         return FloatingActionButton.extended(
@@ -325,7 +320,7 @@ class _CommunityHubScreenState extends State<CommunityHubScreen>
           label: const Text('New Discussion'),
           backgroundColor: Theme.of(context).colorScheme.primary,
         );
-      
+
       case 1: // Expert Q&A
         return FloatingActionButton.extended(
           onPressed: () => _askExpertQuestion(context, controller),
@@ -333,7 +328,7 @@ class _CommunityHubScreenState extends State<CommunityHubScreen>
           label: const Text('Ask Expert'),
           backgroundColor: Theme.of(context).colorScheme.secondary,
         );
-      
+
       case 2: // Cycle Buddies
         return FloatingActionButton.extended(
           onPressed: () => _findCycleBuddies(context, controller),
@@ -341,7 +336,7 @@ class _CommunityHubScreenState extends State<CommunityHubScreen>
           label: const Text('Find Buddies'),
           backgroundColor: Theme.of(context).colorScheme.tertiary,
         );
-      
+
       case 3: // Symptom Stories
         return FloatingActionButton.extended(
           onPressed: () => _shareSymptomStory(context, controller),
@@ -349,13 +344,16 @@ class _CommunityHubScreenState extends State<CommunityHubScreen>
           label: const Text('Share Story'),
           backgroundColor: Colors.purple,
         );
-      
+
       default:
         return null;
     }
   }
 
-  void _createNewDiscussion(BuildContext context, CommunityController controller) {
+  void _createNewDiscussion(
+    BuildContext context,
+    CommunityController controller,
+  ) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -369,7 +367,11 @@ class _CommunityHubScreenState extends State<CommunityHubScreen>
             color: Theme.of(context).colorScheme.surface,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
           ),
-          child: _buildCreateDiscussionForm(context, controller, scrollController),
+          child: _buildCreateDiscussionForm(
+            context,
+            controller,
+            scrollController,
+          ),
         ),
       ),
     );
@@ -403,64 +405,69 @@ class _CommunityHubScreenState extends State<CommunityHubScreen>
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             Text(
               'Start a New Discussion',
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             AdaptiveTextFormField(
               labelText: 'Discussion Title',
               hintText: 'What would you like to discuss?',
               maxLines: 2,
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             AdaptiveTextFormField(
               labelText: 'Description',
               hintText: 'Share more details about your topic...',
               maxLines: 6,
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             Text(
               'Category',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
             ),
-            
+
             const SizedBox(height: 8),
-            
+
             Wrap(
               spacing: 8,
               runSpacing: 8,
-              children: [
-                'General Discussion',
-                'Symptom Support',
-                'Fertility & Pregnancy',
-                'Mental Health',
-                'Lifestyle & Nutrition',
-                'Medical Questions',
-              ].map((category) => FilterChip(
-                label: Text(category),
-                selected: false,
-                onSelected: (selected) {
-                  // Handle category selection
-                },
-              )).toList(),
+              children:
+                  [
+                        'General Discussion',
+                        'Symptom Support',
+                        'Fertility & Pregnancy',
+                        'Mental Health',
+                        'Lifestyle & Nutrition',
+                        'Medical Questions',
+                      ]
+                      .map(
+                        (category) => FilterChip(
+                          label: Text(category),
+                          selected: false,
+                          onSelected: (selected) {
+                            // Handle category selection
+                          },
+                        ),
+                      )
+                      .toList(),
             ),
-            
+
             const SizedBox(height: 32),
-            
+
             Row(
               children: [
                 Expanded(
@@ -470,9 +477,9 @@ class _CommunityHubScreenState extends State<CommunityHubScreen>
                     isPrimary: false,
                   ),
                 ),
-                
+
                 const SizedBox(width: 16),
-                
+
                 Expanded(
                   flex: 2,
                   child: AdaptiveButton(
@@ -492,7 +499,10 @@ class _CommunityHubScreenState extends State<CommunityHubScreen>
     );
   }
 
-  void _askExpertQuestion(BuildContext context, CommunityController controller) {
+  void _askExpertQuestion(
+    BuildContext context,
+    CommunityController controller,
+  ) {
     // Implementation for expert question form
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Ask Expert Question feature coming soon!')),
@@ -502,14 +512,21 @@ class _CommunityHubScreenState extends State<CommunityHubScreen>
   void _findCycleBuddies(BuildContext context, CommunityController controller) {
     // Implementation for cycle buddy matching
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Cycle Buddy Matching feature coming soon!')),
+      const SnackBar(
+        content: Text('Cycle Buddy Matching feature coming soon!'),
+      ),
     );
   }
 
-  void _shareSymptomStory(BuildContext context, CommunityController controller) {
+  void _shareSymptomStory(
+    BuildContext context,
+    CommunityController controller,
+  ) {
     // Implementation for symptom story sharing
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Symptom Story Sharing feature coming soon!')),
+      const SnackBar(
+        content: Text('Symptom Story Sharing feature coming soon!'),
+      ),
     );
   }
 
@@ -518,10 +535,7 @@ class _CommunityHubScreenState extends State<CommunityHubScreen>
   }
 
   void _showSearch(BuildContext context) {
-    showSearch(
-      context: context,
-      delegate: CommunitySearchDelegate(),
-    );
+    showSearch(context: context, delegate: CommunitySearchDelegate());
   }
 }
 
@@ -537,7 +551,11 @@ class _SliverTabBarDelegate extends SliverPersistentHeaderDelegate {
   double get maxExtent => tabBar.preferredSize.height;
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
     return Material(
       color: Theme.of(context).colorScheme.surface,
       elevation: overlapsContent ? 4 : 0,
@@ -577,16 +595,12 @@ class CommunitySearchDelegate extends SearchDelegate<String> {
   @override
   Widget buildResults(BuildContext context) {
     // Implementation for search results
-    return const Center(
-      child: Text('Search results will appear here'),
-    );
+    return const Center(child: Text('Search results will appear here'));
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
     // Implementation for search suggestions
-    return const Center(
-      child: Text('Search suggestions will appear here'),
-    );
+    return const Center(child: Text('Search suggestions will appear here'));
   }
 }

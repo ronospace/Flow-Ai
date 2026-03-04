@@ -211,13 +211,9 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
       vsync: this,
     );
 
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
 
     _animationController.forward();
   }
@@ -264,7 +260,7 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
 
   Widget _buildHeader(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -275,9 +271,9 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
             color: theme.colorScheme.onSurface,
           ),
         ),
-        
+
         const SizedBox(height: 8),
-        
+
         Text(
           'Select the areas where you\'d like to see improvement and get personalized insights.',
           style: theme.textTheme.bodyMedium?.copyWith(
@@ -291,7 +287,7 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
 
   Widget _buildPrioritySelection(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -301,21 +297,26 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
             fontWeight: FontWeight.bold,
           ),
         ),
-        
+
         const SizedBox(height: 16),
-        
-        ...(_priorityLevels.map((priority) => Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: _buildPriorityCard(context, priority),
-        ))),
+
+        ...(_priorityLevels.map(
+          (priority) => Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: _buildPriorityCard(context, priority),
+          ),
+        )),
       ],
     );
   }
 
-  Widget _buildPriorityCard(BuildContext context, Map<String, dynamic> priority) {
+  Widget _buildPriorityCard(
+    BuildContext context,
+    Map<String, dynamic> priority,
+  ) {
     final theme = Theme.of(context);
     final isSelected = _selectedPriority == priority['id'];
-    
+
     return InkWell(
       onTap: () {
         setState(() {
@@ -327,7 +328,7 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isSelected 
+          color: isSelected
               ? theme.colorScheme.primary.withValues(alpha: 0.1)
               : theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
@@ -356,9 +357,9 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
                 size: 24,
               ),
             ),
-            
+
             const SizedBox(width: 16),
-            
+
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -372,18 +373,18 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
                           : theme.colorScheme.onSurface,
                     ),
                   ),
-                  
+
                   const SizedBox(height: 4),
-                  
+
                   Text(
                     priority['subtitle'],
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 4),
-                  
+
                   Text(
                     'Recommended: ${priority['recommendedGoals']} goals',
                     style: theme.textTheme.bodySmall?.copyWith(
@@ -396,12 +397,9 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
                 ],
               ),
             ),
-            
+
             if (isSelected)
-              Icon(
-                Icons.check_circle,
-                color: theme.colorScheme.primary,
-              ),
+              Icon(Icons.check_circle, color: theme.colorScheme.primary),
           ],
         ),
       ),
@@ -410,7 +408,7 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
 
   Widget _buildPopularGoalsSection(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     // Get popular goals from all categories
     final popularGoals = <Map<String, dynamic>>[];
     for (final category in _goalCategories.values) {
@@ -426,14 +424,10 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
       children: [
         Row(
           children: [
-            Icon(
-              Icons.trending_up,
-              color: theme.colorScheme.primary,
-              size: 20,
-            ),
-            
+            Icon(Icons.trending_up, color: theme.colorScheme.primary, size: 20),
+
             const SizedBox(width: 8),
-            
+
             Text(
               'Most Popular Goals',
               style: theme.textTheme.titleLarge?.copyWith(
@@ -442,13 +436,15 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
             ),
           ],
         ),
-        
+
         const SizedBox(height: 16),
-        
+
         Wrap(
           spacing: 8,
           runSpacing: 8,
-          children: popularGoals.map((goal) => _buildGoalChip(context, goal)).toList(),
+          children: popularGoals
+              .map((goal) => _buildGoalChip(context, goal))
+              .toList(),
         ),
       ],
     );
@@ -457,21 +453,25 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
   Widget _buildAllGoalsSection(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: _goalCategories.entries.map((entry) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildCategoryHeader(context, entry.key),
-          const SizedBox(height: 16),
-          _buildGoalsGrid(context, entry.value),
-          const SizedBox(height: 32),
-        ],
-      )).toList(),
+      children: _goalCategories.entries
+          .map(
+            (entry) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildCategoryHeader(context, entry.key),
+                const SizedBox(height: 16),
+                _buildGoalsGrid(context, entry.value),
+                const SizedBox(height: 32),
+              ],
+            ),
+          )
+          .toList(),
     );
   }
 
   Widget _buildCategoryHeader(BuildContext context, String categoryName) {
     final theme = Theme.of(context);
-    
+
     return Text(
       categoryName,
       style: theme.textTheme.titleLarge?.copyWith(
@@ -481,19 +481,26 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
     );
   }
 
-  Widget _buildGoalsGrid(BuildContext context, List<Map<String, dynamic>> goals) {
+  Widget _buildGoalsGrid(
+    BuildContext context,
+    List<Map<String, dynamic>> goals,
+  ) {
     return Column(
-      children: goals.map((goal) => Padding(
-        padding: const EdgeInsets.only(bottom: 12),
-        child: _buildGoalCard(context, goal),
-      )).toList(),
+      children: goals
+          .map(
+            (goal) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: _buildGoalCard(context, goal),
+            ),
+          )
+          .toList(),
     );
   }
 
   Widget _buildGoalCard(BuildContext context, Map<String, dynamic> goal) {
     final theme = Theme.of(context);
     final isSelected = _selectedGoals.contains(goal['id']);
-    
+
     return InkWell(
       onTap: () {
         setState(() {
@@ -510,7 +517,7 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isSelected 
+          color: isSelected
               ? theme.colorScheme.primary.withValues(alpha: 0.1)
               : theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
@@ -529,15 +536,11 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
                 color: (goal['color'] as Color).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Icon(
-                goal['icon'],
-                color: goal['color'],
-                size: 20,
-              ),
+              child: Icon(goal['icon'], color: goal['color'], size: 20),
             ),
-            
+
             const SizedBox(width: 16),
-            
+
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -555,11 +558,14 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
                           ),
                         ),
                       ),
-                      
+
                       if (goal['popular'] == true) ...[
                         const SizedBox(width: 8),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 2,
+                          ),
                           decoration: BoxDecoration(
                             color: Colors.orange.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(10),
@@ -576,9 +582,9 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
                       ],
                     ],
                   ),
-                  
+
                   const SizedBox(height: 4),
-                  
+
                   Text(
                     goal['subtitle'],
                     style: theme.textTheme.bodySmall?.copyWith(
@@ -588,9 +594,9 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
                 ],
               ),
             ),
-            
+
             const SizedBox(width: 12),
-            
+
             if (isSelected)
               Icon(
                 Icons.check_circle,
@@ -606,7 +612,7 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
   Widget _buildGoalChip(BuildContext context, Map<String, dynamic> goal) {
     final theme = Theme.of(context);
     final isSelected = _selectedGoals.contains(goal['id']);
-    
+
     return FilterChip(
       label: Row(
         mainAxisSize: MainAxisSize.min,
@@ -614,13 +620,11 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
           Icon(
             goal['icon'],
             size: 16,
-            color: isSelected
-                ? theme.colorScheme.onPrimary
-                : goal['color'],
+            color: isSelected ? theme.colorScheme.onPrimary : goal['color'],
           ),
-          
+
           const SizedBox(width: 8),
-          
+
           Text(goal['title']),
         ],
       ),
@@ -652,9 +656,12 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
     }
 
     final theme = Theme.of(context);
-    final recommendedCount = _priorityLevels
-        .firstWhere((p) => p['id'] == _selectedPriority)['recommendedGoals'] as int;
-    
+    final recommendedCount =
+        _priorityLevels.firstWhere(
+              (p) => p['id'] == _selectedPriority,
+            )['recommendedGoals']
+            as int;
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -669,13 +676,10 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
         children: [
           Row(
             children: [
-              Icon(
-                Icons.check_circle,
-                color: theme.colorScheme.primary,
-              ),
-              
+              Icon(Icons.check_circle, color: theme.colorScheme.primary),
+
               const SizedBox(width: 12),
-              
+
               Text(
                 'Your Goals (${_selectedGoals.length})',
                 style: theme.textTheme.titleMedium?.copyWith(
@@ -684,16 +688,19 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
               ),
             ],
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           Wrap(
             spacing: 8,
             runSpacing: 8,
             children: _selectedGoals.map((goalId) {
               final goal = _findGoalById(goalId);
               return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: theme.colorScheme.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
@@ -708,9 +715,9 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
               );
             }).toList(),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
@@ -724,9 +731,9 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
                   color: _getRecommendationColor(theme),
                   size: 20,
                 ),
-                
+
                 const SizedBox(width: 12),
-                
+
                 Expanded(
                   child: Text(
                     _getRecommendationText(recommendedCount),
@@ -755,9 +762,12 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
   }
 
   Color _getRecommendationColor(ThemeData theme) {
-    final recommendedCount = _priorityLevels
-        .firstWhere((p) => p['id'] == _selectedPriority)['recommendedGoals'] as int;
-    
+    final recommendedCount =
+        _priorityLevels.firstWhere(
+              (p) => p['id'] == _selectedPriority,
+            )['recommendedGoals']
+            as int;
+
     if (_selectedGoals.length == recommendedCount) {
       return Colors.green;
     } else if (_selectedGoals.length < recommendedCount) {
@@ -768,9 +778,12 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
   }
 
   IconData _getRecommendationIcon() {
-    final recommendedCount = _priorityLevels
-        .firstWhere((p) => p['id'] == _selectedPriority)['recommendedGoals'] as int;
-    
+    final recommendedCount =
+        _priorityLevels.firstWhere(
+              (p) => p['id'] == _selectedPriority,
+            )['recommendedGoals']
+            as int;
+
     if (_selectedGoals.length == recommendedCount) {
       return Icons.check_circle;
     } else if (_selectedGoals.length < recommendedCount) {

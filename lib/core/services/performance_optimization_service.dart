@@ -6,7 +6,8 @@ import '../utils/app_logger.dart';
 /// Performance Optimization Service
 /// Comprehensive performance monitoring and optimization for Flow Ai
 class PerformanceOptimizationService {
-  static final PerformanceOptimizationService _instance = PerformanceOptimizationService._internal();
+  static final PerformanceOptimizationService _instance =
+      PerformanceOptimizationService._internal();
   static PerformanceOptimizationService get instance => _instance;
   PerformanceOptimizationService._internal();
 
@@ -69,7 +70,9 @@ class PerformanceOptimizationService {
 
   /// Start performance monitoring
   void _startPerformanceMonitoring() {
-    _performanceTimer = Timer.periodic(const Duration(seconds: 10), (timer) async {
+    _performanceTimer = Timer.periodic(const Duration(seconds: 10), (
+      timer,
+    ) async {
       await _collectPerformanceMetrics();
     });
   }
@@ -99,7 +102,9 @@ class PerformanceOptimizationService {
 
       // Log performance data
       if (kDebugMode) {
-        AppLogger.info('📊 Performance: Memory: ${metric.memoryUsageMB.toInt()}MB, FPS: ${metric.frameRate.toInt()}, Cache: ${metric.cacheUsageMB.toStringAsFixed(1)}MB');
+        AppLogger.info(
+          '📊 Performance: Memory: ${metric.memoryUsageMB.toInt()}MB, FPS: ${metric.frameRate.toInt()}, Cache: ${metric.cacheUsageMB.toStringAsFixed(1)}MB',
+        );
       }
     } catch (e) {
       AppLogger.warning('Performance metrics collection failed: $e');
@@ -122,31 +127,31 @@ class PerformanceOptimizationService {
   Future<void> _performMemoryCleanup() async {
     try {
       final currentMemory = await _getCurrentMemoryUsage();
-      
+
       if (currentMemory > _memoryThresholdMB || _isMemoryWarning) {
         AppLogger.info('🧹 Performing memory cleanup...');
-        
+
         // Clear expired cache entries
         await _clearExpiredCache();
-        
+
         // Force garbage collection
         await _forceGarbageCollection();
-        
+
         // Clear image cache if memory is still high
         if (await _getCurrentMemoryUsage() > _memoryThresholdMB) {
           await _clearImageCache();
         }
-        
+
         // Optimize data structures
         _optimizeDataStructures();
-        
+
         final newMemory = await _getCurrentMemoryUsage();
         final freedMB = currentMemory - newMemory;
-        
+
         if (freedMB > 0) {
           AppLogger.success('✅ Memory cleanup freed ${freedMB.toInt()}MB');
         }
-        
+
         _isMemoryWarning = false;
       }
     } catch (e) {
@@ -158,7 +163,7 @@ class PerformanceOptimizationService {
   void _initializeCacheManagement() {
     // Pre-warm critical caches
     _preWarmCache();
-    
+
     // Setup cache cleanup
     Timer.periodic(const Duration(hours: 1), (timer) {
       _performCacheOptimization();
@@ -185,7 +190,7 @@ class PerformanceOptimizationService {
       // Optimize for battery life in production
       await _optimizeForBatteryLife();
     }
-    
+
     // Configure memory pressure handling
     _setupIOSMemoryHandling();
   }
@@ -209,12 +214,12 @@ class PerformanceOptimizationService {
       final ttlDuration = ttl ?? const Duration(hours: 1);
       final serializedData = _serializeData(data);
       final dataSize = _calculateDataSize(serializedData);
-      
+
       // Check if we need to make space
       if (_currentCacheSize + dataSize > _maxCacheSize) {
         await _makeSpaceInCache(dataSize);
       }
-      
+
       _dataCache[key] = CacheEntry(
         data: serializedData,
         timestamp: DateTime.now(),
@@ -222,7 +227,7 @@ class PerformanceOptimizationService {
         size: dataSize,
         accessCount: 0,
       );
-      
+
       _currentCacheSize += dataSize;
       AppLogger.info('💾 Cached data: $key (${_formatBytes(dataSize)})');
     } catch (e) {
@@ -235,17 +240,17 @@ class PerformanceOptimizationService {
     try {
       final entry = _dataCache[key];
       if (entry == null) return null;
-      
+
       // Check if expired
       if (DateTime.now().difference(entry.timestamp) > entry.ttl) {
         removeCachedData(key);
         return null;
       }
-      
+
       // Update access statistics
       entry.accessCount++;
       entry.lastAccessed = DateTime.now();
-      
+
       return _deserializeData<T>(entry.data);
     } catch (e) {
       AppLogger.error('Failed to retrieve cached data: $e');
@@ -262,16 +267,20 @@ class PerformanceOptimizationService {
   }
 
   /// Cache image with optimization
-  Future<void> cacheImage(String key, Uint8List imageData, {Duration? ttl}) async {
+  Future<void> cacheImage(
+    String key,
+    Uint8List imageData, {
+    Duration? ttl,
+  }) async {
     try {
       final optimizedData = await _optimizeImage(imageData);
       final ttlDuration = ttl ?? const Duration(days: 1);
-      
+
       // Check cache space
       if (_currentCacheSize + optimizedData.length > _maxCacheSize) {
         await _makeSpaceInCache(optimizedData.length);
       }
-      
+
       _imageCache[key] = CacheEntry(
         data: optimizedData,
         timestamp: DateTime.now(),
@@ -279,9 +288,11 @@ class PerformanceOptimizationService {
         size: optimizedData.length,
         accessCount: 0,
       );
-      
+
       _currentCacheSize += optimizedData.length;
-      AppLogger.info('🖼️ Cached image: $key (${_formatBytes(optimizedData.length)})');
+      AppLogger.info(
+        '🖼️ Cached image: $key (${_formatBytes(optimizedData.length)})',
+      );
     } catch (e) {
       AppLogger.error('Failed to cache image: $e');
     }
@@ -292,17 +303,17 @@ class PerformanceOptimizationService {
     try {
       final entry = _imageCache[key];
       if (entry == null) return null;
-      
+
       // Check if expired
       if (DateTime.now().difference(entry.timestamp) > entry.ttl) {
         _imageCache.remove(key);
         _currentCacheSize -= entry.size;
         return null;
       }
-      
+
       entry.accessCount++;
       entry.lastAccessed = DateTime.now();
-      
+
       return entry.data as Uint8List;
     } catch (e) {
       AppLogger.error('Failed to retrieve cached image: $e');
@@ -314,28 +325,34 @@ class PerformanceOptimizationService {
   Future<void> optimizePerformance() async {
     try {
       AppLogger.info('⚡ Optimizing app performance...');
-      
+
       // Analyze recent performance metrics
       final recentMetrics = _performanceHistory.take(10).toList();
       if (recentMetrics.isEmpty) return;
-      
-      final avgMemory = recentMetrics.map((m) => m.memoryUsageMB).reduce((a, b) => a + b) / recentMetrics.length;
-      final avgFrameRate = recentMetrics.map((m) => m.frameRate).reduce((a, b) => a + b) / recentMetrics.length;
-      final avgBattery = recentMetrics.map((m) => m.batteryLevel).reduce((a, b) => a + b) / recentMetrics.length;
-      
+
+      final avgMemory =
+          recentMetrics.map((m) => m.memoryUsageMB).reduce((a, b) => a + b) /
+          recentMetrics.length;
+      final avgFrameRate =
+          recentMetrics.map((m) => m.frameRate).reduce((a, b) => a + b) /
+          recentMetrics.length;
+      final avgBattery =
+          recentMetrics.map((m) => m.batteryLevel).reduce((a, b) => a + b) /
+          recentMetrics.length;
+
       // Apply optimizations based on performance analysis
       if (avgMemory > _memoryThresholdMB) {
         await _performMemoryCleanup();
       }
-      
+
       if (avgFrameRate < 30) {
         await _optimizeForFrameRate();
       }
-      
+
       if (avgBattery < 20) {
         await _optimizeForBatteryLife();
       }
-      
+
       AppLogger.success('✅ Performance optimization completed');
     } catch (e) {
       AppLogger.error('Performance optimization failed: $e');
@@ -353,30 +370,38 @@ class PerformanceOptimizationService {
     try {
       var freedSpace = 0;
       final allEntries = <MapEntry<String, CacheEntry>>[];
-      
+
       // Combine all cache entries
-      allEntries.addAll(_dataCache.entries.map((e) => MapEntry('data_${e.key}', e.value)));
-      allEntries.addAll(_imageCache.entries.map((e) => MapEntry('image_${e.key}', e.value)));
-      
+      allEntries.addAll(
+        _dataCache.entries.map((e) => MapEntry('data_${e.key}', e.value)),
+      );
+      allEntries.addAll(
+        _imageCache.entries.map((e) => MapEntry('image_${e.key}', e.value)),
+      );
+
       // Sort by last accessed (LRU)
-      allEntries.sort((a, b) => (a.value.lastAccessed ?? a.value.timestamp).compareTo(b.value.lastAccessed ?? b.value.timestamp));
-      
+      allEntries.sort(
+        (a, b) => (a.value.lastAccessed ?? a.value.timestamp).compareTo(
+          b.value.lastAccessed ?? b.value.timestamp,
+        ),
+      );
+
       for (final entry in allEntries) {
         if (freedSpace >= neededSpace) break;
-        
+
         final key = entry.key;
         final size = entry.value.size;
-        
+
         if (key.startsWith('data_')) {
           _dataCache.remove(key.substring(5));
         } else if (key.startsWith('image_')) {
           _imageCache.remove(key.substring(6));
         }
-        
+
         freedSpace += size;
         _currentCacheSize -= size;
       }
-      
+
       AppLogger.info('🗑️ Freed ${_formatBytes(freedSpace)} from cache');
     } catch (e) {
       AppLogger.error('Failed to make space in cache: $e');
@@ -387,13 +412,15 @@ class PerformanceOptimizationService {
   Future<void> _clearExpiredCache() async {
     final now = DateTime.now();
     var freedSpace = 0;
-    
+
     // Clear expired data cache
     final expiredDataKeys = _dataCache.entries
-        .where((entry) => now.difference(entry.value.timestamp) > entry.value.ttl)
+        .where(
+          (entry) => now.difference(entry.value.timestamp) > entry.value.ttl,
+        )
         .map((entry) => entry.key)
         .toList();
-    
+
     for (final key in expiredDataKeys) {
       final entry = _dataCache.remove(key);
       if (entry != null) {
@@ -401,13 +428,15 @@ class PerformanceOptimizationService {
         _currentCacheSize -= entry.size;
       }
     }
-    
+
     // Clear expired image cache
     final expiredImageKeys = _imageCache.entries
-        .where((entry) => now.difference(entry.value.timestamp) > entry.value.ttl)
+        .where(
+          (entry) => now.difference(entry.value.timestamp) > entry.value.ttl,
+        )
         .map((entry) => entry.key)
         .toList();
-    
+
     for (final key in expiredImageKeys) {
       final entry = _imageCache.remove(key);
       if (entry != null) {
@@ -415,7 +444,7 @@ class PerformanceOptimizationService {
         _currentCacheSize -= entry.size;
       }
     }
-    
+
     if (freedSpace > 0) {
       AppLogger.info('🕐 Cleared expired cache: ${_formatBytes(freedSpace)}');
     }
@@ -427,15 +456,20 @@ class PerformanceOptimizationService {
       // In debug mode, we can suggest GC
       await Future.delayed(const Duration(milliseconds: 100));
     }
-    
+
     // Clear any weak references
-    _performanceHistory.removeWhere((metric) => 
-      DateTime.now().difference(metric.timestamp) > const Duration(hours: 1));
+    _performanceHistory.removeWhere(
+      (metric) =>
+          DateTime.now().difference(metric.timestamp) >
+          const Duration(hours: 1),
+    );
   }
 
   /// Clear image cache
   Future<void> _clearImageCache() async {
-    final freedSpace = _imageCache.values.map((e) => e.size).fold(0, (a, b) => a + b);
+    final freedSpace = _imageCache.values
+        .map((e) => e.size)
+        .fold(0, (a, b) => a + b);
     _imageCache.clear();
     _currentCacheSize -= freedSpace;
     AppLogger.info('🖼️ Cleared image cache: ${_formatBytes(freedSpace)}');
@@ -446,7 +480,10 @@ class PerformanceOptimizationService {
     // Compact performance history
     if (_performanceHistory.length > _maxHistorySize ~/ 2) {
       final keepCount = _maxHistorySize ~/ 2;
-      _performanceHistory.removeRange(0, _performanceHistory.length - keepCount);
+      _performanceHistory.removeRange(
+        0,
+        _performanceHistory.length - keepCount,
+      );
     }
   }
 
@@ -460,22 +497,22 @@ class PerformanceOptimizationService {
   /// Performance threshold checking
   void _checkPerformanceThresholds(PerformanceMetric metric) {
     final alerts = <String>[];
-    
+
     if (metric.memoryUsageMB > _memoryThresholdMB) {
       alerts.add('High memory usage: ${metric.memoryUsageMB.toInt()}MB');
     }
-    
+
     if (metric.frameRate < 30) {
       alerts.add('Low frame rate: ${metric.frameRate.toInt()}fps');
     }
-    
+
     if (metric.batteryLevel < 20) {
       alerts.add('Low battery: ${metric.batteryLevel.toInt()}%');
       _isLowPowerMode = true;
     } else {
       _isLowPowerMode = false;
     }
-    
+
     if (alerts.isNotEmpty) {
       AppLogger.warning('⚠️ Performance alerts: ${alerts.join(', ')}');
     }
@@ -484,18 +521,18 @@ class PerformanceOptimizationService {
   /// Optimize for frame rate
   Future<void> _optimizeForFrameRate() async {
     AppLogger.info('🎬 Optimizing for better frame rate...');
-    
+
     // Reduce animation complexity
     // Clear non-essential caches
     await _clearExpiredCache();
-    
+
     // Reduce background processing
   }
 
   /// Optimize for battery life
   Future<void> _optimizeForBatteryLife() async {
     AppLogger.info('🔋 Optimizing for battery life...');
-    
+
     // Reduce update frequency
     // Disable non-essential animations
     // Reduce network requests
@@ -552,10 +589,14 @@ class PerformanceOptimizationService {
   void _cleanupPendingRequests() {
     final now = DateTime.now();
     final expiredKeys = _pendingRequests.entries
-        .where((entry) => now.difference(entry.value.timestamp) > const Duration(minutes: 5))
+        .where(
+          (entry) =>
+              now.difference(entry.value.timestamp) >
+              const Duration(minutes: 5),
+        )
         .map((entry) => entry.key)
         .toList();
-    
+
     for (final key in expiredKeys) {
       _pendingRequests.remove(key);
     }
@@ -595,9 +636,15 @@ class PerformanceOptimizationService {
     }
 
     final recentMetrics = _performanceHistory.take(10).toList();
-    final avgMemory = recentMetrics.map((m) => m.memoryUsageMB).reduce((a, b) => a + b) / recentMetrics.length;
-    final avgFrameRate = recentMetrics.map((m) => m.frameRate).reduce((a, b) => a + b) / recentMetrics.length;
-    final avgBattery = recentMetrics.map((m) => m.batteryLevel).reduce((a, b) => a + b) / recentMetrics.length;
+    final avgMemory =
+        recentMetrics.map((m) => m.memoryUsageMB).reduce((a, b) => a + b) /
+        recentMetrics.length;
+    final avgFrameRate =
+        recentMetrics.map((m) => m.frameRate).reduce((a, b) => a + b) /
+        recentMetrics.length;
+    final avgBattery =
+        recentMetrics.map((m) => m.batteryLevel).reduce((a, b) => a + b) /
+        recentMetrics.length;
 
     return PerformanceReport(
       averageMemoryUsage: avgMemory,
@@ -606,28 +653,36 @@ class PerformanceOptimizationService {
       cacheUsageMB: _currentCacheSize / (1024 * 1024),
       isLowPowerMode: _isLowPowerMode,
       totalCacheEntries: _dataCache.length + _imageCache.length,
-      performanceScore: _calculatePerformanceScore(avgMemory, avgFrameRate, avgBattery),
+      performanceScore: _calculatePerformanceScore(
+        avgMemory,
+        avgFrameRate,
+        avgBattery,
+      ),
     );
   }
 
-  double _calculatePerformanceScore(double memory, double frameRate, double battery) {
+  double _calculatePerformanceScore(
+    double memory,
+    double frameRate,
+    double battery,
+  ) {
     var score = 100.0;
-    
+
     // Deduct for high memory usage
     if (memory > _memoryThresholdMB) {
       score -= (memory - _memoryThresholdMB) / _memoryThresholdMB * 30;
     }
-    
+
     // Deduct for low frame rate
     if (frameRate < 60) {
       score -= (60 - frameRate) / 60 * 20;
     }
-    
+
     // Deduct for low battery
     if (battery < 50) {
       score -= (50 - battery) / 50 * 10;
     }
-    
+
     return (score.clamp(0, 100) / 100);
   }
 

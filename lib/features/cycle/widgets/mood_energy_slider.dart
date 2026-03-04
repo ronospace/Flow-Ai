@@ -29,7 +29,7 @@ class MoodEnergySlider extends StatefulWidget {
   State<MoodEnergySlider> createState() => _MoodEnergySliderState();
 }
 
-class _MoodEnergySliderState extends State<MoodEnergySlider> 
+class _MoodEnergySliderState extends State<MoodEnergySlider>
     with TickerProviderStateMixin {
   late AnimationController _pulseController;
   late AnimationController _waveController;
@@ -53,20 +53,16 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
       duration: const Duration(seconds: 3),
       vsync: this,
     )..repeat();
-    
-    _pulseAnimation = Tween<double>(
-      begin: 1.0,
-      end: 1.3,
-    ).animate(CurvedAnimation(
-      parent: _pulseController,
-      curve: Curves.elasticOut,
-    ));
-    
+
+    _pulseAnimation = Tween<double>(begin: 1.0, end: 1.3).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.elasticOut),
+    );
+
     _waveAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
     ).animate(_waveController);
-    
+
     _particleAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
@@ -118,27 +114,25 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
 
   Color _getColorForValue(double value) {
     final intensity = (value - widget.min) / (widget.max - widget.min);
-    
+
     if (widget.label.toLowerCase() == 'pain level') {
       // For pain, higher values are more intense (red)
-      return Color.lerp(
-        AppTheme.accentMint,
-        AppTheme.primaryRose,
-        intensity,
-      ) ?? widget.color;
+      return Color.lerp(AppTheme.accentMint, AppTheme.primaryRose, intensity) ??
+          widget.color;
     } else {
       // For mood and energy, higher values are better (positive colors)
       return Color.lerp(
-        widget.color.withValues(alpha: 0.5),
-        widget.color,
-        intensity,
-      ) ?? widget.color;
+            widget.color.withValues(alpha: 0.5),
+            widget.color,
+            intensity,
+          ) ??
+          widget.color;
     }
   }
 
   String _getPsychologyInsight(double value) {
     final type = widget.label.toLowerCase();
-    
+
     if (type == 'mood') {
       switch (value.round()) {
         case 1:
@@ -173,21 +167,45 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
       return 'Consistent tracking provides valuable insights into your wellbeing patterns.';
     }
   }
-  
+
   List<Color> _getNeuralNetworkColors(double value) {
     final intensity = (value - widget.min) / (widget.max - widget.min);
-    
+
     if (widget.label.toLowerCase() == 'mood') {
       return [
-        Color.lerp(AppTheme.secondaryBlue.withValues(alpha: 0.5), AppTheme.primaryRose, intensity)!,
-        Color.lerp(AppTheme.primaryPurple.withValues(alpha: 0.5), AppTheme.primaryPurple, intensity)!,
-        Color.lerp(AppTheme.primaryRose.withValues(alpha: 0.5), AppTheme.accentMint, intensity)!,
+        Color.lerp(
+          AppTheme.secondaryBlue.withValues(alpha: 0.5),
+          AppTheme.primaryRose,
+          intensity,
+        )!,
+        Color.lerp(
+          AppTheme.primaryPurple.withValues(alpha: 0.5),
+          AppTheme.primaryPurple,
+          intensity,
+        )!,
+        Color.lerp(
+          AppTheme.primaryRose.withValues(alpha: 0.5),
+          AppTheme.accentMint,
+          intensity,
+        )!,
       ];
     } else {
       return [
-        Color.lerp(AppTheme.warningOrange.withValues(alpha: 0.5), AppTheme.accentMint, intensity)!,
-        Color.lerp(AppTheme.accentMint.withValues(alpha: 0.5), AppTheme.secondaryBlue, intensity)!,
-        Color.lerp(AppTheme.successGreen.withValues(alpha: 0.5), AppTheme.primaryRose, intensity)!,
+        Color.lerp(
+          AppTheme.warningOrange.withValues(alpha: 0.5),
+          AppTheme.accentMint,
+          intensity,
+        )!,
+        Color.lerp(
+          AppTheme.accentMint.withValues(alpha: 0.5),
+          AppTheme.secondaryBlue,
+          intensity,
+        )!,
+        Color.lerp(
+          AppTheme.successGreen.withValues(alpha: 0.5),
+          AppTheme.primaryRose,
+          intensity,
+        )!,
       ];
     }
   }
@@ -259,15 +277,13 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                     ],
                   ),
                   const Spacer(),
-                  
+
                   // Neural Activity Indicator
                   Container(
                     width: 60,
                     height: 24,
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: neuralColors,
-                      ),
+                      gradient: LinearGradient(colors: neuralColors),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Stack(
@@ -285,12 +301,15 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                       ],
                     ),
                   ),
-                  
+
                   const SizedBox(width: 12),
-                  
+
                   // Status Badge
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
@@ -318,9 +337,9 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                   ),
                 ],
               ),
-              
+
               const SizedBox(height: 32),
-              
+
               // REVOLUTIONARY: Biometric Center Display
               Stack(
                 alignment: Alignment.center,
@@ -338,12 +357,13 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                       ),
                     ),
                   ),
-                  
+
                   // Pulsing rings based on value intensity
                   ...List.generate(3, (index) {
                     final radius = 50.0 + (index * 15);
-                    final opacity = (widget.value / widget.max) * 0.3 * (3 - index) / 3;
-                    
+                    final opacity =
+                        (widget.value / widget.max) * 0.3 * (3 - index) / 3;
+
                     return AnimatedBuilder(
                       animation: _waveAnimation,
                       builder: (context, child) {
@@ -361,7 +381,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                       },
                     );
                   }),
-                  
+
                   // Central biometric display
                   AnimatedBuilder(
                     animation: _pulseAnimation,
@@ -396,14 +416,19 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                                 widget.emoji,
                                 style: const TextStyle(fontSize: 42),
                               ),
-                              
+
                               // Value display
                               Positioned(
                                 bottom: 12,
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 2,
+                                  ),
                                   decoration: BoxDecoration(
-                                    color: theme.colorScheme.surface.withValues(alpha: 0.9),
+                                    color: theme.colorScheme.surface.withValues(
+                                      alpha: 0.9,
+                                    ),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Text(
@@ -424,103 +449,121 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                   ),
                 ],
               ),
-              
+
               const SizedBox(height: 32),
-              
+
               // REVOLUTIONARY: Enhanced Interactive Value Selectors
               Wrap(
                 spacing: 12,
-                children: List.generate(
-                  (widget.max - widget.min + 1).round(),
-                  (index) {
-                    final indicatorValue = widget.min + index;
-                    final isActive = widget.value.round() == indicatorValue.round();
-                    final indicatorColor = _getColorForValue(indicatorValue);
-                    
-                    return GestureDetector(
-                      onTap: () {
-                        widget.onChanged(indicatorValue);
-                        _triggerPulse();
-                        HapticFeedback.mediumImpact();
-                      },
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.elasticOut,
-                        width: isActive ? 55 : 45,
-                        height: isActive ? 55 : 45,
-                        decoration: BoxDecoration(
-                          gradient: isActive 
-                              ? LinearGradient(
-                                  colors: [
-                                    indicatorColor,
-                                    indicatorColor.withValues(alpha: 0.8),
-                                  ],
-                                )
-                              : null,
-                          color: isActive ? null : indicatorColor.withValues(alpha: 0.15),
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: indicatorColor,
-                            width: isActive ? 3 : 2,
-                          ),
-          boxShadow: isActive ? [
-                            SafeShadows.safe(
-                              color: indicatorColor.withValues(alpha: 0.5),
-                              blurRadius: 15.0,
-                              offset: const Offset(0, 6),
-                              spreadRadius: 2.0,
-                            ),
-                            SafeShadows.safe(
-                              color: theme.colorScheme.surface.withValues(alpha: 0.8),
-                              blurRadius: 5.0,
-                              offset: const Offset(0, 2),
-                            ),
-                          ] : [
-                            SafeShadows.safe(
-                              color: indicatorColor.withValues(alpha: 0.2),
-                              blurRadius: 8.0,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
-                        ),
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            // Background pulse for active
-                            if (isActive)
-                              Container(
-                                width: 50,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  color: theme.colorScheme.surface.withValues(alpha: 0.2),
-                                  shape: BoxShape.circle,
+                children: List.generate((widget.max - widget.min + 1).round(), (
+                  index,
+                ) {
+                  final indicatorValue = widget.min + index;
+                  final isActive =
+                      widget.value.round() == indicatorValue.round();
+                  final indicatorColor = _getColorForValue(indicatorValue);
+
+                  return GestureDetector(
+                    onTap: () {
+                      widget.onChanged(indicatorValue);
+                      _triggerPulse();
+                      HapticFeedback.mediumImpact();
+                    },
+                    child:
+                        AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.elasticOut,
+                              width: isActive ? 55 : 45,
+                              height: isActive ? 55 : 45,
+                              decoration: BoxDecoration(
+                                gradient: isActive
+                                    ? LinearGradient(
+                                        colors: [
+                                          indicatorColor,
+                                          indicatorColor.withValues(alpha: 0.8),
+                                        ],
+                                      )
+                                    : null,
+                                color: isActive
+                                    ? null
+                                    : indicatorColor.withValues(alpha: 0.15),
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: indicatorColor,
+                                  width: isActive ? 3 : 2,
                                 ),
-                              ).animate(onPlay: (controller) => controller.repeat())
-                                .fadeIn(duration: 800.ms)
-                                .then(delay: 200.ms)
-                                .fadeOut(duration: 800.ms),
-                            
-                            // Number display
-                            Text(
-                              indicatorValue.round().toString(),
-                              style: TextStyle(
-                                color: isActive ? theme.colorScheme.onPrimary : indicatorColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: isActive ? 20 : 16,
+                                boxShadow: isActive
+                                    ? [
+                                        SafeShadows.safe(
+                                          color: indicatorColor.withValues(
+                                            alpha: 0.5,
+                                          ),
+                                          blurRadius: 15.0,
+                                          offset: const Offset(0, 6),
+                                          spreadRadius: 2.0,
+                                        ),
+                                        SafeShadows.safe(
+                                          color: theme.colorScheme.surface
+                                              .withValues(alpha: 0.8),
+                                          blurRadius: 5.0,
+                                          offset: const Offset(0, 2),
+                                        ),
+                                      ]
+                                    : [
+                                        SafeShadows.safe(
+                                          color: indicatorColor.withValues(
+                                            alpha: 0.2,
+                                          ),
+                                          blurRadius: 8.0,
+                                          offset: const Offset(0, 3),
+                                        ),
+                                      ],
                               ),
-                            ),
-                          ],
-                        ),
-                      ).animate(delay: Duration(milliseconds: index * 100))
-                        .fadeIn()
-                        .scale(begin: const Offset(0.8, 0.8)),
-                    );
-                  },
-                ),
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  // Background pulse for active
+                                  if (isActive)
+                                    Container(
+                                          width: 50,
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                            color: theme.colorScheme.surface
+                                                .withValues(alpha: 0.2),
+                                            shape: BoxShape.circle,
+                                          ),
+                                        )
+                                        .animate(
+                                          onPlay: (controller) =>
+                                              controller.repeat(),
+                                        )
+                                        .fadeIn(duration: 800.ms)
+                                        .then(delay: 200.ms)
+                                        .fadeOut(duration: 800.ms),
+
+                                  // Number display
+                                  Text(
+                                    indicatorValue.round().toString(),
+                                    style: TextStyle(
+                                      color: isActive
+                                          ? theme.colorScheme.onPrimary
+                                          : indicatorColor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: isActive ? 20 : 16,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                            .animate(delay: Duration(milliseconds: index * 100))
+                            .fadeIn()
+                            .scale(begin: const Offset(0.8, 0.8)),
+                  );
+                }),
               ),
-              
+
               const SizedBox(height: 32),
-              
+
               // REVOLUTIONARY: Advanced Biometric Slider
               SizedBox(
                 height: 60,
@@ -541,7 +584,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                         borderRadius: BorderRadius.circular(6),
                       ),
                     ),
-                    
+
                     // Main slider
                     SliderTheme(
                       data: SliderTheme.of(context).copyWith(
@@ -557,7 +600,9 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                           theme: theme,
                         ),
                         trackHeight: 12,
-                        overlayShape: const RoundSliderOverlayShape(overlayRadius: 30),
+                        overlayShape: const RoundSliderOverlayShape(
+                          overlayRadius: 30,
+                        ),
                       ),
                       child: Slider(
                         value: widget.value,
@@ -574,9 +619,13 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                   ],
                 ),
               ),
-              
+
               // Range labels with enhanced styling
-              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -624,9 +673,9 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
             ],
           ),
         ).animate().fadeIn().slideY(begin: 0.3, end: 0),
-        
+
         const SizedBox(height: 20),
-        
+
         // REVOLUTIONARY: AI Psychology Insights Panel
         Container(
           constraints: const BoxConstraints(minHeight: 120),
@@ -660,32 +709,38 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
               Row(
                 children: [
                   Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [AppTheme.secondaryBlue, AppTheme.accentMint],
-                      ),
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppTheme.secondaryBlue.withValues(alpha: 0.3),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [
+                              AppTheme.secondaryBlue,
+                              AppTheme.accentMint,
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppTheme.secondaryBlue.withValues(
+                                alpha: 0.3,
+                              ),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    child: Icon(
-                      Icons.psychology,
-                      color: theme.colorScheme.onPrimary,
-                      size: 20,
-                    ),
-                  ).animate(onPlay: (controller) => controller.repeat())
-                    .shimmer(duration: 2500.ms)
-                    .then(delay: 1000.ms),
-                  
+                        child: Icon(
+                          Icons.psychology,
+                          color: theme.colorScheme.onPrimary,
+                          size: 20,
+                        ),
+                      )
+                      .animate(onPlay: (controller) => controller.repeat())
+                      .shimmer(duration: 2500.ms)
+                      .then(delay: 1000.ms),
+
                   const SizedBox(width: 12),
-                  
+
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -709,10 +764,13 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                       ],
                     ),
                   ),
-                  
+
                   // Insight indicator
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: AppTheme.accentMint.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(8),
@@ -728,9 +786,9 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                   ),
                 ],
               ),
-              
+
               const SizedBox(height: 16),
-              
+
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -783,30 +841,34 @@ class NeuralWavePainter extends CustomPainter {
     for (int i = 0; i < colors.length; i++) {
       paint.color = colors[i].withValues(alpha: 0.7);
       path.reset();
-      
+
       final yOffset = size.height / 2 + (i - 1) * 3;
-      
+
       for (double x = 0; x <= size.width; x += 1) {
-        final y = yOffset + 
-                 waveHeight * 
-                 math.sin((x / size.width * frequency + animation.value + i * 0.5) * 2 * math.pi) * 
-                 (value / 5.0);
-        
+        final y =
+            yOffset +
+            waveHeight *
+                math.sin(
+                  (x / size.width * frequency + animation.value + i * 0.5) *
+                      2 *
+                      math.pi,
+                ) *
+                (value / 5.0);
+
         if (x == 0) {
           path.moveTo(x, y);
         } else {
           path.lineTo(x, y);
         }
       }
-      
+
       canvas.drawPath(path, paint);
     }
   }
 
   @override
   bool shouldRepaint(covariant NeuralWavePainter oldDelegate) {
-    return oldDelegate.animation != animation ||
-           oldDelegate.value != value;
+    return oldDelegate.animation != animation || oldDelegate.value != value;
   }
 }
 
@@ -826,8 +888,7 @@ class NeuralNetworkPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..style = PaintingStyle.fill;
+    final paint = Paint()..style = PaintingStyle.fill;
 
     final center = Offset(size.width / 2, size.height / 2);
     final nodeCount = (value * 3).round() + 3;
@@ -835,33 +896,40 @@ class NeuralNetworkPainter extends CustomPainter {
 
     // Draw neural nodes
     for (int i = 0; i < nodeCount; i++) {
-      final angle = (i / nodeCount * 2 * math.pi) + (animation.value * 2 * math.pi);
+      final angle =
+          (i / nodeCount * 2 * math.pi) + (animation.value * 2 * math.pi);
       final radius = 25 + (i % 3) * 15 + (animation.value * 5);
-      
+
       final x = center.dx + radius * math.cos(angle);
       final y = center.dy + radius * math.sin(angle);
-      
+
       if (x >= 0 && x <= size.width && y >= 0 && y <= size.height) {
-        paint.color = colors[i % colors.length].withValues(alpha: 0.15 + intensity * 0.2);
+        paint.color = colors[i % colors.length].withValues(
+          alpha: 0.15 + intensity * 0.2,
+        );
         canvas.drawCircle(Offset(x, y), 3 + (intensity * 2), paint);
-        
+
         // Draw connections
         if (i > 0) {
-          final prevAngle = ((i-1) / nodeCount * 2 * math.pi) + (animation.value * 2 * math.pi);
-          final prevRadius = 25 + ((i-1) % 3) * 15 + (animation.value * 5);
+          final prevAngle =
+              ((i - 1) / nodeCount * 2 * math.pi) +
+              (animation.value * 2 * math.pi);
+          final prevRadius = 25 + ((i - 1) % 3) * 15 + (animation.value * 5);
           final prevX = center.dx + prevRadius * math.cos(prevAngle);
           final prevY = center.dy + prevRadius * math.sin(prevAngle);
-          
+
           final connectionPaint = Paint()
-            ..color = colors[i % colors.length].withValues(alpha: 0.1 + intensity * 0.15)
+            ..color = colors[i % colors.length].withValues(
+              alpha: 0.1 + intensity * 0.15,
+            )
             ..strokeWidth = 0.5
             ..style = PaintingStyle.stroke;
-          
+
           canvas.drawLine(Offset(x, y), Offset(prevX, prevY), connectionPaint);
         }
       }
     }
-    
+
     // Draw central pulse
     final pulseRadius = 20 + (intensity * 15) + (animation.value * 5);
     paint.color = colors.first.withValues(alpha: 0.08 + intensity * 0.1);
@@ -870,8 +938,7 @@ class NeuralNetworkPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant NeuralNetworkPainter oldDelegate) {
-    return oldDelegate.animation != animation ||
-           oldDelegate.value != value;
+    return oldDelegate.animation != animation || oldDelegate.value != value;
   }
 }
 
@@ -913,13 +980,13 @@ class BiometricSliderThumb extends SliderComponentShape {
   }) {
     final Canvas canvas = context.canvas;
     final intensity = this.value / maxValue;
-    
+
     // Outer pulsing glow
     final outerGlowPaint = Paint()
       ..color = color.withValues(alpha: 0.2 + (animation.value * 0.2))
       ..style = PaintingStyle.fill;
     canvas.drawCircle(center, 20 + (animation.value * 5), outerGlowPaint);
-    
+
     // Neural ring pattern
     for (int i = 0; i < 3; i++) {
       final ringRadius = 12 + (i * 3) + (animation.value * 2);
@@ -929,7 +996,7 @@ class BiometricSliderThumb extends SliderComponentShape {
         ..strokeWidth = 1.5;
       canvas.drawCircle(center, ringRadius, ringPaint);
     }
-    
+
     // Main biometric thumb
     final gradientPaint = Paint()
       ..shader = RadialGradient(
@@ -942,34 +1009,32 @@ class BiometricSliderThumb extends SliderComponentShape {
       ).createShader(Rect.fromCircle(center: center, radius: 14))
       ..style = PaintingStyle.fill;
     canvas.drawCircle(center, 14, gradientPaint);
-    
+
     // Inner biometric pattern
     final patternPaint = Paint()
       ..color = theme.colorScheme.onPrimary.withValues(alpha: 0.4)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
-    
+
     // Draw biometric lines
     for (int i = 0; i < 6; i++) {
       final angle = (i / 6 * 2 * math.pi) + (animation.value * 2 * math.pi);
       final innerRadius = 4;
       final outerRadius = 10;
-      
+
       final startX = center.dx + innerRadius * math.cos(angle);
       final startY = center.dy + innerRadius * math.sin(angle);
       final endX = center.dx + outerRadius * math.cos(angle);
       final endY = center.dy + outerRadius * math.sin(angle);
-      
-      canvas.drawLine(
-        Offset(startX, startY),
-        Offset(endX, endY),
-        patternPaint,
-      );
+
+      canvas.drawLine(Offset(startX, startY), Offset(endX, endY), patternPaint);
     }
-    
+
     // Central pulse indicator
     final centerPaint = Paint()
-      ..color = theme.colorScheme.onPrimary.withValues(alpha: 0.8 + (animation.value * 0.2))
+      ..color = theme.colorScheme.onPrimary.withValues(
+        alpha: 0.8 + (animation.value * 0.2),
+      )
       ..style = PaintingStyle.fill;
     canvas.drawCircle(center, 2 + (intensity * 2), centerPaint);
   }
@@ -1033,19 +1098,19 @@ class CustomSliderThumb extends SliderComponentShape {
     required Size sizeWithOverflow,
   }) {
     final Canvas canvas = context.canvas;
-    
+
     // Outer circle (glow effect)
     final glowPaint = Paint()
       ..color = color.withValues(alpha: 0.3)
       ..style = PaintingStyle.fill;
     canvas.drawCircle(center, radius * 1.5, glowPaint);
-    
+
     // Main thumb
     final thumbPaint = Paint()
       ..color = color
       ..style = PaintingStyle.fill;
     canvas.drawCircle(center, radius, thumbPaint);
-    
+
     // Inner highlight
     final highlightPaint = Paint()
       ..color = theme.colorScheme.onPrimary.withValues(alpha: 0.3)

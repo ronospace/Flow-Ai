@@ -28,7 +28,7 @@ class GamificationService {
   /// Load user achievements
   Future<List<Achievement>> loadUserAchievements() async {
     await Future.delayed(const Duration(milliseconds: 800));
-    
+
     return [
       Achievement(
         id: '1',
@@ -97,9 +97,9 @@ class GamificationService {
   /// Load available challenges
   Future<List<Challenge>> loadChallenges() async {
     await Future.delayed(const Duration(milliseconds: 600));
-    
+
     final now = DateTime.now();
-    
+
     return [
       Challenge(
         id: '1',
@@ -168,9 +168,9 @@ class GamificationService {
   /// Load streak data
   Future<List<StreakData>> loadUserStreaks() async {
     await Future.delayed(const Duration(milliseconds: 500));
-    
+
     final now = DateTime.now();
-    
+
     return [
       StreakData(
         id: '1',
@@ -182,7 +182,7 @@ class GamificationService {
         streakStartDate: now.subtract(const Duration(days: 12)),
         isActive: true,
         activityDates: List.generate(
-          12, 
+          12,
           (i) => now.subtract(Duration(days: i)),
         ),
         createdAt: now.subtract(const Duration(days: 30)),
@@ -198,7 +198,7 @@ class GamificationService {
         streakStartDate: now.subtract(const Duration(days: 5)),
         isActive: true,
         activityDates: List.generate(
-          5, 
+          5,
           (i) => now.subtract(Duration(days: i + 1)),
         ),
         createdAt: now.subtract(const Duration(days: 20)),
@@ -213,20 +213,33 @@ class GamificationService {
     int limit = 50,
   }) async {
     await Future.delayed(const Duration(milliseconds: 700));
-    
+
     final now = DateTime.now();
-    final names = ['Alice', 'Bob', 'Carol', 'David', 'Eve', 'Frank', 'Grace', 'Henry', 'Ivy', 'Jack'];
+    final names = [
+      'Alice',
+      'Bob',
+      'Carol',
+      'David',
+      'Eve',
+      'Frank',
+      'Grace',
+      'Henry',
+      'Ivy',
+      'Jack',
+    ];
     final tiers = ['bronze', 'silver', 'gold', 'platinum', 'diamond'];
-    
+
     return List.generate(limit, (index) {
       final isCurrentUser = index == 4; // User is ranked 5th
       final points = 2000 - (index * 15) + Random().nextInt(50);
       final previousRank = index + Random().nextInt(3) - 1;
-      
+
       return LeaderboardEntry(
         userId: 'user${index + 1}',
         username: isCurrentUser ? 'You' : names[index % names.length],
-        displayName: isCurrentUser ? 'You' : '${names[index % names.length]} ${index + 1}',
+        displayName: isCurrentUser
+            ? 'You'
+            : '${names[index % names.length]} ${index + 1}',
         rank: index + 1,
         previousRank: previousRank > 0 ? previousRank : index + 1,
         totalPoints: points,
@@ -252,9 +265,9 @@ class GamificationService {
   /// Load available rewards
   Future<List<Reward>> loadRewards() async {
     await Future.delayed(const Duration(milliseconds: 600));
-    
+
     final now = DateTime.now();
-    
+
     return [
       Reward(
         id: '1',
@@ -309,14 +322,15 @@ class GamificationService {
   /// Load educational content
   Future<List<EducationalContent>> loadEducationalContent() async {
     await Future.delayed(const Duration(milliseconds: 500));
-    
+
     final now = DateTime.now();
-    
+
     return [
       EducationalContent(
         id: '1',
         title: 'Understanding Your Cycle',
-        description: 'Learn about the phases of your menstrual cycle and what to expect',
+        description:
+            'Learn about the phases of your menstrual cycle and what to expect',
         content: 'Detailed content about menstrual cycle phases...',
         category: 'cycle_education',
         type: 'article',
@@ -420,7 +434,10 @@ class GamificationService {
   }
 
   /// Update challenge progress
-  Future<bool> updateChallengeProgress(String challengeId, double progress) async {
+  Future<bool> updateChallengeProgress(
+    String challengeId,
+    double progress,
+  ) async {
     await Future.delayed(const Duration(milliseconds: 300));
     // In real implementation, this would update progress on the backend
     return true;
@@ -460,10 +477,7 @@ class GamificationService {
       lastActivityDate: now,
       streakStartDate: now.subtract(const Duration(days: 13)),
       isActive: true,
-      activityDates: List.generate(
-        13, 
-        (i) => now.subtract(Duration(days: i)),
-      ),
+      activityDates: List.generate(13, (i) => now.subtract(Duration(days: i))),
       createdAt: now.subtract(const Duration(days: 30)),
       updatedAt: now,
     );

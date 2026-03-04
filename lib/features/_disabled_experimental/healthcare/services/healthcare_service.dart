@@ -24,30 +24,31 @@ class HealthcareService {
   final List<DataConsent> _consents = [];
 
   // Stream controllers for real-time updates
-  final StreamController<List<PatientProfile>> _patientsController = 
+  final StreamController<List<PatientProfile>> _patientsController =
       StreamController<List<PatientProfile>>.broadcast();
-  final StreamController<List<MedicalReport>> _reportsController = 
+  final StreamController<List<MedicalReport>> _reportsController =
       StreamController<List<MedicalReport>>.broadcast();
-  final StreamController<List<Appointment>> _appointmentsController = 
+  final StreamController<List<Appointment>> _appointmentsController =
       StreamController<List<Appointment>>.broadcast();
-  final StreamController<ProviderAnalytics> _analyticsController = 
+  final StreamController<ProviderAnalytics> _analyticsController =
       StreamController<ProviderAnalytics>.broadcast();
 
   // Getters for streams
   Stream<List<PatientProfile>> get patientsStream => _patientsController.stream;
   Stream<List<MedicalReport>> get reportsStream => _reportsController.stream;
-  Stream<List<Appointment>> get appointmentsStream => _appointmentsController.stream;
+  Stream<List<Appointment>> get appointmentsStream =>
+      _appointmentsController.stream;
   Stream<ProviderAnalytics> get analyticsStream => _analyticsController.stream;
 
   Future<void> initialize() async {
     if (_isInitialized) return;
 
     debugPrint('🏥 Initializing Healthcare Service...');
-    
+
     await _loadSampleProviders();
     await _loadSamplePatients();
     await _generateSampleData();
-    
+
     _isInitialized = true;
     debugPrint('✅ Healthcare Service initialized');
   }
@@ -64,7 +65,7 @@ class HealthcareService {
     String subscriptionTier = 'basic',
   }) async {
     final providerId = _generateProviderId();
-    
+
     final provider = HealthcareProvider(
       providerId: providerId,
       name: name,
@@ -167,10 +168,14 @@ class HealthcareService {
   /// Get provider's patients
   List<PatientProfile> getProviderPatients() {
     if (_currentProvider == null) return [];
-    
-    return _patients.where((patient) => 
-      patient.authorizedProviders.contains(_currentProvider!.providerId)
-    ).toList();
+
+    return _patients
+        .where(
+          (patient) => patient.authorizedProviders.contains(
+            _currentProvider!.providerId,
+          ),
+        )
+        .toList();
   }
 
   /// Generate medical report for patient
@@ -185,8 +190,13 @@ class HealthcareService {
     }
 
     // In production, this would fetch actual patient data
-    final reportData = await _generateReportData(patientId, reportType, periodStart, periodEnd);
-    
+    final reportData = await _generateReportData(
+      patientId,
+      reportType,
+      periodStart,
+      periodEnd,
+    );
+
     final reportId = _generateReportId();
     final report = MedicalReport(
       reportId: reportId,
@@ -204,7 +214,7 @@ class HealthcareService {
 
     _reports.add(report);
     _reportsController.add(List.unmodifiable(_reports));
-    
+
     debugPrint('📊 Generated $reportType report for patient: $patientId');
     return report;
   }
@@ -238,7 +248,7 @@ class HealthcareService {
 
     _appointments.add(appointment);
     _appointmentsController.add(List.unmodifiable(_appointments));
-    
+
     debugPrint('📅 Scheduled appointment: $title');
     return appointment;
   }
@@ -270,7 +280,7 @@ class HealthcareService {
     );
 
     _notes.add(note);
-    
+
     debugPrint('📝 Added clinical note: $title');
     return note;
   }
@@ -309,7 +319,7 @@ class HealthcareService {
     );
 
     _prescriptions.add(prescription);
-    
+
     debugPrint('💊 Prescribed $medicationName for patient: $patientId');
     return prescription;
   }
@@ -347,7 +357,7 @@ class HealthcareService {
     );
 
     _consents.add(consent);
-    
+
     debugPrint('📋 Requested consent from patient: $patientId');
     return consent;
   }
@@ -364,10 +374,10 @@ class HealthcareService {
 
     // In production, this would integrate with actual EHR systems
     debugPrint('📤 Exporting data to $ehrSystem for patient: $patientId');
-    
+
     // Simulate EHR integration
     await Future.delayed(const Duration(seconds: 2));
-    
+
     return true;
   }
 
@@ -381,30 +391,27 @@ class HealthcareService {
     // In production, this would generate actual PDF
     final pdfPath = '/tmp/report_$reportId.pdf';
     debugPrint('📄 Generated PDF report: $pdfPath');
-    
+
     return pdfPath;
   }
 
   /// Get appointments for a specific date range
-  List<Appointment> getAppointments({
-    DateTime? startDate,
-    DateTime? endDate,
-  }) {
+  List<Appointment> getAppointments({DateTime? startDate, DateTime? endDate}) {
     if (_currentProvider == null) return [];
 
-    var appointments = _appointments.where((apt) => 
-      apt.providerId == _currentProvider!.providerId
+    var appointments = _appointments.where(
+      (apt) => apt.providerId == _currentProvider!.providerId,
     );
 
     if (startDate != null) {
-      appointments = appointments.where((apt) => 
-        apt.scheduledAt.isAfter(startDate)
+      appointments = appointments.where(
+        (apt) => apt.scheduledAt.isAfter(startDate),
       );
     }
 
     if (endDate != null) {
-      appointments = appointments.where((apt) => 
-        apt.scheduledAt.isBefore(endDate)
+      appointments = appointments.where(
+        (apt) => apt.scheduledAt.isBefore(endDate),
       );
     }
 
@@ -416,19 +423,25 @@ class HealthcareService {
   List<ClinicalNote> getPatientNotes(String patientId) {
     if (_currentProvider == null) return [];
 
-    return _notes.where((note) => 
-      note.patientId == patientId && 
-      note.providerId == _currentProvider!.providerId
-    ).toList()
+    return _notes
+        .where(
+          (note) =>
+              note.patientId == patientId &&
+              note.providerId == _currentProvider!.providerId,
+        )
+        .toList()
       ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
   }
 
   /// Get prescriptions for patient
   List<Prescription> getPatientPrescriptions(String patientId) {
-    return _prescriptions.where((prescription) => 
-      prescription.patientId == patientId &&
-      prescription.providerId == _currentProvider!.providerId
-    ).toList()
+    return _prescriptions
+        .where(
+          (prescription) =>
+              prescription.patientId == patientId &&
+              prescription.providerId == _currentProvider!.providerId,
+        )
+        .toList()
       ..sort((a, b) => b.prescribedAt.compareTo(a.prescribedAt));
   }
 
@@ -438,9 +451,10 @@ class HealthcareService {
 
     final lowerQuery = query.toLowerCase();
     return getProviderPatients().where((patient) {
-      final fullName = '${patient.firstName ?? ''} ${patient.lastName ?? ''}'.toLowerCase();
-      return fullName.contains(lowerQuery) || 
-             patient.patientId.toLowerCase().contains(lowerQuery);
+      final fullName = '${patient.firstName ?? ''} ${patient.lastName ?? ''}'
+          .toLowerCase();
+      return fullName.contains(lowerQuery) ||
+          patient.patientId.toLowerCase().contains(lowerQuery);
     }).toList();
   }
 
@@ -506,7 +520,11 @@ class HealthcareService {
           'average_cycle_length': 28.5,
           'cycle_regularity': 0.85,
           'flow_duration': 5.2,
-          'common_symptoms': ['mild_cramping', 'breast_tenderness', 'mood_changes'],
+          'common_symptoms': [
+            'mild_cramping',
+            'breast_tenderness',
+            'mood_changes',
+          ],
         },
         insights: [
           'Cycle length is within normal range',
@@ -557,7 +575,11 @@ class HealthcareService {
           'average_cycle_length': 28.5,
           'cycle_regularity': 0.85,
           'average_flow_duration': 5.2,
-          'flow_intensity_distribution': {'light': 20, 'moderate': 60, 'heavy': 20},
+          'flow_intensity_distribution': {
+            'light': 20,
+            'moderate': 60,
+            'heavy': 20,
+          },
           'common_symptoms': ['cramping', 'mood_changes', 'breast_tenderness'],
           'pms_severity': 'mild',
           'ovulation_patterns': 'regular',
@@ -585,11 +607,13 @@ class HealthcareService {
 
   List<String> _generateInsights(Map<String, dynamic> data) {
     final insights = <String>[];
-    
+
     if (data.containsKey('cycle_regularity')) {
       final regularity = data['cycle_regularity'] as double;
       if (regularity > 0.8) {
-        insights.add('Excellent cycle regularity indicates healthy hormonal balance');
+        insights.add(
+          'Excellent cycle regularity indicates healthy hormonal balance',
+        );
       } else if (regularity > 0.6) {
         insights.add('Good cycle regularity with minor variations');
       } else {
@@ -602,7 +626,9 @@ class HealthcareService {
       if (length >= 21 && length <= 35) {
         insights.add('Cycle length is within the normal range (21-35 days)');
       } else {
-        insights.add('Cycle length outside normal range may require evaluation');
+        insights.add(
+          'Cycle length outside normal range may require evaluation',
+        );
       }
     }
 
@@ -613,10 +639,14 @@ class HealthcareService {
           insights.add('PMS symptoms are mild and manageable');
           break;
         case 'moderate':
-          insights.add('Moderate PMS symptoms may benefit from lifestyle modifications');
+          insights.add(
+            'Moderate PMS symptoms may benefit from lifestyle modifications',
+          );
           break;
         case 'severe':
-          insights.add('Severe PMS symptoms require medical attention and treatment');
+          insights.add(
+            'Severe PMS symptoms require medical attention and treatment',
+          );
           break;
       }
     }
@@ -629,17 +659,23 @@ class HealthcareService {
 
     if (data.containsKey('common_symptoms')) {
       final symptoms = data['common_symptoms'] as List;
-      
+
       if (symptoms.contains('cramping')) {
-        recommendations.add('Consider heat therapy and gentle exercise for cramp relief');
+        recommendations.add(
+          'Consider heat therapy and gentle exercise for cramp relief',
+        );
         recommendations.add('Magnesium supplements may help reduce cramping');
       }
-      
+
       if (symptoms.contains('mood_changes')) {
-        recommendations.add('Regular exercise and stress management can help mood stability');
-        recommendations.add('Consider tracking mood patterns for better understanding');
+        recommendations.add(
+          'Regular exercise and stress management can help mood stability',
+        );
+        recommendations.add(
+          'Consider tracking mood patterns for better understanding',
+        );
       }
-      
+
       if (symptoms.contains('fatigue')) {
         recommendations.add('Ensure adequate iron intake during menstruation');
         recommendations.add('Maintain consistent sleep schedule');
@@ -649,13 +685,19 @@ class HealthcareService {
     if (data.containsKey('cycle_regularity')) {
       final regularity = data['cycle_regularity'] as double;
       if (regularity < 0.6) {
-        recommendations.add('Consider lifestyle factors affecting cycle regularity');
+        recommendations.add(
+          'Consider lifestyle factors affecting cycle regularity',
+        );
         recommendations.add('Evaluate stress levels and sleep quality');
-        recommendations.add('Consider hormonal evaluation if irregularity persists');
+        recommendations.add(
+          'Consider hormonal evaluation if irregularity persists',
+        );
       }
     }
 
-    recommendations.add('Continue regular cycle tracking for ongoing health monitoring');
+    recommendations.add(
+      'Continue regular cycle tracking for ongoing health monitoring',
+    );
     recommendations.add('Schedule follow-up appointment in 3 months');
 
     return recommendations;
@@ -665,21 +707,23 @@ class HealthcareService {
     // Generate sample cycle data for demonstration
     final cycles = <CycleData>[];
     final now = DateTime.now();
-    
+
     for (int i = 0; i < 6; i++) {
       final startDate = now.subtract(Duration(days: (i * 28) + (i * 2)));
-      cycles.add(CycleData(
-        id: 'cycle_$i',
-        startDate: startDate,
-        endDate: startDate.add(Duration(days: 28 + Random().nextInt(6) - 3)),
-        length: 28 + Random().nextInt(6) - 3,
-        symptoms: ['cramping', 'mood_changes', 'fatigue'],
-        notes: 'Sample cycle data',
-        createdAt: startDate,
-        updatedAt: DateTime.now(),
-      ));
+      cycles.add(
+        CycleData(
+          id: 'cycle_$i',
+          startDate: startDate,
+          endDate: startDate.add(Duration(days: 28 + Random().nextInt(6) - 3)),
+          length: 28 + Random().nextInt(6) - 3,
+          symptoms: ['cramping', 'mood_changes', 'fatigue'],
+          notes: 'Sample cycle data',
+          createdAt: startDate,
+          updatedAt: DateTime.now(),
+        ),
+      );
     }
-    
+
     return cycles;
   }
 
@@ -687,22 +731,31 @@ class HealthcareService {
     // Generate sample biometric data for demonstration
     final data = <String, dynamic>{};
     final now = DateTime.now();
-    
-    data['heart_rate_data'] = List.generate(30, (i) => {
-      'date': now.subtract(Duration(days: i)).toIso8601String(),
-      'value': 65 + Random().nextInt(20),
-    });
-    
-    data['temperature_data'] = List.generate(30, (i) => {
-      'date': now.subtract(Duration(days: i)).toIso8601String(),
-      'value': 97.8 + Random().nextDouble() * 1.4,
-    });
-    
-    data['sleep_data'] = List.generate(30, (i) => {
-      'date': now.subtract(Duration(days: i)).toIso8601String(),
-      'value': Random().nextInt(5) + 1,
-    });
-    
+
+    data['heart_rate_data'] = List.generate(
+      30,
+      (i) => {
+        'date': now.subtract(Duration(days: i)).toIso8601String(),
+        'value': 65 + Random().nextInt(20),
+      },
+    );
+
+    data['temperature_data'] = List.generate(
+      30,
+      (i) => {
+        'date': now.subtract(Duration(days: i)).toIso8601String(),
+        'value': 97.8 + Random().nextDouble() * 1.4,
+      },
+    );
+
+    data['sleep_data'] = List.generate(
+      30,
+      (i) => {
+        'date': now.subtract(Duration(days: i)).toIso8601String(),
+        'value': Random().nextInt(5) + 1,
+      },
+    );
+
     return data;
   }
 

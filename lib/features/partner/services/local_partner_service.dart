@@ -3,8 +3,18 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/services/local_user_service.dart';
-import '../models/partner_models.dart' show Partnership, PartnershipStatus, PartnerPrivacySettings;
-import 'partner_service.dart' show PartnerInvitation, PartnerMessage, PartnerMessageType, PartnerCareAction, PartnerCareActionType, PartnerInsight, PartnerInsightType, PartnerSharingSettings;
+import '../models/partner_models.dart'
+    show Partnership, PartnershipStatus, PartnerPrivacySettings;
+import 'partner_service.dart'
+    show
+        PartnerInvitation,
+        PartnerMessage,
+        PartnerMessageType,
+        PartnerCareAction,
+        PartnerCareActionType,
+        PartnerInsight,
+        PartnerInsightType,
+        PartnerSharingSettings;
 
 /// Local Partner Service
 /// Provides partner sharing functionality using local storage (SharedPreferences)
@@ -47,10 +57,12 @@ class LocalPartnerService {
     } catch (e) {
       debugPrint('Error getting current user: $e');
     }
-    
+
     // Fallback to prefs
     return {
-      'userId': _prefs?.getString('current_user_id') ?? 'user_${DateTime.now().millisecondsSinceEpoch}',
+      'userId':
+          _prefs?.getString('current_user_id') ??
+          'user_${DateTime.now().millisecondsSinceEpoch}',
       'userName': _prefs?.getString('current_user_name') ?? 'User',
       'userEmail': _prefs?.getString('current_user_email') ?? '',
     };
@@ -86,7 +98,9 @@ class LocalPartnerService {
   }
 
   /// Accept partner invitation by code
-  Future<Map<String, dynamic>?> acceptPartnerInvitation(String invitationCode) async {
+  Future<Map<String, dynamic>?> acceptPartnerInvitation(
+    String invitationCode,
+  ) async {
     await _ensureInitialized();
 
     // Get current user info
@@ -179,7 +193,7 @@ class LocalPartnerService {
     }
   }
 
-  /// Convert Partnership (partner_models) to partner_service format  
+  /// Convert Partnership (partner_models) to partner_service format
   /// Note: This returns the JSON in partner_models.dart format, which partner_service.dart
   /// should be able to use directly since it imports from partner_models.dart
   Map<String, dynamic> _convertPartnershipToServiceFormat(Partnership p) {
@@ -189,7 +203,10 @@ class LocalPartnerService {
   }
 
   /// Get partnership between two users
-  Future<Partnership?> getPartnershipBetween(String userId1, String userId2) async {
+  Future<Partnership?> getPartnershipBetween(
+    String userId1,
+    String userId2,
+  ) async {
     await _ensureInitialized();
     final partnerships = await getAllPartnerships();
     try {
@@ -219,7 +236,6 @@ class LocalPartnerService {
       return [];
     }
   }
-
 
   /// Save partnership
   Future<void> _savePartnership(Partnership partnership) async {
@@ -258,7 +274,9 @@ class LocalPartnerService {
     final invitations = await _getAllInvitations();
 
     // Remove existing invitation with same code
-    invitations.removeWhere((i) => i.invitationCode == invitation.invitationCode);
+    invitations.removeWhere(
+      (i) => i.invitationCode == invitation.invitationCode,
+    );
 
     invitations.add(invitation);
 
@@ -317,8 +335,8 @@ class LocalPartnerService {
 
     final userInfo = await _getCurrentUserInfo();
     final senderId = userInfo['userId']!;
-    final receiverId = partnership.userId1 == senderId 
-        ? partnership.userId2 
+    final receiverId = partnership.userId1 == senderId
+        ? partnership.userId2
         : partnership.userId1;
 
     final message = PartnerMessage(
@@ -341,14 +359,14 @@ class LocalPartnerService {
   Future<List<PartnerMessage>> getMessages(String partnershipId) async {
     await _ensureInitialized();
     final messages = await _getAllMessages();
-    return messages
-        .where((m) => m.partnershipId == partnershipId)
-        .toList()
+    return messages.where((m) => m.partnershipId == partnershipId).toList()
       ..sort((a, b) => b.sentAt.compareTo(a.sentAt));
   }
 
   /// Get messages for partnership (returns JSON list)
-  Future<List<Map<String, dynamic>>> getMessagesForPartnership(String partnershipId) async {
+  Future<List<Map<String, dynamic>>> getMessagesForPartnership(
+    String partnershipId,
+  ) async {
     final messages = await getMessages(partnershipId);
     return messages.map((m) => m.toJson()).toList();
   }
@@ -401,8 +419,8 @@ class LocalPartnerService {
 
     final userInfo = await _getCurrentUserInfo();
     final performedByUserId = userInfo['userId']!;
-    final forUserId = partnership.userId1 == performedByUserId 
-        ? partnership.userId2 
+    final forUserId = partnership.userId1 == performedByUserId
+        ? partnership.userId2
         : partnership.userId1;
 
     final careAction = PartnerCareAction(
@@ -422,7 +440,10 @@ class LocalPartnerService {
   }
 
   /// Update sharing settings
-  Future<void> updateSharingSettings(String partnershipId, PartnerSharingSettings settings) async {
+  Future<void> updateSharingSettings(
+    String partnershipId,
+    PartnerSharingSettings settings,
+  ) async {
     await _ensureInitialized();
     final partnerships = await getAllPartnerships();
     try {
@@ -450,14 +471,14 @@ class LocalPartnerService {
   Future<List<PartnerCareAction>> getCareActions(String partnershipId) async {
     await _ensureInitialized();
     final actions = await _getAllCareActions();
-    return actions
-        .where((a) => a.partnershipId == partnershipId)
-        .toList()
+    return actions.where((a) => a.partnershipId == partnershipId).toList()
       ..sort((a, b) => b.performedAt.compareTo(a.performedAt));
   }
 
   /// Get care actions for partnership (returns JSON list)
-  Future<List<Map<String, dynamic>>> getCareActionsForPartnership(String partnershipId) async {
+  Future<List<Map<String, dynamic>>> getCareActionsForPartnership(
+    String partnershipId,
+  ) async {
     final actions = await getCareActions(partnershipId);
     return actions.map((a) => a.toJson()).toList();
   }

@@ -26,7 +26,7 @@ class BiometricEngine {
     if (_isInitialized) return;
 
     debugPrint('📊 Initializing Biometric Engine (Week 3)...');
-    
+
     // Heart Rate Analysis Model
     _heartRateModel = {
       'resting_hr_baselines': {
@@ -46,7 +46,7 @@ class BiometricEngine {
         'sleep_correlation': -0.4,
       },
     };
-    
+
     // Heart Rate Variability Model
     _hrvModel = {
       'healthy_ranges': {
@@ -65,7 +65,7 @@ class BiometricEngine {
         'recovery_threshold': 35.0, // RMSSD above this indicates good recovery
       },
     };
-    
+
     // Sleep Analysis Model
     _sleepModel = {
       'quality_metrics': {
@@ -92,7 +92,7 @@ class BiometricEngine {
         'stress_sleep_impact': 0.7,
       },
     };
-    
+
     // Body Temperature Model
     _temperatureModel = {
       'basal_body_temperature': {
@@ -112,7 +112,7 @@ class BiometricEngine {
         'activity_compensation': 0.15,
       },
     };
-    
+
     // Stress Analysis Model
     _stressModel = {
       'stress_indicators': {
@@ -132,7 +132,7 @@ class BiometricEngine {
         'chronic_stress_duration': 7, // days
       },
     };
-    
+
     // Multi-modal Correlation Engine
     _correlationEngine = {
       'biometric_weights': {
@@ -168,7 +168,7 @@ class BiometricEngine {
         'pattern_stability_threshold': 0.7,
       },
     };
-    
+
     _isInitialized = true;
     debugPrint('✅ Biometric Engine initialized with wearable integration');
   }
@@ -179,40 +179,53 @@ class BiometricEngine {
     required String currentPhase,
     required DateTime analysisDate,
   }) async {
-    final phaseBaseline = _heartRateModel['resting_hr_baselines'][currentPhase] as Map<String, dynamic>;
+    final phaseBaseline =
+        _heartRateModel['resting_hr_baselines'][currentPhase]
+            as Map<String, dynamic>;
     final baselineMean = phaseBaseline['mean'] as double;
     final baselineStd = phaseBaseline['std'] as double;
-    
+
     // Calculate current metrics
-    final recentData = heartRateData.where((hr) => 
-      hr.timestamp.isAfter(analysisDate.subtract(const Duration(days: 7)))).toList();
-    
+    final recentData = heartRateData
+        .where(
+          (hr) => hr.timestamp.isAfter(
+            analysisDate.subtract(const Duration(days: 7)),
+          ),
+        )
+        .toList();
+
     if (recentData.isEmpty) {
       return HeartRateAnalysis.empty();
     }
-    
-    final averageRestingHR = recentData
-        .where((hr) => hr.type == HeartRateType.resting)
-        .map((hr) => hr.beatsPerMinute)
-        .fold<double>(0, (sum, bpm) => sum + bpm) / math.max(1, recentData.length);
-    
+
+    final averageRestingHR =
+        recentData
+            .where((hr) => hr.type == HeartRateType.resting)
+            .map((hr) => hr.beatsPerMinute)
+            .fold<double>(0, (sum, bpm) => sum + bpm) /
+        math.max(1, recentData.length);
+
     // Detect anomalies
     final deviationFromBaseline = averageRestingHR - baselineMean;
     final zScore = deviationFromBaseline / baselineStd;
-    
+
     // Trend analysis
     final trend = _calculateHeartRateTrend(recentData);
-    
+
     // Generate insights
     final insights = <String>[];
     if (zScore.abs() > 2.0) {
-      insights.add('Your resting heart rate is ${zScore > 0 ? 'elevated' : 'lower'} compared to typical $currentPhase values');
+      insights.add(
+        'Your resting heart rate is ${zScore > 0 ? 'elevated' : 'lower'} compared to typical $currentPhase values',
+      );
     }
-    
+
     if (trend.abs() > 3.0) {
-      insights.add('Your heart rate has been ${trend > 0 ? 'increasing' : 'decreasing'} over the past week');
+      insights.add(
+        'Your heart rate has been ${trend > 0 ? 'increasing' : 'decreasing'} over the past week',
+      );
     }
-    
+
     return HeartRateAnalysis(
       averageRestingHR: averageRestingHR,
       phaseBaseline: baselineMean,
@@ -232,25 +245,37 @@ class BiometricEngine {
     required String currentPhase,
     required DateTime analysisDate,
   }) async {
-    final recentData = hrvData.where((hrv) => 
-      hrv.timestamp.isAfter(analysisDate.subtract(const Duration(days: 7)))).toList();
-    
+    final recentData = hrvData
+        .where(
+          (hrv) => hrv.timestamp.isAfter(
+            analysisDate.subtract(const Duration(days: 7)),
+          ),
+        )
+        .toList();
+
     if (recentData.isEmpty) {
       return HRVAnalysis.empty();
     }
-    
-    final averageRMSSD = recentData.map((hrv) => hrv.rmssd).reduce((a, b) => a + b) / recentData.length;
-    final averageSDNN = recentData.map((hrv) => hrv.sdnn).reduce((a, b) => a + b) / recentData.length;
-    
+
+    final averageRMSSD =
+        recentData.map((hrv) => hrv.rmssd).reduce((a, b) => a + b) /
+        recentData.length;
+    final averageSDNN =
+        recentData.map((hrv) => hrv.sdnn).reduce((a, b) => a + b) /
+        recentData.length;
+
     // Assess recovery status
     final recoveryStatus = _assessRecoveryStatus(averageRMSSD);
-    
+
     // Detect stress indicators
     final stressLevel = _calculateHRVStressLevel(averageRMSSD, averageSDNN);
-    
+
     // Phase-specific analysis
-    final phaseAnalysis = _analyzeHRVCycleCorrelation(averageRMSSD, currentPhase);
-    
+    final phaseAnalysis = _analyzeHRVCycleCorrelation(
+      averageRMSSD,
+      currentPhase,
+    );
+
     return HRVAnalysis(
       averageRMSSD: averageRMSSD,
       averageSDNN: averageSDNN,
@@ -269,28 +294,50 @@ class BiometricEngine {
     required String currentPhase,
     required DateTime analysisDate,
   }) async {
-    final recentSleep = sleepData.where((sleep) => 
-      sleep.sleepDate.isAfter(analysisDate.subtract(const Duration(days: 7)))).toList();
-    
+    final recentSleep = sleepData
+        .where(
+          (sleep) => sleep.sleepDate.isAfter(
+            analysisDate.subtract(const Duration(days: 7)),
+          ),
+        )
+        .toList();
+
     if (recentSleep.isEmpty) {
       return SleepAnalysis.empty();
     }
-    
+
     // Calculate sleep metrics
-    final avgDuration = recentSleep.map((s) => s.totalDuration.inMinutes).reduce((a, b) => a + b) / recentSleep.length / 60.0;
-    final avgEfficiency = recentSleep.map((s) => s.efficiency).reduce((a, b) => a + b) / recentSleep.length;
-    final avgDeepSleep = recentSleep.map((s) => s.deepSleepPercentage).reduce((a, b) => a + b) / recentSleep.length;
-    final avgREMSleep = recentSleep.map((s) => s.remSleepPercentage).reduce((a, b) => a + b) / recentSleep.length;
-    
+    final avgDuration =
+        recentSleep
+            .map((s) => s.totalDuration.inMinutes)
+            .reduce((a, b) => a + b) /
+        recentSleep.length /
+        60.0;
+    final avgEfficiency =
+        recentSleep.map((s) => s.efficiency).reduce((a, b) => a + b) /
+        recentSleep.length;
+    final avgDeepSleep =
+        recentSleep.map((s) => s.deepSleepPercentage).reduce((a, b) => a + b) /
+        recentSleep.length;
+    final avgREMSleep =
+        recentSleep.map((s) => s.remSleepPercentage).reduce((a, b) => a + b) /
+        recentSleep.length;
+
     // Phase-specific analysis
-    final phaseEffects = _sleepModel['cycle_phase_effects'][currentPhase] as Map<String, dynamic>?;
-    
+    final phaseEffects =
+        _sleepModel['cycle_phase_effects'][currentPhase]
+            as Map<String, dynamic>?;
+
     // Quality assessment
-    final qualityScore = _calculateSleepQuality(avgEfficiency, avgDeepSleep, avgREMSleep);
-    
+    final qualityScore = _calculateSleepQuality(
+      avgEfficiency,
+      avgDeepSleep,
+      avgREMSleep,
+    );
+
     // Trend analysis
     final sleepTrend = _calculateSleepTrend(recentSleep);
-    
+
     return SleepAnalysis(
       averageDuration: avgDuration,
       averageEfficiency: avgEfficiency,
@@ -298,8 +345,13 @@ class BiometricEngine {
       averageREMSleepPercentage: avgREMSleep,
       qualityScore: qualityScore,
       trend: sleepTrend,
-      phaseImpact: phaseEffects != null ? _analyzeSleepPhaseImpact(phaseEffects, qualityScore) : null,
-      recommendations: _generateSleepRecommendations(qualityScore, currentPhase),
+      phaseImpact: phaseEffects != null
+          ? _analyzeSleepPhaseImpact(phaseEffects, qualityScore)
+          : null,
+      recommendations: _generateSleepRecommendations(
+        qualityScore,
+        currentPhase,
+      ),
       analysisDate: analysisDate,
     );
   }
@@ -310,29 +362,41 @@ class BiometricEngine {
     required String currentPhase,
     required DateTime analysisDate,
   }) async {
-    final recentData = temperatureData.where((temp) => 
-      temp.timestamp.isAfter(analysisDate.subtract(const Duration(days: 14)))).toList();
-    
+    final recentData = temperatureData
+        .where(
+          (temp) => temp.timestamp.isAfter(
+            analysisDate.subtract(const Duration(days: 14)),
+          ),
+        )
+        .toList();
+
     if (recentData.isEmpty) {
       return TemperatureAnalysis.empty();
     }
-    
+
     // Sort by timestamp for trend analysis
     recentData.sort((a, b) => a.timestamp.compareTo(b.timestamp));
-    
+
     // Calculate baseline and recent average
-    final follicularBaseline = _temperatureModel['basal_body_temperature']['follicular_baseline'] as double;
-    final recentAverage = recentData.map((t) => t.temperature).reduce((a, b) => a + b) / recentData.length;
-    
+    final follicularBaseline =
+        _temperatureModel['basal_body_temperature']['follicular_baseline']
+            as double;
+    final recentAverage =
+        recentData.map((t) => t.temperature).reduce((a, b) => a + b) /
+        recentData.length;
+
     // Detect ovulation patterns
-    final ovulationSignals = _detectOvulationSignals(recentData, follicularBaseline);
-    
+    final ovulationSignals = _detectOvulationSignals(
+      recentData,
+      follicularBaseline,
+    );
+
     // Phase transition detection
     final phaseTransition = _detectPhaseTransition(recentData, currentPhase);
-    
+
     // Temperature trend
     final trend = _calculateTemperatureTrend(recentData);
-    
+
     return TemperatureAnalysis(
       recentAverage: recentAverage,
       baseline: follicularBaseline,
@@ -341,7 +405,11 @@ class BiometricEngine {
       ovulationSignals: ovulationSignals,
       phaseTransition: phaseTransition,
       confidence: _calculateConfidence(recentData.length, 0.0),
-      insights: _generateTemperatureInsights(recentAverage, follicularBaseline, currentPhase),
+      insights: _generateTemperatureInsights(
+        recentAverage,
+        follicularBaseline,
+        currentPhase,
+      ),
       analysisDate: analysisDate,
     );
   }
@@ -357,30 +425,41 @@ class BiometricEngine {
   }) async {
     // Cross-correlation analysis between biometric data and cycle patterns
     final correlations = <String, double>{};
-    
+
     // Heart rate correlations
     correlations['heart_rate_cycle_length'] = _calculateCycleCorrelation(
-      cycles, heartRateData.map((hr) => hr.beatsPerMinute).toList());
-    
+      cycles,
+      heartRateData.map((hr) => hr.beatsPerMinute).toList(),
+    );
+
     // HRV correlations
     correlations['hrv_symptom_severity'] = _calculateSymptomCorrelation(
-      cycles, hrvData.map((hrv) => hrv.rmssd).toList());
-    
+      cycles,
+      hrvData.map((hrv) => hrv.rmssd).toList(),
+    );
+
     // Sleep correlations
     correlations['sleep_mood_energy'] = _calculateMoodEnergyCorrelation(
-      cycles, sleepData.map((sleep) => sleep.efficiency).toList());
-    
+      cycles,
+      sleepData.map((sleep) => sleep.efficiency).toList(),
+    );
+
     // Temperature correlations
     correlations['temperature_ovulation'] = _calculateOvulationCorrelation(
-      cycles, temperatureData.map((temp) => temp.temperature).toList());
-    
+      cycles,
+      temperatureData.map((temp) => temp.temperature).toList(),
+    );
+
     // Multi-modal predictions
     final predictions = await _generateBiometricPredictions(
-      correlations, cycles, analysisDate);
-    
+      correlations,
+      cycles,
+      analysisDate,
+    );
+
     // Insights generation
     final insights = _generateCorrelationInsights(correlations);
-    
+
     return BiometricCorrelationAnalysis(
       correlations: correlations,
       predictions: predictions,
@@ -399,26 +478,37 @@ class BiometricEngine {
     required DateTime analysisDate,
   }) async {
     final anomalies = <BiometricAnomaly>[];
-    
+
     // Heart rate anomalies
-    anomalies.addAll(await _detectHeartRateAnomalies(heartRateData, analysisDate));
-    
+    anomalies.addAll(
+      await _detectHeartRateAnomalies(heartRateData, analysisDate),
+    );
+
     // HRV anomalies
     anomalies.addAll(await _detectHRVAnomalies(hrvData, analysisDate));
-    
+
     // Sleep anomalies
     anomalies.addAll(await _detectSleepAnomalies(sleepData, analysisDate));
-    
+
     // Temperature anomalies
-    anomalies.addAll(await _detectTemperatureAnomalies(temperatureData, analysisDate));
-    
+    anomalies.addAll(
+      await _detectTemperatureAnomalies(temperatureData, analysisDate),
+    );
+
     // Cross-metric anomalies
-    anomalies.addAll(await _detectCrossMetricAnomalies(
-      heartRateData, hrvData, sleepData, temperatureData, analysisDate));
-    
+    anomalies.addAll(
+      await _detectCrossMetricAnomalies(
+        heartRateData,
+        hrvData,
+        sleepData,
+        temperatureData,
+        analysisDate,
+      ),
+    );
+
     // Sort by severity
     anomalies.sort((a, b) => b.severity.index.compareTo(a.severity.index));
-    
+
     return anomalies;
   }
 
@@ -426,19 +516,25 @@ class BiometricEngine {
 
   double _calculateHeartRateTrend(List<HeartRateData> data) {
     if (data.length < 2) return 0.0;
-    
-    final firstHalf = data.take(data.length ~/ 2).map((hr) => hr.beatsPerMinute).toList();
-    final secondHalf = data.skip(data.length ~/ 2).map((hr) => hr.beatsPerMinute).toList();
-    
+
+    final firstHalf = data
+        .take(data.length ~/ 2)
+        .map((hr) => hr.beatsPerMinute)
+        .toList();
+    final secondHalf = data
+        .skip(data.length ~/ 2)
+        .map((hr) => hr.beatsPerMinute)
+        .toList();
+
     final firstAvg = firstHalf.reduce((a, b) => a + b) / firstHalf.length;
     final secondAvg = secondHalf.reduce((a, b) => a + b) / secondHalf.length;
-    
+
     return secondAvg - firstAvg;
   }
 
   String _assessRecoveryStatus(double rmssd) {
     final thresholds = _hrvModel['stress_indicators'] as Map<String, dynamic>;
-    
+
     if (rmssd >= thresholds['recovery_threshold']) {
       return 'excellent';
     } else if (rmssd >= 25.0) {
@@ -453,14 +549,15 @@ class BiometricEngine {
   double _calculateHRVStressLevel(double rmssd, double sdnn) {
     final normalizedRMSSD = math.max(0.0, math.min(1.0, rmssd / 50.0));
     final normalizedSDNN = math.max(0.0, math.min(1.0, sdnn / 80.0));
-    
+
     // Lower HRV indicates higher stress
     return 1.0 - ((normalizedRMSSD + normalizedSDNN) / 2.0);
   }
 
   Map<String, dynamic> _analyzeHRVCycleCorrelation(double rmssd, String phase) {
-    final correlations = _hrvModel['cycle_correlations'] as Map<String, dynamic>;
-    
+    final correlations =
+        _hrvModel['cycle_correlations'] as Map<String, dynamic>;
+
     switch (phase) {
       case 'luteal_phase':
         final expectedDrop = correlations['luteal_hrv_drop'] as double;
@@ -473,9 +570,12 @@ class BiometricEngine {
     }
   }
 
-  List<String> _generateHRVRecommendations(String recoveryStatus, double stressLevel) {
+  List<String> _generateHRVRecommendations(
+    String recoveryStatus,
+    double stressLevel,
+  ) {
     final recommendations = <String>[];
-    
+
     if (recoveryStatus == 'poor' || stressLevel > 0.7) {
       recommendations.addAll([
         'Prioritize stress management techniques',
@@ -484,34 +584,54 @@ class BiometricEngine {
         'Practice deep breathing exercises',
       ]);
     } else if (recoveryStatus == 'excellent') {
-      recommendations.add('Great recovery! Your body is responding well to your current routine');
+      recommendations.add(
+        'Great recovery! Your body is responding well to your current routine',
+      );
     }
-    
+
     return recommendations;
   }
 
-  double _calculateSleepQuality(double efficiency, double deepSleep, double remSleep) {
-    final qualityMetrics = _sleepModel['quality_metrics'] as Map<String, dynamic>;
-    
-    final efficiencyScore = efficiency / qualityMetrics['sleep_efficiency']['optimal'];
-    final deepSleepScore = deepSleep / qualityMetrics['deep_sleep_percentage']['optimal'];
-    final remScore = remSleep / qualityMetrics['rem_sleep_percentage']['optimal'];
-    
-    return math.min(1.0, (efficiencyScore * 0.4 + deepSleepScore * 0.3 + remScore * 0.3));
+  double _calculateSleepQuality(
+    double efficiency,
+    double deepSleep,
+    double remSleep,
+  ) {
+    final qualityMetrics =
+        _sleepModel['quality_metrics'] as Map<String, dynamic>;
+
+    final efficiencyScore =
+        efficiency / qualityMetrics['sleep_efficiency']['optimal'];
+    final deepSleepScore =
+        deepSleep / qualityMetrics['deep_sleep_percentage']['optimal'];
+    final remScore =
+        remSleep / qualityMetrics['rem_sleep_percentage']['optimal'];
+
+    return math.min(
+      1.0,
+      (efficiencyScore * 0.4 + deepSleepScore * 0.3 + remScore * 0.3),
+    );
   }
 
   String _calculateSleepTrend(List<SleepData> sleepData) {
     if (sleepData.length < 3) return 'insufficient_data';
-    
-    final recentQuality = sleepData.takeLast(3).map((s) => s.efficiency).reduce((a, b) => a + b) / 3;
-    final overallQuality = sleepData.map((s) => s.efficiency).reduce((a, b) => a + b) / sleepData.length;
-    
+
+    final recentQuality =
+        sleepData.takeLast(3).map((s) => s.efficiency).reduce((a, b) => a + b) /
+        3;
+    final overallQuality =
+        sleepData.map((s) => s.efficiency).reduce((a, b) => a + b) /
+        sleepData.length;
+
     if (recentQuality > overallQuality + 0.05) return 'improving';
     if (recentQuality < overallQuality - 0.05) return 'declining';
     return 'stable';
   }
 
-  Map<String, dynamic>? _analyzeSleepPhaseImpact(Map<String, dynamic> phaseEffects, double qualityScore) {
+  Map<String, dynamic>? _analyzeSleepPhaseImpact(
+    Map<String, dynamic> phaseEffects,
+    double qualityScore,
+  ) {
     return {
       'phase_impact_detected': true,
       'quality_deviation': qualityScore - 0.8, // Compare to ideal
@@ -519,9 +639,12 @@ class BiometricEngine {
     };
   }
 
-  List<String> _generateSleepRecommendations(double qualityScore, String phase) {
+  List<String> _generateSleepRecommendations(
+    double qualityScore,
+    String phase,
+  ) {
     final recommendations = <String>[];
-    
+
     if (qualityScore < 0.7) {
       recommendations.addAll([
         'Establish a consistent sleep schedule',
@@ -530,111 +653,161 @@ class BiometricEngine {
         'Keep bedroom cool and dark',
       ]);
     }
-    
+
     if (phase == 'luteal_phase') {
       recommendations.add('Consider earlier bedtime during luteal phase');
     }
-    
+
     return recommendations;
   }
 
-  List<TemperatureSignal> _detectOvulationSignals(List<TemperatureData> data, double baseline) {
+  List<TemperatureSignal> _detectOvulationSignals(
+    List<TemperatureData> data,
+    double baseline,
+  ) {
     final signals = <TemperatureSignal>[];
-    final detectionSensitivity = _temperatureModel['detection_algorithms']['ovulation_detection_sensitivity'] as double;
-    
+    final detectionSensitivity =
+        _temperatureModel['detection_algorithms']['ovulation_detection_sensitivity']
+            as double;
+
     for (int i = 1; i < data.length; i++) {
       final previousTemp = data[i - 1].temperature;
       final currentTemp = data[i].temperature;
-      
+
       // Look for temperature dip followed by sustained rise
-      if (previousTemp < baseline - detectionSensitivity && 
+      if (previousTemp < baseline - detectionSensitivity &&
           currentTemp > baseline + detectionSensitivity) {
-        signals.add(TemperatureSignal(
-          type: TemperatureSignalType.ovulationPattern,
-          timestamp: data[i].timestamp,
-          temperature: currentTemp,
-          confidence: 0.8,
-          description: 'Potential ovulation pattern detected',
-        ));
+        signals.add(
+          TemperatureSignal(
+            type: TemperatureSignalType.ovulationPattern,
+            timestamp: data[i].timestamp,
+            temperature: currentTemp,
+            confidence: 0.8,
+            description: 'Potential ovulation pattern detected',
+          ),
+        );
       }
     }
-    
+
     return signals;
   }
 
-  Map<String, dynamic>? _detectPhaseTransition(List<TemperatureData> data, String currentPhase) {
+  Map<String, dynamic>? _detectPhaseTransition(
+    List<TemperatureData> data,
+    String currentPhase,
+  ) {
     // Simplified phase transition detection
     if (data.length < 5) return null;
-    
+
     final recentTemps = data.takeLast(3).map((t) => t.temperature).toList();
     final avgRecent = recentTemps.reduce((a, b) => a + b) / recentTemps.length;
-    
-    final baseline = _temperatureModel['basal_body_temperature']['follicular_baseline'] as double;
-    final lutealElevation = _temperatureModel['basal_body_temperature']['luteal_elevation'] as double;
-    
-    if (currentPhase == 'follicular_phase' && avgRecent > baseline + lutealElevation * 0.5) {
+
+    final baseline =
+        _temperatureModel['basal_body_temperature']['follicular_baseline']
+            as double;
+    final lutealElevation =
+        _temperatureModel['basal_body_temperature']['luteal_elevation']
+            as double;
+
+    if (currentPhase == 'follicular_phase' &&
+        avgRecent > baseline + lutealElevation * 0.5) {
       return {
         'transition_detected': true,
         'likely_new_phase': 'luteal_phase',
         'confidence': 0.7,
       };
     }
-    
+
     return null;
   }
 
   double _calculateTemperatureTrend(List<TemperatureData> data) {
     if (data.length < 5) return 0.0;
-    
-    final firstQuarter = data.take(data.length ~/ 4).map((t) => t.temperature).toList();
-    final lastQuarter = data.takeLast(data.length ~/ 4).map((t) => t.temperature).toList();
-    
+
+    final firstQuarter = data
+        .take(data.length ~/ 4)
+        .map((t) => t.temperature)
+        .toList();
+    final lastQuarter = data
+        .takeLast(data.length ~/ 4)
+        .map((t) => t.temperature)
+        .toList();
+
     final firstAvg = firstQuarter.reduce((a, b) => a + b) / firstQuarter.length;
     final lastAvg = lastQuarter.reduce((a, b) => a + b) / lastQuarter.length;
-    
+
     return lastAvg - firstAvg;
   }
 
-  List<String> _generateTemperatureInsights(double recent, double baseline, String phase) {
+  List<String> _generateTemperatureInsights(
+    double recent,
+    double baseline,
+    String phase,
+  ) {
     final insights = <String>[];
     final deviation = recent - baseline;
-    
+
     if (deviation > 0.3) {
-      insights.add('Your body temperature is elevated, suggesting ${phase == 'luteal_phase' ? 'normal luteal phase elevation' : 'possible phase transition'}');
+      insights.add(
+        'Your body temperature is elevated, suggesting ${phase == 'luteal_phase' ? 'normal luteal phase elevation' : 'possible phase transition'}',
+      );
     } else if (deviation < -0.2) {
-      insights.add('Your body temperature is below baseline, ${phase == 'menstrual_phase' ? 'typical for menstrual phase' : 'which may indicate approaching menstruation'}');
+      insights.add(
+        'Your body temperature is below baseline, ${phase == 'menstrual_phase' ? 'typical for menstrual phase' : 'which may indicate approaching menstruation'}',
+      );
     }
-    
+
     return insights;
   }
 
   double _calculateConfidence(int dataPoints, double anomalyScore) {
-    final dataConfidence = math.min(1.0, dataPoints / 30.0); // More data = higher confidence
-    final anomalyPenalty = math.max(0.0, 1.0 - (anomalyScore / 2.0)); // High anomalies reduce confidence
+    final dataConfidence = math.min(
+      1.0,
+      dataPoints / 30.0,
+    ); // More data = higher confidence
+    final anomalyPenalty = math.max(
+      0.0,
+      1.0 - (anomalyScore / 2.0),
+    ); // High anomalies reduce confidence
     return (dataConfidence * 0.7 + anomalyPenalty * 0.3);
   }
 
   // Additional correlation and prediction methods...
-  double _calculateCycleCorrelation(List<CycleData> cycles, List<double> biometricData) {
+  double _calculateCycleCorrelation(
+    List<CycleData> cycles,
+    List<double> biometricData,
+  ) {
     // Simplified correlation calculation
     if (cycles.length < 3 || biometricData.length < 3) return 0.0;
     return 0.6; // Placeholder for actual correlation algorithm
   }
 
-  double _calculateSymptomCorrelation(List<CycleData> cycles, List<double> biometricData) {
+  double _calculateSymptomCorrelation(
+    List<CycleData> cycles,
+    List<double> biometricData,
+  ) {
     return 0.5; // Placeholder
   }
 
-  double _calculateMoodEnergyCorrelation(List<CycleData> cycles, List<double> biometricData) {
+  double _calculateMoodEnergyCorrelation(
+    List<CycleData> cycles,
+    List<double> biometricData,
+  ) {
     return 0.7; // Placeholder
   }
 
-  double _calculateOvulationCorrelation(List<CycleData> cycles, List<double> biometricData) {
+  double _calculateOvulationCorrelation(
+    List<CycleData> cycles,
+    List<double> biometricData,
+  ) {
     return 0.8; // Placeholder
   }
 
   Future<Map<String, dynamic>> _generateBiometricPredictions(
-      Map<String, double> correlations, List<CycleData> cycles, DateTime analysisDate) async {
+    Map<String, double> correlations,
+    List<CycleData> cycles,
+    DateTime analysisDate,
+  ) async {
     return {
       'next_cycle_length': 28,
       'ovulation_date': analysisDate.add(const Duration(days: 14)),
@@ -644,48 +817,63 @@ class BiometricEngine {
 
   List<String> _generateCorrelationInsights(Map<String, double> correlations) {
     final insights = <String>[];
-    
+
     correlations.forEach((metric, correlation) {
       if (correlation.abs() > 0.6) {
-        insights.add('Strong correlation detected between $metric and cycle patterns');
+        insights.add(
+          'Strong correlation detected between $metric and cycle patterns',
+        );
       }
     });
-    
+
     return insights;
   }
 
   double _calculateOverallConfidence(Map<String, double> correlations) {
     if (correlations.isEmpty) return 0.0;
-    
-    final avgCorrelation = correlations.values.reduce((a, b) => a + b) / correlations.length;
+
+    final avgCorrelation =
+        correlations.values.reduce((a, b) => a + b) / correlations.length;
     return math.min(1.0, avgCorrelation.abs());
   }
 
   // Anomaly detection methods
   Future<List<BiometricAnomaly>> _detectHeartRateAnomalies(
-      List<HeartRateData> data, DateTime analysisDate) async {
+    List<HeartRateData> data,
+    DateTime analysisDate,
+  ) async {
     // Simplified anomaly detection
     return [];
   }
 
   Future<List<BiometricAnomaly>> _detectHRVAnomalies(
-      List<HRVData> data, DateTime analysisDate) async {
+    List<HRVData> data,
+    DateTime analysisDate,
+  ) async {
     return [];
   }
 
   Future<List<BiometricAnomaly>> _detectSleepAnomalies(
-      List<SleepData> data, DateTime analysisDate) async {
+    List<SleepData> data,
+    DateTime analysisDate,
+  ) async {
     return [];
   }
 
   Future<List<BiometricAnomaly>> _detectTemperatureAnomalies(
-      List<TemperatureData> data, DateTime analysisDate) async {
+    List<TemperatureData> data,
+    DateTime analysisDate,
+  ) async {
     return [];
   }
 
   Future<List<BiometricAnomaly>> _detectCrossMetricAnomalies(
-      List<HeartRateData> hr, List<HRVData> hrv, 
-      List<SleepData> sleep, List<TemperatureData> temp, DateTime analysisDate) async {
+    List<HeartRateData> hr,
+    List<HRVData> hrv,
+    List<SleepData> sleep,
+    List<TemperatureData> temp,
+    DateTime analysisDate,
+  ) async {
     return [];
   }
 }

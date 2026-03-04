@@ -15,7 +15,8 @@ class PartnerCommunicationWidget extends StatefulWidget {
   });
 
   @override
-  State<PartnerCommunicationWidget> createState() => _PartnerCommunicationWidgetState();
+  State<PartnerCommunicationWidget> createState() =>
+      _PartnerCommunicationWidgetState();
 }
 
 class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
@@ -28,12 +29,12 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
   @override
   void initState() {
     super.initState();
-    
+
     _controller = AnimationController(
       duration: const Duration(milliseconds: 600),
       vsync: this,
     );
-    
+
     _fadeAnimation = CurvedAnimation(
       parent: _controller,
       curve: Curves.easeInOut,
@@ -89,9 +90,7 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
                   _buildRecentMessages(theme),
                 ],
                 _buildQuickMessageBar(theme),
-                if (_isExpanded) ...[
-                  _buildExpandedChat(theme),
-                ],
+                if (_isExpanded) ...[_buildExpandedChat(theme)],
               ],
             ),
           ),
@@ -105,7 +104,10 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [AppTheme.primaryRose.withValues(alpha: 0.1), AppTheme.primaryPurple.withValues(alpha: 0.1)],
+          colors: [
+            AppTheme.primaryRose.withValues(alpha: 0.1),
+            AppTheme.primaryPurple.withValues(alpha: 0.1),
+          ],
         ),
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(24),
@@ -114,20 +116,20 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
       ),
       child: Row(
         children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(
-                  Icons.chat_bubble,
-                  color: theme.colorScheme.onPrimary,
-                  size: 20,
-                ),
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
               ),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(
+              Icons.chat_bubble,
+              color: theme.colorScheme.onPrimary,
+              size: 20,
+            ),
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -141,9 +143,9 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
                   ),
                 ),
                 Text(
-                  widget.messages.isNotEmpty 
-                    ? '${widget.messages.length} messages'
-                    : 'Start a conversation',
+                  widget.messages.isNotEmpty
+                      ? '${widget.messages.length} messages'
+                      : 'Start a conversation',
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
@@ -165,7 +167,7 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
 
   Widget _buildRecentMessages(ThemeData theme) {
     final recentMessages = widget.messages.take(3).toList();
-    
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       child: Column(
@@ -203,9 +205,14 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
     );
   }
 
-  Widget _buildMessagePreview(ThemeData theme, PartnerMessage message, int index) {
-    final isFromPartner = message.senderId != 'current_user'; // Replace with actual user ID logic
-    
+  Widget _buildMessagePreview(
+    ThemeData theme,
+    PartnerMessage message,
+    int index,
+  ) {
+    final isFromPartner =
+        message.senderId != 'current_user'; // Replace with actual user ID logic
+
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       child: Row(
@@ -215,9 +222,9 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
             height: 32,
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: isFromPartner 
-                  ? [AppTheme.secondaryBlue, AppTheme.accentMint]
-                  : [AppTheme.primaryRose, AppTheme.primaryPurple],
+                colors: isFromPartner
+                    ? [AppTheme.secondaryBlue, AppTheme.accentMint]
+                    : [AppTheme.primaryRose, AppTheme.primaryPurple],
               ),
               shape: BoxShape.circle,
             ),
@@ -247,7 +254,9 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
                       _formatTime(message.createdAt),
                       style: TextStyle(
                         fontSize: 10,
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.6,
+                        ),
                       ),
                     ),
                   ],
@@ -301,7 +310,10 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
             spacing: 8,
             runSpacing: 8,
             children: [
-              _buildQuickMessageChip('How are you feeling? 💕', Icons.psychology),
+              _buildQuickMessageChip(
+                'How are you feeling? 💕',
+                Icons.psychology,
+              ),
               _buildQuickMessageChip('Thinking of you ❤️', Icons.favorite),
               _buildQuickMessageChip('Need anything? 🤗', Icons.support),
               _buildQuickMessageChip('You\'re amazing! 🌟', Icons.star),
@@ -321,7 +333,10 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppTheme.primaryRose.withValues(alpha: 0.1), AppTheme.primaryPurple.withValues(alpha: 0.1)],
+            colors: [
+              AppTheme.primaryRose.withValues(alpha: 0.1),
+              AppTheme.primaryPurple.withValues(alpha: 0.1),
+            ],
           ),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
@@ -356,16 +371,23 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
             controller: _messageController,
             decoration: InputDecoration(
               hintText: 'Send a message...',
-              hintStyle: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.6)),
+              hintStyle: TextStyle(
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+              ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(25),
-                borderSide: BorderSide(color: theme.colorScheme.onSurface.withValues(alpha: 0.3)),
+                borderSide: BorderSide(
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
+                ),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(25),
                 borderSide: BorderSide(color: AppTheme.primaryRose, width: 2),
               ),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 12,
+              ),
               filled: true,
               fillColor: theme.scaffoldBackgroundColor,
             ),
@@ -378,11 +400,7 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
         FloatingActionButton.small(
           onPressed: () => _sendMessage(_messageController.text),
           backgroundColor: AppTheme.primaryRose,
-          child: Icon(
-            Icons.send,
-            color: theme.colorScheme.onPrimary,
-            size: 16,
-          ),
+          child: Icon(Icons.send, color: theme.colorScheme.onPrimary, size: 16),
         ),
       ],
     );
@@ -438,8 +456,9 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
   }
 
   Widget _buildFullMessage(ThemeData theme, PartnerMessage message) {
-    final isFromPartner = message.senderId != 'current_user'; // Replace with actual user ID logic
-    
+    final isFromPartner =
+        message.senderId != 'current_user'; // Replace with actual user ID logic
+
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       child: Row(
@@ -451,29 +470,43 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
           ],
           Expanded(
             child: Column(
-              crossAxisAlignment: isFromPartner ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+              crossAxisAlignment: isFromPartner
+                  ? CrossAxisAlignment.start
+                  : CrossAxisAlignment.end,
               children: [
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     gradient: isFromPartner
-                      ? LinearGradient(
-                          colors: [AppTheme.lightGrey.withValues(alpha: 0.5), AppTheme.lightGrey.withValues(alpha: 0.2)],
-                        )
-                      : const LinearGradient(
-                          colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
-                        ),
+                        ? LinearGradient(
+                            colors: [
+                              AppTheme.lightGrey.withValues(alpha: 0.5),
+                              AppTheme.lightGrey.withValues(alpha: 0.2),
+                            ],
+                          )
+                        : const LinearGradient(
+                            colors: [
+                              AppTheme.primaryRose,
+                              AppTheme.primaryPurple,
+                            ],
+                          ),
                     borderRadius: BorderRadius.only(
                       topLeft: const Radius.circular(20),
                       topRight: const Radius.circular(20),
-                      bottomLeft: isFromPartner ? const Radius.circular(4) : const Radius.circular(20),
-                      bottomRight: isFromPartner ? const Radius.circular(20) : const Radius.circular(4),
+                      bottomLeft: isFromPartner
+                          ? const Radius.circular(4)
+                          : const Radius.circular(20),
+                      bottomRight: isFromPartner
+                          ? const Radius.circular(20)
+                          : const Radius.circular(4),
                     ),
                   ),
                   child: Text(
                     message.content,
                     style: TextStyle(
-                      color: isFromPartner ? theme.colorScheme.onSurface : Colors.white,
+                      color: isFromPartner
+                          ? theme.colorScheme.onSurface
+                          : Colors.white,
                       fontSize: 14,
                     ),
                   ),
@@ -505,9 +538,9 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
       height: 32,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: isFromPartner 
-            ? [AppTheme.secondaryBlue, AppTheme.accentMint]
-            : [AppTheme.primaryRose, AppTheme.primaryPurple],
+          colors: isFromPartner
+              ? [AppTheme.secondaryBlue, AppTheme.accentMint]
+              : [AppTheme.primaryRose, AppTheme.primaryPurple],
         ),
         shape: BoxShape.circle,
         border: Border.all(color: theme.cardColor, width: 2),
@@ -530,7 +563,7 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
   String _formatTime(DateTime dateTime) {
     final now = DateTime.now();
     final difference = now.difference(dateTime);
-    
+
     if (difference.inMinutes < 1) {
       return 'now';
     } else if (difference.inHours < 1) {
@@ -545,7 +578,7 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
   String _formatMessageTime(DateTime dateTime) {
     final now = DateTime.now();
     final difference = now.difference(dateTime);
-    
+
     if (difference.inDays < 1) {
       return DateFormat('HH:mm').format(dateTime);
     } else if (difference.inDays < 7) {

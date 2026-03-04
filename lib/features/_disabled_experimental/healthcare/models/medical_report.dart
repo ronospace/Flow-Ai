@@ -156,7 +156,7 @@ class ReportSection {
         orElse: () => ReportSectionType.general,
       ),
       chartData: json['chartData'] as Map<String, dynamic>?,
-      images: json['images'] != null 
+      images: json['images'] != null
           ? List<String>.from(json['images'] as List)
           : null,
     );
@@ -223,11 +223,7 @@ class ClinicalInsight {
 }
 
 /// Insight severity levels
-enum InsightSeverity {
-  informational,
-  warning,
-  critical,
-}
+enum InsightSeverity { informational, warning, critical }
 
 /// Medical recommendation
 class MedicalRecommendation {
@@ -303,22 +299,14 @@ class MedicalRecommendation {
 }
 
 /// Recommendation priority levels
-enum RecommendationPriority {
-  low,
-  medium,
-  high,
-  urgent,
-}
+enum RecommendationPriority { low, medium, high, urgent }
 
 /// Date range for reports
 class DateRange {
   final DateTime start;
   final DateTime end;
 
-  const DateRange({
-    required this.start,
-    required this.end,
-  });
+  const DateRange({required this.start, required this.end});
 
   /// Duration of the range
   Duration get duration => end.difference(start);
@@ -328,10 +316,7 @@ class DateRange {
 
   /// Convert to JSON
   Map<String, dynamic> toJson() {
-    return {
-      'start': start.toIso8601String(),
-      'end': end.toIso8601String(),
-    };
+    return {'start': start.toIso8601String(), 'end': end.toIso8601String()};
   }
 
   /// Create from JSON

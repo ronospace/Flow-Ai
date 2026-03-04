@@ -53,7 +53,7 @@ class EnhancedOnboardingController extends ChangeNotifier {
 
       // Load any existing partial onboarding data
       await _loadExistingData();
-      
+
       _clearError();
     } catch (e) {
       _setError('Failed to initialize onboarding: $e');
@@ -69,8 +69,10 @@ class EnhancedOnboardingController extends ChangeNotifier {
       final cycleLength = _preferencesService.getAverageCycleLength();
       final periodLength = _preferencesService.getAveragePeriodLength();
       final trackingGoals = _preferencesService.getTrackingGoals();
-      
-      if (cycleLength != null || periodLength != null || trackingGoals.isNotEmpty) {
+
+      if (cycleLength != null ||
+          periodLength != null ||
+          trackingGoals.isNotEmpty) {
         _data = _data.copyWith(
           averageCycleLength: cycleLength,
           averagePeriodLength: periodLength,
@@ -116,7 +118,7 @@ class EnhancedOnboardingController extends ChangeNotifier {
     _setLoading(true);
     try {
       _data = personalData;
-      
+
       // Save to preferences service
       if (personalData.fullName != null) {
         await _preferencesService.setDisplayName(personalData.fullName!);
@@ -127,7 +129,7 @@ class EnhancedOnboardingController extends ChangeNotifier {
       if (personalData.dateOfBirth != null) {
         await _preferencesService.setDateOfBirth(personalData.dateOfBirth!);
       }
-      
+
       _clearError();
       nextStep();
     } catch (e) {
@@ -142,24 +144,32 @@ class EnhancedOnboardingController extends ChangeNotifier {
     _setLoading(true);
     try {
       _data = cycleData;
-      
+
       // Save cycle preferences
       if (cycleData.averageCycleLength != null) {
-        await _preferencesService.setAverageCycleLength(cycleData.averageCycleLength!);
+        await _preferencesService.setAverageCycleLength(
+          cycleData.averageCycleLength!,
+        );
       }
       if (cycleData.averagePeriodLength != null) {
-        await _preferencesService.setAveragePeriodLength(cycleData.averagePeriodLength!);
+        await _preferencesService.setAveragePeriodLength(
+          cycleData.averagePeriodLength!,
+        );
       }
       if (cycleData.lastPeriodDate != null) {
         await _preferencesService.setLastPeriodDate(cycleData.lastPeriodDate!);
       }
-      
+
       // Save tracking experience
-      await _preferencesService.setIsFirstTimeTracking(cycleData.isFirstTimeTracking);
+      await _preferencesService.setIsFirstTimeTracking(
+        cycleData.isFirstTimeTracking,
+      );
       if (cycleData.previousTrackingMethod != null) {
-        await _preferencesService.setPreviousTrackingMethod(cycleData.previousTrackingMethod!);
+        await _preferencesService.setPreviousTrackingMethod(
+          cycleData.previousTrackingMethod!,
+        );
       }
-      
+
       _clearError();
       nextStep();
     } catch (e) {
@@ -174,12 +184,14 @@ class EnhancedOnboardingController extends ChangeNotifier {
     _setLoading(true);
     try {
       _data = lifestyleData;
-      
+
       // Save lifestyle preferences
       if (lifestyleData.lifestyle != null) {
-        await _preferencesService.setLifestylePreferences(lifestyleData.lifestyle!.toJson());
+        await _preferencesService.setLifestylePreferences(
+          lifestyleData.lifestyle!.toJson(),
+        );
       }
-      
+
       _clearError();
       nextStep();
     } catch (e) {
@@ -194,12 +206,14 @@ class EnhancedOnboardingController extends ChangeNotifier {
     _setLoading(true);
     try {
       _data = goalsData;
-      
+
       // Save health goals
       if (goalsData.healthGoals != null) {
-        await _preferencesService.setHealthGoals(goalsData.healthGoals!.toJson());
+        await _preferencesService.setHealthGoals(
+          goalsData.healthGoals!.toJson(),
+        );
       }
-      
+
       _clearError();
       nextStep();
     } catch (e) {
@@ -210,11 +224,13 @@ class EnhancedOnboardingController extends ChangeNotifier {
   }
 
   /// Save notification preferences
-  Future<void> saveNotificationPreferences(OnboardingData notificationData) async {
+  Future<void> saveNotificationPreferences(
+    OnboardingData notificationData,
+  ) async {
     _setLoading(true);
     try {
       _data = notificationData;
-      
+
       // Request notification permissions if enabled
       if (notificationData.notificationPrefs?.enableNotifications == true) {
         final granted = await _notificationService.requestPermission();
@@ -222,14 +238,14 @@ class EnhancedOnboardingController extends ChangeNotifier {
           await _notificationService.initialize();
         }
       }
-      
+
       // Save notification preferences
       if (notificationData.notificationPrefs != null) {
         await _preferencesService.setNotificationPreferences(
           notificationData.notificationPrefs!.toJson(),
         );
       }
-      
+
       _clearError();
       nextStep();
     } catch (e) {
@@ -244,7 +260,7 @@ class EnhancedOnboardingController extends ChangeNotifier {
     _setLoading(true);
     try {
       _data = privacyData;
-      
+
       // Save privacy preferences
       await _preferencesService.setShareDataForResearch(
         privacyData.shareDataForResearch,
@@ -252,7 +268,7 @@ class EnhancedOnboardingController extends ChangeNotifier {
       await _preferencesService.setEnableAIInsights(
         privacyData.enableAIInsights,
       );
-      
+
       _clearError();
       nextStep();
     } catch (e) {
@@ -269,18 +285,18 @@ class EnhancedOnboardingController extends ChangeNotifier {
       // Mark onboarding as completed
       await _preferencesService.setOnboardingCompleted(true);
       await _preferencesService.setFirstLaunch(false);
-      
+
       // Save final onboarding data
       await _preferencesService.setOnboardingData(_data.toJson());
-      
+
       // Schedule welcome notification if notifications are enabled
       if (_data.notificationPrefs?.enableNotifications == true) {
         await _scheduleWelcomeNotification();
       }
-      
+
       // Initialize user tracking data based on collected information
       await _initializeUserTrackingData();
-      
+
       _clearError();
     } catch (e) {
       _setError('Failed to complete onboarding: $e');
@@ -299,12 +315,13 @@ class EnhancedOnboardingController extends ChangeNotifier {
         // This would integrate with the cycle tracking service
         // await _cycleTrackingService.createInitialCycle(_data.lastPeriodDate!);
       }
-      
+
       // Set up initial health goals and tracking preferences
       if (_data.healthGoals != null) {
-        await _preferencesService.setTrackingGoals(_getTrackingGoalsFromHealthGoals());
+        await _preferencesService.setTrackingGoals(
+          _getTrackingGoalsFromHealthGoals(),
+        );
       }
-      
     } catch (e) {
       debugPrint('Error initializing user tracking data: $e');
     }
@@ -314,7 +331,7 @@ class EnhancedOnboardingController extends ChangeNotifier {
   List<String> _getTrackingGoalsFromHealthGoals() {
     final goals = <String>[];
     final healthGoals = _data.healthGoals;
-    
+
     if (healthGoals?.trackCycleRegularity == true) {
       goals.add('cycle_regularity');
     }
@@ -333,7 +350,7 @@ class EnhancedOnboardingController extends ChangeNotifier {
     if (healthGoals?.monitorHealth == true) {
       goals.add('general_health');
     }
-    
+
     return goals;
   }
 
@@ -364,13 +381,13 @@ class EnhancedOnboardingController extends ChangeNotifier {
         enableAIInsights: true,
         shareDataForResearch: false,
       );
-      
+
       // Save basic preferences
       await _preferencesService.setAverageCycleLength(28);
       await _preferencesService.setAveragePeriodLength(5);
       await _preferencesService.setOnboardingCompleted(true);
       await _preferencesService.setFirstLaunch(false);
-      
+
       _clearError();
     } catch (e) {
       _setError('Failed to skip onboarding: $e');
@@ -386,7 +403,7 @@ class EnhancedOnboardingController extends ChangeNotifier {
     try {
       await _preferencesService.setOnboardingCompleted(false);
       await _preferencesService.setFirstLaunch(true);
-      
+
       _data = OnboardingData();
       _currentStep = 0;
       _clearError();
@@ -425,5 +442,4 @@ class EnhancedOnboardingController extends ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
   }
-
 }

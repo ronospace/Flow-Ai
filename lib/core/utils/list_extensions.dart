@@ -45,22 +45,22 @@ extension StringListExtensions on List<String> {
   /// Get most frequent element, returns null if empty
   String? mostFrequent() {
     if (isEmpty) return null;
-    
+
     final counts = <String, int>{};
     for (final item in this) {
       counts[item] = (counts[item] ?? 0) + 1;
     }
-    
+
     String? mostFrequent;
     int maxCount = 0;
-    
+
     counts.forEach((item, count) {
       if (count > maxCount) {
         maxCount = count;
         mostFrequent = item;
       }
     });
-    
+
     return mostFrequent;
   }
 }

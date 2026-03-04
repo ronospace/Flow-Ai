@@ -6,7 +6,8 @@ import '../utils/app_logger.dart';
 /// Production-ready analytics and monitoring service
 /// Tracks user behavior, app performance, and business metrics
 class ProductionAnalyticsService {
-  static final ProductionAnalyticsService _instance = ProductionAnalyticsService._internal();
+  static final ProductionAnalyticsService _instance =
+      ProductionAnalyticsService._internal();
   factory ProductionAnalyticsService() => _instance;
   ProductionAnalyticsService._internal();
 
@@ -29,22 +30,22 @@ class ProductionAnalyticsService {
       _prefs = await SharedPreferences.getInstance();
       _analyticsEnabled = _prefs?.getBool(_keyAnalyticsEnabled) ?? true;
       _userId = userId ?? _prefs?.getString(_keyUserId);
-      
+
       _sessionData = {
         'session_start': DateTime.now().toIso8601String(),
         'app_version': '2.0.0+2',
         'platform': defaultTargetPlatform.name,
         'session_id': _generateSessionId(),
       };
-      
+
       _isInitialized = true;
-      
+
       // Track app launch
       await trackEvent('app_launch', {
         'timestamp': DateTime.now().toIso8601String(),
         'cold_start': true,
       });
-      
+
       AppLogger.success('Production Analytics Service initialized');
     } catch (e) {
       AppLogger.error('Failed to initialize Production Analytics Service', e);
@@ -52,7 +53,10 @@ class ProductionAnalyticsService {
   }
 
   /// Track user events for analytics
-  Future<void> trackEvent(String eventName, Map<String, dynamic> properties) async {
+  Future<void> trackEvent(
+    String eventName,
+    Map<String, dynamic> properties,
+  ) async {
     if (!_analyticsEnabled || !_isInitialized) return;
 
     try {
@@ -65,7 +69,7 @@ class ProductionAnalyticsService {
       };
 
       await _storeEvent(event);
-      
+
       // In production, you would send this to your analytics service
       // For now, we'll log it for development
       if (kDebugMode) {
@@ -77,7 +81,10 @@ class ProductionAnalyticsService {
   }
 
   /// Track screen views
-  Future<void> trackScreenView(String screenName, {Map<String, dynamic>? properties}) async {
+  Future<void> trackScreenView(
+    String screenName, {
+    Map<String, dynamic>? properties,
+  }) async {
     await trackEvent('screen_view', {
       'screen_name': screenName,
       'timestamp': DateTime.now().toIso8601String(),
@@ -86,7 +93,10 @@ class ProductionAnalyticsService {
   }
 
   /// Track user actions
-  Future<void> trackUserAction(String action, {Map<String, dynamic>? context}) async {
+  Future<void> trackUserAction(
+    String action, {
+    Map<String, dynamic>? context,
+  }) async {
     await trackEvent('user_action', {
       'action': action,
       'timestamp': DateTime.now().toIso8601String(),
@@ -95,7 +105,11 @@ class ProductionAnalyticsService {
   }
 
   /// Track app performance metrics
-  Future<void> trackPerformanceMetric(String metricName, double value, {String? unit}) async {
+  Future<void> trackPerformanceMetric(
+    String metricName,
+    double value, {
+    String? unit,
+  }) async {
     await trackEvent('performance_metric', {
       'metric_name': metricName,
       'value': value,
@@ -105,7 +119,9 @@ class ProductionAnalyticsService {
   }
 
   /// Track errors and crashes
-  Future<void> trackError(String errorType, String errorMessage, {
+  Future<void> trackError(
+    String errorType,
+    String errorMessage, {
     String? stackTrace,
     Map<String, dynamic>? context,
   }) async {
@@ -128,7 +144,11 @@ class ProductionAnalyticsService {
   }
 
   /// Track user onboarding progress
-  Future<void> trackOnboardingStep(String stepName, bool completed, {int? stepNumber}) async {
+  Future<void> trackOnboardingStep(
+    String stepName,
+    bool completed, {
+    int? stepNumber,
+  }) async {
     await trackEvent('onboarding_step', {
       'step_name': stepName,
       'step_number': stepNumber,
@@ -138,7 +158,10 @@ class ProductionAnalyticsService {
   }
 
   /// Track feature usage
-  Future<void> trackFeatureUsage(String featureName, {Map<String, dynamic>? metadata}) async {
+  Future<void> trackFeatureUsage(
+    String featureName, {
+    Map<String, dynamic>? metadata,
+  }) async {
     await trackEvent('feature_usage', {
       'feature_name': featureName,
       'timestamp': DateTime.now().toIso8601String(),
@@ -159,7 +182,7 @@ class ProductionAnalyticsService {
     if (_sessionData.containsKey('session_start')) {
       final startTime = DateTime.parse(_sessionData['session_start']);
       final duration = DateTime.now().difference(startTime).inSeconds;
-      
+
       await trackEvent('session_end', {
         'session_duration_seconds': duration,
         'timestamp': DateTime.now().toIso8601String(),
@@ -185,7 +208,7 @@ class ProductionAnalyticsService {
   Future<void> setAnalyticsEnabled(bool enabled) async {
     _analyticsEnabled = enabled;
     await _prefs?.setBool(_keyAnalyticsEnabled, enabled);
-    
+
     await trackEvent('analytics_settings_changed', {
       'enabled': enabled,
       'timestamp': DateTime.now().toIso8601String(),
@@ -213,12 +236,12 @@ class ProductionAnalyticsService {
     try {
       final events = await _getStoredEvents();
       events.add(event);
-      
+
       // Keep only last 1000 events to prevent storage bloat
       if (events.length > 1000) {
         events.removeRange(0, events.length - 1000);
       }
-      
+
       await _prefs!.setString(_keyAppEvents, jsonEncode(events));
     } catch (e) {
       AppLogger.error('Failed to store analytics event', e);
@@ -232,7 +255,7 @@ class ProductionAnalyticsService {
     try {
       final eventsJson = _prefs!.getString(_keyAppEvents);
       if (eventsJson == null) return [];
-      
+
       final eventsList = jsonDecode(eventsJson) as List;
       return eventsList.cast<Map<String, dynamic>>();
     } catch (e) {
@@ -249,14 +272,18 @@ class ProductionAnalyticsService {
   /// Generate random string
   String _generateRandomString(int length) {
     const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    return List.generate(length, (index) => chars[(DateTime.now().millisecondsSinceEpoch + index) % chars.length]).join();
+    return List.generate(
+      length,
+      (index) =>
+          chars[(DateTime.now().millisecondsSinceEpoch + index) % chars.length],
+    ).join();
   }
 
   /// Clear all stored analytics data (for privacy compliance)
   Future<void> clearAnalyticsData() async {
     await _prefs?.remove(_keyAppEvents);
     await _prefs?.remove(_keySessionData);
-    
+
     AppLogger.info('Analytics data cleared');
   }
 
@@ -264,23 +291,31 @@ class ProductionAnalyticsService {
   Future<void> trackAppStart() => trackEvent('app_start', {});
   Future<void> trackAppBackground() => trackEvent('app_background', {});
   Future<void> trackAppForeground() => trackEvent('app_foreground', {});
-  
-  Future<void> trackUserLogin(String method) => trackEvent('user_login', {'method': method});
+
+  Future<void> trackUserLogin(String method) =>
+      trackEvent('user_login', {'method': method});
   Future<void> trackUserLogout() => trackEvent('user_logout', {});
-  Future<void> trackUserSignup(String method) => trackEvent('user_signup', {'method': method});
-  
+  Future<void> trackUserSignup(String method) =>
+      trackEvent('user_signup', {'method': method});
+
   Future<void> trackCycleAdded() => trackEvent('cycle_added', {});
-  Future<void> trackSymptomLogged(String symptom) => trackEvent('symptom_logged', {'symptom': symptom});
-  Future<void> trackAIPredictionViewed() => trackEvent('ai_prediction_viewed', {});
-  Future<void> trackSettingsChanged(String setting) => trackEvent('settings_changed', {'setting': setting});
+  Future<void> trackSymptomLogged(String symptom) =>
+      trackEvent('symptom_logged', {'symptom': symptom});
+  Future<void> trackAIPredictionViewed() =>
+      trackEvent('ai_prediction_viewed', {});
+  Future<void> trackSettingsChanged(String setting) =>
+      trackEvent('settings_changed', {'setting': setting});
 }
 
 /// Extension for easy analytics tracking
 extension AnalyticsTracker on Object {
-  Future<void> trackEvent(String eventName, [Map<String, dynamic>? properties]) async {
+  Future<void> trackEvent(
+    String eventName, [
+    Map<String, dynamic>? properties,
+  ]) async {
     await ProductionAnalyticsService().trackEvent(eventName, properties ?? {});
   }
-  
+
   Future<void> trackScreen(String screenName) async {
     await ProductionAnalyticsService().trackScreenView(screenName);
   }

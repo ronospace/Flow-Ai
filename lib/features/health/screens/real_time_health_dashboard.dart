@@ -19,13 +19,11 @@ import '../widgets/biometric_pulse_indicator.dart';
 class RealTimeHealthDashboard extends StatefulWidget {
   final UserProfile user;
 
-  const RealTimeHealthDashboard({
-    super.key,
-    required this.user,
-  });
+  const RealTimeHealthDashboard({super.key, required this.user});
 
   @override
-  State<RealTimeHealthDashboard> createState() => _RealTimeHealthDashboardState();
+  State<RealTimeHealthDashboard> createState() =>
+      _RealTimeHealthDashboardState();
 }
 
 class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
@@ -66,27 +64,20 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
       duration: const Duration(seconds: 2),
       vsync: this,
     );
-    
+
     _slideController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
     );
 
-    _pulseAnimation = Tween<double>(
-      begin: 0.8,
-      end: 1.2,
-    ).animate(CurvedAnimation(
-      parent: _pulseController,
-      curve: Curves.easeInOut,
-    ));
+    _pulseAnimation = Tween<double>(begin: 0.8, end: 1.2).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+    );
 
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 1),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _slideController,
-      curve: Curves.easeOutCubic,
-    ));
+    _slideAnimation = Tween<Offset>(begin: const Offset(0, 1), end: Offset.zero)
+        .animate(
+          CurvedAnimation(parent: _slideController, curve: Curves.easeOutCubic),
+        );
 
     _pulseController.repeat(reverse: true);
     _slideController.forward();
@@ -103,7 +94,9 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
       _biometricSubscription = AdvancedBiometricEngine.instance.biometricStream
           .listen(_onBiometricUpdate);
 
-      _performanceSubscription = PerformanceOptimizationEngine.instance.metricsStream
+      _performanceSubscription = PerformanceOptimizationEngine
+          .instance
+          .metricsStream
           .listen(_onPerformanceUpdate);
 
       // Generate initial health report
@@ -152,7 +145,8 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
 
   Future<void> _refreshBiometricData() async {
     try {
-      final snapshot = await AdvancedBiometricEngine.instance.getBiometricSnapshot(widget.user.id);
+      final snapshot = await AdvancedBiometricEngine.instance
+          .getBiometricSnapshot(widget.user.id);
       setState(() {
         _latestBiometrics = snapshot;
       });
@@ -165,13 +159,14 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
     try {
       // Get recent cycle data (placeholder - in real app would come from database)
       final mockCycleHistory = _generateMockCycleHistory();
-      
-      final report = await AdvancedHealthAnalytics.instance.generateHealthReport(
-        user: widget.user,
-        cycleHistory: mockCycleHistory,
-        currentPhase: 'follicular',
-        analysisDepth: 30,
-      );
+
+      final report = await AdvancedHealthAnalytics.instance
+          .generateHealthReport(
+            user: widget.user,
+            cycleHistory: mockCycleHistory,
+            currentPhase: 'follicular',
+            analysisDepth: 30,
+          );
 
       setState(() {
         _healthReport = report;
@@ -184,23 +179,30 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
   List<CycleData> _generateMockCycleHistory() {
     final random = math.Random();
     final cycles = <CycleData>[];
-    
+
     for (int i = 0; i < 6; i++) {
       final startDate = DateTime.now().subtract(Duration(days: 28 * (i + 1)));
-      cycles.add(CycleData(
-        id: 'cycle_$i',
-        userId: 'anonymous_user',
-        startDate: startDate,
-        cycleLength: 26 + random.nextInt(6), // 26-31 days
-        averageFlow: FlowIntensity.values[random.nextInt(FlowIntensity.values.length)],
-        dailyData: {},
-        symptoms: ['cramps', 'bloating', 'headache'].where((_) => random.nextBool()).toList(),
-        pain: 1.0 + random.nextDouble() * 4.0, // 1-5 scale
-        createdAt: startDate,
-        lastUpdated: startDate,
-      ));
+      cycles.add(
+        CycleData(
+          id: 'cycle_$i',
+          userId: 'anonymous_user',
+          startDate: startDate,
+          cycleLength: 26 + random.nextInt(6), // 26-31 days
+          averageFlow:
+              FlowIntensity.values[random.nextInt(FlowIntensity.values.length)],
+          dailyData: {},
+          symptoms: [
+            'cramps',
+            'bloating',
+            'headache',
+          ].where((_) => random.nextBool()).toList(),
+          pain: 1.0 + random.nextDouble() * 4.0, // 1-5 scale
+          createdAt: startDate,
+          lastUpdated: startDate,
+        ),
+      );
     }
-    
+
     return cycles;
   }
 
@@ -235,11 +237,7 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
                   ],
                 ),
               ),
-              child: const Icon(
-                Icons.favorite,
-                color: Colors.pink,
-                size: 40,
-              ),
+              child: const Icon(Icons.favorite, color: Colors.pink, size: 40),
             ),
           ),
           const SizedBox(height: 24),
@@ -254,10 +252,7 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
           const SizedBox(height: 8),
           const Text(
             'Connecting to biometric sensors...',
-            style: TextStyle(
-              color: Colors.white54,
-              fontSize: 14,
-            ),
+            style: TextStyle(color: Colors.white54, fontSize: 14),
           ),
         ],
       ),
@@ -301,20 +296,14 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
       flexibleSpace: FlexibleSpaceBar(
         title: const Text(
           'Health Dashboard',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         background: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [
-                Color(0xFF1D1E33),
-                Color(0xFF2A2D5A),
-              ],
+              colors: [Color(0xFF1D1E33), Color(0xFF2A2D5A)],
             ),
           ),
           child: _buildHeaderContent(),
@@ -371,7 +360,9 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
                       Text(
                         'Health Score: ${(_healthReport!.overallHealthScore * 100).round()}%',
                         style: TextStyle(
-                          color: _getHealthScoreColor(_healthReport!.overallHealthScore),
+                          color: _getHealthScoreColor(
+                            _healthReport!.overallHealthScore,
+                          ),
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                         ),
@@ -386,12 +377,16 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
             Row(
               children: [
                 BiometricPulseIndicator(
-                  value: _latestBiometrics!.fusedData['heart_rate']?.toDouble() ?? 75.0,
+                  value:
+                      _latestBiometrics!.fusedData['heart_rate']?.toDouble() ??
+                      75.0,
                   label: 'BPM',
                 ),
                 const SizedBox(width: 24),
                 BiometricPulseIndicator(
-                  value: _latestBiometrics!.fusedData['temperature']?.toDouble() ?? 36.5,
+                  value:
+                      _latestBiometrics!.fusedData['temperature']?.toDouble() ??
+                      36.5,
                   label: '°C',
                 ),
               ],
@@ -448,15 +443,14 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
           ],
         ),
         const SizedBox(height: 16),
-        if (_latestBiometrics != null)
-          _buildMetricsGrid(),
+        if (_latestBiometrics != null) _buildMetricsGrid(),
       ],
     );
   }
 
   Widget _buildMetricsGrid() {
     final biometrics = _latestBiometrics!;
-    
+
     return GridView.count(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -565,7 +559,7 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
 
   Widget _buildTimeRangeButton(String label, int hours) {
     final isSelected = _selectedTimeRange == hours;
-    
+
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -609,7 +603,7 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
 
   Widget _buildMetricChip(Map<String, dynamic> metric) {
     final isSelected = _selectedMetric == metric['key'];
-    
+
     return Padding(
       padding: const EdgeInsets.only(right: 12),
       child: GestureDetector(
@@ -622,7 +616,9 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           decoration: BoxDecoration(
-            color: isSelected ? Colors.pink.withValues(alpha: 0.1) : const Color(0xFF2A2D5A),
+            color: isSelected
+                ? Colors.pink.withValues(alpha: 0.1)
+                : const Color(0xFF2A2D5A),
             borderRadius: BorderRadius.circular(25),
             border: isSelected ? Border.all(color: Colors.pink) : null,
           ),
@@ -718,17 +714,19 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
     );
   }
 
-  Widget _buildPerformanceRow(String label, String value, double progress, Color color) {
+  Widget _buildPerformanceRow(
+    String label,
+    String value,
+    double progress,
+    Color color,
+  ) {
     return Row(
       children: [
         Expanded(
           flex: 2,
           child: Text(
             label,
-            style: const TextStyle(
-              color: Colors.white70,
-              fontSize: 14,
-            ),
+            style: const TextStyle(color: Colors.white70, fontSize: 14),
           ),
         ),
         Expanded(
@@ -780,8 +778,10 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
             children: [
               _buildAnalysisSection('Key Findings', _healthReport!.keyFindings),
               const SizedBox(height: 16),
-              _buildAnalysisSection('Recommendations', 
-                _healthReport!.recommendations.map((r) => r.action).toList()),
+              _buildAnalysisSection(
+                'Recommendations',
+                _healthReport!.recommendations.map((r) => r.action).toList(),
+              ),
               const SizedBox(height: 16),
               _buildAnalysisSection('Next Steps', _healthReport!.nextSteps),
             ],
@@ -804,27 +804,31 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
           ),
         ),
         const SizedBox(height: 8),
-        ...items.take(3).map((item) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                '• ',
-                style: TextStyle(color: Colors.pink, fontSize: 16),
-              ),
-              Expanded(
-                child: Text(
-                  item,
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14,
-                  ),
+        ...items
+            .take(3)
+            .map(
+              (item) => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      '• ',
+                      style: TextStyle(color: Colors.pink, fontSize: 16),
+                    ),
+                    Expanded(
+                      child: Text(
+                        item,
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        )),
+            ),
       ],
     );
   }
@@ -838,12 +842,12 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
   List<FlSpot> _generateTrendData() {
     final random = math.Random();
     final data = <FlSpot>[];
-    
+
     for (int i = 0; i < 20; i++) {
       final value = 50 + random.nextDouble() * 50 + math.sin(i * 0.3) * 10;
       data.add(FlSpot(i.toDouble(), value));
     }
-    
+
     return data;
   }
 
@@ -900,17 +904,22 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
     );
   }
 
-  Widget _buildSettingsTile(String title, String subtitle, IconData icon, VoidCallback onTap) {
+  Widget _buildSettingsTile(
+    String title,
+    String subtitle,
+    IconData icon,
+    VoidCallback onTap,
+  ) {
     return ListTile(
       leading: Icon(icon, color: Colors.pink),
       title: Text(
         title,
-        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w600,
+        ),
       ),
-      subtitle: Text(
-        subtitle,
-        style: const TextStyle(color: Colors.white54),
-      ),
+      subtitle: Text(subtitle, style: const TextStyle(color: Colors.white54)),
       onTap: onTap,
       contentPadding: EdgeInsets.zero,
     );
@@ -918,15 +927,12 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
 
   Future<void> _refreshAllData() async {
     _triggerHapticFeedback();
-    
+
     setState(() {
       _isLoading = true;
     });
 
-    await Future.wait([
-      _refreshBiometricData(),
-      _generateHealthReport(),
-    ]);
+    await Future.wait([_refreshBiometricData(), _generateHealthReport()]);
 
     setState(() {
       _isLoading = false;

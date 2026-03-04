@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 /// Basic user service for user management and session handling
 class UserService {
   static UserService? _instance;

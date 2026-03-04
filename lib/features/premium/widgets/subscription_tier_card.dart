@@ -25,7 +25,7 @@ class SubscriptionTierCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final plan = SubscriptionPlan.getPlanForTier(tier, billingCycle);
-    
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 24),
       child: Stack(
@@ -118,9 +118,9 @@ class SubscriptionTierCard extends StatelessWidget {
                       ),
                   ],
                 ),
-                
+
                 const SizedBox(height: 20),
-                
+
                 // Pricing
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -155,7 +155,7 @@ class SubscriptionTierCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                
+
                 if (billingCycle == SubscriptionBillingCycle.yearly)
                   Padding(
                     padding: const EdgeInsets.only(top: 8),
@@ -168,37 +168,39 @@ class SubscriptionTierCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                
+
                 const SizedBox(height: 24),
-                
+
                 // Features list
-                ...plan.features.map((feature) => Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(
-                        Icons.check_circle,
-                        size: 20,
-                        color: AppTheme.primaryPurple,
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          feature,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: AppTheme.textSecondary,
-                            height: 1.4,
+                ...plan.features.map(
+                  (feature) => Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.check_circle,
+                          size: 20,
+                          color: AppTheme.primaryPurple,
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            feature,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: AppTheme.textSecondary,
+                              height: 1.4,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                )),
-                
+                ),
+
                 const SizedBox(height: 24),
-                
+
                 // Subscribe button
                 SizedBox(
                   width: double.infinity,
@@ -219,8 +221,8 @@ class SubscriptionTierCard extends StatelessWidget {
                       isCurrentTier
                           ? 'Current Plan'
                           : tier == SubscriptionTier.basic
-                              ? 'Continue Free'
-                              : 'Subscribe Now',
+                          ? 'Continue Free'
+                          : 'Subscribe Now',
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -231,7 +233,7 @@ class SubscriptionTierCard extends StatelessWidget {
               ],
             ),
           ),
-          
+
           // Popular badge
           if (isPopular)
             Positioned(
@@ -258,11 +260,7 @@ class SubscriptionTierCard extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(
-                      Icons.star,
-                      size: 14,
-                      color: Colors.white,
-                    ),
+                    const Icon(Icons.star, size: 14, color: Colors.white),
                     const SizedBox(width: 4),
                     const Text(
                       'MOST POPULAR',

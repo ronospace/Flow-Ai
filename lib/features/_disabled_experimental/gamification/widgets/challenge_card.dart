@@ -57,7 +57,7 @@ class ChallengeCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 16),
-                    
+
                     // Title and Status
                     Expanded(
                       child: Column(
@@ -93,7 +93,7 @@ class ChallengeCard extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(width: 8),
-                              
+
                               // Difficulty Badge
                               Container(
                                 padding: const EdgeInsets.symmetric(
@@ -121,20 +121,17 @@ class ChallengeCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 // Description
                 Text(
                   challenge.description,
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 15,
-                  ),
+                  style: TextStyle(color: Colors.grey[600], fontSize: 15),
                 ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 // Progress Section (if joined)
                 if (challenge.hasJoined) ...[
                   Column(
@@ -165,22 +162,21 @@ class ChallengeCard extends StatelessWidget {
                       LinearProgressIndicator(
                         value: challenge.progressPercentage,
                         backgroundColor: Colors.grey[300],
-                        valueColor: AlwaysStoppedAnimation<Color>(challenge.primaryColor),
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          challenge.primaryColor,
+                        ),
                         minHeight: 6,
                       ),
                       const SizedBox(height: 4),
                       Text(
                         '${(challenge.progressPercentage * 100).toInt()}% completed',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey[600],
-                        ),
+                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                       ),
                     ],
                   ),
                   const SizedBox(height: 16),
                 ],
-                
+
                 // Time and Participants Info
                 Row(
                   children: [
@@ -193,34 +189,24 @@ class ChallengeCard extends StatelessWidget {
                     const SizedBox(width: 4),
                     Text(
                       '${challenge.participantCount} joined',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[600],
-                      ),
+                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                     ),
                     const SizedBox(width: 16),
-                    
+
                     // Time Remaining
-                    Icon(
-                      Icons.access_time,
-                      size: 16,
-                      color: Colors.grey[600],
-                    ),
+                    Icon(Icons.access_time, size: 16, color: Colors.grey[600]),
                     const SizedBox(width: 4),
                     Expanded(
                       child: Text(
                         challenge.timeRemainingText,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey[600],
-                        ),
+                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                       ),
                     ),
                   ],
                 ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 // Requirements (if any)
                 if (challenge.requirements.isNotEmpty) ...[
                   Text(
@@ -232,31 +218,29 @@ class ChallengeCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  ...challenge.requirements.map((req) => Padding(
-                    padding: const EdgeInsets.only(left: 8, bottom: 2),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.circle,
-                          size: 4,
-                          color: Colors.grey[600],
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            req,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[600],
+                  ...challenge.requirements.map(
+                    (req) => Padding(
+                      padding: const EdgeInsets.only(left: 8, bottom: 2),
+                      child: Row(
+                        children: [
+                          Icon(Icons.circle, size: 4, color: Colors.grey[600]),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              req,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[600],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  )),
+                  ),
                   const SizedBox(height: 16),
                 ],
-                
+
                 // Bottom Section - Rewards and Action
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -264,11 +248,7 @@ class ChallengeCard extends StatelessWidget {
                     // Rewards
                     Row(
                       children: [
-                        Icon(
-                          Icons.stars,
-                          size: 18,
-                          color: Colors.amber,
-                        ),
+                        Icon(Icons.stars, size: 18, color: Colors.amber),
                         const SizedBox(width: 4),
                         Text(
                           '${challenge.pointsReward} pts',
@@ -278,11 +258,7 @@ class ChallengeCard extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 12),
-                        Icon(
-                          Icons.trending_up,
-                          size: 18,
-                          color: Colors.blue,
-                        ),
+                        Icon(Icons.trending_up, size: 18, color: Colors.blue),
                         const SizedBox(width: 4),
                         Text(
                           '${challenge.xpReward} XP',
@@ -293,9 +269,11 @@ class ChallengeCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    
+
                     // Action Button
-                    if (!challenge.hasJoined && challenge.isOngoing && onJoin != null)
+                    if (!challenge.hasJoined &&
+                        challenge.isOngoing &&
+                        onJoin != null)
                       ElevatedButton(
                         onPressed: onJoin,
                         style: ElevatedButton.styleFrom(
@@ -326,10 +304,7 @@ class ChallengeCard extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: Colors.green.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: Colors.green,
-                            width: 1,
-                          ),
+                          border: Border.all(color: Colors.green, width: 1),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -366,11 +341,7 @@ class CompactChallengeCard extends StatelessWidget {
   final Challenge challenge;
   final VoidCallback? onTap;
 
-  const CompactChallengeCard({
-    super.key,
-    required this.challenge,
-    this.onTap,
-  });
+  const CompactChallengeCard({super.key, required this.challenge, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -436,9 +407,9 @@ class CompactChallengeCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                
+
                 const SizedBox(height: 12),
-                
+
                 // Title
                 Text(
                   challenge.title,
@@ -449,47 +420,39 @@ class CompactChallengeCard extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                
+
                 const SizedBox(height: 8),
-                
+
                 // Progress (if joined)
                 if (challenge.hasJoined) ...[
                   LinearProgressIndicator(
                     value: challenge.progressPercentage,
                     backgroundColor: Colors.grey[300],
-                    valueColor: AlwaysStoppedAnimation<Color>(challenge.primaryColor),
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      challenge.primaryColor,
+                    ),
                     minHeight: 4,
                   ),
                   const SizedBox(height: 4),
                   Text(
                     '${(challenge.progressPercentage * 100).toInt()}% completed',
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: Colors.grey[600],
-                    ),
+                    style: TextStyle(fontSize: 10, color: Colors.grey[600]),
                   ),
                   const SizedBox(height: 8),
                 ],
-                
+
                 // Time remaining
                 Text(
                   challenge.timeRemainingText,
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: Colors.grey[600],
-                  ),
+                  style: TextStyle(fontSize: 10, color: Colors.grey[600]),
                 ),
-                
+
                 const Spacer(),
-                
+
                 // Rewards
                 Row(
                   children: [
-                    Icon(
-                      Icons.stars,
-                      size: 12,
-                      color: Colors.amber,
-                    ),
+                    Icon(Icons.stars, size: 12, color: Colors.amber),
                     const SizedBox(width: 2),
                     Text(
                       '${challenge.pointsReward}',

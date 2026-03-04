@@ -7,24 +7,24 @@ class OnboardingData {
   String? preferredName;
   DateTime? dateOfBirth;
   int? age;
-  
+
   // Health & Cycle Information
   DateTime? lastPeriodDate;
   int? averageCycleLength;
   int? averagePeriodLength;
   List<String> symptoms;
   List<String> cycleIrregularities;
-  
+
   // Lifestyle Information
   LifestylePreferences? lifestyle;
   HealthGoals? healthGoals;
   NotificationPreferences? notificationPrefs;
-  
+
   // Experience & Background
   bool isFirstTimeTracking;
   String? previousTrackingMethod;
   List<String> healthConcerns;
-  
+
   // Privacy & Preferences
   bool shareDataForResearch;
   bool enableAIInsights;
@@ -81,25 +81,25 @@ class OnboardingData {
     return OnboardingData(
       fullName: json['fullName'],
       preferredName: json['preferredName'],
-      dateOfBirth: json['dateOfBirth'] != null 
-          ? DateTime.parse(json['dateOfBirth']) 
+      dateOfBirth: json['dateOfBirth'] != null
+          ? DateTime.parse(json['dateOfBirth'])
           : null,
       age: json['age'],
-      lastPeriodDate: json['lastPeriodDate'] != null 
-          ? DateTime.parse(json['lastPeriodDate']) 
+      lastPeriodDate: json['lastPeriodDate'] != null
+          ? DateTime.parse(json['lastPeriodDate'])
           : null,
       averageCycleLength: json['averageCycleLength'],
       averagePeriodLength: json['averagePeriodLength'],
       symptoms: List<String>.from(json['symptoms'] ?? []),
       cycleIrregularities: List<String>.from(json['cycleIrregularities'] ?? []),
-      lifestyle: json['lifestyle'] != null 
-          ? LifestylePreferences.fromJson(json['lifestyle']) 
+      lifestyle: json['lifestyle'] != null
+          ? LifestylePreferences.fromJson(json['lifestyle'])
           : null,
-      healthGoals: json['healthGoals'] != null 
-          ? HealthGoals.fromJson(json['healthGoals']) 
+      healthGoals: json['healthGoals'] != null
+          ? HealthGoals.fromJson(json['healthGoals'])
           : null,
-      notificationPrefs: json['notificationPrefs'] != null 
-          ? NotificationPreferences.fromJson(json['notificationPrefs']) 
+      notificationPrefs: json['notificationPrefs'] != null
+          ? NotificationPreferences.fromJson(json['notificationPrefs'])
           : null,
       isFirstTimeTracking: json['isFirstTimeTracking'] ?? true,
       previousTrackingMethod: json['previousTrackingMethod'],
@@ -146,7 +146,8 @@ class OnboardingData {
       healthGoals: healthGoals ?? this.healthGoals,
       notificationPrefs: notificationPrefs ?? this.notificationPrefs,
       isFirstTimeTracking: isFirstTimeTracking ?? this.isFirstTimeTracking,
-      previousTrackingMethod: previousTrackingMethod ?? this.previousTrackingMethod,
+      previousTrackingMethod:
+          previousTrackingMethod ?? this.previousTrackingMethod,
       healthConcerns: healthConcerns ?? this.healthConcerns,
       shareDataForResearch: shareDataForResearch ?? this.shareDataForResearch,
       enableAIInsights: enableAIInsights ?? this.enableAIInsights,
@@ -294,7 +295,7 @@ class NotificationPreferences {
       'symptomReminders': symptomReminders,
       'moodCheckIns': moodCheckIns,
       'healthTips': healthTips,
-      'reminderTime': reminderTime != null 
+      'reminderTime': reminderTime != null
           ? {'hour': reminderTime!.hour, 'minute': reminderTime!.minute}
           : null,
       'daysBeforePeriod': daysBeforePeriod,
@@ -310,14 +311,16 @@ class NotificationPreferences {
       symptomReminders: json['symptomReminders'] ?? true,
       moodCheckIns: json['moodCheckIns'] ?? true,
       healthTips: json['healthTips'] ?? true,
-      reminderTime: json['reminderTime'] != null 
+      reminderTime: json['reminderTime'] != null
           ? TimeOfDay(
               hour: json['reminderTime']['hour'],
               minute: json['reminderTime']['minute'],
             )
           : null,
       daysBeforePeriod: json['daysBeforePeriod'] ?? 3,
-      weeklyReminderDays: List<int>.from(json['weeklyReminderDays'] ?? [1, 3, 5]),
+      weeklyReminderDays: List<int>.from(
+        json['weeklyReminderDays'] ?? [1, 3, 5],
+      ),
     );
   }
 }

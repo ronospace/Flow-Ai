@@ -18,27 +18,11 @@ enum DataLoadStrategy {
   hybrid, // Combination approach
 }
 
-enum MemoryPressureLevel {
-  normal,
-  moderate,
-  high,
-  critical,
-}
+enum MemoryPressureLevel { normal, moderate, high, critical }
 
-enum OptimizationLevel {
-  minimal,
-  balanced,
-  aggressive,
-  maximum,
-}
+enum OptimizationLevel { minimal, balanced, aggressive, maximum }
 
-enum CompressionType {
-  none,
-  gzip,
-  lz4,
-  snappy,
-  brotli,
-}
+enum CompressionType { none, gzip, lz4, snappy, brotli }
 
 enum DatabaseOptimization {
   indexing,
@@ -106,7 +90,9 @@ class CacheEntry<T> {
       key: json['key'],
       data: data,
       createdAt: DateTime.parse(json['created_at']),
-      expiresAt: json['expires_at'] != null ? DateTime.parse(json['expires_at']) : null,
+      expiresAt: json['expires_at'] != null
+          ? DateTime.parse(json['expires_at'])
+          : null,
       accessCount: json['access_count'] ?? 1,
       lastAccessedAt: DateTime.parse(json['last_accessed_at']),
       sizeBytes: json['size_bytes'],
@@ -156,7 +142,9 @@ class CacheConfiguration {
     return CacheConfiguration(
       maxMemoryUsageBytes: json['max_memory_usage_bytes'] ?? 50 * 1024 * 1024,
       maxItemCount: json['max_item_count'] ?? 10000,
-      defaultTtl: Duration(milliseconds: json['default_ttl_ms'] ?? 6 * 60 * 60 * 1000),
+      defaultTtl: Duration(
+        milliseconds: json['default_ttl_ms'] ?? 6 * 60 * 60 * 1000,
+      ),
       strategy: CacheStrategy.values.firstWhere(
         (e) => e.name == json['strategy'],
         orElse: () => CacheStrategy.lru,
@@ -615,7 +603,8 @@ class MemoryPool<T> {
     required this.maxSize,
     required T Function() factory,
     void Function(T)? resetFunction,
-  }) : _factory = factory, _resetFunction = resetFunction;
+  }) : _factory = factory,
+       _resetFunction = resetFunction;
 
   T acquire() {
     if (_available.isNotEmpty) {

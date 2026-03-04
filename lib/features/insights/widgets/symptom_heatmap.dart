@@ -18,7 +18,7 @@ class SymptomHeatmap extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final filteredData = _getFilteredData();
-    
+
     if (filteredData.isEmpty) {
       return _buildEmptyState(context);
     }
@@ -79,9 +79,9 @@ class SymptomHeatmap extends StatelessWidget {
               ),
             ],
           ),
-          
+
           const SizedBox(height: 20),
-          
+
           // Heatmap
           if (symptoms.isNotEmpty) ...[
             // Legend
@@ -108,17 +108,19 @@ class SymptomHeatmap extends StatelessWidget {
                 }),
               ],
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Symptom grid
             ...symptoms.take(8).map((symptom) {
               final intensities = symptomData[symptom]!;
-              return Padding(padding: const EdgeInsets.only(bottom: 12),
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 12),
                 child: Row(
                   children: [
                     // Symptom label
-                    SizedBox(width: 100,
+                    SizedBox(
+                      width: 100,
                       child: Text(
                         symptom,
                         style: TextStyle(
@@ -129,54 +131,67 @@ class SymptomHeatmap extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    
+
                     const SizedBox(width: 12),
-                    
+
                     // Intensity cells
                     Expanded(
                       child: Row(
-                        children: intensities.take(28).toList().asMap().entries.map((entry) {
-                          final intensity = entry.value;
-                          return Expanded(
-                            child: Container(
-                              margin: const EdgeInsets.only(right: 1),
-                              height: 20,
-                              decoration: BoxDecoration(
-                                color: _getIntensityColor(intensity),
-                                borderRadius: BorderRadius.circular(2),
-                              ),
-                              child: intensity > 0 
-                                  ? Center(
-                                      child: Text(
-                                        intensity.toInt().toString(),
-                                        style: TextStyle(
-                                          color: intensity > 0.5 ? Colors.white : theme.colorScheme.onSurface,
-                                          fontSize: 8,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    )
-                                  : null,
-                            ),
-                          );
-                        }).toList(),
+                        children: intensities
+                            .take(28)
+                            .toList()
+                            .asMap()
+                            .entries
+                            .map((entry) {
+                              final intensity = entry.value;
+                              return Expanded(
+                                child: Container(
+                                  margin: const EdgeInsets.only(right: 1),
+                                  height: 20,
+                                  decoration: BoxDecoration(
+                                    color: _getIntensityColor(intensity),
+                                    borderRadius: BorderRadius.circular(2),
+                                  ),
+                                  child: intensity > 0
+                                      ? Center(
+                                          child: Text(
+                                            intensity.toInt().toString(),
+                                            style: TextStyle(
+                                              color: intensity > 0.5
+                                                  ? Colors.white
+                                                  : theme.colorScheme.onSurface,
+                                              fontSize: 8,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        )
+                                      : null,
+                                ),
+                              );
+                            })
+                            .toList(),
                       ),
                     ),
-                    
+
                     const SizedBox(width: 8),
-                    
+
                     // Average intensity
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
-                        color: _getIntensityColor(_getAverageIntensity(intensities)),
+                        color: _getIntensityColor(
+                          _getAverageIntensity(intensities),
+                        ),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
                         _getAverageIntensity(intensities).toStringAsFixed(1),
                         style: TextStyle(
-                          color: _getAverageIntensity(intensities) > 0.5 
-                              ? Colors.white 
+                          color: _getAverageIntensity(intensities) > 0.5
+                              ? Colors.white
                               : theme.colorScheme.onSurface,
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
@@ -188,14 +203,16 @@ class SymptomHeatmap extends StatelessWidget {
               );
             }),
           ],
-          
+
           const SizedBox(height: 20),
-          
+
           // Insights
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+              color: theme.colorScheme.surfaceContainerHighest.withValues(
+                alpha: 0.3,
+              ),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(
@@ -212,7 +229,8 @@ class SymptomHeatmap extends StatelessWidget {
                 ...symptoms.take(3).map((symptom) {
                   final intensities = symptomData[symptom]!;
                   final pattern = _analyzePattern(intensities);
-                  return Padding(padding: const EdgeInsets.only(bottom: 4),
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 4),
                     child: Row(
                       children: [
                         Icon(
@@ -225,7 +243,9 @@ class SymptomHeatmap extends StatelessWidget {
                           child: Text(
                             '$symptom: ${_getPatternDescription(pattern)}',
                             style: TextStyle(
-                              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                              color: theme.colorScheme.onSurface.withValues(
+                                alpha: 0.7,
+                              ),
                               fontSize: 12,
                             ),
                           ),
@@ -330,7 +350,7 @@ class SymptomHeatmap extends StatelessWidget {
     ];
 
     final Map<String, List<double>> symptomData = {};
-    
+
     for (final symptom in symptoms) {
       symptomData[symptom] = _generateSymptomPattern(symptom, data.length * 28);
     }
@@ -340,7 +360,7 @@ class SymptomHeatmap extends StatelessWidget {
 
   List<double> _generateSymptomPattern(String symptom, int totalDays) {
     final pattern = <double>[];
-    
+
     for (int day = 0; day < totalDays.clamp(0, 28); day++) {
       final cycleDay = day % 28 + 1;
       double intensity = 0;
@@ -385,7 +405,7 @@ class SymptomHeatmap extends StatelessWidget {
 
   Color _getIntensityColor(double intensity) {
     if (intensity <= 0) return AppTheme.lightGrey;
-    
+
     final colors = [
       AppTheme.lightGrey,
       AppTheme.primaryRose.withValues(alpha: 0.2),
@@ -394,7 +414,7 @@ class SymptomHeatmap extends StatelessWidget {
       AppTheme.primaryRose.withValues(alpha: 0.8),
       AppTheme.primaryRose,
     ];
-    
+
     final index = (intensity * (colors.length - 1)).round();
     return colors[index.clamp(0, colors.length - 1)];
   }
@@ -403,29 +423,33 @@ class SymptomHeatmap extends StatelessWidget {
     if (intensities.isEmpty) return 0;
     final nonZeroIntensities = intensities.where((i) => i > 0).toList();
     if (nonZeroIntensities.isEmpty) return 0;
-    return nonZeroIntensities.reduce((a, b) => a + b) / nonZeroIntensities.length;
+    return nonZeroIntensities.reduce((a, b) => a + b) /
+        nonZeroIntensities.length;
   }
 
   String _analyzePattern(List<double> intensities) {
     final nonZeroCount = intensities.where((i) => i > 0).length;
     final totalDays = intensities.length;
-    
+
     if (nonZeroCount == 0) return 'None';
-    
+
     final frequency = nonZeroCount / totalDays;
-    
+
     // Check for menstrual phase pattern (first 5-7 days)
     final menstrualPhase = intensities.take(7).where((i) => i > 0).length;
     if (menstrualPhase >= 4) return 'Menstrual';
-    
+
     // Check for luteal phase pattern (last 10-14 days)
-    final lutealPhase = intensities.skip(intensities.length - 14).where((i) => i > 0).length;
+    final lutealPhase = intensities
+        .skip(intensities.length - 14)
+        .where((i) => i > 0)
+        .length;
     if (lutealPhase >= 7) return 'Luteal';
-    
+
     // Check for ovulation pattern (mid-cycle)
     final midCycle = intensities.skip(10).take(8).where((i) => i > 0).length;
     if (midCycle >= 3) return 'Ovulation';
-    
+
     if (frequency > 0.5) return 'Frequent';
     if (frequency > 0.2) return 'Moderate';
     return 'Occasional';

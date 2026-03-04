@@ -31,7 +31,7 @@ enum FeatureStatus {
   comingSoon('Coming Soon', Color(0xFF66BB6A));
 
   const FeatureStatus(this.displayName, this.color);
-  
+
   final String displayName;
   final Color color;
 }

@@ -24,26 +24,26 @@ class SettingsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final effectivePadding = padding ?? const EdgeInsets.symmetric(horizontal: 20, vertical: 16);
-    
+    final effectivePadding =
+        padding ?? const EdgeInsets.symmetric(horizontal: 20, vertical: 16);
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: enabled ? () {
-          HapticFeedback.lightImpact();
-          onTap?.call();
-        } : null,
+        onTap: enabled
+            ? () {
+                HapticFeedback.lightImpact();
+                onTap?.call();
+              }
+            : null,
         child: Opacity(
           opacity: enabled ? 1.0 : 0.5,
           child: Padding(
             padding: effectivePadding,
             child: Row(
               children: [
-                if (leading != null) ...[
-                  leading!,
-                  const SizedBox(width: 16),
-                ],
-                
+                if (leading != null) ...[leading!, const SizedBox(width: 16)],
+
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,18 +62,17 @@ class SettingsTile extends StatelessWidget {
                           subtitle!,
                           style: TextStyle(
                             fontSize: 14,
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                            color: theme.colorScheme.onSurface.withValues(
+                              alpha: 0.7,
+                            ),
                           ),
                         ),
                       ],
                     ],
                   ),
                 ),
-                
-                if (trailing != null) ...[
-                  const SizedBox(width: 16),
-                  trailing!,
-                ],
+
+                if (trailing != null) ...[const SizedBox(width: 16), trailing!],
               ],
             ),
           ),

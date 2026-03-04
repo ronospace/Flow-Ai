@@ -38,7 +38,7 @@ class ExpertVerification {
   bool get isApproved => status == VerificationStatus.approved;
   bool get isRejected => status == VerificationStatus.rejected;
   bool get isComplete => documents.isNotEmpty && applicantInfo.isComplete;
-  
+
   /// Get days since submission
   int get daysSinceSubmission => timeSinceSubmission.inDays;
 
@@ -108,7 +108,8 @@ class ExpertVerification {
     }
   }
 
-  factory ExpertVerification.fromJson(Map<String, dynamic> json) => _$ExpertVerificationFromJson(json);
+  factory ExpertVerification.fromJson(Map<String, dynamic> json) =>
+      _$ExpertVerificationFromJson(json);
   Map<String, dynamic> toJson() => _$ExpertVerificationToJson(this);
 }
 
@@ -150,12 +151,12 @@ class ExpertApplicantInfo {
   /// Check if basic information is complete
   bool get isComplete {
     return fullName.isNotEmpty &&
-           email.isNotEmpty &&
-           specialty.isNotEmpty &&
-           licenseNumber.isNotEmpty &&
-           institution.isNotEmpty &&
-           credentials.isNotEmpty &&
-           bio.length >= 100; // Minimum bio length
+        email.isNotEmpty &&
+        specialty.isNotEmpty &&
+        licenseNumber.isNotEmpty &&
+        institution.isNotEmpty &&
+        credentials.isNotEmpty &&
+        bio.length >= 100; // Minimum bio length
   }
 
   /// Check if specialty is emergency-related
@@ -164,10 +165,11 @@ class ExpertApplicantInfo {
       'Emergency Medicine',
       'Critical Care',
       'Trauma Surgery',
-      'Emergency Obstetrics'
+      'Emergency Obstetrics',
     ];
-    return emergencySpecialties.any((spec) => 
-        specialty.toLowerCase().contains(spec.toLowerCase()));
+    return emergencySpecialties.any(
+      (spec) => specialty.toLowerCase().contains(spec.toLowerCase()),
+    );
   }
 
   /// Check if specialty is high-demand
@@ -177,10 +179,11 @@ class ExpertApplicantInfo {
       'Gynecology',
       'Reproductive Endocrinology',
       'Maternal-Fetal Medicine',
-      'Endocrinology'
+      'Endocrinology',
     ];
-    return highDemandSpecialties.any((spec) => 
-        specialty.toLowerCase().contains(spec.toLowerCase()));
+    return highDemandSpecialties.any(
+      (spec) => specialty.toLowerCase().contains(spec.toLowerCase()),
+    );
   }
 
   /// Get formatted credentials string
@@ -191,7 +194,7 @@ class ExpertApplicantInfo {
   /// Get experience level description
   String get experienceLevel {
     if (yearsOfExperience == null) return 'Not specified';
-    
+
     final years = yearsOfExperience!;
     if (years < 5) return 'Early Career (< 5 years)';
     if (years < 10) return 'Experienced (5-10 years)';
@@ -199,7 +202,8 @@ class ExpertApplicantInfo {
     return 'Veteran (20+ years)';
   }
 
-  factory ExpertApplicantInfo.fromJson(Map<String, dynamic> json) => _$ExpertApplicantInfoFromJson(json);
+  factory ExpertApplicantInfo.fromJson(Map<String, dynamic> json) =>
+      _$ExpertApplicantInfoFromJson(json);
   Map<String, dynamic> toJson() => _$ExpertApplicantInfoToJson(this);
 }
 
@@ -235,19 +239,43 @@ class ExpertVerificationDocument {
   /// Check if document needs review
   bool get needsReview => status == DocumentStatus.pending;
 
-  factory ExpertVerificationDocument.fromJson(Map<String, dynamic> json) => 
+  factory ExpertVerificationDocument.fromJson(Map<String, dynamic> json) =>
       _$ExpertVerificationDocumentFromJson(json);
   Map<String, dynamic> toJson() => _$ExpertVerificationDocumentToJson(this);
 }
 
 /// Document Types for verification
 enum DocumentType {
-  medicalLicense('Medical License', 'Current medical license or registration', true),
-  educationCertificate('Education Certificate', 'Medical degree or relevant certification', true),
-  professionalPhoto('Professional Photo', 'Professional headshot for profile', true),
-  boardCertification('Board Certification', 'Specialty board certification', false),
-  malpracticeInsurance('Malpractice Insurance', 'Professional liability insurance', false),
-  hospitalAffiliation('Hospital Affiliation', 'Hospital or clinic affiliation letter', false),
+  medicalLicense(
+    'Medical License',
+    'Current medical license or registration',
+    true,
+  ),
+  educationCertificate(
+    'Education Certificate',
+    'Medical degree or relevant certification',
+    true,
+  ),
+  professionalPhoto(
+    'Professional Photo',
+    'Professional headshot for profile',
+    true,
+  ),
+  boardCertification(
+    'Board Certification',
+    'Specialty board certification',
+    false,
+  ),
+  malpracticeInsurance(
+    'Malpractice Insurance',
+    'Professional liability insurance',
+    false,
+  ),
+  hospitalAffiliation(
+    'Hospital Affiliation',
+    'Hospital or clinic affiliation letter',
+    false,
+  ),
   cv('Curriculum Vitae', 'Current CV or resume', false),
   referenceLetters('Reference Letters', 'Professional references', false);
 
@@ -390,7 +418,8 @@ class VerificationNote {
     this.isInternal = true,
   });
 
-  factory VerificationNote.fromJson(Map<String, dynamic> json) => _$VerificationNoteFromJson(json);
+  factory VerificationNote.fromJson(Map<String, dynamic> json) =>
+      _$VerificationNoteFromJson(json);
   Map<String, dynamic> toJson() => _$VerificationNoteToJson(this);
 }
 
@@ -430,7 +459,11 @@ class VerificationScore {
   });
 
   /// Get total verification score
-  int get totalScore => credentialsScore + experienceScore + documentationScore + professionalismScore;
+  int get totalScore =>
+      credentialsScore +
+      experienceScore +
+      documentationScore +
+      professionalismScore;
 
   /// Get score percentage
   double get scorePercentage => totalScore / 100.0;
@@ -446,14 +479,23 @@ class VerificationScore {
   /// Check if score meets minimum requirements
   bool get meetsMinimumRequirements => totalScore >= 70;
 
-  factory VerificationScore.fromJson(Map<String, dynamic> json) => _$VerificationScoreFromJson(json);
+  factory VerificationScore.fromJson(Map<String, dynamic> json) =>
+      _$VerificationScoreFromJson(json);
   Map<String, dynamic> toJson() => _$VerificationScoreToJson(this);
 }
 
 /// Verification Grades
 enum VerificationGrade {
-  excellent('Excellent', 'Outstanding credentials and documentation', 0xFF4CAF50),
-  good('Good', 'Strong credentials with minor improvements possible', 0xFF8BC34A),
+  excellent(
+    'Excellent',
+    'Outstanding credentials and documentation',
+    0xFF4CAF50,
+  ),
+  good(
+    'Good',
+    'Strong credentials with minor improvements possible',
+    0xFF8BC34A,
+  ),
   satisfactory('Satisfactory', 'Meets basic requirements', 0xFFFF9800),
   needsImprovement('Needs Improvement', 'Below minimum standards', 0xFFF44336);
 
@@ -500,7 +542,7 @@ class VerificationChecklistItem {
     this.notes,
   });
 
-  factory VerificationChecklistItem.fromJson(Map<String, dynamic> json) => 
+  factory VerificationChecklistItem.fromJson(Map<String, dynamic> json) =>
       _$VerificationChecklistItemFromJson(json);
   Map<String, dynamic> toJson() => _$VerificationChecklistItemToJson(this);
 }

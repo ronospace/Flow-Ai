@@ -34,16 +34,10 @@ enum HealthInsightType {
   cycleIrregularity,
   symptomPattern,
   lifestyleRecommendation,
-  preventiveCare
+  preventiveCare,
 }
 
-enum HealthInsightSeverity {
-  info,
-  low,
-  moderate,
-  high,
-  critical
-}
+enum HealthInsightSeverity { info, low, moderate, high, critical }
 
 class MedicalRiskAssessment {
   final String conditionName;
@@ -69,13 +63,7 @@ class MedicalRiskAssessment {
   });
 }
 
-enum RiskLevel {
-  minimal,
-  low,
-  moderate,
-  high,
-  critical
-}
+enum RiskLevel { minimal, low, moderate, high, critical }
 
 class FertilityInsight {
   final double fertilityScore; // 0-1 scale
@@ -95,12 +83,7 @@ class FertilityInsight {
   });
 }
 
-enum FertilityStatus {
-  optimal,
-  good,
-  concernsDetected,
-  requiresAttention
-}
+enum FertilityStatus { optimal, good, concernsDetected, requiresAttention }
 
 class HormonalAnalysis {
   final Map<String, HormoneLevel> hormoneLevels;
@@ -132,19 +115,9 @@ class HormoneLevel {
   });
 }
 
-enum HormoneLevelStatus {
-  low,
-  normal,
-  elevated,
-  fluctuating
-}
+enum HormoneLevelStatus { low, normal, elevated, fluctuating }
 
-enum HormonalPhase {
-  menstrual,
-  follicular,
-  ovulatory,
-  luteal
-}
+enum HormonalPhase { menstrual, follicular, ovulatory, luteal }
 
 class SymptomPatternInsight {
   final String patternType;
@@ -166,7 +139,7 @@ class SymptomPatternInsight {
 
 class CycleQualityAssessment {
   final double regularityScore; // 0-1 scale
-  final double symptomScore; // 0-1 scale  
+  final double symptomScore; // 0-1 scale
   final double overallHealthScore; // 0-1 scale
   final CycleQualityStatus status;
   final List<String> strengthAreas;
@@ -184,12 +157,7 @@ class CycleQualityAssessment {
   });
 }
 
-enum CycleQualityStatus {
-  excellent,
-  good,
-  fair,
-  needsAttention
-}
+enum CycleQualityStatus { excellent, good, fair, needsAttention }
 
 class LifestyleImpactAnalysis {
   final Map<String, double> lifestyleFactors;

@@ -3,19 +3,19 @@ import '../../../core/services/analytics_service.dart';
 
 class AnalyticsProvider extends ChangeNotifier {
   final AnalyticsService _analyticsService = AnalyticsService.instance;
-  
+
   // State
   bool _isLoading = false;
   DateTime? _startDate;
   DateTime? _endDate;
-  
+
   // Analytics data
   CycleAnalytics? _cycleAnalytics;
   HealthAnalytics? _healthAnalytics;
   PredictionAnalytics? _predictionAnalytics;
   TrendAnalytics? _trendAnalytics;
   List<PersonalizedRecommendation> _recommendations = [];
-  
+
   // Getters
   bool get isLoading => _isLoading;
   DateTime? get startDate => _startDate;
@@ -25,7 +25,7 @@ class AnalyticsProvider extends ChangeNotifier {
   PredictionAnalytics? get predictionAnalytics => _predictionAnalytics;
   TrendAnalytics? get trendAnalytics => _trendAnalytics;
   List<PersonalizedRecommendation> get recommendations => _recommendations;
-  
+
   // Load all analytics data
   Future<void> loadAllAnalytics() async {
     _setLoading(true);
@@ -43,7 +43,7 @@ class AnalyticsProvider extends ChangeNotifier {
       _setLoading(false);
     }
   }
-  
+
   // Load cycle analytics
   Future<void> loadCycleAnalytics() async {
     try {
@@ -56,7 +56,7 @@ class AnalyticsProvider extends ChangeNotifier {
       debugPrint('Error loading cycle analytics: $e');
     }
   }
-  
+
   // Load health analytics
   Future<void> loadHealthAnalytics() async {
     try {
@@ -69,7 +69,7 @@ class AnalyticsProvider extends ChangeNotifier {
       debugPrint('Error loading health analytics: $e');
     }
   }
-  
+
   // Load prediction analytics
   Future<void> loadPredictionAnalytics() async {
     try {
@@ -79,7 +79,7 @@ class AnalyticsProvider extends ChangeNotifier {
       debugPrint('Error loading prediction analytics: $e');
     }
   }
-  
+
   // Load trend analytics
   Future<void> loadTrendAnalytics() async {
     try {
@@ -92,29 +92,30 @@ class AnalyticsProvider extends ChangeNotifier {
       debugPrint('Error loading trend analytics: $e');
     }
   }
-  
+
   // Load personalized recommendations
   Future<void> loadRecommendations() async {
     try {
-      _recommendations = await _analyticsService.getPersonalizedRecommendations();
+      _recommendations = await _analyticsService
+          .getPersonalizedRecommendations();
       notifyListeners();
     } catch (e) {
       debugPrint('Error loading recommendations: $e');
     }
   }
-  
+
   // Set time range for analytics
   void setTimeRange(DateTime? startDate, DateTime? endDate) {
     _startDate = startDate;
     _endDate = endDate;
     loadAllAnalytics();
   }
-  
+
   // Refresh analytics data
   Future<void> refresh() async {
     await loadAllAnalytics();
   }
-  
+
   // Clear analytics data
   void clearData() {
     _cycleAnalytics = null;
@@ -124,7 +125,7 @@ class AnalyticsProvider extends ChangeNotifier {
     _recommendations = [];
     notifyListeners();
   }
-  
+
   // Get analytics summary
   Map<String, dynamic> getAnalyticsSummary() {
     return {
@@ -136,22 +137,22 @@ class AnalyticsProvider extends ChangeNotifier {
       'lastUpdated': DateTime.now(),
     };
   }
-  
+
   // Get trend direction for specific metric
   TrendDirection? getTrendDirection(String metric) {
     final trends = _trendAnalytics?.trends;
     if (trends == null) return null;
     return trends[metric]?.direction;
   }
-  
+
   // Check if analytics data is available
   bool get hasData {
-    return _cycleAnalytics != null || 
-           _healthAnalytics != null || 
-           _predictionAnalytics != null || 
-           _trendAnalytics != null;
+    return _cycleAnalytics != null ||
+        _healthAnalytics != null ||
+        _predictionAnalytics != null ||
+        _trendAnalytics != null;
   }
-  
+
   // Get insights count
   int get insightsCount {
     int count = 0;
@@ -161,7 +162,7 @@ class AnalyticsProvider extends ChangeNotifier {
     if (_trendAnalytics != null) count++;
     return count;
   }
-  
+
   void _setLoading(bool loading) {
     _isLoading = loading;
     notifyListeners();

@@ -9,18 +9,11 @@ enum CyclePhase {
   ovulatory,
   ovulation, // Alias for ovulatory
   luteal,
-  preMenstrual
+  preMenstrual,
 }
 
 /// Flow intensity levels
-enum FlowIntensity {
-  none,
-  spotting,
-  light,
-  medium,
-  heavy,
-  veryHeavy
-}
+enum FlowIntensity { none, spotting, light, medium, heavy, veryHeavy }
 
 /// Cycle data model
 @JsonSerializable()
@@ -45,9 +38,10 @@ class CycleData {
     required this.updatedAt,
   });
 
-  factory CycleData.fromJson(Map<String, dynamic> json) => _$CycleDataFromJson(json);
+  factory CycleData.fromJson(Map<String, dynamic> json) =>
+      _$CycleDataFromJson(json);
   Map<String, dynamic> toJson() => _$CycleDataToJson(this);
-  
+
   /// Create a copy with updated fields
   CycleData copyWith({
     String? id,
@@ -95,7 +89,8 @@ class DailyData {
     this.additionalData = const {},
   });
 
-  factory DailyData.fromJson(Map<String, dynamic> json) => _$DailyDataFromJson(json);
+  factory DailyData.fromJson(Map<String, dynamic> json) =>
+      _$DailyDataFromJson(json);
   Map<String, dynamic> toJson() => _$DailyDataToJson(this);
 }
 
@@ -116,9 +111,10 @@ class CycleSettings {
     this.customSettings = const {},
   });
 
-  factory CycleSettings.fromJson(Map<String, dynamic> json) => _$CycleSettingsFromJson(json);
+  factory CycleSettings.fromJson(Map<String, dynamic> json) =>
+      _$CycleSettingsFromJson(json);
   Map<String, dynamic> toJson() => _$CycleSettingsToJson(this);
-  
+
   /// Create default settings
   factory CycleSettings.defaults() => const CycleSettings();
 }
@@ -144,9 +140,10 @@ class CycleStatistics {
     this.additionalStats = const {},
   });
 
-  factory CycleStatistics.fromJson(Map<String, dynamic> json) => _$CycleStatisticsFromJson(json);
+  factory CycleStatistics.fromJson(Map<String, dynamic> json) =>
+      _$CycleStatisticsFromJson(json);
   Map<String, dynamic> toJson() => _$CycleStatisticsToJson(this);
-  
+
   /// Create empty statistics
   factory CycleStatistics.empty() => const CycleStatistics(
     averageCycleLength: 28.0,
@@ -154,7 +151,7 @@ class CycleStatistics {
     cycleVariability: 0.0,
     totalCycles: 0,
   );
-  
+
   /// Get cycle lengths list (for backward compatibility)
   List<int> get cycleLengths => [];
 }

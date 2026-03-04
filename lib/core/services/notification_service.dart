@@ -7,7 +7,8 @@ class NotificationService {
   static NotificationService get instance => _instance;
   NotificationService._internal();
 
-  final FlutterLocalNotificationsPlugin _notifications = FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin _notifications =
+      FlutterLocalNotificationsPlugin();
   bool _isInitialized = false;
 
   Future<void> initialize() async {
@@ -15,7 +16,9 @@ class NotificationService {
 
     debugPrint('🔔 Initializing Notification Service...');
 
-    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const androidSettings = AndroidInitializationSettings(
+      '@mipmap/ic_launcher',
+    );
     const iosSettings = DarwinInitializationSettings(
       requestSoundPermission: true,
       requestBadgePermission: true,
@@ -35,7 +38,7 @@ class NotificationService {
 
     await _notifications.initialize(settings);
     _isInitialized = true;
-    
+
     debugPrint('✅ Notification Service initialized');
   }
 
@@ -47,7 +50,7 @@ class NotificationService {
     String? payload,
   }) async {
     if (!_isInitialized) await initialize();
-    
+
     const androidDetails = AndroidNotificationDetails(
       'flowsense_reminders',
       'FlowSense Reminders',
@@ -67,7 +70,7 @@ class NotificationService {
 
     // Convert DateTime to TZDateTime
     final tzScheduledDate = tz.TZDateTime.from(scheduledDate, tz.local);
-    
+
     await _notifications.zonedSchedule(
       id,
       title,
@@ -75,7 +78,8 @@ class NotificationService {
       tzScheduledDate,
       notificationDetails,
       payload: payload,
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );
   }
@@ -105,47 +109,61 @@ class NotificationService {
 
   Future<bool> requestPermission() async {
     if (!_isInitialized) await initialize();
-    
+
     // Request permissions for different platforms
     if (defaultTargetPlatform == TargetPlatform.android) {
-      final androidPlugin = _notifications.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+      final androidPlugin = _notifications
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >();
       if (androidPlugin != null) {
         return await androidPlugin.requestNotificationsPermission() ?? false;
       }
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
-      final iosPlugin = _notifications.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
+      final iosPlugin = _notifications
+          .resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin
+          >();
       if (iosPlugin != null) {
         return await iosPlugin.requestPermissions(
-          alert: true,
-          badge: true,
-          sound: true,
-        ) ?? false;
+              alert: true,
+              badge: true,
+              sound: true,
+            ) ??
+            false;
       }
     } else if (defaultTargetPlatform == TargetPlatform.macOS) {
-      final macOSPlugin = _notifications.resolvePlatformSpecificImplementation<MacOSFlutterLocalNotificationsPlugin>();
+      final macOSPlugin = _notifications
+          .resolvePlatformSpecificImplementation<
+            MacOSFlutterLocalNotificationsPlugin
+          >();
       if (macOSPlugin != null) {
         return await macOSPlugin.requestPermissions(
-          alert: true,
-          badge: true,
-          sound: true,
-        ) ?? false;
+              alert: true,
+              badge: true,
+              sound: true,
+            ) ??
+            false;
       }
     }
-    
+
     // Default to true for unsupported platforms
     return true;
   }
 
   Future<bool> areNotificationsEnabled() async {
     if (!_isInitialized) await initialize();
-    
+
     if (defaultTargetPlatform == TargetPlatform.android) {
-      final androidPlugin = _notifications.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+      final androidPlugin = _notifications
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >();
       if (androidPlugin != null) {
         return await androidPlugin.areNotificationsEnabled() ?? false;
       }
     }
-    
+
     // For other platforms, assume true
     return true;
   }

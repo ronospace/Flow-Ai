@@ -15,7 +15,8 @@ class FeelingsAnalyticsService {
 
   FeelingsAnalyticsService._internal();
 
-  final FeelingsDatabaseService _databaseService = FeelingsDatabaseService.instance;
+  final FeelingsDatabaseService _databaseService =
+      FeelingsDatabaseService.instance;
   bool _isInitialized = false;
 
   /// Initialize the analytics service
@@ -122,12 +123,14 @@ class FeelingsAnalyticsService {
 
       final trend = _calculateTrend(values);
       if (trend.direction != TrendDirection.stable) {
-        trends.add(TrendInsight(
-          description: _generateMoodTrendDescription(category, trend),
-          direction: trend.direction,
-          confidence: trend.confidence,
-          category: 'mood',
-        ));
+        trends.add(
+          TrendInsight(
+            description: _generateMoodTrendDescription(category, trend),
+            direction: trend.direction,
+            confidence: trend.confidence,
+            category: 'mood',
+          ),
+        );
       }
     }
 
@@ -149,12 +152,14 @@ class FeelingsAnalyticsService {
 
       final trend = _calculateTrend(values);
       if (trend.direction != TrendDirection.stable) {
-        trends.add(TrendInsight(
-          description: _generateEnergyTrendDescription(type, trend),
-          direction: trend.direction,
-          confidence: trend.confidence,
-          category: 'energy',
-        ));
+        trends.add(
+          TrendInsight(
+            description: _generateEnergyTrendDescription(type, trend),
+            direction: trend.direction,
+            confidence: trend.confidence,
+            category: 'energy',
+          ),
+        );
       }
     }
 
@@ -170,12 +175,14 @@ class FeelingsAnalyticsService {
 
     final trend = _calculateTrend(values);
     if (trend.direction != TrendDirection.stable) {
-      trends.add(TrendInsight(
-        description: _generateWellbeingTrendDescription(trend),
-        direction: trend.direction,
-        confidence: trend.confidence,
-        category: 'wellbeing',
-      ));
+      trends.add(
+        TrendInsight(
+          description: _generateWellbeingTrendDescription(trend),
+          direction: trend.direction,
+          confidence: trend.confidence,
+          category: 'wellbeing',
+        ),
+      );
     }
 
     return trends;
@@ -218,22 +225,28 @@ class FeelingsAnalyticsService {
   /// Generate mood trend description
   String _generateMoodTrendDescription(MoodCategory category, TrendData trend) {
     final categoryName = category.displayName.toLowerCase();
-    final direction = trend.direction == TrendDirection.up ? 'increasing' : 'decreasing';
-    
+    final direction = trend.direction == TrendDirection.up
+        ? 'increasing'
+        : 'decreasing';
+
     return 'Your $categoryName levels have been $direction over the past week';
   }
 
   /// Generate energy trend description
   String _generateEnergyTrendDescription(EnergyType type, TrendData trend) {
     final typeName = type.displayName.toLowerCase();
-    final direction = trend.direction == TrendDirection.up ? 'improving' : 'declining';
-    
+    final direction = trend.direction == TrendDirection.up
+        ? 'improving'
+        : 'declining';
+
     return 'Your $typeName has been $direction recently';
   }
 
   /// Generate wellbeing trend description
   String _generateWellbeingTrendDescription(TrendData trend) {
-    final direction = trend.direction == TrendDirection.up ? 'improving' : 'declining';
+    final direction = trend.direction == TrendDirection.up
+        ? 'improving'
+        : 'declining';
     return 'Your overall wellbeing has been $direction';
   }
 
@@ -262,17 +275,20 @@ class FeelingsAnalyticsService {
 
         if (values.length >= 7) {
           final trendData = _calculateTrend(values);
-          if (trendData.direction != TrendDirection.stable && trendData.confidence > 0.5) {
-            trends.add(TrendAnalysis(
-              id: 'trend_mood_${category.name}_${DateTime.now().millisecondsSinceEpoch}',
-              type: 'mood_${category.name}',
-              description: _generateMoodTrendDescription(category, trendData),
-              direction: trendData.direction,
-              confidence: trendData.confidence,
-              startDate: startDate,
-              endDate: endDate,
-              dataPoints: values.length,
-            ));
+          if (trendData.direction != TrendDirection.stable &&
+              trendData.confidence > 0.5) {
+            trends.add(
+              TrendAnalysis(
+                id: 'trend_mood_${category.name}_${DateTime.now().millisecondsSinceEpoch}',
+                type: 'mood_${category.name}',
+                description: _generateMoodTrendDescription(category, trendData),
+                direction: trendData.direction,
+                confidence: trendData.confidence,
+                startDate: startDate,
+                endDate: endDate,
+                dataPoints: values.length,
+              ),
+            );
           }
         }
       }
@@ -296,37 +312,43 @@ class FeelingsAnalyticsService {
 
       // Low wellbeing insight
       if (entry.overallWellbeing < 4) {
-        insights.add(FeelingsInsight(
-          id: 'insight_low_wellbeing_${DateTime.now().millisecondsSinceEpoch}',
-          type: 'wellbeing_alert',
-          title: 'Low Wellbeing Detected',
-          description: 'Your overall wellbeing score is lower than usual. Consider self-care activities or reaching out for support.',
-          category: 'wellbeing',
-          priority: InsightPriority.high,
-          confidence: 0.9,
-          actionable: true,
-          dataSources: ['daily_entry'],
-          generatedAt: DateTime.now(),
-          expiresAt: DateTime.now().add(const Duration(days: 3)),
-        ));
+        insights.add(
+          FeelingsInsight(
+            id: 'insight_low_wellbeing_${DateTime.now().millisecondsSinceEpoch}',
+            type: 'wellbeing_alert',
+            title: 'Low Wellbeing Detected',
+            description:
+                'Your overall wellbeing score is lower than usual. Consider self-care activities or reaching out for support.',
+            category: 'wellbeing',
+            priority: InsightPriority.high,
+            confidence: 0.9,
+            actionable: true,
+            dataSources: ['daily_entry'],
+            generatedAt: DateTime.now(),
+            expiresAt: DateTime.now().add(const Duration(days: 3)),
+          ),
+        );
       }
 
       // High anxiety insight
       if (entry.moodScores[MoodCategory.anxiety] != null &&
           entry.moodScores[MoodCategory.anxiety]! > 7) {
-        insights.add(FeelingsInsight(
-          id: 'insight_high_anxiety_${DateTime.now().millisecondsSinceEpoch}',
-          type: 'anxiety_alert',
-          title: 'High Anxiety Level',
-          description: 'Your anxiety levels are elevated today. Consider breathing exercises or mindfulness practices.',
-          category: 'mood',
-          priority: InsightPriority.high,
-          confidence: 0.85,
-          actionable: true,
-          dataSources: ['daily_entry'],
-          generatedAt: DateTime.now(),
-          expiresAt: DateTime.now().add(const Duration(days: 1)),
-        ));
+        insights.add(
+          FeelingsInsight(
+            id: 'insight_high_anxiety_${DateTime.now().millisecondsSinceEpoch}',
+            type: 'anxiety_alert',
+            title: 'High Anxiety Level',
+            description:
+                'Your anxiety levels are elevated today. Consider breathing exercises or mindfulness practices.',
+            category: 'mood',
+            priority: InsightPriority.high,
+            confidence: 0.85,
+            actionable: true,
+            dataSources: ['daily_entry'],
+            generatedAt: DateTime.now(),
+            expiresAt: DateTime.now().add(const Duration(days: 1)),
+          ),
+        );
       }
 
       // Positive mood streak insight
@@ -337,43 +359,52 @@ class FeelingsAnalyticsService {
           .toList();
 
       if (happinessValues.length >= 7 && happinessValues.every((v) => v >= 7)) {
-        insights.add(FeelingsInsight(
-          id: 'insight_happiness_streak_${DateTime.now().millisecondsSinceEpoch}',
-          type: 'positive_trend',
-          title: 'Great Happiness Streak!',
-          description: 'You\'ve maintained high happiness levels for a week. Whatever you\'re doing, keep it up!',
-          category: 'mood',
-          priority: InsightPriority.medium,
-          confidence: 0.8,
-          actionable: false,
-          dataSources: ['recent_entries'],
-          generatedAt: DateTime.now(),
-          expiresAt: DateTime.now().add(const Duration(days: 7)),
-        ));
+        insights.add(
+          FeelingsInsight(
+            id: 'insight_happiness_streak_${DateTime.now().millisecondsSinceEpoch}',
+            type: 'positive_trend',
+            title: 'Great Happiness Streak!',
+            description:
+                'You\'ve maintained high happiness levels for a week. Whatever you\'re doing, keep it up!',
+            category: 'mood',
+            priority: InsightPriority.medium,
+            confidence: 0.8,
+            actionable: false,
+            dataSources: ['recent_entries'],
+            generatedAt: DateTime.now(),
+            expiresAt: DateTime.now().add(const Duration(days: 7)),
+          ),
+        );
       }
 
       // Low energy pattern insight
       final energyValues = recentEntries
           .take(5)
-          .map((e) => e.energyLevels.values.isEmpty 
-              ? 5.0 
-              : e.energyLevels.values.reduce((a, b) => a + b) / e.energyLevels.length)
+          .map(
+            (e) => e.energyLevels.values.isEmpty
+                ? 5.0
+                : e.energyLevels.values.reduce((a, b) => a + b) /
+                      e.energyLevels.length,
+          )
           .toList();
 
       if (energyValues.length >= 5 && energyValues.every((v) => v <= 4)) {
-        insights.add(FeelingsInsight(
-          id: 'insight_low_energy_${DateTime.now().millisecondsSinceEpoch}',
-          type: 'energy_alert',
-          title: 'Consistent Low Energy',
-          description: 'Your energy levels have been low for several days. Consider improving sleep, exercise, or nutrition.',
-          category: 'energy',
-          priority: InsightPriority.medium,
-          confidence: 0.75,
-          actionable: true,
-          dataSources: ['recent_entries'],
-          generatedAt: DateTime.now(),
-          expiresAt: DateTime.now().add(const Duration(days: 5)),
-        ));
+        insights.add(
+          FeelingsInsight(
+            id: 'insight_low_energy_${DateTime.now().millisecondsSinceEpoch}',
+            type: 'energy_alert',
+            title: 'Consistent Low Energy',
+            description:
+                'Your energy levels have been low for several days. Consider improving sleep, exercise, or nutrition.',
+            category: 'energy',
+            priority: InsightPriority.medium,
+            confidence: 0.75,
+            actionable: true,
+            dataSources: ['recent_entries'],
+            generatedAt: DateTime.now(),
+            expiresAt: DateTime.now().add(const Duration(days: 5)),
+          ),
+        );
       }
 
       // Save insights to database
@@ -428,88 +459,94 @@ class FeelingsAnalyticsService {
   /// Calculate average wellbeing
   double _calculateAverageWellbeing(List<DailyFeelingsEntry> entries) {
     if (entries.isEmpty) return 0.0;
-    
+
     final sum = entries.map((e) => e.overallWellbeing).reduce((a, b) => a + b);
     return sum / entries.length;
   }
 
   /// Calculate mood distribution
-  Map<String, double> _calculateMoodDistribution(List<DailyFeelingsEntry> entries) {
+  Map<String, double> _calculateMoodDistribution(
+    List<DailyFeelingsEntry> entries,
+  ) {
     final distribution = <String, double>{};
-    
+
     for (final category in MoodCategory.values) {
       final values = entries
           .where((e) => e.moodScores.containsKey(category))
           .map((e) => e.moodScores[category]!)
           .toList();
-      
+
       if (values.isNotEmpty) {
-        distribution[category.displayName] = values.reduce((a, b) => a + b) / values.length;
+        distribution[category.displayName] =
+            values.reduce((a, b) => a + b) / values.length;
       }
     }
-    
+
     return distribution;
   }
 
   /// Calculate energy distribution
-  Map<String, double> _calculateEnergyDistribution(List<DailyFeelingsEntry> entries) {
+  Map<String, double> _calculateEnergyDistribution(
+    List<DailyFeelingsEntry> entries,
+  ) {
     final distribution = <String, double>{};
-    
+
     for (final type in EnergyType.values) {
       final values = entries
           .where((e) => e.energyLevels.containsKey(type))
           .map((e) => e.energyLevels[type]!)
           .toList();
-      
+
       if (values.isNotEmpty) {
-        distribution[type.displayName] = values.reduce((a, b) => a + b) / values.length;
+        distribution[type.displayName] =
+            values.reduce((a, b) => a + b) / values.length;
       }
     }
-    
+
     return distribution;
   }
 
   /// Get common symptoms
   Map<String, int> _getCommonSymptoms(List<DailyFeelingsEntry> entries) {
     final symptomCounts = <String, int>{};
-    
+
     for (final entry in entries) {
       for (final symptom in entry.symptoms.keys) {
         symptomCounts[symptom] = (symptomCounts[symptom] ?? 0) + 1;
       }
     }
-    
+
     // Sort by frequency and return top 10
     final sorted = symptomCounts.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
-    
+
     return Map.fromEntries(sorted.take(10));
   }
 
   /// Get common tags
   Map<String, int> _getCommonTags(List<DailyFeelingsEntry> entries) {
     final tagCounts = <String, int>{};
-    
+
     for (final entry in entries) {
       for (final tag in entry.customTags.keys) {
         tagCounts[tag] = (tagCounts[tag] ?? 0) + 1;
       }
     }
-    
+
     // Sort by frequency and return top 10
     final sorted = tagCounts.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
-    
+
     return Map.fromEntries(sorted.take(10));
   }
 
   /// Calculate streaks
   Map<String, int> _calculateStreaks(List<DailyFeelingsEntry> entries) {
     final streaks = <String, int>{};
-    
+
     // Sort entries by date (newest first)
     entries.sort((a, b) => b.date.compareTo(a.date));
-    
+
     // Calculate current wellbeing streak
     int currentWellbeingStreak = 0;
     for (final entry in entries) {
@@ -520,7 +557,7 @@ class FeelingsAnalyticsService {
       }
     }
     streaks['High Wellbeing'] = currentWellbeingStreak;
-    
+
     // Calculate happiness streak
     int currentHappinessStreak = 0;
     for (final entry in entries) {
@@ -532,7 +569,7 @@ class FeelingsAnalyticsService {
       }
     }
     streaks['High Happiness'] = currentHappinessStreak;
-    
+
     return streaks;
   }
 

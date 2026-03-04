@@ -3,8 +3,8 @@ class User {
   final String id;
   final String email;
   final String name;
-  final String? uid;  // Add uid for backward compatibility
-  final String? displayName;  // Add displayName for tests
+  final String? uid; // Add uid for backward compatibility
+  final String? displayName; // Add displayName for tests
   final DateTime createdAt;
   final String? profileImageUrl;
   final Map<String, dynamic>? metadata;

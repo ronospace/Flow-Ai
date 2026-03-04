@@ -36,9 +36,7 @@ class UpgradePromptDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       backgroundColor: AppTheme.cardColor,
       child: Container(
         padding: const EdgeInsets.all(24),
@@ -62,10 +60,7 @@ class UpgradePromptDialog extends StatelessWidget {
               height: 80,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [
-                    AppTheme.primaryPurple,
-                    AppTheme.secondaryBlue,
-                  ],
+                  colors: [AppTheme.primaryPurple, AppTheme.secondaryBlue],
                 ),
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
@@ -82,9 +77,9 @@ class UpgradePromptDialog extends StatelessWidget {
                 color: Colors.white,
               ),
             ).animate().scale(duration: 400.ms),
-            
+
             const SizedBox(height: 20),
-            
+
             // Title
             Text(
               'Premium Feature',
@@ -94,9 +89,9 @@ class UpgradePromptDialog extends StatelessWidget {
                 color: AppTheme.textPrimary,
               ),
             ).animate().fadeIn(delay: 200.ms),
-            
+
             const SizedBox(height: 8),
-            
+
             // Feature name
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -116,9 +111,9 @@ class UpgradePromptDialog extends StatelessWidget {
                 ),
               ),
             ).animate().fadeIn(delay: 300.ms),
-            
+
             const SizedBox(height: 16),
-            
+
             // Description
             Text(
               blockedFeature.description,
@@ -129,26 +124,20 @@ class UpgradePromptDialog extends StatelessWidget {
                 height: 1.5,
               ),
             ).animate().fadeIn(delay: 400.ms),
-            
+
             const SizedBox(height: 24),
-            
+
             // Required tier badge
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: _getTierGradient(),
-                ),
+                gradient: LinearGradient(colors: _getTierGradient()),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
-                    _getTierIcon(),
-                    size: 18,
-                    color: Colors.white,
-                  ),
+                  Icon(_getTierIcon(), size: 18, color: Colors.white),
                   const SizedBox(width: 8),
                   Text(
                     'Requires ${requiredTier.displayName}',
@@ -161,14 +150,14 @@ class UpgradePromptDialog extends StatelessWidget {
                 ],
               ),
             ).animate().fadeIn(delay: 500.ms),
-            
+
             const SizedBox(height: 24),
-            
+
             // Benefits list
             _buildBenefitsList(),
-            
+
             const SizedBox(height: 24),
-            
+
             // Upgrade button
             SizedBox(
               width: double.infinity,
@@ -188,25 +177,19 @@ class UpgradePromptDialog extends StatelessWidget {
                 ),
                 child: const Text(
                   'Upgrade Now',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ),
             ).animate().fadeIn(delay: 600.ms).slideY(begin: 0.2),
-            
+
             const SizedBox(height: 12),
-            
+
             // Cancel button
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
               child: Text(
                 'Maybe Later',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: AppTheme.textSecondary,
-                ),
+                style: TextStyle(fontSize: 14, color: AppTheme.textSecondary),
               ),
             ).animate().fadeIn(delay: 700.ms),
           ],
@@ -217,18 +200,14 @@ class UpgradePromptDialog extends StatelessWidget {
 
   Widget _buildBenefitsList() {
     final benefits = _getFeatureBenefits();
-    
+
     return Column(
       children: benefits.map((benefit) {
         return Padding(
           padding: const EdgeInsets.only(bottom: 12),
           child: Row(
             children: [
-              Icon(
-                Icons.check_circle,
-                size: 20,
-                color: AppTheme.successGreen,
-              ),
+              Icon(Icons.check_circle, size: 20, color: AppTheme.successGreen),
               const SizedBox(width: 12),
               Expanded(
                 child: Text(

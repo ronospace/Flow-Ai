@@ -29,7 +29,11 @@ class _SymptomSelectorState extends State<SymptomSelector> {
       localizations.physical: [
         SymptomOption(localizations.cramps, '🔥', AppTheme.primaryRose),
         SymptomOption(localizations.headache, '🤕', AppTheme.secondaryBlue),
-        SymptomOption(localizations.breastTenderness, '💙', AppTheme.primaryPurple),
+        SymptomOption(
+          localizations.breastTenderness,
+          '💙',
+          AppTheme.primaryPurple,
+        ),
         SymptomOption(localizations.backPain, '💢', AppTheme.accentMint),
         SymptomOption(localizations.bloating, '🎈', Color(0xFFFF7043)),
         SymptomOption(localizations.nausea, '🤢', Color(0xFF66BB6A)),
@@ -37,11 +41,19 @@ class _SymptomSelectorState extends State<SymptomSelector> {
         SymptomOption(localizations.hotFlashes, '🔥', Color(0xFFEF5350)),
       ],
       localizations.emotional: [
-        SymptomOption(localizations.moodSwingsSymptom, '🎭', AppTheme.primaryRose),
+        SymptomOption(
+          localizations.moodSwingsSymptom,
+          '🎭',
+          AppTheme.primaryRose,
+        ),
         SymptomOption(localizations.irritability, '😤', Color(0xFFFF7043)),
         SymptomOption(localizations.anxiety, '😰', AppTheme.secondaryBlue),
         SymptomOption(localizations.depression, '😢', Color(0xFF9575CD)),
-        SymptomOption(localizations.emotionalSensitivity, '💝', AppTheme.primaryPurple),
+        SymptomOption(
+          localizations.emotionalSensitivity,
+          '💝',
+          AppTheme.primaryPurple,
+        ),
         SymptomOption(localizations.stress, '😫', Color(0xFFEF5350)),
       ],
       localizations.skinAndHair: [
@@ -80,16 +92,14 @@ class _SymptomSelectorState extends State<SymptomSelector> {
               _buildSelectedSymptomsSummary(),
               const SizedBox(height: 20),
             ],
-            
+
             // Category selector
             _buildCategorySelector(),
-            
+
             const SizedBox(height: 20),
-            
+
             // Symptoms list
-            Expanded(
-              child: _buildSymptomsList(),
-            ),
+            Expanded(child: _buildSymptomsList()),
           ],
         ),
       ),
@@ -123,7 +133,9 @@ class _SymptomSelectorState extends State<SymptomSelector> {
               ),
               const SizedBox(width: 8),
               Text(
-                AppLocalizations.of(context).selectedSymptoms(widget.selectedSymptoms.length),
+                AppLocalizations.of(
+                  context,
+                ).selectedSymptoms(widget.selectedSymptoms.length),
                 style: theme.textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppTheme.darkGrey,
@@ -148,7 +160,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
   Widget _buildSelectedSymptomChip(String symptom, double severity) {
     final color = _getSymptomColor(symptom);
     final severityText = _getSeverityText(severity);
-    
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
@@ -159,10 +171,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            _getSymptomEmoji(symptom),
-            style: const TextStyle(fontSize: 14),
-          ),
+          Text(_getSymptomEmoji(symptom), style: const TextStyle(fontSize: 14)),
           const SizedBox(width: 6),
           Text(
             symptom,
@@ -196,11 +205,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
               widget.onSymptomsChanged(updatedSymptoms);
               HapticFeedback.lightImpact();
             },
-            child: Icon(
-              Icons.close,
-              size: 14,
-              color: color,
-            ),
+            child: Icon(Icons.close, size: 14, color: color),
           ),
         ],
       ),
@@ -215,7 +220,8 @@ class _SymptomSelectorState extends State<SymptomSelector> {
       child: Row(
         children: symptomCategories.keys.map((category) {
           final isSelected = category == _expandedCategory;
-          return Padding(padding: const EdgeInsets.only(right: 12),
+          return Padding(
+            padding: const EdgeInsets.only(right: 12),
             child: GestureDetector(
               onTap: () {
                 setState(() {
@@ -225,11 +231,17 @@ class _SymptomSelectorState extends State<SymptomSelector> {
               },
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 12,
+                ),
                 decoration: BoxDecoration(
-                  gradient: isSelected 
+                  gradient: isSelected
                       ? const LinearGradient(
-                          colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+                          colors: [
+                            AppTheme.primaryRose,
+                            AppTheme.primaryPurple,
+                          ],
                         )
                       : null,
                   color: isSelected ? null : theme.colorScheme.surface,
@@ -264,118 +276,129 @@ class _SymptomSelectorState extends State<SymptomSelector> {
   Widget _buildSymptomsList() {
     final symptomCategories = _getSymptomCategories(context);
     final symptoms = symptomCategories[_expandedCategory] ?? [];
-    
+
     return ListView.builder(
       itemCount: symptoms.length,
       itemBuilder: (context, index) {
         final symptom = symptoms[index];
         final isSelected = widget.selectedSymptoms.contains(symptom.name);
         final severity = widget.symptomSeverity[symptom.name] ?? 3.0;
-        
-        return Padding(padding: const EdgeInsets.only(bottom: 12),
+
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 12),
           child: _buildSymptomTile(symptom, isSelected, severity, index),
         );
       },
     );
   }
 
-  Widget _buildSymptomTile(SymptomOption symptom, bool isSelected, double severity, int index) {
+  Widget _buildSymptomTile(
+    SymptomOption symptom,
+    bool isSelected,
+    double severity,
+    int index,
+  ) {
     final theme = Theme.of(context);
     return GestureDetector(
-      onTap: () {
-        final updatedSymptoms = Set<String>.from(widget.selectedSymptoms);
-        if (isSelected) {
-          updatedSymptoms.remove(symptom.name);
-        } else {
-          updatedSymptoms.add(symptom.name);
-        }
-        widget.onSymptomsChanged(updatedSymptoms);
-        HapticFeedback.selectionClick();
-      },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: isSelected ? symptom.color : Colors.transparent,
-            width: 2,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: isSelected 
-                  ? symptom.color.withValues(alpha: 0.2)
-                  : Colors.black.withValues(alpha: 0.1),
-              blurRadius: isSelected ? 12 : 8,
-              offset: Offset(0, isSelected ? 6 : 4),
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                // Emoji and name
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: symptom.color.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Center(
-                    child: Text(
-                      symptom.emoji,
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    symptom.name,
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                      color: isSelected ? symptom.color : AppTheme.darkGrey,
-                    ),
-                  ),
-                ),
-                // Selection indicator
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  width: 24,
-                  height: 24,
-                  decoration: BoxDecoration(
-                    color: isSelected ? symptom.color : Colors.transparent,
-                    border: Border.all(
-                      color: isSelected ? symptom.color : AppTheme.lightGrey,
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: isSelected
-                      ? const Icon(
-                          Icons.check,
-                          color: Colors.white,
-                          size: 16,
-                        )
-                      : null,
+          onTap: () {
+            final updatedSymptoms = Set<String>.from(widget.selectedSymptoms);
+            if (isSelected) {
+              updatedSymptoms.remove(symptom.name);
+            } else {
+              updatedSymptoms.add(symptom.name);
+            }
+            widget.onSymptomsChanged(updatedSymptoms);
+            HapticFeedback.selectionClick();
+          },
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surface,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: isSelected ? symptom.color : Colors.transparent,
+                width: 2,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: isSelected
+                      ? symptom.color.withValues(alpha: 0.2)
+                      : Colors.black.withValues(alpha: 0.1),
+                  blurRadius: isSelected ? 12 : 8,
+                  offset: Offset(0, isSelected ? 6 : 4),
                 ),
               ],
             ),
-            
-            // Severity slider (shown when selected)
-            if (isSelected) ...[
-              const SizedBox(height: 16),
-              _buildSeveritySlider(symptom.name, severity, symptom.color),
-            ],
-          ],
-        ),
-      ),
-    ).animate(delay: Duration(milliseconds: index * 50))
-      .fadeIn()
-      .slideX(begin: 0.2, end: 0);
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    // Emoji and name
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: symptom.color.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Center(
+                        child: Text(
+                          symptom.emoji,
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        symptom.name,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: isSelected
+                              ? FontWeight.bold
+                              : FontWeight.w500,
+                          color: isSelected ? symptom.color : AppTheme.darkGrey,
+                        ),
+                      ),
+                    ),
+                    // Selection indicator
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      width: 24,
+                      height: 24,
+                      decoration: BoxDecoration(
+                        color: isSelected ? symptom.color : Colors.transparent,
+                        border: Border.all(
+                          color: isSelected
+                              ? symptom.color
+                              : AppTheme.lightGrey,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: isSelected
+                          ? const Icon(
+                              Icons.check,
+                              color: Colors.white,
+                              size: 16,
+                            )
+                          : null,
+                    ),
+                  ],
+                ),
+
+                // Severity slider (shown when selected)
+                if (isSelected) ...[
+                  const SizedBox(height: 16),
+                  _buildSeveritySlider(symptom.name, severity, symptom.color),
+                ],
+              ],
+            ),
+          ),
+        )
+        .animate(delay: Duration(milliseconds: index * 50))
+        .fadeIn()
+        .slideX(begin: 0.2, end: 0);
   }
 
   Widget _buildSeveritySlider(String symptom, double severity, Color color) {
@@ -429,12 +452,18 @@ class _SymptomSelectorState extends State<SymptomSelector> {
 
   String _getSeverityText(double severity) {
     switch (severity.round()) {
-      case 1: return 'Mild';
-      case 2: return 'Light';
-      case 3: return 'Moderate';
-      case 4: return 'Strong';
-      case 5: return 'Severe';
-      default: return 'Moderate';
+      case 1:
+        return 'Mild';
+      case 2:
+        return 'Light';
+      case 3:
+        return 'Moderate';
+      case 4:
+        return 'Strong';
+      case 5:
+        return 'Severe';
+      default:
+        return 'Moderate';
     }
   }
 

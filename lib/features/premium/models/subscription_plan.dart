@@ -1,10 +1,7 @@
 import 'subscription.dart';
 
 /// Subscription Billing Cycle
-enum SubscriptionBillingCycle {
-  monthly,
-  yearly,
-}
+enum SubscriptionBillingCycle { monthly, yearly }
 
 /// Subscription Plan with pricing details
 class SubscriptionPlan {
@@ -90,7 +87,7 @@ class SubscriptionPlan {
       tier: SubscriptionTier.premium,
       billingCycle: cycle,
       price: isYearly ? 79.99 : 9.99,
-      productId: isYearly 
+      productId: isYearly
           ? 'com.zyraflow.premium.yearly'
           : 'com.zyraflow.premium.monthly',
       discount: isYearly ? 0.20 : null, // 20% discount on annual
@@ -134,13 +131,13 @@ class SubscriptionPlan {
 
   /// Get all available plans
   static List<SubscriptionPlan> get allPlans => [
-        _createBasicPlan(SubscriptionBillingCycle.monthly),
-        _createBasicPlan(SubscriptionBillingCycle.yearly),
-        _createPremiumPlan(SubscriptionBillingCycle.monthly),
-        _createPremiumPlan(SubscriptionBillingCycle.yearly),
-        _createUltimatePlan(SubscriptionBillingCycle.monthly),
-        _createUltimatePlan(SubscriptionBillingCycle.yearly),
-      ];
+    _createBasicPlan(SubscriptionBillingCycle.monthly),
+    _createBasicPlan(SubscriptionBillingCycle.yearly),
+    _createPremiumPlan(SubscriptionBillingCycle.monthly),
+    _createPremiumPlan(SubscriptionBillingCycle.yearly),
+    _createUltimatePlan(SubscriptionBillingCycle.monthly),
+    _createUltimatePlan(SubscriptionBillingCycle.yearly),
+  ];
 
   /// Get plans for a specific billing cycle
   static List<SubscriptionPlan> getPlansForCycle(

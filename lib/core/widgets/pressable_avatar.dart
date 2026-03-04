@@ -46,8 +46,9 @@ class _PressableAvatarState extends State<PressableAvatar> {
       );
     } else if (displayName != null && displayName.trim().isNotEmpty) {
       final parts = displayName.trim().split(RegExp(r"\s+"));
-      final initials = (parts.first[0] + (parts.length > 1 ? parts.last[0] : ""))
-          .toUpperCase();
+      final initials =
+          (parts.first[0] + (parts.length > 1 ? parts.last[0] : ""))
+              .toUpperCase();
 
       avatarContent = Center(
         child: Text(
@@ -103,10 +104,6 @@ class _PressableAvatarState extends State<PressableAvatar> {
   }
 
   Widget _fallbackIcon(ThemeData theme) {
-    return Icon(
-      Icons.person,
-      size: 20,
-      color: theme.colorScheme.primary,
-    );
+    return Icon(Icons.person, size: 20, color: theme.colorScheme.primary);
   }
 }

@@ -5,7 +5,7 @@ import '../services/platform_service.dart';
 /// Adaptive UI components that automatically adjust to platform conventions
 class AdaptiveComponents {
   static final PlatformService _platformService = PlatformService();
-  
+
   /// Adaptive scaffold with platform-specific navigation
   static Widget adaptiveScaffold({
     required BuildContext context,
@@ -20,14 +20,12 @@ class AdaptiveComponents {
     bool extendBodyBehindAppBar = false,
   }) {
     final platformInfo = _platformService.platformInfo;
-    
+
     if (platformInfo.platform == TargetPlatform.iOS && platformInfo.isMobile) {
       return CupertinoPageScaffold(
         navigationBar: appBar as ObstructingPreferredSizeWidget?,
         backgroundColor: backgroundColor ?? CupertinoColors.systemBackground,
-        child: SafeArea(
-          child: body ?? const SizedBox.shrink(),
-        ),
+        child: SafeArea(child: body ?? const SizedBox.shrink()),
       );
     } else {
       return Scaffold(
@@ -58,25 +56,24 @@ class AdaptiveComponents {
   }) {
     final theme = Theme.of(context);
     final platformInfo = _platformService.platformInfo;
-    
+
     if (platformInfo.platform == TargetPlatform.iOS && platformInfo.isMobile) {
       return CupertinoNavigationBar(
-        middle: Text(
-          title,
-          style: theme.textTheme.titleLarge?.copyWith(
-            color: foregroundColor ?? theme.colorScheme.onSurface,
-          ),
-        ),
-        trailing: actions != null && actions.isNotEmpty
-            ? Row(
-                mainAxisSize: MainAxisSize.min,
-                children: actions,
-              )
-            : null,
-        leading: leading,
-        automaticallyImplyLeading: automaticallyImplyLeading,
-        backgroundColor: backgroundColor ?? CupertinoColors.systemBackground,
-      ) as PreferredSizeWidget;
+            middle: Text(
+              title,
+              style: theme.textTheme.titleLarge?.copyWith(
+                color: foregroundColor ?? theme.colorScheme.onSurface,
+              ),
+            ),
+            trailing: actions != null && actions.isNotEmpty
+                ? Row(mainAxisSize: MainAxisSize.min, children: actions)
+                : null,
+            leading: leading,
+            automaticallyImplyLeading: automaticallyImplyLeading,
+            backgroundColor:
+                backgroundColor ?? CupertinoColors.systemBackground,
+          )
+          as PreferredSizeWidget;
     } else {
       return AppBar(
         title: Text(title),
@@ -112,18 +109,19 @@ class AdaptiveComponents {
   }) {
     final theme = Theme.of(context);
     final platformInfo = _platformService.platformInfo;
-    
+
     if (platformInfo.platform == TargetPlatform.iOS && platformInfo.isMobile) {
       final buttonStyle = isDestructive
           ? CupertinoColors.destructiveRed
           : isPrimary
-              ? theme.colorScheme.primary
-              : CupertinoColors.systemBlue;
-      
+          ? theme.colorScheme.primary
+          : CupertinoColors.systemBlue;
+
       return CupertinoButton(
         onPressed: onPressed,
         color: isPrimary ? buttonStyle : null,
-        padding: padding ?? const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        padding:
+            padding ?? const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         child: SizedBox(
           width: width,
           height: height,
@@ -138,11 +136,11 @@ class AdaptiveComponents {
               Text(
                 text,
                 style: theme.textTheme.labelLarge?.copyWith(
-                  color: isPrimary 
-                      ? CupertinoColors.white 
+                  color: isPrimary
+                      ? CupertinoColors.white
                       : isDestructive
-                          ? CupertinoColors.destructiveRed
-                          : theme.colorScheme.primary,
+                      ? CupertinoColors.destructiveRed
+                      : theme.colorScheme.primary,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -152,7 +150,7 @@ class AdaptiveComponents {
       );
     } else {
       final buttonStyle = _platformService.getAdaptiveButtonStyle(context);
-      
+
       if (isPrimary) {
         return SizedBox(
           width: width,
@@ -161,10 +159,13 @@ class AdaptiveComponents {
             onPressed: onPressed,
             style: buttonStyle.copyWith(
               backgroundColor: WidgetStateProperty.all(
-                isDestructive ? theme.colorScheme.error : theme.colorScheme.primary,
+                isDestructive
+                    ? theme.colorScheme.error
+                    : theme.colorScheme.primary,
               ),
               padding: WidgetStateProperty.all(
-                padding ?? const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                padding ??
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               ),
             ),
             child: Row(
@@ -195,9 +196,13 @@ class AdaptiveComponents {
             style: OutlinedButton.styleFrom(
               shape: buttonStyle.shape?.resolve({}),
               side: BorderSide(
-                color: isDestructive ? theme.colorScheme.error : theme.colorScheme.outline,
+                color: isDestructive
+                    ? theme.colorScheme.error
+                    : theme.colorScheme.outline,
               ),
-              padding: padding ?? const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              padding:
+                  padding ??
+                  const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -207,14 +212,18 @@ class AdaptiveComponents {
                   Icon(
                     icon,
                     size: _platformService.getAdaptiveIconSize(),
-                    color: isDestructive ? theme.colorScheme.error : theme.colorScheme.primary,
+                    color: isDestructive
+                        ? theme.colorScheme.error
+                        : theme.colorScheme.primary,
                   ),
                   const SizedBox(width: 8),
                 ],
                 Text(
                   text,
                   style: theme.textTheme.labelLarge?.copyWith(
-                    color: isDestructive ? theme.colorScheme.error : theme.colorScheme.primary,
+                    color: isDestructive
+                        ? theme.colorScheme.error
+                        : theme.colorScheme.primary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -250,7 +259,7 @@ class AdaptiveComponents {
   }) {
     final theme = Theme.of(context);
     final platformInfo = _platformService.platformInfo;
-    
+
     if (platformInfo.platform == TargetPlatform.iOS && platformInfo.isMobile) {
       return Padding(
         padding: padding ?? const EdgeInsets.symmetric(vertical: 8),
@@ -341,7 +350,10 @@ class AdaptiveComponents {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: theme.colorScheme.primary, width: 2),
+              borderSide: BorderSide(
+                color: theme.colorScheme.primary,
+                width: 2,
+              ),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
@@ -349,7 +361,10 @@ class AdaptiveComponents {
             ),
             filled: true,
             fillColor: theme.colorScheme.surface,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 12,
+            ),
           ),
         ),
       );
@@ -366,9 +381,9 @@ class AdaptiveComponents {
   }) {
     final theme = Theme.of(context);
     final platformInfo = _platformService.platformInfo;
-    
+
     Widget switchWidget;
-    
+
     if (platformInfo.platform == TargetPlatform.iOS && platformInfo.isMobile) {
       switchWidget = CupertinoSwitch(
         value: value,
@@ -379,13 +394,19 @@ class AdaptiveComponents {
       switchWidget = Switch(
         value: value,
         onChanged: enabled ? onChanged : null,
-        thumbColor: WidgetStateProperty.resolveWith((states) => 
-          states.contains(WidgetState.selected) ? theme.colorScheme.primary : null),
-        trackColor: WidgetStateProperty.resolveWith((states) => 
-          states.contains(WidgetState.selected) ? theme.colorScheme.primary.withValues(alpha: 0.5) : null),
+        thumbColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? theme.colorScheme.primary
+              : null,
+        ),
+        trackColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? theme.colorScheme.primary.withValues(alpha: 0.5)
+              : null,
+        ),
       );
     }
-    
+
     if (label != null) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -405,7 +426,7 @@ class AdaptiveComponents {
         ],
       );
     }
-    
+
     return switchWidget;
   }
 
@@ -422,7 +443,7 @@ class AdaptiveComponents {
   }) {
     final theme = Theme.of(context);
     final platformInfo = _platformService.platformInfo;
-    
+
     if (platformInfo.platform == TargetPlatform.iOS && platformInfo.isMobile) {
       return CupertinoSlider(
         value: value,
@@ -457,7 +478,7 @@ class AdaptiveComponents {
   }) {
     final theme = Theme.of(context);
     final platformInfo = _platformService.platformInfo;
-    
+
     if (platformInfo.platform == TargetPlatform.iOS && platformInfo.isMobile) {
       return CupertinoSegmentedControl<T>(
         children: options.map(
@@ -503,9 +524,7 @@ class AdaptiveComponents {
             : null,
         style: ButtonStyle(
           shape: WidgetStateProperty.all(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
       );
@@ -520,7 +539,7 @@ class AdaptiveComponents {
   }) {
     final theme = Theme.of(context);
     final platformInfo = _platformService.platformInfo;
-    
+
     if (platformInfo.platform == TargetPlatform.iOS && platformInfo.isMobile) {
       return CupertinoActivityIndicator(
         radius: (size ?? 20) / 2,
@@ -549,7 +568,7 @@ class AdaptiveComponents {
     bool barrierDismissible = true,
   }) {
     final platformInfo = _platformService.platformInfo;
-    
+
     if (platformInfo.platform == TargetPlatform.iOS && platformInfo.isMobile) {
       return showCupertinoDialog<T>(
         context: context,
@@ -558,14 +577,16 @@ class AdaptiveComponents {
           return CupertinoAlertDialog(
             title: Text(title),
             content: Text(content),
-            actions: actions?.map((action) {
-              return CupertinoDialogAction(
-                onPressed: action.onPressed,
-                isDestructiveAction: action.isDestructive,
-                isDefaultAction: action.isDefault,
-                child: Text(action.text),
-              );
-            }).toList() ?? [],
+            actions:
+                actions?.map((action) {
+                  return CupertinoDialogAction(
+                    onPressed: action.onPressed,
+                    isDestructiveAction: action.isDestructive,
+                    isDefaultAction: action.isDefault,
+                    child: Text(action.text),
+                  );
+                }).toList() ??
+                [],
           );
         },
       );
@@ -580,24 +601,28 @@ class AdaptiveComponents {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
             ),
-            actions: actions?.map((action) {
-              return TextButton(
-                onPressed: action.onPressed,
-                style: TextButton.styleFrom(
-                  foregroundColor: action.isDestructive
-                      ? Theme.of(context).colorScheme.error
-                      : action.isDefault
+            actions:
+                actions?.map((action) {
+                  return TextButton(
+                    onPressed: action.onPressed,
+                    style: TextButton.styleFrom(
+                      foregroundColor: action.isDestructive
+                          ? Theme.of(context).colorScheme.error
+                          : action.isDefault
                           ? Theme.of(context).colorScheme.primary
                           : null,
-                ),
-                child: Text(
-                  action.text,
-                  style: TextStyle(
-                    fontWeight: action.isDefault ? FontWeight.w600 : FontWeight.normal,
-                  ),
-                ),
-              );
-            }).toList() ?? [],
+                    ),
+                    child: Text(
+                      action.text,
+                      style: TextStyle(
+                        fontWeight: action.isDefault
+                            ? FontWeight.w600
+                            : FontWeight.normal,
+                      ),
+                    ),
+                  );
+                }).toList() ??
+                [],
           );
         },
       );
@@ -613,7 +638,7 @@ class AdaptiveComponents {
     AdaptiveActionSheetAction<T>? cancelAction,
   }) {
     final platformInfo = _platformService.platformInfo;
-    
+
     if (platformInfo.platform == TargetPlatform.iOS && platformInfo.isMobile) {
       return showCupertinoModalPopup<T>(
         context: context,
@@ -748,16 +773,16 @@ class ResponsiveBreakpoints {
   static const double mobile = 600;
   static const double tablet = 900;
   static const double desktop = 1200;
-  
+
   static bool isMobile(BuildContext context) {
     return MediaQuery.of(context).size.width < mobile;
   }
-  
+
   static bool isTablet(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     return width >= mobile && width < desktop;
   }
-  
+
   static bool isDesktop(BuildContext context) {
     return MediaQuery.of(context).size.width >= desktop;
   }

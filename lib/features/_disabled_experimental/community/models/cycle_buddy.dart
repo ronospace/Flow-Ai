@@ -88,7 +88,7 @@ class CycleBuddy {
   String get activityStatus {
     if (lastActiveAt == null) return 'Never active';
     final difference = DateTime.now().difference(lastActiveAt!);
-    
+
     if (difference.inMinutes < 5) return 'Online now';
     if (difference.inMinutes < 60) return '${difference.inMinutes}m ago';
     if (difference.inHours < 24) return '${difference.inHours}h ago';
@@ -218,14 +218,14 @@ class BuddyRequest {
   }
 
   String get senderName => fromDisplayName ?? fromUsername;
-  
+
   bool get isPending => status == 'pending';
   bool get isAccepted => status == 'accepted';
   bool get isDeclined => status == 'declined';
 
   String get timeAgoText {
     final difference = DateTime.now().difference(createdAt);
-    
+
     if (difference.inMinutes < 60) return '${difference.inMinutes}m ago';
     if (difference.inHours < 24) return '${difference.inHours}h ago';
     if (difference.inDays < 7) return '${difference.inDays}d ago';

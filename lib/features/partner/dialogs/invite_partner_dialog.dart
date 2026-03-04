@@ -5,10 +5,7 @@ import '../../../core/theme/app_theme.dart';
 class InvitePartnerDialog extends StatefulWidget {
   final Function(String, String?) onSendInvite;
 
-  const InvitePartnerDialog({
-    super.key,
-    required this.onSendInvite,
-  });
+  const InvitePartnerDialog({super.key, required this.onSendInvite});
 
   @override
   State<InvitePartnerDialog> createState() => _InvitePartnerDialogState();
@@ -19,11 +16,11 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
   late Animation<double> _fadeAnimation;
-  
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _messageController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  
+
   bool _isLoading = false;
   int _currentStep = 0;
 
@@ -36,20 +33,16 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
   @override
   void initState() {
     super.initState();
-    
+
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
     );
-    
-    _scaleAnimation = Tween<double>(
-      begin: 0.8,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.elasticOut,
-    ));
-    
+
+    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.elasticOut),
+    );
+
     _fadeAnimation = CurvedAnimation(
       parent: _animationController,
       curve: Curves.easeInOut,
@@ -108,10 +101,7 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
                     Flexible(
                       child: SingleChildScrollView(
                         padding: const EdgeInsets.symmetric(horizontal: 24),
-                        child: Form(
-                          key: _formKey,
-                          child: _buildCurrentStep(),
-                        ),
+                        child: Form(key: _formKey, child: _buildCurrentStep()),
                       ),
                     ),
                     _buildFooter(),
@@ -150,11 +140,7 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
               ),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: const Icon(
-              Icons.person_add,
-              color: Colors.white,
-              size: 24,
-            ),
+            child: const Icon(Icons.person_add, color: Colors.white, size: 24),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -170,9 +156,9 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
                 ),
                 Text(
                   'Share your journey together',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppTheme.mediumGrey,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGrey),
                 ),
               ],
             ),
@@ -214,9 +200,9 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
         const SizedBox(height: 8),
         Text(
           'We\'ll send them an invitation to connect with you on Flow Ai.',
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: AppTheme.mediumGrey,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGrey),
         ),
         const SizedBox(height: 24),
         TextFormField(
@@ -226,10 +212,7 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
           decoration: InputDecoration(
             labelText: 'Email Address',
             hintText: 'partner@example.com',
-            prefixIcon: Icon(
-              Icons.email_outlined,
-              color: AppTheme.primaryRose,
-            ),
+            prefixIcon: Icon(Icons.email_outlined, color: AppTheme.primaryRose),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
               borderSide: BorderSide(color: AppTheme.lightGrey),
@@ -275,9 +258,9 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
         const SizedBox(height: 8),
         Text(
           'Add a personal touch to your invitation (optional).',
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: AppTheme.mediumGrey,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGrey),
         ),
         const SizedBox(height: 24),
         Text(
@@ -335,35 +318,32 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             border: Border.all(
-              color: _messageController.text == message 
-                ? AppTheme.primaryRose 
-                : AppTheme.lightGrey,
+              color: _messageController.text == message
+                  ? AppTheme.primaryRose
+                  : AppTheme.lightGrey,
               width: _messageController.text == message ? 2 : 1,
             ),
             borderRadius: BorderRadius.circular(12),
-            color: _messageController.text == message 
-              ? AppTheme.primaryRose.withValues(alpha: 0.05)
-              : Colors.white,
+            color: _messageController.text == message
+                ? AppTheme.primaryRose.withValues(alpha: 0.05)
+                : Colors.white,
           ),
           child: Row(
             children: [
               Icon(
-                _messageController.text == message 
-                  ? Icons.radio_button_checked 
-                  : Icons.radio_button_unchecked,
-                color: _messageController.text == message 
-                  ? AppTheme.primaryRose 
-                  : AppTheme.lightGrey,
+                _messageController.text == message
+                    ? Icons.radio_button_checked
+                    : Icons.radio_button_unchecked,
+                color: _messageController.text == message
+                    ? AppTheme.primaryRose
+                    : AppTheme.lightGrey,
                 size: 20,
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
                   message,
-                  style: TextStyle(
-                    color: AppTheme.darkGrey,
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(color: AppTheme.darkGrey, fontSize: 14),
                 ),
               ),
             ],
@@ -391,7 +371,7 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
   Widget _buildStepDot(int step, String label) {
     final isActive = _currentStep >= step;
     final isCompleted = _currentStep > step;
-    
+
     return Column(
       children: [
         Container(
@@ -399,10 +379,10 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
           height: 32,
           decoration: BoxDecoration(
             gradient: isActive
-              ? const LinearGradient(
-                  colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
-                )
-              : null,
+                ? const LinearGradient(
+                    colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+                  )
+                : null,
             color: isActive ? null : AppTheme.lightGrey,
             shape: BoxShape.circle,
           ),
@@ -438,19 +418,12 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
       ),
       child: Row(
         children: [
-          Icon(
-            Icons.security,
-            color: AppTheme.accentMint,
-            size: 20,
-          ),
+          Icon(Icons.security, color: AppTheme.accentMint, size: 20),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
               'Your partner will need to accept the invitation before you can share any cycle data.',
-              style: TextStyle(
-                color: AppTheme.darkGrey,
-                fontSize: 13,
-              ),
+              style: TextStyle(color: AppTheme.darkGrey, fontSize: 13),
             ),
           ),
         ],
@@ -465,18 +438,17 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
         children: [
           if (_currentStep > 0) ...[
             TextButton(
-              onPressed: _isLoading ? null : () {
-                setState(() => _currentStep = _currentStep - 1);
-              },
+              onPressed: _isLoading
+                  ? null
+                  : () {
+                      setState(() => _currentStep = _currentStep - 1);
+                    },
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(Icons.arrow_back, size: 16, color: AppTheme.mediumGrey),
                   const SizedBox(width: 8),
-                  Text(
-                    'Back',
-                    style: TextStyle(color: AppTheme.mediumGrey),
-                  ),
+                  Text('Back', style: TextStyle(color: AppTheme.mediumGrey)),
                 ],
               ),
             ),
@@ -495,31 +467,31 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
                 elevation: 0,
               ),
               child: _isLoading
-                ? SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    ),
-                  )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        _currentStep == 0 ? 'Next' : 'Send Invitation',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
+                  ? SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          _currentStep == 0 ? 'Next' : 'Send Invitation',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 8),
-                      Icon(
-                        _currentStep == 0 ? Icons.arrow_forward : Icons.send,
-                        size: 18,
-                      ),
-                    ],
-                  ),
+                        const SizedBox(width: 8),
+                        Icon(
+                          _currentStep == 0 ? Icons.arrow_forward : Icons.send,
+                          size: 18,
+                        ),
+                      ],
+                    ),
             ),
           ),
         ],
@@ -539,14 +511,16 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
 
   Future<void> _sendInvitation() async {
     if (!_formKey.currentState!.validate()) return;
-    
+
     setState(() => _isLoading = true);
 
     try {
       // Call the callback - parent will handle PartnerService call
       widget.onSendInvite(
         _emailController.text.trim(),
-        _messageController.text.trim().isEmpty ? null : _messageController.text.trim(),
+        _messageController.text.trim().isEmpty
+            ? null
+            : _messageController.text.trim(),
       );
 
       if (mounted) {
@@ -554,7 +528,7 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
       }
     } catch (e) {
       setState(() => _isLoading = false);
-      
+
       if (mounted) {
         ScaffoldMessenger.maybeOf(context)?.showSnackBar(
           SnackBar(

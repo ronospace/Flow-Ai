@@ -6,15 +6,15 @@ import 'package:flutter/foundation.dart';
 /// Validates purchase receipts from App Store and Google Play
 class ReceiptValidationService {
   // Backend API endpoints (replace with your actual backend URLs)
-  static const String _appleValidationEndpoint = 
+  static const String _appleValidationEndpoint =
       'https://your-backend.com/api/validate-apple-receipt';
-  static const String _googleValidationEndpoint = 
+  static const String _googleValidationEndpoint =
       'https://your-backend.com/api/validate-google-receipt';
-  
+
   // Apple Sandbox vs Production
-  static const String _appleSandboxUrl = 
+  static const String _appleSandboxUrl =
       'https://sandbox.itunes.apple.com/verifyReceipt';
-  static const String _appleProductionUrl = 
+  static const String _appleProductionUrl =
       'https://buy.itunes.apple.com/verifyReceipt';
 
   /// Validate App Store receipt
@@ -26,7 +26,7 @@ class ReceiptValidationService {
   }) async {
     try {
       debugPrint('🍎 Validating Apple receipt for product: $productId');
-      
+
       // Option 1: Validate through your backend (RECOMMENDED)
       final backendResult = await _validateThroughBackend(
         endpoint: _appleValidationEndpoint,
@@ -34,11 +34,11 @@ class ReceiptValidationService {
         productId: productId,
         platform: 'ios',
       );
-      
+
       if (backendResult != null) {
         return backendResult;
       }
-      
+
       // Option 2: Direct validation with Apple (fallback, less secure)
       return await _validateWithAppleDirect(
         receiptData: receiptData,
@@ -61,22 +61,21 @@ class ReceiptValidationService {
   }) async {
     try {
       debugPrint('🤖 Validating Google Play receipt for product: $productId');
-      
+
       // Validate through your backend (REQUIRED for Google Play)
       final result = await _validateThroughBackend(
         endpoint: _googleValidationEndpoint,
         receiptData: purchaseToken,
         productId: productId,
         platform: 'android',
-        additionalData: {
-          'packageName': packageName,
-        },
+        additionalData: {'packageName': packageName},
       );
-      
-      return result ?? ReceiptValidationResult(
-        isValid: false,
-        errorMessage: 'Backend validation unavailable',
-      );
+
+      return result ??
+          ReceiptValidationResult(
+            isValid: false,
+            errorMessage: 'Backend validation unavailable',
+          );
     } catch (e) {
       debugPrint('❌ Google Play receipt validation error: $e');
       return ReceiptValidationResult(
@@ -95,20 +94,22 @@ class ReceiptValidationService {
     Map<String, dynamic>? additionalData,
   }) async {
     try {
-      final response = await http.post(
-        Uri.parse(endpoint),
-        headers: {
-          'Content-Type': 'application/json',
-          // Add authentication headers if needed
-          // 'Authorization': 'Bearer YOUR_API_KEY',
-        },
-        body: jsonEncode({
-          'receipt': receiptData,
-          'productId': productId,
-          'platform': platform,
-          ...?additionalData,
-        }),
-      ).timeout(const Duration(seconds: 10));
+      final response = await http
+          .post(
+            Uri.parse(endpoint),
+            headers: {
+              'Content-Type': 'application/json',
+              // Add authentication headers if needed
+              // 'Authorization': 'Bearer YOUR_API_KEY',
+            },
+            body: jsonEncode({
+              'receipt': receiptData,
+              'productId': productId,
+              'platform': platform,
+              ...?additionalData,
+            }),
+          )
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -138,28 +139,30 @@ class ReceiptValidationService {
     required bool isProduction,
   }) async {
     final url = isProduction ? _appleProductionUrl : _appleSandboxUrl;
-    
+
     try {
-      final response = await http.post(
-        Uri.parse(url),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'receipt-data': receiptData,
-          'password': '', // Your App-Specific Shared Secret
-          'exclude-old-transactions': true,
-        }),
-      ).timeout(const Duration(seconds: 10));
+      final response = await http
+          .post(
+            Uri.parse(url),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({
+              'receipt-data': receiptData,
+              'password': '', // Your App-Specific Shared Secret
+              'exclude-old-transactions': true,
+            }),
+          )
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         final status = data['status'] as int;
-        
+
         // Status 0 = valid receipt
         if (status == 0) {
           final latestReceiptInfo = data['latest_receipt_info'];
           if (latestReceiptInfo != null && latestReceiptInfo.isNotEmpty) {
             final receipt = latestReceiptInfo[0];
-            
+
             return ReceiptValidationResult(
               isValid: true,
               expirationDate: _parseAppleDate(receipt['expires_date_ms']),
@@ -175,13 +178,13 @@ class ReceiptValidationService {
             isProduction: false,
           );
         }
-        
+
         return ReceiptValidationResult(
           isValid: false,
           errorMessage: _getAppleErrorMessage(status),
         );
       }
-      
+
       return ReceiptValidationResult(
         isValid: false,
         errorMessage: 'Invalid response from Apple: ${response.statusCode}',
@@ -238,19 +241,23 @@ class ReceiptValidationService {
   }) async {
     try {
       // Query your backend to check subscription status
-      final response = await http.get(
-        Uri.parse('https://your-backend.com/api/subscription/status/$userId/$subscriptionId'),
-        headers: {
-          'Content-Type': 'application/json',
-          // Add authentication headers
-        },
-      ).timeout(const Duration(seconds: 10));
+      final response = await http
+          .get(
+            Uri.parse(
+              'https://your-backend.com/api/subscription/status/$userId/$subscriptionId',
+            ),
+            headers: {
+              'Content-Type': 'application/json',
+              // Add authentication headers
+            },
+          )
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         return data['active'] == true;
       }
-      
+
       return false;
     } catch (e) {
       debugPrint('Error verifying subscription: $e');

@@ -5,11 +5,7 @@ class CommunityStatsWidget extends StatelessWidget {
   final CommunityStats stats;
   final VoidCallback? onRefresh;
 
-  const CommunityStatsWidget({
-    super.key,
-    required this.stats,
-    this.onRefresh,
-  });
+  const CommunityStatsWidget({super.key, required this.stats, this.onRefresh});
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +20,7 @@ class CommunityStatsWidget extends StatelessWidget {
               children: [
                 const Text(
                   'Community Stats',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 if (onRefresh != null)
                   IconButton(
@@ -37,9 +30,18 @@ class CommunityStatsWidget extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            _buildStatRow('Active Members', stats.activeMembersCount.toString()),
-            _buildStatRow('Total Discussions', stats.totalDiscussionsCount.toString()),
-            _buildStatRow('Expert Questions', stats.totalQuestionsCount.toString()),
+            _buildStatRow(
+              'Active Members',
+              stats.activeMembersCount.toString(),
+            ),
+            _buildStatRow(
+              'Total Discussions',
+              stats.totalDiscussionsCount.toString(),
+            ),
+            _buildStatRow(
+              'Expert Questions',
+              stats.totalQuestionsCount.toString(),
+            ),
             _buildStatRow('Cycle Buddies', stats.totalBuddiesCount.toString()),
             _buildStatRow('Shared Stories', stats.totalStoriesCount.toString()),
             if (stats.weeklyGrowthRate > 0)
@@ -57,10 +59,7 @@ class CommunityStatsWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label),
-          Text(
-            value,
-            style: const TextStyle(fontWeight: FontWeight.w600),
-          ),
+          Text(value, style: const TextStyle(fontWeight: FontWeight.w600)),
         ],
       ),
     );

@@ -45,9 +45,7 @@ class FeatureComparisonWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                Expanded(
-                  child: _buildTierHeader('Basic', AppTheme.mediumGrey),
-                ),
+                Expanded(child: _buildTierHeader('Basic', AppTheme.mediumGrey)),
                 Expanded(
                   child: _buildTierHeader('Premium', AppTheme.primaryPurple),
                 ),
@@ -57,7 +55,7 @@ class FeatureComparisonWidget extends StatelessWidget {
               ],
             ),
           ),
-          
+
           // Feature rows
           _buildFeatureRow(
             'Period Tracking',
@@ -140,10 +138,7 @@ class FeatureComparisonWidget extends StatelessWidget {
         Container(
           width: 8,
           height: 8,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
         const SizedBox(height: 4),
         Text(
@@ -184,21 +179,12 @@ class FeatureComparisonWidget extends StatelessWidget {
             flex: 2,
             child: Text(
               feature,
-              style: TextStyle(
-                fontSize: 13,
-                color: AppTheme.textSecondary,
-              ),
+              style: TextStyle(fontSize: 13, color: AppTheme.textSecondary),
             ),
           ),
-          Expanded(
-            child: _buildFeatureIndicator(basic, basicNote),
-          ),
-          Expanded(
-            child: _buildFeatureIndicator(premium, premiumNote),
-          ),
-          Expanded(
-            child: _buildFeatureIndicator(ultimate, ultimateNote),
-          ),
+          Expanded(child: _buildFeatureIndicator(basic, basicNote)),
+          Expanded(child: _buildFeatureIndicator(premium, premiumNote)),
+          Expanded(child: _buildFeatureIndicator(ultimate, ultimateNote)),
         ],
       ),
     );
@@ -217,10 +203,7 @@ class FeatureComparisonWidget extends StatelessWidget {
             const SizedBox(height: 2),
             Text(
               note,
-              style: TextStyle(
-                fontSize: 9,
-                color: AppTheme.textSecondary,
-              ),
+              style: TextStyle(fontSize: 9, color: AppTheme.textSecondary),
             ),
           ],
         ],

@@ -17,7 +17,8 @@ class BiometricPulseIndicator extends StatefulWidget {
   });
 
   @override
-  State<BiometricPulseIndicator> createState() => _BiometricPulseIndicatorState();
+  State<BiometricPulseIndicator> createState() =>
+      _BiometricPulseIndicatorState();
 }
 
 class _BiometricPulseIndicatorState extends State<BiometricPulseIndicator>
@@ -30,7 +31,7 @@ class _BiometricPulseIndicatorState extends State<BiometricPulseIndicator>
   @override
   void initState() {
     super.initState();
-    
+
     _pulseController = AnimationController(
       duration: const Duration(milliseconds: 1000),
       vsync: this,
@@ -41,21 +42,13 @@ class _BiometricPulseIndicatorState extends State<BiometricPulseIndicator>
       vsync: this,
     );
 
-    _pulseAnimation = Tween<double>(
-      begin: 0.8,
-      end: 1.2,
-    ).animate(CurvedAnimation(
-      parent: _pulseController,
-      curve: Curves.easeInOut,
-    ));
+    _pulseAnimation = Tween<double>(begin: 0.8, end: 1.2).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+    );
 
-    _rippleAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _rippleController,
-      curve: Curves.easeOut,
-    ));
+    _rippleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _rippleController, curve: Curves.easeOut),
+    );
 
     _startAnimations();
   }
@@ -63,14 +56,20 @@ class _BiometricPulseIndicatorState extends State<BiometricPulseIndicator>
   void _startAnimations() {
     // Pulse animation based on heart rate value
     final heartRateDelay = _calculatePulseDelay(widget.value);
-    
-    _pulseController.repeat(reverse: true, period: Duration(milliseconds: heartRateDelay));
-    _rippleController.repeat(period: Duration(milliseconds: heartRateDelay * 2));
+
+    _pulseController.repeat(
+      reverse: true,
+      period: Duration(milliseconds: heartRateDelay),
+    );
+    _rippleController.repeat(
+      period: Duration(milliseconds: heartRateDelay * 2),
+    );
   }
 
   int _calculatePulseDelay(double value) {
     // Calculate pulse delay based on value (assuming heart rate)
-    if (widget.label.toLowerCase().contains('bpm') || widget.label.toLowerCase().contains('heart')) {
+    if (widget.label.toLowerCase().contains('bpm') ||
+        widget.label.toLowerCase().contains('heart')) {
       // Convert BPM to milliseconds per beat
       return (60000 / value).round().clamp(400, 2000);
     } else {
@@ -109,14 +108,16 @@ class _BiometricPulseIndicatorState extends State<BiometricPulseIndicator>
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: indicatorColor.withOpacity(0.3 * (1 - _rippleAnimation.value)),
+                    color: indicatorColor.withOpacity(
+                      0.3 * (1 - _rippleAnimation.value),
+                    ),
                     width: 2,
                   ),
                 ),
               );
             },
           ),
-          
+
           // Pulse indicator
           AnimatedBuilder(
             animation: _pulseAnimation,
@@ -191,17 +192,18 @@ class _BiometricPulseIndicatorState extends State<BiometricPulseIndicator>
   List<Widget> _buildPulseDots(Color color) {
     return List.generate(3, (index) {
       final delay = index * 200.0;
-      
+
       return AnimatedBuilder(
         animation: _pulseController,
         builder: (context, child) {
           final delayedAnimation = math.sin(
-            (_pulseController.value * 2 * math.pi) - (delay / 1000 * 2 * math.pi)
+            (_pulseController.value * 2 * math.pi) -
+                (delay / 1000 * 2 * math.pi),
           );
-          
+
           final scale = 0.3 + (delayedAnimation.abs() * 0.2);
           final opacity = 0.3 + (delayedAnimation.abs() * 0.4);
-          
+
           return Positioned(
             top: 5 + (index * 8.0),
             right: 5,
@@ -234,7 +236,7 @@ class _BiometricPulseIndicatorState extends State<BiometricPulseIndicator>
 
   Color _getColorForMetric(String label) {
     final labelLower = label.toLowerCase();
-    
+
     if (labelLower.contains('bpm') || labelLower.contains('heart')) {
       return Colors.red;
     } else if (labelLower.contains('°c') || labelLower.contains('temp')) {

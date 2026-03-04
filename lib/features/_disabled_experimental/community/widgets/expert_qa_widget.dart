@@ -23,7 +23,7 @@ class ExpertQAWidget extends StatefulWidget {
 class _ExpertQAWidgetState extends State<ExpertQAWidget> {
   final TextEditingController _questionController = TextEditingController();
   String _selectedCategory = 'General';
-  
+
   final List<String> _categories = [
     'General',
     'Menstrual Health',
@@ -49,9 +49,7 @@ class _ExpertQAWidgetState extends State<ExpertQAWidget> {
         const SizedBox(height: 16),
         _buildCategoryFilter(),
         const SizedBox(height: 16),
-        Expanded(
-          child: _buildQuestionsList(),
-        ),
+        Expanded(child: _buildQuestionsList()),
       ],
     );
   }
@@ -65,7 +63,10 @@ class _ExpertQAWidgetState extends State<ExpertQAWidget> {
           children: [
             Row(
               children: [
-                Icon(Icons.medical_services, color: Theme.of(context).primaryColor),
+                Icon(
+                  Icons.medical_services,
+                  color: Theme.of(context).primaryColor,
+                ),
                 const SizedBox(width: 8),
                 const Text(
                   'Ask a Healthcare Expert',
@@ -82,10 +83,7 @@ class _ExpertQAWidgetState extends State<ExpertQAWidget> {
                 isDense: true,
               ),
               items: _categories.map((category) {
-                return DropdownMenuItem(
-                  value: category,
-                  child: Text(category),
-                );
+                return DropdownMenuItem(value: category, child: Text(category));
               }).toList(),
               onChanged: (value) {
                 setState(() {
@@ -100,7 +98,8 @@ class _ExpertQAWidgetState extends State<ExpertQAWidget> {
               decoration: const InputDecoration(
                 hintText: 'Describe your question in detail...',
                 border: OutlineInputBorder(),
-                helperText: 'Your question will be answered by certified healthcare professionals',
+                helperText:
+                    'Your question will be answered by certified healthcare professionals',
                 helperMaxLines: 2,
               ),
             ),
@@ -154,7 +153,10 @@ class _ExpertQAWidgetState extends State<ExpertQAWidget> {
 
   Widget _buildQuestionsList() {
     final filteredQuestions = widget.questions
-        .where((q) => _selectedCategory == 'General' || q.category == _selectedCategory)
+        .where(
+          (q) =>
+              _selectedCategory == 'General' || q.category == _selectedCategory,
+        )
         .toList();
 
     if (filteredQuestions.isEmpty) {
@@ -219,7 +221,9 @@ class _ExpertQAWidgetState extends State<ExpertQAWidget> {
                 decoration: BoxDecoration(
                   color: Colors.green.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.green.withValues(alpha: 0.1)),
+                  border: Border.all(
+                    color: Colors.green.withValues(alpha: 0.1),
+                  ),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -229,17 +233,27 @@ class _ExpertQAWidgetState extends State<ExpertQAWidget> {
                         CircleAvatar(
                           radius: 12,
                           backgroundColor: Colors.green,
-                          child: const Icon(Icons.verified, size: 16, color: Colors.white),
+                          child: const Icon(
+                            Icons.verified,
+                            size: 16,
+                            color: Colors.white,
+                          ),
                         ),
                         const SizedBox(width: 8),
                         Text(
                           question.expertName ?? 'Healthcare Expert',
-                          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green,
+                          ),
                         ),
                         const Spacer(),
                         Text(
                           _formatTimestamp(question.answeredAt!),
-                          style: const TextStyle(fontSize: 12, color: Colors.grey),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
                         ),
                       ],
                     ),
@@ -261,16 +275,22 @@ class _ExpertQAWidgetState extends State<ExpertQAWidget> {
                 ),
                 const Spacer(),
                 _buildActionButton(
-                  icon: question.isLikedByUser ? Icons.favorite : Icons.favorite_border,
+                  icon: question.isLikedByUser
+                      ? Icons.favorite
+                      : Icons.favorite_border,
                   label: question.likesCount.toString(),
                   color: question.isLikedByUser ? Colors.red : Colors.grey,
                   onPressed: () => widget.onLikeQuestion(question.id),
                 ),
                 const SizedBox(width: 8),
                 _buildActionButton(
-                  icon: question.isBookmarkedByUser ? Icons.bookmark : Icons.bookmark_border,
+                  icon: question.isBookmarkedByUser
+                      ? Icons.bookmark
+                      : Icons.bookmark_border,
                   label: 'Save',
-                  color: question.isBookmarkedByUser ? Colors.orange : Colors.grey,
+                  color: question.isBookmarkedByUser
+                      ? Colors.orange
+                      : Colors.grey,
                   onPressed: () => widget.onBookmarkQuestion(question.id),
                 ),
                 const SizedBox(width: 8),
@@ -342,7 +362,11 @@ class _ExpertQAWidgetState extends State<ExpertQAWidget> {
           const SizedBox(width: 3),
           Text(
             text,
-            style: TextStyle(fontSize: 10, color: color, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 10,
+              color: color,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ),
@@ -381,7 +405,9 @@ class _ExpertQAWidgetState extends State<ExpertQAWidget> {
       _questionController.clear();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Question submitted! You\'ll be notified when answered.'),
+          content: Text(
+            'Question submitted! You\'ll be notified when answered.',
+          ),
           backgroundColor: Colors.green,
         ),
       );
@@ -389,9 +415,9 @@ class _ExpertQAWidgetState extends State<ExpertQAWidget> {
   }
 
   void _shareQuestion(ExpertQuestion question) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Share feature coming soon!')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Share feature coming soon!')));
   }
 
   String _formatTimestamp(DateTime timestamp) {

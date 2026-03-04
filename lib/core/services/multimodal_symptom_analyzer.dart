@@ -8,7 +8,8 @@ import '../models/user_profile.dart';
 /// AI interprets symptoms, mood, and lifestyle context
 /// Smart journaling with AI summaries
 class MultimodalSymptomAnalyzer {
-  static final MultimodalSymptomAnalyzer _instance = MultimodalSymptomAnalyzer._internal();
+  static final MultimodalSymptomAnalyzer _instance =
+      MultimodalSymptomAnalyzer._internal();
   static MultimodalSymptomAnalyzer get instance => _instance;
   MultimodalSymptomAnalyzer._internal();
 
@@ -96,7 +97,9 @@ class MultimodalSymptomAnalyzer {
   }) async {
     if (!_isInitialized) await initialize();
 
-    debugPrint('📝 Analyzing text input: ${textInput.substring(0, math.min(50, textInput.length))}...');
+    debugPrint(
+      '📝 Analyzing text input: ${textInput.substring(0, math.min(50, textInput.length))}...',
+    );
 
     // Natural Language Processing
     final nlpResults = await _processNaturalLanguage(textInput);
@@ -115,11 +118,18 @@ class MultimodalSymptomAnalyzer {
 
     // Contextual analysis
     final contextualInsights = await _analyzeTextualContext(
-      textInput, symptoms, context);
+      textInput,
+      symptoms,
+      context,
+    );
 
     // Generate confidence scores
     final confidenceScores = _calculateTextAnalysisConfidence(
-      nlpResults, symptoms, moodAnalysis, painAnalysis);
+      nlpResults,
+      symptoms,
+      moodAnalysis,
+      painAnalysis,
+    );
 
     return TextSymptomAnalysis(
       originalText: textInput,
@@ -226,11 +236,18 @@ class MultimodalSymptomAnalyzer {
 
     // Contextual image analysis
     final contextualInsights = await _analyzeImageContext(
-      preprocessedImage, analysisType, context);
+      preprocessedImage,
+      analysisType,
+      context,
+    );
 
     // Generate insights and recommendations
     final insights = await _generateImageInsights(
-      skinAnalysis, moodAnalysis, acneAnalysis, inflammationAnalysis);
+      skinAnalysis,
+      moodAnalysis,
+      acneAnalysis,
+      inflammationAnalysis,
+    );
 
     return ImageSymptomAnalysis(
       imageFile: imageFile,
@@ -259,13 +276,18 @@ class MultimodalSymptomAnalyzer {
   }) async {
     if (!_isInitialized) await initialize();
 
-    debugPrint('📓 Generating smart journal summary for ${date.toIso8601String().split('T')[0]}...');
+    debugPrint(
+      '📓 Generating smart journal summary for ${date.toIso8601String().split('T')[0]}...',
+    );
 
     // Combine all analyses for the day
     final combinedAnalysis = _combineMultimodalAnalyses(dailyAnalyses);
 
     // Generate AI summary
-    final aiSummary = await _generateAISummary(combinedAnalysis, userJournalEntry);
+    final aiSummary = await _generateAISummary(
+      combinedAnalysis,
+      userJournalEntry,
+    );
 
     // Extract key insights
     final keyInsights = await _extractKeyInsights(combinedAnalysis);
@@ -274,14 +296,18 @@ class MultimodalSymptomAnalyzer {
     final patterns = await _identifyDailyPatterns(combinedAnalysis);
 
     // Generate recommendations
-    final recommendations = await _generateDailyRecommendations(combinedAnalysis);
+    final recommendations = await _generateDailyRecommendations(
+      combinedAnalysis,
+    );
 
     // Mood and energy trends
     final moodTrend = _calculateMoodTrend(dailyAnalyses);
     final energyTrend = _calculateEnergyTrend(dailyAnalyses);
 
     // Symptom correlation analysis
-    final symptomCorrelations = await _analyzeSymptomCorrelations(dailyAnalyses);
+    final symptomCorrelations = await _analyzeSymptomCorrelations(
+      dailyAnalyses,
+    );
 
     return SmartJournalEntry(
       date: date,
@@ -310,15 +336,21 @@ class MultimodalSymptomAnalyzer {
     final timeCorrelations = await _analyzeTimeBasedCorrelations(analyses);
 
     // Cross-modal correlations (e.g., voice stress vs skin condition)
-    final crossModalCorrelations = await _analyzeCrossModalCorrelations(analyses);
+    final crossModalCorrelations = await _analyzeCrossModalCorrelations(
+      analyses,
+    );
 
     // Environmental correlations
     final environmentalCorrelations = await _analyzeEnvironmentalCorrelations(
-      analyses, environmentalData);
+      analyses,
+      environmentalData,
+    );
 
     // Personal pattern analysis
     final personalPatterns = await _analyzePersonalPatterns(
-      analyses, userProfile);
+      analyses,
+      userProfile,
+    );
 
     // Anomaly detection
     final anomalies = await _detectMultimodalAnomalies(analyses, userProfile);
@@ -345,10 +377,18 @@ class MultimodalSymptomAnalyzer {
   Map<String, dynamic> _initializeSentimentAnalyzer() => {
     'model_type': 'transformer_based',
     'health_sentiment_weights': {
-      'positive': 0.8, 'negative': 1.2, 'neutral': 1.0,
+      'positive': 0.8,
+      'negative': 1.2,
+      'neutral': 1.0,
     },
     'emotion_categories': [
-      'joy', 'sadness', 'anger', 'fear', 'surprise', 'disgust', 'anxiety'
+      'joy',
+      'sadness',
+      'anger',
+      'fear',
+      'surprise',
+      'disgust',
+      'anxiety',
     ],
   };
 
@@ -363,47 +403,108 @@ class MultimodalSymptomAnalyzer {
   void _initializeSymptomPatterns() {
     _symptomKeywords = {
       'pain': [
-        'hurt', 'ache', 'pain', 'sore', 'tender', 'throbbing', 'sharp', 'dull',
-        'cramping', 'stabbing', 'burning', 'shooting'
+        'hurt',
+        'ache',
+        'pain',
+        'sore',
+        'tender',
+        'throbbing',
+        'sharp',
+        'dull',
+        'cramping',
+        'stabbing',
+        'burning',
+        'shooting',
       ],
       'mood': [
-        'happy', 'sad', 'angry', 'irritated', 'anxious', 'depressed', 'excited',
-        'calm', 'stressed', 'overwhelmed', 'moody', 'emotional'
+        'happy',
+        'sad',
+        'angry',
+        'irritated',
+        'anxious',
+        'depressed',
+        'excited',
+        'calm',
+        'stressed',
+        'overwhelmed',
+        'moody',
+        'emotional',
       ],
       'energy': [
-        'tired', 'exhausted', 'fatigue', 'energetic', 'sluggish', 'alert',
-        'drowsy', 'restless', 'vigorous', 'lethargic', 'motivated'
+        'tired',
+        'exhausted',
+        'fatigue',
+        'energetic',
+        'sluggish',
+        'alert',
+        'drowsy',
+        'restless',
+        'vigorous',
+        'lethargic',
+        'motivated',
       ],
       'digestive': [
-        'bloating', 'nausea', 'stomach ache', 'constipated', 'diarrhea',
-        'indigestion', 'heartburn', 'appetite', 'hungry', 'full'
+        'bloating',
+        'nausea',
+        'stomach ache',
+        'constipated',
+        'diarrhea',
+        'indigestion',
+        'heartburn',
+        'appetite',
+        'hungry',
+        'full',
       ],
       'sleep': [
-        'insomnia', 'sleepy', 'restless', 'nightmare', 'dream', 'wake up',
-        'sleep', 'tired', 'alert', 'drowsy'
+        'insomnia',
+        'sleepy',
+        'restless',
+        'nightmare',
+        'dream',
+        'wake up',
+        'sleep',
+        'tired',
+        'alert',
+        'drowsy',
       ],
       'skin': [
-        'acne', 'breakout', 'rash', 'dry', 'oily', 'clear', 'blemish',
-        'irritated', 'sensitive', 'glowing', 'dull'
-      ]
+        'acne',
+        'breakout',
+        'rash',
+        'dry',
+        'oily',
+        'clear',
+        'blemish',
+        'irritated',
+        'sensitive',
+        'glowing',
+        'dull',
+      ],
     };
 
     _moodIndicators = {
       'positive': ['happy', 'joy', 'excited', 'calm', 'peaceful', 'content'],
-      'negative': ['sad', 'angry', 'frustrated', 'anxious', 'depressed', 'overwhelmed'],
-      'neutral': ['okay', 'fine', 'normal', 'alright', 'stable']
+      'negative': [
+        'sad',
+        'angry',
+        'frustrated',
+        'anxious',
+        'depressed',
+        'overwhelmed',
+      ],
+      'neutral': ['okay', 'fine', 'normal', 'alright', 'stable'],
     };
 
     _energyIndicators = {
       'high': ['energetic', 'alert', 'vigorous', 'motivated', 'active'],
       'medium': ['okay', 'normal', 'moderate', 'stable'],
-      'low': ['tired', 'exhausted', 'sluggish', 'lethargic', 'drained']
+      'low': ['tired', 'exhausted', 'sluggish', 'lethargic', 'drained'],
     };
 
     _painDescriptors = {
       'intensity': ['mild', 'moderate', 'severe', 'excruciating'],
       'type': ['sharp', 'dull', 'throbbing', 'burning', 'stabbing', 'cramping'],
-      'location': ['head', 'back', 'stomach', 'chest', 'abdomen', 'joints']
+      'location': ['head', 'back', 'stomach', 'chest', 'abdomen', 'joints'],
     };
   }
 
@@ -419,30 +520,36 @@ class MultimodalSymptomAnalyzer {
   }
 
   Future<List<ExtractedSymptom>> _extractSymptomsFromText(
-    String text, Map<String, dynamic> nlpResults) async {
+    String text,
+    Map<String, dynamic> nlpResults,
+  ) async {
     final symptoms = <ExtractedSymptom>[];
-    
+
     for (final category in _symptomKeywords.keys) {
       for (final keyword in _symptomKeywords[category]!) {
         if (text.toLowerCase().contains(keyword)) {
-          symptoms.add(ExtractedSymptom(
-            category: category,
-            symptom: keyword,
-            confidence: 0.8,
-            context: _extractSymptomContext(text, keyword),
-          ));
+          symptoms.add(
+            ExtractedSymptom(
+              category: category,
+              symptom: keyword,
+              confidence: 0.8,
+              context: _extractSymptomContext(text, keyword),
+            ),
+          );
         }
       }
     }
-    
+
     return symptoms;
   }
 
   String _extractSymptomContext(String text, String symptom) {
     final words = text.split(' ');
-    final index = words.indexWhere((word) => word.toLowerCase().contains(symptom.toLowerCase()));
+    final index = words.indexWhere(
+      (word) => word.toLowerCase().contains(symptom.toLowerCase()),
+    );
     if (index == -1) return '';
-    
+
     final start = math.max(0, index - 3);
     final end = math.min(words.length, index + 4);
     return words.sublist(start, end).join(' ');
@@ -451,7 +558,10 @@ class MultimodalSymptomAnalyzer {
   // All missing method implementations for complete functionality
 
   // Text Analysis Methods
-  Future<MoodAnalysis> _analyzeMoodFromText(String text, Map<String, dynamic> nlpResults) async {
+  Future<MoodAnalysis> _analyzeMoodFromText(
+    String text,
+    Map<String, dynamic> nlpResults,
+  ) async {
     final moodScores = <String, double>{};
     String dominantMood = 'neutral';
     double maxScore = 0.0;
@@ -477,7 +587,10 @@ class MultimodalSymptomAnalyzer {
     );
   }
 
-  Future<PainAnalysis> _analyzePainFromText(String text, Map<String, dynamic> nlpResults) async {
+  Future<PainAnalysis> _analyzePainFromText(
+    String text,
+    Map<String, dynamic> nlpResults,
+  ) async {
     final painTypes = <String>[];
     final intensityScores = <String, double>{};
     final locations = <String>[];
@@ -491,10 +604,18 @@ class MultimodalSymptomAnalyzer {
     for (final intensity in _painDescriptors['intensity']!) {
       if (text.toLowerCase().contains(intensity)) {
         switch (intensity) {
-          case 'mild': intensityScores[intensity] = 0.25; break;
-          case 'moderate': intensityScores[intensity] = 0.5; break;
-          case 'severe': intensityScores[intensity] = 0.75; break;
-          case 'excruciating': intensityScores[intensity] = 1.0; break;
+          case 'mild':
+            intensityScores[intensity] = 0.25;
+            break;
+          case 'moderate':
+            intensityScores[intensity] = 0.5;
+            break;
+          case 'severe':
+            intensityScores[intensity] = 0.75;
+            break;
+          case 'excruciating':
+            intensityScores[intensity] = 1.0;
+            break;
         }
       }
     }
@@ -513,7 +634,10 @@ class MultimodalSymptomAnalyzer {
     );
   }
 
-  Future<EnergyAnalysis> _analyzeEnergyFromText(String text, Map<String, dynamic> nlpResults) async {
+  Future<EnergyAnalysis> _analyzeEnergyFromText(
+    String text,
+    Map<String, dynamic> nlpResults,
+  ) async {
     String energyLevel = 'medium';
     double energyScore = 0.5;
 
@@ -522,9 +646,15 @@ class MultimodalSymptomAnalyzer {
         if (text.toLowerCase().contains(indicator)) {
           energyLevel = category;
           switch (category) {
-            case 'high': energyScore = 0.8; break;
-            case 'medium': energyScore = 0.5; break;
-            case 'low': energyScore = 0.2; break;
+            case 'high':
+              energyScore = 0.8;
+              break;
+            case 'medium':
+              energyScore = 0.5;
+              break;
+            case 'low':
+              energyScore = 0.2;
+              break;
           }
           break;
         }
@@ -539,31 +669,43 @@ class MultimodalSymptomAnalyzer {
   }
 
   Future<List<ContextualInsight>> _analyzeTextualContext(
-    String text, List<ExtractedSymptom> symptoms, Map<String, dynamic>? context) async {
+    String text,
+    List<ExtractedSymptom> symptoms,
+    Map<String, dynamic>? context,
+  ) async {
     final insights = <ContextualInsight>[];
 
     if (symptoms.isNotEmpty) {
-      insights.add(ContextualInsight(
-        insight: 'Multiple symptoms detected, suggest tracking patterns over time',
-        relevance: 0.8,
-        category: 'pattern_analysis',
-      ));
+      insights.add(
+        ContextualInsight(
+          insight:
+              'Multiple symptoms detected, suggest tracking patterns over time',
+          relevance: 0.8,
+          category: 'pattern_analysis',
+        ),
+      );
     }
 
     if (context != null && context.containsKey('time_of_day')) {
-      insights.add(ContextualInsight(
-        insight: 'Symptoms reported at ${context['time_of_day']}, may correlate with daily rhythms',
-        relevance: 0.6,
-        category: 'temporal_correlation',
-      ));
+      insights.add(
+        ContextualInsight(
+          insight:
+              'Symptoms reported at ${context['time_of_day']}, may correlate with daily rhythms',
+          relevance: 0.6,
+          category: 'temporal_correlation',
+        ),
+      );
     }
 
     return insights;
   }
 
   Map<String, double> _calculateTextAnalysisConfidence(
-    Map<String, dynamic> nlpResults, List<ExtractedSymptom> symptoms,
-    MoodAnalysis moodAnalysis, PainAnalysis painAnalysis) {
+    Map<String, dynamic> nlpResults,
+    List<ExtractedSymptom> symptoms,
+    MoodAnalysis moodAnalysis,
+    PainAnalysis painAnalysis,
+  ) {
     return {
       'overall': 0.75,
       'symptom_extraction': symptoms.isNotEmpty ? 0.8 : 0.4,
@@ -649,7 +791,9 @@ class MultimodalSymptomAnalyzer {
     };
   }
 
-  Future<ImageAnalysisResult> _analyzeSkinCondition(Map<String, dynamic> preprocessedImage) async {
+  Future<ImageAnalysisResult> _analyzeSkinCondition(
+    Map<String, dynamic> preprocessedImage,
+  ) async {
     await Future.delayed(const Duration(milliseconds: 1000));
     return ImageAnalysisResult(
       results: {
@@ -663,24 +807,26 @@ class MultimodalSymptomAnalyzer {
     );
   }
 
-  Future<ImageAnalysisResult> _analyzeFacialMood(Map<String, dynamic> preprocessedImage) async {
+  Future<ImageAnalysisResult> _analyzeFacialMood(
+    Map<String, dynamic> preprocessedImage,
+  ) async {
     await Future.delayed(const Duration(milliseconds: 800));
     return ImageAnalysisResult(
       results: {
         'detected_emotion': 'neutral',
-        'emotion_scores': {
-          'happiness': 0.4,
-          'sadness': 0.3,
-          'neutral': 0.6,
-        },
+        'emotion_scores': {'happiness': 0.4, 'sadness': 0.3, 'neutral': 0.6},
         'facial_tension': 'low',
       },
       confidence: 0.71,
-      insights: ['Facial expression suggests neutral to slightly positive mood'],
+      insights: [
+        'Facial expression suggests neutral to slightly positive mood',
+      ],
     );
   }
 
-  Future<ImageAnalysisResult> _analyzeAcneCondition(Map<String, dynamic> preprocessedImage) async {
+  Future<ImageAnalysisResult> _analyzeAcneCondition(
+    Map<String, dynamic> preprocessedImage,
+  ) async {
     await Future.delayed(const Duration(milliseconds: 600));
     return ImageAnalysisResult(
       results: {
@@ -694,7 +840,9 @@ class MultimodalSymptomAnalyzer {
     );
   }
 
-  Future<ImageAnalysisResult> _analyzeInflammation(Map<String, dynamic> preprocessedImage) async {
+  Future<ImageAnalysisResult> _analyzeInflammation(
+    Map<String, dynamic> preprocessedImage,
+  ) async {
     await Future.delayed(const Duration(milliseconds: 500));
     return ImageAnalysisResult(
       results: {
@@ -707,7 +855,9 @@ class MultimodalSymptomAnalyzer {
     );
   }
 
-  Future<Map<String, dynamic>> _analyzeImageColors(Map<String, dynamic> preprocessedImage) async {
+  Future<Map<String, dynamic>> _analyzeImageColors(
+    Map<String, dynamic> preprocessedImage,
+  ) async {
     await Future.delayed(const Duration(milliseconds: 200));
     return {
       'dominant_colors': ['#FFDBAC', '#E8B894', '#D4A574'],
@@ -716,7 +866,9 @@ class MultimodalSymptomAnalyzer {
     };
   }
 
-  Future<Map<String, dynamic>> _analyzeImageTexture(Map<String, dynamic> preprocessedImage) async {
+  Future<Map<String, dynamic>> _analyzeImageTexture(
+    Map<String, dynamic> preprocessedImage,
+  ) async {
     await Future.delayed(const Duration(milliseconds: 300));
     return {
       'texture_smoothness': 0.7,
@@ -728,15 +880,19 @@ class MultimodalSymptomAnalyzer {
   Future<List<ContextualInsight>> _analyzeImageContext(
     Map<String, dynamic> preprocessedImage,
     ImageAnalysisType analysisType,
-    Map<String, dynamic>? context) async {
+    Map<String, dynamic>? context,
+  ) async {
     final insights = <ContextualInsight>[];
 
     if (context != null && context.containsKey('cycle_phase')) {
-      insights.add(ContextualInsight(
-        insight: 'Image taken during ${context['cycle_phase']} phase, may show hormonal effects',
-        relevance: 0.8,
-        category: 'hormonal_correlation',
-      ));
+      insights.add(
+        ContextualInsight(
+          insight:
+              'Image taken during ${context['cycle_phase']} phase, may show hormonal effects',
+          relevance: 0.8,
+          category: 'hormonal_correlation',
+        ),
+      );
     }
 
     return insights;
@@ -746,7 +902,8 @@ class MultimodalSymptomAnalyzer {
     ImageAnalysisResult? skinAnalysis,
     ImageAnalysisResult? moodAnalysis,
     ImageAnalysisResult? acneAnalysis,
-    ImageAnalysisResult? inflammationAnalysis) async {
+    ImageAnalysisResult? inflammationAnalysis,
+  ) async {
     final insights = <String>[];
 
     if (skinAnalysis != null) {
@@ -766,14 +923,18 @@ class MultimodalSymptomAnalyzer {
   }
 
   // Smart Journaling Methods
-  Map<String, dynamic> _combineMultimodalAnalyses(List<SymptomAnalysisBase> analyses) {
+  Map<String, dynamic> _combineMultimodalAnalyses(
+    List<SymptomAnalysisBase> analyses,
+  ) {
     final combinedSymptoms = <String>[];
     final combinedMoods = <String>[];
     double totalConfidence = 0.0;
 
     for (final analysis in analyses) {
       if (analysis is TextSymptomAnalysis) {
-        combinedSymptoms.addAll(analysis.extractedSymptoms.map((s) => s.symptom));
+        combinedSymptoms.addAll(
+          analysis.extractedSymptoms.map((s) => s.symptom),
+        );
         combinedMoods.add(analysis.moodAnalysis.dominantMood);
         totalConfidence += analysis.confidenceScores['overall'] ?? 0.0;
       }
@@ -782,35 +943,42 @@ class MultimodalSymptomAnalyzer {
     return {
       'symptoms': combinedSymptoms,
       'moods': combinedMoods,
-      'confidence': analyses.isNotEmpty ? totalConfidence / analyses.length : 0.0,
+      'confidence': analyses.isNotEmpty
+          ? totalConfidence / analyses.length
+          : 0.0,
     };
   }
 
   Future<String> _generateAISummary(
-    Map<String, dynamic> combinedAnalysis, String? userJournalEntry) async {
+    Map<String, dynamic> combinedAnalysis,
+    String? userJournalEntry,
+  ) async {
     await Future.delayed(const Duration(milliseconds: 1500));
-    
+
     final symptoms = combinedAnalysis['symptoms'] as List<String>;
     final moods = combinedAnalysis['moods'] as List<String>;
-    
+
     String summary = 'Daily Summary: ';
-    
+
     if (symptoms.isNotEmpty) {
       summary += 'Reported symptoms include ${symptoms.take(3).join(', ')}. ';
     }
-    
+
     if (moods.isNotEmpty) {
       summary += 'Mood appeared to be predominantly ${moods.first}. ';
     }
-    
+
     if (userJournalEntry != null && userJournalEntry.isNotEmpty) {
-      summary += 'Personal notes indicate additional context about daily experiences.';
+      summary +=
+          'Personal notes indicate additional context about daily experiences.';
     }
-    
+
     return summary;
   }
 
-  Future<List<String>> _extractKeyInsights(Map<String, dynamic> combinedAnalysis) async {
+  Future<List<String>> _extractKeyInsights(
+    Map<String, dynamic> combinedAnalysis,
+  ) async {
     await Future.delayed(const Duration(milliseconds: 800));
     return [
       'Symptoms show correlation with cycle phase',
@@ -819,7 +987,9 @@ class MultimodalSymptomAnalyzer {
     ];
   }
 
-  Future<List<String>> _identifyDailyPatterns(Map<String, dynamic> combinedAnalysis) async {
+  Future<List<String>> _identifyDailyPatterns(
+    Map<String, dynamic> combinedAnalysis,
+  ) async {
     await Future.delayed(const Duration(milliseconds: 600));
     return [
       'Morning energy levels consistently lower',
@@ -828,7 +998,9 @@ class MultimodalSymptomAnalyzer {
     ];
   }
 
-  Future<List<String>> _generateDailyRecommendations(Map<String, dynamic> combinedAnalysis) async {
+  Future<List<String>> _generateDailyRecommendations(
+    Map<String, dynamic> combinedAnalysis,
+  ) async {
     await Future.delayed(const Duration(milliseconds: 700));
     return [
       'Consider gentle exercise for mood improvement',
@@ -839,41 +1011,45 @@ class MultimodalSymptomAnalyzer {
 
   Map<String, dynamic> _calculateMoodTrend(List<SymptomAnalysisBase> analyses) {
     final moodScores = <double>[];
-    
+
     for (final analysis in analyses) {
       if (analysis is TextSymptomAnalysis) {
         moodScores.add(analysis.moodAnalysis.confidence);
       }
     }
-    
+
     return {
-      'average_mood': moodScores.isNotEmpty 
-        ? moodScores.reduce((a, b) => a + b) / moodScores.length 
-        : 0.5,
+      'average_mood': moodScores.isNotEmpty
+          ? moodScores.reduce((a, b) => a + b) / moodScores.length
+          : 0.5,
       'trend_direction': 'stable',
       'volatility': 0.3,
     };
   }
 
-  Map<String, dynamic> _calculateEnergyTrend(List<SymptomAnalysisBase> analyses) {
+  Map<String, dynamic> _calculateEnergyTrend(
+    List<SymptomAnalysisBase> analyses,
+  ) {
     final energyScores = <double>[];
-    
+
     for (final analysis in analyses) {
       if (analysis is TextSymptomAnalysis) {
         energyScores.add(analysis.energyAnalysis.energyScore);
       }
     }
-    
+
     return {
-      'average_energy': energyScores.isNotEmpty 
-        ? energyScores.reduce((a, b) => a + b) / energyScores.length 
-        : 0.5,
+      'average_energy': energyScores.isNotEmpty
+          ? energyScores.reduce((a, b) => a + b) / energyScores.length
+          : 0.5,
       'trend_direction': 'declining',
       'peak_times': ['morning', 'late_afternoon'],
     };
   }
 
-  Future<Map<String, dynamic>> _analyzeSymptomCorrelations(List<SymptomAnalysisBase> analyses) async {
+  Future<Map<String, dynamic>> _analyzeSymptomCorrelations(
+    List<SymptomAnalysisBase> analyses,
+  ) async {
     await Future.delayed(const Duration(milliseconds: 500));
     return {
       'strong_correlations': ['mood_energy', 'pain_stress'],
@@ -883,7 +1059,9 @@ class MultimodalSymptomAnalyzer {
   }
 
   // Contextual Analysis Methods
-  Future<Map<String, dynamic>> _analyzeTimeBasedCorrelations(List<SymptomAnalysisBase> analyses) async {
+  Future<Map<String, dynamic>> _analyzeTimeBasedCorrelations(
+    List<SymptomAnalysisBase> analyses,
+  ) async {
     await Future.delayed(const Duration(milliseconds: 400));
     return {
       'morning_patterns': ['low_energy', 'mood_neutral'],
@@ -892,7 +1070,9 @@ class MultimodalSymptomAnalyzer {
     };
   }
 
-  Future<Map<String, dynamic>> _analyzeCrossModalCorrelations(List<SymptomAnalysisBase> analyses) async {
+  Future<Map<String, dynamic>> _analyzeCrossModalCorrelations(
+    List<SymptomAnalysisBase> analyses,
+  ) async {
     await Future.delayed(const Duration(milliseconds: 600));
     return {
       'voice_text_correlation': 0.8,
@@ -902,7 +1082,9 @@ class MultimodalSymptomAnalyzer {
   }
 
   Future<Map<String, dynamic>> _analyzeEnvironmentalCorrelations(
-    List<SymptomAnalysisBase> analyses, Map<String, dynamic>? environmentalData) async {
+    List<SymptomAnalysisBase> analyses,
+    Map<String, dynamic>? environmentalData,
+  ) async {
     await Future.delayed(const Duration(milliseconds: 300));
     return {
       'weather_correlation': 0.5,
@@ -912,7 +1094,9 @@ class MultimodalSymptomAnalyzer {
   }
 
   Future<Map<String, dynamic>> _analyzePersonalPatterns(
-    List<SymptomAnalysisBase> analyses, UserProfile userProfile) async {
+    List<SymptomAnalysisBase> analyses,
+    UserProfile userProfile,
+  ) async {
     await Future.delayed(const Duration(milliseconds: 500));
     return {
       'unique_patterns': ['stress_response', 'sleep_correlation'],
@@ -922,7 +1106,9 @@ class MultimodalSymptomAnalyzer {
   }
 
   Future<List<String>> _detectMultimodalAnomalies(
-    List<SymptomAnalysisBase> analyses, UserProfile userProfile) async {
+    List<SymptomAnalysisBase> analyses,
+    UserProfile userProfile,
+  ) async {
     await Future.delayed(const Duration(milliseconds: 400));
     return [
       'Unusual pain intensity reported',
@@ -933,7 +1119,14 @@ class MultimodalSymptomAnalyzer {
 
   // Additional initialization helper methods
   Map<String, dynamic> _initializeMoodDetector() => {
-    'emotion_categories': ['joy', 'sadness', 'anger', 'fear', 'surprise', 'disgust'],
+    'emotion_categories': [
+      'joy',
+      'sadness',
+      'anger',
+      'fear',
+      'surprise',
+      'disgust',
+    ],
     'intensity_levels': ['low', 'medium', 'high'],
     'confidence_threshold': 0.7,
   };

@@ -45,11 +45,7 @@ class SettingsSection extends StatelessWidget {
                     ),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Icon(
-                    icon,
-                    color: Colors.white,
-                    size: 20,
-                  ),
+                  child: Icon(icon, color: Colors.white, size: 20),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -67,7 +63,7 @@ class SettingsSection extends StatelessWidget {
               ],
             ),
           ),
-          
+
           // Section Items
           ...children.map((child) => child),
         ],

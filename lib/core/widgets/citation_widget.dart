@@ -6,10 +6,7 @@ class Citation {
   final String title;
   final String description;
 
-  const Citation({
-    required this.title,
-    required this.description,
-  });
+  const Citation({required this.title, required this.description});
 }
 
 /// Reusable widget to display "View Sources" link and citation dialog
@@ -70,9 +67,7 @@ class CitationWidget extends StatelessWidget {
             Expanded(
               child: Text(
                 dialogTitle,
-                style: TextStyle(
-                  color: iconColor ?? AppTheme.primaryPurple,
-                ),
+                style: TextStyle(color: iconColor ?? AppTheme.primaryPurple),
               ),
             ),
           ],
@@ -113,11 +108,7 @@ class CitationWidget extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            Icons.check_circle,
-            size: 16,
-            color: AppTheme.accentMint,
-          ),
+          Icon(Icons.check_circle, size: 16, color: AppTheme.accentMint),
           const SizedBox(width: 8),
           Expanded(
             child: Column(
@@ -155,49 +146,59 @@ class CitationSets {
   static const List<Citation> cycleRegularity = [
     Citation(
       title: '1. Cycle Length Analysis',
-      description: 'Statistical analysis of your recorded cycle lengths over time.',
+      description:
+          'Statistical analysis of your recorded cycle lengths over time.',
     ),
     Citation(
       title: '2. Variation Tracking',
-      description: 'Standard deviation calculation to measure cycle consistency.',
+      description:
+          'Standard deviation calculation to measure cycle consistency.',
     ),
     Citation(
       title: '3. Pattern Recognition',
-      description: 'Machine learning models trained on clinical cycle data and research.',
+      description:
+          'Machine learning models trained on clinical cycle data and research.',
     ),
     Citation(
       title: '4. Medical Guidelines',
-      description: 'Based on ACOG and WHO standards for menstrual health assessment.',
+      description:
+          'Based on ACOG and WHO standards for menstrual health assessment.',
     ),
   ];
 
   static const List<Citation> predictionAccuracy = [
     Citation(
       title: '1. Historical Comparison',
-      description: 'Comparing AI predictions against actual cycle start dates you recorded.',
+      description:
+          'Comparing AI predictions against actual cycle start dates you recorded.',
     ),
     Citation(
       title: '2. Machine Learning Models',
-      description: 'Ensemble of SVM, Random Forest, Neural Networks, and LSTM models.',
+      description:
+          'Ensemble of SVM, Random Forest, Neural Networks, and LSTM models.',
     ),
     Citation(
       title: '3. Confidence Scoring',
-      description: 'Statistical analysis of prediction reliability and uncertainty ranges.',
+      description:
+          'Statistical analysis of prediction reliability and uncertainty ranges.',
     ),
     Citation(
       title: '4. Continuous Learning',
-      description: 'Algorithms improve accuracy over time using your feedback and data.',
+      description:
+          'Algorithms improve accuracy over time using your feedback and data.',
     ),
     Citation(
       title: '5. Biometric Integration',
-      description: 'Heart rate, temperature, and health data correlation for enhanced accuracy.',
+      description:
+          'Heart rate, temperature, and health data correlation for enhanced accuracy.',
     ),
   ];
 
   static const List<Citation> symptomPrediction = [
     Citation(
       title: '1. Pattern Analysis',
-      description: 'ML-based recognition of symptom patterns across your cycle history.',
+      description:
+          'ML-based recognition of symptom patterns across your cycle history.',
     ),
     Citation(
       title: '2. Temporal Correlation',
@@ -205,22 +206,26 @@ class CitationSets {
     ),
     Citation(
       title: '3. Severity Modeling',
-      description: 'Predictive algorithms for symptom intensity based on historical data.',
+      description:
+          'Predictive algorithms for symptom intensity based on historical data.',
     ),
     Citation(
       title: '4. Ensemble Forecasting',
-      description: 'Combined predictions from multiple ML models for higher accuracy.',
+      description:
+          'Combined predictions from multiple ML models for higher accuracy.',
     ),
   ];
 
   static const List<Citation> fertilityWindow = [
     Citation(
       title: '1. LSTM Neural Networks',
-      description: 'Sequential pattern learning with 12-cycle memory for ovulation prediction.',
+      description:
+          'Sequential pattern learning with 12-cycle memory for ovulation prediction.',
     ),
     Citation(
       title: '2. Gaussian Process Models',
-      description: 'Uncertainty quantification for fertility window predictions.',
+      description:
+          'Uncertainty quantification for fertility window predictions.',
     ),
     Citation(
       title: '3. Bayesian Inference',
@@ -228,7 +233,8 @@ class CitationSets {
     ),
     Citation(
       title: '4. Biometric Correlation',
-      description: 'Temperature and heart rate pattern analysis for ovulation detection.',
+      description:
+          'Temperature and heart rate pattern analysis for ovulation detection.',
     ),
     Citation(
       title: '5. Medical Research',
@@ -239,7 +245,8 @@ class CitationSets {
   static const List<Citation> healthConditions = [
     Citation(
       title: '1. PCOS Detection',
-      description: 'Pattern recognition based on Rotterdam criteria and cycle irregularities.',
+      description:
+          'Pattern recognition based on Rotterdam criteria and cycle irregularities.',
     ),
     Citation(
       title: '2. Endometriosis Markers',
@@ -247,30 +254,36 @@ class CitationSets {
     ),
     Citation(
       title: '3. Risk Scoring',
-      description: 'Statistical algorithms for condition probability assessment.',
+      description:
+          'Statistical algorithms for condition probability assessment.',
     ),
     Citation(
       title: '4. Medical Guidelines',
-      description: 'ACOG diagnostic criteria and clinical research integration.',
+      description:
+          'ACOG diagnostic criteria and clinical research integration.',
     ),
   ];
 
   static const List<Citation> moodEnergy = [
     Citation(
       title: '1. Hormonal Correlation',
-      description: 'Analysis of mood patterns linked to cycle phase and hormonal changes.',
+      description:
+          'Analysis of mood patterns linked to cycle phase and hormonal changes.',
     ),
     Citation(
       title: '2. Temporal Patterns',
-      description: 'ML-based identification of recurring mood and energy cycles.',
+      description:
+          'ML-based identification of recurring mood and energy cycles.',
     ),
     Citation(
       title: '3. PMS Prediction',
-      description: 'Statistical models for premenstrual syndrome symptom forecasting.',
+      description:
+          'Statistical models for premenstrual syndrome symptom forecasting.',
     ),
     Citation(
       title: '4. Biometric Integration',
-      description: 'Sleep, activity, and heart rate correlation with emotional wellbeing.',
+      description:
+          'Sleep, activity, and heart rate correlation with emotional wellbeing.',
     ),
   ];
 }

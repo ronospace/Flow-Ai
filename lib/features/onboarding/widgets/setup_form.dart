@@ -4,10 +4,7 @@ import 'package:flutter/services.dart';
 class SetupForm extends StatefulWidget {
   final Function(Map<String, dynamic>) onSave;
 
-  const SetupForm({
-    super.key,
-    required this.onSave,
-  });
+  const SetupForm({super.key, required this.onSave});
 
   @override
   State<SetupForm> createState() => _SetupFormState();
@@ -15,7 +12,7 @@ class SetupForm extends StatefulWidget {
 
 class _SetupFormState extends State<SetupForm> {
   final _formKey = GlobalKey<FormState>();
-  
+
   // Form data
   int _cycleLength = 28;
   int _periodLength = 5;
@@ -31,15 +28,23 @@ class _SetupFormState extends State<SetupForm> {
     {'id': 'fertility', 'title': 'Fertility Tracking', 'icon': Icons.favorite},
     {'id': 'symptoms', 'title': 'Symptom Monitoring', 'icon': Icons.healing},
     {'id': 'mood', 'title': 'Mood Tracking', 'icon': Icons.mood},
-    {'id': 'exercise', 'title': 'Exercise & Wellness', 'icon': Icons.fitness_center},
-    {'id': 'medication', 'title': 'Medication Reminders', 'icon': Icons.medication},
+    {
+      'id': 'exercise',
+      'title': 'Exercise & Wellness',
+      'icon': Icons.fitness_center,
+    },
+    {
+      'id': 'medication',
+      'title': 'Medication Reminders',
+      'icon': Icons.medication,
+    },
     {'id': 'health', 'title': 'General Health', 'icon': Icons.local_hospital},
   ];
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Form(
       key: _formKey,
       child: SingleChildScrollView(
@@ -155,7 +160,10 @@ class _SetupFormState extends State<SetupForm> {
               ),
               const SizedBox(width: 16),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
                   color: theme.colorScheme.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
@@ -220,7 +228,10 @@ class _SetupFormState extends State<SetupForm> {
               ),
               const SizedBox(width: 16),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
                   color: theme.colorScheme.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
@@ -270,8 +281,8 @@ class _SetupFormState extends State<SetupForm> {
                   Icon(
                     goal['icon'],
                     size: 16,
-                    color: isSelected 
-                        ? theme.colorScheme.onPrimary 
+                    color: isSelected
+                        ? theme.colorScheme.onPrimary
                         : theme.colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
                   const SizedBox(width: 8),
@@ -291,8 +302,8 @@ class _SetupFormState extends State<SetupForm> {
               backgroundColor: theme.colorScheme.surface,
               selectedColor: theme.colorScheme.primary,
               labelStyle: TextStyle(
-                color: isSelected 
-                    ? theme.colorScheme.onPrimary 
+                color: isSelected
+                    ? theme.colorScheme.onPrimary
                     : theme.colorScheme.onSurface,
               ),
             );
@@ -340,7 +351,7 @@ class _SetupFormState extends State<SetupForm> {
                 });
               },
               activeTrackColor: Colors.blue,
-        activeThumbColor: Colors.blue,
+              activeThumbColor: Colors.blue,
             ),
           );
         }),
@@ -378,19 +389,17 @@ class _SetupFormState extends State<SetupForm> {
     }
   }
 
-  
-
   void _saveSetup() {
     if (_formKey.currentState?.validate() ?? false) {
       HapticFeedback.lightImpact();
-      
+
       final data = {
         'cycleLength': _cycleLength,
         'periodLength': _periodLength,
         'goals': _selectedGoals.toList(),
         'reminders': _reminderSettings,
       };
-      
+
       widget.onSave(data);
     }
   }

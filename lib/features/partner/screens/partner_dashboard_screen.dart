@@ -1,18 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../generated/app_localizations.dart';
-import '../services/partner_service.dart' hide PartnershipStatus, PartnerMessageType, PartnerMessage, PartnerInsight, PartnerInsightType, Partnership show PartnerService, PartnerCareAction, PartnerCareActionType, PartnerInvitation, PartnerSharingSettings;
-import '../services/partner_service.dart' as service_types show PartnerMessageType;
-import '../models/partner_models.dart' show Partnership, PartnershipStatus, PartnerMessage, PartnerMessageType, PartnerPrivacySettings, CareAction, CareActionType;
+import '../services/partner_service.dart'
+    hide
+        PartnershipStatus,
+        PartnerMessageType,
+        PartnerMessage,
+        PartnerInsight,
+        PartnerInsightType,
+        Partnership
+    show
+        PartnerService,
+        PartnerCareAction,
+        PartnerCareActionType,
+        PartnerInvitation,
+        PartnerSharingSettings;
+import '../services/partner_service.dart'
+    as service_types
+    show PartnerMessageType;
+import '../models/partner_models.dart'
+    show
+        Partnership,
+        PartnershipStatus,
+        PartnerMessage,
+        PartnerMessageType,
+        PartnerPrivacySettings,
+        CareAction,
+        CareActionType;
 import '../models/partner_insight.dart';
 import '../widgets/partner_cycle_insight_widget.dart';
 import '../widgets/partner_communication_widget.dart';
 import '../widgets/partner_care_actions_widget.dart';
 import '../widgets/partner_insights_widget.dart';
-import '../dialogs/invite_partner_dialog.dart';
+import '../widgets/partner_invitation_dialog.dart';
 import '../dialogs/join_partner_dialog.dart';
 
 class PartnerDashboardScreen extends StatefulWidget {
@@ -32,22 +54,22 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
   @override
   void initState() {
     super.initState();
-    
+
     _headerController = AnimationController(
       duration: const Duration(milliseconds: 1200),
       vsync: this,
     );
-    
+
     _contentController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
     );
-    
+
     _headerAnimation = CurvedAnimation(
       parent: _headerController,
       curve: Curves.easeOutBack,
     );
-    
+
     _contentAnimation = CurvedAnimation(
       parent: _contentController,
       curve: Curves.easeInOut,
@@ -58,7 +80,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     Future.delayed(const Duration(milliseconds: 300), () {
       _contentController.forward();
     });
-    
+
     // Initialize partner service
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<PartnerService>().initialize();
@@ -76,7 +98,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localizations = AppLocalizations.of(context);
-    
+
     return Scaffold(
       body: Consumer<PartnerService>(
         builder: (context, partnerService, child) {
@@ -88,26 +110,54 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                 sliver: SliverList(
                   delegate: SliverChildListDelegate([
                     if (partnerService.hasPartner) ...[
-                      _buildPartnershipHeader(theme, localizations, partnerService),
+                      _buildPartnershipHeader(
+                        theme,
+                        localizations,
+                        partnerService,
+                      ),
                       const SizedBox(height: 24),
-                      
-                      _buildCycleInsightCard(theme, localizations, partnerService),
+
+                      _buildCycleInsightCard(
+                        theme,
+                        localizations,
+                        partnerService,
+                      ),
                       const SizedBox(height: 20),
-                      
-                      _buildQuickActionsGrid(theme, localizations, partnerService),
+
+                      _buildQuickActionsGrid(
+                        theme,
+                        localizations,
+                        partnerService,
+                      ),
                       const SizedBox(height: 20),
-                      
-                      _buildCommunicationCard(theme, localizations, partnerService),
+
+                      _buildCommunicationCard(
+                        theme,
+                        localizations,
+                        partnerService,
+                      ),
                       const SizedBox(height: 20),
-                      
-                      _buildPartnerInsightsCard(theme, localizations, partnerService),
+
+                      _buildPartnerInsightsCard(
+                        theme,
+                        localizations,
+                        partnerService,
+                      ),
                       const SizedBox(height: 20),
-                      
-                      _buildCareHistoryCard(theme, localizations, partnerService),
+
+                      _buildCareHistoryCard(
+                        theme,
+                        localizations,
+                        partnerService,
+                      ),
                     ] else ...[
-                      _buildNoPartnerState(theme, localizations, partnerService),
+                      _buildNoPartnerState(
+                        theme,
+                        localizations,
+                        partnerService,
+                      ),
                     ],
-                    
+
                     const SizedBox(height: 100), // Space for bottom navigation
                   ]),
                 ),
@@ -119,7 +169,11 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     );
   }
 
-  Widget _buildAnimatedAppBar(ThemeData theme, AppLocalizations localizations, PartnerService partnerService) {
+  Widget _buildAnimatedAppBar(
+    ThemeData theme,
+    AppLocalizations localizations,
+    PartnerService partnerService,
+  ) {
     return SliverAppBar(
       expandedHeight: 120,
       floating: true,
@@ -144,7 +198,9 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
               ),
               child: FlexibleSpaceBar(
                 title: Text(
-                  partnerService.hasPartner ? 'Partner Connection' : 'Connect with Partner',
+                  partnerService.hasPartner
+                      ? 'Partner Connection'
+                      : 'Connect with Partner',
                   style: theme.textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: theme.colorScheme.onSurface,
@@ -170,11 +226,17 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     );
   }
 
-  Widget _buildPartnershipHeader(ThemeData theme, AppLocalizations localizations, PartnerService partnerService) {
+  Widget _buildPartnershipHeader(
+    ThemeData theme,
+    AppLocalizations localizations,
+    PartnerService partnerService,
+  ) {
     final partnership = partnerService.currentPartnership!;
     // Service Partnership doesn't have status field, so assume active if partnership exists
-    final isConnected = partnerService.hasPartner && (partnership.partnerUserName.isNotEmpty ?? false);
-    
+    final isConnected =
+        partnerService.hasPartner &&
+        (partnership.partnerUserName.isNotEmpty ?? false);
+
     return AnimatedBuilder(
       animation: _contentAnimation,
       builder: (context, child) {
@@ -203,29 +265,40 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                   children: [
                     _buildPartnerAvatar(partnership.primaryUserName, true),
                     const SizedBox(width: 16),
-                    
+
                     Expanded(
                       child: Column(
                         children: [
                           Container(
-                            width: 60,
-                            height: 3,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
-                              ),
-                              borderRadius: BorderRadius.circular(2),
-                            ),
-                          ).animate(onPlay: (controller) => controller.repeat())
-                            .shimmer(duration: 2000.ms)
-                            .then(delay: 1000.ms),
-                          
+                                width: 60,
+                                height: 3,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      AppTheme.primaryRose,
+                                      AppTheme.primaryPurple,
+                                    ],
+                                  ),
+                                  borderRadius: BorderRadius.circular(2),
+                                ),
+                              )
+                              .animate(
+                                onPlay: (controller) => controller.repeat(),
+                              )
+                              .shimmer(duration: 2000.ms)
+                              .then(delay: 1000.ms),
+
                           const SizedBox(height: 8),
-                          
+
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
                             decoration: BoxDecoration(
-                              color: AppTheme.warningOrange.withValues(alpha: 0.1),
+                              color: AppTheme.warningOrange.withValues(
+                                alpha: 0.1,
+                              ),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Row(
@@ -254,31 +327,31 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                         ],
                       ),
                     ),
-                    
+
                     const SizedBox(width: 16),
                     _buildPartnerAvatar(partnership.partnerUserName, false),
                   ],
                 ),
-                
+
                 const SizedBox(height: 20),
-                
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     _buildConnectionStat(
-                      'Days Connected', 
+                      'Days Connected',
                       '${DateTime.now().difference(partnership.createdAt).inDays}',
                       Icons.favorite,
                       AppTheme.primaryRose,
                     ),
                     _buildConnectionStat(
-                      'Messages', 
+                      'Messages',
                       '${partnerService.messages.length}',
                       Icons.chat,
                       AppTheme.secondaryBlue,
                     ),
                     _buildConnectionStat(
-                      'Care Actions', 
+                      'Care Actions',
                       '${partnerService.careActions.length}',
                       Icons.healing,
                       AppTheme.accentMint,
@@ -299,15 +372,12 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
       height: 60,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: isPrimary 
-            ? [AppTheme.primaryRose, AppTheme.primaryPurple]
-            : [AppTheme.secondaryBlue, AppTheme.accentMint],
+          colors: isPrimary
+              ? [AppTheme.primaryRose, AppTheme.primaryPurple]
+              : [AppTheme.secondaryBlue, AppTheme.accentMint],
         ),
         shape: BoxShape.circle,
-        border: Border.all(
-          color: Theme.of(context).cardColor,
-          width: 3,
-        ),
+        border: Border.all(color: Theme.of(context).cardColor, width: 3),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.1),
@@ -329,7 +399,12 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     );
   }
 
-  Widget _buildConnectionStat(String label, String value, IconData icon, Color color) {
+  Widget _buildConnectionStat(
+    String label,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     final theme = Theme.of(context);
     return Column(
       children: [
@@ -354,7 +429,11 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     );
   }
 
-  Widget _buildCycleInsightCard(ThemeData theme, AppLocalizations localizations, PartnerService partnerService) {
+  Widget _buildCycleInsightCard(
+    ThemeData theme,
+    AppLocalizations localizations,
+    PartnerService partnerService,
+  ) {
     // Convert service Partnership to model Partnership
     final ps = partnerService.currentPartnership!;
     final partnership = Partnership(
@@ -378,13 +457,17 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
       ),
       lastActiveAt: ps.lastActiveAt,
     );
-    
+
     return PartnerCycleInsightWidget(
       partnership: partnership,
     ).animate().fadeIn(delay: 200.ms).slideX(begin: -0.2, end: 0);
   }
 
-  Widget _buildQuickActionsGrid(ThemeData theme, AppLocalizations localizations, PartnerService partnerService) {
+  Widget _buildQuickActionsGrid(
+    ThemeData theme,
+    AppLocalizations localizations,
+    PartnerService partnerService,
+  ) {
     final actions = [
       _ActionButton(
         title: 'Send Message',
@@ -444,80 +527,83 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
   Widget _buildActionCard(_ActionButton action) {
     final theme = Theme.of(context);
     return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            theme.cardColor,
-            action.color.withValues(alpha: 0.05),
-          ],
-        ),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: action.color.withValues(alpha: 0.2),
-          width: 1.5,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: action.color.withValues(alpha: 0.1),
-            blurRadius: 12,
-            offset: const Offset(0, 6),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [theme.cardColor, action.color.withValues(alpha: 0.05)],
+            ),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: action.color.withValues(alpha: 0.2),
+              width: 1.5,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: action.color.withValues(alpha: 0.1),
+                blurRadius: 12,
+                offset: const Offset(0, 6),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: action.onTap,
-          borderRadius: BorderRadius.circular(20),
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [action.color, action.color.withValues(alpha: 0.7)],
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: action.onTap,
+              borderRadius: BorderRadius.circular(20),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            action.color,
+                            action.color.withValues(alpha: 0.7),
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(action.icon, color: Colors.white, size: 24),
                     ),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(
-                    action.icon,
-                    color: Colors.white,
-                    size: 24,
-                  ),
+                    const Spacer(),
+                    Text(
+                      action.title,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: theme.colorScheme.onSurface,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      action.subtitle,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.6,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                const Spacer(),
-                Text(
-                  action.title,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.onSurface,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  action.subtitle,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
-    ).animate(onPlay: (controller) => controller.repeat())
-      .shimmer(duration: 3000.ms, color: action.color.withValues(alpha: 0.1))
-      .then(delay: 2000.ms);
+        )
+        .animate(onPlay: (controller) => controller.repeat())
+        .shimmer(duration: 3000.ms, color: action.color.withValues(alpha: 0.1))
+        .then(delay: 2000.ms);
   }
 
-  Widget _buildCommunicationCard(ThemeData theme, AppLocalizations localizations, PartnerService partnerService) {
+  Widget _buildCommunicationCard(
+    ThemeData theme,
+    AppLocalizations localizations,
+    PartnerService partnerService,
+  ) {
     // Convert PartnerMessage from service to PartnerMessage from models
     final messages = partnerService.messages.map((pm) {
       // Map PartnerMessageType from service to PartnerMessageType from models
@@ -535,7 +621,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
         default:
           type = PartnerMessageType.text;
       }
-      
+
       return PartnerMessage(
         id: pm.id,
         partnershipId: pm.partnershipId,
@@ -548,7 +634,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
         metadata: pm.metadata,
       );
     }).toList();
-    
+
     return PartnerCommunicationWidget(
       messages: messages.take(3).toList(),
       onSendMessage: (message) => partnerService.sendMessage(
@@ -558,7 +644,11 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.2, end: 0);
   }
 
-  Widget _buildPartnerInsightsCard(ThemeData theme, AppLocalizations localizations, PartnerService partnerService) {
+  Widget _buildPartnerInsightsCard(
+    ThemeData theme,
+    AppLocalizations localizations,
+    PartnerService partnerService,
+  ) {
     // Convert PartnerInsight from service to PartnerInsight from models
     final insights = partnerService.insights.map((pi) {
       return PartnerInsight(
@@ -576,24 +666,29 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
         isRead: pi.isRead,
       );
     }).toList();
-    
+
     return PartnerInsightsWidget(
       insights: insights,
     ).animate().fadeIn(delay: 600.ms).slideX(begin: 0.2, end: 0);
   }
 
-  Widget _buildCareHistoryCard(ThemeData theme, AppLocalizations localizations, PartnerService partnerService) {
+  Widget _buildCareHistoryCard(
+    ThemeData theme,
+    AppLocalizations localizations,
+    PartnerService partnerService,
+  ) {
     // Get current user ID from partnership
     final partnership = partnerService.currentPartnership;
     if (partnership == null) {
       return const SizedBox.shrink();
     }
-    
+
     // Try to determine current user ID from LocalUserService synchronously via stored value
     // For now, use a placeholder - will be set correctly by the service
     // Service Partnership uses primaryUserId/partnerUserId, not userId1/userId2
-    final currentUserId = partnership.primaryUserId; // Service will handle determining the correct user
-    
+    final currentUserId = partnership
+        .primaryUserId; // Service will handle determining the correct user
+
     // Convert PartnerCareAction to CareAction for widget
     final careActions = partnerService.careActions.map((pa) {
       // Map PartnerCareActionType to CareActionType
@@ -612,7 +707,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
           type = CareActionType.checkIn;
           break;
       }
-      
+
       final partnership = partnerService.currentPartnership!;
       return CareAction(
         id: pa.id,
@@ -626,7 +721,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
         completedAt: null,
       );
     }).toList();
-    
+
     return PartnerCareActionsWidget(
       careActions: careActions.take(5).toList(),
       onSendCareAction: (careAction) async {
@@ -645,7 +740,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
           default:
             type = PartnerCareActionType.other;
         }
-        
+
         await partnerService.sendCareAction(
           type: type,
           title: careAction.title,
@@ -657,31 +752,41 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     ).animate().fadeIn(delay: 800.ms).slideY(begin: 0.3, end: 0);
   }
 
-  Widget _buildNoPartnerState(ThemeData theme, AppLocalizations localizations, PartnerService partnerService) {
+  Widget _buildNoPartnerState(
+    ThemeData theme,
+    AppLocalizations localizations,
+    PartnerService partnerService,
+  ) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const SizedBox(height: 60),
-          
+
           Container(
-            width: 120,
-            height: 120,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [AppTheme.primaryRose.withValues(alpha: 0.1), AppTheme.primaryPurple.withValues(alpha: 0.1)],
-              ),
-              borderRadius: BorderRadius.circular(60),
-            ),
-            child: Icon(
-              Icons.favorite_border,
-              size: 60,
-              color: AppTheme.primaryRose,
-            ),
-          ).animate().scale(begin: const Offset(0.5, 0.5)).fadeIn(duration: 800.ms),
-          
+                width: 120,
+                height: 120,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      AppTheme.primaryRose.withValues(alpha: 0.1),
+                      AppTheme.primaryPurple.withValues(alpha: 0.1),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(60),
+                ),
+                child: Icon(
+                  Icons.favorite_border,
+                  size: 60,
+                  color: AppTheme.primaryRose,
+                ),
+              )
+              .animate()
+              .scale(begin: const Offset(0.5, 0.5))
+              .fadeIn(duration: 800.ms),
+
           const SizedBox(height: 32),
-          
+
           Text(
             'Connect with Your Partner',
             style: theme.textTheme.headlineMedium?.copyWith(
@@ -689,9 +794,9 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
               color: theme.colorScheme.onSurface,
             ),
           ).animate().fadeIn(delay: 200.ms),
-          
+
           const SizedBox(height: 16),
-          
+
           Text(
             'Share your cycle journey together.\nGet support, insights, and stay connected.',
             textAlign: TextAlign.center,
@@ -700,14 +805,15 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
               height: 1.5,
             ),
           ).animate().fadeIn(delay: 400.ms),
-          
+
           const SizedBox(height: 40),
-          
+
           Row(
             children: [
               Expanded(
                 child: ElevatedButton.icon(
-                  onPressed: () => _showInvitePartnerDialog(context, partnerService),
+                  onPressed: () =>
+                      _showPartnerInvitationDialog(context, partnerService),
                   icon: const Icon(Icons.send),
                   label: const Text('Invite Partner'),
                   style: ElevatedButton.styleFrom(
@@ -723,7 +829,8 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
               const SizedBox(width: 16),
               Expanded(
                 child: OutlinedButton.icon(
-                  onPressed: () => _showJoinPartnerDialog(context, partnerService),
+                  onPressed: () =>
+                      _showJoinPartnerDialog(context, partnerService),
                   icon: const Icon(Icons.link),
                   label: const Text('Join Partner'),
                   style: OutlinedButton.styleFrom(
@@ -744,84 +851,28 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
   }
 
   // Dialog methods
-  void _showInvitePartnerDialog(BuildContext context, PartnerService partnerService) {
+  void _showPartnerInvitationDialog(
+    BuildContext context,
+    PartnerService partnerService,
+  ) {
     showDialog(
       context: context,
-      builder: (context) => InvitePartnerDialog(
-        onSendInvite: (email, message) async {
-          final invitation = await partnerService.sendPartnerInvitation(
-            inviteeEmail: email,
-            personalMessage: message,
-          );
-          
-          if (invitation != null && context.mounted) {
-            // Show invitation code dialog
-            _showInvitationCodeDialog(context, invitation.invitationCode);
-          }
-        },
-      ),
-    );
-  }
-  
-  void _showInvitationCodeDialog(BuildContext context, String code) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: const Text('Invitation Code'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text('Share this code with your partner:'),
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: AppTheme.primaryRose.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppTheme.primaryRose, width: 2),
-              ),
-              child: SelectableText(
-                code,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 4,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton.icon(
-              onPressed: () async {
-                await Clipboard.setData(ClipboardData(text: code));
-                if (context.mounted) {
-                  ScaffoldMessenger.maybeOf(context)?.showSnackBar(
-                    const SnackBar(content: Text('Code copied to clipboard!')),
-                  );
-                }
-              },
-              icon: const Icon(Icons.copy),
-              label: const Text('Copy Code'),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Done'),
-          ),
-        ],
-      ),
+      builder: (context) =>
+          PartnerInvitationDialog(partnerService: partnerService),
     );
   }
 
-  void _showJoinPartnerDialog(BuildContext context, PartnerService partnerService) {
+  void _showJoinPartnerDialog(
+    BuildContext context,
+    PartnerService partnerService,
+  ) {
     showDialog(
       context: context,
       builder: (context) => JoinPartnerDialog(
         onJoinWithCode: (code) async {
-          final partnership = await partnerService.acceptPartnerInvitation(code);
+          final partnership = await partnerService.acceptPartnerInvitation(
+            code,
+          );
           if (partnership != null && context.mounted) {
             Navigator.of(context).pop(); // Close join dialog
           }
@@ -847,18 +898,24 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     );
   }
 
-  void _showCareActionsDialog(BuildContext context, PartnerService partnerService) {
+  void _showCareActionsDialog(
+    BuildContext context,
+    PartnerService partnerService,
+  ) {
     // Implementation for care actions dialog
   }
 
-  void _showPartnerSettings(BuildContext context, PartnerService partnerService) {
+  void _showPartnerSettings(
+    BuildContext context,
+    PartnerService partnerService,
+  ) {
     // Implementation for partner settings
   }
 
   void _sendMoodCheckIn(PartnerService partnerService) {
     partnerService.sendMessage(
       content: "How are you feeling today? 💕",
-        type: service_types.PartnerMessageType.text,
+      type: service_types.PartnerMessageType.text,
     );
   }
 }

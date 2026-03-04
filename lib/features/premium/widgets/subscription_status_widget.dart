@@ -23,12 +23,20 @@ class SubscriptionStatusWidget extends StatelessWidget {
         }
 
         final subscription = premiumProvider.currentSubscription!;
-        
+
         if (isCompact) {
-          return _buildCompactSubscriptionCard(context, subscription, premiumProvider);
+          return _buildCompactSubscriptionCard(
+            context,
+            subscription,
+            premiumProvider,
+          );
         }
 
-        return _buildFullSubscriptionCard(context, subscription, premiumProvider);
+        return _buildFullSubscriptionCard(
+          context,
+          subscription,
+          premiumProvider,
+        );
       },
     );
   }
@@ -59,7 +67,9 @@ class SubscriptionStatusWidget extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.primary.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Icon(
@@ -75,15 +85,16 @@ class SubscriptionStatusWidget extends StatelessWidget {
                         children: [
                           Text(
                             'Free Version',
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                           Text(
                             'Upgrade to unlock premium features',
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1),
-                            ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(
+                                  color: Theme.of(context).colorScheme.onSurface
+                                      .withValues(alpha: 0.1),
+                                ),
                           ),
                         ],
                       ),
@@ -102,7 +113,9 @@ class SubscriptionStatusWidget extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
-                      onPressed: onTap ?? () => Navigator.of(context).pushNamed('/premium'),
+                      onPressed:
+                          onTap ??
+                          () => Navigator.of(context).pushNamed('/premium'),
                       icon: const Icon(Icons.diamond),
                       label: const Text('Upgrade to Premium'),
                     ),
@@ -117,9 +130,9 @@ class SubscriptionStatusWidget extends StatelessWidget {
   }
 
   Widget _buildCompactSubscriptionCard(
-    BuildContext context, 
-    Subscription subscription, 
-    PremiumProvider provider
+    BuildContext context,
+    Subscription subscription,
+    PremiumProvider provider,
   ) {
     return GestureDetector(
       onTap: onTap ?? () => Navigator.of(context).pushNamed('/premium'),
@@ -131,7 +144,9 @@ class SubscriptionStatusWidget extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: _getStatusColor(subscription.status).withValues(alpha: 0.1),
+                  color: _getStatusColor(
+                    subscription.status,
+                  ).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Icon(
@@ -165,7 +180,9 @@ class SubscriptionStatusWidget extends StatelessWidget {
               Icon(
                 Icons.arrow_forward_ios,
                 size: 16,
-                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1),
+                color: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.1),
               ),
             ],
           ),
@@ -175,9 +192,9 @@ class SubscriptionStatusWidget extends StatelessWidget {
   }
 
   Widget _buildFullSubscriptionCard(
-    BuildContext context, 
-    Subscription subscription, 
-    PremiumProvider provider
+    BuildContext context,
+    Subscription subscription,
+    PremiumProvider provider,
   ) {
     final theme = Theme.of(context);
     final daysRemaining = subscription.remainingDays;
@@ -188,15 +205,15 @@ class SubscriptionStatusWidget extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           gradient: subscription.status == SubscriptionStatus.active
-            ? LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  theme.colorScheme.primary.withValues(alpha: 0.1),
-                  theme.colorScheme.secondary.withValues(alpha: 0.1),
-                ],
-              )
-            : null,
+              ? LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    theme.colorScheme.primary.withValues(alpha: 0.1),
+                    theme.colorScheme.secondary.withValues(alpha: 0.1),
+                  ],
+                )
+              : null,
         ),
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -239,7 +256,9 @@ class SubscriptionStatusWidget extends StatelessWidget {
                         Text(
                           '${subscription.tier.priceString}/month',
                           style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
+                            color: theme.colorScheme.onSurface.withValues(
+                              alpha: 0.1,
+                            ),
                           ),
                         ),
                       ],
@@ -247,9 +266,9 @@ class SubscriptionStatusWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              
+
               const SizedBox(height: 20),
-              
+
               // Subscription details
               Container(
                 padding: const EdgeInsets.all(16),
@@ -273,7 +292,9 @@ class SubscriptionStatusWidget extends StatelessWidget {
                       context,
                       'Next Billing',
                       _formatDate(subscription.endDate),
-                      isExpiringSoon ? Colors.orange : theme.colorScheme.onSurface,
+                      isExpiringSoon
+                          ? Colors.orange
+                          : theme.colorScheme.onSurface,
                     ),
                     const Divider(height: 20),
                     _buildDetailRow(
@@ -287,14 +308,17 @@ class SubscriptionStatusWidget extends StatelessWidget {
               ),
 
               // Days remaining warning
-              if (isExpiringSoon && subscription.status == SubscriptionStatus.active) ...[
+              if (isExpiringSoon &&
+                  subscription.status == SubscriptionStatus.active) ...[
                 const SizedBox(height: 16),
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Colors.orange.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.orange.withValues(alpha: 0.1)),
+                    border: Border.all(
+                      color: Colors.orange.withValues(alpha: 0.1),
+                    ),
                   ),
                   child: Row(
                     children: [
@@ -321,7 +345,9 @@ class SubscriptionStatusWidget extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.red.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.red.withValues(alpha: 0.1)),
+                    border: Border.all(
+                      color: Colors.red.withValues(alpha: 0.1),
+                    ),
                   ),
                   child: Row(
                     children: [
@@ -348,7 +374,9 @@ class SubscriptionStatusWidget extends StatelessWidget {
                 children: [
                   Expanded(
                     child: OutlinedButton.icon(
-                      onPressed: onTap ?? () => Navigator.of(context).pushNamed('/premium'),
+                      onPressed:
+                          onTap ??
+                          () => Navigator.of(context).pushNamed('/premium'),
                       icon: const Icon(Icons.settings, size: 16),
                       label: const Text('Manage'),
                     ),
@@ -384,28 +412,27 @@ class SubscriptionStatusWidget extends StatelessWidget {
       children: [
         Text(
           'Available Features:',
-          style: Theme.of(context).textTheme.titleSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
-        ...freeFeatures.map((feature) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 2),
-          child: Row(
-            children: [
-              Icon(
-                Icons.check,
-                size: 16,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                feature,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            ],
+        ...freeFeatures.map(
+          (feature) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 2),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.check,
+                  size: 16,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                const SizedBox(width: 8),
+                Text(feature, style: Theme.of(context).textTheme.bodySmall),
+              ],
+            ),
           ),
-        )),
+        ),
       ],
     );
   }
@@ -428,9 +455,9 @@ class SubscriptionStatusWidget extends StatelessWidget {
   }
 
   Widget _buildDetailRow(
-    BuildContext context, 
-    String label, 
-    String value, 
+    BuildContext context,
+    String label,
+    String value,
     Color? valueColor,
   ) {
     return Row(
@@ -439,7 +466,9 @@ class SubscriptionStatusWidget extends StatelessWidget {
         Text(
           label,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1),
+            color: Theme.of(
+              context,
+            ).colorScheme.onSurface.withValues(alpha: 0.1),
           ),
         ),
         Text(
@@ -508,13 +537,15 @@ class SubscriptionStatusWidget extends StatelessWidget {
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.outline.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
               ),
               const SizedBox(height: 20),
-              
+
               Text(
                 'Premium Feature Usage',
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -525,11 +556,13 @@ class SubscriptionStatusWidget extends StatelessWidget {
               Text(
                 'Usage statistics for this month',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withValues(alpha: 0.1),
                 ),
               ),
               const SizedBox(height: 20),
-              
+
               Expanded(
                 child: ListView(
                   controller: scrollController,
@@ -537,14 +570,17 @@ class SubscriptionStatusWidget extends StatelessWidget {
                     _buildUsageCard(
                       context,
                       'Custom Reports',
-                      provider.monthlyUsage[PremiumFeatureType.customReports] ?? 0,
+                      provider.monthlyUsage[PremiumFeatureType.customReports] ??
+                          0,
                       null,
                       Icons.assessment,
                     ),
                     _buildUsageCard(
                       context,
                       'Data Exports',
-                      provider.monthlyUsage[PremiumFeatureType.unlimitedExports] ?? 0,
+                      provider.monthlyUsage[PremiumFeatureType
+                              .unlimitedExports] ??
+                          0,
                       null,
                       Icons.download,
                     ),
@@ -558,14 +594,15 @@ class SubscriptionStatusWidget extends StatelessWidget {
                     _buildUsageCard(
                       context,
                       'Health Syncs',
-                      provider.monthlyUsage[PremiumFeatureType.biometricSync] ?? 0,
+                      provider.monthlyUsage[PremiumFeatureType.biometricSync] ??
+                          0,
                       null,
                       Icons.fitness_center,
                     ),
                   ],
                 ),
               ),
-              
+
               const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
@@ -597,7 +634,9 @@ class SubscriptionStatusWidget extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                color: Theme.of(
+                  context,
+                ).colorScheme.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
@@ -621,7 +660,9 @@ class SubscriptionStatusWidget extends StatelessWidget {
                   Text(
                     limit != null ? '$usage / $limit used' : '$usage used',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1),
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withValues(alpha: 0.1),
                     ),
                   ),
                 ],

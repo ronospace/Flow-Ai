@@ -6,7 +6,8 @@ import '../utils/app_logger.dart';
 /// Centralized app enhancement service for dependency injection,
 /// error handling, performance monitoring, and feature management
 class AppEnhancementService {
-  static final AppEnhancementService _instance = AppEnhancementService._internal();
+  static final AppEnhancementService _instance =
+      AppEnhancementService._internal();
   factory AppEnhancementService() => _instance;
   AppEnhancementService._internal();
 
@@ -22,22 +23,21 @@ class AppEnhancementService {
 
     try {
       AppLogger.system('🚀 Initializing App Enhancement Service...');
-      
+
       // Initialize feature flags
       _initializeFeatureFlags();
-      
+
       // Setup error monitoring
       _setupErrorMonitoring();
-      
+
       // Initialize performance monitoring
       _setupPerformanceMonitoring();
-      
+
       _isInitialized = true;
       AppLogger.system('✅ App Enhancement Service initialized successfully');
-      
+
       // Start background tasks
       _startBackgroundTasks();
-      
     } catch (e) {
       AppLogger.error('❌ Failed to initialize App Enhancement Service', e);
       rethrow;
@@ -84,8 +84,10 @@ class AppEnhancementService {
       'health_kit_integration': false, // iOS only, coming soon
       'wear_os_support': false, // Android Wear, coming soon
     });
-    
-    AppLogger.system('🏁 Feature flags initialized: ${_featureFlags.length} features');
+
+    AppLogger.system(
+      '🏁 Feature flags initialized: ${_featureFlags.length} features',
+    );
   }
 
   /// Check if a feature is enabled
@@ -94,7 +96,9 @@ class AppEnhancementService {
   /// Enable/disable a feature
   void setFeature(String feature, bool enabled) {
     _featureFlags[feature] = enabled;
-    AppLogger.system('🔧 Feature "$feature" ${enabled ? 'enabled' : 'disabled'}');
+    AppLogger.system(
+      '🔧 Feature "$feature" ${enabled ? 'enabled' : 'disabled'}',
+    );
   }
 
   /// Setup comprehensive error monitoring
@@ -107,9 +111,9 @@ class AppEnhancementService {
         type: AppErrorType.flutter,
         context: details.context?.toString(),
       );
-      
+
       _recordError(error);
-      
+
       // Log to console in debug mode
       if (kDebugMode) {
         FlutterError.presentError(details);
@@ -124,25 +128,25 @@ class AppEnhancementService {
         timestamp: DateTime.now(),
         type: AppErrorType.dart,
       );
-      
+
       _recordError(appError);
       return true;
     };
-    
+
     AppLogger.system('🛡️ Error monitoring setup complete');
   }
 
   /// Record an error
   void _recordError(AppError error) {
     _errors.add(error);
-    
+
     // Keep only the last 100 errors to prevent memory leaks
     if (_errors.length > 100) {
       _errors.removeAt(0);
     }
-    
+
     AppLogger.error('📊 Error recorded: ${error.message}');
-    
+
     // In production, you would send this to a crash reporting service
     if (isFeatureEnabled('error_reporting') && kReleaseMode) {
       _sendErrorToService(error);
@@ -158,7 +162,7 @@ class AppEnhancementService {
   /// Setup performance monitoring
   void _setupPerformanceMonitoring() {
     if (!isFeatureEnabled('performance_monitoring')) return;
-    
+
     // Monitor build times, navigation, and memory usage
     AppLogger.system('📈 Performance monitoring enabled');
   }
@@ -166,7 +170,7 @@ class AppEnhancementService {
   /// Start a performance measurement
   void startPerformanceTrace(String traceName) {
     if (!isFeatureEnabled('performance_monitoring')) return;
-    
+
     _performanceMetrics[traceName] = PerformanceMetric(
       name: traceName,
       startTime: DateTime.now(),
@@ -176,14 +180,16 @@ class AppEnhancementService {
   /// Stop a performance measurement
   void stopPerformanceTrace(String traceName) {
     if (!isFeatureEnabled('performance_monitoring')) return;
-    
+
     final metric = _performanceMetrics[traceName];
     if (metric != null) {
       metric.endTime = DateTime.now();
       metric.duration = metric.endTime!.difference(metric.startTime);
-      
-      AppLogger.performance('⏱️ Trace "$traceName" took ${metric.duration!.inMilliseconds}ms');
-      
+
+      AppLogger.performance(
+        '⏱️ Trace "$traceName" took ${metric.duration!.inMilliseconds}ms',
+      );
+
       // In production, send to analytics service
       if (kReleaseMode) {
         _sendMetricToService(metric);
@@ -203,7 +209,7 @@ class AppEnhancementService {
     Timer.periodic(const Duration(minutes: 30), (timer) {
       _cleanupOldData();
     });
-    
+
     // Performance health check
     Timer.periodic(const Duration(minutes: 5), (timer) {
       _performHealthCheck();
@@ -213,34 +219,39 @@ class AppEnhancementService {
   /// Cleanup old data to prevent memory leaks
   void _cleanupOldData() {
     final now = DateTime.now();
-    
+
     // Remove errors older than 1 hour
-    _errors.removeWhere((error) => 
-        now.difference(error.timestamp).inHours > 1);
-    
+    _errors.removeWhere((error) => now.difference(error.timestamp).inHours > 1);
+
     // Remove old performance metrics
-    _performanceMetrics.removeWhere((key, metric) => 
-        metric.endTime != null && 
-        now.difference(metric.endTime!).inMinutes > 30);
-    
+    _performanceMetrics.removeWhere(
+      (key, metric) =>
+          metric.endTime != null &&
+          now.difference(metric.endTime!).inMinutes > 30,
+    );
+
     AppLogger.system('🧹 Cleanup completed');
   }
 
   /// Perform system health check
   void _performHealthCheck() {
     if (!kDebugMode) return;
-    
+
     try {
       // Check error rate
-      final recentErrors = _errors.where((error) => 
-          DateTime.now().difference(error.timestamp).inMinutes < 5).length;
-      
+      final recentErrors = _errors
+          .where(
+            (error) => DateTime.now().difference(error.timestamp).inMinutes < 5,
+          )
+          .length;
+
       if (recentErrors > 5) {
-        AppLogger.warning('⚠️ High error rate detected: $recentErrors errors in last 5 minutes');
+        AppLogger.warning(
+          '⚠️ High error rate detected: $recentErrors errors in last 5 minutes',
+        );
       }
-      
+
       AppLogger.system('💚 Health check completed - System healthy');
-      
     } catch (e) {
       AppLogger.warning('❌ Health check failed: $e');
     }
@@ -254,8 +265,12 @@ class AppEnhancementService {
       'featuresEnabled': _featureFlags.values.where((v) => v).length,
       'totalFeatures': _featureFlags.length,
       'errorCount': _errors.length,
-      'recentErrors': _errors.where((error) => 
-          DateTime.now().difference(error.timestamp).inMinutes < 10).length,
+      'recentErrors': _errors
+          .where(
+            (error) =>
+                DateTime.now().difference(error.timestamp).inMinutes < 10,
+          )
+          .length,
       'performanceMetrics': _performanceMetrics.length,
       'memoryHealth': 'Good', // Placeholder - would use actual memory stats
     };
@@ -263,12 +278,16 @@ class AppEnhancementService {
 
   /// Get error summary
   List<Map<String, dynamic>> getErrorSummary() {
-    return _errors.map((error) => {
-      'message': error.message,
-      'type': error.type.toString(),
-      'timestamp': error.timestamp.toIso8601String(),
-      'hasStackTrace': error.stackTrace.isNotEmpty,
-    }).toList();
+    return _errors
+        .map(
+          (error) => {
+            'message': error.message,
+            'type': error.type.toString(),
+            'timestamp': error.timestamp.toIso8601String(),
+            'hasStackTrace': error.stackTrace.isNotEmpty,
+          },
+        )
+        .toList();
   }
 
   /// Clear all errors (for testing/debugging)
@@ -291,7 +310,7 @@ class AppEnhancementService {
 class ServiceNotFoundException implements Exception {
   final String message;
   ServiceNotFoundException(this.message);
-  
+
   @override
   String toString() => 'ServiceNotFoundException: $message';
 }
@@ -347,6 +366,6 @@ class PerformanceMetric {
 /// Extension for easy service access
 extension ServiceLocator on BuildContext {
   T getService<T>() => AppEnhancementService().getService<T>();
-  
+
   bool hasService<T>() => AppEnhancementService().hasService<T>();
 }

@@ -35,21 +35,17 @@ Future<PersonalizationExampleResult> demoPersonalization() async {
   await HyperPersonalizationService.instance.initialize();
 
   // Build adaptive reminders
-  final reminders = HyperPersonalizationService.instance.generateAdaptiveReminders(
-    user: user,
-    currentPhase: currentPhase,
-    goals: goals,
-    behaviorSignals: {
-      'adherence_rate': 0.55,
-      'prefers_morning': true,
-    },
-  );
+  final reminders = HyperPersonalizationService.instance
+      .generateAdaptiveReminders(
+        user: user,
+        currentPhase: currentPhase,
+        goals: goals,
+        behaviorSignals: {'adherence_rate': 0.55, 'prefers_morning': true},
+      );
 
   // Build a phase-based notification
-  final phaseNotification = HyperPersonalizationService.instance.buildPhaseNotification(
-    phase: currentPhase,
-    user: user,
-  );
+  final phaseNotification = HyperPersonalizationService.instance
+      .buildPhaseNotification(phase: currentPhase, user: user);
 
   // Optionally schedule via an adapter (noop by default)
   final adapter = NoopNotificationAdapter();
@@ -58,11 +54,12 @@ Future<PersonalizationExampleResult> demoPersonalization() async {
     scheduledAt: DateTime.now().add(const Duration(minutes: 1)),
   );
 
-  debugPrint('Generated ${reminders.length} reminders and a phase notification');
+  debugPrint(
+    'Generated ${reminders.length} reminders and a phase notification',
+  );
 
   return PersonalizationExampleResult(
     reminders: reminders,
     phaseNotification: phaseNotification,
   );
 }
-

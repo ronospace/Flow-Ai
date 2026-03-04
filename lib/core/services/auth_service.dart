@@ -34,8 +34,11 @@ class AuthService {
 
   User? get currentUser => _auth?.currentUser;
   bool get isInitialized => _isInitialized;
-  Future<bool> get isAuthenticated async => /* _auth?.currentUser != null || */
-      await _hasLocalUser();
+  Future<bool> get isAuthenticated async => await _hasLocalUser();
+
+  bool get isFirebaseAvailable => _firebaseAvailable;
+  bool get isFirebaseAuthenticated =>
+      _firebaseAvailable && (_auth?.currentUser != null);
 
   /// Get current user, checking both Firebase and local users
   Future<dynamic> getCurrentUser() async {
@@ -151,6 +154,26 @@ class AuthService {
       // Initialize local user service as fallback (critical for app function)
       _localUserService = LocalUserService();
       await _localUserService!.initialize();
+
+      // 🔄 Auto-sync local user with Firebase
+      final localUser = await _localUserService!.getCurrentUser();
+      if (localUser != null && _auth != null && _auth!.currentUser == null) {
+        try {
+          await _auth!.signInWithEmailAndPassword(
+            email: localUser.email,
+            password: localUser.uid, // deterministic fallback password
+          );
+        } catch (_) {
+          try {
+            await _auth!.createUserWithEmailAndPassword(
+              email: localUser.email,
+              password: localUser.uid,
+            );
+          } catch (e) {
+            AppLogger.warning("Firebase silent sync failed: ");
+          }
+        }
+      }
 
       _isInitialized = true;
       AppLogger.auth(
@@ -352,120 +375,6 @@ class AuthService {
 
       // Fallback to local authentication
       if (_localUserService != null) {
-        final localResult = await _localUserService!.createUser(
-          email: email,
-          password: password,
-          displayName: displayName,
-          username: username,
-        );
-
-        if (localResult.isSuccess) {
-          // Store comprehensive user profile data
-          await _storeUserData({
-            'uid': localResult.user!.uid,
-            'email': email,
-            'displayName': displayName,
-            'username':
-                username ??
-                displayName, // Use displayName as fallback for username
-            'provider': 'local',
-            'createdAt': DateTime.now().toIso8601String(),
-            'lastUpdated': DateTime.now().toIso8601String(),
-            'profileComplete': true,
-          });
-
-          debugPrint('✅ Local user profile saved: $displayName ($email)');
-
-          if (_prefs != null) {
-            await _prefs!.setString(_lastLoginMethodKey, 'local');
-          }
-
-          debugPrint('✅ Local user created successfully: $email');
-          return AuthResult.success(
-            null,
-          ); // No Firebase user, but successful local creation
-        } else {
-          return AuthResult.failure(localResult.error!);
-        }
-      }
-
-      return AuthResult.failure(
-        'Authentication service not properly initialized',
-      );
-    } catch (e) {
-      debugPrint('❌ Sign up error: $e');
-      return AuthResult.failure('Sign up failed: ${e.toString()}');
-    }
-  }
-
-  /// Sign in with email and password
-  Future<AuthResult> signInWithEmail({
-    required String email,
-    required String password,
-  }) async {
-    try {
-      
-      if (email.trim().toLowerCase() == "demo@flowai.app") {
-        return AuthResult.failure("Demo account disabled");
-      }
-// Firebase temporarily disabled for iOS build
-      // if (_firebaseAvailable && _auth != null) {
-      //   try {
-      //     final UserCredential result = await _auth!.signInWithEmailAndPassword(
-      //       email: email,
-      //       password: password,
-      //     );
-      //
-      //     if (result.user != null) {
-      //       // Get existing stored data to preserve username
-      //       final existingData = await _getStoredUserData();
-      //       await _storeUserData({
-      //         'uid': result.user!.uid,
-      //         'email': email,
-      //         'displayName': result.user!.displayName,
-      //         'username': existingData?['username'] ?? result.user!.displayName, // Preserve username
-      //         'provider': 'firebase',
-      //         'lastLogin': DateTime.now().toIso8601String(),
-      //       });
-      //
-      //       if (_prefs != null) {
-      //         await _prefs!.setString(_lastLoginMethodKey, 'firebase');
-      //       }
-      //
-      //       return AuthResult.success(result.user!);
-      //     }
-      //   } catch (firebaseError) {
-      //     debugPrint('⚠️ Firebase sign in failed, trying local: $firebaseError');
-      //   }
-      // }
-
-      // Fallback to local authentication
-      if (_localUserService != null) {
-              if (!kReleaseMode) {
-  // Special handling for demo account (debug only)
-          const demoEmail = 'demo@flowai.app';
-          const demoPassword = 'FlowAiDemo2025!';
-          if (email == demoEmail && password == demoPassword) {
-            final emailExists = await _localUserService!.isEmailRegistered(
-              demoEmail,
-            );
-            if (!emailExists) {
-              // Create demo account if it doesn't exist
-              final createResult = await _localUserService!.createUser(
-                email: demoEmail,
-                password: demoPassword,
-                displayName: kReleaseMode ? 'User' : 'Demo User for App Review',
-                username: 'demo_user',
-              );
-              if (!createResult.isSuccess) {
-                return AuthResult.failure(
-                  'Failed to create demo account: ${createResult.error}',
-                );
-              }
-            }
-        }
-        }
-
         final localResult = await _localUserService!.signInUser(
           email: email,
           password: password,
@@ -487,10 +396,7 @@ class AuthService {
           });
 
           if (_prefs != null) {
-            await _prefs!.setString(
-              _lastLoginMethodKey,
-              'local',
-            );
+            await _prefs!.setString(_lastLoginMethodKey, 'local');
           }
 
           debugPrint('✅ Local user signed in successfully: $email');
@@ -510,6 +416,75 @@ class AuthService {
       return AuthResult.failure('Sign in failed: ${e.toString()}');
     }
   }
+  /// Sign in with email and password
+  Future<AuthResult> signInWithEmail({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      // Firebase temporarily disabled for iOS build
+      // if (_firebaseAvailable && _auth != null) {
+      //   try {
+      //     final UserCredential result = await _auth!.signInWithEmailAndPassword(
+      //       email: email,
+      //       password: password,
+      //     );
+      //     if (result.user != null) {
+      //       final existingData = await _getStoredUserData();
+      //       await _storeUserData({
+      //         'uid': result.user!.uid,
+      //         'email': email,
+      //         'displayName': result.user!.displayName,
+      //         'username': existingData?['username'] ?? result.user!.displayName,
+      //         'provider': 'firebase',
+      //         'lastLogin': DateTime.now().toIso8601String(),
+      //       });
+      //       if (_prefs != null) {
+      //         await _prefs!.setString(_lastLoginMethodKey, 'firebase');
+      //       }
+      //       return AuthResult.success(result.user!);
+      //     }
+      //   } catch (firebaseError) {
+      //     debugPrint('⚠️ Firebase sign in failed, trying local: $firebaseError');
+      //   }
+      // }
+
+      // Fallback to local authentication
+      if (_localUserService != null) {
+        final localResult = await _localUserService!.signInUser(
+          email: email,
+          password: password,
+        );
+
+        if (localResult.isSuccess) {
+          final existingData = await _getStoredUserData();
+          await _storeUserData({
+            'uid': localResult.user!.uid,
+            'email': email,
+            'displayName': localResult.user!.displayName,
+            'username': existingData?['username'] ?? localResult.user!.username ?? localResult.user!.displayName,
+            'provider': 'local',
+            'lastLogin': DateTime.now().toIso8601String(),
+          });
+
+          if (_prefs != null) {
+            await _prefs!.setString(_lastLoginMethodKey, 'local');
+          }
+
+          debugPrint('✅ Local user signed in successfully: $email');
+          return AuthResult.success(null);
+        } else {
+          return AuthResult.failure(localResult.error!);
+        }
+      }
+
+      return AuthResult.failure('Authentication service not properly initialized');
+    } catch (e) {
+      debugPrint('❌ Sign in error: $e');
+      return AuthResult.failure('Sign in failed: ${e.toString()}');
+    }
+  }
+
 
   /// Sign in with Google
 
@@ -864,14 +839,26 @@ class AuthService {
     debugPrint('🧠 Memory cache cleared for user isolation');
   }
 
-  Future<UserCredential> firebaseCreateUserWithEmailAndPassword(String email, String password) async {
+  Future<UserCredential> firebaseCreateUserWithEmailAndPassword(
+    String email,
+    String password,
+  ) async {
     _auth ??= FirebaseAuth.instance;
-    return await _auth!.createUserWithEmailAndPassword(email: email, password: password);
+    return await _auth!.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
   }
 
-  Future<UserCredential> firebaseSignInWithEmailAndPassword(String email, String password) async {
+  Future<UserCredential> firebaseSignInWithEmailAndPassword(
+    String email,
+    String password,
+  ) async {
     _auth ??= FirebaseAuth.instance;
-    return await _auth!.signInWithEmailAndPassword(email: email, password: password);
+    return await _auth!.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
   }
 }
 

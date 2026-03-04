@@ -7,11 +7,12 @@ import '../biometrics/advanced_biometric_engine.dart';
 import '../ai/neural_prediction_engine.dart';
 import '../ai/emotional_intelligence_engine.dart';
 
-/// 🔬 Revolutionary Advanced Health Analytics Engine  
+/// 🔬 Revolutionary Advanced Health Analytics Engine
 /// Comprehensive health scoring, fertility insights, condition detection, and personalized recommendations
 /// Leveraging AI, biometrics, and multi-dimensional health data analysis
 class AdvancedHealthAnalytics {
-  static final AdvancedHealthAnalytics _instance = AdvancedHealthAnalytics._internal();
+  static final AdvancedHealthAnalytics _instance =
+      AdvancedHealthAnalytics._internal();
   static AdvancedHealthAnalytics get instance => _instance;
   AdvancedHealthAnalytics._internal();
 
@@ -34,7 +35,8 @@ class AdvancedHealthAnalytics {
 
   // Health data cache and trends
   final Map<String, HealthReport> _healthReportCache = {};
-  final StreamController<HealthInsight> _healthInsightStream = StreamController.broadcast();
+  final StreamController<HealthInsight> _healthInsightStream =
+      StreamController.broadcast();
   Stream<HealthInsight> get healthInsightStream => _healthInsightStream.stream;
 
   Future<void> initialize() async {
@@ -52,7 +54,9 @@ class AdvancedHealthAnalytics {
     await _setupHealthMonitoring();
 
     _initialized = true;
-    debugPrint('✅ Advanced Health Analytics initialized with comprehensive analysis capabilities');
+    debugPrint(
+      '✅ Advanced Health Analytics initialized with comprehensive analysis capabilities',
+    );
   }
 
   Future<void> _initializeAnalyticsComponents() async {
@@ -105,43 +109,86 @@ class AdvancedHealthAnalytics {
   }) async {
     if (!_initialized) await initialize();
 
-    debugPrint('📊 Generating comprehensive health report for user ${user.id}...');
+    debugPrint(
+      '📊 Generating comprehensive health report for user ${user.id}...',
+    );
 
     // Gather multi-dimensional health data
-    final healthData = await _gatherHealthData(user, cycleHistory, additionalData);
+    final healthData = await _gatherHealthData(
+      user,
+      cycleHistory,
+      additionalData,
+    );
 
     // Generate health scores across multiple dimensions
     final healthScores = await _healthScoringEngine.calculateHealthScores(
-      user, cycleHistory, healthData, currentPhase);
+      user,
+      cycleHistory,
+      healthData,
+      currentPhase,
+    );
 
     // Analyze fertility insights
     final fertilityAnalysis = await _fertilityAnalyzer.analyzeFertility(
-      user, cycleHistory, healthData, currentPhase);
+      user,
+      cycleHistory,
+      healthData,
+      currentPhase,
+    );
 
     // Screen for potential conditions
     final conditionScreening = await _conditionDetector.screenForConditions(
-      user, cycleHistory, healthData, currentPhase);
+      user,
+      cycleHistory,
+      healthData,
+      currentPhase,
+    );
 
     // Generate personalized supplement recommendations
-    final supplementRecommendations = await _supplementRecommender.generateRecommendations(
-      user, cycleHistory, healthData, healthScores, conditionScreening);
+    final supplementRecommendations = await _supplementRecommender
+        .generateRecommendations(
+          user,
+          cycleHistory,
+          healthData,
+          healthScores,
+          conditionScreening,
+        );
 
     // Assess health risks
     final riskAssessments = await _riskAssessment.assessRisks(
-      user, cycleHistory, healthData, healthScores, conditionScreening);
+      user,
+      cycleHistory,
+      healthData,
+      healthScores,
+      conditionScreening,
+    );
 
     // Generate personalized insights
     final personalizedInsights = await _personalizationEngine.generateInsights(
-      user, cycleHistory, healthData, healthScores);
+      user,
+      cycleHistory,
+      healthData,
+      healthScores,
+    );
 
     // Analyze trends and patterns
     final trendAnalysis = await _trendAnalyzer.analyzeTrends(
-      user, cycleHistory, healthData, analysisDepth);
+      user,
+      cycleHistory,
+      healthData,
+      analysisDepth,
+    );
 
     // Generate actionable recommendations
     final recommendations = await _generateActionableRecommendations(
-      user, healthScores, fertilityAnalysis, conditionScreening, 
-      supplementRecommendations, riskAssessments, personalizedInsights);
+      user,
+      healthScores,
+      fertilityAnalysis,
+      conditionScreening,
+      supplementRecommendations,
+      riskAssessments,
+      personalizedInsights,
+    );
 
     final report = ComprehensiveHealthReport(
       userId: user.id,
@@ -157,7 +204,11 @@ class AdvancedHealthAnalytics {
       personalizedInsights: personalizedInsights,
       trendAnalysis: trendAnalysis,
       recommendations: recommendations,
-      keyFindings: _identifyKeyFindings(healthScores, conditionScreening, trendAnalysis),
+      keyFindings: _identifyKeyFindings(
+        healthScores,
+        conditionScreening,
+        trendAnalysis,
+      ),
       nextSteps: _generateNextSteps(recommendations, riskAssessments),
     );
 
@@ -196,15 +247,27 @@ class AdvancedHealthAnalytics {
 
     // Generate quick health snapshot
     final quickScores = await _healthScoringEngine.calculateQuickScores(
-      user, currentPhase, currentSymptoms, recentBiometrics);
+      user,
+      currentPhase,
+      currentSymptoms,
+      recentBiometrics,
+    );
 
     // Quick risk screening
     final immediateRisks = await _riskAssessment.assessImmediateRisks(
-      user, currentPhase, currentSymptoms, recentBiometrics);
+      user,
+      currentPhase,
+      currentSymptoms,
+      recentBiometrics,
+    );
 
     // Emergency recommendations
     final urgentRecommendations = await _generateUrgentRecommendations(
-      user, currentPhase, quickScores, immediateRisks);
+      user,
+      currentPhase,
+      quickScores,
+      immediateRisks,
+    );
 
     return QuickHealthAssessment(
       userId: user.id,
@@ -228,7 +291,11 @@ class AdvancedHealthAnalytics {
     if (!_initialized) await initialize();
 
     final fertilityPrediction = await _fertilityAnalyzer.predictFertilityWindow(
-      user, cycleHistory, biometricData, predictionDays);
+      user,
+      cycleHistory,
+      biometricData,
+      predictionDays,
+    );
 
     return fertilityPrediction;
   }
@@ -242,12 +309,16 @@ class AdvancedHealthAnalytics {
     if (!_initialized) await initialize();
 
     return await _conditionDetector.screenForConditions(
-      user, cycleHistory, additionalData ?? {}, 'current');
+      user,
+      cycleHistory,
+      additionalData ?? {},
+      'current',
+    );
   }
 
   Future<Map<String, dynamic>> _gatherHealthData(
-    UserProfile user, 
-    List<CycleData> cycleHistory, 
+    UserProfile user,
+    List<CycleData> cycleHistory,
     Map<String, dynamic>? additionalData,
   ) async {
     final healthData = <String, dynamic>{};
@@ -255,7 +326,9 @@ class AdvancedHealthAnalytics {
     // Get biometric data
     if (_biometricEngine.isInitialized) {
       try {
-        final biometricSnapshot = await _biometricEngine.getBiometricSnapshot(user.id);
+        final biometricSnapshot = await _biometricEngine.getBiometricSnapshot(
+          user.id,
+        );
         healthData['biometrics'] = biometricSnapshot.toMap();
       } catch (e) {
         debugPrint('Warning: Could not fetch biometric data: $e');
@@ -358,9 +431,13 @@ class AdvancedHealthAnalytics {
     // Health score findings
     healthScores.forEach((category, score) {
       if (score < 0.4) {
-        findings.add('${category.capitalize()} health shows concerning patterns (${(score * 100).round()}%)');
+        findings.add(
+          '${category.capitalize()} health shows concerning patterns (${(score * 100).round()}%)',
+        );
       } else if (score > 0.8) {
-        findings.add('Excellent $category health indicators (${(score * 100).round()}%)');
+        findings.add(
+          'Excellent $category health indicators (${(score * 100).round()}%)',
+        );
       }
     });
 
@@ -375,7 +452,9 @@ class AdvancedHealthAnalytics {
     if (trendAnalysis.overallTrend == 'declining') {
       findings.add('Health trends show declining pattern over recent cycles');
     } else if (trendAnalysis.overallTrend == 'improving') {
-      findings.add('Positive health trends detected across multiple indicators');
+      findings.add(
+        'Positive health trends detected across multiple indicators',
+      );
     }
 
     return findings.take(5).toList(); // Limit to top 5 findings
@@ -435,7 +514,9 @@ class AdvancedHealthAnalytics {
     final hasCriticalScores = quickScores.values.any((score) => score < 0.3);
 
     // Check if any high-severity risks are present
-    final hasHighRisks = immediateRisks.any((risk) => risk['severity'] == 'high');
+    final hasHighRisks = immediateRisks.any(
+      (risk) => risk['severity'] == 'high',
+    );
 
     return hasCriticalScores || hasHighRisks;
   }
@@ -454,51 +535,62 @@ class AdvancedHealthAnalytics {
     // Health score based recommendations
     healthScores.forEach((category, score) {
       if (score < 0.6) {
-        recommendations.add(HealthRecommendation(
-          category: category,
-          priority: score < 0.4 ? RecommendationPriority.high : RecommendationPriority.medium,
-          action: 'Improve $category health through targeted interventions',
-          reasoning: 'Current $category score: ${(score * 100).round()}%',
-          expectedOutcome: 'Enhanced $category function and overall wellness',
-          timeframe: score < 0.4 ? '2-4 weeks' : '4-8 weeks',
-        ));
+        recommendations.add(
+          HealthRecommendation(
+            category: category,
+            priority: score < 0.4
+                ? RecommendationPriority.high
+                : RecommendationPriority.medium,
+            action: 'Improve $category health through targeted interventions',
+            reasoning: 'Current $category score: ${(score * 100).round()}%',
+            expectedOutcome: 'Enhanced $category function and overall wellness',
+            timeframe: score < 0.4 ? '2-4 weeks' : '4-8 weeks',
+          ),
+        );
       }
     });
 
     // Fertility-based recommendations
     if (fertilityAnalysis.fertilityScore < 0.7) {
-      recommendations.add(HealthRecommendation(
-        category: 'fertility',
-        priority: RecommendationPriority.high,
-        action: 'Optimize fertility through lifestyle and nutritional support',
-        reasoning: 'Fertility analysis shows potential for improvement',
-        expectedOutcome: 'Enhanced reproductive health and fertility markers',
-        timeframe: '3-6 months',
-      ));
+      recommendations.add(
+        HealthRecommendation(
+          category: 'fertility',
+          priority: RecommendationPriority.high,
+          action:
+              'Optimize fertility through lifestyle and nutritional support',
+          reasoning: 'Fertility analysis shows potential for improvement',
+          expectedOutcome: 'Enhanced reproductive health and fertility markers',
+          timeframe: '3-6 months',
+        ),
+      );
     }
 
     // Risk-based recommendations
     for (final risk in riskAssessments.identifiedRisks.take(3)) {
-      recommendations.add(HealthRecommendation(
-        category: 'risk_management',
-        priority: RecommendationPriority.high,
-        action: 'Address identified risk: ${risk['description']}',
-        reasoning: 'Risk assessment indicates attention needed',
-        expectedOutcome: 'Reduced health risk and improved outcomes',
-        timeframe: '2-8 weeks',
-      ));
+      recommendations.add(
+        HealthRecommendation(
+          category: 'risk_management',
+          priority: RecommendationPriority.high,
+          action: 'Address identified risk: ${risk['description']}',
+          reasoning: 'Risk assessment indicates attention needed',
+          expectedOutcome: 'Reduced health risk and improved outcomes',
+          timeframe: '2-8 weeks',
+        ),
+      );
     }
 
     // Add supplement recommendations as health recommendations
     for (final suppRec in supplementRecommendations.take(3)) {
-      recommendations.add(HealthRecommendation(
-        category: 'nutrition',
-        priority: RecommendationPriority.medium,
-        action: 'Consider ${suppRec.name}: ${suppRec.dosage}',
-        reasoning: suppRec.rationale,
-        expectedOutcome: suppRec.expectedBenefits.join(', '),
-        timeframe: '4-12 weeks',
-      ));
+      recommendations.add(
+        HealthRecommendation(
+          category: 'nutrition',
+          priority: RecommendationPriority.medium,
+          action: 'Consider ${suppRec.name}: ${suppRec.dosage}',
+          reasoning: suppRec.rationale,
+          expectedOutcome: suppRec.expectedBenefits.join(', '),
+          timeframe: '4-12 weeks',
+        ),
+      );
     }
 
     return recommendations;
@@ -527,8 +619,12 @@ class AdvancedHealthAnalytics {
     }
 
     // Phase-specific urgent recommendations
-    if (currentPhase == 'menstrual' && quickScores['pain'] != null && quickScores['pain']! < 0.2) {
-      urgent.add('Severe menstrual symptoms detected - consider pain management');
+    if (currentPhase == 'menstrual' &&
+        quickScores['pain'] != null &&
+        quickScores['pain']! < 0.2) {
+      urgent.add(
+        'Severe menstrual symptoms detected - consider pain management',
+      );
     }
 
     return urgent.take(3).toList();
@@ -561,8 +657,15 @@ class HealthScoringEngine {
   ) async {
     final scores = <String, double>{};
 
-    scores['reproductive'] = _calculateReproductiveScore(cycleHistory, healthData);
-    scores['hormonal'] = _calculateHormonalScore(cycleHistory, healthData, currentPhase);
+    scores['reproductive'] = _calculateReproductiveScore(
+      cycleHistory,
+      healthData,
+    );
+    scores['hormonal'] = _calculateHormonalScore(
+      cycleHistory,
+      healthData,
+      currentPhase,
+    );
     scores['metabolic'] = _calculateMetabolicScore(user, healthData);
     scores['cardiovascular'] = _calculateCardiovascularScore(healthData);
     scores['mental'] = _calculateMentalHealthScore(healthData);
@@ -587,7 +690,10 @@ class HealthScoringEngine {
     return scores;
   }
 
-  double _calculateReproductiveScore(List<CycleData> cycles, Map<String, dynamic> data) {
+  double _calculateReproductiveScore(
+    List<CycleData> cycles,
+    Map<String, dynamic> data,
+  ) {
     if (cycles.isEmpty) return 0.5;
 
     double score = 1.0;
@@ -595,25 +701,35 @@ class HealthScoringEngine {
     // Cycle regularity
     final lengths = cycles.map((c) => c.length).toList();
     final avgLength = lengths.reduce((a, b) => a + b) / lengths.length;
-    final variance = lengths.map((l) => math.pow(l - avgLength, 2)).reduce((a, b) => a + b) / lengths.length;
+    final variance =
+        lengths.map((l) => math.pow(l - avgLength, 2)).reduce((a, b) => a + b) /
+        lengths.length;
     final regularity = 1.0 - (math.sqrt(variance) / avgLength).clamp(0.0, 1.0);
     score *= 0.4 + (regularity * 0.6);
 
     // Flow consistency
-    final flowIntensities = cycles.map((c) => _flowToNumeric(c.flowIntensity ?? FlowIntensity.none)).toList();
+    final flowIntensities = cycles
+        .map((c) => _flowToNumeric(c.flowIntensity ?? FlowIntensity.none))
+        .toList();
     final flowVariance = _calculateVariance(flowIntensities);
     final flowConsistency = 1.0 - (flowVariance / 5.0).clamp(0.0, 1.0);
     score *= 0.3 + (flowConsistency * 0.7);
 
     // Symptom severity
-    final avgSymptomCount = cycles.map((c) => c.symptoms.length).reduce((a, b) => a + b) / cycles.length;
+    final avgSymptomCount =
+        cycles.map((c) => c.symptoms.length).reduce((a, b) => a + b) /
+        cycles.length;
     final symptomScore = (1.0 - (avgSymptomCount / 10.0)).clamp(0.0, 1.0);
     score *= 0.5 + (symptomScore * 0.5);
 
     return score.clamp(0.0, 1.0);
   }
 
-  double _calculateHormonalScore(List<CycleData> cycles, Map<String, dynamic> data, String phase) {
+  double _calculateHormonalScore(
+    List<CycleData> cycles,
+    Map<String, dynamic> data,
+    String phase,
+  ) {
     double score = 0.7; // Base score
 
     // Mood consistency
@@ -686,14 +802,18 @@ class HealthScoringEngine {
   double _calculateMentalHealthScore(Map<String, dynamic> data) {
     final emotional = data['emotional'] as Map<String, dynamic>?;
     if (emotional != null) {
-      final wellnessScore = (emotional['wellness_score'] as num?)?.toDouble() ?? 0.5;
+      final wellnessScore =
+          (emotional['wellness_score'] as num?)?.toDouble() ?? 0.5;
       final stability = (emotional['stability'] as num?)?.toDouble() ?? 0.5;
       return ((wellnessScore * 0.7) + (stability * 0.3)).clamp(0.0, 1.0);
     }
     return 0.5;
   }
 
-  double _calculateNutritionalScore(UserProfile user, Map<String, dynamic> data) {
+  double _calculateNutritionalScore(
+    UserProfile user,
+    Map<String, dynamic> data,
+  ) {
     double score = 0.7;
 
     // Base on user's reported health concerns and lifestyle
@@ -704,7 +824,8 @@ class HealthScoringEngine {
     final biometrics = data['biometrics'] as Map<String, dynamic>?;
     if (biometrics != null) {
       // Energy consistency
-      final energyStability = (biometrics['energy_stability'] as num?)?.toDouble() ?? 0.5;
+      final energyStability =
+          (biometrics['energy_stability'] as num?)?.toDouble() ?? 0.5;
       score *= 0.6 + (energyStability * 0.4);
     }
 
@@ -712,8 +833,8 @@ class HealthScoringEngine {
   }
 
   double _calculateQuickOverallScore(
-    UserProfile user, 
-    Map<String, dynamic>? symptoms, 
+    UserProfile user,
+    Map<String, dynamic>? symptoms,
     Map<String, dynamic>? biometrics,
   ) {
     double score = 0.7;
@@ -727,7 +848,8 @@ class HealthScoringEngine {
     }
 
     if (biometrics != null) {
-      final overallWellness = (biometrics['wellness_indicator'] as num?)?.toDouble() ?? 0.7;
+      final overallWellness =
+          (biometrics['wellness_indicator'] as num?)?.toDouble() ?? 0.7;
       score *= 0.8 + (overallWellness * 0.2);
     }
 
@@ -736,12 +858,15 @@ class HealthScoringEngine {
 
   double _calculatePainScore(Map<String, dynamic>? symptoms) {
     if (symptoms == null) return 0.7;
-    
+
     final painLevel = (symptoms['pain_level'] as num?)?.toDouble() ?? 0.0;
     return (1.0 - (painLevel / 10.0)).clamp(0.0, 1.0);
   }
 
-  double _calculateEnergyScore(Map<String, dynamic>? symptoms, Map<String, dynamic>? biometrics) {
+  double _calculateEnergyScore(
+    Map<String, dynamic>? symptoms,
+    Map<String, dynamic>? biometrics,
+  ) {
     double score = 0.5;
 
     if (symptoms != null) {
@@ -750,7 +875,8 @@ class HealthScoringEngine {
     }
 
     if (biometrics != null) {
-      final sleepQuality = (biometrics['sleep_quality'] as num?)?.toDouble() ?? 0.7;
+      final sleepQuality =
+          (biometrics['sleep_quality'] as num?)?.toDouble() ?? 0.7;
       score = (score * 0.7) + (sleepQuality * 0.3);
     }
 
@@ -759,27 +885,34 @@ class HealthScoringEngine {
 
   double _calculateMoodScore(Map<String, dynamic>? symptoms) {
     if (symptoms == null) return 0.7;
-    
+
     final moodRating = (symptoms['mood_rating'] as num?)?.toDouble() ?? 0.7;
     return moodRating.clamp(0.0, 1.0);
   }
 
   double _flowToNumeric(FlowIntensity flow) {
     switch (flow) {
-      case FlowIntensity.none: return 0.0;
-      case FlowIntensity.spotting: return 1.0;
-      case FlowIntensity.light: return 2.0;
-      case FlowIntensity.medium: return 3.0;
-      case FlowIntensity.heavy: return 4.0;
-      case FlowIntensity.veryHeavy: return 5.0;
+      case FlowIntensity.none:
+        return 0.0;
+      case FlowIntensity.spotting:
+        return 1.0;
+      case FlowIntensity.light:
+        return 2.0;
+      case FlowIntensity.medium:
+        return 3.0;
+      case FlowIntensity.heavy:
+        return 4.0;
+      case FlowIntensity.veryHeavy:
+        return 5.0;
     }
   }
 
   double _calculateVariance(List<double> values) {
     if (values.isEmpty) return 0.0;
-    
+
     final mean = values.reduce((a, b) => a + b) / values.length;
-    return values.map((v) => math.pow(v - mean, 2)).reduce((a, b) => a + b) / values.length;
+    return values.map((v) => math.pow(v - mean, 2)).reduce((a, b) => a + b) /
+        values.length;
   }
 
   double _assessPhaseAppropriateSymptoms(List<CycleData> cycles, String phase) {
@@ -799,9 +932,16 @@ class FertilityAnalyzer {
     Map<String, dynamic> healthData,
     String currentPhase,
   ) async {
-    final fertilityScore = _calculateFertilityScore(user, cycleHistory, healthData);
+    final fertilityScore = _calculateFertilityScore(
+      user,
+      cycleHistory,
+      healthData,
+    );
     final ovulationPrediction = _predictOvulation(cycleHistory);
-    final fertilityWindow = _calculateOptimalWindow(cycleHistory, ovulationPrediction);
+    final fertilityWindow = _calculateOptimalWindow(
+      cycleHistory,
+      ovulationPrediction,
+    );
     final factors = _identifyFertilityFactors(user, cycleHistory, healthData);
 
     return FertilityAnalysisResult(
@@ -809,7 +949,10 @@ class FertilityAnalyzer {
       ovulationPrediction: ovulationPrediction,
       fertilityWindow: fertilityWindow,
       factors: factors,
-      recommendations: _generateFertilityRecommendations(fertilityScore, factors),
+      recommendations: _generateFertilityRecommendations(
+        fertilityScore,
+        factors,
+      ),
     );
   }
 
@@ -824,17 +967,25 @@ class FertilityAnalyzer {
 
     return EnhancedFertilityWindow(
       ovulationDate: DateTime.now().add(Duration(days: ovulationDay.round())),
-      fertilityStart: DateTime.now().add(Duration(days: (ovulationDay - 5).round())),
-      fertilityEnd: DateTime.now().add(Duration(days: (ovulationDay + 1).round())),
+      fertilityStart: DateTime.now().add(
+        Duration(days: (ovulationDay - 5).round()),
+      ),
+      fertilityEnd: DateTime.now().add(
+        Duration(days: (ovulationDay + 1).round()),
+      ),
       confidence: confidence,
-      factors: _identifyFertilityFactors(user, cycleHistory, biometricData ?? {}),
+      factors: _identifyFertilityFactors(
+        user,
+        cycleHistory,
+        biometricData ?? {},
+      ),
       recommendations: _generateTimingRecommendations(ovulationDay, confidence),
     );
   }
 
   double _calculateFertilityScore(
-    UserProfile user, 
-    List<CycleData> cycles, 
+    UserProfile user,
+    List<CycleData> cycles,
     Map<String, dynamic> data,
   ) {
     double score = 0.8; // Base fertility score
@@ -853,8 +1004,13 @@ class FertilityAnalyzer {
     if (cycles.isNotEmpty) {
       final lengths = cycles.map((c) => c.length).toList();
       final avgLength = lengths.reduce((a, b) => a + b) / lengths.length;
-      final variance = lengths.map((l) => math.pow(l - avgLength, 2)).reduce((a, b) => a + b) / lengths.length;
-      final regularity = 1.0 - (math.sqrt(variance) / avgLength).clamp(0.0, 0.5);
+      final variance =
+          lengths
+              .map((l) => math.pow(l - avgLength, 2))
+              .reduce((a, b) => a + b) /
+          lengths.length;
+      final regularity =
+          1.0 - (math.sqrt(variance) / avgLength).clamp(0.0, 0.5);
       score *= 0.7 + (regularity * 0.3);
     }
 
@@ -872,11 +1028,15 @@ class FertilityAnalyzer {
   double _predictOvulation(List<CycleData> cycles) {
     if (cycles.isEmpty) return 14.0;
 
-    final avgLength = cycles.map((c) => c.length).reduce((a, b) => a + b) / cycles.length;
+    final avgLength =
+        cycles.map((c) => c.length).reduce((a, b) => a + b) / cycles.length;
     return avgLength / 2.0; // Simplified ovulation prediction
   }
 
-  Map<String, DateTime> _calculateOptimalWindow(List<CycleData> cycles, double ovulationDay) {
+  Map<String, DateTime> _calculateOptimalWindow(
+    List<CycleData> cycles,
+    double ovulationDay,
+  ) {
     final now = DateTime.now();
     return {
       'fertile_start': now.add(Duration(days: (ovulationDay - 5).round())),
@@ -886,21 +1046,30 @@ class FertilityAnalyzer {
   }
 
   Map<String, dynamic> _identifyFertilityFactors(
-    UserProfile user, 
-    List<CycleData> cycles, 
+    UserProfile user,
+    List<CycleData> cycles,
     Map<String, dynamic> data,
   ) {
     final factors = <String, dynamic>{};
 
-    factors['age_impact'] = user.age != null && user.age! > 35 ? 'moderate' : 'low';
+    factors['age_impact'] = user.age != null && user.age! > 35
+        ? 'moderate'
+        : 'low';
     factors['cycle_regularity'] = cycles.isNotEmpty ? 'good' : 'unknown';
-    factors['stress_level'] = data['emotional']?['stability'] < 0.5 ? 'high' : 'moderate';
-    factors['lifestyle_factors'] = user.lifestyle == 'active' ? 'positive' : 'needs_improvement';
+    factors['stress_level'] = data['emotional']?['stability'] < 0.5
+        ? 'high'
+        : 'moderate';
+    factors['lifestyle_factors'] = user.lifestyle == 'active'
+        ? 'positive'
+        : 'needs_improvement';
 
     return factors;
   }
 
-  List<String> _generateFertilityRecommendations(double score, Map<String, dynamic> factors) {
+  List<String> _generateFertilityRecommendations(
+    double score,
+    Map<String, dynamic> factors,
+  ) {
     final recommendations = <String>[];
 
     if (score < 0.7) {
@@ -915,8 +1084,12 @@ class FertilityAnalyzer {
       recommendations.add('Optimize nutrition and exercise routine');
     }
 
-    recommendations.add('Track basal body temperature for accurate ovulation detection');
-    recommendations.add('Consider fertility-supporting supplements (folic acid, CoQ10)');
+    recommendations.add(
+      'Track basal body temperature for accurate ovulation detection',
+    );
+    recommendations.add(
+      'Consider fertility-supporting supplements (folic acid, CoQ10)',
+    );
 
     return recommendations;
   }
@@ -924,26 +1097,40 @@ class FertilityAnalyzer {
   double _calculatePredictionConfidence(List<CycleData> cycles) {
     if (cycles.isEmpty) return 0.3;
     if (cycles.length < 3) return 0.5;
-    
+
     // Higher confidence with more regular cycles
     final lengths = cycles.map((c) => c.length).toList();
     final avgLength = lengths.reduce((a, b) => a + b) / lengths.length;
-    final variance = lengths.map((l) => math.pow(l - avgLength, 2)).reduce((a, b) => a + b) / lengths.length;
+    final variance =
+        lengths.map((l) => math.pow(l - avgLength, 2)).reduce((a, b) => a + b) /
+        lengths.length;
     final regularity = 1.0 - (math.sqrt(variance) / avgLength).clamp(0.0, 0.5);
-    
-    return (0.5 + (regularity * 0.4) + (cycles.length / 12 * 0.1)).clamp(0.3, 0.9);
+
+    return (0.5 + (regularity * 0.4) + (cycles.length / 12 * 0.1)).clamp(
+      0.3,
+      0.9,
+    );
   }
 
-  List<String> _generateTimingRecommendations(double ovulationDay, double confidence) {
+  List<String> _generateTimingRecommendations(
+    double ovulationDay,
+    double confidence,
+  ) {
     final recommendations = <String>[];
 
     if (confidence > 0.7) {
-      recommendations.add('Optimal timing: ${(ovulationDay - 2).round()} to ${ovulationDay.round()} days');
+      recommendations.add(
+        'Optimal timing: ${(ovulationDay - 2).round()} to ${ovulationDay.round()} days',
+      );
     } else {
-      recommendations.add('Monitor cervical mucus and use ovulation tests for better timing');
+      recommendations.add(
+        'Monitor cervical mucus and use ovulation tests for better timing',
+      );
     }
 
-    recommendations.add('Maintain consistent tracking for improved predictions');
+    recommendations.add(
+      'Maintain consistent tracking for improved predictions',
+    );
     return recommendations;
   }
 }
@@ -986,8 +1173,8 @@ class ConditionDetector {
   }
 
   Map<String, dynamic> _screenForPCOS(
-    UserProfile user, 
-    List<CycleData> cycles, 
+    UserProfile user,
+    List<CycleData> cycles,
     Map<String, dynamic> data,
   ) {
     double riskLevel = 0.0;
@@ -996,7 +1183,9 @@ class ConditionDetector {
     // Irregular cycles
     if (cycles.isNotEmpty) {
       final lengths = cycles.map((c) => c.length).toList();
-      final variance = lengths.map((l) => math.pow(l - 28, 2)).reduce((a, b) => a + b) / lengths.length;
+      final variance =
+          lengths.map((l) => math.pow(l - 28, 2)).reduce((a, b) => a + b) /
+          lengths.length;
       if (math.sqrt(variance) > 7) {
         riskLevel += 0.3;
         indicators.add('Irregular menstrual cycles');
@@ -1004,8 +1193,8 @@ class ConditionDetector {
     }
 
     // Long cycles
-    final avgLength = cycles.isNotEmpty 
-        ? cycles.map((c) => c.length).reduce((a, b) => a + b) / cycles.length 
+    final avgLength = cycles.isNotEmpty
+        ? cycles.map((c) => c.length).reduce((a, b) => a + b) / cycles.length
         : 28.0;
     if (avgLength > 35) {
       riskLevel += 0.2;
@@ -1013,8 +1202,13 @@ class ConditionDetector {
     }
 
     // Heavy bleeding
-    final heavyFlowCycles = cycles.where((c) => 
-        c.flowIntensity == FlowIntensity.heavy || c.flowIntensity == FlowIntensity.veryHeavy).length;
+    final heavyFlowCycles = cycles
+        .where(
+          (c) =>
+              c.flowIntensity == FlowIntensity.heavy ||
+              c.flowIntensity == FlowIntensity.veryHeavy,
+        )
+        .length;
     if (heavyFlowCycles > cycles.length * 0.5) {
       riskLevel += 0.1;
       indicators.add('Heavy menstrual bleeding');
@@ -1031,15 +1225,15 @@ class ConditionDetector {
       'risk_level': riskLevel.clamp(0.0, 1.0),
       'confidence': cycles.length > 6 ? 0.8 : 0.5,
       'indicators': indicators,
-      'recommendation': riskLevel > 0.5 
+      'recommendation': riskLevel > 0.5
           ? 'Consult healthcare provider for PCOS evaluation'
           : 'Continue monitoring cycle patterns',
     };
   }
 
   Map<String, dynamic> _screenForEndometriosis(
-    UserProfile user, 
-    List<CycleData> cycles, 
+    UserProfile user,
+    List<CycleData> cycles,
     Map<String, dynamic> data,
   ) {
     double riskLevel = 0.0;
@@ -1048,7 +1242,9 @@ class ConditionDetector {
     // Severe pain patterns
     final severeSymptoms = ['severe_cramps', 'pelvic_pain', 'back_pain'];
     for (final cycle in cycles) {
-      final severeCount = cycle.symptoms.where((s) => severeSymptoms.contains(s)).length;
+      final severeCount = cycle.symptoms
+          .where((s) => severeSymptoms.contains(s))
+          .length;
       if (severeCount >= 2) {
         riskLevel += 0.1;
       }
@@ -1059,16 +1255,24 @@ class ConditionDetector {
     }
 
     // Heavy bleeding
-    final heavyFlowCount = cycles.where((c) => 
-        c.flowIntensity == FlowIntensity.heavy || c.flowIntensity == FlowIntensity.veryHeavy).length;
+    final heavyFlowCount = cycles
+        .where(
+          (c) =>
+              c.flowIntensity == FlowIntensity.heavy ||
+              c.flowIntensity == FlowIntensity.veryHeavy,
+        )
+        .length;
     if (heavyFlowCount > cycles.length * 0.4) {
       riskLevel += 0.2;
       indicators.add('Frequent heavy bleeding');
     }
 
     // Pain scores
-    final avgPain = cycles.where((c) => c.pain != null)
-        .map((c) => c.pain!).fold(0.0, (sum, pain) => sum + pain) / 
+    final avgPain =
+        cycles
+            .where((c) => c.pain != null)
+            .map((c) => c.pain!)
+            .fold(0.0, (sum, pain) => sum + pain) /
         cycles.where((c) => c.pain != null).length;
     if (avgPain > 3.5) {
       riskLevel += 0.3;
@@ -1080,15 +1284,15 @@ class ConditionDetector {
       'risk_level': riskLevel.clamp(0.0, 1.0),
       'confidence': cycles.length > 8 ? 0.7 : 0.4,
       'indicators': indicators,
-      'recommendation': riskLevel > 0.5 
+      'recommendation': riskLevel > 0.5
           ? 'Consider evaluation for endometriosis'
           : 'Monitor pain patterns and severity',
     };
   }
 
   Map<String, dynamic> _screenForThyroidIssues(
-    UserProfile user, 
-    List<CycleData> cycles, 
+    UserProfile user,
+    List<CycleData> cycles,
     Map<String, dynamic> data,
   ) {
     double riskLevel = 0.0;
@@ -1097,7 +1301,9 @@ class ConditionDetector {
     // Cycle irregularity
     if (cycles.isNotEmpty) {
       final lengths = cycles.map((c) => c.length).toList();
-      final variance = lengths.map((l) => math.pow(l - 28, 2)).reduce((a, b) => a + b) / lengths.length;
+      final variance =
+          lengths.map((l) => math.pow(l - 28, 2)).reduce((a, b) => a + b) /
+          lengths.length;
       if (math.sqrt(variance) > 10) {
         riskLevel += 0.2;
         indicators.add('Significant cycle irregularity');
@@ -1129,23 +1335,28 @@ class ConditionDetector {
       'risk_level': riskLevel.clamp(0.0, 1.0),
       'confidence': 0.6,
       'indicators': indicators,
-      'recommendation': riskLevel > 0.4 
+      'recommendation': riskLevel > 0.4
           ? 'Consider thyroid function testing'
           : 'Continue monitoring energy and cycle patterns',
     };
   }
 
   Map<String, dynamic> _screenForIronDeficiency(
-    UserProfile user, 
-    List<CycleData> cycles, 
+    UserProfile user,
+    List<CycleData> cycles,
     Map<String, dynamic> data,
   ) {
     double riskLevel = 0.0;
     final indicators = <String>[];
 
     // Heavy bleeding patterns
-    final heavyFlowCount = cycles.where((c) => 
-        c.flowIntensity == FlowIntensity.heavy || c.flowIntensity == FlowIntensity.veryHeavy).length;
+    final heavyFlowCount = cycles
+        .where(
+          (c) =>
+              c.flowIntensity == FlowIntensity.heavy ||
+              c.flowIntensity == FlowIntensity.veryHeavy,
+        )
+        .length;
     if (heavyFlowCount > cycles.length * 0.3) {
       riskLevel += 0.4;
       indicators.add('Frequent heavy menstrual bleeding');
@@ -1172,7 +1383,7 @@ class ConditionDetector {
       'risk_level': riskLevel.clamp(0.0, 1.0),
       'confidence': 0.7,
       'indicators': indicators,
-      'recommendation': riskLevel > 0.5 
+      'recommendation': riskLevel > 0.5
           ? 'Consider iron level testing and dietary assessment'
           : 'Monitor energy levels and menstrual flow',
     };
@@ -1180,24 +1391,26 @@ class ConditionDetector {
 
   double _calculateOverallConfidence(List<Map<String, dynamic>> risks) {
     if (risks.isEmpty) return 0.8;
-    
+
     final confidences = risks.map((r) => r['confidence'] as double);
     return confidences.reduce((a, b) => a + b) / risks.length;
   }
 
-  List<String> _generateScreeningRecommendations(List<Map<String, dynamic>> risks) {
+  List<String> _generateScreeningRecommendations(
+    List<Map<String, dynamic>> risks,
+  ) {
     final recommendations = <String>[];
-    
+
     for (final risk in risks) {
       if (risk['risk_level'] > 0.5) {
         recommendations.add(risk['recommendation']);
       }
     }
-    
+
     if (recommendations.isEmpty) {
       recommendations.add('Continue regular health monitoring');
     }
-    
+
     return recommendations;
   }
 }
@@ -1220,7 +1433,9 @@ class SupplementRecommender {
     recommendations.addAll(_getCoreSupplements(user, cycleHistory));
 
     // Condition-specific supplements
-    recommendations.addAll(_getConditionSpecificSupplements(conditionScreening));
+    recommendations.addAll(
+      _getConditionSpecificSupplements(conditionScreening),
+    );
 
     // Health score-based supplements
     recommendations.addAll(_getHealthScoreBasedSupplements(healthScores));
@@ -1231,136 +1446,203 @@ class SupplementRecommender {
     return recommendations;
   }
 
-  List<SupplementRecommendation> _getCoreSupplements(UserProfile user, List<CycleData> cycles) {
+  List<SupplementRecommendation> _getCoreSupplements(
+    UserProfile user,
+    List<CycleData> cycles,
+  ) {
     final core = <SupplementRecommendation>[];
 
     // Folic Acid - essential for all women of reproductive age
-    core.add(SupplementRecommendation(
-      name: 'Folic Acid',
-      dosage: '400-800 mcg daily',
-      timing: 'Morning with breakfast',
-      priority: SupplementPriority.high,
-      category: 'reproductive_health',
-      rationale: 'Essential for reproductive health and neural tube development',
-      expectedBenefits: ['Supports reproductive health', 'Prevents neural tube defects', 'Supports DNA synthesis'],
-      contraindications: ['Consult doctor if taking methotrexate'],
-      duration: 'Ongoing',
-    ));
+    core.add(
+      SupplementRecommendation(
+        name: 'Folic Acid',
+        dosage: '400-800 mcg daily',
+        timing: 'Morning with breakfast',
+        priority: SupplementPriority.high,
+        category: 'reproductive_health',
+        rationale:
+            'Essential for reproductive health and neural tube development',
+        expectedBenefits: [
+          'Supports reproductive health',
+          'Prevents neural tube defects',
+          'Supports DNA synthesis',
+        ],
+        contraindications: ['Consult doctor if taking methotrexate'],
+        duration: 'Ongoing',
+      ),
+    );
 
     // Vitamin D - often deficient
-    core.add(SupplementRecommendation(
-      name: 'Vitamin D3',
-      dosage: '1000-2000 IU daily',
-      timing: 'With meals',
-      priority: SupplementPriority.high,
-      category: 'immune_support',
-      rationale: 'Supports immune function, bone health, and hormonal balance',
-      expectedBenefits: ['Improved immune function', 'Better calcium absorption', 'Hormonal support'],
-      contraindications: ['Monitor levels if taking high doses'],
-      duration: 'Ongoing',
-    ));
+    core.add(
+      SupplementRecommendation(
+        name: 'Vitamin D3',
+        dosage: '1000-2000 IU daily',
+        timing: 'With meals',
+        priority: SupplementPriority.high,
+        category: 'immune_support',
+        rationale:
+            'Supports immune function, bone health, and hormonal balance',
+        expectedBenefits: [
+          'Improved immune function',
+          'Better calcium absorption',
+          'Hormonal support',
+        ],
+        contraindications: ['Monitor levels if taking high doses'],
+        duration: 'Ongoing',
+      ),
+    );
 
     // Omega-3 fatty acids
-    core.add(SupplementRecommendation(
-      name: 'Omega-3 (EPA/DHA)',
-      dosage: '1000-2000 mg daily',
-      timing: 'With meals',
-      priority: SupplementPriority.medium,
-      category: 'anti_inflammatory',
-      rationale: 'Reduces inflammation and supports hormonal balance',
-      expectedBenefits: ['Reduced inflammation', 'Improved mood', 'Cardiovascular support'],
-      contraindications: ['Consult doctor if taking blood thinners'],
-      duration: 'Ongoing',
-    ));
+    core.add(
+      SupplementRecommendation(
+        name: 'Omega-3 (EPA/DHA)',
+        dosage: '1000-2000 mg daily',
+        timing: 'With meals',
+        priority: SupplementPriority.medium,
+        category: 'anti_inflammatory',
+        rationale: 'Reduces inflammation and supports hormonal balance',
+        expectedBenefits: [
+          'Reduced inflammation',
+          'Improved mood',
+          'Cardiovascular support',
+        ],
+        contraindications: ['Consult doctor if taking blood thinners'],
+        duration: 'Ongoing',
+      ),
+    );
 
     return core;
   }
 
-  List<SupplementRecommendation> _getConditionSpecificSupplements(ConditionScreeningResult screening) {
+  List<SupplementRecommendation> _getConditionSpecificSupplements(
+    ConditionScreeningResult screening,
+  ) {
     final specific = <SupplementRecommendation>[];
 
     for (final risk in screening.detectedRisks) {
       final condition = risk['condition'] as String;
-      
-      if (condition == 'PCOS' && risk['risk_level'] > 0.4) {
-        specific.add(SupplementRecommendation(
-          name: 'Inositol',
-          dosage: '2000 mg twice daily',
-          timing: 'Morning and evening',
-          priority: SupplementPriority.high,
-          category: 'hormonal_balance',
-          rationale: 'May help improve insulin sensitivity and hormonal balance in PCOS',
-          expectedBenefits: ['Improved insulin sensitivity', 'Better ovulation', 'Reduced testosterone'],
-          contraindications: ['May cause mild digestive upset initially'],
-          duration: '3-6 months minimum',
-        ));
 
-        specific.add(SupplementRecommendation(
-          name: 'Spearmint Tea',
-          dosage: '2 cups daily',
-          timing: 'Between meals',
-          priority: SupplementPriority.medium,
-          category: 'hormonal_balance',
-          rationale: 'May help reduce androgens in PCOS',
-          expectedBenefits: ['Reduced excess hair growth', 'Hormonal balance'],
-          contraindications: ['Avoid if pregnant or breastfeeding'],
-          duration: '2-3 months',
-        ));
+      if (condition == 'PCOS' && risk['risk_level'] > 0.4) {
+        specific.add(
+          SupplementRecommendation(
+            name: 'Inositol',
+            dosage: '2000 mg twice daily',
+            timing: 'Morning and evening',
+            priority: SupplementPriority.high,
+            category: 'hormonal_balance',
+            rationale:
+                'May help improve insulin sensitivity and hormonal balance in PCOS',
+            expectedBenefits: [
+              'Improved insulin sensitivity',
+              'Better ovulation',
+              'Reduced testosterone',
+            ],
+            contraindications: ['May cause mild digestive upset initially'],
+            duration: '3-6 months minimum',
+          ),
+        );
+
+        specific.add(
+          SupplementRecommendation(
+            name: 'Spearmint Tea',
+            dosage: '2 cups daily',
+            timing: 'Between meals',
+            priority: SupplementPriority.medium,
+            category: 'hormonal_balance',
+            rationale: 'May help reduce androgens in PCOS',
+            expectedBenefits: [
+              'Reduced excess hair growth',
+              'Hormonal balance',
+            ],
+            contraindications: ['Avoid if pregnant or breastfeeding'],
+            duration: '2-3 months',
+          ),
+        );
       }
 
       if (condition == 'Iron Deficiency' && risk['risk_level'] > 0.5) {
-        specific.add(SupplementRecommendation(
-          name: 'Iron Bisglycinate',
-          dosage: '25-50 mg daily',
-          timing: 'On empty stomach or with vitamin C',
-          priority: SupplementPriority.high,
-          category: 'nutritional_support',
-          rationale: 'Gentle form of iron to address deficiency without digestive upset',
-          expectedBenefits: ['Improved energy', 'Better oxygen transport', 'Reduced fatigue'],
-          contraindications: ['Take away from calcium and coffee', 'Monitor iron levels'],
-          duration: '3-6 months',
-        ));
+        specific.add(
+          SupplementRecommendation(
+            name: 'Iron Bisglycinate',
+            dosage: '25-50 mg daily',
+            timing: 'On empty stomach or with vitamin C',
+            priority: SupplementPriority.high,
+            category: 'nutritional_support',
+            rationale:
+                'Gentle form of iron to address deficiency without digestive upset',
+            expectedBenefits: [
+              'Improved energy',
+              'Better oxygen transport',
+              'Reduced fatigue',
+            ],
+            contraindications: [
+              'Take away from calcium and coffee',
+              'Monitor iron levels',
+            ],
+            duration: '3-6 months',
+          ),
+        );
       }
     }
 
     return specific;
   }
 
-  List<SupplementRecommendation> _getHealthScoreBasedSupplements(Map<String, double> scores) {
+  List<SupplementRecommendation> _getHealthScoreBasedSupplements(
+    Map<String, double> scores,
+  ) {
     final scoreBased = <SupplementRecommendation>[];
 
     if (scores['mental'] != null && scores['mental']! < 0.6) {
-      scoreBased.add(SupplementRecommendation(
-        name: 'Magnesium Glycinate',
-        dosage: '200-400 mg daily',
-        timing: 'Evening before bed',
-        priority: SupplementPriority.medium,
-        category: 'stress_support',
-        rationale: 'Supports nervous system function and stress response',
-        expectedBenefits: ['Improved sleep', 'Reduced anxiety', 'Better stress management'],
-        contraindications: ['May cause drowsiness', 'Reduce dose if digestive upset occurs'],
-        duration: '2-4 months',
-      ));
+      scoreBased.add(
+        SupplementRecommendation(
+          name: 'Magnesium Glycinate',
+          dosage: '200-400 mg daily',
+          timing: 'Evening before bed',
+          priority: SupplementPriority.medium,
+          category: 'stress_support',
+          rationale: 'Supports nervous system function and stress response',
+          expectedBenefits: [
+            'Improved sleep',
+            'Reduced anxiety',
+            'Better stress management',
+          ],
+          contraindications: [
+            'May cause drowsiness',
+            'Reduce dose if digestive upset occurs',
+          ],
+          duration: '2-4 months',
+        ),
+      );
     }
 
     if (scores['cardiovascular'] != null && scores['cardiovascular']! < 0.7) {
-      scoreBased.add(SupplementRecommendation(
-        name: 'CoQ10',
-        dosage: '100-200 mg daily',
-        timing: 'With meals',
-        priority: SupplementPriority.medium,
-        category: 'cardiovascular_support',
-        rationale: 'Supports cellular energy production and cardiovascular health',
-        expectedBenefits: ['Improved energy', 'Cardiovascular support', 'Antioxidant protection'],
-        contraindications: ['May interact with blood thinners'],
-        duration: '3-6 months',
-      ));
+      scoreBased.add(
+        SupplementRecommendation(
+          name: 'CoQ10',
+          dosage: '100-200 mg daily',
+          timing: 'With meals',
+          priority: SupplementPriority.medium,
+          category: 'cardiovascular_support',
+          rationale:
+              'Supports cellular energy production and cardiovascular health',
+          expectedBenefits: [
+            'Improved energy',
+            'Cardiovascular support',
+            'Antioxidant protection',
+          ],
+          contraindications: ['May interact with blood thinners'],
+          duration: '3-6 months',
+        ),
+      );
     }
 
     return scoreBased;
   }
 
-  List<SupplementRecommendation> _getSymptomBasedSupplements(List<CycleData> cycles) {
+  List<SupplementRecommendation> _getSymptomBasedSupplements(
+    List<CycleData> cycles,
+  ) {
     final symptomBased = <SupplementRecommendation>[];
 
     // Analyze common symptoms across cycles
@@ -1371,33 +1653,48 @@ class SupplementRecommender {
     }
 
     // Cramp support
-    if (symptomCounts['cramps'] != null && symptomCounts['cramps']! > cycles.length * 0.5) {
-      symptomBased.add(SupplementRecommendation(
-        name: 'Calcium & Magnesium',
-        dosage: '500 mg calcium, 250 mg magnesium daily',
-        timing: 'Evening',
-        priority: SupplementPriority.medium,
-        category: 'symptom_relief',
-        rationale: 'May help reduce menstrual cramps and muscle tension',
-        expectedBenefits: ['Reduced cramp severity', 'Better muscle relaxation', 'Improved sleep'],
-        contraindications: ['Space away from iron supplements'],
-        duration: '2-3 cycles to assess effectiveness',
-      ));
+    if (symptomCounts['cramps'] != null &&
+        symptomCounts['cramps']! > cycles.length * 0.5) {
+      symptomBased.add(
+        SupplementRecommendation(
+          name: 'Calcium & Magnesium',
+          dosage: '500 mg calcium, 250 mg magnesium daily',
+          timing: 'Evening',
+          priority: SupplementPriority.medium,
+          category: 'symptom_relief',
+          rationale: 'May help reduce menstrual cramps and muscle tension',
+          expectedBenefits: [
+            'Reduced cramp severity',
+            'Better muscle relaxation',
+            'Improved sleep',
+          ],
+          contraindications: ['Space away from iron supplements'],
+          duration: '2-3 cycles to assess effectiveness',
+        ),
+      );
     }
 
     // Mood support
-    if (symptomCounts['mood_swings'] != null && symptomCounts['mood_swings']! > cycles.length * 0.3) {
-      symptomBased.add(SupplementRecommendation(
-        name: 'Vitamin B Complex',
-        dosage: 'B-50 complex daily',
-        timing: 'Morning with breakfast',
-        priority: SupplementPriority.medium,
-        category: 'mood_support',
-        rationale: 'B vitamins support neurotransmitter production and mood regulation',
-        expectedBenefits: ['Improved mood stability', 'Better energy', 'Reduced PMS symptoms'],
-        contraindications: ['May cause neon yellow urine (harmless)'],
-        duration: '2-3 months',
-      ));
+    if (symptomCounts['mood_swings'] != null &&
+        symptomCounts['mood_swings']! > cycles.length * 0.3) {
+      symptomBased.add(
+        SupplementRecommendation(
+          name: 'Vitamin B Complex',
+          dosage: 'B-50 complex daily',
+          timing: 'Morning with breakfast',
+          priority: SupplementPriority.medium,
+          category: 'mood_support',
+          rationale:
+              'B vitamins support neurotransmitter production and mood regulation',
+          expectedBenefits: [
+            'Improved mood stability',
+            'Better energy',
+            'Reduced PMS symptoms',
+          ],
+          contraindications: ['May cause neon yellow urine (harmless)'],
+          duration: '2-3 months',
+        ),
+      );
     }
 
     return symptomBased;
@@ -1419,13 +1716,19 @@ class RiskAssessment {
     final identifiedRisks = <Map<String, dynamic>>[];
 
     // Assess reproductive health risks
-    identifiedRisks.addAll(await _assessReproductiveRisks(user, cycleHistory, healthData));
+    identifiedRisks.addAll(
+      await _assessReproductiveRisks(user, cycleHistory, healthData),
+    );
 
     // Assess metabolic risks
-    identifiedRisks.addAll(await _assessMetabolicRisks(user, healthData, healthScores));
+    identifiedRisks.addAll(
+      await _assessMetabolicRisks(user, healthData, healthScores),
+    );
 
     // Assess mental health risks
-    identifiedRisks.addAll(await _assessMentalHealthRisks(user, healthData, healthScores));
+    identifiedRisks.addAll(
+      await _assessMentalHealthRisks(user, healthData, healthScores),
+    );
 
     // Assess lifestyle-related risks
     identifiedRisks.addAll(await _assessLifestyleRisks(user, healthData));
@@ -1455,7 +1758,8 @@ class RiskAssessment {
           'type': 'severe_pain',
           'severity': 'high',
           'description': 'Severe pain requiring immediate attention',
-          'recommendation': 'Seek medical attention if pain persists or worsens',
+          'recommendation':
+              'Seek medical attention if pain persists or worsens',
         });
       }
     }
@@ -1488,15 +1792,18 @@ class RiskAssessment {
         'severity': user.age! > 40 ? 'high' : 'medium',
         'description': 'Age-related fertility decline',
         'risk_score': user.age! > 40 ? 0.8 : 0.5,
-        'recommendation': 'Consider fertility assessment and family planning discussion',
+        'recommendation':
+            'Consider fertility assessment and family planning discussion',
       });
     }
 
     // Irregular cycle risks
     if (cycles.isNotEmpty) {
       final lengths = cycles.map((c) => c.length).toList();
-      final variance = lengths.map((l) => math.pow(l - 28, 2)).reduce((a, b) => a + b) / lengths.length;
-      
+      final variance =
+          lengths.map((l) => math.pow(l - 28, 2)).reduce((a, b) => a + b) /
+          lengths.length;
+
       if (math.sqrt(variance) > 10) {
         risks.add({
           'category': 'reproductive',
@@ -1527,7 +1834,8 @@ class RiskAssessment {
         'severity': 'medium',
         'description': 'Metabolic health indicators below optimal range',
         'risk_score': 0.7,
-        'recommendation': 'Focus on nutrition optimization and metabolic support',
+        'recommendation':
+            'Focus on nutrition optimization and metabolic support',
       });
     }
 
@@ -1576,7 +1884,8 @@ class RiskAssessment {
           'severity': 'medium',
           'description': 'Emotional instability patterns detected',
           'risk_score': 0.6,
-          'recommendation': 'Implement stress management and emotional regulation techniques',
+          'recommendation':
+              'Implement stress management and emotional regulation techniques',
         });
       }
     }
@@ -1605,7 +1914,8 @@ class RiskAssessment {
     // Sleep quality risks
     final biometrics = data['biometrics'] as Map<String, dynamic>?;
     if (biometrics != null) {
-      final sleepQuality = (biometrics['sleep_quality'] as num?)?.toDouble() ?? 0.7;
+      final sleepQuality =
+          (biometrics['sleep_quality'] as num?)?.toDouble() ?? 0.7;
       if (sleepQuality < 0.4) {
         risks.add({
           'category': 'lifestyle',
@@ -1613,7 +1923,8 @@ class RiskAssessment {
           'severity': 'medium',
           'description': 'Poor sleep quality affecting health and recovery',
           'risk_score': 0.6,
-          'recommendation': 'Prioritize sleep hygiene and address sleep disorders',
+          'recommendation':
+              'Prioritize sleep hygiene and address sleep disorders',
         });
       }
     }
@@ -1626,55 +1937,57 @@ class RiskAssessment {
 
     final riskScores = risks.map((r) => r['risk_score'] as double).toList();
     final averageRisk = riskScores.reduce((a, b) => a + b) / riskScores.length;
-    
+
     // Weight by number of risks
     final riskMultiplier = (risks.length / 10.0).clamp(1.0, 1.5);
-    
+
     return (averageRisk * riskMultiplier).clamp(0.0, 1.0);
   }
 
   Map<String, int> _categorizeRisks(List<Map<String, dynamic>> risks) {
     final categories = <String, int>{};
-    
+
     for (final risk in risks) {
       final category = risk['category'] as String;
       categories[category] = (categories[category] ?? 0) + 1;
     }
-    
+
     return categories;
   }
 
   List<String> _generateRiskRecommendations(List<Map<String, dynamic>> risks) {
     final recommendations = <String>[];
-    
+
     for (final risk in risks) {
       if (risk['severity'] == 'high') {
         recommendations.add(risk['recommendation']);
       }
     }
-    
+
     // Add general recommendations
     if (risks.length > 3) {
       recommendations.add('Consider comprehensive health assessment');
     }
-    
+
     return recommendations.take(5).toList();
   }
 
-  Map<String, String> _determineMonitoringNeeds(List<Map<String, dynamic>> risks) {
+  Map<String, String> _determineMonitoringNeeds(
+    List<Map<String, dynamic>> risks,
+  ) {
     final monitoring = <String, String>{};
-    
+
     for (final risk in risks) {
       final category = risk['category'] as String;
       final severity = risk['severity'] as String;
-      
+
       if (severity == 'high') {
         monitoring[category] = 'weekly';
       } else if (severity == 'medium') {
         monitoring[category] = 'monthly';
       }
     }
-    
+
     return monitoring;
   }
 }
@@ -1690,7 +2003,11 @@ class PersonalizationEngine {
     Map<String, dynamic> healthData,
     Map<String, double> healthScores,
   ) async {
-    final personalityProfile = _buildPersonalityProfile(user, cycleHistory, healthData);
+    final personalityProfile = _buildPersonalityProfile(
+      user,
+      cycleHistory,
+      healthData,
+    );
     final preferences = _identifyPreferences(user, healthData);
     final strengths = _identifyStrengths(healthScores, healthData);
     final opportunities = _identifyOpportunities(healthScores, healthData);
@@ -1700,7 +2017,11 @@ class PersonalizationEngine {
       preferences: preferences,
       strengths: strengths,
       opportunities: opportunities,
-      personalizedTips: _generatePersonalizedTips(personalityProfile, preferences, strengths),
+      personalizedTips: _generatePersonalizedTips(
+        personalityProfile,
+        preferences,
+        strengths,
+      ),
       motivationalApproach: _determineMotivationalApproach(personalityProfile),
     );
   }
@@ -1727,7 +2048,10 @@ class PersonalizationEngine {
     return profile;
   }
 
-  Map<String, String> _identifyPreferences(UserProfile user, Map<String, dynamic> data) {
+  Map<String, String> _identifyPreferences(
+    UserProfile user,
+    Map<String, dynamic> data,
+  ) {
     final preferences = <String, String>{};
 
     // Activity preferences
@@ -1738,7 +2062,8 @@ class PersonalizationEngine {
     }
 
     // Learning preferences
-    preferences['learning'] = 'visual_data'; // Could be enhanced with user input
+    preferences['learning'] =
+        'visual_data'; // Could be enhanced with user input
 
     // Intervention timing
     preferences['timing'] = 'proactive'; // vs reactive
@@ -1746,7 +2071,10 @@ class PersonalizationEngine {
     return preferences;
   }
 
-  List<String> _identifyStrengths(Map<String, double> scores, Map<String, dynamic> data) {
+  List<String> _identifyStrengths(
+    Map<String, double> scores,
+    Map<String, dynamic> data,
+  ) {
     final strengths = <String>[];
 
     scores.forEach((category, score) {
@@ -1764,7 +2092,10 @@ class PersonalizationEngine {
     return strengths.take(5).toList();
   }
 
-  List<String> _identifyOpportunities(Map<String, double> scores, Map<String, dynamic> data) {
+  List<String> _identifyOpportunities(
+    Map<String, double> scores,
+    Map<String, dynamic> data,
+  ) {
     final opportunities = <String>[];
 
     scores.forEach((category, score) {
@@ -1783,24 +2114,30 @@ class PersonalizationEngine {
   ) {
     final tips = <String>[];
 
-    final consciousness = profile['health_consciousness'] as String? ?? 'medium';
+    final consciousness =
+        profile['health_consciousness'] as String? ?? 'medium';
     final dataEngagement = profile['data_engagement'] as String? ?? 'moderate';
 
     if (consciousness == 'high' && dataEngagement == 'high') {
-      tips.add('Your detailed tracking is paying off - use the advanced analytics to optimize timing');
+      tips.add(
+        'Your detailed tracking is paying off - use the advanced analytics to optimize timing',
+      );
     }
 
     if (preferences['exercise'] == 'high_intensity') {
       tips.add('Consider cycle syncing your workouts for optimal performance');
     }
 
-    tips.add('Based on your profile, focus on ${_getTopPriorityArea(profile)} for maximum impact');
+    tips.add(
+      'Based on your profile, focus on ${_getTopPriorityArea(profile)} for maximum impact',
+    );
 
     return tips;
   }
 
   String _determineMotivationalApproach(Map<String, dynamic> profile) {
-    final consciousness = profile['health_consciousness'] as String? ?? 'medium';
+    final consciousness =
+        profile['health_consciousness'] as String? ?? 'medium';
     final style = profile['intervention_style'] as String? ?? 'balanced';
 
     if (consciousness == 'high' && style == 'proactive') {
@@ -1812,14 +2149,21 @@ class PersonalizationEngine {
     }
   }
 
-  String _assessHealthConsciousness(UserProfile user, Map<String, dynamic> data) {
+  String _assessHealthConsciousness(
+    UserProfile user,
+    Map<String, dynamic> data,
+  ) {
     if (user.healthConcerns.length > 3) return 'high';
     if (user.healthConcerns.length > 1) return 'medium';
     return 'low';
   }
 
-  String _assessDataEngagement(List<CycleData> cycles, Map<String, dynamic> data) {
-    if (cycles.length > 6 && cycles.any((c) => c.symptoms.length > 3)) return 'high';
+  String _assessDataEngagement(
+    List<CycleData> cycles,
+    Map<String, dynamic> data,
+  ) {
+    if (cycles.length > 6 && cycles.any((c) => c.symptoms.length > 3))
+      return 'high';
     if (cycles.length > 3) return 'moderate';
     return 'low';
   }
@@ -1829,7 +2173,10 @@ class PersonalizationEngine {
     return 'gentle';
   }
 
-  String _assessCommunicationStyle(UserProfile user, Map<String, dynamic> data) {
+  String _assessCommunicationStyle(
+    UserProfile user,
+    Map<String, dynamic> data,
+  ) {
     return 'detailed'; // Could be enhanced with user preferences
   }
 
@@ -1853,7 +2200,11 @@ class TrendAnalyzer {
     final cycleTrends = _analyzeCycleTrends(cycleHistory);
     final symptomTrends = _analyzeSymptomTrends(cycleHistory);
     final healthTrends = _analyzeHealthTrends(healthData);
-    final overallTrend = _determineOverallTrend(cycleTrends, symptomTrends, healthTrends);
+    final overallTrend = _determineOverallTrend(
+      cycleTrends,
+      symptomTrends,
+      healthTrends,
+    );
 
     return TrendAnalysisResult(
       analysisDepth: analysisDepth,
@@ -1863,7 +2214,10 @@ class TrendAnalyzer {
       overallTrend: overallTrend,
       trendConfidence: _calculateTrendConfidence(cycleHistory),
       predictions: _generateTrendPredictions(cycleTrends, symptomTrends),
-      actionableInsights: _generateActionableInsights(overallTrend, cycleTrends),
+      actionableInsights: _generateActionableInsights(
+        overallTrend,
+        cycleTrends,
+      ),
     );
   }
 
@@ -1873,14 +2227,20 @@ class TrendAnalyzer {
     }
 
     final trends = <String, dynamic>{};
-    
+
     // Length trends
     final lengths = cycles.map((c) => c.length).toList();
-    trends['length_trend'] = _calculateTrend(lengths.map((l) => l.toDouble()).toList());
-    trends['length_stability'] = _calculateStability(lengths.map((l) => l.toDouble()).toList());
+    trends['length_trend'] = _calculateTrend(
+      lengths.map((l) => l.toDouble()).toList(),
+    );
+    trends['length_stability'] = _calculateStability(
+      lengths.map((l) => l.toDouble()).toList(),
+    );
 
     // Flow trends
-    final flows = cycles.map((c) => _flowToNumeric(c.flowIntensity ?? FlowIntensity.none)).toList();
+    final flows = cycles
+        .map((c) => _flowToNumeric(c.flowIntensity ?? FlowIntensity.none))
+        .toList();
     trends['flow_trend'] = _calculateTrend(flows);
 
     return trends;
@@ -1888,18 +2248,23 @@ class TrendAnalyzer {
 
   Map<String, dynamic> _analyzeSymptomTrends(List<CycleData> cycles) {
     final trends = <String, dynamic>{};
-    
+
     if (cycles.isEmpty) return trends;
 
     // Symptom frequency trends
     final allSymptoms = cycles.expand((c) => c.symptoms).toSet();
     for (final symptom in allSymptoms) {
-      final occurrences = cycles.map((c) => c.symptoms.contains(symptom) ? 1.0 : 0.0).toList();
+      final occurrences = cycles
+          .map((c) => c.symptoms.contains(symptom) ? 1.0 : 0.0)
+          .toList();
       trends['${symptom}_trend'] = _calculateTrend(occurrences);
     }
 
     // Pain trends
-    final painScores = cycles.where((c) => c.pain != null).map((c) => c.pain!).toList();
+    final painScores = cycles
+        .where((c) => c.pain != null)
+        .map((c) => c.pain!)
+        .toList();
     if (painScores.isNotEmpty) {
       trends['pain_trend'] = _calculateTrend(painScores);
     }
@@ -1926,7 +2291,11 @@ class TrendAnalyzer {
 
     // Collect trend directions
     for (var trendMap in [cycleTrends, symptomTrends, healthTrends]) {
-      trendMap.values.where((v) => v is String && ['improving', 'declining', 'stable'].contains(v))
+      trendMap.values
+          .where(
+            (v) =>
+                v is String && ['improving', 'declining', 'stable'].contains(v),
+          )
           .forEach((v) => trendValues.add(v));
     }
 
@@ -1963,10 +2332,12 @@ class TrendAnalyzer {
 
   double _calculateStability(List<double> values) {
     if (values.isEmpty) return 0.0;
-    
+
     final mean = values.reduce((a, b) => a + b) / values.length;
-    final variance = values.map((v) => math.pow(v - mean, 2)).reduce((a, b) => a + b) / values.length;
-    
+    final variance =
+        values.map((v) => math.pow(v - mean, 2)).reduce((a, b) => a + b) /
+        values.length;
+
     return 1.0 / (1.0 + math.sqrt(variance)); // Higher value = more stable
   }
 
@@ -1986,23 +2357,35 @@ class TrendAnalyzer {
     if (cycleTrends['length_trend'] == 'improving') {
       predictions.add('Cycle regularity is expected to continue improving');
     } else if (cycleTrends['length_trend'] == 'declining') {
-      predictions.add('Cycle irregularity may increase - consider lifestyle factors');
+      predictions.add(
+        'Cycle irregularity may increase - consider lifestyle factors',
+      );
     }
 
     return predictions;
   }
 
-  List<String> _generateActionableInsights(String overallTrend, Map<String, dynamic> cycleTrends) {
+  List<String> _generateActionableInsights(
+    String overallTrend,
+    Map<String, dynamic> cycleTrends,
+  ) {
     final insights = <String>[];
 
     if (overallTrend == 'improving') {
-      insights.add('Your health trends are positive - continue current strategies');
+      insights.add(
+        'Your health trends are positive - continue current strategies',
+      );
     } else if (overallTrend == 'declining') {
-      insights.add('Consider addressing lifestyle factors that may be impacting your health');
+      insights.add(
+        'Consider addressing lifestyle factors that may be impacting your health',
+      );
     }
 
-    if (cycleTrends['length_stability'] != null && cycleTrends['length_stability'] < 0.5) {
-      insights.add('Focus on stress management and consistent sleep schedule for cycle regularity');
+    if (cycleTrends['length_stability'] != null &&
+        cycleTrends['length_stability'] < 0.5) {
+      insights.add(
+        'Focus on stress management and consistent sleep schedule for cycle regularity',
+      );
     }
 
     return insights;
@@ -2010,12 +2393,18 @@ class TrendAnalyzer {
 
   double _flowToNumeric(FlowIntensity flow) {
     switch (flow) {
-      case FlowIntensity.none: return 0.0;
-      case FlowIntensity.spotting: return 1.0;
-      case FlowIntensity.light: return 2.0;
-      case FlowIntensity.medium: return 3.0;
-      case FlowIntensity.heavy: return 4.0;
-      case FlowIntensity.veryHeavy: return 5.0;
+      case FlowIntensity.none:
+        return 0.0;
+      case FlowIntensity.spotting:
+        return 1.0;
+      case FlowIntensity.light:
+        return 2.0;
+      case FlowIntensity.medium:
+        return 3.0;
+      case FlowIntensity.heavy:
+        return 4.0;
+      case FlowIntensity.veryHeavy:
+        return 5.0;
     }
   }
 }

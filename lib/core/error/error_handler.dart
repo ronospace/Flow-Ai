@@ -46,7 +46,9 @@ class ErrorHandler {
     _registerDefaultStrategies();
 
     _initialized = true;
-    AppLogger.success('Error Handler initialized with production-grade logging');
+    AppLogger.success(
+      'Error Handler initialized with production-grade logging',
+    );
   }
 
   /// Set up global error handling for uncaught errors
@@ -106,7 +108,11 @@ class ErrorHandler {
   }
 
   /// Create and handle different types of errors
-  Future<void> handleAPIError(String endpoint, int? statusCode, String message) async {
+  Future<void> handleAPIError(
+    String endpoint,
+    int? statusCode,
+    String message,
+  ) async {
     final error = AppError(
       type: ErrorType.api,
       message: 'API Error: $message',
@@ -167,16 +173,16 @@ class ErrorHandler {
     await handleError(error);
   }
 
-  Future<void> handleHealthDataError(String operation, dynamic exception) async {
+  Future<void> handleHealthDataError(
+    String operation,
+    dynamic exception,
+  ) async {
     final error = AppError(
       type: ErrorType.healthData,
       message: 'Health Data Error during $operation: $exception',
       timestamp: DateTime.now(),
       severity: ErrorSeverity.high,
-      context: {
-        'operation': operation,
-        'data_integrity_concern': true,
-      },
+      context: {'operation': operation, 'data_integrity_concern': true},
     );
 
     await handleError(error);
@@ -184,7 +190,8 @@ class ErrorHandler {
 
   /// Log error with appropriate level and formatting
   void _logError(AppError error) {
-    final logMessage = '''
+    final logMessage =
+        '''
 ═══════════════════════════════════════════════════════════════
 🚨 ${error.severity.name.toUpperCase()} ERROR - ${error.type.name.toUpperCase()}
 ═══════════════════════════════════════════════════════════════
@@ -214,7 +221,7 @@ ${error.stackTrace != null ? 'Stack Trace:\n${error.stackTrace}' : ''}
   /// Add error to history for analytics
   void _addToErrorHistory(AppError error) {
     _errorHistory.add(error);
-    
+
     // Keep history size manageable
     if (_errorHistory.length > _maxErrorHistory) {
       _errorHistory.removeAt(0);
@@ -245,7 +252,7 @@ ${error.stackTrace != null ? 'Stack Trace:\n${error.stackTrace}' : ''}
   /// Attempt error recovery using registered strategies
   Future<void> _attemptRecovery(AppError error) async {
     final strategy = _recoveryStrategies[error.type.runtimeType];
-    
+
     if (strategy != null) {
       try {
         final recovered = await strategy.attempt(error);
@@ -267,19 +274,25 @@ ${error.stackTrace != null ? 'Stack Trace:\n${error.stackTrace}' : ''}
     switch (error.type) {
       case ErrorType.api:
         // For API errors, we might retry or use cached data
-        _logger.i('Applying API error fallback - using cached data if available');
+        _logger.i(
+          'Applying API error fallback - using cached data if available',
+        );
         break;
-      
+
       case ErrorType.database:
         // For database errors, we might try to reinitialize
-        _logger.i('Applying database error fallback - attempting to reinitialize');
+        _logger.i(
+          'Applying database error fallback - attempting to reinitialize',
+        );
         break;
-      
+
       case ErrorType.authentication:
         // For auth errors, we might redirect to login
-        _logger.i('Applying auth error fallback - may need user re-authentication');
+        _logger.i(
+          'Applying auth error fallback - may need user re-authentication',
+        );
         break;
-      
+
       default:
         _logger.i('No specific fallback strategy for ${error.type.name}');
     }
@@ -288,19 +301,28 @@ ${error.stackTrace != null ? 'Stack Trace:\n${error.stackTrace}' : ''}
   /// Register default recovery strategies
   void _registerDefaultStrategies() {
     registerRecoveryStrategy(ErrorType.api, APIErrorRecoveryStrategy());
-    registerRecoveryStrategy(ErrorType.database, DatabaseErrorRecoveryStrategy());
-    registerRecoveryStrategy(ErrorType.authentication, AuthErrorRecoveryStrategy());
+    registerRecoveryStrategy(
+      ErrorType.database,
+      DatabaseErrorRecoveryStrategy(),
+    );
+    registerRecoveryStrategy(
+      ErrorType.authentication,
+      AuthErrorRecoveryStrategy(),
+    );
   }
 
   /// Register custom recovery strategy
-  void registerRecoveryStrategy(ErrorType type, ErrorRecoveryStrategy strategy) {
+  void registerRecoveryStrategy(
+    ErrorType type,
+    ErrorRecoveryStrategy strategy,
+  ) {
     _recoveryStrategies[type.runtimeType] = strategy;
   }
 
   /// Get API error severity based on status code
   ErrorSeverity _getAPISeverity(int? statusCode) {
     if (statusCode == null) return ErrorSeverity.high;
-    
+
     if (statusCode >= 500) return ErrorSeverity.critical;
     if (statusCode >= 400) return ErrorSeverity.high;
     if (statusCode >= 300) return ErrorSeverity.medium;
@@ -334,7 +356,7 @@ ${error.stackTrace != null ? 'Stack Trace:\n${error.stackTrace}' : ''}
   Map<String, dynamic> getErrorStats() {
     final now = DateTime.now();
     final last24Hours = now.subtract(const Duration(hours: 24));
-    
+
     final recentErrors = _errorHistory
         .where((error) => error.timestamp.isAfter(last24Hours))
         .toList();
@@ -344,7 +366,8 @@ ${error.stackTrace != null ? 'Stack Trace:\n${error.stackTrace}' : ''}
 
     for (final error in recentErrors) {
       errorsByType[error.type.name] = (errorsByType[error.type.name] ?? 0) + 1;
-      errorsBySeverity[error.severity.name] = (errorsBySeverity[error.severity.name] ?? 0) + 1;
+      errorsBySeverity[error.severity.name] =
+          (errorsBySeverity[error.severity.name] ?? 0) + 1;
     }
 
     return {
@@ -352,7 +375,9 @@ ${error.stackTrace != null ? 'Stack Trace:\n${error.stackTrace}' : ''}
       'recent_errors_24h': recentErrors.length,
       'errors_by_type': errorsByType,
       'errors_by_severity': errorsBySeverity,
-      'last_error': _errorHistory.isNotEmpty ? _errorHistory.last.timestamp.toIso8601String() : null,
+      'last_error': _errorHistory.isNotEmpty
+          ? _errorHistory.last.timestamp.toIso8601String()
+          : null,
     };
   }
 
@@ -382,12 +407,7 @@ enum ErrorType {
 }
 
 /// Error severity levels
-enum ErrorSeverity {
-  low,
-  medium,
-  high,
-  critical,
-}
+enum ErrorSeverity { low, medium, high, critical }
 
 /// Application error model
 class AppError {

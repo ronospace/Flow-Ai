@@ -13,7 +13,7 @@ class PlatformService {
 
   bool _isInitialized = false;
   PlatformInfo? _platformInfo;
-  
+
   /// Get platform information
   PlatformInfo get platformInfo => _platformInfo ?? PlatformInfo.unknown();
 
@@ -23,14 +23,15 @@ class PlatformService {
 
     try {
       AppLogger.system('🔄 Initializing Platform Service...');
-      
+
       await _detectPlatformInfo();
       _configureSystemUI();
       _configurePlatformSpecific();
-      
+
       _isInitialized = true;
-      AppLogger.system('✅ Platform Service initialized for ${platformInfo.platformName}');
-      
+      AppLogger.system(
+        '✅ Platform Service initialized for ${platformInfo.platformName}',
+      );
     } catch (e) {
       AppLogger.error('❌ Failed to initialize Platform Service', e);
       rethrow;
@@ -41,7 +42,7 @@ class PlatformService {
   Future<void> _detectPlatformInfo() async {
     try {
       final deviceInfo = DeviceInfoPlugin();
-      
+
       if (kIsWeb) {
         final webInfo = await deviceInfo.webBrowserInfo;
         _platformInfo = PlatformInfo(
@@ -139,7 +140,6 @@ class PlatformService {
           supportsBiometrics: false,
         );
       }
-      
     } catch (e) {
       AppLogger.warning('Failed to detect platform info: $e');
       _platformInfo = PlatformInfo.unknown();
@@ -149,12 +149,12 @@ class PlatformService {
   /// Configure system UI based on platform
   void _configureSystemUI() {
     if (kIsWeb) return; // No system UI control on web
-    
+
     try {
       if (platformInfo.isMobile) {
         // Configure mobile system UI
         SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-        
+
         // Configure status bar
         SystemChrome.setSystemUIOverlayStyle(
           const SystemUiOverlayStyle(
@@ -164,19 +164,18 @@ class PlatformService {
             systemNavigationBarIconBrightness: Brightness.dark,
           ),
         );
-        
+
         // Lock orientation to portrait for mobile
         SystemChrome.setPreferredOrientations([
           DeviceOrientation.portraitUp,
           DeviceOrientation.portraitDown,
         ]);
-        
+
         AppLogger.system('📱 Mobile system UI configured');
       } else if (platformInfo.isDesktop) {
         // Desktop-specific configurations
         AppLogger.system('🖥️ Desktop system UI configured');
       }
-      
     } catch (e) {
       AppLogger.warning('Failed to configure system UI: $e');
     }
@@ -232,43 +231,60 @@ class PlatformService {
   bool _detectAndroidNotch(AndroidDeviceInfo androidInfo) {
     // This is a simplified detection based on common models
     final model = androidInfo.model.toLowerCase();
-    return model.contains('pixel 3') || 
-           model.contains('pixel 4') || 
-           model.contains('pixel 5') ||
-           model.contains('oneplus') ||
-           androidInfo.version.sdkInt >= 28; // API 28+ generally support notch
+    return model.contains('pixel 3') ||
+        model.contains('pixel 4') ||
+        model.contains('pixel 5') ||
+        model.contains('oneplus') ||
+        androidInfo.version.sdkInt >= 28; // API 28+ generally support notch
   }
 
   /// Detect if iOS device has a notch
   bool _detectiOSNotch(IosDeviceInfo iosInfo) {
     // Devices with notch/Dynamic Island
     final notchDevices = [
-      'iPhone X', 'iPhone XS', 'iPhone XS Max', 'iPhone XR',
-      'iPhone 11', 'iPhone 11 Pro', 'iPhone 11 Pro Max',
-      'iPhone 12', 'iPhone 12 mini', 'iPhone 12 Pro', 'iPhone 12 Pro Max',
-      'iPhone 13', 'iPhone 13 mini', 'iPhone 13 Pro', 'iPhone 13 Pro Max',
-      'iPhone 14', 'iPhone 14 Plus', 'iPhone 14 Pro', 'iPhone 14 Pro Max',
-      'iPhone 15', 'iPhone 15 Plus', 'iPhone 15 Pro', 'iPhone 15 Pro Max',
+      'iPhone X',
+      'iPhone XS',
+      'iPhone XS Max',
+      'iPhone XR',
+      'iPhone 11',
+      'iPhone 11 Pro',
+      'iPhone 11 Pro Max',
+      'iPhone 12',
+      'iPhone 12 mini',
+      'iPhone 12 Pro',
+      'iPhone 12 Pro Max',
+      'iPhone 13',
+      'iPhone 13 mini',
+      'iPhone 13 Pro',
+      'iPhone 13 Pro Max',
+      'iPhone 14',
+      'iPhone 14 Plus',
+      'iPhone 14 Pro',
+      'iPhone 14 Pro Max',
+      'iPhone 15',
+      'iPhone 15 Plus',
+      'iPhone 15 Pro',
+      'iPhone 15 Pro Max',
     ];
-    
+
     return notchDevices.any((device) => iosInfo.model.contains(device));
   }
 
   /// Detect iOS biometric support
   bool _detectiOSBiometrics(IosDeviceInfo iosInfo) {
     // Most iOS devices since iPhone 5s support Touch ID or Face ID
-    return !iosInfo.model.contains('iPhone 5') && 
-           !iosInfo.model.contains('iPhone 4');
+    return !iosInfo.model.contains('iPhone 5') &&
+        !iosInfo.model.contains('iPhone 4');
   }
 
   /// Get adaptive padding for notched devices
   EdgeInsets getAdaptivePadding(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    
+
     if (!platformInfo.hasNotch) {
       return EdgeInsets.only(top: mediaQuery.padding.top);
     }
-    
+
     // Additional padding for notched devices
     return EdgeInsets.only(
       top: mediaQuery.padding.top + 8,
@@ -279,26 +295,20 @@ class PlatformService {
   /// Get platform-appropriate button style
   ButtonStyle getAdaptiveButtonStyle(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     if (platformInfo.platform == TargetPlatform.iOS) {
       return ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         elevation: 0,
       );
     } else if (platformInfo.platform == TargetPlatform.android) {
       return ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         elevation: 2,
       );
     } else {
       return ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         elevation: 1,
       );
     }
@@ -324,9 +334,11 @@ class PlatformService {
   }
 
   /// Trigger haptic feedback if supported
-  Future<void> triggerHapticFeedback({HapticFeedbackType type = HapticFeedbackType.selection}) async {
+  Future<void> triggerHapticFeedback({
+    HapticFeedbackType type = HapticFeedbackType.selection,
+  }) async {
     if (!platformInfo.supportsHaptics) return;
-    
+
     try {
       switch (type) {
         case HapticFeedbackType.selection:
@@ -401,9 +413,7 @@ class PlatformService {
         title: Text(title),
         content: Text(content),
         actions: actions,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       );
     }
   }
@@ -514,9 +524,9 @@ class PlatformInfo {
 
 /// Screen size categories
 enum ScreenSize {
-  small,   // < 5.5 inches or < 600dp width
-  medium,  // 5.5-6.7 inches or 600-900dp width  
-  large,   // > 6.7 inches or > 900dp width (tablets, desktops)
+  small, // < 5.5 inches or < 600dp width
+  medium, // 5.5-6.7 inches or 600-900dp width
+  large, // > 6.7 inches or > 900dp width (tablets, desktops)
 }
 
 /// Platform features enum
@@ -533,27 +543,25 @@ enum PlatformFeature {
 }
 
 /// Haptic feedback types
-enum HapticFeedbackType {
-  selection,
-  impact,
-  success,
-  warning,
-  error,
-}
+enum HapticFeedbackType { selection, impact, success, warning, error }
 
 /// Extensions for adaptive UI
 extension AdaptiveContext on BuildContext {
   PlatformService get platformService => PlatformService();
   PlatformInfo get platformInfo => PlatformService().platformInfo;
-  
+
   EdgeInsets get adaptivePadding => PlatformService().getAdaptivePadding(this);
-  ButtonStyle get adaptiveButtonStyle => PlatformService().getAdaptiveButtonStyle(this);
-  ScrollPhysics get adaptiveScrollPhysics => PlatformService().getAdaptiveScrollPhysics();
-  
-  Future<void> hapticFeedback([HapticFeedbackType type = HapticFeedbackType.selection]) {
+  ButtonStyle get adaptiveButtonStyle =>
+      PlatformService().getAdaptiveButtonStyle(this);
+  ScrollPhysics get adaptiveScrollPhysics =>
+      PlatformService().getAdaptiveScrollPhysics();
+
+  Future<void> hapticFeedback([
+    HapticFeedbackType type = HapticFeedbackType.selection,
+  ]) {
     return PlatformService().triggerHapticFeedback(type: type);
   }
-  
+
   bool isFeatureSupported(PlatformFeature feature) {
     return PlatformService().isFeatureSupported(feature);
   }

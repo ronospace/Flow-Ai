@@ -6,7 +6,8 @@ import 'package:flutter/foundation.dart';
 /// Real-time performance monitoring, memory optimization, and battery management
 /// Ultra-efficient resource utilization with predictive performance scaling
 class PerformanceOptimizationEngine {
-  static final PerformanceOptimizationEngine _instance = PerformanceOptimizationEngine._internal();
+  static final PerformanceOptimizationEngine _instance =
+      PerformanceOptimizationEngine._internal();
   static PerformanceOptimizationEngine get instance => _instance;
   PerformanceOptimizationEngine._internal();
 
@@ -22,7 +23,8 @@ class PerformanceOptimizationEngine {
   late StorageOptimizer _storageOptimizer;
 
   // Real-time metrics
-  final StreamController<PerformanceMetrics> _metricsStream = StreamController.broadcast();
+  final StreamController<PerformanceMetrics> _metricsStream =
+      StreamController.broadcast();
   Stream<PerformanceMetrics> get metricsStream => _metricsStream.stream;
 
   // Optimization timers
@@ -33,7 +35,7 @@ class PerformanceOptimizationEngine {
   // Performance cache and history
   final List<PerformanceMetrics> _performanceHistory = [];
   final Map<String, dynamic> _optimizationCache = {};
-  
+
   // Performance thresholds
   static const double _criticalMemoryThreshold = 0.85;
   static const double _warningMemoryThreshold = 0.70;
@@ -55,7 +57,9 @@ class PerformanceOptimizationEngine {
     _setupOptimizationSchedule();
 
     _initialized = true;
-    debugPrint('✅ Performance Optimization Engine initialized with real-time monitoring');
+    debugPrint(
+      '✅ Performance Optimization Engine initialized with real-time monitoring',
+    );
   }
 
   Future<void> _initializeOptimizationComponents() async {
@@ -80,7 +84,9 @@ class PerformanceOptimizationEngine {
 
   Future<void> _startPerformanceMonitoring() async {
     // Start real-time performance monitoring
-    _performanceMonitorTimer = Timer.periodic(const Duration(seconds: 5), (_) async {
+    _performanceMonitorTimer = Timer.periodic(const Duration(seconds: 5), (
+      _,
+    ) async {
       await _collectPerformanceMetrics();
     });
   }
@@ -92,14 +98,16 @@ class PerformanceOptimizationEngine {
     });
 
     // Battery optimization every 10 minutes
-    _batteryOptimizationTimer = Timer.periodic(const Duration(minutes: 10), (_) async {
+    _batteryOptimizationTimer = Timer.periodic(const Duration(minutes: 10), (
+      _,
+    ) async {
       await _optimizeBatteryUsage();
     });
   }
 
   Future<void> _collectPerformanceMetrics() async {
     final metrics = await _performanceMonitor.collectMetrics();
-    
+
     // Add to history (keep last 100 entries)
     _performanceHistory.add(metrics);
     if (_performanceHistory.length > 100) {
@@ -116,7 +124,9 @@ class PerformanceOptimizationEngine {
   Future<void> _analyzeAndOptimize(PerformanceMetrics metrics) async {
     // Memory optimization
     if (metrics.memoryUsage > _criticalMemoryThreshold) {
-      debugPrint('🚨 Critical memory usage detected: ${(metrics.memoryUsage * 100).toStringAsFixed(1)}%');
+      debugPrint(
+        '🚨 Critical memory usage detected: ${(metrics.memoryUsage * 100).toStringAsFixed(1)}%',
+      );
       await _performEmergencyMemoryOptimization();
     } else if (metrics.memoryUsage > _warningMemoryThreshold) {
       await _performProactiveMemoryOptimization();
@@ -133,7 +143,8 @@ class PerformanceOptimizationEngine {
     }
 
     // Network optimization
-    if (metrics.networkLatency > 1000) { // >1 second
+    if (metrics.networkLatency > 1000) {
+      // >1 second
       await _optimizeNetworkUsage();
     }
   }
@@ -147,7 +158,7 @@ class PerformanceOptimizationEngine {
     final currentMetrics = await _performanceMonitor.collectMetrics();
     final optimizationStatus = await _getOptimizationStatus();
     final recommendations = await _generateOptimizationRecommendations();
-    
+
     return PerformanceReport(
       timestamp: DateTime.now(),
       currentMetrics: currentMetrics,
@@ -173,25 +184,33 @@ class PerformanceOptimizationEngine {
 
     // Memory optimization
     if (specificAreas?.contains('memory') ?? true) {
-      final memoryResult = await _optimizeMemoryUsage(aggressive: aggressiveMode);
+      final memoryResult = await _optimizeMemoryUsage(
+        aggressive: aggressiveMode,
+      );
       optimizationResults['memory'] = memoryResult;
     }
 
     // Battery optimization
     if (specificAreas?.contains('battery') ?? true) {
-      final batteryResult = await _optimizeBatteryUsage(aggressive: aggressiveMode);
+      final batteryResult = await _optimizeBatteryUsage(
+        aggressive: aggressiveMode,
+      );
       optimizationResults['battery'] = batteryResult;
     }
 
     // Network optimization
     if (specificAreas?.contains('network') ?? true) {
-      final networkResult = await _optimizeNetworkUsage(aggressive: aggressiveMode);
+      final networkResult = await _optimizeNetworkUsage(
+        aggressive: aggressiveMode,
+      );
       optimizationResults['network'] = networkResult;
     }
 
     // Rendering optimization
     if (specificAreas?.contains('rendering') ?? true) {
-      final renderingResult = await _optimizeRendering(aggressive: aggressiveMode);
+      final renderingResult = await _optimizeRendering(
+        aggressive: aggressiveMode,
+      );
       optimizationResults['rendering'] = renderingResult;
     }
 
@@ -202,7 +221,7 @@ class PerformanceOptimizationEngine {
     }
 
     final duration = DateTime.now().difference(startTime);
-    
+
     return OptimizationResult(
       optimizationDuration: duration,
       areasOptimized: optimizationResults.keys.toList(),
@@ -212,23 +231,33 @@ class PerformanceOptimizationEngine {
     );
   }
 
-  Future<Map<String, dynamic>> _optimizeMemoryUsage({bool aggressive = false}) async {
+  Future<Map<String, dynamic>> _optimizeMemoryUsage({
+    bool aggressive = false,
+  }) async {
     return await _memoryOptimizer.optimize(aggressive: aggressive);
   }
 
-  Future<Map<String, dynamic>> _optimizeBatteryUsage({bool aggressive = false}) async {
+  Future<Map<String, dynamic>> _optimizeBatteryUsage({
+    bool aggressive = false,
+  }) async {
     return await _batteryOptimizer.optimize(aggressive: aggressive);
   }
 
-  Future<Map<String, dynamic>> _optimizeNetworkUsage({bool aggressive = false}) async {
+  Future<Map<String, dynamic>> _optimizeNetworkUsage({
+    bool aggressive = false,
+  }) async {
     return await _networkOptimizer.optimize(aggressive: aggressive);
   }
 
-  Future<Map<String, dynamic>> _optimizeRendering({bool aggressive = false}) async {
+  Future<Map<String, dynamic>> _optimizeRendering({
+    bool aggressive = false,
+  }) async {
     return await _renderingOptimizer.optimize(aggressive: aggressive);
   }
 
-  Future<Map<String, dynamic>> _optimizeStorage({bool aggressive = false}) async {
+  Future<Map<String, dynamic>> _optimizeStorage({
+    bool aggressive = false,
+  }) async {
     return await _storageOptimizer.optimize(aggressive: aggressive);
   }
 
@@ -250,28 +279,39 @@ class PerformanceOptimizationEngine {
     if (_performanceHistory.length < 2) return {};
 
     final recent = _performanceHistory.take(10).toList();
-    final older = _performanceHistory.skip(math.max(0, _performanceHistory.length - 20)).take(10).toList();
+    final older = _performanceHistory
+        .skip(math.max(0, _performanceHistory.length - 20))
+        .take(10)
+        .toList();
 
     return {
-      'memory_trend': _calculateTrend(recent.map((m) => m.memoryUsage).toList(), 
-                                     older.map((m) => m.memoryUsage).toList()),
-      'frame_rate_trend': _calculateTrend(recent.map((m) => m.frameRate).toList(),
-                                         older.map((m) => m.frameRate).toList()),
-      'battery_trend': _calculateTrend(recent.map((m) => m.batteryLevel).toList(),
-                                      older.map((m) => m.batteryLevel).toList()),
-      'cpu_trend': _calculateTrend(recent.map((m) => m.cpuUsage).toList(),
-                                  older.map((m) => m.cpuUsage).toList()),
+      'memory_trend': _calculateTrend(
+        recent.map((m) => m.memoryUsage).toList(),
+        older.map((m) => m.memoryUsage).toList(),
+      ),
+      'frame_rate_trend': _calculateTrend(
+        recent.map((m) => m.frameRate).toList(),
+        older.map((m) => m.frameRate).toList(),
+      ),
+      'battery_trend': _calculateTrend(
+        recent.map((m) => m.batteryLevel).toList(),
+        older.map((m) => m.batteryLevel).toList(),
+      ),
+      'cpu_trend': _calculateTrend(
+        recent.map((m) => m.cpuUsage).toList(),
+        older.map((m) => m.cpuUsage).toList(),
+      ),
     };
   }
 
   String _calculateTrend(List<double> recent, List<double> older) {
     if (recent.isEmpty || older.isEmpty) return 'stable';
-    
+
     final recentAvg = recent.reduce((a, b) => a + b) / recent.length;
     final olderAvg = older.reduce((a, b) => a + b) / older.length;
-    
+
     final difference = (recentAvg - olderAvg) / olderAvg;
-    
+
     if (difference > 0.1) return 'improving';
     if (difference < -0.1) return 'declining';
     return 'stable';
@@ -289,70 +329,73 @@ class PerformanceOptimizationEngine {
 
   Future<List<String>> _generateOptimizationRecommendations() async {
     final recommendations = <String>[];
-    
+
     if (_performanceHistory.isNotEmpty) {
       final latestMetrics = _performanceHistory.last;
-      
+
       if (latestMetrics.memoryUsage > 0.8) {
         recommendations.add('Consider reducing memory-intensive operations');
       }
-      
+
       if (latestMetrics.frameRate < 55) {
         recommendations.add('Optimize UI rendering for smoother animations');
       }
-      
+
       if (latestMetrics.batteryLevel < 0.3 && latestMetrics.cpuUsage > 0.7) {
         recommendations.add('Reduce background processing to conserve battery');
       }
-      
+
       if (latestMetrics.networkLatency > 500) {
-        recommendations.add('Implement request caching to reduce network calls');
+        recommendations.add(
+          'Implement request caching to reduce network calls',
+        );
       }
     }
-    
+
     return recommendations;
   }
 
   double _calculatePerformanceScore(PerformanceMetrics metrics) {
     double score = 1.0;
-    
+
     // Memory score (30%)
     score *= (1.0 - metrics.memoryUsage) * 0.3 + 0.7;
-    
+
     // Frame rate score (25%)
     final frameRateScore = (metrics.frameRate / 60.0).clamp(0.0, 1.0);
     score *= frameRateScore * 0.25 + 0.75;
-    
+
     // CPU score (20%)
     score *= (1.0 - metrics.cpuUsage) * 0.2 + 0.8;
-    
+
     // Battery efficiency score (15%)
     if (metrics.batteryLevel > 0.2) {
       score *= 1.0;
     } else {
       score *= 0.8;
     }
-    
+
     // Network efficiency score (10%)
     final networkScore = math.max(0.0, 1.0 - (metrics.networkLatency / 2000.0));
     score *= networkScore * 0.1 + 0.9;
-    
+
     return (score * 100).clamp(0.0, 100.0);
   }
 
   Future<List<String>> _identifyBottlenecks() async {
     final bottlenecks = <String>[];
-    
+
     if (_performanceHistory.isNotEmpty) {
       final metrics = _performanceHistory.last;
-      
+
       if (metrics.memoryUsage > 0.85) bottlenecks.add('High memory usage');
       if (metrics.cpuUsage > 0.80) bottlenecks.add('High CPU utilization');
       if (metrics.frameRate < 50) bottlenecks.add('Low frame rate');
-      if (metrics.networkLatency > 1000) bottlenecks.add('High network latency');
+      if (metrics.networkLatency > 1000)
+        bottlenecks.add('High network latency');
       if (metrics.droppedFrames > 5) bottlenecks.add('Frequent frame drops');
     }
-    
+
     return bottlenecks;
   }
 
@@ -369,14 +412,16 @@ class PerformanceOptimizationEngine {
   double _calculateOverallImprovement(Map<String, dynamic> results) {
     double totalImprovement = 0.0;
     int count = 0;
-    
+
     for (final result in results.values) {
-      if (result is Map<String, dynamic> && result.containsKey('improvement_percentage')) {
-        totalImprovement += (result['improvement_percentage'] as num).toDouble();
+      if (result is Map<String, dynamic> &&
+          result.containsKey('improvement_percentage')) {
+        totalImprovement += (result['improvement_percentage'] as num)
+            .toDouble();
         count++;
       }
     }
-    
+
     return count > 0 ? totalImprovement / count : 0.0;
   }
 
@@ -489,18 +534,21 @@ class MemoryOptimizer {
 
   Future<Map<String, dynamic>> optimize({bool aggressive = false}) async {
     final startMemory = await _getCurrentMemoryUsage();
-    
+
     // Perform memory optimization
     await _clearUnusedCaches();
     await _optimizeImageCaches();
-    
+
     if (aggressive) {
       await _performAggressiveCleanup();
     }
-    
+
     final endMemory = await _getCurrentMemoryUsage();
-    final improvement = ((startMemory - endMemory) / startMemory * 100).clamp(0.0, 100.0);
-    
+    final improvement = ((startMemory - endMemory) / startMemory * 100).clamp(
+      0.0,
+      100.0,
+    );
+
     return {
       'start_memory': startMemory,
       'end_memory': endMemory,
@@ -676,7 +724,8 @@ class NetworkOptimizer {
     return {
       'optimizations': optimizations,
       'improvement_percentage': improvement,
-      'estimated_data_savings': '${(improvement * 0.1).toStringAsFixed(1)}MB/hour',
+      'estimated_data_savings':
+          '${(improvement * 0.1).toStringAsFixed(1)}MB/hour',
     };
   }
 

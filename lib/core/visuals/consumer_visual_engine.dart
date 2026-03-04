@@ -8,7 +8,8 @@ import '../utils/app_logger.dart';
 /// Advanced visual system adapted from Flow Ai for consumer wellness experience
 /// Features mood-based color morphing, breathing animations, and wellness visualizations
 class ConsumerVisualEngine {
-  static final ConsumerVisualEngine _instance = ConsumerVisualEngine._internal();
+  static final ConsumerVisualEngine _instance =
+      ConsumerVisualEngine._internal();
   static ConsumerVisualEngine get instance => _instance;
   ConsumerVisualEngine._internal();
 
@@ -23,7 +24,7 @@ class ConsumerVisualEngine {
 
   // Animation controllers
   final List<AnimationController> _activeControllers = [];
-  
+
   // Color palettes
   static const Map<MoodState, List<Color>> _moodPalettes = {
     MoodState.joyful: [
@@ -233,7 +234,7 @@ class ConsumerVisualEngine {
       controller.dispose();
     }
     _activeControllers.clear();
-    
+
     _colorMorph.dispose();
     _breathingEngine.dispose();
     _wellnessViz.dispose();
@@ -245,7 +246,7 @@ class ConsumerVisualEngine {
 class MoodColorMorph {
   bool _isInitialized = false;
   Timer? _morphTimer;
-  
+
   Future<void> initialize() async {
     if (_isInitialized) return;
     _isInitialized = true;
@@ -258,8 +259,9 @@ class MoodColorMorph {
     double intensity = 1.0,
     bool animated = true,
   }) {
-    final palette = ConsumerVisualEngine._moodPalettes[moodState] ?? 
-                   ConsumerVisualEngine._moodPalettes[MoodState.neutral]!;
+    final palette =
+        ConsumerVisualEngine._moodPalettes[moodState] ??
+        ConsumerVisualEngine._moodPalettes[MoodState.neutral]!;
 
     return AnimatedContainer(
       duration: animated ? const Duration(seconds: 2) : Duration.zero,
@@ -354,10 +356,7 @@ class WellnessVisualization {
     WellnessChartType type,
   ) async {
     final tracker = DailyFeelingsTracker.instance;
-    return tracker.getFeelingsPattern(
-      userId: userId,
-      daysBack: daysBack,
-    );
+    return tracker.getFeelingsPattern(userId: userId, daysBack: daysBack);
   }
 
   void dispose() {
@@ -438,7 +437,8 @@ class BreathingAnimationWidget extends StatefulWidget {
   });
 
   @override
-  State<BreathingAnimationWidget> createState() => _BreathingAnimationWidgetState();
+  State<BreathingAnimationWidget> createState() =>
+      _BreathingAnimationWidgetState();
 }
 
 class _BreathingAnimationWidgetState extends State<BreathingAnimationWidget>
@@ -457,18 +457,12 @@ class _BreathingAnimationWidgetState extends State<BreathingAnimationWidget>
     _scaleAnimation = Tween<double>(
       begin: 0.8,
       end: 1.2,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    ));
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
     _opacityAnimation = Tween<double>(
       begin: 0.4,
       end: 0.9,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    ));
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -512,7 +506,9 @@ class _BreathingAnimationWidgetState extends State<BreathingAnimationWidget>
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: widget.color.withOpacity(_opacityAnimation.value * 0.3),
+                      color: widget.color.withOpacity(
+                        _opacityAnimation.value * 0.3,
+                      ),
                       width: 2,
                     ),
                   ),
@@ -646,7 +642,10 @@ class WavePainter extends CustomPainter {
     path.moveTo(0, centerY);
 
     for (double x = 0; x <= size.width; x += 1) {
-      final y = centerY + waveHeight * math.sin((x / size.width) * frequency * 2 * math.pi + phase);
+      final y =
+          centerY +
+          waveHeight *
+              math.sin((x / size.width) * frequency * 2 * math.pi + phase);
       path.lineTo(x, y);
     }
 
@@ -678,10 +677,7 @@ class WellnessChartWidget extends StatelessWidget {
       height: height,
       child: CustomPaint(
         size: Size(double.infinity, height),
-        painter: WellnessChartPainter(
-          data: data,
-          color: accentColor,
-        ),
+        painter: WellnessChartPainter(data: data, color: accentColor),
       ),
     );
   }
@@ -692,10 +688,7 @@ class WellnessChartPainter extends CustomPainter {
   final List<FeelingsDataPoint> data;
   final Color color;
 
-  WellnessChartPainter({
-    required this.data,
-    required this.color,
-  });
+  WellnessChartPainter({required this.data, required this.color});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -717,7 +710,7 @@ class WellnessChartPainter extends CustomPainter {
 
     for (int i = 0; i < data.length; i++) {
       final x = i * stepX;
-      final normalizedScore = scoreRange > 0 
+      final normalizedScore = scoreRange > 0
           ? (data[i].score - minScore) / scoreRange
           : 0.5;
       final y = size.height - (normalizedScore * size.height);
@@ -729,8 +722,13 @@ class WellnessChartPainter extends CustomPainter {
       }
 
       // Draw point
-      canvas.drawCircle(Offset(x, y), 4, 
-          Paint()..color = color..style = PaintingStyle.fill);
+      canvas.drawCircle(
+        Offset(x, y),
+        4,
+        Paint()
+          ..color = color
+          ..style = PaintingStyle.fill,
+      );
     }
 
     canvas.drawPath(path, paint);
@@ -756,7 +754,8 @@ class BiometricParticleSystem extends StatefulWidget {
   });
 
   @override
-  State<BiometricParticleSystem> createState() => _BiometricParticleSystemState();
+  State<BiometricParticleSystem> createState() =>
+      _BiometricParticleSystemState();
 }
 
 class _BiometricParticleSystemState extends State<BiometricParticleSystem>
@@ -771,7 +770,7 @@ class _BiometricParticleSystemState extends State<BiometricParticleSystem>
       duration: const Duration(seconds: 2),
       vsync: this,
     );
-    
+
     _generateParticles();
     _controller.repeat();
   }
@@ -781,13 +780,15 @@ class _BiometricParticleSystemState extends State<BiometricParticleSystem>
     final random = math.Random();
 
     for (int i = 0; i < particleCount; i++) {
-      _particles.add(Particle(
-        x: random.nextDouble() * widget.size.width,
-        y: random.nextDouble() * widget.size.height,
-        size: random.nextDouble() * 6 + 2,
-        speed: random.nextDouble() * 2 + 1,
-        opacity: random.nextDouble() * 0.7 + 0.3,
-      ));
+      _particles.add(
+        Particle(
+          x: random.nextDouble() * widget.size.width,
+          y: random.nextDouble() * widget.size.height,
+          size: random.nextDouble() * 6 + 2,
+          speed: random.nextDouble() * 2 + 1,
+          opacity: random.nextDouble() * 0.7 + 0.3,
+        ),
+      );
     }
   }
 
@@ -860,17 +861,17 @@ class ParticlePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     for (final particle in particles) {
       final paint = Paint()
-        ..color = color.withOpacity(particle.opacity * (0.5 + 0.5 * math.sin(animationValue * 2 * math.pi)))
+        ..color = color.withOpacity(
+          particle.opacity *
+              (0.5 + 0.5 * math.sin(animationValue * 2 * math.pi)),
+        )
         ..style = PaintingStyle.fill;
 
       // Update particle position based on animation
-      final animatedY = particle.y + (particle.speed * animationValue * 50) % size.height;
-      
-      canvas.drawCircle(
-        Offset(particle.x, animatedY),
-        particle.size,
-        paint,
-      );
+      final animatedY =
+          particle.y + (particle.speed * animationValue * 50) % size.height;
+
+      canvas.drawCircle(Offset(particle.x, animatedY), particle.size, paint);
     }
   }
 
@@ -890,23 +891,8 @@ enum MoodState {
   neutral,
 }
 
-enum BreathingPattern {
-  relaxation,
-  energy,
-  focus,
-  sleep,
-}
+enum BreathingPattern { relaxation, energy, focus, sleep }
 
-enum WellnessChartType {
-  moodTrend,
-  weeklyAverage,
-  completionRate,
-  insights,
-}
+enum WellnessChartType { moodTrend, weeklyAverage, completionRate, insights }
 
-enum BiometricVisualization {
-  heartRate,
-  breathingRate,
-  stressLevel,
-  energy,
-}
+enum BiometricVisualization { heartRate, breathingRate, stressLevel, energy }

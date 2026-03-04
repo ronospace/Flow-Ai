@@ -89,19 +89,19 @@ class HealthReport {
     final period = endDate.difference(startDate).inDays;
     final cyclesAnalyzed = data['cycles_analyzed'] ?? 0;
     final avgCycleLength = data['average_cycle_length'] ?? 'N/A';
-    
+
     return 'Health report covering $period days with $cyclesAnalyzed cycles analyzed. '
-           'Average cycle length: $avgCycleLength days.';
+        'Average cycle length: $avgCycleLength days.';
   }
 
   /// Get report sections based on included data
   List<String> get sections {
     final sections = <String>['Overview', 'Summary'];
-    
+
     if (includeSymptoms) sections.add('Symptoms Analysis');
     if (includeMoodData) sections.add('Mood Patterns');
     if (includePredictions) sections.add('AI Predictions');
-    
+
     sections.addAll(['Recommendations', 'Notes']);
     return sections;
   }
@@ -150,13 +150,7 @@ class HealthReport {
 }
 
 /// Report Format Types
-enum ReportFormat {
-  comprehensive,
-  summary,
-  symptoms,
-  predictions,
-  custom,
-}
+enum ReportFormat { comprehensive, summary, symptoms, predictions, custom }
 
 /// Extension for Report Format
 extension ReportFormatExtension on ReportFormat {
@@ -192,12 +186,7 @@ extension ReportFormatExtension on ReportFormat {
 }
 
 /// Report Status Types
-enum ReportStatus {
-  draft,
-  reviewed,
-  shared,
-  archived,
-}
+enum ReportStatus { draft, reviewed, shared, archived }
 
 /// Extension for Report Status
 extension ReportStatusExtension on ReportStatus {

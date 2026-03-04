@@ -12,11 +12,7 @@ enum ModernButtonType {
   ghost,
 }
 
-enum ModernButtonSize {
-  small,
-  medium,
-  large,
-}
+enum ModernButtonSize { small, medium, large }
 
 class ModernButton extends StatefulWidget {
   final String text;
@@ -48,7 +44,7 @@ class ModernButton extends StatefulWidget {
   State<ModernButton> createState() => _ModernButtonState();
 }
 
-class _ModernButtonState extends State<ModernButton> 
+class _ModernButtonState extends State<ModernButton>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
@@ -61,13 +57,9 @@ class _ModernButtonState extends State<ModernButton>
       duration: const Duration(milliseconds: 150),
       vsync: this,
     );
-    _scaleAnimation = Tween<double>(
-      begin: 1.0,
-      end: 0.95,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.95).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
   }
 
   @override
@@ -103,7 +95,7 @@ class _ModernButtonState extends State<ModernButton>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isEnabled = widget.onPressed != null && !widget.isLoading;
-    
+
     return AnimatedBuilder(
       animation: _scaleAnimation,
       builder: (context, child) {
@@ -152,23 +144,27 @@ class _ModernButtonState extends State<ModernButton>
 
   BoxDecoration _getDecoration(ThemeData theme, bool isEnabled) {
     final colors = widget.gradientColors ?? _getGradientColors();
-    
+
     switch (widget.type) {
       case ModernButtonType.primary:
         return BoxDecoration(
-          gradient: isEnabled 
+          gradient: isEnabled
               ? LinearGradient(colors: colors)
-              : LinearGradient(colors: [AppTheme.lightGrey, AppTheme.lightGrey]),
+              : LinearGradient(
+                  colors: [AppTheme.lightGrey, AppTheme.lightGrey],
+                ),
           borderRadius: widget.borderRadius ?? BorderRadius.circular(16),
-          boxShadow: isEnabled ? [
-            BoxShadow(
-              color: colors.first.withValues(alpha: 0.3),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ] : null,
+          boxShadow: isEnabled
+              ? [
+                  BoxShadow(
+                    color: colors.first.withValues(alpha: 0.3),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ]
+              : null,
         );
-        
+
       case ModernButtonType.secondary:
         return BoxDecoration(
           color: isEnabled ? theme.cardColor : AppTheme.lightGrey,
@@ -177,60 +173,78 @@ class _ModernButtonState extends State<ModernButton>
             color: isEnabled ? theme.dividerColor : AppTheme.lightGrey,
             width: 1,
           ),
-          boxShadow: isEnabled ? [
-            BoxShadow(
-              color: theme.shadowColor.withValues(alpha: 0.1),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ] : null,
+          boxShadow: isEnabled
+              ? [
+                  BoxShadow(
+                    color: theme.shadowColor.withValues(alpha: 0.1),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ]
+              : null,
         );
-        
+
       case ModernButtonType.success:
         return BoxDecoration(
-          gradient: isEnabled 
-              ? const LinearGradient(colors: [AppTheme.successGreen, Color(0xFF4CAF50)])
-              : LinearGradient(colors: [AppTheme.lightGrey, AppTheme.lightGrey]),
+          gradient: isEnabled
+              ? const LinearGradient(
+                  colors: [AppTheme.successGreen, Color(0xFF4CAF50)],
+                )
+              : LinearGradient(
+                  colors: [AppTheme.lightGrey, AppTheme.lightGrey],
+                ),
           borderRadius: widget.borderRadius ?? BorderRadius.circular(16),
-          boxShadow: isEnabled ? [
-            BoxShadow(
-              color: AppTheme.successGreen.withValues(alpha: 0.3),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ] : null,
+          boxShadow: isEnabled
+              ? [
+                  BoxShadow(
+                    color: AppTheme.successGreen.withValues(alpha: 0.3),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ]
+              : null,
         );
-        
+
       case ModernButtonType.warning:
         return BoxDecoration(
-          gradient: isEnabled 
-              ? const LinearGradient(colors: [AppTheme.warningOrange, Color(0xFFFF9800)])
-              : LinearGradient(colors: [AppTheme.lightGrey, AppTheme.lightGrey]),
+          gradient: isEnabled
+              ? const LinearGradient(
+                  colors: [AppTheme.warningOrange, Color(0xFFFF9800)],
+                )
+              : LinearGradient(
+                  colors: [AppTheme.lightGrey, AppTheme.lightGrey],
+                ),
           borderRadius: widget.borderRadius ?? BorderRadius.circular(16),
-          boxShadow: isEnabled ? [
-            BoxShadow(
-              color: AppTheme.warningOrange.withValues(alpha: 0.3),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ] : null,
+          boxShadow: isEnabled
+              ? [
+                  BoxShadow(
+                    color: AppTheme.warningOrange.withValues(alpha: 0.3),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ]
+              : null,
         );
-        
+
       case ModernButtonType.danger:
         return BoxDecoration(
-          gradient: isEnabled 
+          gradient: isEnabled
               ? const LinearGradient(colors: [Colors.red, Color(0xFFE53E3E)])
-              : LinearGradient(colors: [AppTheme.lightGrey, AppTheme.lightGrey]),
+              : LinearGradient(
+                  colors: [AppTheme.lightGrey, AppTheme.lightGrey],
+                ),
           borderRadius: widget.borderRadius ?? BorderRadius.circular(16),
-          boxShadow: isEnabled ? [
-            BoxShadow(
-              color: Colors.red.withValues(alpha: 0.3),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ] : null,
+          boxShadow: isEnabled
+              ? [
+                  BoxShadow(
+                    color: Colors.red.withValues(alpha: 0.3),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ]
+              : null,
         );
-        
+
       case ModernButtonType.outline:
         return BoxDecoration(
           color: Colors.transparent,
@@ -240,10 +254,12 @@ class _ModernButtonState extends State<ModernButton>
             width: 2,
           ),
         );
-        
+
       case ModernButtonType.ghost:
         return BoxDecoration(
-          color: isEnabled ? colors.first.withValues(alpha: 0.1) : AppTheme.lightGrey.withValues(alpha: 0.1),
+          color: isEnabled
+              ? colors.first.withValues(alpha: 0.1)
+              : AppTheme.lightGrey.withValues(alpha: 0.1),
           borderRadius: widget.borderRadius ?? BorderRadius.circular(16),
         );
     }
@@ -270,7 +286,7 @@ class _ModernButtonState extends State<ModernButton>
   Widget _buildContent(ThemeData theme, bool isEnabled) {
     final textColor = _getTextColor(theme, isEnabled);
     final fontSize = _getFontSize();
-    
+
     if (widget.isLoading) {
       return Center(
         child: SizedBox(
@@ -289,11 +305,7 @@ class _ModernButtonState extends State<ModernButton>
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         if (widget.icon != null) ...[
-          Icon(
-            widget.icon,
-            color: textColor,
-            size: fontSize,
-          ),
+          Icon(widget.icon, color: textColor, size: fontSize),
           const SizedBox(width: 8),
         ],
         Flexible(
@@ -317,7 +329,7 @@ class _ModernButtonState extends State<ModernButton>
     if (!isEnabled) {
       return AppTheme.mediumGrey;
     }
-    
+
     switch (widget.type) {
       case ModernButtonType.secondary:
         return theme.textTheme.titleMedium?.color ?? AppTheme.darkGrey;

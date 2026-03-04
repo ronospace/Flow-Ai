@@ -22,7 +22,7 @@ enum OnboardingStepType {
   privacy,
   permissions,
   setup,
-  complete
+  complete,
 }
 
 class OnboardingData {
@@ -34,7 +34,7 @@ class OnboardingData {
       highlights: [
         'Track your cycle with AI-powered insights',
         'Monitor symptoms and mood patterns',
-        'Get personalized health recommendations'
+        'Get personalized health recommendations',
       ],
       type: OnboardingStepType.welcome,
     ),
@@ -46,7 +46,7 @@ class OnboardingData {
         'Smart cycle predictions',
         'Symptom tracking & analysis',
         'Health insights dashboard',
-        'Secure data encryption'
+        'Secure data encryption',
       ],
       type: OnboardingStepType.features,
     ),
@@ -58,7 +58,7 @@ class OnboardingData {
         'End-to-end encryption',
         'Data stored locally on your device',
         'No sharing without your permission',
-        'GDPR & HIPAA compliant'
+        'GDPR & HIPAA compliant',
       ],
       type: OnboardingStepType.privacy,
     ),
@@ -70,7 +70,7 @@ class OnboardingData {
         'Period & ovulation reminders',
         'Medication tracking alerts',
         'Health goal notifications',
-        'Customize frequency & timing'
+        'Customize frequency & timing',
       ],
       type: OnboardingStepType.permissions,
       data: {'permission': 'notifications'},
@@ -83,7 +83,7 @@ class OnboardingData {
         'Set your cycle preferences',
         'Choose tracking goals',
         'Configure reminder schedule',
-        'Select language & theme'
+        'Select language & theme',
       ],
       type: OnboardingStepType.setup,
     ),
@@ -95,7 +95,7 @@ class OnboardingData {
         'Start tracking today',
         'Explore AI insights',
         'Join our community',
-        'Contact support anytime'
+        'Contact support anytime',
       ],
       type: OnboardingStepType.complete,
     ),

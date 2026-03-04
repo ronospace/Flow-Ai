@@ -8,7 +8,8 @@ import '../models/user_profile.dart';
 /// Advanced sentiment analysis, mood prediction, and empathetic support
 /// Tailored to hormonal fluctuations and menstrual cycle phases
 class EmotionalIntelligenceEngine {
-  static final EmotionalIntelligenceEngine _instance = EmotionalIntelligenceEngine._internal();
+  static final EmotionalIntelligenceEngine _instance =
+      EmotionalIntelligenceEngine._internal();
   static EmotionalIntelligenceEngine get instance => _instance;
   EmotionalIntelligenceEngine._internal();
 
@@ -23,8 +24,10 @@ class EmotionalIntelligenceEngine {
   late HormonalCorrelationEngine _hormonalEngine;
 
   // Real-time emotional state tracking
-  final StreamController<EmotionalState> _emotionalStateStream = StreamController.broadcast();
-  Stream<EmotionalState> get emotionalStateStream => _emotionalStateStream.stream;
+  final StreamController<EmotionalState> _emotionalStateStream =
+      StreamController.broadcast();
+  Stream<EmotionalState> get emotionalStateStream =>
+      _emotionalStateStream.stream;
 
   // Emotional memory and context
   final List<EmotionalMemory> _emotionalHistory = [];
@@ -36,15 +39,17 @@ class EmotionalIntelligenceEngine {
 
     // Initialize AI components
     await _initializeAIComponents();
-    
+
     // Load emotional intelligence models
     await _loadEmotionalModels();
-    
+
     // Setup real-time monitoring
     await _setupEmotionalMonitoring();
 
     _initialized = true;
-    debugPrint('✅ Emotional Intelligence Engine initialized with advanced empathy');
+    debugPrint(
+      '✅ Emotional Intelligence Engine initialized with advanced empathy',
+    );
   }
 
   Future<void> _initializeAIComponents() async {
@@ -92,23 +97,29 @@ class EmotionalIntelligenceEngine {
   }) async {
     if (!_initialized) await initialize();
 
-    debugPrint('💭 Analyzing sentiment for text: "${text.length > 50 ? text.substring(0, 50) : text}..."');
+    debugPrint(
+      '💭 Analyzing sentiment for text: "${text.length > 50 ? text.substring(0, 50) : text}..."',
+    );
 
     // Basic sentiment analysis with hormonal context
     final sentiment = await _sentimentAnalyzer.analyze(text, currentPhase);
-    
+
     // Correlate with hormonal phase
     final hormonalContext = await _hormonalEngine.analyzeHormonalImpact(
-      sentiment, currentPhase);
-    
+      sentiment,
+      currentPhase,
+    );
+
     // Store in emotional memory
-    _addToEmotionalMemory(EmotionalMemory(
-      timestamp: DateTime.now(),
-      text: text,
-      sentiment: sentiment,
-      phase: currentPhase,
-      context: contextData ?? {},
-    ));
+    _addToEmotionalMemory(
+      EmotionalMemory(
+        timestamp: DateTime.now(),
+        text: text,
+        sentiment: sentiment,
+        phase: currentPhase,
+        context: contextData ?? {},
+      ),
+    );
 
     return SentimentAnalysisResult(
       originalText: text,
@@ -116,7 +127,10 @@ class EmotionalIntelligenceEngine {
       hormonalContext: hormonalContext,
       confidence: sentiment.confidence,
       emotions: sentiment.emotions,
-      recommendations: _generateSentimentRecommendations(sentiment, currentPhase),
+      recommendations: _generateSentimentRecommendations(
+        sentiment,
+        currentPhase,
+      ),
       insights: _generateSentimentInsights(sentiment, currentPhase),
     );
   }
@@ -134,8 +148,10 @@ class EmotionalIntelligenceEngine {
 
     // Analyze historical mood patterns
     final patterns = await _patternDetector.detectMoodPatterns(
-      _emotionalHistory, cycleHistory);
-    
+      _emotionalHistory,
+      cycleHistory,
+    );
+
     // Generate predictions
     final predictions = await _moodPredictor.predict(
       currentPhase: currentPhase,
@@ -197,24 +213,37 @@ class EmotionalIntelligenceEngine {
 
     // Analyze recent emotional data
     final recentHistory = _getRecentEmotionalHistory(daysPeriod);
-    
+
     // Detect emotional patterns
     final patterns = await _patternDetector.detectEmotionalPatterns(
-      recentHistory, cycleHistory);
-    
+      recentHistory,
+      cycleHistory,
+    );
+
     // Assess emotional stability
     final stability = _assessEmotionalStability(recentHistory);
-    
+
     // Calculate wellness score
     final wellnessScore = _calculateEmotionalWellnessScore(
-      patterns, stability, currentPhase);
-    
+      patterns,
+      stability,
+      currentPhase,
+    );
+
     // Generate insights and recommendations
     final insights = _generateWellnessInsights(
-      patterns, stability, currentPhase, user);
-    
+      patterns,
+      stability,
+      currentPhase,
+      user,
+    );
+
     final recommendations = _generateWellnessRecommendations(
-      patterns, stability, currentPhase, user);
+      patterns,
+      stability,
+      currentPhase,
+      user,
+    );
 
     return EmotionalWellnessReport(
       userId: user.id,
@@ -234,7 +263,7 @@ class EmotionalIntelligenceEngine {
   Future<EmotionalState> _getCurrentEmotionalState() async {
     // Analyze current emotional state based on recent data
     final recentEmotions = _getRecentEmotionalHistory(1);
-    
+
     if (recentEmotions.isEmpty) {
       return EmotionalState(
         timestamp: DateTime.now(),
@@ -261,7 +290,7 @@ class EmotionalIntelligenceEngine {
 
   void _addToEmotionalMemory(EmotionalMemory memory) {
     _emotionalHistory.add(memory);
-    
+
     // Keep only recent history (last 90 days)
     final cutoff = DateTime.now().subtract(const Duration(days: 90));
     _emotionalHistory.removeWhere((m) => m.timestamp.isBefore(cutoff));
@@ -272,7 +301,10 @@ class EmotionalIntelligenceEngine {
     return _emotionalHistory.where((m) => m.timestamp.isAfter(cutoff)).toList();
   }
 
-  List<String> _generateSentimentRecommendations(Sentiment sentiment, String phase) {
+  List<String> _generateSentimentRecommendations(
+    Sentiment sentiment,
+    String phase,
+  ) {
     final recommendations = <String>[];
 
     if (sentiment.valence < -0.3) {
@@ -284,7 +316,9 @@ class EmotionalIntelligenceEngine {
       ]);
 
       if (phase == 'luteal') {
-        recommendations.add('Remember: PMS emotions are temporary and will pass');
+        recommendations.add(
+          'Remember: PMS emotions are temporary and will pass',
+        );
       }
     } else if (sentiment.valence > 0.3) {
       // Positive emotions
@@ -297,13 +331,18 @@ class EmotionalIntelligenceEngine {
 
     if (sentiment.arousal > 0.7) {
       // High arousal
-      recommendations.add('Channel this energy through physical activity or creative expression');
+      recommendations.add(
+        'Channel this energy through physical activity or creative expression',
+      );
     }
 
     return recommendations;
   }
 
-  Map<String, dynamic> _generateSentimentInsights(Sentiment sentiment, String phase) {
+  Map<String, dynamic> _generateSentimentInsights(
+    Sentiment sentiment,
+    String phase,
+  ) {
     return {
       'emotional_intelligence_note': 'Your emotional awareness is a strength',
       'phase_correlation': _getPhaseEmotionalCorrelation(sentiment, phase),
@@ -332,8 +371,12 @@ class EmotionalIntelligenceEngine {
       return 'Building your emotional pattern profile...';
     }
 
-    final recentSentiments = _emotionalHistory.skip(math.max(0, _emotionalHistory.length - 5)).map((m) => m.sentiment).toList();
-    final avgValence = recentSentiments.map((s) => s.valence).reduce((a, b) => a + b) / 5;
+    final recentSentiments = _emotionalHistory
+        .skip(math.max(0, _emotionalHistory.length - 5))
+        .map((m) => m.sentiment)
+        .toList();
+    final avgValence =
+        recentSentiments.map((s) => s.valence).reduce((a, b) => a + b) / 5;
 
     if (avgValence > 0.3) {
       return 'You\'ve been experiencing predominantly positive emotions lately';
@@ -354,14 +397,19 @@ class EmotionalIntelligenceEngine {
     }
   }
 
-  List<String> _identifyMoodRiskFactors(Map<String, dynamic> patterns, String phase) {
+  List<String> _identifyMoodRiskFactors(
+    Map<String, dynamic> patterns,
+    String phase,
+  ) {
     final risks = <String>[];
 
     if (patterns['volatility'] != null && patterns['volatility'] > 0.7) {
       risks.add('High emotional volatility detected');
     }
 
-    if (phase == 'luteal' && patterns['luteal_intensity'] != null && patterns['luteal_intensity'] > 0.8) {
+    if (phase == 'luteal' &&
+        patterns['luteal_intensity'] != null &&
+        patterns['luteal_intensity'] > 0.8) {
       risks.add('Intense luteal phase emotional patterns');
     }
 
@@ -372,14 +420,19 @@ class EmotionalIntelligenceEngine {
     return risks;
   }
 
-  List<String> _identifyProtectiveFactors(Map<String, dynamic> patterns, String phase) {
+  List<String> _identifyProtectiveFactors(
+    Map<String, dynamic> patterns,
+    String phase,
+  ) {
     final factors = <String>[];
 
-    if (patterns['emotional_awareness'] != null && patterns['emotional_awareness'] > 0.7) {
+    if (patterns['emotional_awareness'] != null &&
+        patterns['emotional_awareness'] > 0.7) {
       factors.add('Strong emotional self-awareness');
     }
 
-    if (patterns['recovery_speed'] != null && patterns['recovery_speed'] > 0.6) {
+    if (patterns['recovery_speed'] != null &&
+        patterns['recovery_speed'] > 0.6) {
       factors.add('Good emotional resilience and recovery');
     }
 
@@ -390,11 +443,17 @@ class EmotionalIntelligenceEngine {
     return factors;
   }
 
-  List<String> _generateMoodRecommendations(Map<String, dynamic> predictions, String phase) {
+  List<String> _generateMoodRecommendations(
+    Map<String, dynamic> predictions,
+    String phase,
+  ) {
     final recommendations = <String>[];
 
-    if (predictions['risk_days'] != null && (predictions['risk_days'] as List).isNotEmpty) {
-      recommendations.add('Plan self-care activities for predicted challenging days');
+    if (predictions['risk_days'] != null &&
+        (predictions['risk_days'] as List).isNotEmpty) {
+      recommendations.add(
+        'Plan self-care activities for predicted challenging days',
+      );
     }
 
     switch (phase) {
@@ -431,10 +490,14 @@ class EmotionalIntelligenceEngine {
     return recommendations;
   }
 
-  List<String> _suggestMoodInterventions(Map<String, dynamic> predictions, String phase) {
+  List<String> _suggestMoodInterventions(
+    Map<String, dynamic> predictions,
+    String phase,
+  ) {
     final interventions = <String>[];
 
-    if (predictions['depression_risk'] != null && predictions['depression_risk'] > 0.6) {
+    if (predictions['depression_risk'] != null &&
+        predictions['depression_risk'] > 0.6) {
       interventions.addAll([
         'Consider speaking with a mental health professional',
         'Implement daily mood tracking',
@@ -442,7 +505,8 @@ class EmotionalIntelligenceEngine {
       ]);
     }
 
-    if (predictions['anxiety_risk'] != null && predictions['anxiety_risk'] > 0.6) {
+    if (predictions['anxiety_risk'] != null &&
+        predictions['anxiety_risk'] > 0.6) {
       interventions.addAll([
         'Practice mindfulness meditation daily',
         'Try progressive muscle relaxation',
@@ -465,7 +529,9 @@ class EmotionalIntelligenceEngine {
     // Calculate coefficient of variation in emotional valence
     final valences = history.map((m) => m.sentiment.valence).toList();
     final mean = valences.reduce((a, b) => a + b) / valences.length;
-    final variance = valences.map((v) => math.pow(v - mean, 2)).reduce((a, b) => a + b) / valences.length;
+    final variance =
+        valences.map((v) => math.pow(v - mean, 2)).reduce((a, b) => a + b) /
+        valences.length;
     final stdDev = math.sqrt(variance);
     final cv = stdDev / mean.abs();
 
@@ -474,7 +540,10 @@ class EmotionalIntelligenceEngine {
   }
 
   double _calculateEmotionalWellnessScore(
-      Map<String, dynamic> patterns, double stability, String phase) {
+    Map<String, dynamic> patterns,
+    double stability,
+    String phase,
+  ) {
     double score = 0.5; // Base score
 
     // Factor in emotional stability (30%)
@@ -498,7 +567,10 @@ class EmotionalIntelligenceEngine {
     return score.clamp(0.0, 1.0);
   }
 
-  double _assessPhaseAppropriateEmotions(Map<String, dynamic> patterns, String phase) {
+  double _assessPhaseAppropriateEmotions(
+    Map<String, dynamic> patterns,
+    String phase,
+  ) {
     // Assess if emotional patterns align with typical phase characteristics
     switch (phase) {
       case 'menstrual':
@@ -514,23 +586,35 @@ class EmotionalIntelligenceEngine {
     }
   }
 
-  List<String> _generateWellnessInsights(Map<String, dynamic> patterns, 
-      double stability, String phase, UserProfile user) {
+  List<String> _generateWellnessInsights(
+    Map<String, dynamic> patterns,
+    double stability,
+    String phase,
+    UserProfile user,
+  ) {
     final insights = <String>[];
 
-    insights.add('Your emotional wellness score reflects your current cycle phase patterns');
+    insights.add(
+      'Your emotional wellness score reflects your current cycle phase patterns',
+    );
 
     if (stability > 0.7) {
-      insights.add('You demonstrate excellent emotional stability and resilience');
+      insights.add(
+        'You demonstrate excellent emotional stability and resilience',
+      );
     } else if (stability < 0.4) {
       insights.add('Consider focusing on emotional regulation techniques');
     }
 
     if (patterns['cycle_awareness'] == true) {
-      insights.add('Your awareness of cycle-emotion connections is a significant strength');
+      insights.add(
+        'Your awareness of cycle-emotion connections is a significant strength',
+      );
     }
 
-    insights.add('Emotional patterns show ${_getEmotionalTrend(patterns)} trend over recent cycles');
+    insights.add(
+      'Emotional patterns show ${_getEmotionalTrend(patterns)} trend over recent cycles',
+    );
 
     return insights;
   }
@@ -541,8 +625,12 @@ class EmotionalIntelligenceEngine {
     return 'a stable';
   }
 
-  List<String> _generateWellnessRecommendations(Map<String, dynamic> patterns,
-      double stability, String phase, UserProfile user) {
+  List<String> _generateWellnessRecommendations(
+    Map<String, dynamic> patterns,
+    double stability,
+    String phase,
+    UserProfile user,
+  ) {
     final recommendations = <String>[];
 
     // Base recommendations for everyone
@@ -572,26 +660,38 @@ class EmotionalIntelligenceEngine {
     return recommendations;
   }
 
-  List<String> _identifyEmotionalRiskFactors(Map<String, dynamic> patterns, double stability) {
+  List<String> _identifyEmotionalRiskFactors(
+    Map<String, dynamic> patterns,
+    double stability,
+  ) {
     final risks = <String>[];
 
     if (stability < 0.3) risks.add('High emotional volatility');
-    if (patterns['isolation_tendency'] == true) risks.add('Social withdrawal patterns');
-    if (patterns['negative_rumination'] == true) risks.add('Persistent negative thinking');
-    if (patterns['poor_coping'] == true) risks.add('Ineffective coping strategies');
+    if (patterns['isolation_tendency'] == true)
+      risks.add('Social withdrawal patterns');
+    if (patterns['negative_rumination'] == true)
+      risks.add('Persistent negative thinking');
+    if (patterns['poor_coping'] == true)
+      risks.add('Ineffective coping strategies');
 
     return risks;
   }
 
-  List<String> _identifyEmotionalStrengths(Map<String, dynamic> patterns, double stability) {
+  List<String> _identifyEmotionalStrengths(
+    Map<String, dynamic> patterns,
+    double stability,
+  ) {
     final strengths = <String>[];
 
     if (stability > 0.7) strengths.add('Excellent emotional stability');
-    if (patterns['emotional_awareness'] != null && patterns['emotional_awareness'] > 0.7) {
+    if (patterns['emotional_awareness'] != null &&
+        patterns['emotional_awareness'] > 0.7) {
       strengths.add('High emotional self-awareness');
     }
-    if (patterns['effective_coping'] == true) strengths.add('Strong coping skills');
-    if (patterns['social_support'] == true) strengths.add('Good social support network');
+    if (patterns['effective_coping'] == true)
+      strengths.add('Strong coping skills');
+    if (patterns['social_support'] == true)
+      strengths.add('Good social support network');
 
     return strengths;
   }
@@ -601,8 +701,10 @@ class EmotionalIntelligenceEngine {
 
     final valences = history.map((m) => m.sentiment.valence).toList();
     final mean = valences.reduce((a, b) => a + b) / valences.length;
-    final variance = valences.map((v) => math.pow(v - mean, 2)).reduce((a, b) => a + b) / valences.length;
-    
+    final variance =
+        valences.map((v) => math.pow(v - mean, 2)).reduce((a, b) => a + b) /
+        valences.length;
+
     // Lower variance indicates higher stability
     return (1.0 - math.sqrt(variance)).clamp(0.0, 1.0);
   }
@@ -621,11 +723,29 @@ class SentimentAnalyzer {
   Future<Sentiment> analyze(String text, String phase) async {
     // Advanced sentiment analysis with NLP
     final words = text.toLowerCase().split(' ');
-    
+
     // Simple sentiment scoring (in production, use actual NLP models)
-    final positiveWords = ['happy', 'good', 'great', 'love', 'amazing', 'wonderful', 'joy', 'excited'];
-    final negativeWords = ['sad', 'bad', 'terrible', 'hate', 'awful', 'depressed', 'anxious', 'worried'];
-    
+    final positiveWords = [
+      'happy',
+      'good',
+      'great',
+      'love',
+      'amazing',
+      'wonderful',
+      'joy',
+      'excited',
+    ];
+    final negativeWords = [
+      'sad',
+      'bad',
+      'terrible',
+      'hate',
+      'awful',
+      'depressed',
+      'anxious',
+      'worried',
+    ];
+
     double valence = 0.0;
     double intensity = 0.0;
     double arousal = 0.5;
@@ -643,7 +763,7 @@ class SentimentAnalyzer {
 
     valence = valence.clamp(-1.0, 1.0);
     intensity = valence.abs();
-    
+
     // Adjust for cycle phase
     if (phase == 'luteal') {
       intensity *= 1.2; // Emotions often more intense during luteal phase
@@ -685,7 +805,7 @@ class MoodPredictor {
     for (int day = 1; day <= daysAhead; day++) {
       final dayPhase = _predictPhaseForDay(currentPhase, day);
       final moodScore = _predictMoodScore(dayPhase, patterns, day);
-      
+
       predictions[day] = {
         'predicted_phase': dayPhase,
         'mood_score': moodScore,
@@ -711,7 +831,11 @@ class MoodPredictor {
     return phases[futureIndex];
   }
 
-  double _predictMoodScore(String phase, Map<String, dynamic> patterns, int day) {
+  double _predictMoodScore(
+    String phase,
+    Map<String, dynamic> patterns,
+    int day,
+  ) {
     double baseScore = 0.5;
 
     switch (phase) {
@@ -763,9 +887,15 @@ class MoodPredictor {
   }
 
   String _calculateOverallTrend(Map<int, Map<String, dynamic>> predictions) {
-    final scores = predictions.values.map((p) => p['mood_score'] as double).toList();
-    final firstHalf = scores.take(scores.length ~/ 2).fold(0.0, (a, b) => a + b) / (scores.length ~/ 2);
-    final secondHalf = scores.skip(scores.length ~/ 2).fold(0.0, (a, b) => a + b) / (scores.length - scores.length ~/ 2);
+    final scores = predictions.values
+        .map((p) => p['mood_score'] as double)
+        .toList();
+    final firstHalf =
+        scores.take(scores.length ~/ 2).fold(0.0, (a, b) => a + b) /
+        (scores.length ~/ 2);
+    final secondHalf =
+        scores.skip(scores.length ~/ 2).fold(0.0, (a, b) => a + b) /
+        (scores.length - scores.length ~/ 2);
 
     if (secondHalf > firstHalf + 0.1) return 'improving';
     if (secondHalf < firstHalf - 0.1) return 'declining';
@@ -779,7 +909,9 @@ class MoodPredictor {
         .toList();
   }
 
-  List<int> _identifyOpportunityDays(Map<int, Map<String, dynamic>> predictions) {
+  List<int> _identifyOpportunityDays(
+    Map<int, Map<String, dynamic>> predictions,
+  ) {
     return predictions.entries
         .where((entry) => (entry.value['mood_score'] as double) > 0.7)
         .map((entry) => entry.key)
@@ -801,10 +933,16 @@ class EmpatheticChatbot {
   }) async {
     // Generate empathetic response based on emotional state
     final responseText = await _generateEmpatheticText(
-      userMessage, sentiment, currentPhase);
-    
-    final supportiveActions = _suggestSupportiveActions(sentiment, currentPhase);
-    
+      userMessage,
+      sentiment,
+      currentPhase,
+    );
+
+    final supportiveActions = _suggestSupportiveActions(
+      sentiment,
+      currentPhase,
+    );
+
     final followUpQuestions = _generateFollowUpQuestions(sentiment);
 
     return ChatbotResponse(
@@ -817,7 +955,11 @@ class EmpatheticChatbot {
     );
   }
 
-  Future<String> _generateEmpatheticText(String message, Sentiment sentiment, String phase) async {
+  Future<String> _generateEmpatheticText(
+    String message,
+    Sentiment sentiment,
+    String phase,
+  ) async {
     // Generate contextually appropriate empathetic response
     if (sentiment.valence < -0.5) {
       // Highly negative sentiment
@@ -877,16 +1019,32 @@ class EmpatheticChatbot {
     // Phase-specific actions
     switch (phase) {
       case 'menstrual':
-        actions.addAll(['Rest and recuperate', 'Use a heating pad', 'Drink herbal tea']);
+        actions.addAll([
+          'Rest and recuperate',
+          'Use a heating pad',
+          'Drink herbal tea',
+        ]);
         break;
       case 'follicular':
-        actions.addAll(['Set new goals', 'Try something creative', 'Connect with friends']);
+        actions.addAll([
+          'Set new goals',
+          'Try something creative',
+          'Connect with friends',
+        ]);
         break;
       case 'ovulatory':
-        actions.addAll(['Have important conversations', 'Take on challenges', 'Celebrate achievements']);
+        actions.addAll([
+          'Have important conversations',
+          'Take on challenges',
+          'Celebrate achievements',
+        ]);
         break;
       case 'luteal':
-        actions.addAll(['Practice extra self-care', 'Prepare for period', 'Be gentle with yourself']);
+        actions.addAll([
+          'Practice extra self-care',
+          'Prepare for period',
+          'Be gentle with yourself',
+        ]);
         break;
     }
 
@@ -917,7 +1075,10 @@ class EmpatheticChatbot {
 
   double _calculateEmpathyLevel(Sentiment sentiment) {
     // Higher empathy for more intense or negative emotions
-    return (0.5 + sentiment.intensity * 0.3 + (sentiment.valence < 0 ? 0.2 : 0.0)).clamp(0.0, 1.0);
+    return (0.5 +
+            sentiment.intensity * 0.3 +
+            (sentiment.valence < 0 ? 0.2 : 0.0))
+        .clamp(0.0, 1.0);
   }
 
   String _determineTone(Sentiment sentiment, String phase) {
@@ -934,7 +1095,9 @@ class EmotionalPatternDetector {
   }
 
   Future<Map<String, dynamic>> detectMoodPatterns(
-      List<EmotionalMemory> history, List<CycleData> cycles) async {
+    List<EmotionalMemory> history,
+    List<CycleData> cycles,
+  ) async {
     if (history.isEmpty) return {'insufficient_data': true};
 
     return {
@@ -948,9 +1111,11 @@ class EmotionalPatternDetector {
   }
 
   Future<Map<String, dynamic>> detectEmotionalPatterns(
-      List<EmotionalMemory> history, List<CycleData> cycles) async {
+    List<EmotionalMemory> history,
+    List<CycleData> cycles,
+  ) async {
     final moodPatterns = await detectMoodPatterns(history, cycles);
-    
+
     // Add additional emotional intelligence patterns
     moodPatterns.addAll({
       'stress_sensitivity': _detectStressSensitivity(history),
@@ -975,7 +1140,10 @@ class EmotionalPatternDetector {
     return (totalVariation / (valences.length - 1)).clamp(0.0, 2.0) / 2.0;
   }
 
-  double _analyzeCycleCorrelation(List<EmotionalMemory> history, List<CycleData> cycles) {
+  double _analyzeCycleCorrelation(
+    List<EmotionalMemory> history,
+    List<CycleData> cycles,
+  ) {
     // Analyze correlation between emotional patterns and cycle phases
     // Simplified implementation
     return 0.7; // Placeholder
@@ -984,8 +1152,14 @@ class EmotionalPatternDetector {
   bool _detectPositiveTrend(List<EmotionalMemory> history) {
     if (history.length < 5) return false;
 
-    final recent = history.skip(math.max(0, history.length - 5)).map((m) => m.sentiment.valence).toList();
-    final older = history.take(history.length - 5).map((m) => m.sentiment.valence).toList();
+    final recent = history
+        .skip(math.max(0, history.length - 5))
+        .map((m) => m.sentiment.valence)
+        .toList();
+    final older = history
+        .take(history.length - 5)
+        .map((m) => m.sentiment.valence)
+        .toList();
 
     if (older.isEmpty) return false;
 
@@ -1015,18 +1189,26 @@ class EmotionalPatternDetector {
     final phaseEmotions = <String, List<double>>{};
 
     for (final memory in history) {
-      phaseEmotions.putIfAbsent(memory.phase, () => []).add(memory.sentiment.valence);
+      phaseEmotions
+          .putIfAbsent(memory.phase, () => [])
+          .add(memory.sentiment.valence);
     }
 
-    return phaseEmotions.map((phase, valences) => MapEntry(
-      phase,
-      valences.isEmpty ? 0.0 : valences.reduce((a, b) => a + b) / valences.length,
-    ));
+    return phaseEmotions.map(
+      (phase, valences) => MapEntry(
+        phase,
+        valences.isEmpty
+            ? 0.0
+            : valences.reduce((a, b) => a + b) / valences.length,
+      ),
+    );
   }
 
   bool _detectStressSensitivity(List<EmotionalMemory> history) {
     // Detect if user is particularly sensitive to stress
-    return history.any((m) => m.context.containsKey('stress') && m.sentiment.valence < -0.5);
+    return history.any(
+      (m) => m.context.containsKey('stress') && m.sentiment.valence < -0.5,
+    );
   }
 
   Map<String, dynamic> _analyzeSocialPatterns(List<EmotionalMemory> history) {
@@ -1054,7 +1236,9 @@ class HormonalCorrelationEngine {
   }
 
   Future<Map<String, dynamic>> analyzeHormonalImpact(
-      Sentiment sentiment, String phase) async {
+    Sentiment sentiment,
+    String phase,
+  ) async {
     return {
       'phase_typical': _isPhaseTypical(sentiment, phase),
       'hormonal_influence': _assessHormonalInfluence(sentiment, phase),

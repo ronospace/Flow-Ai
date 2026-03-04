@@ -5,15 +5,12 @@ import '../../../core/services/analytics_service.dart';
 class PredictionAnalyticsCard extends StatelessWidget {
   final PredictionAnalytics analytics;
 
-  const PredictionAnalyticsCard({
-    super.key,
-    required this.analytics,
-  });
+  const PredictionAnalyticsCard({super.key, required this.analytics});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -36,11 +33,7 @@ class PredictionAnalyticsCard extends StatelessWidget {
           // Header
           Row(
             children: [
-              Icon(
-                Icons.analytics,
-                color: Colors.orange,
-                size: 24,
-              ),
+              Icon(Icons.analytics, color: Colors.orange, size: 24),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -56,7 +49,9 @@ class PredictionAnalyticsCard extends StatelessWidget {
                     Text(
                       'AI prediction accuracy insights',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.6,
+                        ),
                       ),
                     ),
                   ],
@@ -143,20 +138,14 @@ class PredictionAnalyticsCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: color.withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(
-                icon,
-                color: color,
-                size: 16,
-              ),
+              Icon(icon, color: color, size: 16),
               const Spacer(),
               Container(
                 padding: const EdgeInsets.all(2),
@@ -233,7 +222,9 @@ class PredictionAnalyticsCard extends StatelessWidget {
                       return Text(
                         '${value.toInt()}d',
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.7,
+                          ),
                         ),
                       );
                     },
@@ -248,14 +239,20 @@ class PredictionAnalyticsCard extends StatelessWidget {
                       return Text(
                         'C${value.toInt()}',
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.7,
+                          ),
                         ),
                       );
                     },
                   ),
                 ),
-                topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                topTitles: AxisTitles(
+                  sideTitles: SideTitles(showTitles: false),
+                ),
+                rightTitles: AxisTitles(
+                  sideTitles: SideTitles(showTitles: false),
+                ),
               ),
               borderData: FlBorderData(show: false),
               minX: 1,
@@ -303,7 +300,9 @@ class PredictionAnalyticsCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: _getConfidenceColor(analytics.confidenceScore).withValues(alpha: 0.1),
+                color: _getConfidenceColor(
+                  analytics.confidenceScore,
+                ).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
@@ -322,7 +321,7 @@ class PredictionAnalyticsCard extends StatelessWidget {
 
   Widget _buildAccuracyDistribution(ThemeData theme) {
     final distribution = _calculateAccuracyDistribution();
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -344,22 +343,39 @@ class PredictionAnalyticsCard extends StatelessWidget {
           child: BarChart(
             BarChartData(
               alignment: BarChartAlignment.spaceAround,
-              maxY: distribution.values.reduce((a, b) => a > b ? a : b).toDouble() + 1,
+              maxY:
+                  distribution.values
+                      .reduce((a, b) => a > b ? a : b)
+                      .toDouble() +
+                  1,
               barTouchData: BarTouchData(enabled: false),
               titlesData: FlTitlesData(
-                leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                leftTitles: AxisTitles(
+                  sideTitles: SideTitles(showTitles: false),
+                ),
+                rightTitles: AxisTitles(
+                  sideTitles: SideTitles(showTitles: false),
+                ),
+                topTitles: AxisTitles(
+                  sideTitles: SideTitles(showTitles: false),
+                ),
                 bottomTitles: AxisTitles(
                   sideTitles: SideTitles(
                     showTitles: true,
                     getTitlesWidget: (value, meta) {
-                      final labels = ['Perfect', '±1 day', '±2 days', '±3+ days'];
+                      final labels = [
+                        'Perfect',
+                        '±1 day',
+                        '±2 days',
+                        '±3+ days',
+                      ];
                       if (value.toInt() < labels.length) {
                         return Text(
                           labels[value.toInt()],
                           style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                            color: theme.colorScheme.onSurface.withValues(
+                              alpha: 0.7,
+                            ),
                           ),
                         );
                       }
@@ -379,7 +395,9 @@ class PredictionAnalyticsCard extends StatelessWidget {
                       toY: entry.value.toDouble(),
                       color: _getDistributionColor(entry.key),
                       width: 20,
-                      borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(4),
+                      ),
                     ),
                   ],
                 );
@@ -393,7 +411,7 @@ class PredictionAnalyticsCard extends StatelessWidget {
 
   Widget _buildImprovementTips(ThemeData theme) {
     final tips = _getImprovementTips();
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -405,35 +423,37 @@ class PredictionAnalyticsCard extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12),
-        ...tips.map((tip) => Container(
-          margin: const EdgeInsets.only(bottom: 8),
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: theme.colorScheme.primary.withValues(alpha: 0.3),
-            ),
-          ),
-          child: Row(
-            children: [
-              Icon(
-                Icons.lightbulb_outline,
-                color: theme.colorScheme.primary,
-                size: 16,
+        ...tips.map(
+          (tip) => Container(
+            margin: const EdgeInsets.only(bottom: 8),
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: theme.colorScheme.primary.withValues(alpha: 0.3),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  tip,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.lightbulb_outline,
+                  color: theme.colorScheme.primary,
+                  size: 16,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    tip,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        )),
+        ),
       ],
     );
   }
@@ -472,31 +492,31 @@ class PredictionAnalyticsCard extends StatelessWidget {
 
   List<String> _getImprovementTips() {
     final tips = <String>[];
-    
+
     if (analytics.confidenceScore < 70) {
       tips.add('Track your cycles consistently for better predictions');
     }
-    
+
     if (analytics.averageAccuracyDays > 2) {
       tips.add('Log your period start dates accurately');
     }
-    
+
     if (analytics.totalPredictions < 6) {
       tips.add('More cycle data will improve prediction accuracy');
     }
-    
+
     tips.add('Note irregular patterns to help AI learn your unique cycle');
-    
+
     return tips;
   }
 
   double _calculateSuccessRate(PredictionAnalytics analytics) {
     if (analytics.accuracyHistory.isEmpty) return 0.0;
-    
+
     final successfulPredictions = analytics.accuracyHistory
         .where((accuracy) => accuracy.accuracyDays <= 1)
         .length;
-    
+
     return (successfulPredictions / analytics.accuracyHistory.length) * 100;
   }
 

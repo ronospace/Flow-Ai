@@ -18,15 +18,16 @@ class CalendarScreen extends StatefulWidget {
   State<CalendarScreen> createState() => _CalendarScreenState();
 }
 
-class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStateMixin {
+class _CalendarScreenState extends State<CalendarScreen>
+    with TickerProviderStateMixin {
   late final PageController _pageController;
   late final AnimationController _fadeController;
   late final AnimationController _scaleController;
-  
+
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
-  
+
   @override
   void initState() {
     super.initState();
@@ -40,12 +41,12 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
       vsync: this,
     );
     _selectedDay = DateTime.now();
-    
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<CycleProvider>().loadCycles();
     });
   }
-  
+
   @override
   void dispose() {
     _pageController.dispose();
@@ -53,29 +54,34 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
     _scaleController.dispose();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-        gradient: AppTheme.backgroundGradient(theme.brightness == Brightness.dark),
+          gradient: AppTheme.backgroundGradient(
+            theme.brightness == Brightness.dark,
+          ),
         ),
         child: SafeArea(
           child: Column(
             children: [
               // Custom Header
               _buildHeader(),
-              
+
               // Calendar Legend
               _buildCalendarLegend(),
-              
+
               // Calendar Widget
               Expanded(
                 flex: 3,
                 child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
                     color: theme.colorScheme.surface,
                     borderRadius: BorderRadius.circular(20),
@@ -99,7 +105,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                   ),
                 ),
               ),
-              
+
               // Current Cycle Info
               _buildCurrentCycleInfo(),
             ],
@@ -108,7 +114,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
       ),
     );
   }
-  
+
   Widget _buildHeader() {
     final theme = Theme.of(context);
     return Container(
@@ -120,13 +126,13 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                    Text(
-                      AppLocalizations.of(context).calendarTitle,
-                      style: theme.textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: theme.colorScheme.onSurface,
-                      ),
-                    ).animate().fadeIn().slideX(begin: -0.3, end: 0),
+                Text(
+                  AppLocalizations.of(context).calendarTitle,
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurface,
+                  ),
+                ).animate().fadeIn().slideX(begin: -0.3, end: 0),
                 Text(
                   DateFormat('MMMM yyyy').format(_focusedDay),
                   style: theme.textTheme.bodyLarge?.copyWith(
@@ -136,9 +142,9 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
               ],
             ),
           ),
-          
+
           // Settings icon removed - not necessary per user request
-          
+
           // View Toggle Button
           Container(
             decoration: BoxDecoration(
@@ -164,7 +170,8 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                   HapticFeedback.selectionClick();
                 },
                 borderRadius: BorderRadius.circular(12),
-                child: Padding(padding: const EdgeInsets.all(12),
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
                   child: Icon(
                     _calendarFormat == CalendarFormat.month
                         ? Icons.calendar_view_week
@@ -176,9 +183,9 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
               ),
             ),
           ).animate().fadeIn(delay: 200.ms).scale(),
-          
+
           const SizedBox(width: 12),
-          
+
           // Today Button
           Container(
             decoration: BoxDecoration(
@@ -198,7 +205,11 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                   HapticFeedback.lightImpact();
                 },
                 borderRadius: BorderRadius.circular(12),
-                child: Padding(padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                   child: Text(
                     AppLocalizations.of(context).todayButton,
                     style: const TextStyle(
@@ -215,14 +226,14 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
       ),
     );
   }
-  
+
   Widget _buildCalendarLegend() {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       child: const CalendarLegend(),
     ).animate().fadeIn(delay: 400.ms).slideY(begin: -0.2, end: 0);
   }
-  
+
   Widget _buildCalendar(CycleProvider cycleProvider) {
     final theme = Theme.of(context);
     return TableCalendar<CycleData>(
@@ -244,7 +255,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
         outsideDaysVisible: false,
         weekendTextStyle: TextStyle(color: AppTheme.darkGrey),
         holidayTextStyle: TextStyle(color: AppTheme.primaryRose),
-        
+
         // Today styling
         todayDecoration: BoxDecoration(
           color: AppTheme.accentMint.withValues(alpha: 0.8),
@@ -254,7 +265,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
           fontWeight: FontWeight.bold,
           color: Colors.white,
         ),
-        
+
         // Selected day styling
         selectedDecoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -266,15 +277,11 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
           fontWeight: FontWeight.bold,
           color: Colors.white,
         ),
-        
+
         // Default cell styling
-        defaultDecoration: const BoxDecoration(
-          shape: BoxShape.circle,
-        ),
-        weekendDecoration: const BoxDecoration(
-          shape: BoxShape.circle,
-        ),
-        
+        defaultDecoration: const BoxDecoration(shape: BoxShape.circle),
+        weekendDecoration: const BoxDecoration(shape: BoxShape.circle),
+
         // Marker styling
         markersMaxCount: 1,
         markerDecoration: const BoxDecoration(
@@ -327,7 +334,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
           _selectedDay = selectedDay;
           _focusedDay = focusedDay;
         });
-        
+
         HapticFeedback.selectionClick();
         _showDayDetailSheet(selectedDay, cycleProvider);
       },
@@ -338,11 +345,16 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
       },
     );
   }
-  
-  Widget _buildCalendarDay(DateTime day, CycleProvider cycleProvider, bool isSelected, {bool isToday = false}) {
+
+  Widget _buildCalendarDay(
+    DateTime day,
+    CycleProvider cycleProvider,
+    bool isSelected, {
+    bool isToday = false,
+  }) {
     final dayInfo = _getDayInfo(day, cycleProvider);
     final theme = Theme.of(context);
-    
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       margin: const EdgeInsets.all(6),
@@ -352,14 +364,20 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                 colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
               )
             : isToday
-                ? LinearGradient(
-                    colors: [AppTheme.accentMint.withValues(alpha: 0.8), AppTheme.accentMint],
-                  )
-                : dayInfo.color != null
-                    ? LinearGradient(
-                        colors: [dayInfo.color!.withValues(alpha: 0.3), dayInfo.color!.withValues(alpha: 0.6)],
-                      )
-                    : null,
+            ? LinearGradient(
+                colors: [
+                  AppTheme.accentMint.withValues(alpha: 0.8),
+                  AppTheme.accentMint,
+                ],
+              )
+            : dayInfo.color != null
+            ? LinearGradient(
+                colors: [
+                  dayInfo.color!.withValues(alpha: 0.3),
+                  dayInfo.color!.withValues(alpha: 0.6),
+                ],
+              )
+            : null,
         color: dayInfo.color == null && !isSelected && !isToday
             ? Colors.transparent
             : null,
@@ -382,17 +400,19 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
               color: isSelected || isToday
                   ? Colors.white
                   : dayInfo.color != null
-                      ? Colors.white
-                      : theme.colorScheme.onSurface,
+                  ? Colors.white
+                  : theme.colorScheme.onSurface,
               fontWeight: isSelected || isToday || dayInfo.color != null
                   ? FontWeight.bold
                   : FontWeight.w500,
               fontSize: 14,
             ),
           ),
-          
+
           // Period tracking emoji overlay
-          if (dayInfo.phase != null && (dayInfo.flowIntensity != null && dayInfo.flowIntensity != FlowIntensity.none))
+          if (dayInfo.phase != null &&
+              (dayInfo.flowIntensity != null &&
+                  dayInfo.flowIntensity != FlowIntensity.none))
             Positioned(
               bottom: 0,
               child: Text(
@@ -409,19 +429,19 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                 ),
               ),
             ),
-            
+
           // Alternative flow intensity indicator for non-period days
-          if ((dayInfo.flowIntensity == null || dayInfo.flowIntensity == FlowIntensity.none) && dayInfo.phase != null)
+          if ((dayInfo.flowIntensity == null ||
+                  dayInfo.flowIntensity == FlowIntensity.none) &&
+              dayInfo.phase != null)
             Positioned(
               bottom: 1,
               child: Text(
                 _getPhaseEmoji(dayInfo.phase!, null),
-                style: const TextStyle(
-                  fontSize: 8,
-                ),
+                style: const TextStyle(fontSize: 8),
               ),
             ),
-            
+
           // AI prediction indicator
           if (dayInfo.isPredicted)
             Positioned(
@@ -435,10 +455,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                     colors: [AppTheme.secondaryBlue, AppTheme.accentMint],
                   ),
                   shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Colors.white,
-                    width: 1,
-                  ),
+                  border: Border.all(color: Colors.white, width: 1),
                   boxShadow: [
                     BoxShadow(
                       color: AppTheme.secondaryBlue.withValues(alpha: 0.3),
@@ -448,12 +465,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                   ],
                 ),
                 child: const Center(
-                  child: Text(
-                    '🤖',
-                    style: TextStyle(
-                      fontSize: 4,
-                    ),
-                  ),
+                  child: Text('🤖', style: TextStyle(fontSize: 4)),
                 ),
               ),
             ),
@@ -461,7 +473,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
       ),
     );
   }
-  
+
   DayInfo _getDayInfo(DateTime day, CycleProvider cycleProvider) {
     // Check if day is in current cycle
     final currentCycle = cycleProvider.cycleData?.currentCycle;
@@ -474,14 +486,16 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
         phase: _getCyclePhase(dayInCycle, currentCycle.length),
       );
     }
-    
+
     // Check if day is in predicted next period
     final predictions = cycleProvider.predictions;
     if (predictions != null) {
       final nextPeriodStart = predictions.nextPeriodDate;
       final periodLength = 5; // Typical period length
-      final nextPeriodEnd = nextPeriodStart.add(Duration(days: periodLength - 1));
-      
+      final nextPeriodEnd = nextPeriodStart.add(
+        Duration(days: periodLength - 1),
+      );
+
       if (day.isAfter(nextPeriodStart.subtract(const Duration(days: 1))) &&
           day.isBefore(nextPeriodEnd.add(const Duration(days: 1)))) {
         final dayInPeriod = day.difference(nextPeriodStart).inDays + 1;
@@ -492,11 +506,11 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
           isPredicted: true,
         );
       }
-      
+
       // Check if day is in fertile window
       final fertileStart = predictions.fertileWindowStart;
       final fertileEnd = predictions.fertileWindowEnd;
-      
+
       if (day.isAfter(fertileStart.subtract(const Duration(days: 1))) &&
           day.isBefore(fertileEnd.add(const Duration(days: 1)))) {
         return DayInfo(
@@ -506,13 +520,13 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
           isFertileWindow: true,
         );
       }
-          
+
       // Check if day is ovulation day
       if (predictions.ovulationDate != null) {
         final ovulationDay = predictions.ovulationDate!;
         if (day.isAtSameMomentAs(ovulationDay) ||
             (day.isAfter(ovulationDay.subtract(const Duration(days: 1))) &&
-             day.isBefore(ovulationDay.add(const Duration(days: 1))))) {
+                day.isBefore(ovulationDay.add(const Duration(days: 1))))) {
           return DayInfo(
             color: AppTheme.secondaryBlue,
             phase: CyclePhase.ovulatory,
@@ -522,10 +536,10 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
         }
       }
     }
-    
+
     return DayInfo();
   }
-  
+
   Color _getCyclePhaseColor(int dayInCycle, int cycleLength) {
     if (dayInCycle <= 7) {
       // Menstrual phase
@@ -541,7 +555,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
       return AppTheme.primaryPurple;
     }
   }
-  
+
   CyclePhase _getCyclePhase(int dayInCycle, int cycleLength) {
     if (dayInCycle <= 7) {
       return CyclePhase.menstrual;
@@ -553,7 +567,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
       return CyclePhase.luteal;
     }
   }
-  
+
   double _getFlowIndicatorSize(FlowIntensity intensity) {
     switch (intensity) {
       case FlowIntensity.none:
@@ -570,7 +584,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
         return 20;
     }
   }
-  
+
   String _getPhaseEmoji(CyclePhase phase, FlowIntensity? flowIntensity) {
     switch (phase) {
       case CyclePhase.menstrual:
@@ -601,7 +615,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
         return '❓';
     }
   }
-  
+
   double _getEmojiSize(FlowIntensity intensity) {
     switch (intensity) {
       case FlowIntensity.none:
@@ -618,20 +632,20 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
         return 16;
     }
   }
-  
+
   bool _isDateInCycle(DateTime date, CycleData cycle) {
     final cycleEnd = cycle.endDate ?? DateTime.now();
     return date.isAfter(cycle.startDate.subtract(const Duration(days: 1))) &&
-           date.isBefore(cycleEnd.add(const Duration(days: 1)));
+        date.isBefore(cycleEnd.add(const Duration(days: 1)));
   }
-  
+
   Widget _buildCurrentCycleInfo() {
     return Consumer<CycleProvider>(
       builder: (context, cycleProvider, child) {
         final theme = Theme.of(context);
         final currentCycle = cycleProvider.cycleData?.currentCycle;
         final predictions = cycleProvider.predictions;
-        
+
         return Container(
           margin: const EdgeInsets.all(20),
           padding: const EdgeInsets.all(20),
@@ -672,20 +686,24 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                       Text(
                         _getCurrentPhaseText(currentCycle),
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.7,
+                          ),
                         ),
                       ),
                     ] else
                       Text(
                         'No active cycle',
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.7,
+                          ),
                         ),
                       ),
                   ],
                 ),
               ),
-              
+
               // Next Period Prediction
               if (predictions != null)
                 Expanded(
@@ -710,7 +728,9 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                       Text(
                         DateFormat('MMM d').format(predictions.nextPeriodDate),
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.7,
+                          ),
                         ),
                       ),
                     ],
@@ -722,11 +742,11 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
       },
     ).animate().fadeIn(delay: 600.ms).slideY(begin: 0.3, end: 0);
   }
-  
+
   String _getCurrentPhaseText(CycleData cycle) {
     final dayInCycle = DateTime.now().difference(cycle.startDate).inDays + 1;
     final phase = _getCyclePhase(dayInCycle, cycle.length);
-    
+
     switch (phase) {
       case CyclePhase.menstrual:
         return 'Menstrual Phase';
@@ -740,7 +760,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
         return 'Unknown Phase';
     }
   }
-  
+
   void _showDayDetailSheet(DateTime selectedDay, CycleProvider cycleProvider) {
     showModalBottomSheet(
       context: context,
@@ -762,7 +782,7 @@ class DayInfo {
   final bool isPredicted;
   final bool isFertileWindow;
   final bool isOvulation;
-  
+
   DayInfo({
     this.cycleDay,
     this.color,
@@ -773,4 +793,3 @@ class DayInfo {
     this.isOvulation = false,
   });
 }
-

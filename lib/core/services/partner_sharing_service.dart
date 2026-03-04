@@ -23,7 +23,9 @@ class PartnerSharingService {
 
   PartnerSharingService() {
     _initializeEncryption();
-    debugPrint('⚠️ PartnerSharingService: Firebase disabled, sharing features unavailable');
+    debugPrint(
+      '⚠️ PartnerSharingService: Firebase disabled, sharing features unavailable',
+    );
   }
 
   void _initializeEncryption() {
@@ -39,22 +41,41 @@ class PartnerSharingService {
     required String invitationMessage,
     DateTime? expiresAt,
   }) async {
-    debugPrint('⚠️ PartnerSharingService: Partner sharing disabled (Firebase unavailable)');
-    throw Exception('Partner sharing is disabled in this build. Firebase authentication required.');
+    debugPrint(
+      '⚠️ PartnerSharingService: Partner sharing disabled (Firebase unavailable)',
+    );
+    throw Exception(
+      'Partner sharing is disabled in this build. Firebase authentication required.',
+    );
   }
 
-  Future<SharedConnection> acceptSharingInvitation(String invitationCode) async {
-    debugPrint('⚠️ PartnerSharingService: Partner sharing disabled (Firebase unavailable)');
-    throw Exception('Partner sharing is disabled in this build. Firebase authentication required.');
+  Future<SharedConnection> acceptSharingInvitation(
+    String invitationCode,
+  ) async {
+    debugPrint(
+      '⚠️ PartnerSharingService: Partner sharing disabled (Firebase unavailable)',
+    );
+    throw Exception(
+      'Partner sharing is disabled in this build. Firebase authentication required.',
+    );
   }
 
-  Future<void> declineSharingInvitation(String invitationCode, String reason) async {
-    debugPrint('⚠️ PartnerSharingService: Partner sharing disabled (Firebase unavailable)');
-    throw Exception('Partner sharing is disabled in this build. Firebase authentication required.');
+  Future<void> declineSharingInvitation(
+    String invitationCode,
+    String reason,
+  ) async {
+    debugPrint(
+      '⚠️ PartnerSharingService: Partner sharing disabled (Firebase unavailable)',
+    );
+    throw Exception(
+      'Partner sharing is disabled in this build. Firebase authentication required.',
+    );
   }
 
   Future<List<SharedConnection>> getSharedConnections() async {
-    debugPrint('⚠️ PartnerSharingService: Partner sharing disabled (Firebase unavailable)');
+    debugPrint(
+      '⚠️ PartnerSharingService: Partner sharing disabled (Firebase unavailable)',
+    );
     return []; // Return empty list instead of throwing
   }
 
@@ -64,23 +85,42 @@ class PartnerSharingService {
     List<String> trackingDataIds, {
     String? note,
   }) async {
-    debugPrint('⚠️ PartnerSharingService: Partner sharing disabled (Firebase unavailable)');
-    throw Exception('Partner sharing is disabled in this build. Firebase authentication required.');
+    debugPrint(
+      '⚠️ PartnerSharingService: Partner sharing disabled (Firebase unavailable)',
+    );
+    throw Exception(
+      'Partner sharing is disabled in this build. Firebase authentication required.',
+    );
   }
 
   Future<SharedData> getSharedData(String connectionId) async {
-    debugPrint('⚠️ PartnerSharingService: Partner sharing disabled (Firebase unavailable)');
-    throw Exception('Partner sharing is disabled in this build. Firebase authentication required.');
+    debugPrint(
+      '⚠️ PartnerSharingService: Partner sharing disabled (Firebase unavailable)',
+    );
+    throw Exception(
+      'Partner sharing is disabled in this build. Firebase authentication required.',
+    );
   }
 
-  Future<void> updateSharingPermissions(String connectionId, SharingPermissions newPermissions) async {
-    debugPrint('⚠️ PartnerSharingService: Partner sharing disabled (Firebase unavailable)');
-    throw Exception('Partner sharing is disabled in this build. Firebase authentication required.');
+  Future<void> updateSharingPermissions(
+    String connectionId,
+    SharingPermissions newPermissions,
+  ) async {
+    debugPrint(
+      '⚠️ PartnerSharingService: Partner sharing disabled (Firebase unavailable)',
+    );
+    throw Exception(
+      'Partner sharing is disabled in this build. Firebase authentication required.',
+    );
   }
 
   Future<void> revokeSharing(String connectionId, String reason) async {
-    debugPrint('⚠️ PartnerSharingService: Partner sharing disabled (Firebase unavailable)');
-    throw Exception('Partner sharing is disabled in this build. Firebase authentication required.');
+    debugPrint(
+      '⚠️ PartnerSharingService: Partner sharing disabled (Firebase unavailable)',
+    );
+    throw Exception(
+      'Partner sharing is disabled in this build. Firebase authentication required.',
+    );
   }
 
   Future<EmergencyShare> createEmergencyShare({
@@ -89,20 +129,31 @@ class PartnerSharingService {
     required String medicalContext,
     DateTime? expiresAt,
   }) async {
-    debugPrint('⚠️ PartnerSharingService: Emergency sharing disabled (Firebase unavailable)');
-    throw Exception('Emergency sharing is disabled in this build. Firebase authentication required.');
+    debugPrint(
+      '⚠️ PartnerSharingService: Emergency sharing disabled (Firebase unavailable)',
+    );
+    throw Exception(
+      'Emergency sharing is disabled in this build. Firebase authentication required.',
+    );
   }
 
-  Future<Map<String, dynamic>> accessEmergencyShare(String shareId, String accessCode) async {
-    debugPrint('⚠️ PartnerSharingService: Emergency sharing disabled (Firebase unavailable)');
-    throw Exception('Emergency sharing is disabled in this build. Firebase authentication required.');
+  Future<Map<String, dynamic>> accessEmergencyShare(
+    String shareId,
+    String accessCode,
+  ) async {
+    debugPrint(
+      '⚠️ PartnerSharingService: Emergency sharing disabled (Firebase unavailable)',
+    );
+    throw Exception(
+      'Emergency sharing is disabled in this build. Firebase authentication required.',
+    );
   }
 
   // Local backup functionality that doesn't require Firebase
   Future<void> createLocalDataExport() async {
     try {
       debugPrint('📤 Creating local data export...');
-      
+
       final exportData = {
         'cycles': await _databaseService.getAllCycles(),
         'tracking': await _databaseService.getAllTrackingData(),
@@ -110,10 +161,13 @@ class PartnerSharingService {
         'exportedAt': DateTime.now().toIso8601String(),
         'appVersion': '1.0.0',
       };
-      
+
       final encryptedExport = _encryptData(exportData);
-      await _preferencesService.setString('local_data_export', jsonEncode(encryptedExport));
-      
+      await _preferencesService.setString(
+        'local_data_export',
+        jsonEncode(encryptedExport),
+      );
+
       debugPrint('✅ Local data export created successfully');
     } catch (e) {
       debugPrint('❌ Error creating local data export: $e');
@@ -123,9 +177,11 @@ class PartnerSharingService {
 
   Future<Map<String, dynamic>?> getLocalDataExport() async {
     try {
-      final exportString = await _preferencesService.getString('local_data_export');
+      final exportString = await _preferencesService.getString(
+        'local_data_export',
+      );
       if (exportString == null) return null;
-      
+
       final encryptedExport = jsonDecode(exportString);
       return _decryptData(encryptedExport);
     } catch (e) {
@@ -154,14 +210,16 @@ class PartnerSharingService {
 
   // Status methods
   bool get isFirebaseAvailable => _firebaseAvailable;
-  bool get isSharingAvailable => false; // Always false when Firebase is disabled
-  
+  bool get isSharingAvailable =>
+      false; // Always false when Firebase is disabled
+
   Future<Map<String, dynamic>> getSharingStatus() async {
     return {
       'firebaseAvailable': _firebaseAvailable,
       'sharingEnabled': false,
       'localExportAvailable': await _hasLocalExport(),
-      'message': 'Partner sharing requires Firebase authentication which is disabled in this build',
+      'message':
+          'Partner sharing requires Firebase authentication which is disabled in this build',
     };
   }
 
@@ -173,9 +231,12 @@ class PartnerSharingService {
   String _generateInvitationCode() {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     final random = Random.secure();
-    return String.fromCharCodes(Iterable.generate(
-      8, (_) => characters.codeUnitAt(random.nextInt(characters.length))
-    ));
+    return String.fromCharCodes(
+      Iterable.generate(
+        8,
+        (_) => characters.codeUnitAt(random.nextInt(characters.length)),
+      ),
+    );
   }
 }
 
@@ -297,4 +358,5 @@ class EmergencyShare {
 }
 
 enum SharingStatus { pending, accepted, declined, expired }
+
 enum ConnectionStatus { active, paused, revoked }

@@ -8,9 +8,10 @@ import 'cycle_calculation_engine.dart';
 class RealCycleService {
   final DatabaseService _database;
   final CycleCalculationEngine _calculationEngine;
-  
-  RealCycleService(this._database) : _calculationEngine = CycleCalculationEngine(_database);
-  
+
+  RealCycleService(this._database)
+    : _calculationEngine = CycleCalculationEngine(_database);
+
   /// Get comprehensive cycle data and predictions
   Future<RealCycleData> getRealCycleData() async {
     try {
@@ -19,19 +20,19 @@ class RealCycleService {
         referenceDate: DateTime.now(),
         monthsOfHistory: 12,
       );
-      
+
       // Get recent cycles for display
       final recentCycles = await _database.getCyclesInRange(
         DateTime.now().subtract(const Duration(days: 180)),
         DateTime.now(),
       );
-      
+
       // Get current cycle if exists
       final currentCycle = await _database.getCurrentCycle();
-      
+
       // Get recent tracking data for insights
       final recentTracking = await _database.getRecentTrackingData(days: 30);
-      
+
       return RealCycleData(
         predictions: predictions,
         recentCycles: recentCycles,
@@ -53,14 +54,15 @@ class RealCycleService {
       );
     }
   }
-  
+
   /// Get cycle statistics and insights
   Future<CycleInsights> getCycleInsights() async {
     final stats = await _database.getCycleStatistics();
     final recentData = await _database.getRecentTrackingData(days: 90);
-    
+
     return CycleInsights(
-      averageCycleLength: stats['cycle_stats']['avg_length']?.toDouble() ?? 28.0,
+      averageCycleLength:
+          stats['cycle_stats']['avg_length']?.toDouble() ?? 28.0,
       cycleVariability: _calculateVariability(stats),
       totalCycles: stats['cycle_stats']['total_cycles'] ?? 0,
       commonSymptoms: _extractCommonSymptoms(stats['common_symptoms']),
@@ -68,7 +70,7 @@ class RealCycleService {
       periodPredictionAccuracy: await _calculatePredictionAccuracy(),
     );
   }
-  
+
   /// Start a new cycle
   Future<void> startNewCycle({
     required DateTime startDate,
@@ -84,7 +86,7 @@ class RealCycleService {
       );
       await _database.updateCycle(updatedCycle);
     }
-    
+
     // Create new cycle
     final newCycle = CycleData(
       id: 'cycle_${DateTime.now().millisecondsSinceEpoch}',
@@ -100,10 +102,10 @@ class RealCycleService {
       createdAt: DateTime.now(),
       lastUpdated: DateTime.now(),
     );
-    
+
     await _database.insertCycle(newCycle);
   }
-  
+
   /// End current cycle
   Future<void> endCurrentCycle(DateTime endDate) async {
     final current = await _database.getCurrentCycle();
@@ -116,7 +118,7 @@ class RealCycleService {
       await _database.updateCycle(updatedCycle);
     }
   }
-  
+
   /// Update cycle predictions (refresh calculations)
   Future<CyclePredictions> refreshPredictions() async {
     return await _calculationEngine.calculatePredictions(
@@ -124,18 +126,18 @@ class RealCycleService {
       monthsOfHistory: 12,
     );
   }
-  
+
   // Helper methods
-  
+
   double _calculateVariability(Map<String, dynamic> stats) {
     final min = stats['cycle_stats']['min_length']?.toDouble() ?? 28.0;
     final max = stats['cycle_stats']['max_length']?.toDouble() ?? 28.0;
     final avg = stats['cycle_stats']['avg_length']?.toDouble() ?? 28.0;
-    
+
     if (avg == 0) return 0.0;
     return ((max - min) / avg) * 100; // Variability as percentage
   }
-  
+
   List<String> _extractCommonSymptoms(List<Map<String, dynamic>> symptomData) {
     return symptomData
         .take(5) // Top 5 symptoms
@@ -143,23 +145,21 @@ class RealCycleService {
         .where((symptom) => symptom.isNotEmpty)
         .toList();
   }
-  
-  Map<String, double> _analyzeMoodTrends(List<Map<String, dynamic>> trackingData) {
+
+  Map<String, double> _analyzeMoodTrends(
+    List<Map<String, dynamic>> trackingData,
+  ) {
     if (trackingData.isEmpty) {
-      return {
-        'avgMood': 3.0,
-        'avgEnergy': 3.0,
-        'avgPain': 2.0,
-      };
+      return {'avgMood': 3.0, 'avgEnergy': 3.0, 'avgPain': 2.0};
     }
-    
+
     double totalMood = 0;
-    double totalEnergy = 0; 
+    double totalEnergy = 0;
     double totalPain = 0;
     int moodCount = 0;
     int energyCount = 0;
     int painCount = 0;
-    
+
     for (final data in trackingData) {
       if (data['mood'] != null) {
         totalMood += (data['mood'] as num).toDouble();
@@ -174,14 +174,14 @@ class RealCycleService {
         painCount++;
       }
     }
-    
+
     return {
       'avgMood': moodCount > 0 ? totalMood / moodCount : 3.0,
       'avgEnergy': energyCount > 0 ? totalEnergy / energyCount : 3.0,
       'avgPain': painCount > 0 ? totalPain / painCount : 2.0,
     };
   }
-  
+
   Future<double> _calculatePredictionAccuracy() async {
     // Simple accuracy calculation based on recent predictions
     // In a real implementation, you'd track prediction vs actual data
@@ -189,24 +189,34 @@ class RealCycleService {
       DateTime.now().subtract(const Duration(days: 180)),
       DateTime.now(),
     );
-    
+
     if (recentCycles.length < 3) return 0.5; // Default 50% when not enough data
-    
+
     // Calculate how regular cycles have been (more regular = higher accuracy)
     final cycleLengths = <int>[];
     for (int i = 0; i < recentCycles.length - 1; i++) {
-      final length = recentCycles[i + 1].startDate.difference(recentCycles[i].startDate).inDays;
+      final length = recentCycles[i + 1].startDate
+          .difference(recentCycles[i].startDate)
+          .inDays;
       cycleLengths.add(length);
     }
-    
+
     if (cycleLengths.isEmpty) return 0.5;
-    
-    final avgLength = cycleLengths.reduce((a, b) => a + b) / cycleLengths.length;
-    final variance = cycleLengths.map((l) => (l - avgLength) * (l - avgLength)).reduce((a, b) => a + b) / cycleLengths.length;
+
+    final avgLength =
+        cycleLengths.reduce((a, b) => a + b) / cycleLengths.length;
+    final variance =
+        cycleLengths
+            .map((l) => (l - avgLength) * (l - avgLength))
+            .reduce((a, b) => a + b) /
+        cycleLengths.length;
     final standardDeviation = math.sqrt(variance);
-    
+
     // Convert standard deviation to accuracy (lower deviation = higher accuracy)
-    final accuracy = math.max(0.1, math.min(0.95, 0.9 - (standardDeviation * 0.05)));
+    final accuracy = math.max(
+      0.1,
+      math.min(0.95, 0.9 - (standardDeviation * 0.05)),
+    );
     return accuracy;
   }
 }
@@ -218,7 +228,7 @@ class RealCycleData {
   final CycleData? currentCycle;
   final List<Map<String, dynamic>> recentTrackingData;
   final DateTime lastUpdated;
-  
+
   RealCycleData({
     required this.predictions,
     required this.recentCycles,
@@ -226,29 +236,29 @@ class RealCycleData {
     required this.recentTrackingData,
     required this.lastUpdated,
   });
-  
+
   /// Get current cycle day (days since period started)
   int get currentCycleDay {
     if (currentCycle == null) return 0;
     return DateTime.now().difference(currentCycle!.startDate).inDays + 1;
   }
-  
+
   /// Check if currently menstruating (first 5 days of cycle)
   bool get isMenstruating {
     return currentCycleDay <= 5;
   }
-  
+
   /// Get cycle phase description for UI
   String get phaseDescription {
     return predictions.currentPhase.description;
   }
-  
+
   /// Get next significant event (period, ovulation, etc.)
   NextEvent get nextEvent {
     final now = DateTime.now();
     final daysUntilPeriod = predictions.daysUntilNextPeriod;
     final daysUntilOvulation = predictions.daysUntilOvulation;
-    
+
     if (predictions.isInFertileWindow) {
       return NextEvent(
         type: EventType.fertility,
@@ -257,8 +267,10 @@ class RealCycleData {
         description: 'Fertile window ends',
       );
     }
-    
-    if (daysUntilOvulation > 0 && daysUntilOvulation < daysUntilPeriod && predictions.ovulationDate != null) {
+
+    if (daysUntilOvulation > 0 &&
+        daysUntilOvulation < daysUntilPeriod &&
+        predictions.ovulationDate != null) {
       return NextEvent(
         type: EventType.ovulation,
         date: predictions.ovulationDate!,
@@ -266,7 +278,7 @@ class RealCycleData {
         description: 'Ovulation expected',
       );
     }
-    
+
     return NextEvent(
       type: EventType.period,
       date: predictions.nextPeriodDate,
@@ -284,7 +296,7 @@ class CycleInsights {
   final List<String> commonSymptoms;
   final Map<String, double> moodTrends;
   final double periodPredictionAccuracy;
-  
+
   CycleInsights({
     required this.averageCycleLength,
     required this.cycleVariability,
@@ -301,7 +313,7 @@ class NextEvent {
   final DateTime date;
   final int daysAway;
   final String description;
-  
+
   NextEvent({
     required this.type,
     required this.date,
