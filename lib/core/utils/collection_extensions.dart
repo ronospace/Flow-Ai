@@ -22,7 +22,7 @@ extension ListExtensions<T> on List<T> {
   /// Chunks the list into smaller lists of the specified size
   List<List<T>> chunk(int size) {
     if (size <= 0) throw ArgumentError('Chunk size must be positive');
-    
+
     final chunks = <List<T>>[];
     for (int i = 0; i < length; i += size) {
       chunks.add(sublist(i, (i + size).clamp(0, length)));

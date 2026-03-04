@@ -8,93 +8,95 @@ import '../../../core/widgets/citation_widget.dart';
 class AIPredictionCard extends StatelessWidget {
   final PeriodPrediction prediction;
   final VoidCallback? onTap;
-  
-  const AIPredictionCard({
-    super.key,
-    required this.prediction,
-    this.onTap,
-  });
+
+  const AIPredictionCard({super.key, required this.prediction, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              AppTheme.primaryRose.withValues(alpha: 0.1),
-              AppTheme.primaryPurple.withValues(alpha: 0.1),
-              AppTheme.accentMint.withValues(alpha: 0.1),
-            ],
-          ),
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(
-            color: AppTheme.primaryRose.withValues(alpha: 0.1),
-            width: 1,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: AppTheme.primaryRose.withValues(alpha: 0.1),
-              blurRadius: 20,
-              offset: const Offset(0, 8),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header with AI badge
-              _buildHeader(theme),
-              
-              const SizedBox(height: 20),
-              
-              // Main prediction display
-              _buildPredictionDisplay(theme),
-              
-              const SizedBox(height: 20),
-              
-              // Confidence and additional info
-              _buildConfidenceSection(theme),
-              
-              const SizedBox(height: 16),
-              
-              // AI Insights
-              if (prediction.insights.isNotEmpty) ...[
-                _buildInsightsSection(theme),
-                const SizedBox(height: 12),
-              ],
-              
-              // Fertility window
-              _buildFertilityWindow(theme),
-              
-              const SizedBox(height: 16),
-              
-              // View Sources Citation
-              CitationWidget(
-                dialogTitle: 'Period Prediction Sources',
-                dialogDescription: 'Our AI predictions are based on:',
-                citations: CitationSets.predictionAccuracy,
-                linkColor: AppTheme.primaryPurple,
-                iconColor: AppTheme.primaryPurple,
+          onTap: onTap,
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  AppTheme.primaryRose.withValues(alpha: 0.1),
+                  AppTheme.primaryPurple.withValues(alpha: 0.1),
+                  AppTheme.accentMint.withValues(alpha: 0.1),
+                ],
               ),
-            ],
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(
+                color: AppTheme.primaryRose.withValues(alpha: 0.1),
+                width: 1,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: AppTheme.primaryRose.withValues(alpha: 0.1),
+                  blurRadius: 20,
+                  offset: const Offset(0, 8),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Header with AI badge
+                  _buildHeader(theme),
+
+                  const SizedBox(height: 20),
+
+                  // Main prediction display
+                  _buildPredictionDisplay(theme),
+
+                  const SizedBox(height: 20),
+
+                  // Confidence and additional info
+                  _buildConfidenceSection(theme),
+
+                  const SizedBox(height: 16),
+
+                  // AI Insights
+                  if (prediction.insights.isNotEmpty) ...[
+                    _buildInsightsSection(theme),
+                    const SizedBox(height: 12),
+                  ],
+
+                  // Fertility window
+                  _buildFertilityWindow(theme),
+
+                  const SizedBox(height: 16),
+
+                  // View Sources Citation
+                  CitationWidget(
+                    dialogTitle: 'Period Prediction Sources',
+                    dialogDescription: 'Our AI predictions are based on:',
+                    citations: CitationSets.predictionAccuracy,
+                    linkColor: AppTheme.primaryPurple,
+                    iconColor: AppTheme.primaryPurple,
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
-    ).animate()
-      .fadeIn(duration: 600.ms)
-      .slideY(begin: 0.3, end: 0, duration: 600.ms, curve: Curves.easeOutCubic)
-      .shimmer(delay: 800.ms, duration: 1200.ms);
+        )
+        .animate()
+        .fadeIn(duration: 600.ms)
+        .slideY(
+          begin: 0.3,
+          end: 0,
+          duration: 600.ms,
+          curve: Curves.easeOutCubic,
+        )
+        .shimmer(delay: 800.ms, duration: 1200.ms);
   }
-  
+
   Widget _buildHeader(ThemeData theme) {
     return Row(
       children: [
@@ -162,12 +164,12 @@ class AIPredictionCard extends StatelessWidget {
       ],
     );
   }
-  
+
   Widget _buildPredictionDisplay(ThemeData theme) {
     final daysUntil = prediction.daysUntilNextPeriod;
     final isToday = daysUntil == 0;
     final isPast = daysUntil < 0;
-    
+
     return Row(
       children: [
         Expanded(
@@ -220,8 +222,9 @@ class AIPredictionCard extends StatelessWidget {
                 ),
               ),
               Text(
-                isPast ? (daysUntil == -1 ? 'day ago' : 'days ago') 
-                      : (daysUntil == 1 ? 'day' : 'days'),
+                isPast
+                    ? (daysUntil == -1 ? 'day ago' : 'days ago')
+                    : (daysUntil == 1 ? 'day' : 'days'),
                 style: TextStyle(
                   fontSize: 10,
                   color: _getPredictionStatusColor(),
@@ -234,7 +237,7 @@ class AIPredictionCard extends StatelessWidget {
       ],
     );
   }
-  
+
   Widget _buildConfidenceSection(ThemeData theme) {
     return Row(
       children: [
@@ -271,18 +274,14 @@ class AIPredictionCard extends StatelessWidget {
       ],
     );
   }
-  
+
   Widget _buildInsightsSection(ThemeData theme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
-            Icon(
-              Icons.lightbulb_rounded,
-              size: 16,
-              color: AppTheme.accentMint,
-            ),
+            Icon(Icons.lightbulb_rounded, size: 16, color: AppTheme.accentMint),
             const SizedBox(width: 8),
             Text(
               'AI Insights',
@@ -294,41 +293,45 @@ class AIPredictionCard extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 8),
-        ...prediction.insights.take(2).map((insight) => Padding(
-          padding: const EdgeInsets.only(bottom: 4),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 4,
-                height: 4,
-                margin: const EdgeInsets.only(top: 6, right: 8),
-                decoration: BoxDecoration(
-                  color: AppTheme.accentMint,
-                  borderRadius: BorderRadius.circular(2),
+        ...prediction.insights
+            .take(2)
+            .map(
+              (insight) => Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 4,
+                      height: 4,
+                      margin: const EdgeInsets.only(top: 6, right: 8),
+                      decoration: BoxDecoration(
+                        color: AppTheme.accentMint,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(
+                        insight,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: AppTheme.mediumGrey,
+                          height: 1.3,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Expanded(
-                child: Text(
-                  insight,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: AppTheme.mediumGrey,
-                    height: 1.3,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        )),
+            ),
       ],
     );
   }
-  
+
   Widget _buildFertilityWindow(ThemeData theme) {
     final fertilityWindow = prediction.fertilityWindow;
     final startDate = fertilityWindow[0];
     final endDate = fertilityWindow[1];
-    
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -339,20 +342,14 @@ class AIPredictionCard extends StatelessWidget {
           ],
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: AppTheme.accentMint.withValues(alpha: 0.1),
-        ),
+        border: Border.all(color: AppTheme.accentMint.withValues(alpha: 0.1)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(
-                Icons.eco_rounded,
-                size: 16,
-                color: AppTheme.accentMint,
-              ),
+              Icon(Icons.eco_rounded, size: 16, color: AppTheme.accentMint),
               const SizedBox(width: 8),
               Text(
                 'Fertility Window',
@@ -408,10 +405,10 @@ class AIPredictionCard extends StatelessWidget {
       ),
     );
   }
-  
+
   String _getPredictionStatusText() {
     final daysUntil = prediction.daysUntilNextPeriod;
-    
+
     if (daysUntil == 0) {
       return 'Today';
     } else if (daysUntil == 1) {
@@ -424,10 +421,10 @@ class AIPredictionCard extends StatelessWidget {
       return '${-daysUntil} days ago';
     }
   }
-  
+
   Color _getPredictionStatusColor() {
     final daysUntil = prediction.daysUntilNextPeriod;
-    
+
     if (daysUntil <= 0) {
       return AppTheme.primaryRose;
     } else if (daysUntil <= 3) {
@@ -438,7 +435,7 @@ class AIPredictionCard extends StatelessWidget {
       return AppTheme.secondaryBlue;
     }
   }
-  
+
   Color _getConfidenceColor() {
     if (prediction.confidenceLevel >= 85) {
       return AppTheme.successGreen;
@@ -454,18 +451,14 @@ class AIPredictionCard extends StatelessWidget {
 class AIPredictionSummary extends StatelessWidget {
   final PeriodPrediction prediction;
   final VoidCallback? onTap;
-  
-  const AIPredictionSummary({
-    super.key,
-    required this.prediction,
-    this.onTap,
-  });
+
+  const AIPredictionSummary({super.key, required this.prediction, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final daysUntil = prediction.daysUntilNextPeriod;
-    
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -514,7 +507,10 @@ class AIPredictionSummary extends StatelessWidget {
                       ),
                       const SizedBox(width: 8),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 2,
+                        ),
                         decoration: BoxDecoration(
                           color: AppTheme.accentMint.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(6),
@@ -531,9 +527,9 @@ class AIPredictionSummary extends StatelessWidget {
                     ],
                   ),
                   Text(
-                    daysUntil <= 0 
-                      ? 'Period expected today'
-                      : 'Next period in $daysUntil days',
+                    daysUntil <= 0
+                        ? 'Period expected today'
+                        : 'Next period in $daysUntil days',
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: AppTheme.mediumGrey,
                     ),

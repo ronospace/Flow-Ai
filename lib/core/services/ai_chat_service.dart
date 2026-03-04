@@ -271,12 +271,13 @@ class AIChatService {
   String _addMedicalCitationToResponse(String response, String userMessage) {
     final lowerMessage = userMessage.toLowerCase();
     final lowerResponse = response.toLowerCase();
-    
+
     // Determine citation category based on message and response content
     String? citationCategory;
-    
+
     // Check for medical/health content in response
-    final hasMedicalContent = lowerResponse.contains('period') ||
+    final hasMedicalContent =
+        lowerResponse.contains('period') ||
         lowerResponse.contains('menstrual') ||
         lowerResponse.contains('cycle') ||
         lowerResponse.contains('fertility') ||
@@ -288,30 +289,38 @@ class AIChatService {
         lowerResponse.contains('health') ||
         lowerResponse.contains('medical') ||
         lowerResponse.contains('pregnancy');
-    
+
     if (!hasMedicalContent) {
       // Not medical content, return as-is
       return response;
     }
-    
+
     // Determine appropriate citation category
-    if (lowerMessage.contains('period') || lowerMessage.contains('menstruation') ||
-        lowerResponse.contains('cycle length') || lowerResponse.contains('cycle pattern')) {
+    if (lowerMessage.contains('period') ||
+        lowerMessage.contains('menstruation') ||
+        lowerResponse.contains('cycle length') ||
+        lowerResponse.contains('cycle pattern')) {
       citationCategory = 'cycle_length';
-    } else if (lowerMessage.contains('fertile') || lowerMessage.contains('ovulation') ||
-        lowerMessage.contains('pregnancy') || lowerResponse.contains('fertility window')) {
+    } else if (lowerMessage.contains('fertile') ||
+        lowerMessage.contains('ovulation') ||
+        lowerMessage.contains('pregnancy') ||
+        lowerResponse.contains('fertility window')) {
       citationCategory = 'fertility_window';
-    } else if (lowerMessage.contains('mood') || lowerMessage.contains('pms') ||
-        lowerMessage.contains('cramp') || lowerResponse.contains('symptom')) {
+    } else if (lowerMessage.contains('mood') ||
+        lowerMessage.contains('pms') ||
+        lowerMessage.contains('cramp') ||
+        lowerResponse.contains('symptom')) {
       citationCategory = 'menstrual_symptoms';
-    } else if (lowerMessage.contains('health') || lowerMessage.contains('exercise') ||
-        lowerMessage.contains('diet') || lowerMessage.contains('lifestyle')) {
+    } else if (lowerMessage.contains('health') ||
+        lowerMessage.contains('exercise') ||
+        lowerMessage.contains('diet') ||
+        lowerMessage.contains('lifestyle')) {
       citationCategory = 'lifestyle_recommendations';
     } else {
       // Default to general health tracking citation
       citationCategory = 'health_tracking';
     }
-    
+
     return _addMedicalCitation(response, citationCategory);
   }
 

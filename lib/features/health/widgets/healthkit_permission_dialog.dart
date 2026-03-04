@@ -70,18 +70,11 @@ class HealthKitPermissionDialog extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppTheme.warningOrange.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: AppTheme.warningOrange,
-                  width: 2,
-                ),
+                border: Border.all(color: AppTheme.warningOrange, width: 2),
               ),
               child: Row(
                 children: [
-                  Icon(
-                    Icons.gavel,
-                    size: 20,
-                    color: AppTheme.warningOrange,
-                  ),
+                  Icon(Icons.gavel, size: 20, color: AppTheme.warningOrange),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Column(
@@ -100,7 +93,9 @@ class HealthKitPermissionDialog extends StatelessWidget {
                           'App Store Guideline 2.5.1 - HealthKit Transparency',
                           style: TextStyle(
                             fontSize: 11,
-                            color: AppTheme.warningOrange.withValues(alpha: 0.9),
+                            color: AppTheme.warningOrange.withValues(
+                              alpha: 0.9,
+                            ),
                           ),
                         ),
                       ],

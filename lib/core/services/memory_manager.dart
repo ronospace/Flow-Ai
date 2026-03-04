@@ -19,18 +19,18 @@ class MemoryManager {
   /// Initialize memory management and monitoring
   Future<void> initialize() async {
     if (_isMonitoring) return;
-    
+
     debugPrint('🧠 Memory Manager initialized');
     _isMonitoring = true;
-    
+
     // Start memory monitoring in debug mode only
     if (kDebugMode) {
       _startMemoryMonitoring();
     }
-    
+
     // Register system memory warning callbacks
     SystemChannels.platform.setMethodCallHandler(_handlePlatformCalls);
-    
+
     // Set up periodic cleanup
     _schedulePeriodicCleanup();
   }
@@ -61,7 +61,7 @@ class MemoryManager {
   Future<void> _handleLowMemoryWarning() async {
     debugPrint('⚠️ System memory warning received');
     _memoryWarnings.add('System memory warning at ${DateTime.now()}');
-    
+
     // Aggressive cleanup on memory warnings
     await performAggressiveCleanup();
   }
@@ -90,13 +90,14 @@ class MemoryManager {
     // In a real implementation, this would use platform channels
     // to get actual memory usage from iOS/Android
     _currentMemoryUsage = DateTime.now().millisecondsSinceEpoch % 1000000;
-    
+
     if (_currentMemoryUsage > _peakMemoryUsage) {
       _peakMemoryUsage = _currentMemoryUsage;
     }
 
     // Trigger cleanup if memory usage is high
-    if (_currentMemoryUsage > 800000) { // Simulated threshold
+    if (_currentMemoryUsage > 800000) {
+      // Simulated threshold
       _performAutomaticCleanup();
     }
   }
@@ -114,16 +115,16 @@ class MemoryManager {
     try {
       // Clear image cache
       await _clearImageCache();
-      
+
       // Clear expired data from memory
       await _clearExpiredData();
-      
+
       // Optimize collections
       await _optimizeCollections();
-      
+
       // Force garbage collection
       _forceGarbageCollection();
-      
+
       debugPrint('✅ Standard memory cleanup completed');
     } catch (e) {
       debugPrint('❌ Error during standard cleanup: $e');
@@ -135,16 +136,16 @@ class MemoryManager {
     try {
       // Clear image cache
       await _clearImageCache();
-      
+
       // Clear expired data from memory
       await _clearExpiredData();
-      
+
       // Optimize collections
       await _optimizeCollections();
-      
+
       // Force garbage collection
       _forceGarbageCollection();
-      
+
       // Only log in debug mode
       if (kDebugMode) {
         debugPrint('✅ Silent memory cleanup completed');
@@ -161,16 +162,16 @@ class MemoryManager {
     try {
       // First, perform standard cleanup
       await performStandardCleanup();
-      
+
       // Clear all caches
       await _clearAllCaches();
-      
+
       // Clear conversation history (keep only recent)
       await _clearOldConversationHistory();
-      
+
       // Clear analytics data (keep only essential)
       await _clearAnalyticsData();
-      
+
       debugPrint('🚨 Aggressive memory cleanup completed');
     } catch (e) {
       debugPrint('❌ Error during aggressive cleanup: $e');
@@ -182,13 +183,13 @@ class MemoryManager {
     try {
       // Reduce AI processing frequency
       await _throttleAIProcessing();
-      
+
       // Reduce animation complexity
       await _reduceAnimations();
-      
+
       // Clear non-essential caches
       await _clearNonEssentialCaches();
-      
+
       debugPrint('🌡️ Thermal optimization completed');
     } catch (e) {
       debugPrint('❌ Error during thermal optimization: $e');
@@ -207,7 +208,7 @@ class MemoryManager {
     // Clear expired conversation data
     // Clear expired analytics data
     // Clear expired cache entries
-    
+
     // This would be implemented with actual data clearing logic
     if (kDebugMode) {
       debugPrint('Expired data cleared');
@@ -219,7 +220,7 @@ class MemoryManager {
     // Trim collections to reasonable sizes
     // Remove duplicate entries
     // Compress data where possible
-    
+
     if (kDebugMode) {
       debugPrint('Collections optimized');
     }
@@ -237,11 +238,11 @@ class MemoryManager {
   Future<void> _clearAllCaches() async {
     // Clear image cache
     await _clearImageCache();
-    
+
     // Clear HTTP cache if using dio or similar
     // Clear database query cache
     // Clear AI response cache
-    
+
     debugPrint('All caches cleared');
   }
 
@@ -249,7 +250,7 @@ class MemoryManager {
   Future<void> _clearOldConversationHistory() async {
     // Keep only last 50 messages instead of 100
     // Clear old personalized insights
-    
+
     debugPrint('Old conversation history cleared');
   }
 
@@ -257,7 +258,7 @@ class MemoryManager {
   Future<void> _clearAnalyticsData() async {
     // Keep only essential metrics
     // Clear detailed analytics logs
-    
+
     debugPrint('Analytics data cleared');
   }
 
@@ -266,7 +267,7 @@ class MemoryManager {
     // Reduce AI prediction frequency
     // Simplify AI responses
     // Delay non-critical AI operations
-    
+
     debugPrint('AI processing throttled');
   }
 
@@ -275,7 +276,7 @@ class MemoryManager {
     // Disable complex animations
     // Reduce animation frame rates
     // Use simpler transitions
-    
+
     debugPrint('Animations optimized for thermal conditions');
   }
 
@@ -284,15 +285,17 @@ class MemoryManager {
     // Clear preview image cache
     // Clear non-critical API response cache
     // Clear temporary file cache
-    
+
     debugPrint('Non-essential caches cleared');
   }
 
   /// Schedule periodic cleanup
   void _schedulePeriodicCleanup() {
     // Only schedule cleanup in debug mode, or less frequently in release mode
-    final duration = kDebugMode ? const Duration(minutes: 15) : const Duration(hours: 1);
-    
+    final duration = kDebugMode
+        ? const Duration(minutes: 15)
+        : const Duration(hours: 1);
+
     Timer.periodic(duration, (timer) {
       if (_isMonitoring) {
         _performSilentCleanup();
@@ -365,14 +368,14 @@ class MemoryManager {
   /// Optimize app for low-end devices
   Future<void> optimizeForLowEndDevice() async {
     await performAggressiveCleanup();
-    
+
     // Reduce AI processing
     await _throttleAIProcessing();
-    
+
     // Optimize images
     PaintingBinding.instance.imageCache.maximumSize = 50; // Reduce cache size
     PaintingBinding.instance.imageCache.maximumSizeBytes = 50 << 20; // 50MB
-    
+
     debugPrint('📱 App optimized for low-end device');
   }
 }

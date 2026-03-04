@@ -65,7 +65,9 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? AppTheme.darkBackground : AppTheme.lightBackground,
+      backgroundColor: isDark
+          ? AppTheme.darkBackground
+          : AppTheme.lightBackground,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -74,54 +76,61 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
             children: [
               // Error Icon with animation
               Container(
-                width: 120,
-                height: 120,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      AppTheme.primaryRose.withValues(alpha: 0.1),
-                      AppTheme.primaryPurple.withValues(alpha: 0.1),
-                    ],
-                  ),
-                  borderRadius: BorderRadius.circular(60),
-                ),
-                child: Icon(
-                  Icons.error_outline_rounded,
-                  size: 60,
-                  color: AppTheme.primaryRose,
-                ),
-              ).animate()
-                .scale(delay: 200.ms, duration: 600.ms, curve: Curves.elasticOut)
-                .fadeIn(),
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          AppTheme.primaryRose.withValues(alpha: 0.1),
+                          AppTheme.primaryPurple.withValues(alpha: 0.1),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(60),
+                    ),
+                    child: Icon(
+                      Icons.error_outline_rounded,
+                      size: 60,
+                      color: AppTheme.primaryRose,
+                    ),
+                  )
+                  .animate()
+                  .scale(
+                    delay: 200.ms,
+                    duration: 600.ms,
+                    curve: Curves.elasticOut,
+                  )
+                  .fadeIn(),
 
               const SizedBox(height: 32),
 
               // Error Title
               Text(
-                widget.fallbackTitle ?? 'Something went wrong',
-                style: theme.textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: isDark ? Colors.white : AppTheme.darkGrey,
-                ),
-                textAlign: TextAlign.center,
-              ).animate()
-                .slideY(begin: 0.3, end: 0, delay: 400.ms, duration: 600.ms)
-                .fadeIn(),
+                    widget.fallbackTitle ?? 'Something went wrong',
+                    style: theme.textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: isDark ? Colors.white : AppTheme.darkGrey,
+                    ),
+                    textAlign: TextAlign.center,
+                  )
+                  .animate()
+                  .slideY(begin: 0.3, end: 0, delay: 400.ms, duration: 600.ms)
+                  .fadeIn(),
 
               const SizedBox(height: 16),
 
               // Error Message
               Text(
-                widget.fallbackMessage ?? 
-                'We\'re sorry, but something unexpected happened. Don\'t worry, your data is safe.',
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  color: isDark ? Colors.white70 : AppTheme.mediumGrey,
-                  height: 1.5,
-                ),
-                textAlign: TextAlign.center,
-              ).animate()
-                .slideY(begin: 0.3, end: 0, delay: 600.ms, duration: 600.ms)
-                .fadeIn(),
+                    widget.fallbackMessage ??
+                        'We\'re sorry, but something unexpected happened. Don\'t worry, your data is safe.',
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      color: isDark ? Colors.white70 : AppTheme.mediumGrey,
+                      height: 1.5,
+                    ),
+                    textAlign: TextAlign.center,
+                  )
+                  .animate()
+                  .slideY(begin: 0.3, end: 0, delay: 600.ms, duration: 600.ms)
+                  .fadeIn(),
 
               const SizedBox(height: 40),
 
@@ -130,198 +139,225 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
                 children: [
                   // Retry Button
                   SizedBox(
-                    width: double.infinity,
-                    height: 56,
-                    child: ElevatedButton(
-                      onPressed: _handleRetry,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                      ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+                        width: double.infinity,
+                        height: 56,
+                        child: ElevatedButton(
+                          onPressed: _handleRetry,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
                           ),
-                          borderRadius: BorderRadius.circular(16),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [
+                                  AppTheme.primaryRose,
+                                  AppTheme.primaryPurple,
+                                ],
+                              ),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: const Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.refresh_rounded,
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    'Try Again',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
-                        child: const Center(
+                      )
+                      .animate()
+                      .slideY(
+                        begin: 0.3,
+                        end: 0,
+                        delay: 800.ms,
+                        duration: 600.ms,
+                      )
+                      .fadeIn(),
+
+                  const SizedBox(height: 16),
+
+                  // Report Button
+                  SizedBox(
+                        width: double.infinity,
+                        height: 56,
+                        child: OutlinedButton(
+                          onPressed: _handleReport,
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(
+                              color: AppTheme.primaryRose.withValues(
+                                alpha: 0.1,
+                              ),
+                              width: 2,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.refresh_rounded, color: Colors.white),
-                              SizedBox(width: 8),
+                              Icon(
+                                Icons.bug_report_outlined,
+                                color: AppTheme.primaryRose,
+                              ),
+                              const SizedBox(width: 8),
                               Text(
-                                'Try Again',
+                                'Report Issue',
                                 style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
+                                  color: AppTheme.primaryRose,
+                                  fontWeight: FontWeight.w600,
                                   fontSize: 16,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      ),
-                    ),
-                  ).animate()
-                    .slideY(begin: 0.3, end: 0, delay: 800.ms, duration: 600.ms)
-                    .fadeIn(),
-
-                  const SizedBox(height: 16),
-
-                  // Report Button
-                  SizedBox(
-                    width: double.infinity,
-                    height: 56,
-                    child: OutlinedButton(
-                      onPressed: _handleReport,
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(
-                          color: AppTheme.primaryRose.withValues(alpha: 0.1),
-                          width: 2,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.bug_report_outlined,
-                            color: AppTheme.primaryRose,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            'Report Issue',
-                            style: TextStyle(
-                              color: AppTheme.primaryRose,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ).animate()
-                    .slideY(begin: 0.3, end: 0, delay: 1000.ms, duration: 600.ms)
-                    .fadeIn(),
+                      )
+                      .animate()
+                      .slideY(
+                        begin: 0.3,
+                        end: 0,
+                        delay: 1000.ms,
+                        duration: 600.ms,
+                      )
+                      .fadeIn(),
 
                   const SizedBox(height: 16),
 
                   // Show Details Button (for developers)
                   if (widget.showDetails || _error != null)
                     TextButton(
-                      onPressed: () {
-                        setState(() {
-                          _showDetails = !_showDetails;
-                        });
-                        HapticFeedback.selectionClick();
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            _showDetails 
-                              ? Icons.expand_less_rounded 
-                              : Icons.expand_more_rounded,
-                            color: AppTheme.mediumGrey,
+                          onPressed: () {
+                            setState(() {
+                              _showDetails = !_showDetails;
+                            });
+                            HapticFeedback.selectionClick();
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                _showDetails
+                                    ? Icons.expand_less_rounded
+                                    : Icons.expand_more_rounded,
+                                color: AppTheme.mediumGrey,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                _showDetails ? 'Hide Details' : 'Show Details',
+                                style: TextStyle(
+                                  color: AppTheme.mediumGrey,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 4),
-                          Text(
-                            _showDetails ? 'Hide Details' : 'Show Details',
-                            style: TextStyle(
-                              color: AppTheme.mediumGrey,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ).animate()
-                      .slideY(begin: 0.3, end: 0, delay: 1200.ms, duration: 600.ms)
-                      .fadeIn(),
+                        )
+                        .animate()
+                        .slideY(
+                          begin: 0.3,
+                          end: 0,
+                          delay: 1200.ms,
+                          duration: 600.ms,
+                        )
+                        .fadeIn(),
                 ],
               ),
 
               // Error Details (expandable)
               if (_showDetails && _error != null)
                 Container(
-                  margin: const EdgeInsets.only(top: 24),
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: isDark 
-                      ? Colors.grey[900]?.withValues(alpha: 0.1)
-                      : Colors.grey[100],
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: AppTheme.primaryRose.withValues(alpha: 0.1),
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
+                      margin: const EdgeInsets.only(top: 24),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: isDark
+                            ? Colors.grey[900]?.withValues(alpha: 0.1)
+                            : Colors.grey[100],
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: AppTheme.primaryRose.withValues(alpha: 0.1),
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(
-                            Icons.info_outline,
-                            size: 18,
-                            color: AppTheme.mediumGrey,
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.info_outline,
+                                size: 18,
+                                color: AppTheme.mediumGrey,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Technical Details',
+                                style: theme.textTheme.titleSmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppTheme.mediumGrey,
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 8),
-                          Text(
-                            'Technical Details',
-                            style: theme.textTheme.titleSmall?.copyWith(
-                              fontWeight: FontWeight.bold,
+                          const SizedBox(height: 12),
+                          SelectableText(
+                            _error.toString(),
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              fontFamily: 'monospace',
                               color: AppTheme.mediumGrey,
+                              fontSize: 12,
                             ),
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      SelectableText(
-                        _error.toString(),
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          fontFamily: 'monospace',
-                          color: AppTheme.mediumGrey,
-                          fontSize: 12,
-                        ),
-                      ),
-                      if (_stackTrace != null) ...[
-                        const SizedBox(height: 8),
-                        const Divider(),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Stack Trace:',
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: AppTheme.mediumGrey,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        ConstrainedBox(
-                          constraints: const BoxConstraints(maxHeight: 200),
-                          child: SingleChildScrollView(
-                            child: SelectableText(
-                              _stackTrace.toString(),
+                          if (_stackTrace != null) ...[
+                            const SizedBox(height: 8),
+                            const Divider(),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Stack Trace:',
                               style: theme.textTheme.bodySmall?.copyWith(
-                                fontFamily: 'monospace',
+                                fontWeight: FontWeight.bold,
                                 color: AppTheme.mediumGrey,
-                                fontSize: 10,
                               ),
                             ),
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                ).animate()
-                  .slideY(begin: 0.3, end: 0, duration: 400.ms)
-                  .fadeIn(),
+                            const SizedBox(height: 4),
+                            ConstrainedBox(
+                              constraints: const BoxConstraints(maxHeight: 200),
+                              child: SingleChildScrollView(
+                                child: SelectableText(
+                                  _stackTrace.toString(),
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    fontFamily: 'monospace',
+                                    color: AppTheme.mediumGrey,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    )
+                    .animate()
+                    .slideY(begin: 0.3, end: 0, duration: 400.ms)
+                    .fadeIn(),
             ],
           ),
         ),
@@ -331,7 +367,7 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
 
   void _handleRetry() {
     HapticFeedback.lightImpact();
-    
+
     if (widget.onRetry != null) {
       widget.onRetry!();
     } else {
@@ -355,7 +391,8 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
     } else {
       // Default report behavior - copy error to clipboard
       if (_error != null) {
-        final errorReport = '''
+        final errorReport =
+            '''
 Error Report:
 Time: ${DateTime.now().toIso8601String()}
 Error: ${_error.toString()}
@@ -363,7 +400,7 @@ ${_stackTrace != null ? '\nStack Trace:\n${_stackTrace.toString()}' : ''}
 ''';
 
         await Clipboard.setData(ClipboardData(text: errorReport));
-        
+
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

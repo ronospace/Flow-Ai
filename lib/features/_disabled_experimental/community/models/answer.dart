@@ -44,7 +44,10 @@ class Answer {
 
   // Computed properties
   int get totalVotes => upvotes - downvotes;
-  double get score => (upvotes - downvotes) + (isAccepted ? 15 : 0) + (isVerifiedAnswer ? 5 : 0);
+  double get score =>
+      (upvotes - downvotes) +
+      (isAccepted ? 15 : 0) +
+      (isVerifiedAnswer ? 5 : 0);
   bool get hasReferences => references.isNotEmpty;
   bool get hasAttachments => attachments.isNotEmpty;
   Duration get timeSinceSubmission => DateTime.now().difference(submittedDate);
@@ -53,7 +56,7 @@ class Answer {
   /// Get answer quality score based on various factors
   double get qualityScore {
     var score = 0.0;
-    
+
     // Content length (optimal range: 200-1000 characters)
     final contentLength = content.length;
     if (contentLength >= 200 && contentLength <= 1000) {
@@ -61,29 +64,29 @@ class Answer {
     } else if (contentLength >= 100) {
       score += 1.0;
     }
-    
+
     // Has references
     if (hasReferences) {
       score += 3.0;
     }
-    
+
     // Vote ratio
     final totalVotesAbs = upvotes + downvotes;
     if (totalVotesAbs > 0) {
       final voteRatio = upvotes / totalVotesAbs;
       score += voteRatio * 2.0;
     }
-    
+
     // Verified answer bonus
     if (isVerifiedAnswer) {
       score += 1.0;
     }
-    
+
     // Accepted answer bonus
     if (isAccepted) {
       score += 5.0;
     }
-    
+
     // Answer type bonus
     switch (answerType) {
       case AnswerType.comprehensive:
@@ -98,7 +101,7 @@ class Answer {
       default:
         break;
     }
-    
+
     return score.clamp(0.0, 10.0);
   }
 
@@ -113,7 +116,7 @@ class Answer {
   /// Get formatted time since submission
   String get timeAgo {
     final duration = timeSinceSubmission;
-    
+
     if (duration.inDays > 0) {
       return '${duration.inDays}d ago';
     } else if (duration.inHours > 0) {
@@ -128,7 +131,7 @@ class Answer {
   /// Get formatted references list
   String get formattedReferences {
     if (references.isEmpty) return '';
-    
+
     return references
         .asMap()
         .entries
@@ -149,20 +152,20 @@ class Answer {
 
   /// Check if answer contains medical advice disclaimer
   bool get hasDisclaimer {
-    return disclaimer != null || 
-           content.toLowerCase().contains('consult') ||
-           content.toLowerCase().contains('medical professional') ||
-           content.toLowerCase().contains('doctor');
+    return disclaimer != null ||
+        content.toLowerCase().contains('consult') ||
+        content.toLowerCase().contains('medical professional') ||
+        content.toLowerCase().contains('doctor');
   }
 
   /// Get answer summary (first few sentences)
   String getSummary({int maxLength = 200}) {
     if (content.length <= maxLength) return content;
-    
+
     // Try to break at sentence end
     final sentences = content.split('. ');
     var summary = '';
-    
+
     for (final sentence in sentences) {
       if (('$summary$sentence. ').length <= maxLength) {
         summary += '$sentence. ';
@@ -170,12 +173,12 @@ class Answer {
         break;
       }
     }
-    
+
     if (summary.isEmpty) {
       // Fallback to character limit
       return '${content.substring(0, maxLength)}...';
     }
-    
+
     return summary.trim();
   }
 
@@ -183,18 +186,31 @@ class Answer {
   List<String> get medicalTerms {
     final terms = <String>[];
     final medicalKeywords = [
-      'PCOS', 'endometriosis', 'fibroids', 'ovulation', 'estrogen', 'progesterone',
-      'insulin resistance', 'thyroid', 'amenorrhea', 'dysmenorrhea', 'menorrhagia',
-      'oligomenorrhea', 'perimenopause', 'menopause', 'fertility', 'contraception'
+      'PCOS',
+      'endometriosis',
+      'fibroids',
+      'ovulation',
+      'estrogen',
+      'progesterone',
+      'insulin resistance',
+      'thyroid',
+      'amenorrhea',
+      'dysmenorrhea',
+      'menorrhagia',
+      'oligomenorrhea',
+      'perimenopause',
+      'menopause',
+      'fertility',
+      'contraception',
     ];
-    
+
     final contentLower = content.toLowerCase();
     for (final term in medicalKeywords) {
       if (contentLower.contains(term.toLowerCase())) {
         terms.add(term);
       }
     }
-    
+
     return terms;
   }
 
@@ -246,7 +262,11 @@ enum AnswerType {
   educational('Educational', 'Focuses on education and understanding', '🎓'),
   quick('Quick Response', 'Brief but helpful answer', '⚡'),
   clarification('Clarification', 'Asks for more information or clarifies', '❓'),
-  referral('Referral', 'Recommends consulting other healthcare professionals', '👩‍⚕️'),
+  referral(
+    'Referral',
+    'Recommends consulting other healthcare professionals',
+    '👩‍⚕️',
+  ),
   emergency('Emergency Response', 'Addresses urgent medical concerns', '🚨');
 
   const AnswerType(this.displayName, this.description, this.icon);
@@ -366,16 +386,16 @@ class AnswerMetadata {
 
   /// Check if answer has high-quality metadata
   bool get isWellDocumented {
-    return sourceType != null && 
-           citations.isNotEmpty && 
-           keywords.isNotEmpty &&
-           evidenceLevel != null;
+    return sourceType != null &&
+        citations.isNotEmpty &&
+        keywords.isNotEmpty &&
+        evidenceLevel != null;
   }
 
   /// Get formatted citations
   String get formattedCitations {
     if (citations.isEmpty) return 'No citations provided';
-    
+
     return citations
         .asMap()
         .entries
@@ -397,7 +417,8 @@ class AnswerMetadata {
     }
   }
 
-  factory AnswerMetadata.fromJson(Map<String, dynamic> json) => _$AnswerMetadataFromJson(json);
+  factory AnswerMetadata.fromJson(Map<String, dynamic> json) =>
+      _$AnswerMetadataFromJson(json);
   Map<String, dynamic> toJson() => _$AnswerMetadataToJson(this);
 }
 
@@ -426,20 +447,22 @@ class AnswerThread {
   /// Get most recent answer in thread
   Answer? get mostRecentAnswer {
     if (followUpAnswers.isEmpty) return null;
-    
-    return followUpAnswers
-        .reduce((a, b) => a.submittedDate.isAfter(b.submittedDate) ? a : b);
+
+    return followUpAnswers.reduce(
+      (a, b) => a.submittedDate.isAfter(b.submittedDate) ? a : b,
+    );
   }
 
   /// Check if thread has recent activity
   bool get hasRecentActivity {
     final recentAnswer = mostRecentAnswer;
     if (recentAnswer == null) return false;
-    
+
     return DateTime.now().difference(recentAnswer.submittedDate).inDays < 7;
   }
 
-  factory AnswerThread.fromJson(Map<String, dynamic> json) => _$AnswerThreadFromJson(json);
+  factory AnswerThread.fromJson(Map<String, dynamic> json) =>
+      _$AnswerThreadFromJson(json);
   Map<String, dynamic> toJson() => _$AnswerThreadToJson(this);
 }
 
@@ -472,7 +495,8 @@ class AnswerFeedback {
   /// Check if feedback has detailed comment
   bool get hasDetailedComment => comment != null && comment!.length > 20;
 
-  factory AnswerFeedback.fromJson(Map<String, dynamic> json) => _$AnswerFeedbackFromJson(json);
+  factory AnswerFeedback.fromJson(Map<String, dynamic> json) =>
+      _$AnswerFeedbackFromJson(json);
   Map<String, dynamic> toJson() => _$AnswerFeedbackToJson(this);
 }
 

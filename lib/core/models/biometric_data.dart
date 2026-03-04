@@ -5,12 +5,7 @@ import 'package:flutter/foundation.dart';
 
 // === Heart Rate Data Models ===
 
-enum HeartRateType {
-  resting,
-  active,
-  peak,
-  recovery,
-}
+enum HeartRateType { resting, active, peak, recovery }
 
 @immutable
 class HeartRateData {
@@ -181,13 +176,7 @@ class HRVAnalysis {
 
 // === Sleep Data Models ===
 
-enum SleepStage {
-  awake,
-  light,
-  deep,
-  rem,
-  unknown,
-}
+enum SleepStage { awake, light, deep, rem, unknown }
 
 @immutable
 class SleepStageData {
@@ -251,17 +240,21 @@ class SleepData {
       remSleepPercentage: (json['rem_sleep_percentage'] as num).toDouble(),
       lightSleepPercentage: (json['light_sleep_percentage'] as num).toDouble(),
       awakeDuringNight: json['awake_during_night'],
-      sleepStages: (json['sleep_stages'] as List?)
-              ?.map((stage) => SleepStageData(
-                    stage: SleepStage.values.byName(stage['stage']),
-                    startTime: DateTime.parse(stage['start_time']),
-                    duration: Duration(minutes: stage['duration_minutes']),
-                  ))
+      sleepStages:
+          (json['sleep_stages'] as List?)
+              ?.map(
+                (stage) => SleepStageData(
+                  stage: SleepStage.values.byName(stage['stage']),
+                  startTime: DateTime.parse(stage['start_time']),
+                  duration: Duration(minutes: stage['duration_minutes']),
+                ),
+              )
               .toList() ??
           [],
       sleepScore: json['sleep_score']?.toDouble(),
       deviceSource: json['device_source'],
-      environmentalFactors: json['environmental_factors'] as Map<String, dynamic>?,
+      environmentalFactors:
+          json['environmental_factors'] as Map<String, dynamic>?,
     );
   }
 
@@ -278,11 +271,15 @@ class SleepData {
       'rem_sleep_percentage': remSleepPercentage,
       'light_sleep_percentage': lightSleepPercentage,
       'awake_during_night': awakeDuringNight,
-      'sleep_stages': sleepStages.map((stage) => {
-        'stage': stage.stage.name,
-        'start_time': stage.startTime.toIso8601String(),
-        'duration_minutes': stage.duration.inMinutes,
-      }).toList(),
+      'sleep_stages': sleepStages
+          .map(
+            (stage) => {
+              'stage': stage.stage.name,
+              'start_time': stage.startTime.toIso8601String(),
+              'duration_minutes': stage.duration.inMinutes,
+            },
+          )
+          .toList(),
       'sleep_score': sleepScore,
       'device_source': deviceSource,
       'environmental_factors': environmentalFactors,
@@ -476,8 +473,10 @@ class StressData {
       timestamp: DateTime.parse(json['timestamp']),
       stressLevel: (json['stress_level'] as num).toDouble(),
       stressSource: json['stress_source'],
-      contributingFactors: (json['contributing_factors'] as Map<String, dynamic>?)
-          ?.map((key, value) => MapEntry(key, (value as num).toDouble())),
+      contributingFactors:
+          (json['contributing_factors'] as Map<String, dynamic>?)?.map(
+            (key, value) => MapEntry(key, (value as num).toDouble()),
+          ),
       deviceSource: json['device_source'],
     );
   }
@@ -569,12 +568,7 @@ class BiometricCorrelationAnalysis {
   });
 }
 
-enum BiometricAnomalySeverity {
-  low,
-  medium,
-  high,
-  critical,
-}
+enum BiometricAnomalySeverity { low, medium, high, critical }
 
 enum BiometricAnomalyType {
   heartRateAnomaly,
@@ -709,18 +703,18 @@ class BiometricAnalysis {
     );
   }
 
-  bool get hasData => 
-    heartRateData.isNotEmpty ||
-    sleepData.isNotEmpty ||
-    temperatureData.isNotEmpty ||
-    hrvData.isNotEmpty ||
-    stressData.isNotEmpty ||
-    activityData.isNotEmpty;
+  bool get hasData =>
+      heartRateData.isNotEmpty ||
+      sleepData.isNotEmpty ||
+      temperatureData.isNotEmpty ||
+      hrvData.isNotEmpty ||
+      stressData.isNotEmpty ||
+      activityData.isNotEmpty;
 
   double get dataCompleteness {
     int categories = 0;
     int filledCategories = 0;
-    
+
     categories += 6; // Total categories we're tracking
     if (heartRateData.isNotEmpty) filledCategories++;
     if (sleepData.isNotEmpty) filledCategories++;
@@ -728,7 +722,7 @@ class BiometricAnalysis {
     if (hrvData.isNotEmpty) filledCategories++;
     if (stressData.isNotEmpty) filledCategories++;
     if (activityData.isNotEmpty) filledCategories++;
-    
+
     return categories > 0 ? filledCategories / categories : 0.0;
   }
 }

@@ -4,17 +4,14 @@ import '../../../../core/widgets/modern_button.dart';
 /// Completion step for onboarding flow
 class CompleteStep extends StatefulWidget {
   final VoidCallback onGetStarted;
-  
-  const CompleteStep({
-    super.key,
-    required this.onGetStarted,
-  });
+
+  const CompleteStep({super.key, required this.onGetStarted});
 
   @override
   State<CompleteStep> createState() => _CompleteStepState();
 }
 
-class _CompleteStepState extends State<CompleteStep> 
+class _CompleteStepState extends State<CompleteStep>
     with TickerProviderStateMixin {
   late AnimationController _confettiController;
   late AnimationController _scaleController;
@@ -24,33 +21,25 @@ class _CompleteStepState extends State<CompleteStep>
   @override
   void initState() {
     super.initState();
-    
+
     _confettiController = AnimationController(
       duration: const Duration(milliseconds: 1500),
       vsync: this,
     );
-    
+
     _scaleController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
     );
-    
-    _scaleAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _scaleController,
-      curve: Curves.elasticOut,
-    ));
-    
-    _confettiAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _confettiController,
-      curve: Curves.easeOut,
-    ));
-    
+
+    _scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _scaleController, curve: Curves.elasticOut),
+    );
+
+    _confettiAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _confettiController, curve: Curves.easeOut),
+    );
+
     // Start animations
     _scaleController.forward();
     Future.delayed(const Duration(milliseconds: 300), () {
@@ -68,13 +57,13 @@ class _CompleteStepState extends State<CompleteStep>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Padding(
       padding: const EdgeInsets.all(24.0),
       child: Column(
         children: [
           const Spacer(),
-          
+
           // Success animation
           ScaleTransition(
             scale: _scaleAnimation,
@@ -106,9 +95,9 @@ class _CompleteStepState extends State<CompleteStep>
               ),
             ),
           ),
-          
+
           const SizedBox(height: 40),
-          
+
           // Success message
           AnimatedBuilder(
             animation: _scaleAnimation,
@@ -125,9 +114,9 @@ class _CompleteStepState extends State<CompleteStep>
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    
+
                     const SizedBox(height: 16),
-                    
+
                     Text(
                       'Welcome to your personalized menstrual health journey',
                       style: theme.textTheme.bodyLarge?.copyWith(
@@ -140,16 +129,18 @@ class _CompleteStepState extends State<CompleteStep>
               );
             },
           ),
-          
+
           const SizedBox(height: 40),
-          
+
           // Feature summary
           FadeTransition(
             opacity: _confettiAnimation,
             child: Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.1),
+                color: theme.colorScheme.surfaceContainerHighest.withValues(
+                  alpha: 0.1,
+                ),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
                   color: theme.colorScheme.outline.withValues(alpha: 0.1),
@@ -163,33 +154,33 @@ class _CompleteStepState extends State<CompleteStep>
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  
+
                   const SizedBox(height: 20),
-                  
+
                   _buildFeatureSummary(
                     context,
                     Icons.timeline,
                     'Personalized cycle tracking',
                   ),
-                  
+
                   const SizedBox(height: 12),
-                  
+
                   _buildFeatureSummary(
                     context,
                     Icons.insights,
                     'AI-powered health insights',
                   ),
-                  
+
                   const SizedBox(height: 12),
-                  
+
                   _buildFeatureSummary(
                     context,
                     Icons.notifications_active,
                     'Smart reminders and predictions',
                   ),
-                  
+
                   const SizedBox(height: 12),
-                  
+
                   _buildFeatureSummary(
                     context,
                     Icons.security,
@@ -199,9 +190,9 @@ class _CompleteStepState extends State<CompleteStep>
               ),
             ),
           ),
-          
+
           const Spacer(),
-          
+
           // Get started button
           AnimatedBuilder(
             animation: _confettiAnimation,
@@ -221,9 +212,9 @@ class _CompleteStepState extends State<CompleteStep>
               );
             },
           ),
-          
+
           const SizedBox(height: 20),
-          
+
           // Additional message
           FadeTransition(
             opacity: _confettiAnimation,
@@ -235,7 +226,7 @@ class _CompleteStepState extends State<CompleteStep>
               textAlign: TextAlign.center,
             ),
           ),
-          
+
           const SizedBox(height: 20),
         ],
       ),
@@ -248,7 +239,7 @@ class _CompleteStepState extends State<CompleteStep>
     String text,
   ) {
     final theme = Theme.of(context);
-    
+
     return Row(
       children: [
         Container(
@@ -257,11 +248,7 @@ class _CompleteStepState extends State<CompleteStep>
             color: theme.colorScheme.primary.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(
-            icon,
-            size: 16,
-            color: theme.colorScheme.primary,
-          ),
+          child: Icon(icon, size: 16, color: theme.colorScheme.primary),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -272,11 +259,7 @@ class _CompleteStepState extends State<CompleteStep>
             ),
           ),
         ),
-        Icon(
-          Icons.check_circle,
-          size: 16,
-          color: theme.colorScheme.primary,
-        ),
+        Icon(Icons.check_circle, size: 16, color: theme.colorScheme.primary),
       ],
     );
   }

@@ -117,7 +117,9 @@ class TelehealthSession {
       reason: json['reason'] as String?,
       cost: (json['cost'] as num).toDouble(),
       insurance: json['insurance'] != null
-          ? TelehealthInsurance.fromJson(json['insurance'] as Map<String, dynamic>)
+          ? TelehealthInsurance.fromJson(
+              json['insurance'] as Map<String, dynamic>,
+            )
           : null,
       bookingDate: json['bookingDate'] != null
           ? DateTime.parse(json['bookingDate'] as String)
@@ -128,7 +130,9 @@ class TelehealthSession {
           : null,
       sessionNotes: json['sessionNotes'] as String?,
       rating: json['rating'] != null
-          ? TelehealthSessionRating.fromJson(json['rating'] as Map<String, dynamic>)
+          ? TelehealthSessionRating.fromJson(
+              json['rating'] as Map<String, dynamic>,
+            )
           : null,
     );
   }
@@ -137,7 +141,7 @@ class TelehealthSession {
   String get formattedDuration {
     final hours = duration.inHours;
     final minutes = duration.inMinutes % 60;
-    
+
     if (hours > 0) {
       return '${hours}h ${minutes}m';
     }
@@ -147,15 +151,15 @@ class TelehealthSession {
   /// Check if session is upcoming
   bool get isUpcoming {
     return status == TelehealthSessionStatus.scheduled &&
-           scheduledDateTime.isAfter(DateTime.now());
+        scheduledDateTime.isAfter(DateTime.now());
   }
 
   /// Check if session is in progress
   bool get isInProgress {
     final now = DateTime.now();
     return status == TelehealthSessionStatus.scheduled &&
-           now.isAfter(scheduledDateTime) &&
-           now.isBefore(scheduledDateTime.add(duration));
+        now.isAfter(scheduledDateTime) &&
+        now.isBefore(scheduledDateTime.add(duration));
   }
 
   /// Get final cost after insurance
@@ -251,13 +255,13 @@ extension TelehealthSessionStatusExtension on TelehealthSessionStatus {
 
   bool get isActive {
     return this == TelehealthSessionStatus.scheduled ||
-           this == TelehealthSessionStatus.inProgress;
+        this == TelehealthSessionStatus.inProgress;
   }
 
   bool get isCompleted {
     return this == TelehealthSessionStatus.completed ||
-           this == TelehealthSessionStatus.cancelled ||
-           this == TelehealthSessionStatus.noShow;
+        this == TelehealthSessionStatus.cancelled ||
+        this == TelehealthSessionStatus.noShow;
   }
 }
 

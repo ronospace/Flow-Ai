@@ -37,21 +37,13 @@ class _RealTimeMetricCardState extends State<RealTimeMetricCard>
       vsync: this,
     );
 
-    _pulseAnimation = Tween<double>(
-      begin: 0.8,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
+    _pulseAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
 
-    _scaleAnimation = Tween<double>(
-      begin: 0.9,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.elasticOut,
-    ));
+    _scaleAnimation = Tween<double>(begin: 0.9, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.elasticOut),
+    );
 
     _animationController.repeat(reverse: true);
   }
@@ -94,11 +86,7 @@ class _RealTimeMetricCardState extends State<RealTimeMetricCard>
                           color: widget.color.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: Icon(
-                          widget.icon,
-                          color: widget.color,
-                          size: 24,
-                        ),
+                        child: Icon(widget.icon, color: widget.color, size: 24),
                       ),
                     );
                   },
@@ -159,11 +147,7 @@ class _RealTimeMetricCardState extends State<RealTimeMetricCard>
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              Icons.horizontal_rule,
-              color: Colors.grey,
-              size: 12,
-            ),
+            Icon(Icons.horizontal_rule, color: Colors.grey, size: 12),
             const SizedBox(width: 2),
             Text(
               '0%',
@@ -190,11 +174,7 @@ class _RealTimeMetricCardState extends State<RealTimeMetricCard>
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon,
-            color: color,
-            size: 12,
-          ),
+          Icon(icon, color: color, size: 12),
           const SizedBox(width: 2),
           Text(
             '${widget.trend.abs().toStringAsFixed(1)}%',

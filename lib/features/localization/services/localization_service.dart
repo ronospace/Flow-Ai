@@ -22,7 +22,8 @@ class LocalizationService {
   SharedPreferences? _prefs;
   late SupportedLocale _currentLocale;
   final Map<String, Map<String, String>> _localizedStrings = {};
-  final StreamController<SupportedLocale> _localeController = StreamController<SupportedLocale>.broadcast();
+  final StreamController<SupportedLocale> _localeController =
+      StreamController<SupportedLocale>.broadcast();
 
   // Configuration
   static const String _selectedLocaleKey = 'selected_locale';
@@ -45,21 +46,25 @@ class LocalizationService {
 
     try {
       _prefs = await SharedPreferences.getInstance();
-      
+
       // Load current locale
       await _loadCurrentLocale();
-      
+
       // Load localized strings
       await _loadLocalizedStrings();
-      
+
       // Initialize date formatting
       await initializeDateFormatting(_currentLocale.toString());
-      
+
       _isInitialized = true;
-      debugPrint('🌍 Localization service initialized with locale: $_currentLocale');
+      debugPrint(
+        '🌍 Localization service initialized with locale: $_currentLocale',
+      );
     } catch (e) {
       debugPrint('❌ Failed to initialize localization: $e');
-      throw LocalizationException('Failed to initialize localization service: $e');
+      throw LocalizationException(
+        'Failed to initialize localization service: $e',
+      );
     }
   }
 
@@ -115,7 +120,10 @@ class LocalizationService {
     // Replace parameters if provided
     if (params != null) {
       for (final entry in params.entries) {
-        localizedString = localizedString!.replaceAll('{${entry.key}}', entry.value);
+        localizedString = localizedString!.replaceAll(
+          '{${entry.key}}',
+          entry.value,
+        );
       }
     }
 
@@ -127,7 +135,7 @@ class LocalizationService {
     if (!_isInitialized) return key;
 
     String pluralKey = key;
-    
+
     // Simple pluralization rules
     if (count == 0) {
       pluralKey = '${key}_zero';
@@ -151,7 +159,8 @@ class LocalizationService {
     if (!_isInitialized) return date.toString();
 
     try {
-      final DateFormat formatter = customFormat ?? DateFormat.yMMMd(_currentLocale.toString());
+      final DateFormat formatter =
+          customFormat ?? DateFormat.yMMMd(_currentLocale.toString());
       return formatter.format(date);
     } catch (e) {
       debugPrint('⚠️ Date formatting error: $e');
@@ -164,7 +173,7 @@ class LocalizationService {
     if (!_isInitialized) return time.toString();
 
     try {
-      final DateFormat formatter = use24Hour 
+      final DateFormat formatter = use24Hour
           ? DateFormat.Hm(_currentLocale.toString())
           : DateFormat.jm(_currentLocale.toString());
       return formatter.format(time);
@@ -179,11 +188,14 @@ class LocalizationService {
     if (!_isInitialized) return dateTime.toString();
 
     try {
-      final DateFormat formatter = customFormat ?? DateFormat.yMMMd(_currentLocale.toString()).add_jm();
+      final DateFormat formatter =
+          customFormat ?? DateFormat.yMMMd(_currentLocale.toString()).add_jm();
       return formatter.format(dateTime);
     } catch (e) {
       debugPrint('⚠️ DateTime formatting error: $e');
-      return DateFormat.yMMMd().add_jm().format(dateTime); // Fallback to default
+      return DateFormat.yMMMd().add_jm().format(
+        dateTime,
+      ); // Fallback to default
     }
   }
 
@@ -192,7 +204,9 @@ class LocalizationService {
     if (!_isInitialized) return number.toString();
 
     try {
-      final NumberFormat formatter = NumberFormat.decimalPattern(_currentLocale.toString());
+      final NumberFormat formatter = NumberFormat.decimalPattern(
+        _currentLocale.toString(),
+      );
       if (decimalDigits != null) {
         formatter.minimumFractionDigits = decimalDigits;
         formatter.maximumFractionDigits = decimalDigits;
@@ -209,7 +223,8 @@ class LocalizationService {
     if (!_isInitialized) return amount.toString();
 
     try {
-      final String currency = currencyCode ?? _getCurrencyForLocale(_currentLocale);
+      final String currency =
+          currencyCode ?? _getCurrencyForLocale(_currentLocale);
       final NumberFormat formatter = NumberFormat.currency(
         locale: _currentLocale.toString(),
         symbol: currency,
@@ -226,7 +241,10 @@ class LocalizationService {
     if (!_isInitialized) return [];
 
     try {
-      final DateFormat formatter = DateFormat('MMMM', _currentLocale.toString());
+      final DateFormat formatter = DateFormat(
+        'MMMM',
+        _currentLocale.toString(),
+      );
       return List.generate(12, (index) {
         final DateTime date = DateTime(2024, index + 1, 1);
         return formatter.format(date);
@@ -242,7 +260,10 @@ class LocalizationService {
     if (!_isInitialized) return [];
 
     try {
-      final DateFormat formatter = DateFormat('EEEE', _currentLocale.toString());
+      final DateFormat formatter = DateFormat(
+        'EEEE',
+        _currentLocale.toString(),
+      );
       return List.generate(7, (index) {
         // Start from Monday (index 1 in DateTime.monday)
         final DateTime date = DateTime(2024, 1, index + 1);
@@ -272,13 +293,18 @@ class LocalizationService {
 
     try {
       if (translationsData['translations'] != null) {
-        final Map<String, dynamic> translations = translationsData['translations'];
-        
+        final Map<String, dynamic> translations =
+            translationsData['translations'];
+
         for (final localeKey in translations.keys) {
-          _localizedStrings[localeKey] = Map<String, String>.from(translations[localeKey]);
+          _localizedStrings[localeKey] = Map<String, String>.from(
+            translations[localeKey],
+          );
         }
 
-        debugPrint('🌍 Imported translations for ${translations.keys.length} locales');
+        debugPrint(
+          '🌍 Imported translations for ${translations.keys.length} locales',
+        );
       }
     } catch (e) {
       debugPrint('❌ Failed to import translations: $e');
@@ -290,7 +316,7 @@ class LocalizationService {
   Future<void> _loadCurrentLocale() async {
     try {
       final String? savedLocale = _prefs?.getString(_selectedLocaleKey);
-      
+
       if (savedLocale != null) {
         final List<String> parts = savedLocale.split('_');
         if (parts.length == 2) {
@@ -320,10 +346,10 @@ class LocalizationService {
   Future<void> _loadLocalizedStrings() async {
     try {
       final String localeKey = _currentLocale.toString();
-      
+
       // Load current locale strings
       await _loadStringsForLocale(localeKey);
-      
+
       // Always load English as fallback
       if (localeKey != 'en_US') {
         await _loadStringsForLocale('en_US');
@@ -338,10 +364,11 @@ class LocalizationService {
   /// Load strings for specific locale
   Future<void> _loadStringsForLocale(String localeKey) async {
     try {
-      final String fileName = 'lib/features/localization/assets/strings_$localeKey.json';
+      final String fileName =
+          'lib/features/localization/assets/strings_$localeKey.json';
       final String jsonString = await rootBundle.loadString(fileName);
       final Map<String, dynamic> jsonMap = json.decode(jsonString);
-      
+
       _localizedStrings[localeKey] = Map<String, String>.from(jsonMap);
     } catch (e) {
       debugPrint('⚠️ Failed to load strings for $localeKey: $e');
@@ -355,7 +382,7 @@ class LocalizationService {
     try {
       final String systemLocale = Intl.getCurrentLocale();
       final List<String> parts = systemLocale.split('_');
-      
+
       if (parts.isNotEmpty) {
         // Find matching supported locale
         for (final locale in _supportedLocales) {
@@ -367,7 +394,7 @@ class LocalizationService {
     } catch (e) {
       debugPrint('⚠️ Failed to get system locale: $e');
     }
-    
+
     // Default to English
     return const SupportedLocale('en', 'US', 'English', 'English');
   }
@@ -424,28 +451,28 @@ class LocalizationService {
       'continue': 'Continue',
       'skip': 'Skip',
       'retry': 'Retry',
-      
+
       // Navigation
       'home': 'Home',
       'tracking': 'Tracking',
       'insights': 'Insights',
       'settings': 'Settings',
       'profile': 'Profile',
-      
+
       // Health tracking
       'cycle_tracking': 'Cycle Tracking',
       'mood_tracking': 'Mood Tracking',
       'symptoms': 'Symptoms',
       'notes': 'Notes',
       'predictions': 'Predictions',
-      
+
       // Time and dates
       'today': 'Today',
       'yesterday': 'Yesterday',
       'tomorrow': 'Tomorrow',
       'this_week': 'This Week',
       'this_month': 'This Month',
-      
+
       // Common actions
       'add': 'Add',
       'remove': 'Remove',
@@ -455,13 +482,13 @@ class LocalizationService {
       'import': 'Import',
       'backup': 'Backup',
       'restore': 'Restore',
-      
+
       // Status messages
       'data_saved': 'Data saved successfully',
       'data_loaded': 'Data loaded',
       'sync_complete': 'Synchronization complete',
       'backup_created': 'Backup created',
-      
+
       // Pluralization examples
       'day_zero': '{count} days',
       'day_one': '{count} day',

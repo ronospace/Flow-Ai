@@ -21,23 +21,33 @@ class CommunityService {
   final List<CommunityAchievement> _achievements = [];
   final ContentFilter _contentFilter = const ContentFilter(
     bannedWords: [
-      'spam', 'scam', 'inappropriate', 'hate', 'abuse',
-      'violence', 'drug', 'suicide', 'self-harm'
+      'spam',
+      'scam',
+      'inappropriate',
+      'hate',
+      'abuse',
+      'violence',
+      'drug',
+      'suicide',
+      'self-harm',
     ],
     flaggedPhrases: [
-      'medical advice', 'dangerous behavior', 'illegal activity',
-      'personal information', 'contact details'
+      'medical advice',
+      'dangerous behavior',
+      'illegal activity',
+      'personal information',
+      'contact details',
     ],
     toxicityThreshold: 0.3,
     enableAIModeration: true,
   );
 
   // Stream controllers for real-time updates
-  final StreamController<List<CommunityPost>> _postsController = 
+  final StreamController<List<CommunityPost>> _postsController =
       StreamController<List<CommunityPost>>.broadcast();
-  final StreamController<List<CommunityReply>> _repliesController = 
+  final StreamController<List<CommunityReply>> _repliesController =
       StreamController<List<CommunityReply>>.broadcast();
-  final StreamController<CommunityMetrics> _metricsController = 
+  final StreamController<CommunityMetrics> _metricsController =
       StreamController<CommunityMetrics>.broadcast();
 
   // Getters for streams
@@ -49,12 +59,12 @@ class CommunityService {
     if (_isInitialized) return;
 
     debugPrint('🤝 Initializing Community Service...');
-    
+
     await _loadDefaultGroups();
     await _loadVerifiedExperts();
     await _loadAchievements();
     await _generateSampleContent();
-    
+
     _isInitialized = true;
     debugPrint('✅ Community Service initialized');
   }
@@ -67,7 +77,7 @@ class CommunityService {
   }) async {
     final anonymousId = _generateAnonymousId();
     final avatar = _generateRandomAvatar();
-    
+
     final profile = AnonymousProfile(
       anonymousId: anonymousId,
       displayName: displayName,
@@ -80,7 +90,7 @@ class CommunityService {
 
     _currentProfile = profile;
     debugPrint('👤 Created anonymous profile: $displayName');
-    
+
     return profile;
   }
 
@@ -119,7 +129,8 @@ class CommunityService {
     }
 
     // Content safety check
-    if (!_contentFilter.isContentSafe(content) || !_contentFilter.isContentSafe(title)) {
+    if (!_contentFilter.isContentSafe(content) ||
+        !_contentFilter.isContentSafe(title)) {
       throw Exception('Content violates community guidelines');
     }
 
@@ -142,10 +153,10 @@ class CommunityService {
 
     _posts.add(post);
     _postsController.add(List.unmodifiable(_posts));
-    
+
     // Update user stats
     await _updateUserStats('post_created');
-    
+
     debugPrint('📝 Created post: $title');
     return post;
   }
@@ -178,16 +189,16 @@ class CommunityService {
 
     _replies.add(reply);
     _repliesController.add(List.unmodifiable(_replies));
-    
+
     // Update post reply count
     final postIndex = _posts.indexWhere((p) => p.postId == postId);
     if (postIndex != -1) {
       // In a real implementation, we'd update the post's reply count
     }
-    
+
     // Update user stats
     await _updateUserStats('reply_created');
-    
+
     debugPrint('💬 Created reply to post: $postId');
     return reply;
   }
@@ -208,17 +219,21 @@ class CommunityService {
 
   /// Get discussions
   Future<List<DiscussionPost>> getDiscussions() async {
-    return _posts.map((post) => DiscussionPost(
-      id: post.postId,
-      userId: post.authorId,
-      title: post.title,
-      content: post.content,
-      category: post.tags.isNotEmpty ? post.tags.first : 'general',
-      createdAt: post.createdAt,
-      likes: post.upvotes,
-      replies: _replies.where((r) => r.postId == post.postId).length,
-      tags: post.tags,
-    )).toList();
+    return _posts
+        .map(
+          (post) => DiscussionPost(
+            id: post.postId,
+            userId: post.authorId,
+            title: post.title,
+            content: post.content,
+            category: post.tags.isNotEmpty ? post.tags.first : 'general',
+            createdAt: post.createdAt,
+            likes: post.upvotes,
+            replies: _replies.where((r) => r.postId == post.postId).length,
+            tags: post.tags,
+          ),
+        )
+        .toList();
   }
 
   /// Create discussion
@@ -398,10 +413,13 @@ class CommunityService {
 
   /// Search community
   Future<List<dynamic>> searchCommunity(String query) async {
-    return _posts.where((post) => 
-      post.title.toLowerCase().contains(query.toLowerCase()) ||
-      post.content.toLowerCase().contains(query.toLowerCase())
-    ).toList();
+    return _posts
+        .where(
+          (post) =>
+              post.title.toLowerCase().contains(query.toLowerCase()) ||
+              post.content.toLowerCase().contains(query.toLowerCase()),
+        )
+        .toList();
   }
 
   /// Vote on a post or reply
@@ -416,7 +434,7 @@ class CommunityService {
 
     // In production, this would update vote counts and prevent duplicate voting
     debugPrint('${isUpvote ? '👍' : '👎'} Voted on $targetType: $targetId');
-    
+
     await _updateUserStats('vote_cast');
   }
 
@@ -458,45 +476,62 @@ class CommunityService {
   /// Search posts by keyword
   List<CommunityPost> searchPosts(String query) {
     if (query.isEmpty) return [];
-    
+
     final lowerQuery = query.toLowerCase();
-    return _posts.where((post) =>
-      post.title.toLowerCase().contains(lowerQuery) ||
-      post.content.toLowerCase().contains(lowerQuery) ||
-      post.tags.any((tag) => tag.toLowerCase().contains(lowerQuery))
-    ).toList()
+    return _posts
+        .where(
+          (post) =>
+              post.title.toLowerCase().contains(lowerQuery) ||
+              post.content.toLowerCase().contains(lowerQuery) ||
+              post.tags.any((tag) => tag.toLowerCase().contains(lowerQuery)),
+        )
+        .toList()
       ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
   }
 
   /// Get trending posts (most upvotes in last 24 hours)
   List<CommunityPost> getTrendingPosts() {
     final yesterday = DateTime.now().subtract(const Duration(days: 1));
-    
+
     return _posts.where((post) => post.createdAt.isAfter(yesterday)).toList()
-      ..sort((a, b) => (b.upvotes - b.downvotes).compareTo(a.upvotes - a.downvotes))
+      ..sort(
+        (a, b) => (b.upvotes - b.downvotes).compareTo(a.upvotes - a.downvotes),
+      )
       ..take(10).toList();
   }
 
   /// Get expert-verified replies
   List<CommunityReply> getExpertReplies(String postId) {
-    return _replies.where((reply) => 
-      reply.postId == postId && reply.isExpertReply
-    ).toList();
+    return _replies
+        .where((reply) => reply.postId == postId && reply.isExpertReply)
+        .toList();
   }
 
   /// Get community metrics
   CommunityMetrics getCommunityMetrics() {
     final totalMembers = 1250; // In production, this would be from database
     final activeMembers = 875;
-    final dailyPosts = _posts.where((p) =>
-      p.createdAt.isAfter(DateTime.now().subtract(const Duration(days: 1)))
-    ).length;
-    final weeklyPosts = _posts.where((p) =>
-      p.createdAt.isAfter(DateTime.now().subtract(const Duration(days: 7)))
-    ).length;
-    final monthlyPosts = _posts.where((p) =>
-      p.createdAt.isAfter(DateTime.now().subtract(const Duration(days: 30)))
-    ).length;
+    final dailyPosts = _posts
+        .where(
+          (p) => p.createdAt.isAfter(
+            DateTime.now().subtract(const Duration(days: 1)),
+          ),
+        )
+        .length;
+    final weeklyPosts = _posts
+        .where(
+          (p) => p.createdAt.isAfter(
+            DateTime.now().subtract(const Duration(days: 7)),
+          ),
+        )
+        .length;
+    final monthlyPosts = _posts
+        .where(
+          (p) => p.createdAt.isAfter(
+            DateTime.now().subtract(const Duration(days: 30)),
+          ),
+        )
+        .length;
 
     final metrics = CommunityMetrics(
       totalMembers: totalMembers,
@@ -522,16 +557,18 @@ class CommunityService {
   /// Get user achievements
   List<CommunityAchievement> getUserAchievements() {
     if (_currentProfile == null) return [];
-    
+
     // Check for unlocked achievements
     final unlockedAchievements = <CommunityAchievement>[];
-    
+
     for (final achievement in _achievements) {
       if (_checkAchievementUnlocked(achievement)) {
-        unlockedAchievements.add(achievement.copyWith(unlockedAt: DateTime.now()));
+        unlockedAchievements.add(
+          achievement.copyWith(unlockedAt: DateTime.now()),
+        );
       }
     }
-    
+
     return unlockedAchievements;
   }
 
@@ -660,7 +697,11 @@ class CommunityService {
         requiresApproval: true,
         moderatorIds: ['mod1', 'expert2'],
         createdAt: DateTime.now().subtract(const Duration(days: 100)),
-        settings: {'allow_anonymous': true, 'expert_moderation': true, 'age_verification': true},
+        settings: {
+          'allow_anonymous': true,
+          'expert_moderation': true,
+          'age_verification': true,
+        },
       ),
       CommunityGroup(
         groupId: 'expert_qa',
@@ -762,7 +803,8 @@ class CommunityService {
         authorId: 'user1',
         groupId: 'period_questions',
         title: 'Is it normal to have irregular cycles?',
-        content: 'I\'ve been tracking my cycle for 6 months and it varies between 26-32 days. Is this normal?',
+        content:
+            'I\'ve been tracking my cycle for 6 months and it varies between 26-32 days. Is this normal?',
         type: PostType.question,
         tags: ['irregular', 'cycle_length', 'normal'],
         createdAt: DateTime.now().subtract(const Duration(hours: 2)),
@@ -775,7 +817,8 @@ class CommunityService {
         authorId: 'user2',
         groupId: 'pms_support',
         title: 'Natural remedies for cramps that actually work',
-        content: 'I wanted to share some natural remedies that have helped me with menstrual cramps...',
+        content:
+            'I wanted to share some natural remedies that have helped me with menstrual cramps...',
         type: PostType.tip,
         tags: ['cramps', 'natural_remedies', 'pain_relief'],
         createdAt: DateTime.now().subtract(const Duration(hours: 8)),
@@ -787,14 +830,15 @@ class CommunityService {
     ];
 
     _posts.addAll(samplePosts);
-    
+
     // Generate sample replies
     final sampleReplies = [
       CommunityReply(
         replyId: 'reply1',
         postId: 'post1',
         authorId: 'expert1',
-        content: 'Cycle variation of 6 days is completely normal. This falls within the typical range...',
+        content:
+            'Cycle variation of 6 days is completely normal. This falls within the typical range...',
         createdAt: DateTime.now().subtract(const Duration(hours: 1)),
         upvotes: 8,
         isExpertReply: true,
@@ -803,7 +847,8 @@ class CommunityService {
         replyId: 'reply2',
         postId: 'post2',
         authorId: 'user3',
-        content: 'Thank you for sharing! I\'ve tried the heating pad suggestion and it really helps.',
+        content:
+            'Thank you for sharing! I\'ve tried the heating pad suggestion and it really helps.',
         createdAt: DateTime.now().subtract(const Duration(hours: 6)),
         upvotes: 3,
       ),
@@ -844,7 +889,9 @@ class CommunityService {
       case 'cycle_expert':
         return _currentProfile!.totalPosts >= 25;
       case 'community_champion':
-        final daysSinceJoin = DateTime.now().difference(_currentProfile!.joinDate).inDays;
+        final daysSinceJoin = DateTime.now()
+            .difference(_currentProfile!.joinDate)
+            .inDays;
         return daysSinceJoin >= 180;
       default:
         return false;
@@ -890,9 +937,7 @@ class CommunityService {
 
 // Extension methods for easier model manipulation
 extension CommunityAchievementExtensions on CommunityAchievement {
-  CommunityAchievement copyWith({
-    DateTime? unlockedAt,
-  }) {
+  CommunityAchievement copyWith({DateTime? unlockedAt}) {
     return CommunityAchievement(
       achievementId: achievementId,
       name: name,

@@ -38,7 +38,7 @@ class AuthResult {
     String? accessToken,
     String? refreshToken,
     Map<String, dynamic>? additionalData,
-    User? user,  // Add user parameter for test compatibility
+    User? user, // Add user parameter for test compatibility
   }) {
     return AuthResult(
       success: true,
@@ -56,7 +56,7 @@ class AuthResult {
   /// Factory constructor for failed authentication
   factory AuthResult.failure({
     String? error,
-    String? message,  // Add message parameter for test compatibility
+    String? message, // Add message parameter for test compatibility
     AuthProvider provider = AuthProvider.local,
     Map<String, dynamic>? additionalData,
   }) {
@@ -146,10 +146,4 @@ class AuthResult {
 }
 
 /// Authentication providers
-enum AuthProvider {
-  local,
-  firebase,
-  apple,
-  google,
-  facebook,
-}
+enum AuthProvider { local, firebase, apple, google, facebook }

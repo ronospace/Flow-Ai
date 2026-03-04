@@ -13,7 +13,8 @@ import '../models/clinical_data_export.dart';
 /// Premium Healthcare Integration Service
 /// Provides healthcare provider connections, clinical data export, and telehealth features
 class HealthcareIntegrationService {
-  static final HealthcareIntegrationService _instance = HealthcareIntegrationService._internal();
+  static final HealthcareIntegrationService _instance =
+      HealthcareIntegrationService._internal();
   factory HealthcareIntegrationService() => _instance;
   HealthcareIntegrationService._internal();
 
@@ -26,11 +27,11 @@ class HealthcareIntegrationService {
   Future<void> initialize() async {
     try {
       debugPrint('🏥 Initializing Healthcare Integration Service...');
-      
+
       // Initialize FHIR connections, provider APIs, etc.
       await _initializeProviderConnections();
       await _loadConnectedProviders();
-      
+
       _isInitialized = true;
       debugPrint('✅ Healthcare Integration Service initialized successfully');
     } catch (e) {
@@ -49,10 +50,10 @@ class HealthcareIntegrationService {
     double? maxDistance,
   }) async {
     debugPrint('🔍 Searching healthcare providers...');
-    
+
     // Simulate API call to provider directory
     await Future.delayed(const Duration(seconds: 1));
-    
+
     final providers = [
       HealthcareProvider(
         id: 'provider_1',
@@ -71,7 +72,8 @@ class HealthcareIntegrationService {
         ],
         languages: ['English', 'Spanish'],
         profileImageUrl: 'https://example.com/doctor1.jpg',
-        bio: 'Specializing in women\'s reproductive health with over 15 years of experience.',
+        bio:
+            'Specializing in women\'s reproductive health with over 15 years of experience.',
         officeHours: {
           'Monday': '9:00 AM - 5:00 PM',
           'Tuesday': '9:00 AM - 5:00 PM',
@@ -102,7 +104,8 @@ class HealthcareIntegrationService {
         ],
         languages: ['English', 'Mandarin'],
         profileImageUrl: 'https://example.com/doctor2.jpg',
-        bio: 'Expert in hormonal disorders affecting women\'s reproductive health.',
+        bio:
+            'Expert in hormonal disorders affecting women\'s reproductive health.',
         officeHours: {
           'Monday': '8:00 AM - 4:00 PM',
           'Wednesday': '8:00 AM - 4:00 PM',
@@ -118,17 +121,23 @@ class HealthcareIntegrationService {
 
     // Filter based on search criteria
     return providers.where((provider) {
-      if (specialty != null && !provider.specialty.toLowerCase().contains(specialty.toLowerCase())) {
+      if (specialty != null &&
+          !provider.specialty.toLowerCase().contains(specialty.toLowerCase())) {
         return false;
       }
-      if (location != null && !provider.location.toLowerCase().contains(location.toLowerCase())) {
+      if (location != null &&
+          !provider.location.toLowerCase().contains(location.toLowerCase())) {
         return false;
       }
       if (maxDistance != null && provider.distance > maxDistance) {
         return false;
       }
-      if (insuranceNetwork != null && !provider.acceptedInsurance.any(
-          (insurance) => insurance.toLowerCase().contains(insuranceNetwork.toLowerCase()))) {
+      if (insuranceNetwork != null &&
+          !provider.acceptedInsurance.any(
+            (insurance) => insurance.toLowerCase().contains(
+              insuranceNetwork.toLowerCase(),
+            ),
+          )) {
         return false;
       }
       return true;
@@ -136,28 +145,29 @@ class HealthcareIntegrationService {
   }
 
   /// Connect to a healthcare provider
-  Future<bool> connectToProvider(HealthcareProvider provider, {
+  Future<bool> connectToProvider(
+    HealthcareProvider provider, {
     required String patientId,
     Map<String, dynamic>? authCredentials,
   }) async {
     try {
       debugPrint('🔗 Connecting to provider: ${provider.name}');
-      
+
       // Simulate provider connection process
       await Future.delayed(const Duration(seconds: 2));
-      
+
       // Add OAuth/API integration logic here
       final connectedProvider = provider.copyWith(
         isConnected: true,
         connectionDate: DateTime.now(),
         patientId: patientId,
       );
-      
+
       _connectedProviders.add(connectedProvider);
-      
+
       // Store connection in secure storage
       await _storeProviderConnection(connectedProvider);
-      
+
       debugPrint('✅ Successfully connected to ${provider.name}');
       return true;
     } catch (e) {
@@ -170,10 +180,10 @@ class HealthcareIntegrationService {
   Future<bool> disconnectFromProvider(String providerId) async {
     try {
       debugPrint('🔌 Disconnecting from provider: $providerId');
-      
+
       _connectedProviders.removeWhere((provider) => provider.id == providerId);
       await _removeProviderConnection(providerId);
-      
+
       debugPrint('✅ Successfully disconnected from provider');
       return true;
     } catch (e) {
@@ -199,7 +209,7 @@ class HealthcareIntegrationService {
     List<String>? includedDataTypes,
   }) async {
     debugPrint('📊 Generating clinical data export...');
-    
+
     final export = ClinicalDataExport(
       exportId: DateTime.now().millisecondsSinceEpoch.toString(),
       userId: user.id,
@@ -209,22 +219,29 @@ class HealthcareIntegrationService {
         end: endDate ?? DateTime.now(),
       ),
       format: ClinicalDataFormat.fhir,
-      includedDataTypes: includedDataTypes ?? [
-        'menstrual_cycles',
-        'symptoms',
-        'medications',
-        'vital_signs',
-        'lifestyle_factors',
-      ],
+      includedDataTypes:
+          includedDataTypes ??
+          [
+            'menstrual_cycles',
+            'symptoms',
+            'medications',
+            'vital_signs',
+            'lifestyle_factors',
+          ],
     );
 
     // Generate FHIR-compliant data
-    final fhirData = await _generateFHIRData(user, cycles, trackingData, export);
+    final fhirData = await _generateFHIRData(
+      user,
+      cycles,
+      trackingData,
+      export,
+    );
     export.data = fhirData;
-    
+
     // Calculate file size
     export.fileSize = utf8.encode(jsonEncode(fhirData)).length;
-    
+
     debugPrint('✅ Clinical data export generated: ${export.fileSize} bytes');
     return export;
   }
@@ -235,10 +252,10 @@ class HealthcareIntegrationService {
     ClinicalDataFormat format = ClinicalDataFormat.fhir,
   }) async {
     debugPrint('💾 Exporting data to file format: $format');
-    
+
     String content;
     String extension;
-    
+
     switch (format) {
       case ClinicalDataFormat.fhir:
         content = jsonEncode(export.data);
@@ -260,14 +277,16 @@ class HealthcareIntegrationService {
 
     // Create temporary file
     final tempDir = Directory.systemTemp;
-    final file = File('${tempDir.path}/medical_export_${export.exportId}.$extension');
-    
+    final file = File(
+      '${tempDir.path}/medical_export_${export.exportId}.$extension',
+    );
+
     if (format == ClinicalDataFormat.pdf) {
       await file.writeAsBytes(base64Decode(content));
     } else {
       await file.writeAsString(content);
     }
-    
+
     debugPrint('✅ Data exported to file: ${file.path}');
     return file;
   }
@@ -281,7 +300,7 @@ class HealthcareIntegrationService {
   }) async {
     try {
       debugPrint('📤 Sharing clinical data with provider: $providerId');
-      
+
       final provider = _connectedProviders.firstWhere(
         (p) => p.id == providerId,
         orElse: () => throw Exception('Provider not found or not connected'),
@@ -289,10 +308,10 @@ class HealthcareIntegrationService {
 
       // Simulate secure data transmission
       await Future.delayed(const Duration(seconds: 2));
-      
+
       // Log the sharing event
       await _logDataSharingEvent(provider, export, message);
-      
+
       debugPrint('✅ Clinical data shared successfully');
       return true;
     } catch (e) {
@@ -310,60 +329,64 @@ class HealthcareIntegrationService {
     String? timeOfDay,
   }) async {
     debugPrint('📅 Searching telehealth availability...');
-    
+
     await Future.delayed(const Duration(milliseconds: 800));
-    
+
     final now = DateTime.now();
     final sessions = <TelehealthSession>[];
-    
+
     // Generate available time slots for the next 2 weeks
     for (int day = 1; day <= 14; day++) {
       final date = now.add(Duration(days: day));
-      
+
       // Skip weekends for this example
       if (date.weekday == 6 || date.weekday == 7) continue;
-      
+
       // Morning slots
-      sessions.add(TelehealthSession(
-        sessionId: 'session_${date.day}_09',
-        providerId: providerId,
-        patientId: 'current_user',
-        scheduledDateTime: DateTime(date.year, date.month, date.day, 9, 0),
-        duration: const Duration(minutes: 30),
-        type: TelehealthSessionType.consultation,
-        status: TelehealthSessionStatus.available,
-        meetingLink: null,
-        cost: 150.00,
-        insurance: TelehealthInsurance(
-          isAccepted: true,
-          copay: 25.00,
-          coverage: 0.8,
+      sessions.add(
+        TelehealthSession(
+          sessionId: 'session_${date.day}_09',
+          providerId: providerId,
+          patientId: 'current_user',
+          scheduledDateTime: DateTime(date.year, date.month, date.day, 9, 0),
+          duration: const Duration(minutes: 30),
+          type: TelehealthSessionType.consultation,
+          status: TelehealthSessionStatus.available,
+          meetingLink: null,
+          cost: 150.00,
+          insurance: TelehealthInsurance(
+            isAccepted: true,
+            copay: 25.00,
+            coverage: 0.8,
+          ),
         ),
-      ));
-      
+      );
+
       // Afternoon slots
-      sessions.add(TelehealthSession(
-        sessionId: 'session_${date.day}_14',
-        providerId: providerId,
-        patientId: 'current_user',
-        scheduledDateTime: DateTime(date.year, date.month, date.day, 14, 0),
-        duration: const Duration(minutes: 30),
-        type: TelehealthSessionType.consultation,
-        status: TelehealthSessionStatus.available,
-        meetingLink: null,
-        cost: 150.00,
-        insurance: TelehealthInsurance(
-          isAccepted: true,
-          copay: 25.00,
-          coverage: 0.8,
+      sessions.add(
+        TelehealthSession(
+          sessionId: 'session_${date.day}_14',
+          providerId: providerId,
+          patientId: 'current_user',
+          scheduledDateTime: DateTime(date.year, date.month, date.day, 14, 0),
+          duration: const Duration(minutes: 30),
+          type: TelehealthSessionType.consultation,
+          status: TelehealthSessionStatus.available,
+          meetingLink: null,
+          cost: 150.00,
+          insurance: TelehealthInsurance(
+            isAccepted: true,
+            copay: 25.00,
+            coverage: 0.8,
+          ),
         ),
-      ));
+      );
     }
-    
+
     return sessions.where((session) {
       if (preferredDate != null) {
         return session.scheduledDateTime.day == preferredDate.day &&
-               session.scheduledDateTime.month == preferredDate.month;
+            session.scheduledDateTime.month == preferredDate.month;
       }
       return true;
     }).toList();
@@ -377,21 +400,22 @@ class HealthcareIntegrationService {
   }) async {
     try {
       debugPrint('📞 Booking telehealth session...');
-      
+
       await Future.delayed(const Duration(seconds: 1));
-      
+
       final bookedSession = session.copyWith(
         status: TelehealthSessionStatus.scheduled,
-        meetingLink: 'https://telehealth.example.com/session/${session.sessionId}',
+        meetingLink:
+            'https://telehealth.example.com/session/${session.sessionId}',
         reason: reason,
         bookingDate: DateTime.now(),
       );
-      
+
       _scheduledSessions.add(bookedSession);
-      
+
       // Send confirmation notifications, calendar invites, etc.
       await _sendAppointmentConfirmation(bookedSession);
-      
+
       debugPrint('✅ Telehealth session booked successfully');
       return bookedSession;
     } catch (e) {
@@ -401,26 +425,31 @@ class HealthcareIntegrationService {
   }
 
   /// Cancel a telehealth appointment
-  Future<bool> cancelTelehealthSession(String sessionId, {String? reason}) async {
+  Future<bool> cancelTelehealthSession(
+    String sessionId, {
+    String? reason,
+  }) async {
     try {
       debugPrint('❌ Cancelling telehealth session: $sessionId');
-      
-      final sessionIndex = _scheduledSessions.indexWhere((s) => s.sessionId == sessionId);
+
+      final sessionIndex = _scheduledSessions.indexWhere(
+        (s) => s.sessionId == sessionId,
+      );
       if (sessionIndex == -1) {
         throw Exception('Session not found');
       }
-      
+
       final session = _scheduledSessions[sessionIndex];
       final cancelledSession = session.copyWith(
         status: TelehealthSessionStatus.cancelled,
         cancellationReason: reason,
       );
-      
+
       _scheduledSessions[sessionIndex] = cancelledSession;
-      
+
       // Process refunds if applicable
       await _processCancellationRefund(cancelledSession);
-      
+
       debugPrint('✅ Telehealth session cancelled');
       return true;
     } catch (e) {
@@ -449,7 +478,7 @@ class HealthcareIntegrationService {
     DateTime? endDate,
   }) async {
     debugPrint('📋 Generating medical report...');
-    
+
     final report = MedicalReport(
       reportId: DateTime.now().millisecondsSinceEpoch.toString(),
       userId: user.id,
@@ -466,25 +495,39 @@ class HealthcareIntegrationService {
     // Generate report content based on type
     switch (type) {
       case ReportType.comprehensive:
-        report.sections = await _generateComprehensiveReportSections(user, cycles, trackingData);
+        report.sections = await _generateComprehensiveReportSections(
+          user,
+          cycles,
+          trackingData,
+        );
         break;
       case ReportType.cycleAnalysis:
-        report.sections = await _generateCycleAnalysisSections(cycles, trackingData);
+        report.sections = await _generateCycleAnalysisSections(
+          cycles,
+          trackingData,
+        );
         break;
       case ReportType.symptomSummary:
         report.sections = await _generateSymptomSummarySections(trackingData);
         break;
       case ReportType.fertilityAssessment:
-        report.sections = await _generateFertilityAssessmentSections(cycles, trackingData);
+        report.sections = await _generateFertilityAssessmentSections(
+          cycles,
+          trackingData,
+        );
         break;
     }
 
     // Add clinical insights and recommendations
     report.insights = await _generateClinicalInsights(cycles, trackingData);
-    report.recommendations = await _generateMedicalRecommendations(user, cycles, trackingData);
-    
+    report.recommendations = await _generateMedicalRecommendations(
+      user,
+      cycles,
+      trackingData,
+    );
+
     _generatedReports.add(report);
-    
+
     debugPrint('✅ Medical report generated: ${report.reportId}');
     return report;
   }
@@ -543,33 +586,41 @@ class HealthcareIntegrationService {
           'resource': {
             'resourceType': 'Patient',
             'id': user.id,
-            'name': [{'given': [user.name]}],
+            'name': [
+              {
+                'given': [user.name],
+              },
+            ],
             'birthDate': user.birthDate?.toIso8601String(),
             'gender': 'female',
-          }
+          },
         },
-        ...cycles.map((cycle) => {
-          'resource': {
-            'resourceType': 'Observation',
-            'id': 'cycle_${cycle.id}',
-            'status': 'final',
-            'code': {
-              'coding': [{
-                'system': 'http://loinc.org',
-                'code': '21840-4',
-                'display': 'Menstrual cycle length'
-              }]
+        ...cycles.map(
+          (cycle) => {
+            'resource': {
+              'resourceType': 'Observation',
+              'id': 'cycle_${cycle.id}',
+              'status': 'final',
+              'code': {
+                'coding': [
+                  {
+                    'system': 'http://loinc.org',
+                    'code': '21840-4',
+                    'display': 'Menstrual cycle length',
+                  },
+                ],
+              },
+              'subject': {'reference': 'Patient/${user.id}'},
+              'effectiveDateTime': cycle.startDate.toIso8601String(),
+              'valueQuantity': {
+                'value': cycle.length,
+                'unit': 'day',
+                'system': 'http://unitsofmeasure.org',
+                'code': 'd',
+              },
             },
-            'subject': {'reference': 'Patient/${user.id}'},
-            'effectiveDateTime': cycle.startDate.toIso8601String(),
-            'valueQuantity': {
-              'value': cycle.length,
-              'unit': 'day',
-              'system': 'http://unitsofmeasure.org',
-              'code': 'd'
-            }
-          }
-        }),
+          },
+        ),
       ],
     };
   }
@@ -627,17 +678,20 @@ class HealthcareIntegrationService {
     return [
       ReportSection(
         title: 'Patient Information',
-        content: 'Name: ${user.name}\nAge: ${DateTime.now().year - (user.birthDate?.year ?? 1990)}\nTracking Period: ${cycles.length} cycles',
+        content:
+            'Name: ${user.name}\nAge: ${DateTime.now().year - (user.birthDate?.year ?? 1990)}\nTracking Period: ${cycles.length} cycles',
         type: ReportSectionType.patientInfo,
       ),
       ReportSection(
         title: 'Cycle Overview',
-        content: 'Average cycle length: ${cycles.map((c) => c.length).reduce((a, b) => a + b) / cycles.length} days\nCycle regularity: Regular\nTotal cycles tracked: ${cycles.length}',
+        content:
+            'Average cycle length: ${cycles.map((c) => c.length).reduce((a, b) => a + b) / cycles.length} days\nCycle regularity: Regular\nTotal cycles tracked: ${cycles.length}',
         type: ReportSectionType.cycleAnalysis,
       ),
       ReportSection(
         title: 'Symptom Analysis',
-        content: 'Most common symptoms: Cramps, Bloating, Mood changes\nSymptom severity: Mild to Moderate\nPattern consistency: High',
+        content:
+            'Most common symptoms: Cramps, Bloating, Mood changes\nSymptom severity: Mild to Moderate\nPattern consistency: High',
         type: ReportSectionType.symptoms,
       ),
     ];

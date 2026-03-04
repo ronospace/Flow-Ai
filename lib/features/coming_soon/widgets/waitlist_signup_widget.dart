@@ -16,7 +16,7 @@ class _WaitlistSignupWidgetState extends State<WaitlistSignupWidget> {
   final _nameController = TextEditingController();
   bool _isLoading = false;
   bool _isSubscribed = false;
-  
+
   final Set<String> _selectedInterests = {};
   final List<String> _interests = [
     'AI Predictions',
@@ -85,11 +85,7 @@ class _WaitlistSignupWidgetState extends State<WaitlistSignupWidget> {
             ),
             borderRadius: BorderRadius.circular(12),
           ),
-          child: const Icon(
-            Icons.science,
-            color: Colors.white,
-            size: 24,
-          ),
+          child: const Icon(Icons.science, color: Colors.white, size: 24),
         ),
         const SizedBox(width: 16),
         Expanded(
@@ -130,16 +126,23 @@ class _WaitlistSignupWidgetState extends State<WaitlistSignupWidget> {
             labelStyle: TextStyle(color: Colors.white.withValues(alpha: 0.7)),
             hintText: 'Enter your full name',
             hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
-            prefixIcon: Icon(Icons.person_outline, color: Colors.white.withValues(alpha: 0.7)),
+            prefixIcon: Icon(
+              Icons.person_outline,
+              color: Colors.white.withValues(alpha: 0.7),
+            ),
             filled: true,
             fillColor: Colors.white.withValues(alpha: 0.1),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
+              borderSide: BorderSide(
+                color: Colors.white.withValues(alpha: 0.3),
+              ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
+              borderSide: BorderSide(
+                color: Colors.white.withValues(alpha: 0.3),
+              ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
@@ -153,9 +156,9 @@ class _WaitlistSignupWidgetState extends State<WaitlistSignupWidget> {
             return null;
           },
         ),
-        
+
         const SizedBox(height: 16),
-        
+
         // Email Field
         TextFormField(
           controller: _emailController,
@@ -166,16 +169,23 @@ class _WaitlistSignupWidgetState extends State<WaitlistSignupWidget> {
             labelStyle: TextStyle(color: Colors.white.withValues(alpha: 0.7)),
             hintText: 'your.email@example.com',
             hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
-            prefixIcon: Icon(Icons.email_outlined, color: Colors.white.withValues(alpha: 0.7)),
+            prefixIcon: Icon(
+              Icons.email_outlined,
+              color: Colors.white.withValues(alpha: 0.7),
+            ),
             filled: true,
             fillColor: Colors.white.withValues(alpha: 0.1),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
+              borderSide: BorderSide(
+                color: Colors.white.withValues(alpha: 0.3),
+              ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
+              borderSide: BorderSide(
+                color: Colors.white.withValues(alpha: 0.3),
+              ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
@@ -226,14 +236,17 @@ class _WaitlistSignupWidgetState extends State<WaitlistSignupWidget> {
               },
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
-                  color: isSelected 
+                  color: isSelected
                       ? AppTheme.primaryRose.withValues(alpha: 0.3)
                       : Colors.white.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: isSelected 
+                    color: isSelected
                         ? AppTheme.primaryRose
                         : Colors.white.withValues(alpha: 0.3),
                   ),
@@ -242,18 +255,16 @@ class _WaitlistSignupWidgetState extends State<WaitlistSignupWidget> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     if (isSelected) ...[
-                      Icon(
-                        Icons.check,
-                        size: 16,
-                        color: Colors.white,
-                      ),
+                      Icon(Icons.check, size: 16, color: Colors.white),
                       const SizedBox(width: 4),
                     ],
                     Text(
                       interest,
                       style: TextStyle(
                         fontSize: 13,
-                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                        fontWeight: isSelected
+                            ? FontWeight.w600
+                            : FontWeight.w500,
                         color: Colors.white,
                       ),
                     ),
@@ -278,11 +289,7 @@ class _WaitlistSignupWidgetState extends State<WaitlistSignupWidget> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            Icons.shield_outlined,
-            size: 16,
-            color: AppTheme.accentMint,
-          ),
+          Icon(Icons.shield_outlined, size: 16, color: AppTheme.accentMint),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
@@ -329,10 +336,7 @@ class _WaitlistSignupWidgetState extends State<WaitlistSignupWidget> {
                   SizedBox(width: 8),
                   Text(
                     'Join Beta Program',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                 ],
               ),
@@ -357,15 +361,11 @@ class _WaitlistSignupWidgetState extends State<WaitlistSignupWidget> {
               color: AppTheme.successGreen,
               shape: BoxShape.circle,
             ),
-            child: const Icon(
-              Icons.check,
-              color: Colors.white,
-              size: 40,
-            ),
+            child: const Icon(Icons.check, color: Colors.white, size: 40),
           ).animate().scale(delay: 100.ms).then().shake(),
-          
+
           const SizedBox(height: 24),
-          
+
           const Text(
             'Welcome to the Beta Program!',
             style: TextStyle(
@@ -375,9 +375,9 @@ class _WaitlistSignupWidgetState extends State<WaitlistSignupWidget> {
             ),
             textAlign: TextAlign.center,
           ).animate().fadeIn(delay: 300.ms),
-          
+
           const SizedBox(height: 12),
-          
+
           Text(
             'Thank you for joining! You\'ll receive an email with beta access details within the next 24 hours.',
             style: TextStyle(
@@ -387,9 +387,9 @@ class _WaitlistSignupWidgetState extends State<WaitlistSignupWidget> {
             ),
             textAlign: TextAlign.center,
           ).animate().fadeIn(delay: 500.ms),
-          
+
           const SizedBox(height: 24),
-          
+
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -428,17 +428,17 @@ class _WaitlistSignupWidgetState extends State<WaitlistSignupWidget> {
 
   Future<void> _handleSubmit() async {
     if (!_formKey.currentState!.validate()) return;
-    
+
     setState(() => _isLoading = true);
 
     final messenger = ScaffoldMessenger.of(context);
-    
+
     try {
       // Simulate API call
       await Future.delayed(const Duration(seconds: 2));
 
       if (!mounted) return;
-      
+
       // Here you would typically send data to your backend
       final userData = {
         'name': _nameController.text.trim(),
@@ -446,19 +446,18 @@ class _WaitlistSignupWidgetState extends State<WaitlistSignupWidget> {
         'interests': _selectedInterests.toList(),
         'timestamp': DateTime.now().toIso8601String(),
       };
-      
+
       debugPrint('Beta signup data: $userData');
-      
+
       setState(() {
         _isLoading = false;
         _isSubscribed = true;
       });
-      
     } catch (e) {
       if (!mounted) return;
 
       setState(() => _isLoading = false);
-      
+
       messenger.showSnackBar(
         SnackBar(
           content: Text('Error signing up: $e'),

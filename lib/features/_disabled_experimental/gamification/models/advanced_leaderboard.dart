@@ -45,15 +45,16 @@ class AdvancedLeaderboard {
   );
 
   /// Get friends on leaderboard
-  List<LeaderboardEntry> get friendEntries => entries.where((entry) => entry.isFriend).toList();
+  List<LeaderboardEntry> get friendEntries =>
+      entries.where((entry) => entry.isFriend).toList();
 
   /// Get entries around user's rank
   List<LeaderboardEntry> getEntriesAroundUser({int range = 3}) {
     if (userRank == null) return [];
-    
+
     final startIndex = (userRank! - range - 1).clamp(0, entries.length);
     final endIndex = (userRank! + range).clamp(0, entries.length);
-    
+
     return entries.sublist(startIndex, endIndex);
   }
 
@@ -63,17 +64,17 @@ class AdvancedLeaderboard {
   /// Get time remaining if time-limited
   Duration? get timeRemaining {
     if (!isTimeLimited || endDate == null) return null;
-    
+
     final now = DateTime.now();
     if (now.isAfter(endDate!)) return Duration.zero;
-    
+
     return endDate!.difference(now);
   }
 
   /// Get leaderboard status
   LeaderboardStatus get status {
     if (!isActive) return LeaderboardStatus.inactive;
-    
+
     final now = DateTime.now();
     if (startDate != null && now.isBefore(startDate!)) {
       return LeaderboardStatus.upcoming;
@@ -81,11 +82,11 @@ class AdvancedLeaderboard {
     if (endDate != null && now.isAfter(endDate!)) {
       return LeaderboardStatus.ended;
     }
-    
+
     return LeaderboardStatus.active;
   }
 
-  factory AdvancedLeaderboard.fromJson(Map<String, dynamic> json) => 
+  factory AdvancedLeaderboard.fromJson(Map<String, dynamic> json) =>
       _$AdvancedLeaderboardFromJson(json);
   Map<String, dynamic> toJson() => _$AdvancedLeaderboardToJson(this);
 }
@@ -132,7 +133,7 @@ class LeaderboardEntry {
   /// Get rank change since last period
   RankChange get rankChange {
     if (previousRank == null) return RankChange.new_;
-    
+
     final change = previousRank! - rank;
     if (change > 0) return RankChange.up;
     if (change < 0) return RankChange.down;
@@ -159,11 +160,14 @@ class LeaderboardEntry {
     final tierThresholds = _getTierThresholds();
     final currentThreshold = tierThresholds[tier] ?? 0;
     final nextTier = _getNextTier();
-    final nextThreshold = nextTier != null ? tierThresholds[nextTier] ?? currentThreshold : currentThreshold;
-    
+    final nextThreshold = nextTier != null
+        ? tierThresholds[nextTier] ?? currentThreshold
+        : currentThreshold;
+
     if (nextThreshold == currentThreshold) return 1.0;
-    
-    return ((score - currentThreshold) / (nextThreshold - currentThreshold)).clamp(0.0, 1.0);
+
+    return ((score - currentThreshold) / (nextThreshold - currentThreshold))
+        .clamp(0.0, 1.0);
   }
 
   UserTier? _getNextTier() {
@@ -191,7 +195,7 @@ class LeaderboardEntry {
     };
   }
 
-  factory LeaderboardEntry.fromJson(Map<String, dynamic> json) => 
+  factory LeaderboardEntry.fromJson(Map<String, dynamic> json) =>
       _$LeaderboardEntryFromJson(json);
   Map<String, dynamic> toJson() => _$LeaderboardEntryToJson(this);
 
@@ -318,11 +322,28 @@ enum UserTier {
       case UserTier.silver:
         return ['Exclusive silver badges', '10% bonus XP', 'Priority support'];
       case UserTier.gold:
-        return ['Gold exclusive content', '25% bonus XP', 'Special challenges', 'Custom themes'];
+        return [
+          'Gold exclusive content',
+          '25% bonus XP',
+          'Special challenges',
+          'Custom themes',
+        ];
       case UserTier.platinum:
-        return ['Platinum exclusive features', '50% bonus XP', 'Beta access', 'Platinum badge', 'Expert consultations'];
+        return [
+          'Platinum exclusive features',
+          '50% bonus XP',
+          'Beta access',
+          'Platinum badge',
+          'Expert consultations',
+        ];
       case UserTier.diamond:
-        return ['All premium features', '100% bonus XP', 'VIP status', 'Exclusive events', 'Personal coaching'];
+        return [
+          'All premium features',
+          '100% bonus XP',
+          'VIP status',
+          'Exclusive events',
+          'Personal coaching',
+        ];
     }
   }
 }
@@ -377,7 +398,7 @@ class LeaderboardMetadata {
     required this.createdAt,
   });
 
-  factory LeaderboardMetadata.fromJson(Map<String, dynamic> json) => 
+  factory LeaderboardMetadata.fromJson(Map<String, dynamic> json) =>
       _$LeaderboardMetadataFromJson(json);
   Map<String, dynamic> toJson() => _$LeaderboardMetadataToJson(this);
 }
@@ -412,7 +433,7 @@ class LeaderboardReward {
   /// Check if rank qualifies for this reward
   bool qualifiesForReward(int rank) => rankRange.contains(rank);
 
-  factory LeaderboardReward.fromJson(Map<String, dynamic> json) => 
+  factory LeaderboardReward.fromJson(Map<String, dynamic> json) =>
       _$LeaderboardRewardFromJson(json);
   Map<String, dynamic> toJson() => _$LeaderboardRewardToJson(this);
 }
@@ -423,10 +444,7 @@ class RankRange {
   final int minRank;
   final int maxRank;
 
-  RankRange({
-    required this.minRank,
-    required this.maxRank,
-  });
+  RankRange({required this.minRank, required this.maxRank});
 
   /// Check if rank is in range
   bool contains(int rank) => rank >= minRank && rank <= maxRank;
@@ -437,7 +455,8 @@ class RankRange {
     return '#$minRank - #$maxRank';
   }
 
-  factory RankRange.fromJson(Map<String, dynamic> json) => _$RankRangeFromJson(json);
+  factory RankRange.fromJson(Map<String, dynamic> json) =>
+      _$RankRangeFromJson(json);
   Map<String, dynamic> toJson() => _$RankRangeToJson(this);
 }
 
@@ -481,7 +500,7 @@ class LeaderboardEntryStats {
   /// Get engagement level based on stats
   EngagementLevel get engagementLevel {
     final score = totalActiveDays + (currentStreak * 2) + achievementsEarned;
-    
+
     if (score >= 100) return EngagementLevel.exceptional;
     if (score >= 50) return EngagementLevel.high;
     if (score >= 25) return EngagementLevel.moderate;
@@ -489,7 +508,7 @@ class LeaderboardEntryStats {
     return EngagementLevel.minimal;
   }
 
-  factory LeaderboardEntryStats.fromJson(Map<String, dynamic> json) => 
+  factory LeaderboardEntryStats.fromJson(Map<String, dynamic> json) =>
       _$LeaderboardEntryStatsFromJson(json);
   Map<String, dynamic> toJson() => _$LeaderboardEntryStatsToJson(this);
 
@@ -550,7 +569,7 @@ class LeaderboardFilter {
     }
 
     // Engagement filter
-    if (minEngagement != null && 
+    if (minEngagement != null &&
         entry.stats.engagementLevel.index < minEngagement!.index) {
       return false;
     }
@@ -600,7 +619,7 @@ class LeaderboardAnalytics {
   /// Get most common tier
   UserTier get mostCommonTier {
     if (tierDistribution.isEmpty) return UserTier.bronze;
-    
+
     return tierDistribution.entries
         .reduce((a, b) => a.value > b.value ? a : b)
         .key;
@@ -610,18 +629,18 @@ class LeaderboardAnalytics {
   double get competitionLevel {
     // Higher when scores are closer together
     if (scoreDistribution.isEmpty) return 0.0;
-    
+
     final scores = scoreDistribution.keys.toList()..sort();
     if (scores.length < 2) return 0.0;
-    
+
     final range = scores.last - scores.first;
     final avgGap = range / scores.length;
-    
+
     // Normalize to 0-1 scale (smaller gaps = higher competition)
     return (1000 - avgGap).clamp(0, 1000) / 1000;
   }
 
-  factory LeaderboardAnalytics.fromJson(Map<String, dynamic> json) => 
+  factory LeaderboardAnalytics.fromJson(Map<String, dynamic> json) =>
       _$LeaderboardAnalyticsFromJson(json);
   Map<String, dynamic> toJson() => _$LeaderboardAnalyticsToJson(this);
 }

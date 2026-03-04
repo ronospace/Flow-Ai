@@ -51,7 +51,7 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
         child: Consumer<SubscriptionProvider>(
           builder: (context, subscriptionProvider, child) {
             final yearlySavings = subscriptionProvider.calculateYearlySavings();
-            
+
             return Stack(
               children: [
                 // Gradient background
@@ -62,12 +62,14 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
                       end: Alignment.bottomRight,
                       colors: [
                         Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                        Theme.of(context).colorScheme.secondary.withOpacity(0.1),
+                        Theme.of(
+                          context,
+                        ).colorScheme.secondary.withOpacity(0.1),
                       ],
                     ),
                   ),
                 ),
-                
+
                 // Content
                 CustomScrollView(
                   slivers: [
@@ -85,9 +87,9 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
                                   onPressed: () => Navigator.of(context).pop(),
                                 ),
                               ),
-                            
+
                             const SizedBox(height: 16),
-                            
+
                             // Crown icon
                             Container(
                               padding: const EdgeInsets.all(20),
@@ -106,72 +108,87 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
                                 color: Colors.white,
                               ),
                             ),
-                            
+
                             const SizedBox(height: 24),
-                            
+
                             // Title
                             Text(
                               'Unlock Premium',
-                              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: Theme.of(context).textTheme.headlineLarge
+                                  ?.copyWith(fontWeight: FontWeight.bold),
                             ),
-                            
+
                             const SizedBox(height: 8),
-                            
+
                             // Subtitle
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 32),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 32,
+                              ),
                               child: Text(
                                 'Get unlimited access to all premium features',
                                 textAlign: TextAlign.center,
-                                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
-                                ),
+                                style: Theme.of(context).textTheme.bodyLarge
+                                    ?.copyWith(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSurface.withOpacity(0.7),
+                                    ),
                               ),
                             ),
-                            
+
                             const SizedBox(height: 32),
-                            
+
                             // Premium features
                             _buildFeaturesList(context),
-                            
+
                             const SizedBox(height: 32),
-                            
+
                             // Subscription options
                             _buildSubscriptionOptions(
                               context,
                               subscriptionProvider,
                               yearlySavings,
                             ),
-                            
+
                             const SizedBox(height: 24),
-                            
+
                             // Subscribe button
-                            _buildSubscribeButton(context, subscriptionProvider),
-                            
+                            _buildSubscribeButton(
+                              context,
+                              subscriptionProvider,
+                            ),
+
                             const SizedBox(height: 16),
-                            
+
                             // Restore purchases
                             TextButton(
-                              onPressed: () => _restorePurchases(context, subscriptionProvider),
+                              onPressed: () => _restorePurchases(
+                                context,
+                                subscriptionProvider,
+                              ),
                               child: const Text('Restore Purchases'),
                             ),
-                            
+
                             const SizedBox(height: 8),
-                            
+
                             // Terms and privacy
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 32),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 32,
+                              ),
                               child: Text(
                                 'Subscription automatically renews unless canceled. Terms and Privacy Policy apply.',
                                 textAlign: TextAlign.center,
-                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
-                                ),
+                                style: Theme.of(context).textTheme.bodySmall
+                                    ?.copyWith(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSurface.withOpacity(0.5),
+                                    ),
                               ),
                             ),
-                            
+
                             const SizedBox(height: 32),
                           ],
                         ),
@@ -179,14 +196,12 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
                     ),
                   ],
                 ),
-                
+
                 // Loading overlay
                 if (subscriptionProvider.isLoading)
                   Container(
                     color: Colors.black.withOpacity(0.5),
-                    child: const Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                    child: const Center(child: CircularProgressIndicator()),
                   ),
               ],
             );
@@ -287,17 +302,16 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
                 Text(
                   feature.description,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withOpacity(0.7),
                   ),
                 ),
               ],
             ),
           ),
           if (feature.highlight)
-            Icon(
-              Icons.star,
-              color: Theme.of(context).colorScheme.primary,
-            ),
+            Icon(Icons.star, color: Theme.of(context).colorScheme.primary),
         ],
       ),
     );
@@ -327,10 +341,10 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
                 });
               },
             ),
-          
+
           if (monthlyProduct != null && yearlyProduct != null)
             const SizedBox(height: 12),
-          
+
           // Yearly option
           if (yearlyProduct != null)
             _buildSubscriptionOption(
@@ -395,16 +409,12 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
                     : Colors.transparent,
               ),
               child: isSelected
-                  ? const Icon(
-                      Icons.check,
-                      size: 16,
-                      color: Colors.white,
-                    )
+                  ? const Icon(Icons.check, size: 16, color: Colors.white)
                   : null,
             ),
-            
+
             const SizedBox(width: 16),
-            
+
             // Product info
             Expanded(
               child: Column(
@@ -416,9 +426,8 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
                         product.billingPeriod == BillingPeriod.yearly
                             ? 'Yearly'
                             : 'Monthly',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       if (isPopular) ...[
                         const SizedBox(width: 8),
@@ -433,10 +442,11 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
                           ),
                           child: Text(
                             'BEST VALUE',
-                            style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                              color: Colors.amber.shade900,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: Theme.of(context).textTheme.labelSmall
+                                ?.copyWith(
+                                  color: Colors.amber.shade900,
+                                  fontWeight: FontWeight.bold,
+                                ),
                           ),
                         ),
                       ],
@@ -454,22 +464,24 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
                 ],
               ),
             ),
-            
+
             // Price
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
                   product.priceString,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 if (product.billingPeriod == BillingPeriod.yearly)
                   Text(
                     '${product.getPricePerMonth().toStringAsFixed(2)}/mo',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withOpacity(0.7),
                     ),
                   ),
               ],
@@ -578,9 +590,7 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
       navigator.pop(true);
     } else {
       messenger.showSnackBar(
-        const SnackBar(
-          content: Text('No purchases found to restore'),
-        ),
+        const SnackBar(content: Text('No purchases found to restore')),
       );
     }
   }

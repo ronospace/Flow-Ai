@@ -107,11 +107,13 @@ class Challenge {
   bool get isExpired => DateTime.now().isAfter(endDate);
   bool get isStarted => DateTime.now().isAfter(startDate);
   bool get isOngoing => isStarted && !isExpired && isActive;
-  
-  Duration get timeRemaining => isExpired ? Duration.zero : endDate.difference(DateTime.now());
+
+  Duration get timeRemaining =>
+      isExpired ? Duration.zero : endDate.difference(DateTime.now());
   Duration get totalDuration => endDate.difference(startDate);
-  
-  double get progressPercentage => target > 0 ? (progress / target).clamp(0.0, 1.0) : 0.0;
+
+  double get progressPercentage =>
+      target > 0 ? (progress / target).clamp(0.0, 1.0) : 0.0;
 
   String get statusText {
     if (isCompleted) return 'Completed';
@@ -203,11 +205,11 @@ class Challenge {
       isActive: json['isActive'] as bool? ?? true,
       isCompleted: json['isCompleted'] as bool? ?? false,
       hasJoined: json['hasJoined'] as bool? ?? false,
-      joinedAt: json['joinedAt'] != null 
-          ? DateTime.parse(json['joinedAt'] as String) 
+      joinedAt: json['joinedAt'] != null
+          ? DateTime.parse(json['joinedAt'] as String)
           : null,
-      completedAt: json['completedAt'] != null 
-          ? DateTime.parse(json['completedAt'] as String) 
+      completedAt: json['completedAt'] != null
+          ? DateTime.parse(json['completedAt'] as String)
           : null,
       progress: json['progress'] as double? ?? 0.0,
       target: json['target'] as double? ?? 1.0,

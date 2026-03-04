@@ -6,7 +6,8 @@ import '../models/daily_tracking_data.dart';
 
 /// Simplified Advanced ML Prediction Models for stable build
 class AdvancedPredictionModels {
-  static final AdvancedPredictionModels _instance = AdvancedPredictionModels._internal();
+  static final AdvancedPredictionModels _instance =
+      AdvancedPredictionModels._internal();
   factory AdvancedPredictionModels() => _instance;
   static AdvancedPredictionModels get instance => _instance;
   AdvancedPredictionModels._internal();
@@ -18,10 +19,10 @@ class AdvancedPredictionModels {
   Future<void> initialize() async {
     try {
       debugPrint('🤖 Initializing Advanced ML Prediction Models...');
-      
+
       // Simulate initialization delay
       await Future.delayed(const Duration(milliseconds: 500));
-      
+
       _isInitialized = true;
       debugPrint('✅ Advanced ML Models initialized successfully');
     } catch (e) {
@@ -44,13 +45,21 @@ class AdvancedPredictionModels {
     // Simple irregularity calculation
     final lengths = cycles.map((c) => c.length).toList();
     final avgLength = lengths.reduce((a, b) => a + b) / lengths.length;
-    final variance = lengths.map((l) => (l - avgLength) * (l - avgLength)).reduce((a, b) => a + b) / lengths.length;
+    final variance =
+        lengths
+            .map((l) => (l - avgLength) * (l - avgLength))
+            .reduce((a, b) => a + b) /
+        lengths.length;
     final irregularityScore = (variance / 100).clamp(0.0, 1.0);
 
     return SimpleCycleIrregularityPrediction(
       irregularityScore: irregularityScore,
       confidence: 0.8,
-      riskLevel: irregularityScore > 0.7 ? 'High' : irregularityScore > 0.4 ? 'Medium' : 'Low',
+      riskLevel: irregularityScore > 0.7
+          ? 'High'
+          : irregularityScore > 0.4
+          ? 'Medium'
+          : 'Low',
       recommendations: _generateSimpleRecommendations(irregularityScore),
     );
   }
@@ -66,9 +75,10 @@ class AdvancedPredictionModels {
       return SimpleFertilityWindowOptimization.empty();
     }
 
-    final avgCycleLength = cycles.map((c) => c.length).reduce((a, b) => a + b) / cycles.length;
+    final avgCycleLength =
+        cycles.map((c) => c.length).reduce((a, b) => a + b) / cycles.length;
     final ovulationDay = avgCycleLength - 14; // Standard luteal phase
-    
+
     final now = DateTime.now();
     return SimpleFertilityWindowOptimization(
       optimalWindow: {
@@ -89,22 +99,27 @@ class AdvancedPredictionModels {
     Map<String, dynamic>? biometricData,
   ) async {
     final results = <SimpleConditionDetectionResult>[];
-    
+
     if (cycles.length >= 3) {
       final lengths = cycles.map((c) => c.length).toList();
       final variance = _calculateVariance(lengths);
-      
+
       // Simple PCOS detection based on cycle irregularity
       if (variance > 50) {
-        results.add(SimpleConditionDetectionResult(
-          condition: 'PCOS',
-          riskLevel: 'Medium',
-          confidence: 0.6,
-          recommendations: ['Consult with healthcare provider', 'Track symptoms closely'],
-        ));
+        results.add(
+          SimpleConditionDetectionResult(
+            condition: 'PCOS',
+            riskLevel: 'Medium',
+            confidence: 0.6,
+            recommendations: [
+              'Consult with healthcare provider',
+              'Track symptoms closely',
+            ],
+          ),
+        );
       }
     }
-    
+
     return results;
   }
 
@@ -116,15 +131,22 @@ class AdvancedPredictionModels {
     Map<String, dynamic>? biometricData,
   ) async {
     final insights = <String>[];
-    
+
     if (cycles.isNotEmpty) {
-      final avgLength = cycles.map((c) => c.length).reduce((a, b) => a + b) / cycles.length;
-      insights.add('Your average cycle length is ${avgLength.toStringAsFixed(1)} days');
-      
+      final avgLength =
+          cycles.map((c) => c.length).reduce((a, b) => a + b) / cycles.length;
+      insights.add(
+        'Your average cycle length is ${avgLength.toStringAsFixed(1)} days',
+      );
+
       if (avgLength < 25) {
-        insights.add('Your cycles are shorter than average - consider tracking stress levels');
+        insights.add(
+          'Your cycles are shorter than average - consider tracking stress levels',
+        );
       } else if (avgLength > 32) {
-        insights.add('Your cycles are longer than average - monitor for any concerning patterns');
+        insights.add(
+          'Your cycles are longer than average - monitor for any concerning patterns',
+        );
       } else {
         insights.add('Your cycle length is within normal range');
       }
@@ -146,28 +168,34 @@ class AdvancedPredictionModels {
     Map<String, dynamic>? context,
   ) async {
     final predictions = <SimpleSymptomPredictionResult>[];
-    
+
     // Simple predictions based on cycle phase
-    predictions.add(SimpleSymptomPredictionResult(
-      symptomType: 'Cramps',
-      probability: 0.7,
-      confidence: 0.8,
-      timing: 'Next 3-5 days',
-    ));
-    
-    predictions.add(SimpleSymptomPredictionResult(
-      symptomType: 'Mood Changes',
-      probability: 0.6,
-      confidence: 0.7,
-      timing: 'Next week',
-    ));
-    
+    predictions.add(
+      SimpleSymptomPredictionResult(
+        symptomType: 'Cramps',
+        probability: 0.7,
+        confidence: 0.8,
+        timing: 'Next 3-5 days',
+      ),
+    );
+
+    predictions.add(
+      SimpleSymptomPredictionResult(
+        symptomType: 'Mood Changes',
+        probability: 0.6,
+        confidence: 0.7,
+        timing: 'Next week',
+      ),
+    );
+
     return predictions;
   }
 
   /// Process user feedback (simplified)
   Future<void> processFeedback(SimpleMLFeedback feedback) async {
-    debugPrint('📝 Processing ML feedback: ${feedback.type} - ${feedback.wasAccurate}');
+    debugPrint(
+      '📝 Processing ML feedback: ${feedback.type} - ${feedback.wasAccurate}',
+    );
     // In a real implementation, this would update model weights
   }
 
@@ -175,7 +203,8 @@ class AdvancedPredictionModels {
   double _calculateVariance(List<int> values) {
     if (values.isEmpty) return 0.0;
     final mean = values.reduce((a, b) => a + b) / values.length;
-    return values.map((v) => (v - mean) * (v - mean)).reduce((a, b) => a + b) / values.length;
+    return values.map((v) => (v - mean) * (v - mean)).reduce((a, b) => a + b) /
+        values.length;
   }
 
   List<String> _generateSimpleRecommendations(double irregularityScore) {
@@ -221,7 +250,8 @@ class SimpleCycleIrregularityPrediction {
     required this.recommendations,
   });
 
-  factory SimpleCycleIrregularityPrediction.empty() => SimpleCycleIrregularityPrediction(
+  factory SimpleCycleIrregularityPrediction.empty() =>
+      SimpleCycleIrregularityPrediction(
         irregularityScore: 0.0,
         confidence: 0.0,
         riskLevel: 'Unknown',
@@ -240,7 +270,8 @@ class SimpleFertilityWindowOptimization {
     required this.confidence,
   });
 
-  factory SimpleFertilityWindowOptimization.empty() => SimpleFertilityWindowOptimization(
+  factory SimpleFertilityWindowOptimization.empty() =>
+      SimpleFertilityWindowOptimization(
         optimalWindow: {},
         fertilityScore: 0.0,
         confidence: 0.0,
@@ -294,9 +325,5 @@ class SimpleMLFeedback {
   final bool wasAccurate;
   final String? notes;
 
-  SimpleMLFeedback({
-    required this.type,
-    required this.wasAccurate,
-    this.notes,
-  });
+  SimpleMLFeedback({required this.type, required this.wasAccurate, this.notes});
 }

@@ -43,7 +43,7 @@ class _AdvancedChartWidgetState extends State<AdvancedChartWidget>
       parent: _animationController,
       curve: Curves.easeOutCubic,
     );
-    
+
     if (widget.animated) {
       _animationController.forward();
     } else {
@@ -84,18 +84,15 @@ class _AdvancedChartWidgetState extends State<AdvancedChartWidget>
         children: [
           Text(
             widget.title,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
           ).animate().fadeIn(duration: 300.ms).slideY(begin: -0.2),
           const SizedBox(height: 20),
           AnimatedBuilder(
             animation: _animation,
             builder: (context, child) {
-              return SizedBox(
-                height: 250,
-                child: _buildChart(),
-              );
+              return SizedBox(height: 250, child: _buildChart());
             },
           ),
         ],
@@ -124,10 +121,7 @@ class _AdvancedChartWidgetState extends State<AdvancedChartWidget>
           drawVerticalLine: false,
           horizontalInterval: 1,
           getDrawingHorizontalLine: (value) {
-            return FlLine(
-              color: Colors.grey.withOpacity(0.1),
-              strokeWidth: 1,
-            );
+            return FlLine(color: Colors.grey.withOpacity(0.1), strokeWidth: 1);
           },
         ),
         titlesData: FlTitlesData(
@@ -146,10 +140,7 @@ class _AdvancedChartWidgetState extends State<AdvancedChartWidget>
               getTitlesWidget: (value, meta) {
                 return Text(
                   value.toStringAsFixed(0),
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: 10,
-                  ),
+                  style: const TextStyle(color: Colors.grey, fontSize: 10),
                 );
               },
             ),
@@ -161,10 +152,7 @@ class _AdvancedChartWidgetState extends State<AdvancedChartWidget>
               getTitlesWidget: (value, meta) {
                 return Text(
                   value.toStringAsFixed(0),
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: 10,
-                  ),
+                  style: const TextStyle(color: Colors.grey, fontSize: 10),
                 );
               },
             ),
@@ -180,10 +168,7 @@ class _AdvancedChartWidgetState extends State<AdvancedChartWidget>
             spots: widget.data.asMap().entries.map((entry) {
               final index = entry.key;
               final point = entry.value;
-              return FlSpot(
-                index.toDouble(),
-                point.value * _animation.value,
-              );
+              return FlSpot(index.toDouble(), point.value * _animation.value);
             }).toList(),
             isCurved: true,
             gradient: LinearGradient(
@@ -313,20 +298,11 @@ class _AdvancedChartWidgetState extends State<AdvancedChartWidget>
   }
 }
 
-enum ChartType {
-  line,
-  bar,
-  area,
-  pie,
-}
+enum ChartType { line, bar, area, pie }
 
 class ChartDataPoint {
   final double value;
   final String label;
 
-  ChartDataPoint({
-    required this.value,
-    required this.label,
-  });
+  ChartDataPoint({required this.value, required this.label});
 }
-

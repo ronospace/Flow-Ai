@@ -55,7 +55,10 @@ class _CycleBuddyWidgetState extends State<CycleBuddyWidget>
               child: widget.availableBuddies.isNotEmpty
                   ? Badge(
                       label: Text('${widget.availableBuddies.length}'),
-                      child: const Tab(icon: Icon(Icons.people_outline), text: 'Find Buddies'),
+                      child: const Tab(
+                        icon: Icon(Icons.people_outline),
+                        text: 'Find Buddies',
+                      ),
                     )
                   : null,
             ),
@@ -65,7 +68,10 @@ class _CycleBuddyWidgetState extends State<CycleBuddyWidget>
               child: widget.pendingRequests.isNotEmpty
                   ? Badge(
                       label: Text('${widget.pendingRequests.length}'),
-                      child: const Tab(icon: Icon(Icons.schedule), text: 'Requests'),
+                      child: const Tab(
+                        icon: Icon(Icons.schedule),
+                        text: 'Requests',
+                      ),
                     )
                   : null,
             ),
@@ -75,7 +81,10 @@ class _CycleBuddyWidgetState extends State<CycleBuddyWidget>
               child: widget.currentBuddies.isNotEmpty
                   ? Badge(
                       label: Text('${widget.currentBuddies.length}'),
-                      child: const Tab(icon: Icon(Icons.favorite), text: 'My Buddies'),
+                      child: const Tab(
+                        icon: Icon(Icons.favorite),
+                        text: 'My Buddies',
+                      ),
                     )
                   : null,
             ),
@@ -162,7 +171,10 @@ class _CycleBuddyWidgetState extends State<CycleBuddyWidget>
       padding: const EdgeInsets.symmetric(vertical: 8),
       itemCount: widget.availableBuddies.length,
       itemBuilder: (context, index) {
-        return _buildBuddyCard(widget.availableBuddies[index], isAvailable: true);
+        return _buildBuddyCard(
+          widget.availableBuddies[index],
+          isAvailable: true,
+        );
       },
     );
   }
@@ -227,7 +239,11 @@ class _CycleBuddyWidgetState extends State<CycleBuddyWidget>
     );
   }
 
-  Widget _buildBuddyCard(CycleBuddy buddy, {bool isAvailable = false, bool isConnected = false}) {
+  Widget _buildBuddyCard(
+    CycleBuddy buddy, {
+    bool isAvailable = false,
+    bool isConnected = false,
+  }) {
     return Card(
       margin: const EdgeInsets.only(bottom: 8.0),
       child: Padding(
@@ -239,7 +255,9 @@ class _CycleBuddyWidgetState extends State<CycleBuddyWidget>
               children: [
                 CircleAvatar(
                   radius: 24,
-                  backgroundColor: Theme.of(context).primaryColor.withValues(alpha: 0.1),
+                  backgroundColor: Theme.of(
+                    context,
+                  ).primaryColor.withValues(alpha: 0.1),
                   child: Text(
                     buddy.name[0].toUpperCase(),
                     style: TextStyle(
@@ -258,7 +276,10 @@ class _CycleBuddyWidgetState extends State<CycleBuddyWidget>
                         children: [
                           Text(
                             buddy.name,
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           const SizedBox(width: 8),
                           if (buddy.isOnline)
@@ -274,7 +295,10 @@ class _CycleBuddyWidgetState extends State<CycleBuddyWidget>
                       ),
                       Text(
                         'Age ${buddy.age} • ${_formatLocation(buddy.location)}',
-                        style: const TextStyle(fontSize: 12, color: Colors.grey),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
                       ),
                     ],
                   ),
@@ -350,7 +374,9 @@ class _CycleBuddyWidgetState extends State<CycleBuddyWidget>
               children: [
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: Theme.of(context).primaryColor.withValues(alpha: 0.1),
+                  backgroundColor: Theme.of(
+                    context,
+                  ).primaryColor.withValues(alpha: 0.1),
                   child: Text(
                     request.senderName[0].toUpperCase(),
                     style: TextStyle(
@@ -367,11 +393,17 @@ class _CycleBuddyWidgetState extends State<CycleBuddyWidget>
                     children: [
                       Text(
                         request.senderName,
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Text(
                         'Sent ${_formatTimestamp(request.createdAt)}',
-                        style: const TextStyle(fontSize: 12, color: Colors.grey),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
                       ),
                     ],
                   ),
@@ -388,7 +420,10 @@ class _CycleBuddyWidgetState extends State<CycleBuddyWidget>
                 ),
                 child: Text(
                   request.message,
-                  style: const TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontStyle: FontStyle.italic,
+                  ),
                 ),
               ),
             ],
@@ -397,16 +432,20 @@ class _CycleBuddyWidgetState extends State<CycleBuddyWidget>
               children: [
                 Expanded(
                   child: ElevatedButton.icon(
-                    onPressed: () => widget.onRespondToBuddyRequest(request.id, true),
+                    onPressed: () =>
+                        widget.onRespondToBuddyRequest(request.id, true),
                     icon: const Icon(Icons.check, size: 16),
                     label: const Text('Accept'),
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: OutlinedButton.icon(
-                    onPressed: () => widget.onRespondToBuddyRequest(request.id, false),
+                    onPressed: () =>
+                        widget.onRespondToBuddyRequest(request.id, false),
                     icon: const Icon(Icons.close, size: 16),
                     label: const Text('Decline'),
                     style: OutlinedButton.styleFrom(
@@ -457,11 +496,16 @@ class _CycleBuddyWidgetState extends State<CycleBuddyWidget>
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Theme.of(context).primaryColor.withValues(alpha: 0.1)),
+        border: Border.all(
+          color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
+        ),
       ),
       child: Row(
         children: [
-          _buildCycleInfoItem('Cycle Length', '${buddy.averageCycleLength} days'),
+          _buildCycleInfoItem(
+            'Cycle Length',
+            '${buddy.averageCycleLength} days',
+          ),
           const SizedBox(width: 16),
           _buildCycleInfoItem('Phase', buddy.currentPhase),
           const SizedBox(width: 16),
@@ -482,10 +526,7 @@ class _CycleBuddyWidgetState extends State<CycleBuddyWidget>
             color: Theme.of(context).primaryColor,
           ),
         ),
-        Text(
-          label,
-          style: const TextStyle(fontSize: 10, color: Colors.grey),
-        ),
+        Text(label, style: const TextStyle(fontSize: 10, color: Colors.grey)),
       ],
     );
   }
@@ -503,7 +544,9 @@ class _CycleBuddyWidgetState extends State<CycleBuddyWidget>
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Remove Buddy'),
-          content: Text('Are you sure you want to remove ${buddy.name} as your cycle buddy?'),
+          content: Text(
+            'Are you sure you want to remove ${buddy.name} as your cycle buddy?',
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),

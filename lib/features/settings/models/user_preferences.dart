@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum AppThemeMode {
-  light,
-  dark,
-  system,
-}
+enum AppThemeMode { light, dark, system }
 
 enum AppLanguage {
   english,
@@ -159,7 +155,8 @@ class UserPreferences {
       symptomReminders: symptomReminders ?? this.symptomReminders,
       reminderDaysBefore: reminderDaysBefore ?? this.reminderDaysBefore,
       aiInsightsEnabled: aiInsightsEnabled ?? this.aiInsightsEnabled,
-      hapticFeedbackEnabled: hapticFeedbackEnabled ?? this.hapticFeedbackEnabled,
+      hapticFeedbackEnabled:
+          hapticFeedbackEnabled ?? this.hapticFeedbackEnabled,
       soundsEnabled: soundsEnabled ?? this.soundsEnabled,
       avatarUrl: avatarUrl ?? this.avatarUrl,
       syncWithCycleSync: syncWithCycleSync ?? this.syncWithCycleSync,
@@ -218,7 +215,9 @@ class UserPreferences {
       cycleSyncUserId: json['cycleSyncUserId'],
       privacyMode: json['privacyMode'] ?? false,
       biometricAuth: json['biometricAuth'] ?? false,
-      lastUpdated: DateTime.parse(json['lastUpdated'] ?? DateTime.now().toIso8601String()),
+      lastUpdated: DateTime.parse(
+        json['lastUpdated'] ?? DateTime.now().toIso8601String(),
+      ),
     );
   }
 }

@@ -25,7 +25,12 @@ class PremiumFeatureWidget extends StatelessWidget {
         final isLocked = !hasFeature;
 
         if (isCompact) {
-          return _buildCompactCard(context, hasFeature, isLocked, premiumProvider);
+          return _buildCompactCard(
+            context,
+            hasFeature,
+            isLocked,
+            premiumProvider,
+          );
         }
 
         return _buildFullCard(context, hasFeature, isLocked, premiumProvider);
@@ -33,7 +38,12 @@ class PremiumFeatureWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildCompactCard(BuildContext context, bool hasFeature, bool isLocked, PremiumProvider provider) {
+  Widget _buildCompactCard(
+    BuildContext context,
+    bool hasFeature,
+    bool isLocked,
+    PremiumProvider provider,
+  ) {
     return Card(
       elevation: isLocked ? 1 : 2,
       child: Padding(
@@ -51,12 +61,14 @@ class PremiumFeatureWidget extends StatelessWidget {
                       Expanded(
                         child: Text(
                           feature.name,
-                          style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: isLocked 
-                              ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1)
-                              : null,
-                          ),
+                          style: Theme.of(context).textTheme.titleSmall
+                              ?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: isLocked
+                                    ? Theme.of(context).colorScheme.onSurface
+                                          .withValues(alpha: 0.1)
+                                    : null,
+                              ),
                         ),
                       ),
                       if (isLocked) _buildLockIcon(context),
@@ -65,9 +77,13 @@ class PremiumFeatureWidget extends StatelessWidget {
                   Text(
                     feature.description,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: isLocked 
-                        ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1)
-                        : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1),
+                      color: isLocked
+                          ? Theme.of(
+                              context,
+                            ).colorScheme.onSurface.withValues(alpha: 0.1)
+                          : Theme.of(
+                              context,
+                            ).colorScheme.onSurface.withValues(alpha: 0.1),
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -85,28 +101,39 @@ class PremiumFeatureWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildFullCard(BuildContext context, bool hasFeature, bool isLocked, PremiumProvider provider) {
+  Widget _buildFullCard(
+    BuildContext context,
+    bool hasFeature,
+    bool isLocked,
+    PremiumProvider provider,
+  ) {
     return Card(
       elevation: isLocked ? 1 : 3,
       child: Container(
-        decoration: isLocked 
-          ? BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
+        decoration: isLocked
+            ? BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.outline.withValues(alpha: 0.1),
+                ),
+              )
+            : BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Theme.of(
+                      context,
+                    ).colorScheme.primary.withValues(alpha: 0.1),
+                    Theme.of(
+                      context,
+                    ).colorScheme.secondary.withValues(alpha: 0.1),
+                  ],
+                ),
               ),
-            )
-          : BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
-                  Theme.of(context).colorScheme.secondary.withValues(alpha: 0.1),
-                ],
-              ),
-            ),
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -126,12 +153,18 @@ class PremiumFeatureWidget extends StatelessWidget {
                             Expanded(
                               child: Text(
                                 feature.name,
-                                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: isLocked 
-                                    ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1)
-                                    : Theme.of(context).colorScheme.primary,
-                                ),
+                                style: Theme.of(context).textTheme.titleLarge
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: isLocked
+                                          ? Theme.of(context)
+                                                .colorScheme
+                                                .onSurface
+                                                .withValues(alpha: 0.1)
+                                          : Theme.of(
+                                              context,
+                                            ).colorScheme.primary,
+                                    ),
                               ),
                             ),
                             if (isLocked) _buildLockIcon(context),
@@ -141,11 +174,14 @@ class PremiumFeatureWidget extends StatelessWidget {
                         const SizedBox(height: 8),
                         Text(
                           feature.description,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: isLocked 
-                              ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1)
-                              : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1),
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: isLocked
+                                    ? Theme.of(context).colorScheme.onSurface
+                                          .withValues(alpha: 0.1)
+                                    : Theme.of(context).colorScheme.onSurface
+                                          .withValues(alpha: 0.1),
+                              ),
                         ),
                       ],
                     ),
@@ -180,16 +216,16 @@ class PremiumFeatureWidget extends StatelessWidget {
       width: 48,
       height: 48,
       decoration: BoxDecoration(
-        color: isLocked 
-          ? Theme.of(context).colorScheme.outline.withValues(alpha: 0.1)
-          : Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+        color: isLocked
+            ? Theme.of(context).colorScheme.outline.withValues(alpha: 0.1)
+            : Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Icon(
         _getFeatureIcon(),
-        color: isLocked 
-          ? Theme.of(context).colorScheme.outline
-          : Theme.of(context).colorScheme.primary,
+        color: isLocked
+            ? Theme.of(context).colorScheme.outline
+            : Theme.of(context).colorScheme.primary,
         size: 24,
       ),
     );
@@ -217,11 +253,7 @@ class PremiumFeatureWidget extends StatelessWidget {
         color: Colors.green.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: const Icon(
-        Icons.check_circle,
-        size: 16,
-        color: Colors.green,
-      ),
+      child: const Icon(Icons.check_circle, size: 16, color: Colors.green),
     );
   }
 
@@ -233,18 +265,24 @@ class PremiumFeatureWidget extends StatelessWidget {
           'Benefits:',
           style: Theme.of(context).textTheme.titleSmall?.copyWith(
             fontWeight: FontWeight.bold,
-            color: isLocked 
-              ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1)
-              : Theme.of(context).colorScheme.primary,
+            color: isLocked
+                ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1)
+                : Theme.of(context).colorScheme.primary,
           ),
         ),
         const SizedBox(height: 8),
-        ...feature.benefits.map((benefit) => _buildBenefitItem(context, benefit, isLocked)),
+        ...feature.benefits.map(
+          (benefit) => _buildBenefitItem(context, benefit, isLocked),
+        ),
       ],
     );
   }
 
-  Widget _buildBenefitItem(BuildContext context, String benefit, bool isLocked) {
+  Widget _buildBenefitItem(
+    BuildContext context,
+    String benefit,
+    bool isLocked,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
@@ -255,9 +293,9 @@ class PremiumFeatureWidget extends StatelessWidget {
             width: 6,
             height: 6,
             decoration: BoxDecoration(
-              color: isLocked 
-                ? Theme.of(context).colorScheme.outline.withValues(alpha: 0.1)
-                : Theme.of(context).colorScheme.primary,
+              color: isLocked
+                  ? Theme.of(context).colorScheme.outline.withValues(alpha: 0.1)
+                  : Theme.of(context).colorScheme.primary,
               shape: BoxShape.circle,
             ),
           ),
@@ -266,9 +304,13 @@ class PremiumFeatureWidget extends StatelessWidget {
             child: Text(
               benefit,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: isLocked 
-                  ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1)
-                  : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1),
+                color: isLocked
+                    ? Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withValues(alpha: 0.1)
+                    : Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withValues(alpha: 0.1),
               ),
             ),
           ),
@@ -280,7 +322,7 @@ class PremiumFeatureWidget extends StatelessWidget {
   Widget _buildUsageInfo(BuildContext context, PremiumProvider provider) {
     final usage = provider.getFeatureUsage(feature.type);
     final limit = feature.usage?.limit;
-    
+
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -298,9 +340,9 @@ class PremiumFeatureWidget extends StatelessWidget {
             children: [
               Text(
                 'Usage this month',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontWeight: FontWeight.w500,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w500),
               ),
               Text(
                 limit != null ? '$usage / $limit' : usage.toString(),
@@ -315,11 +357,13 @@ class PremiumFeatureWidget extends StatelessWidget {
             const SizedBox(height: 8),
             LinearProgressIndicator(
               value: limit > 0 ? (usage / limit).clamp(0.0, 1.0) : 0.0,
-              backgroundColor: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
+              backgroundColor: Theme.of(
+                context,
+              ).colorScheme.outline.withValues(alpha: 0.1),
               valueColor: AlwaysStoppedAnimation<Color>(
-                usage >= limit 
-                  ? Colors.red 
-                  : Theme.of(context).colorScheme.primary,
+                usage >= limit
+                    ? Colors.red
+                    : Theme.of(context).colorScheme.primary,
               ),
             ),
           ],
@@ -332,10 +376,12 @@ class PremiumFeatureWidget extends StatelessWidget {
     return SizedBox(
       width: isCompact ? null : double.infinity,
       child: ElevatedButton.icon(
-        onPressed: onUpgradePressed ?? () {
-          // Default upgrade action - navigate to premium subscription screen
-          Navigator.of(context).pushNamed('/premium');
-        },
+        onPressed:
+            onUpgradePressed ??
+            () {
+              // Default upgrade action - navigate to premium subscription screen
+              Navigator.of(context).pushNamed('/premium');
+            },
         style: ElevatedButton.styleFrom(
           padding: EdgeInsets.symmetric(
             vertical: isCompact ? 8 : 12,
@@ -345,10 +391,7 @@ class PremiumFeatureWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(isCompact ? 8 : 12),
           ),
         ),
-        icon: Icon(
-          Icons.diamond,
-          size: isCompact ? 16 : 20,
-        ),
+        icon: Icon(Icons.diamond, size: isCompact ? 16 : 20),
         label: Text(
           'Upgrade',
           style: TextStyle(
@@ -369,10 +412,7 @@ class PremiumFeatureWidget extends StatelessWidget {
               _showFeatureDetails(context);
             },
             icon: const Icon(Icons.info_outline, size: 16),
-            label: const Text(
-              'Learn More',
-              style: TextStyle(fontSize: 12),
-            ),
+            label: const Text('Learn More', style: TextStyle(fontSize: 12)),
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
             ),
@@ -385,10 +425,7 @@ class PremiumFeatureWidget extends StatelessWidget {
               _useFeature(context);
             },
             icon: const Icon(Icons.play_arrow, size: 16),
-            label: const Text(
-              'Use Now',
-              style: TextStyle(fontSize: 12),
-            ),
+            label: const Text('Use Now', style: TextStyle(fontSize: 12)),
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
             ),
@@ -441,31 +478,33 @@ class PremiumFeatureWidget extends StatelessWidget {
                 const SizedBox(height: 16),
                 Text(
                   'Benefits:',
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
-                ...feature.benefits.map((benefit) => Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(
-                        Icons.check,
-                        size: 16,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          benefit,
-                          style: Theme.of(context).textTheme.bodySmall,
+                ...feature.benefits.map(
+                  (benefit) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.check,
+                          size: 16,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
-                      ),
-                    ],
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            benefit,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                )),
+                ),
               ],
               if (feature.helpUrl != null) ...[
                 const SizedBox(height: 16),
@@ -491,11 +530,13 @@ class PremiumFeatureWidget extends StatelessWidget {
 
   void _useFeature(BuildContext context) {
     final provider = context.read<PremiumProvider>();
-    
+
     if (!provider.canUseFeature(feature.type)) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('${feature.name} is not available with your current subscription'),
+          content: Text(
+            '${feature.name} is not available with your current subscription',
+          ),
           backgroundColor: Colors.orange,
         ),
       );
@@ -504,7 +545,7 @@ class PremiumFeatureWidget extends StatelessWidget {
 
     // Record feature usage
     provider.recordFeatureUsage(feature.type);
-    
+
     // Show success message
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -512,7 +553,7 @@ class PremiumFeatureWidget extends StatelessWidget {
         backgroundColor: Colors.green,
       ),
     );
-    
+
     // Here you would typically navigate to the feature or trigger its functionality
     // For now, we'll just show a placeholder message
   }
@@ -537,15 +578,17 @@ class PremiumFeatureList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: features
-          .map((feature) => Padding(
-                padding: const EdgeInsets.only(bottom: 16),
-                child: PremiumFeatureWidget(
-                  feature: feature,
-                  isCompact: isCompact,
-                  showUpgradeButton: showUpgradeButtons,
-                  onUpgradePressed: onUpgradePressed,
-                ),
-              ))
+          .map(
+            (feature) => Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: PremiumFeatureWidget(
+                feature: feature,
+                isCompact: isCompact,
+                showUpgradeButton: showUpgradeButtons,
+                onUpgradePressed: onUpgradePressed,
+              ),
+            ),
+          )
           .toList(),
     );
   }
@@ -572,53 +615,63 @@ class PremiumFeatureComparison extends StatelessWidget {
           children: [
             Text(
               'Feature Comparison',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: DataTable(
                 columns: [
-                  const DataColumn(
-                    label: Text('Feature'),
-                  ),
-                  ...tiers.map((tier) => DataColumn(
-                    label: Text(
-                      tier,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                  const DataColumn(label: Text('Feature')),
+                  ...tiers.map(
+                    (tier) => DataColumn(
+                      label: Text(
+                        tier,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
-                  )),
+                  ),
                 ],
-                rows: features.map((feature) => DataRow(
-                  cells: [
-                    DataCell(
-                      Row(
-                        children: [
-                          Icon(
-                            _getFeatureIcon(feature.type),
-                            size: 16,
-                            color: Theme.of(context).colorScheme.primary,
+                rows: features
+                    .map(
+                      (feature) => DataRow(
+                        cells: [
+                          DataCell(
+                            Row(
+                              children: [
+                                Icon(
+                                  _getFeatureIcon(feature.type),
+                                  size: 16,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(feature.name),
+                              ],
+                            ),
                           ),
-                          const SizedBox(width: 8),
-                          Text(feature.name),
+                          ...tiers.map(
+                            (tier) => DataCell(
+                              Icon(
+                                _isFeatureAvailableInTier(feature.type, tier)
+                                    ? Icons.check_circle
+                                    : Icons.cancel,
+                                color:
+                                    _isFeatureAvailableInTier(
+                                      feature.type,
+                                      tier,
+                                    )
+                                    ? Colors.green
+                                    : Colors.red.withValues(alpha: 0.1),
+                                size: 20,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
-                    ),
-                    ...tiers.map((tier) => DataCell(
-                      Icon(
-                        _isFeatureAvailableInTier(feature.type, tier)
-                          ? Icons.check_circle
-                          : Icons.cancel,
-                        color: _isFeatureAvailableInTier(feature.type, tier)
-                          ? Colors.green
-                          : Colors.red.withValues(alpha: 0.1),
-                        size: 20,
-                      ),
-                    )),
-                  ],
-                )).toList(),
+                    )
+                    .toList(),
               ),
             ),
           ],

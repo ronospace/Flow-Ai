@@ -12,7 +12,7 @@ class BuildConfig {
   /// Get required dependencies for each platform
   Map<String, List<String>> getRequiredDependencies() {
     final platformInfo = _platformService.platformInfo;
-    
+
     return {
       'common': [
         'flutter',
@@ -49,16 +49,8 @@ class BuildConfig {
         'vibration',
         'haptic_feedback',
       ],
-      'ios': [
-        'sign_in_with_apple',
-        'cupertino_icons',
-        'health',
-      ],
-      'android': [
-        'google_sign_in',
-        'android_intent_plus',
-        'health',
-      ],
+      'ios': ['sign_in_with_apple', 'cupertino_icons', 'health'],
+      'android': ['google_sign_in', 'android_intent_plus', 'health'],
       'web': [
         'firebase_auth_web',
         'firebase_firestore_web',
@@ -94,7 +86,7 @@ class BuildConfig {
   /// Get platform-specific compiler definitions
   Map<String, String> getCompilerDefinitions() {
     final platformInfo = _platformService.platformInfo;
-    
+
     final definitions = <String, String>{
       'FLUTTER_COMPILED': 'true',
       'APP_VERSION': '1.0.0',
@@ -118,10 +110,7 @@ class BuildConfig {
     }
 
     if (platformInfo.platform == TargetPlatform.iOS) {
-      definitions.addAll({
-        'IOS_PLATFORM': 'true',
-        'ENABLE_IMPELLER': 'true',
-      });
+      definitions.addAll({'IOS_PLATFORM': 'true', 'ENABLE_IMPELLER': 'true'});
     }
 
     return definitions;
@@ -130,7 +119,7 @@ class BuildConfig {
   /// Get build arguments for different platforms
   Map<String, List<String>> getBuildArguments() {
     final platformInfo = _platformService.platformInfo;
-    
+
     final args = <String, List<String>>{};
 
     if (platformInfo.platform == TargetPlatform.android) {
@@ -219,7 +208,7 @@ class BuildConfig {
   /// Get desktop build configurations
   Map<String, dynamic> getDesktopBuildConfig() {
     final platformInfo = _platformService.platformInfo;
-    
+
     final config = <String, dynamic>{
       'enableAOT': !kDebugMode,
       'enableTreeShaking': !kDebugMode,
@@ -243,10 +232,7 @@ class BuildConfig {
     }
 
     if (platformInfo.platform == TargetPlatform.linux) {
-      config.addAll({
-        'enableGTK': true,
-        'gtkVersion': '3.0',
-      });
+      config.addAll({'enableGTK': true, 'gtkVersion': '3.0'});
     }
 
     return config;
@@ -256,20 +242,20 @@ class BuildConfig {
   String generatePubspecDependencies() {
     final dependencies = getRequiredDependencies();
     final platformInfo = _platformService.platformInfo;
-    
+
     final buffer = StringBuffer();
     buffer.writeln('dependencies:');
     buffer.writeln('  flutter:');
     buffer.writeln('    sdk: flutter');
     buffer.writeln();
-    
+
     // Add common dependencies
     for (final dep in dependencies['common']!) {
       if (dep != 'flutter') {
         buffer.writeln('  $dep: ^latest');
       }
     }
-    
+
     // Add platform-specific dependencies
     if (platformInfo.isMobile) {
       buffer.writeln();
@@ -278,7 +264,7 @@ class BuildConfig {
         buffer.writeln('  $dep: ^latest');
       }
     }
-    
+
     if (platformInfo.platform == TargetPlatform.iOS) {
       buffer.writeln();
       buffer.writeln('  # iOS-specific dependencies');
@@ -286,7 +272,7 @@ class BuildConfig {
         buffer.writeln('  $dep: ^latest');
       }
     }
-    
+
     if (platformInfo.platform == TargetPlatform.android) {
       buffer.writeln();
       buffer.writeln('  # Android-specific dependencies');
@@ -294,7 +280,7 @@ class BuildConfig {
         buffer.writeln('  $dep: ^latest');
       }
     }
-    
+
     if (platformInfo.isWeb) {
       buffer.writeln();
       buffer.writeln('  # Web-specific dependencies');
@@ -302,7 +288,7 @@ class BuildConfig {
         buffer.writeln('  $dep: ^latest');
       }
     }
-    
+
     if (platformInfo.isDesktop) {
       buffer.writeln();
       buffer.writeln('  # Desktop-specific dependencies');
@@ -310,21 +296,21 @@ class BuildConfig {
         buffer.writeln('  $dep: ^latest');
       }
     }
-    
+
     // Add dev dependencies
     buffer.writeln();
     buffer.writeln('dev_dependencies:');
     for (final dep in getDevDependencies()) {
       buffer.writeln('  $dep: ^latest');
     }
-    
+
     return buffer.toString();
   }
 
   /// Generate Android build.gradle configurations
   String generateAndroidBuildGradle() {
     final config = getAndroidGradleConfig();
-    
+
     return '''
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
@@ -629,9 +615,10 @@ dependencies {
   /// Generate build scripts for different platforms
   Map<String, String> generateBuildScripts() {
     final scripts = <String, String>{};
-    
+
     // Android build script
-    scripts['build_android.sh'] = '''
+    scripts['build_android.sh'] =
+        '''
 #!/bin/bash
 set -e
 
@@ -651,7 +638,8 @@ echo "✅ Android build completed"
 ''';
 
     // iOS build script
-    scripts['build_ios.sh'] = '''
+    scripts['build_ios.sh'] =
+        '''
 #!/bin/bash
 set -e
 
@@ -671,7 +659,8 @@ echo "✅ iOS build completed"
 ''';
 
     // Web build script
-    scripts['build_web.sh'] = '''
+    scripts['build_web.sh'] =
+        '''
 #!/bin/bash
 set -e
 
@@ -832,7 +821,7 @@ const String BUILD_ENVIRONMENT = ENVIRONMENT;
 /// Build utilities for fixing common platform issues
 class BuildUtilities {
   static final PlatformService _platformService = PlatformService();
-  
+
   /// Fix common iOS build issues
   static List<String> getiOSBuildFixes() {
     return [
@@ -846,7 +835,7 @@ class BuildUtilities {
       'Verify Firebase configuration files are present',
     ];
   }
-  
+
   /// Fix common Android build issues
   static List<String> getAndroidBuildFixes() {
     return [
@@ -861,7 +850,7 @@ class BuildUtilities {
       'Verify Firebase configuration files are present',
     ];
   }
-  
+
   /// Fix common web build issues
   static List<String> getWebBuildFixes() {
     return [
@@ -875,7 +864,7 @@ class BuildUtilities {
       'Optimize bundle size: Enable tree shaking',
     ];
   }
-  
+
   /// Fix common desktop build issues
   static List<String> getDesktopBuildFixes() {
     return [

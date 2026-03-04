@@ -6,7 +6,7 @@ import '../services/premium_service.dart';
 /// Provider for managing premium features and subscription state
 class PremiumProvider extends ChangeNotifier {
   final PremiumService _premiumService = PremiumService();
-  
+
   Subscription? _currentSubscription;
   List<PremiumFeature> _availableFeatures = [];
   FeatureLimits? _featureLimits;
@@ -18,7 +18,8 @@ class PremiumProvider extends ChangeNotifier {
   Subscription? get currentSubscription => _currentSubscription;
 
   /// Get available premium features
-  List<PremiumFeature> get availableFeatures => List.unmodifiable(_availableFeatures);
+  List<PremiumFeature> get availableFeatures =>
+      List.unmodifiable(_availableFeatures);
 
   /// Get feature limits based on current subscription
   FeatureLimits? get featureLimits => _featureLimits;
@@ -33,7 +34,8 @@ class PremiumProvider extends ChangeNotifier {
   String? get error => _error;
 
   /// Get monthly usage for features
-  Map<PremiumFeatureType, int> get monthlyUsage => Map.unmodifiable(_monthlyUsage);
+  Map<PremiumFeatureType, int> get monthlyUsage =>
+      Map.unmodifiable(_monthlyUsage);
 
   /// Initialize premium provider
   Future<void> initialize() async {
@@ -47,7 +49,7 @@ class PremiumProvider extends ChangeNotifier {
       await _loadSubscriptionData();
       await _loadFeatures();
       await _loadUsageData();
-      
+
       debugPrint('✅ PremiumProvider initialized');
     } catch (e) {
       _setError('Failed to initialize premium features: $e');
@@ -91,12 +93,18 @@ class PremiumProvider extends ChangeNotifier {
   }
 
   /// Purchase a subscription
-  Future<bool> purchaseSubscription(SubscriptionTier tier, PaymentMethod paymentMethod) async {
+  Future<bool> purchaseSubscription(
+    SubscriptionTier tier,
+    PaymentMethod paymentMethod,
+  ) async {
     _setLoading(true);
     _clearError();
 
     try {
-      final success = await _premiumService.purchaseSubscription(tier, paymentMethod);
+      final success = await _premiumService.purchaseSubscription(
+        tier,
+        paymentMethod,
+      );
       if (success) {
         await _loadSubscriptionData();
         await _loadFeatures();
@@ -165,13 +173,16 @@ class PremiumProvider extends ChangeNotifier {
       _monthlyUsage[featureType] = (_monthlyUsage[featureType] ?? 0) + 1;
 
       // Update feature usage count
-      final featureIndex = _availableFeatures.indexWhere((f) => f.type == featureType);
+      final featureIndex = _availableFeatures.indexWhere(
+        (f) => f.type == featureType,
+      );
       if (featureIndex != -1) {
-        _availableFeatures[featureIndex] = _availableFeatures[featureIndex].incrementUsage();
+        _availableFeatures[featureIndex] = _availableFeatures[featureIndex]
+            .incrementUsage();
       }
 
       _notifyListeners();
-      
+
       // TODO: Persist usage data to local storage or analytics service
     } catch (e) {
       debugPrint('⚠️ Failed to record feature usage: $e');
@@ -183,17 +194,23 @@ class PremiumProvider extends ChangeNotifier {
     if (_featureLimits == null) return -1; // Unlimited
 
     final currentUsage = _monthlyUsage[featureType] ?? 0;
-    
+
     switch (featureType) {
       case PremiumFeatureType.unlimitedExports:
       case PremiumFeatureType.limitedExports:
         if (_featureLimits!.hasUnlimitedExports) return -1;
-        return (_featureLimits!.maxExportsPerMonth - currentUsage).clamp(0, _featureLimits!.maxExportsPerMonth);
-        
+        return (_featureLimits!.maxExportsPerMonth - currentUsage).clamp(
+          0,
+          _featureLimits!.maxExportsPerMonth,
+        );
+
       case PremiumFeatureType.customReports:
         if (_featureLimits!.hasUnlimitedReports) return -1;
-        return (_featureLimits!.maxReportsPerMonth - currentUsage).clamp(0, _featureLimits!.maxReportsPerMonth);
-        
+        return (_featureLimits!.maxReportsPerMonth - currentUsage).clamp(
+          0,
+          _featureLimits!.maxReportsPerMonth,
+        );
+
       default:
         return -1; // Most features are unlimited once unlocked
     }
@@ -255,11 +272,11 @@ class PremiumProvider extends ChangeNotifier {
       case PremiumFeatureType.unlimitedExports:
         if (_featureLimits!.hasUnlimitedExports) return true;
         return currentUsage < _featureLimits!.maxExportsPerMonth;
-        
+
       case PremiumFeatureType.customReports:
         if (_featureLimits!.hasUnlimitedReports) return true;
         return currentUsage < _featureLimits!.maxReportsPerMonth;
-        
+
       default:
         return true; // Most features are unlimited once unlocked
     }

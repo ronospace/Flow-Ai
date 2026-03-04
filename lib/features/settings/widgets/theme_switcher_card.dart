@@ -14,7 +14,7 @@ class ThemeSwitcherCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
-    
+
     return Consumer<SettingsProvider>(
       builder: (context, settings, child) {
         return Container(
@@ -49,7 +49,10 @@ class ThemeSwitcherCard extends StatelessWidget {
                           height: 36,
                           decoration: BoxDecoration(
                             gradient: const LinearGradient(
-                              colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+                              colors: [
+                                AppTheme.primaryRose,
+                                AppTheme.primaryPurple,
+                              ],
                             ),
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -75,7 +78,9 @@ class ThemeSwitcherCard extends StatelessWidget {
                               Text(
                                 l10n.customizeAppearance,
                                 style: TextStyle(
-                                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                                  color: theme.colorScheme.onSurface.withValues(
+                                    alpha: 0.6,
+                                  ),
                                   fontSize: 12,
                                 ),
                               ),
@@ -84,9 +89,9 @@ class ThemeSwitcherCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    
+
                     const SizedBox(height: 16),
-                    
+
                     // Theme Options - Horizontal
                     Row(
                       children: [
@@ -94,7 +99,9 @@ class ThemeSwitcherCard extends StatelessWidget {
                           child: _ThemeOption(
                             icon: Icons.brightness_auto,
                             label: l10n.system,
-                            isSelected: settings.preferences.themeMode == AppThemeMode.system,
+                            isSelected:
+                                settings.preferences.themeMode ==
+                                AppThemeMode.system,
                             onTap: () {
                               HapticFeedback.lightImpact();
                               settings.updateThemeMode(AppThemeMode.system);
@@ -106,7 +113,9 @@ class ThemeSwitcherCard extends StatelessWidget {
                           child: _ThemeOption(
                             icon: Icons.light_mode,
                             label: l10n.light,
-                            isSelected: settings.preferences.themeMode == AppThemeMode.light,
+                            isSelected:
+                                settings.preferences.themeMode ==
+                                AppThemeMode.light,
                             onTap: () {
                               HapticFeedback.lightImpact();
                               settings.updateThemeMode(AppThemeMode.light);
@@ -118,7 +127,9 @@ class ThemeSwitcherCard extends StatelessWidget {
                           child: _ThemeOption(
                             icon: Icons.dark_mode,
                             label: l10n.dark,
-                            isSelected: settings.preferences.themeMode == AppThemeMode.dark,
+                            isSelected:
+                                settings.preferences.themeMode ==
+                                AppThemeMode.dark,
                             onTap: () {
                               HapticFeedback.lightImpact();
                               settings.updateThemeMode(AppThemeMode.dark);
@@ -154,7 +165,7 @@ class _ThemeOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(

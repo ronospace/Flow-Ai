@@ -14,7 +14,7 @@ class RecommendationsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     if (recommendations.isEmpty) {
       return _buildEmptyState(theme);
     }
@@ -74,7 +74,7 @@ class RecommendationsList extends StatelessWidget {
   ) {
     final priorityColor = _getPriorityColor(recommendation.priority, theme);
     final categoryIcon = _getCategoryIcon(recommendation.category);
-    
+
     return InkWell(
       onTap: () => onRecommendationTap?.call(recommendation),
       borderRadius: BorderRadius.circular(12),
@@ -83,9 +83,7 @@ class RecommendationsList extends StatelessWidget {
         decoration: BoxDecoration(
           color: theme.colorScheme.surface.withValues(alpha: 0.8),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: priorityColor.withValues(alpha: 0.3),
-          ),
+          border: Border.all(color: priorityColor.withValues(alpha: 0.3)),
           boxShadow: [
             BoxShadow(
               color: theme.shadowColor.withValues(alpha: 0.1),
@@ -106,11 +104,7 @@ class RecommendationsList extends StatelessWidget {
                     color: priorityColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Icon(
-                    categoryIcon,
-                    color: priorityColor,
-                    size: 20,
-                  ),
+                  child: Icon(categoryIcon, color: priorityColor, size: 20),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -127,7 +121,11 @@ class RecommendationsList extends StatelessWidget {
                       const SizedBox(height: 2),
                       Row(
                         children: [
-                          _buildPriorityChip(recommendation.priority, priorityColor, theme),
+                          _buildPriorityChip(
+                            recommendation.priority,
+                            priorityColor,
+                            theme,
+                          ),
                           const SizedBox(width: 8),
                           _buildCategoryChip(recommendation.category, theme),
                         ],
@@ -142,7 +140,7 @@ class RecommendationsList extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-            
+
             // Description
             Text(
               recommendation.description,
@@ -152,7 +150,7 @@ class RecommendationsList extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-            
+
             // Action items preview
             if (recommendation.actionItems.isNotEmpty) ...[
               Text(
@@ -163,32 +161,38 @@ class RecommendationsList extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 6),
-              ...recommendation.actionItems.take(2).map((item) => Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(top: 6),
-                      width: 4,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: priorityColor,
-                        shape: BoxShape.circle,
+              ...recommendation.actionItems
+                  .take(2)
+                  .map(
+                    (item) => Padding(
+                      padding: const EdgeInsets.only(bottom: 4),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(top: 6),
+                            width: 4,
+                            height: 4,
+                            decoration: BoxDecoration(
+                              color: priorityColor,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              item,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: theme.colorScheme.onSurface.withValues(
+                                  alpha: 0.7,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        item,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )),
+                  ),
               if (recommendation.actionItems.length > 2)
                 Text(
                   '+${recommendation.actionItems.length - 2} more actions',

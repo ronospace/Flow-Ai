@@ -60,9 +60,9 @@ class CycleRegularityIndicator extends StatelessWidget {
               ),
             ],
           ),
-          
+
           const SizedBox(height: 24),
-          
+
           // Regularity Score Bar
           Row(
             children: [
@@ -103,7 +103,9 @@ class CycleRegularityIndicator extends StatelessWidget {
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
-                                _getRegularityColor(regularityScore).withValues(alpha: 0.7),
+                                _getRegularityColor(
+                                  regularityScore,
+                                ).withValues(alpha: 0.7),
                                 _getRegularityColor(regularityScore),
                               ],
                             ),
@@ -117,9 +119,9 @@ class CycleRegularityIndicator extends StatelessWidget {
               ),
             ],
           ),
-          
+
           const SizedBox(height: 24),
-          
+
           // Stats Grid
           Container(
             padding: const EdgeInsets.all(16),
@@ -179,17 +181,21 @@ class CycleRegularityIndicator extends StatelessWidget {
               ],
             ),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Insight message
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: _getRegularityColor(regularityScore).withValues(alpha: 0.1),
+              color: _getRegularityColor(
+                regularityScore,
+              ).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: _getRegularityColor(regularityScore).withValues(alpha: 0.3),
+                color: _getRegularityColor(
+                  regularityScore,
+                ).withValues(alpha: 0.3),
               ),
             ),
             child: Row(
@@ -213,9 +219,9 @@ class CycleRegularityIndicator extends StatelessWidget {
               ],
             ),
           ),
-          
+
           const SizedBox(height: 12),
-          
+
           // View Sources link
           GestureDetector(
             onTap: () {
@@ -225,11 +231,7 @@ class CycleRegularityIndicator extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.menu_book,
-                  size: 14,
-                  color: AppTheme.primaryPurple,
-                ),
+                Icon(Icons.menu_book, size: 14, color: AppTheme.primaryPurple),
                 const SizedBox(width: 6),
                 Text(
                   'View Sources',
@@ -247,19 +249,20 @@ class CycleRegularityIndicator extends StatelessWidget {
     ).animate().fadeIn().slideY(begin: 0.2, end: 0);
   }
 
-  Widget _buildStat(BuildContext context, String label, String value, 
-      IconData icon, Color color) {
+  Widget _buildStat(
+    BuildContext context,
+    String label,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
-            Icon(
-              icon,
-              color: color,
-              size: 16,
-            ),
+            Icon(icon, color: color, size: 16),
             const SizedBox(width: 6),
             Text(
               label,
@@ -359,11 +362,7 @@ class CycleRegularityIndicator extends StatelessWidget {
       builder: (context) => AlertDialog(
         title: Row(
           children: [
-            Icon(
-              Icons.menu_book,
-              color: AppTheme.primaryPurple,
-              size: 20,
-            ),
+            Icon(Icons.menu_book, color: AppTheme.primaryPurple, size: 20),
             const SizedBox(width: 8),
             Text('Cycle Regularity Sources'),
           ],
@@ -419,11 +418,7 @@ class CycleRegularityIndicator extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            Icons.check_circle,
-            size: 16,
-            color: AppTheme.accentMint,
-          ),
+          Icon(Icons.check_circle, size: 16, color: AppTheme.accentMint),
           const SizedBox(width: 8),
           Expanded(
             child: Column(

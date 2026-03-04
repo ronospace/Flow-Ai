@@ -56,7 +56,7 @@ class AchievementCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 12),
-                    
+
                     // Title and Status
                     Expanded(
                       child: Column(
@@ -92,7 +92,8 @@ class AchievementCard extends StatelessWidget {
                                     ),
                                   ),
                                 )
-                              else if (achievement.isUnlocked && !achievement.isClaimed)
+                              else if (achievement.isUnlocked &&
+                                  !achievement.isClaimed)
                                 Container(
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 8,
@@ -114,7 +115,7 @@ class AchievementCard extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(height: 4),
-                          
+
                           // Difficulty Badge
                           Container(
                             padding: const EdgeInsets.symmetric(
@@ -140,20 +141,17 @@ class AchievementCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                
+
                 const SizedBox(height: 12),
-                
+
                 // Description
                 Text(
                   achievement.description,
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(color: Colors.grey[600], fontSize: 14),
                 ),
-                
+
                 const SizedBox(height: 12),
-                
+
                 // Progress Bar
                 if (!achievement.isCompleted) ...[
                   Column(
@@ -184,14 +182,16 @@ class AchievementCard extends StatelessWidget {
                       LinearProgressIndicator(
                         value: achievement.progressPercentage,
                         backgroundColor: Colors.grey[300],
-                        valueColor: AlwaysStoppedAnimation<Color>(achievement.color),
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          achievement.color,
+                        ),
                         minHeight: 4,
                       ),
                       const SizedBox(height: 8),
                     ],
                   ),
                 ],
-                
+
                 // Rewards and Action
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -199,11 +199,7 @@ class AchievementCard extends StatelessWidget {
                     // Rewards
                     Row(
                       children: [
-                        Icon(
-                          Icons.stars,
-                          size: 16,
-                          color: Colors.amber,
-                        ),
+                        Icon(Icons.stars, size: 16, color: Colors.amber),
                         const SizedBox(width: 4),
                         Text(
                           '${achievement.pointsReward} pts',
@@ -213,11 +209,7 @@ class AchievementCard extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 12),
-                        Icon(
-                          Icons.trending_up,
-                          size: 16,
-                          color: Colors.blue,
-                        ),
+                        Icon(Icons.trending_up, size: 16, color: Colors.blue),
                         const SizedBox(width: 4),
                         Text(
                           '${achievement.xpReward} XP',
@@ -228,9 +220,11 @@ class AchievementCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    
+
                     // Claim Button
-                    if (achievement.isUnlocked && !achievement.isClaimed && onClaim != null)
+                    if (achievement.isUnlocked &&
+                        !achievement.isClaimed &&
+                        onClaim != null)
                       ElevatedButton(
                         onPressed: onClaim,
                         style: ElevatedButton.styleFrom(
@@ -261,11 +255,7 @@ class AchievementGridCard extends StatelessWidget {
   final Achievement achievement;
   final VoidCallback? onTap;
 
-  const AchievementGridCard({
-    super.key,
-    required this.achievement,
-    this.onTap,
-  });
+  const AchievementGridCard({super.key, required this.achievement, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -297,22 +287,22 @@ class AchievementGridCard extends StatelessWidget {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: achievement.isUnlocked 
+                    color: achievement.isUnlocked
                         ? achievement.color.withValues(alpha: 0.1)
                         : Colors.grey.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Icon(
                     achievement.icon,
-                    color: achievement.isUnlocked 
-                        ? achievement.color 
+                    color: achievement.isUnlocked
+                        ? achievement.color
                         : Colors.grey,
                     size: 20,
                   ),
                 ),
-                
+
                 const SizedBox(height: 8),
-                
+
                 // Title
                 Text(
                   achievement.title,
@@ -322,27 +312,19 @@ class AchievementGridCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: achievement.isUnlocked 
-                        ? Colors.black87 
+                    color: achievement.isUnlocked
+                        ? Colors.black87
                         : Colors.grey,
                   ),
                 ),
-                
+
                 const SizedBox(height: 4),
-                
+
                 // Status or Progress
                 if (achievement.isClaimed)
-                  Icon(
-                    Icons.check_circle,
-                    color: Colors.green,
-                    size: 16,
-                  )
+                  Icon(Icons.check_circle, color: Colors.green, size: 16)
                 else if (achievement.isUnlocked)
-                  Icon(
-                    Icons.star,
-                    color: Colors.orange,
-                    size: 16,
-                  )
+                  Icon(Icons.star, color: Colors.orange, size: 16)
                 else if (achievement.progress > 0)
                   SizedBox(
                     width: 24,
@@ -351,15 +333,13 @@ class AchievementGridCard extends StatelessWidget {
                       value: achievement.progressPercentage,
                       strokeWidth: 2,
                       backgroundColor: Colors.grey[300],
-                      valueColor: AlwaysStoppedAnimation<Color>(achievement.color),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        achievement.color,
+                      ),
                     ),
                   )
                 else
-                  Icon(
-                    Icons.lock_outline,
-                    color: Colors.grey,
-                    size: 16,
-                  ),
+                  Icon(Icons.lock_outline, color: Colors.grey, size: 16),
               ],
             ),
           ),

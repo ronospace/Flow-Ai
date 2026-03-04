@@ -23,7 +23,7 @@ class DatabaseService {
     try {
       final documentsDirectory = await getApplicationDocumentsDirectory();
       final path = join(documentsDirectory.path, 'flowsense.db');
-      
+
       return await openDatabase(
         path,
         version: 1,
@@ -31,7 +31,9 @@ class DatabaseService {
         onUpgrade: _upgradeDatabase,
       );
     } catch (e) {
-      if (kDebugMode) { debugPrint('Database init failed, using in-memory DB: $e'); }
+      if (kDebugMode) {
+        debugPrint('Database init failed, using in-memory DB: $e');
+      }
       return await openDatabase(
         inMemoryDatabasePath,
         version: 1,
@@ -79,8 +81,12 @@ class DatabaseService {
     ''');
 
     // Create indexes for better performance
-    await db.execute('CREATE INDEX idx_cycles_start_date ON cycles(start_date)');
-    await db.execute('CREATE INDEX idx_cycles_created_at ON cycles(created_at)');
+    await db.execute(
+      'CREATE INDEX idx_cycles_start_date ON cycles(start_date)',
+    );
+    await db.execute(
+      'CREATE INDEX idx_cycles_created_at ON cycles(created_at)',
+    );
   }
 
   Future<void> _createDailyTrackingTable(Database db) async {
@@ -102,7 +108,9 @@ class DatabaseService {
       )
     ''');
 
-    await db.execute('CREATE INDEX idx_daily_tracking_date ON daily_tracking(date)');
+    await db.execute(
+      'CREATE INDEX idx_daily_tracking_date ON daily_tracking(date)',
+    );
   }
 
   Future<void> _createSymptomsTable(Database db) async {
@@ -147,7 +155,9 @@ class DatabaseService {
     ''');
 
     await db.execute('CREATE INDEX idx_predictions_type ON predictions(type)');
-    await db.execute('CREATE INDEX idx_predictions_expires_at ON predictions(expires_at)');
+    await db.execute(
+      'CREATE INDEX idx_predictions_expires_at ON predictions(expires_at)',
+    );
   }
 
   Future<void> _createFeelingsTable(Database db) async {
@@ -169,40 +179,146 @@ class DatabaseService {
 
     // Create indexes for better performance
     await db.execute('CREATE INDEX idx_feelings_user_id ON feelings(user_id)');
-    await db.execute('CREATE INDEX idx_feelings_timestamp ON feelings(timestamp)');
-    await db.execute('CREATE INDEX idx_feelings_app_type ON feelings(app_type)');
-    await db.execute('CREATE INDEX idx_feelings_user_timestamp ON feelings(user_id, timestamp)');
+    await db.execute(
+      'CREATE INDEX idx_feelings_timestamp ON feelings(timestamp)',
+    );
+    await db.execute(
+      'CREATE INDEX idx_feelings_app_type ON feelings(app_type)',
+    );
+    await db.execute(
+      'CREATE INDEX idx_feelings_user_timestamp ON feelings(user_id, timestamp)',
+    );
   }
 
   Future<void> _insertDefaultSymptoms(Database db) async {
     final defaultSymptoms = [
       // Physical symptoms
-      {'name': 'Cramps', 'category': 'Physical', 'icon': '🤕', 'color': '#FF6B6B'},
-      {'name': 'Bloating', 'category': 'Physical', 'icon': '🎈', 'color': '#4ECDC4'},
-      {'name': 'Headache', 'category': 'Physical', 'icon': '🤕', 'color': '#FFD93D'},
-      {'name': 'Back Pain', 'category': 'Physical', 'icon': '🦴', 'color': '#6BCF7F'},
-      {'name': 'Breast Tenderness', 'category': 'Physical', 'icon': '💐', 'color': '#FF8A80'},
-      {'name': 'Fatigue', 'category': 'Physical', 'icon': '😴', 'color': '#B39DDB'},
-      {'name': 'Nausea', 'category': 'Physical', 'icon': '🤢', 'color': '#81C784'},
-      {'name': 'Hot Flashes', 'category': 'Physical', 'icon': '🔥', 'color': '#FF7043'},
-      
-      // Emotional symptoms  
-      {'name': 'Mood Swings', 'category': 'Emotional', 'icon': '🎭', 'color': '#E1BEE7'},
-      {'name': 'Irritability', 'category': 'Emotional', 'icon': '😤', 'color': '#FFCDD2'},
-      {'name': 'Anxiety', 'category': 'Emotional', 'icon': '😰', 'color': '#F8BBD9'},
-      {'name': 'Depression', 'category': 'Emotional', 'icon': '😢', 'color': '#C5E1A5'},
-      {'name': 'Stress', 'category': 'Emotional', 'icon': '😵', 'color': '#FFAB91'},
-      
+      {
+        'name': 'Cramps',
+        'category': 'Physical',
+        'icon': '🤕',
+        'color': '#FF6B6B',
+      },
+      {
+        'name': 'Bloating',
+        'category': 'Physical',
+        'icon': '🎈',
+        'color': '#4ECDC4',
+      },
+      {
+        'name': 'Headache',
+        'category': 'Physical',
+        'icon': '🤕',
+        'color': '#FFD93D',
+      },
+      {
+        'name': 'Back Pain',
+        'category': 'Physical',
+        'icon': '🦴',
+        'color': '#6BCF7F',
+      },
+      {
+        'name': 'Breast Tenderness',
+        'category': 'Physical',
+        'icon': '💐',
+        'color': '#FF8A80',
+      },
+      {
+        'name': 'Fatigue',
+        'category': 'Physical',
+        'icon': '😴',
+        'color': '#B39DDB',
+      },
+      {
+        'name': 'Nausea',
+        'category': 'Physical',
+        'icon': '🤢',
+        'color': '#81C784',
+      },
+      {
+        'name': 'Hot Flashes',
+        'category': 'Physical',
+        'icon': '🔥',
+        'color': '#FF7043',
+      },
+
+      // Emotional symptoms
+      {
+        'name': 'Mood Swings',
+        'category': 'Emotional',
+        'icon': '🎭',
+        'color': '#E1BEE7',
+      },
+      {
+        'name': 'Irritability',
+        'category': 'Emotional',
+        'icon': '😤',
+        'color': '#FFCDD2',
+      },
+      {
+        'name': 'Anxiety',
+        'category': 'Emotional',
+        'icon': '😰',
+        'color': '#F8BBD9',
+      },
+      {
+        'name': 'Depression',
+        'category': 'Emotional',
+        'icon': '😢',
+        'color': '#C5E1A5',
+      },
+      {
+        'name': 'Stress',
+        'category': 'Emotional',
+        'icon': '😵',
+        'color': '#FFAB91',
+      },
+
       // Skin & Hair symptoms
-      {'name': 'Acne', 'category': 'Skin & Hair', 'icon': '🔴', 'color': '#EF9A9A'},
-      {'name': 'Oily Skin', 'category': 'Skin & Hair', 'icon': '✨', 'color': '#FFF59D'},
-      {'name': 'Dry Skin', 'category': 'Skin & Hair', 'icon': '🏜️', 'color': '#BCAAA4'},
-      
+      {
+        'name': 'Acne',
+        'category': 'Skin & Hair',
+        'icon': '🔴',
+        'color': '#EF9A9A',
+      },
+      {
+        'name': 'Oily Skin',
+        'category': 'Skin & Hair',
+        'icon': '✨',
+        'color': '#FFF59D',
+      },
+      {
+        'name': 'Dry Skin',
+        'category': 'Skin & Hair',
+        'icon': '🏜️',
+        'color': '#BCAAA4',
+      },
+
       // Digestive symptoms
-      {'name': 'Food Cravings', 'category': 'Digestive', 'icon': '🍫', 'color': '#A1887F'},
-      {'name': 'Loss of Appetite', 'category': 'Digestive', 'icon': '🚫', 'color': '#90A4AE'},
-      {'name': 'Constipation', 'category': 'Digestive', 'icon': '🚽', 'color': '#8D6E63'},
-      {'name': 'Diarrhea', 'category': 'Digestive', 'icon': '💧', 'color': '#4DD0E1'},
+      {
+        'name': 'Food Cravings',
+        'category': 'Digestive',
+        'icon': '🍫',
+        'color': '#A1887F',
+      },
+      {
+        'name': 'Loss of Appetite',
+        'category': 'Digestive',
+        'icon': '🚫',
+        'color': '#90A4AE',
+      },
+      {
+        'name': 'Constipation',
+        'category': 'Digestive',
+        'icon': '🚽',
+        'color': '#8D6E63',
+      },
+      {
+        'name': 'Diarrhea',
+        'category': 'Digestive',
+        'icon': '💧',
+        'color': '#4DD0E1',
+      },
     ];
 
     for (final symptom in defaultSymptoms) {
@@ -217,7 +333,11 @@ class DatabaseService {
     }
   }
 
-  Future<void> _upgradeDatabase(Database db, int oldVersion, int newVersion) async {
+  Future<void> _upgradeDatabase(
+    Database db,
+    int oldVersion,
+    int newVersion,
+  ) async {
     // Handle database migrations here when schema changes
     // For now, we'll just recreate tables (in production, use proper migrations)
     if (oldVersion < newVersion) {
@@ -229,7 +349,7 @@ class DatabaseService {
 
   Future<String> insertCycle(CycleData cycle) async {
     final db = await database;
-    
+
     // Map CycleData to database columns
     final data = <String, dynamic>{
       'id': cycle.id,
@@ -253,10 +373,16 @@ class DatabaseService {
       'pain': cycle.pain,
       'notes': cycle.notes != null ? (cycle.notes!['text'] ?? '') : null,
       'created_at': cycle.createdAt.toIso8601String(),
-      'updated_at': cycle.lastUpdated?.toIso8601String() ?? DateTime.now().toIso8601String(),
+      'updated_at':
+          cycle.lastUpdated?.toIso8601String() ??
+          DateTime.now().toIso8601String(),
     };
-    
-    await db.insert('cycles', data, conflictAlgorithm: ConflictAlgorithm.replace);
+
+    await db.insert(
+      'cycles',
+      data,
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
     return cycle.id;
   }
 
@@ -284,7 +410,10 @@ class DatabaseService {
     return null;
   }
 
-  Future<List<CycleData>> getCyclesByDateRange(DateTime start, DateTime end) async {
+  Future<List<CycleData>> getCyclesByDateRange(
+    DateTime start,
+    DateTime end,
+  ) async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query(
       'cycles',
@@ -304,7 +433,7 @@ class DatabaseService {
   Future<CycleData?> getCurrentCycle() async {
     final db = await database;
     final now = DateTime.now();
-    
+
     // Get cycles that might be current (started recently and not ended)
     final List<Map<String, dynamic>> maps = await db.query(
       'cycles',
@@ -323,7 +452,7 @@ class DatabaseService {
   Future<void> updateCycle(CycleData cycle) async {
     final db = await database;
     final updatedCycle = cycle.copyWith(lastUpdated: DateTime.now());
-    
+
     // Map CycleData to database columns
     final data = <String, dynamic>{
       'id': updatedCycle.id,
@@ -338,24 +467,24 @@ class DatabaseService {
       'moods': updatedCycle.moods.join(','),
       'current_phase': updatedCycle.currentPhase.name,
       'ovulation_date': updatedCycle.ovulationDate?.toIso8601String(),
-      'expected_next_period': updatedCycle.expectedNextPeriod?.toIso8601String(),
+      'expected_next_period': updatedCycle.expectedNextPeriod
+          ?.toIso8601String(),
       'fertility_score': updatedCycle.fertilityScore,
       'is_complete': updatedCycle.isComplete ? 1 : 0,
       'quality': updatedCycle.quality.name,
       'mood': updatedCycle.mood,
       'energy': updatedCycle.energy,
       'pain': updatedCycle.pain,
-      'notes': updatedCycle.notes != null ? (updatedCycle.notes!['text'] ?? '') : null,
+      'notes': updatedCycle.notes != null
+          ? (updatedCycle.notes!['text'] ?? '')
+          : null,
       'created_at': updatedCycle.createdAt.toIso8601String(),
-      'updated_at': updatedCycle.lastUpdated?.toIso8601String() ?? DateTime.now().toIso8601String(),
+      'updated_at':
+          updatedCycle.lastUpdated?.toIso8601String() ??
+          DateTime.now().toIso8601String(),
     };
-    
-    await db.update(
-      'cycles',
-      data,
-      where: 'id = ?',
-      whereArgs: [cycle.id],
-    );
+
+    await db.update('cycles', data, where: 'id = ?', whereArgs: [cycle.id]);
   }
 
   Future<void> deleteCycle(String id) async {
@@ -371,14 +500,14 @@ class DatabaseService {
     List<String>? symptoms,
     Map<String, double>? symptomSeverity,
     double? mood,
-    double? energy,  
+    double? energy,
     double? pain,
     Map<String, double>? painAreas,
     String? notes,
   }) async {
     final db = await database;
     final dateStr = date.toIso8601String().split('T')[0]; // YYYY-MM-DD format
-    
+
     final data = <String, dynamic>{
       'id': '${dateStr}_tracking',
       'date': dateStr,
@@ -388,20 +517,25 @@ class DatabaseService {
 
     if (flowIntensity != null) data['flow_intensity'] = flowIntensity.name;
     if (symptoms != null) data['symptoms'] = symptoms.join(',');
-    if (symptomSeverity != null) data['symptom_severity'] = _mapToJson(symptomSeverity);
+    if (symptomSeverity != null)
+      data['symptom_severity'] = _mapToJson(symptomSeverity);
     if (mood != null) data['mood'] = mood;
     if (energy != null) data['energy'] = energy;
     if (pain != null) data['pain'] = pain;
     if (painAreas != null) data['pain_areas'] = _mapToJson(painAreas);
     if (notes != null) data['notes'] = notes;
 
-    await db.insert('daily_tracking', data, conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.insert(
+      'daily_tracking',
+      data,
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 
   Future<Map<String, dynamic>?> getDailyTracking(DateTime date) async {
     final db = await database;
     final dateStr = date.toIso8601String().split('T')[0];
-    
+
     final List<Map<String, dynamic>> maps = await db.query(
       'daily_tracking',
       where: 'date = ?',
@@ -410,10 +544,13 @@ class DatabaseService {
 
     if (maps.isNotEmpty) {
       final data = Map<String, dynamic>.from(maps.first);
-      
+
       // Parse JSON fields
       if (data['symptoms'] != null) {
-        data['symptoms'] = (data['symptoms'] as String).split(',').where((s) => s.isNotEmpty).toList();
+        data['symptoms'] = (data['symptoms'] as String)
+            .split(',')
+            .where((s) => s.isNotEmpty)
+            .toList();
       }
       if (data['symptom_severity'] != null) {
         data['symptom_severity'] = _jsonToMap(data['symptom_severity']);
@@ -427,17 +564,20 @@ class DatabaseService {
           orElse: () => FlowIntensity.none,
         );
       }
-      
+
       return data;
     }
     return null;
   }
 
-  Future<List<Map<String, dynamic>>> getDailyTrackingRange(DateTime start, DateTime end) async {
+  Future<List<Map<String, dynamic>>> getDailyTrackingRange(
+    DateTime start,
+    DateTime end,
+  ) async {
     final db = await database;
     final startStr = start.toIso8601String().split('T')[0];
     final endStr = end.toIso8601String().split('T')[0];
-    
+
     final List<Map<String, dynamic>> maps = await db.query(
       'daily_tracking',
       where: 'date >= ? AND date <= ?',
@@ -447,13 +587,18 @@ class DatabaseService {
 
     return maps.map((data) {
       final parsedData = Map<String, dynamic>.from(data);
-      
+
       // Parse JSON fields
       if (parsedData['symptoms'] != null) {
-        parsedData['symptoms'] = (parsedData['symptoms'] as String).split(',').where((s) => s.isNotEmpty).toList();
+        parsedData['symptoms'] = (parsedData['symptoms'] as String)
+            .split(',')
+            .where((s) => s.isNotEmpty)
+            .toList();
       }
       if (parsedData['symptom_severity'] != null) {
-        parsedData['symptom_severity'] = _jsonToMap(parsedData['symptom_severity']);
+        parsedData['symptom_severity'] = _jsonToMap(
+          parsedData['symptom_severity'],
+        );
       }
       if (parsedData['pain_areas'] != null) {
         parsedData['pain_areas'] = _jsonToMap(parsedData['pain_areas']);
@@ -464,13 +609,16 @@ class DatabaseService {
           orElse: () => FlowIntensity.none,
         );
       }
-      
+
       return parsedData;
     }).toList();
   }
 
   // Alias for getDailyTrackingRange to match export service expectations
-  Future<List<Map<String, dynamic>>> getTrackingDataInRange(DateTime start, DateTime end) async {
+  Future<List<Map<String, dynamic>>> getTrackingDataInRange(
+    DateTime start,
+    DateTime end,
+  ) async {
     return getDailyTrackingRange(start, end);
   }
 
@@ -478,16 +626,22 @@ class DatabaseService {
 
   Future<List<Map<String, dynamic>>> getAllSymptoms() async {
     final db = await database;
-    return await db.query('symptoms', where: 'is_active = 1', orderBy: 'category, name');
+    return await db.query(
+      'symptoms',
+      where: 'is_active = 1',
+      orderBy: 'category, name',
+    );
   }
 
-  Future<List<Map<String, dynamic>>> getSymptomsByCategory(String category) async {
+  Future<List<Map<String, dynamic>>> getSymptomsByCategory(
+    String category,
+  ) async {
     final db = await database;
     return await db.query(
-      'symptoms', 
-      where: 'category = ? AND is_active = 1', 
+      'symptoms',
+      where: 'category = ? AND is_active = 1',
       whereArgs: [category],
-      orderBy: 'name'
+      orderBy: 'name',
     );
   }
 
@@ -495,15 +649,11 @@ class DatabaseService {
 
   Future<void> saveSetting(String key, String value) async {
     final db = await database;
-    await db.insert(
-      'user_settings',
-      {
-        'key': key,
-        'value': value,
-        'updated_at': DateTime.now().toIso8601String(),
-      },
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    await db.insert('user_settings', {
+      'key': key,
+      'value': value,
+      'updated_at': DateTime.now().toIso8601String(),
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   Future<String?> getSetting(String key) async {
@@ -523,7 +673,7 @@ class DatabaseService {
   Future<Map<String, String>> getAllSettings() async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query('user_settings');
-    
+
     final settings = <String, String>{};
     for (final map in maps) {
       settings[map['key'] as String] = map['value'] as String;
@@ -543,26 +693,22 @@ class DatabaseService {
     DateTime? expiresAt,
   }) async {
     final db = await database;
-    await db.insert(
-      'predictions',
-      {
-        'id': id,
-        'type': type,
-        'predicted_date': predictedDate?.toIso8601String(),
-        'predicted_length': predictedLength,
-        'confidence': confidence,
-        'data': _mapToJson(data),
-        'created_at': DateTime.now().toIso8601String(),
-        'expires_at': expiresAt?.toIso8601String(),
-      },
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    await db.insert('predictions', {
+      'id': id,
+      'type': type,
+      'predicted_date': predictedDate?.toIso8601String(),
+      'predicted_length': predictedLength,
+      'confidence': confidence,
+      'data': _mapToJson(data),
+      'created_at': DateTime.now().toIso8601String(),
+      'expires_at': expiresAt?.toIso8601String(),
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   Future<Map<String, dynamic>?> getPrediction(String type) async {
     final db = await database;
     final now = DateTime.now().toIso8601String();
-    
+
     final List<Map<String, dynamic>> maps = await db.query(
       'predictions',
       where: 'type = ? AND (expires_at IS NULL OR expires_at > ?)',
@@ -584,7 +730,7 @@ class DatabaseService {
   Future<void> clearExpiredPredictions() async {
     final db = await database;
     final now = DateTime.now().toIso8601String();
-    
+
     await db.delete(
       'predictions',
       where: 'expires_at IS NOT NULL AND expires_at <= ?',
@@ -607,21 +753,30 @@ class DatabaseService {
         orElse: () => FlowIntensity.medium,
       ),
       dailyData: {},
-      symptoms: map['symptoms'] != null 
-          ? (map['symptoms'] as String).split(',').where((s) => s.isNotEmpty).toList()
+      symptoms: map['symptoms'] != null
+          ? (map['symptoms'] as String)
+                .split(',')
+                .where((s) => s.isNotEmpty)
+                .toList()
           : [],
       moods: [], // Empty for now, can be populated from daily tracking data
       currentPhase: CyclePhase.values.firstWhere(
         (e) => e.name == map['current_phase'],
         orElse: () => CyclePhase.menstrual,
       ),
-      ovulationDate: map['ovulation_date'] != null ? _parseDateTime(map['ovulation_date']) : null,
-      expectedNextPeriod: map['expected_next_period'] != null ? _parseDateTime(map['expected_next_period']) : null,
+      ovulationDate: map['ovulation_date'] != null
+          ? _parseDateTime(map['ovulation_date'])
+          : null,
+      expectedNextPeriod: map['expected_next_period'] != null
+          ? _parseDateTime(map['expected_next_period'])
+          : null,
       notes: map['notes'] != null ? {"text": map['notes']} : null,
       fertilityScore: map['fertility_score']?.toDouble(),
       events: [], // Empty for now, can be populated from events table if needed
       createdAt: _parseDateTime(map['created_at']),
-      lastUpdated: map['updated_at'] != null ? _parseDateTime(map['updated_at']) : null,
+      lastUpdated: map['updated_at'] != null
+          ? _parseDateTime(map['updated_at'])
+          : null,
       isComplete: map['is_complete'] == 1 || map['is_complete'] == true,
       quality: CycleQuality.values.firstWhere(
         (e) => e.name == map['quality'],
@@ -665,11 +820,11 @@ class DatabaseService {
     if (dateValue == null) {
       return DateTime.now();
     }
-    
+
     if (dateValue is DateTime) {
       return dateValue;
     }
-    
+
     if (dateValue is String) {
       try {
         return DateTime.parse(dateValue);
@@ -678,7 +833,7 @@ class DatabaseService {
         return DateTime.now();
       }
     }
-    
+
     // Handle Firestore Timestamp
     if (dateValue.runtimeType.toString() == 'Timestamp') {
       try {
@@ -690,7 +845,7 @@ class DatabaseService {
         return DateTime.now();
       }
     }
-    
+
     // Handle milliseconds since epoch
     if (dateValue is int) {
       try {
@@ -700,12 +855,14 @@ class DatabaseService {
         return DateTime.now();
       }
     }
-    
+
     // Fallback
-    debugPrint('Unknown date format: ${dateValue.runtimeType}, value: $dateValue');
+    debugPrint(
+      'Unknown date format: ${dateValue.runtimeType}, value: $dateValue',
+    );
     return DateTime.now();
   }
-  
+
   // ===== DATABASE MANAGEMENT =====
 
   Future<void> close() async {
@@ -730,7 +887,7 @@ class DatabaseService {
 
   Future<Map<String, dynamic>> getCycleStatistics() async {
     final db = await database;
-    
+
     // Get average cycle length
     final avgLengthResult = await db.rawQuery('''
       SELECT AVG(length) as avg_length, 
@@ -765,10 +922,12 @@ class DatabaseService {
     };
   }
 
-  Future<List<Map<String, dynamic>>> getRecentTrackingData({int days = 30}) async {
+  Future<List<Map<String, dynamic>>> getRecentTrackingData({
+    int days = 30,
+  }) async {
     final db = await database;
     final startDate = DateTime.now().subtract(Duration(days: days));
-    
+
     return await db.query(
       'daily_tracking',
       where: 'date >= ?',
@@ -782,7 +941,7 @@ class DatabaseService {
   /// Store a feelings entry to the database
   Future<void> storeFeelingsEntry(dynamic feelingsEntry) async {
     final db = await database;
-    
+
     // Convert the feelings entry to a map for database storage
     final data = <String, dynamic>{
       'id': feelingsEntry.id,
@@ -792,13 +951,19 @@ class DatabaseService {
       'timestamp': feelingsEntry.timestamp.toIso8601String(),
       'notes': feelingsEntry.notes,
       'encrypted_notes': feelingsEntry.encryptedNotes,
-      'context_data': feelingsEntry.contextData.isNotEmpty ? _mapToJsonString(feelingsEntry.contextData) : null,
+      'context_data': feelingsEntry.contextData.isNotEmpty
+          ? _mapToJsonString(feelingsEntry.contextData)
+          : null,
       'app_type': feelingsEntry.appType.name,
       'created_at': DateTime.now().toIso8601String(),
       'updated_at': DateTime.now().toIso8601String(),
     };
 
-    await db.insert('feelings', data, conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.insert(
+      'feelings',
+      data,
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 
   /// Get feelings history from database
@@ -821,20 +986,20 @@ class DatabaseService {
     String? appType,
   }) async {
     final db = await database;
-    
+
     String whereClause = 'user_id = ?';
     List<dynamic> whereArgs = [userId];
-    
+
     if (startDate != null) {
       whereClause += ' AND timestamp >= ?';
       whereArgs.add(startDate.toIso8601String());
     }
-    
+
     if (endDate != null) {
       whereClause += ' AND timestamp <= ?';
       whereArgs.add(endDate.toIso8601String());
     }
-    
+
     if (appType != null) {
       whereClause += ' AND app_type = ?';
       whereArgs.add(appType);
@@ -858,25 +1023,25 @@ class DatabaseService {
     String? appType,
   }) async {
     final db = await database;
-    
+
     String whereClause = '1=1'; // Always true condition
     List<dynamic> whereArgs = [];
-    
+
     if (userId != null) {
       whereClause += ' AND user_id = ?';
       whereArgs.add(userId);
     }
-    
+
     if (startDate != null) {
       whereClause += ' AND timestamp >= ?';
       whereArgs.add(startDate.toIso8601String());
     }
-    
+
     if (endDate != null) {
       whereClause += ' AND timestamp <= ?';
       whereArgs.add(endDate.toIso8601String());
     }
-    
+
     if (appType != null) {
       whereClause += ' AND app_type = ?';
       whereArgs.add(appType);
@@ -896,7 +1061,7 @@ class DatabaseService {
   Future<void> cleanupOldFeelings({int daysToKeep = 365}) async {
     final db = await database;
     final cutoffDate = DateTime.now().subtract(Duration(days: daysToKeep));
-    
+
     await db.delete(
       'feelings',
       where: 'timestamp < ?',
@@ -905,12 +1070,15 @@ class DatabaseService {
   }
 
   /// Get feelings statistics for a user
-  Future<Map<String, dynamic>> getFeelingsStatistics(String userId, {String? appType}) async {
+  Future<Map<String, dynamic>> getFeelingsStatistics(
+    String userId, {
+    String? appType,
+  }) async {
     final db = await database;
-    
+
     String whereClause = 'user_id = ?';
     List<dynamic> whereArgs = [userId];
-    
+
     if (appType != null) {
       whereClause += ' AND app_type = ?';
       whereArgs.add(appType);
@@ -942,12 +1110,15 @@ class DatabaseService {
 
     // Get recent trend (last 30 days)
     final thirtyDaysAgo = DateTime.now().subtract(const Duration(days: 30));
-    final trendResult = await db.rawQuery('''
+    final trendResult = await db.rawQuery(
+      '''
       SELECT 
         AVG(feeling_score) as recent_avg
       FROM feelings 
       WHERE $whereClause AND timestamp >= ?
-    ''', [...whereArgs, thirtyDaysAgo.toIso8601String()]);
+    ''',
+      [...whereArgs, thirtyDaysAgo.toIso8601String()],
+    );
 
     return {
       'overall': statsResult.isNotEmpty ? statsResult.first : {},
@@ -957,7 +1128,7 @@ class DatabaseService {
   }
 
   // Helper methods for feelings data
-  
+
   /// Convert a database map to a feelings entry
   dynamic _feelingsEntryFromMap(Map<String, dynamic> map) {
     // This is a placeholder - in the actual implementation, this would create
@@ -968,35 +1139,40 @@ class DatabaseService {
   /// Process feelings map from database
   Map<String, dynamic> _processFeelingsMap(Map<String, dynamic> map) {
     final processedMap = Map<String, dynamic>.from(map);
-    
+
     // Parse timestamp
     if (processedMap['timestamp'] != null) {
       processedMap['timestamp'] = DateTime.parse(processedMap['timestamp']);
     }
-    
+
     // Parse context_data JSON
-    if (processedMap['context_data'] != null && processedMap['context_data'] is String) {
+    if (processedMap['context_data'] != null &&
+        processedMap['context_data'] is String) {
       try {
-        processedMap['context_data'] = _jsonStringToMap(processedMap['context_data']);
+        processedMap['context_data'] = _jsonStringToMap(
+          processedMap['context_data'],
+        );
       } catch (e) {
         processedMap['context_data'] = <String, dynamic>{};
       }
     } else {
       processedMap['context_data'] = <String, dynamic>{};
     }
-    
+
     return processedMap;
   }
 
   /// Convert map to JSON string
   String _mapToJsonString(Map<String, dynamic> map) {
     if (map.isEmpty) return '{}';
-    
-    final entries = map.entries.map((e) {
-      final value = e.value is String ? '"${e.value}"' : e.value.toString();
-      return '"${e.key}":$value';
-    }).join(',');
-    
+
+    final entries = map.entries
+        .map((e) {
+          final value = e.value is String ? '"${e.value}"' : e.value.toString();
+          return '"${e.key}":$value';
+        })
+        .join(',');
+
     return '{$entries}';
   }
 
@@ -1009,9 +1185,12 @@ class DatabaseService {
         for (final entry in content.split(',')) {
           final colonIndex = entry.indexOf(':');
           if (colonIndex != -1) {
-            final key = entry.substring(0, colonIndex).replaceAll('"', '').trim();
+            final key = entry
+                .substring(0, colonIndex)
+                .replaceAll('"', '')
+                .trim();
             final valueStr = entry.substring(colonIndex + 1).trim();
-            
+
             // Try to parse different value types
             dynamic value;
             if (valueStr.startsWith('"') && valueStr.endsWith('"')) {
@@ -1023,7 +1202,7 @@ class DatabaseService {
             } else {
               value = double.tryParse(valueStr) ?? valueStr;
             }
-            
+
             map[key] = value;
           }
         }
@@ -1035,7 +1214,6 @@ class DatabaseService {
   // Add a static instance getter for singleton access
   static DatabaseService get instance => _instance;
 
-
   // --- Compatibility wrappers for services ---
 
   /// Returns all daily tracking rows as raw maps (service-level export/sync).
@@ -1045,11 +1223,21 @@ class DatabaseService {
   }
 
   /// Returns a daily tracking row for a specific date.
-  Future<Map<String, dynamic>?> getTrackingByDate({required DateTime date}) async {
+  Future<Map<String, dynamic>?> getTrackingByDate({
+    required DateTime date,
+  }) async {
     final db = await database;
-    final key = DateTime(date.year, date.month, date.day).toIso8601String().split('T').first;
-    final rows = await db.query('daily_tracking', where: 'date = ?', whereArgs: [key], limit: 1);
+    final key = DateTime(
+      date.year,
+      date.month,
+      date.day,
+    ).toIso8601String().split('T').first;
+    final rows = await db.query(
+      'daily_tracking',
+      where: 'date = ?',
+      whereArgs: [key],
+      limit: 1,
+    );
     return rows.isEmpty ? null : rows.first;
   }
-
 }

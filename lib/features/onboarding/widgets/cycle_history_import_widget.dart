@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import '../models/onboarding_data.dart';
 import '../../../core/ui/adaptive_components.dart';
 
-/// 📊 Cycle History Import Widget - Advanced Data Import System  
+/// 📊 Cycle History Import Widget - Advanced Data Import System
 /// Features: Multiple import sources, CSV/JSON parsing, manual entry,
 /// smart pattern detection, and data validation
 class CycleHistoryImportWidget extends StatefulWidget {
@@ -17,7 +17,8 @@ class CycleHistoryImportWidget extends StatefulWidget {
   });
 
   @override
-  State<CycleHistoryImportWidget> createState() => _CycleHistoryImportWidgetState();
+  State<CycleHistoryImportWidget> createState() =>
+      _CycleHistoryImportWidgetState();
 }
 
 class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
@@ -32,10 +33,10 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
   bool _isFirstTimeTracking = false;
   String? _previousTrackingMethod;
   String _importMethod = 'manual';
-  
+
   final _cycleLengthController = TextEditingController();
   final _periodLengthController = TextEditingController();
-  
+
   final List<Map<String, dynamic>> _importMethods = [
     {
       'id': 'manual',
@@ -68,42 +69,17 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
   ];
 
   final List<Map<String, dynamic>> _trackingApps = [
-    {
-      'id': 'clue',
-      'name': 'Clue',
-      'icon': '🔴',
-      'supported': true,
-    },
-    {
-      'id': 'flo',
-      'name': 'Flo',
-      'icon': '🌸',
-      'supported': true,
-    },
+    {'id': 'clue', 'name': 'Clue', 'icon': '🔴', 'supported': true},
+    {'id': 'flo', 'name': 'Flo', 'icon': '🌸', 'supported': true},
     {
       'id': 'period_tracker',
       'name': 'Period Tracker',
       'icon': '📅',
       'supported': true,
     },
-    {
-      'id': 'ovia',
-      'name': 'Ovia',
-      'icon': '🦋',
-      'supported': true,
-    },
-    {
-      'id': 'glow',
-      'name': 'Glow',
-      'icon': '✨',
-      'supported': false,
-    },
-    {
-      'id': 'maya',
-      'name': 'Maya',
-      'icon': '🌙',
-      'supported': false,
-    },
+    {'id': 'ovia', 'name': 'Ovia', 'icon': '🦋', 'supported': true},
+    {'id': 'glow', 'name': 'Glow', 'icon': '✨', 'supported': false},
+    {'id': 'maya', 'name': 'Maya', 'icon': '🌙', 'supported': false},
   ];
 
   List<Map<String, DateTime>> _importedCycles = [];
@@ -124,21 +100,17 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
       vsync: this,
     );
 
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
 
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0.0, 1.0),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOutCubic,
-    ));
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0.0, 1.0), end: Offset.zero).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Curves.easeOutCubic,
+          ),
+        );
 
     _animationController.forward();
   }
@@ -155,7 +127,7 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
     _averagePeriodLength = data.averagePeriodLength;
     _isFirstTimeTracking = data.isFirstTimeTracking ?? false;
     _previousTrackingMethod = data.previousTrackingMethod;
-    
+
     _cycleLengthController.text = _averageCycleLength?.toString() ?? '';
     _periodLengthController.text = _averagePeriodLength?.toString() ?? '';
   }
@@ -183,7 +155,7 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
       'previousTrackingMethod': _previousTrackingMethod,
       'importedCycles': _importedCycles,
     };
-    
+
     widget.onDataChanged(data);
   }
 
@@ -220,7 +192,7 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
 
   Widget _buildHeader(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -231,9 +203,9 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
             color: theme.colorScheme.onSurface,
           ),
         ),
-        
+
         const SizedBox(height: 8),
-        
+
         Text(
           'Help us understand your patterns for more accurate predictions.',
           style: theme.textTheme.bodyMedium?.copyWith(
@@ -247,7 +219,7 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
 
   Widget _buildFirstTimeTrackingSection(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -298,10 +270,13 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
     );
   }
 
-  Widget _buildImportMethodCard(BuildContext context, Map<String, dynamic> method) {
+  Widget _buildImportMethodCard(
+    BuildContext context,
+    Map<String, dynamic> method,
+  ) {
     final theme = Theme.of(context);
     final isSelected = _importMethod == method['id'];
-    
+
     return InkWell(
       onTap: () {
         setState(() {
@@ -313,7 +288,7 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isSelected 
+          color: isSelected
               ? theme.colorScheme.primary.withValues(alpha: 0.1)
               : theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
@@ -332,15 +307,11 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
                 color: (method['color'] as Color).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(
-                method['icon'],
-                color: method['color'],
-                size: 24,
-              ),
+              child: Icon(method['icon'], color: method['color'], size: 24),
             ),
-            
+
             const SizedBox(width: 16),
-            
+
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -354,9 +325,9 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
                           : theme.colorScheme.onSurface,
                     ),
                   ),
-                  
+
                   const SizedBox(height: 4),
-                  
+
                   Text(
                     method['subtitle'],
                     style: theme.textTheme.bodySmall?.copyWith(
@@ -366,12 +337,9 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
                 ],
               ),
             ),
-            
+
             if (isSelected)
-              Icon(
-                Icons.check_circle,
-                color: theme.colorScheme.primary,
-              ),
+              Icon(Icons.check_circle, color: theme.colorScheme.primary),
           ],
         ),
       ),
@@ -393,7 +361,7 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
 
   Widget _buildCSVImportSection(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -408,13 +376,10 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
         children: [
           Row(
             children: [
-              Icon(
-                Icons.file_upload,
-                color: theme.colorScheme.primary,
-              ),
-              
+              Icon(Icons.file_upload, color: theme.colorScheme.primary),
+
               const SizedBox(width: 12),
-              
+
               Text(
                 'CSV Import',
                 style: theme.textTheme.titleMedium?.copyWith(
@@ -423,18 +388,18 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
               ),
             ],
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           Text(
             'Expected CSV format:',
             style: theme.textTheme.bodyMedium?.copyWith(
               fontWeight: FontWeight.w600,
             ),
           ),
-          
+
           const SizedBox(height: 8),
-          
+
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
@@ -449,23 +414,27 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
               ),
             ),
           ),
-          
+
           const SizedBox(height: 24),
-          
+
           Row(
             children: [
               Expanded(
-                child: AdaptiveComponents.adaptiveButton(context: context, text: 'Choose CSV File',
+                child: AdaptiveComponents.adaptiveButton(
+                  context: context,
+                  text: 'Choose CSV File',
                   onPressed: _handleCSVImport,
                   isPrimary: false,
                   icon: Icons.folder_open,
                 ),
               ),
-              
+
               const SizedBox(width: 12),
-              
+
               Expanded(
-                child: AdaptiveComponents.adaptiveButton(context: context, text: 'Download Template',
+                child: AdaptiveComponents.adaptiveButton(
+                  context: context,
+                  text: 'Download Template',
                   onPressed: _downloadCSVTemplate,
                   isPrimary: false,
                   icon: Icons.download,
@@ -473,7 +442,7 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
               ),
             ],
           ),
-          
+
           if (_importError != null) ...[
             const SizedBox(height: 16),
             Container(
@@ -484,13 +453,10 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
               ),
               child: Row(
                 children: [
-                  Icon(
-                    Icons.error_outline,
-                    color: theme.colorScheme.error,
-                  ),
-                  
+                  Icon(Icons.error_outline, color: theme.colorScheme.error),
+
                   const SizedBox(width: 12),
-                  
+
                   Expanded(
                     child: Text(
                       _importError!,
@@ -510,7 +476,7 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
 
   Widget _buildAppImportSection(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -529,20 +495,22 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
               fontWeight: FontWeight.bold,
             ),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           Text(
             'Select your previous tracking app:',
             style: theme.textTheme.bodyMedium,
           ),
-          
+
           const SizedBox(height: 16),
-          
-          ...(_trackingApps.map((app) => Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: _buildAppImportCard(context, app),
-          ))),
+
+          ...(_trackingApps.map(
+            (app) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: _buildAppImportCard(context, app),
+            ),
+          )),
         ],
       ),
     );
@@ -551,7 +519,7 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
   Widget _buildAppImportCard(BuildContext context, Map<String, dynamic> app) {
     final theme = Theme.of(context);
     final isSupported = app['supported'] as bool;
-    
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -573,15 +541,12 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
               borderRadius: BorderRadius.circular(8),
             ),
             child: Center(
-              child: Text(
-                app['icon'],
-                style: const TextStyle(fontSize: 20),
-              ),
+              child: Text(app['icon'], style: const TextStyle(fontSize: 20)),
             ),
           ),
-          
+
           const SizedBox(width: 16),
-          
+
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -592,7 +557,7 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                
+
                 Text(
                   isSupported ? 'Supported' : 'Coming Soon',
                   style: theme.textTheme.bodySmall?.copyWith(
@@ -604,8 +569,10 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
               ],
             ),
           ),
-          
-          AdaptiveComponents.adaptiveButton(context: context, text: 'Import',
+
+          AdaptiveComponents.adaptiveButton(
+            context: context,
+            text: 'Import',
             onPressed: isSupported ? () => _handleAppImport(app['id']) : null,
             isPrimary: false,
           ),
@@ -616,7 +583,7 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
 
   Widget _buildHealthConnectSection(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -633,18 +600,18 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
             size: 48,
             color: theme.colorScheme.primary,
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           Text(
             'Health Connect Integration',
             style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
             ),
           ),
-          
+
           const SizedBox(height: 8),
-          
+
           Text(
             'Sync your menstrual cycle data from Apple Health or Google Fit.',
             style: theme.textTheme.bodyMedium?.copyWith(
@@ -652,10 +619,12 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
             ),
             textAlign: TextAlign.center,
           ),
-          
+
           const SizedBox(height: 24),
-          
-          AdaptiveComponents.adaptiveButton(context: context, text: 'Connect Health App',
+
+          AdaptiveComponents.adaptiveButton(
+            context: context,
+            text: 'Connect Health App',
             onPressed: _handleHealthConnect,
             isPrimary: true,
             icon: Icons.sync,
@@ -671,17 +640,17 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
       children: [
         Text(
           'Basic cycle information',
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
         ),
-        
+
         const SizedBox(height: 16),
-        
+
         _buildLastPeriodDateField(context),
-        
+
         const SizedBox(height: 16),
-        
+
         Row(
           children: [
             Expanded(
@@ -709,18 +678,17 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
             ),
           ],
         ),
-        
+
         const SizedBox(height: 16),
-        
+
         _buildCycleHelpText(context),
       ],
     );
   }
 
-
   Widget _buildLastPeriodDateField(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return InkWell(
       onTap: () => _selectLastPeriodDate(context),
       borderRadius: BorderRadius.circular(12),
@@ -738,9 +706,9 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
               Icons.calendar_today,
               color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
             ),
-            
+
             const SizedBox(width: 12),
-            
+
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -751,9 +719,9 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
                       color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 2),
-                  
+
                   Text(
                     _lastPeriodDate != null
                         ? _formatDate(_lastPeriodDate!)
@@ -767,7 +735,7 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
                 ],
               ),
             ),
-            
+
             Icon(
               Icons.arrow_forward_ios,
               size: 16,
@@ -781,7 +749,7 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
 
   Widget _buildCycleHelpText(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -794,14 +762,10 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            Icons.info_outline,
-            color: theme.colorScheme.primary,
-            size: 20,
-          ),
-          
+          Icon(Icons.info_outline, color: theme.colorScheme.primary, size: 20),
+
           const SizedBox(width: 12),
-          
+
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -813,9 +777,9 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
                     color: theme.colorScheme.primary,
                   ),
                 ),
-                
+
                 const SizedBox(height: 4),
-                
+
                 Text(
                   'No worries! Use 28 days for cycle length and 5 days for period length as starting points. We\'ll learn your personal patterns over time.',
                   style: theme.textTheme.bodySmall?.copyWith(
@@ -832,7 +796,7 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
 
   Widget _buildImportedDataPreview(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -847,13 +811,10 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
         children: [
           Row(
             children: [
-              Icon(
-                Icons.check_circle,
-                color: theme.colorScheme.primary,
-              ),
-              
+              Icon(Icons.check_circle, color: theme.colorScheme.primary),
+
               const SizedBox(width: 12),
-              
+
               Text(
                 'Imported ${_importedCycles.length} cycles',
                 style: theme.textTheme.titleMedium?.copyWith(
@@ -862,47 +823,55 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
               ),
             ],
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           Text(
             'Preview of imported data:',
             style: theme.textTheme.bodyMedium?.copyWith(
               fontWeight: FontWeight.w600,
             ),
           ),
-          
+
           const SizedBox(height: 12),
-          
-          ...(_importedCycles.take(3).map((cycle) => Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.circle,
-                  size: 8,
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                ),
-                
-                const SizedBox(width: 12),
-                
-                Text(
-                  _formatDate(cycle['startDate']!),
-                  style: theme.textTheme.bodySmall,
-                ),
-                
-                if (cycle['endDate'] != null) ...[
-                  Text(
-                    ' - ${_formatDate(cycle['endDate']!)}',
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                    ),
+
+          ...(_importedCycles
+              .take(3)
+              .map(
+                (cycle) => Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.circle,
+                        size: 8,
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.5,
+                        ),
+                      ),
+
+                      const SizedBox(width: 12),
+
+                      Text(
+                        _formatDate(cycle['startDate']!),
+                        style: theme.textTheme.bodySmall,
+                      ),
+
+                      if (cycle['endDate'] != null) ...[
+                        Text(
+                          ' - ${_formatDate(cycle['endDate']!)}',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.onSurface.withValues(
+                              alpha: 0.7,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
-                ],
-              ],
-            ),
-          ))),
-          
+                ),
+              )),
+
           if (_importedCycles.length > 3) ...[
             const SizedBox(height: 8),
             Text(
@@ -932,12 +901,13 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
   Future<void> _selectLastPeriodDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: _lastPeriodDate ?? DateTime.now().subtract(const Duration(days: 28)),
+      initialDate:
+          _lastPeriodDate ?? DateTime.now().subtract(const Duration(days: 28)),
       firstDate: DateTime.now().subtract(const Duration(days: 365)),
       lastDate: DateTime.now(),
       helpText: 'SELECT LAST PERIOD START DATE',
     );
-    
+
     if (picked != null && picked != _lastPeriodDate) {
       setState(() {
         _lastPeriodDate = picked;
@@ -951,25 +921,35 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
       _isImporting = true;
       _importError = null;
     });
-    
+
     try {
       // Simulate file picker and CSV parsing
       await Future.delayed(const Duration(seconds: 2));
-      
+
       // Mock imported data
       setState(() {
         _importedCycles = [
-          {'startDate': DateTime(2024, 1, 15), 'endDate': DateTime(2024, 1, 20)},
-          {'startDate': DateTime(2024, 2, 12), 'endDate': DateTime(2024, 2, 17)},
-          {'startDate': DateTime(2024, 3, 10), 'endDate': DateTime(2024, 3, 15)},
+          {
+            'startDate': DateTime(2024, 1, 15),
+            'endDate': DateTime(2024, 1, 20),
+          },
+          {
+            'startDate': DateTime(2024, 2, 12),
+            'endDate': DateTime(2024, 2, 17),
+          },
+          {
+            'startDate': DateTime(2024, 3, 10),
+            'endDate': DateTime(2024, 3, 15),
+          },
         ];
         _previousTrackingMethod = 'CSV Import';
       });
-      
+
       _notifyDataChanged();
     } catch (e) {
       setState(() {
-        _importError = 'Failed to import CSV file. Please check the format and try again.';
+        _importError =
+            'Failed to import CSV file. Please check the format and try again.';
       });
     } finally {
       setState(() {
@@ -981,9 +961,7 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
   Future<void> _downloadCSVTemplate() async {
     // Implement CSV template download
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('CSV template download would start here'),
-      ),
+      const SnackBar(content: Text('CSV template download would start here')),
     );
   }
 
@@ -991,19 +969,27 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
     setState(() {
       _isImporting = true;
     });
-    
+
     try {
       // Simulate app import
       await Future.delayed(const Duration(seconds: 2));
-      
+
       setState(() {
         _importedCycles = [
-          {'startDate': DateTime(2024, 1, 20), 'endDate': DateTime(2024, 1, 25)},
-          {'startDate': DateTime(2024, 2, 18), 'endDate': DateTime(2024, 2, 22)},
+          {
+            'startDate': DateTime(2024, 1, 20),
+            'endDate': DateTime(2024, 1, 25),
+          },
+          {
+            'startDate': DateTime(2024, 2, 18),
+            'endDate': DateTime(2024, 2, 22),
+          },
         ];
-        _previousTrackingMethod = _trackingApps.firstWhere((app) => app['id'] == appId)['name'];
+        _previousTrackingMethod = _trackingApps.firstWhere(
+          (app) => app['id'] == appId,
+        )['name'];
       });
-      
+
       _notifyDataChanged();
     } finally {
       setState(() {
@@ -1016,20 +1002,23 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
     setState(() {
       _isImporting = true;
     });
-    
+
     try {
       // Simulate health connect
       await Future.delayed(const Duration(seconds: 3));
-      
+
       setState(() {
         _importedCycles = [
-          {'startDate': DateTime(2024, 1, 10), 'endDate': DateTime(2024, 1, 15)},
+          {
+            'startDate': DateTime(2024, 1, 10),
+            'endDate': DateTime(2024, 1, 15),
+          },
           {'startDate': DateTime(2024, 2, 8), 'endDate': DateTime(2024, 2, 13)},
           {'startDate': DateTime(2024, 3, 7), 'endDate': DateTime(2024, 3, 12)},
         ];
         _previousTrackingMethod = 'Health Connect';
       });
-      
+
       _notifyDataChanged();
     } finally {
       setState(() {
@@ -1040,10 +1029,20 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
 
   String _formatDate(DateTime date) {
     final months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
-    
+
     return '${months[date.month - 1]} ${date.day}, ${date.year}';
   }
 }

@@ -6,15 +6,12 @@ import '../../../core/theme/app_theme.dart';
 class HealthAnalyticsCard extends StatelessWidget {
   final HealthAnalytics analytics;
 
-  const HealthAnalyticsCard({
-    super.key,
-    required this.analytics,
-  });
+  const HealthAnalyticsCard({super.key, required this.analytics});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -57,7 +54,9 @@ class HealthAnalyticsCard extends StatelessWidget {
                     Text(
                       'Last updated ${_formatDate(analytics.lastUpdated)}',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.6,
+                        ),
                       ),
                     ),
                   ],
@@ -109,9 +108,7 @@ class HealthAnalyticsCard extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               // Add wellness tips card
-              Expanded(
-                child: _buildWellnessTipsCard(theme),
-              ),
+              Expanded(child: _buildWellnessTipsCard(theme)),
             ],
           ),
           const SizedBox(height: 20),
@@ -126,7 +123,7 @@ class HealthAnalyticsCard extends StatelessWidget {
   Widget _buildHealthScoreSection(ThemeData theme) {
     final score = analytics.overallHealthScore;
     final scoreColor = _getHealthScoreColor(score);
-    
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -139,9 +136,7 @@ class HealthAnalyticsCard extends StatelessWidget {
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: scoreColor.withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: scoreColor.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
@@ -184,7 +179,9 @@ class HealthAnalyticsCard extends StatelessWidget {
                       child: Text(
                         '/100',
                         style: theme.textTheme.bodyLarge?.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.7,
+                          ),
                         ),
                       ),
                     ),
@@ -218,20 +215,14 @@ class HealthAnalyticsCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: color.withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(
-                icon,
-                color: color,
-                size: 16,
-              ),
+              Icon(icon, color: color, size: 16),
               const Spacer(),
               Icon(
                 _getTrendIcon(trend.direction),
@@ -276,11 +267,7 @@ class HealthAnalyticsCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(
-                Icons.lightbulb,
-                color: theme.colorScheme.primary,
-                size: 16,
-              ),
+              Icon(Icons.lightbulb, color: theme.colorScheme.primary, size: 16),
               const Spacer(),
               Icon(
                 Icons.arrow_forward,
@@ -352,7 +339,9 @@ class HealthAnalyticsCard extends StatelessWidget {
                       return Text(
                         value.toInt().toString(),
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.7,
+                          ),
                         ),
                       );
                     },
@@ -367,14 +356,20 @@ class HealthAnalyticsCard extends StatelessWidget {
                       return Text(
                         '${value.toInt()}d',
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.7,
+                          ),
                         ),
                       );
                     },
                   ),
                 ),
-                topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                topTitles: AxisTitles(
+                  sideTitles: SideTitles(showTitles: false),
+                ),
+                rightTitles: AxisTitles(
+                  sideTitles: SideTitles(showTitles: false),
+                ),
               ),
               borderData: FlBorderData(show: false),
               minX: 0,
@@ -525,11 +520,11 @@ class HealthAnalyticsCard extends StatelessWidget {
   String _formatDate(DateTime date) {
     final now = DateTime.now();
     final difference = now.difference(date).inDays;
-    
+
     if (difference == 0) return 'today';
     if (difference == 1) return 'yesterday';
     if (difference < 7) return '$difference days ago';
-    
+
     return '${date.day}/${date.month}/${date.year}';
   }
 }

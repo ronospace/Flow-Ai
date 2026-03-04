@@ -17,60 +17,21 @@ enum ClinicalCategory {
   general,
 }
 
-enum ClinicalSeverity {
-  mild,
-  moderate,
-  severe,
-}
+enum ClinicalSeverity { mild, moderate, severe }
 
-enum RiskLevel {
-  low,
-  moderate,
-  high,
-}
+enum RiskLevel { low, moderate, high }
 
-enum RecommendationPriority {
-  low,
-  medium,
-  high,
-  urgent,
-}
+enum RecommendationPriority { low, medium, high, urgent }
 
-enum InsightCategory {
-  correlation,
-  trend,
-  pattern,
-  behavioral,
-  predictive,
-}
+enum InsightCategory { correlation, trend, pattern, behavioral, predictive }
 
-enum InsightSignificance {
-  low,
-  medium,
-  high,
-  critical,
-}
+enum InsightSignificance { low, medium, high, critical }
 
-enum ClinicalFlagType {
-  warning,
-  critical,
-  urgent,
-  informational,
-}
+enum ClinicalFlagType { warning, critical, urgent, informational }
 
-enum ClinicalUrgency {
-  routine,
-  priority,
-  urgent,
-  immediate,
-}
+enum ClinicalUrgency { routine, priority, urgent, immediate }
 
-enum ClinicalReportFormat {
-  pdf,
-  json,
-  hl7,
-  csv,
-}
+enum ClinicalReportFormat { pdf, json, hl7, csv }
 
 // === CLINICAL DATA STRUCTURES ===
 
@@ -254,18 +215,12 @@ class CycleClinicalData {
 
 class SymptomFrequency {
   final double frequency; // 0.0 to 1.0
-  final double severity;  // 1.0 to 10.0
+  final double severity; // 1.0 to 10.0
 
-  SymptomFrequency({
-    required this.frequency,
-    required this.severity,
-  });
+  SymptomFrequency({required this.frequency, required this.severity});
 
   Map<String, dynamic> toJson() {
-    return {
-      'frequency': frequency,
-      'severity': severity,
-    };
+    return {'frequency': frequency, 'severity': severity};
   }
 }
 
@@ -291,7 +246,9 @@ class SymptomClinicalData {
       'total_symptom_entries': totalSymptomEntries,
       'unique_symptoms': uniqueSymptoms,
       'average_symptoms_per_day': averageSymptomsPerDay,
-      'most_frequent_symptoms': mostFrequentSymptoms.map((k, v) => MapEntry(k, v.toJson())),
+      'most_frequent_symptoms': mostFrequentSymptoms.map(
+        (k, v) => MapEntry(k, v.toJson()),
+      ),
       'severity_distribution': severityDistribution,
       'symptom_patterns': symptomPatterns,
     };
@@ -582,7 +539,9 @@ class CorrelationAnalysisResult {
 
   Map<String, dynamic> toJson() {
     return {
-      'significant_correlations': significantCorrelations.map((c) => c.toJson()).toList(),
+      'significant_correlations': significantCorrelations
+          .map((c) => c.toJson())
+          .toList(),
       'network_analysis': networkAnalysis,
     };
   }

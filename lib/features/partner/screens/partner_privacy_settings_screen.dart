@@ -9,14 +9,16 @@ class PartnerPrivacySettingsScreen extends StatefulWidget {
   const PartnerPrivacySettingsScreen({super.key});
 
   @override
-  State<PartnerPrivacySettingsScreen> createState() => _PartnerPrivacySettingsScreenState();
+  State<PartnerPrivacySettingsScreen> createState() =>
+      _PartnerPrivacySettingsScreenState();
 }
 
-class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScreen>
+class _PartnerPrivacySettingsScreenState
+    extends State<PartnerPrivacySettingsScreen>
     with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
-  
+
   PartnerSharingSettings? _currentSettings;
   PartnerSharingSettings? _tempSettings;
   bool _hasChanges = false;
@@ -25,12 +27,12 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
   @override
   void initState() {
     super.initState();
-    
+
     _controller = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
     );
-    
+
     _fadeAnimation = CurvedAnimation(
       parent: _controller,
       curve: Curves.easeInOut,
@@ -56,7 +58,9 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
     }
   }
 
-  void _updateSetting(PartnerSharingSettings Function(PartnerSharingSettings) update) {
+  void _updateSetting(
+    PartnerSharingSettings Function(PartnerSharingSettings) update,
+  ) {
     if (_tempSettings != null) {
       setState(() {
         _tempSettings = update(_tempSettings!);
@@ -71,8 +75,10 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
     setState(() => _isLoading = true);
 
     try {
-      await context.read<PartnerService>().updateSharingSettings(_tempSettings!);
-      
+      await context.read<PartnerService>().updateSharingSettings(
+        _tempSettings!,
+      );
+
       setState(() {
         _currentSettings = _tempSettings;
         _hasChanges = false;
@@ -83,7 +89,9 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
           content: const Text('Privacy settings updated successfully!'),
           backgroundColor: AppTheme.successGreen,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
         ),
       );
     } catch (e) {
@@ -92,7 +100,9 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
           content: Text('Failed to update settings: $e'),
           backgroundColor: AppTheme.errorRed,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
         ),
       );
     } finally {
@@ -131,12 +141,12 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
             TextButton(
               onPressed: _isLoading ? null : _saveSettings,
               child: _isLoading
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : const Text('Save'),
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Text('Save'),
             ),
         ],
       ),
@@ -152,7 +162,7 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
                 children: [
                   _buildPrivacyOverview(theme),
                   const SizedBox(height: 24),
-                  
+
                   _buildSection(
                     'Cycle Data Sharing',
                     'Control what cycle information is shared with your partner',
@@ -163,36 +173,48 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
                         'Period Dates',
                         'Share when your period starts and ends',
                         _tempSettings!.sharePredictions,
-                        (value) => _updateSetting((settings) => settings.copyWith(sharePredictions: value)),
+                        (value) => _updateSetting(
+                          (settings) =>
+                              settings.copyWith(sharePredictions: value),
+                        ),
                         Icons.calendar_today,
                       ),
                       _buildSwitchTile(
                         'Cycle Predictions',
                         'Share AI predictions for future cycles',
                         _tempSettings!.sharePredictions,
-                        (value) => _updateSetting((settings) => settings.copyWith(sharePredictions: value)),
+                        (value) => _updateSetting(
+                          (settings) =>
+                              settings.copyWith(sharePredictions: value),
+                        ),
                         Icons.auto_graph,
                       ),
                       _buildSwitchTile(
                         'Ovulation Dates',
                         'Share fertile window and ovulation predictions',
                         _tempSettings!.sharePredictions,
-                        (value) => _updateSetting((settings) => settings.copyWith(sharePredictions: value)),
+                        (value) => _updateSetting(
+                          (settings) =>
+                              settings.copyWith(sharePredictions: value),
+                        ),
                         Icons.favorite_border,
                       ),
                       _buildSwitchTile(
                         'Flow Intensity',
                         'Share detailed flow intensity information',
                         _tempSettings!.sharePhysicalSymptoms,
-                        (value) => _updateSetting((settings) => settings.copyWith(sharePhysicalSymptoms: value)),
+                        (value) => _updateSetting(
+                          (settings) =>
+                              settings.copyWith(sharePhysicalSymptoms: value),
+                        ),
                         Icons.water_drop,
                         isAdvanced: true,
                       ),
                     ],
                   ),
-                  
+
                   const SizedBox(height: 24),
-                  
+
                   _buildSection(
                     'Symptoms & Health',
                     'Choose what health information to share',
@@ -203,14 +225,19 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
                         'Basic Symptoms',
                         'Share common symptoms like cramps, headaches',
                         _tempSettings!.shareSymptoms,
-                        (value) => _updateSetting((settings) => settings.copyWith(shareSymptoms: value)),
+                        (value) => _updateSetting(
+                          (settings) => settings.copyWith(shareSymptoms: value),
+                        ),
                         Icons.local_hospital,
                       ),
                       _buildSwitchTile(
                         'Detailed Symptoms',
                         'Share all symptoms and severity levels',
                         _tempSettings!.sharePhysicalSymptoms,
-                        (value) => _updateSetting((settings) => settings.copyWith(sharePhysicalSymptoms: value)),
+                        (value) => _updateSetting(
+                          (settings) =>
+                              settings.copyWith(sharePhysicalSymptoms: value),
+                        ),
                         Icons.assignment,
                         isAdvanced: true,
                       ),
@@ -218,22 +245,27 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
                         'Mood Data',
                         'Share mood tracking and emotional insights',
                         _tempSettings!.shareMoodData,
-                        (value) => _updateSetting((settings) => settings.copyWith(shareMoodData: value)),
+                        (value) => _updateSetting(
+                          (settings) => settings.copyWith(shareMoodData: value),
+                        ),
                         Icons.psychology,
                       ),
                       _buildSwitchTile(
                         'Pain Levels',
                         'Share pain intensity and location details',
                         _tempSettings!.sharePhysicalSymptoms,
-                        (value) => _updateSetting((settings) => settings.copyWith(sharePhysicalSymptoms: value)),
+                        (value) => _updateSetting(
+                          (settings) =>
+                              settings.copyWith(sharePhysicalSymptoms: value),
+                        ),
                         Icons.sentiment_very_dissatisfied,
                         isAdvanced: true,
                       ),
                     ],
                   ),
-                  
+
                   const SizedBox(height: 24),
-                  
+
                   _buildSection(
                     'AI Insights & Trends',
                     'Control sharing of AI-generated insights',
@@ -244,29 +276,35 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
                         'AI Health Insights',
                         'Share personalized AI health recommendations',
                         _tempSettings!.allowInsights,
-                        (value) => _updateSetting((settings) => settings.copyWith(allowInsights: value)),
+                        (value) => _updateSetting(
+                          (settings) => settings.copyWith(allowInsights: value),
+                        ),
                         Icons.psychology,
                       ),
                       _buildSwitchTile(
                         'Health Trends',
                         'Share long-term health pattern analysis',
                         _tempSettings!.allowInsights,
-                        (value) => _updateSetting((settings) => settings.copyWith(allowInsights: value)),
+                        (value) => _updateSetting(
+                          (settings) => settings.copyWith(allowInsights: value),
+                        ),
                         Icons.trending_up,
                       ),
                       _buildSwitchTile(
                         'Personal Notes',
                         'Share your private journal entries and notes',
                         _tempSettings!.shareSymptoms,
-                        (value) => _updateSetting((settings) => settings.copyWith(shareSymptoms: value)),
+                        (value) => _updateSetting(
+                          (settings) => settings.copyWith(shareSymptoms: value),
+                        ),
                         Icons.note,
                         isAdvanced: true,
                       ),
                     ],
                   ),
-                  
+
                   const SizedBox(height: 24),
-                  
+
                   _buildSection(
                     'Communication & Notifications',
                     'Manage how your partner can communicate with you',
@@ -277,28 +315,37 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
                         'Partner Messages',
                         'Allow your partner to send you messages',
                         _tempSettings!.sendNotifications,
-                        (value) => _updateSetting((settings) => settings.copyWith(sendNotifications: value)),
+                        (value) => _updateSetting(
+                          (settings) =>
+                              settings.copyWith(sendNotifications: value),
+                        ),
                         Icons.chat,
                       ),
                       _buildSwitchTile(
                         'Care Reminders',
                         'Receive care suggestions from your partner',
                         _tempSettings!.sendNotifications,
-                        (value) => _updateSetting((settings) => settings.copyWith(sendNotifications: value)),
+                        (value) => _updateSetting(
+                          (settings) =>
+                              settings.copyWith(sendNotifications: value),
+                        ),
                         Icons.favorite,
                       ),
                       _buildSwitchTile(
                         'Mood Check-ins',
                         'Allow partner to check on your mood',
                         _tempSettings!.sendNotifications,
-                        (value) => _updateSetting((settings) => settings.copyWith(sendNotifications: value)),
+                        (value) => _updateSetting(
+                          (settings) =>
+                              settings.copyWith(sendNotifications: value),
+                        ),
                         Icons.sentiment_satisfied,
                       ),
                     ],
                   ),
-                  
+
                   const SizedBox(height: 24),
-                  
+
                   _buildSection(
                     'Notification Preferences',
                     'Choose what notifications your partner receives',
@@ -308,40 +355,50 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
                       _buildSwitchTile(
                         'Period Start/End',
                         'Notify partner when period starts or ends',
-                        _tempSettings!.sendNotifications && _tempSettings!.sendNotifications,
-                        (value) => _updateSetting((settings) => settings.copyWith(
-                          sendNotifications: value,
-                          
-                        )),
+                        _tempSettings!.sendNotifications &&
+                            _tempSettings!.sendNotifications,
+                        (value) => _updateSetting(
+                          (settings) =>
+                              settings.copyWith(sendNotifications: value),
+                        ),
                         Icons.event,
                       ),
                       _buildSwitchTile(
                         'Ovulation Notifications',
                         'Notify partner about ovulation timing',
                         _tempSettings!.sendNotifications,
-                        (value) => _updateSetting((settings) => settings.copyWith(sendNotifications: value)),
+                        (value) => _updateSetting(
+                          (settings) =>
+                              settings.copyWith(sendNotifications: value),
+                        ),
                         Icons.favorite_border,
                       ),
                       _buildSwitchTile(
                         'Mood Changes',
                         'Notify partner about significant mood changes',
                         _tempSettings!.sendNotifications,
-                        (value) => _updateSetting((settings) => settings.copyWith(sendNotifications: value)),
+                        (value) => _updateSetting(
+                          (settings) =>
+                              settings.copyWith(sendNotifications: value),
+                        ),
                         Icons.psychology,
                       ),
                       _buildSwitchTile(
                         'Symptom Alerts',
                         'Notify partner about new or severe symptoms',
                         _tempSettings!.sendNotifications,
-                        (value) => _updateSetting((settings) => settings.copyWith(sendNotifications: value)),
+                        (value) => _updateSetting(
+                          (settings) =>
+                              settings.copyWith(sendNotifications: value),
+                        ),
                         Icons.warning,
                         isAdvanced: true,
                       ),
                     ],
                   ),
-                  
+
                   const SizedBox(height: 24),
-                  
+
                   _buildSection(
                     'Advanced Privacy',
                     'Additional privacy and visibility controls',
@@ -352,7 +409,9 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
                         'Hide During Period',
                         'Reduce visibility to partner during menstruation',
                         _tempSettings!.allowInsights,
-                        (value) => _updateSetting((settings) => settings.copyWith(allowInsights: value)),
+                        (value) => _updateSetting(
+                          (settings) => settings.copyWith(allowInsights: value),
+                        ),
                         Icons.visibility_off,
                         isAdvanced: true,
                       ),
@@ -360,7 +419,9 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
                         'Hide Detailed Health Data',
                         'Hide sensitive health metrics and details',
                         _tempSettings!.allowInsights,
-                        (value) => _updateSetting((settings) => settings.copyWith(allowInsights: value)),
+                        (value) => _updateSetting(
+                          (settings) => settings.copyWith(allowInsights: value),
+                        ),
                         Icons.shield,
                         isAdvanced: true,
                       ),
@@ -368,16 +429,18 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
                         'Allow History Access',
                         'Let partner view historical cycle data',
                         _tempSettings!.allowInsights,
-                        (value) => _updateSetting((settings) => settings.copyWith(allowInsights: value)),
+                        (value) => _updateSetting(
+                          (settings) => settings.copyWith(allowInsights: value),
+                        ),
                         Icons.history,
                       ),
                     ],
                   ),
-                  
+
                   const SizedBox(height: 32),
-                  
+
                   _buildActionButtons(theme),
-                  
+
                   const SizedBox(height: 100), // Bottom padding
                 ],
               ),
@@ -419,11 +482,7 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
                   ),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(
-                  Icons.shield,
-                  color: Colors.white,
-                  size: 24,
-                ),
+                child: const Icon(Icons.shield, color: Colors.white, size: 24),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -451,11 +510,23 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
           const SizedBox(height: 16),
           Row(
             children: [
-              _buildPrivacyMetric('Shared', _getSharedCount(), AppTheme.successGreen),
+              _buildPrivacyMetric(
+                'Shared',
+                _getSharedCount(),
+                AppTheme.successGreen,
+              ),
               const SizedBox(width: 16),
-              _buildPrivacyMetric('Private', _getPrivateCount(), AppTheme.warningOrange),
+              _buildPrivacyMetric(
+                'Private',
+                _getPrivateCount(),
+                AppTheme.warningOrange,
+              ),
               const SizedBox(width: 16),
-              _buildPrivacyMetric('Advanced', _getAdvancedCount(), AppTheme.secondaryBlue),
+              _buildPrivacyMetric(
+                'Advanced',
+                _getAdvancedCount(),
+                AppTheme.secondaryBlue,
+              ),
             ],
           ),
         ],
@@ -481,28 +552,25 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
                 color: color,
               ),
             ),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12,
-                color: color,
-              ),
-            ),
+            Text(label, style: TextStyle(fontSize: 12, color: color)),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildSection(String title, String subtitle, IconData icon, Color color, List<Widget> children) {
+  Widget _buildSection(
+    String title,
+    String subtitle,
+    IconData icon,
+    Color color,
+    List<Widget> children,
+  ) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: color.withValues(alpha: 0.2),
-          width: 1,
-        ),
+        border: Border.all(color: color.withValues(alpha: 0.2), width: 1),
         boxShadow: [
           BoxShadow(
             color: color.withValues(alpha: 0.1),
@@ -518,7 +586,10 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [color.withValues(alpha: 0.1), color.withValues(alpha: 0.05)],
+                colors: [
+                  color.withValues(alpha: 0.1),
+                  color.withValues(alpha: 0.05),
+                ],
               ),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(20),
@@ -583,7 +654,8 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: (value ? AppTheme.successGreen : AppTheme.lightGrey).withValues(alpha: 0.2),
+              color: (value ? AppTheme.successGreen : AppTheme.lightGrey)
+                  .withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(
@@ -610,7 +682,10 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
                     if (isAdvanced) ...[
                       const SizedBox(width: 8),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 2,
+                        ),
                         decoration: BoxDecoration(
                           color: AppTheme.warningOrange.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(8),
@@ -629,10 +704,7 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
                 ),
                 Text(
                   subtitle,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: AppTheme.mediumGrey,
-                  ),
+                  style: TextStyle(fontSize: 14, color: AppTheme.mediumGrey),
                 ),
               ],
             ),
@@ -640,10 +712,16 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
           Switch.adaptive(
             value: value,
             onChanged: onChanged,
-            thumbColor: WidgetStateProperty.resolveWith((states) => 
-              states.contains(WidgetState.selected) ? AppTheme.primaryRose : null),
-            trackColor: WidgetStateProperty.resolveWith((states) => 
-              states.contains(WidgetState.selected) ? AppTheme.primaryRose.withValues(alpha: 0.5) : null),
+            thumbColor: WidgetStateProperty.resolveWith(
+              (states) => states.contains(WidgetState.selected)
+                  ? AppTheme.primaryRose
+                  : null,
+            ),
+            trackColor: WidgetStateProperty.resolveWith(
+              (states) => states.contains(WidgetState.selected)
+                  ? AppTheme.primaryRose.withValues(alpha: 0.5)
+                  : null,
+            ),
           ),
         ],
       ),
@@ -667,11 +745,7 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
             ),
             child: Row(
               children: [
-                Icon(
-                  Icons.info,
-                  color: AppTheme.warningOrange,
-                  size: 20,
-                ),
+                Icon(Icons.info, color: AppTheme.warningOrange, size: 20),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
@@ -687,7 +761,7 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
           ).animate().fadeIn().shake(delay: 100.ms),
           const SizedBox(height: 16),
         ],
-        
+
         Row(
           children: [
             Expanded(
@@ -711,15 +785,17 @@ class _PartnerPrivacySettingsScreenState extends State<PartnerPrivacySettingsScr
                 child: ElevatedButton.icon(
                   onPressed: _isLoading ? null : _saveSettings,
                   icon: _isLoading
-                    ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                        ),
-                      )
-                    : const Icon(Icons.save),
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Colors.white,
+                            ),
+                          ),
+                        )
+                      : const Icon(Icons.save),
                   label: Text(_isLoading ? 'Saving...' : 'Save Changes'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppTheme.primaryRose,

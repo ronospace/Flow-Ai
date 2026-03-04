@@ -53,8 +53,10 @@ class ExpertProfile {
   });
 
   // Computed properties
-  double get acceptanceRate => totalAnswers > 0 ? acceptedAnswers / totalAnswers : 0.0;
-  int get reputation => (rating * 100 + acceptedAnswers * 10 + totalAnswers * 2).round();
+  double get acceptanceRate =>
+      totalAnswers > 0 ? acceptedAnswers / totalAnswers : 0.0;
+  int get reputation =>
+      (rating * 100 + acceptedAnswers * 10 + totalAnswers * 2).round();
   bool get isTopExpert => rating >= 4.5 && totalAnswers >= 50;
   bool get isFeatured => badges?.featured == true;
 
@@ -72,14 +74,17 @@ class ExpertProfile {
   }
 
   /// Get primary specialty (first in the list)
-  String get primarySpecialty => specialties.isNotEmpty ? specialties.first : 'General Practice';
+  String get primarySpecialty =>
+      specialties.isNotEmpty ? specialties.first : 'General Practice';
 
   /// Get formatted credentials string
   String get formattedCredentials => credentials.join(', ');
 
   /// Check if expert specializes in a particular area
   bool hasSpecialty(String specialty) {
-    return specialties.any((s) => s.toLowerCase().contains(specialty.toLowerCase()));
+    return specialties.any(
+      (s) => s.toLowerCase().contains(specialty.toLowerCase()),
+    );
   }
 
   /// Check if expert is active (answered in last 30 days)
@@ -91,16 +96,17 @@ class ExpertProfile {
   /// Get availability status message
   String get availabilityMessage {
     if (!isAvailable) return 'Currently unavailable';
-    
+
     final avgHours = averageResponseTime.inHours;
     if (avgHours < 2) return 'Usually responds within 2 hours';
     if (avgHours < 24) return 'Usually responds within $avgHours hours';
-    
+
     final days = (avgHours / 24).ceil();
     return 'Usually responds within $days day${days > 1 ? 's' : ''}';
   }
 
-  factory ExpertProfile.fromJson(Map<String, dynamic> json) => _$ExpertProfileFromJson(json);
+  factory ExpertProfile.fromJson(Map<String, dynamic> json) =>
+      _$ExpertProfileFromJson(json);
   Map<String, dynamic> toJson() => _$ExpertProfileToJson(this);
 
   ExpertProfile copyWith({
@@ -201,7 +207,8 @@ class ExpertBadges {
     return badges;
   }
 
-  factory ExpertBadges.fromJson(Map<String, dynamic> json) => _$ExpertBadgesFromJson(json);
+  factory ExpertBadges.fromJson(Map<String, dynamic> json) =>
+      _$ExpertBadgesFromJson(json);
   Map<String, dynamic> toJson() => _$ExpertBadgesToJson(this);
 }
 
@@ -258,7 +265,7 @@ class ExpertAvailability {
   bool isAvailableAt(DateTime dateTime) {
     final dayOfWeek = _getDayOfWeek(dateTime.weekday);
     final timeSlots = weeklySchedule[dayOfWeek] ?? [];
-    
+
     for (final slot in timeSlots) {
       if (slot.contains(dateTime)) {
         return true;
@@ -270,13 +277,13 @@ class ExpertAvailability {
   /// Get next available time slot
   DateTime? getNextAvailableTime() {
     final now = DateTime.now();
-    
+
     // Check next 7 days
     for (int i = 0; i < 7; i++) {
       final checkDate = now.add(Duration(days: i));
       final dayOfWeek = _getDayOfWeek(checkDate.weekday);
       final timeSlots = weeklySchedule[dayOfWeek] ?? [];
-      
+
       for (final slot in timeSlots) {
         final slotStart = DateTime(
           checkDate.year,
@@ -285,22 +292,31 @@ class ExpertAvailability {
           slot.startTime.hour,
           slot.startTime.minute,
         );
-        
+
         if (slotStart.isAfter(now)) {
           return slotStart;
         }
       }
     }
-    
+
     return null;
   }
 
   String _getDayOfWeek(int weekday) {
-    const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    const days = [
+      'monday',
+      'tuesday',
+      'wednesday',
+      'thursday',
+      'friday',
+      'saturday',
+      'sunday',
+    ];
     return days[weekday - 1];
   }
 
-  factory ExpertAvailability.fromJson(Map<String, dynamic> json) => _$ExpertAvailabilityFromJson(json);
+  factory ExpertAvailability.fromJson(Map<String, dynamic> json) =>
+      _$ExpertAvailabilityFromJson(json);
   Map<String, dynamic> toJson() => _$ExpertAvailabilityToJson(this);
 }
 
@@ -324,7 +340,7 @@ class TimeSlot {
   /// Check if a specific time falls within this slot
   bool contains(DateTime dateTime) {
     if (!isAvailable) return false;
-    
+
     final checkTime = TimeOfDay.fromDateTime(dateTime);
     return _isTimeBetween(checkTime, startTime, endTime);
   }
@@ -340,7 +356,7 @@ class TimeSlot {
     final timeMinutes = time.hour * 60 + time.minute;
     final startMinutes = start.hour * 60 + start.minute;
     final endMinutes = end.hour * 60 + end.minute;
-    
+
     if (startMinutes <= endMinutes) {
       return timeMinutes >= startMinutes && timeMinutes <= endMinutes;
     } else {
@@ -349,13 +365,14 @@ class TimeSlot {
     }
   }
 
-  factory TimeSlot.fromJson(Map<String, dynamic> json) => _$TimeSlotFromJson(json);
+  factory TimeSlot.fromJson(Map<String, dynamic> json) =>
+      _$TimeSlotFromJson(json);
   Map<String, dynamic> toJson() => _$TimeSlotToJson(this);
-  
+
   static TimeOfDay _timeOfDayFromJson(Map<String, dynamic> json) {
     return TimeOfDay(hour: json['hour'] as int, minute: json['minute'] as int);
   }
-  
+
   static Map<String, dynamic> _timeOfDayToJson(TimeOfDay time) {
     return {'hour': time.hour, 'minute': time.minute};
   }

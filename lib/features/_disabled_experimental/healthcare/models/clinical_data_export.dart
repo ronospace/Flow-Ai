@@ -103,7 +103,7 @@ class ClinicalDataExport {
   /// Get formatted file size
   String get formattedFileSize {
     if (fileSize == null) return 'Unknown';
-    
+
     if (fileSize! < 1024) {
       return '${fileSize!} B';
     } else if (fileSize! < 1024 * 1024) {
@@ -127,23 +127,17 @@ class ClinicalDataExport {
   /// Get summary of included data types
   String get dataTypesSummary {
     if (includedDataTypes.isEmpty) return 'No data types selected';
-    
+
     if (includedDataTypes.length <= 3) {
       return includedDataTypes.join(', ');
     }
-    
+
     return '${includedDataTypes.take(3).join(', ')} and ${includedDataTypes.length - 3} more';
   }
 }
 
 /// Supported clinical data export formats
-enum ClinicalDataFormat {
-  fhir,
-  hl7,
-  csv,
-  pdf,
-  json,
-}
+enum ClinicalDataFormat { fhir, hl7, csv, pdf, json }
 
 extension ClinicalDataFormatExtension on ClinicalDataFormat {
   String get displayName {
@@ -236,10 +230,7 @@ class DateRange {
   final DateTime start;
   final DateTime end;
 
-  const DateRange({
-    required this.start,
-    required this.end,
-  });
+  const DateRange({required this.start, required this.end});
 
   /// Duration of the range
   Duration get duration => end.difference(start);
@@ -249,10 +240,7 @@ class DateRange {
 
   /// Convert to JSON
   Map<String, dynamic> toJson() {
-    return {
-      'start': start.toIso8601String(),
-      'end': end.toIso8601String(),
-    };
+    return {'start': start.toIso8601String(), 'end': end.toIso8601String()};
   }
 
   /// Create from JSON

@@ -12,15 +12,12 @@ class SubscriptionService {
 
   final InAppPurchase _iap = InAppPurchase.instance;
   late StreamSubscription<List<PurchaseDetails>> _subscription;
-  
+
   // Product IDs (configure these in App Store Connect and Google Play Console)
   static const String monthlyProductId = 'flow_ai_premium_monthly';
   static const String yearlyProductId = 'flow_ai_premium_yearly';
-  
-  static const Set<String> _productIds = {
-    monthlyProductId,
-    yearlyProductId,
-  };
+
+  static const Set<String> _productIds = {monthlyProductId, yearlyProductId};
 
   List<ProductDetails> _products = [];
   bool _isAvailable = false;
@@ -40,7 +37,7 @@ class SubscriptionService {
 
     // Check if IAP is available
     _isAvailable = await _iap.isAvailable();
-    
+
     if (!_isAvailable) {
       if (kDebugMode) {
         print('⚠️ In-app purchases not available');
@@ -65,7 +62,7 @@ class SubscriptionService {
 
     // Restore previous purchases
     await restorePurchases(userId);
-    
+
     if (kDebugMode) {
       print('✅ SubscriptionService initialized');
     }
@@ -77,7 +74,7 @@ class SubscriptionService {
 
     try {
       final response = await _iap.queryProductDetails(_productIds);
-      
+
       if (response.error != null) {
         if (kDebugMode) {
           print('❌ Error loading products: ${response.error}');
@@ -92,7 +89,7 @@ class SubscriptionService {
       }
 
       _products = response.productDetails;
-      
+
       if (kDebugMode) {
         print('✅ Loaded ${_products.length} products');
         for (final product in _products) {
@@ -155,7 +152,7 @@ class SubscriptionService {
       }
 
       final purchaseParam = PurchaseParam(productDetails: product);
-      
+
       // For subscriptions, use buyNonConsumable on iOS, subscribe on Android
       if (Platform.isIOS) {
         await _iap.buyNonConsumable(purchaseParam: purchaseParam);
@@ -241,7 +238,7 @@ class SubscriptionService {
     // In production, send purchaseDetails.verificationData to your backend
     // Your backend should verify with Apple/Google servers
     // For now, we'll trust the store
-    
+
     if (Platform.isIOS) {
       // iOS receipt verification
       final receipt = purchaseDetails.verificationData.serverVerificationData;
@@ -249,11 +246,12 @@ class SubscriptionService {
       return receipt.isNotEmpty;
     } else if (Platform.isAndroid) {
       // Android purchase token verification
-      final purchaseToken = purchaseDetails.verificationData.serverVerificationData;
+      final purchaseToken =
+          purchaseDetails.verificationData.serverVerificationData;
       // TODO: Send to backend for verification
       return purchaseToken.isNotEmpty;
     }
-    
+
     return false;
   }
 
@@ -261,11 +259,11 @@ class SubscriptionService {
   Future<void> _grantPremiumAccess(PurchaseDetails purchaseDetails) async {
     final userId = _currentSubscription?.userId ?? 'unknown';
     final isYearly = purchaseDetails.productID == yearlyProductId;
-    
+
     // Calculate expiry date
     final purchaseDate = DateTime.fromMillisecondsSinceEpoch(
-      int.tryParse(purchaseDetails.transactionDate ?? '0') ?? 
-      DateTime.now().millisecondsSinceEpoch,
+      int.tryParse(purchaseDetails.transactionDate ?? '0') ??
+          DateTime.now().millisecondsSinceEpoch,
     );
     final expiryDate = isYearly
         ? purchaseDate.add(const Duration(days: 365))
@@ -302,11 +300,11 @@ class SubscriptionService {
       }
 
       await _iap.restorePurchases();
-      
+
       // Load saved subscription from storage
       final prefs = await SharedPreferences.getInstance();
       final subscriptionJson = prefs.getString('user_subscription');
-      
+
       if (subscriptionJson != null) {
         // Parse and validate subscription
         // TODO: Implement proper parsing from JSON
@@ -350,11 +348,11 @@ class SubscriptionService {
   /// Increment AI insights usage
   Future<void> incrementInsightsUsage() async {
     if (_currentSubscription == null) return;
-    
+
     _currentSubscription = _currentSubscription!.copyWith(
       aiInsightsUsed: _currentSubscription!.aiInsightsUsed + 1,
     );
-    
+
     await _saveSubscription();
   }
 
@@ -362,9 +360,10 @@ class SubscriptionService {
   int getRemainingFreeInsights() {
     if (_currentSubscription == null) return 0;
     if (_currentSubscription!.hasUnlimitedInsights) return -1; // Unlimited
-    
-    return (_currentSubscription!.aiInsightsLimit - 
-            _currentSubscription!.aiInsightsUsed).clamp(0, 999);
+
+    return (_currentSubscription!.aiInsightsLimit -
+            _currentSubscription!.aiInsightsUsed)
+        .clamp(0, 999);
   }
 
   /// Dispose

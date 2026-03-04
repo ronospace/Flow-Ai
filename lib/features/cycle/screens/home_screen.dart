@@ -88,9 +88,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     // Start animations with a delay to not block UI
     Future.delayed(const Duration(milliseconds: 500), () {
       if (mounted) {
-        _dashboardController.repeat();
+        _dashboardController.forward();
         _healthController.repeat();
-        _predictiveController.repeat();
+        _predictiveController.forward();
       }
     });
 
@@ -106,7 +106,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       // Load ad even later to not impact startup
       Future.delayed(const Duration(milliseconds: 1000), () {
         if (mounted) {
-      _loadBannerAd();        }
+          _loadBannerAd();
+        }
       });
 
       // Load AI prediction
@@ -366,31 +367,41 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         children: [
           Text(
             "Advanced AI Analysis",
-            style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 8),
           ...[
             "6-month forecast & confidence",
             "Hormone projection & correlations",
             "Mood patterns + long-term modeling",
-          ].map((t) => Padding(
-                padding: const EdgeInsets.only(top: 6),
-                child: Row(
-                  children: [
-                    Icon(Icons.lock, size: 16, color: theme.colorScheme.onSurface.withValues(alpha: 0.55)),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        t,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.75),
-                          fontWeight: FontWeight.w600,
+          ].map(
+            (t) => Padding(
+              padding: const EdgeInsets.only(top: 6),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.lock,
+                    size: 16,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      t,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.75,
                         ),
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                  ],
-                ),
-              )),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -431,12 +442,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
-                          colors: [AppTheme.warningOrange, AppTheme.primaryRose],
+                          colors: [
+                            AppTheme.warningOrange,
+                            AppTheme.primaryRose,
+                          ],
                         ),
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
-                            color: AppTheme.warningOrange.withValues(alpha: 0.30),
+                            color: AppTheme.warningOrange.withValues(
+                              alpha: 0.30,
+                            ),
                             blurRadius: 10,
                             offset: const Offset(0, 6),
                           ),
@@ -445,7 +461,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.lock_open, color: theme.colorScheme.onPrimary, size: 18),
+                          Icon(
+                            Icons.lock_open,
+                            color: theme.colorScheme.onPrimary,
+                            size: 18,
+                          ),
                           const SizedBox(width: 10),
                           Flexible(
                             child: Text(
@@ -477,7 +497,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       onRewarded: (reward) {
         // User watched the full ad, unlock premium insights
         _unlockPremiumInsights();
-
 
         // Completion-based interstitial (post-reward unlock)
         _adMobService.showInterstitialAdWithFrequency();
@@ -533,14 +552,20 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
-      
-      actions: [
-        Padding(
-          padding: const EdgeInsets.only(right: 16),
-          child: PressableAvatar(onTap: () { context.push('/settings'); }, displayName: user?.displayName, photoUrl: user?.photoURL),
-        ),
-      ],
-),
+
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: PressableAvatar(
+              onTap: () {
+                context.push('/settings');
+              },
+              displayName: user?.displayName,
+              photoUrl: user?.photoURL,
+            ),
+          ),
+        ],
+      ),
       body: Stack(
         children: [
           Consumer<SettingsProvider>(
@@ -659,7 +684,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       ),
                     ),
                   )
-                  .animate(onPlay: (controller) => controller.repeat())
+                  .animate()
                   .scale(
                     begin: const Offset(0.8, 0.8),
                     end: const Offset(1.2, 1.2),
@@ -682,23 +707,20 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
               // AI brain icon
               Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [AppTheme.secondaryBlue, AppTheme.accentMint],
-                      ),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Icon(
-                      Icons.psychology,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                  )
-                  .animate(onPlay: (controller) => controller.repeat())
-                  .shimmer(duration: 2000.ms)
-                  .then(delay: 500.ms),
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [AppTheme.secondaryBlue, AppTheme.accentMint],
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Icon(
+                  Icons.psychology,
+                  color: Colors.white,
+                  size: 20,
+                ),
+              ).animate().shimmer(duration: 2000.ms).then(delay: 500.ms),
             ],
           ),
 
@@ -832,9 +854,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 ],
                               ),
                             )
-                            .animate(
-                              onPlay: (controller) => controller.repeat(),
-                            )
+                            .animate()
                             .shimmer(duration: 2000.ms)
                             .then(delay: 1000.ms),
                       ],
@@ -1350,7 +1370,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             ],
           ),
         )
-        .animate(onPlay: (controller) => controller.repeat())
+        .animate()
         .shimmer(duration: 3000.ms, color: color.withValues(alpha: 0.1))
         .then(delay: 2000.ms);
   }
@@ -1669,10 +1689,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           if (provider.insights.isNotEmpty) ...[
             // Advanced insights lock
             // Premium AI insights unlock widget
-            if (!provider.premiumUnlocked)
-              _buildPremiumInsightsUnlockWidget(),
+            if (!provider.premiumUnlocked) _buildPremiumInsightsUnlockWidget(),
 
-            if (!provider.premiumUnlocked) _buildLockedAdvancedInsightTeaserWidget(),
+            if (!provider.premiumUnlocked)
+              _buildLockedAdvancedInsightTeaserWidget(),
 
             ...provider.insights
                 .take(provider.premiumUnlocked ? 2 : 1)
@@ -2055,7 +2075,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             ),
           ),
         )
-        .animate(onPlay: (controller) => controller.repeat())
+        .animate()
         .shimmer(duration: 4000.ms, color: color.withValues(alpha: 0.05))
         .then(delay: 3000.ms);
   }
@@ -2338,10 +2358,11 @@ class HealthScorePainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
 
-    final sweepAngle = (score * 2 * math.pi * animation);
+    final sweepAngle = (score * 2 * math.pi);
+    final startAngle = (-math.pi / 2) + (2 * math.pi * animation);
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
-      -math.pi / 2,
+      startAngle,
       sweepAngle,
       false,
       scorePaint,
@@ -2627,7 +2648,7 @@ extension _PremiumFeaturesMethods on _HomeScreenState {
             ),
           ),
         )
-        .animate(onPlay: (controller) => controller.repeat())
+        .animate()
         .shimmer(duration: 4000.ms, color: color.withValues(alpha: 0.03))
         .then(delay: 3000.ms);
   }
@@ -2897,9 +2918,7 @@ extension _NavigationMethods on _HomeScreenState {
 
   void _navigateToPartnerSharing() {
     Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const PartnerDashboardScreen(),
-      ),
+      MaterialPageRoute(builder: (context) => const PartnerDashboardScreen()),
     );
   }
 
@@ -2934,22 +2953,20 @@ extension _NavigationMethods on _HomeScreenState {
         child: Row(
           children: [
             Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: const Icon(
-                    Icons.psychology_rounded,
-                    color: Colors.white,
-                    size: 20,
-                  ),
-                )
-                .animate(onPlay: (controller) => controller.repeat())
-                .shimmer(duration: 1200.ms),
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+                ),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const Icon(
+                Icons.psychology_rounded,
+                color: Colors.white,
+                size: 20,
+              ),
+            ).animate().shimmer(duration: 1200.ms),
             const SizedBox(width: 12),
             Expanded(
               child: Column(

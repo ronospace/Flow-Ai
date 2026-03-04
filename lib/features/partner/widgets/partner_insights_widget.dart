@@ -44,34 +44,37 @@ class PartnerInsightsWidget extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            ...insights.take(3).map((insight) => Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: ListTile(
-                contentPadding: EdgeInsets.zero,
-                title: Text(
-                  insight.title,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: AppTheme.textPrimary,
+            ...insights
+                .take(3)
+                .map(
+                  (insight) => Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(
+                        insight.title,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: AppTheme.textPrimary,
+                        ),
+                      ),
+                      subtitle: Text(
+                        insight.content,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppTheme.textSecondary,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      onTap: () => onInsightTap?.call(insight),
+                    ),
                   ),
                 ),
-                subtitle: Text(
-                  insight.content,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: AppTheme.textSecondary,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                onTap: () => onInsightTap?.call(insight),
-              ),
-            )),
           ],
         ),
       ),
     );
   }
 }
-

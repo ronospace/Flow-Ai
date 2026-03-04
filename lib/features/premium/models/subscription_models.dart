@@ -58,7 +58,7 @@ class SubscriptionProduct {
 
   factory SubscriptionProduct.fromJson(Map<String, dynamic> json) =>
       _$SubscriptionProductFromJson(json);
-  
+
   Map<String, dynamic> toJson() => _$SubscriptionProductToJson(this);
 
   /// Calculate savings compared to monthly
@@ -95,7 +95,7 @@ class UserSubscription {
   final bool autoRenew;
   final String? transactionId;
   final String? originalTransactionId;
-  
+
   // Features access
   final int aiInsightsUsed;
   final int aiInsightsLimit;
@@ -128,7 +128,7 @@ class UserSubscription {
 
   factory UserSubscription.fromJson(Map<String, dynamic> json) =>
       _$UserSubscriptionFromJson(json);
-  
+
   Map<String, dynamic> toJson() => _$UserSubscriptionToJson(this);
 
   /// Create free tier subscription
@@ -178,7 +178,7 @@ class UserSubscription {
   /// Check if subscription is valid
   bool get isValid {
     if (tier == SubscriptionTier.free) return true;
-    if (status != SubscriptionStatus.active && 
+    if (status != SubscriptionStatus.active &&
         status != SubscriptionStatus.trial &&
         status != SubscriptionStatus.grace_period) {
       return false;
@@ -221,7 +221,7 @@ class UserSubscription {
   }
 
   /// Check if user has used up free insights
-  bool get hasUsedFreeInsights => 
+  bool get hasUsedFreeInsights =>
       tier == SubscriptionTier.free && aiInsightsUsed >= aiInsightsLimit;
 
   /// Copy with updated fields
@@ -255,7 +255,8 @@ class UserSubscription {
       cancelledDate: cancelledDate ?? this.cancelledDate,
       autoRenew: autoRenew ?? this.autoRenew,
       transactionId: transactionId ?? this.transactionId,
-      originalTransactionId: originalTransactionId ?? this.originalTransactionId,
+      originalTransactionId:
+          originalTransactionId ?? this.originalTransactionId,
       aiInsightsUsed: aiInsightsUsed ?? this.aiInsightsUsed,
       aiInsightsLimit: aiInsightsLimit ?? this.aiInsightsLimit,
       hasUnlimitedInsights: hasUnlimitedInsights ?? this.hasUnlimitedInsights,
@@ -291,18 +292,11 @@ class PurchaseResult {
   });
 
   factory PurchaseResult.success(UserSubscription subscription) {
-    return PurchaseResult(
-      success: true,
-      subscription: subscription,
-    );
+    return PurchaseResult(success: true, subscription: subscription);
   }
 
   factory PurchaseResult.failure(String message, [PurchaseError? error]) {
-    return PurchaseResult(
-      success: false,
-      errorMessage: message,
-      error: error,
-    );
+    return PurchaseResult(success: false, errorMessage: message, error: error);
   }
 }
 

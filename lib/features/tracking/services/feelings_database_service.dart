@@ -73,7 +73,9 @@ class FeelingsDatabaseService {
 
     // Create index for faster queries
     await db.execute('CREATE INDEX idx_entries_date ON $_entriesTable (date)');
-    await db.execute('CREATE INDEX idx_entries_user_date ON $_entriesTable (user_id, date)');
+    await db.execute(
+      'CREATE INDEX idx_entries_user_date ON $_entriesTable (user_id, date)',
+    );
 
     // Trends table
     await db.execute('''
@@ -113,7 +115,11 @@ class FeelingsDatabaseService {
   }
 
   /// Upgrade database schema
-  Future<void> _upgradeDatabase(Database db, int oldVersion, int newVersion) async {
+  Future<void> _upgradeDatabase(
+    Database db,
+    int oldVersion,
+    int newVersion,
+  ) async {
     // Handle database migrations here
     debugPrint('📊 Upgrading database from version $oldVersion to $newVersion');
   }
@@ -126,26 +132,26 @@ class FeelingsDatabaseService {
 
     try {
       final now = DateTime.now().toIso8601String();
-      
-      await _database!.insert(
-        _entriesTable,
-        {
-          'id': entry.id,
-          'user_id': 'current_user', // TODO: Get actual user ID
-          'date': entry.date.toIso8601String().split('T')[0], // Date only
-          'mood_scores': jsonEncode(entry.moodScores.map((k, v) => MapEntry(k.name, v))),
-          'energy_levels': jsonEncode(entry.energyLevels.map((k, v) => MapEntry(k.name, v))),
-          'symptoms': jsonEncode(entry.symptoms),
-          'custom_tags': jsonEncode(entry.customTags),
-          'notes': entry.notes,
-          'overall_wellbeing': entry.overallWellbeing,
-          'timestamp': entry.timestamp.toIso8601String(),
-          'sync_status': 0,
-          'created_at': now,
-          'updated_at': now,
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
+
+      await _database!.insert(_entriesTable, {
+        'id': entry.id,
+        'user_id': 'current_user', // TODO: Get actual user ID
+        'date': entry.date.toIso8601String().split('T')[0], // Date only
+        'mood_scores': jsonEncode(
+          entry.moodScores.map((k, v) => MapEntry(k.name, v)),
+        ),
+        'energy_levels': jsonEncode(
+          entry.energyLevels.map((k, v) => MapEntry(k.name, v)),
+        ),
+        'symptoms': jsonEncode(entry.symptoms),
+        'custom_tags': jsonEncode(entry.customTags),
+        'notes': entry.notes,
+        'overall_wellbeing': entry.overallWellbeing,
+        'timestamp': entry.timestamp.toIso8601String(),
+        'sync_status': 0,
+        'created_at': now,
+        'updated_at': now,
+      }, conflictAlgorithm: ConflictAlgorithm.replace);
 
       debugPrint('💾 Saved feelings entry for ${entry.date}');
     } catch (e) {
@@ -162,7 +168,7 @@ class FeelingsDatabaseService {
 
     try {
       final dateString = date.toIso8601String().split('T')[0];
-      
+
       final results = await _database!.query(
         _entriesTable,
         where: 'user_id = ? AND date = ?',
@@ -263,7 +269,7 @@ class FeelingsDatabaseService {
 
     try {
       final user = userId ?? 'current_user';
-      
+
       final result = await _database!.rawQuery(
         'SELECT COUNT(*) as count FROM $_entriesTable WHERE user_id = ?',
         [user],
@@ -283,22 +289,18 @@ class FeelingsDatabaseService {
     }
 
     try {
-      await _database!.insert(
-        _trendsTable,
-        {
-          'id': trend.id,
-          'user_id': 'current_user',
-          'trend_type': trend.type,
-          'description': trend.description,
-          'direction': trend.direction.name,
-          'confidence': trend.confidence,
-          'start_date': trend.startDate.toIso8601String(),
-          'end_date': trend.endDate.toIso8601String(),
-          'data_points': trend.dataPoints,
-          'created_at': DateTime.now().toIso8601String(),
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
+      await _database!.insert(_trendsTable, {
+        'id': trend.id,
+        'user_id': 'current_user',
+        'trend_type': trend.type,
+        'description': trend.description,
+        'direction': trend.direction.name,
+        'confidence': trend.confidence,
+        'start_date': trend.startDate.toIso8601String(),
+        'end_date': trend.endDate.toIso8601String(),
+        'data_points': trend.dataPoints,
+        'created_at': DateTime.now().toIso8601String(),
+      }, conflictAlgorithm: ConflictAlgorithm.replace);
     } catch (e) {
       debugPrint('❌ Failed to save trend: $e');
       throw DatabaseException('Failed to save trend: $e');
@@ -339,24 +341,20 @@ class FeelingsDatabaseService {
     }
 
     try {
-      await _database!.insert(
-        _insightsTable,
-        {
-          'id': insight.id,
-          'user_id': 'current_user',
-          'insight_type': insight.type,
-          'title': insight.title,
-          'description': insight.description,
-          'category': insight.category,
-          'priority': insight.priority.index,
-          'confidence': insight.confidence,
-          'actionable': insight.actionable ? 1 : 0,
-          'data_sources': jsonEncode(insight.dataSources),
-          'generated_at': insight.generatedAt.toIso8601String(),
-          'expires_at': insight.expiresAt?.toIso8601String(),
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
+      await _database!.insert(_insightsTable, {
+        'id': insight.id,
+        'user_id': 'current_user',
+        'insight_type': insight.type,
+        'title': insight.title,
+        'description': insight.description,
+        'category': insight.category,
+        'priority': insight.priority.index,
+        'confidence': insight.confidence,
+        'actionable': insight.actionable ? 1 : 0,
+        'data_sources': jsonEncode(insight.dataSources),
+        'generated_at': insight.generatedAt.toIso8601String(),
+        'expires_at': insight.expiresAt?.toIso8601String(),
+      }, conflictAlgorithm: ConflictAlgorithm.replace);
     } catch (e) {
       debugPrint('❌ Failed to save insight: $e');
       throw DatabaseException('Failed to save insight: $e');
@@ -399,7 +397,7 @@ class FeelingsDatabaseService {
 
     try {
       final now = DateTime.now().toIso8601String();
-      
+
       await _database!.delete(
         _insightsTable,
         where: 'expires_at IS NOT NULL AND expires_at < ?',
@@ -462,7 +460,7 @@ class FeelingsDatabaseService {
   /// Calculate tracking duration in days
   int? _calculateTrackingDuration(String? firstDate, String? lastDate) {
     if (firstDate == null || lastDate == null) return null;
-    
+
     try {
       final first = DateTime.parse(firstDate);
       final last = DateTime.parse(lastDate);
@@ -474,22 +472,29 @@ class FeelingsDatabaseService {
 
   /// Map database row to DailyFeelingsEntry
   DailyFeelingsEntry _mapToFeelingsEntry(Map<String, dynamic> row) {
-    final moodScoresJson = jsonDecode(row['mood_scores']) as Map<String, dynamic>;
-    final energyLevelsJson = jsonDecode(row['energy_levels']) as Map<String, dynamic>;
+    final moodScoresJson =
+        jsonDecode(row['mood_scores']) as Map<String, dynamic>;
+    final energyLevelsJson =
+        jsonDecode(row['energy_levels']) as Map<String, dynamic>;
     final symptomsJson = jsonDecode(row['symptoms']) as Map<String, dynamic>;
-    final customTagsJson = jsonDecode(row['custom_tags']) as Map<String, dynamic>;
+    final customTagsJson =
+        jsonDecode(row['custom_tags']) as Map<String, dynamic>;
 
     return DailyFeelingsEntry(
       id: row['id'],
       date: DateTime.parse(row['date']),
-      moodScores: moodScoresJson.map((k, v) => MapEntry(
-        MoodCategory.values.firstWhere((e) => e.name == k),
-        (v as num).toDouble(),
-      )),
-      energyLevels: energyLevelsJson.map((k, v) => MapEntry(
-        EnergyType.values.firstWhere((e) => e.name == k),
-        (v as num).toDouble(),
-      )),
+      moodScores: moodScoresJson.map(
+        (k, v) => MapEntry(
+          MoodCategory.values.firstWhere((e) => e.name == k),
+          (v as num).toDouble(),
+        ),
+      ),
+      energyLevels: energyLevelsJson.map(
+        (k, v) => MapEntry(
+          EnergyType.values.firstWhere((e) => e.name == k),
+          (v as num).toDouble(),
+        ),
+      ),
       symptoms: Map<String, int>.from(symptomsJson),
       customTags: Map<String, String>.from(customTagsJson),
       notes: row['notes'],
@@ -518,7 +523,7 @@ class FeelingsDatabaseService {
   /// Map database row to FeelingsInsight
   FeelingsInsight _mapToFeelingsInsight(Map<String, dynamic> row) {
     final dataSourcesJson = jsonDecode(row['data_sources']) as List<dynamic>;
-    
+
     return FeelingsInsight(
       id: row['id'],
       type: row['insight_type'],
@@ -530,7 +535,7 @@ class FeelingsDatabaseService {
       actionable: row['actionable'] == 1,
       dataSources: List<String>.from(dataSourcesJson),
       generatedAt: DateTime.parse(row['generated_at']),
-      expiresAt: row['expires_at'] != null 
+      expiresAt: row['expires_at'] != null
           ? DateTime.parse(row['expires_at'])
           : null,
     );
@@ -553,7 +558,7 @@ class FeelingsDatabaseService {
 
     try {
       final user = userId ?? 'current_user';
-      
+
       final entries = await _database!.query(
         _entriesTable,
         where: 'user_id = ?',
@@ -642,11 +647,7 @@ class FeelingsInsight {
   });
 }
 
-enum InsightPriority {
-  low,
-  medium,
-  high,
-}
+enum InsightPriority { low, medium, high }
 
 class DatabaseException implements Exception {
   final String message;

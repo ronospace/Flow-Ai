@@ -156,11 +156,7 @@ class _HealthcareProviderPortalScreenState
         children: [
           Row(
             children: [
-              Icon(
-                Icons.info_outline,
-                color: AppTheme.secondaryBlue,
-                size: 24,
-              ),
+              Icon(Icons.info_outline, color: AppTheme.secondaryBlue, size: 24),
               const SizedBox(width: 12),
               Text(
                 'Share Your Health Data',
@@ -174,9 +170,7 @@ class _HealthcareProviderPortalScreenState
           const SizedBox(height: 12),
           Text(
             'Export your cycle data, symptoms, and health insights to share with your healthcare provider during appointments.',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              height: 1.5,
-            ),
+            style: theme.textTheme.bodyMedium?.copyWith(height: 1.5),
           ),
           const SizedBox(height: 12),
           Container(
@@ -264,7 +258,8 @@ class _HealthcareProviderPortalScreenState
 
   Widget _buildDateRangeChip(String label, DateRange Function() rangeBuilder) {
     final range = rangeBuilder();
-    final isSelected = _selectedDateRange?.start == range.start &&
+    final isSelected =
+        _selectedDateRange?.start == range.start &&
         _selectedDateRange?.end == range.end;
 
     return FilterChip(
@@ -423,10 +418,7 @@ class _HealthcareProviderPortalScreenState
             : const Icon(Icons.file_download, size: 24),
         label: Text(
           _isExporting ? 'Exporting...' : 'Export Health Data',
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         style: ElevatedButton.styleFrom(
           backgroundColor: AppTheme.secondaryBlue,
@@ -575,10 +567,9 @@ class _HealthcareProviderPortalScreenState
     if (_exportFilePath == null) return;
 
     try {
-      await Share.shareXFiles(
-        [XFile(_exportFilePath!)],
-        text: 'My Flow Ai Health Data Export',
-      );
+      await Share.shareXFiles([
+        XFile(_exportFilePath!),
+      ], text: 'My Flow Ai Health Data Export');
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.maybeOf(context)?.showSnackBar(
@@ -591,4 +582,3 @@ class _HealthcareProviderPortalScreenState
     }
   }
 }
-

@@ -19,7 +19,6 @@ class FlowIntensityPicker extends StatefulWidget {
 }
 
 class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
-  
   List<FlowIntensityOption> _getIntensityOptions(BuildContext context) {
     final localizations = AppLocalizations.of(context);
     return [
@@ -53,7 +52,11 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
         color: AppTheme.secondaryBlue,
         description: localizations.flowIntensityLightDescription,
         medicalInfo: localizations.flowIntensityLightMedicalInfo,
-        products: [localizations.lightPads, localizations.tamponsRegular, localizations.menstrualCups],
+        products: [
+          localizations.lightPads,
+          localizations.tamponsRegular,
+          localizations.menstrualCups,
+        ],
         hourlyChanges: 1,
       ),
       FlowIntensityOption(
@@ -64,7 +67,12 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
         color: AppTheme.primaryPurple,
         description: localizations.flowIntensityMediumDescription,
         medicalInfo: localizations.flowIntensityMediumMedicalInfo,
-        products: [localizations.regularPads, localizations.tamponsSuper, localizations.menstrualCups, localizations.periodUnderwear],
+        products: [
+          localizations.regularPads,
+          localizations.tamponsSuper,
+          localizations.menstrualCups,
+          localizations.periodUnderwear,
+        ],
         hourlyChanges: 2,
       ),
       FlowIntensityOption(
@@ -75,7 +83,12 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
         color: AppTheme.primaryRose,
         description: localizations.flowIntensityHeavyDescription,
         medicalInfo: localizations.flowIntensityHeavyMedicalInfo,
-        products: [localizations.superPads, localizations.tamponsSuperPlus, localizations.menstrualCupsLarge, localizations.periodUnderwearHeavy],
+        products: [
+          localizations.superPads,
+          localizations.tamponsSuperPlus,
+          localizations.menstrualCupsLarge,
+          localizations.periodUnderwearHeavy,
+        ],
         hourlyChanges: 3,
       ),
       FlowIntensityOption(
@@ -86,12 +99,17 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
         color: Color(0xFFD32F2F),
         description: localizations.flowIntensityVeryHeavyDescription,
         medicalInfo: localizations.flowIntensityVeryHeavyMedicalInfo,
-        products: [localizations.ultraPads, localizations.tamponsUltra, localizations.menstrualCupsXL, localizations.medicalConsultation],
+        products: [
+          localizations.ultraPads,
+          localizations.tamponsUltra,
+          localizations.menstrualCupsXL,
+          localizations.medicalConsultation,
+        ],
         hourlyChanges: 4,
       ),
     ];
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -100,7 +118,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
       (option) => option.intensity == widget.selectedIntensity,
       orElse: () => intensityOptions[0],
     );
-    
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -109,7 +127,8 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
           height: 400, // Fixed height to avoid unbounded constraints
           child: GridView.builder(
             padding: const EdgeInsets.all(12),
-            physics: const BouncingScrollPhysics(), // Better scrolling performance
+            physics:
+                const BouncingScrollPhysics(), // Better scrolling performance
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 12,
@@ -120,7 +139,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
             itemBuilder: (context, index) {
               final option = intensityOptions[index];
               final isSelected = option.intensity == widget.selectedIntensity;
-              
+
               return GestureDetector(
                 onTap: () {
                   HapticFeedback.mediumImpact();
@@ -135,7 +154,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
             },
           ),
         ),
-        
+
         // AI Insights Panel - Positioned at bottom for better layout
         if (widget.selectedIntensity != FlowIntensity.none)
           Container(
@@ -145,7 +164,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
       ],
     );
   }
-  
+
   Widget _buildFlowVisualization(FlowIntensityOption option) {
     final theme = Theme.of(context);
     return Container(
@@ -194,7 +213,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
               ),
             ),
           ),
-          
+
           // Medical Information
           Expanded(
             flex: 3,
@@ -223,17 +242,14 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                   if (option.hourlyChanges > 0)
                     Row(
                       children: [
-                        Icon(
-                          Icons.schedule,
-                          size: 16,
-                          color: option.color,
-                        ),
+                        Icon(Icons.schedule, size: 16, color: option.color),
                         const SizedBox(width: 4),
                         Text(
-                          AppLocalizations.of(context).hourlyChanges(option.hourlyChanges),
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppTheme.mediumGrey,
-                          ),
+                          AppLocalizations.of(
+                            context,
+                          ).hourlyChanges(option.hourlyChanges),
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(color: AppTheme.mediumGrey),
                         ),
                       ],
                     ),
@@ -245,7 +261,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
       ),
     );
   }
-  
+
   Widget _buildAIInsightsPanel(FlowIntensityOption option) {
     final theme = Theme.of(context);
     return Container(
@@ -279,9 +295,9 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
               size: 24,
             ),
           ),
-          
+
           const SizedBox(width: 16),
-          
+
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -309,13 +325,13 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
       ),
     );
   }
-  
+
   Widget _buildFlowIntensityCard(FlowIntensityOption option, bool isSelected) {
     final theme = Theme.of(context);
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200), // Reduced animation time
       decoration: BoxDecoration(
-        gradient: isSelected 
+        gradient: isSelected
             ? LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -328,12 +344,14 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
         color: isSelected ? null : theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: isSelected ? option.color : AppTheme.lightGrey.withValues(alpha: 0.5),
+          color: isSelected
+              ? option.color
+              : AppTheme.lightGrey.withValues(alpha: 0.5),
           width: isSelected ? 3 : 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: isSelected 
+            color: isSelected
                 ? option.color.withValues(alpha: 0.3)
                 : theme.shadowColor.withValues(alpha: 0.05),
             blurRadius: isSelected ? 15.0 : 8.0,
@@ -358,15 +376,13 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
               child: Center(
                 child: Text(
                   option.emoji,
-                  style: TextStyle(
-                    fontSize: isSelected ? 28 : 24,
-                  ),
+                  style: TextStyle(fontSize: isSelected ? 28 : 24),
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 8),
-            
+
             // Title
             Flexible(
               child: Text(
@@ -381,9 +397,9 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            
+
             const SizedBox(height: 2),
-            
+
             // Subtitle
             Flexible(
               child: Text(
@@ -397,9 +413,9 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            
+
             // Medical indicator for heavy flows
-            if (option.intensity == FlowIntensity.heavy || 
+            if (option.intensity == FlowIntensity.heavy ||
                 option.intensity == FlowIntensity.veryHeavy) ...[
               const SizedBox(height: 4),
               Container(
@@ -429,11 +445,11 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                 ),
               ),
             ],
-            
+
             const Spacer(),
-            
+
             // Selection indicator
-            if (isSelected) 
+            if (isSelected)
               Container(
                 width: 24,
                 height: 3,
@@ -447,7 +463,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
       ),
     );
   }
-  
+
   String _getAIInsight(FlowIntensityOption option) {
     final localizations = AppLocalizations.of(context);
     switch (option.intensity) {
@@ -465,7 +481,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
         return localizations.noFlowInsight;
     }
   }
-  
+
   void _showMedicalInfo(FlowIntensityOption option) {
     final localizations = AppLocalizations.of(context);
     final theme = Theme.of(context);
@@ -494,7 +510,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
-            
+
             // Header
             Padding(
               padding: const EdgeInsets.all(24),
@@ -505,7 +521,10 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                     height: 60,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [option.color, option.color.withValues(alpha: 0.7)],
+                        colors: [
+                          option.color,
+                          option.color.withValues(alpha: 0.7),
+                        ],
                       ),
                       borderRadius: BorderRadius.circular(30),
                     ),
@@ -541,7 +560,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                 ],
               ),
             ),
-            
+
             // Content
             Expanded(
               child: SingleChildScrollView(
@@ -564,9 +583,9 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                         color: AppTheme.darkGrey,
                       ),
                     ),
-                    
+
                     const SizedBox(height: 24),
-                    
+
                     // Recommended Products
                     if (option.products.isNotEmpty) ...[
                       Text(
@@ -576,25 +595,24 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      ...option.products.map((product) => Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.check_circle,
-                              size: 16,
-                              color: option.color,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              product,
-                              style: theme.textTheme.bodyMedium,
-                            ),
-                          ],
+                      ...option.products.map(
+                        (product) => Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.check_circle,
+                                size: 16,
+                                color: option.color,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(product, style: theme.textTheme.bodyMedium),
+                            ],
+                          ),
                         ),
-                      )),
+                      ),
                     ],
-                    
+
                     const SizedBox(height: 20),
                   ],
                 ),

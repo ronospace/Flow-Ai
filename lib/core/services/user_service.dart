@@ -12,7 +12,7 @@ class UserService extends ChangeNotifier {
 
   UserProfile? _currentUser;
   bool _isInitialized = false;
-  
+
   final LocalUserService _localUserService = LocalUserService();
   final AuthService _authService = AuthService();
 
@@ -23,16 +23,16 @@ class UserService extends ChangeNotifier {
   /// Initialize the user service
   Future<void> initialize() async {
     if (_isInitialized) return;
-    
+
     debugPrint('🔄 Initializing User Service...');
-    
+
     try {
       // Initialize dependencies
       await _localUserService.initialize();
-      
+
       // Load current user if exists
       await _loadCurrentUser();
-      
+
       _isInitialized = true;
       debugPrint('✅ User Service initialized');
     } catch (e) {
@@ -57,7 +57,7 @@ class UserService extends ChangeNotifier {
     Map<String, dynamic>? familyHistory,
   }) async {
     if (!_isInitialized) await initialize();
-    
+
     final now = DateTime.now();
     final user = UserProfile(
       id: 'user_${now.millisecondsSinceEpoch}',
@@ -82,7 +82,7 @@ class UserService extends ChangeNotifier {
   /// Update the current user profile
   Future<UserProfile> updateUser(UserProfile updatedUser) async {
     if (!_isInitialized) await initialize();
-    
+
     final user = updatedUser.copyWith(updatedAt: DateTime.now());
     await _saveUser(user);
     return user;
@@ -119,7 +119,7 @@ class UserService extends ChangeNotifier {
   /// Sign in user
   Future<UserProfile?> signInUser(String userId) async {
     if (!_isInitialized) await initialize();
-    
+
     try {
       final user = await _localUserService.getUser(userId);
       if (user != null) {
@@ -144,7 +144,7 @@ class UserService extends ChangeNotifier {
   /// Delete user account
   Future<bool> deleteUser(String userId) async {
     if (!_isInitialized) await initialize();
-    
+
     try {
       final success = await _localUserService.deleteUser(userId);
       if (success && _currentUser?.id == userId) {
@@ -167,7 +167,7 @@ class UserService extends ChangeNotifier {
     if (_currentUser != null) {
       final preferences = Map<String, dynamic>.from(_currentUser!.preferences);
       preferences['onboarding_completed'] = true;
-      
+
       await updateUserProperties(preferences: preferences);
     }
   }
@@ -182,7 +182,7 @@ class UserService extends ChangeNotifier {
     if (_currentUser != null) {
       final preferences = Map<String, dynamic>.from(_currentUser!.preferences);
       preferences.addAll(newPreferences);
-      
+
       await updateUserProperties(preferences: preferences);
     }
   }
@@ -318,7 +318,7 @@ class UserService extends ChangeNotifier {
   String getUserAgeCategory() {
     final age = _currentUser?.age;
     if (age == null) return 'unknown';
-    
+
     if (age < 18) return 'teen';
     if (age < 25) return 'young_adult';
     if (age < 35) return 'adult';

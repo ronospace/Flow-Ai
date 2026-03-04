@@ -1,5 +1,8 @@
 import 'features/partner/services/partner_service.dart';
+import 'features/partner/dialogs/join_partner_dialog.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:app_links/app_links.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
@@ -281,6 +284,9 @@ class FlowAIApp extends StatefulWidget {
 }
 
 class _FlowAIAppState extends State<FlowAIApp> {
+  final AppLinks _appLinks = AppLinks();
+  StreamSubscription<Uri>? _linkSub;
+
   late SettingsProvider settingsProvider;
   late ProgressiveDisclosureService progressiveDisclosureService;
 
@@ -291,6 +297,7 @@ class _FlowAIAppState extends State<FlowAIApp> {
     progressiveDisclosureService = ProgressiveDisclosureService();
     _initializeSettings();
     _initializeProgressiveDisclosure();
+    _initDeepLinks();
   }
 
   Future<void> _initializeSettings() async {
@@ -309,6 +316,55 @@ class _FlowAIAppState extends State<FlowAIApp> {
     } catch (e) {
       AppLogger.warning('Progressive Disclosure initialization failed: $e');
     }
+  }
+
+
+  Future<void> _initDeepLinks() async {
+    try {
+      _linkSub = _appLinks.uriLinkStream.listen((uri) {
+        if (!mounted) return;
+
+        final segments = uri.pathSegments;
+        if (segments.isEmpty) return;
+
+        // flowai://invite/<CODE>
+        if (segments.length >= 2 && segments[0] == 'invite') {
+          final code = segments[1];
+
+          WidgetsBinding.instance.addPostFrameCallback((_) async {
+            if (!mounted) return;
+
+            // Ensure we are inside the app shell first
+            AppRouter.router.go('/home');
+
+            // Show Join Partner dialog with code prefilled (we'll add initialCode next)
+            try {
+              final partnerService = context.read<PartnerService>();
+              await showDialog(
+                context: context,
+                builder: (_) => JoinPartnerDialog(
+                  initialCode: code,
+                  onJoinWithCode: (c) async {
+                    await partnerService.acceptPartnerInvitation(c);
+                  },
+                ),
+              );
+            } catch (_) {
+              // ignore UI errors
+            }
+          });
+        }
+      });
+    } catch (_) {
+      // ignore link init errors
+    }
+  }
+
+
+  @override
+  void dispose() {
+    _linkSub?.cancel();
+    super.dispose();
   }
 
   @override
@@ -451,5 +507,6 @@ class _FlowAIAppState extends State<FlowAIApp> {
     );
   }
 }
+
 // hot-reload-test Tue Feb 24 23:29:29 CET 2026
 // hot-reload-test Tue Feb 24 23:29:33 CET 2026

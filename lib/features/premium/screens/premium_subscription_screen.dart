@@ -8,10 +8,12 @@ class PremiumSubscriptionScreen extends StatefulWidget {
   const PremiumSubscriptionScreen({super.key});
 
   @override
-  State<PremiumSubscriptionScreen> createState() => _PremiumSubscriptionScreenState();
+  State<PremiumSubscriptionScreen> createState() =>
+      _PremiumSubscriptionScreenState();
 }
 
-class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> with TickerProviderStateMixin {
+class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen>
+    with TickerProviderStateMixin {
   late TabController _tabController;
   SubscriptionTier _selectedTier = SubscriptionTier.premium;
   PaymentMethod _selectedPaymentMethod = PaymentMethod.appStore;
@@ -53,7 +55,7 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
 
   Widget _buildCurrentSubscriptionView(PremiumProvider provider) {
     final subscription = provider.currentSubscription!;
-    
+
     return CustomScrollView(
       slivers: [
         _buildAppBar(context, 'Your Subscription'),
@@ -64,7 +66,11 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
               children: [
                 _buildCurrentSubscriptionCard(subscription),
                 const SizedBox(height: 24),
-                _buildFeaturesList(provider.availableFeatures.where((f) => provider.hasFeature(f.type)).toList()),
+                _buildFeaturesList(
+                  provider.availableFeatures
+                      .where((f) => provider.hasFeature(f.type))
+                      .toList(),
+                ),
                 const SizedBox(height: 24),
                 _buildUsageStats(provider),
                 const SizedBox(height: 24),
@@ -115,10 +121,7 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
       flexibleSpace: FlexibleSpaceBar(
         title: Text(
           title,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         centerTitle: true,
         background: Container(
@@ -161,16 +164,18 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
           const SizedBox(height: 16),
           Text(
             'Unlock Premium Features',
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
           Text(
             'Get access to advanced AI predictions, healthcare integration, and unlimited features',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1),
+              color: Theme.of(
+                context,
+              ).colorScheme.onSurface.withValues(alpha: 0.1),
             ),
             textAlign: TextAlign.center,
           ),
@@ -185,9 +190,9 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
       children: [
         Text(
           'Choose Your Plan',
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16),
         ...SubscriptionTier.values.map((tier) => _buildTierCard(tier)),
@@ -198,7 +203,7 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
   Widget _buildTierCard(SubscriptionTier tier) {
     final isSelected = _selectedTier == tier;
     final theme = Theme.of(context);
-    
+
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       child: InkWell(
@@ -213,10 +218,14 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: isSelected ? theme.colorScheme.primary : theme.colorScheme.outline.withValues(alpha: 0.1),
+              color: isSelected
+                  ? theme.colorScheme.primary
+                  : theme.colorScheme.outline.withValues(alpha: 0.1),
               width: isSelected ? 2 : 1,
             ),
-            color: isSelected ? theme.colorScheme.primary.withValues(alpha: 0.1) : theme.colorScheme.surface,
+            color: isSelected
+                ? theme.colorScheme.primary.withValues(alpha: 0.1)
+                : theme.colorScheme.surface,
           ),
           child: Row(
             children: [
@@ -226,18 +235,22 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: isSelected ? theme.colorScheme.primary : theme.colorScheme.outline,
+                    color: isSelected
+                        ? theme.colorScheme.primary
+                        : theme.colorScheme.outline,
                     width: 2,
                   ),
-                  color: isSelected ? theme.colorScheme.primary : Colors.transparent,
+                  color: isSelected
+                      ? theme.colorScheme.primary
+                      : Colors.transparent,
                 ),
-                child: isSelected 
-                  ? Icon(
-                      Icons.check,
-                      size: 16,
-                      color: theme.colorScheme.onPrimary,
-                    )
-                  : null,
+                child: isSelected
+                    ? Icon(
+                        Icons.check,
+                        size: 16,
+                        color: theme.colorScheme.onPrimary,
+                      )
+                    : null,
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -250,13 +263,18 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
                           tier.displayName,
                           style: theme.textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: isSelected ? theme.colorScheme.primary : null,
+                            color: isSelected
+                                ? theme.colorScheme.primary
+                                : null,
                           ),
                         ),
                         if (tier == SubscriptionTier.premium) ...[
                           const SizedBox(width: 8),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 2,
+                            ),
                             decoration: BoxDecoration(
                               color: theme.colorScheme.secondary,
                               borderRadius: BorderRadius.circular(12),
@@ -276,7 +294,9 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
                     Text(
                       tier.featuresDescription,
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.1,
+                        ),
                       ),
                     ),
                   ],
@@ -317,9 +337,9 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
           children: [
             Text(
               'Features Included',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             ...features.map((feature) => _buildFeatureRow(feature)),
@@ -331,16 +351,16 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
 
   Widget _buildFeatureRow(PremiumFeature feature) {
     final isIncluded = _getFeatureTiers(feature.type).contains(_selectedTier);
-    
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
           Icon(
             isIncluded ? Icons.check_circle : Icons.cancel,
-            color: isIncluded 
-              ? Theme.of(context).colorScheme.primary 
-              : Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
+            color: isIncluded
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
             size: 20,
           ),
           const SizedBox(width: 12),
@@ -352,17 +372,23 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
                   feature.name,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.w500,
-                    color: isIncluded 
-                      ? null 
-                      : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1),
+                    color: isIncluded
+                        ? null
+                        : Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withValues(alpha: 0.1),
                   ),
                 ),
                 Text(
                   feature.description,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: isIncluded 
-                      ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1)
-                      : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1),
+                    color: isIncluded
+                        ? Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withValues(alpha: 0.1)
+                        : Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withValues(alpha: 0.1),
                   ),
                 ),
               ],
@@ -379,19 +405,21 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
       children: [
         Text(
           'Payment Method',
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 12),
-        ...PaymentMethod.values.map((method) => _buildPaymentMethodTile(method)),
+        ...PaymentMethod.values.map(
+          (method) => _buildPaymentMethodTile(method),
+        ),
       ],
     );
   }
 
   Widget _buildPaymentMethodTile(PaymentMethod method) {
     final isSelected = _selectedPaymentMethod == method;
-    
+
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       child: InkWell(
@@ -406,13 +434,15 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: isSelected 
-                ? Theme.of(context).colorScheme.primary 
-                : Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
+              color: isSelected
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(
+                      context,
+                    ).colorScheme.outline.withValues(alpha: 0.1),
             ),
-            color: isSelected 
-              ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1) 
-              : null,
+            color: isSelected
+                ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)
+                : null,
           ),
           child: Row(
             children: [
@@ -432,9 +462,9 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
               const SizedBox(width: 12),
               Text(
                 method.displayName,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.w500,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
               ),
             ],
           ),
@@ -448,29 +478,31 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
       width: double.infinity,
       child: ElevatedButton(
         onPressed: provider.isLoading
-          ? null
-          : () async {
-              final success = await provider.purchaseSubscription(
-                _selectedTier,
-                _selectedPaymentMethod,
-              );
-              
-              if (success && mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Subscription activated successfully!'),
-                    backgroundColor: Colors.green,
-                  ),
+            ? null
+            : () async {
+                final success = await provider.purchaseSubscription(
+                  _selectedTier,
+                  _selectedPaymentMethod,
                 );
-              } else if (!success && mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(provider.error ?? 'Purchase failed. Please try again.'),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              }
-            },
+
+                if (success && mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Subscription activated successfully!'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                } else if (!success && mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        provider.error ?? 'Purchase failed. Please try again.',
+                      ),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
@@ -478,14 +510,14 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
           ),
         ),
         child: provider.isLoading
-          ? const CircularProgressIndicator()
-          : Text(
-              'Subscribe to ${_selectedTier.displayName} - ${_selectedTier.priceString}',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+            ? const CircularProgressIndicator()
+            : Text(
+                'Subscribe to ${_selectedTier.displayName} - ${_selectedTier.priceString}',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
       ),
     );
   }
@@ -503,9 +535,7 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
           );
         } else if (!success && mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('No subscription found to restore.'),
-            ),
+            const SnackBar(content: Text('No subscription found to restore.')),
           );
         }
       },
@@ -514,7 +544,7 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
   }
 
   // Helper methods for current subscription view
-  
+
   Widget _buildCurrentSubscriptionCard(Subscription subscription) {
     return Card(
       child: Padding(
@@ -542,26 +572,31 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
                       Text(
                         'Active until ${_formatDate(subscription.endDate)}',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1),
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withValues(alpha: 0.1),
                         ),
                       ),
                     ],
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: subscription.status == SubscriptionStatus.active
-                      ? Colors.green.withValues(alpha: 0.1)
-                      : Colors.orange.withValues(alpha: 0.1),
+                        ? Colors.green.withValues(alpha: 0.1)
+                        : Colors.orange.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Text(
                     subscription.status.name.toUpperCase(),
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
                       color: subscription.status == SubscriptionStatus.active
-                        ? Colors.green
-                        : Colors.orange,
+                          ? Colors.green
+                          : Colors.orange,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -606,22 +641,20 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
       ),
       child: Column(
         children: [
-          Icon(
-            icon,
-            color: Theme.of(context).colorScheme.primary,
-            size: 24,
-          ),
+          Icon(icon, color: Theme.of(context).colorScheme.primary, size: 24),
           const SizedBox(height: 8),
           Text(
             value,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
           Text(
             label,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1),
+              color: Theme.of(
+                context,
+              ).colorScheme.onSurface.withValues(alpha: 0.1),
             ),
             textAlign: TextAlign.center,
           ),
@@ -639,9 +672,9 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
           children: [
             Text(
               'Your Premium Features',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             ...features.map((feature) => _buildActiveFeatureTile(feature)),
@@ -659,7 +692,9 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+              color: Theme.of(
+                context,
+              ).colorScheme.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(
@@ -675,14 +710,16 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
               children: [
                 Text(
                   feature.name,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
                 ),
                 Text(
                   feature.description,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withValues(alpha: 0.1),
                   ),
                 ),
               ],
@@ -702,9 +739,9 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
           children: [
             Text(
               'Usage This Month',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             Row(
@@ -712,7 +749,9 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
                 Expanded(
                   child: _buildUsageStat(
                     'Reports Generated',
-                    provider.monthlyUsage[PremiumFeatureType.customReports]?.toString() ?? '0',
+                    provider.monthlyUsage[PremiumFeatureType.customReports]
+                            ?.toString() ??
+                        '0',
                     Icons.assessment,
                   ),
                 ),
@@ -720,7 +759,9 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
                 Expanded(
                   child: _buildUsageStat(
                     'Data Exports',
-                    provider.monthlyUsage[PremiumFeatureType.unlimitedExports]?.toString() ?? '0',
+                    provider.monthlyUsage[PremiumFeatureType.unlimitedExports]
+                            ?.toString() ??
+                        '0',
                     Icons.download,
                   ),
                 ),
@@ -744,22 +785,20 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
       ),
       child: Column(
         children: [
-          Icon(
-            icon,
-            color: Theme.of(context).colorScheme.secondary,
-            size: 24,
-          ),
+          Icon(icon, color: Theme.of(context).colorScheme.secondary, size: 24),
           const SizedBox(height: 8),
           Text(
             value,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
           Text(
             label,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1),
+              color: Theme.of(
+                context,
+              ).colorScheme.onSurface.withValues(alpha: 0.1),
             ),
             textAlign: TextAlign.center,
           ),
@@ -790,7 +829,7 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
               if (confirmed == true && mounted) {
                 final provider = context.read<PremiumProvider>();
                 final success = await provider.cancelSubscription();
-                
+
                 if (success && mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -822,7 +861,11 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen> w
         return SubscriptionTier.values;
       case PremiumFeatureType.unlimitedExports:
       case PremiumFeatureType.customReports:
-        return [SubscriptionTier.basic, SubscriptionTier.premium, SubscriptionTier.ultimate];
+        return [
+          SubscriptionTier.basic,
+          SubscriptionTier.premium,
+          SubscriptionTier.ultimate,
+        ];
       case PremiumFeatureType.advancedAI:
       case PremiumFeatureType.healthcareIntegration:
       case PremiumFeatureType.prioritySupport:

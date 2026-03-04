@@ -24,23 +24,23 @@ class SecurityManager {
   late Encrypter _encrypter;
   late encrypt.Key _masterKey;
   late IV _defaultIV;
-  
+
   // Biometric authentication
   final LocalAuthentication _localAuth = LocalAuthentication();
-  
+
   // Security audit trail
   final List<SecurityEvent> _auditTrail = [];
   final int _maxAuditEntries = 1000;
-  
+
   // Session management
   String? _currentSessionId;
   DateTime? _sessionStartTime;
   final Duration _sessionTimeout = const Duration(minutes: 30);
   Timer? _sessionTimer;
-  
+
   // Device fingerprinting
   String? _deviceFingerprint;
-  
+
   /// Initialize the security system
   Future<void> initialize() async {
     if (_isInitialized) return;
@@ -50,27 +50,27 @@ class SecurityManager {
 
       // Generate or retrieve master encryption key
       await _initializeEncryption();
-      
+
       // Initialize biometric authentication
       await _initializeBiometrics();
-      
+
       // Generate device fingerprint
       await _generateDeviceFingerprint();
-      
+
       // Setup security monitoring
       _setupSecurityMonitoring();
-      
+
       // Initialize session management
       _initializeSessionManagement();
 
       _isInitialized = true;
-      
+
       _logSecurityEvent(
         SecurityEventType.systemInitialized,
         'Security Manager initialized successfully',
         severity: SecuritySeverity.info,
       );
-      
+
       AppLogger.success('✅ Security Manager initialized with HIPAA compliance');
     } catch (e) {
       await ErrorHandler.instance.handleSecurityError(
@@ -87,10 +87,10 @@ class SecurityManager {
       // Generate or retrieve master key
       _masterKey = await _getMasterKey();
       _defaultIV = IV.fromSecureRandom(16);
-      
+
       // Initialize encrypter with AES-256-GCM for authenticated encryption
       _encrypter = Encrypter(AES(_masterKey, mode: AESMode.gcm));
-      
+
       AppLogger.security('🔑 AES-256-GCM encryption initialized');
     } catch (e) {
       throw SecurityException('Failed to initialize encryption: $e');
@@ -102,12 +102,16 @@ class SecurityManager {
     try {
       final isAvailable = await _localAuth.canCheckBiometrics;
       final isDeviceSupported = await _localAuth.isDeviceSupported();
-      
+
       if (isAvailable && isDeviceSupported) {
         final availableBiometrics = await _localAuth.getAvailableBiometrics();
-        AppLogger.security('👤 Biometrics available: ${availableBiometrics.join(", ")}');
+        AppLogger.security(
+          '👤 Biometrics available: ${availableBiometrics.join(", ")}',
+        );
       } else {
-        AppLogger.security('👤 Biometric authentication not available on this device');
+        AppLogger.security(
+          '👤 Biometric authentication not available on this device',
+        );
       }
     } catch (e) {
       AppLogger.warning('Failed to initialize biometrics: $e');
@@ -125,11 +129,11 @@ class SecurityManager {
         Platform.localHostname,
         // Add more device characteristics as needed
       ];
-      
+
       final combined = characteristics.join('|');
       final bytes = utf8.encode(combined);
       final digest = sha256.convert(bytes);
-      
+
       _deviceFingerprint = digest.toString();
       AppLogger.security('📱 Device fingerprint generated');
     } catch (e) {
@@ -154,21 +158,21 @@ class SecurityManager {
   /// Encrypt sensitive health data
   Future<String> encryptHealthData(String plaintext) async {
     if (!_isInitialized) await initialize();
-    
+
     try {
       // Use secure random IV for each encryption
       final iv = IV.fromSecureRandom(16);
       final encrypted = _encrypter.encrypt(plaintext, iv: iv);
-      
+
       // Combine IV and encrypted data
       final result = base64.encode(iv.bytes + encrypted.bytes);
-      
+
       _logSecurityEvent(
         SecurityEventType.dataEncrypted,
         'Health data encrypted',
         metadata: {'data_length': plaintext.length},
       );
-      
+
       return result;
     } catch (e) {
       await ErrorHandler.instance.handleSecurityError(
@@ -182,22 +186,22 @@ class SecurityManager {
   /// Decrypt sensitive health data
   Future<String> decryptHealthData(String encryptedData) async {
     if (!_isInitialized) await initialize();
-    
+
     try {
       final combinedBytes = base64.decode(encryptedData);
-      
+
       // Extract IV and encrypted data
       final iv = IV(combinedBytes.sublist(0, 16));
       final encryptedBytes = combinedBytes.sublist(16);
-      
+
       final encrypted = Encrypted(encryptedBytes);
       final decrypted = _encrypter.decrypt(encrypted, iv: iv);
-      
+
       _logSecurityEvent(
         SecurityEventType.dataDecrypted,
         'Health data decrypted',
       );
-      
+
       return decrypted;
     } catch (e) {
       await ErrorHandler.instance.handleSecurityError(
@@ -229,11 +233,13 @@ class SecurityManager {
       );
 
       _logSecurityEvent(
-        isAuthenticated 
-            ? SecurityEventType.biometricAuthSuccess 
+        isAuthenticated
+            ? SecurityEventType.biometricAuthSuccess
             : SecurityEventType.biometricAuthFailure,
         'Biometric authentication ${isAuthenticated ? "successful" : "failed"}',
-        severity: isAuthenticated ? SecuritySeverity.info : SecuritySeverity.warning,
+        severity: isAuthenticated
+            ? SecuritySeverity.info
+            : SecuritySeverity.warning,
       );
 
       return isAuthenticated;
@@ -253,12 +259,12 @@ class SecurityManager {
       final key = _masterKey.bytes;
       final hmac = Hmac(sha256, key);
       final digest = hmac.convert(utf8.encode(data));
-      
+
       _logSecurityEvent(
         SecurityEventType.integrityCheck,
         'Data integrity hash generated',
       );
-      
+
       return digest.toString();
     } catch (e) {
       throw SecurityException('Failed to generate integrity hash: $e');
@@ -270,15 +276,15 @@ class SecurityManager {
     try {
       final actualHash = generateDataIntegrityHash(data);
       final isValid = actualHash == expectedHash;
-      
+
       _logSecurityEvent(
-        isValid 
-            ? SecurityEventType.integrityVerified 
+        isValid
+            ? SecurityEventType.integrityVerified
             : SecurityEventType.integrityViolation,
         'Data integrity ${isValid ? "verified" : "violation detected"}',
         severity: isValid ? SecuritySeverity.info : SecuritySeverity.critical,
       );
-      
+
       return isValid;
     } catch (e) {
       _logSecurityEvent(
@@ -294,13 +300,13 @@ class SecurityManager {
   void _startNewSession() {
     _currentSessionId = _generateSecureId();
     _sessionStartTime = DateTime.now();
-    
+
     // Set session timeout timer
     _sessionTimer?.cancel();
     _sessionTimer = Timer(_sessionTimeout, () {
       _expireSession('timeout');
     });
-    
+
     _logSecurityEvent(
       SecurityEventType.sessionStarted,
       'New secure session started',
@@ -315,7 +321,7 @@ class SecurityManager {
       _sessionTimer = Timer(_sessionTimeout, () {
         _expireSession('timeout');
       });
-      
+
       _logSecurityEvent(
         SecurityEventType.sessionExtended,
         'Session extended',
@@ -332,7 +338,7 @@ class SecurityManager {
         'Session expired: $reason',
         metadata: {'session_id': _currentSessionId},
       );
-      
+
       _currentSessionId = null;
       _sessionStartTime = null;
       _sessionTimer?.cancel();
@@ -344,10 +350,10 @@ class SecurityManager {
     if (_currentSessionId == null || _sessionStartTime == null) {
       return false;
     }
-    
+
     final now = DateTime.now();
     final elapsed = now.difference(_sessionStartTime!);
-    
+
     return elapsed < _sessionTimeout;
   }
 
@@ -361,12 +367,12 @@ class SecurityManager {
           data[i] = random.nextInt(256);
         }
       }
-      
+
       // Final zero pass
       for (int i = 0; i < data.length; i++) {
         data[i] = 0;
       }
-      
+
       _logSecurityEvent(
         SecurityEventType.dataWiped,
         'Sensitive data securely wiped from memory',
@@ -394,7 +400,7 @@ class SecurityManager {
     );
 
     _auditTrail.add(event);
-    
+
     // Keep audit trail size manageable
     if (_auditTrail.length > _maxAuditEntries) {
       _auditTrail.removeAt(0);
@@ -412,7 +418,9 @@ class SecurityManager {
         AppLogger.error('❌ Security Error - ${type.name}: $description');
         break;
       case SecuritySeverity.critical:
-        AppLogger.error('🚨 CRITICAL Security Event - ${type.name}: $description');
+        AppLogger.error(
+          '🚨 CRITICAL Security Event - ${type.name}: $description',
+        );
         break;
     }
   }
@@ -421,18 +429,21 @@ class SecurityManager {
   Future<encrypt.Key> _getMasterKey() async {
     final prefs = await SharedPreferences.getInstance();
     const keyKey = 'security_master_key_v2';
-    
+
     String? storedKey = prefs.getString(keyKey);
-    
+
     if (storedKey == null) {
       // Generate new 256-bit key
-      final keyBytes = List<int>.generate(32, (i) => Random.secure().nextInt(256));
+      final keyBytes = List<int>.generate(
+        32,
+        (i) => Random.secure().nextInt(256),
+      );
       storedKey = base64.encode(keyBytes);
       await prefs.setString(keyKey, storedKey);
-      
+
       AppLogger.security('🔑 New master key generated and stored securely');
     }
-    
+
     return encrypt.Key.fromBase64(storedKey);
   }
 
@@ -453,7 +464,7 @@ class SecurityManager {
   Map<String, dynamic> getSecurityMetrics() {
     final now = DateTime.now();
     final last24Hours = now.subtract(const Duration(hours: 24));
-    
+
     final recentEvents = _auditTrail
         .where((event) => event.timestamp.isAfter(last24Hours))
         .toList();
@@ -463,7 +474,8 @@ class SecurityManager {
 
     for (final event in recentEvents) {
       eventsByType[event.type.name] = (eventsByType[event.type.name] ?? 0) + 1;
-      eventsBySeverity[event.severity.name] = (eventsBySeverity[event.severity.name] ?? 0) + 1;
+      eventsBySeverity[event.severity.name] =
+          (eventsBySeverity[event.severity.name] ?? 0) + 1;
     }
 
     return {
@@ -516,12 +528,7 @@ enum SecurityEventType {
 }
 
 /// Security event severity levels
-enum SecuritySeverity {
-  info,
-  warning,
-  error,
-  critical,
-}
+enum SecuritySeverity { info, warning, error, critical }
 
 /// Security event model for audit trail
 class SecurityEvent {
@@ -565,7 +572,7 @@ class SecurityException implements Exception {
 
   @override
   String toString() {
-    return context != null 
+    return context != null
         ? 'SecurityException in $context: $message'
         : 'SecurityException: $message';
   }
@@ -575,9 +582,10 @@ class SecurityException implements Exception {
 class SecurityUtils {
   /// Generate cryptographically secure password
   static String generateSecurePassword({int length = 16}) {
-    const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#\$%^&*';
+    const charset =
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#\$%^&*';
     final random = Random.secure();
-    
+
     return String.fromCharCodes(
       Iterable.generate(
         length,
@@ -604,12 +612,12 @@ class SecurityUtils {
   /// Constant-time string comparison (prevents timing attacks)
   static bool constantTimeEquals(String a, String b) {
     if (a.length != b.length) return false;
-    
+
     int result = 0;
     for (int i = 0; i < a.length; i++) {
       result |= a.codeUnitAt(i) ^ b.codeUnitAt(i);
     }
-    
+
     return result == 0;
   }
 }

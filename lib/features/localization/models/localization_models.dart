@@ -31,7 +31,8 @@ class SupportedLocale {
     ];
 
     for (final locale in supportedLocales) {
-      if (locale.languageCode == languageCode && locale.countryCode == countryCode) {
+      if (locale.languageCode == languageCode &&
+          locale.countryCode == countryCode) {
         return locale;
       }
     }
@@ -63,7 +64,8 @@ class SupportedLocale {
   bool get isRTL => languageCode == 'ar';
 
   /// Get text direction
-  TextDirection get textDirection => isRTL ? TextDirection.rtl : TextDirection.ltr;
+  TextDirection get textDirection =>
+      isRTL ? TextDirection.rtl : TextDirection.ltr;
 
   /// JSON serialization
   Map<String, dynamic> toJson() {
@@ -204,7 +206,12 @@ class LocalizationConfig {
   final Map<String, dynamic> customSettings;
 
   const LocalizationConfig({
-    this.defaultLocale = const SupportedLocale('en', 'US', 'English', 'English'),
+    this.defaultLocale = const SupportedLocale(
+      'en',
+      'US',
+      'English',
+      'English',
+    ),
     this.supportedLocales = const [
       SupportedLocale('en', 'US', 'English', 'English'),
       SupportedLocale('es', 'ES', 'Spanish', 'Español'),
@@ -236,7 +243,7 @@ class LocalizationConfig {
         return locale;
       }
     }
-    
+
     // Fallback to default
     return defaultLocale;
   }
@@ -267,11 +274,7 @@ class LocalizationConfig {
 }
 
 /// Text direction helper
-enum TextDirectionality {
-  ltr,
-  rtl,
-  auto,
-}
+enum TextDirectionality { ltr, rtl, auto }
 
 extension TextDirectionalityExtension on TextDirectionality {
   TextDirection toTextDirection([SupportedLocale? locale]) {
@@ -331,9 +334,11 @@ class LocaleDateFormat {
     return LocaleDateFormat(
       pattern: json['pattern'],
       description: json['description'],
-      applicableLocales: (json['applicable_locales'] as List?)
-          ?.map((l) => SupportedLocale.fromJson(l))
-          .toList() ?? [],
+      applicableLocales:
+          (json['applicable_locales'] as List?)
+              ?.map((l) => SupportedLocale.fromJson(l))
+              .toList() ??
+          [],
     );
   }
 }

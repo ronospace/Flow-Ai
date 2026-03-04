@@ -8,7 +8,8 @@ class FeedbackScreen extends StatefulWidget {
   State<FeedbackScreen> createState() => _FeedbackScreenState();
 }
 
-class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStateMixin {
+class _FeedbackScreenState extends State<FeedbackScreen>
+    with TickerProviderStateMixin {
   int _rating = 0;
   String _selectedCategory = 'general';
   final TextEditingController _feedbackController = TextEditingController();
@@ -32,13 +33,12 @@ class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStat
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-    _scaleAnimation = Tween<double>(
-      begin: 1.0,
-      end: 0.95,
-    ).animate(CurvedAnimation(
-      parent: _submitAnimationController,
-      curve: Curves.easeInOut,
-    ));
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.95).animate(
+      CurvedAnimation(
+        parent: _submitAnimationController,
+        curve: Curves.easeInOut,
+      ),
+    );
   }
 
   @override
@@ -57,13 +57,13 @@ class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStat
 
     setState(() => _isSubmitting = true);
     await _submitAnimationController.forward();
-    
+
     // Simulate API call
     await Future.delayed(const Duration(seconds: 2));
-    
+
     await _submitAnimationController.reverse();
     setState(() => _isSubmitting = false);
-    
+
     if (mounted) {
       _showSuccessDialog();
     }
@@ -97,7 +97,9 @@ class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStat
             Text('Thank you!'),
           ],
         ),
-        content: const Text('Your feedback has been submitted. We truly appreciate your input in making Flow Ai better!'),
+        content: const Text(
+          'Your feedback has been submitted. We truly appreciate your input in making Flow Ai better!',
+        ),
         actions: [
           TextButton(
             onPressed: () {
@@ -114,7 +116,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStat
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Help Us Improve'),
@@ -155,11 +157,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStat
               ),
               child: const Column(
                 children: [
-                  Icon(
-                    Icons.favorite,
-                    color: Colors.white,
-                    size: 48,
-                  ),
+                  Icon(Icons.favorite, color: Colors.white, size: 48),
                   SizedBox(height: 12),
                   Text(
                     'Your Voice Matters',
@@ -172,18 +170,15 @@ class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStat
                   SizedBox(height: 8),
                   Text(
                     'Help us shape the future of Flow Ai with your valuable feedback',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
+                    style: TextStyle(color: Colors.white, fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
                 ],
               ),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Rating section
             Text(
               'Rate Your Experience',
@@ -212,9 +207,9 @@ class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStat
                 );
               }),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Category selection
             Text(
               'Feedback Category',
@@ -235,12 +230,19 @@ class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStat
                   },
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
                     decoration: BoxDecoration(
-                      color: isSelected ? const Color(0xFFFF6B9D) : Colors.grey.shade200,
+                      color: isSelected
+                          ? const Color(0xFFFF6B9D)
+                          : Colors.grey.shade200,
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
-                        color: isSelected ? const Color(0xFFFF6B9D) : Colors.grey.shade300,
+                        color: isSelected
+                            ? const Color(0xFFFF6B9D)
+                            : Colors.grey.shade300,
                       ),
                     ),
                     child: Row(
@@ -248,14 +250,18 @@ class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStat
                       children: [
                         Icon(
                           entry.value,
-                          color: isSelected ? Colors.white : Colors.grey.shade600,
+                          color: isSelected
+                              ? Colors.white
+                              : Colors.grey.shade600,
                           size: 16,
                         ),
                         const SizedBox(width: 8),
                         Text(
                           entry.key.toUpperCase(),
                           style: TextStyle(
-                            color: isSelected ? Colors.white : Colors.grey.shade600,
+                            color: isSelected
+                                ? Colors.white
+                                : Colors.grey.shade600,
                             fontWeight: FontWeight.w600,
                             fontSize: 12,
                           ),
@@ -266,9 +272,9 @@ class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStat
                 );
               }).toList(),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Feedback text
             Text(
               'Your Feedback',
@@ -281,19 +287,23 @@ class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStat
               controller: _feedbackController,
               maxLines: 5,
               decoration: InputDecoration(
-                hintText: 'Tell us what you think! Your suggestions, bug reports, and ideas help us improve...',
+                hintText:
+                    'Tell us what you think! Your suggestions, bug reports, and ideas help us improve...',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: Color(0xFFFF6B9D), width: 2),
+                  borderSide: const BorderSide(
+                    color: Color(0xFFFF6B9D),
+                    width: 2,
+                  ),
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Email (optional)
             Text(
               'Email (Optional)',
@@ -311,14 +321,17 @@ class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStat
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: Color(0xFFFF6B9D), width: 2),
+                  borderSide: const BorderSide(
+                    color: Color(0xFFFF6B9D),
+                    width: 2,
+                  ),
                 ),
                 prefixIcon: const Icon(Icons.email_outlined),
               ),
             ),
-            
+
             const SizedBox(height: 32),
-            
+
             // Submit button
             AnimatedBuilder(
               animation: _scaleAnimation,
@@ -347,25 +360,33 @@ class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStat
                                   height: 20,
                                   child: CircularProgressIndicator(
                                     strokeWidth: 2,
-                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white,
+                                    ),
                                   ),
                                 ),
                                 SizedBox(width: 12),
-                                Text('Submitting...', style: TextStyle(fontSize: 16)),
+                                Text(
+                                  'Submitting...',
+                                  style: TextStyle(fontSize: 16),
+                                ),
                               ],
                             )
                           : const Text(
                               'Submit Feedback',
-                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                     ),
                   ),
                 );
               },
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Privacy note
             Container(
               padding: const EdgeInsets.all(16),

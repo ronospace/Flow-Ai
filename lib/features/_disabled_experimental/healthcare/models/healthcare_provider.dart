@@ -75,7 +75,7 @@ class HealthcareProvider {
       apiEndpoint: json['apiEndpoint'],
       credentials: Map<String, dynamic>.from(json['credentials'] ?? {}),
       connectedAt: DateTime.parse(json['connectedAt']),
-      lastSyncAt: json['lastSyncAt'] != null 
+      lastSyncAt: json['lastSyncAt'] != null
           ? DateTime.parse(json['lastSyncAt'])
           : null,
     );

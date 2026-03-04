@@ -407,7 +407,7 @@ class AnalyticsService {
           accuracyDays: daysDifference,
         ),
       );
-        }
+    }
 
     final averageAccuracy = accuracyData.isNotEmpty
         ? accuracyData.map((a) => a.accuracyDays).fold(0, (a, b) => a + b) /
@@ -600,7 +600,7 @@ class AnalyticsService {
       for (final symptom in data.symptoms) {
         symptomCounts[symptom] = (symptomCounts[symptom] ?? 0) + 1;
       }
-        }
+    }
 
     return symptomCounts.map(
       (symptom, count) => MapEntry(symptom, count / totalDays),

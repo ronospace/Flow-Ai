@@ -43,9 +43,11 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
     try {
       // Simulate loading time for better UX
       await Future.delayed(const Duration(milliseconds: 800));
-      
-      final prediction = await PeriodPredictionEngine().predictNextPeriod('anonymous_user');
-      
+
+      final prediction = await PeriodPredictionEngine().predictNextPeriod(
+        'anonymous_user',
+      );
+
       if (mounted) {
         setState(() {
           currentPrediction = prediction;
@@ -117,7 +119,10 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
       backgroundColor: theme.scaffoldBackgroundColor,
       elevation: 0,
       leading: IconButton(
-        icon: Icon(Icons.arrow_back_rounded, color: theme.colorScheme.onSurface),
+        icon: Icon(
+          Icons.arrow_back_rounded,
+          color: theme.colorScheme.onSurface,
+        ),
         onPressed: () => Navigator.of(context).pop(),
       ),
       flexibleSpace: FlexibleSpaceBar(
@@ -168,9 +173,7 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
       decoration: BoxDecoration(
         color: theme.cardColor,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: theme.dividerColor,
-        ),
+        border: Border.all(color: theme.dividerColor),
         boxShadow: [
           BoxShadow(
             color: theme.shadowColor.withValues(alpha: 0.1),
@@ -182,27 +185,31 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
       child: Column(
         children: [
           Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  AppTheme.primaryRose.withValues(alpha: 0.1),
-                  AppTheme.primaryPurple.withValues(alpha: 0.1),
-                ],
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      AppTheme.primaryRose.withValues(alpha: 0.1),
+                      AppTheme.primaryPurple.withValues(alpha: 0.1),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: const Icon(
+                  Icons.psychology_rounded,
+                  color: AppTheme.primaryRose,
+                  size: 30,
+                ),
+              )
+              .animate(onPlay: (controller) => controller.repeat())
+              .shimmer(duration: 1200.ms)
+              .scale(begin: const Offset(0.9, 0.9), end: const Offset(1.1, 1.1))
+              .then()
+              .scale(
+                begin: const Offset(1.1, 1.1),
+                end: const Offset(0.9, 0.9),
               ),
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: const Icon(
-              Icons.psychology_rounded,
-              color: AppTheme.primaryRose,
-              size: 30,
-            ),
-          ).animate(onPlay: (controller) => controller.repeat())
-            .shimmer(duration: 1200.ms)
-            .scale(begin: const Offset(0.9, 0.9), end: const Offset(1.1, 1.1))
-            .then()
-            .scale(begin: const Offset(1.1, 1.1), end: const Offset(0.9, 0.9)),
           const SizedBox(height: 20),
           Text(
             'Analyzing Your Cycle',
@@ -221,11 +228,16 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
           ),
           const SizedBox(height: 20),
           LinearProgressIndicator(
-            backgroundColor: theme.colorScheme.onSurface.withValues(alpha: 0.1),
-            valueColor: const AlwaysStoppedAnimation<Color>(AppTheme.primaryRose),
-            borderRadius: BorderRadius.circular(4),
-          ).animate(onPlay: (controller) => controller.repeat())
-            .shimmer(duration: 800.ms),
+                backgroundColor: theme.colorScheme.onSurface.withValues(
+                  alpha: 0.1,
+                ),
+                valueColor: const AlwaysStoppedAnimation<Color>(
+                  AppTheme.primaryRose,
+                ),
+                borderRadius: BorderRadius.circular(4),
+              )
+              .animate(onPlay: (controller) => controller.repeat())
+              .shimmer(duration: 800.ms),
         ],
       ),
     );
@@ -305,11 +317,7 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(
-          icon,
-          size: 20,
-          color: AppTheme.secondaryBlue,
-        ),
+        Icon(icon, size: 20, color: AppTheme.secondaryBlue),
         const SizedBox(width: 12),
         Expanded(
           child: Column(
@@ -343,9 +351,7 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppTheme.lightGrey.withValues(alpha: 0.1),
-        ),
+        border: Border.all(color: AppTheme.lightGrey.withValues(alpha: 0.1)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -370,9 +376,9 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
           const SizedBox(height: 16),
           Text(
             'Previous predictions will appear here as you track more cycles.',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppTheme.mediumGrey,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGrey),
           ),
         ],
       ),
@@ -386,10 +392,7 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
       elevation: 8,
       icon: RotationTransition(
         turns: _refreshController,
-        child: const Icon(
-          Icons.refresh_rounded,
-          color: Colors.white,
-        ),
+        child: const Icon(Icons.refresh_rounded, color: Colors.white),
       ),
       label: Text(
         isLoading ? 'Generating...' : 'Refresh',
@@ -410,9 +413,7 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
         height: MediaQuery.of(context).size.height * 0.85,
         decoration: const BoxDecoration(
           color: AppTheme.white,
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(24),
-          ),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         ),
         child: Column(
           children: [
@@ -433,10 +434,11 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
                   children: [
                     Text(
                       'Prediction Details',
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppTheme.darkGrey,
-                      ),
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: AppTheme.darkGrey,
+                          ),
                     ),
                     const SizedBox(height: 20),
                     AIPredictionCard(prediction: prediction),
@@ -444,43 +446,47 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
                     if (prediction.insights.length > 2) ...[
                       Text(
                         'All AI Insights',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppTheme.darkGrey,
-                        ),
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: AppTheme.darkGrey,
+                            ),
                       ),
                       const SizedBox(height: 12),
-                      ...prediction.insights.map((insight) => Container(
-                        margin: const EdgeInsets.only(bottom: 8),
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: AppTheme.accentMint.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
+                      ...prediction.insights.map(
+                        (insight) => Container(
+                          margin: const EdgeInsets.only(bottom: 8),
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
                             color: AppTheme.accentMint.withValues(alpha: 0.1),
-                          ),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(
-                              Icons.lightbulb_rounded,
-                              size: 16,
-                              color: AppTheme.accentMint,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: AppTheme.accentMint.withValues(alpha: 0.1),
                             ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                insight,
-                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: AppTheme.darkGrey,
-                                  height: 1.4,
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Icon(
+                                Icons.lightbulb_rounded,
+                                size: 16,
+                                color: AppTheme.accentMint,
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  insight,
+                                  style: Theme.of(context).textTheme.bodySmall
+                                      ?.copyWith(
+                                        color: AppTheme.darkGrey,
+                                        height: 1.4,
+                                      ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      )),
+                      ),
                     ],
                     const SizedBox(height: 100),
                   ],

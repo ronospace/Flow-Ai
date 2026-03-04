@@ -13,7 +13,7 @@ class UserPreferencesService {
   static const String _keyPrivacySettings = 'privacy_settings';
   static const String _keyHealthGoals = 'health_goals';
   static const String _keyReminderSettings = 'reminder_settings';
-  
+
   late SharedPreferences _prefs;
   bool _isInitialized = false;
 
@@ -24,7 +24,7 @@ class UserPreferencesService {
       _isInitialized = true;
     }
   }
-  
+
   /// Ensure preferences are initialized before use
   Future<void> _ensureInitialized() async {
     if (!_isInitialized) {
@@ -37,6 +37,7 @@ class UserPreferencesService {
     if (!_isInitialized) return 'system';
     return _prefs.getString(_keyThemeMode) ?? 'system';
   }
+
   Future<void> setThemeMode(String mode) async {
     await _prefs.setString(_keyThemeMode, mode);
   }
@@ -64,6 +65,7 @@ class UserPreferencesService {
     if (!_isInitialized) return false;
     return _prefs.getBool(_keyOnboardingComplete) ?? false;
   }
+
   Future<void> setOnboardingComplete(bool complete) async {
     await _prefs.setBool(_keyOnboardingComplete, complete);
   }
@@ -215,7 +217,6 @@ class UserPreferencesService {
     await _prefs.clear();
   }
 
-
   // --- Cloud sync helpers (wrappers) ---
   Future<void> setLastSyncTime(DateTime time) async {
     await _ensureInitialized();
@@ -335,7 +336,9 @@ class UserPreferencesService {
     }
   }
 
-  Future<void> setNotificationPreferences(Map<String, dynamic> preferences) async {
+  Future<void> setNotificationPreferences(
+    Map<String, dynamic> preferences,
+  ) async {
     final jsonString = jsonEncode(preferences);
     await setString('notification_preferences', jsonString);
   }
@@ -441,7 +444,7 @@ class UserPreferencesService {
   Set<String> getKeys() {
     return _prefs.getKeys();
   }
-  
+
   Future<void> setFirstLaunch(bool isFirst) async {
     await setBool('first_launch', isFirst);
   }

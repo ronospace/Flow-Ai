@@ -62,7 +62,8 @@ class Question {
   UrgencyLevel get urgencyLevel {
     if (isUrgent) return UrgencyLevel.urgent;
     if (category == QuestionCategory.emergency) return UrgencyLevel.critical;
-    if (timeSinceSubmission.inHours > 48 && !hasAnswers) return UrgencyLevel.high;
+    if (timeSinceSubmission.inHours > 48 && !hasAnswers)
+      return UrgencyLevel.high;
     return UrgencyLevel.normal;
   }
 
@@ -78,7 +79,7 @@ class Question {
   /// Get formatted time since submission
   String get timeAgo {
     final duration = timeSinceSubmission;
-    
+
     if (duration.inDays > 0) {
       return '${duration.inDays}d ago';
     } else if (duration.inHours > 0) {
@@ -93,35 +94,39 @@ class Question {
   /// Get question summary (truncated content)
   String getSummary({int maxLength = 150}) {
     if (content.length <= maxLength) return content;
-    
+
     final truncated = content.substring(0, maxLength);
     final lastSpace = truncated.lastIndexOf(' ');
-    
+
     if (lastSpace > maxLength * 0.7) {
       return '${truncated.substring(0, lastSpace)}...';
     }
-    
+
     return '$truncated...';
   }
 
   /// Check if question matches search query
   bool matchesQuery(String query) {
     final queryLower = query.toLowerCase();
-    
+
     return title.toLowerCase().contains(queryLower) ||
-           content.toLowerCase().contains(queryLower) ||
-           tags.any((tag) => tag.toLowerCase().contains(queryLower)) ||
-           category.displayName.toLowerCase().contains(queryLower);
+        content.toLowerCase().contains(queryLower) ||
+        tags.any((tag) => tag.toLowerCase().contains(queryLower)) ||
+        category.displayName.toLowerCase().contains(queryLower);
   }
 
   /// Get related tags based on content and category
   List<String> get suggestedTags {
     final suggestions = <String>[];
-    
+
     // Category-based suggestions
     switch (category) {
       case QuestionCategory.cycleHealth:
-        suggestions.addAll(['irregular cycles', 'period tracking', 'cycle length']);
+        suggestions.addAll([
+          'irregular cycles',
+          'period tracking',
+          'cycle length',
+        ]);
         break;
       case QuestionCategory.pcos:
         suggestions.addAll(['PCOS', 'hormones', 'insulin resistance']);
@@ -133,7 +138,11 @@ class Question {
         suggestions.addAll(['pregnancy', 'early pregnancy', 'symptoms']);
         break;
       case QuestionCategory.contraception:
-        suggestions.addAll(['birth control', 'contraception', 'family planning']);
+        suggestions.addAll([
+          'birth control',
+          'contraception',
+          'family planning',
+        ]);
         break;
       case QuestionCategory.menopause:
         suggestions.addAll(['menopause', 'perimenopause', 'hormone changes']);
@@ -141,14 +150,15 @@ class Question {
       default:
         suggestions.addAll(['general health', 'wellness']);
     }
-    
+
     // Remove tags already applied
     suggestions.removeWhere((tag) => tags.contains(tag));
-    
+
     return suggestions.take(5).toList();
   }
 
-  factory Question.fromJson(Map<String, dynamic> json) => _$QuestionFromJson(json);
+  factory Question.fromJson(Map<String, dynamic> json) =>
+      _$QuestionFromJson(json);
   Map<String, dynamic> toJson() => _$QuestionToJson(this);
 
   Question copyWith({
@@ -198,16 +208,40 @@ class Question {
 
 /// Question Categories
 enum QuestionCategory {
-  cycleHealth('Cycle Health', 'Questions about menstrual cycle and period tracking', '🩸'),
-  pcos('PCOS & Hormones', 'Polycystic ovary syndrome and hormonal issues', '⚗️'),
-  fertility('Fertility', 'Conception, ovulation, and fertility-related questions', '🤱'),
+  cycleHealth(
+    'Cycle Health',
+    'Questions about menstrual cycle and period tracking',
+    '🩸',
+  ),
+  pcos(
+    'PCOS & Hormones',
+    'Polycystic ovary syndrome and hormonal issues',
+    '⚗️',
+  ),
+  fertility(
+    'Fertility',
+    'Conception, ovulation, and fertility-related questions',
+    '🤱',
+  ),
   pregnancy('Pregnancy', 'Early pregnancy signs and concerns', '🤰'),
-  contraception('Contraception', 'Birth control methods and family planning', '💊'),
+  contraception(
+    'Contraception',
+    'Birth control methods and family planning',
+    '💊',
+  ),
   menopause('Menopause', 'Menopause and perimenopause questions', '🌸'),
   pain('Pain & Symptoms', 'Period pain, cramps, and other symptoms', '😣'),
   lifestyle('Lifestyle', 'Diet, exercise, and lifestyle factors', '🏃‍♀️'),
-  mental('Mental Health', 'Mood, anxiety, and mental health during cycle', '🧠'),
-  emergency('Emergency', 'Urgent medical concerns requiring immediate attention', '🚨'),
+  mental(
+    'Mental Health',
+    'Mood, anxiety, and mental health during cycle',
+    '🧠',
+  ),
+  emergency(
+    'Emergency',
+    'Urgent medical concerns requiring immediate attention',
+    '🚨',
+  ),
   general('General Health', 'General women\'s health questions', '💗');
 
   const QuestionCategory(this.displayName, this.description, this.icon);
@@ -369,7 +403,8 @@ class QuestionMetadata {
     return medications.join(', ');
   }
 
-  factory QuestionMetadata.fromJson(Map<String, dynamic> json) => _$QuestionMetadataFromJson(json);
+  factory QuestionMetadata.fromJson(Map<String, dynamic> json) =>
+      _$QuestionMetadataFromJson(json);
   Map<String, dynamic> toJson() => _$QuestionMetadataToJson(this);
 }
 

@@ -15,8 +15,11 @@ class CommunityAchievementsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final unlockedAchievements = achievements.where((a) => a.isUnlocked).take(3).toList();
-    
+    final unlockedAchievements = achievements
+        .where((a) => a.isUnlocked)
+        .take(3)
+        .toList();
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -28,10 +31,7 @@ class CommunityAchievementsWidget extends StatelessWidget {
               children: [
                 const Text(
                   'Recent Achievements',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 if (onViewAll != null)
                   TextButton(
@@ -49,8 +49,8 @@ class CommunityAchievementsWidget extends StatelessWidget {
                 ),
               )
             else
-              ...unlockedAchievements.map((achievement) => 
-                _buildAchievementTile(context, achievement)
+              ...unlockedAchievements.map(
+                (achievement) => _buildAchievementTile(context, achievement),
               ),
           ],
         ),
@@ -58,19 +58,22 @@ class CommunityAchievementsWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildAchievementTile(BuildContext context, CommunityAchievement achievement) {
+  Widget _buildAchievementTile(
+    BuildContext context,
+    CommunityAchievement achievement,
+  ) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: achievement.isUnlocked 
-          ? Theme.of(context).primaryColor.withValues(alpha: 0.1)
-          : Colors.grey.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: achievement.isUnlocked 
+        color: achievement.isUnlocked
             ? Theme.of(context).primaryColor.withValues(alpha: 0.1)
             : Colors.grey.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: achievement.isUnlocked
+              ? Theme.of(context).primaryColor.withValues(alpha: 0.1)
+              : Colors.grey.withValues(alpha: 0.1),
         ),
       ),
       child: Row(
@@ -79,9 +82,9 @@ class CommunityAchievementsWidget extends StatelessWidget {
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-              color: achievement.isUnlocked 
-                ? Theme.of(context).primaryColor
-                : Colors.grey,
+              color: achievement.isUnlocked
+                  ? Theme.of(context).primaryColor
+                  : Colors.grey,
               borderRadius: BorderRadius.circular(24),
             ),
             child: Icon(
@@ -99,9 +102,7 @@ class CommunityAchievementsWidget extends StatelessWidget {
                   achievement.title,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    color: achievement.isUnlocked 
-                      ? null 
-                      : Colors.grey,
+                    color: achievement.isUnlocked ? null : Colors.grey,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -109,9 +110,9 @@ class CommunityAchievementsWidget extends StatelessWidget {
                   achievement.description,
                   style: TextStyle(
                     fontSize: 12,
-                    color: achievement.isUnlocked 
-                      ? Colors.grey[600]
-                      : Colors.grey,
+                    color: achievement.isUnlocked
+                        ? Colors.grey[600]
+                        : Colors.grey,
                   ),
                 ),
                 if (achievement.progress < achievement.targetCount)
@@ -128,12 +129,12 @@ class CommunityAchievementsWidget extends StatelessWidget {
               ],
             ),
           ),
-          if (achievement.isUnlocked && !achievement.isRewardClaimed && onClaimReward != null)
+          if (achievement.isUnlocked &&
+              !achievement.isRewardClaimed &&
+              onClaimReward != null)
             ElevatedButton(
               onPressed: () => onClaimReward!(achievement),
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(80, 32),
-              ),
+              style: ElevatedButton.styleFrom(minimumSize: const Size(80, 32)),
               child: const Text('Claim', style: TextStyle(fontSize: 12)),
             ),
         ],

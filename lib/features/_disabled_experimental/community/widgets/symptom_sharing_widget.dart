@@ -48,11 +48,7 @@ class _SymptomSharingWidgetState extends State<SymptomSharingWidget> {
   Widget _buildHeader(ThemeData theme) {
     return Row(
       children: [
-        Icon(
-          Icons.forum,
-          color: theme.colorScheme.primary,
-          size: 24,
-        ),
+        Icon(Icons.forum, color: theme.colorScheme.primary, size: 24),
         const SizedBox(width: 12),
         Expanded(
           child: Column(
@@ -75,10 +71,7 @@ class _SymptomSharingWidgetState extends State<SymptomSharingWidget> {
         ),
         IconButton(
           onPressed: () => _showNewStoryDialog(context),
-          icon: Icon(
-            Icons.add,
-            color: theme.colorScheme.primary,
-          ),
+          icon: Icon(Icons.add, color: theme.colorScheme.primary),
         ),
       ],
     );
@@ -111,7 +104,7 @@ class _SymptomSharingWidgetState extends State<SymptomSharingWidget> {
 
   Widget _buildCategoryFilter(ThemeData theme) {
     final categories = ['All', ...widget.categories];
-    
+
     return SizedBox(
       height: 40,
       child: ListView.builder(
@@ -120,7 +113,7 @@ class _SymptomSharingWidgetState extends State<SymptomSharingWidget> {
         itemBuilder: (context, index) {
           final category = categories[index];
           final isSelected = _selectedCategory == category;
-          
+
           return Padding(
             padding: const EdgeInsets.only(right: 8),
             child: FilterChip(
@@ -171,7 +164,9 @@ class _SymptomSharingWidgetState extends State<SymptomSharingWidget> {
                 children: [
                   CircleAvatar(
                     radius: 16,
-                    backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.1),
+                    backgroundColor: theme.colorScheme.primary.withValues(
+                      alpha: 0.1,
+                    ),
                     child: Text(
                       story.isAnonymous ? 'A' : story.userId[0].toUpperCase(),
                       style: TextStyle(
@@ -195,7 +190,9 @@ class _SymptomSharingWidgetState extends State<SymptomSharingWidget> {
                         Text(
                           _formatTimeAgo(story.createdAt),
                           style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
+                            color: theme.colorScheme.onSurface.withValues(
+                              alpha: 0.1,
+                            ),
                           ),
                         ),
                       ],
@@ -257,11 +254,7 @@ class _SymptomSharingWidgetState extends State<SymptomSharingWidget> {
         const PopupMenuItem(
           value: 'share',
           child: Row(
-            children: [
-              Icon(Icons.share),
-              SizedBox(width: 8),
-              Text('Share'),
-            ],
+            children: [Icon(Icons.share), SizedBox(width: 8), Text('Share')],
           ),
         ),
       ],
@@ -363,16 +356,27 @@ class _SymptomSharingWidgetState extends State<SymptomSharingWidget> {
 
     // Filter by category
     if (_selectedCategory != 'All') {
-      filtered = filtered.where((story) => story.category == _selectedCategory).toList();
+      filtered = filtered
+          .where((story) => story.category == _selectedCategory)
+          .toList();
     }
 
     // Filter by search query
     if (_searchQuery.isNotEmpty) {
-      filtered = filtered.where((story) =>
-        story.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-        story.content.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-        story.symptoms.any((s) => s.toLowerCase().contains(_searchQuery.toLowerCase()))
-      ).toList();
+      filtered = filtered
+          .where(
+            (story) =>
+                story.title.toLowerCase().contains(
+                  _searchQuery.toLowerCase(),
+                ) ||
+                story.content.toLowerCase().contains(
+                  _searchQuery.toLowerCase(),
+                ) ||
+                story.symptoms.any(
+                  (s) => s.toLowerCase().contains(_searchQuery.toLowerCase()),
+                ),
+          )
+          .toList();
     }
 
     return filtered;

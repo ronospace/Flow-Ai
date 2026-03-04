@@ -8,9 +8,8 @@ import '../services/community_service.dart';
 class CommunityController extends ChangeNotifier {
   final CommunityService _communityService;
 
-  CommunityController({
-    required CommunityService communityService,
-  }) : _communityService = communityService;
+  CommunityController({required CommunityService communityService})
+    : _communityService = communityService;
 
   // Loading states
   bool _isLoading = false;
@@ -56,15 +55,20 @@ class CommunityController extends ChangeNotifier {
 
   CommunityStats? get communityStats => _communityStats;
   List<Discussion> get discussions => List.unmodifiable(_discussions);
-  List<ExpertQuestion> get expertQuestions => List.unmodifiable(_expertQuestions);
+  List<ExpertQuestion> get expertQuestions =>
+      List.unmodifiable(_expertQuestions);
   List<Expert> get experts => List.unmodifiable(_experts);
   List<CycleBuddy> get cycleBuddies => List.unmodifiable(_cycleBuddies);
-  List<BuddyRequest> get pendingBuddyRequests => List.unmodifiable(_pendingBuddyRequests);
+  List<BuddyRequest> get pendingBuddyRequests =>
+      List.unmodifiable(_pendingBuddyRequests);
   List<SymptomStory> get symptomStories => List.unmodifiable(_symptomStories);
   List<String> get symptomCategories => List.unmodifiable(_symptomCategories);
-  List<CommunityAchievement> get communityAchievements => List.unmodifiable(_communityAchievements);
-  Map<String, double> get userAchievementProgress => Map.unmodifiable(_userAchievementProgress);
-  List<LeaderboardEntry> get achievementLeaderboard => List.unmodifiable(_achievementLeaderboard);
+  List<CommunityAchievement> get communityAchievements =>
+      List.unmodifiable(_communityAchievements);
+  Map<String, double> get userAchievementProgress =>
+      Map.unmodifiable(_userAchievementProgress);
+  List<LeaderboardEntry> get achievementLeaderboard =>
+      List.unmodifiable(_achievementLeaderboard);
 
   String get discussionFilter => _discussionFilter;
   String get discussionSort => _discussionSort;
@@ -140,7 +144,7 @@ class CommunityController extends ChangeNotifier {
         tags: tags,
         isAnonymous: isAnonymous,
       );
-      
+
       _discussions.insert(0, discussion);
       _communityStats?.incrementDiscussions();
       notifyListeners();
@@ -152,7 +156,7 @@ class CommunityController extends ChangeNotifier {
   Future<void> joinDiscussion(String discussionId) async {
     try {
       await _communityService.joinDiscussion(discussionId);
-      
+
       final index = _discussions.indexWhere((d) => d.id == discussionId);
       if (index != -1) {
         _discussions[index] = _discussions[index].copyWith(
@@ -239,7 +243,7 @@ class CommunityController extends ChangeNotifier {
         preferredExpertId: preferredExpertId,
         isAnonymous: isAnonymous,
       );
-      
+
       _expertQuestions.insert(0, question);
       notifyListeners();
     } catch (e) {
@@ -250,7 +254,7 @@ class CommunityController extends ChangeNotifier {
   Future<void> answerQuestion(String questionId, String answer) async {
     try {
       await _communityService.answerQuestion(questionId, answer);
-      
+
       final index = _expertQuestions.indexWhere((q) => q.id == questionId);
       if (index != -1) {
         _expertQuestions[index] = _expertQuestions[index].copyWith(
@@ -293,7 +297,7 @@ class CommunityController extends ChangeNotifier {
         _communityService.getCycleBuddies(),
         _communityService.getPendingBuddyRequests(),
       ]);
-      
+
       _cycleBuddies = results[0] as List<CycleBuddy>;
       _pendingBuddyRequests = results[1] as List<BuddyRequest>;
       _errors.remove('buddies');
@@ -336,7 +340,7 @@ class CommunityController extends ChangeNotifier {
   Future<void> acceptBuddyRequest(String requestId) async {
     try {
       final buddy = await _communityService.acceptBuddyRequest(requestId);
-      
+
       _cycleBuddies.add(buddy);
       _pendingBuddyRequests.removeWhere((r) => r.id == requestId);
       notifyListeners();
@@ -348,7 +352,7 @@ class CommunityController extends ChangeNotifier {
   Future<void> declineBuddyRequest(String requestId) async {
     try {
       await _communityService.declineBuddyRequest(requestId);
-      
+
       _pendingBuddyRequests.removeWhere((r) => r.id == requestId);
       notifyListeners();
     } catch (e) {
@@ -366,7 +370,7 @@ class CommunityController extends ChangeNotifier {
         _communityService.getSymptomStories(filter: _symptomFilter),
         _communityService.getSymptomCategories(),
       ]);
-      
+
       _symptomStories = results[0] as List<SymptomStory>;
       _symptomCategories = results[1] as List<String>;
       _errors.remove('stories');
@@ -397,7 +401,7 @@ class CommunityController extends ChangeNotifier {
         severity: severity,
         isAnonymous: isAnonymous,
       );
-      
+
       _symptomStories.insert(0, story);
       notifyListeners();
     } catch (e) {
@@ -408,7 +412,7 @@ class CommunityController extends ChangeNotifier {
   Future<void> reactToStory(String storyId, String reaction) async {
     try {
       await _communityService.reactToStory(storyId, reaction);
-      
+
       final index = _symptomStories.indexWhere((s) => s.id == storyId);
       if (index != -1) {
         _symptomStories[index] = _symptomStories[index].copyWith(
@@ -424,7 +428,7 @@ class CommunityController extends ChangeNotifier {
   Future<void> followStory(String storyId) async {
     try {
       await _communityService.followStory(storyId);
-      
+
       final index = _symptomStories.indexWhere((s) => s.id == storyId);
       if (index != -1) {
         _symptomStories[index] = _symptomStories[index].copyWith(
@@ -448,7 +452,7 @@ class CommunityController extends ChangeNotifier {
         _communityService.getUserAchievementProgress(),
         _communityService.getAchievementLeaderboard(),
       ]);
-      
+
       _communityAchievements = results[0] as List<CommunityAchievement>;
       _userAchievementProgress = results[1] as Map<String, double>;
       _achievementLeaderboard = results[2] as List<LeaderboardEntry>;
@@ -464,8 +468,10 @@ class CommunityController extends ChangeNotifier {
   Future<void> claimAchievement(String achievementId) async {
     try {
       await _communityService.claimAchievement(achievementId);
-      
-      final index = _communityAchievements.indexWhere((a) => a.id == achievementId);
+
+      final index = _communityAchievements.indexWhere(
+        (a) => a.id == achievementId,
+      );
       if (index != -1) {
         _communityAchievements[index] = _communityAchievements[index].copyWith(
           isUnlocked: true,
@@ -534,10 +540,7 @@ class CommunityController extends ChangeNotifier {
   }
 
   Future<void> refreshExperts() async {
-    await Future.wait([
-      _loadExpertQuestions(),
-      _loadExperts(),
-    ]);
+    await Future.wait([_loadExpertQuestions(), _loadExperts()]);
   }
 
   Future<void> refreshBuddies() async {

@@ -55,7 +55,8 @@ class UserProfile {
       lifestyle: lifestyle ?? this.lifestyle,
       healthConcerns: healthConcerns ?? this.healthConcerns,
       preferences: preferences ?? this.preferences,
-      personalizedBaselines: personalizedBaselines ?? this.personalizedBaselines,
+      personalizedBaselines:
+          personalizedBaselines ?? this.personalizedBaselines,
       adaptationHistory: adaptationHistory ?? this.adaptationHistory,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -91,18 +92,28 @@ class UserProfile {
       lifestyle: json['lifestyle'],
       healthConcerns: List<String>.from(json['health_concerns'] ?? []),
       preferences: Map<String, dynamic>.from(json['preferences'] ?? {}),
-      personalizedBaselines: Map<String, dynamic>.from(json['personalized_baselines'] ?? {}),
-      adaptationHistory: (json['adaptation_history'] as List<dynamic>?)
-          ?.map((e) => AdaptationEvent.fromJson(e))
-          .toList() ?? [],
+      personalizedBaselines: Map<String, dynamic>.from(
+        json['personalized_baselines'] ?? {},
+      ),
+      adaptationHistory:
+          (json['adaptation_history'] as List<dynamic>?)
+              ?.map((e) => AdaptationEvent.fromJson(e))
+              .toList() ??
+          [],
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
-      weight: json['weight'] != null ? (json['weight'] as num).toDouble() : null,
-      height: json['height'] != null ? (json['height'] as num).toDouble() : null,
-      familyHistory: json['family_history'] != null ? Map<String, dynamic>.from(json['family_history']) : null,
+      weight: json['weight'] != null
+          ? (json['weight'] as num).toDouble()
+          : null,
+      height: json['height'] != null
+          ? (json['height'] as num).toDouble()
+          : null,
+      familyHistory: json['family_history'] != null
+          ? Map<String, dynamic>.from(json['family_history'])
+          : null,
     );
   }
-  
+
   // Add fromMap and toMap for compatibility
   static UserProfile fromMap(Map<String, dynamic> map) => fromJson(map);
   Map<String, dynamic> toMap() => toJson();
@@ -217,7 +228,9 @@ class PersonalizedInsight {
       description: json['description'],
       confidence: json['confidence'].toDouble(),
       relevanceScore: json['relevance_score'].toDouble(),
-      personalizedRecommendations: List<String>.from(json['personalized_recommendations'] ?? []),
+      personalizedRecommendations: List<String>.from(
+        json['personalized_recommendations'] ?? [],
+      ),
       basedOnFactors: List<String>.from(json['based_on_factors'] ?? []),
       additionalData: json['additional_data'],
       generatedAt: DateTime.parse(json['generated_at']),
@@ -330,7 +343,9 @@ class BehavioralPattern {
       patternData: Map<String, dynamic>.from(json['pattern_data']),
       confidence: json['confidence'].toDouble(),
       detectedAt: DateTime.parse(json['detected_at']),
-      expiresAt: json['expires_at'] != null ? DateTime.parse(json['expires_at']) : null,
+      expiresAt: json['expires_at'] != null
+          ? DateTime.parse(json['expires_at'])
+          : null,
     );
   }
 }
@@ -417,7 +432,9 @@ class AdaptiveLearningConfig {
     return AdaptiveLearningConfig(
       userId: json['user_id'],
       learningRates: Map<String, double>.from(json['learning_rates']),
-      confidenceThresholds: Map<String, double>.from(json['confidence_thresholds']),
+      confidenceThresholds: Map<String, double>.from(
+        json['confidence_thresholds'],
+      ),
       adaptationCooldowns: Map<String, int>.from(json['adaptation_cooldowns']),
       autoAdaptationEnabled: json['auto_adaptation_enabled'],
       lastUpdated: DateTime.parse(json['last_updated']),

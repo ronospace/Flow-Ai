@@ -1,4 +1,3 @@
-
 /// Healthcare provider profile and credentials
 class HealthcareProvider {
   final String providerId;
@@ -98,12 +97,14 @@ class PatientProfile {
       anonymousId: json['anonymous_id'] as String,
       firstName: json['first_name'] as String?,
       lastName: json['last_name'] as String?,
-      dateOfBirth: json['date_of_birth'] != null 
-          ? DateTime.parse(json['date_of_birth'] as String) 
+      dateOfBirth: json['date_of_birth'] != null
+          ? DateTime.parse(json['date_of_birth'] as String)
           : null,
       email: json['email'] as String?,
       phone: json['phone'] as String?,
-      authorizedProviders: List<String>.from(json['authorized_providers'] as List),
+      authorizedProviders: List<String>.from(
+        json['authorized_providers'] as List,
+      ),
       dataPermissions: Map<String, bool>.from(json['data_permissions'] as Map),
       consentDate: DateTime.parse(json['consent_date'] as String),
       isActive: json['is_active'] as bool,
@@ -293,8 +294,8 @@ class ClinicalNote {
       title: json['title'] as String,
       content: json['content'] as String,
       createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: json['updated_at'] != null 
-          ? DateTime.parse(json['updated_at'] as String) 
+      updatedAt: json['updated_at'] != null
+          ? DateTime.parse(json['updated_at'] as String)
           : null,
       type: NoteType.values[json['type'] as int],
       tags: List<String>.from(json['tags'] as List),
@@ -351,7 +352,9 @@ class EHRIntegration {
       credentials: Map<String, String>.from(json['credentials'] as Map),
       isActive: json['is_active'] as bool,
       lastSyncAt: DateTime.parse(json['last_sync_at'] as String),
-      supportedDataTypes: List<String>.from(json['supported_data_types'] as List),
+      supportedDataTypes: List<String>.from(
+        json['supported_data_types'] as List,
+      ),
       syncSettings: Map<String, dynamic>.from(json['sync_settings'] as Map),
     );
   }
@@ -412,11 +415,11 @@ class Prescription {
       dosage: json['dosage'] as String,
       frequency: json['frequency'] as String,
       prescribedAt: DateTime.parse(json['prescribed_at'] as String),
-      startDate: json['start_date'] != null 
-          ? DateTime.parse(json['start_date'] as String) 
+      startDate: json['start_date'] != null
+          ? DateTime.parse(json['start_date'] as String)
           : null,
-      endDate: json['end_date'] != null 
-          ? DateTime.parse(json['end_date'] as String) 
+      endDate: json['end_date'] != null
+          ? DateTime.parse(json['end_date'] as String)
           : null,
       purpose: json['purpose'] as String,
       sideEffects: List<String>.from(json['side_effects'] as List),
@@ -480,11 +483,13 @@ class LabResult {
       testName: json['test_name'] as String,
       testType: json['test_type'] as String,
       collectedAt: DateTime.parse(json['collected_at'] as String),
-      resultedAt: json['resulted_at'] != null 
-          ? DateTime.parse(json['resulted_at'] as String) 
+      resultedAt: json['resulted_at'] != null
+          ? DateTime.parse(json['resulted_at'] as String)
           : null,
       values: Map<String, dynamic>.from(json['values'] as Map),
-      referenceRanges: Map<String, String>.from(json['reference_ranges'] as Map),
+      referenceRanges: Map<String, String>.from(
+        json['reference_ranges'] as Map,
+      ),
       status: json['status'] as String,
       interpretation: json['interpretation'] as String?,
     );
@@ -612,10 +617,14 @@ class ProviderAnalytics {
       newPatients: json['new_patients'] as int,
       totalAppointments: json['total_appointments'] as int,
       totalReports: json['total_reports'] as int,
-      conditionDistribution: Map<String, int>.from(json['condition_distribution'] as Map),
+      conditionDistribution: Map<String, int>.from(
+        json['condition_distribution'] as Map,
+      ),
       outcomeMetrics: Map<String, double>.from(json['outcome_metrics'] as Map),
       patientSatisfaction: (json['patient_satisfaction'] as num).toDouble(),
-      prescriptionStats: Map<String, int>.from(json['prescription_stats'] as Map),
+      prescriptionStats: Map<String, int>.from(
+        json['prescription_stats'] as Map,
+      ),
     );
   }
 
@@ -638,13 +647,7 @@ class ProviderAnalytics {
 }
 
 /// Enums for healthcare system
-enum ReportStatus {
-  pending,
-  generated,
-  reviewed,
-  shared,
-  archived,
-}
+enum ReportStatus { pending, generated, reviewed, shared, archived }
 
 enum AppointmentType {
   consultation,
@@ -663,13 +666,7 @@ enum AppointmentStatus {
   noShow,
 }
 
-enum NoteType {
-  assessment,
-  treatment,
-  followUp,
-  observation,
-  education,
-}
+enum NoteType { assessment, treatment, followUp, observation, education }
 
 /// Data consent and permissions
 class DataConsent {
@@ -700,8 +697,8 @@ class DataConsent {
       providerId: json['provider_id'] as String,
       permissions: Map<String, bool>.from(json['permissions'] as Map),
       grantedAt: DateTime.parse(json['granted_at'] as String),
-      revokedAt: json['revoked_at'] != null 
-          ? DateTime.parse(json['revoked_at'] as String) 
+      revokedAt: json['revoked_at'] != null
+          ? DateTime.parse(json['revoked_at'] as String)
           : null,
       consentVersion: json['consent_version'] as String,
       isActive: json['is_active'] as bool,

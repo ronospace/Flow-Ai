@@ -148,9 +148,7 @@ class _MedicalCitationsSectionState extends State<MedicalCitationsSection> {
         ),
 
         // Citations list
-        Expanded(
-          child: _buildCitationsList(context),
-        ),
+        Expanded(child: _buildCitationsList(context)),
       ],
     );
   }
@@ -181,7 +179,9 @@ class _MedicalCitationsSectionState extends State<MedicalCitationsSection> {
     // Filter by category
     final filteredByCategory = _selectedCategory == null
         ? allCitations
-        : MedicalCitationsDatabase.getCitationsForInsightType(_selectedCategory!);
+        : MedicalCitationsDatabase.getCitationsForInsightType(
+            _selectedCategory!,
+          );
 
     // Filter by search query
     final filtered = _searchQuery.isEmpty
@@ -242,8 +242,7 @@ class _MedicalCitationsSectionState extends State<MedicalCitationsSection> {
       itemBuilder: (context, index) {
         final categoryKey = grouped.keys.elementAt(index);
         final citations = grouped[categoryKey]!;
-        final categoryLabel =
-            _categoryLabels[categoryKey] ?? 'Other Sources';
+        final categoryLabel = _categoryLabels[categoryKey] ?? 'Other Sources';
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -257,10 +256,9 @@ class _MedicalCitationsSectionState extends State<MedicalCitationsSection> {
               ),
             ),
             const SizedBox(height: 12),
-            ...citations.map((citation) => _buildCitationCard(
-                  context,
-                  citation,
-                )),
+            ...citations.map(
+              (citation) => _buildCitationCard(context, citation),
+            ),
           ],
         );
       },
@@ -275,9 +273,7 @@ class _MedicalCitationsSectionState extends State<MedicalCitationsSection> {
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(
-          color: AppTheme.secondaryBlue.withValues(alpha: 0.2),
-        ),
+        side: BorderSide(color: AppTheme.secondaryBlue.withValues(alpha: 0.2)),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -327,7 +323,9 @@ class _MedicalCitationsSectionState extends State<MedicalCitationsSection> {
                       child: Text(
                         citation.authors.join(', '),
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.7,
+                          ),
                         ),
                       ),
                     ),
@@ -336,7 +334,9 @@ class _MedicalCitationsSectionState extends State<MedicalCitationsSection> {
                     Text(
                       ' (${citation.year})',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.7,
+                        ),
                       ),
                     ),
                   ],
@@ -395,4 +395,3 @@ class _MedicalCitationsSectionState extends State<MedicalCitationsSection> {
     ).animate().fadeIn(duration: 300.ms).slideY(begin: 0.1, end: 0);
   }
 }
-

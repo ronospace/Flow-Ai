@@ -156,6 +156,7 @@ dependencies:
   # Archive (for data export/import compression)
   archive: ^3.6.1
   cloud_functions: ^6.0.6
+  app_links: ^7.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

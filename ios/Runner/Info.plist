@@ -28,7 +28,9 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>com.googleusercontent.apps.752724279049-ei2380bh9o9ph6tq348lht6sf0ks52n2</string>
-			</array>
+			
+				<string>flowai</string>
+</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>

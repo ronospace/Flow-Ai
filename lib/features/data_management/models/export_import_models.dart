@@ -1,12 +1,6 @@
 // === ENUMS ===
 
-enum DataFormat {
-  json,
-  csv,
-  xml,
-  zyraflowBackup,
-  fhir,
-}
+enum DataFormat { json, csv, xml, zyraflowBackup, fhir }
 
 enum DataType {
   cycle,
@@ -19,16 +13,12 @@ enum DataType {
   settings,
 }
 
-enum BackupFrequency {
-  daily,
-  weekly,
-  monthly,
-}
+enum BackupFrequency { daily, weekly, monthly }
 
 enum MergeStrategy {
-  preserve,  // Keep existing data
+  preserve, // Keep existing data
   overwrite, // Replace existing data
-  merge,     // Combine data intelligently
+  merge, // Combine data intelligently
 }
 
 // === CONFIGURATION MODELS ===
@@ -73,7 +63,7 @@ class ExportConfig {
       dataTypes: (json['data_types'] as List)
           .map((e) => DataType.values.firstWhere((dt) => dt.name == e))
           .toSet(),
-      dateRange: json['date_range'] != null 
+      dateRange: json['date_range'] != null
           ? DateRange.fromJson(json['date_range'])
           : null,
       includeMedia: json['include_media'] ?? false,
@@ -108,14 +98,15 @@ class ImportConfig {
 
   factory ImportConfig.fromJson(Map<String, dynamic> json) {
     return ImportConfig(
-      mergeStrategy: MergeStrategy.values
-          .firstWhere((e) => e.name == json['merge_strategy']),
+      mergeStrategy: MergeStrategy.values.firstWhere(
+        (e) => e.name == json['merge_strategy'],
+      ),
       validateData: json['validate_data'] ?? true,
       createBackupBeforeImport: json['create_backup_before_import'] ?? true,
       limitToDataTypes: json['limit_to_data_types'] != null
           ? (json['limit_to_data_types'] as List)
-              .map((e) => DataType.values.firstWhere((dt) => dt.name == e))
-              .toSet()
+                .map((e) => DataType.values.firstWhere((dt) => dt.name == e))
+                .toSet()
           : null,
     );
   }
@@ -125,16 +116,10 @@ class DateRange {
   final DateTime start;
   final DateTime end;
 
-  DateRange({
-    required this.start,
-    required this.end,
-  });
+  DateRange({required this.start, required this.end});
 
   Map<String, dynamic> toJson() {
-    return {
-      'start': start.toIso8601String(),
-      'end': end.toIso8601String(),
-    };
+    return {'start': start.toIso8601String(), 'end': end.toIso8601String()};
   }
 
   factory DateRange.fromJson(Map<String, dynamic> json) {
@@ -235,12 +220,13 @@ class ImportedDataSet {
 
   factory ImportedDataSet.fromJson(Map<String, dynamic> json) {
     final Map<DataType, List<Map<String, dynamic>>> dataMap = {};
-    
+
     if (json['data'] != null) {
       json['data'].forEach((key, value) {
         try {
-          final DataType dataType = DataType.values
-              .firstWhere((e) => e.name == key);
+          final DataType dataType = DataType.values.firstWhere(
+            (e) => e.name == key,
+          );
           dataMap[dataType] = List<Map<String, dynamic>>.from(value);
         } catch (e) {
           // Skip unknown data types
@@ -330,7 +316,9 @@ class ImportResult {
       'imported_items': importedItems,
       'errors': errors,
       'warnings': warnings,
-      'items_by_type': itemsByType?.map((key, value) => MapEntry(key.name, value)),
+      'items_by_type': itemsByType?.map(
+        (key, value) => MapEntry(key.name, value),
+      ),
     };
   }
 
@@ -340,8 +328,9 @@ class ImportResult {
       itemsByType = {};
       json['items_by_type'].forEach((key, value) {
         try {
-          final DataType dataType = DataType.values
-              .firstWhere((e) => e.name == key);
+          final DataType dataType = DataType.values.firstWhere(
+            (e) => e.name == key,
+          );
           itemsByType![dataType] = value;
         } catch (e) {
           // Skip unknown data types
@@ -567,11 +556,7 @@ class ValidationError {
   });
 
   Map<String, dynamic> toJson() {
-    return {
-      'field': field,
-      'message': message,
-      'suggested_fix': suggestedFix,
-    };
+    return {'field': field, 'message': message, 'suggested_fix': suggestedFix};
   }
 
   factory ValidationError.fromJson(Map<String, dynamic> json) {
@@ -595,11 +580,7 @@ class ValidationWarning {
   });
 
   Map<String, dynamic> toJson() {
-    return {
-      'field': field,
-      'message': message,
-      'severity': severity,
-    };
+    return {'field': field, 'message': message, 'severity': severity};
   }
 
   factory ValidationWarning.fromJson(Map<String, dynamic> json) {

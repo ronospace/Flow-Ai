@@ -35,32 +35,24 @@ class _ComingSoonCardState extends State<ComingSoonCard>
   @override
   void initState() {
     super.initState();
-    
+
     _shimmerController = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
     );
-    
+
     _bounceController = AnimationController(
       duration: const Duration(milliseconds: 200),
       vsync: this,
     );
 
-    _shimmerAnimation = Tween<double>(
-      begin: -1.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _shimmerController,
-      curve: Curves.easeInOut,
-    ));
+    _shimmerAnimation = Tween<double>(begin: -1.0, end: 1.0).animate(
+      CurvedAnimation(parent: _shimmerController, curve: Curves.easeInOut),
+    );
 
-    _bounceAnimation = Tween<double>(
-      begin: 1.0,
-      end: 0.95,
-    ).animate(CurvedAnimation(
-      parent: _bounceController,
-      curve: Curves.easeInOut,
-    ));
+    _bounceAnimation = Tween<double>(begin: 1.0, end: 0.95).animate(
+      CurvedAnimation(parent: _bounceController, curve: Curves.easeInOut),
+    );
 
     if (widget.showShimmer) {
       _shimmerController.repeat();
@@ -79,7 +71,7 @@ class _ComingSoonCardState extends State<ComingSoonCard>
     _bounceController.forward().then((_) {
       _bounceController.reverse();
     });
-    
+
     if (widget.onNotifyMe != null) {
       widget.onNotifyMe!();
     } else {
@@ -91,9 +83,7 @@ class _ComingSoonCardState extends State<ComingSoonCard>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Row(
           children: [
             Icon(widget.icon, color: widget.gradientColors.first),
@@ -144,7 +134,9 @@ class _ComingSoonCardState extends State<ComingSoonCard>
               // TODO: Implement notification signup
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text('We\'ll notify you when this feature is ready!'),
+                  content: Text(
+                    'We\'ll notify you when this feature is ready!',
+                  ),
                   duration: Duration(seconds: 2),
                 ),
               );
@@ -198,7 +190,9 @@ class _ComingSoonCardState extends State<ComingSoonCard>
                           end: Alignment.bottomRight,
                         ),
                         border: Border.all(
-                          color: widget.gradientColors.first.withValues(alpha: 0.3),
+                          color: widget.gradientColors.first.withValues(
+                            alpha: 0.3,
+                          ),
                           width: 1.5,
                         ),
                         borderRadius: BorderRadius.circular(16),
@@ -250,9 +244,9 @@ class _ComingSoonCardState extends State<ComingSoonCard>
                               ),
                             ],
                           ),
-                          
+
                           const SizedBox(height: 16),
-                          
+
                           // Title
                           Text(
                             widget.title,
@@ -261,9 +255,9 @@ class _ComingSoonCardState extends State<ComingSoonCard>
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          
+
                           const SizedBox(height: 8),
-                          
+
                           // Description
                           Text(
                             widget.description,
@@ -273,7 +267,7 @@ class _ComingSoonCardState extends State<ComingSoonCard>
                               height: 1.4,
                             ),
                           ),
-                          
+
                           if (widget.eta != null) ...[
                             const SizedBox(height: 12),
                             Row(
@@ -298,7 +292,7 @@ class _ComingSoonCardState extends State<ComingSoonCard>
                         ],
                       ),
                     ),
-                    
+
                     // Shimmer effect
                     if (widget.showShimmer)
                       AnimatedBuilder(
@@ -310,7 +304,9 @@ class _ComingSoonCardState extends State<ComingSoonCard>
                               child: Stack(
                                 children: [
                                   Positioned(
-                                    left: _shimmerAnimation.value * MediaQuery.of(context).size.width,
+                                    left:
+                                        _shimmerAnimation.value *
+                                        MediaQuery.of(context).size.width,
                                     top: 0,
                                     bottom: 0,
                                     child: Container(
@@ -353,9 +349,9 @@ class AIFeatureCard extends ComingSoonCard {
     super.eta,
     super.onNotifyMe,
   }) : super(
-          icon: Icons.psychology_outlined,
-          gradientColors: const [Color(0xFF6C63FF), Color(0xFF9C27B0)],
-        );
+         icon: Icons.psychology_outlined,
+         gradientColors: const [Color(0xFF6C63FF), Color(0xFF9C27B0)],
+       );
 }
 
 class HealthFeatureCard extends ComingSoonCard {
@@ -366,9 +362,9 @@ class HealthFeatureCard extends ComingSoonCard {
     super.eta,
     super.onNotifyMe,
   }) : super(
-          icon: Icons.favorite_outlined,
-          gradientColors: const [Color(0xFFE91E63), Color(0xFF9C27B0)],
-        );
+         icon: Icons.favorite_outlined,
+         gradientColors: const [Color(0xFFE91E63), Color(0xFF9C27B0)],
+       );
 }
 
 class TechFeatureCard extends ComingSoonCard {
@@ -379,7 +375,7 @@ class TechFeatureCard extends ComingSoonCard {
     super.eta,
     super.onNotifyMe,
   }) : super(
-          icon: Icons.auto_awesome_outlined,
-          gradientColors: const [Color(0xFF00BCD4), Color(0xFF2196F3)],
-        );
+         icon: Icons.auto_awesome_outlined,
+         gradientColors: const [Color(0xFF00BCD4), Color(0xFF2196F3)],
+       );
 }

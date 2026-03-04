@@ -20,11 +20,11 @@ class CycleData {
   final DateTime? lastUpdated;
   final bool isComplete;
   final CycleQuality quality;
-  
+
   // Additional properties for AI engine compatibility
-  final double? mood;        // 1-5 scale
-  final double? energy;      // 1-5 scale
-  final double? pain;        // 1-5 scale
+  final double? mood; // 1-5 scale
+  final double? energy; // 1-5 scale
+  final double? pain; // 1-5 scale
   final FlowIntensity? flowIntensity;
 
   CycleData({
@@ -123,9 +123,7 @@ class CycleData {
       id: json['id'],
       userId: json['userId'],
       startDate: DateTime.parse(json['startDate']),
-      endDate: json['endDate'] != null 
-          ? DateTime.parse(json['endDate'])
-          : null,
+      endDate: json['endDate'] != null ? DateTime.parse(json['endDate']) : null,
       cycleLength: json['cycleLength'],
       periodLength: json['periodLength'],
       averageFlow: FlowIntensity.values.firstWhere(
@@ -174,26 +172,18 @@ class CycleData {
     final updatedDailyData = Map<DateTime, DayData>.from(dailyData);
     updatedDailyData[date] = dayData;
 
-    return copyWith(
-      dailyData: updatedDailyData,
-      lastUpdated: DateTime.now(),
-    );
+    return copyWith(dailyData: updatedDailyData, lastUpdated: DateTime.now());
   }
 
   /// Update cycle phase
   CycleData updatePhase(CyclePhase phase) {
-    return copyWith(
-      currentPhase: phase,
-      lastUpdated: DateTime.now(),
-    );
+    return copyWith(currentPhase: phase, lastUpdated: DateTime.now());
   }
 
   /// Mark cycle as complete
   CycleData complete(DateTime endDate) {
     final length = endDate.difference(startDate).inDays + 1;
-    final periodDays = dailyData.values
-        .where((day) => day.hasFlow)
-        .length;
+    final periodDays = dailyData.values.where((day) => day.hasFlow).length;
 
     return copyWith(
       endDate: endDate,
@@ -222,13 +212,13 @@ class CycleData {
         .where((entry) => entry.value.hasFlow)
         .map((entry) => entry.key)
         .toList()
-        ..sort();
+      ..sort();
   }
 
   /// Get fertile window days
   List<DateTime> get fertileWindow {
     if (ovulationDate == null) return [];
-    
+
     final fertile = <DateTime>[];
     for (int i = -5; i <= 1; i++) {
       fertile.add(ovulationDate!.add(Duration(days: i)));
@@ -259,12 +249,12 @@ class CycleData {
     final days = <DateTime>[];
     final end = endDate ?? DateTime.now();
     DateTime current = startDate;
-    
+
     while (current.isBefore(end) || current.isAtSameMomentAs(end)) {
       days.add(current);
       current = current.add(const Duration(days: 1));
     }
-    
+
     return days;
   }
 
@@ -287,10 +277,10 @@ class CycleData {
         symptomCounts[symptom] = (symptomCounts[symptom] ?? 0) + 1;
       }
     }
-    
+
     final sorted = symptomCounts.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
-    
+
     return sorted.take(5).map((e) => e.key).toList();
   }
 
@@ -301,16 +291,16 @@ class CycleData {
         moodCounts[mood] = (moodCounts[mood] ?? 0) + 1;
       }
     }
-    
+
     final sorted = moodCounts.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
-    
+
     return sorted.take(3).map((e) => e.key).toList();
   }
 
   double _calculateRegularityScore() {
     if (cycleLength == null) return 0.0;
-    
+
     // Regular cycles are 21-35 days
     if (cycleLength! >= 21 && cycleLength! <= 35) {
       return 1.0;
@@ -409,7 +399,8 @@ class DayData {
   });
 
   /// Check if there's menstrual flow
-  bool get hasFlow => flowIntensity != null && flowIntensity != FlowIntensity.none;
+  bool get hasFlow =>
+      flowIntensity != null && flowIntensity != FlowIntensity.none;
 
   /// Convert to JSON
   Map<String, dynamic> toJson() {
@@ -602,10 +593,10 @@ class CyclePrediction {
     required this.fertileWindow,
   });
 
-  DateTime get predictedEndDate => 
+  DateTime get predictedEndDate =>
       predictedStartDate.add(Duration(days: predictedLength - 1));
-  
-  int get daysUntilStart => 
+
+  int get daysUntilStart =>
       predictedStartDate.difference(DateTime.now()).inDays;
 }
 
@@ -614,7 +605,7 @@ class EnhancedCyclePrediction extends CyclePrediction {
   final SymptomForecast symptomForecast;
   final MoodEnergyForecast moodEnergyForecast;
   final List<String> predictionFactors;
-  
+
   const EnhancedCyclePrediction({
     required super.predictedStartDate,
     required super.predictedLength,
@@ -631,25 +622,27 @@ class CycleLengthPrediction {
   final int predictedLength;
   final double confidence;
   final List<String> factors;
-  
-  const CycleLengthPrediction(this.predictedLength, this.confidence, this.factors);
+
+  const CycleLengthPrediction(
+    this.predictedLength,
+    this.confidence,
+    this.factors,
+  );
 }
 
 // Symptom forecasting
 class SymptomForecast {
   final Map<String, double> predictedSymptoms; // symptom -> likelihood (0-1)
   final double confidence;
-  
+
   const SymptomForecast({
     required this.predictedSymptoms,
     required this.confidence,
   });
-  
-  static SymptomForecast empty() => const SymptomForecast(
-    predictedSymptoms: {},
-    confidence: 0.0,
-  );
-  
+
+  static SymptomForecast empty() =>
+      const SymptomForecast(predictedSymptoms: {}, confidence: 0.0);
+
   List<String> get likelySymptoms => predictedSymptoms.entries
       .where((e) => e.value >= 0.6)
       .map((e) => e.key)
@@ -661,13 +654,13 @@ class MoodEnergyForecast {
   final Map<String, double> moodByPhase; // phase -> predicted mood (1-5)
   final Map<String, double> energyByPhase; // phase -> predicted energy (1-5)
   final double confidence;
-  
+
   const MoodEnergyForecast({
     required this.moodByPhase,
     required this.energyByPhase,
     required this.confidence,
   });
-  
+
   static MoodEnergyForecast empty() => const MoodEnergyForecast(
     moodByPhase: {},
     energyByPhase: {},
@@ -684,12 +677,7 @@ enum CycleAnomalyType {
   flowChange,
 }
 
-enum AnomalySeverity {
-  low,
-  medium,
-  high,
-  critical,
-}
+enum AnomalySeverity { low, medium, high, critical }
 
 class CycleAnomaly {
   final String cycleId;
@@ -697,7 +685,7 @@ class CycleAnomaly {
   final AnomalySeverity severity;
   final String description;
   final DateTime detectedAt;
-  
+
   const CycleAnomaly({
     required this.cycleId,
     required this.type,
@@ -719,24 +707,18 @@ class FertileWindow {
   });
 
   int get lengthInDays => end.difference(start).inDays + 1;
-  
+
   bool get isActive {
     final now = DateTime.now();
     return now.isAfter(start) && now.isBefore(end.add(const Duration(days: 1)));
   }
-  
+
   int get daysUntilStart => start.difference(DateTime.now()).inDays;
   int get daysUntilPeak => peak.difference(DateTime.now()).inDays;
 }
 
 /// Cycle phases
-enum CyclePhase {
-  menstrual,
-  follicular,
-  ovulatory,
-  luteal,
-  unknown,
-}
+enum CyclePhase { menstrual, follicular, ovulatory, luteal, unknown }
 
 /// Extension for cycle phase
 extension CyclePhaseExtension on CyclePhase {
@@ -772,13 +754,7 @@ extension CyclePhaseExtension on CyclePhase {
 }
 
 /// Cycle quality assessment
-enum CycleQuality {
-  regular,
-  irregular,
-  long,
-  short,
-  anovulatory,
-}
+enum CycleQuality { regular, irregular, long, short, anovulatory }
 
 /// Extension for cycle quality
 extension CycleQualityExtension on CycleQuality {
@@ -864,4 +840,3 @@ extension CycleEventTypeExtension on CycleEventType {
     }
   }
 }
-

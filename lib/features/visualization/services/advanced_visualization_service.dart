@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 
 import '../models/visualization_models.dart';
 import '../../tracking/services/feelings_database_service.dart';
-import '../../tracking/screens/enhanced_daily_feelings_tracker.dart' show MoodCategory;
+import '../../tracking/screens/enhanced_daily_feelings_tracker.dart'
+    show MoodCategory;
 
 /// Advanced visualization service for interactive charts and data presentation
 class AdvancedVisualizationService {
@@ -370,16 +371,20 @@ class AdvancedVisualizationService {
         title: config.title,
         subtitle: config.subtitle ?? "",
         series: [series],
-        xAxisConfig: config.xAxisConfig ?? AxisConfiguration(
-          title: "X",
-          type: AxisType.numeric,
-          showGridLines: true,
-        ),
-        yAxisConfig: config.yAxisConfig ?? AxisConfiguration(
-          title: "Y",
-          type: AxisType.numeric,
-          showGridLines: true,
-        ),
+        xAxisConfig:
+            config.xAxisConfig ??
+            AxisConfiguration(
+              title: "X",
+              type: AxisType.numeric,
+              showGridLines: true,
+            ),
+        yAxisConfig:
+            config.yAxisConfig ??
+            AxisConfiguration(
+              title: "Y",
+              type: AxisType.numeric,
+              showGridLines: true,
+            ),
         legend: config.legend ?? ChartLegend(show: true),
         interactivity: config.interactivity ?? ChartInteractivity(),
         annotations: config.annotations ?? const <ChartAnnotation>[],

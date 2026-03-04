@@ -5,11 +5,7 @@ class StreakWidget extends StatelessWidget {
   final StreakData streak;
   final VoidCallback? onTap;
 
-  const StreakWidget({
-    super.key,
-    required this.streak,
-    this.onTap,
-  });
+  const StreakWidget({super.key, required this.streak, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +51,7 @@ class StreakWidget extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 16),
-                    
+
                     // Streak Info
                     Expanded(
                       child: Column(
@@ -79,7 +75,7 @@ class StreakWidget extends StatelessWidget {
                         ],
                       ),
                     ),
-                    
+
                     // Current Streak Display
                     Container(
                       padding: const EdgeInsets.symmetric(
@@ -112,9 +108,9 @@ class StreakWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-                
+
                 const SizedBox(height: 20),
-                
+
                 // Stats Row
                 Row(
                   children: [
@@ -146,14 +142,14 @@ class StreakWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 // Weekly Activity Grid
                 _buildWeeklyGrid(),
-                
+
                 const SizedBox(height: 16),
-                
+
                 // Next Milestone
                 if (streak.nextMilestone != null) ...[
                   Container(
@@ -169,11 +165,7 @@ class StreakWidget extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        Icon(
-                          Icons.emoji_events,
-                          color: Colors.amber,
-                          size: 20,
-                        ),
+                        Icon(Icons.emoji_events, color: Colors.amber, size: 20),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
@@ -204,7 +196,12 @@ class StreakWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildStatCard(String title, String value, IconData icon, Color color) {
+  Widget _buildStatCard(
+    String title,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -213,11 +210,7 @@ class StreakWidget extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Icon(
-            icon,
-            color: color,
-            size: 20,
-          ),
+          Icon(icon, color: color, size: 20),
           const SizedBox(height: 4),
           Text(
             value,
@@ -227,13 +220,7 @@ class StreakWidget extends StatelessWidget {
               color: color,
             ),
           ),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 11,
-              color: Colors.grey[600],
-            ),
-          ),
+          Text(title, style: TextStyle(fontSize: 11, color: Colors.grey[600])),
         ],
       ),
     );
@@ -242,7 +229,7 @@ class StreakWidget extends StatelessWidget {
   Widget _buildWeeklyGrid() {
     final now = DateTime.now();
     final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -259,17 +246,20 @@ class StreakWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: List.generate(7, (index) {
             final date = startOfWeek.add(Duration(days: index));
-            final hasActivity = streak.activityDates.any((activityDate) =>
-                activityDate.year == date.year &&
-                activityDate.month == date.month &&
-                activityDate.day == date.day);
-            
-            final isToday = date.year == now.year &&
-                           date.month == now.month &&
-                           date.day == now.day;
-            
+            final hasActivity = streak.activityDates.any(
+              (activityDate) =>
+                  activityDate.year == date.year &&
+                  activityDate.month == date.month &&
+                  activityDate.day == date.day,
+            );
+
+            final isToday =
+                date.year == now.year &&
+                date.month == now.month &&
+                date.day == now.day;
+
             final isFuture = date.isAfter(now);
-            
+
             return Column(
               children: [
                 Text(
@@ -285,32 +275,28 @@ class StreakWidget extends StatelessWidget {
                   width: 28,
                   height: 28,
                   decoration: BoxDecoration(
-                    color: isFuture 
+                    color: isFuture
                         ? Colors.grey[200]
-                        : hasActivity 
-                            ? _getStreakColor()
-                            : Colors.grey[300],
+                        : hasActivity
+                        ? _getStreakColor()
+                        : Colors.grey[300],
                     borderRadius: BorderRadius.circular(6),
-                    border: isToday 
+                    border: isToday
                         ? Border.all(color: _getStreakColor(), width: 2)
                         : null,
                   ),
                   child: Center(
                     child: hasActivity && !isFuture
-                        ? Icon(
-                            Icons.check,
-                            color: Colors.white,
-                            size: 16,
-                          )
+                        ? Icon(Icons.check, color: Colors.white, size: 16)
                         : Text(
                             '${date.day}',
                             style: TextStyle(
                               fontSize: 12,
-                              color: isFuture 
+                              color: isFuture
                                   ? Colors.grey[400]
                                   : hasActivity
-                                      ? Colors.white
-                                      : Colors.grey[600],
+                                  ? Colors.white
+                                  : Colors.grey[600],
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -371,11 +357,7 @@ class CompactStreakWidget extends StatelessWidget {
   final StreakData streak;
   final VoidCallback? onTap;
 
-  const CompactStreakWidget({
-    super.key,
-    required this.streak,
-    this.onTap,
-  });
+  const CompactStreakWidget({super.key, required this.streak, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -416,9 +398,9 @@ class CompactStreakWidget extends StatelessWidget {
                   size: 16,
                 ),
               ),
-              
+
               const SizedBox(height: 8),
-              
+
               // Current Streak
               Text(
                 '${streak.currentStreak}',
@@ -430,14 +412,11 @@ class CompactStreakWidget extends StatelessWidget {
               ),
               Text(
                 'days',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey[600],
-                ),
+                style: TextStyle(fontSize: 12, color: Colors.grey[600]),
               ),
-              
+
               const SizedBox(height: 4),
-              
+
               // Type
               Text(
                 _getStreakTitle(),

@@ -6,15 +6,12 @@ import '../../../core/theme/app_theme.dart';
 class TrendChartWidget extends StatelessWidget {
   final TrendAnalytics analytics;
 
-  const TrendChartWidget({
-    super.key,
-    required this.analytics,
-  });
+  const TrendChartWidget({super.key, required this.analytics});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -31,7 +28,8 @@ class TrendChartWidget extends StatelessWidget {
           ),
         ],
       ),
-      child: Column(mainAxisSize: MainAxisSize.min,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header
@@ -44,7 +42,8 @@ class TrendChartWidget extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: Column(mainAxisSize: MainAxisSize.min,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -57,8 +56,10 @@ class TrendChartWidget extends StatelessWidget {
                     Text(
                       'Health trends over ${analytics.timeframe}',
                       style: theme.textTheme.bodySmall?.copyWith(
-                      height: 1.0,
-color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                        height: 1.0,
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.6,
+                        ),
                       ),
                     ),
                   ],
@@ -115,20 +116,15 @@ color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: color.withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
-          Icon(
-            icon,
-            color: color,
-            size: 20,
-          ),
+          Icon(icon, color: color, size: 20),
           const SizedBox(width: 8),
           Expanded(
-            child: Column(mainAxisSize: MainAxisSize.min,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -155,8 +151,8 @@ color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.bodySmall?.copyWith(
-                      height: 1.0,
-color: _getTrendDirectionColor(trend.direction),
+                        height: 1.0,
+                        color: _getTrendDirectionColor(trend.direction),
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -171,7 +167,8 @@ color: _getTrendDirectionColor(trend.direction),
   }
 
   Widget _buildMainTrendChart(ThemeData theme) {
-    return Column(mainAxisSize: MainAxisSize.min,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
@@ -212,8 +209,10 @@ color: _getTrendDirectionColor(trend.direction),
                       return Text(
                         value.toInt().toString(),
                         style: theme.textTheme.bodySmall?.copyWith(
-                      height: 1.0,
-color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                          height: 1.0,
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.7,
+                          ),
                         ),
                       );
                     },
@@ -228,15 +227,21 @@ color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                       return Text(
                         '${(value / 30).round()}M',
                         style: theme.textTheme.bodySmall?.copyWith(
-                      height: 1.0,
-color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                          height: 1.0,
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.7,
+                          ),
                         ),
                       );
                     },
                   ),
                 ),
-                topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                topTitles: AxisTitles(
+                  sideTitles: SideTitles(showTitles: false),
+                ),
+                rightTitles: AxisTitles(
+                  sideTitles: SideTitles(showTitles: false),
+                ),
               ),
               borderData: FlBorderData(show: false),
               minX: 0,
@@ -263,7 +268,8 @@ color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
   }
 
   Widget _buildIndividualMetricCharts(ThemeData theme) {
-    return Column(mainAxisSize: MainAxisSize.min,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
@@ -300,11 +306,10 @@ color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: color.withValues(alpha: 0.2),
-        ),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
-      child: Column(mainAxisSize: MainAxisSize.min,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
@@ -320,7 +325,9 @@ color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: _getTrendDirectionColor(trend.direction).withValues(alpha: 0.1),
+                  color: _getTrendDirectionColor(
+                    trend.direction,
+                  ).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
@@ -337,8 +344,8 @@ color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.bodySmall?.copyWith(
-                      height: 1.0,
-color: _getTrendDirectionColor(trend.direction),
+                        height: 1.0,
+                        color: _getTrendDirectionColor(trend.direction),
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -383,15 +390,15 @@ color: _getTrendDirectionColor(trend.direction),
               Text(
                 'Confidence: ${(trend.confidence * 100).round()}%',
                 style: theme.textTheme.bodySmall?.copyWith(
-                      height: 1.0,
-color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                  height: 1.0,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                 ),
               ),
               Text(
                 'Magnitude: ${(trend.magnitude * 100).round()}%',
                 style: theme.textTheme.bodySmall?.copyWith(
-                      height: 1.0,
-color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                  height: 1.0,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                 ),
               ),
             ],
@@ -417,8 +424,8 @@ color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
         Text(
           label,
           style: theme.textTheme.bodySmall?.copyWith(
-                      height: 1.0,
-color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+            height: 1.0,
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
           ),
         ),
       ],
@@ -441,11 +448,11 @@ color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
   List<FlSpot> _generateSampleSpots(TrendData trend, {bool extended = false}) {
     final length = extended ? 180 : 30;
     final baseValue = 3.0;
-    
+
     return List.generate(length ~/ 5, (index) {
       final x = (index * 5).toDouble();
       var y = baseValue;
-      
+
       // Apply trend direction
       switch (trend.direction) {
         case TrendDirection.improving:
@@ -458,7 +465,7 @@ color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
           y += (index % 3 - 1) * 0.1; // Small random variations
           break;
       }
-      
+
       return FlSpot(x, y.clamp(1.0, 5.0));
     });
   }

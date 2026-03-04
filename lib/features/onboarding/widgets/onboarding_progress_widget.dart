@@ -24,7 +24,8 @@ class OnboardingProgressWidget extends StatefulWidget {
   });
 
   @override
-  State<OnboardingProgressWidget> createState() => _OnboardingProgressWidgetState();
+  State<OnboardingProgressWidget> createState() =>
+      _OnboardingProgressWidgetState();
 }
 
 class _OnboardingProgressWidgetState extends State<OnboardingProgressWidget>
@@ -51,21 +52,13 @@ class _OnboardingProgressWidgetState extends State<OnboardingProgressWidget>
       vsync: this,
     );
 
-    _progressAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _progressController,
-      curve: Curves.easeInOut,
-    ));
+    _progressAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _progressController, curve: Curves.easeInOut),
+    );
 
-    _pulseAnimation = Tween<double>(
-      begin: 1.0,
-      end: 1.2,
-    ).animate(CurvedAnimation(
-      parent: _pulseController,
-      curve: Curves.elasticInOut,
-    ));
+    _pulseAnimation = Tween<double>(begin: 1.0, end: 1.2).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.elasticInOut),
+    );
 
     _pulseController.repeat(reverse: true);
     _updateProgress();
@@ -100,12 +93,12 @@ class _OnboardingProgressWidgetState extends State<OnboardingProgressWidget>
       children: [
         // Main progress bar
         _buildMainProgressBar(context, primaryColor, backgroundColor),
-        
+
         const SizedBox(height: 16),
-        
+
         // Step indicators
         _buildStepIndicators(context, primaryColor, backgroundColor),
-        
+
         if (widget.stepTitles != null) ...[
           const SizedBox(height: 12),
           _buildStepTitle(context),
@@ -114,9 +107,13 @@ class _OnboardingProgressWidgetState extends State<OnboardingProgressWidget>
     );
   }
 
-  Widget _buildMainProgressBar(BuildContext context, Color primaryColor, Color backgroundColor) {
+  Widget _buildMainProgressBar(
+    BuildContext context,
+    Color primaryColor,
+    Color backgroundColor,
+  ) {
     final theme = Theme.of(context);
-    
+
     return Container(
       height: 6,
       decoration: BoxDecoration(
@@ -139,10 +136,7 @@ class _OnboardingProgressWidgetState extends State<OnboardingProgressWidget>
             child: Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [
-                    primaryColor,
-                    primaryColor.withValues(alpha: 0.8),
-                  ],
+                  colors: [primaryColor, primaryColor.withValues(alpha: 0.8)],
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
                 ),
@@ -162,7 +156,11 @@ class _OnboardingProgressWidgetState extends State<OnboardingProgressWidget>
     );
   }
 
-  Widget _buildStepIndicators(BuildContext context, Color primaryColor, Color backgroundColor) {
+  Widget _buildStepIndicators(
+    BuildContext context,
+    Color primaryColor,
+    Color backgroundColor,
+  ) {
     return Row(
       children: List.generate(widget.totalSteps, (index) {
         return Expanded(
@@ -196,7 +194,7 @@ class _OnboardingProgressWidgetState extends State<OnboardingProgressWidget>
     Color indicatorColor;
     Color textColor;
     IconData? icon;
-    
+
     if (isCompleted) {
       indicatorColor = primaryColor;
       textColor = Colors.white;
@@ -210,13 +208,9 @@ class _OnboardingProgressWidgetState extends State<OnboardingProgressWidget>
     }
 
     Widget indicatorChild;
-    
+
     if (icon != null) {
-      indicatorChild = Icon(
-        icon,
-        color: textColor,
-        size: 16,
-      );
+      indicatorChild = Icon(icon, color: textColor, size: 16);
     } else if (widget.showStepNumbers) {
       indicatorChild = Text(
         '${stepIndex + 1}',
@@ -269,8 +263,9 @@ class _OnboardingProgressWidgetState extends State<OnboardingProgressWidget>
     return Column(
       children: [
         indicator,
-        
-        if (widget.stepTitles != null && stepIndex < widget.stepTitles!.length) ...[
+
+        if (widget.stepTitles != null &&
+            stepIndex < widget.stepTitles!.length) ...[
           const SizedBox(height: 8),
           Text(
             widget.stepTitles![stepIndex],
@@ -290,13 +285,14 @@ class _OnboardingProgressWidgetState extends State<OnboardingProgressWidget>
   }
 
   Widget _buildStepTitle(BuildContext context) {
-    if (widget.stepTitles == null || widget.currentStep >= widget.stepTitles!.length) {
+    if (widget.stepTitles == null ||
+        widget.currentStep >= widget.stepTitles!.length) {
       return const SizedBox.shrink();
     }
 
     final theme = Theme.of(context);
     final currentTitle = widget.stepTitles![widget.currentStep];
-    
+
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 300),
       transitionBuilder: (child, animation) {
@@ -349,7 +345,7 @@ class EnhancedOnboardingProgressWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final primaryColor = accentColor ?? theme.colorScheme.primary;
-    
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -375,7 +371,7 @@ class EnhancedOnboardingProgressWidget extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              
+
               Text(
                 '${(progress * 100).round()}%',
                 style: theme.textTheme.titleMedium?.copyWith(
@@ -385,9 +381,9 @@ class EnhancedOnboardingProgressWidget extends StatelessWidget {
               ),
             ],
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Progress visualization
           OnboardingProgressWidget(
             progress: progress,
@@ -396,9 +392,9 @@ class EnhancedOnboardingProgressWidget extends StatelessWidget {
             stepTitles: stepTitles,
             primaryColor: primaryColor,
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Progress details
           _buildProgressDetails(context, theme, primaryColor),
         ],
@@ -406,10 +402,14 @@ class EnhancedOnboardingProgressWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildProgressDetails(BuildContext context, ThemeData theme, Color primaryColor) {
+  Widget _buildProgressDetails(
+    BuildContext context,
+    ThemeData theme,
+    Color primaryColor,
+  ) {
     final completedSteps = currentStep;
     final remainingSteps = totalSteps - currentStep - 1;
-    
+
     return Row(
       children: [
         Expanded(
@@ -421,7 +421,7 @@ class EnhancedOnboardingProgressWidget extends StatelessWidget {
             color: Colors.green,
           ),
         ),
-        
+
         Expanded(
           child: _buildProgressStat(
             context,
@@ -431,7 +431,7 @@ class EnhancedOnboardingProgressWidget extends StatelessWidget {
             color: primaryColor,
           ),
         ),
-        
+
         Expanded(
           child: _buildProgressStat(
             context,
@@ -453,17 +453,13 @@ class EnhancedOnboardingProgressWidget extends StatelessWidget {
     required Color color,
   }) {
     final theme = Theme.of(context);
-    
+
     return Column(
       children: [
-        Icon(
-          icon,
-          color: color,
-          size: 20,
-        ),
-        
+        Icon(icon, color: color, size: 20),
+
         const SizedBox(height: 4),
-        
+
         Text(
           value,
           style: theme.textTheme.titleSmall?.copyWith(
@@ -471,7 +467,7 @@ class EnhancedOnboardingProgressWidget extends StatelessWidget {
             color: color,
           ),
         ),
-        
+
         Text(
           label,
           style: theme.textTheme.bodySmall?.copyWith(

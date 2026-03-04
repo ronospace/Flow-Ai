@@ -18,7 +18,7 @@ class CorrelationInsightsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final displayCorrelations = isPreview 
+    final displayCorrelations = isPreview
         ? correlations.entries.take(3).toList()
         : correlations.entries.toList();
 
@@ -40,21 +40,23 @@ class CorrelationInsightsCard extends StatelessWidget {
         children: [
           _buildHeader(context),
           const SizedBox(height: 16),
-          
+
           if (displayCorrelations.isEmpty)
             _buildNoCorrelationsMessage(context)
           else
-            ...displayCorrelations.map((entry) => _buildCorrelationItem(
-              context, 
-              _getMetricDisplayName(entry.key), 
-              entry.value,
-            )),
-          
+            ...displayCorrelations.map(
+              (entry) => _buildCorrelationItem(
+                context,
+                _getMetricDisplayName(entry.key),
+                entry.value,
+              ),
+            ),
+
           if (isPreview && correlations.length > 3) ...[
             const SizedBox(height: 12),
             _buildViewMoreButton(context),
           ],
-          
+
           if (!isPreview) ...[
             const SizedBox(height: 16),
             _buildInsightsSummary(context),
@@ -63,7 +65,7 @@ class CorrelationInsightsCard extends StatelessWidget {
       ),
     ).animate().fadeIn().slideY(begin: 0.3, end: 0);
   }
-  
+
   Widget _buildHeader(BuildContext context) {
     final theme = Theme.of(context);
     return Row(
@@ -77,11 +79,7 @@ class CorrelationInsightsCard extends StatelessWidget {
             ),
             borderRadius: BorderRadius.circular(12),
           ),
-          child: const Icon(
-            Icons.insights,
-            color: Colors.white,
-            size: 20,
-          ),
+          child: const Icon(Icons.insights, color: Colors.white, size: 20),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -96,7 +94,7 @@ class CorrelationInsightsCard extends StatelessWidget {
                 ),
               ),
               Text(
-                isPreview 
+                isPreview
                     ? 'How your health metrics relate to your cycle'
                     : 'Detailed correlation analysis',
                 style: theme.textTheme.bodySmall?.copyWith(
@@ -107,22 +105,22 @@ class CorrelationInsightsCard extends StatelessWidget {
           ),
         ),
         if (isPreview)
-          Icon(
-            Icons.arrow_forward_ios,
-            size: 16,
-            color: AppTheme.mediumGrey,
-          ),
+          Icon(Icons.arrow_forward_ios, size: 16, color: AppTheme.mediumGrey),
       ],
     );
   }
-  
-  Widget _buildCorrelationItem(BuildContext context, String metric, double correlation) {
+
+  Widget _buildCorrelationItem(
+    BuildContext context,
+    String metric,
+    double correlation,
+  ) {
     final theme = Theme.of(context);
     final absCorrelation = correlation.abs();
     final strength = _getCorrelationStrength(absCorrelation);
     final color = _getCorrelationColor(correlation);
     final isPositive = correlation > 0;
-    
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.all(16),
@@ -137,10 +135,7 @@ class CorrelationInsightsCard extends StatelessWidget {
           Container(
             width: 32,
             height: 32,
-            decoration: BoxDecoration(
-              color: color,
-              shape: BoxShape.circle,
-            ),
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
             child: Icon(
               isPositive ? Icons.trending_up : Icons.trending_down,
               color: Colors.white,
@@ -148,7 +143,7 @@ class CorrelationInsightsCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-          
+
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,7 +165,7 @@ class CorrelationInsightsCard extends StatelessWidget {
               ],
             ),
           ),
-          
+
           // Correlation strength bar
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -207,7 +202,7 @@ class CorrelationInsightsCard extends StatelessWidget {
       ),
     );
   }
-  
+
   Widget _buildNoCorrelationsMessage(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(24),
@@ -231,16 +226,13 @@ class CorrelationInsightsCard extends StatelessWidget {
           Text(
             'Keep tracking your health data to discover patterns',
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: AppTheme.mediumGrey,
-              fontSize: 12,
-            ),
+            style: const TextStyle(color: AppTheme.mediumGrey, fontSize: 12),
           ),
         ],
       ),
     );
   }
-  
+
   Widget _buildViewMoreButton(BuildContext context) {
     final theme = Theme.of(context);
     return GestureDetector(
@@ -255,7 +247,9 @@ class CorrelationInsightsCard extends StatelessWidget {
             ],
           ),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppTheme.primaryRose.withValues(alpha: 0.3)),
+          border: Border.all(
+            color: AppTheme.primaryRose.withValues(alpha: 0.3),
+          ),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -268,23 +262,19 @@ class CorrelationInsightsCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
-            Icon(
-              Icons.arrow_forward,
-              size: 16,
-              color: AppTheme.primaryRose,
-            ),
+            Icon(Icons.arrow_forward, size: 16, color: AppTheme.primaryRose),
           ],
         ),
       ),
     );
   }
-  
+
   Widget _buildInsightsSummary(BuildContext context) {
     final theme = Theme.of(context);
     final strongCorrelations = correlations.entries
         .where((entry) => entry.value.abs() > 0.6)
         .toList();
-    
+
     if (strongCorrelations.isEmpty) {
       return Container(
         padding: const EdgeInsets.all(16),
@@ -294,11 +284,7 @@ class CorrelationInsightsCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(
-              Icons.info_outline,
-              color: AppTheme.accentMint,
-              size: 20,
-            ),
+            Icon(Icons.info_outline, color: AppTheme.accentMint, size: 20),
             const SizedBox(width: 12),
             Expanded(
               child: Text(
@@ -313,7 +299,7 @@ class CorrelationInsightsCard extends StatelessWidget {
         ),
       );
     }
-    
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -352,23 +338,25 @@ class CorrelationInsightsCard extends StatelessWidget {
       ),
     );
   }
-  
-  String _generateInsightText(List<MapEntry<String, double>> strongCorrelations) {
+
+  String _generateInsightText(
+    List<MapEntry<String, double>> strongCorrelations,
+  ) {
     if (strongCorrelations.isEmpty) {
       return 'No strong correlations detected yet. Keep tracking for more insights.';
     }
-    
+
     final strongest = strongCorrelations.first;
     final metricName = _getMetricDisplayName(strongest.key);
     final isPositive = strongest.value > 0;
-    
+
     if (isPositive) {
       return 'Your $metricName shows a strong positive correlation with your cycle, suggesting it tends to increase during certain phases.';
     } else {
       return 'Your $metricName shows a strong negative correlation with your cycle, suggesting it tends to decrease during certain phases.';
     }
   }
-  
+
   String _getMetricDisplayName(String key) {
     switch (key.toLowerCase()) {
       case 'hrv_cycle_correlation':
@@ -383,13 +371,14 @@ class CorrelationInsightsCard extends StatelessWidget {
         return 'Activity Level';
       default:
         // Convert snake_case to Title Case
-        return key.split('_')
+        return key
+            .split('_')
             .map((word) => word[0].toUpperCase() + word.substring(1))
             .join(' ')
             .replaceAll(' Correlation', '');
     }
   }
-  
+
   String _getCorrelationStrength(double absCorrelation) {
     if (absCorrelation >= 0.8) return 'Very strong';
     if (absCorrelation >= 0.6) return 'Strong';
@@ -397,10 +386,10 @@ class CorrelationInsightsCard extends StatelessWidget {
     if (absCorrelation >= 0.2) return 'Weak';
     return 'Very weak';
   }
-  
+
   Color _getCorrelationColor(double correlation) {
     final absCorrelation = correlation.abs();
-    
+
     if (absCorrelation >= 0.6) {
       return correlation > 0 ? AppTheme.successGreen : AppTheme.primaryRose;
     } else if (absCorrelation >= 0.4) {

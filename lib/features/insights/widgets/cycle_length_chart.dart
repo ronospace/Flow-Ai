@@ -17,7 +17,7 @@ class CycleLengthChart extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final filteredCycles = _getFilteredCycles();
-    
+
     if (filteredCycles.isEmpty) {
       return _buildEmptyState(theme);
     }
@@ -71,7 +71,9 @@ class CycleLengthChart extends StatelessWidget {
                     Text(
                       'Last ${months == 12 ? '1 year' : '$months months'}',
                       style: TextStyle(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.7,
+                        ),
                         fontSize: 14,
                       ),
                     ),
@@ -82,11 +84,12 @@ class CycleLengthChart extends StatelessWidget {
               _buildStatistics(filteredCycles, theme),
             ],
           ),
-          
+
           const SizedBox(height: 30),
-          
+
           // Chart
-          SizedBox(height: 200,
+          SizedBox(
+            height: 200,
             child: LineChart(_buildLineChartData(filteredCycles)),
           ),
         ],
@@ -95,9 +98,14 @@ class CycleLengthChart extends StatelessWidget {
   }
 
   Widget _buildStatistics(List<CycleData> cycles, ThemeData theme) {
-    final avgLength = cycles.fold<int>(0, (sum, cycle) => sum + cycle.length) / cycles.length;
-    final shortest = cycles.map((c) => c.length).reduce((min, length) => length < min ? length : min);
-    final longest = cycles.map((c) => c.length).reduce((max, length) => length > max ? length : max);
+    final avgLength =
+        cycles.fold<int>(0, (sum, cycle) => sum + cycle.length) / cycles.length;
+    final shortest = cycles
+        .map((c) => c.length)
+        .reduce((min, length) => length < min ? length : min);
+    final longest = cycles
+        .map((c) => c.length)
+        .reduce((max, length) => length > max ? length : max);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -212,18 +220,18 @@ class CycleLengthChart extends StatelessWidget {
           sideTitles: SideTitles(
             showTitles: true,
             reservedSize: 30,
-            interval: cycles.length > 10 ? (cycles.length / 5).roundToDouble() : 1,
+            interval: cycles.length > 10
+                ? (cycles.length / 5).roundToDouble()
+                : 1,
             getTitlesWidget: (value, meta) {
               final index = value.toInt();
               if (index >= 0 && index < cycles.length) {
                 final cycle = cycles[index];
-                return Padding(padding: const EdgeInsets.only(top: 8),
+                return Padding(
+                  padding: const EdgeInsets.only(top: 8),
                   child: Text(
                     '${cycle.startDate.month}/${cycle.startDate.day}',
-                    style: TextStyle(
-                      color: AppTheme.mediumGrey,
-                      fontSize: 10,
-                    ),
+                    style: TextStyle(color: AppTheme.mediumGrey, fontSize: 10),
                   ),
                 );
               }
@@ -231,7 +239,9 @@ class CycleLengthChart extends StatelessWidget {
             },
           ),
         ),
-        rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        rightTitles: const AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
         topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
       ),
       borderData: FlBorderData(show: false),
@@ -296,6 +306,8 @@ class CycleLengthChart extends StatelessWidget {
 
   List<CycleData> _getFilteredCycles() {
     final cutoffDate = DateTime.now().subtract(Duration(days: months * 30));
-    return cycles.where((cycle) => cycle.startDate.isAfter(cutoffDate)).toList();
+    return cycles
+        .where((cycle) => cycle.startDate.isAfter(cutoffDate))
+        .toList();
   }
 }

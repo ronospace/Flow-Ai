@@ -79,13 +79,25 @@ class AdaptiveMessages {
     if (!context.mounted) return;
 
     final platformInfo = _platformService.platformInfo;
-    
+
     if (platformInfo.platform == TargetPlatform.iOS && platformInfo.isMobile) {
       // Use iOS-style alert for messages
-      await _showIOSMessage(context, title: title, message: message, type: type, duration: duration);
+      await _showIOSMessage(
+        context,
+        title: title,
+        message: message,
+        type: type,
+        duration: duration,
+      );
     } else {
       // Use Material SnackBar for Android/other platforms
-      await _showMaterialMessage(context, title: title, message: message, type: type, duration: duration);
+      await _showMaterialMessage(
+        context,
+        title: title,
+        message: message,
+        type: type,
+        duration: duration,
+      );
     }
   }
 
@@ -100,7 +112,7 @@ class AdaptiveMessages {
 
     // For iOS, we'll show a brief alert dialog that auto-dismisses
     final completer = Completer<void>();
-    
+
     showCupertinoDialog(
       context: context,
       barrierDismissible: true,
@@ -154,7 +166,13 @@ class AdaptiveMessages {
       scaffoldMessenger = ScaffoldMessenger.maybeOf(context);
     } catch (e) {
       // If ScaffoldMessenger is not available, fall back to iOS-style dialog
-      return _showIOSMessage(context, title: title, message: message, type: type, duration: duration);
+      return _showIOSMessage(
+        context,
+        title: title,
+        message: message,
+        type: type,
+        duration: duration,
+      );
     }
 
     if (scaffoldMessenger != null) {
@@ -169,13 +187,21 @@ class AdaptiveMessages {
           ),
           backgroundColor: color,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
           duration: duration,
         ),
       );
     } else {
       // Fallback to iOS-style dialog if no ScaffoldMessenger available
-      return _showIOSMessage(context, title: title, message: message, type: type, duration: duration);
+      return _showIOSMessage(
+        context,
+        title: title,
+        message: message,
+        type: type,
+        duration: duration,
+      );
     }
   }
 
@@ -202,28 +228,24 @@ class AdaptiveMessages {
     bool isDestructive = false,
   }) async {
     return await AdaptiveComponents.showAdaptiveDialog<bool>(
-      context: context,
-      title: title,
-      content: message,
-      actions: [
-        AdaptiveDialogAction(
-          text: cancelText,
-          onPressed: () => Navigator.of(context).pop(false),
-        ),
-        AdaptiveDialogAction(
-          text: confirmText,
-          onPressed: () => Navigator.of(context).pop(true),
-          isDefault: true,
-          isDestructive: isDestructive,
-        ),
-      ],
-    ) ?? false;
+          context: context,
+          title: title,
+          content: message,
+          actions: [
+            AdaptiveDialogAction(
+              text: cancelText,
+              onPressed: () => Navigator.of(context).pop(false),
+            ),
+            AdaptiveDialogAction(
+              text: confirmText,
+              onPressed: () => Navigator.of(context).pop(true),
+              isDefault: true,
+              isDestructive: isDestructive,
+            ),
+          ],
+        ) ??
+        false;
   }
 }
 
-enum _MessageType {
-  success,
-  error,
-  warning,
-  info,
-}
+enum _MessageType { success, error, warning, info }

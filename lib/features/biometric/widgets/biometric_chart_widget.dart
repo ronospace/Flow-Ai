@@ -33,10 +33,10 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
     with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
-  
+
   int? _selectedIndex;
   BiometricReading? _selectedReading;
-  
+
   @override
   void initState() {
     super.initState();
@@ -50,20 +50,20 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
     );
     _animationController.forward();
   }
-  
+
   @override
   void dispose() {
     _animationController.dispose();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     if (widget.data.isEmpty) {
       return _buildEmptyChart();
     }
-    
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -95,7 +95,7 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
       ),
     ).animate().fadeIn().slideY(begin: 0.3, end: 0);
   }
-  
+
   Widget _buildHeader() {
     final theme = Theme.of(context);
     return Row(
@@ -156,13 +156,17 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
       ],
     );
   }
-  
+
   Widget _buildChart() {
     final chartHeight = 200.0;
-    final maxValue = widget.data.map((r) => r.value).reduce((a, b) => a > b ? a : b);
-    final minValue = widget.data.map((r) => r.value).reduce((a, b) => a < b ? a : b);
+    final maxValue = widget.data
+        .map((r) => r.value)
+        .reduce((a, b) => a > b ? a : b);
+    final minValue = widget.data
+        .map((r) => r.value)
+        .reduce((a, b) => a < b ? a : b);
     final range = maxValue - minValue;
-    
+
     return AnimatedBuilder(
       animation: _animation,
       builder: (context, child) {
@@ -181,7 +185,8 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
               showTrend: widget.showTrend,
             ),
             child: GestureDetector(
-              onTapDown: (details) => _handleTap(details, chartHeight, range, minValue),
+              onTapDown: (details) =>
+                  _handleTap(details, chartHeight, range, minValue),
               onTap: () => setState(() {}),
               child: Container(),
             ),
@@ -190,16 +195,21 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
       },
     );
   }
-  
-  void _handleTap(TapDownDetails details, double chartHeight, double range, double minValue) {
+
+  void _handleTap(
+    TapDownDetails details,
+    double chartHeight,
+    double range,
+    double minValue,
+  ) {
     final RenderBox renderBox = context.findRenderObject() as RenderBox;
     final localPosition = renderBox.globalToLocal(details.globalPosition);
-    
+
     // Calculate which data point was tapped
     final chartWidth = renderBox.size.width - 40; // Account for padding
     final pointSpacing = chartWidth / (widget.data.length - 1);
     final tappedIndex = ((localPosition.dx - 20) / pointSpacing).round();
-    
+
     if (tappedIndex >= 0 && tappedIndex < widget.data.length) {
       setState(() {
         _selectedIndex = tappedIndex;
@@ -207,13 +217,13 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
       });
     }
   }
-  
+
   Widget _buildSelectedDataInfo() {
     if (_selectedReading == null) return const SizedBox();
     final theme = Theme.of(context);
-    
+
     final reading = _selectedReading!;
-    
+
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -223,11 +233,7 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
       ),
       child: Row(
         children: [
-          Icon(
-            Icons.info_outline,
-            color: widget.color,
-            size: 16,
-          ),
+          Icon(Icons.info_outline, color: widget.color, size: 16),
           const SizedBox(width: 8),
           Expanded(
             child: Column(
@@ -254,22 +260,20 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
               _selectedIndex = null;
               _selectedReading = null;
             }),
-            child: Icon(
-              Icons.close,
-              color: AppTheme.mediumGrey,
-              size: 16,
-            ),
+            child: Icon(Icons.close, color: AppTheme.mediumGrey, size: 16),
           ),
         ],
       ),
     ).animate().fadeIn().scale();
   }
-  
+
   Widget _buildStatistics() {
     final theme = Theme.of(context);
-    final average = widget.data.map((r) => r.value).reduce((a, b) => a + b) / widget.data.length;
+    final average =
+        widget.data.map((r) => r.value).reduce((a, b) => a + b) /
+        widget.data.length;
     final trend = _calculateTrend();
-    
+
     return Row(
       children: [
         if (widget.showAverage) ...[
@@ -282,23 +286,37 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
             ),
           ),
         ],
-        if (widget.showAverage && widget.showTrend)
-          const SizedBox(width: 16),
+        if (widget.showAverage && widget.showTrend) const SizedBox(width: 16),
         if (widget.showTrend) ...[
           Expanded(
             child: _buildStatItem(
               'Trend',
-              trend > 0 ? '+${(trend * 100).toStringAsFixed(1)}%' : '${(trend * 100).toStringAsFixed(1)}%',
-              trend > 0 ? Icons.trending_up : trend < 0 ? Icons.trending_down : Icons.trending_flat,
-              trend > 0 ? AppTheme.successGreen : trend < 0 ? AppTheme.warningOrange : AppTheme.mediumGrey,
+              trend > 0
+                  ? '+${(trend * 100).toStringAsFixed(1)}%'
+                  : '${(trend * 100).toStringAsFixed(1)}%',
+              trend > 0
+                  ? Icons.trending_up
+                  : trend < 0
+                  ? Icons.trending_down
+                  : Icons.trending_flat,
+              trend > 0
+                  ? AppTheme.successGreen
+                  : trend < 0
+                  ? AppTheme.warningOrange
+                  : AppTheme.mediumGrey,
             ),
           ),
         ],
       ],
     );
   }
-  
-  Widget _buildStatItem(String label, String value, IconData icon, Color color) {
+
+  Widget _buildStatItem(
+    String label,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(12),
@@ -335,7 +353,7 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
       ),
     );
   }
-  
+
   Widget _buildEmptyChart() {
     final theme = Theme.of(context);
     return Container(
@@ -372,20 +390,24 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
       ),
     );
   }
-  
+
   double _calculateTrend() {
     if (widget.data.length < 2) return 0.0;
-    
+
     final midPoint = widget.data.length ~/ 2;
     final firstHalf = widget.data.take(midPoint);
     final secondHalf = widget.data.skip(midPoint);
-    
-    final firstAvg = firstHalf.map((r) => r.value).reduce((a, b) => a + b) / firstHalf.length;
-    final secondAvg = secondHalf.map((r) => r.value).reduce((a, b) => a + b) / secondHalf.length;
-    
+
+    final firstAvg =
+        firstHalf.map((r) => r.value).reduce((a, b) => a + b) /
+        firstHalf.length;
+    final secondAvg =
+        secondHalf.map((r) => r.value).reduce((a, b) => a + b) /
+        secondHalf.length;
+
     return (secondAvg - firstAvg) / firstAvg;
   }
-  
+
   IconData _getIconForType(BiometricType type) {
     switch (type) {
       case BiometricType.heartRate:
@@ -410,11 +432,11 @@ class _BiometricChartWidgetState extends State<BiometricChartWidget>
         return Icons.health_and_safety;
     }
   }
-  
+
   String _formatDateTime(DateTime dateTime) {
     final now = DateTime.now();
     final difference = now.difference(dateTime);
-    
+
     if (difference.inDays > 0) {
       return '${difference.inDays}d ago';
     } else if (difference.inHours > 0) {
@@ -473,7 +495,7 @@ class BiometricChartPainter extends CustomPainter {
     final path = Path();
     final fillPath = Path();
     final range = maxValue - minValue;
-    
+
     if (range == 0) return;
 
     // Calculate points
@@ -508,7 +530,7 @@ class BiometricChartPainter extends CustomPainter {
 
       // Draw the fill area
       canvas.drawPath(fillPath, fillPaint);
-      
+
       // Draw the line
       canvas.drawPath(path, paint);
 
@@ -517,7 +539,7 @@ class BiometricChartPainter extends CustomPainter {
         final point = animatedPoints[i];
         final isSelected = selectedIndex == i;
         final pointRadius = isSelected ? 6.0 : 4.0;
-        
+
         if (isSelected) {
           // Draw selection ring
           canvas.drawCircle(
@@ -528,9 +550,13 @@ class BiometricChartPainter extends CustomPainter {
               ..style = PaintingStyle.fill,
           );
         }
-        
-        canvas.drawCircle(point, pointRadius, isSelected ? selectedPointPaint : pointPaint);
-        
+
+        canvas.drawCircle(
+          point,
+          pointRadius,
+          isSelected ? selectedPointPaint : pointPaint,
+        );
+
         // Draw white center for contrast
         canvas.drawCircle(
           point,
@@ -543,21 +569,18 @@ class BiometricChartPainter extends CustomPainter {
 
       // Draw average line if enabled
       if (showAverage && animationProgress > 0.5) {
-        final avgValue = data.map((r) => r.value).reduce((a, b) => a + b) / data.length;
+        final avgValue =
+            data.map((r) => r.value).reduce((a, b) => a + b) / data.length;
         final normalizedAvg = (avgValue - minValue) / range;
         final avgY = size.height - (normalizedAvg * size.height);
-        
+
         final avgPaint = Paint()
           ..color = color.withValues(alpha: 0.5)
           ..strokeWidth = 2
           ..style = PaintingStyle.stroke
           ..strokeDashPattern = [5, 5];
 
-        canvas.drawLine(
-          Offset(0, avgY),
-          Offset(size.width, avgY),
-          avgPaint,
-        );
+        canvas.drawLine(Offset(0, avgY), Offset(size.width, avgY), avgPaint);
       }
     }
   }
@@ -565,8 +588,8 @@ class BiometricChartPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant BiometricChartPainter oldDelegate) {
     return oldDelegate.animationProgress != animationProgress ||
-           oldDelegate.selectedIndex != selectedIndex ||
-           oldDelegate.data != data;
+        oldDelegate.selectedIndex != selectedIndex ||
+        oldDelegate.data != data;
   }
 }
 

@@ -16,16 +16,17 @@ class OfflineService {
   late Connectivity _connectivity;
   late SharedPreferences _prefs;
   late DatabaseService _databaseService;
-  
+
   List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
   bool _isOffline = true;
-  
+
   // Sync queue for operations to perform when online
   final List<PendingSyncOperation> _syncQueue = [];
-  
+
   // Stream controllers for connectivity changes
-  final StreamController<bool> _connectivityController = StreamController<bool>.broadcast();
-  final StreamController<List<PendingSyncOperation>> _syncQueueController = 
+  final StreamController<bool> _connectivityController =
+      StreamController<bool>.broadcast();
+  final StreamController<List<PendingSyncOperation>> _syncQueueController =
       StreamController<List<PendingSyncOperation>>.broadcast();
 
   // Keys for SharedPreferences
@@ -35,29 +36,32 @@ class OfflineService {
 
   // Getters
   Stream<bool> get connectivityStream => _connectivityController.stream;
-  Stream<List<PendingSyncOperation>> get syncQueueStream => _syncQueueController.stream;
+  Stream<List<PendingSyncOperation>> get syncQueueStream =>
+      _syncQueueController.stream;
   bool get isOffline => _isOffline;
   bool get isOnline => !_isOffline;
   List<PendingSyncOperation> get syncQueue => List.unmodifiable(_syncQueue);
-  
+
   /// Initialize offline service
   Future<void> initialize() async {
     _connectivity = Connectivity();
     _prefs = await SharedPreferences.getInstance();
     _databaseService = DatabaseService();
-    
+
     // Load sync queue from storage
     await _loadSyncQueue();
-    
+
     // Check initial connectivity
     await _checkConnectivity();
-    
+
     // Listen for connectivity changes (using older API which expects single ConnectivityResult)
     _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
       _onConnectivityChanged([result]);
     });
-    
-    debugPrint('🔄 Offline Service initialized - Status: ${_isOffline ? 'Offline' : 'Online'}');
+
+    debugPrint(
+      '🔄 Offline Service initialized - Status: ${_isOffline ? 'Offline' : 'Online'}',
+    );
   }
 
   /// Check current connectivity status
@@ -76,7 +80,7 @@ class OfflineService {
   void _onConnectivityChanged(List<ConnectivityResult> results) async {
     _connectionStatus = results;
     await _updateConnectivityStatus(results);
-    
+
     // If we're back online, process sync queue
     if (isOnline && _syncQueue.isNotEmpty) {
       await processSyncQueue();
@@ -84,16 +88,21 @@ class OfflineService {
   }
 
   /// Update connectivity status and notify listeners
-  Future<void> _updateConnectivityStatus(List<ConnectivityResult> results) async {
+  Future<void> _updateConnectivityStatus(
+    List<ConnectivityResult> results,
+  ) async {
     final wasOffline = _isOffline;
-    
+
     // Check if we have actual internet connectivity, not just network connection
-    _isOffline = results.contains(ConnectivityResult.none) || results.isEmpty || !(await _hasInternetAccess());
-    
+    _isOffline =
+        results.contains(ConnectivityResult.none) ||
+        results.isEmpty ||
+        !(await _hasInternetAccess());
+
     if (wasOffline != _isOffline) {
       debugPrint('Connectivity changed: ${_isOffline ? 'OFFLINE' : 'ONLINE'}');
       _connectivityController.add(isOnline);
-      
+
       // Update last sync timestamp when going online
       if (isOnline) {
         await _prefs.setString(_lastSyncKey, DateTime.now().toIso8601String());
@@ -116,17 +125,19 @@ class OfflineService {
     _syncQueue.add(operation);
     await _saveSyncQueue();
     _syncQueueController.add(_syncQueue);
-    
-    debugPrint('Added operation to sync queue: ${operation.type} - ${operation.id}');
+
+    debugPrint(
+      'Added operation to sync queue: ${operation.type} - ${operation.id}',
+    );
   }
 
   /// Process all operations in sync queue
   Future<void> processSyncQueue() async {
     if (_syncQueue.isEmpty || _isOffline) return;
-    
+
     debugPrint('Processing ${_syncQueue.length} queued operations...');
     final completedOperations = <PendingSyncOperation>[];
-    
+
     for (final operation in _syncQueue) {
       try {
         final success = await _processOperation(operation);
@@ -138,20 +149,20 @@ class OfflineService {
         debugPrint('Failed to sync operation ${operation.id}: $e');
       }
     }
-    
+
     // Remove completed operations
     for (final operation in completedOperations) {
       _syncQueue.remove(operation);
     }
-    
+
     if (completedOperations.isNotEmpty) {
       await _saveSyncQueue();
       _syncQueueController.add(_syncQueue);
-      
+
       // Update last sync timestamp
       await _prefs.setString(_lastSyncKey, DateTime.now().toIso8601String());
     }
-    
+
     debugPrint('Sync completed. Remaining operations: ${_syncQueue.length}');
   }
 
@@ -235,7 +246,7 @@ class OfflineService {
       debugPrint('Cannot force sync - device is offline');
       return false;
     }
-    
+
     await processSyncQueue();
     return _syncQueue.isEmpty;
   }
@@ -264,7 +275,7 @@ class OfflineService {
       final List<dynamic> queueJson = json.decode(queueString);
       _syncQueue.clear();
       _syncQueue.addAll(
-        queueJson.map((json) => PendingSyncOperation.fromJson(json))
+        queueJson.map((json) => PendingSyncOperation.fromJson(json)),
       );
     }
   }
@@ -327,9 +338,7 @@ class PendingSyncOperation {
   factory PendingSyncOperation.fromJson(Map<String, dynamic> json) {
     return PendingSyncOperation(
       id: json['id'],
-      type: SyncOperationType.values.firstWhere(
-        (e) => e.name == json['type'],
-      ),
+      type: SyncOperationType.values.firstWhere((e) => e.name == json['type']),
       data: Map<String, dynamic>.from(json['data']),
       createdAt: DateTime.parse(json['createdAt']),
       retryCount: json['retryCount'] ?? 0,
@@ -354,13 +363,15 @@ mixin OfflineCapableMixin<T extends StatefulWidget> on State<T> {
   void _initializeOfflineCapability() {
     final offlineService = OfflineService();
     _isOffline = offlineService.isOffline;
-    
-    _connectivitySubscription = offlineService.connectivityStream.listen((isOnline) {
+
+    _connectivitySubscription = offlineService.connectivityStream.listen((
+      isOnline,
+    ) {
       if (mounted) {
         setState(() {
           _isOffline = !isOnline;
         });
-        
+
         if (isOnline) {
           onConnectionRestored();
         } else {
@@ -384,7 +395,9 @@ mixin OfflineCapableMixin<T extends StatefulWidget> on State<T> {
   void showOfflineMessage() {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('You are currently offline. Changes will be synced when connection is restored.'),
+        content: Text(
+          'You are currently offline. Changes will be synced when connection is restored.',
+        ),
         backgroundColor: Colors.orange,
         duration: Duration(seconds: 3),
       ),

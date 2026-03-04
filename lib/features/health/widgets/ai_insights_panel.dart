@@ -6,10 +6,7 @@ import '../../../core/health/advanced_health_analytics.dart';
 class AIInsightsPanel extends StatefulWidget {
   final ComprehensiveHealthReport healthReport;
 
-  const AIInsightsPanel({
-    super.key,
-    required this.healthReport,
-  });
+  const AIInsightsPanel({super.key, required this.healthReport});
 
   @override
   State<AIInsightsPanel> createState() => _AIInsightsPanelState();
@@ -38,21 +35,13 @@ class _AIInsightsPanelState extends State<AIInsightsPanel>
       vsync: this,
     );
 
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _fadeInController,
-      curve: Curves.easeInOut,
-    ));
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _fadeInController, curve: Curves.easeInOut),
+    );
 
-    _expandAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _expandController,
-      curve: Curves.easeInOutCubic,
-    ));
+    _expandAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _expandController, curve: Curves.easeInOutCubic),
+    );
 
     _fadeInController.forward();
   }
@@ -107,11 +96,7 @@ class _AIInsightsPanelState extends State<AIInsightsPanel>
               color: Colors.purple.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Icon(
-              Icons.psychology,
-              color: Colors.purple,
-              size: 24,
-            ),
+            child: const Icon(Icons.psychology, color: Colors.purple, size: 24),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -128,10 +113,7 @@ class _AIInsightsPanelState extends State<AIInsightsPanel>
                 ),
                 Text(
                   _getInsightSummary(),
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 12,
-                  ),
+                  style: const TextStyle(color: Colors.white70, fontSize: 12),
                 ),
               ],
             ),
@@ -158,7 +140,7 @@ class _AIInsightsPanelState extends State<AIInsightsPanel>
 
   Widget _buildInsightsCarousel() {
     final insights = _getInsights();
-    
+
     return SizedBox(
       height: 160,
       child: PageView.builder(
@@ -199,11 +181,7 @@ class _AIInsightsPanelState extends State<AIInsightsPanel>
                   color: insight['color'].withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(
-                  insight['icon'],
-                  color: insight['color'],
-                  size: 18,
-                ),
+                child: Icon(insight['icon'], color: insight['color'], size: 18),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -260,8 +238,8 @@ class _AIInsightsPanelState extends State<AIInsightsPanel>
     final color = confidence >= 0.8
         ? Colors.green
         : confidence >= 0.6
-            ? Colors.orange
-            : Colors.red;
+        ? Colors.orange
+        : Colors.red;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -351,10 +329,7 @@ class _AIInsightsPanelState extends State<AIInsightsPanel>
                 const SizedBox(height: 2),
                 Text(
                   recommendation.reasoning,
-                  style: const TextStyle(
-                    color: Colors.white54,
-                    fontSize: 12,
-                  ),
+                  style: const TextStyle(color: Colors.white54, fontSize: 12),
                 ),
               ],
             ),
@@ -362,7 +337,9 @@ class _AIInsightsPanelState extends State<AIInsightsPanel>
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
             decoration: BoxDecoration(
-              color: _getPriorityColor(recommendation.priority).withValues(alpha: 0.1),
+              color: _getPriorityColor(
+                recommendation.priority,
+              ).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
@@ -392,7 +369,9 @@ class _AIInsightsPanelState extends State<AIInsightsPanel>
           ),
         ),
         const SizedBox(height: 8),
-        ..._getPredictions().map((prediction) => _buildPredictionItem(prediction)),
+        ..._getPredictions().map(
+          (prediction) => _buildPredictionItem(prediction),
+        ),
       ],
     );
   }
@@ -407,11 +386,7 @@ class _AIInsightsPanelState extends State<AIInsightsPanel>
       ),
       child: Row(
         children: [
-          Icon(
-            prediction['icon'],
-            color: prediction['color'],
-            size: 20,
-          ),
+          Icon(prediction['icon'], color: prediction['color'], size: 20),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -427,10 +402,7 @@ class _AIInsightsPanelState extends State<AIInsightsPanel>
                 ),
                 Text(
                   prediction['description'],
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 12,
-                  ),
+                  style: const TextStyle(color: Colors.white70, fontSize: 12),
                 ),
               ],
             ),
@@ -500,11 +472,12 @@ class _AIInsightsPanelState extends State<AIInsightsPanel>
 
   List<Map<String, dynamic>> _getInsights() {
     final random = math.Random();
-    
+
     return [
       {
         'title': 'Cycle Regularity',
-        'description': 'Your cycles are showing excellent regularity patterns with 94% consistency.',
+        'description':
+            'Your cycles are showing excellent regularity patterns with 94% consistency.',
         'icon': Icons.track_changes,
         'color': Colors.green,
         'confidence': 0.94,
@@ -512,7 +485,8 @@ class _AIInsightsPanelState extends State<AIInsightsPanel>
       },
       {
         'title': 'Sleep Quality Impact',
-        'description': 'Your sleep patterns are strongly correlated with mood stability.',
+        'description':
+            'Your sleep patterns are strongly correlated with mood stability.',
         'icon': Icons.bedtime,
         'color': Colors.blue,
         'confidence': 0.87,
@@ -520,7 +494,8 @@ class _AIInsightsPanelState extends State<AIInsightsPanel>
       },
       {
         'title': 'Stress Management',
-        'description': 'Recent stress levels may be affecting your cycle length predictions.',
+        'description':
+            'Recent stress levels may be affecting your cycle length predictions.',
         'icon': Icons.psychology,
         'color': Colors.orange,
         'confidence': 0.76,
@@ -528,7 +503,8 @@ class _AIInsightsPanelState extends State<AIInsightsPanel>
       },
       {
         'title': 'Nutrition Optimization',
-        'description': 'Iron levels appear optimal, but consider increasing vitamin D intake.',
+        'description':
+            'Iron levels appear optimal, but consider increasing vitamin D intake.',
         'icon': Icons.restaurant,
         'color': Colors.purple,
         'confidence': 0.82,

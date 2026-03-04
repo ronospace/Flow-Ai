@@ -15,9 +15,13 @@ class OnboardingProgress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final steps = OnboardingStep.values.where((step) => 
-      step != OnboardingStep.welcome && step != OnboardingStep.complete).toList();
-    
+    final steps = OnboardingStep.values
+        .where(
+          (step) =>
+              step != OnboardingStep.welcome && step != OnboardingStep.complete,
+        )
+        .toList();
+
     return Container(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -40,22 +44,24 @@ class OnboardingProgress extends StatelessWidget {
               ),
             ],
           ),
-          
+
           const SizedBox(height: 8),
-          
+
           // Progress bar
           ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
               value: currentStep.progress,
               backgroundColor: theme.colorScheme.surfaceContainerHighest,
-              valueColor: AlwaysStoppedAnimation<Color>(theme.colorScheme.primary),
+              valueColor: AlwaysStoppedAnimation<Color>(
+                theme.colorScheme.primary,
+              ),
               minHeight: 6,
             ),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Step indicators
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -63,7 +69,7 @@ class OnboardingProgress extends StatelessWidget {
               final isCurrentStep = step == currentStep;
               final isCompletedStep = step.index < currentStep.index;
               final isAccessible = step.index <= currentStep.index;
-              
+
               return GestureDetector(
                 onTap: isAccessible ? () => onStepTap?.call(step) : null,
                 child: _StepIndicator(
@@ -97,19 +103,19 @@ class _StepIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     Color getColor() {
       if (isCompleted) return theme.colorScheme.primary;
       if (isActive) return theme.colorScheme.primary;
       return theme.colorScheme.outline;
     }
-    
+
     Color getBackgroundColor() {
       if (isCompleted) return theme.colorScheme.primaryContainer;
       if (isActive) return theme.colorScheme.primaryContainer;
       return theme.colorScheme.surface;
     }
-    
+
     return Column(
       children: [
         AnimatedContainer(
@@ -119,10 +125,7 @@ class _StepIndicator extends StatelessWidget {
           decoration: BoxDecoration(
             color: getBackgroundColor(),
             shape: BoxShape.circle,
-            border: Border.all(
-              color: getColor(),
-              width: 2,
-            ),
+            border: Border.all(color: getColor(), width: 2),
           ),
           child: Icon(
             isCompleted ? Icons.check : step.icon,
@@ -130,9 +133,9 @@ class _StepIndicator extends StatelessWidget {
             size: 20,
           ),
         ),
-        
+
         const SizedBox(height: 8),
-        
+
         SizedBox(
           width: 60,
           child: Text(

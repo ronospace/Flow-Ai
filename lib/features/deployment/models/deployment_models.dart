@@ -45,23 +45,9 @@ enum BuildStatus {
   ready,
 }
 
-enum ReleaseType {
-  major,
-  minor,
-  patch,
-  hotfix,
-  beta,
-  alpha,
-}
+enum ReleaseType { major, minor, patch, hotfix, beta, alpha }
 
-enum PlatformTarget {
-  ios,
-  android,
-  web,
-  macos,
-  windows,
-  linux,
-}
+enum PlatformTarget { ios, android, web, macos, windows, linux }
 
 // === APP METADATA MODELS ===
 
@@ -150,9 +136,13 @@ class AppMetadata {
       marketingUrl: json['marketing_url'],
       privacyPolicyUrl: json['privacy_policy_url'],
       copyrightText: json['copyright_text'],
-      localizedDescriptions: Map<String, String>.from(json['localized_descriptions']),
+      localizedDescriptions: Map<String, String>.from(
+        json['localized_descriptions'],
+      ),
       localizedKeywords: Map<String, List<String>>.from(
-        json['localized_keywords'].map((k, v) => MapEntry(k, List<String>.from(v))),
+        json['localized_keywords'].map(
+          (k, v) => MapEntry(k, List<String>.from(v)),
+        ),
       ),
       screenshots: (json['screenshots'] as List)
           .map((s) => Screenshot.fromJson(s))
@@ -202,7 +192,9 @@ class Screenshot {
   factory Screenshot.fromJson(Map<String, dynamic> json) {
     return Screenshot(
       filePath: json['file_path'],
-      platform: PlatformTarget.values.firstWhere((e) => e.name == json['platform']),
+      platform: PlatformTarget.values.firstWhere(
+        (e) => e.name == json['platform'],
+      ),
       deviceType: json['device_type'],
       width: json['width'],
       height: json['height'],
@@ -271,7 +263,9 @@ class AppIconVariant {
     return AppIconVariant(
       filePath: json['file_path'],
       size: json['size'],
-      platform: PlatformTarget.values.firstWhere((e) => e.name == json['platform']),
+      platform: PlatformTarget.values.firstWhere(
+        (e) => e.name == json['platform'],
+      ),
       usage: json['usage'],
     );
   }
@@ -486,7 +480,9 @@ class ComplianceCheck {
       name: json['name'],
       description: json['description'],
       category: json['category'],
-      status: ComplianceStatus.values.firstWhere((e) => e.name == json['status']),
+      status: ComplianceStatus.values.firstWhere(
+        (e) => e.name == json['status'],
+      ),
       issues: (json['issues'] as List)
           .map((i) => ComplianceIssue.fromJson(i))
           .toList(),
@@ -570,8 +566,10 @@ class ComplianceReport {
     required this.warningChecks,
   });
 
-  bool get isReadyForRelease => overallStatus == ComplianceStatus.compliant && failedChecks == 0;
-  double get complianceScore => totalChecks > 0 ? passedChecks / totalChecks : 0.0;
+  bool get isReadyForRelease =>
+      overallStatus == ComplianceStatus.compliant && failedChecks == 0;
+  double get complianceScore =>
+      totalChecks > 0 ? passedChecks / totalChecks : 0.0;
 
   Map<String, dynamic> toJson() {
     return {
@@ -636,10 +634,16 @@ class BuildConfiguration {
   factory BuildConfiguration.fromJson(Map<String, dynamic> json) {
     return BuildConfiguration(
       name: json['name'],
-      target: DeploymentTarget.values.firstWhere((e) => e.name == json['target']),
-      platform: PlatformTarget.values.firstWhere((e) => e.name == json['platform']),
+      target: DeploymentTarget.values.firstWhere(
+        (e) => e.name == json['target'],
+      ),
+      platform: PlatformTarget.values.firstWhere(
+        (e) => e.name == json['platform'],
+      ),
       buildMode: json['build_mode'],
-      environmentVariables: Map<String, String>.from(json['environment_variables']),
+      environmentVariables: Map<String, String>.from(
+        json['environment_variables'],
+      ),
       buildFlags: List<String>.from(json['build_flags']),
       obfuscate: json['obfuscate'] ?? true,
       treeShakeIcons: json['tree_shake_icons'] ?? true,
@@ -821,7 +825,7 @@ class ReleasePackage {
 
   bool get isReadyForRelease {
     return complianceReport.isReadyForRelease &&
-           buildResults.values.every((build) => build.isSuccess);
+        buildResults.values.every((build) => build.isSuccess);
   }
 
   Map<String, dynamic> toJson() {
@@ -926,7 +930,9 @@ class DeploymentStatus {
 
   bool get isInReview => status == AppStoreStatus.inReview;
   bool get isApproved => status == AppStoreStatus.readyForSale;
-  bool get isRejected => status == AppStoreStatus.rejected || status == AppStoreStatus.metadataRejected;
+  bool get isRejected =>
+      status == AppStoreStatus.rejected ||
+      status == AppStoreStatus.metadataRejected;
 
   Duration? get reviewDuration {
     if (reviewStartedAt != null && approvedAt != null) {

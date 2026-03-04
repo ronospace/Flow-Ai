@@ -7,7 +7,8 @@ import '../models/user_profile.dart';
 /// Neural network-based predictions with multi-modal inputs
 /// Ultra-accurate cycle forecasting and advanced health insights
 class NeuralPredictionEngine {
-  static final NeuralPredictionEngine _instance = NeuralPredictionEngine._internal();
+  static final NeuralPredictionEngine _instance =
+      NeuralPredictionEngine._internal();
   static NeuralPredictionEngine get instance => _instance;
   NeuralPredictionEngine._internal();
 
@@ -22,7 +23,7 @@ class NeuralPredictionEngine {
 
   // Feature extractors for multi-modal inputs
   final Map<String, FeatureExtractor> _extractors = {};
-  
+
   // Prediction models for different health aspects
   late PredictionModel _cycleLengthModel;
   late PredictionModel _ovulationModel;
@@ -37,15 +38,17 @@ class NeuralPredictionEngine {
 
     // Initialize neural network architecture
     await _initializeNeuralNetwork();
-    
+
     // Initialize feature extractors
     await _initializeFeatureExtractors();
-    
+
     // Initialize specialized prediction models
     await _initializePredictionModels();
 
     _initialized = true;
-    debugPrint('✅ Neural Prediction Engine initialized with ${_extractors.length} feature extractors');
+    debugPrint(
+      '✅ Neural Prediction Engine initialized with ${_extractors.length} feature extractors',
+    );
   }
 
   /// Generate comprehensive health predictions
@@ -112,7 +115,10 @@ class NeuralPredictionEngine {
     _hiddenLayer1Weights = _initializeWeights(inputSize, hidden1Size);
     _hiddenLayer2Weights = _initializeWeights(hidden1Size, hidden2Size);
     _outputWeights = List.generate(outputSize, (_) => _randomWeight());
-    _biases = List.generate(hidden1Size + hidden2Size + outputSize, (_) => 0.01);
+    _biases = List.generate(
+      hidden1Size + hidden2Size + outputSize,
+      (_) => 0.01,
+    );
   }
 
   Future<void> _initializeFeatureExtractors() async {
@@ -171,21 +177,35 @@ class NeuralPredictionEngine {
       features.add(0.0);
     }
     if (features.length > 50) return features.take(50).toList();
-    
+
     return features;
   }
 
   Future<List<double>> _runNeuralInference(List<double> features) async {
     // Forward pass through neural network
-    var hiddenLayer1 = _applyLayer(features, _hiddenLayer1Weights, _biases.take(128).toList());
+    var hiddenLayer1 = _applyLayer(
+      features,
+      _hiddenLayer1Weights,
+      _biases.take(128).toList(),
+    );
     hiddenLayer1 = hiddenLayer1.map(_relu).toList();
 
-    var hiddenLayer2 = _applyLayer(hiddenLayer1, _hiddenLayer2Weights, _biases.skip(128).take(64).toList());
+    var hiddenLayer2 = _applyLayer(
+      hiddenLayer1,
+      _hiddenLayer2Weights,
+      _biases.skip(128).take(64).toList(),
+    );
     hiddenLayer2 = hiddenLayer2.map(_relu).toList();
 
-    final output = List.generate(_outputWeights.length, (i) => 
-      hiddenLayer2.asMap().entries.fold(0.0, (sum, entry) => 
-        sum + entry.value * _outputWeights[i]) + _biases[128 + 64 + i]);
+    final output = List.generate(
+      _outputWeights.length,
+      (i) =>
+          hiddenLayer2.asMap().entries.fold(
+            0.0,
+            (sum, entry) => sum + entry.value * _outputWeights[i],
+          ) +
+          _biases[128 + 64 + i],
+    );
 
     return output.map(_sigmoid).toList();
   }
@@ -194,50 +214,80 @@ class NeuralPredictionEngine {
   List<List<double>> _initializeWeights(int inputSize, int outputSize) {
     final limit = math.sqrt(6.0 / (inputSize + outputSize));
     final random = math.Random();
-    
-    return List.generate(outputSize, (_) =>
-      List.generate(inputSize, (_) => 
-        (random.nextDouble() * 2 - 1) * limit));
+
+    return List.generate(
+      outputSize,
+      (_) => List.generate(
+        inputSize,
+        (_) => (random.nextDouble() * 2 - 1) * limit,
+      ),
+    );
   }
 
   double _randomWeight() => (math.Random().nextDouble() * 2 - 1) * 0.1;
 
-  List<double> _applyLayer(List<double> input, List<List<double>> weights, List<double> biases) {
-    return List.generate(weights.length, (i) =>
-      input.asMap().entries.fold(biases[i], (sum, entry) =>
-        sum + entry.value * weights[i][entry.key]));
+  List<double> _applyLayer(
+    List<double> input,
+    List<List<double>> weights,
+    List<double> biases,
+  ) {
+    return List.generate(
+      weights.length,
+      (i) => input.asMap().entries.fold(
+        biases[i],
+        (sum, entry) => sum + entry.value * weights[i][entry.key],
+      ),
+    );
   }
 
   double _relu(double x) => math.max(0, x);
   double _sigmoid(double x) => 1 / (1 + math.exp(-x));
 
   // Prediction calculation methods
-  DateTime _calculateNextPeriodDate(List<CycleData> history, Map<String, dynamic> cyclePrediction) {
+  DateTime _calculateNextPeriodDate(
+    List<CycleData> history,
+    Map<String, dynamic> cyclePrediction,
+  ) {
     if (history.isEmpty) return DateTime.now().add(const Duration(days: 28));
-    
+
     final avgLength = cyclePrediction['predicted_length'] ?? 28.0;
-    final lastPeriod = history.last.startDate; // Use startDate instead of periodStartDate
-    
+    final lastPeriod =
+        history.last.startDate; // Use startDate instead of periodStartDate
+
     return lastPeriod.add(Duration(days: avgLength.round()));
   }
 
-  Map<String, dynamic> _calculateFertilityWindow(Map<String, dynamic> ovulationPred) {
+  Map<String, dynamic> _calculateFertilityWindow(
+    Map<String, dynamic> ovulationPred,
+  ) {
     final ovulationDay = ovulationPred['predicted_day'] ?? 14.0;
     final confidence = ovulationPred['confidence'] ?? 0.7;
-    
+
     return {
-      'fertile_start': DateTime.now().add(Duration(days: (ovulationDay - 5).round())),
-      'fertile_end': DateTime.now().add(Duration(days: (ovulationDay + 1).round())),
-      'peak_fertility': DateTime.now().add(Duration(days: ovulationDay.round())),
+      'fertile_start': DateTime.now().add(
+        Duration(days: (ovulationDay - 5).round()),
+      ),
+      'fertile_end': DateTime.now().add(
+        Duration(days: (ovulationDay + 1).round()),
+      ),
+      'peak_fertility': DateTime.now().add(
+        Duration(days: ovulationDay.round()),
+      ),
       'confidence': confidence,
     };
   }
 
-  double _calculateConfidenceScore(List<double> features, List<double> networkOutput) {
+  double _calculateConfidenceScore(
+    List<double> features,
+    List<double> networkOutput,
+  ) {
     // Calculate confidence based on feature quality and network certainty
-    final featureQuality = features.where((f) => f != 0.0).length / features.length;
-    final networkCertainty = networkOutput.map((o) => (o - 0.5).abs() * 2).reduce((a, b) => a + b) / networkOutput.length;
-    
+    final featureQuality =
+        features.where((f) => f != 0.0).length / features.length;
+    final networkCertainty =
+        networkOutput.map((o) => (o - 0.5).abs() * 2).reduce((a, b) => a + b) /
+        networkOutput.length;
+
     return (featureQuality * 0.3 + networkCertainty * 0.7).clamp(0.0, 1.0);
   }
 
@@ -245,26 +295,35 @@ class NeuralPredictionEngine {
     // Weighted combination of network outputs for overall health score
     final weights = [0.2, 0.15, 0.15, 0.1, 0.1, 0.1, 0.05, 0.05, 0.05, 0.05];
     double score = 0.0;
-    
+
     for (int i = 0; i < math.min(networkOutput.length, weights.length); i++) {
       score += networkOutput[i] * weights[i];
     }
-    
+
     return (score * 100).clamp(0.0, 100.0);
   }
 
-  List<String> _identifyRiskFactors(List<double> features, List<double> networkOutput) {
+  List<String> _identifyRiskFactors(
+    List<double> features,
+    List<double> networkOutput,
+  ) {
     final risks = <String>[];
-    
+
     // Analyze network output for potential health risks
-    if (networkOutput.length > 10 && networkOutput[10] > 0.7) risks.add('Irregular cycle pattern detected');
-    if (networkOutput.length > 11 && networkOutput[11] > 0.6) risks.add('Potential hormonal imbalance');
-    if (networkOutput.length > 12 && networkOutput[12] > 0.5) risks.add('Stress-related cycle disruption');
-    
+    if (networkOutput.length > 10 && networkOutput[10] > 0.7)
+      risks.add('Irregular cycle pattern detected');
+    if (networkOutput.length > 11 && networkOutput[11] > 0.6)
+      risks.add('Potential hormonal imbalance');
+    if (networkOutput.length > 12 && networkOutput[12] > 0.5)
+      risks.add('Stress-related cycle disruption');
+
     return risks;
   }
 
-  Map<String, dynamic> _generatePersonalizationInsights(UserProfile user, List<double> features) {
+  Map<String, dynamic> _generatePersonalizationInsights(
+    UserProfile user,
+    List<double> features,
+  ) {
     return {
       'cycle_type': _determineCycleType(features),
       'sensitivity_factors': _identifySensitivityFactors(features),
@@ -276,7 +335,7 @@ class NeuralPredictionEngine {
   String _determineCycleType(List<double> features) {
     // Analyze features to determine cycle characteristics
     final variability = features.take(10).fold(0.0, (sum, f) => sum + f) / 10;
-    
+
     if (variability < 0.3) return 'Very Regular';
     if (variability < 0.5) return 'Regular';
     if (variability < 0.7) return 'Somewhat Irregular';
@@ -285,22 +344,29 @@ class NeuralPredictionEngine {
 
   List<String> _identifySensitivityFactors(List<double> features) {
     final factors = <String>[];
-    
-    if (features.length > 20 && features[20] > 0.6) factors.add('Stress sensitive');
-    if (features.length > 21 && features[21] > 0.6) factors.add('Sleep sensitive');
-    if (features.length > 22 && features[22] > 0.6) factors.add('Diet sensitive');
-    if (features.length > 23 && features[23] > 0.6) factors.add('Exercise sensitive');
-    
+
+    if (features.length > 20 && features[20] > 0.6)
+      factors.add('Stress sensitive');
+    if (features.length > 21 && features[21] > 0.6)
+      factors.add('Sleep sensitive');
+    if (features.length > 22 && features[22] > 0.6)
+      factors.add('Diet sensitive');
+    if (features.length > 23 && features[23] > 0.6)
+      factors.add('Exercise sensitive');
+
     return factors;
   }
 
   List<String> _findOptimizationOpportunities(List<double> features) {
     final opportunities = <String>[];
-    
-    if (features.length > 25 && features[25] < 0.4) opportunities.add('Sleep optimization');
-    if (features.length > 26 && features[26] < 0.4) opportunities.add('Stress management');
-    if (features.length > 27 && features[27] < 0.4) opportunities.add('Nutrition balance');
-    
+
+    if (features.length > 25 && features[25] < 0.4)
+      opportunities.add('Sleep optimization');
+    if (features.length > 26 && features[26] < 0.4)
+      opportunities.add('Stress management');
+    if (features.length > 27 && features[27] < 0.4)
+      opportunities.add('Nutrition balance');
+
     return opportunities;
   }
 
@@ -310,22 +376,31 @@ class NeuralPredictionEngine {
     return lifestyleFeatures.fold(0.0, (sum, f) => sum + f) / 10;
   }
 
-  List<String> _generateAIRecommendations(List<double> networkOutput, List<double> features) {
+  List<String> _generateAIRecommendations(
+    List<double> networkOutput,
+    List<double> features,
+  ) {
     final recommendations = <String>[];
-    
+
     // AI-generated personalized recommendations
     if (networkOutput.length > 15 && networkOutput[15] > 0.6) {
-      recommendations.add('Consider tracking basal body temperature for better ovulation prediction');
+      recommendations.add(
+        'Consider tracking basal body temperature for better ovulation prediction',
+      );
     }
-    
+
     if (features.length > 30 && features[30] < 0.3) {
-      recommendations.add('Increase omega-3 intake to support hormonal balance');
+      recommendations.add(
+        'Increase omega-3 intake to support hormonal balance',
+      );
     }
-    
+
     if (networkOutput.length > 16 && networkOutput[16] > 0.7) {
-      recommendations.add('Schedule stress management activities during luteal phase');
+      recommendations.add(
+        'Schedule stress management activities during luteal phase',
+      );
     }
-    
+
     return recommendations;
   }
 }
@@ -357,28 +432,32 @@ class CyclePatternExtractor extends FeatureExtractor {
     Map<String, dynamic>? moodData,
   }) async {
     final features = <double>[];
-    
+
     if (historicalData.isNotEmpty) {
       // Calculate cycle statistics
       final lengths = historicalData.map((c) => c.length.toDouble()).toList();
       features.add(_mean(lengths));
       features.add(_standardDeviation(lengths));
       features.add(lengths.length.toDouble());
-      
+
       // Flow patterns
       final flowIntensities = historicalData
-          .map((c) => _flowIntensityToDouble(c.flowIntensity ?? FlowIntensity.none))
+          .map(
+            (c) =>
+                _flowIntensityToDouble(c.flowIntensity ?? FlowIntensity.none),
+          )
           .toList();
       features.add(flowIntensities.isNotEmpty ? _mean(flowIntensities) : 0.0);
     } else {
       features.addAll([28.0, 2.0, 0.0, 2.0]); // Default values
     }
-    
+
     return features;
   }
 
-  double _mean(List<double> values) => values.isEmpty ? 0.0 : values.reduce((a, b) => a + b) / values.length;
-  
+  double _mean(List<double> values) =>
+      values.isEmpty ? 0.0 : values.reduce((a, b) => a + b) / values.length;
+
   double _flowIntensityToDouble(FlowIntensity intensity) {
     switch (intensity) {
       case FlowIntensity.none:
@@ -395,11 +474,13 @@ class CyclePatternExtractor extends FeatureExtractor {
         return 5.0;
     }
   }
-  
+
   double _standardDeviation(List<double> values) {
     if (values.isEmpty) return 0.0;
     final mean = _mean(values);
-    final variance = values.map((v) => math.pow(v - mean, 2)).reduce((a, b) => a + b) / values.length;
+    final variance =
+        values.map((v) => math.pow(v - mean, 2)).reduce((a, b) => a + b) /
+        values.length;
     return math.sqrt(variance);
   }
 }
@@ -414,16 +495,18 @@ class BiometricFeatureExtractor extends FeatureExtractor {
     Map<String, dynamic>? moodData,
   }) async {
     final features = <double>[];
-    
+
     if (biometricData != null) {
       features.add((biometricData['heart_rate'] as num?)?.toDouble() ?? 70.0);
-      features.add((biometricData['body_temperature'] as num?)?.toDouble() ?? 36.5);
+      features.add(
+        (biometricData['body_temperature'] as num?)?.toDouble() ?? 36.5,
+      );
       features.add((biometricData['hrv'] as num?)?.toDouble() ?? 40.0);
       features.add((biometricData['sleep_quality'] as num?)?.toDouble() ?? 0.7);
     } else {
       features.addAll([70.0, 36.5, 40.0, 0.7]); // Default values
     }
-    
+
     return features;
   }
 }
@@ -438,16 +521,20 @@ class LifestyleFeatureExtractor extends FeatureExtractor {
     Map<String, dynamic>? moodData,
   }) async {
     final features = <double>[];
-    
+
     if (lifestyleData != null) {
-      features.add((lifestyleData['exercise_frequency'] as num?)?.toDouble() ?? 3.0);
+      features.add(
+        (lifestyleData['exercise_frequency'] as num?)?.toDouble() ?? 3.0,
+      );
       features.add((lifestyleData['stress_level'] as num?)?.toDouble() ?? 0.5);
       features.add((lifestyleData['sleep_hours'] as num?)?.toDouble() ?? 7.5);
-      features.add((lifestyleData['caffeine_intake'] as num?)?.toDouble() ?? 1.0);
+      features.add(
+        (lifestyleData['caffeine_intake'] as num?)?.toDouble() ?? 1.0,
+      );
     } else {
       features.addAll([3.0, 0.5, 7.5, 1.0]); // Default values
     }
-    
+
     return features;
   }
 }
@@ -462,7 +549,7 @@ class MoodFeatureExtractor extends FeatureExtractor {
     Map<String, dynamic>? moodData,
   }) async {
     final features = <double>[];
-    
+
     if (moodData != null) {
       features.add((moodData['overall_mood'] as num?)?.toDouble() ?? 0.5);
       features.add((moodData['energy_level'] as num?)?.toDouble() ?? 0.5);
@@ -470,7 +557,7 @@ class MoodFeatureExtractor extends FeatureExtractor {
     } else {
       features.addAll([0.5, 0.5, 0.3]); // Default values
     }
-    
+
     return features;
   }
 }
@@ -514,12 +601,12 @@ class DemographicFeatureExtractor extends FeatureExtractor {
 class CycleLengthPredictionModel extends PredictionModel {
   @override
   Future<void> initialize() async {}
-  
+
   @override
   Future<Map<String, dynamic>> predict(List<double> features) async {
     final baseLength = features.isNotEmpty ? features[0] : 28.0;
     final variation = features.length > 1 ? features[1] : 2.0;
-    
+
     return {
       'predicted_length': baseLength,
       'confidence': 0.8 - (variation / 10.0).clamp(0.0, 0.3),
@@ -532,12 +619,12 @@ class CycleLengthPredictionModel extends PredictionModel {
 class OvulationPredictionModel extends PredictionModel {
   @override
   Future<void> initialize() async {}
-  
+
   @override
   Future<Map<String, dynamic>> predict(List<double> features) async {
     final cycleLength = features.isNotEmpty ? features[0] : 28.0;
     final ovulationDay = cycleLength / 2.0; // Simplified model
-    
+
     return {
       'predicted_day': ovulationDay,
       'confidence': 0.75,
@@ -551,12 +638,12 @@ class OvulationPredictionModel extends PredictionModel {
 class SymptomSeverityModel extends PredictionModel {
   @override
   Future<void> initialize() async {}
-  
+
   @override
   Future<Map<String, dynamic>> predict(List<double> features) async {
     final stressLevel = features.length > 5 ? features[5] : 0.5;
     final sleepQuality = features.length > 7 ? features[7] : 0.7;
-    
+
     return {
       'cramps_severity': (stressLevel + (1 - sleepQuality)) / 2,
       'mood_swings': stressLevel * 0.8,
@@ -569,14 +656,17 @@ class SymptomSeverityModel extends PredictionModel {
 class FertilityPredictionModel extends PredictionModel {
   @override
   Future<void> initialize() async {}
-  
+
   @override
   Future<Map<String, dynamic>> predict(List<double> features) async {
     final ageNormalized = features.length > 45 ? features[45] : 0.25;
-    final cycleRegularity = features.length > 1 ? 1 - (features[1] / 10.0) : 0.8;
-    
-    final fertilityScore = (cycleRegularity * 0.7 + (1 - ageNormalized) * 0.3).clamp(0.0, 1.0);
-    
+    final cycleRegularity = features.length > 1
+        ? 1 - (features[1] / 10.0)
+        : 0.8;
+
+    final fertilityScore = (cycleRegularity * 0.7 + (1 - ageNormalized) * 0.3)
+        .clamp(0.0, 1.0);
+
     return {
       'fertility_score': fertilityScore,
       'conception_probability': fertilityScore * 0.25, // Per cycle
@@ -584,7 +674,7 @@ class FertilityPredictionModel extends PredictionModel {
       'lifestyle_factors': _assessFertilityFactors(features),
     };
   }
-  
+
   Map<String, dynamic> _assessFertilityFactors(List<double> features) {
     return {
       'stress_impact': features.length > 5 ? features[5] : 0.5,
@@ -597,22 +687,25 @@ class FertilityPredictionModel extends PredictionModel {
 class MoodPredictionModel extends PredictionModel {
   @override
   Future<void> initialize() async {}
-  
+
   @override
   Future<Map<String, dynamic>> predict(List<double> features) async {
     final currentMood = features.length > 40 ? features[40] : 0.5;
     final stressLevel = features.length > 5 ? features[5] : 0.5;
     final sleepQuality = features.length > 7 ? features[7] : 0.7;
-    
+
     return {
       'mood_trajectory': _predictMoodTrajectory(currentMood, stressLevel),
       'pms_risk': stressLevel * 0.8,
       'energy_forecast': sleepQuality * 0.9,
       'emotional_volatility': stressLevel * (1 - sleepQuality),
-      'recommended_activities': _getMoodRecommendations(currentMood, stressLevel),
+      'recommended_activities': _getMoodRecommendations(
+        currentMood,
+        stressLevel,
+      ),
     };
   }
-  
+
   List<double> _predictMoodTrajectory(double currentMood, double stress) {
     // Predict mood for next 7 days
     return List.generate(7, (day) {
@@ -621,14 +714,14 @@ class MoodPredictionModel extends PredictionModel {
       return (currentMood + cyclicEffect - stressEffect).clamp(0.0, 1.0);
     });
   }
-  
+
   List<String> _getMoodRecommendations(double mood, double stress) {
     final recommendations = <String>[];
-    
+
     if (mood < 0.4) recommendations.add('Practice mindfulness meditation');
     if (stress > 0.6) recommendations.add('Try deep breathing exercises');
     if (mood < 0.5 && stress > 0.5) recommendations.add('Consider gentle yoga');
-    
+
     return recommendations;
   }
 }

@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Flow Ai Invite</title>
+
+    <!-- iOS: try to open app -->
+    <meta name="apple-itunes-app" content="app-id=6751801915" />
+
+    <script>
+      (function () {
+        // URL patterns:
+        // /invite/ABC123   OR   /invite/?code=ABC123
+        var path = location.pathname || "";
+        var code = "";
+        var parts = path.split("/").filter(Boolean);
+        if (parts.length >= 2 && parts[0] === "invite") code = parts[1];
+        if (!code) code = new URLSearchParams(location.search).get("code") || "";
+
+        var iosStore = "https://apps.apple.com/app/flow-ai/id6751801915";
+        var androidStore = "https://play.google.com/store/apps/details?id=com.flowai.app";
+
+        // Replace with your actual schemes if different:
+        // iOS/Android deep link scheme (example):
+        var appLink = code ? ("flowai://invite/" + encodeURIComponent(code)) : "flowai://invite";
+        // Universal link (once flowai.app is mapped to hosting):
+        var universal = code ? ("https://flowai.app/invite/" + encodeURIComponent(code)) : "https://flowai.app";
+
+        var ua = navigator.userAgent || "";
+        var isAndroid = /Android/i.test(ua);
+        var isIOS = /iPhone|iPad|iPod/i.test(ua);
+
+        var store = isAndroid ? androidStore : iosStore;
+
+        // Try open app, fallback to store
+        var start = Date.now();
+        window.location.href = appLink;
+
+        setTimeout(function () {
+          // If app didn't open quickly, go store
+          if (Date.now() - start < 1600) window.location.href = store;
+        }, 900);
+
+        // Also render something if user stays
+        window.addEventListener("load", function () {
+          var el = document.getElementById("fallback");
+          el.innerHTML =
+            '<p>Opening Flow Ai…</p>' +
+            (code ? ('<p>Invite code: <b>' + code + '</b></p>') : "") +
+            '<p>If nothing happens, <a href="' + store + '">tap here</a>.</p>' +
+            '<p style="opacity:.6;font-size:12px">Or open the app and paste the code.</p>';
+        });
+      })();
+    </script>
+  </head>
+  <body style="font-family: -apple-system, system-ui, Segoe UI, Roboto, Arial; padding: 24px;">
+    <div id="fallback">Loading…</div>
+  </body>
+</html>

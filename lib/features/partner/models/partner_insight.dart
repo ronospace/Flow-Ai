@@ -54,10 +54,4 @@ class PartnerInsight {
   }
 }
 
-enum PartnerInsightType {
-  supportSuggestion,
-  cycleUpdate,
-  moodAlert,
-  healthTip,
-}
-
+enum PartnerInsightType { supportSuggestion, cycleUpdate, moodAlert, healthTip }

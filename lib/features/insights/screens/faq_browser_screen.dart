@@ -17,12 +17,12 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
   final EnhancedAIChatService _chatService = EnhancedAIChatService();
   final TextEditingController _searchController = TextEditingController();
   late AnimationController _animationController;
-  
+
   String? _selectedCategory;
   List<FAQItem> _filteredFAQs = [];
   List<FAQItem> _searchResults = [];
   bool _isSearching = false;
-  
+
   final Map<String, IconData> _categoryIcons = {
     'health': Icons.favorite,
     'general': Icons.lightbulb,
@@ -42,7 +42,7 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
   @override
   void initState() {
     super.initState();
-    
+
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 300),
       vsync: this,
@@ -50,7 +50,7 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
 
     // Load all FAQs initially
     _loadAllFAQs();
-    
+
     _animationController.forward();
   }
 
@@ -66,7 +66,7 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
     for (final category in _chatService.getFAQCategories()) {
       allFAQs.addAll(_chatService.getFAQsByCategory(category));
     }
-    
+
     setState(() {
       _filteredFAQs = allFAQs;
     });
@@ -77,7 +77,7 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
       _selectedCategory = category;
       _isSearching = false;
       _searchController.clear();
-      
+
       if (category == null) {
         _loadAllFAQs();
       } else {
@@ -112,7 +112,7 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localizations = AppLocalizations.of(context);
-    
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -129,10 +129,7 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [
-                      AppTheme.primaryPurple,
-                      AppTheme.primaryRose,
-                    ],
+                    colors: [AppTheme.primaryPurple, AppTheme.primaryRose],
                   ),
                 ),
                 child: SafeArea(
@@ -246,14 +243,16 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
                         selected: _selectedCategory == null,
                         onSelected: (_) => _filterByCategory(null),
                         backgroundColor: theme.cardColor,
-                        selectedColor: AppTheme.primaryPurple.withValues(alpha: 0.2),
+                        selectedColor: AppTheme.primaryPurple.withValues(
+                          alpha: 0.2,
+                        ),
                         checkmarkColor: AppTheme.primaryPurple,
                         labelStyle: TextStyle(
-                          color: _selectedCategory == null 
-                              ? AppTheme.primaryPurple 
+                          color: _selectedCategory == null
+                              ? AppTheme.primaryPurple
                               : theme.textTheme.bodyMedium?.color,
-                          fontWeight: _selectedCategory == null 
-                              ? FontWeight.bold 
+                          fontWeight: _selectedCategory == null
+                              ? FontWeight.bold
                               : FontWeight.normal,
                         ),
                       ),
@@ -262,7 +261,8 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
 
                   final category = _chatService.getFAQCategories()[index - 1];
                   final isSelected = _selectedCategory == category;
-                  final color = _categoryColors[category] ?? AppTheme.primaryPurple;
+                  final color =
+                      _categoryColors[category] ?? AppTheme.primaryPurple;
                   final icon = _categoryIcons[category] ?? Icons.help;
 
                   return Padding(
@@ -271,7 +271,9 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
                       avatar: Icon(
                         icon,
                         size: 18,
-                        color: isSelected ? color : theme.textTheme.bodyMedium?.color,
+                        color: isSelected
+                            ? color
+                            : theme.textTheme.bodyMedium?.color,
                       ),
                       label: Text(category.toUpperCase()),
                       selected: isSelected,
@@ -280,8 +282,12 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
                       selectedColor: color.withValues(alpha: 0.2),
                       checkmarkColor: color,
                       labelStyle: TextStyle(
-                        color: isSelected ? color : theme.textTheme.bodyMedium?.color,
-                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                        color: isSelected
+                            ? color
+                            : theme.textTheme.bodyMedium?.color,
+                        fontWeight: isSelected
+                            ? FontWeight.bold
+                            : FontWeight.normal,
                         fontSize: 12,
                       ),
                     ),
@@ -299,8 +305,8 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
                 _isSearching
                     ? '${_searchResults.length} search results'
                     : _selectedCategory != null
-                        ? '${_filteredFAQs.length} FAQs in $_selectedCategory'
-                        : '${_filteredFAQs.length} total FAQs',
+                    ? '${_filteredFAQs.length} FAQs in $_selectedCategory'
+                    : '${_filteredFAQs.length} total FAQs',
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: AppTheme.mediumGrey,
                   fontWeight: FontWeight.w500,
@@ -311,21 +317,17 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
 
           // FAQ List
           SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final faqs = _isSearching ? _searchResults : _filteredFAQs;
-                if (index >= faqs.length) return null;
+            delegate: SliverChildBuilderDelegate((context, index) {
+              final faqs = _isSearching ? _searchResults : _filteredFAQs;
+              if (index >= faqs.length) return null;
 
-                final faq = faqs[index];
-                return _buildFAQCard(faq, index);
-              },
-            ),
+              final faq = faqs[index];
+              return _buildFAQCard(faq, index);
+            }),
           ),
 
           // Bottom Padding
-          const SliverToBoxAdapter(
-            child: SizedBox(height: 100),
-          ),
+          const SliverToBoxAdapter(child: SizedBox(height: 100)),
         ],
       ),
 
@@ -346,112 +348,109 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
 
   Widget _buildFAQCard(FAQItem faq, int index) {
     final theme = Theme.of(context);
-    
+
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      decoration: BoxDecoration(
-        color: theme.cardColor,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: theme.shadowColor.withValues(alpha: 0.08),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: ExpansionTile(
-        leading: Container(
-          width: 40,
-          height: 40,
+          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                AppTheme.primaryPurple.withValues(alpha: 0.2),
-                AppTheme.primaryRose.withValues(alpha: 0.2),
-              ],
-            ),
-            borderRadius: BorderRadius.circular(20),
+            color: theme.cardColor,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: theme.shadowColor.withValues(alpha: 0.08),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
-          child: Icon(
-            Icons.quiz,
-            color: AppTheme.primaryPurple,
-            size: 20,
-          ),
-        ),
-        title: Text(
-          faq.question,
-          style: theme.textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.w600,
-            color: AppTheme.darkGrey,
-          ),
-        ),
-        subtitle: Text(
-          faq.answer.length > 100
-              ? '${faq.answer.substring(0, 100)}...'
-              : faq.answer,
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: AppTheme.mediumGrey,
-          ),
-        ),
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  faq.answer,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    height: 1.5,
-                    color: AppTheme.darkGrey,
-                  ),
+          child: ExpansionTile(
+            leading: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    AppTheme.primaryPurple.withValues(alpha: 0.2),
+                    AppTheme.primaryRose.withValues(alpha: 0.2),
+                  ],
                 ),
-                const SizedBox(height: 16),
-                Row(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Icon(Icons.quiz, color: AppTheme.primaryPurple, size: 20),
+            ),
+            title: Text(
+              faq.question,
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+                color: AppTheme.darkGrey,
+              ),
+            ),
+            subtitle: Text(
+              faq.answer.length > 100
+                  ? '${faq.answer.substring(0, 100)}...'
+                  : faq.answer,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: AppTheme.mediumGrey,
+              ),
+            ),
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextButton.icon(
-                      onPressed: () {
-                        _askRelatedQuestion(faq.question);
-                      },
-                      icon: Icon(
-                        Icons.psychology,
-                        color: AppTheme.primaryPurple,
-                        size: 16,
-                      ),
-                      label: Text(
-                        'Ask related question',
-                        style: TextStyle(
-                          color: AppTheme.primaryPurple,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    const Spacer(),
-                    Icon(
-                      Icons.verified,
-                      color: AppTheme.successGreen,
-                      size: 16,
-                    ),
-                    const SizedBox(width: 4),
                     Text(
-                      'Verified',
-                      style: TextStyle(
-                        color: AppTheme.successGreen,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
+                      faq.answer,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        height: 1.5,
+                        color: AppTheme.darkGrey,
                       ),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        TextButton.icon(
+                          onPressed: () {
+                            _askRelatedQuestion(faq.question);
+                          },
+                          icon: Icon(
+                            Icons.psychology,
+                            color: AppTheme.primaryPurple,
+                            size: 16,
+                          ),
+                          label: Text(
+                            'Ask related question',
+                            style: TextStyle(
+                              color: AppTheme.primaryPurple,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
+                        Icon(
+                          Icons.verified,
+                          color: AppTheme.successGreen,
+                          size: 16,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          'Verified',
+                          style: TextStyle(
+                            color: AppTheme.successGreen,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
-    ).animate(delay: Duration(milliseconds: 200 + (index * 100)))
-      .fadeIn()
-      .slideX(begin: 0.3);
+        )
+        .animate(delay: Duration(milliseconds: 200 + (index * 100)))
+        .fadeIn()
+        .slideX(begin: 0.3);
   }
 
   void _askRelatedQuestion(String question) {
@@ -488,7 +487,7 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
-                
+
                 // Header
                 Padding(
                   padding: const EdgeInsets.all(20),
@@ -499,7 +498,10 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
                         height: 40,
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
-                            colors: [AppTheme.primaryPurple, AppTheme.primaryRose],
+                            colors: [
+                              AppTheme.primaryPurple,
+                              AppTheme.primaryRose,
+                            ],
                           ),
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -516,15 +518,13 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
                           children: [
                             Text(
                               'Ask Mira AI',
-                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: Theme.of(context).textTheme.titleLarge
+                                  ?.copyWith(fontWeight: FontWeight.bold),
                             ),
                             Text(
                               'Get personalized answers to your questions',
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: AppTheme.mediumGrey,
-                              ),
+                              style: Theme.of(context).textTheme.bodySmall
+                                  ?.copyWith(color: AppTheme.mediumGrey),
                             ),
                           ],
                         ),
@@ -536,11 +536,14 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
                     ],
                   ),
                 ),
-                
+
                 // Quick Message Input
                 if (initialMessage != null)
                   Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 10,
+                    ),
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: AppTheme.primaryPurple.withValues(alpha: 0.1),
@@ -568,7 +571,7 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
                       ],
                     ),
                   ),
-                
+
                 // Navigation to full chat
                 Expanded(
                   child: Center(
@@ -583,16 +586,14 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
                         const SizedBox(height: 16),
                         Text(
                           'Full chat experience coming soon!',
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: AppTheme.mediumGrey,
-                          ),
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(color: AppTheme.mediumGrey),
                         ),
                         const SizedBox(height: 8),
                         Text(
                           'For now, use the floating chat in the insights screen',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppTheme.mediumGrey,
-                          ),
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(color: AppTheme.mediumGrey),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 24),

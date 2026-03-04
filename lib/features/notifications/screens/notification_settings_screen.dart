@@ -9,54 +9,50 @@ class NotificationSettingsScreen extends StatefulWidget {
   const NotificationSettingsScreen({super.key});
 
   @override
-  State<NotificationSettingsScreen> createState() => _NotificationSettingsScreenState();
+  State<NotificationSettingsScreen> createState() =>
+      _NotificationSettingsScreenState();
 }
 
 class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
     with TickerProviderStateMixin {
-  
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
-  
+
   late NotificationPreferences _preferences;
   bool _isLoading = true;
-  
+
   // Time range selections
   TimeOfDay _quietTimeStart = const TimeOfDay(hour: 22, minute: 0);
   TimeOfDay _quietTimeEnd = const TimeOfDay(hour: 7, minute: 0);
-  
+
   @override
   void initState() {
     super.initState();
-    
+
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
     );
-    
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOutCubic,
-    ));
-    
+
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOutCubic),
+    );
+
     _loadPreferences();
     _animationController.forward();
   }
-  
+
   @override
   void dispose() {
     _animationController.dispose();
     super.dispose();
   }
-  
+
   Future<void> _loadPreferences() async {
     try {
       // Load current preferences
       _preferences = NotificationPreferences.defaultPreferences();
-      
+
       setState(() {
         _isLoading = false;
       });
@@ -67,7 +63,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
       });
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,7 +72,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
       body: _isLoading ? _buildLoadingScreen() : _buildSettingsContent(),
     );
   }
-  
+
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.transparent,
@@ -89,7 +85,11 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
           ),
-          child: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 16),
+          child: const Icon(
+            Icons.arrow_back_ios_new,
+            color: Colors.white,
+            size: 16,
+          ),
         ),
         onPressed: () => Navigator.pop(context),
       ),
@@ -106,7 +106,9 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
           icon: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+              color: Theme.of(
+                context,
+              ).colorScheme.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: const Icon(Icons.save_outlined, color: Colors.white),
@@ -117,14 +119,16 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
       ],
     );
   }
-  
+
   Widget _buildLoadingScreen() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.primary),
+            valueColor: AlwaysStoppedAnimation<Color>(
+              Theme.of(context).colorScheme.primary,
+            ),
           ),
           SizedBox(height: 16),
           Text(
@@ -135,7 +139,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
       ),
     );
   }
-  
+
   Widget _buildSettingsContent() {
     return FadeTransition(
       opacity: _fadeAnimation,
@@ -158,7 +162,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
       ),
     );
   }
-  
+
   Widget _buildHeaderSection() {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -183,7 +187,9 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.primary.withValues(alpha: 0.1),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),
@@ -211,10 +217,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
                 SizedBox(height: 4),
                 Text(
                   'AI-powered personalized health alerts',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(color: Colors.white70, fontSize: 14),
                 ),
               ],
             ),
@@ -223,7 +226,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
       ),
     );
   }
-  
+
   Widget _buildNotificationTypesSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,21 +240,23 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
           ),
         ),
         const SizedBox(height: 16),
-        ...NotificationType.values.map((type) => _buildNotificationTypeCard(type)),
+        ...NotificationType.values.map(
+          (type) => _buildNotificationTypeCard(type),
+        ),
       ],
     );
   }
-  
+
   Widget _buildNotificationTypeCard(NotificationType type) {
     final isEnabled = _preferences.allowsNotification(type);
-    
+
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: isEnabled 
+          color: isEnabled
               ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)
               : Colors.white.withValues(alpha: 0.1),
         ),
@@ -261,7 +266,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
         leading: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: isEnabled 
+            color: isEnabled
                 ? _getTypeColor(type).withValues(alpha: 0.1)
                 : Colors.grey.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
@@ -289,10 +294,16 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
         ),
         trailing: Switch.adaptive(
           value: isEnabled,
-          thumbColor: WidgetStateProperty.resolveWith((states) => 
-            states.contains(WidgetState.selected) ? _getTypeColor(type) : Colors.grey),
-          trackColor: WidgetStateProperty.resolveWith((states) => 
-            states.contains(WidgetState.selected) ? _getTypeColor(type).withValues(alpha: 0.5) : null),
+          thumbColor: WidgetStateProperty.resolveWith(
+            (states) => states.contains(WidgetState.selected)
+                ? _getTypeColor(type)
+                : Colors.grey,
+          ),
+          trackColor: WidgetStateProperty.resolveWith(
+            (states) => states.contains(WidgetState.selected)
+                ? _getTypeColor(type).withValues(alpha: 0.5)
+                : null,
+          ),
           onChanged: (value) {
             setState(() {
               _preferences.typePreferences[type] = value;
@@ -302,7 +313,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
       ),
     );
   }
-  
+
   Widget _buildTimingSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -320,7 +331,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
       ],
     );
   }
-  
+
   Widget _buildTimingCard() {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -340,7 +351,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
       ),
     );
   }
-  
+
   Widget _buildQuietHoursSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -376,8 +387,12 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
       ],
     );
   }
-  
-  Widget _buildTimeSelector(String label, TimeOfDay time, Function(TimeOfDay) onChanged) {
+
+  Widget _buildTimeSelector(
+    String label,
+    TimeOfDay time,
+    Function(TimeOfDay) onChanged,
+  ) {
     return GestureDetector(
       onTap: () async {
         final selectedTime = await showTimePicker(
@@ -406,7 +421,9 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)),
+          border: Border.all(
+            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+          ),
         ),
         child: Column(
           children: [
@@ -432,7 +449,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
       ),
     );
   }
-  
+
   Widget _buildMaxNotificationsSection() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -450,7 +467,11 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)),
+            border: Border.all(
+              color: Theme.of(
+                context,
+              ).colorScheme.primary.withValues(alpha: 0.1),
+            ),
           ),
           child: Text(
             '${_preferences.maxDailyNotifications}',
@@ -464,7 +485,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
       ],
     );
   }
-  
+
   Widget _buildWeekendSection() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -482,19 +503,22 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
             ),
             Text(
               'Receive notifications on weekends',
-              style: TextStyle(
-                color: Colors.white70,
-                fontSize: 14,
-              ),
+              style: TextStyle(color: Colors.white70, fontSize: 14),
             ),
           ],
         ),
         Switch.adaptive(
           value: _preferences.allowWeekends,
-          thumbColor: WidgetStateProperty.resolveWith((states) => 
-            states.contains(WidgetState.selected) ? Theme.of(context).colorScheme.primary : null),
-          trackColor: WidgetStateProperty.resolveWith((states) => 
-            states.contains(WidgetState.selected) ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.5) : null),
+          thumbColor: WidgetStateProperty.resolveWith(
+            (states) => states.contains(WidgetState.selected)
+                ? Theme.of(context).colorScheme.primary
+                : null,
+          ),
+          trackColor: WidgetStateProperty.resolveWith(
+            (states) => states.contains(WidgetState.selected)
+                ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.5)
+                : null,
+          ),
           onChanged: (value) {
             setState(() {
               // This would update the preference
@@ -504,7 +528,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
       ],
     );
   }
-  
+
   Widget _buildAdvancedSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -522,7 +546,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
       ],
     );
   }
-  
+
   Widget _buildAdvancedCard() {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -560,7 +584,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
       ),
     );
   }
-  
+
   Widget _buildAdvancedOption(
     String title,
     String description,
@@ -576,7 +600,11 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
             color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(icon, color: Theme.of(context).colorScheme.primary, size: 20),
+          child: Icon(
+            icon,
+            color: Theme.of(context).colorScheme.primary,
+            size: 20,
+          ),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -593,26 +621,29 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
               ),
               Text(
                 description,
-                style: const TextStyle(
-                  color: Colors.white70,
-                  fontSize: 14,
-                ),
+                style: const TextStyle(color: Colors.white70, fontSize: 14),
               ),
             ],
           ),
         ),
         Switch.adaptive(
           value: value,
-          thumbColor: WidgetStateProperty.resolveWith((states) => 
-            states.contains(WidgetState.selected) ? Theme.of(context).colorScheme.primary : null),
-          trackColor: WidgetStateProperty.resolveWith((states) => 
-            states.contains(WidgetState.selected) ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.5) : null),
+          thumbColor: WidgetStateProperty.resolveWith(
+            (states) => states.contains(WidgetState.selected)
+                ? Theme.of(context).colorScheme.primary
+                : null,
+          ),
+          trackColor: WidgetStateProperty.resolveWith(
+            (states) => states.contains(WidgetState.selected)
+                ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.5)
+                : null,
+          ),
           onChanged: onChanged,
         ),
       ],
     );
   }
-  
+
   Widget _buildTestNotificationSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -630,7 +661,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
       ],
     );
   }
-  
+
   Widget _buildTestButton() {
     return SizedBox(
       width: double.infinity,
@@ -659,7 +690,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
       ),
     );
   }
-  
+
   // Helper methods
   Color _getTypeColor(NotificationType type) {
     switch (type) {
@@ -677,7 +708,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
         return Theme.of(context).colorScheme.secondary;
     }
   }
-  
+
   IconData _getTypeIcon(NotificationType type) {
     switch (type) {
       case NotificationType.healthAlert:
@@ -698,7 +729,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
         return Icons.assignment;
     }
   }
-  
+
   String _getTypeTitle(NotificationType type) {
     switch (type) {
       case NotificationType.healthAlert:
@@ -719,7 +750,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
         return 'Symptom Reminders';
     }
   }
-  
+
   String _getTypeDescription(NotificationType type) {
     switch (type) {
       case NotificationType.healthAlert:
@@ -740,12 +771,12 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
         return 'Reminders to log symptoms and data';
     }
   }
-  
+
   Future<void> _sendTestNotification() async {
     try {
       final userService = Provider.of<UserService>(context, listen: false);
       final user = await userService.getCurrentUser();
-      
+
       if (user != null) {
         await SmartNotificationSystem.instance.sendSmartHealthNotification(
           user: user,
@@ -754,7 +785,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
           priority: NotificationPriority.normal,
           delayMinutes: 0,
         );
-        
+
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -778,12 +809,12 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
       }
     }
   }
-  
+
   Future<void> _savePreferences() async {
     try {
       // In a real app, save preferences to storage
       // await NotificationPreferencesService.savePreferences(_preferences);
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

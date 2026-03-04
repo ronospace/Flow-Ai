@@ -42,7 +42,7 @@ class _FeaturePreviewCardState extends State<FeaturePreviewCard>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return MouseRegion(
       onEnter: (_) {
         setState(() => _isHovered = true);
@@ -63,10 +63,12 @@ class _FeaturePreviewCardState extends State<FeaturePreviewCard>
           child: Container(
             margin: const EdgeInsets.symmetric(vertical: 8),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: widget.isSelected ? 0.25 : 0.15),
+              color: Colors.white.withValues(
+                alpha: widget.isSelected ? 0.25 : 0.15,
+              ),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: widget.isSelected 
+                color: widget.isSelected
                     ? widget.feature.color.withValues(alpha: 0.6)
                     : Colors.white.withValues(alpha: 0.3),
                 width: widget.isSelected ? 2 : 1,
@@ -74,7 +76,7 @@ class _FeaturePreviewCardState extends State<FeaturePreviewCard>
               boxShadow: [
                 BoxShadow(
                   color: widget.feature.color.withValues(
-                    alpha: widget.isSelected ? 0.2 : 0.1
+                    alpha: widget.isSelected ? 0.2 : 0.1,
                   ),
                   blurRadius: widget.isSelected ? 20 : 10,
                   offset: Offset(0, widget.isSelected ? 8 : 4),
@@ -121,15 +123,11 @@ class _FeaturePreviewCardState extends State<FeaturePreviewCard>
                 ),
               ],
             ),
-            child: Icon(
-              widget.feature.icon,
-              color: Colors.white,
-              size: 28,
-            ),
+            child: Icon(widget.feature.icon, color: Colors.white, size: 28),
           ),
-          
+
           const SizedBox(width: 16),
-          
+
           // Feature Info
           Expanded(
             child: Column(
@@ -164,7 +162,7 @@ class _FeaturePreviewCardState extends State<FeaturePreviewCard>
               ],
             ),
           ),
-          
+
           // Expand Indicator
           AnimatedRotation(
             turns: widget.isSelected ? 0.5 : 0,
@@ -204,10 +202,10 @@ class _FeaturePreviewCardState extends State<FeaturePreviewCard>
   Widget _buildEstimatedDate() {
     final now = DateTime.now();
     final daysUntil = widget.feature.estimatedRelease.difference(now).inDays;
-    
+
     String timeText;
     IconData timeIcon;
-    
+
     if (daysUntil <= 30) {
       timeText = 'Coming in $daysUntil days';
       timeIcon = Icons.schedule;
@@ -220,7 +218,7 @@ class _FeaturePreviewCardState extends State<FeaturePreviewCard>
       timeText = 'Coming in $months months';
       timeIcon = Icons.calendar_month;
     }
-    
+
     return Row(
       children: [
         Icon(
@@ -256,9 +254,9 @@ class _FeaturePreviewCardState extends State<FeaturePreviewCard>
               height: 1.4,
             ),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Features List
           Text(
             'Key Features:',
@@ -268,13 +266,13 @@ class _FeaturePreviewCardState extends State<FeaturePreviewCard>
               color: Colors.white,
             ),
           ),
-          
+
           const SizedBox(height: 8),
-          
+
           ...widget.feature.features.asMap().entries.map((entry) {
             final index = entry.key;
             final feature = entry.value;
-            
+
             return Padding(
               padding: const EdgeInsets.only(bottom: 6),
               child: Row(
@@ -303,9 +301,9 @@ class _FeaturePreviewCardState extends State<FeaturePreviewCard>
               ),
             ).animate().fadeIn(delay: (50 * index).ms).slideX(begin: 0.2);
           }),
-          
+
           const SizedBox(height: 16),
-          
+
           // Action Buttons
           Row(
             children: [
@@ -346,10 +344,12 @@ class _FeaturePreviewCardState extends State<FeaturePreviewCard>
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         decoration: BoxDecoration(
-          color: isSecondary ? Colors.transparent : color.withValues(alpha: 0.2),
+          color: isSecondary
+              ? Colors.transparent
+              : color.withValues(alpha: 0.2),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSecondary 
+            color: isSecondary
                 ? Colors.white.withValues(alpha: 0.3)
                 : color.withValues(alpha: 0.4),
           ),
@@ -357,11 +357,7 @@ class _FeaturePreviewCardState extends State<FeaturePreviewCard>
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              icon,
-              size: 16,
-              color: Colors.white,
-            ),
+            Icon(icon, size: 16, color: Colors.white),
             const SizedBox(width: 6),
             Text(
               text,
@@ -381,7 +377,9 @@ class _FeaturePreviewCardState extends State<FeaturePreviewCard>
     // Implement notification signup
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('You\'ll be notified when ${widget.feature.title} is ready!'),
+        content: Text(
+          'You\'ll be notified when ${widget.feature.title} is ready!',
+        ),
         backgroundColor: widget.feature.color,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -421,7 +419,7 @@ class _FeaturePreviewCardState extends State<FeaturePreviewCard>
               borderRadius: BorderRadius.circular(2),
             ),
           ),
-          
+
           // Content
           Expanded(
             child: Padding(
@@ -436,7 +434,10 @@ class _FeaturePreviewCardState extends State<FeaturePreviewCard>
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
-                            colors: [widget.feature.color, widget.feature.color.withValues(alpha: 0.7)],
+                            colors: [
+                              widget.feature.color,
+                              widget.feature.color.withValues(alpha: 0.7),
+                            ],
                           ),
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -471,9 +472,9 @@ class _FeaturePreviewCardState extends State<FeaturePreviewCard>
                       ),
                     ],
                   ),
-                  
+
                   const SizedBox(height: 24),
-                  
+
                   // Detailed Description
                   const Text(
                     'About This Feature',
@@ -492,9 +493,9 @@ class _FeaturePreviewCardState extends State<FeaturePreviewCard>
                       height: 1.4,
                     ),
                   ),
-                  
+
                   const SizedBox(height: 24),
-                  
+
                   // Features
                   const Text(
                     'What You\'ll Get',
@@ -505,7 +506,7 @@ class _FeaturePreviewCardState extends State<FeaturePreviewCard>
                     ),
                   ),
                   const SizedBox(height: 12),
-                  
+
                   Expanded(
                     child: ListView.builder(
                       itemCount: widget.feature.features.length,

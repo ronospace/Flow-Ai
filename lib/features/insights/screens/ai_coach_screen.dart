@@ -39,15 +39,10 @@ class AICoachScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Row(
           children: [
-            Icon(
-              Icons.notifications_active,
-              color: AppTheme.primaryPurple,
-            ),
+            Icon(Icons.notifications_active, color: AppTheme.primaryPurple),
             const SizedBox(width: 8),
             const Text('Notification Set'),
           ],

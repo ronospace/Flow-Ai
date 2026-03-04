@@ -7,24 +7,26 @@ import '../../../core/services/ai_engine.dart';
 import '../../../core/utils/app_logger.dart';
 
 import 'package:flow_ai/core/models/cycle_data.dart';
+
 /// Enhanced Consumer Intelligence Dashboard with real-time biometric integration
 class EnhancedConsumerDashboard extends StatefulWidget {
   const EnhancedConsumerDashboard({super.key});
 
   @override
-  State<EnhancedConsumerDashboard> createState() => _EnhancedConsumerDashboardState();
+  State<EnhancedConsumerDashboard> createState() =>
+      _EnhancedConsumerDashboardState();
 }
 
 class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
     with TickerProviderStateMixin {
   late AnimationController _pulseController;
   late AnimationController _fadeController;
-  
+
   BiometricSnapshot? _currentSnapshot;
   List<BiometricInsight> _insights = [];
   bool _isLoading = true;
   StreamSubscription? _dataSubscription;
-  
+
   final Map<String, double> _healthScores = {
     'Overall': 0.85,
     'Cycle': 0.92,
@@ -45,7 +47,7 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
       duration: const Duration(seconds: 2),
       vsync: this,
     )..repeat(reverse: true);
-    
+
     _fadeController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
@@ -55,23 +57,23 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
   Future<void> _initializeDashboard() async {
     try {
       AppLogger.info('🔄 Initializing Enhanced Consumer Dashboard...');
-      
+
       // Initialize biometric service
       await AdvancedBiometricService.instance.initialize();
-      
+
       // Load initial data
       await _loadDashboardData();
-      
+
       // Start real-time updates
       _startRealTimeUpdates();
-      
+
       // Animate dashboard appearance
       await _fadeController.forward();
-      
+
       setState(() {
         _isLoading = false;
       });
-      
+
       AppLogger.success('✅ Enhanced Dashboard initialized');
     } catch (e) {
       AppLogger.error('Failed to initialize dashboard: $e');
@@ -84,14 +86,17 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
   Future<void> _loadDashboardData() async {
     try {
       // Load current biometric snapshot
-      _currentSnapshot = await AdvancedBiometricService.instance.getCurrentBiometricSnapshot();
-      
+      _currentSnapshot = await AdvancedBiometricService.instance
+          .getCurrentBiometricSnapshot();
+
       // If no real data, use mock data for demonstration// Generate AI insights based on current data
-      final List<CycleData> cycles = <CycleData>[]; // This would come from your cycle data service
-      await AIEngine.instance.generateInsights(cycles);      
+      final List<CycleData> cycles =
+          <CycleData>[]; // This would come from your cycle data service
+      await AIEngine.instance.generateInsights(cycles);
       // Load recent biometric insights
-      _insights = await _generateMockInsights(); // This would come from the biometric service
-      
+      _insights =
+          await _generateMockInsights(); // This would come from the biometric service
+
       AppLogger.info('📊 Dashboard data loaded - ${_insights.length} insights');
     } catch (e) {
       AppLogger.error('Error loading dashboard data: $e');
@@ -111,8 +116,9 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
 
   Future<void> _refreshDashboardData() async {
     try {
-      final newSnapshot = await AdvancedBiometricService.instance.getCurrentBiometricSnapshot();
-      
+      final newSnapshot = await AdvancedBiometricService.instance
+          .getCurrentBiometricSnapshot();
+
       if (mounted) {
         setState(() {
           _currentSnapshot = newSnapshot;
@@ -144,7 +150,9 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
                         gradient: LinearGradient(
                           colors: [
                             Theme.of(context).primaryColor,
-                            Theme.of(context).primaryColor.withValues(alpha: 0.1),
+                            Theme.of(
+                              context,
+                            ).primaryColor.withValues(alpha: 0.1),
                           ],
                         ),
                       ),
@@ -160,9 +168,9 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
               const SizedBox(height: 24),
               Text(
                 'Loading your health insights...',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Colors.grey[600],
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(color: Colors.grey[600]),
               ),
             ],
           ),
@@ -254,7 +262,9 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
+                    color: Theme.of(
+                      context,
+                    ).primaryColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
@@ -269,7 +279,10 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
                     children: [
                       const Text(
                         'Overall Health Score',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Text(
                         'Based on your biometric data and cycle patterns',
@@ -296,7 +309,7 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
 
   Widget _buildScoreIndicator(String label, double score) {
     final color = _getScoreColor(score);
-    
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: Column(
@@ -373,7 +386,10 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
           children: [
             Row(
               children: [
-                Icon(Icons.monitor_heart, color: Theme.of(context).primaryColor),
+                Icon(
+                  Icons.monitor_heart,
+                  color: Theme.of(context).primaryColor,
+                ),
                 const SizedBox(width: 12),
                 const Text(
                   'Current Vitals',
@@ -381,7 +397,10 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
                 ),
                 const Spacer(),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.green.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
@@ -418,17 +437,47 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
               runSpacing: 12,
               children: [
                 if (_currentSnapshot!.heartRate != null)
-                  _buildVitalCard('Heart Rate', '${_currentSnapshot!.heartRate!.toInt()} BPM', Icons.favorite, Colors.red),
+                  _buildVitalCard(
+                    'Heart Rate',
+                    '${_currentSnapshot!.heartRate!.toInt()} BPM',
+                    Icons.favorite,
+                    Colors.red,
+                  ),
                 if (_currentSnapshot!.heartRateVariability != null)
-                  _buildVitalCard('HRV', '${_currentSnapshot!.heartRateVariability!.toInt()} ms', Icons.timeline, Colors.blue),
+                  _buildVitalCard(
+                    'HRV',
+                    '${_currentSnapshot!.heartRateVariability!.toInt()} ms',
+                    Icons.timeline,
+                    Colors.blue,
+                  ),
                 if (_currentSnapshot!.bodyTemperature != null)
-                  _buildVitalCard('Temperature', '${_currentSnapshot!.bodyTemperature!.toStringAsFixed(1)}°C', Icons.thermostat, Colors.orange),
+                  _buildVitalCard(
+                    'Temperature',
+                    '${_currentSnapshot!.bodyTemperature!.toStringAsFixed(1)}°C',
+                    Icons.thermostat,
+                    Colors.orange,
+                  ),
                 if (_currentSnapshot!.sleepHours != null)
-                  _buildVitalCard('Sleep', '${_currentSnapshot!.sleepHours!.toStringAsFixed(1)}h', Icons.bedtime, Colors.purple),
+                  _buildVitalCard(
+                    'Sleep',
+                    '${_currentSnapshot!.sleepHours!.toStringAsFixed(1)}h',
+                    Icons.bedtime,
+                    Colors.purple,
+                  ),
                 if (_currentSnapshot!.steps != null)
-                  _buildVitalCard('Steps', '${(_currentSnapshot!.steps! / 1000).toStringAsFixed(1)}K', Icons.directions_walk, Colors.green),
+                  _buildVitalCard(
+                    'Steps',
+                    '${(_currentSnapshot!.steps! / 1000).toStringAsFixed(1)}K',
+                    Icons.directions_walk,
+                    Colors.green,
+                  ),
                 if (_currentSnapshot!.bloodOxygen != null)
-                  _buildVitalCard('Blood O₂', '${_currentSnapshot!.bloodOxygen!.toInt()}%', Icons.air, Colors.cyan),
+                  _buildVitalCard(
+                    'Blood O₂',
+                    '${_currentSnapshot!.bloodOxygen!.toInt()}%',
+                    Icons.air,
+                    Colors.cyan,
+                  ),
               ],
             ),
           ],
@@ -437,7 +486,12 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
     ).animate().slideX(begin: -0.3, duration: 700.ms).fadeIn();
   }
 
-  Widget _buildVitalCard(String label, String value, IconData icon, Color color) {
+  Widget _buildVitalCard(
+    String label,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -457,13 +511,7 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
               color: color,
             ),
           ),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey[600],
-            ),
-          ),
+          Text(label, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
         ],
       ),
     );
@@ -496,7 +544,10 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
                     const SizedBox(height: 12),
                     const Text(
                       'Gathering insights...',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
@@ -507,7 +558,9 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
                 ),
               )
             else
-              ...(_insights.take(3).map((insight) => _buildInsightCard(insight))),
+              ...(_insights
+                  .take(3)
+                  .map((insight) => _buildInsightCard(insight))),
           ],
         ),
       ),
@@ -521,28 +574,32 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Theme.of(context).primaryColor.withValues(alpha: 0.1)),
+        border: Border.all(
+          color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Text(
-                insight.type.emoji,
-                style: const TextStyle(fontSize: 20),
-              ),
+              Text(insight.type.emoji, style: const TextStyle(fontSize: 20)),
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
                   insight.title,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
-                  color: _getConfidenceColor(insight.confidence).withValues(alpha: 0.1),
+                  color: _getConfidenceColor(
+                    insight.confidence,
+                  ).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -557,10 +614,7 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
             ],
           ),
           const SizedBox(height: 8),
-          Text(
-            insight.insight,
-            style: TextStyle(color: Colors.grey[600]),
-          ),
+          Text(insight.insight, style: TextStyle(color: Colors.grey[600])),
           if (insight.recommendations.isNotEmpty) ...[
             const SizedBox(height: 8),
             Text(
@@ -595,10 +649,7 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
               ],
             ),
             const SizedBox(height: 20),
-            SizedBox(
-              height: 200,
-              child: _buildMockTrendChart(),
-            ),
+            SizedBox(height: 200, child: _buildMockTrendChart()),
           ],
         ),
       ),
@@ -610,7 +661,10 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
     final spots = List.generate(7, (index) {
       final baseValue = 75.0;
       final variation = (index * 1.5) - 3;
-      return FlSpot(index.toDouble(), baseValue + variation + (index % 2 == 0 ? 2 : -2));
+      return FlSpot(
+        index.toDouble(),
+        baseValue + variation + (index % 2 == 0 ? 2 : -2),
+      );
     });
 
     return LineChart(
@@ -680,7 +734,9 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
               ],
             ),
             const SizedBox(height: 16),
-            ...mockRecommendations.map((recommendation) => _buildRecommendationItem(recommendation)),
+            ...mockRecommendations.map(
+              (recommendation) => _buildRecommendationItem(recommendation),
+            ),
           ],
         ),
       ),
@@ -701,10 +757,7 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
           Icon(Icons.check_circle_outline, color: Colors.blue, size: 20),
           const SizedBox(width: 12),
           Expanded(
-            child: Text(
-              recommendation,
-              style: const TextStyle(fontSize: 14),
-            ),
+            child: Text(recommendation, style: const TextStyle(fontSize: 14)),
           ),
         ],
       ),
@@ -771,28 +824,40 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
       BiometricInsight(
         type: BiometricInsightType.hrvElevated,
         title: 'Excellent Recovery Status',
-        insight: 'Your heart rate variability is in the optimal range, indicating good recovery and stress management.',
+        insight:
+            'Your heart rate variability is in the optimal range, indicating good recovery and stress management.',
         confidence: 0.87,
         dataPoints: 14,
-        recommendations: ['Great time for moderate exercise', 'Maintain current wellness routine'],
+        recommendations: [
+          'Great time for moderate exercise',
+          'Maintain current wellness routine',
+        ],
         timestamp: DateTime.now().subtract(const Duration(minutes: 15)),
       ),
       BiometricInsight(
         type: BiometricInsightType.sleepDisruption,
         title: 'Sleep Pattern Changes',
-        insight: 'Your sleep duration has decreased by 45 minutes over the past 3 days.',
+        insight:
+            'Your sleep duration has decreased by 45 minutes over the past 3 days.',
         confidence: 0.72,
         dataPoints: 21,
-        recommendations: ['Try a consistent bedtime routine', 'Limit screen time before bed'],
+        recommendations: [
+          'Try a consistent bedtime routine',
+          'Limit screen time before bed',
+        ],
         timestamp: DateTime.now().subtract(const Duration(hours: 2)),
       ),
       BiometricInsight(
         type: BiometricInsightType.temperatureShift,
         title: 'Basal Temperature Trend',
-        insight: 'Your basal body temperature shows a gradual increase, suggesting you may be approaching ovulation.',
+        insight:
+            'Your basal body temperature shows a gradual increase, suggesting you may be approaching ovulation.',
         confidence: 0.94,
         dataPoints: 10,
-        recommendations: ['Continue daily temperature tracking', 'Note any additional fertility signs'],
+        recommendations: [
+          'Continue daily temperature tracking',
+          'Note any additional fertility signs',
+        ],
         timestamp: DateTime.now().subtract(const Duration(hours: 6)),
       ),
     ];

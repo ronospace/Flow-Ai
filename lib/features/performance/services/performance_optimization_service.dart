@@ -14,34 +14,37 @@ class PerformanceOptimizationService {
     _instance ??= PerformanceOptimizationService._internal();
     return _instance!;
   }
+
   PerformanceOptimizationService._internal();
 
   // Configuration
   PerformanceOptimizationConfig _config = const PerformanceOptimizationConfig();
-  
+
   // Cache Management
   final Map<String, AdvancedCache> _caches = {};
-  
+
   // Memory Management
   MemoryMonitor? _memoryMonitor;
   final Map<String, MemoryPool> _memoryPools = {};
-  
+
   // Performance Monitoring
   PerformanceMetrics? _lastMetrics;
   final List<PerformanceMetrics> _metricsHistory = [];
   Timer? _metricsTimer;
-  
+
   // Background Tasks
   final Map<String, BackgroundTask> _backgroundTasks = {};
   Timer? _backgroundTaskTimer;
-  
+
   // Optimization States
   bool _isOptimizationRunning = false;
   DateTime? _lastOptimizationRun;
-  
+
   // Event Streams
-  final StreamController<PerformanceMetrics> _metricsController = StreamController.broadcast();
-  final StreamController<MemoryUsageInfo> _memoryController = StreamController.broadcast();
+  final StreamController<PerformanceMetrics> _metricsController =
+      StreamController.broadcast();
+  final StreamController<MemoryUsageInfo> _memoryController =
+      StreamController.broadcast();
 
   Stream<PerformanceMetrics> get metricsStream => _metricsController.stream;
   Stream<MemoryUsageInfo> get memoryStream => _memoryController.stream;
@@ -51,12 +54,12 @@ class PerformanceOptimizationService {
   Future<void> initialize({PerformanceOptimizationConfig? config}) async {
     try {
       _config = config ?? const PerformanceOptimizationConfig();
-      
+
       await _initializeCaches();
       await _initializeMemoryMonitoring();
       await _initializeBackgroundTasks();
       _startPerformanceMonitoring();
-      
+
       debugPrint('✅ Performance Optimization Service initialized');
     } catch (e) {
       debugPrint('❌ Failed to initialize Performance Optimization Service: $e');
@@ -66,11 +69,8 @@ class PerformanceOptimizationService {
 
   Future<void> _initializeCaches() async {
     // Initialize default caches
-    await createCache(
-      'default',
-      _config.cacheConfig,
-    );
-    
+    await createCache('default', _config.cacheConfig);
+
     await createCache(
       'images',
       _config.cacheConfig.copyWith(
@@ -78,7 +78,7 @@ class PerformanceOptimizationService {
         compressionType: CompressionType.lz4,
       ),
     );
-    
+
     await createCache(
       'api_responses',
       _config.cacheConfig.copyWith(
@@ -95,33 +95,39 @@ class PerformanceOptimizationService {
 
   Future<void> _initializeBackgroundTasks() async {
     // Cache cleanup task
-    registerBackgroundTask(BackgroundTask(
-      id: 'cache_cleanup',
-      name: 'Cache Cleanup',
-      task: _performCacheCleanup,
-      interval: const Duration(minutes: 15),
-      priority: 2,
-    ));
-    
+    registerBackgroundTask(
+      BackgroundTask(
+        id: 'cache_cleanup',
+        name: 'Cache Cleanup',
+        task: _performCacheCleanup,
+        interval: const Duration(minutes: 15),
+        priority: 2,
+      ),
+    );
+
     // Memory compaction task
     if (_config.enableMemoryCompaction) {
-      registerBackgroundTask(BackgroundTask(
-        id: 'memory_compaction',
-        name: 'Memory Compaction',
-        task: _performMemoryCompaction,
-        interval: const Duration(hours: 1),
-        priority: 1,
-      ));
+      registerBackgroundTask(
+        BackgroundTask(
+          id: 'memory_compaction',
+          name: 'Memory Compaction',
+          task: _performMemoryCompaction,
+          interval: const Duration(hours: 1),
+          priority: 1,
+        ),
+      );
     }
-    
+
     // Performance metrics collection
-    registerBackgroundTask(BackgroundTask(
-      id: 'metrics_collection',
-      name: 'Metrics Collection',
-      task: _collectPerformanceMetrics,
-      interval: const Duration(seconds: 30),
-      priority: 3,
-    ));
+    registerBackgroundTask(
+      BackgroundTask(
+        id: 'metrics_collection',
+        name: 'Metrics Collection',
+        task: _collectPerformanceMetrics,
+        interval: const Duration(seconds: 30),
+        priority: 3,
+      ),
+    );
 
     if (_config.enableBackgroundProcessing) {
       _startBackgroundTaskScheduler();
@@ -178,7 +184,7 @@ class PerformanceOptimizationService {
 
   Future<void> _handleMemoryPressure(MemoryUsageInfo memoryInfo) async {
     debugPrint('🔥 Memory pressure detected: ${memoryInfo.pressureLevel.name}');
-    
+
     switch (memoryInfo.pressureLevel) {
       case MemoryPressureLevel.moderate:
         await _performLightCleanup();
@@ -199,7 +205,7 @@ class PerformanceOptimizationService {
     for (final cache in _caches.values) {
       cache.removeExpired();
     }
-    
+
     // Trigger GC hint
     if (_config.enableGarbageCollectionHints) {
       _triggerGarbageCollection();
@@ -208,12 +214,12 @@ class PerformanceOptimizationService {
 
   Future<void> _performMediumCleanup() async {
     await _performLightCleanup();
-    
+
     // Clear LRU cache entries (keep 70%)
     for (final cache in _caches.values) {
       await cache.trim(0.7);
     }
-    
+
     // Clear memory pools partially
     for (final pool in _memoryPools.values) {
       // Clear half of available items
@@ -232,20 +238,20 @@ class PerformanceOptimizationService {
 
   Future<void> _performAggressiveCleanup() async {
     await _performMediumCleanup();
-    
+
     // Clear most cache entries (keep 30%)
     for (final cache in _caches.values) {
       await cache.trim(0.3);
     }
-    
+
     // Clear all memory pools
     for (final pool in _memoryPools.values) {
       pool.clear();
     }
-    
+
     // Force garbage collection
     _triggerGarbageCollection();
-    
+
     debugPrint('🧹 Aggressive cleanup completed');
   }
 
@@ -269,14 +275,14 @@ class PerformanceOptimizationService {
   void _collectPerformanceMetrics() {
     final metrics = _generatePerformanceMetrics();
     _lastMetrics = metrics;
-    
+
     _metricsHistory.add(metrics);
     if (_metricsHistory.length > 1000) {
       _metricsHistory.removeAt(0);
     }
-    
+
     _metricsController.add(metrics);
-    
+
     // Auto-optimize if needed
     if (_shouldAutoOptimize(metrics)) {
       _performAutoOptimization();
@@ -287,14 +293,14 @@ class PerformanceOptimizationService {
     int totalCacheHits = 0;
     int totalCacheMisses = 0;
     int totalMemoryUsage = 0;
-    
+
     for (final cache in _caches.values) {
       final stats = cache.getStats();
       totalCacheHits += stats.hits;
       totalCacheMisses += stats.misses;
       totalMemoryUsage += stats.memoryUsageBytes;
     }
-    
+
     return PerformanceMetrics(
       cpuUsagePercentage: _getCpuUsage(),
       memoryUsageBytes: totalMemoryUsage,
@@ -306,7 +312,9 @@ class PerformanceOptimizationService {
       cacheMisses: totalCacheMisses,
       frameRenderTime: 16.6, // Placeholder - would need frame rendering metrics
       gcCount: 0, // Platform-specific
-      upTime: DateTime.now().difference(DateTime.now()), // App start time tracking needed
+      upTime: DateTime.now().difference(
+        DateTime.now(),
+      ), // App start time tracking needed
       customMetrics: {
         'active_caches': _caches.length.toDouble(),
         'memory_pools': _memoryPools.length.toDouble(),
@@ -324,12 +332,13 @@ class PerformanceOptimizationService {
 
   bool _shouldAutoOptimize(PerformanceMetrics metrics) {
     return metrics.cacheHitRatio < 0.5 ||
-           metrics.memoryUsageBytes > _config.cacheConfig.maxMemoryUsageBytes * 0.9;
+        metrics.memoryUsageBytes >
+            _config.cacheConfig.maxMemoryUsageBytes * 0.9;
   }
 
   void _performAutoOptimization() {
     if (_isOptimizationRunning) return;
-    
+
     _isOptimizationRunning = true;
     Timer(const Duration(seconds: 1), () {
       _performOptimizationCycle();
@@ -343,7 +352,7 @@ class PerformanceOptimizationService {
     for (final cache in _caches.values) {
       cache.optimize();
     }
-    
+
     // Clean up expired data
     _performCacheCleanup();
   }
@@ -369,7 +378,7 @@ class PerformanceOptimizationService {
   void _runBackgroundTasks() {
     final sortedTasks = _backgroundTasks.values.toList()
       ..sort((a, b) => b.priority.compareTo(a.priority));
-    
+
     for (final task in sortedTasks) {
       if (task.shouldRun()) {
         _executeBackgroundTask(task);
@@ -400,7 +409,7 @@ class PerformanceOptimizationService {
 
   Future<void> optimizePerformance({OptimizationLevel? level}) async {
     final targetLevel = level ?? _config.level;
-    
+
     switch (targetLevel) {
       case OptimizationLevel.minimal:
         await _performLightCleanup();
@@ -420,18 +429,20 @@ class PerformanceOptimizationService {
     for (final entry in _caches.entries) {
       cacheStats[entry.key] = entry.value.getStats().toJson();
     }
-    
+
     final poolStats = <String, dynamic>{};
     for (final entry in _memoryPools.entries) {
       poolStats[entry.key] = entry.value.getStats();
     }
-    
+
     return {
       'config': _config.toJson(),
       'last_metrics': _lastMetrics?.toJson(),
       'cache_stats': cacheStats,
       'memory_pool_stats': poolStats,
-      'background_tasks': _backgroundTasks.values.map((t) => t.toJson()).toList(),
+      'background_tasks': _backgroundTasks.values
+          .map((t) => t.toJson())
+          .toList(),
       'last_optimization': _lastOptimizationRun?.toIso8601String(),
       'is_optimization_running': _isOptimizationRunning,
       'metrics_history_count': _metricsHistory.length,
@@ -441,16 +452,16 @@ class PerformanceOptimizationService {
   Future<void> dispose() async {
     _metricsTimer?.cancel();
     _backgroundTaskTimer?.cancel();
-    
+
     await _metricsController.close();
     await _memoryController.close();
-    
+
     await clearAllCaches();
-    
+
     for (final pool in _memoryPools.values) {
       pool.clear();
     }
-    
+
     _memoryMonitor?.dispose();
   }
 }
@@ -460,16 +471,16 @@ class PerformanceOptimizationService {
 class AdvancedCache<T> {
   final String name;
   final CacheConfiguration config;
-  
+
   final Map<String, CacheEntry<T>> _cache = {};
   final LinkedHashMap<String, int> _accessOrder = LinkedHashMap();
-  
+
   int _hits = 0;
   int _misses = 0;
   int _memoryUsage = 0;
-  
+
   Database? _persistentStore;
-  
+
   AdvancedCache(this.name, this.config);
 
   Future<void> initialize() async {
@@ -482,7 +493,7 @@ class AdvancedCache<T> {
     try {
       final directory = await getApplicationSupportDirectory();
       final path = '${directory.path}/cache_$name.db';
-      
+
       _persistentStore = await openDatabase(
         path,
         version: 1,
@@ -499,9 +510,13 @@ class AdvancedCache<T> {
               size_bytes INTEGER
             )
           ''');
-          
-          await db.execute('CREATE INDEX idx_expires_at ON cache_entries(expires_at)');
-          await db.execute('CREATE INDEX idx_last_accessed ON cache_entries(last_accessed_at)');
+
+          await db.execute(
+            'CREATE INDEX idx_expires_at ON cache_entries(expires_at)',
+          );
+          await db.execute(
+            'CREATE INDEX idx_last_accessed ON cache_entries(last_accessed_at)',
+          );
         },
       );
     } catch (e) {
@@ -511,10 +526,10 @@ class AdvancedCache<T> {
 
   Future<T?> get(String key) async {
     final entry = _cache[key];
-    
+
     if (entry == null) {
       _misses++;
-      
+
       // Try loading from persistent store
       if (config.enablePersistence && _persistentStore != null) {
         final persistedEntry = await _loadFromPersistentStore(key);
@@ -525,30 +540,30 @@ class AdvancedCache<T> {
           return persistedEntry.data;
         }
       }
-      
+
       return null;
     }
-    
+
     if (entry.isExpired) {
       await remove(key);
       _misses++;
       return null;
     }
-    
+
     // Update access tracking
     final updatedEntry = entry.copyWithAccess();
     _cache[key] = updatedEntry;
     _updateAccessOrder(key);
     _hits++;
-    
+
     return entry.data;
   }
 
   Future<void> put(String key, T data, {Duration? ttl}) async {
-    final expiresAt = ttl != null 
+    final expiresAt = ttl != null
         ? DateTime.now().add(ttl)
         : DateTime.now().add(config.defaultTtl);
-    
+
     final sizeBytes = _calculateSize(data);
     final entry = CacheEntry<T>(
       key: key,
@@ -558,14 +573,14 @@ class AdvancedCache<T> {
       lastAccessedAt: DateTime.now(),
       sizeBytes: sizeBytes,
     );
-    
+
     // Check memory constraints
     await _ensureMemoryConstraints(sizeBytes);
-    
+
     _cache[key] = entry;
     _updateAccessOrder(key);
     _memoryUsage += sizeBytes;
-    
+
     // Persist if enabled
     if (config.enablePersistence && _persistentStore != null) {
       await _saveToPersistentStore(entry);
@@ -578,9 +593,13 @@ class AdvancedCache<T> {
       _memoryUsage -= entry.sizeBytes;
       _accessOrder.remove(key);
     }
-    
+
     if (config.enablePersistence && _persistentStore != null) {
-      await _persistentStore!.delete('cache_entries', where: 'key = ?', whereArgs: [key]);
+      await _persistentStore!.delete(
+        'cache_entries',
+        where: 'key = ?',
+        whereArgs: [key],
+      );
     }
   }
 
@@ -590,7 +609,7 @@ class AdvancedCache<T> {
     _memoryUsage = 0;
     _hits = 0;
     _misses = 0;
-    
+
     if (config.enablePersistence && _persistentStore != null) {
       await _persistentStore!.delete('cache_entries');
     }
@@ -599,7 +618,7 @@ class AdvancedCache<T> {
   void optimize() {
     // Remove expired entries
     removeExpired();
-    
+
     // Apply optimization strategy
     switch (config.strategy) {
       case CacheStrategy.lru:
@@ -618,13 +637,13 @@ class AdvancedCache<T> {
 
   void removeExpired() {
     final keysToRemove = <String>[];
-    
+
     for (final entry in _cache.entries) {
       if (entry.value.isExpired) {
         keysToRemove.add(entry.key);
       }
     }
-    
+
     for (final key in keysToRemove) {
       remove(key);
     }
@@ -633,12 +652,14 @@ class AdvancedCache<T> {
   Future<void> trim(double keepRatio) async {
     final targetCount = (_cache.length * keepRatio).floor();
     final currentCount = _cache.length;
-    
+
     if (targetCount >= currentCount) return;
-    
+
     final sortedEntries = _cache.entries.toList()
-      ..sort((a, b) => a.value.lastAccessedAt.compareTo(b.value.lastAccessedAt));
-    
+      ..sort(
+        (a, b) => a.value.lastAccessedAt.compareTo(b.value.lastAccessedAt),
+      );
+
     final toRemove = currentCount - targetCount;
     for (int i = 0; i < toRemove && i < sortedEntries.length; i++) {
       await remove(sortedEntries[i].key);
@@ -665,10 +686,11 @@ class AdvancedCache<T> {
   }
 
   Future<void> _ensureMemoryConstraints(int newEntrySize) async {
-    while (_memoryUsage + newEntrySize > config.maxMemoryUsageBytes && _cache.isNotEmpty) {
+    while (_memoryUsage + newEntrySize > config.maxMemoryUsageBytes &&
+        _cache.isNotEmpty) {
       await _evictOldestEntry();
     }
-    
+
     while (_cache.length >= config.maxItemCount) {
       await _evictOldestEntry();
     }
@@ -676,7 +698,7 @@ class AdvancedCache<T> {
 
   Future<void> _evictOldestEntry() async {
     if (_accessOrder.isEmpty) return;
-    
+
     final oldestKey = _accessOrder.keys.first;
     await remove(oldestKey);
   }
@@ -699,10 +721,10 @@ class AdvancedCache<T> {
 
   void _optimizeLFU() {
     if (_cache.length <= config.maxItemCount * 0.8) return;
-    
+
     final sortedEntries = _cache.entries.toList()
       ..sort((a, b) => a.value.accessCount.compareTo(b.value.accessCount));
-    
+
     final toRemoveCount = (_cache.length * 0.1).floor();
     for (int i = 0; i < toRemoveCount && i < sortedEntries.length; i++) {
       remove(sortedEntries[i].key);
@@ -711,17 +733,17 @@ class AdvancedCache<T> {
 
   void _optimizeAdaptive() {
     final oneHourAgo = DateTime.now().subtract(const Duration(hours: 1));
-    
+
     // Remove entries not accessed in the last hour and with low access count
     final keysToRemove = <String>[];
-    
+
     for (final entry in _cache.entries) {
-      if (entry.value.lastAccessedAt.isBefore(oneHourAgo) && 
+      if (entry.value.lastAccessedAt.isBefore(oneHourAgo) &&
           entry.value.accessCount < 3) {
         keysToRemove.add(entry.key);
       }
     }
-    
+
     for (final key in keysToRemove) {
       remove(key);
     }
@@ -735,20 +757,24 @@ class AdvancedCache<T> {
         whereArgs: [key],
         limit: 1,
       );
-      
+
       if (result.isNotEmpty) {
         final row = result.first;
         final data = _deserializeData(row['data'] as Uint8List);
-        
+
         return CacheEntry<T>(
           key: key,
           data: data,
-          createdAt: DateTime.fromMillisecondsSinceEpoch(row['created_at'] as int),
-          expiresAt: row['expires_at'] != null 
+          createdAt: DateTime.fromMillisecondsSinceEpoch(
+            row['created_at'] as int,
+          ),
+          expiresAt: row['expires_at'] != null
               ? DateTime.fromMillisecondsSinceEpoch(row['expires_at'] as int)
               : null,
           accessCount: row['access_count'] as int,
-          lastAccessedAt: DateTime.fromMillisecondsSinceEpoch(row['last_accessed_at'] as int),
+          lastAccessedAt: DateTime.fromMillisecondsSinceEpoch(
+            row['last_accessed_at'] as int,
+          ),
           sizeBytes: row['size_bytes'] as int,
           metadata: json.decode(row['metadata'] as String),
         );
@@ -756,26 +782,22 @@ class AdvancedCache<T> {
     } catch (e) {
       debugPrint('⚠️ Failed to load from persistent store: $e');
     }
-    
+
     return null;
   }
 
   Future<void> _saveToPersistentStore(CacheEntry<T> entry) async {
     try {
-      await _persistentStore!.insert(
-        'cache_entries',
-        {
-          'key': entry.key,
-          'data': _serializeData(entry.data),
-          'metadata': json.encode(entry.metadata),
-          'created_at': entry.createdAt.millisecondsSinceEpoch,
-          'expires_at': entry.expiresAt?.millisecondsSinceEpoch,
-          'access_count': entry.accessCount,
-          'last_accessed_at': entry.lastAccessedAt.millisecondsSinceEpoch,
-          'size_bytes': entry.sizeBytes,
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
+      await _persistentStore!.insert('cache_entries', {
+        'key': entry.key,
+        'data': _serializeData(entry.data),
+        'metadata': json.encode(entry.metadata),
+        'created_at': entry.createdAt.millisecondsSinceEpoch,
+        'expires_at': entry.expiresAt?.millisecondsSinceEpoch,
+        'access_count': entry.accessCount,
+        'last_accessed_at': entry.lastAccessedAt.millisecondsSinceEpoch,
+        'size_bytes': entry.sizeBytes,
+      }, conflictAlgorithm: ConflictAlgorithm.replace);
     } catch (e) {
       debugPrint('⚠️ Failed to save to persistent store: $e');
     }
@@ -798,22 +820,23 @@ class AdvancedCache<T> {
 
 class MemoryMonitor {
   final double warningThreshold;
-  final StreamController<MemoryUsageInfo> _controller = StreamController.broadcast();
+  final StreamController<MemoryUsageInfo> _controller =
+      StreamController.broadcast();
   Timer? _monitoringTimer;
-  
+
   Stream<MemoryUsageInfo> get onMemoryPressure => _controller.stream;
-  
+
   MemoryMonitor(this.warningThreshold) {
     _startMonitoring();
   }
-  
+
   void _startMonitoring() {
     _monitoringTimer = Timer.periodic(
       const Duration(seconds: 10),
       (_) => _checkMemoryUsage(),
     );
   }
-  
+
   void _checkMemoryUsage() {
     // Placeholder implementation - would need platform-specific code
     final memoryInfo = MemoryUsageInfo(
@@ -829,12 +852,12 @@ class MemoryMonitor {
       },
       timestamp: DateTime.now(),
     );
-    
+
     if (memoryInfo.usagePercentage > warningThreshold) {
       _controller.add(memoryInfo);
     }
   }
-  
+
   void dispose() {
     _monitoringTimer?.cancel();
     _controller.close();

@@ -29,7 +29,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   GoRouter get _router => GoRouter.of(context);
   SettingsProvider get _settingsProvider => context.read<SettingsProvider>();
 
-
   late AnimationController _headerController;
   late AnimationController _formController;
   late AnimationController _socialController;
@@ -493,7 +492,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         'Biometric authentication is not available on this device',
       );
       return;
-    }    setState(() {
+    }
+    setState(() {
       _isLoading = true;
     });
 
@@ -537,8 +537,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       } else {
         _showErrorMessage(result.error ?? 'Biometric authentication failed');
       }
-    }
-    catch (e) {
+    } catch (e) {
       debugPrint('Biometric authentication error: $e');
       _showErrorMessage('Biometric authentication failed. Please try again.');
     } finally {
@@ -687,7 +686,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       _isLoading = true;
     });
 
-    try {      // Initialize auth service
+    try {
+      // Initialize auth service
       await _authService.initialize();
 
       // Perform Google Sign-In
@@ -717,8 +717,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       } else {
         _showErrorMessage(result.error ?? 'Google sign-in failed');
       }
-    }
-    catch (e) {
+    } catch (e) {
       debugPrint('Google sign-in error: $e');
       _showErrorMessage('Google sign-in failed. Please try again.');
     } finally {
@@ -737,7 +736,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       _isLoading = true;
     });
 
-    try {      // Initialize auth service
+    try {
+      // Initialize auth service
       await _authService.initialize();
 
       if (!mounted) return;
@@ -773,8 +773,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       } else {
         _showErrorMessage(result.error ?? 'Apple sign-in failed');
       }
-    }
-    catch (e) {
+    } catch (e) {
       debugPrint('Apple sign-in error: $e');
       _showErrorMessage('Apple sign-in failed. Please try again.');
     } finally {
@@ -925,7 +924,9 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                                     setState(() => isResetting = true);
 
                                     try {
-                                      final dialogNavigator = Navigator.of(dialogContext);
+                                      final dialogNavigator = Navigator.of(
+                                        dialogContext,
+                                      );
 
                                       // Initialize auth service if needed
                                       await _authService.initialize();
@@ -936,7 +937,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                                           .resetPassword(
                                             resetEmailController.text.trim(),
                                           );
-
 
                                       if (!mounted) return;
                                       if (result.isSuccess) {
@@ -1001,11 +1001,13 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         .fadeIn(delay: 400.ms)
         .slideY(begin: 0.2, end: 0, delay: 400.ms);
   }
+
   Future<void> _handleDemoAccountFill() async {
     // Demo mode removed for store safety and clean analytics.
     // Keep this handler to avoid breaking UI wiring.
     HapticFeedback.lightImpact();
-    _showInfoMessage('Demo mode is no longer available. Please sign up or log in to continue.');
+    _showInfoMessage(
+      'Demo mode is no longer available. Please sign up or log in to continue.',
+    );
   }
-
 }

@@ -19,7 +19,7 @@ class MoodEnergyChart extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final filteredData = _getFilteredData();
-    
+
     if (filteredData.isEmpty) {
       return _buildEmptyState(context);
     }
@@ -80,9 +80,9 @@ class MoodEnergyChart extends StatelessWidget {
               ),
             ],
           ),
-          
+
           const SizedBox(height: 20),
-          
+
           // Legend
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -92,11 +92,12 @@ class MoodEnergyChart extends StatelessWidget {
               _buildLegendItem('Energy', AppTheme.accentMint, context),
             ],
           ),
-          
+
           const SizedBox(height: 20),
-          
+
           // Chart
-          SizedBox(height: 200,
+          SizedBox(
+            height: 200,
             child: LineChart(
               LineChartData(
                 gridData: FlGridData(
@@ -124,14 +125,17 @@ class MoodEnergyChart extends StatelessWidget {
                       reservedSize: 30,
                       interval: _getBottomInterval(filteredData.length),
                       getTitlesWidget: (double value, TitleMeta meta) {
-                        if (value.toInt() >= 0 && value.toInt() < filteredData.length) {
+                        if (value.toInt() >= 0 &&
+                            value.toInt() < filteredData.length) {
                           final data = filteredData[value.toInt()];
                           return SideTitleWidget(
                             axisSide: meta.axisSide,
                             child: Text(
                               '${data.startDate.month}/${data.startDate.day}',
                               style: TextStyle(
-                                color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                                color: theme.colorScheme.onSurface.withValues(
+                                  alpha: 0.7,
+                                ),
                                 fontSize: 10,
                               ),
                             ),
@@ -152,7 +156,9 @@ class MoodEnergyChart extends StatelessWidget {
                           child: Text(
                             value.toInt().toString(),
                             style: TextStyle(
-                              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                              color: theme.colorScheme.onSurface.withValues(
+                                alpha: 0.7,
+                              ),
                               fontSize: 12,
                             ),
                           ),
@@ -163,7 +169,9 @@ class MoodEnergyChart extends StatelessWidget {
                 ),
                 borderData: FlBorderData(
                   show: true,
-                  border: Border.all(color: theme.colorScheme.outline.withValues(alpha: 0.3)),
+                  border: Border.all(
+                    color: theme.colorScheme.outline.withValues(alpha: 0.3),
+                  ),
                 ),
                 minX: 0,
                 maxX: (filteredData.length - 1).toDouble(),
@@ -222,14 +230,13 @@ class MoodEnergyChart extends StatelessWidget {
                       return touchedBarSpots.map((barSpot) {
                         final isEnergyLine = barSpot.barIndex == 1;
                         final label = isEnergyLine ? 'Energy' : 'Mood';
-                        final color = isEnergyLine ? AppTheme.accentMint : AppTheme.primaryPurple;
-                        
+                        final color = isEnergyLine
+                            ? AppTheme.accentMint
+                            : AppTheme.primaryPurple;
+
                         return LineTooltipItem(
                           '$label: ${barSpot.y.toInt()}/5',
-                          TextStyle(
-                            color: color,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          TextStyle(color: color, fontWeight: FontWeight.bold),
                         );
                       }).toList();
                     },
@@ -238,9 +245,9 @@ class MoodEnergyChart extends StatelessWidget {
               ),
             ),
           ),
-          
+
           const SizedBox(height: 20),
-          
+
           // Summary stats
           Container(
             padding: const EdgeInsets.all(16),
@@ -350,15 +357,17 @@ class MoodEnergyChart extends StatelessWidget {
     );
   }
 
-  Widget _buildSummaryItem(String label, String value, Color color, IconData icon, BuildContext context) {
+  Widget _buildSummaryItem(
+    String label,
+    String value,
+    Color color,
+    IconData icon,
+    BuildContext context,
+  ) {
     final theme = Theme.of(context);
     return Column(
       children: [
-        Icon(
-          icon,
-          color: color,
-          size: 16,
-        ),
+        Icon(icon, color: color, size: 16),
         const SizedBox(height: 4),
         Text(
           value,
@@ -421,7 +430,7 @@ class MoodEnergyChart extends StatelessWidget {
     return data.asMap().entries.map((entry) {
       final index = entry.key.toDouble();
       final cycle = entry.value;
-      // Mock energy data based on cycle phase  
+      // Mock energy data based on cycle phase
       final energyScore = _getMockEnergyScore(cycle);
       return FlSpot(index, energyScore.toDouble());
     }).toList();
@@ -430,7 +439,7 @@ class MoodEnergyChart extends StatelessWidget {
   int _getMockMoodScore(CycleData cycle) {
     // Simulate mood patterns based on cycle phase
     final dayInCycle = DateTime.now().difference(cycle.startDate).inDays % 28;
-    
+
     if (dayInCycle < 5) return 3; // Menstrual phase
     if (dayInCycle < 14) return 4; // Follicular phase
     if (dayInCycle < 16) return 5; // Ovulation
@@ -440,9 +449,9 @@ class MoodEnergyChart extends StatelessWidget {
   int _getMockEnergyScore(CycleData cycle) {
     // Simulate energy patterns based on cycle phase
     final dayInCycle = DateTime.now().difference(cycle.startDate).inDays % 28;
-    
+
     if (dayInCycle < 5) return 2; // Menstrual phase
-    if (dayInCycle < 14) return 4; // Follicular phase  
+    if (dayInCycle < 14) return 4; // Follicular phase
     if (dayInCycle < 16) return 5; // Ovulation
     return 3; // Luteal phase
   }
@@ -466,10 +475,10 @@ class MoodEnergyChart extends StatelessWidget {
 
   String _getTrendDirection(List<FlSpot> moodData, List<FlSpot> energyData) {
     if (moodData.length < 2 || energyData.length < 2) return 'Stable';
-    
+
     final moodTrend = moodData.last.y - moodData.first.y;
     final energyTrend = energyData.last.y - energyData.first.y;
-    
+
     if (moodTrend > 0 && energyTrend > 0) return 'Improving';
     if (moodTrend < 0 && energyTrend < 0) return 'Declining';
     return 'Mixed';

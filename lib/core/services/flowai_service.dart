@@ -14,16 +14,16 @@ class FlowAIService {
   static const String _baseUrl = 'https://api.flowai.io/v1';
   static const String _chatEndpoint = '/chat/completions';
   static const String _healthEndpoint = '/health';
-  
+
   String? _apiKey;
   String? _modelId;
   bool _isInitialized = false;
   Duration _timeout = const Duration(seconds: 30);
-  
+
   // Rate limiting
   DateTime? _lastRequestTime;
   static const Duration _minRequestInterval = Duration(milliseconds: 500);
-  
+
   /// Initialize Flow Ai service with API credentials
   Future<void> initialize({
     required String apiKey,
@@ -33,14 +33,14 @@ class FlowAIService {
     _apiKey = apiKey;
     _modelId = modelId;
     if (timeout != null) _timeout = timeout;
-    
+
     // Test connection
     try {
       final isHealthy = await _checkHealth();
       if (!isHealthy) {
         throw FlowAIException('Flow Ai service is not available');
       }
-      
+
       _isInitialized = true;
       debugPrint('✅ Flow Ai service initialized successfully');
     } catch (e) {
@@ -127,14 +127,11 @@ class FlowAIService {
     List<String>? patterns,
   }) async {
     final insightPrompt = _buildInsightPrompt(cycleAnalysis, patterns);
-    
+
     return sendChatMessage(
       message: insightPrompt,
       userId: userId,
-      userMetadata: {
-        'type': 'insight_generation',
-        'app': 'flowai',
-      },
+      userMetadata: {'type': 'insight_generation', 'app': 'flowai'},
     );
   }
 
@@ -142,12 +139,9 @@ class FlowAIService {
   Future<bool> _checkHealth() async {
     try {
       final response = await http
-          .get(
-            Uri.parse('$_baseUrl$_healthEndpoint'),
-            headers: _buildHeaders(),
-          )
+          .get(Uri.parse('$_baseUrl$_healthEndpoint'), headers: _buildHeaders())
           .timeout(const Duration(seconds: 10));
-      
+
       return response.statusCode == 200;
     } catch (e) {
       debugPrint('Health check failed: $e');
@@ -175,18 +169,10 @@ class FlowAIService {
     final request = {
       'model': _modelId,
       'messages': [
-        {
-          'role': 'system',
-          'content': _getSystemPrompt(),
-        },
-        if (conversationContext != null) {
-          'role': 'system',
-          'content': 'Context: $conversationContext',
-        },
-        {
-          'role': 'user',
-          'content': message,
-        },
+        {'role': 'system', 'content': _getSystemPrompt()},
+        if (conversationContext != null)
+          {'role': 'system', 'content': 'Context: $conversationContext'},
+        {'role': 'user', 'content': message},
       ],
       'user_id': userId,
       'max_tokens': 500,
@@ -236,34 +222,41 @@ Always remind users that you provide educational information and not medical adv
     String? currentPhase,
   }) {
     final contextParts = <String>[];
-    
+
     if (currentPhase != null) {
       contextParts.add('Current cycle phase: $currentPhase');
     }
-    
+
     if (recentSymptoms != null && recentSymptoms.isNotEmpty) {
       contextParts.add('Recent symptoms: ${recentSymptoms.join(', ')}');
     }
-    
+
     if (cycleData != null && cycleData.isNotEmpty) {
       contextParts.add('Cycle data: ${json.encode(cycleData)}');
     }
-    
+
     return contextParts.join('; ');
   }
 
   /// Build insight generation prompt
-  String _buildInsightPrompt(Map<String, dynamic> cycleAnalysis, List<String>? patterns) {
+  String _buildInsightPrompt(
+    Map<String, dynamic> cycleAnalysis,
+    List<String>? patterns,
+  ) {
     final prompt = StringBuffer();
-    prompt.write('Generate personalized health insights based on this cycle analysis: ');
+    prompt.write(
+      'Generate personalized health insights based on this cycle analysis: ',
+    );
     prompt.write(json.encode(cycleAnalysis));
-    
+
     if (patterns != null && patterns.isNotEmpty) {
       prompt.write('. Detected patterns: ${patterns.join(', ')}');
     }
-    
-    prompt.write('. Please provide 2-3 actionable insights with recommendations.');
-    
+
+    prompt.write(
+      '. Please provide 2-3 actionable insights with recommendations.',
+    );
+
     return prompt.toString();
   }
 
@@ -272,19 +265,19 @@ Always remind users that you provide educational information and not medical adv
     if (response.statusCode == 200) {
       try {
         final data = json.decode(response.body) as Map<String, dynamic>;
-        
+
         final choices = data['choices'] as List?;
         if (choices == null || choices.isEmpty) {
           throw FlowAIException('No response choices received');
         }
-        
+
         final message = choices[0]['message'] as Map<String, dynamic>?;
         final content = message?['content'] as String?;
-        
+
         if (content == null || content.isEmpty) {
           throw FlowAIException('Empty response content');
         }
-        
+
         return FlowAIResponse(
           content: content,
           messageId: data['id'] as String?,
@@ -302,14 +295,16 @@ Always remind users that you provide educational information and not medical adv
     } else if (response.statusCode >= 500) {
       throw FlowAIException('Server error - please try again later');
     } else {
-      throw FlowAIException('Request failed with status ${response.statusCode}');
+      throw FlowAIException(
+        'Request failed with status ${response.statusCode}',
+      );
     }
   }
 
   /// Parse usage information from response
   FlowAIUsage? _parseUsage(Map<String, dynamic>? usageData) {
     if (usageData == null) return null;
-    
+
     return FlowAIUsage(
       promptTokens: usageData['prompt_tokens'] as int? ?? 0,
       completionTokens: usageData['completion_tokens'] as int? ?? 0,
@@ -331,7 +326,7 @@ Always remind users that you provide educational information and not medical adv
 
   /// Get service status
   bool get isInitialized => _isInitialized;
-  
+
   /// Get configured model ID
   String? get modelId => _modelId;
 }

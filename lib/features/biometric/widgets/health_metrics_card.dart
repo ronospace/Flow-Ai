@@ -41,10 +41,7 @@ class HealthMetricsCard extends StatelessWidget {
               offset: const Offset(0, 8),
             ),
           ],
-          border: Border.all(
-            color: color.withValues(alpha: 0.1),
-            width: 1,
-          ),
+          border: Border.all(color: color.withValues(alpha: 0.1), width: 1),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,18 +58,14 @@ class HealthMetricsCard extends StatelessWidget {
                     color: color.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Icon(
-                    icon,
-                    color: color,
-                    size: 20,
-                  ),
+                  child: Icon(icon, color: color, size: 20),
                 ),
                 _buildTrendIndicator(context),
               ],
             ),
-            
+
             const SizedBox(height: 12),
-            
+
             // Value and unit
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -97,9 +90,9 @@ class HealthMetricsCard extends StatelessWidget {
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 8),
-            
+
             // Title and subtitle
             Text(
               title,
@@ -108,7 +101,7 @@ class HealthMetricsCard extends StatelessWidget {
                 color: AppTheme.darkGrey,
               ),
             ),
-            
+
             if (subtitle != null) ...[
               const SizedBox(height: 2),
               Text(
@@ -125,7 +118,7 @@ class HealthMetricsCard extends StatelessWidget {
       ).animate().fadeIn().scale(begin: const Offset(0.9, 0.9)),
     );
   }
-  
+
   Widget _buildTrendIndicator(BuildContext context) {
     if (trend == 0.0) {
       return Container(
@@ -137,11 +130,7 @@ class HealthMetricsCard extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              Icons.trending_flat,
-              size: 12,
-              color: AppTheme.mediumGrey,
-            ),
+            Icon(Icons.trending_flat, size: 12, color: AppTheme.mediumGrey),
             const SizedBox(width: 2),
             Text(
               '0%',
@@ -155,12 +144,12 @@ class HealthMetricsCard extends StatelessWidget {
         ),
       );
     }
-    
+
     final isPositive = trend > 0;
     final trendColor = _getTrendColor();
     final trendIcon = isPositive ? Icons.trending_up : Icons.trending_down;
     final trendPercent = (trend.abs() * 100).toStringAsFixed(0);
-    
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
       decoration: BoxDecoration(
@@ -170,11 +159,7 @@ class HealthMetricsCard extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            trendIcon,
-            size: 10,
-            color: trendColor,
-          ),
+          Icon(trendIcon, size: 10, color: trendColor),
           const SizedBox(width: 2),
           Text(
             '$trendPercent%',
@@ -188,10 +173,10 @@ class HealthMetricsCard extends StatelessWidget {
       ),
     );
   }
-  
+
   Color _getTrendColor() {
     if (trend == 0.0) return AppTheme.mediumGrey;
-    
+
     // For most health metrics, positive trends are good
     // But this could be customized per metric type
     switch (title.toLowerCase()) {

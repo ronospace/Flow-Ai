@@ -4,12 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../theme/app_theme.dart';
 import 'modern_button.dart';
 
-enum ComingSoonType {
-  feature,
-  enhancement,
-  premium,
-  beta,
-}
+enum ComingSoonType { feature, enhancement, premium, beta }
 
 class ComingSoonCard extends StatelessWidget {
   final String title;
@@ -37,17 +32,14 @@ class ComingSoonCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final effectiveAccentColor = accentColor ?? _getTypeColor();
-    
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            theme.cardColor,
-            theme.cardColor.withValues(alpha: 0.8),
-          ],
+          colors: [theme.cardColor, theme.cardColor.withValues(alpha: 0.8)],
         ),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
@@ -109,15 +101,11 @@ class ComingSoonCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: Icon(
-                    icon,
-                    color: Colors.white,
-                    size: 28,
-                  ),
+                  child: Icon(icon, color: Colors.white, size: 28),
                 ),
-                
+
                 const SizedBox(width: 16),
-                
+
                 // Title and Type Badge
                 Expanded(
                   child: Column(
@@ -132,7 +120,10 @@ class ComingSoonCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
+                        ),
                         decoration: BoxDecoration(
                           color: effectiveAccentColor.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(12),
@@ -154,23 +145,26 @@ class ComingSoonCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                
+
                 // Sparkle Animation
                 const Icon(
-                  Icons.auto_awesome,
-                  color: AppTheme.accentMint,
-                  size: 24,
-                ).animate(
-                  onPlay: (controller) => controller.repeat(reverse: true),
-                ).scale(
-                  begin: const Offset(0.8, 0.8),
-                  end: const Offset(1.2, 1.2),
-                  duration: 2.seconds,
-                ).then(delay: 1.seconds),
+                      Icons.auto_awesome,
+                      color: AppTheme.accentMint,
+                      size: 24,
+                    )
+                    .animate(
+                      onPlay: (controller) => controller.repeat(reverse: true),
+                    )
+                    .scale(
+                      begin: const Offset(0.8, 0.8),
+                      end: const Offset(1.2, 1.2),
+                      duration: 2.seconds,
+                    )
+                    .then(delay: 1.seconds),
               ],
             ),
           ),
-          
+
           // Content Section
           Padding(
             padding: const EdgeInsets.all(24),
@@ -185,7 +179,7 @@ class ComingSoonCard extends StatelessWidget {
                     height: 1.6,
                   ),
                 ),
-                
+
                 if (features != null && features!.isNotEmpty) ...[
                   const SizedBox(height: 20),
                   Text(
@@ -196,38 +190,43 @@ class ComingSoonCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  ...features!.map((feature) => Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: 6,
-                          height: 6,
-                          margin: const EdgeInsets.only(top: 8, right: 12),
-                          decoration: BoxDecoration(
-                            color: effectiveAccentColor,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        Expanded(
-                          child: Text(
-                            feature,
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: AppTheme.mediumGrey,
-                              height: 1.4,
+                  ...features!.map(
+                    (feature) => Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: 6,
+                            height: 6,
+                            margin: const EdgeInsets.only(top: 8, right: 12),
+                            decoration: BoxDecoration(
+                              color: effectiveAccentColor,
+                              shape: BoxShape.circle,
                             ),
                           ),
-                        ),
-                      ],
+                          Expanded(
+                            child: Text(
+                              feature,
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: AppTheme.mediumGrey,
+                                height: 1.4,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  )),
+                  ),
                 ],
-                
+
                 if (releaseEstimate != null) ...[
                   const SizedBox(height: 20),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
@@ -260,9 +259,9 @@ class ComingSoonCard extends StatelessWidget {
                     ),
                   ),
                 ],
-                
+
                 const SizedBox(height: 24),
-                
+
                 // Action Button
                 if (onNotifyMeTapped != null)
                   ModernButton(
@@ -273,13 +272,19 @@ class ComingSoonCard extends StatelessWidget {
                     },
                     type: ModernButtonType.outline,
                     size: ModernButtonSize.medium,
-                    gradientColors: [effectiveAccentColor, effectiveAccentColor.withValues(alpha: 0.8)],
+                    gradientColors: [
+                      effectiveAccentColor,
+                      effectiveAccentColor.withValues(alpha: 0.8),
+                    ],
                     isExpanded: true,
                   )
                 else
                   Center(
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 12,
+                      ),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [

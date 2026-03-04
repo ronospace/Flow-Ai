@@ -13,17 +13,11 @@ enum SymptomType {
   pain,
   skin,
   digestive,
-  other
+  other,
 }
 
 /// Symptom intensity levels
-enum SymptomIntensity {
-  none,
-  mild,
-  moderate,
-  severe,
-  extreme
-}
+enum SymptomIntensity { none, mild, moderate, severe, extreme }
 
 /// Mood categories
 enum MoodCategory {
@@ -36,24 +30,14 @@ enum MoodCategory {
   tired,
   confident,
   emotional,
-  neutral
+  neutral,
 }
 
 /// Energy types
-enum EnergyType {
-  physical,
-  mental,
-  emotional,
-  overall
-}
+enum EnergyType { physical, mental, emotional, overall }
 
 /// Trend direction
-enum TrendDirection {
-  increasing,
-  decreasing,
-  stable,
-  fluctuating
-}
+enum TrendDirection { increasing, decreasing, stable, fluctuating }
 
 /// Symptom entry
 @JsonSerializable()
@@ -72,7 +56,8 @@ class SymptomEntry {
     required this.timestamp,
   });
 
-  factory SymptomEntry.fromJson(Map<String, dynamic> json) => _$SymptomEntryFromJson(json);
+  factory SymptomEntry.fromJson(Map<String, dynamic> json) =>
+      _$SymptomEntryFromJson(json);
   Map<String, dynamic> toJson() => _$SymptomEntryToJson(this);
 }
 
@@ -103,7 +88,8 @@ class SymptomTracking {
     required this.updatedAt,
   });
 
-  factory SymptomTracking.fromJson(Map<String, dynamic> json) => _$SymptomTrackingFromJson(json);
+  factory SymptomTracking.fromJson(Map<String, dynamic> json) =>
+      _$SymptomTrackingFromJson(json);
   Map<String, dynamic> toJson() => _$SymptomTrackingToJson(this);
 
   /// Get symptoms by type
@@ -125,9 +111,11 @@ class SymptomTracking {
 
   /// Check if has severe symptoms
   bool get hasSevereSymptoms {
-    return symptoms.values.any((symptom) => 
-        symptom.intensity == SymptomIntensity.severe || 
-        symptom.intensity == SymptomIntensity.extreme);
+    return symptoms.values.any(
+      (symptom) =>
+          symptom.intensity == SymptomIntensity.severe ||
+          symptom.intensity == SymptomIntensity.extreme,
+    );
   }
 
   /// Create a copy with updated fields

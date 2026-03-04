@@ -1,3 +1,1 @@
-enum RewardPlacement {
-  advancedInsightsTabs,
-}
+enum RewardPlacement { advancedInsightsTabs }

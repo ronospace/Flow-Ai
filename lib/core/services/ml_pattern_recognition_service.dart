@@ -6,7 +6,8 @@ import '../models/cycle_data.dart';
 /// Uses machine learning algorithms to detect patterns, anomalies, and predictive insights
 /// This is a sophisticated service that analyzes complex health patterns
 class MLPatternRecognitionService {
-  static final MLPatternRecognitionService _instance = MLPatternRecognitionService._internal();
+  static final MLPatternRecognitionService _instance =
+      MLPatternRecognitionService._internal();
   factory MLPatternRecognitionService() => _instance;
   MLPatternRecognitionService._internal();
 
@@ -30,26 +31,41 @@ class MLPatternRecognitionService {
     final anomalies = <PatternAnomaly>[];
 
     // Calculate baseline statistics
-    final cycleLengths = cycles.where((c) => c.cycleLength != null).map((c) => c.cycleLength!.toDouble()).toList();
+    final cycleLengths = cycles
+        .where((c) => c.cycleLength != null)
+        .map((c) => c.cycleLength!.toDouble())
+        .toList();
     final mean = cycleLengths.reduce((a, b) => a + b) / cycleLengths.length;
-    final variance = cycleLengths.map((x) => math.pow(x - mean, 2)).reduce((a, b) => a + b) / cycleLengths.length;
+    final variance =
+        cycleLengths.map((x) => math.pow(x - mean, 2)).reduce((a, b) => a + b) /
+        cycleLengths.length;
     final stdDev = math.sqrt(variance);
 
     // Detect outliers (beyond 2 standard deviations)
     final validCycles = cycles.where((c) => c.cycleLength != null).toList();
-    final validLengths = validCycles.map((c) => c.cycleLength!.toDouble()).toList();
-    
+    final validLengths = validCycles
+        .map((c) => c.cycleLength!.toDouble())
+        .toList();
+
     for (int i = 0; i < validCycles.length; i++) {
-      final zScore = (validLengths[i] - mean) / (stdDev + 0.001); // Avoid division by zero
+      final zScore =
+          (validLengths[i] - mean) / (stdDev + 0.001); // Avoid division by zero
       if (zScore.abs() > 2.0) {
-        anomalies.add(PatternAnomaly(
-          type: AnomalyType.irregularCycleLength,
-          severity: zScore.abs() > 3.0 ? AnomalySeverity.high : AnomalySeverity.medium,
-          detectedAt: validCycles[i].startDate,
-          description: 'Cycle length ${validLengths[i].toInt()} days differs significantly from average ${mean.toInt()} days',
-          confidence: 0.85,
-          recommendation: _getAnomalyRecommendation(AnomalyType.irregularCycleLength),
-        ));
+        anomalies.add(
+          PatternAnomaly(
+            type: AnomalyType.irregularCycleLength,
+            severity: zScore.abs() > 3.0
+                ? AnomalySeverity.high
+                : AnomalySeverity.medium,
+            detectedAt: validCycles[i].startDate,
+            description:
+                'Cycle length ${validLengths[i].toInt()} days differs significantly from average ${mean.toInt()} days',
+            confidence: 0.85,
+            recommendation: _getAnomalyRecommendation(
+              AnomalyType.irregularCycleLength,
+            ),
+          ),
+        );
       }
     }
 
@@ -63,14 +79,18 @@ class MLPatternRecognitionService {
     if (historicalCycles.length < 3) {
       return null;
     }
-    
-    final validCycles = historicalCycles.where((c) => c.cycleLength != null).toList();
+
+    final validCycles = historicalCycles
+        .where((c) => c.cycleLength != null)
+        .toList();
     if (validCycles.length < 3) {
       return null;
     }
 
     // Use exponential smoothing for prediction
-    final cycleLengths = validCycles.map((c) => c.cycleLength!.toDouble()).toList();
+    final cycleLengths = validCycles
+        .map((c) => c.cycleLength!.toDouble())
+        .toList();
     final lastCycle = validCycles.last;
 
     // Calculate weighted moving average (recent cycles weighted more heavily)
@@ -84,18 +104,27 @@ class MLPatternRecognitionService {
     predictedLength /= totalWeight;
 
     // Calculate confidence based on historical variance
-    final variance = cycleLengths.map((x) => math.pow(x - predictedLength, 2)).reduce((a, b) => a + b) / cycleLengths.length;
+    final variance =
+        cycleLengths
+            .map((x) => math.pow(x - predictedLength, 2))
+            .reduce((a, b) => a + b) /
+        cycleLengths.length;
     final confidence = math.max(0.0, math.min(1.0, 1.0 - (variance / 100)));
 
     // Predict start date
     final lastStartDate = lastCycle.startDate;
-    final predictedStartDate = lastStartDate.add(Duration(days: predictedLength.toInt()));
+    final predictedStartDate = lastStartDate.add(
+      Duration(days: predictedLength.toInt()),
+    );
 
     return CyclePrediction(
       predictedStartDate: predictedStartDate,
       predictedLength: predictedLength.toInt(),
       confidence: confidence,
-      fertileWindow: _calculateFertileWindow(predictedStartDate, predictedLength.toInt()),
+      fertileWindow: _calculateFertileWindow(
+        predictedStartDate,
+        predictedLength.toInt(),
+      ),
     );
   }
 
@@ -123,8 +152,9 @@ class MLPatternRecognitionService {
         final dateStr = dayData['date'] as String?;
         if (dateStr == null) continue;
         final day = DateTime.parse(dateStr);
-        
-        if (day.isBefore(cycleStart) || day.isAfter(cycleStart.add(Duration(days: cycleLength)))) {
+
+        if (day.isBefore(cycleStart) ||
+            day.isAfter(cycleStart.add(Duration(days: cycleLength)))) {
           continue;
         }
 
@@ -147,7 +177,7 @@ class MLPatternRecognitionService {
     // Analyze symptom patterns per phase
     for (final phase in phaseData.keys) {
       final phaseTrackingData = phaseData[phase]!;
-      
+
       // Calculate symptom frequency per phase
       final symptomCounts = <String, int>{};
       int totalDays = phaseTrackingData.length;
@@ -159,11 +189,14 @@ class MLPatternRecognitionService {
           if (symptoms is List) {
             symptomList = symptoms.cast<String>();
           } else if (symptoms is String) {
-            symptomList = symptoms.split(',').where((s) => s.isNotEmpty).toList();
+            symptomList = symptoms
+                .split(',')
+                .where((s) => s.isNotEmpty)
+                .toList();
           } else {
             continue;
           }
-          
+
           for (final symptom in symptomList) {
             symptomCounts[symptom] = (symptomCounts[symptom] ?? 0) + 1;
           }
@@ -173,7 +206,8 @@ class MLPatternRecognitionService {
       // Calculate correlation strength
       for (final entry in symptomCounts.entries) {
         final frequency = entry.value / totalDays;
-        if (frequency > 0.3) { // Only significant correlations (>30% frequency)
+        if (frequency > 0.3) {
+          // Only significant correlations (>30% frequency)
           correlations['${entry.key}_$phase'] = SymptomCorrelation(
             symptom: entry.key,
             cyclePhase: phase,
@@ -258,11 +292,7 @@ class MLPatternRecognitionService {
       strength: math.min(1.0, rSquared.abs()),
       changeRate: slope.toDouble(),
       confidence: math.min(0.95, n / 30.0),
-      metadata: {
-        'sample_size': n,
-        'r_squared': rSquared,
-        'slope': slope,
-      },
+      metadata: {'sample_size': n, 'r_squared': rSquared, 'slope': slope},
     );
   }
 
@@ -286,7 +316,7 @@ class MLPatternRecognitionService {
         } else {
           continue;
         }
-        
+
         if (symptomList.isNotEmpty) {
           final key = List<String>.from(symptomList)..sort();
           final keyString = key.join(',');
@@ -300,13 +330,15 @@ class MLPatternRecognitionService {
     for (final entry in symptomCombinations.entries) {
       if (entry.value.length >= 5) {
         final symptoms = entry.key.split(',');
-        clusters.add(SymptomCluster(
-          symptoms: symptoms,
-          frequency: entry.value.length,
-          averageSeverity: _calculateAverageSeverity(entry.value),
-          mostCommonPhase: _identifyMostCommonPhase(entry.value),
-          recommendation: _getClusterRecommendation(symptoms),
-        ));
+        clusters.add(
+          SymptomCluster(
+            symptoms: symptoms,
+            frequency: entry.value.length,
+            averageSeverity: _calculateAverageSeverity(entry.value),
+            mostCommonPhase: _identifyMostCommonPhase(entry.value),
+            recommendation: _getClusterRecommendation(symptoms),
+          ),
+        );
       }
     }
 
@@ -321,14 +353,15 @@ class MLPatternRecognitionService {
     final fertileEnd = cycleStart.add(Duration(days: ovulationDay + 1));
     final peak = cycleStart.add(Duration(days: ovulationDay));
 
-    return FertileWindow(
-      start: fertileStart,
-      end: fertileEnd,
-      peak: peak,
-    );
+    return FertileWindow(start: fertileStart, end: fertileEnd, peak: peak);
   }
 
-  double _calculateRSquared(List<double> x, List<double> y, double xMean, double yMean) {
+  double _calculateRSquared(
+    List<double> x,
+    List<double> y,
+    double xMean,
+    double yMean,
+  ) {
     double ssRes = 0;
     double ssTot = 0;
 
@@ -400,11 +433,7 @@ enum AnomalyType {
   healthMetricDeviation,
 }
 
-enum AnomalySeverity {
-  low,
-  medium,
-  high,
-}
+enum AnomalySeverity { low, medium, high }
 
 class PatternAnomaly {
   final AnomalyType type;
@@ -444,11 +473,7 @@ class SymptomCorrelation {
   });
 }
 
-enum TrendDirection {
-  improving,
-  declining,
-  stable,
-}
+enum TrendDirection { improving, declining, stable }
 
 class HealthTrend {
   final TrendDirection direction;
@@ -466,12 +491,12 @@ class HealthTrend {
   });
 
   factory HealthTrend.stable() => HealthTrend(
-        direction: TrendDirection.stable,
-        strength: 0.0,
-        changeRate: 0.0,
-        confidence: 0.0,
-        metadata: {},
-      );
+    direction: TrendDirection.stable,
+    strength: 0.0,
+    changeRate: 0.0,
+    confidence: 0.0,
+    metadata: {},
+  );
 }
 
 class SymptomCluster {
@@ -489,4 +514,3 @@ class SymptomCluster {
     required this.recommendation,
   });
 }
-

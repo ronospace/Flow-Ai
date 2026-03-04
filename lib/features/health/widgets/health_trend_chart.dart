@@ -34,13 +34,12 @@ class _HealthTrendChartState extends State<HealthTrendChart>
       vsync: this,
     );
 
-    _chartAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _chartAnimationController,
-      curve: Curves.easeInOutCubic,
-    ));
+    _chartAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _chartAnimationController,
+        curve: Curves.easeInOutCubic,
+      ),
+    );
 
     _chartAnimationController.forward();
   }
@@ -99,22 +98,20 @@ class _HealthTrendChartState extends State<HealthTrendChart>
             const SizedBox(height: 4),
             Text(
               _getTimeRangeDescription(widget.timeRange),
-              style: const TextStyle(
-                color: Colors.white54,
-                fontSize: 12,
-              ),
+              style: const TextStyle(color: Colors.white54, fontSize: 12),
             ),
           ],
         ),
-        if (widget.data.isNotEmpty)
-          _buildCurrentValue(),
+        if (widget.data.isNotEmpty) _buildCurrentValue(),
       ],
     );
   }
 
   Widget _buildCurrentValue() {
     final currentValue = widget.data.last.y;
-    final previousValue = widget.data.length > 1 ? widget.data[widget.data.length - 2].y : currentValue;
+    final previousValue = widget.data.length > 1
+        ? widget.data[widget.data.length - 2].y
+        : currentValue;
     final change = ((currentValue - previousValue) / previousValue * 100);
     final isPositive = change > 0;
 
@@ -197,18 +194,13 @@ class _HealthTrendChartState extends State<HealthTrendChart>
             border: isDotted ? Border.all(color: color, width: 1) : null,
           ),
           child: isDotted
-              ? CustomPaint(
-                  painter: DottedLinePainter(color: color),
-                )
+              ? CustomPaint(painter: DottedLinePainter(color: color))
               : null,
         ),
         const SizedBox(width: 8),
         Text(
           label,
-          style: const TextStyle(
-            color: Colors.white70,
-            fontSize: 12,
-          ),
+          style: const TextStyle(color: Colors.white70, fontSize: 12),
         ),
       ],
     );
@@ -251,40 +243,41 @@ class _HealthTrendChartState extends State<HealthTrendChart>
             }).toList();
           },
         ),
-        getTouchedSpotIndicator: (LineChartBarData barData, List<int> spotIndexes) {
-          return spotIndexes.map((spotIndex) {
-            return TouchedSpotIndicatorData(
-              FlLine(
-                color: _getMetricColor(widget.selectedMetric),
-                strokeWidth: 2,
-                dashArray: [5, 5],
-              ),
-              FlDotData(
-                getDotPainter: (spot, percent, barData, index) => FlDotCirclePainter(
-                  radius: 6,
-                  color: _getMetricColor(widget.selectedMetric),
-                  strokeWidth: 2,
-                  strokeColor: Colors.white,
-                ),
-              ),
-            );
-          }).toList();
-        },
+        getTouchedSpotIndicator:
+            (LineChartBarData barData, List<int> spotIndexes) {
+              return spotIndexes.map((spotIndex) {
+                return TouchedSpotIndicatorData(
+                  FlLine(
+                    color: _getMetricColor(widget.selectedMetric),
+                    strokeWidth: 2,
+                    dashArray: [5, 5],
+                  ),
+                  FlDotData(
+                    getDotPainter: (spot, percent, barData, index) =>
+                        FlDotCirclePainter(
+                          radius: 6,
+                          color: _getMetricColor(widget.selectedMetric),
+                          strokeWidth: 2,
+                          strokeColor: Colors.white,
+                        ),
+                  ),
+                );
+              }).toList();
+            },
       ),
       gridData: FlGridData(
         show: true,
         drawVerticalLine: false,
         horizontalInterval: (_getMaxY() - _getMinY()) / 5,
         getDrawingHorizontalLine: (value) {
-          return FlLine(
-            color: Colors.white10,
-            strokeWidth: 1,
-          );
+          return FlLine(color: Colors.white10, strokeWidth: 1);
         },
       ),
       titlesData: FlTitlesData(
         show: true,
-        rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        rightTitles: const AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
         topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
         leftTitles: AxisTitles(
           sideTitles: SideTitles(
@@ -293,10 +286,7 @@ class _HealthTrendChartState extends State<HealthTrendChart>
             getTitlesWidget: (double value, TitleMeta meta) {
               return Text(
                 value.toStringAsFixed(0),
-                style: const TextStyle(
-                  color: Colors.white54,
-                  fontSize: 10,
-                ),
+                style: const TextStyle(color: Colors.white54, fontSize: 10),
               );
             },
             reservedSize: 40,
@@ -309,10 +299,7 @@ class _HealthTrendChartState extends State<HealthTrendChart>
             getTitlesWidget: (double value, TitleMeta meta) {
               return Text(
                 _getTimeLabel(value.toInt()),
-                style: const TextStyle(
-                  color: Colors.white54,
-                  fontSize: 10,
-                ),
+                style: const TextStyle(color: Colors.white54, fontSize: 10),
               );
             },
           ),
@@ -324,7 +311,8 @@ class _HealthTrendChartState extends State<HealthTrendChart>
           spots: widget.data.map((spot) {
             return FlSpot(
               spot.x,
-              spot.y * _chartAnimation.value + _getMinY() * (1 - _chartAnimation.value),
+              spot.y * _chartAnimation.value +
+                  _getMinY() * (1 - _chartAnimation.value),
             );
           }).toList(),
           isCurved: true,
@@ -399,40 +387,59 @@ class _HealthTrendChartState extends State<HealthTrendChart>
 
   String _getMetricDisplayName(String metric) {
     switch (metric) {
-      case 'heart_rate': return 'Heart Rate';
-      case 'temperature': return 'Body Temperature';
-      case 'hrv': return 'Heart Rate Variability';
-      case 'sleep': return 'Sleep Score';
-      default: return metric;
+      case 'heart_rate':
+        return 'Heart Rate';
+      case 'temperature':
+        return 'Body Temperature';
+      case 'hrv':
+        return 'Heart Rate Variability';
+      case 'sleep':
+        return 'Sleep Score';
+      default:
+        return metric;
     }
   }
 
   String _getMetricUnit(String metric) {
     switch (metric) {
-      case 'heart_rate': return 'BPM';
-      case 'temperature': return '°C';
-      case 'hrv': return 'ms';
-      case 'sleep': return '%';
-      default: return '';
+      case 'heart_rate':
+        return 'BPM';
+      case 'temperature':
+        return '°C';
+      case 'hrv':
+        return 'ms';
+      case 'sleep':
+        return '%';
+      default:
+        return '';
     }
   }
 
   Color _getMetricColor(String metric) {
     switch (metric) {
-      case 'heart_rate': return Colors.red;
-      case 'temperature': return Colors.orange;
-      case 'hrv': return Colors.blue;
-      case 'sleep': return Colors.purple;
-      default: return Colors.pink;
+      case 'heart_rate':
+        return Colors.red;
+      case 'temperature':
+        return Colors.orange;
+      case 'hrv':
+        return Colors.blue;
+      case 'sleep':
+        return Colors.purple;
+      default:
+        return Colors.pink;
     }
   }
 
   String _getTimeRangeDescription(int hours) {
     switch (hours) {
-      case 1: return 'Last hour';
-      case 24: return 'Last 24 hours';
-      case 168: return 'Last 7 days';
-      default: return 'Custom range';
+      case 1:
+        return 'Last hour';
+      case 24:
+        return 'Last 24 hours';
+      case 168:
+        return 'Last 7 days';
+      default:
+        return 'Custom range';
     }
   }
 

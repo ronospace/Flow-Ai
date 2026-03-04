@@ -52,7 +52,9 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
     final theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
-        gradient: AppTheme.backgroundGradient(theme.brightness == Brightness.dark),
+        gradient: AppTheme.backgroundGradient(
+          theme.brightness == Brightness.dark,
+        ),
       ),
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
@@ -91,7 +93,9 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
                       Text(
                         'Help us understand your cycle patterns',
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.7,
+                          ),
                         ),
                       ),
                     ],
@@ -103,39 +107,45 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
             const SizedBox(height: 32),
 
             // Tracking Experience
-            _buildTrackingExperienceSection(theme)
-                .animate(delay: 200.ms).fadeIn().slideX(begin: 0.3, end: 0),
+            _buildTrackingExperienceSection(
+              theme,
+            ).animate(delay: 200.ms).fadeIn().slideX(begin: 0.3, end: 0),
 
             const SizedBox(height: 24),
 
             // Last Period Date
             if (!_isFirstTimeTracking)
-              _buildLastPeriodSection(theme)
-                  .animate(delay: 300.ms).fadeIn().slideX(begin: 0.3, end: 0),
+              _buildLastPeriodSection(
+                theme,
+              ).animate(delay: 300.ms).fadeIn().slideX(begin: 0.3, end: 0),
 
             if (!_isFirstTimeTracking) const SizedBox(height: 24),
 
             // Cycle Length
-            _buildCycleLengthSection(theme)
-                .animate(delay: 400.ms).fadeIn().slideX(begin: 0.3, end: 0),
+            _buildCycleLengthSection(
+              theme,
+            ).animate(delay: 400.ms).fadeIn().slideX(begin: 0.3, end: 0),
 
             const SizedBox(height: 24),
 
             // Period Length
-            _buildPeriodLengthSection(theme)
-                .animate(delay: 500.ms).fadeIn().slideX(begin: 0.3, end: 0),
+            _buildPeriodLengthSection(
+              theme,
+            ).animate(delay: 500.ms).fadeIn().slideX(begin: 0.3, end: 0),
 
             const SizedBox(height: 24),
 
             // Common Symptoms
-            _buildSymptomsSection(theme)
-                .animate(delay: 600.ms).fadeIn().slideY(begin: 0.3, end: 0),
+            _buildSymptomsSection(
+              theme,
+            ).animate(delay: 600.ms).fadeIn().slideY(begin: 0.3, end: 0),
 
             const SizedBox(height: 24),
 
             // Irregularities
-            _buildIrregularitiesSection(theme)
-                .animate(delay: 700.ms).fadeIn().slideY(begin: 0.3, end: 0),
+            _buildIrregularitiesSection(
+              theme,
+            ).animate(delay: 700.ms).fadeIn().slideY(begin: 0.3, end: 0),
 
             const SizedBox(height: 40),
 
@@ -244,7 +254,9 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
                 backgroundColor: theme.cardColor,
                 selectedColor: AppTheme.primaryRose.withValues(alpha: 0.1),
                 labelStyle: TextStyle(
-                  color: isSelected ? AppTheme.primaryRose : AppTheme.mediumGrey,
+                  color: isSelected
+                      ? AppTheme.primaryRose
+                      : AppTheme.mediumGrey,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                 ),
               );
@@ -313,7 +325,9 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
                           style: TextStyle(
                             color: _lastPeriodDate != null
                                 ? theme.colorScheme.onSurface
-                                : theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                                : theme.colorScheme.onSurface.withValues(
+                                    alpha: 0.6,
+                                  ),
                             fontSize: 16,
                           ),
                         ),
@@ -340,8 +354,8 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
       subtitle: 'How many days from period start to next period start?',
       child: Container(
         padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: theme.cardColor,
+        decoration: BoxDecoration(
+          color: theme.cardColor,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -364,7 +378,10 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: _getCycleLengthColor().withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
@@ -387,7 +404,7 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
               max: 40,
               divisions: 19,
               activeColor: Colors.blue,
-        
+
               onChanged: (value) {
                 setState(() {
                   _cycleLength = value.round();
@@ -413,8 +430,8 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
       subtitle: 'How many days does your period typically last?',
       child: Container(
         padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: theme.cardColor,
+        decoration: BoxDecoration(
+          color: theme.cardColor,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -437,7 +454,10 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: _getPeriodLengthColor().withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
@@ -460,7 +480,7 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
               max: 10,
               divisions: 8,
               activeColor: Colors.blue,
-        
+
               onChanged: (value) {
                 setState(() {
                   _periodLength = value.round();
@@ -623,7 +643,9 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
               children: [
                 Icon(
                   icon,
-                  color: isSelected ? AppTheme.primaryPurple : AppTheme.mediumGrey,
+                  color: isSelected
+                      ? AppTheme.primaryPurple
+                      : AppTheme.mediumGrey,
                   size: 32,
                 ),
                 const SizedBox(height: 8),
@@ -631,7 +653,9 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
                   title,
                   style: theme.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: isSelected ? AppTheme.primaryPurple : AppTheme.darkGrey,
+                    color: isSelected
+                        ? AppTheme.primaryPurple
+                        : AppTheme.darkGrey,
                   ),
                 ),
                 Text(
@@ -692,7 +716,8 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
   Future<void> _selectLastPeriodDate() async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: _lastPeriodDate ?? DateTime.now().subtract(const Duration(days: 14)),
+      initialDate:
+          _lastPeriodDate ?? DateTime.now().subtract(const Duration(days: 14)),
       firstDate: DateTime.now().subtract(const Duration(days: 365)),
       lastDate: DateTime.now(),
       builder: (context, child) {

@@ -856,5 +856,4 @@ class _FuturisticAuthScreenState extends State<FuturisticAuthScreen>
       ),
     );
   }
-
 }

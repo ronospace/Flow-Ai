@@ -28,8 +28,12 @@ class _PersonalInfoStepScreenState extends State<PersonalInfoStepScreen> {
   @override
   void initState() {
     super.initState();
-    _fullNameController = TextEditingController(text: widget.data.fullName ?? '');
-    _preferredNameController = TextEditingController(text: widget.data.preferredName ?? '');
+    _fullNameController = TextEditingController(
+      text: widget.data.fullName ?? '',
+    );
+    _preferredNameController = TextEditingController(
+      text: widget.data.preferredName ?? '',
+    );
     _selectedDate = widget.data.dateOfBirth;
   }
 
@@ -47,7 +51,9 @@ class _PersonalInfoStepScreenState extends State<PersonalInfoStepScreen> {
 
     return Container(
       decoration: BoxDecoration(
-        gradient: AppTheme.backgroundGradient(theme.brightness == Brightness.dark),
+        gradient: AppTheme.backgroundGradient(
+          theme.brightness == Brightness.dark,
+        ),
       ),
       child: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -88,7 +94,9 @@ class _PersonalInfoStepScreenState extends State<PersonalInfoStepScreen> {
                         Text(
                           'Tell us a bit about yourself',
                           style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                            color: theme.colorScheme.onSurface.withValues(
+                              alpha: 0.7,
+                            ),
                           ),
                         ),
                       ],
@@ -126,7 +134,9 @@ class _PersonalInfoStepScreenState extends State<PersonalInfoStepScreen> {
               const SizedBox(height: 24),
 
               // Date of Birth
-              _buildDateField(theme).animate(delay: 400.ms).fadeIn().slideX(begin: 0.3, end: 0),
+              _buildDateField(
+                theme,
+              ).animate(delay: 400.ms).fadeIn().slideX(begin: 0.3, end: 0),
 
               const Spacer(),
 
@@ -184,9 +194,7 @@ class _PersonalInfoStepScreenState extends State<PersonalInfoStepScreen> {
       child: TextFormField(
         controller: controller,
         validator: validator,
-        style: TextStyle(
-          color: theme.colorScheme.onSurface,
-        ),
+        style: TextStyle(color: theme.colorScheme.onSurface),
         decoration: InputDecoration(
           labelText: label,
           hintText: hint,
@@ -204,11 +212,7 @@ class _PersonalInfoStepScreenState extends State<PersonalInfoStepScreen> {
               color: AppTheme.primaryPurple.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(
-              icon,
-              color: AppTheme.primaryPurple,
-              size: 20,
-            ),
+            child: Icon(icon, color: AppTheme.primaryPurple, size: 20),
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
@@ -280,7 +284,9 @@ class _PersonalInfoStepScreenState extends State<PersonalInfoStepScreen> {
                         style: TextStyle(
                           color: _selectedDate != null
                               ? theme.colorScheme.onSurface
-                              : theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                              : theme.colorScheme.onSurface.withValues(
+                                  alpha: 0.6,
+                                ),
                           fontSize: 16,
                         ),
                       ),
@@ -303,9 +309,13 @@ class _PersonalInfoStepScreenState extends State<PersonalInfoStepScreen> {
   Future<void> _selectDate() async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: _selectedDate ?? DateTime.now().subtract(const Duration(days: 365 * 25)),
+      initialDate:
+          _selectedDate ??
+          DateTime.now().subtract(const Duration(days: 365 * 25)),
       firstDate: DateTime(1950),
-      lastDate: DateTime.now().subtract(const Duration(days: 365 * 13)), // Minimum 13 years
+      lastDate: DateTime.now().subtract(
+        const Duration(days: 365 * 13),
+      ), // Minimum 13 years
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(

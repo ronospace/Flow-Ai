@@ -41,11 +41,11 @@ class BiometricInsights {
 
   // Computed properties
   Duration get analysisWindow => periodEnd.difference(periodStart);
-  bool get hasHighPriorityRecommendations => 
+  bool get hasHighPriorityRecommendations =>
       recommendations.any((r) => r.priority == RecommendationPriority.high);
-  bool get hasCriticalAnomalies => 
+  bool get hasCriticalAnomalies =>
       anomalies.any((a) => a.severity == AnomalySeverity.high);
-  
+
   /// Get insights freshness (how recent the analysis is)
   InsightsFreshness get freshness {
     final age = DateTime.now().difference(generatedDate);
@@ -58,26 +58,32 @@ class BiometricInsights {
   /// Get overall insight confidence score (0-100)
   int get confidenceScore {
     var score = 0;
-    
+
     // Data quantity factor
     if (totalDataPoints > 1000) {
       score += 30;
-    } else if (totalDataPoints > 500) score += 20;
-    else if (totalDataPoints > 100) score += 10;
-    
+    } else if (totalDataPoints > 500)
+      score += 20;
+    else if (totalDataPoints > 100)
+      score += 10;
+
     // Time window factor
     if (analysisWindow.inDays >= 30) {
       score += 25;
-    } else if (analysisWindow.inDays >= 14) score += 15;
-    else if (analysisWindow.inDays >= 7) score += 10;
-    
+    } else if (analysisWindow.inDays >= 14)
+      score += 15;
+    else if (analysisWindow.inDays >= 7)
+      score += 10;
+
     // Metric diversity factor
     score += (keyMetrics.length * 3).clamp(0, 20);
-    
+
     // Correlation strength factor
-    final strongCorrelations = correlations.values.where((c) => c.abs() > 0.6).length;
+    final strongCorrelations = correlations.values
+        .where((c) => c.abs() > 0.6)
+        .length;
     score += (strongCorrelations * 5).clamp(0, 15);
-    
+
     // Freshness factor
     switch (freshness) {
       case InsightsFreshness.fresh:
@@ -92,33 +98,39 @@ class BiometricInsights {
       case InsightsFreshness.outdated:
         break;
     }
-    
+
     return score.clamp(0, 100);
   }
 
   /// Get priority recommendations (high and critical only)
   List<HealthRecommendation> get priorityRecommendations {
     return recommendations
-        .where((r) => r.priority == RecommendationPriority.high || 
-                     r.priority == RecommendationPriority.critical)
+        .where(
+          (r) =>
+              r.priority == RecommendationPriority.high ||
+              r.priority == RecommendationPriority.critical,
+        )
         .toList();
   }
 
   /// Get anomalies by severity
   Map<AnomalySeverity, List<BiometricAnomaly>> get anomaliesBySeverity {
     final grouped = <AnomalySeverity, List<BiometricAnomaly>>{};
-    
+
     for (final severity in AnomalySeverity.values) {
-      grouped[severity] = anomalies.where((a) => a.severity == severity).toList();
+      grouped[severity] = anomalies
+          .where((a) => a.severity == severity)
+          .toList();
     }
-    
+
     return grouped;
   }
 
   /// Get trends by category
-  Map<BiometricCategory, Map<BiometricType, TrendDirection>> get trendsByCategory {
+  Map<BiometricCategory, Map<BiometricType, TrendDirection>>
+  get trendsByCategory {
     final grouped = <BiometricCategory, Map<BiometricType, TrendDirection>>{};
-    
+
     for (final entry in trends.entries) {
       final category = entry.key.category;
       if (!grouped.containsKey(category)) {
@@ -126,51 +138,72 @@ class BiometricInsights {
       }
       grouped[category]![entry.key] = entry.value;
     }
-    
+
     return grouped;
   }
 
   /// Get key insights as text summaries
   List<String> get keyInsights {
     final insights = <String>[];
-    
+
     // Health score insight
     if (healthScore >= 80) {
-      insights.add('Your overall health score is excellent at ${healthScore.toStringAsFixed(0)}/100');
+      insights.add(
+        'Your overall health score is excellent at ${healthScore.toStringAsFixed(0)}/100',
+      );
     } else if (healthScore >= 60) {
-      insights.add('Your health score is good at ${healthScore.toStringAsFixed(0)}/100 with room for improvement');
+      insights.add(
+        'Your health score is good at ${healthScore.toStringAsFixed(0)}/100 with room for improvement',
+      );
     } else {
-      insights.add('Your health score is ${healthScore.toStringAsFixed(0)}/100 - focus on key recommendations');
+      insights.add(
+        'Your health score is ${healthScore.toStringAsFixed(0)}/100 - focus on key recommendations',
+      );
     }
-    
+
     // Trend insights
     final improvingTrends = trends.entries
-        .where((e) => e.value == TrendDirection.increasing && _isPositiveTrend(e.key))
+        .where(
+          (e) =>
+              e.value == TrendDirection.increasing && _isPositiveTrend(e.key),
+        )
         .length;
     final decliningTrends = trends.entries
-        .where((e) => e.value == TrendDirection.decreasing && _isPositiveTrend(e.key))
+        .where(
+          (e) =>
+              e.value == TrendDirection.decreasing && _isPositiveTrend(e.key),
+        )
         .length;
-        
+
     if (improvingTrends > decliningTrends) {
-      insights.add('Most of your health metrics are improving - keep up the great work!');
+      insights.add(
+        'Most of your health metrics are improving - keep up the great work!',
+      );
     } else if (decliningTrends > improvingTrends) {
-      insights.add('Some health metrics need attention - check your recommendations');
+      insights.add(
+        'Some health metrics need attention - check your recommendations',
+      );
     }
-    
+
     // Anomaly insights
     if (hasCriticalAnomalies) {
-      insights.add('Critical health anomalies detected - consider consulting a healthcare provider');
+      insights.add(
+        'Critical health anomalies detected - consider consulting a healthcare provider',
+      );
     } else if (anomalies.isNotEmpty) {
-      insights.add('${anomalies.length} health patterns detected for monitoring');
+      insights.add(
+        '${anomalies.length} health patterns detected for monitoring',
+      );
     }
-    
+
     // Correlation insights
-    final strongestCorrelation = correlations.entries
-        .reduce((a, b) => a.value.abs() > b.value.abs() ? a : b);
+    final strongestCorrelation = correlations.entries.reduce(
+      (a, b) => a.value.abs() > b.value.abs() ? a : b,
+    );
     if (strongestCorrelation.value.abs() > 0.7) {
       insights.add('Strong correlation found: ${strongestCorrelation.key}');
     }
-    
+
     return insights;
   }
 
@@ -192,7 +225,7 @@ class BiometricInsights {
     }
   }
 
-  factory BiometricInsights.fromJson(Map<String, dynamic> json) => 
+  factory BiometricInsights.fromJson(Map<String, dynamic> json) =>
       _$BiometricInsightsFromJson(json);
   Map<String, dynamic> toJson() => _$BiometricInsightsToJson(this);
 }
@@ -268,7 +301,7 @@ class BiometricAnomaly {
   /// Check if anomaly requires immediate attention
   bool get requiresAttention => severity == AnomalySeverity.high;
 
-  factory BiometricAnomaly.fromJson(Map<String, dynamic> json) => 
+  factory BiometricAnomaly.fromJson(Map<String, dynamic> json) =>
       _$BiometricAnomalyFromJson(json);
   Map<String, dynamic> toJson() => _$BiometricAnomalyToJson(this);
 }
@@ -335,8 +368,9 @@ class HealthRecommendation {
   });
 
   /// Check if recommendation is time-sensitive
-  bool get isTimeSensitive => priority == RecommendationPriority.critical ||
-                              priority == RecommendationPriority.high;
+  bool get isTimeSensitive =>
+      priority == RecommendationPriority.critical ||
+      priority == RecommendationPriority.high;
 
   /// Get estimated effort level
   EffortLevel get effortLevel {
@@ -345,7 +379,7 @@ class HealthRecommendation {
     return EffortLevel.high;
   }
 
-  factory HealthRecommendation.fromJson(Map<String, dynamic> json) => 
+  factory HealthRecommendation.fromJson(Map<String, dynamic> json) =>
       _$HealthRecommendationFromJson(json);
   Map<String, dynamic> toJson() => _$HealthRecommendationToJson(this);
 }
@@ -417,12 +451,14 @@ class RiskFactor {
   });
 
   /// Check if risk factor is severe
-  bool get isSevere => riskLevel == RiskLevel.high || riskLevel == RiskLevel.critical;
+  bool get isSevere =>
+      riskLevel == RiskLevel.high || riskLevel == RiskLevel.critical;
 
   /// Get risk factor age
   Duration get age => DateTime.now().difference(identifiedDate);
 
-  factory RiskFactor.fromJson(Map<String, dynamic> json) => _$RiskFactorFromJson(json);
+  factory RiskFactor.fromJson(Map<String, dynamic> json) =>
+      _$RiskFactorFromJson(json);
   Map<String, dynamic> toJson() => _$RiskFactorToJson(this);
 }
 
@@ -461,13 +497,16 @@ class InsightsSummary {
 
   /// Get summary tone based on content
   SummaryTone get tone {
-    if (concerns.isNotEmpty && improvements.isEmpty) return SummaryTone.concerning;
-    if (improvements.isNotEmpty && concerns.isEmpty) return SummaryTone.positive;
-    if (improvements.isNotEmpty && concerns.isNotEmpty) return SummaryTone.mixed;
+    if (concerns.isNotEmpty && improvements.isEmpty)
+      return SummaryTone.concerning;
+    if (improvements.isNotEmpty && concerns.isEmpty)
+      return SummaryTone.positive;
+    if (improvements.isNotEmpty && concerns.isNotEmpty)
+      return SummaryTone.mixed;
     return SummaryTone.neutral;
   }
 
-  factory InsightsSummary.fromJson(Map<String, dynamic> json) => 
+  factory InsightsSummary.fromJson(Map<String, dynamic> json) =>
       _$InsightsSummaryFromJson(json);
   Map<String, dynamic> toJson() => _$InsightsSummaryToJson(this);
 }
@@ -534,7 +573,7 @@ class BiometricPattern {
   /// Check if pattern is consistent
   bool get isConsistent => confidence >= 0.7;
 
-  factory BiometricPattern.fromJson(Map<String, dynamic> json) => 
+  factory BiometricPattern.fromJson(Map<String, dynamic> json) =>
       _$BiometricPatternFromJson(json);
   Map<String, dynamic> toJson() => _$BiometricPatternToJson(this);
 }

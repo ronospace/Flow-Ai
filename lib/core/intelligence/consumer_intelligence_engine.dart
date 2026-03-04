@@ -8,7 +8,8 @@ import '../utils/collection_extensions.dart';
 /// AI-powered wellness intelligence system adapted from Flow Ai clinical intelligence
 /// Provides personalized lifestyle insights, mood predictions, and wellness recommendations
 class ConsumerIntelligenceEngine {
-  static final ConsumerIntelligenceEngine _instance = ConsumerIntelligenceEngine._internal();
+  static final ConsumerIntelligenceEngine _instance =
+      ConsumerIntelligenceEngine._internal();
   static ConsumerIntelligenceEngine get instance => _instance;
   ConsumerIntelligenceEngine._internal();
 
@@ -45,7 +46,9 @@ class ConsumerIntelligenceEngine {
       ]);
 
       _isInitialized = true;
-      AppLogger.success('✅ Consumer Intelligence Engine initialized successfully');
+      AppLogger.success(
+        '✅ Consumer Intelligence Engine initialized successfully',
+      );
     } catch (e) {
       AppLogger.error('Failed to initialize Consumer Intelligence Engine: $e');
       rethrow;
@@ -99,13 +102,17 @@ class ConsumerIntelligenceEngine {
         trends: trends,
         recommendations: recommendations,
         lifestyleInsights: lifestyleInsights,
-        confidenceScore: _calculateConfidenceScore(feelingsData.length, analysisDepth),
+        confidenceScore: _calculateConfidenceScore(
+          feelingsData.length,
+          analysisDepth,
+        ),
         nextUpdateSuggestion: DateTime.now().add(const Duration(days: 7)),
       );
 
-      AppLogger.success('✅ Generated wellness insights with ${insights.confidenceScore}% confidence');
+      AppLogger.success(
+        '✅ Generated wellness insights with ${insights.confidenceScore}% confidence',
+      );
       return insights;
-
     } catch (e) {
       AppLogger.error('Failed to generate wellness insights: $e');
       rethrow;
@@ -183,7 +190,7 @@ class ConsumerIntelligenceEngine {
 
     final date = targetDate ?? DateTime.now();
     final feelingsTracker = DailyFeelingsTracker.instance;
-    
+
     // Get today's feelings and recent history
     final todaysFeelings = feelingsTracker.getTodaysFeelings(userId: userId);
     final recentHistory = feelingsTracker.getFeelingsPattern(
@@ -220,7 +227,7 @@ class ConsumerIntelligenceEngine {
 /// Mood Prediction AI Module
 class MoodPredictor {
   bool _isInitialized = false;
-  
+
   Future<void> initialize() async {
     if (_isInitialized) return;
     _isInitialized = true;
@@ -237,26 +244,37 @@ class MoodPredictor {
     }
 
     // Simple trend-based prediction (in production, use ML models)
-    final recentScores = historicalData.takeLast(7).map((d) => d.score).toList();
-    final averageRecent = recentScores.reduce((a, b) => a + b) / recentScores.length;
-    
+    final recentScores = historicalData
+        .takeLast(7)
+        .map((d) => d.score)
+        .toList();
+    final averageRecent =
+        recentScores.reduce((a, b) => a + b) / recentScores.length;
+
     // Calculate trend
-    final olderScores = historicalData.length > 14 
-        ? historicalData.take(historicalData.length - 7).map((d) => d.score).toList()
+    final olderScores = historicalData.length > 14
+        ? historicalData
+              .take(historicalData.length - 7)
+              .map((d) => d.score)
+              .toList()
         : recentScores;
-    final averageOlder = olderScores.reduce((a, b) => a + b) / olderScores.length;
-    
+    final averageOlder =
+        olderScores.reduce((a, b) => a + b) / olderScores.length;
+
     final trendDirection = averageRecent - averageOlder;
-    final predictedScore = (averageRecent + (trendDirection * 0.5)).clamp(1.0, 10.0);
-    
+    final predictedScore = (averageRecent + (trendDirection * 0.5)).clamp(
+      1.0,
+      10.0,
+    );
+
     return MoodPrediction(
       predictedScore: predictedScore,
       confidence: _calculatePredictionConfidence(historicalData.length),
-      trendDirection: trendDirection > 0.2 
-          ? MoodTrend.improving 
-          : trendDirection < -0.2 
-              ? MoodTrend.declining 
-              : MoodTrend.stable,
+      trendDirection: trendDirection > 0.2
+          ? MoodTrend.improving
+          : trendDirection < -0.2
+          ? MoodTrend.declining
+          : MoodTrend.stable,
       factors: _identifyInfluencingFactors(historicalData),
       timeframe: const Duration(days: 3),
     );
@@ -268,29 +286,35 @@ class MoodPredictor {
     int daysAhead = 7,
   }) async {
     final predictions = <MoodPrediction>[];
-    
+
     for (int day = 1; day <= daysAhead; day++) {
       // Simple pattern-based prediction
       final dayOfWeek = DateTime.now().add(Duration(days: day)).weekday;
       final weekdayData = _getWeekdayPattern(historicalData, dayOfWeek);
-      
+
       final predictedScore = weekdayData.isNotEmpty
-          ? weekdayData.map((d) => d.score).reduce((a, b) => a + b) / weekdayData.length
+          ? weekdayData.map((d) => d.score).reduce((a, b) => a + b) /
+                weekdayData.length
           : 7.0; // Default neutral-positive
-      
-      predictions.add(MoodPrediction(
-        predictedScore: predictedScore,
-        confidence: weekdayData.length > 2 ? 75.0 : 50.0,
-        trendDirection: MoodTrend.stable,
-        factors: ['Weekday pattern analysis'],
-        timeframe: Duration(days: day),
-      ));
+
+      predictions.add(
+        MoodPrediction(
+          predictedScore: predictedScore,
+          confidence: weekdayData.length > 2 ? 75.0 : 50.0,
+          trendDirection: MoodTrend.stable,
+          factors: ['Weekday pattern analysis'],
+          timeframe: Duration(days: day),
+        ),
+      );
     }
-    
+
     return predictions;
   }
 
-  List<FeelingsDataPoint> _getWeekdayPattern(List<FeelingsDataPoint> data, int weekday) {
+  List<FeelingsDataPoint> _getWeekdayPattern(
+    List<FeelingsDataPoint> data,
+    int weekday,
+  ) {
     return data.where((d) => d.date.weekday == weekday).toList();
   }
 
@@ -303,34 +327,40 @@ class MoodPredictor {
 
   List<String> _identifyInfluencingFactors(List<FeelingsDataPoint> data) {
     final factors = <String>[];
-    
+
     // Weekend vs weekday analysis
-    final weekdayScores = data.where((d) => d.date.weekday <= 5).map((d) => d.score);
-    final weekendScores = data.where((d) => d.date.weekday > 5).map((d) => d.score);
-    
+    final weekdayScores = data
+        .where((d) => d.date.weekday <= 5)
+        .map((d) => d.score);
+    final weekendScores = data
+        .where((d) => d.date.weekday > 5)
+        .map((d) => d.score);
+
     if (weekdayScores.isNotEmpty && weekendScores.isNotEmpty) {
-      final weekdayAvg = weekdayScores.reduce((a, b) => a + b) / weekdayScores.length;
-      final weekendAvg = weekendScores.reduce((a, b) => a + b) / weekendScores.length;
-      
+      final weekdayAvg =
+          weekdayScores.reduce((a, b) => a + b) / weekdayScores.length;
+      final weekendAvg =
+          weekendScores.reduce((a, b) => a + b) / weekendScores.length;
+
       if (weekendAvg - weekdayAvg > 1) {
         factors.add('Weekend mood boost pattern detected');
       } else if (weekdayAvg - weekendAvg > 1) {
         factors.add('Weekday productivity mood pattern');
       }
     }
-    
+
     // Recent trend factor
     if (data.length >= 7) {
       final recent = data.takeLast(3).map((d) => d.score).toList();
       final average = recent.reduce((a, b) => a + b) / recent.length;
-      
+
       if (average > 7.5) {
         factors.add('Recent positive momentum');
       } else if (average < 4.5) {
         factors.add('Recent challenging period');
       }
     }
-    
+
     return factors;
   }
 
@@ -354,7 +384,7 @@ class WellnessTrendAnalyzer {
     if (data.isEmpty) return WellnessTrends.empty();
 
     final sortedData = data.toList()..sort((a, b) => a.date.compareTo(b.date));
-    
+
     return WellnessTrends(
       overallTrend: _calculateOverallTrend(sortedData),
       weeklyPattern: _analyzeWeeklyPattern(sortedData),
@@ -384,11 +414,13 @@ class WellnessTrendAnalyzer {
 
   WeeklyPattern _analyzeWeeklyPattern(List<FeelingsDataPoint> data) {
     final weekdayAverages = <int, double>{};
-    
+
     for (int weekday = 1; weekday <= 7; weekday++) {
       final dayData = data.where((d) => d.date.weekday == weekday);
       if (dayData.isNotEmpty) {
-        weekdayAverages[weekday] = dayData.map((d) => d.score).reduce((a, b) => a + b) / dayData.length;
+        weekdayAverages[weekday] =
+            dayData.map((d) => d.score).reduce((a, b) => a + b) /
+            dayData.length;
       }
     }
 
@@ -405,7 +437,9 @@ class WellnessTrendAnalyzer {
 
     final scores = data.map((d) => d.score).toList();
     final average = scores.reduce((a, b) => a + b) / scores.length;
-    final variance = scores.map((s) => math.pow(s - average, 2)).reduce((a, b) => a + b) / scores.length;
+    final variance =
+        scores.map((s) => math.pow(s - average, 2)).reduce((a, b) => a + b) /
+        scores.length;
     return math.sqrt(variance);
   }
 
@@ -419,17 +453,20 @@ class WellnessTrendAnalyzer {
 
     for (int i = 1; i < data.length; i++) {
       final category = _categorizeScore(data[i].score);
-      
+
       if (category == currentCategory) {
         currentStreakLength++;
       } else {
-        if (currentStreakLength >= 3) { // Only record streaks of 3+ days
-          streaks.add(MoodStreak(
-            category: currentCategory,
-            length: currentStreakLength,
-            startDate: streakStart,
-            endDate: data[i - 1].date,
-          ));
+        if (currentStreakLength >= 3) {
+          // Only record streaks of 3+ days
+          streaks.add(
+            MoodStreak(
+              category: currentCategory,
+              length: currentStreakLength,
+              startDate: streakStart,
+              endDate: data[i - 1].date,
+            ),
+          );
         }
         currentCategory = category;
         currentStreakLength = 1;
@@ -439,12 +476,14 @@ class WellnessTrendAnalyzer {
 
     // Check final streak
     if (currentStreakLength >= 3) {
-      streaks.add(MoodStreak(
-        category: currentCategory,
-        length: currentStreakLength,
-        startDate: streakStart,
-        endDate: data.last.date,
-      ));
+      streaks.add(
+        MoodStreak(
+          category: currentCategory,
+          length: currentStreakLength,
+          startDate: streakStart,
+          endDate: data.last.date,
+        ),
+      );
     }
 
     return streaks;
@@ -460,7 +499,7 @@ class WellnessTrendAnalyzer {
   Map<String, dynamic> _detectSeasonality(List<FeelingsDataPoint> data) {
     // Simple seasonality detection - in production, use more sophisticated algorithms
     final monthlyAverages = <int, double>{};
-    
+
     for (final point in data) {
       final month = point.date.month;
       monthlyAverages[month] = (monthlyAverages[month] ?? 0) + point.score;
@@ -469,7 +508,8 @@ class WellnessTrendAnalyzer {
     // Convert sums to averages
     final monthlyCounts = <int, int>{};
     for (final point in data) {
-      monthlyCounts[point.date.month] = (monthlyCounts[point.date.month] ?? 0) + 1;
+      monthlyCounts[point.date.month] =
+          (monthlyCounts[point.date.month] ?? 0) + 1;
     }
 
     for (final month in monthlyAverages.keys) {
@@ -485,19 +525,21 @@ class WellnessTrendAnalyzer {
   List<String> _identifyImprovementAreas(List<FeelingsDataPoint> data) {
     final areas = <String>[];
     final recentData = data.takeLast(14).toList();
-    
+
     if (recentData.isNotEmpty) {
-      final recentAverage = recentData.map((d) => d.score).reduce((a, b) => a + b) / recentData.length;
-      
+      final recentAverage =
+          recentData.map((d) => d.score).reduce((a, b) => a + b) /
+          recentData.length;
+
       if (recentAverage < 5) {
         areas.add('Focus on daily mood boosting activities');
       }
-      
+
       final volatility = _calculateVolatility(recentData);
       if (volatility > 2.5) {
         areas.add('Work on emotional stability and consistency');
       }
-      
+
       final completionRate = recentData.length / 28.0; // 14 days * 2 entries
       if (completionRate < 0.7) {
         areas.add('Improve mood tracking consistency for better insights');
@@ -510,21 +552,23 @@ class WellnessTrendAnalyzer {
   List<String> _identifyStrengths(List<FeelingsDataPoint> data) {
     final strengths = <String>[];
     final recentData = data.takeLast(14).toList();
-    
+
     if (recentData.isNotEmpty) {
-      final recentAverage = recentData.map((d) => d.score).reduce((a, b) => a + b) / recentData.length;
-      
+      final recentAverage =
+          recentData.map((d) => d.score).reduce((a, b) => a + b) /
+          recentData.length;
+
       if (recentAverage >= 7.5) {
         strengths.add('Maintaining excellent emotional wellness');
       } else if (recentAverage >= 6) {
         strengths.add('Generally positive mood patterns');
       }
-      
+
       final trend = _calculateOverallTrend(recentData);
       if (trend == TrendDirection.improving) {
         strengths.add('Showing positive improvement trend');
       }
-      
+
       final volatility = _calculateVolatility(recentData);
       if (volatility < 1.5) {
         strengths.add('Good emotional stability and consistency');
@@ -536,32 +580,52 @@ class WellnessTrendAnalyzer {
 
   String? _findBestDay(Map<int, double> weekdayAverages) {
     if (weekdayAverages.isEmpty) return null;
-    final bestEntry = weekdayAverages.entries.reduce((a, b) => a.value > b.value ? a : b);
+    final bestEntry = weekdayAverages.entries.reduce(
+      (a, b) => a.value > b.value ? a : b,
+    );
     return _weekdayName(bestEntry.key);
   }
 
   String? _findChallengingDay(Map<int, double> weekdayAverages) {
     if (weekdayAverages.isEmpty) return null;
-    final worstEntry = weekdayAverages.entries.reduce((a, b) => a.value < b.value ? a : b);
+    final worstEntry = weekdayAverages.entries.reduce(
+      (a, b) => a.value < b.value ? a : b,
+    );
     return _weekdayName(worstEntry.key);
   }
 
   String _analyzeWeekendEffect(Map<int, double> weekdayAverages) {
-    final weekdayScores = [1, 2, 3, 4, 5].where((day) => weekdayAverages.containsKey(day)).map((day) => weekdayAverages[day]!);
-    final weekendScores = [6, 7].where((day) => weekdayAverages.containsKey(day)).map((day) => weekdayAverages[day]!);
-    
-    if (weekdayScores.isEmpty || weekendScores.isEmpty) return 'Insufficient data';
-    
-    final weekdayAvg = weekdayScores.reduce((a, b) => a + b) / weekdayScores.length;
-    final weekendAvg = weekendScores.reduce((a, b) => a + b) / weekendScores.length;
-    
+    final weekdayScores = [1, 2, 3, 4, 5]
+        .where((day) => weekdayAverages.containsKey(day))
+        .map((day) => weekdayAverages[day]!);
+    final weekendScores = [6, 7]
+        .where((day) => weekdayAverages.containsKey(day))
+        .map((day) => weekdayAverages[day]!);
+
+    if (weekdayScores.isEmpty || weekendScores.isEmpty)
+      return 'Insufficient data';
+
+    final weekdayAvg =
+        weekdayScores.reduce((a, b) => a + b) / weekdayScores.length;
+    final weekendAvg =
+        weekendScores.reduce((a, b) => a + b) / weekendScores.length;
+
     if (weekendAvg - weekdayAvg > 1) return 'Strong weekend mood boost';
     if (weekdayAvg - weekendAvg > 1) return 'Weekday productivity high';
     return 'Balanced week pattern';
   }
 
   String _weekdayName(int weekday) {
-    const names = ['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const names = [
+      '',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday',
+    ];
     return names[weekday];
   }
 
@@ -590,13 +654,13 @@ class PersonalizedRecommendations {
 
     // Mood-based recommendations
     recommendations.addAll(await _generateMoodRecommendations(moodData));
-    
+
     // Trend-based recommendations
     recommendations.addAll(await _generateTrendRecommendations(trends));
-    
+
     // Consistency recommendations
     recommendations.addAll(await _generateConsistencyRecommendations(moodData));
-    
+
     // Prioritize and limit recommendations
     recommendations.sort((a, b) => b.priority.compareTo(a.priority));
     return recommendations.take(5).toList();
@@ -634,71 +698,90 @@ class PersonalizedRecommendations {
     return recommendations.take(limit).toList();
   }
 
-  Future<List<WellnessRecommendation>> _generateMoodRecommendations(List<FeelingsDataPoint> data) async {
+  Future<List<WellnessRecommendation>> _generateMoodRecommendations(
+    List<FeelingsDataPoint> data,
+  ) async {
     final recommendations = <WellnessRecommendation>[];
-    
+
     if (data.isNotEmpty) {
-      final recentAverage = data.takeLast(7).map((d) => d.score).reduce((a, b) => a + b) / 7;
-      
+      final recentAverage =
+          data.takeLast(7).map((d) => d.score).reduce((a, b) => a + b) / 7;
+
       if (recentAverage < 5) {
-        recommendations.add(WellnessRecommendation(
-          id: 'mood_boost_low',
-          title: 'Daily Mood Boosters',
-          description: 'Try 10 minutes of your favorite uplifting activity each morning',
-          category: RecommendationCategory.mood,
-          priority: RecommendationPriority.high,
-          actionType: ActionType.daily,
-          estimatedImpact: ImpactLevel.high,
-          duration: const Duration(minutes: 10),
-        ));
+        recommendations.add(
+          WellnessRecommendation(
+            id: 'mood_boost_low',
+            title: 'Daily Mood Boosters',
+            description:
+                'Try 10 minutes of your favorite uplifting activity each morning',
+            category: RecommendationCategory.mood,
+            priority: RecommendationPriority.high,
+            actionType: ActionType.daily,
+            estimatedImpact: ImpactLevel.high,
+            duration: const Duration(minutes: 10),
+          ),
+        );
       } else if (recentAverage > 8) {
-        recommendations.add(WellnessRecommendation(
-          id: 'maintain_high',
-          title: 'Maintain Your Momentum',
-          description: 'You\'re doing great! Keep up your current wellness practices',
-          category: RecommendationCategory.lifestyle,
-          priority: RecommendationPriority.medium,
-          actionType: ActionType.maintain,
-          estimatedImpact: ImpactLevel.medium,
-        ));
+        recommendations.add(
+          WellnessRecommendation(
+            id: 'maintain_high',
+            title: 'Maintain Your Momentum',
+            description:
+                'You\'re doing great! Keep up your current wellness practices',
+            category: RecommendationCategory.lifestyle,
+            priority: RecommendationPriority.medium,
+            actionType: ActionType.maintain,
+            estimatedImpact: ImpactLevel.medium,
+          ),
+        );
       }
     }
 
     return recommendations;
   }
 
-  Future<List<WellnessRecommendation>> _generateTrendRecommendations(WellnessTrends trends) async {
+  Future<List<WellnessRecommendation>> _generateTrendRecommendations(
+    WellnessTrends trends,
+  ) async {
     final recommendations = <WellnessRecommendation>[];
 
     if (trends.overallTrend == TrendDirection.declining) {
-      recommendations.add(WellnessRecommendation(
-        id: 'reverse_decline',
-        title: 'Reverse the Trend',
-        description: 'Schedule a pleasant activity for today to lift your spirits',
-        category: RecommendationCategory.mood,
-        priority: RecommendationPriority.high,
-        actionType: ActionType.immediate,
-        estimatedImpact: ImpactLevel.high,
-        duration: const Duration(minutes: 30),
-      ));
+      recommendations.add(
+        WellnessRecommendation(
+          id: 'reverse_decline',
+          title: 'Reverse the Trend',
+          description:
+              'Schedule a pleasant activity for today to lift your spirits',
+          category: RecommendationCategory.mood,
+          priority: RecommendationPriority.high,
+          actionType: ActionType.immediate,
+          estimatedImpact: ImpactLevel.high,
+          duration: const Duration(minutes: 30),
+        ),
+      );
     }
 
     if (trends.volatility > 2.5) {
-      recommendations.add(WellnessRecommendation(
-        id: 'stabilize_mood',
-        title: 'Create Emotional Stability',
-        description: 'Try a consistent bedtime routine to help stabilize your mood',
-        category: RecommendationCategory.sleep,
-        priority: RecommendationPriority.medium,
-        actionType: ActionType.weekly,
-        estimatedImpact: ImpactLevel.medium,
-      ));
+      recommendations.add(
+        WellnessRecommendation(
+          id: 'stabilize_mood',
+          title: 'Create Emotional Stability',
+          description:
+              'Try a consistent bedtime routine to help stabilize your mood',
+          category: RecommendationCategory.sleep,
+          priority: RecommendationPriority.medium,
+          actionType: ActionType.weekly,
+          estimatedImpact: ImpactLevel.medium,
+        ),
+      );
     }
 
     return recommendations;
   }
 
-  Future<List<WellnessRecommendation>> _generateConsistencyRecommendations(List<FeelingsDataPoint> data) async {
+  Future<List<WellnessRecommendation>> _generateConsistencyRecommendations(
+    List<FeelingsDataPoint> data,
+  ) async {
     return [
       WellnessRecommendation(
         id: 'tracking_consistency',
@@ -712,7 +795,8 @@ class PersonalizedRecommendations {
     ];
   }
 
-  Future<List<WellnessRecommendation>> _generateMoodBoostingRecommendations() async {
+  Future<List<WellnessRecommendation>>
+  _generateMoodBoostingRecommendations() async {
     return [
       WellnessRecommendation(
         id: 'gratitude_practice',
@@ -751,12 +835,14 @@ class PersonalizedRecommendations {
     ];
   }
 
-  Future<List<WellnessRecommendation>> _generateStressReductionRecommendations() async {
+  Future<List<WellnessRecommendation>>
+  _generateStressReductionRecommendations() async {
     return [
       WellnessRecommendation(
         id: 'breathing_exercise',
         title: 'Daily Breathing Exercise',
-        description: 'Practice 4-7-8 breathing for 5 minutes when feeling stressed',
+        description:
+            'Practice 4-7-8 breathing for 5 minutes when feeling stressed',
         category: RecommendationCategory.mindfulness,
         priority: RecommendationPriority.high,
         actionType: ActionType.asNeeded,
@@ -766,7 +852,8 @@ class PersonalizedRecommendations {
     ];
   }
 
-  Future<List<WellnessRecommendation>> _generateGeneralWellnessRecommendations() async {
+  Future<List<WellnessRecommendation>>
+  _generateGeneralWellnessRecommendations() async {
     return [
       WellnessRecommendation(
         id: 'general_wellness',
@@ -837,12 +924,18 @@ class LifestyleCortex {
 
   Future<String> _analyzeSleepPatterns(List<FeelingsDataPoint> data) async {
     // Simple sleep quality inference from morning vs evening mood patterns
-    final morningMoods = data.where((d) => d.entryCount == 1).map((d) => d.score);
-    final eveningMoods = data.where((d) => d.entryCount == 2).map((d) => d.score);
+    final morningMoods = data
+        .where((d) => d.entryCount == 1)
+        .map((d) => d.score);
+    final eveningMoods = data
+        .where((d) => d.entryCount == 2)
+        .map((d) => d.score);
 
     if (morningMoods.isNotEmpty && eveningMoods.isNotEmpty) {
-      final morningAvg = morningMoods.reduce((a, b) => a + b) / morningMoods.length;
-      final eveningAvg = eveningMoods.reduce((a, b) => a + b) / eveningMoods.length;
+      final morningAvg =
+          morningMoods.reduce((a, b) => a + b) / morningMoods.length;
+      final eveningAvg =
+          eveningMoods.reduce((a, b) => a + b) / eveningMoods.length;
 
       if (morningAvg > eveningAvg + 1) {
         return 'Good sleep quality - you wake up refreshed';
@@ -854,7 +947,9 @@ class LifestyleCortex {
     return 'Sleep patterns appear stable';
   }
 
-  Future<List<String>> _identifyStressFactors(List<FeelingsDataPoint> data) async {
+  Future<List<String>> _identifyStressFactors(
+    List<FeelingsDataPoint> data,
+  ) async {
     final factors = <String>[];
 
     // Analyze volatility as stress indicator
@@ -867,11 +962,13 @@ class LifestyleCortex {
     if (data.length >= 7) {
       final recent = data.takeLast(7);
       final older = data.take(data.length - 7);
-      
+
       if (recent.isNotEmpty && older.isNotEmpty) {
-        final recentAvg = recent.map((d) => d.score).reduce((a, b) => a + b) / recent.length;
-        final olderAvg = older.map((d) => d.score).reduce((a, b) => a + b) / older.length;
-        
+        final recentAvg =
+            recent.map((d) => d.score).reduce((a, b) => a + b) / recent.length;
+        final olderAvg =
+            older.map((d) => d.score).reduce((a, b) => a + b) / older.length;
+
         if (olderAvg - recentAvg > 1.5) {
           factors.add('Recent decline in mood may indicate stress');
         }
@@ -884,8 +981,9 @@ class LifestyleCortex {
   Future<String> _analyzeEnergyPatterns(List<FeelingsDataPoint> data) async {
     if (data.isEmpty) return 'Insufficient data for energy analysis';
 
-    final averageScore = data.map((d) => d.score).reduce((a, b) => a + b) / data.length;
-    
+    final averageScore =
+        data.map((d) => d.score).reduce((a, b) => a + b) / data.length;
+
     if (averageScore >= 7.5) return 'High energy levels detected';
     if (averageScore >= 5.5) return 'Moderate energy levels';
     return 'Low energy levels - consider energy-boosting activities';
@@ -901,8 +999,12 @@ class LifestyleCortex {
     final weekendData = data.where((d) => d.date.weekday > 5);
 
     if (weekdayData.isNotEmpty && weekendData.isNotEmpty) {
-      final weekdayAvg = weekdayData.map((d) => d.score).reduce((a, b) => a + b) / weekdayData.length;
-      final weekendAvg = weekendData.map((d) => d.score).reduce((a, b) => a + b) / weekendData.length;
+      final weekdayAvg =
+          weekdayData.map((d) => d.score).reduce((a, b) => a + b) /
+          weekdayData.length;
+      final weekendAvg =
+          weekendData.map((d) => d.score).reduce((a, b) => a + b) /
+          weekendData.length;
 
       if (weekendAvg - weekdayAvg > 1.5) {
         return 'Work stress detected - weekend mood significantly better';
@@ -914,11 +1016,13 @@ class LifestyleCortex {
     return 'Balanced work-life pattern';
   }
 
-  Future<List<String>> _generateLifestyleRecommendations(List<FeelingsDataPoint> data) async {
+  Future<List<String>> _generateLifestyleRecommendations(
+    List<FeelingsDataPoint> data,
+  ) async {
     final recommendations = <String>[];
 
-    final averageScore = data.isNotEmpty 
-        ? data.map((d) => d.score).reduce((a, b) => a + b) / data.length 
+    final averageScore = data.isNotEmpty
+        ? data.map((d) => d.score).reduce((a, b) => a + b) / data.length
         : 5.0;
 
     if (averageScore < 6) {
@@ -935,28 +1039,32 @@ class LifestyleCortex {
 
   List<MoodTrigger> _analyzeTimePatterns(List<FeelingsDataPoint> data) {
     final triggers = <MoodTrigger>[];
-    
+
     // This would be more sophisticated in a real implementation
     // For now, return basic time-based insights
-    
+
     return triggers;
   }
 
   List<MoodTrigger> _analyzeWeeklyTriggers(List<FeelingsDataPoint> data) {
     final triggers = <MoodTrigger>[];
-    
+
     // Analyze day-of-week patterns
     final mondayData = data.where((d) => d.date.weekday == 1);
     if (mondayData.isNotEmpty) {
-      final mondayAvg = mondayData.map((d) => d.score).reduce((a, b) => a + b) / mondayData.length;
+      final mondayAvg =
+          mondayData.map((d) => d.score).reduce((a, b) => a + b) /
+          mondayData.length;
       if (mondayAvg < 5) {
-        triggers.add(MoodTrigger(
-          type: TriggerType.temporal,
-          name: 'Monday Blues',
-          description: 'Lower mood scores on Mondays',
-          confidence: 0.7,
-          frequency: mondayData.length,
-        ));
+        triggers.add(
+          MoodTrigger(
+            type: TriggerType.temporal,
+            name: 'Monday Blues',
+            description: 'Lower mood scores on Mondays',
+            confidence: 0.7,
+            frequency: mondayData.length,
+          ),
+        );
       }
     }
 
@@ -965,25 +1073,34 @@ class LifestyleCortex {
 
   double _calculateTriggerConfidence(List<MoodTrigger> triggers) {
     if (triggers.isEmpty) return 0.0;
-    return triggers.map((t) => t.confidence).reduce((a, b) => a + b) / triggers.length;
+    return triggers.map((t) => t.confidence).reduce((a, b) => a + b) /
+        triggers.length;
   }
 
   List<String> _generateTriggerRecommendations(List<MoodTrigger> triggers) {
     final recommendations = <String>[];
-    
+
     for (final trigger in triggers) {
       switch (trigger.type) {
         case TriggerType.temporal:
-          recommendations.add('Plan positive activities for ${trigger.name} to counteract low mood');
+          recommendations.add(
+            'Plan positive activities for ${trigger.name} to counteract low mood',
+          );
           break;
         case TriggerType.environmental:
-          recommendations.add('Modify your environment to reduce ${trigger.name} impact');
+          recommendations.add(
+            'Modify your environment to reduce ${trigger.name} impact',
+          );
           break;
         case TriggerType.social:
-          recommendations.add('Consider social strategies to handle ${trigger.name}');
+          recommendations.add(
+            'Consider social strategies to handle ${trigger.name}',
+          );
           break;
         case TriggerType.lifestyle:
-          recommendations.add('Adjust lifestyle factors related to ${trigger.name}');
+          recommendations.add(
+            'Adjust lifestyle factors related to ${trigger.name}',
+          );
           break;
       }
     }
@@ -995,7 +1112,9 @@ class LifestyleCortex {
     if (data.length < 2) return 0.0;
     final scores = data.map((d) => d.score).toList();
     final average = scores.reduce((a, b) => a + b) / scores.length;
-    final variance = scores.map((s) => math.pow(s - average, 2)).reduce((a, b) => a + b) / scores.length;
+    final variance =
+        scores.map((s) => math.pow(s - average, 2)).reduce((a, b) => a + b) /
+        scores.length;
     return math.sqrt(variance);
   }
 
@@ -1027,8 +1146,10 @@ class InsightGenerator {
 
     // Analyze today's feelings
     if (todaysFeelings.isNotEmpty) {
-      final todayAverage = todaysFeelings.map((f) => f.feelingScore).reduce((a, b) => a + b) / todaysFeelings.length;
-      
+      final todayAverage =
+          todaysFeelings.map((f) => f.feelingScore).reduce((a, b) => a + b) /
+          todaysFeelings.length;
+
       if (todayAverage >= 8) {
         insight.write('You\'re having an excellent day! ');
         mood = InsightMood.positive;
@@ -1040,7 +1161,9 @@ class InsightGenerator {
       } else if (todayAverage < 4) {
         insight.write('Today seems challenging. ');
         mood = InsightMood.supportive;
-        suggestions.add('Be gentle with yourself and try a small self-care activity');
+        suggestions.add(
+          'Be gentle with yourself and try a small self-care activity',
+        );
       }
     } else {
       insight.write('Take a moment to check in with yourself. ');
@@ -1049,9 +1172,15 @@ class InsightGenerator {
 
     // Compare with recent history
     if (recentHistory.length > 3) {
-      final recentAverage = recentHistory.takeLast(7).map((d) => d.score).reduce((a, b) => a + b) / 7;
-      final todayScore = todaysFeelings.isNotEmpty 
-          ? todaysFeelings.map((f) => f.feelingScore).reduce((a, b) => a + b) / todaysFeelings.length 
+      final recentAverage =
+          recentHistory
+              .takeLast(7)
+              .map((d) => d.score)
+              .reduce((a, b) => a + b) /
+          7;
+      final todayScore = todaysFeelings.isNotEmpty
+          ? todaysFeelings.map((f) => f.feelingScore).reduce((a, b) => a + b) /
+                todaysFeelings.length
           : recentAverage;
 
       if (todayScore > recentAverage + 1) {
@@ -1080,13 +1209,17 @@ class InsightGenerator {
     );
   }
 
-  Future<String> _generatePersonalizedTip(String userId, List<FeelingsDataPoint> history) async {
+  Future<String> _generatePersonalizedTip(
+    String userId,
+    List<FeelingsDataPoint> history,
+  ) async {
     if (history.isEmpty) {
       return 'Start tracking your mood regularly to get personalized insights!';
     }
 
-    final recentAverage = history.takeLast(7).map((d) => d.score).reduce((a, b) => a + b) / 7;
-    
+    final recentAverage =
+        history.takeLast(7).map((d) => d.score).reduce((a, b) => a + b) / 7;
+
     if (recentAverage >= 8) {
       return 'You\'re in a great space! Consider helping others or trying something new.';
     } else if (recentAverage >= 6) {
@@ -1318,24 +1451,11 @@ class DailyInsight {
 
 // Enums
 
-enum MoodTrend {
-  improving,
-  stable,
-  declining,
-}
+enum MoodTrend { improving, stable, declining }
 
-enum TrendDirection {
-  improving,
-  stable,
-  declining,
-}
+enum TrendDirection { improving, stable, declining }
 
-enum MoodCategory {
-  excellent,
-  good,
-  neutral,
-  challenging,
-}
+enum MoodCategory { excellent, good, neutral, challenging }
 
 enum WellnessGoal {
   improveMood,
@@ -1354,39 +1474,15 @@ enum RecommendationCategory {
   social,
 }
 
-enum RecommendationPriority {
-  high,
-  medium,
-  low,
-}
+enum RecommendationPriority { high, medium, low }
 
-enum ActionType {
-  immediate,
-  daily,
-  weekly,
-  monthly,
-  asNeeded,
-  maintain,
-}
+enum ActionType { immediate, daily, weekly, monthly, asNeeded, maintain }
 
-enum ImpactLevel {
-  high,
-  medium,
-  low,
-}
+enum ImpactLevel { high, medium, low }
 
-enum TriggerType {
-  temporal,
-  environmental,
-  social,
-  lifestyle,
-}
+enum TriggerType { temporal, environmental, social, lifestyle }
 
-enum InsightMood {
-  positive,
-  neutral,
-  supportive,
-}
+enum InsightMood { positive, neutral, supportive }
 
 /// Extension for RecommendationPriority to add compareTo functionality
 extension RecommendationPriorityExtension on RecommendationPriority {

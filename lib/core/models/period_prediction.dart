@@ -1,4 +1,3 @@
-
 /// Period prediction model for AI-powered cycle forecasting
 class PeriodPrediction {
   final String id;
@@ -40,7 +39,7 @@ class PeriodPrediction {
   }) {
     final now = DateTime.now();
     final predictedStart = now.add(const Duration(days: 28));
-    
+
     return PeriodPrediction(
       id: id ?? 'default_${DateTime.now().millisecondsSinceEpoch}',
       userId: userId,
@@ -200,7 +199,7 @@ class FertileWindow {
       return FertilityStatus.low;
     } else if (date.isAtSameMomentAs(peak) ||
         (date.isAfter(peak.subtract(const Duration(days: 1))) &&
-         date.isBefore(peak.add(const Duration(days: 2))))) {
+            date.isBefore(peak.add(const Duration(days: 2))))) {
       return FertilityStatus.peak;
     } else {
       return FertilityStatus.high;
@@ -248,19 +247,10 @@ class SymptomPrediction {
 }
 
 /// Cycle phases
-enum CyclePhase {
-  menstrual,
-  follicular,
-  ovulatory,
-  luteal,
-}
+enum CyclePhase { menstrual, follicular, ovulatory, luteal }
 
 /// Fertility status
-enum FertilityStatus {
-  low,
-  high,
-  peak,
-}
+enum FertilityStatus { low, high, peak }
 
 /// Extension methods for cycle phase
 extension CyclePhaseExtension on CyclePhase {

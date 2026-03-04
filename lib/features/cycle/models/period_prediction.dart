@@ -35,7 +35,10 @@ class PeriodPrediction {
   /// Check if prediction was accurate
   bool get isAccurate {
     if (actualStartDate == null) return false;
-    final daysDifference = actualStartDate!.difference(predictedStartDate).inDays.abs();
+    final daysDifference = actualStartDate!
+        .difference(predictedStartDate)
+        .inDays
+        .abs();
     return daysDifference <= 2; // Within 2 days is considered accurate
   }
 
@@ -47,13 +50,13 @@ class PeriodPrediction {
   /// Check if prediction is for current cycle
   bool get isCurrentCyclePrediction {
     final now = DateTime.now();
-    return predictedStartDate.isAfter(now) && 
-           predictedStartDate.difference(now).inDays <= 35;
+    return predictedStartDate.isAfter(now) &&
+        predictedStartDate.difference(now).inDays <= 35;
   }
 
-  factory PeriodPrediction.fromJson(Map<String, dynamic> json) => 
+  factory PeriodPrediction.fromJson(Map<String, dynamic> json) =>
       _$PeriodPredictionFromJson(json);
-  
+
   Map<String, dynamic> toJson() => _$PeriodPredictionToJson(this);
 
   /// Create a copy with updated fields

@@ -17,4 +17,3 @@ class NoopNotificationAdapter implements NotificationAdapter {
     return;
   }
 }
-

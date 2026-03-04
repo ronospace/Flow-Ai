@@ -6,7 +6,8 @@ import '../utils/app_logger.dart';
 /// 🏥 Clinical Intelligence Engine
 /// AI-powered clinical decision support system with evidence-based insights
 class ClinicalIntelligenceEngine {
-  static final ClinicalIntelligenceEngine _instance = ClinicalIntelligenceEngine._internal();
+  static final ClinicalIntelligenceEngine _instance =
+      ClinicalIntelligenceEngine._internal();
   static ClinicalIntelligenceEngine get instance => _instance;
   ClinicalIntelligenceEngine._internal();
 
@@ -22,10 +23,10 @@ class ClinicalIntelligenceEngine {
 
   // Clinical data validation and integrity
   late DataValidationEngine _dataValidator;
-  
+
   // Performance monitoring
   final Map<String, ClinicalMetrics> _performanceMetrics = {};
-  
+
   /// Initialize the clinical intelligence system
   Future<void> initialize() async {
     if (_isInitialized) return;
@@ -42,16 +43,20 @@ class ClinicalIntelligenceEngine {
       await _initializeDataValidation();
 
       _isInitialized = true;
-      
-      AppLogger.success('✅ Clinical Intelligence Engine initialized with evidence-based algorithms');
+
+      AppLogger.success(
+        '✅ Clinical Intelligence Engine initialized with evidence-based algorithms',
+      );
     } catch (e) {
-      await ErrorHandler.instance.handleError(AppError(
-        type: ErrorType.healthData,
-        message: 'Failed to initialize Clinical Intelligence Engine: $e',
-        timestamp: DateTime.now(),
-        severity: ErrorSeverity.critical,
-        context: {'component': 'clinical_intelligence_engine'},
-      ));
+      await ErrorHandler.instance.handleError(
+        AppError(
+          type: ErrorType.healthData,
+          message: 'Failed to initialize Clinical Intelligence Engine: $e',
+          timestamp: DateTime.now(),
+          severity: ErrorSeverity.critical,
+          context: {'component': 'clinical_intelligence_engine'},
+        ),
+      );
       rethrow;
     }
   }
@@ -60,7 +65,9 @@ class ClinicalIntelligenceEngine {
   Future<void> _initializeClinicalKnowledgeBase() async {
     _knowledgeBase = ClinicalKnowledgeBase();
     await _knowledgeBase.initialize();
-    AppLogger.clinical('📚 Clinical knowledge base loaded with evidence-based protocols');
+    AppLogger.clinical(
+      '📚 Clinical knowledge base loaded with evidence-based protocols',
+    );
   }
 
   /// Initialize risk assessment algorithms
@@ -110,7 +117,9 @@ class ClinicalIntelligenceEngine {
     if (!_isInitialized) await initialize();
 
     try {
-      AppLogger.clinical('🏥 Performing comprehensive health assessment for patient $patientId');
+      AppLogger.clinical(
+        '🏥 Performing comprehensive health assessment for patient $patientId',
+      );
 
       // Start performance tracking
       final startTime = DateTime.now();
@@ -138,7 +147,7 @@ class ClinicalIntelligenceEngine {
       );
 
       // Analyze symptoms
-      final symptomAnalysis = symptoms != null 
+      final symptomAnalysis = symptoms != null
           ? await _symptomAnalyzer.analyzeSymptoms(
               symptoms: symptoms,
               patientData: healthData,
@@ -153,21 +162,23 @@ class ClinicalIntelligenceEngine {
             );
 
       // Generate treatment recommendations
-      final treatmentRecommendations = await _treatmentEngine.generateRecommendations(
-        patientId: patientId,
-        riskAssessment: riskAssessment,
-        symptomAnalysis: symptomAnalysis,
-        healthData: healthData,
-        currentMedications: medications,
-      );
+      final treatmentRecommendations = await _treatmentEngine
+          .generateRecommendations(
+            patientId: patientId,
+            riskAssessment: riskAssessment,
+            symptomAnalysis: symptomAnalysis,
+            healthData: healthData,
+            currentMedications: medications,
+          );
 
       // Perform clinical decision support
-      final decisionSupport = await _decisionSupport.provideSupportRecommendations(
-        riskAssessment: riskAssessment,
-        symptomAnalysis: symptomAnalysis,
-        treatmentRecommendations: treatmentRecommendations,
-        patientData: healthData,
-      );
+      final decisionSupport = await _decisionSupport
+          .provideSupportRecommendations(
+            riskAssessment: riskAssessment,
+            symptomAnalysis: symptomAnalysis,
+            treatmentRecommendations: treatmentRecommendations,
+            patientData: healthData,
+          );
 
       // Generate clinical insights
       final clinicalInsights = await _generateClinicalInsights(
@@ -199,7 +210,9 @@ class ClinicalIntelligenceEngine {
         dataQuality: validationResult.qualityScore,
       );
 
-      AppLogger.clinical('✅ Health assessment completed with ${assessment.confidence.toStringAsFixed(1)}% confidence');
+      AppLogger.clinical(
+        '✅ Health assessment completed with ${assessment.confidence.toStringAsFixed(1)}% confidence',
+      );
 
       return assessment;
     } catch (e) {
@@ -236,7 +249,9 @@ class ClinicalIntelligenceEngine {
         vitalSigns: vitalSigns,
       );
 
-      AppLogger.clinical('🔍 Symptom analysis completed: ${symptoms.length} symptoms analyzed');
+      AppLogger.clinical(
+        '🔍 Symptom analysis completed: ${symptoms.length} symptoms analyzed',
+      );
 
       return analysis;
     } catch (e) {
@@ -266,15 +281,18 @@ class ClinicalIntelligenceEngine {
       );
 
       // Generate decision support
-      final decisionSupport = await _decisionSupport.provideSupportRecommendations(
-        riskAssessment: riskAssessment,
-        patientData: clinicalData,
-        differentialDiagnosis: differentialDiagnosis,
-        testResults: testResults,
-        clinicalQuestion: clinicalQuestion,
-      );
+      final decisionSupport = await _decisionSupport
+          .provideSupportRecommendations(
+            riskAssessment: riskAssessment,
+            patientData: clinicalData,
+            differentialDiagnosis: differentialDiagnosis,
+            testResults: testResults,
+            clinicalQuestion: clinicalQuestion,
+          );
 
-      AppLogger.clinical('🧠 Clinical decision support provided for patient $patientId');
+      AppLogger.clinical(
+        '🧠 Clinical decision support provided for patient $patientId',
+      );
 
       return decisionSupport;
     } catch (e) {
@@ -306,8 +324,10 @@ class ClinicalIntelligenceEngine {
       );
 
       if (monitoringResult.isDeterioration) {
-        AppLogger.clinical('🚨 Clinical deterioration detected for patient $patientId');
-        
+        AppLogger.clinical(
+          '🚨 Clinical deterioration detected for patient $patientId',
+        );
+
         return ClinicalAlert(
           alertId: _generateAlertId(),
           patientId: patientId,
@@ -342,17 +362,22 @@ class ClinicalIntelligenceEngine {
 
     // Risk-based insights
     if (riskAssessment.overallRisk > 0.7) {
-      insights.add(ClinicalInsight(
-        type: ClinicalInsightType.riskAlert,
-        title: 'Elevated Clinical Risk Identified',
-        description: 'Patient shows elevated risk factors that require clinical attention.',
-        evidence: riskAssessment.riskFactors.map((f) => f.description).toList(),
-        recommendations: riskAssessment.recommendations,
-        confidence: riskAssessment.confidence,
-        urgency: riskAssessment.overallRisk > 0.85 
-            ? ClinicalUrgency.high 
-            : ClinicalUrgency.medium,
-      ));
+      insights.add(
+        ClinicalInsight(
+          type: ClinicalInsightType.riskAlert,
+          title: 'Elevated Clinical Risk Identified',
+          description:
+              'Patient shows elevated risk factors that require clinical attention.',
+          evidence: riskAssessment.riskFactors
+              .map((f) => f.description)
+              .toList(),
+          recommendations: riskAssessment.recommendations,
+          confidence: riskAssessment.confidence,
+          urgency: riskAssessment.overallRisk > 0.85
+              ? ClinicalUrgency.high
+              : ClinicalUrgency.medium,
+        ),
+      );
     }
 
     // Symptom pattern insights
@@ -362,15 +387,18 @@ class ClinicalIntelligenceEngine {
           .toList();
 
       if (significantSymptoms.isNotEmpty) {
-        insights.add(ClinicalInsight(
-          type: ClinicalInsightType.symptomPattern,
-          title: 'Significant Symptom Pattern Detected',
-          description: 'Pattern of symptoms suggests potential clinical condition.',
-          evidence: significantSymptoms.map((s) => s.description).toList(),
-          recommendations: symptomAnalysis.recommendations,
-          confidence: symptomAnalysis.confidence,
-          urgency: _determineSymptomUrgency(significantSymptoms),
-        ));
+        insights.add(
+          ClinicalInsight(
+            type: ClinicalInsightType.symptomPattern,
+            title: 'Significant Symptom Pattern Detected',
+            description:
+                'Pattern of symptoms suggests potential clinical condition.',
+            evidence: significantSymptoms.map((s) => s.description).toList(),
+            recommendations: symptomAnalysis.recommendations,
+            confidence: symptomAnalysis.confidence,
+            urgency: _determineSymptomUrgency(significantSymptoms),
+          ),
+        );
       }
     }
 
@@ -381,15 +409,20 @@ class ClinicalIntelligenceEngine {
           .toList();
 
       if (highPriorityTreatments.isNotEmpty) {
-        insights.add(ClinicalInsight(
-          type: ClinicalInsightType.treatmentOptimization,
-          title: 'Treatment Optimization Opportunities',
-          description: 'Evidence-based treatment modifications could improve outcomes.',
-          evidence: highPriorityTreatments.map((t) => t.rationale).toList(),
-          recommendations: highPriorityTreatments.map((t) => t.description).toList(),
-          confidence: treatmentRecommendations.confidence,
-          urgency: ClinicalUrgency.medium,
-        ));
+        insights.add(
+          ClinicalInsight(
+            type: ClinicalInsightType.treatmentOptimization,
+            title: 'Treatment Optimization Opportunities',
+            description:
+                'Evidence-based treatment modifications could improve outcomes.',
+            evidence: highPriorityTreatments.map((t) => t.rationale).toList(),
+            recommendations: highPriorityTreatments
+                .map((t) => t.description)
+                .toList(),
+            confidence: treatmentRecommendations.confidence,
+            urgency: ClinicalUrgency.medium,
+          ),
+        );
       }
     }
 
@@ -399,7 +432,7 @@ class ClinicalIntelligenceEngine {
   /// Calculate overall assessment confidence
   double _calculateOverallConfidence(List<double> confidenceScores) {
     if (confidenceScores.isEmpty) return 0.0;
-    
+
     // Weighted average with emphasis on lower scores (conservative approach)
     final weights = List.generate(confidenceScores.length, (i) => 1.0);
     double weightedSum = 0.0;
@@ -448,13 +481,16 @@ class ClinicalIntelligenceEngine {
 
   /// Get clinical performance metrics
   Map<String, dynamic> getClinicalMetrics() {
-    final totalAssessments = _performanceMetrics.values
-        .fold<int>(0, (sum, metrics) => sum + metrics.assessmentCount);
+    final totalAssessments = _performanceMetrics.values.fold<int>(
+      0,
+      (sum, metrics) => sum + metrics.assessmentCount,
+    );
 
     final averageProcessingTime = _performanceMetrics.values.isNotEmpty
         ? _performanceMetrics.values
-            .map((m) => m.averageProcessingTimeMs)
-            .reduce((a, b) => a + b) / _performanceMetrics.values.length
+                  .map((m) => m.averageProcessingTimeMs)
+                  .reduce((a, b) => a + b) /
+              _performanceMetrics.values.length
         : 0.0;
 
     return {
@@ -465,11 +501,14 @@ class ClinicalIntelligenceEngine {
       'knowledge_base_version': _knowledgeBase.version,
       'last_assessment': _performanceMetrics.values.isNotEmpty
           ? _performanceMetrics.values
-              .map((m) => m.lastAssessmentTime)
-              .where((time) => time != null)
-              .fold<DateTime?>(null, (latest, time) => 
-                latest == null || time!.isAfter(latest) ? time : latest)
-              ?.toIso8601String()
+                .map((m) => m.lastAssessmentTime)
+                .where((time) => time != null)
+                .fold<DateTime?>(
+                  null,
+                  (latest, time) =>
+                      latest == null || time!.isAfter(latest) ? time : latest,
+                )
+                ?.toIso8601String()
           : null,
     };
   }
@@ -484,7 +523,7 @@ class ClinicalIntelligenceEngine {
 /// Clinical knowledge base with evidence-based protocols
 class ClinicalKnowledgeBase {
   String get version => '1.0.0';
-  
+
   // Clinical protocols and guidelines
   late Map<String, ClinicalProtocol> _protocols;
   late Map<String, List<String>> _symptomMappings;
@@ -517,7 +556,12 @@ class ClinicalKnowledgeBase {
 
   void _loadSymptomMappings() {
     _symptomMappings = {
-      'chest_pain': ['cardiac', 'pulmonary', 'gastrointestinal', 'musculoskeletal'],
+      'chest_pain': [
+        'cardiac',
+        'pulmonary',
+        'gastrointestinal',
+        'musculoskeletal',
+      ],
       'shortness_of_breath': ['cardiac', 'pulmonary', 'anxiety'],
       'fatigue': ['cardiac', 'endocrine', 'hematologic', 'psychiatric'],
       // Add more mappings...
@@ -669,7 +713,11 @@ class RiskAssessmentEngine {
   double _assessSymptomRisk(List<String> symptoms) {
     double risk = 0.0;
 
-    final highRiskSymptoms = ['chest_pain', 'difficulty_breathing', 'severe_headache'];
+    final highRiskSymptoms = [
+      'chest_pain',
+      'difficulty_breathing',
+      'severe_headache',
+    ];
     final mediumRiskSymptoms = ['dizziness', 'nausea', 'fatigue'];
 
     for (final symptom in symptoms) {
@@ -685,9 +733,15 @@ class RiskAssessmentEngine {
 
   List<String> _generateRiskBasedRecommendations(double risk) {
     if (risk > 0.8) {
-      return ['Immediate medical evaluation required', 'Consider emergency care'];
+      return [
+        'Immediate medical evaluation required',
+        'Consider emergency care',
+      ];
     } else if (risk > 0.6) {
-      return ['Schedule urgent medical consultation', 'Monitor symptoms closely'];
+      return [
+        'Schedule urgent medical consultation',
+        'Monitor symptoms closely',
+      ];
     } else if (risk > 0.4) {
       return ['Follow up with healthcare provider', 'Continue monitoring'];
     }
@@ -713,15 +767,21 @@ class SymptomAnalyzer {
     final clinicalSymptoms = <ClinicalSymptom>[];
 
     for (final symptom in symptoms) {
-      final significance = _calculateClinicalSignificance(symptom, patientData, vitalSigns);
-      
-      clinicalSymptoms.add(ClinicalSymptom(
-        name: symptom,
-        description: _getSymptomDescription(symptom),
-        clinicalSignificance: significance,
-        possibleCauses: _knowledgeBase.getSymptomMappings(symptom) ?? [],
-        urgency: _determineSymptomUrgency(significance),
-      ));
+      final significance = _calculateClinicalSignificance(
+        symptom,
+        patientData,
+        vitalSigns,
+      );
+
+      clinicalSymptoms.add(
+        ClinicalSymptom(
+          name: symptom,
+          description: _getSymptomDescription(symptom),
+          clinicalSignificance: significance,
+          possibleCauses: _knowledgeBase.getSymptomMappings(symptom) ?? [],
+          urgency: _determineSymptomUrgency(significance),
+        ),
+      );
     }
 
     return SymptomAnalysis(
@@ -749,7 +809,11 @@ class SymptomAnalyzer {
     Map<String, dynamic>? vitalSigns,
   ) {
     // Simplified significance calculation
-    final highSignificanceSymptoms = ['chest_pain', 'difficulty_breathing', 'severe_headache'];
+    final highSignificanceSymptoms = [
+      'chest_pain',
+      'difficulty_breathing',
+      'severe_headache',
+    ];
     final mediumSignificanceSymptoms = ['dizziness', 'nausea', 'palpitations'];
 
     if (highSignificanceSymptoms.contains(symptom.toLowerCase())) {
@@ -770,7 +834,8 @@ class SymptomAnalyzer {
       'fatigue': 'Extreme tiredness or exhaustion',
     };
 
-    return descriptions[symptom.toLowerCase()] ?? 'Clinical symptom requiring assessment';
+    return descriptions[symptom.toLowerCase()] ??
+        'Clinical symptom requiring assessment';
   }
 
   ClinicalUrgency _determineSymptomUrgency(double significance) {
@@ -781,10 +846,8 @@ class SymptomAnalyzer {
 
   double _calculateOverallSignificance(List<ClinicalSymptom> symptoms) {
     if (symptoms.isEmpty) return 0.0;
-    
-    return symptoms
-        .map((s) => s.clinicalSignificance)
-        .reduce(math.max);
+
+    return symptoms.map((s) => s.clinicalSignificance).reduce(math.max);
   }
 
   List<String> _generateSymptomRecommendations(List<ClinicalSymptom> symptoms) {
@@ -795,10 +858,14 @@ class SymptomAnalyzer {
         .toList();
 
     if (highUrgencySymptoms.isNotEmpty) {
-      recommendations.add('Seek immediate medical attention for high-urgency symptoms');
+      recommendations.add(
+        'Seek immediate medical attention for high-urgency symptoms',
+      );
       recommendations.add('Do not delay medical evaluation');
     } else {
-      recommendations.add('Monitor symptoms and consult healthcare provider if worsening');
+      recommendations.add(
+        'Monitor symptoms and consult healthcare provider if worsening',
+      );
       recommendations.add('Continue tracking symptom progression');
     }
 
@@ -826,23 +893,23 @@ class TreatmentRecommendationEngine {
     final recommendations = <TreatmentRecommendation>[];
 
     // Generate lifestyle recommendations
-    recommendations.addAll(_generateLifestyleRecommendations(
-      riskAssessment,
-      symptomAnalysis,
-      healthData,
-    ));
+    recommendations.addAll(
+      _generateLifestyleRecommendations(
+        riskAssessment,
+        symptomAnalysis,
+        healthData,
+      ),
+    );
 
     // Generate medication recommendations if appropriate
-    recommendations.addAll(_generateMedicationRecommendations(
-      riskAssessment,
-      currentMedications,
-    ));
+    recommendations.addAll(
+      _generateMedicationRecommendations(riskAssessment, currentMedications),
+    );
 
     // Generate monitoring recommendations
-    recommendations.addAll(_generateMonitoringRecommendations(
-      riskAssessment,
-      symptomAnalysis,
-    ));
+    recommendations.addAll(
+      _generateMonitoringRecommendations(riskAssessment, symptomAnalysis),
+    );
 
     return TreatmentRecommendations(
       patientId: patientId,
@@ -861,26 +928,30 @@ class TreatmentRecommendationEngine {
     final recommendations = <TreatmentRecommendation>[];
 
     // Diet recommendations
-    recommendations.add(TreatmentRecommendation(
-      id: 'lifestyle_diet',
-      type: TreatmentType.lifestyle,
-      description: 'Follow a heart-healthy diet with reduced sodium',
-      rationale: 'Evidence-based approach to cardiovascular health',
-      priority: TreatmentPriority.medium,
-      expectedOutcome: 'Improved cardiovascular health markers',
-      monitoringParameters: ['Blood pressure', 'Weight'],
-    ));
+    recommendations.add(
+      TreatmentRecommendation(
+        id: 'lifestyle_diet',
+        type: TreatmentType.lifestyle,
+        description: 'Follow a heart-healthy diet with reduced sodium',
+        rationale: 'Evidence-based approach to cardiovascular health',
+        priority: TreatmentPriority.medium,
+        expectedOutcome: 'Improved cardiovascular health markers',
+        monitoringParameters: ['Blood pressure', 'Weight'],
+      ),
+    );
 
     // Exercise recommendations
-    recommendations.add(TreatmentRecommendation(
-      id: 'lifestyle_exercise',
-      type: TreatmentType.lifestyle,
-      description: 'Engage in regular moderate-intensity exercise',
-      rationale: 'Physical activity improves overall health outcomes',
-      priority: TreatmentPriority.medium,
-      expectedOutcome: 'Enhanced cardiovascular fitness and well-being',
-      monitoringParameters: ['Exercise tolerance', 'Vital signs'],
-    ));
+    recommendations.add(
+      TreatmentRecommendation(
+        id: 'lifestyle_exercise',
+        type: TreatmentType.lifestyle,
+        description: 'Engage in regular moderate-intensity exercise',
+        rationale: 'Physical activity improves overall health outcomes',
+        priority: TreatmentPriority.medium,
+        expectedOutcome: 'Enhanced cardiovascular fitness and well-being',
+        monitoringParameters: ['Exercise tolerance', 'Vital signs'],
+      ),
+    );
 
     return recommendations;
   }
@@ -895,15 +966,19 @@ class TreatmentRecommendationEngine {
     // This would generate educational information or suggestions for provider consultation
 
     if (riskAssessment.overallRisk > 0.7) {
-      recommendations.add(TreatmentRecommendation(
-        id: 'medication_consultation',
-        type: TreatmentType.pharmacological,
-        description: 'Consult healthcare provider about medication management',
-        rationale: 'High risk profile may benefit from pharmacological intervention',
-        priority: TreatmentPriority.high,
-        expectedOutcome: 'Optimized medication regimen',
-        monitoringParameters: ['Medication adherence', 'Side effects'],
-      ));
+      recommendations.add(
+        TreatmentRecommendation(
+          id: 'medication_consultation',
+          type: TreatmentType.pharmacological,
+          description:
+              'Consult healthcare provider about medication management',
+          rationale:
+              'High risk profile may benefit from pharmacological intervention',
+          priority: TreatmentPriority.high,
+          expectedOutcome: 'Optimized medication regimen',
+          monitoringParameters: ['Medication adherence', 'Side effects'],
+        ),
+      );
     }
 
     return recommendations;
@@ -915,15 +990,17 @@ class TreatmentRecommendationEngine {
   ) {
     final recommendations = <TreatmentRecommendation>[];
 
-    recommendations.add(TreatmentRecommendation(
-      id: 'monitoring_vitals',
-      type: TreatmentType.monitoring,
-      description: 'Regular monitoring of vital signs and symptoms',
-      rationale: 'Continuous monitoring enables early detection of changes',
-      priority: TreatmentPriority.medium,
-      expectedOutcome: 'Early identification of health changes',
-      monitoringParameters: ['Blood pressure', 'Heart rate', 'Symptoms'],
-    ));
+    recommendations.add(
+      TreatmentRecommendation(
+        id: 'monitoring_vitals',
+        type: TreatmentType.monitoring,
+        description: 'Regular monitoring of vital signs and symptoms',
+        rationale: 'Continuous monitoring enables early detection of changes',
+        priority: TreatmentPriority.medium,
+        expectedOutcome: 'Early identification of health changes',
+        monitoringParameters: ['Blood pressure', 'Heart rate', 'Symptoms'],
+      ),
+    );
 
     return recommendations;
   }
@@ -954,17 +1031,24 @@ class ClinicalDecisionSupport {
 
     // Generate alerts based on risk assessment
     if (riskAssessment.overallRisk > 0.8) {
-      alerts.add(ClinicalAlert(
-        alertId: 'high_risk_${DateTime.now().millisecondsSinceEpoch}',
-        patientId: riskAssessment.patientId,
-        alertType: ClinicalAlertType.highRisk,
-        severity: ClinicalAlertSeverity.high,
-        message: 'High risk profile identified requiring clinical attention',
-        recommendations: ['Immediate clinical evaluation', 'Enhanced monitoring'],
-        timestamp: DateTime.now(),
-        triggeringFactors: riskAssessment.riskFactors.map((f) => f.name).toList(),
-        confidence: riskAssessment.confidence,
-      ));
+      alerts.add(
+        ClinicalAlert(
+          alertId: 'high_risk_${DateTime.now().millisecondsSinceEpoch}',
+          patientId: riskAssessment.patientId,
+          alertType: ClinicalAlertType.highRisk,
+          severity: ClinicalAlertSeverity.high,
+          message: 'High risk profile identified requiring clinical attention',
+          recommendations: [
+            'Immediate clinical evaluation',
+            'Enhanced monitoring',
+          ],
+          timestamp: DateTime.now(),
+          triggeringFactors: riskAssessment.riskFactors
+              .map((f) => f.name)
+              .toList(),
+          confidence: riskAssessment.confidence,
+        ),
+      );
     }
 
     // Generate recommendations
@@ -1071,8 +1155,14 @@ class DataValidationEngine {
 
     // Check for valid symptom names
     final validSymptoms = [
-      'chest_pain', 'difficulty_breathing', 'dizziness', 'nausea',
-      'fatigue', 'headache', 'palpitations', 'sweating'
+      'chest_pain',
+      'difficulty_breathing',
+      'dizziness',
+      'nausea',
+      'fatigue',
+      'headache',
+      'palpitations',
+      'sweating',
     ];
 
     for (final symptom in symptoms) {
@@ -1411,13 +1501,7 @@ enum ClinicalAlertType {
   allergyAlert,
 }
 
-enum ClinicalAlertSeverity {
-  none,
-  low,
-  medium,
-  high,
-  critical,
-}
+enum ClinicalAlertSeverity { none, low, medium, high, critical }
 
 enum ClinicalInsightType {
   riskAlert,
@@ -1427,12 +1511,7 @@ enum ClinicalInsightType {
   correlationInsight,
 }
 
-enum ClinicalUrgency {
-  low,
-  medium,
-  high,
-  critical,
-}
+enum ClinicalUrgency { low, medium, high, critical }
 
 enum TreatmentType {
   lifestyle,
@@ -1442,26 +1521,11 @@ enum TreatmentType {
   referral,
 }
 
-enum TreatmentPriority {
-  low,
-  medium,
-  high,
-  urgent,
-}
+enum TreatmentPriority { low, medium, high, urgent }
 
-enum EvidenceLevel {
-  low,
-  moderate,
-  high,
-  veryHigh,
-}
+enum EvidenceLevel { low, moderate, high, veryHigh }
 
-enum ClinicalSupportLevel {
-  basic,
-  moderate,
-  advanced,
-  expert,
-}
+enum ClinicalSupportLevel { basic, moderate, advanced, expert }
 
 /// Custom clinical exception
 class ClinicalException implements Exception {
@@ -1472,7 +1536,7 @@ class ClinicalException implements Exception {
 
   @override
   String toString() {
-    return context != null 
+    return context != null
         ? 'ClinicalException in $context: $message'
         : 'ClinicalException: $message';
   }

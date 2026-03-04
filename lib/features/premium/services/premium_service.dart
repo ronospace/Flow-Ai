@@ -25,7 +25,7 @@ class PremiumService {
     try {
       await _loadCurrentSubscription();
       await _loadAvailableFeatures();
-      
+
       _isInitialized = true;
       debugPrint('✅ Premium Service initialized');
     } catch (e) {
@@ -41,14 +41,15 @@ class PremiumService {
   Subscription? get currentSubscription => _currentSubscription;
 
   /// Get available premium features
-  List<PremiumFeature> get availableFeatures => List.unmodifiable(_availableFeatures);
+  List<PremiumFeature> get availableFeatures =>
+      List.unmodifiable(_availableFeatures);
 
   /// Check if a specific feature is available
   bool hasFeature(PremiumFeatureType featureType) {
     if (!hasPremium) {
       return _getFreeTierFeatures().contains(featureType);
     }
-    
+
     final subscription = _currentSubscription!;
     return _getFeaturesForTier(subscription.tier).contains(featureType);
   }
@@ -61,7 +62,10 @@ class PremiumService {
   ];
 
   /// Purchase subscription
-  Future<bool> purchaseSubscription(SubscriptionTier tier, PaymentMethod paymentMethod) async {
+  Future<bool> purchaseSubscription(
+    SubscriptionTier tier,
+    PaymentMethod paymentMethod,
+  ) async {
     try {
       debugPrint('💳 Purchasing ${tier.displayName} subscription...');
 
@@ -129,7 +133,7 @@ class PremiumService {
 
       // Mock subscription restoration from App Store/Play Store
       final restoredSubscription = await _restoreFromStore();
-      
+
       if (restoredSubscription != null) {
         await _saveSubscription(restoredSubscription);
         _currentSubscription = restoredSubscription;
@@ -150,7 +154,9 @@ class PremiumService {
     if (!hasPremium) return {};
 
     final subscription = _currentSubscription!;
-    final daysSinceStart = DateTime.now().difference(subscription.startDate).inDays;
+    final daysSinceStart = DateTime.now()
+        .difference(subscription.startDate)
+        .inDays;
 
     return {
       'subscription_tier': subscription.tier.name,
@@ -167,13 +173,14 @@ class PremiumService {
     if (_currentSubscription == null) return;
 
     final subscription = _currentSubscription!;
-    
+
     // Check if subscription expired
-    if (subscription.isExpired && subscription.status == SubscriptionStatus.active) {
+    if (subscription.isExpired &&
+        subscription.status == SubscriptionStatus.active) {
       final updatedSubscription = subscription.copyWith(
         status: SubscriptionStatus.expired,
       );
-      
+
       await _saveSubscription(updatedSubscription);
       _currentSubscription = updatedSubscription;
     }
@@ -189,7 +196,7 @@ class PremiumService {
     if (!hasPremium) {
       return FeatureLimits.free();
     }
-    
+
     return FeatureLimits.forTier(_currentSubscription!.tier);
   }
 
@@ -284,9 +291,14 @@ class PremiumService {
     await _preferences.setString('current_subscription', json);
   }
 
-  Future<bool> _processPayment(SubscriptionTier tier, PaymentMethod paymentMethod) async {
+  Future<bool> _processPayment(
+    SubscriptionTier tier,
+    PaymentMethod paymentMethod,
+  ) async {
     // Mock payment processing - in real implementation, integrate with payment provider
-    debugPrint('💳 Processing payment: ${tier.price} via ${paymentMethod.displayName}');
+    debugPrint(
+      '💳 Processing payment: ${tier.price} via ${paymentMethod.displayName}',
+    );
     await Future.delayed(const Duration(seconds: 2));
     return true; // Mock success
   }
@@ -301,10 +313,10 @@ class PremiumService {
   }
 
   Future<void> _unlockPremiumFeatures(SubscriptionTier tier) async {
-      final features = _getFeaturesForTier(tier);
-      for (final feature in features) {
-        _preferences.setBool('feature_${feature.name}_unlocked', true);
-      }
+    final features = _getFeaturesForTier(tier);
+    for (final feature in features) {
+      _preferences.setBool('feature_${feature.name}_unlocked', true);
+    }
   }
 
   List<PremiumFeatureType> _getFreeTierFeatures() {
@@ -317,7 +329,7 @@ class PremiumService {
 
   List<PremiumFeatureType> _getFeaturesForTier(SubscriptionTier tier) {
     final allFeatures = _getFreeTierFeatures();
-    
+
     switch (tier) {
       case SubscriptionTier.basic:
         allFeatures.addAll([
@@ -348,7 +360,7 @@ class PremiumService {
         ]);
         break;
     }
-    
+
     return allFeatures;
   }
 
@@ -372,12 +384,17 @@ class PremiumService {
 
     try {
       // Mock auto-renewal process
-      final renewed = await _processPayment(subscription.tier, subscription.paymentMethod);
+      final renewed = await _processPayment(
+        subscription.tier,
+        subscription.paymentMethod,
+      );
       if (renewed) {
         final renewedSubscription = subscription.copyWith(
-          endDate: DateTime.now().add(_getSubscriptionDuration(subscription.tier)),
+          endDate: DateTime.now().add(
+            _getSubscriptionDuration(subscription.tier),
+          ),
         );
-        
+
         await _saveSubscription(renewedSubscription);
         _currentSubscription = renewedSubscription;
       }

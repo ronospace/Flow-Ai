@@ -529,7 +529,11 @@ class _EnhancedAnalyticsDashboardScreenState
             ),
             const SizedBox(height: 20),
             ...[
-              ('PDF Report', Icons.picture_as_pdf, () => _exportData(context, 'pdf')),
+              (
+                'PDF Report',
+                Icons.picture_as_pdf,
+                () => _exportData(context, 'pdf'),
+              ),
               (
                 'Excel Spreadsheet',
                 Icons.table_chart,

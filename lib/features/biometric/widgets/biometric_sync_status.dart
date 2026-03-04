@@ -113,7 +113,7 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
   @override
   Widget build(BuildContext context) {
     final overallStatus = _getOverallSyncStatus();
-    
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -189,7 +189,9 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
                 ),
               ),
               Text(
-                _isSyncing ? 'Syncing...' : _getStatusDescription(overallStatus),
+                _isSyncing
+                    ? 'Syncing...'
+                    : _getStatusDescription(overallStatus),
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: AppTheme.mediumGrey,
                 ),
@@ -225,7 +227,9 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
           ],
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: _getStatusColor(overallStatus).withValues(alpha: 0.3)),
+        border: Border.all(
+          color: _getStatusColor(overallStatus).withValues(alpha: 0.3),
+        ),
       ),
       child: Row(
         children: [
@@ -282,10 +286,9 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
           ),
         ),
         const SizedBox(height: 12),
-        ..._syncData.entries.map((entry) => _buildSyncDataItem(
-          entry.key,
-          entry.value,
-        )),
+        ..._syncData.entries.map(
+          (entry) => _buildSyncDataItem(entry.key, entry.value),
+        ),
       ],
     );
   }
@@ -298,7 +301,9 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
       decoration: BoxDecoration(
         color: _getStatusColor(data.status).withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: _getStatusColor(data.status).withValues(alpha: 0.2)),
+        border: Border.all(
+          color: _getStatusColor(data.status).withValues(alpha: 0.2),
+        ),
       ),
       child: Row(
         children: [
@@ -317,7 +322,7 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
             ),
           ),
           const SizedBox(width: 12),
-          
+
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -333,7 +338,10 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
                     ),
                     const SizedBox(width: 8),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: AppTheme.mediumGrey.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(6),
@@ -359,7 +367,7 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
               ],
             ),
           ),
-          
+
           // Sync status badge
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -420,11 +428,7 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
                   const SizedBox(width: 12),
                 ],
                 if (!_isSyncing) ...[
-                  const Icon(
-                    Icons.refresh,
-                    color: Colors.white,
-                    size: 20,
-                  ),
+                  const Icon(Icons.refresh, color: Colors.white, size: 20),
                   const SizedBox(width: 8),
                 ],
                 Text(
@@ -445,7 +449,7 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
 
   SyncStatus _getOverallSyncStatus() {
     final statuses = _syncData.values.map((data) => data.status).toList();
-    
+
     if (statuses.any((status) => status == SyncStatus.error)) {
       return SyncStatus.error;
     } else if (statuses.any((status) => status == SyncStatus.warning)) {
@@ -523,12 +527,7 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
   }
 }
 
-enum SyncStatus {
-  success,
-  warning,
-  error,
-  syncing,
-}
+enum SyncStatus { success, warning, error, syncing }
 
 class SyncDataPoint {
   final DateTime lastSync;

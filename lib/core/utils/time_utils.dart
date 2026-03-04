@@ -7,7 +7,7 @@ class TimeUtils {
   static const int daysPerWeek = 7;
   static const int daysPerMonth = 30; // Average
   static const int daysPerYear = 365; // Average
-  
+
   /// Gets a human-readable "time ago" string
   static String getTimeAgo(DateTime dateTime) {
     final now = DateTime.now();
@@ -37,7 +37,10 @@ class TimeUtils {
   }
 
   /// Formats a date to a readable string
-  static String formatDate(DateTime dateTime, {String pattern = 'MMM dd, yyyy'}) {
+  static String formatDate(
+    DateTime dateTime, {
+    String pattern = 'MMM dd, yyyy',
+  }) {
     return DateFormat(pattern).format(dateTime);
   }
 
@@ -59,7 +62,15 @@ class TimeUtils {
 
   /// Gets the end of the day for a given date
   static DateTime endOfDay(DateTime dateTime) {
-    return DateTime(dateTime.year, dateTime.month, dateTime.day, 23, 59, 59, 999);
+    return DateTime(
+      dateTime.year,
+      dateTime.month,
+      dateTime.day,
+      23,
+      59,
+      59,
+      999,
+    );
   }
 
   /// Gets the start of the week for a given date (Monday)
@@ -81,8 +92,8 @@ class TimeUtils {
   /// Checks if two dates are on the same day
   static bool isSameDay(DateTime date1, DateTime date2) {
     return date1.year == date2.year &&
-           date1.month == date2.month &&
-           date1.day == date2.day;
+        date1.month == date2.month &&
+        date1.day == date2.day;
   }
 
   /// Checks if a date is today
@@ -228,12 +239,12 @@ class TimeUtils {
   static int getAge(DateTime birthDate) {
     final now = DateTime.now();
     int age = now.year - birthDate.year;
-    
-    if (now.month < birthDate.month || 
+
+    if (now.month < birthDate.month ||
         (now.month == birthDate.month && now.day < birthDate.day)) {
       age--;
     }
-    
+
     return age;
   }
 }

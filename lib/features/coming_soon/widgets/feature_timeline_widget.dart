@@ -9,14 +9,14 @@ class FeatureTimelineWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final timelineItems = _getTimelineItems();
-    
+
     return Column(
       children: [
         ...timelineItems.asMap().entries.map((entry) {
           final index = entry.key;
           final item = entry.value;
           final isLast = index == timelineItems.length - 1;
-          
+
           return TimelineItemWidget(
             item: item,
             isLast: isLast,
@@ -29,12 +29,13 @@ class FeatureTimelineWidget extends StatelessWidget {
 
   List<TimelineItem> _getTimelineItems() {
     final now = DateTime.now();
-    
+
     return [
       TimelineItem(
         date: now.subtract(const Duration(days: 30)),
         title: 'Advanced AI Engine',
-        description: 'Completed enhanced AI prediction algorithms with personalized insights',
+        description:
+            'Completed enhanced AI prediction algorithms with personalized insights',
         status: TimelineStatus.completed,
         progress: 1.0,
         icon: Icons.psychology,
@@ -45,11 +46,12 @@ class FeatureTimelineWidget extends StatelessWidget {
           'Cycle irregularity detection',
         ],
       ),
-      
+
       TimelineItem(
         date: now.add(const Duration(days: 15)),
         title: 'Smart Medication Reminders',
-        description: 'AI-optimized birth control and supplement tracking with drug interactions',
+        description:
+            'AI-optimized birth control and supplement tracking with drug interactions',
         status: TimelineStatus.testing,
         progress: 0.85,
         icon: Icons.medication,
@@ -61,11 +63,12 @@ class FeatureTimelineWidget extends StatelessWidget {
           'Pharmacy integration for refills',
         ],
       ),
-      
+
       TimelineItem(
         date: now.add(const Duration(days: 35)),
         title: 'Partner Sharing Dashboard',
-        description: 'Secure sharing of cycle insights with partners and healthcare providers',
+        description:
+            'Secure sharing of cycle insights with partners and healthcare providers',
         status: TimelineStatus.inProgress,
         progress: 0.65,
         icon: Icons.people,
@@ -77,11 +80,12 @@ class FeatureTimelineWidget extends StatelessWidget {
           'Healthcare provider portal',
         ],
       ),
-      
+
       TimelineItem(
         date: now.add(const Duration(days: 60)),
         title: 'AI-Powered Telemedicine',
-        description: 'Virtual consultations with certified gynecologists and health providers',
+        description:
+            'Virtual consultations with certified gynecologists and health providers',
         status: TimelineStatus.inProgress,
         progress: 0.45,
         icon: Icons.video_call,
@@ -93,11 +97,12 @@ class FeatureTimelineWidget extends StatelessWidget {
           'Insurance coverage support',
         ],
       ),
-      
+
       TimelineItem(
         date: now.add(const Duration(days: 75)),
         title: 'Advanced Health Analytics',
-        description: 'Deep insights with predictive modeling and comprehensive health analysis',
+        description:
+            'Deep insights with predictive modeling and comprehensive health analysis',
         status: TimelineStatus.planned,
         progress: 0.25,
         icon: Icons.analytics,
@@ -109,11 +114,12 @@ class FeatureTimelineWidget extends StatelessWidget {
           'Personalized health recommendations',
         ],
       ),
-      
+
       TimelineItem(
         date: now.add(const Duration(days: 90)),
         title: 'Women\'s Health Research',
-        description: 'Participate in cutting-edge research to advance women\'s healthcare',
+        description:
+            'Participate in cutting-edge research to advance women\'s healthcare',
         status: TimelineStatus.planned,
         progress: 0.1,
         icon: Icons.science,
@@ -125,11 +131,12 @@ class FeatureTimelineWidget extends StatelessWidget {
           'IRB-approved studies only',
         ],
       ),
-      
+
       TimelineItem(
         date: now.add(const Duration(days: 120)),
         title: 'Wearable Integration 2.0',
-        description: 'Advanced biometric integration with real-time health monitoring',
+        description:
+            'Advanced biometric integration with real-time health monitoring',
         status: TimelineStatus.planned,
         progress: 0.05,
         icon: Icons.watch,
@@ -180,10 +187,7 @@ class _TimelineItemWidgetState extends State<TimelineItemWidget> {
                 decoration: BoxDecoration(
                   color: widget.item.color.withValues(alpha: 0.2),
                   shape: BoxShape.circle,
-                  border: Border.all(
-                    color: widget.item.color,
-                    width: 2,
-                  ),
+                  border: Border.all(color: widget.item.color, width: 2),
                 ),
                 child: Icon(
                   widget.item.icon,
@@ -191,7 +195,7 @@ class _TimelineItemWidgetState extends State<TimelineItemWidget> {
                   size: 24,
                 ),
               ).animate().scale(delay: widget.animationDelay.ms),
-              
+
               // Connecting Line
               if (!widget.isLast)
                 Expanded(
@@ -212,15 +216,13 @@ class _TimelineItemWidgetState extends State<TimelineItemWidget> {
                 ),
             ],
           ),
-          
+
           const SizedBox(width: 16),
-          
+
           // Content
           Expanded(
             child: Container(
-              margin: EdgeInsets.only(
-                bottom: widget.isLast ? 0 : 24,
-              ),
+              margin: EdgeInsets.only(bottom: widget.isLast ? 0 : 24),
               child: GestureDetector(
                 onTap: () => setState(() => _isExpanded = !_isExpanded),
                 child: _buildItemContent(),
@@ -238,9 +240,7 @@ class _TimelineItemWidgetState extends State<TimelineItemWidget> {
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: widget.item.color.withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: widget.item.color.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -283,17 +283,19 @@ class _TimelineItemWidgetState extends State<TimelineItemWidget> {
                 ),
               ),
               Icon(
-                _isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                _isExpanded
+                    ? Icons.keyboard_arrow_up
+                    : Icons.keyboard_arrow_down,
                 color: Colors.white.withValues(alpha: 0.7),
               ),
             ],
           ),
-          
+
           const SizedBox(height: 12),
-          
+
           // Progress Bar
           _buildProgressBar(),
-          
+
           // Expanded Content
           if (_isExpanded) ...[
             const SizedBox(height: 16),
@@ -328,13 +330,13 @@ class _TimelineItemWidgetState extends State<TimelineItemWidget> {
   Widget _buildDateInfo() {
     final now = DateTime.now();
     final isUpcoming = widget.item.date.isAfter(now);
-    final difference = isUpcoming 
+    final difference = isUpcoming
         ? widget.item.date.difference(now)
         : now.difference(widget.item.date);
-    
+
     String timeText;
     IconData timeIcon;
-    
+
     if (isUpcoming) {
       if (difference.inDays <= 30) {
         timeText = 'In ${difference.inDays} days';
@@ -352,7 +354,7 @@ class _TimelineItemWidgetState extends State<TimelineItemWidget> {
       timeText = '${difference.inDays} days ago';
       timeIcon = Icons.check_circle;
     }
-    
+
     return Row(
       children: [
         Icon(
@@ -451,7 +453,7 @@ class _TimelineItemWidgetState extends State<TimelineItemWidget> {
             ),
           );
         }),
-        
+
         if (widget.item.status == TimelineStatus.completed)
           Container(
             margin: const EdgeInsets.only(top: 12),
@@ -511,12 +513,7 @@ class TimelineItem {
   });
 }
 
-enum TimelineStatus {
-  planned,
-  inProgress,
-  testing,
-  completed,
-}
+enum TimelineStatus { planned, inProgress, testing, completed }
 
 extension TimelineStatusExtension on TimelineStatus {
   String get displayName {
@@ -531,7 +528,7 @@ extension TimelineStatusExtension on TimelineStatus {
         return 'Completed';
     }
   }
-  
+
   Color get color {
     switch (this) {
       case TimelineStatus.planned:

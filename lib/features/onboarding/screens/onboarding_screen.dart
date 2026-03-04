@@ -31,20 +31,16 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0.0, 0.3),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOutQuart,
-    ));
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0.0, 0.3), end: Offset.zero).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Curves.easeOutQuart,
+          ),
+        );
     _animationController.forward();
   }
 
@@ -59,7 +55,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localizations = AppLocalizations.of(context);
-    
+
     return Consumer<OnboardingProvider>(
       builder: (context, provider, child) {
         return Scaffold(
@@ -96,7 +92,12 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                             opacity: _fadeAnimation,
                             child: SlideTransition(
                               position: _slideAnimation,
-                              child: _buildStepContent(step, provider, theme, localizations),
+                              child: _buildStepContent(
+                                step,
+                                provider,
+                                theme,
+                                localizations,
+                              ),
                             ),
                           );
                         },
@@ -110,9 +111,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                 if (provider.isLoading)
                   Container(
                     color: Colors.black.withValues(alpha: 0.3),
-                    child: const Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                    child: const Center(child: CircularProgressIndicator()),
                   ),
               ],
             ),
@@ -175,11 +174,9 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     AppLocalizations localizations,
   ) {
     if (step.type == OnboardingStepType.setup) {
-      return SetupForm(
-        onSave: (data) => _handleSetupSave(provider, data),
-      );
+      return SetupForm(onSave: (data) => _handleSetupSave(provider, data));
     }
-    
+
     return OnboardingPage(
       step: step,
       onPermissionRequest: () => _handlePermissionRequest(provider, step),
@@ -225,7 +222,9 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                 ),
               ),
               child: Text(
-                provider.isLastStep ? localizations.getStarted : localizations.next,
+                provider.isLastStep
+                    ? localizations.getStarted
+                    : localizations.next,
                 style: theme.textTheme.titleMedium?.copyWith(
                   color: theme.colorScheme.onPrimary,
                   fontWeight: FontWeight.w600,
@@ -261,19 +260,21 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   Future<void> _completeOnboarding(OnboardingProvider provider) async {
     try {
       await provider.completeOnboarding();
-      
+
       // Schedule welcome notification safely
       try {
         await provider.scheduleWelcomeNotification();
       } catch (notifError) {
-        debugPrint('Warning: Could not schedule welcome notification: $notifError');
+        debugPrint(
+          'Warning: Could not schedule welcome notification: $notifError',
+        );
         // Continue anyway - notification failure shouldn't block completion
       }
-      
+
       if (mounted) {
         // Add a small delay to ensure all services are ready
         await Future.delayed(const Duration(milliseconds: 100));
-        
+
         if (mounted) {
           try {
             context.go('/home');
@@ -334,7 +335,9 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       if (granted && mounted) {
         final localizations = AppLocalizations.of(context);
         HapticFeedback.lightImpact();
-        _showSuccessMessage('${localizations.notifications} ${localizations.success.toLowerCase()}!');
+        _showSuccessMessage(
+          '${localizations.notifications} ${localizations.success.toLowerCase()}!',
+        );
       }
     }
   }
@@ -350,7 +353,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         trackingGoals: List<String>.from(data['goals'] ?? []),
         reminderSettings: Map<String, bool>.from(data['reminders'] ?? {}),
       );
-      
+
       // Handle demo data if enabled
       final useDemoData = data['useDemoData'] ?? false;
       if (useDemoData) {
@@ -359,7 +362,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           _showSuccessMessage('Sample data loaded.');
         }
       }
-      
+
       if (mounted) {
         final localizations = AppLocalizations.of(context);
         HapticFeedback.lightImpact();
@@ -374,7 +377,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       }
     }
   }
-  
+
   /// Helper method to show success messages (works with both Material and Cupertino)
   void _showSuccessMessage(String message) {
     try {
@@ -390,7 +393,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       debugPrint('Success: $message');
     }
   }
-  
+
   /// Helper method to show error messages (works with both Material and Cupertino)
   void _showErrorMessage(String message) {
     try {

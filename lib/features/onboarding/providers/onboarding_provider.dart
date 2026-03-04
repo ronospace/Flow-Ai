@@ -5,7 +5,6 @@ import '../../../core/services/user_preferences_service.dart';
 import '../../../core/services/notification_service.dart';
 import '../../../core/services/onboarding_tutorial_service.dart';
 
-
 // --- Sample mode removed (store-safe) ---
 // These are minimal stubs to keep legacy onboarding code compiling.
 // They do NOT provide credentials or any auto-demo login.
@@ -18,7 +17,6 @@ class DemoDataService {
 }
 // --------------------------------------
 
-
 class OnboardingProvider extends ChangeNotifier {
   bool _isCompleted = false;
   int _currentStep = 0;
@@ -27,7 +25,8 @@ class OnboardingProvider extends ChangeNotifier {
   UserPreferencesService? _preferencesService;
   final NotificationService _notificationService = NotificationService.instance;
   final DemoDataService _demoDataService = DemoDataService();
-  final OnboardingTutorialService _tutorialService = OnboardingTutorialService();
+  final OnboardingTutorialService _tutorialService =
+      OnboardingTutorialService();
   bool _isInitialized = false;
   bool _useDemoData = false;
   DemoDataSet? _demoDataSet;
@@ -69,7 +68,9 @@ class OnboardingProvider extends ChangeNotifier {
         await _preferencesService!.setOnboardingComplete(true);
         await _preferencesService!.setFirstLaunch(false);
       } else {
-        debugPrint('PreferencesService not initialized, skipping preferences update');
+        debugPrint(
+          'PreferencesService not initialized, skipping preferences update',
+        );
       }
     } catch (e) {
       debugPrint('Error completing onboarding: $e');

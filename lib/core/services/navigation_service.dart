@@ -12,7 +12,7 @@ class NavigationService {
   late SharedPreferences _prefs;
   final List<NavigationState> _navigationHistory = [];
   final Map<String, dynamic> _pageStates = {};
-  
+
   static const String _historyKey = 'navigation_history';
   static const String _statesKey = 'page_states';
 
@@ -40,24 +40,24 @@ class NavigationService {
       timestamp: DateTime.now(),
       context: context ?? {},
     );
-    
+
     _navigationHistory.add(navigationState);
-    
+
     // Keep only last 20 navigation entries to avoid memory bloat
     if (_navigationHistory.length > 20) {
       _navigationHistory.removeAt(0);
     }
-    
+
     _saveNavigationHistory();
   }
 
   /// Get the proper back navigation route based on context
   String? getBackRoute(BuildContext? context) {
     if (_navigationHistory.length < 2) return null;
-    
+
     // Remove current route
     final currentRoute = _navigationHistory.last.route;
-    
+
     // Find the previous different route
     for (int i = _navigationHistory.length - 2; i >= 0; i--) {
       final previousRoute = _navigationHistory[i];
@@ -65,30 +65,30 @@ class NavigationService {
         return previousRoute.route;
       }
     }
-    
+
     return null;
   }
 
   /// Enhanced back navigation that goes to the actual previous screen
   bool navigateBack(BuildContext context) {
     final backRoute = getBackRoute(context);
-    
+
     if (backRoute != null) {
       // Remove current route from history to prevent loops
       if (_navigationHistory.isNotEmpty) {
         _navigationHistory.removeLast();
       }
-      
+
       context.go(backRoute);
       return true;
     }
-    
+
     // Fallback to system back if no custom route found
     if (Navigator.of(context).canPop()) {
       Navigator.of(context).pop();
       return true;
     }
-    
+
     return false;
   }
 
@@ -102,7 +102,9 @@ class NavigationService {
 
   /// Get navigation context for current route
   Map<String, dynamic>? getCurrentContext() {
-    return _navigationHistory.isNotEmpty ? _navigationHistory.last.context : null;
+    return _navigationHistory.isNotEmpty
+        ? _navigationHistory.last.context
+        : null;
   }
 
   /// Check if we can navigate back
@@ -132,7 +134,7 @@ class NavigationService {
       final List<dynamic> historyJson = json.decode(historyString);
       _navigationHistory.clear();
       _navigationHistory.addAll(
-        historyJson.map((json) => NavigationState.fromJson(json))
+        historyJson.map((json) => NavigationState.fromJson(json)),
       );
     }
   }
@@ -184,29 +186,24 @@ class NavigationState {
 class SmartBackButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final Color? color;
-  
-  const SmartBackButton({
-    super.key,
-    this.onPressed,
-    this.color,
-  });
+
+  const SmartBackButton({super.key, this.onPressed, this.color});
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: Icon(
-        Icons.arrow_back,
-        color: color,
-      ),
-      onPressed: onPressed ?? () {
-        final navigationService = NavigationService();
-        if (!navigationService.navigateBack(context)) {
-          // If smart navigation fails, try system back
-          if (Navigator.of(context).canPop()) {
-            Navigator.of(context).pop();
-          }
-        }
-      },
+      icon: Icon(Icons.arrow_back, color: color),
+      onPressed:
+          onPressed ??
+          () {
+            final navigationService = NavigationService();
+            if (!navigationService.navigateBack(context)) {
+              // If smart navigation fails, try system back
+              if (Navigator.of(context).canPop()) {
+                Navigator.of(context).pop();
+              }
+            }
+          },
     );
   }
 }

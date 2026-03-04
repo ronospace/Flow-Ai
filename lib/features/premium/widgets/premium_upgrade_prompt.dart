@@ -26,16 +26,10 @@ class PremiumUpgradePrompt extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Colors.amber.shade50,
-            Colors.amber.shade100,
-          ],
+          colors: [Colors.amber.shade50, Colors.amber.shade100],
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Colors.amber.shade300,
-          width: 2,
-        ),
+        border: Border.all(color: Colors.amber.shade300, width: 2),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,10 +61,7 @@ class PremiumUpgradePrompt extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          Text(
-            message,
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
+          Text(message, style: Theme.of(context).textTheme.bodyMedium),
           const SizedBox(height: 16),
           SizedBox(
             width: double.infinity,
@@ -98,9 +89,7 @@ class PremiumUpgradePrompt extends StatelessWidget {
   void _showPaywall(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => PremiumPaywallScreen(
-          highlightFeature: feature,
-        ),
+        builder: (context) => PremiumPaywallScreen(highlightFeature: feature),
         fullscreenDialog: true,
       ),
     );
@@ -119,10 +108,7 @@ Future<bool?> showPremiumUpgradeDialog(
     builder: (context) => AlertDialog(
       title: Row(
         children: [
-          Icon(
-            Icons.workspace_premium,
-            color: Colors.amber.shade600,
-          ),
+          Icon(Icons.workspace_premium, color: Colors.amber.shade600),
           const SizedBox(width: 8),
           Expanded(child: Text(title)),
         ],
@@ -138,9 +124,8 @@ Future<bool?> showPremiumUpgradeDialog(
             Navigator.of(context).pop(false);
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => PremiumPaywallScreen(
-                  highlightFeature: feature,
-                ),
+                builder: (context) =>
+                    PremiumPaywallScreen(highlightFeature: feature),
                 fullscreenDialog: true,
               ),
             );
@@ -175,7 +160,8 @@ Future<bool> checkPremiumAccess(
   await showPremiumUpgradeDialog(
     context,
     title: 'Premium Feature',
-    message: '$featureDescription\n\nUpgrade to premium to unlock this feature.',
+    message:
+        '$featureDescription\n\nUpgrade to premium to unlock this feature.',
     feature: feature,
   );
 
@@ -239,9 +225,7 @@ class FreeInsightsLimitBanner extends StatelessWidget {
           margin: const EdgeInsets.all(16),
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: remaining <= 0
-                ? Colors.red.shade50
-                : Colors.orange.shade50,
+            color: remaining <= 0 ? Colors.red.shade50 : Colors.orange.shade50,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: remaining <= 0

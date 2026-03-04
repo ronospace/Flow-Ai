@@ -5,15 +5,12 @@ import '../../../core/services/analytics_service.dart';
 class CycleAnalyticsCard extends StatelessWidget {
   final CycleAnalytics analytics;
 
-  const CycleAnalyticsCard({
-    super.key,
-    required this.analytics,
-  });
+  const CycleAnalyticsCard({super.key, required this.analytics});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -36,11 +33,7 @@ class CycleAnalyticsCard extends StatelessWidget {
           // Header
           Row(
             children: [
-              Icon(
-                Icons.favorite,
-                color: theme.colorScheme.primary,
-                size: 24,
-              ),
+              Icon(Icons.favorite, color: theme.colorScheme.primary, size: 24),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -56,7 +49,9 @@ class CycleAnalyticsCard extends StatelessWidget {
                     Text(
                       'Last updated ${_formatDate(analytics.lastUpdated)}',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.6,
+                        ),
                       ),
                     ),
                   ],
@@ -144,20 +139,14 @@ class CycleAnalyticsCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: color.withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(
-                icon,
-                color: color,
-                size: 16,
-              ),
+              Icon(icon, color: color, size: 16),
               const Spacer(),
               Container(
                 padding: const EdgeInsets.all(2),
@@ -165,11 +154,7 @@ class CycleAnalyticsCard extends StatelessWidget {
                   color: color.withValues(alpha: 0.2),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
-                  Icons.arrow_upward,
-                  color: color,
-                  size: 10,
-                ),
+                child: Icon(Icons.arrow_upward, color: color, size: 10),
               ),
             ],
           ),
@@ -224,9 +209,7 @@ class CycleAnalyticsCard extends StatelessWidget {
                   );
                 },
               ),
-              titlesData: FlTitlesData(
-                show: false,
-              ),
+              titlesData: FlTitlesData(show: false),
               borderData: FlBorderData(show: false),
               minX: 0,
               maxX: 6,
@@ -252,7 +235,9 @@ class CycleAnalyticsCard extends StatelessWidget {
                   ),
                   belowBarData: BarAreaData(
                     show: true,
-                    color: _getRegularityColor(analytics.regularityScore).withValues(alpha: 0.2),
+                    color: _getRegularityColor(
+                      analytics.regularityScore,
+                    ).withValues(alpha: 0.2),
                   ),
                 ),
               ],
@@ -272,7 +257,9 @@ class CycleAnalyticsCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: _getRegularityColor(analytics.regularityScore).withValues(alpha: 0.1),
+                color: _getRegularityColor(
+                  analytics.regularityScore,
+                ).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
@@ -307,10 +294,14 @@ class CycleAnalyticsCard extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: _getFlowPatternColor(analytics.flowPattern).withValues(alpha: 0.1),
+                  color: _getFlowPatternColor(
+                    analytics.flowPattern,
+                  ).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: _getFlowPatternColor(analytics.flowPattern).withValues(alpha: 0.3),
+                    color: _getFlowPatternColor(
+                      analytics.flowPattern,
+                    ).withValues(alpha: 0.3),
                   ),
                 ),
                 child: Column(
@@ -333,7 +324,9 @@ class CycleAnalyticsCard extends StatelessWidget {
                     Text(
                       _getFlowPatternDescription(analytics.flowPattern),
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.7,
+                        ),
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -348,10 +341,9 @@ class CycleAnalyticsCard extends StatelessWidget {
   }
 
   Widget _buildSymptomFrequencySection(ThemeData theme) {
-    final topSymptoms = analytics.symptomFrequency.entries
-        .toList()
-        ..sort((a, b) => b.value.compareTo(a.value));
-    
+    final topSymptoms = analytics.symptomFrequency.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -363,39 +355,47 @@ class CycleAnalyticsCard extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12),
-        ...topSymptoms.take(5).map((entry) => Padding(
-          padding: const EdgeInsets.only(bottom: 8),
-          child: Row(
-            children: [
-              Expanded(
-                flex: 3,
-                child: Text(
-                  entry.key,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.onSurface,
-                  ),
+        ...topSymptoms
+            .take(5)
+            .map(
+              (entry) => Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: Text(
+                        entry.key,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: theme.colorScheme.onSurface,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: LinearProgressIndicator(
+                        value: entry.value,
+                        backgroundColor: theme.colorScheme.outline.withValues(
+                          alpha: 0.2,
+                        ),
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          theme.colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      '${(entry.value * 100).round()}%',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.7,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Expanded(
-                flex: 2,
-                child: LinearProgressIndicator(
-                  value: entry.value,
-                  backgroundColor: theme.colorScheme.outline.withValues(alpha: 0.2),
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    theme.colorScheme.primary,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                '${(entry.value * 100).round()}%',
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                ),
-              ),
-            ],
-          ),
-        )),
+            ),
       ],
     );
   }
@@ -489,11 +489,11 @@ class CycleAnalyticsCard extends StatelessWidget {
   String _formatDate(DateTime date) {
     final now = DateTime.now();
     final difference = now.difference(date).inDays;
-    
+
     if (difference == 0) return 'today';
     if (difference == 1) return 'yesterday';
     if (difference < 7) return '$difference days ago';
-    
+
     return '${date.day}/${date.month}/${date.year}';
   }
 }

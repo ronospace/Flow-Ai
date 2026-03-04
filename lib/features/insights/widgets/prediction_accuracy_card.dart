@@ -58,15 +58,16 @@ class PredictionAccuracyCard extends StatelessWidget {
               ),
             ],
           ),
-          
+
           const SizedBox(height: 24),
-          
+
           // Circular Progress with percentage
           Center(
             child: Stack(
               alignment: Alignment.center,
               children: [
-                SizedBox(width: 120,
+                SizedBox(
+                  width: 120,
                   height: 120,
                   child: CircularProgressIndicator(
                     value: accuracy,
@@ -99,9 +100,9 @@ class PredictionAccuracyCard extends StatelessWidget {
               ],
             ),
           ),
-          
+
           const SizedBox(height: 24),
-          
+
           // Stats
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -129,9 +130,9 @@ class PredictionAccuracyCard extends StatelessWidget {
               ),
             ],
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Accuracy description
           Container(
             padding: const EdgeInsets.all(16),
@@ -162,9 +163,9 @@ class PredictionAccuracyCard extends StatelessWidget {
               ],
             ),
           ),
-          
+
           const SizedBox(height: 12),
-          
+
           // View Sources link
           GestureDetector(
             onTap: () {
@@ -173,11 +174,7 @@ class PredictionAccuracyCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.menu_book,
-                  size: 14,
-                  color: AppTheme.secondaryBlue,
-                ),
+                Icon(Icons.menu_book, size: 14, color: AppTheme.secondaryBlue),
                 const SizedBox(width: 6),
                 Text(
                   'View Sources',
@@ -195,16 +192,17 @@ class PredictionAccuracyCard extends StatelessWidget {
     ).animate().fadeIn().slideY(begin: 0.2, end: 0);
   }
 
-  Widget _buildStat(BuildContext context, String label, String value, 
-      IconData icon, Color color) {
+  Widget _buildStat(
+    BuildContext context,
+    String label,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     final theme = Theme.of(context);
     return Column(
       children: [
-        Icon(
-          icon,
-          color: color,
-          size: 20,
-        ),
+        Icon(icon, color: color, size: 20),
         const SizedBox(height: 4),
         Text(
           value,
@@ -213,13 +211,7 @@ class PredictionAccuracyCard extends StatelessWidget {
             color: color,
           ),
         ),
-        Text(
-          label,
-          style: TextStyle(
-            color: AppTheme.mediumGrey,
-            fontSize: 12,
-          ),
-        ),
+        Text(label, style: TextStyle(color: AppTheme.mediumGrey, fontSize: 12)),
       ],
     );
   }
@@ -272,11 +264,7 @@ class PredictionAccuracyCard extends StatelessWidget {
       builder: (context) => AlertDialog(
         title: Row(
           children: [
-            Icon(
-              Icons.menu_book,
-              color: AppTheme.secondaryBlue,
-              size: 20,
-            ),
+            Icon(Icons.menu_book, color: AppTheme.secondaryBlue, size: 20),
             const SizedBox(width: 8),
             Text('Prediction Accuracy Sources'),
           ],
@@ -336,11 +324,7 @@ class PredictionAccuracyCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            Icons.check_circle,
-            size: 16,
-            color: AppTheme.accentMint,
-          ),
+          Icon(Icons.check_circle, size: 16, color: AppTheme.accentMint),
           const SizedBox(width: 8),
           Expanded(
             child: Column(

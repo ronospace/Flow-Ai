@@ -54,7 +54,7 @@ class KnowledgeBaseArticle {
   bool get hasHighRating => rating != null && rating! >= 4.0;
   bool get isOutdated => DateTime.now().difference(lastUpdated).inDays > 365;
   bool get needsReview => isOutdated || (rating != null && rating! < 3.0);
-  
+
   /// Get reading time in minutes based on content length
   int get readingTimeMinutes {
     final wordCount = _getWordCount();
@@ -64,7 +64,7 @@ class KnowledgeBaseArticle {
   /// Get article quality score
   double get qualityScore {
     var score = 0.0;
-    
+
     // Content length (optimal: 500-3000 words)
     final wordCount = _getWordCount();
     if (wordCount >= 500 && wordCount <= 3000) {
@@ -72,32 +72,32 @@ class KnowledgeBaseArticle {
     } else if (wordCount >= 200) {
       score += 1.0;
     }
-    
+
     // Has sections
     if (sections.isNotEmpty) {
       score += 1.5;
     }
-    
+
     // Has metadata
     if (metadata != null && metadata!.hasReferences) {
       score += 2.0;
     }
-    
+
     // User rating
     if (rating != null) {
       score += rating!;
     }
-    
+
     // View engagement
     if (views > 50) {
       score += 1.0;
     }
-    
+
     // Recent update
     if (!isOutdated) {
       score += 0.5;
     }
-    
+
     return score.clamp(0.0, 10.0);
   }
 
@@ -106,26 +106,26 @@ class KnowledgeBaseArticle {
     if (summary != null && summary!.isNotEmpty) {
       return summary!;
     }
-    
+
     if (content.length <= maxLength) {
       return content;
     }
-    
+
     // Find a good breaking point
     final truncated = content.substring(0, maxLength);
     final lastSentence = truncated.lastIndexOf('.');
-    
+
     if (lastSentence > maxLength * 0.7) {
       return truncated.substring(0, lastSentence + 1);
     }
-    
+
     return '$truncated...';
   }
 
   /// Get formatted time since creation
   String get timeAgo {
     final duration = DateTime.now().difference(createdDate);
-    
+
     if (duration.inDays > 365) {
       final years = (duration.inDays / 365).floor();
       return '${years}y ago';
@@ -144,35 +144,45 @@ class KnowledgeBaseArticle {
   /// Check if article matches search query
   bool matchesQuery(String query) {
     final queryLower = query.toLowerCase();
-    
+
     return title.toLowerCase().contains(queryLower) ||
-           content.toLowerCase().contains(queryLower) ||
-           tags.any((tag) => tag.toLowerCase().contains(queryLower)) ||
-           category.toLowerCase().contains(queryLower) ||
-           (summary != null && summary!.toLowerCase().contains(queryLower));
+        content.toLowerCase().contains(queryLower) ||
+        tags.any((tag) => tag.toLowerCase().contains(queryLower)) ||
+        category.toLowerCase().contains(queryLower) ||
+        (summary != null && summary!.toLowerCase().contains(queryLower));
   }
 
   /// Get key topics from content
   List<String> get keyTopics {
     final topics = <String>{};
-    
+
     // Add tags
     topics.addAll(tags);
-    
+
     // Extract medical terms (simplified)
     final medicalTerms = [
-      'PCOS', 'endometriosis', 'fibroids', 'ovulation', 'menstruation',
-      'fertility', 'pregnancy', 'menopause', 'hormones', 'estrogen',
-      'progesterone', 'insulin resistance', 'irregular cycles'
+      'PCOS',
+      'endometriosis',
+      'fibroids',
+      'ovulation',
+      'menstruation',
+      'fertility',
+      'pregnancy',
+      'menopause',
+      'hormones',
+      'estrogen',
+      'progesterone',
+      'insulin resistance',
+      'irregular cycles',
     ];
-    
+
     final contentLower = content.toLowerCase();
     for (final term in medicalTerms) {
       if (contentLower.contains(term.toLowerCase())) {
         topics.add(term);
       }
     }
-    
+
     return topics.take(10).toList();
   }
 
@@ -181,7 +191,7 @@ class KnowledgeBaseArticle {
     // Simple heuristic based on content complexity
     final wordCount = _getWordCount();
     final hasAdvancedTerms = _hasAdvancedMedicalTerms();
-    
+
     if (hasAdvancedTerms && wordCount > 1500) {
       return DifficultyLevel.advanced;
     } else if (wordCount > 800 || hasAdvancedTerms) {
@@ -194,8 +204,8 @@ class KnowledgeBaseArticle {
   /// Check if article is comprehensive
   bool get isComprehensive {
     return _getWordCount() >= 1000 &&
-           sections.length >= 3 &&
-           metadata?.hasReferences == true;
+        sections.length >= 3 &&
+        metadata?.hasReferences == true;
   }
 
   int _getWordCount() {
@@ -204,15 +214,18 @@ class KnowledgeBaseArticle {
 
   bool _hasAdvancedMedicalTerms() {
     const advancedTerms = [
-      'pathophysiology', 'endocrinology', 'pharmacology',
-      'differential diagnosis', 'contraindications'
+      'pathophysiology',
+      'endocrinology',
+      'pharmacology',
+      'differential diagnosis',
+      'contraindications',
     ];
-    
+
     final contentLower = content.toLowerCase();
     return advancedTerms.any((term) => contentLower.contains(term));
   }
 
-  factory KnowledgeBaseArticle.fromJson(Map<String, dynamic> json) => 
+  factory KnowledgeBaseArticle.fromJson(Map<String, dynamic> json) =>
       _$KnowledgeBaseArticleFromJson(json);
   Map<String, dynamic> toJson() => _$KnowledgeBaseArticleToJson(this);
 
@@ -352,7 +365,8 @@ class ArticleSection {
   /// Get section word count
   int get wordCount => content.trim().split(RegExp(r'\s+')).length;
 
-  factory ArticleSection.fromJson(Map<String, dynamic> json) => _$ArticleSectionFromJson(json);
+  factory ArticleSection.fromJson(Map<String, dynamic> json) =>
+      _$ArticleSectionFromJson(json);
   Map<String, dynamic> toJson() => _$ArticleSectionToJson(this);
 }
 
@@ -432,7 +446,7 @@ class ArticleMetadata {
   /// Get formatted references
   String get formattedReferences {
     if (references.isEmpty) return '';
-    
+
     return references
         .asMap()
         .entries
@@ -443,18 +457,21 @@ class ArticleMetadata {
   /// Get evidence quality score
   int get evidenceQuality {
     var score = 0;
-    
+
     if (hasReferences) score += 3;
     if (haCurrentMedicalReview) score += 2;
     if (evidenceLevel == 'high') {
       score += 3;
-    } else if (evidenceLevel == 'moderate') score += 2;
-    else if (evidenceLevel == 'low') score += 1;
-    
+    } else if (evidenceLevel == 'moderate')
+      score += 2;
+    else if (evidenceLevel == 'low')
+      score += 1;
+
     return score.clamp(0, 8);
   }
 
-  factory ArticleMetadata.fromJson(Map<String, dynamic> json) => _$ArticleMetadataFromJson(json);
+  factory ArticleMetadata.fromJson(Map<String, dynamic> json) =>
+      _$ArticleMetadataFromJson(json);
   Map<String, dynamic> toJson() => _$ArticleMetadataToJson(this);
 }
 
@@ -497,12 +514,14 @@ class ArticleFilters {
     }
 
     // Difficulty filter
-    if (maxDifficulty != null && article.difficultyLevel.index > maxDifficulty!.index) {
+    if (maxDifficulty != null &&
+        article.difficultyLevel.index > maxDifficulty!.index) {
       return false;
     }
 
     // Rating filter
-    if (minRating != null && (article.rating == null || article.rating! < minRating!)) {
+    if (minRating != null &&
+        (article.rating == null || article.rating! < minRating!)) {
       return false;
     }
 
@@ -512,12 +531,14 @@ class ArticleFilters {
     }
 
     // References filter
-    if (hasReferences != null && (article.metadata?.hasReferences ?? false) != hasReferences!) {
+    if (hasReferences != null &&
+        (article.metadata?.hasReferences ?? false) != hasReferences!) {
       return false;
     }
 
     // Published date filter
-    if (publishedAfter != null && article.createdDate.isBefore(publishedAfter!)) {
+    if (publishedAfter != null &&
+        article.createdDate.isBefore(publishedAfter!)) {
       return false;
     }
 
@@ -570,37 +591,42 @@ class ArticleStatistics {
   /// Get engagement score
   double get engagementScore {
     if (totalViews == 0) return 0.0;
-    
+
     final shareRate = shares / totalViews;
     final bookmarkRate = bookmarks / totalViews;
     final ratingRate = totalRatings / totalViews;
-    
-    return (shareRate * 5 + bookmarkRate * 3 + ratingRate * 2 + averageRating).clamp(0.0, 10.0);
+
+    return (shareRate * 5 + bookmarkRate * 3 + ratingRate * 2 + averageRating)
+        .clamp(0.0, 10.0);
   }
 
   /// Get trending score
   double get trendingScore {
     // Calculate views in last 7 days
     final recentViews = _getRecentViews(7);
-    final totalRecentViews = recentViews.values.fold(0, (sum, views) => sum + views);
-    
+    final totalRecentViews = recentViews.values.fold(
+      0,
+      (sum, views) => sum + views,
+    );
+
     return (totalRecentViews * 0.7 + engagementScore * 0.3).clamp(0.0, 100.0);
   }
 
   Map<String, int> _getRecentViews(int days) {
     final cutoffDate = DateTime.now().subtract(Duration(days: days));
     final recentViews = <String, int>{};
-    
+
     viewsByDay.forEach((date, views) {
       final viewDate = DateTime.tryParse(date);
       if (viewDate != null && viewDate.isAfter(cutoffDate)) {
         recentViews[date] = views;
       }
     });
-    
+
     return recentViews;
   }
 
-  factory ArticleStatistics.fromJson(Map<String, dynamic> json) => _$ArticleStatisticsFromJson(json);
+  factory ArticleStatistics.fromJson(Map<String, dynamic> json) =>
+      _$ArticleStatisticsFromJson(json);
   Map<String, dynamic> toJson() => _$ArticleStatisticsToJson(this);
 }

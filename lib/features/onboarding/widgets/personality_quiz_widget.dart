@@ -22,13 +22,13 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
     with TickerProviderStateMixin {
   late TextEditingController _fullNameController;
   late TextEditingController _preferredNameController;
-  
+
   DateTime? _selectedDateOfBirth;
   String? _selectedPersonalityType;
   String? _selectedTrackingStyle;
   String? _selectedMotivationLevel;
   final List<String> _selectedInterests = [];
-  
+
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
 
@@ -106,14 +106,38 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
   ];
 
   final List<Map<String, dynamic>> _interests = [
-    {'id': 'fertility', 'title': 'Fertility Planning', 'icon': Icons.child_care},
-    {'id': 'symptom_relief', 'title': 'Symptom Management', 'icon': Icons.healing},
-    {'id': 'mood_tracking', 'title': 'Mood & Energy', 'icon': Icons.sentiment_satisfied},
-    {'id': 'exercise', 'title': 'Exercise & Activity', 'icon': Icons.fitness_center},
+    {
+      'id': 'fertility',
+      'title': 'Fertility Planning',
+      'icon': Icons.child_care,
+    },
+    {
+      'id': 'symptom_relief',
+      'title': 'Symptom Management',
+      'icon': Icons.healing,
+    },
+    {
+      'id': 'mood_tracking',
+      'title': 'Mood & Energy',
+      'icon': Icons.sentiment_satisfied,
+    },
+    {
+      'id': 'exercise',
+      'title': 'Exercise & Activity',
+      'icon': Icons.fitness_center,
+    },
     {'id': 'nutrition', 'title': 'Nutrition & Diet', 'icon': Icons.restaurant},
     {'id': 'sleep', 'title': 'Sleep Quality', 'icon': Icons.bedtime},
-    {'id': 'stress', 'title': 'Stress Management', 'icon': Icons.self_improvement},
-    {'id': 'relationships', 'title': 'Relationships & Intimacy', 'icon': Icons.favorite},
+    {
+      'id': 'stress',
+      'title': 'Stress Management',
+      'icon': Icons.self_improvement,
+    },
+    {
+      'id': 'relationships',
+      'title': 'Relationships & Intimacy',
+      'icon': Icons.favorite,
+    },
   ];
 
   @override
@@ -135,13 +159,9 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
       vsync: this,
     );
 
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
 
     _animationController.forward();
   }
@@ -166,15 +186,15 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
       'fullName': _fullNameController.text.trim(),
       'preferredName': _preferredNameController.text.trim(),
       'dateOfBirth': _selectedDateOfBirth,
-      'age': _selectedDateOfBirth != null 
-          ? DateTime.now().year - _selectedDateOfBirth!.year 
+      'age': _selectedDateOfBirth != null
+          ? DateTime.now().year - _selectedDateOfBirth!.year
           : null,
       'personalityType': _selectedPersonalityType,
       'trackingStyle': _selectedTrackingStyle,
       'motivationLevel': _selectedMotivationLevel,
       'interests': _selectedInterests,
     };
-    
+
     widget.onDataChanged(data);
   }
 
@@ -206,7 +226,7 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
 
   Widget _buildHeader(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -217,9 +237,9 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
             color: theme.colorScheme.onSurface,
           ),
         ),
-        
+
         const SizedBox(height: 8),
-        
+
         Text(
           'This helps us create a personalized experience tailored just for you.',
           style: theme.textTheme.bodyMedium?.copyWith(
@@ -252,9 +272,9 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
               return null;
             },
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           TextFormField(
             controller: _preferredNameController,
             decoration: const InputDecoration(
@@ -326,26 +346,31 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
     );
   }
 
-
-
   Widget _buildPersonalitySection(BuildContext context) {
     return _buildSection(
       context,
       title: 'What\'s your tracking personality?',
       subtitle: 'Choose the style that resonates with you most',
       child: Column(
-        children: _personalityTypes.map((type) => Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: _buildPersonalityCard(context, type),
-        )).toList(),
+        children: _personalityTypes
+            .map(
+              (type) => Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: _buildPersonalityCard(context, type),
+              ),
+            )
+            .toList(),
       ),
     );
   }
 
-  Widget _buildPersonalityCard(BuildContext context, Map<String, dynamic> type) {
+  Widget _buildPersonalityCard(
+    BuildContext context,
+    Map<String, dynamic> type,
+  ) {
     final theme = Theme.of(context);
     final isSelected = _selectedPersonalityType == type['id'];
-    
+
     return InkWell(
       onTap: () {
         setState(() {
@@ -358,7 +383,7 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isSelected 
+          color: isSelected
               ? theme.colorScheme.primary.withValues(alpha: 0.1)
               : theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
@@ -377,15 +402,11 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
                 color: (type['color'] as Color).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(
-                type['icon'],
-                color: type['color'],
-                size: 24,
-              ),
+              child: Icon(type['icon'], color: type['color'], size: 24),
             ),
-            
+
             const SizedBox(width: 16),
-            
+
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -399,9 +420,9 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
                           : theme.colorScheme.onSurface,
                     ),
                   ),
-                  
+
                   const SizedBox(height: 4),
-                  
+
                   Text(
                     type['description'],
                     style: theme.textTheme.bodySmall?.copyWith(
@@ -411,12 +432,9 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
                 ],
               ),
             ),
-            
+
             if (isSelected)
-              Icon(
-                Icons.check_circle,
-                color: theme.colorScheme.primary,
-              ),
+              Icon(Icons.check_circle, color: theme.colorScheme.primary),
           ],
         ),
       ),
@@ -428,20 +446,24 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
       context,
       title: 'How detailed do you want your tracking?',
       child: Column(
-        children: _trackingStyles.map((style) => Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: _buildOptionCard(
-            context,
-            item: style,
-            isSelected: _selectedTrackingStyle == style['id'],
-            onTap: () {
-              setState(() {
-                _selectedTrackingStyle = style['id'];
-              });
-              _notifyDataChanged();
-            },
-          ),
-        )).toList(),
+        children: _trackingStyles
+            .map(
+              (style) => Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: _buildOptionCard(
+                  context,
+                  item: style,
+                  isSelected: _selectedTrackingStyle == style['id'],
+                  onTap: () {
+                    setState(() {
+                      _selectedTrackingStyle = style['id'];
+                    });
+                    _notifyDataChanged();
+                  },
+                ),
+              ),
+            )
+            .toList(),
       ),
     );
   }
@@ -451,20 +473,24 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
       context,
       title: 'How do you stay motivated?',
       child: Column(
-        children: _motivationLevels.map((level) => Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: _buildOptionCard(
-            context,
-            item: level,
-            isSelected: _selectedMotivationLevel == level['id'],
-            onTap: () {
-              setState(() {
-                _selectedMotivationLevel = level['id'];
-              });
-              _notifyDataChanged();
-            },
-          ),
-        )).toList(),
+        children: _motivationLevels
+            .map(
+              (level) => Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: _buildOptionCard(
+                  context,
+                  item: level,
+                  isSelected: _selectedMotivationLevel == level['id'],
+                  onTap: () {
+                    setState(() {
+                      _selectedMotivationLevel = level['id'];
+                    });
+                    _notifyDataChanged();
+                  },
+                ),
+              ),
+            )
+            .toList(),
       ),
     );
   }
@@ -477,18 +503,20 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
       child: Wrap(
         spacing: 8,
         runSpacing: 8,
-        children: _interests.map((interest) => _buildInterestChip(
-          context,
-          interest: interest,
-        )).toList(),
+        children: _interests
+            .map((interest) => _buildInterestChip(context, interest: interest))
+            .toList(),
       ),
     );
   }
 
-  Widget _buildInterestChip(BuildContext context, {required Map<String, dynamic> interest}) {
+  Widget _buildInterestChip(
+    BuildContext context, {
+    required Map<String, dynamic> interest,
+  }) {
     final theme = Theme.of(context);
     final isSelected = _selectedInterests.contains(interest['id']);
-    
+
     return FilterChip(
       label: Row(
         mainAxisSize: MainAxisSize.min,
@@ -500,9 +528,9 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
                 ? theme.colorScheme.onPrimary
                 : theme.colorScheme.onSurface.withValues(alpha: 0.7),
           ),
-          
+
           const SizedBox(width: 8),
-          
+
           Text(interest['title']),
         ],
       ),
@@ -530,7 +558,7 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
     required VoidCallback onTap,
   }) {
     final theme = Theme.of(context);
-    
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
@@ -538,7 +566,7 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isSelected 
+          color: isSelected
               ? theme.colorScheme.primary.withValues(alpha: 0.1)
               : theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
@@ -556,9 +584,9 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
                   ? theme.colorScheme.primary
                   : theme.colorScheme.onSurface.withValues(alpha: 0.7),
             ),
-            
+
             const SizedBox(width: 16),
-            
+
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -572,9 +600,9 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
                           : theme.colorScheme.onSurface,
                     ),
                   ),
-                  
+
                   const SizedBox(height: 4),
-                  
+
                   Text(
                     item['description'],
                     style: theme.textTheme.bodySmall?.copyWith(
@@ -584,7 +612,7 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
                 ],
               ),
             ),
-            
+
             if (isSelected)
               Icon(
                 Icons.check_circle,
@@ -604,7 +632,7 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
     required Widget child,
   }) {
     final theme = Theme.of(context);
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -614,7 +642,7 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
             fontWeight: FontWeight.bold,
           ),
         ),
-        
+
         if (subtitle != null) ...[
           const SizedBox(height: 4),
           Text(
@@ -624,9 +652,9 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
             ),
           ),
         ],
-        
+
         const SizedBox(height: 16),
-        
+
         child,
       ],
     );
@@ -635,12 +663,14 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
   Future<void> _selectDateOfBirth(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: _selectedDateOfBirth ?? DateTime.now().subtract(const Duration(days: 365 * 25)),
+      initialDate:
+          _selectedDateOfBirth ??
+          DateTime.now().subtract(const Duration(days: 365 * 25)),
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
       helpText: 'SELECT DATE OF BIRTH',
     );
-    
+
     if (picked != null && picked != _selectedDateOfBirth) {
       setState(() {
         _selectedDateOfBirth = picked;
@@ -651,10 +681,20 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
 
   String _formatDate(DateTime date) {
     final months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
-    
+
     return '${months[date.month - 1]} ${date.day}, ${date.year}';
   }
 }

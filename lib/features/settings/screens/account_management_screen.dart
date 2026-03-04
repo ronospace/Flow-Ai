@@ -11,7 +11,8 @@ class AccountManagementScreen extends StatefulWidget {
   const AccountManagementScreen({super.key});
 
   @override
-  State<AccountManagementScreen> createState() => _AccountManagementScreenState();
+  State<AccountManagementScreen> createState() =>
+      _AccountManagementScreenState();
 }
 
 class _AccountManagementScreenState extends State<AccountManagementScreen> {
@@ -20,13 +21,12 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
     ScaffoldMessenger.of(context).showSnackBar(bar);
   }
 
-
   final _displayNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _newPasswordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  
+
   bool _isEditingProfile = false;
   bool _isExporting = false;
   bool _showPassword = false;
@@ -52,18 +52,20 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
   Future<void> _loadUserData() async {
     final settings = Provider.of<SettingsProvider>(context, listen: false);
     _displayNameController.text = settings.preferences.displayName;
-    
+
     // Force a fresh sync first
     try {
       await settings.forceUserDataSync();
     } catch (e) {
       debugPrint('Warning: Could not sync user data: $e');
     }
-    
+
     // Load email from stored user metadata (more reliable than auth service)
     try {
       final userMetadata = await settings.getUserMetadata();
-      if (userMetadata != null && userMetadata['email'] != null && userMetadata['email'].toString().isNotEmpty) {
+      if (userMetadata != null &&
+          userMetadata['email'] != null &&
+          userMetadata['email'].toString().isNotEmpty) {
         _emailController.text = userMetadata['email'];
         debugPrint('📧 Loaded email from metadata: ${userMetadata['email']}');
       } else {
@@ -71,10 +73,12 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
         final authService = AuthService();
         await authService.initialize();
         final userData = await authService.getUserData();
-        if (userData != null && userData['email'] != null && userData['email'].toString().isNotEmpty) {
+        if (userData != null &&
+            userData['email'] != null &&
+            userData['email'].toString().isNotEmpty) {
           _emailController.text = userData['email'];
           debugPrint('📧 Loaded email from auth service: ${userData['email']}');
-          
+
           // Store this email in metadata for future use
           final currentMetadata = await settings.getUserMetadata() ?? {};
           currentMetadata['email'] = userData['email'];
@@ -93,11 +97,13 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          gradient: AppTheme.backgroundGradient(theme.brightness == Brightness.dark),
+          gradient: AppTheme.backgroundGradient(
+            theme.brightness == Brightness.dark,
+          ),
         ),
         child: SafeArea(
           child: CustomScrollView(
@@ -126,7 +132,10 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                         height: 24,
                         decoration: const BoxDecoration(
                           gradient: LinearGradient(
-                            colors: [AppTheme.secondaryBlue, AppTheme.accentMint],
+                            colors: [
+                              AppTheme.secondaryBlue,
+                              AppTheme.accentMint,
+                            ],
                           ),
                           shape: BoxShape.circle,
                         ),
@@ -187,7 +196,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
 
   Widget _buildProfileSection() {
     final theme = Theme.of(context);
-    
+
     return SettingsSection(
       title: 'Profile Information',
       icon: Icons.person,
@@ -208,11 +217,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
             children: [
               Row(
                 children: [
-                  Icon(
-                    Icons.person,
-                    color: AppTheme.secondaryBlue,
-                    size: 20,
-                  ),
+                  Icon(Icons.person, color: AppTheme.secondaryBlue, size: 20),
                   const SizedBox(width: 8),
                   Text(
                     'Display Name',
@@ -262,12 +267,15 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                   builder: (context, settings, child) {
                     final theme = Theme.of(context);
                     return Text(
-                      settings.preferences.displayName, 
+                      settings.preferences.displayName,
                       style: theme.textTheme.bodyLarge?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.8,
+                        ),
                       ),
                     );
-                  },                ),
+                  },
+                ),
               ],
             ],
           ),
@@ -288,11 +296,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
             children: [
               Row(
                 children: [
-                  Icon(
-                    Icons.email,
-                    color: AppTheme.accentMint,
-                    size: 20,
-                  ),
+                  Icon(Icons.email, color: AppTheme.accentMint, size: 20),
                   const SizedBox(width: 8),
                   Text(
                     'Email Address',
@@ -302,7 +306,10 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                   ),
                   const Spacer(),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: AppTheme.successGreen.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
@@ -320,7 +327,9 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
               ),
               const SizedBox(height: 12),
               Text(
-                _emailController.text.isEmpty ? 'Not available' : _emailController.text,
+                _emailController.text.isEmpty
+                    ? 'Not available'
+                    : _emailController.text,
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
                 ),
@@ -333,7 +342,6 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
   }
 
   Widget _buildSecuritySection() {
-    
     return SettingsSection(
       title: 'Security & Privacy',
       icon: Icons.security,
@@ -357,7 +365,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
             ),
           ),
         ),
-        
+
         // Privacy Settings
         SettingsTile(
           leading: const Icon(Icons.privacy_tip, color: AppTheme.primaryPurple),
@@ -373,10 +381,13 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
             );
           },
         ),
-        
+
         // Two-Factor Authentication
         SettingsTile(
-          leading: const Icon(Icons.verified_user, color: AppTheme.successGreen),
+          leading: const Icon(
+            Icons.verified_user,
+            color: AppTheme.successGreen,
+          ),
           title: 'Two-Factor Authentication',
           subtitle: 'Add extra security to your account',
           onTap: () {
@@ -419,18 +430,20 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
           title: 'Export Data',
           subtitle: 'Download your tracking data',
           onTap: _exportUserData,
-          trailing: _isExporting 
-            ? const SizedBox(
-                width: 16,
-                height: 16,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(AppTheme.accentMint),
-                ),
-              )
-            : const Icon(Icons.arrow_forward_ios, size: 16),
+          trailing: _isExporting
+              ? const SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      AppTheme.accentMint,
+                    ),
+                  ),
+                )
+              : const Icon(Icons.arrow_forward_ios, size: 16),
         ),
-        
+
         // Data Backup
         SettingsTile(
           leading: const Icon(Icons.backup, color: AppTheme.secondaryBlue),
@@ -446,15 +459,18 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
             );
           },
         ),
-        
+
         // Clear Cache
         SettingsTile(
-          leading: const Icon(Icons.cleaning_services, color: AppTheme.warningOrange),
+          leading: const Icon(
+            Icons.cleaning_services,
+            color: AppTheme.warningOrange,
+          ),
           title: 'Clear Cache',
           subtitle: 'Free up storage space',
           onTap: _clearCache,
         ),
-        
+
         // Delete All Data
         SettingsTile(
           leading: const Icon(Icons.delete_sweep, color: AppTheme.primaryRose),
@@ -486,18 +502,24 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
             );
           },
         ),
-        
+
         // Account Deactivation
         SettingsTile(
-          leading: const Icon(Icons.pause_circle, color: AppTheme.warningOrange),
+          leading: const Icon(
+            Icons.pause_circle,
+            color: AppTheme.warningOrange,
+          ),
           title: 'Deactivate Account',
           subtitle: 'Temporarily deactivate your account',
           onTap: () => _showDeactivateAccountDialog(),
         ),
-        
+
         // Delete Account
         SettingsTile(
-          leading: const Icon(Icons.delete_forever, color: AppTheme.primaryRose),
+          leading: const Icon(
+            Icons.delete_forever,
+            color: AppTheme.primaryRose,
+          ),
           title: 'Delete Account',
           subtitle: 'Permanently delete your account',
           onTap: () => _showDeleteAccountDialog(),
@@ -520,7 +542,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
     try {
       final settings = Provider.of<SettingsProvider>(context, listen: false);
       await settings.updateDisplayName(_displayNameController.text.trim());
-      
+
       setState(() {
         _isEditingProfile = false;
       });
@@ -569,8 +591,11 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                 labelText: 'Current Password',
                 prefixIcon: const Icon(Icons.lock_outline),
                 suffixIcon: IconButton(
-                  icon: Icon(_showPassword ? Icons.visibility_off : Icons.visibility),
-                  onPressed: () => setState(() => _showPassword = !_showPassword),
+                  icon: Icon(
+                    _showPassword ? Icons.visibility_off : Icons.visibility,
+                  ),
+                  onPressed: () =>
+                      setState(() => _showPassword = !_showPassword),
                 ),
               ),
             ),
@@ -582,8 +607,11 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                 labelText: 'New Password',
                 prefixIcon: const Icon(Icons.lock),
                 suffixIcon: IconButton(
-                  icon: Icon(_showNewPassword ? Icons.visibility_off : Icons.visibility),
-                  onPressed: () => setState(() => _showNewPassword = !_showNewPassword),
+                  icon: Icon(
+                    _showNewPassword ? Icons.visibility_off : Icons.visibility,
+                  ),
+                  onPressed: () =>
+                      setState(() => _showNewPassword = !_showNewPassword),
                 ),
               ),
             ),
@@ -595,8 +623,14 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                 labelText: 'Confirm New Password',
                 prefixIcon: const Icon(Icons.lock),
                 suffixIcon: IconButton(
-                  icon: Icon(_showConfirmPassword ? Icons.visibility_off : Icons.visibility),
-                  onPressed: () => setState(() => _showConfirmPassword = !_showConfirmPassword),
+                  icon: Icon(
+                    _showConfirmPassword
+                        ? Icons.visibility_off
+                        : Icons.visibility,
+                  ),
+                  onPressed: () => setState(
+                    () => _showConfirmPassword = !_showConfirmPassword,
+                  ),
                 ),
               ),
             ),
@@ -609,7 +643,9 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
           ),
           ElevatedButton(
             onPressed: _changePassword,
-            style: ElevatedButton.styleFrom(backgroundColor: AppTheme.warningOrange),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppTheme.warningOrange,
+            ),
             child: const Text('Change Password'),
           ),
         ],
@@ -649,7 +685,6 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
   }
 
   Future<void> _exportUserData() async {
-
     setState(() => _isExporting = true);
 
     try {
@@ -719,7 +754,9 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                 ),
               );
             },
-            style: ElevatedButton.styleFrom(backgroundColor: AppTheme.warningOrange),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppTheme.warningOrange,
+            ),
             child: const Text('Clear Cache'),
           ),
         ],
@@ -758,7 +795,9 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                 ),
               );
             },
-            style: ElevatedButton.styleFrom(backgroundColor: AppTheme.warningOrange),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppTheme.warningOrange,
+            ),
             child: const Text('Deactivate'),
           ),
         ],
@@ -812,7 +851,9 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
               Navigator.pop(context);
               _performDataDeletion();
             },
-            style: ElevatedButton.styleFrom(backgroundColor: AppTheme.primaryRose),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppTheme.primaryRose,
+            ),
             child: const Text('Delete All Data'),
           ),
         ],
@@ -905,7 +946,9 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                 ),
               );
             },
-            style: ElevatedButton.styleFrom(backgroundColor: AppTheme.primaryRose),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppTheme.primaryRose,
+            ),
             child: const Text('Delete Account'),
           ),
         ],

@@ -13,53 +13,60 @@ class HelpScreen extends StatefulWidget {
 }
 
 class _HelpScreenState extends State<HelpScreen> {
-
   final List<HelpItem> _helpItems = [
     HelpItem(
       question: "How do I start tracking my cycle?",
-      answer: "Navigate to the Track tab and log your period start date. Flow Ai will automatically begin tracking your cycle and provide predictions based on your data.",
+      answer:
+          "Navigate to the Track tab and log your period start date. Flow Ai will automatically begin tracking your cycle and provide predictions based on your data.",
       icon: Icons.play_circle_outline,
       color: AppTheme.primaryRose,
     ),
     HelpItem(
       question: "How accurate are AI predictions?",
-      answer: "Our AI predictions improve with more data. Initially, accuracy is around 70-80%, but after 3-6 months of consistent tracking, accuracy typically reaches 85-95%.",
+      answer:
+          "Our AI predictions improve with more data. Initially, accuracy is around 70-80%, but after 3-6 months of consistent tracking, accuracy typically reaches 85-95%.",
       icon: Icons.psychology,
       color: AppTheme.warningOrange,
     ),
     HelpItem(
       question: "Can I sync with other health apps?",
-      answer: "Yes! Flow Ai integrates with Apple Health and can sync data with other compatible health tracking applications through the Settings > Health Data section.",
+      answer:
+          "Yes! Flow Ai integrates with Apple Health and can sync data with other compatible health tracking applications through the Settings > Health Data section.",
       icon: Icons.sync,
       color: AppTheme.secondaryBlue,
     ),
     HelpItem(
       question: "How do I set up notifications?",
-      answer: "Go to Settings > Notifications to enable alerts for period predictions, ovulation reminders, and symptom tracking prompts. You can customize timing and frequency.",
+      answer:
+          "Go to Settings > Notifications to enable alerts for period predictions, ovulation reminders, and symptom tracking prompts. You can customize timing and frequency.",
       icon: Icons.notifications_active,
       color: AppTheme.accentMint,
     ),
     HelpItem(
       question: "What symptoms should I track?",
-      answer: "Track any symptoms you experience: cramps, mood changes, energy levels, bloating, headaches, or sleep patterns. More data helps provide better insights.",
+      answer:
+          "Track any symptoms you experience: cramps, mood changes, energy levels, bloating, headaches, or sleep patterns. More data helps provide better insights.",
       icon: Icons.favorite,
       color: AppTheme.primaryPurple,
     ),
     HelpItem(
       question: "Is my data private and secure?",
-      answer: "Absolutely. All your health data is encrypted and stored locally on your device. We never share personal health information with third parties.",
+      answer:
+          "Absolutely. All your health data is encrypted and stored locally on your device. We never share personal health information with third parties.",
       icon: Icons.security,
       color: AppTheme.successGreen,
     ),
     HelpItem(
       question: "How do I export my data?",
-      answer: "You can export your data from Settings > Export Data. This creates a CSV file with all your tracked information that you can share with your healthcare provider.",
+      answer:
+          "You can export your data from Settings > Export Data. This creates a CSV file with all your tracked information that you can share with your healthcare provider.",
       icon: Icons.download,
       color: AppTheme.mediumGrey,
     ),
     HelpItem(
       question: "What if my cycle is irregular?",
-      answer: "Flow Ai is designed to work with irregular cycles too. The AI learns your unique patterns and adjusts predictions accordingly. Track consistently for best results.",
+      answer:
+          "Flow Ai is designed to work with irregular cycles too. The AI learns your unique patterns and adjusts predictions accordingly. Track consistently for best results.",
       icon: Icons.timeline,
       color: AppTheme.errorRed,
     ),
@@ -69,7 +76,7 @@ class _HelpScreenState extends State<HelpScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
-    
+
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
@@ -103,10 +110,7 @@ class _HelpScreenState extends State<HelpScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: theme.iconTheme.color,
-          ),
+          icon: Icon(Icons.arrow_back, color: theme.iconTheme.color),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -157,9 +161,9 @@ class _HelpScreenState extends State<HelpScreen> {
                 ],
               ),
             ).animate().slideY(begin: -0.3, end: 0).fadeIn(),
-            
+
             const SizedBox(height: 32),
-            
+
             // FAQ Section
             Text(
               'Frequently Asked Questions',
@@ -169,73 +173,70 @@ class _HelpScreenState extends State<HelpScreen> {
                 color: theme.textTheme.titleLarge?.color,
               ),
             ).animate().slideX(begin: -0.3, end: 0).fadeIn(delay: 200.ms),
-            
+
             const SizedBox(height: 16),
-            
+
             // FAQ Items
             ...List.generate(_helpItems.length, (index) {
               final item = _helpItems[index];
-              
+
               return Container(
-                margin: const EdgeInsets.only(bottom: 12),
-                decoration: BoxDecoration(
-                  color: theme.cardColor,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: ExpansionTile(
-                  leading: Container(
-                    width: 40,
-                    height: 40,
+                    margin: const EdgeInsets.only(bottom: 12),
                     decoration: BoxDecoration(
-                      color: item.color.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(10),
+                      color: theme.cardColor,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.05),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
                     ),
-                    child: Icon(
-                      item.icon,
-                      color: item.color,
-                      size: 20,
-                    ),
-                  ),
-                  title: Text(
-                    item.question,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                      color: theme.textTheme.bodyLarge?.color,
-                    ),
-                  ),
-                  children: [
-                    Padding(padding: const EdgeInsets.fromLTRB(72, 0, 16, 16),
-                      child: Text(
-                        item.answer,
+                    child: ExpansionTile(
+                      leading: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: item.color.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Icon(item.icon, color: item.color, size: 20),
+                      ),
+                      title: Text(
+                        item.question,
                         style: TextStyle(
-                          fontSize: 14,
-                          height: 1.5,
-                          color: theme.textTheme.bodyMedium?.color,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          color: theme.textTheme.bodyLarge?.color,
                         ),
                       ),
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(72, 0, 16, 16),
+                          child: Text(
+                            item.answer,
+                            style: TextStyle(
+                              fontSize: 14,
+                              height: 1.5,
+                              color: theme.textTheme.bodyMedium?.color,
+                            ),
+                          ),
+                        ),
+                      ],
+                      onExpansionChanged: (expanded) {
+                        HapticFeedback.lightImpact();
+                        setState(() {});
+                      },
                     ),
-                  ],
-                  onExpansionChanged: (expanded) {
-                    HapticFeedback.lightImpact();
-                    setState(() {
-                    });
-                  },
-                ),
-              ).animate(delay: Duration(milliseconds: 300 + (index * 100)))
-                .slideX(begin: 0.3, end: 0)
-                .fadeIn();
+                  )
+                  .animate(delay: Duration(milliseconds: 300 + (index * 100)))
+                  .slideX(begin: 0.3, end: 0)
+                  .fadeIn();
             }),
-            
+
             const SizedBox(height: 32),
-            
+
             // Contact Support Section
             Container(
               width: double.infinity,
@@ -258,7 +259,10 @@ class _HelpScreenState extends State<HelpScreen> {
                         height: 48,
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
-                            colors: [AppTheme.accentMint, AppTheme.secondaryBlue],
+                            colors: [
+                              AppTheme.accentMint,
+                              AppTheme.secondaryBlue,
+                            ],
                           ),
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -293,9 +297,9 @@ class _HelpScreenState extends State<HelpScreen> {
                       ),
                     ],
                   ),
-                  
+
                   const SizedBox(height: 20),
-                  
+
                   // Support Options
                   _buildSupportOption(
                     context,
@@ -305,9 +309,9 @@ class _HelpScreenState extends State<HelpScreen> {
                     AppTheme.primaryRose,
                     () => _launchEmail(),
                   ),
-                  
+
                   const SizedBox(height: 12),
-                  
+
                   _buildSupportOption(
                     context,
                     Icons.chat_bubble_outline,
@@ -316,9 +320,9 @@ class _HelpScreenState extends State<HelpScreen> {
                     AppTheme.secondaryBlue,
                     () => _showLiveChat(context),
                   ),
-                  
+
                   const SizedBox(height: 12),
-                  
+
                   _buildSupportOption(
                     context,
                     Icons.article,
@@ -330,7 +334,7 @@ class _HelpScreenState extends State<HelpScreen> {
                 ],
               ),
             ).animate().slideY(begin: 0.3, end: 0).fadeIn(delay: 1.seconds),
-            
+
             const SizedBox(height: 40),
           ],
         ),
@@ -357,9 +361,7 @@ class _HelpScreenState extends State<HelpScreen> {
         decoration: BoxDecoration(
           color: color.withValues(alpha: 0.05),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: color.withValues(alpha: 0.2),
-          ),
+          border: Border.all(color: color.withValues(alpha: 0.2)),
         ),
         child: Row(
           children: [
@@ -370,11 +372,7 @@ class _HelpScreenState extends State<HelpScreen> {
                 color: color.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(
-                icon,
-                color: color,
-                size: 18,
-              ),
+              child: Icon(icon, color: color, size: 18),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -398,11 +396,7 @@ class _HelpScreenState extends State<HelpScreen> {
                 ],
               ),
             ),
-            Icon(
-              Icons.arrow_forward_ios,
-              color: color,
-              size: 16,
-            ),
+            Icon(Icons.arrow_forward_ios, color: color, size: 16),
           ],
         ),
       ),
@@ -413,7 +407,9 @@ class _HelpScreenState extends State<HelpScreen> {
     final Uri emailLaunchUri = Uri(
       scheme: 'mailto',
       path: 'support@flowsense.app',
-      query: Uri.encodeComponent('subject=Flow Ai Support Request&body=Hello Flow Ai Support Team,\n\nI need help with:\n\nPlease describe your issue here...\n\nBest regards'),
+      query: Uri.encodeComponent(
+        'subject=Flow Ai Support Request&body=Hello Flow Ai Support Team,\n\nI need help with:\n\nPlease describe your issue here...\n\nBest regards',
+      ),
     );
 
     try {
@@ -422,7 +418,9 @@ class _HelpScreenState extends State<HelpScreen> {
         await launchUrl(emailLaunchUri, mode: LaunchMode.externalApplication);
       } else {
         // Fallback: Try alternative email URI format
-        final fallbackUri = Uri.parse('mailto:support@flowsense.app?subject=Flow Ai Support Request');
+        final fallbackUri = Uri.parse(
+          'mailto:support@flowsense.app?subject=Flow Ai Support Request',
+        );
         if (await canLaunchUrl(fallbackUri)) {
           await launchUrl(fallbackUri, mode: LaunchMode.externalApplication);
         } else {
@@ -441,9 +439,7 @@ class _HelpScreenState extends State<HelpScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Row(
           children: [
             Container(
@@ -513,7 +509,7 @@ class _HelpScreenState extends State<HelpScreen> {
   void _openUserGuide() async {
     const url = 'https://flowsense.app/guide';
     final Uri uri = Uri.parse(url);
-    
+
     try {
       if (await canLaunchUrl(uri)) {
         await launchUrl(uri, mode: LaunchMode.externalApplication);
@@ -530,9 +526,7 @@ class _HelpScreenState extends State<HelpScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Row(
           children: [
             Container(
@@ -544,11 +538,7 @@ class _HelpScreenState extends State<HelpScreen> {
                 ),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(
-                Icons.email,
-                color: Colors.white,
-                size: 20,
-              ),
+              child: const Icon(Icons.email, color: Colors.white, size: 20),
             ),
             const SizedBox(width: 12),
             const Text('Contact Support'),
@@ -583,7 +573,9 @@ class _HelpScreenState extends State<HelpScreen> {
                   ),
                   IconButton(
                     onPressed: () {
-                      Clipboard.setData(const ClipboardData(text: 'support@flowsense.app'));
+                      Clipboard.setData(
+                        const ClipboardData(text: 'support@flowsense.app'),
+                      );
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('Email address copied!'),
@@ -639,9 +631,7 @@ class _HelpScreenState extends State<HelpScreen> {
         decoration: BoxDecoration(
           color: color.withValues(alpha: 0.05),
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: color.withValues(alpha: 0.2),
-          ),
+          border: Border.all(color: color.withValues(alpha: 0.2)),
         ),
         child: Row(
           children: [
@@ -652,11 +642,7 @@ class _HelpScreenState extends State<HelpScreen> {
                 color: color.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(6),
               ),
-              child: Icon(
-                icon,
-                color: color,
-                size: 16,
-              ),
+              child: Icon(icon, color: color, size: 16),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -681,11 +667,7 @@ class _HelpScreenState extends State<HelpScreen> {
                 ],
               ),
             ),
-            Icon(
-              Icons.arrow_forward_ios,
-              color: color,
-              size: 14,
-            ),
+            Icon(Icons.arrow_forward_ios, color: color, size: 14),
           ],
         ),
       ),

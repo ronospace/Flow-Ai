@@ -66,10 +66,10 @@ class StreakData {
     if (lastActivityDate == null) return false;
     final today = DateTime.now();
     final lastActivity = lastActivityDate!;
-    
+
     return today.year == lastActivity.year &&
-           today.month == lastActivity.month &&
-           today.day == lastActivity.day;
+        today.month == lastActivity.month &&
+        today.day == lastActivity.day;
   }
 
   bool get canExtendStreak {
@@ -77,19 +77,19 @@ class StreakData {
     final today = DateTime.now();
     final yesterday = today.subtract(const Duration(days: 1));
     final lastActivity = lastActivityDate!;
-    
+
     // Can extend if last activity was yesterday or today
     return (lastActivity.year == yesterday.year &&
             lastActivity.month == yesterday.month &&
             lastActivity.day == yesterday.day) ||
-           hasStreakToday;
+        hasStreakToday;
   }
 
   bool get isStreakBroken {
     if (lastActivityDate == null) return currentStreak > 0;
     final today = DateTime.now();
     final daysSinceLastActivity = today.difference(lastActivityDate!).inDays;
-    
+
     return daysSinceLastActivity > 1;
   }
 
@@ -116,8 +116,12 @@ class StreakData {
   List<DateTime> get thisWeekActivities {
     final now = DateTime.now();
     final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
-    final startDate = DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day);
-    
+    final startDate = DateTime(
+      startOfWeek.year,
+      startOfWeek.month,
+      startOfWeek.day,
+    );
+
     return activityDates.where((date) {
       return date.isAfter(startDate.subtract(const Duration(days: 1)));
     }).toList();
@@ -126,7 +130,7 @@ class StreakData {
   List<DateTime> get thisMonthActivities {
     final now = DateTime.now();
     final startOfMonth = DateTime(now.year, now.month, 1);
-    
+
     return activityDates.where((date) {
       return date.isAfter(startOfMonth.subtract(const Duration(days: 1)));
     }).toList();
@@ -135,12 +139,14 @@ class StreakData {
   Map<int, int> get weeklyStreakCounts {
     final counts = <int, int>{};
     final now = DateTime.now();
-    
+
     for (int i = 0; i < 7; i++) {
       final weekday = (now.weekday + i) % 7;
-      counts[weekday] = activityDates.where((date) => date.weekday == weekday + 1).length;
+      counts[weekday] = activityDates
+          .where((date) => date.weekday == weekday + 1)
+          .length;
     }
-    
+
     return counts;
   }
 
