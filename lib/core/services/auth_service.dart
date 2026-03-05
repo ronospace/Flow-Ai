@@ -609,6 +609,9 @@ class AuthService {
 
   /// Sign out
   Future<void> signOut() async {
+    // Force account chooser next time (prevents silent re-login).
+    try { await _googleSignIn?.signOut(); } catch (_) {}
+    try { await _googleSignIn?.disconnect(); } catch (_) {}
     try {
       debugPrint('🔐 Starting complete sign out process...');
 
