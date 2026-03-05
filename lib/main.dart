@@ -1,3 +1,4 @@
+import 'package:flow_ai/core/deeplinks/deep_link_normalizer.dart';
 import 'features/partner/services/partner_service.dart';
 import 'features/partner/dialogs/join_partner_dialog.dart';
 import 'dart:async';
@@ -282,6 +283,18 @@ class FlowAIApp extends StatefulWidget {
   @override
   State<FlowAIApp> createState() => _FlowAIAppState();
 }
+
+
+  void _handleInitialDeepLink(Uri? uri) {
+    if (uri == null) return;
+
+    final normalized = DeepLinkNormalizer.normalizeToAppPath(uri.toString());
+    if (normalized != null) {
+      Future.microtask(() {
+        router.go(normalized);
+      });
+    }
+  }
 
 class _FlowAIAppState extends State<FlowAIApp> {
   final AppLinks _appLinks = AppLinks();
