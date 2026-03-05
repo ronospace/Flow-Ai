@@ -289,6 +289,7 @@ class FlowAIApp extends StatefulWidget {
 
 
 class _FlowAIAppState extends State<FlowAIApp> {
+  final AuthService _authService = AuthService();
   final AppLinks _appLinks = AppLinks();
   StreamSubscription<Uri>? _linkSub;
 
@@ -379,7 +380,7 @@ class _FlowAIAppState extends State<FlowAIApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => PartnerService()),
-        Provider<AuthService>(create: (_) => AuthService()),
+        Provider<AuthService>.value(value: _authService),
         ChangeNotifierProvider(create: (_) => OnboardingProvider()),
         ChangeNotifierProvider(create: (_) => CycleProvider()),
         ChangeNotifierProvider(create: (_) => InsightsProvider()),
@@ -388,7 +389,6 @@ class _FlowAIAppState extends State<FlowAIApp> {
         ChangeNotifierProvider.value(value: settingsProvider),
         ChangeNotifierProvider.value(value: progressiveDisclosureService),
         ChangeNotifierProvider(create: (_) => PremiumProvider()),
-        Provider<AuthService>(create: (_) => AuthService()),
       ],
       child: Consumer<SettingsProvider>(
         builder: (context, settings, child) {
