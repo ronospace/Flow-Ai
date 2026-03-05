@@ -34,7 +34,8 @@ class AuthService {
 
   User? get currentUser => _auth?.currentUser;
   bool get isInitialized => _isInitialized;
-  Future<bool> get isAuthenticated async => await _hasLocalUser();
+  Future<bool> get isAuthenticated async =>
+      isFirebaseAuthenticated || await _hasLocalUser();
 
   bool get isFirebaseAvailable => _firebaseAvailable;
   bool get isFirebaseAuthenticated =>
