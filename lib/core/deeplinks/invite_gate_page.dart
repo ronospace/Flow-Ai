@@ -30,17 +30,40 @@ class _InviteGatePageState extends State<InviteGatePage> {
     if (!mounted || _handled) return;
     _handled = true;
 
-    final auth = context.read<AuthService>();
-    final isAuthed = await auth.isAuthenticated;
+    debugPrint('🔗 InviteGate: handling code=${widget.code}');
 
-    if (!mounted) return;
+    AuthService? auth;
+    try {
+      auth = context.read<AuthService>();
+    } catch (e) {
+      debugPrint('❌ InviteGate: AuthService not found in context: $e');
+    }
+
+    final isAuthed = auth == null ? false : await auth.isAuthenticated;
+        if (!mounted) return;
 
     if (!isAuthed) {
+      debugPrint('🔗 InviteGate: not authed -> /auth/choice');
       context.go('/auth/choice');
       return;
     }
 
-    final partnerService = context.read<PartnerService>();
+    debugPrint('🔗 InviteGate: authed -> showing JoinPartnerDialog');
+
+    PartnerService? partnerService;
+    try {
+      partnerService = context.read<PartnerService>();
+    } catch (e) {
+      debugPrint('❌ InviteGate: PartnerService not found in context: $e');
+    }
+
+    if (partnerService == null) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Partner service unavailable. Please restart the app.')),
+      );
+      return;
+    }
 
     await showDialog<void>(
       context: context,
