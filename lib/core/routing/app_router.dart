@@ -29,7 +29,7 @@ class AppRouter {
       // Normalize custom scheme launches like: flowai://invite/TEST123
       final uri = state.uri;
       if (uri.scheme == 'flowai') {
-        return '/home';
+        return DeepLinkNormalizer.normalize(uri);
       }
       return null;
     },
