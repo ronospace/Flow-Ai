@@ -303,6 +303,15 @@ class _FlowAIAppState extends State<FlowAIApp> {
     _initializeSettings();
     _initializeProgressiveDisclosure();
     _initDeepLinks();
+
+    // Consume any pending deep link AFTER router is mounted.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final pending = PendingDeepLinkService.getPendingRoute();
+      if (pending != null) {
+        PendingDeepLinkService.clearPendingRoute();
+        AppRouter.router.go(pending);
+      }
+    });
   }
 
   Future<void> _initializeSettings() async {
@@ -325,39 +334,23 @@ class _FlowAIAppState extends State<FlowAIApp> {
 
 
   void _handleDeepLink(Uri uri) {
-    debugPrint('🔗 deep link received: ${uri.toString()}');
     final normalized = DeepLinkNormalizer.normalizeToAppPath(uri.toString());
-    debugPrint('🔗 normalized route: ${normalized ?? 'null'}');
-    if (normalized != null) {
-      PendingDeepLinkService.setPendingRoute(normalized);
-    }
     if (normalized == null) return;
 
-    // Route to /invite/<code> (InviteGatePage handles auth + join flow)
-    Future.microtask(() {
-      if (mounted) {
-        AppRouter.router.go(normalized);
-      }
+    // Store for auth/splash resume
+    PendingDeepLinkService.setPendingRoute(normalized);
+
+    // Navigate after frame so Splash doesn't win
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      AppRouter.router.go(normalized);
     });
   }
 
   Future<void> _initDeepLinks() async {
     try {
-      // Cold start (handle app_links API differences across versions)
-      Uri? initial;
-      try {
-        initial = await (_appLinks as dynamic).getInitialAppLink() as Uri?;
-      } catch (_) {}
-
-      if (initial == null) {
-        try {
-          final s = await (_appLinks as dynamic).getInitialLink() as String?;
-          if (s != null) initial = Uri.tryParse(s);
-        } catch (_) {}
-      }
-
-      debugPrint('🔗 initial deep link: ${initial?.toString() ?? 'null'}');
-
+      // Cold start
+      final initial = await _appLinks.getInitialLink();
       if (initial != null) {
         _handleDeepLink(initial);
       }
