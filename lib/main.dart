@@ -1,3 +1,4 @@
+import 'package:flow_ai/core/routing/app_router.dart';
 import 'package:flow_ai/core/deeplinks/deep_link_normalizer.dart';
 import 'features/partner/services/partner_service.dart';
 import 'features/partner/dialogs/join_partner_dialog.dart';
@@ -291,7 +292,7 @@ class FlowAIApp extends StatefulWidget {
     final normalized = DeepLinkNormalizer.normalizeToAppPath(uri.toString());
     if (normalized != null) {
       Future.microtask(() {
-        router.go(normalized);
+        AppRouter.router.go(normalized);
       });
     }
   }
@@ -348,7 +349,7 @@ class _FlowAIAppState extends State<FlowAIApp> {
             if (!mounted) return;
 
             // Ensure we are inside the app shell first
-            AppRouter.router.go('/home');
+            AppRouter.AppRouter.router.go('/home');
 
             // Show Join Partner dialog with code prefilled (we'll add initialCode next)
             try {
