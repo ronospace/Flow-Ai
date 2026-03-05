@@ -349,7 +349,7 @@ class _FlowAIAppState extends State<FlowAIApp> {
             if (!mounted) return;
 
             // Ensure we are inside the app shell first
-            AppRouter.AppRouter.router.go('/home');
+            AppRouter.router.go('/home');
 
             // Show Join Partner dialog with code prefilled (we'll add initialCode next)
             try {
