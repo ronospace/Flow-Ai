@@ -85,14 +85,6 @@ class AppRouter {
       ShellRoute(
         builder: (context, state, child) => MainShell(child: child),
         routes: [
-        GoRoute(
-          path: '/invite/:code',
-          builder: (context, state) {
-            final code = state.pathParameters['code'] ?? '';
-            return InviteGatePage(code: code);
-          },
-        ),
-
           GoRoute(
             path: '/home',
             name: 'home',
