@@ -19,6 +19,7 @@ import '../../features/health/screens/health_screen.dart';
 import '../../features/settings/screens/settings_screen.dart';
 import '../../features/feedback/screens/feedback_screen.dart';
 import '../../features/future_plans/screens/future_plans_screen.dart';
+import 'package:flow_ai/core/deeplinks/invite_gate_page.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
