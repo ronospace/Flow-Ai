@@ -416,6 +416,7 @@ class AuthService {
       return AuthResult.failure('Sign in failed: ${e.toString()}');
     }
   }
+
   /// Sign in with email and password
   Future<AuthResult> signInWithEmail({
     required String email,
@@ -462,7 +463,10 @@ class AuthService {
             'uid': localResult.user!.uid,
             'email': email,
             'displayName': localResult.user!.displayName,
-            'username': existingData?['username'] ?? localResult.user!.username ?? localResult.user!.displayName,
+            'username':
+                existingData?['username'] ??
+                localResult.user!.username ??
+                localResult.user!.displayName,
             'provider': 'local',
             'lastLogin': DateTime.now().toIso8601String(),
           });
@@ -478,13 +482,14 @@ class AuthService {
         }
       }
 
-      return AuthResult.failure('Authentication service not properly initialized');
+      return AuthResult.failure(
+        'Authentication service not properly initialized',
+      );
     } catch (e) {
       debugPrint('❌ Sign in error: $e');
       return AuthResult.failure('Sign in failed: ${e.toString()}');
     }
   }
-
 
   /// Sign in with Google
 
@@ -495,6 +500,9 @@ class AuthService {
         return AuthResult.failure('Authentication not initialized.');
       }
 
+      try {
+        await _googleSignIn?.signOut();
+      } catch (_) {}
       final GoogleSignInAccount? googleUser = await _googleSignIn!.signIn();
       if (googleUser == null) {
         return AuthResult.failure('Google sign-in cancelled.');
@@ -610,8 +618,12 @@ class AuthService {
   /// Sign out
   Future<void> signOut() async {
     // Force account chooser next time (prevents silent re-login).
-    try { await _googleSignIn?.signOut(); } catch (_) {}
-    try { await _googleSignIn?.disconnect(); } catch (_) {}
+    try {
+      await _googleSignIn?.signOut();
+    } catch (_) {}
+    try {
+      await _googleSignIn?.disconnect();
+    } catch (_) {}
     try {
       debugPrint('🔐 Starting complete sign out process...');
 
