@@ -31,17 +31,16 @@
               "client_type": 3
             },
             {
-              "client_id": "752724279049-ei2380bh9o9ph6tq348lht6sf0ks52n2.apps.googleusercontent.com",
+              "client_id": "752724279049-n2esdt1pg3e5elbnij69f1jo17cl2c3s.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.flowai.health",
-                "app_store_id": "6751801915"
+                "bundle_id": "com.healpray.healpray",
+                "app_store_id": "6754618866"
               }
             }
           ]
         }
-      },
-      "admob_app_id": "ca-app-pub-8707491489514576~2318954189"
+      }
     }
   ],
   "configuration_version": "1"
