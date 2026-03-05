@@ -350,7 +350,8 @@ class _FlowAIAppState extends State<FlowAIApp> {
   Future<void> _initDeepLinks() async {
     try {
       // Cold start
-      final initial = await _appLinks.getInitialLink();
+      final initialLink = await _appLinks.getInitialLink();
+      final initial = initialLink != null ? Uri.tryParse(initialLink) : null;
       if (initial != null) {
         _handleDeepLink(initial);
       }
