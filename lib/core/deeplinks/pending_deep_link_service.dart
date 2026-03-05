@@ -16,4 +16,10 @@ class PendingDeepLinkService {
   static void clear() {
     _pendingRoute = null;
   }
+
+  // Compatibility aliases (older call sites)
+  static String? getPendingRoute() => peekPendingRoute();
+
+  static void clearPendingRoute() => clear();
+
 }

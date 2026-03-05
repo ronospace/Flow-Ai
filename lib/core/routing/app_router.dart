@@ -20,6 +20,7 @@ import '../../features/settings/screens/settings_screen.dart';
 import '../../features/feedback/screens/feedback_screen.dart';
 import '../../features/future_plans/screens/future_plans_screen.dart';
 import 'package:flow_ai/core/deeplinks/invite_gate_page.dart';
+import 'package:flow_ai/core/deeplinks/deep_link_normalizer.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -29,7 +30,7 @@ class AppRouter {
       // Normalize custom scheme launches like: flowai://invite/TEST123
       final uri = state.uri;
       if (uri.scheme == 'flowai') {
-        return DeepLinkNormalizer.normalize(uri);
+        return DeepLinkNormalizer.normalizeToAppPath(uri.toString());
       }
       return null;
     },
