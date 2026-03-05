@@ -286,16 +286,6 @@ class FlowAIApp extends StatefulWidget {
 }
 
 
-  void _handleInitialDeepLink(Uri? uri) {
-    if (uri == null) return;
-
-    final normalized = DeepLinkNormalizer.normalizeToAppPath(uri.toString());
-    if (normalized != null) {
-      Future.microtask(() {
-        AppRouter.router.go(normalized);
-      });
-    }
-  }
 
 class _FlowAIAppState extends State<FlowAIApp> {
   final AppLinks _appLinks = AppLinks();
@@ -333,46 +323,36 @@ class _FlowAIAppState extends State<FlowAIApp> {
   }
 
 
+  void _handleDeepLink(Uri uri) {
+    final normalized = DeepLinkNormalizer.normalizeToAppPath(uri.toString());
+    if (normalized == null) return;
+
+    // Route to /invite/<code> (InviteGatePage handles auth + join flow)
+    Future.microtask(() {
+      if (mounted) {
+        AppRouter.router.go(normalized);
+      }
+    });
+  }
+
   Future<void> _initDeepLinks() async {
     try {
+      // Cold start
+      final initial = await _appLinks.getInitialAppLink();
+      if (initial != null) {
+        _handleDeepLink(initial);
+      }
+
+      // Warm / foreground
       _linkSub = _appLinks.uriLinkStream.listen((uri) {
         if (!mounted) return;
-
-        final segments = uri.pathSegments;
-        if (segments.isEmpty) return;
-
-        // flowai://invite/<CODE>
-        if (segments.length >= 2 && segments[0] == 'invite') {
-          final code = segments[1];
-
-          WidgetsBinding.instance.addPostFrameCallback((_) async {
-            if (!mounted) return;
-
-            // Ensure we are inside the app shell first
-            AppRouter.router.go('/home');
-
-            // Show Join Partner dialog with code prefilled (we'll add initialCode next)
-            try {
-              final partnerService = context.read<PartnerService>();
-              await showDialog(
-                context: context,
-                builder: (_) => JoinPartnerDialog(
-                  initialCode: code,
-                  onJoinWithCode: (c) async {
-                    await partnerService.acceptPartnerInvitation(c);
-                  },
-                ),
-              );
-            } catch (_) {
-              // ignore UI errors
-            }
-          });
-        }
+        _handleDeepLink(uri);
       });
     } catch (_) {
-      // ignore link init errors
+      // ignore deep link init errors
     }
   }
+
 
 
   @override
