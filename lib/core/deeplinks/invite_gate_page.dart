@@ -40,7 +40,7 @@ class _InviteGatePageState extends State<InviteGatePage> {
     }
 
     final isAuthed = auth == null ? false : await auth.isAuthenticated;
-        if (!mounted) return;
+    if (!mounted) return;
 
     if (!isAuthed) {
       debugPrint('🔗 InviteGate: not authed -> /auth/choice');
@@ -60,7 +60,9 @@ class _InviteGatePageState extends State<InviteGatePage> {
     if (partnerService == null) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Partner service unavailable. Please restart the app.')),
+        const SnackBar(
+          content: Text('Partner service unavailable. Please restart the app.'),
+        ),
       );
       return;
     }
@@ -71,7 +73,7 @@ class _InviteGatePageState extends State<InviteGatePage> {
       builder: (_) => JoinPartnerDialog(
         initialCode: widget.code,
         onJoinWithCode: (c) async {
-          await partnerService.acceptPartnerInvitation(c);
+          await partnerService!.acceptPartnerInvitation(c);
         },
       ),
     );
@@ -82,10 +84,7 @@ class _InviteGatePageState extends State<InviteGatePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text('Invite code: ${widget.code}'),
-      ),
-    );
+    debugPrint('🔗 InviteGatePage built: code=${widget.code}');
+    return Scaffold(body: Center(child: Text('Invite code: ${widget.code}')));
   }
 }
