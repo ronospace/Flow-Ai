@@ -27,6 +27,7 @@ class _InviteGatePageState extends State<InviteGatePage> {
   }
 
   Future<void> _handleInvite() async {
+    debugPrint('🔗 InviteGatePage _handleInvite start code=${widget.code}');
     if (!mounted || _handled) return;
     _handled = true;
 
@@ -40,6 +41,7 @@ class _InviteGatePageState extends State<InviteGatePage> {
     }
 
     final isAuthed = auth == null ? false : await auth.isAuthenticated;
+    debugPrint('🔗 InviteGatePage isAuthed=$isAuthed');
     if (!mounted) return;
 
     if (!isAuthed) {
@@ -56,6 +58,8 @@ class _InviteGatePageState extends State<InviteGatePage> {
     } catch (e) {
       debugPrint('❌ InviteGate: PartnerService not found in context: $e');
     }
+
+    debugPrint('🔗 InviteGatePage partnerService=' + (partnerService == null ? 'null' : 'ok'));
 
     if (partnerService == null) {
       if (!mounted) return;
