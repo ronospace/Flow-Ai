@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flow_ai/core/deeplinks/pending_deep_link_service.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:go_router/go_router.dart';
@@ -532,7 +533,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
         // Navigate to main app
         if (mounted) {
-          _router.go('/home');
+          final pending = PendingDeepLinkService.consumePendingRoute();
+        _router.go(pending ?? '/home');
         }
       } else {
         _showErrorMessage(result.error ?? 'Biometric authentication failed');
@@ -661,7 +663,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       await Future.delayed(const Duration(milliseconds: 1000));
       if (!mounted) return;
 
-      _router.go('/home');
+      final pending = PendingDeepLinkService.consumePendingRoute();
+        _router.go(pending ?? '/home');
     } catch (e) {
       debugPrint('❌ Auth error: $e');
       final errorMessage = e.toString().replaceFirst('Exception: ', '');
@@ -712,7 +715,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
         // Navigate to main app
         if (mounted) {
-          _router.go('/home');
+          final pending = PendingDeepLinkService.consumePendingRoute();
+        _router.go(pending ?? '/home');
         }
       } else {
         _showErrorMessage(result.error ?? 'Google sign-in failed');
@@ -768,7 +772,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
         // Navigate to main app
         if (mounted) {
-          _router.go('/home');
+          final pending = PendingDeepLinkService.consumePendingRoute();
+        _router.go(pending ?? '/home');
         }
       } else {
         _showErrorMessage(result.error ?? 'Apple sign-in failed');

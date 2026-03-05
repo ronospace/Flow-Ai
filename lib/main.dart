@@ -1,5 +1,6 @@
 import 'package:flow_ai/core/routing/app_router.dart';
 import 'package:flow_ai/core/deeplinks/deep_link_normalizer.dart';
+import 'package:flow_ai/core/deeplinks/pending_deep_link_service.dart';
 import 'features/partner/services/partner_service.dart';
 import 'features/partner/dialogs/join_partner_dialog.dart';
 import 'dart:async';
@@ -325,6 +326,9 @@ class _FlowAIAppState extends State<FlowAIApp> {
 
   void _handleDeepLink(Uri uri) {
     final normalized = DeepLinkNormalizer.normalizeToAppPath(uri.toString());
+    if (normalized != null) {
+      PendingDeepLinkService.setPendingRoute(normalized);
+    }
     if (normalized == null) return;
 
     // Route to /invite/<code> (InviteGatePage handles auth + join flow)
