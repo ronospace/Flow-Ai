@@ -537,6 +537,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         _router.go(pending ?? '/home');
         PendingDeepLinkService.clearPendingRoute();
         PendingDeepLinkService.clearPendingRoute();
+        PendingDeepLinkService.clearPendingRoute();
         }
       } else {
         _showErrorMessage(result.error ?? 'Biometric authentication failed');
@@ -669,6 +670,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         _router.go(pending ?? '/home');
         PendingDeepLinkService.clearPendingRoute();
         PendingDeepLinkService.clearPendingRoute();
+        PendingDeepLinkService.clearPendingRoute();
     } catch (e) {
       debugPrint('❌ Auth error: $e');
       final errorMessage = e.toString().replaceFirst('Exception: ', '');
@@ -721,6 +723,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         if (mounted) {
           final pending = PendingDeepLinkService.consumePendingRoute();
         _router.go(pending ?? '/home');
+        PendingDeepLinkService.clearPendingRoute();
         PendingDeepLinkService.clearPendingRoute();
         PendingDeepLinkService.clearPendingRoute();
         }
@@ -780,6 +783,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         if (mounted) {
           final pending = PendingDeepLinkService.consumePendingRoute();
         _router.go(pending ?? '/home');
+        PendingDeepLinkService.clearPendingRoute();
         PendingDeepLinkService.clearPendingRoute();
         PendingDeepLinkService.clearPendingRoute();
         }
