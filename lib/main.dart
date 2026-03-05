@@ -325,7 +325,9 @@ class _FlowAIAppState extends State<FlowAIApp> {
 
 
   void _handleDeepLink(Uri uri) {
+    debugPrint('🔗 deep link received: ${uri.toString()}');
     final normalized = DeepLinkNormalizer.normalizeToAppPath(uri.toString());
+    debugPrint('🔗 normalized route: ${normalized ?? 'null'}');
     if (normalized != null) {
       PendingDeepLinkService.setPendingRoute(normalized);
     }
@@ -341,8 +343,21 @@ class _FlowAIAppState extends State<FlowAIApp> {
 
   Future<void> _initDeepLinks() async {
     try {
-      // Cold start
-      final initial = await _appLinks.getInitialAppLink();
+      // Cold start (handle app_links API differences across versions)
+      Uri? initial;
+      try {
+        initial = await (_appLinks as dynamic).getInitialAppLink() as Uri?;
+      } catch (_) {}
+
+      if (initial == null) {
+        try {
+          final s = await (_appLinks as dynamic).getInitialLink() as String?;
+          if (s != null) initial = Uri.tryParse(s);
+        } catch (_) {}
+      }
+
+      debugPrint('🔗 initial deep link: ${initial?.toString() ?? 'null'}');
+
       if (initial != null) {
         _handleDeepLink(initial);
       }
