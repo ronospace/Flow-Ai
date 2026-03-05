@@ -308,7 +308,7 @@ class _FlowAIAppState extends State<FlowAIApp> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final pending = PendingDeepLinkService.getPendingRoute();
       if (pending != null) {
-        PendingDeepLinkService.clearPendingRoute();
+        // Don't clear here. Auth must consume after login.
         AppRouter.router.go(pending);
       }
     });
