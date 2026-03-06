@@ -295,7 +295,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                   UpperCaseTextFormatter(),
                 ],
                 decoration: InputDecoration(
-                  hintText: 'ABC123',
+                  hintText: 'ABCDEFG8',
                   hintStyle: TextStyle(
                     color: AppTheme.lightGrey,
                     letterSpacing: 4,
