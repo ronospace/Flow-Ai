@@ -77,10 +77,10 @@ dependencies:
   health: ^13.1.4
   
   # OAuth Authentication
-  google_sign_in: ^6.2.2
+  google_sign_in: ^6.3.0
   sign_in_with_apple: ^7.0.1
-  firebase_auth: ^6.1.4
-  firebase_core: ^4.4.0
+  firebase_auth: ^6.2.0
+  firebase_core: ^4.5.0
   
   # State Persistence
   hydrated_bloc: ^9.1.2
@@ -155,7 +155,7 @@ dependencies:
   
   # Archive (for data export/import compression)
   archive: ^3.6.1
-  cloud_functions: ^6.0.6
+  cloud_functions: ^6.0.7
   app_links: ^7.0.0
 dev_dependencies:
   flutter_test:
