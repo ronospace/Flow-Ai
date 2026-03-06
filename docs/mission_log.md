@@ -40,3 +40,14 @@ Invite deep-links reliably convert: web → app → join partner, with correct a
 ## Notes / Decisions
 - Canonical invite path: /invite/:code
 - Pending invite code key: pendingInviteCode
+
+## M1 complete
+- Android deep links working on warm and cold start
+- Invite dialog opens and autofills code
+- 8-character placeholder aligned with validation
+- iOS build restored and app launches successfully
+- Firebase and Google Sign-In initialize on both platforms
+
+### Known issue
+- Join Partner dialog layout/overlay is visually broken on iOS and needs UI cleanup
+- QR scanner screen is not restored yet
