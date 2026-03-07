@@ -272,7 +272,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
         ),
         const SizedBox(height: 8),
         Text(
-          'Enter the 8-character code from your partner\'s invitation.',
+          'Enter the 6-character code from your partner\'s invitation.',
           style: Theme.of(
             context,
           ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGrey),
@@ -327,8 +327,8 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                   if (value == null || value.isEmpty) {
                     return 'Please enter the invitation code';
                   }
-                  if (value.length != 8) {
-                    return 'Code must be 8 characters';
+                  if (value.length != 6) {
+                    return 'Code must be 6 characters';
                   }
                   return null;
                 },
@@ -473,7 +473,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
       child: SizedBox(
         width: double.infinity,
         child: ElevatedButton(
-          onPressed: (_isLoading || _codeController.text.length != 8)
+          onPressed: (_isLoading || _codeController.text.trim().length != 6)
               ? null
               : _handleJoin,
           style: ElevatedButton.styleFrom(
@@ -541,10 +541,10 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
       });
 
       try {
-        // Validate code format (8 characters, alphanumeric)
+        // Validate code format (6 characters, alphanumeric)
         final code = _codeController.text.trim().toUpperCase();
-        if (code.length != 8 || !RegExp(r'^[A-Z0-9]{8}$').hasMatch(code)) {
-          throw Exception('Invalid code format. Code must be 8 characters.');
+        if (code.length != 6 || !RegExp(r'^[A-Z0-9]{6}$').hasMatch(code)) {
+          throw Exception('Invalid code format. Code must be 6 characters.');
         }
 
         // Call the callback - parent will handle PartnerService call
