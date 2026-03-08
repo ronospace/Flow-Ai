@@ -1,3 +1,4 @@
+import 'package:flow_ai/features/partner/screens/qr_join_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
@@ -17,6 +18,7 @@ import '../../features/insights/screens/ai_coach_screen.dart'
 import '../../features/insights/screens/faq_browser_screen.dart';
 import '../../features/health/screens/health_screen.dart';
 import '../../features/settings/screens/settings_screen.dart';
+import '../../features/partner/screens/partner_dashboard_screen.dart';
 import '../../features/feedback/screens/feedback_screen.dart';
 import '../../features/future_plans/screens/future_plans_screen.dart';
 import 'package:flow_ai/core/deeplinks/invite_gate_page.dart';
@@ -35,6 +37,12 @@ class AppRouter {
       return null;
     },
     routes: [
+
+      GoRoute(
+        path: '/qr-join',
+        builder: (context, state) => const QrJoinScreen(),
+      ),
+
         GoRoute(
           path: '/invite/:code',
           builder: (context, state) {
@@ -86,6 +94,8 @@ class AppRouter {
       ShellRoute(
         builder: (context, state, child) => MainShell(child: child),
         routes: [
+
+
           GoRoute(
             path: '/home',
             name: 'home',
@@ -124,6 +134,11 @@ class AppRouter {
             path: '/settings',
             name: 'settings',
             builder: (context, state) => const SettingsScreen(),
+          ),
+          GoRoute(
+            path: '/partner-dashboard',
+            name: 'partner-dashboard',
+            builder: (context, state) => const PartnerDashboardScreen(),
           ),
           GoRoute(
             path: '/faq',

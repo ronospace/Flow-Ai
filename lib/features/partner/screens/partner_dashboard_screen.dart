@@ -1,4 +1,6 @@
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import 'package:flow_ai/features/partner/screens/qr_join_screen.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import '../../../core/theme/app_theme.dart';
@@ -829,8 +831,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
               const SizedBox(width: 16),
               Expanded(
                 child: OutlinedButton.icon(
-                  onPressed: () =>
-                      _showJoinPartnerDialog(context, partnerService),
+                  onPressed: () => _showJoinPartnerDialog(context, partnerService),
                   icon: const Icon(Icons.link),
                   label: const Text('Join Partner'),
                   style: OutlinedButton.styleFrom(
@@ -857,6 +858,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
   ) {
     showDialog(
       context: context,
+      useRootNavigator: true,
       builder: (context) =>
           PartnerInvitationDialog(partnerService: partnerService),
     );
@@ -868,13 +870,17 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
   ) {
     showDialog(
       context: context,
+      useRootNavigator: true,
       builder: (context) => JoinPartnerDialog(
         onJoinWithCode: (code) async {
           final partnership = await partnerService.acceptPartnerInvitation(
             code,
           );
           if (partnership != null && context.mounted) {
-            Navigator.of(context).pop(); // Close join dialog
+            Navigator.of(context, rootNavigator: true).pop(); 
+            Future.microtask(() {
+              if (context.mounted) context.go('/partner-dashboard');
+            });
           }
         },
       ),
@@ -885,6 +891,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     // Implementation for message dialog - can be enhanced later
     showDialog(
       context: context,
+      useRootNavigator: true,
       builder: (context) => AlertDialog(
         title: const Text('Send Message'),
         content: const Text('Message feature coming soon'),

@@ -2917,9 +2917,7 @@ extension _NavigationMethods on _HomeScreenState {
   }
 
   void _navigateToPartnerSharing() {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => const PartnerDashboardScreen()),
-    );
+    context.push('/partner-dashboard');
   }
 
   void _navigateToAdvancedAnalytics() {
