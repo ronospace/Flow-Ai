@@ -157,6 +157,7 @@ dependencies:
   archive: ^3.6.1
   cloud_functions: ^6.0.7
   app_links: ^7.0.0
+  mobile_scanner: ^7.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

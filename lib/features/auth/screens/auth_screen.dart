@@ -207,7 +207,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
           // Tab Selector
           _buildTabSelector(theme),
 
-          const SizedBox(height: 32),
+          const SizedBox(height: 20),
 
           // Biometric Login (if available and on login page)
           if (_biometricsAvailable && _isLogin) ...[
@@ -399,17 +399,13 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
               .slideY(begin: 0.3, end: 0)
               .fadeIn(delay: 500.ms),
 
-          const SizedBox(height: 32),
+          const SizedBox(height: 20),
 
           // Social Login Section
           _buildSocialLogin(theme),
 
           const SizedBox(height: 24),
 
-          // Demo Account Button
-          _buildDemoAccountButton(theme),
-
-          const SizedBox(height: 24),
         ],
       ),
     );
@@ -448,41 +444,44 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         const SizedBox(height: 20),
 
         // Social Login Buttons
-        Row(
-              children: [
-                // Google Sign-In
-                Expanded(
-                  child: SocialLoginButton(
-                    icon: Icons.g_mobiledata,
-                    label: 'Google',
-                    onPressed: _isLoading ? null : _handleGoogleSignIn,
-                    backgroundColor: Colors.white,
-                    iconColor: const Color(0xFF4285F4),
-                  ),
+        if (PlatformService().platformInfo.platform == TargetPlatform.iOS)
+          Row(
+            children: [
+              Expanded(
+                child: SocialLoginButton(
+                  icon: Icons.g_mobiledata,
+                  label: 'Google',
+                  onPressed: _isLoading ? null : _handleGoogleSignIn,
+                  backgroundColor: Colors.white,
+                  iconColor: const Color(0xFF4285F4),
                 ),
-                const SizedBox(width: 16),
-                // Apple Sign-In (iOS only)
-                if (PlatformService().platformInfo.platform ==
-                    TargetPlatform.iOS)
-                  Expanded(
-                    child: SocialLoginButton(
-                      icon: Icons.apple,
-                      label: 'Apple',
-                      onPressed: _isLoading ? null : _handleAppleSignIn,
-                      backgroundColor: Colors.black,
-                      iconColor: Colors.white,
-                      textColor: Colors.white,
-                    ),
-                  ),
-                // If not iOS, fill the space
-                if (PlatformService().platformInfo.platform !=
-                    TargetPlatform.iOS)
-                  const Expanded(child: SizedBox()),
-              ],
-            )
-            .animate(controller: _socialController)
-            .slideY(begin: 0.3, end: 0)
-            .fadeIn(delay: 200.ms),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: SocialLoginButton(
+                  icon: Icons.apple,
+                  label: 'Apple',
+                  onPressed: _isLoading ? null : _handleAppleSignIn,
+                  backgroundColor: Colors.black,
+                  iconColor: Colors.white,
+                  textColor: Colors.white,
+                ),
+              ),
+            ],
+          )
+        else
+          Center(
+            child: SizedBox(
+              width: 260,
+              child: SocialLoginButton(
+                icon: Icons.g_mobiledata,
+                label: 'Google',
+                onPressed: _isLoading ? null : _handleGoogleSignIn,
+                backgroundColor: Colors.white,
+                iconColor: const Color(0xFF4285F4),
+              ),
+            ),
+          ),
       ],
     );
   }
@@ -1009,20 +1008,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     }
   }
 
-  Widget _buildDemoAccountButton(ThemeData theme) {
-    if (kReleaseMode) return const SizedBox.shrink();
-    return AdaptiveComponents.adaptiveButton(
-          context: context,
-          text: 'Demo',
-          onPressed: _isLoading ? null : _handleDemoAccountFill,
-          isPrimary: false,
-          height: 48,
-        )
-        .animate(controller: _socialController)
-        .fadeIn(delay: 400.ms)
-        .slideY(begin: 0.2, end: 0, delay: 400.ms);
-  }
-
+  
   Future<void> _handleDemoAccountFill() async {
     // Demo mode removed for store safety and clean analytics.
     // Keep this handler to avoid breaking UI wiring.

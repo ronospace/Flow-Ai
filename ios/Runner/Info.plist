@@ -28,9 +28,8 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>com.googleusercontent.apps.752724279049-ei2380bh9o9ph6tq348lht6sf0ks52n2</string>
-			
 				<string>flowai</string>
-</array>
+			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
@@ -43,6 +42,8 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Scan partner QR codes to join securely.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
