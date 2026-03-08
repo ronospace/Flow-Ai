@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
@@ -179,7 +180,30 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
               _buildErrorMessage(),
             ],
             const SizedBox(height: 24),
-            _buildAlternativeOptions(),
+            
+const SizedBox(height: 20),
+SizedBox(
+  width: double.infinity,
+  child: ElevatedButton.icon(
+    onPressed: () {
+      Navigator.pop(context);
+      context.go('/qr-join');
+    },
+    icon: const Icon(Icons.qr_code_scanner, size: 22),
+    label: const Text('Scan QR Code'),
+    style: ElevatedButton.styleFrom(
+      backgroundColor: AppTheme.secondaryBlue,
+      foregroundColor: Colors.white,
+      elevation: 0,
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+    ),
+  ),
+),
+
+_buildAlternativeOptions(),
           ],
         ),
       ),
