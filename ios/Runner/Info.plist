@@ -44,6 +44,8 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Scan partner QR codes to join securely.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Flow AI uses Face ID to securely log you in.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

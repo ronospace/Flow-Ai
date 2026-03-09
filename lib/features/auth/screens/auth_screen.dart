@@ -90,9 +90,10 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       final isAvailable = await _localAuth.canCheckBiometrics;
       final isDeviceSupported = await _localAuth.isDeviceSupported();
       final availableBiometrics = await _localAuth.getAvailableBiometrics();
+      final enabled = await _authService.isBiometricEnabled();
 
       setState(() {
-        _biometricsAvailable = isAvailable && isDeviceSupported;
+        _biometricsAvailable = isAvailable && isDeviceSupported && availableBiometrics.isNotEmpty;
         _availableBiometrics = availableBiometrics;
       });
     } catch (e) {
@@ -487,6 +488,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   }
 
   Future<void> _handleBiometricLogin() async {
+    debugPrint("BIO: tap biometric button");
     if (!_biometricsAvailable) {
       _showErrorMessage(
         'Biometric authentication is not available on this device',
@@ -502,7 +504,11 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       await _authService.initialize();
 
       if (!mounted) return;
+      debugPrint("BIO: tap -> calling authService");
+      debugPrint("BIO: calling auth service");
       final result = await _authService.authenticateWithBiometrics();
+      debugPrint("BIO: auth result success=${result.isSuccess} error=${result.error}");
+      debugPrint("BIO: result success=${result.isSuccess} error=${result.error}");
 
       if (!mounted) return;
 
@@ -534,9 +540,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         if (mounted) {
           final pending = PendingDeepLinkService.consumePendingRoute();
         _router.go(pending ?? '/home');
-        PendingDeepLinkService.clearPendingRoute();
-        PendingDeepLinkService.clearPendingRoute();
-        PendingDeepLinkService.clearPendingRoute();
         PendingDeepLinkService.clearPendingRoute();
         }
       } else {
@@ -669,9 +672,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       final pending = PendingDeepLinkService.consumePendingRoute();
         _router.go(pending ?? '/home');
         PendingDeepLinkService.clearPendingRoute();
-        PendingDeepLinkService.clearPendingRoute();
-        PendingDeepLinkService.clearPendingRoute();
-        PendingDeepLinkService.clearPendingRoute();
     } catch (e) {
       debugPrint('❌ Auth error: $e');
       final errorMessage = e.toString().replaceFirst('Exception: ', '');
@@ -724,9 +724,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         if (mounted) {
           final pending = PendingDeepLinkService.consumePendingRoute();
         _router.go(pending ?? '/home');
-        PendingDeepLinkService.clearPendingRoute();
-        PendingDeepLinkService.clearPendingRoute();
-        PendingDeepLinkService.clearPendingRoute();
         PendingDeepLinkService.clearPendingRoute();
         }
       } else {
@@ -785,9 +782,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         if (mounted) {
           final pending = PendingDeepLinkService.consumePendingRoute();
         _router.go(pending ?? '/home');
-        PendingDeepLinkService.clearPendingRoute();
-        PendingDeepLinkService.clearPendingRoute();
-        PendingDeepLinkService.clearPendingRoute();
         PendingDeepLinkService.clearPendingRoute();
         }
       } else {

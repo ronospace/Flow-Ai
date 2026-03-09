@@ -24,8 +24,10 @@ class AppStateService {
       _preferencesService = UserPreferencesService();
 
       // Initialize services in order
-      await _authService.initialize();
-      await _preferencesService.initialize();
+      await Future.wait([
+        _authService.initialize(),
+        _preferencesService.initialize(),
+      ]);
 
       _isInitialized = true;
       debugPrint('✅ AppStateService initialized successfully');

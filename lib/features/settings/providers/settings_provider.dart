@@ -1,3 +1,5 @@
+import 'package:flow_ai/core/services/auth_service.dart';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -313,6 +315,9 @@ class SettingsProvider extends ChangeNotifier {
     );
     notifyListeners();
     await _savePreferences();
+    final auth = AuthService();
+    await auth.initialize();
+    await auth.setBiometricEnabled(enabled);
   }
 
   // Update CycleSync integration
