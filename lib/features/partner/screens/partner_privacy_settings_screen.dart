@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../generated/app_localizations.dart';
 import '../services/partner_service.dart';
 
 class PartnerPrivacySettingsScreen extends StatefulWidget {
