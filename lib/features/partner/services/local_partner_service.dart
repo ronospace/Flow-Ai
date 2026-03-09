@@ -83,7 +83,7 @@ class LocalPartnerService {
       inviterId: userInfo['userId']!,
       inviterName: userInfo['userName']!,
       inviterEmail: userInfo['userEmail'],
-      inviteeEmail: '', // Will be filled when accepted
+      inviteeEmail: userInfo['userEmail'] ?? '', // Will be filled when accepted
       invitationCode: invitationCode,
       createdAt: now,
       expiresAt: now.add(expirationDuration),

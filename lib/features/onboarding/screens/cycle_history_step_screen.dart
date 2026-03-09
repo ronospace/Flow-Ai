@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../generated/app_localizations.dart';
 import '../models/onboarding_data.dart';
 
 class CycleHistoryStepScreen extends StatefulWidget {

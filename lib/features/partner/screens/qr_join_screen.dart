@@ -15,6 +15,7 @@ class _QrJoinScreenState extends State<QrJoinScreen> {
 
   void handleCode(String code) {
     if (scanned) return;
+    if (!RegExp(r"^[A-Z2-9]{6}$").hasMatch(code)) return;
     scanned = true;
 
     if (mounted) {

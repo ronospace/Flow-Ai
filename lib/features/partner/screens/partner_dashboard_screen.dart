@@ -1,6 +1,5 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
-import 'package:flow_ai/features/partner/screens/qr_join_screen.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import '../../../core/theme/app_theme.dart';

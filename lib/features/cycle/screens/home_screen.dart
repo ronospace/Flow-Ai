@@ -16,7 +16,6 @@ import '../../settings/providers/settings_provider.dart';
 import '../../../core/services/cycle_calculation_engine.dart';
 import '../../../core/widgets/coming_soon_widget.dart';
 import '../../healthcare/screens/healthcare_provider_portal_screen.dart';
-import '../../partner/screens/partner_dashboard_screen.dart';
 import '../../analytics/screens/enhanced_analytics_dashboard_screen.dart';
 import '../../../core/ai/period_prediction_engine.dart';
 import '../../ai_predictions/widgets/ai_prediction_card.dart';

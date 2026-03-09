@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:local_auth/local_auth.dart';
-import '../../../core/services/auth_service.dart';
 import '../../../core/services/platform_service.dart';
 import '../../../core/ui/adaptive_messages.dart';
 import '../widgets/biometric_button.dart';
