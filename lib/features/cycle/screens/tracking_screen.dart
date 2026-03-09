@@ -315,19 +315,9 @@ class _TrackingScreenState extends State<TrackingScreen>
               ),
               margin: const EdgeInsets.all(16),
               duration: const Duration(
-                milliseconds: 1500,
+                milliseconds: 1000,
               ), // Fast display for better UX
               elevation: 12,
-              action: _shouldShowSmartNavigation()
-                  ? SnackBarAction(
-                      label: 'View Insights',
-                      textColor: theme.colorScheme.onPrimary,
-                      backgroundColor: theme.colorScheme.onPrimary.withValues(
-                        alpha: 0.2,
-                      ),
-                      onPressed: () => _navigateToInsights(),
-                    )
-                  : null,
             ),
           );
         } catch (e) {
@@ -341,10 +331,10 @@ class _TrackingScreenState extends State<TrackingScreen>
         // This allows proper completion of subcategories within each tab
 
         // Smart post-save navigation after delay
-        _scheduleSmartNavigation();
+        // _scheduleSmartNavigation();
 
         // Always show a quick action suggestion after 2 seconds for user engagement
-        _scheduleQuickActionSuggestion();
+        // _scheduleQuickActionSuggestion();
       }
     } catch (e) {
       // Handle save errors

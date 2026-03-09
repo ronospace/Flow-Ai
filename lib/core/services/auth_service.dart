@@ -230,6 +230,9 @@ class AuthService {
       }
 
       final bool isAvailable = await isBiometricAvailable();
+      debugPrint("BIO: service isAvailable=$isAvailable");
+      debugPrint("BIO: isAvailable=$isAvailable enabled=${isBiometricEnabled()}");
+      debugPrint("BIO: service isAvailable=$isAvailable enabled=${isBiometricEnabled()}");
       if (!isAvailable) {
         return AuthResult.failure(
           'Biometric authentication is not available on this device',
@@ -237,12 +240,17 @@ class AuthService {
       }
 
       final bool isEnabled = isBiometricEnabled();
+      debugPrint("BIO: service enabled=$isEnabled");
+      debugPrint("BIO: enabled flag = $isEnabled");
       if (!isEnabled) {
         return AuthResult.failure(
           'Biometric authentication is not enabled. Please enable it in settings.',
         );
       }
 
+      debugPrint("BIO: calling localAuth.authenticate");
+      debugPrint("BIO: calling localAuth.authenticate");
+      debugPrint("BIO: calling localAuth.authenticate");
       final bool isAuthenticated = await _localAuth!.authenticate(
         localizedReason: 'Please authenticate to access Flow Ai',
         options: const AuthenticationOptions(
@@ -251,6 +259,9 @@ class AuthService {
         ),
       );
 
+      debugPrint("BIO: localAuth result=$isAuthenticated");
+      debugPrint("BIO: localAuth result=$isAuthenticated");
+      debugPrint("BIO: localAuth result=$isAuthenticated");
       if (isAuthenticated) {
         // If biometric auth succeeds, check if we have stored credentials
         final userData = await _getStoredUserData();
@@ -519,7 +530,8 @@ class AuthService {
 
       final userCredential = await _auth!.signInWithCredential(credential);
 
-      return AuthResult.success(userCredential.user);
+      await _storeUserData({'uid': userCredential.user?.uid,'email': userCredential.user?.email,'provider':'google','lastLogin':DateTime.now().toIso8601String()});
+return AuthResult.success(userCredential.user);
     } catch (e) {
       return AuthResult.failure('Google sign-in failed: $e');
     }
@@ -567,8 +579,7 @@ class AuthService {
       );
 
       final userCredential = await _auth!.signInWithCredential(oauthCredential);
-
-      return AuthResult.success(userCredential.user);
+return AuthResult.success(userCredential.user);
     } catch (e) {
       return AuthResult.failure('Apple sign-in failed: $e');
     }
@@ -629,11 +640,9 @@ class AuthService {
       debugPrint('🔐 Starting complete sign out process...');
 
       // Always clear local data first, even if Firebase operations fail
-      await _clearStoredUserData();
       await _clearAllUserData();
       if (_prefs != null) {
         await _prefs!.remove(_lastLoginMethodKey);
-        await _prefs!.remove(_biometricEnabledKey);
         // Clear any cached user preferences
         await _prefs!.remove('user_preferences');
         await _prefs!.remove('app_settings');
@@ -676,7 +685,6 @@ class AuthService {
       debugPrint('❌ Critical sign out error: $e');
       // Still try to clear local data even if everything else fails
       try {
-        await _clearStoredUserData();
         if (_prefs != null) {
           await _prefs!.remove(_lastLoginMethodKey);
         }
@@ -794,10 +802,8 @@ class AuthService {
       }
 
       await currentUser!.delete();
-      await _clearStoredUserData();
       if (_prefs != null) {
         await _prefs!.remove(_lastLoginMethodKey);
-        await _prefs!.remove(_biometricEnabledKey);
       }
 
       return AuthResult.success(null);
@@ -833,7 +839,7 @@ class AuthService {
       // Get all keys and remove user-related ones
       final keys = _prefs!.getKeys();
       for (final key in keys) {
-        if (key.contains('user_') ||
+        if ((key.contains('user_') && key != _userDataKey) ||
             key.contains('auth_') ||
             key.contains('profile_') ||
             key.contains('settings_') ||

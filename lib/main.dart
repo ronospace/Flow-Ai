@@ -20,7 +20,7 @@ import 'firebase_options.dart';
 
 import 'core/theme/app_theme.dart';
 import 'core/utils/image_cache_config.dart';
-import 'core/routing/app_router.dart';
+
 import 'core/services/ai_engine.dart';
 import 'core/services/notification_service.dart';
 import 'core/services/admob_service.dart' as admob;
@@ -48,7 +48,6 @@ import 'features/analytics/providers/analytics_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await _initializeAdMob();
   // Configure Flutter for production performance
   if (kReleaseMode) {
     // Disable debug banner and optimize for production
@@ -60,9 +59,12 @@ void main() async {
   }
 
   // Initialize only critical services synchronously
-  await _initializeCriticalServices();
-
   runApp(const FlowAIApp());
+
+  Future.microtask(() async {
+    await _initializeCriticalServices();
+    _initializeNonCriticalServices();
+  });
 
   // Initialize non-critical services asynchronously after app launch
   _initializeNonCriticalServices();

@@ -1354,7 +1354,7 @@ class _SettingsScreenState extends State<SettingsScreen>
 
       // Show success message
       if (mounted) {
-        await AdaptiveMessages.showSuccess(context, 'Successfully signed out');
+        await AdaptiveMessages.showSuccess(context, 'Signed out');
       }
 
       // Navigate to auth screen immediately

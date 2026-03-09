@@ -83,7 +83,11 @@ class _InviteGatePageState extends State<InviteGatePage> {
     );
 
     if (!mounted) return;
-    context.go('/home');
+    if (context.canPop()) {
+      context.pop();
+    } else {
+      context.go('/home');
+    }
   }
 
   @override
