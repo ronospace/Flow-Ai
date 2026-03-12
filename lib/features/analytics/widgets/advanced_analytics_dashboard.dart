@@ -241,13 +241,15 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
   }
 
   Widget _buildAdvancedMetricsGrid(ThemeData theme) {
-    return GridView.count(
-      crossAxisCount: 2,
+    return GridView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      crossAxisSpacing: 16,
-      mainAxisSpacing: 16,
-      mainAxisExtent: 185,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
+        mainAxisExtent: 185,
+      ),
       children: [
         _buildAdvancedMetricCard(
           title: 'Cycle Precision',

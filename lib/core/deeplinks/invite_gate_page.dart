@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import '../ui/adaptive_messages.dart';
 
-import '../services/auth_service.dart';
+import '../services/app_state_service.dart';
 import '../../features/partner/dialogs/join_partner_dialog.dart';
 import '../../features/partner/services/partner_service.dart';
 
@@ -33,14 +34,8 @@ class _InviteGatePageState extends State<InviteGatePage> {
 
     debugPrint('🔗 InviteGate: handling code=${widget.code}');
 
-    AuthService? auth;
-    try {
-      auth = context.read<AuthService>();
-    } catch (e) {
-      debugPrint('❌ InviteGate: AuthService not found in context: $e');
-    }
-
-    final isAuthed = auth == null ? false : await auth.isAuthenticated;
+    final appState = AppStateService();
+    final isAuthed = await appState.isUserAuthenticated();
     debugPrint('🔗 InviteGatePage isAuthed=$isAuthed');
     if (!mounted) return;
 
@@ -63,10 +58,9 @@ class _InviteGatePageState extends State<InviteGatePage> {
 
     if (partnerService == null) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Partner service unavailable. Please restart the app.'),
-        ),
+      AdaptiveMessages.showError(
+        context,
+        'Partner service unavailable. Please restart the app.',
       );
       return;
     }

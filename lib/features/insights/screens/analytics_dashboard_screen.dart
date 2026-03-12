@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import '../../../core/ui/adaptive_messages.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -804,8 +805,9 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
 
   void _exportData(BuildContext context) {
     // Export functionality
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Exporting analytics data...')),
+    AdaptiveMessages.showInfo(
+      context,
+      'Exporting analytics data...',
     );
   }
 

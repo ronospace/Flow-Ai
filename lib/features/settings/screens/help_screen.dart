@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/ui/adaptive_messages.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
@@ -576,13 +577,9 @@ class _HelpScreenState extends State<HelpScreen> {
                       Clipboard.setData(
                         const ClipboardData(text: 'support@flowsense.app'),
                       );
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Email address copied!'),
-                          backgroundColor: AppTheme.successGreen,
-                          behavior: SnackBarBehavior.floating,
-                          duration: Duration(seconds: 2),
-                        ),
+                      AdaptiveMessages.showSuccess(
+                        context,
+                        'Email address copied!',
                       );
                     },
                     icon: const Icon(Icons.copy, size: 20),
@@ -709,12 +706,9 @@ class _HelpScreenState extends State<HelpScreen> {
 
   void _showErrorSnackBar(String message) {
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: AppTheme.errorRed,
-        behavior: SnackBarBehavior.floating,
-      ),
+    AdaptiveMessages.showError(
+      context,
+      message,
     );
   }
 }

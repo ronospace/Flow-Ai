@@ -25,6 +25,7 @@ import '../widgets/theme_switcher_card.dart';
 import 'help_screen.dart';
 import 'account_management_screen.dart';
 import '../widgets/medical_citations_section.dart';
+import 'dart:io';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -37,6 +38,18 @@ class _SettingsScreenState extends State<SettingsScreen>
     with TickerProviderStateMixin {
   late AnimationController _headerController;
   late AnimationController _sectionsController;
+
+  String get _platformDisclosureLabel => Platform.isIOS
+      ? 'App Store Guideline 2.5.1 - HealthKit Transparency'
+      : 'Required Disclosure';
+
+  String get _platformIntegrationText => Platform.isIOS
+      ? 'Flow Ai integrates with Apple HealthKit to enhance your experience:'
+      : 'Flow Ai integrates with Health Connect to enhance your experience:';
+
+  String get _platformManagePath => Platform.isIOS
+      ? 'Settings → Health → Data Access & Devices → Flow Ai'
+      : 'Settings → Apps → Health Connect → App permissions → Flow Ai';
 
   @override
   void initState() {
@@ -207,8 +220,8 @@ class _SettingsScreenState extends State<SettingsScreen>
                                   Icons.favorite,
                                   color: AppTheme.primaryRose,
                                 ),
-                                title: 'HealthKit Integration',
-                                subtitle: 'Manage Apple HealthKit data access',
+                                title: Platform.isIOS ? 'HealthKit Integration' : 'Health Connect Integration',
+                                subtitle: Platform.isIOS ? 'Manage Apple HealthKit data access' : 'Manage Health Connect data access',
                                 onTap: () => _showHealthKitInfo(context),
                                 trailing: const Icon(
                                   Icons.arrow_forward_ios,
@@ -808,6 +821,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   void _showHealthKitFullDisclosure(BuildContext context) {
+    final platformName = Platform.isIOS ? 'Apple HealthKit' : 'Health Connect';
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -817,7 +831,7 @@ class _SettingsScreenState extends State<SettingsScreen>
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                'Apple HealthKit Integration',
+                '${platformName} Integration',
                 style: TextStyle(color: AppTheme.secondaryBlue),
               ),
             ),
@@ -847,7 +861,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'Required Disclosure (App Store Guideline 2.5.1)',
+                        _platformDisclosureLabel,
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
@@ -860,7 +874,7 @@ class _SettingsScreenState extends State<SettingsScreen>
               ),
               const SizedBox(height: 16),
               Text(
-                'Flow Ai uses Apple HealthKit to access your health data for enhanced cycle predictions and personalized insights.',
+                Platform.isIOS ? 'Flow Ai uses Apple HealthKit to access your health data for enhanced cycle predictions and personalized insights.' : 'Flow Ai uses Health Connect to access your health data for enhanced cycle predictions and personalized insights.',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.w500,
                   height: 1.5,
@@ -923,7 +937,7 @@ class _SettingsScreenState extends State<SettingsScreen>
               ),
               const SizedBox(height: 12),
               Text(
-                'You can manage HealthKit access at any time in iOS Settings → Health → Data Access & Devices.',
+                Platform.isIOS ? 'You can manage HealthKit access at any time in iOS Settings → Health → Data Access & Devices.' : 'You can manage Health Connect access at any time in Android Settings → Apps → Health Connect → App permissions.',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(
                     context,
@@ -993,7 +1007,7 @@ class _SettingsScreenState extends State<SettingsScreen>
           children: [
             Icon(Icons.health_and_safety, color: AppTheme.primaryRose),
             const SizedBox(width: 12),
-            const Text('HealthKit Integration'),
+            Text(Platform.isIOS ? 'HealthKit Integration' : 'Health Connect Integration'),
           ],
         ),
         content: SingleChildScrollView(
@@ -1002,7 +1016,7 @@ class _SettingsScreenState extends State<SettingsScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Flow Ai integrates with Apple HealthKit to enhance your experience:',
+                _platformIntegrationText,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   color: theme.colorScheme.onSurface,
@@ -1046,7 +1060,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Settings → Health → Data Access & Devices → Flow Ai',
+                      _platformManagePath,
                       style: TextStyle(
                         fontSize: 12,
                         color: theme.colorScheme.onSurface.withValues(

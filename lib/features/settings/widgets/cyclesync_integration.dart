@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/ui/adaptive_messages.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
@@ -417,11 +418,9 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
           rootNavigator: true,
         ).pop(); // Close loading dialog
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Sync completed successfully!'),
-            backgroundColor: AppTheme.successGreen,
-          ),
+        AdaptiveMessages.showSuccess(
+          context,
+          'Sync completed successfully!',
         );
       }
     });

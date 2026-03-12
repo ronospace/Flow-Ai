@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import '../ui/adaptive_messages.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -393,25 +394,18 @@ mixin OfflineCapableMixin<T extends StatefulWidget> on State<T> {
 
   /// Show offline message to user
   void showOfflineMessage() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text(
-          'You are currently offline. Changes will be synced when connection is restored.',
-        ),
-        backgroundColor: Colors.orange,
-        duration: Duration(seconds: 3),
-      ),
+    AdaptiveMessages.showWarning(
+      context,
+      'You are offline. Changes will sync when connection is restored.',
+      duration: const Duration(milliseconds: 1200),
     );
   }
 
   /// Show online message to user
   void showOnlineMessage() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Connection restored. Syncing data...'),
-        backgroundColor: Colors.green,
-        duration: Duration(seconds: 2),
-      ),
+    AdaptiveMessages.showInfo(
+      context,
+      'Connection restored. Syncing data...',
     );
   }
 

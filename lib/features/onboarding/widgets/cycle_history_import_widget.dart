@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../models/onboarding_data.dart';
 import '../../../core/ui/adaptive_components.dart';
+import '../../../core/ui/adaptive_messages.dart';
+import 'dart:io';
 
 /// 📊 Cycle History Import Widget - Advanced Data Import System
 /// Features: Multiple import sources, CSV/JSON parsing, manual entry,
@@ -61,7 +63,7 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
     {
       'id': 'health_connect',
       'title': 'Health Connect',
-      'subtitle': 'Sync with Apple Health or Google Fit',
+      'subtitle': Platform.isIOS ? 'Sync with Apple Health' : 'Sync with Health Connect',
       'icon': Icons.health_and_safety,
       'color': Colors.red,
     },
@@ -603,7 +605,7 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
           const SizedBox(height: 16),
 
           Text(
-            'Health Connect Integration',
+            Platform.isIOS ? 'HealthKit Integration' : 'Health Connect Integration',
             style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
             ),
@@ -959,8 +961,9 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
 
   Future<void> _downloadCSVTemplate() async {
     // Implement CSV template download
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('CSV template download would start here')),
+    AdaptiveMessages.showInfo(
+      context,
+      'CSV template download would start here',
     );
   }
 

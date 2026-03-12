@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/ui/adaptive_messages.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../models/coming_soon_feature.dart';
 
@@ -375,15 +376,9 @@ class _FeaturePreviewCardState extends State<FeaturePreviewCard>
 
   void _handleNotifyMe() {
     // Implement notification signup
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'You\'ll be notified when ${widget.feature.title} is ready!',
-        ),
-        backgroundColor: widget.feature.color,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      ),
+    AdaptiveMessages.showSuccess(
+      context,
+      "You'll be notified when ${widget.feature.title} is ready!",
     );
   }
 

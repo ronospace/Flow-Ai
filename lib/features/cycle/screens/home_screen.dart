@@ -8,7 +8,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../../generated/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/services/admob_service.dart' as admob;
-import '../../../core/services/auth_service.dart';
+import '../../../core/services/app_state_service.dart';
 import '../../../core/models/cycle_data.dart';
 import '../providers/cycle_provider.dart';
 import '../../insights/providers/insights_provider.dart';
@@ -128,11 +128,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   void _loadBannerAd() {
-    _bannerAd = _adMobService.createBannerAd();
-    _bannerAd!.load();
-    setState(() {
-      _isBannerAdReady = true;
-    });
+    _bannerAd?.dispose();
+    _bannerAd = null;
+    if (mounted) {
+      setState(() {
+        _isBannerAdReady = false;
+      });
+    }
   }
 
   Future<void> _loadAIPrediction() async {
@@ -143,9 +145,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     }
 
     try {
-      // Get current user ID from auth service
-      final authService = Provider.of<AuthService>(context, listen: false);
-      final currentUser = authService.currentUser;
+      // Get current user ID from app state service
+      final appState = Provider.of<AppStateService>(context, listen: false);
+      final currentUser = appState.auth.currentUser;
       final userId = currentUser?.uid ?? 'anonymous_user';
 
       final prediction = await PeriodPredictionEngine().predictNextPeriod(
@@ -537,8 +539,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localizations = AppLocalizations.of(context);
-    final authService = context.read<AuthService>();
-    final user = authService.currentUser;
+    final appState = context.read<AppStateService>();
+    final user = appState.auth.currentUser;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -935,90 +937,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     ).animate().fadeIn().slideY(begin: -0.3, end: 0);
   }
 
-  Widget _buildCurrentCycleCard(CycleProvider provider) {
-    final theme = Theme.of(context);
-    final currentCycle = provider.currentCycle;
-
-    return Card(
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          gradient: const LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
-          ),
-        ),
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Icon(
-                  Icons.favorite_rounded,
-                  color: Colors.white,
-                  size: 24,
-                ),
-                const SizedBox(width: 10),
-                Text(
-                  'Current Cycle',
-                  style: theme.textTheme.titleLarge?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 15),
-            if (currentCycle != null) ...[
-              Text(
-                'Day ${DateTime.now().difference(currentCycle.startDate).inDays + 1}',
-                style: theme.textTheme.headlineLarge?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  _buildCycleInfo(
-                    'Flow',
-                    currentCycle.flowIntensity?.emoji ?? '✨',
-                  ),
-                  const SizedBox(width: 20),
-                  if (currentCycle.mood != null)
-                    _buildCycleInfo('Mood', '${currentCycle.mood}/5'),
-                  const SizedBox(width: 20),
-                  if (currentCycle.energy != null)
-                    _buildCycleInfo('Energy', '${currentCycle.energy}/5'),
-                ],
-              ),
-            ] else ...[
-              Text(
-                'No active cycle',
-                style: TextStyle(
-                  color: theme.colorScheme.onPrimary.withValues(alpha: 0.7),
-                  fontSize: 16,
-                ),
-              ),
-              const SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: () {
-                  // Navigate to tracking
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: theme.colorScheme.surface,
-                  foregroundColor: AppTheme.primaryRose,
-                ),
-                child: const Text('Start Tracking'),
-              ),
-            ],
-          ],
-        ),
-      ),
-    ).animate().fadeIn(delay: 300.ms).slideY(begin: 0.2, end: 0);
-  }
 
   Widget _buildCycleInfo(String label, String value) {
     final theme = Theme.of(context);
@@ -1044,102 +962,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildInsightsSection(InsightsProvider provider) {
-    final theme = Theme.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'AI Insights',
-          style: theme.textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 15),
-        ...provider.insights.map(
-          (insight) =>
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        insight.title,
-                        style: Theme.of(context).textTheme.titleMedium
-                            ?.copyWith(fontWeight: FontWeight.w600),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        insight.description,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                      if (insight.recommendations.isNotEmpty) ...[
-                        const SizedBox(height: 12),
-                        Wrap(
-                          spacing: 8,
-                          children: insight.recommendations
-                              .map(
-                                (rec) => Chip(
-                                  label: Text(rec),
-                                  backgroundColor: AppTheme.accentMint
-                                      .withValues(alpha: 0.1),
-                                  labelStyle: const TextStyle(
-                                    color: AppTheme.accentMint,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              )
-                              .toList(),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-              ).animate().fadeIn(
-                delay: (700 + provider.insights.indexOf(insight) * 100).ms,
-              ),
-        ),
-      ],
-    );
-  }
 
-  Widget _buildQuickActions() {
-    final theme = Theme.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Quick Actions',
-          style: theme.textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 15),
-        Row(
-          children: [
-            Expanded(
-              child: _buildActionCard(
-                icon: Icons.add_circle_rounded,
-                title: 'Log Period',
-                color: AppTheme.primaryRose,
-                onTap: () {},
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _buildActionCard(
-                icon: Icons.insights_rounded,
-                title: 'View Insights',
-                color: AppTheme.secondaryBlue,
-                onTap: () {},
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
 
   Widget _buildActionCard({
     required IconData icon,
@@ -2652,64 +2475,6 @@ extension _PremiumFeaturesMethods on _HomeScreenState {
         .then(delay: 3000.ms);
   }
 
-  void _showComingSoonDialog(String featureName) {
-    Widget comingSoonWidget;
-
-    switch (featureName) {
-      case 'AI Health Coach':
-        comingSoonWidget = ComingSoonWidgets.aiCoach(
-          context,
-          onNotifyMe: () => _handleNotifyMe(featureName),
-        );
-        break;
-      case 'Partner Integration':
-        comingSoonWidget = ComingSoonWidgets.partnerFeatures(
-          context,
-          onNotifyMe: () => _handleNotifyMe(featureName),
-        );
-        break;
-      case 'Healthcare Provider Portal':
-        comingSoonWidget = ComingSoonWidgets.healthcareProvider(
-          context,
-          onNotifyMe: () => _handleNotifyMe(featureName),
-        );
-        break;
-      case 'Premium Analytics':
-        comingSoonWidget = ComingSoonWidgets.premiumAnalytics(
-          context,
-          onNotifyMe: () => _handleNotifyMe(featureName),
-        );
-        break;
-      default:
-        // Fallback generic coming soon widget
-        comingSoonWidget = ComingSoonWidget(
-          title: featureName,
-          description:
-              'This advanced feature is currently under development and will be available soon.',
-          icon: Icons.auto_awesome,
-          estimatedDate: 'Coming Soon',
-          onNotifyMe: () => _handleNotifyMe(featureName),
-        );
-    }
-
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return Dialog(
-          insetPadding: const EdgeInsets.all(16),
-          backgroundColor: Colors.transparent,
-          child: Container(
-            constraints: const BoxConstraints(maxHeight: 600),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(24),
-              child: comingSoonWidget,
-            ),
-          ),
-        );
-      },
-    );
-  }
 
   void _handleNotifyMe(String featureName) {
     // Safely close the dialog

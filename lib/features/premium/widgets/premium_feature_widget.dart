@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/ui/adaptive_messages.dart';
 import 'package:provider/provider.dart';
 import '../models/premium_feature.dart';
 import '../providers/premium_provider.dart';
@@ -532,13 +533,9 @@ class PremiumFeatureWidget extends StatelessWidget {
     final provider = context.read<PremiumProvider>();
 
     if (!provider.canUseFeature(feature.type)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            '${feature.name} is not available with your current subscription',
-          ),
-          backgroundColor: Colors.orange,
-        ),
+      AdaptiveMessages.showWarning(
+        context,
+        '${feature.name} is not available with your current subscription',
       );
       return;
     }
@@ -547,11 +544,9 @@ class PremiumFeatureWidget extends StatelessWidget {
     provider.recordFeatureUsage(feature.type);
 
     // Show success message
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Using ${feature.name}...'),
-        backgroundColor: Colors.green,
-      ),
+    AdaptiveMessages.showSuccess(
+      context,
+      'Using ${feature.name}...',
     );
 
     // Here you would typically navigate to the feature or trigger its functionality

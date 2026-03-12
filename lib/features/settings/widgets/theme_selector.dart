@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/ui/adaptive_messages.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
@@ -190,17 +191,9 @@ class ThemeSelector extends StatelessWidget {
 
             if (context.mounted) {
               // Show confirmation
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    '${AppLocalizations.of(context).themeChangedTo} $title',
-                  ),
-                  backgroundColor: AppTheme.sweetPeach,
-                  behavior: SnackBarBehavior.floating,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
+              AdaptiveMessages.showSuccess(
+                context,
+                '${AppLocalizations.of(context).themeChangedTo} $title',
               );
 
               Navigator.pop(context);

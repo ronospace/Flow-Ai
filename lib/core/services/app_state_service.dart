@@ -12,14 +12,25 @@ class AppStateService {
   late final UserPreferencesService _preferencesService;
 
   bool _isInitialized = false;
+  Future<void>? _initializationFuture;
   bool get isInitialized => _isInitialized;
 
   /// Initialize all required services
-  Future<void> initialize() async {
-    if (_isInitialized) return;
+  Future<void> initialize() {
+    if (_isInitialized) {
+      return Future.value();
+    }
+    if (_initializationFuture != null) {
+      return _initializationFuture!;
+    }
 
+    _initializationFuture = _doInitialize();
+    return _initializationFuture!;
+  }
+
+  Future<void> _doInitialize() async {
     try {
-      // Initialize services
+      // Initialize services once
       _authService = AuthService();
       _preferencesService = UserPreferencesService();
 
@@ -33,6 +44,7 @@ class AppStateService {
       debugPrint('✅ AppStateService initialized successfully');
     } catch (e) {
       debugPrint('❌ AppStateService initialization failed: $e');
+      _initializationFuture = null;
       rethrow;
     }
   }

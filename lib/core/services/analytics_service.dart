@@ -16,6 +16,22 @@ class AnalyticsService {
     _databaseService,
   );
 
+  int? _asInt(dynamic value) {
+    if (value == null) return null;
+    if (value is int) return value;
+    if (value is double) return value.round();
+    if (value is num) return value.toInt();
+    return int.tryParse(value.toString());
+  }
+
+  double? _asDouble(dynamic value) {
+    if (value == null) return null;
+    if (value is double) return value;
+    if (value is int) return value.toDouble();
+    if (value is num) return value.toDouble();
+    return double.tryParse(value.toString());
+  }
+
   // Cycle Analytics with performance optimization
   Future<CycleAnalytics> getCycleAnalytics({
     DateTime? startDate,
@@ -51,11 +67,11 @@ class AnalyticsService {
                       map['flow_intensity'] as cycle_data.FlowIntensity,
                     )
                   : map['flow_intensity'] is int
-                  ? map['flow_intensity'] as int?
+                  ? _asInt(map['flow_intensity'])
                   : null,
-              mood: map['mood'] as int?,
-              energy: map['energy'] as int?,
-              sleepHours: map['sleep_hours'] as double?,
+              mood: _asInt(map['mood']),
+              energy: _asInt(map['energy']),
+              sleepHours: _asDouble(map['sleep_hours']),
               symptoms:
                   (map['symptoms'] as List<dynamic>?)?.cast<String>() ?? [],
               medications:
@@ -67,13 +83,13 @@ class AnalyticsService {
               createdAt: map['created_at'] is String
                   ? DateTime.tryParse(map['created_at']) ?? DateTime.now()
                   : DateTime.fromMillisecondsSinceEpoch(
-                      map['created_at'] as int? ??
+                      _asInt(map['created_at']) ??
                           DateTime.now().millisecondsSinceEpoch,
                     ),
               updatedAt: map['updated_at'] is String
                   ? DateTime.tryParse(map['updated_at']) ?? DateTime.now()
                   : DateTime.fromMillisecondsSinceEpoch(
-                      map['updated_at'] as int? ??
+                      _asInt(map['updated_at']) ??
                           DateTime.now().millisecondsSinceEpoch,
                     ),
             );
@@ -118,11 +134,11 @@ class AnalyticsService {
                       map['flow_intensity'] as cycle_data.FlowIntensity,
                     )
                   : map['flow_intensity'] is int
-                  ? map['flow_intensity'] as int?
+                  ? _asInt(map['flow_intensity'])
                   : null,
-              mood: map['mood'] as int?,
-              energy: map['energy'] as int?,
-              sleepHours: map['sleep_hours'] as double?,
+              mood: _asInt(map['mood']),
+              energy: _asInt(map['energy']),
+              sleepHours: _asDouble(map['sleep_hours']),
               symptoms:
                   (map['symptoms'] as List<dynamic>?)?.cast<String>() ?? [],
               medications:
@@ -134,13 +150,13 @@ class AnalyticsService {
               createdAt: map['created_at'] is String
                   ? DateTime.tryParse(map['created_at']) ?? DateTime.now()
                   : DateTime.fromMillisecondsSinceEpoch(
-                      map['created_at'] as int? ??
+                      _asInt(map['created_at']) ??
                           DateTime.now().millisecondsSinceEpoch,
                     ),
               updatedAt: map['updated_at'] is String
                   ? DateTime.tryParse(map['updated_at']) ?? DateTime.now()
                   : DateTime.fromMillisecondsSinceEpoch(
-                      map['updated_at'] as int? ??
+                      _asInt(map['updated_at']) ??
                           DateTime.now().millisecondsSinceEpoch,
                     ),
             );
@@ -198,11 +214,11 @@ class AnalyticsService {
                   map['flow_intensity'] as cycle_data.FlowIntensity,
                 )
               : map['flow_intensity'] is int
-              ? map['flow_intensity'] as int?
-              : map['flow_intensity'] as int?,
-          mood: map['mood'] as int?,
-          energy: map['energy'] as int?,
-          sleepHours: map['sleep_hours'] as double?,
+              ? _asInt(map['flow_intensity'])
+              : _asInt(map['flow_intensity']),
+          mood: _asInt(map['mood']),
+          energy: _asInt(map['energy']),
+          sleepHours: _asDouble(map['sleep_hours']),
           symptoms: (map['symptoms'] as List<dynamic>?)?.cast<String>() ?? [],
           medications:
               (map['medications'] as List<dynamic>?)?.cast<String>() ?? [],
@@ -213,13 +229,13 @@ class AnalyticsService {
           createdAt: map['created_at'] is String
               ? DateTime.tryParse(map['created_at']) ?? DateTime.now()
               : DateTime.fromMillisecondsSinceEpoch(
-                  map['created_at'] as int? ??
+                  ((map['created_at'] as num?)?.toInt()) ??
                       DateTime.now().millisecondsSinceEpoch,
                 ),
           updatedAt: map['updated_at'] is String
               ? DateTime.tryParse(map['updated_at']) ?? DateTime.now()
               : DateTime.fromMillisecondsSinceEpoch(
-                  map['updated_at'] as int? ??
+                  ((map['updated_at'] as num?)?.toInt()) ??
                       DateTime.now().millisecondsSinceEpoch,
                 ),
         );

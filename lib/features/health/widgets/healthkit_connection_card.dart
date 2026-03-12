@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import '../../../core/ui/adaptive_messages.dart';
 import 'package:provider/provider.dart';
 import '../../../core/theme/app_theme.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -16,6 +18,11 @@ class HealthKitConnectionCard extends StatelessWidget {
     return Consumer<HealthProvider>(
       builder: (context, healthProvider, child) {
         final isConnected = healthProvider.isHealthKitConnected;
+        final isIOS = Platform.isIOS;
+        final platformName = isIOS ? 'Apple HealthKit' : 'Health Connect';
+        final platformShort = isIOS ? 'HealthKit' : 'Health Connect';
+        final disclosureLabel = isIOS ? 'Uses HealthKit' : 'Uses Android Health';
+        final syncSource = isIOS ? 'Apple Health' : 'Android Health';
 
         return Container(
           padding: const EdgeInsets.all(20),
@@ -81,8 +88,8 @@ class HealthKitConnectionCard extends StatelessWidget {
                             Expanded(
                               child: Text(
                                 isConnected
-                                    ? 'Apple HealthKit Connected'
-                                    : 'Connect Apple HealthKit',
+                                    ? '${platformName} Connected'
+                                    : 'Connect ${platformName}',
                                 style: theme.textTheme.titleMedium?.copyWith(
                                   fontWeight: FontWeight.bold,
                                   color: theme.colorScheme.onSurface,
@@ -130,7 +137,7 @@ class HealthKitConnectionCard extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(
-                                'Uses HealthKit',
+                                disclosureLabel,
                                 style: TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.w600,
@@ -143,8 +150,8 @@ class HealthKitConnectionCard extends StatelessWidget {
                         const SizedBox(height: 4),
                         Text(
                           isConnected
-                              ? 'Health data syncing from Apple Health'
-                              : 'Sync health data from Apple Health & wearables',
+                              ? 'Health data syncing from ${syncSource}'
+                              : 'Sync health data from ${syncSource} & wearables',
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: theme.colorScheme.onSurface.withValues(
                               alpha: 0.7,
@@ -177,11 +184,9 @@ class HealthKitConnectionCard extends StatelessWidget {
                         onPressed: () async {
                           await healthProvider.disconnectHealthKit();
                           if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('HealthKit disconnected'),
-                                backgroundColor: AppTheme.successGreen,
-                              ),
+                            AdaptiveMessages.showSuccess(
+                              context,
+                              '${platformShort} disconnected',
                             );
                           }
                         },
@@ -207,7 +212,7 @@ class HealthKitConnectionCard extends StatelessWidget {
                       await healthProvider.connectHealthKit(context);
                     },
                     icon: const Icon(Icons.link, size: 20),
-                    label: const Text('Connect HealthKit'),
+                    label: Text('Connect ${platformShort}'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppTheme.secondaryBlue,
                       foregroundColor: Colors.white,
@@ -228,6 +233,7 @@ class HealthKitConnectionCard extends StatelessWidget {
 
   void _showHealthKitDisclosure(BuildContext context) {
     final theme = Theme.of(context);
+    final platformName = Platform.isIOS ? 'Apple HealthKit' : 'Health Connect';
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -238,7 +244,7 @@ class HealthKitConnectionCard extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                'Apple HealthKit Integration',
+                '${platformName} Integration',
                 style: TextStyle(color: AppTheme.secondaryBlue),
               ),
             ),
@@ -280,7 +286,7 @@ class HealthKitConnectionCard extends StatelessWidget {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            'App Store Guideline 2.5.1 - HealthKit Transparency',
+                            Platform.isIOS ? 'App Store Guideline 2.5.1 - HealthKit Transparency' : 'Health Connect data disclosure',
                             style: TextStyle(
                               fontSize: 11,
                               color: AppTheme.warningOrange.withValues(
@@ -296,7 +302,7 @@ class HealthKitConnectionCard extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                'Flow Ai uses Apple HealthKit to access your health data for enhanced cycle predictions and personalized insights.',
+                'Flow Ai uses ${platformName} to access your health data for enhanced cycle predictions and personalized insights.',
                 style: theme.textTheme.bodyLarge?.copyWith(height: 1.5),
               ),
               const SizedBox(height: 16),
@@ -362,7 +368,7 @@ class HealthKitConnectionCard extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Text(
-                'You can manage HealthKit access at any time in iOS Settings → Health → Data Access & Devices.',
+                Platform.isIOS ? 'You can manage HealthKit access at any time in iOS Settings → Health → Data Access & Devices.' : 'You can manage Health Connect access at any time in Android Settings → Apps → Health Connect → App permissions.',
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                   fontSize: 11,

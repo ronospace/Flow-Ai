@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
 
 /// 🔐 Privacy Preferences Widget - Comprehensive Privacy Control System
 /// Features: Granular privacy settings, data sharing preferences, AI consent,
@@ -37,8 +38,8 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
   final List<Map<String, dynamic>> _privacyOptions = [
     {
       'id': 'healthkit_integration',
-      'title': 'HealthKit / Health Connect Integration',
-      'subtitle': 'Sync with Apple HealthKit (iOS) or Google Fit (Android)',
+      'title': Platform.isIOS ? 'HealthKit Integration' : 'Health Connect Integration',
+      'subtitle': Platform.isIOS ? 'Sync with Apple Health on iPhone and Apple Watch' : 'Sync with Health Connect on Android devices',
       'description':
           'Flow Ai integrates with your device\'s health data to enhance predictions. We may access: heart rate, body temperature, sleep data, activity levels, and menstrual flow data. All data stays on your device unless you enable cloud backup.',
       'icon': Icons.health_and_safety,

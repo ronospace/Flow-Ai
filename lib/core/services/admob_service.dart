@@ -9,11 +9,11 @@ class AdMobService {
 
   // Test Ad Unit IDs (use these for development)
   static const String _testBannerAdUnitId =
-      'ca-app-pub-3940256099942544/6300978111';
+      '';
   static const String _testInterstitialAdUnitId =
-      'ca-app-pub-3940256099942544/1033173712';
+      '';
   static const String _testRewardedAdUnitId =
-      'ca-app-pub-3940256099942544/5224354917';
+      '';
 
   // Android Production Ad Unit IDs (App ID: ca-app-pub-3053779336)
   static const String _androidBannerAdUnitId =

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
+import 'dart:io';
 
 /// Permanent HealthKit disclosure banner
 /// Required by App Store Guideline 2.5.1 - HealthKit Transparency
@@ -10,6 +11,7 @@ class HealthKitDisclosureBannerPermanent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final platformName = Platform.isIOS ? 'Apple HealthKit' : 'Health Connect';
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -36,7 +38,7 @@ class HealthKitDisclosureBannerPermanent extends StatelessWidget {
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  'Apple HealthKit Integration',
+                  '${platformName} Integration',
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: AppTheme.secondaryBlue,
@@ -49,7 +51,7 @@ class HealthKitDisclosureBannerPermanent extends StatelessWidget {
 
           // Purpose statement (Apple requirement: explain why data is used)
           Text(
-            'Flow Ai uses Apple HealthKit to access your health data for enhanced cycle predictions and personalized insights.',
+            Platform.isIOS ? 'Flow Ai uses Apple HealthKit to access your health data for enhanced cycle predictions and personalized insights.' : 'Flow Ai uses Health Connect to access your health data for enhanced cycle predictions and personalized insights.',
             style: theme.textTheme.bodyMedium?.copyWith(
               height: 1.5,
               color: theme.colorScheme.onSurface.withValues(alpha: 0.85),
@@ -92,7 +94,7 @@ class HealthKitDisclosureBannerPermanent extends StatelessWidget {
 
           // User control instructions (Apple requirement: explain how to manage)
           Text(
-            'Manage in Settings → Health → Data Access & Devices',
+            Platform.isIOS ? 'Manage in Settings → Health → Data Access & Devices' : 'Manage in Settings → Apps → Health Connect → App permissions',
             style: theme.textTheme.bodySmall?.copyWith(
               fontSize: 11,
               color: theme.colorScheme.onSurface.withValues(alpha: 0.6),

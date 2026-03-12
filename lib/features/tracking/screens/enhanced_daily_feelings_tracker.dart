@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/ui/adaptive_messages.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../../core/theme/app_theme.dart';
@@ -152,23 +153,17 @@ class _EnhancedDailyFeelingsTrackerState
       });
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Feelings saved successfully'),
-            backgroundColor: AppTheme.successGreen,
-            behavior: SnackBarBehavior.floating,
-          ),
+        AdaptiveMessages.showSuccess(
+          context,
+          'Feelings saved successfully',
         );
       }
     } catch (e) {
       debugPrint('Failed to save entry: $e');
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Failed to save feelings'),
-            backgroundColor: AppTheme.primaryRose,
-            behavior: SnackBarBehavior.floating,
-          ),
+        AdaptiveMessages.showError(
+          context,
+          'Failed to save feelings',
         );
       }
     } finally {

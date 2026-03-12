@@ -89,7 +89,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       final isAvailable = await _localAuth.canCheckBiometrics;
       final isDeviceSupported = await _localAuth.isDeviceSupported();
       final availableBiometrics = await _localAuth.getAvailableBiometrics();
-      final enabled = await _authService.isBiometricEnabled();
+      await _authService.isBiometricEnabled();
 
       setState(() {
         _biometricsAvailable = isAvailable && isDeviceSupported && availableBiometrics.isNotEmpty;
@@ -445,29 +445,18 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
         // Social Login Buttons
         if (PlatformService().platformInfo.platform == TargetPlatform.iOS)
-          Row(
-            children: [
-              Expanded(
-                child: SocialLoginButton(
-                  icon: Icons.g_mobiledata,
-                  label: 'Google',
-                  onPressed: _isLoading ? null : _handleGoogleSignIn,
-                  backgroundColor: Colors.white,
-                  iconColor: const Color(0xFF4285F4),
-                ),
+          Center(
+            child: SizedBox(
+              width: 260,
+              child: SocialLoginButton(
+                icon: Icons.apple,
+                label: 'Apple',
+                onPressed: _isLoading ? null : _handleAppleSignIn,
+                backgroundColor: Colors.black,
+                iconColor: Colors.white,
+                textColor: Colors.white,
               ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: SocialLoginButton(
-                  icon: Icons.apple,
-                  label: 'Apple',
-                  onPressed: _isLoading ? null : _handleAppleSignIn,
-                  backgroundColor: Colors.black,
-                  iconColor: Colors.white,
-                  textColor: Colors.white,
-                ),
-              ),
-            ],
+            ),
           )
         else
           Center(
@@ -499,9 +488,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     });
 
     try {
-      // Initialize auth service first
-      await _authService.initialize();
-
       if (!mounted) return;
       debugPrint("BIO: tap -> calling authService");
       debugPrint("BIO: calling auth service");
@@ -512,8 +498,9 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       if (!mounted) return;
 
       if (result.isSuccess) {
+        debugPrint('APPLE: success branch');
         HapticFeedback.lightImpact();
-        _showSuccessMessage('Biometric authentication successful!');
+        // suppressed biometric banner
 
         // Sync user data immediately to ensure username is captured and available
         try {
@@ -592,14 +579,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     });
 
     try {
-      // Initialize auth service if needed
-      try {
-        await _authService.initialize();
-      } catch (initError) {
-        debugPrint('⚠️ Auth service initialization warning: $initError');
-        // Continue anyway as we have local fallback
-      }
-
       if (_isLogin) {
         // Handle login
         final result = await _authService.signInWithEmail(
@@ -696,9 +675,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     });
 
     try {
-      // Initialize auth service
-      await _authService.initialize();
-
       // Perform Google Sign-In
       final result = await _authService.signInWithGoogle();
 
@@ -741,20 +717,22 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   }
 
   Future<void> _handleAppleSignIn() async {
-    if (_isLoading) return;
+    debugPrint('APPLE: tap handler entered');
+    if (_isLoading) {
+      debugPrint('APPLE: ignored because _isLoading=true');
+      return;
+    }
 
     setState(() {
       _isLoading = true;
     });
 
     try {
-      // Initialize auth service
-      await _authService.initialize();
-
       if (!mounted) return;
 
       // Perform Apple Sign-In
       final result = await _authService.signInWithApple();
+      debugPrint('APPLE: result isSuccess=${result.isSuccess} error=${result.error}');
 
       if (!mounted) return;
 
@@ -784,6 +762,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         PendingDeepLinkService.clearPendingRoute();
         }
       } else {
+        debugPrint('APPLE: failure branch showing error');
         _showErrorMessage(result.error ?? 'Apple sign-in failed');
       }
     } catch (e) {
@@ -941,9 +920,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                                         dialogContext,
                                       );
 
-                                      // Initialize auth service if needed
-                                      await _authService.initialize();
-
                                       if (!mounted) return;
 
                                       final result = await _authService
@@ -999,15 +975,5 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     if (mounted) {
       AdaptiveMessages.showInfo(context, message);
     }
-  }
-
-  
-  Future<void> _handleDemoAccountFill() async {
-    // Demo mode removed for store safety and clean analytics.
-    // Keep this handler to avoid breaking UI wiring.
-    HapticFeedback.lightImpact();
-    _showInfoMessage(
-      'Demo mode is no longer available. Please sign up or log in to continue.',
-    );
   }
 }
