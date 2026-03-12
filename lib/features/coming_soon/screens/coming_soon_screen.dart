@@ -48,7 +48,6 @@ class _ComingSoonScreenState extends State<ComingSoonScreen>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
 
     return Scaffold(
       body: Container(

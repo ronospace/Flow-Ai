@@ -53,7 +53,6 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
 
     // Log to enhancement service
     try {
-      final enhancementService = AppEnhancementService();
       // This would record the error for analytics/reporting
       AppLogger.error('🚨 Error captured by ErrorBoundary: $error', stackTrace);
     } catch (e) {
@@ -62,7 +61,6 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
   }
 
   Widget _buildErrorUI(BuildContext context) {
-    final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(

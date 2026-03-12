@@ -739,7 +739,6 @@ class PreventiveHealthInsights {
     double riskScore = 0.0;
 
     // Check for long cycles
-    final avgLength = _calculateAverageCycleLength(cycles);
     if (avgLength > 35) {
       indicators.add('Prolonged menstrual cycles');
       riskScore += 0.3;
@@ -786,7 +785,6 @@ class PreventiveHealthInsights {
     double riskScore = 0.0;
 
     // Check for short cycles
-    final avgLength = _calculateAverageCycleLength(cycles);
     if (avgLength < 21) {
       indicators.add('Shortened menstrual cycles');
       riskScore += 0.3;

@@ -177,7 +177,6 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
   }
 
   List<CycleData> _generateMockCycleHistory() {
-    final random = math.Random();
     final cycles = <CycleData>[];
 
     for (int i = 0; i < 6; i++) {
@@ -835,12 +834,10 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
 
   double _calculateTrend(String metricType) {
     // Simulate trend calculation based on recent data
-    final random = math.Random();
     return (random.nextDouble() - 0.5) * 10; // -5% to +5% trend
   }
 
   List<FlSpot> _generateTrendData() {
-    final random = math.Random();
     final data = <FlSpot>[];
 
     for (int i = 0; i < 20; i++) {

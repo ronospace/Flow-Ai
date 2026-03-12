@@ -29,7 +29,6 @@ class _SymptomSharingWidgetState extends State<SymptomSharingWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final filteredStories = _getFilteredStories();
 
     return Column(

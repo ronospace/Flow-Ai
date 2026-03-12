@@ -13,11 +13,9 @@ class HealthKitConnectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
 
     return Consumer<HealthProvider>(
       builder: (context, healthProvider, child) {
-        final isConnected = healthProvider.isHealthKitConnected;
         final isIOS = Platform.isIOS;
         final platformName = isIOS ? 'Apple HealthKit' : 'Health Connect';
         final platformShort = isIOS ? 'HealthKit' : 'Health Connect';
@@ -232,7 +230,6 @@ class HealthKitConnectionCard extends StatelessWidget {
   }
 
   void _showHealthKitDisclosure(BuildContext context) {
-    final theme = Theme.of(context);
     final platformName = Platform.isIOS ? 'Apple HealthKit' : 'Health Connect';
     showDialog(
       context: context,

@@ -203,7 +203,6 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen>
 
   Widget _buildTierCard(SubscriptionTier tier) {
     final isSelected = _selectedTier == tier;
-    final theme = Theme.of(context);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),

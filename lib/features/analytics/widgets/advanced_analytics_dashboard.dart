@@ -13,7 +13,6 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),

@@ -338,7 +338,6 @@ class AdvancedPredictionEngine {
     FertilityWindow window,
     BiometricFertilitySignals signals,
   ) {
-    final adjustment = Duration(days: signals.dayAdjustment);
     return FertilityWindow(
       start: window.start.add(adjustment),
       end: window.end.add(adjustment),
@@ -350,7 +349,6 @@ class AdvancedPredictionEngine {
     FertilityWindow window,
     SymptomFertilityRefinement refinement,
   ) {
-    final adjustment = Duration(days: refinement.dayAdjustment);
     return FertilityWindow(
       start: window.start.add(adjustment),
       end: window.end.add(adjustment),

@@ -231,7 +231,6 @@ class AIEngine {
 
     // Detect length variations
     final lengths = cycles.map((c) => c.length).toList();
-    final avgLength = lengths.reduce((a, b) => a + b) / lengths.length;
     final variance = _calculateVariance(
       lengths.map((l) => l.toDouble()).toList(),
     );

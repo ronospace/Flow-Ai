@@ -23,9 +23,7 @@ class HealthKitDisclosureBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final platformName = Platform.isIOS ? 'Apple HealthKit' : 'Health Connect';
-    final l10n = AppLocalizations.of(context);
 
     return Container(
       margin: const EdgeInsets.all(16),
@@ -269,7 +267,6 @@ class HealthKitDisclosureBanner extends StatelessWidget {
   }
 
   Widget _buildDataItem(BuildContext context, IconData icon, String text) {
-    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: 6),
       child: Row(

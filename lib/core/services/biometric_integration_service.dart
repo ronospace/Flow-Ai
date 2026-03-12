@@ -432,7 +432,6 @@ class BiometricIntegrationService {
     DateTime endDate,
   ) {
     final data = <BiometricReading>[];
-    final random = math.Random();
 
     for (
       var date = startDate;
@@ -462,7 +461,6 @@ class BiometricIntegrationService {
     DateTime endDate,
   ) {
     final data = <BiometricReading>[];
-    final random = math.Random();
 
     for (
       var date = startDate;
@@ -491,7 +489,6 @@ class BiometricIntegrationService {
     DateTime endDate,
   ) {
     final data = <BiometricReading>[];
-    final random = math.Random();
 
     for (
       var date = startDate;
@@ -522,7 +519,6 @@ class BiometricIntegrationService {
     DateTime endDate,
   ) {
     final data = <BiometricReading>[];
-    final random = math.Random();
 
     for (
       var date = startDate;
@@ -552,7 +548,6 @@ class BiometricIntegrationService {
     DateTime endDate,
   ) {
     final data = <BiometricReading>[];
-    final random = math.Random();
 
     for (
       var date = startDate;
@@ -582,7 +577,6 @@ class BiometricIntegrationService {
     DateTime endDate,
   ) {
     final data = <BiometricReading>[];
-    final random = math.Random();
 
     for (
       var date = startDate;

@@ -15,7 +15,6 @@ class CycleLengthChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final filteredCycles = _getFilteredCycles();
 
     if (filteredCycles.isEmpty) {
@@ -224,7 +223,6 @@ class CycleLengthChart extends StatelessWidget {
                 ? (cycles.length / 5).roundToDouble()
                 : 1,
             getTitlesWidget: (value, meta) {
-              final index = value.toInt();
               if (index >= 0 && index < cycles.length) {
                 final cycle = cycles[index];
                 return Padding(
@@ -282,7 +280,6 @@ class CycleLengthChart extends StatelessWidget {
         touchTooltipData: LineTouchTooltipData(
           getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
             return touchedBarSpots.map((barSpot) {
-              final index = barSpot.x.toInt();
               if (index >= 0 && index < cycles.length) {
                 final cycle = cycles[index];
                 return LineTooltipItem(

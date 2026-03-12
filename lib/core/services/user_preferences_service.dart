@@ -39,24 +39,28 @@ class UserPreferencesService {
   }
 
   Future<void> setThemeMode(String mode) async {
+    await _ensureInitialized();
     await _prefs.setString(_keyThemeMode, mode);
   }
 
   // Language settings
   String get languageCode => _prefs.getString(_keyLanguageCode) ?? 'en';
   Future<void> setLanguageCode(String code) async {
+    await _ensureInitialized();
     await _prefs.setString(_keyLanguageCode, code);
   }
 
   // Notification settings
   bool get notificationsEnabled => _prefs.getBool(_keyNotifications) ?? true;
   Future<void> setNotificationsEnabled(bool enabled) async {
+    await _ensureInitialized();
     await _prefs.setBool(_keyNotifications, enabled);
   }
 
   // Biometric settings
   bool get biometricsEnabled => _prefs.getBool(_keyBiometrics) ?? false;
   Future<void> setBiometricsEnabled(bool enabled) async {
+    await _ensureInitialized();
     await _prefs.setBool(_keyBiometrics, enabled);
   }
 
@@ -67,6 +71,7 @@ class UserPreferencesService {
   }
 
   Future<void> setOnboardingComplete(bool complete) async {
+    await _ensureInitialized();
     await _prefs.setBool(_keyOnboardingComplete, complete);
   }
 
@@ -83,6 +88,7 @@ class UserPreferencesService {
   }
 
   Future<void> setUserProfile(UserProfile profile) async {
+    await _ensureInitialized();
     final jsonString = jsonEncode(profile.toMap());
     await _prefs.setString(_keyUserProfile, jsonString);
   }
@@ -112,6 +118,7 @@ class UserPreferencesService {
   }
 
   Future<void> setPrivacySettings(Map<String, bool> settings) async {
+    await _ensureInitialized();
     final jsonString = jsonEncode(settings);
     await _prefs.setString(_keyPrivacySettings, jsonString);
   }

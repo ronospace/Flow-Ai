@@ -608,13 +608,11 @@ class MemoryPool<T> {
 
   T acquire() {
     if (_available.isNotEmpty) {
-      final item = _available.removeFirst();
       _inUse.add(item);
       return item;
     }
 
     if (_totalCreated < maxSize) {
-      final item = _factory();
       _totalCreated++;
       _inUse.add(item);
       return item;

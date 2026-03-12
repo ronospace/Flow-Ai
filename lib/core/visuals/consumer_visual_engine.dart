@@ -777,7 +777,6 @@ class _BiometricParticleSystemState extends State<BiometricParticleSystem>
 
   void _generateParticles() {
     final particleCount = _getParticleCount();
-    final random = math.Random();
 
     for (int i = 0; i < particleCount; i++) {
       _particles.add(

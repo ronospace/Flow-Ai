@@ -33,7 +33,6 @@ class CycleTracker {
   }
 
   void updateCycle(CycleData updatedCycle) {
-    final index = _cycles.indexWhere((c) => c.id == updatedCycle.id);
     if (index != -1) {
       _cycles[index] = updatedCycle;
       debugPrint('✏️ Updated cycle: ${updatedCycle.id}');

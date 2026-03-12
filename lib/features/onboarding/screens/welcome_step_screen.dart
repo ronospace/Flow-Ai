@@ -10,9 +10,6 @@ class WelcomeStepScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final localizations = AppLocalizations.of(context);
-    final size = MediaQuery.of(context).size;
 
     return Container(
       decoration: BoxDecoration(
@@ -144,7 +141,6 @@ class WelcomeStepScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   ..._buildFeatureList(theme).map((feature) {
-                    final index = _buildFeatureList(theme).indexOf(feature);
                     return feature
                         .animate(
                           delay: Duration(milliseconds: 600 + (index * 100)),

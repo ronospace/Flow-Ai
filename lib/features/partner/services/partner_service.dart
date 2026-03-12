@@ -51,7 +51,6 @@ class PartnerService extends ChangeNotifier {
   /// Load partnership for current user
   Future<void> _loadPartnership() async {
     try {
-      final partnership = await _localService.getCurrentPartnership();
       if (partnership != null) {
         // Convert model Partnership to service Partnership
         _currentPartnership = Partnership(

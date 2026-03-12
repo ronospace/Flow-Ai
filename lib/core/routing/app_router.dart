@@ -315,7 +315,6 @@ class _MainShellState extends State<MainShell> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
@@ -370,7 +369,6 @@ class _MainShellState extends State<MainShell> {
 
   Widget _buildNavItem(int index, IconData icon, String label) {
     final isSelected = _currentIndex == index;
-    final theme = Theme.of(context);
 
     return GestureDetector(
       onTap: () => _onNavigationTap(index),

@@ -240,7 +240,6 @@ class _TrackingScreenState extends State<TrackingScreen>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -284,7 +283,6 @@ class _TrackingScreenState extends State<TrackingScreen>
   }
 
   Widget _buildCustomAppBar() {
-    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(20),
       child: Row(
@@ -375,7 +373,6 @@ class _TrackingScreenState extends State<TrackingScreen>
   }
 
   Widget _buildTabBar() {
-    final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
@@ -452,7 +449,6 @@ class _TrackingScreenState extends State<TrackingScreen>
   }
 
   Widget _buildFlowTab() {
-    final theme = Theme.of(context);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
@@ -524,8 +520,6 @@ class _TrackingScreenState extends State<TrackingScreen>
   }
 
   Widget _buildSymptomsTab() {
-    final localizations = AppLocalizations.of(context);
-    final theme = Theme.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -579,8 +573,6 @@ class _TrackingScreenState extends State<TrackingScreen>
   }
 
   Widget _buildMoodEnergyTab() {
-    final localizations = AppLocalizations.of(context);
-    final theme = Theme.of(context);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
@@ -634,7 +626,6 @@ class _TrackingScreenState extends State<TrackingScreen>
   }
 
   Widget _buildPainTab() {
-    final theme = Theme.of(context);
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -693,7 +684,6 @@ class _TrackingScreenState extends State<TrackingScreen>
   }
 
   Widget _buildNotesTab() {
-    final theme = Theme.of(context);
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -899,7 +889,6 @@ class _TrackingScreenState extends State<TrackingScreen>
   }
 
   Widget _buildQuickNote(String emoji, String label) {
-    final theme = Theme.of(context);
     final isSelected = _selectedQuickNotes.contains(label);
 
     return GestureDetector(
@@ -1044,7 +1033,6 @@ class _TrackingScreenState extends State<TrackingScreen>
   }
 
   Future<void> _showDatePicker() async {
-    final theme = Theme.of(context);
     final picked = await showDatePicker(
       context: context,
       initialDate: _selectedDate,

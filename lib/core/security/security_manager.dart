@@ -361,7 +361,6 @@ class SecurityManager {
   void secureWipeData(List<int> data) {
     try {
       // Overwrite with random data multiple times
-      final random = Random.secure();
       for (int pass = 0; pass < 3; pass++) {
         for (int i = 0; i < data.length; i++) {
           data[i] = random.nextInt(256);
@@ -449,7 +448,6 @@ class SecurityManager {
 
   /// Generate cryptographically secure ID
   String _generateSecureId() {
-    final random = Random.secure();
     final bytes = List<int>.generate(32, (i) => random.nextInt(256));
     return base64.encode(bytes);
   }
@@ -584,7 +582,6 @@ class SecurityUtils {
   static String generateSecurePassword({int length = 16}) {
     const charset =
         'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#\$%^&*';
-    final random = Random.secure();
 
     return String.fromCharCodes(
       Iterable.generate(
@@ -604,7 +601,6 @@ class SecurityUtils {
 
   /// Generate cryptographic salt
   static String generateSalt({int length = 32}) {
-    final random = Random.secure();
     final bytes = List<int>.generate(length, (i) => random.nextInt(256));
     return base64.encode(bytes);
   }

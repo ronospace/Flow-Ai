@@ -42,7 +42,6 @@ class _FeaturePreviewCardState extends State<FeaturePreviewCard>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
 
     return MouseRegion(
       onEnter: (_) {
@@ -271,7 +270,6 @@ class _FeaturePreviewCardState extends State<FeaturePreviewCard>
           const SizedBox(height: 8),
 
           ...widget.feature.features.asMap().entries.map((entry) {
-            final index = entry.key;
             final feature = entry.value;
 
             return Padding(

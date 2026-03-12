@@ -13,8 +13,6 @@ class FeatureTimelineWidget extends StatelessWidget {
     return Column(
       children: [
         ...timelineItems.asMap().entries.map((entry) {
-          final index = entry.key;
-          final item = entry.value;
           final isLast = index == timelineItems.length - 1;
 
           return TimelineItemWidget(

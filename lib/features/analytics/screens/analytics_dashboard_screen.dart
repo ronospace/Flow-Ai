@@ -38,8 +38,6 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final localizations = AppLocalizations.of(context);
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -1014,64 +1012,6 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
     );
   }
 
-  Widget _buildOverviewMetricCard({
-    required String title,
-    required String value,
-    required IconData icon,
-    required Color color,
-    required ThemeData theme,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface.withValues(alpha: 0.8),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withValues(alpha: 0.3)),
-        boxShadow: [
-          BoxShadow(
-            color: theme.shadowColor.withValues(alpha: 0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(icon, color: color, size: 20),
-              const Spacer(),
-              Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Icon(Icons.trending_up, color: color, size: 12),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            value,
-            style: theme.textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: theme.colorScheme.onSurface,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            title,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   void _showTimeRangeSelector(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -1130,60 +1070,6 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
       title: Text(title),
       onTap: onTap,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-    );
-  }
-
-  void _showRecommendationDetails(BuildContext context, recommendation) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(recommendation.title),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(recommendation.description),
-            const SizedBox(height: 16),
-            Text(
-              'Action Items:',
-              style: Theme.of(
-                context,
-              ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            ...recommendation.actionItems.map(
-              (item) => Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '• ',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                    Expanded(child: Text(item)),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Close'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              // Implement reminder/goal setting
-              Navigator.pop(context);
-            },
-            child: const Text('Set Reminder'),
-          ),
-        ],
-      ),
     );
   }
 }

@@ -22,7 +22,6 @@ class SocialLoginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final effectiveTextColor = textColor ?? AppTheme.darkGrey;
 
     return Container(
@@ -49,6 +48,7 @@ class SocialLoginButton extends StatelessWidget {
         child: InkWell(
           onTap: onPressed != null
               ? () {
+                  debugPrint('SOCIAL_BTN: tapped label=$label enabled=${onPressed != null}');
                   HapticFeedback.lightImpact();
                   onPressed!();
                 }

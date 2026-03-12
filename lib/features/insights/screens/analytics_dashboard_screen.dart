@@ -38,8 +38,6 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       body: Container(
@@ -396,7 +394,6 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
     required String subtitle,
     required Widget child,
   }) {
-    final theme = Theme.of(context);
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -441,7 +438,6 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
     required String value,
     required Color color,
   }) {
-    final theme = Theme.of(context);
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -493,7 +489,6 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
     required double confidence,
     required Color color,
   }) {
-    final theme = Theme.of(context);
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -759,7 +754,6 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
   }
 
   Widget _buildEmptyState(String title, String subtitle) {
-    final theme = Theme.of(context);
 
     return Center(
       child: Column(

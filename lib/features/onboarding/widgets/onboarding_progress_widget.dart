@@ -85,7 +85,6 @@ class _OnboardingProgressWidgetState extends State<OnboardingProgressWidget>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final primaryColor = widget.primaryColor ?? theme.colorScheme.primary;
     final backgroundColor = widget.backgroundColor ?? theme.colorScheme.surface;
 
@@ -112,7 +111,6 @@ class _OnboardingProgressWidgetState extends State<OnboardingProgressWidget>
     Color primaryColor,
     Color backgroundColor,
   ) {
-    final theme = Theme.of(context);
 
     return Container(
       height: 6,
@@ -186,10 +184,8 @@ class _OnboardingProgressWidgetState extends State<OnboardingProgressWidget>
     Color primaryColor,
     Color backgroundColor,
   ) {
-    final theme = Theme.of(context);
     final isCompleted = stepIndex < widget.currentStep;
     final isCurrent = stepIndex == widget.currentStep;
-    final isFuture = stepIndex > widget.currentStep;
 
     Color indicatorColor;
     Color textColor;
@@ -289,8 +285,6 @@ class _OnboardingProgressWidgetState extends State<OnboardingProgressWidget>
         widget.currentStep >= widget.stepTitles!.length) {
       return const SizedBox.shrink();
     }
-
-    final theme = Theme.of(context);
     final currentTitle = widget.stepTitles![widget.currentStep];
 
     return AnimatedSwitcher(
@@ -343,7 +337,6 @@ class EnhancedOnboardingProgressWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final primaryColor = accentColor ?? theme.colorScheme.primary;
 
     return Container(
@@ -452,7 +445,6 @@ class EnhancedOnboardingProgressWidget extends StatelessWidget {
     required String value,
     required Color color,
   }) {
-    final theme = Theme.of(context);
 
     return Column(
       children: [

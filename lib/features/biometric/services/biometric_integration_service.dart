@@ -491,7 +491,6 @@ class BiometricIntegrationService {
   }
 
   Future<BiometricData> _generateRealtimeBiometricData() async {
-    final random = Random();
     final types = [
       BiometricType.heartRate,
       BiometricType.steps,
@@ -538,7 +537,6 @@ class BiometricIntegrationService {
   }
 
   Future<void> _addMockBiometricData(String source) async {
-    final random = Random();
     final now = DateTime.now();
 
     // Add various types of biometric data

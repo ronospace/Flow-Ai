@@ -196,7 +196,6 @@ class SubscriptionStatusWidget extends StatelessWidget {
     Subscription subscription,
     PremiumProvider provider,
   ) {
-    final theme = Theme.of(context);
     final daysRemaining = subscription.remainingDays;
     final isExpiringSoon = daysRemaining <= 7;
 

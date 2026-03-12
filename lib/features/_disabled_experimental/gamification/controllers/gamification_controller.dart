@@ -235,8 +235,6 @@ class GamificationController extends ChangeNotifier {
   Future<void> claimAchievement(String achievementId) async {
     try {
       final result = await _gamificationService.claimAchievement(achievementId);
-
-      final index = _achievements.indexWhere((a) => a.id == achievementId);
       if (index != -1) {
         _achievements[index] = _achievements[index].copyWith(
           isUnlocked: true,
@@ -266,7 +264,6 @@ class GamificationController extends ChangeNotifier {
           .checkForNewAchievements();
 
       for (final achievement in newAchievements) {
-        final index = _achievements.indexWhere((a) => a.id == achievement.id);
         if (index != -1) {
           _achievements[index] = achievement;
           _recentlyUnlocked.add(achievement);

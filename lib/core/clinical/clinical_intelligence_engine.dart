@@ -122,7 +122,6 @@ class ClinicalIntelligenceEngine {
       );
 
       // Start performance tracking
-      final startTime = DateTime.now();
 
       // Validate input data
       final validationResult = await _dataValidator.validateHealthData(
@@ -468,14 +467,12 @@ class ClinicalIntelligenceEngine {
   /// Generate unique assessment ID
   String _generateAssessmentId() {
     final timestamp = DateTime.now().millisecondsSinceEpoch;
-    final random = math.Random().nextInt(1000000);
     return 'CA_${timestamp}_$random';
   }
 
   /// Generate unique alert ID
   String _generateAlertId() {
     final timestamp = DateTime.now().millisecondsSinceEpoch;
-    final random = math.Random().nextInt(1000000);
     return 'ALERT_${timestamp}_$random';
   }
 

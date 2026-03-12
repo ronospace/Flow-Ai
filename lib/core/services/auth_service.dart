@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -525,16 +526,24 @@ return AuthResult.success(userCredential.user);
   /// Sign in with Apple (iOS only)
 
   /// Sign in with Apple (Firebase)
+
+  Future<bool> _isIosSimulator() async {
+    if (!Platform.isIOS) return false;
+    final iosInfo = await DeviceInfoPlugin().iosInfo;
+    return !iosInfo.isPhysicalDevice;
+  }
+
   Future<AuthResult> signInWithApple() async {
     try {
+      debugPrint('APPLE_AUTH: apps=${Firebase.apps.length} authNull=${_auth == null} firebaseAvailable=$_firebaseAvailable');
+      debugPrint('APPLE_AUTH: apps=${Firebase.apps.length} authNull=${_auth == null} firebaseAvailable=$_firebaseAvailable');
       if (kIsWeb) {
         return AuthResult.failure('Apple Sign-In not supported on web.');
       }
 
-      if (Platform.isIOS &&
-          Platform.environment.containsKey('SIMULATOR_DEVICE_NAME')) {
+      if (await _isIosSimulator()) {
         return AuthResult.failure(
-          'Apple Sign-In requires a real iPhone (not Simulator).',
+          'Apple Sign-In is unavailable on the iOS Simulator in this build. Use email sign-in here; keep Apple Sign-In for real devices.',
         );
       }
 

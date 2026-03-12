@@ -118,7 +118,6 @@ class _PartnerPrivacySettingsScreenState
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     if (_tempSettings == null) {
       return Scaffold(
         appBar: AppBar(

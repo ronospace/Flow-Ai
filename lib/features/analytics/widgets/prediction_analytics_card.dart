@@ -9,7 +9,6 @@ class PredictionAnalyticsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -387,7 +386,6 @@ class PredictionAnalyticsCard extends StatelessWidget {
               borderData: FlBorderData(show: false),
               gridData: FlGridData(show: false),
               barGroups: distribution.entries.map((entry) {
-                final index = distribution.keys.toList().indexOf(entry.key);
                 return BarChartGroupData(
                   x: index,
                   barRods: [

@@ -22,12 +22,25 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.752724279049-ei2380bh9o9ph6tq348lht6sf0ks52n2</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-3940256099942544~1458002511</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSHealthShareUsageDescription</key>
+	<string>Flow Ai reads health data such as heart rate, sleep, temperature, activity, and menstrual flow to improve cycle insights and predictions.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>Flow Ai can write menstrual flow data to Apple Health when you choose to sync it.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -47,9 +60,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSHealthShareUsageDescription</key>
-	<string>Flow Ai reads health data such as heart rate, sleep, temperature, activity, and menstrual flow to improve cycle insights and predictions.</string>
-	<key>NSHealthUpdateUsageDescription</key>
-	<string>Flow Ai can write menstrual flow data to Apple Health when you choose to sync it.</string>
 </dict>
 </plist>

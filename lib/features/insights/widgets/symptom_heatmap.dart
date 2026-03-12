@@ -16,7 +16,6 @@ class SymptomHeatmap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final filteredData = _getFilteredData();
 
     if (filteredData.isEmpty) {
@@ -263,7 +262,6 @@ class SymptomHeatmap extends StatelessWidget {
   }
 
   Widget _buildEmptyState(BuildContext context) {
-    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(40),
       decoration: BoxDecoration(
@@ -414,8 +412,6 @@ class SymptomHeatmap extends StatelessWidget {
       AppTheme.primaryRose.withValues(alpha: 0.8),
       AppTheme.primaryRose,
     ];
-
-    final index = (intensity * (colors.length - 1)).round();
     return colors[index.clamp(0, colors.length - 1)];
   }
 

@@ -213,7 +213,6 @@ class NeuralPredictionEngine {
   // Neural network utility functions
   List<List<double>> _initializeWeights(int inputSize, int outputSize) {
     final limit = math.sqrt(6.0 / (inputSize + outputSize));
-    final random = math.Random();
 
     return List.generate(
       outputSize,
@@ -249,8 +248,6 @@ class NeuralPredictionEngine {
     Map<String, dynamic> cyclePrediction,
   ) {
     if (history.isEmpty) return DateTime.now().add(const Duration(days: 28));
-
-    final avgLength = cyclePrediction['predicted_length'] ?? 28.0;
     final lastPeriod =
         history.last.startDate; // Use startDate instead of periodStartDate
 
