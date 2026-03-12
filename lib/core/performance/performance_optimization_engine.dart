@@ -179,7 +179,6 @@ class PerformanceOptimizationEngine {
     if (!_initialized) await initialize();
 
     debugPrint('🛠️ Starting performance optimization...');
-    final startTime = DateTime.now();
     final optimizationResults = <String, dynamic>{};
 
     // Memory optimization
@@ -470,7 +469,6 @@ class PerformanceMonitor {
   Future<double> _getMemoryUsage() async {
     try {
       // Simulate memory usage calculation
-      final random = math.Random();
       return 0.4 + random.nextDouble() * 0.4; // 40-80% usage
     } catch (e) {
       return 0.5; // Default fallback
@@ -480,7 +478,6 @@ class PerformanceMonitor {
   Future<double> _getCPUUsage() async {
     try {
       // Simulate CPU usage
-      final random = math.Random();
       return 0.2 + random.nextDouble() * 0.5; // 20-70% usage
     } catch (e) {
       return 0.3;
@@ -489,7 +486,6 @@ class PerformanceMonitor {
 
   Future<double> _getFrameRate() async {
     // Simulate frame rate (targeting 60 FPS)
-    final random = math.Random();
     return 55.0 + random.nextDouble() * 10.0; // 55-65 FPS
   }
 
@@ -497,7 +493,6 @@ class PerformanceMonitor {
     try {
       // In a real implementation, this would use platform channels
       // For now, simulate battery level
-      final random = math.Random();
       return 0.3 + random.nextDouble() * 0.6; // 30-90%
     } catch (e) {
       return 0.5;
@@ -506,22 +501,18 @@ class PerformanceMonitor {
 
   Future<double> _getNetworkLatency() async {
     // Simulate network latency in milliseconds
-    final random = math.Random();
     return 50.0 + random.nextDouble() * 200.0; // 50-250ms
   }
 
   Future<int> _getDroppedFrames() async {
-    final random = math.Random();
     return random.nextInt(5); // 0-4 dropped frames
   }
 
   Future<double> _getRenderingTime() async {
-    final random = math.Random();
     return 8.0 + random.nextDouble() * 8.0; // 8-16ms rendering time
   }
 
   Future<double> _getDiskUsage() async {
-    final random = math.Random();
     return 0.3 + random.nextDouble() * 0.4; // 30-70% disk usage
   }
 }

@@ -396,7 +396,6 @@ class DailyFeelingsTracker {
   /// Generate unique entry ID
   String _generateEntryId() {
     final timestamp = DateTime.now().millisecondsSinceEpoch;
-    final random = math.Random().nextInt(10000);
     return 'feelings_${timestamp}_$random';
   }
 

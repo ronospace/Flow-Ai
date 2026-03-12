@@ -192,7 +192,6 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
   }
 
   Widget _buildHeader(BuildContext context) {
-    final theme = Theme.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -219,7 +218,6 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
   }
 
   Widget _buildFirstTimeTrackingSection(BuildContext context) {
-    final theme = Theme.of(context);
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -275,7 +273,6 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
     BuildContext context,
     Map<String, dynamic> method,
   ) {
-    final theme = Theme.of(context);
     final isSelected = _importMethod == method['id'];
 
     return InkWell(
@@ -361,7 +358,6 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
   }
 
   Widget _buildCSVImportSection(BuildContext context) {
-    final theme = Theme.of(context);
 
     return Container(
       padding: const EdgeInsets.all(24),
@@ -476,7 +472,6 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
   }
 
   Widget _buildAppImportSection(BuildContext context) {
-    final theme = Theme.of(context);
 
     return Container(
       padding: const EdgeInsets.all(24),
@@ -518,7 +513,6 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
   }
 
   Widget _buildAppImportCard(BuildContext context, Map<String, dynamic> app) {
-    final theme = Theme.of(context);
     final isSupported = app['supported'] as bool;
 
     return Container(
@@ -583,7 +577,6 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
   }
 
   Widget _buildHealthConnectSection(BuildContext context) {
-    final theme = Theme.of(context);
 
     return Container(
       padding: const EdgeInsets.all(24),
@@ -688,7 +681,6 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
   }
 
   Widget _buildLastPeriodDateField(BuildContext context) {
-    final theme = Theme.of(context);
 
     return InkWell(
       onTap: () => _selectLastPeriodDate(context),
@@ -749,7 +741,6 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
   }
 
   Widget _buildCycleHelpText(BuildContext context) {
-    final theme = Theme.of(context);
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -796,7 +787,6 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
   }
 
   Widget _buildImportedDataPreview(BuildContext context) {
-    final theme = Theme.of(context);
 
     return Container(
       padding: const EdgeInsets.all(24),

@@ -259,7 +259,6 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
   }
 
   Widget _buildHeader(BuildContext context) {
-    final theme = Theme.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -286,7 +285,6 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
   }
 
   Widget _buildPrioritySelection(BuildContext context) {
-    final theme = Theme.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -314,7 +312,6 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
     BuildContext context,
     Map<String, dynamic> priority,
   ) {
-    final theme = Theme.of(context);
     final isSelected = _selectedPriority == priority['id'];
 
     return InkWell(
@@ -407,7 +404,6 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
   }
 
   Widget _buildPopularGoalsSection(BuildContext context) {
-    final theme = Theme.of(context);
 
     // Get popular goals from all categories
     final popularGoals = <Map<String, dynamic>>[];
@@ -470,7 +466,6 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
   }
 
   Widget _buildCategoryHeader(BuildContext context, String categoryName) {
-    final theme = Theme.of(context);
 
     return Text(
       categoryName,
@@ -498,7 +493,6 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
   }
 
   Widget _buildGoalCard(BuildContext context, Map<String, dynamic> goal) {
-    final theme = Theme.of(context);
     final isSelected = _selectedGoals.contains(goal['id']);
 
     return InkWell(
@@ -610,7 +604,6 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
   }
 
   Widget _buildGoalChip(BuildContext context, Map<String, dynamic> goal) {
-    final theme = Theme.of(context);
     final isSelected = _selectedGoals.contains(goal['id']);
 
     return FilterChip(
@@ -654,8 +647,6 @@ class _GoalSelectionWidgetState extends State<GoalSelectionWidget>
     if (_selectedGoals.isEmpty) {
       return const SizedBox.shrink();
     }
-
-    final theme = Theme.of(context);
     final recommendedCount =
         _priorityLevels.firstWhere(
               (p) => p['id'] == _selectedPriority,

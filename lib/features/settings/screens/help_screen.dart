@@ -75,8 +75,6 @@ class _HelpScreenState extends State<HelpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -179,7 +177,6 @@ class _HelpScreenState extends State<HelpScreen> {
 
             // FAQ Items
             ...List.generate(_helpItems.length, (index) {
-              final item = _helpItems[index];
 
               return Container(
                     margin: const EdgeInsets.only(bottom: 12),
@@ -351,7 +348,6 @@ class _HelpScreenState extends State<HelpScreen> {
     Color color,
     VoidCallback onTap,
   ) {
-    final theme = Theme.of(context);
     return GestureDetector(
       onTap: () {
         HapticFeedback.lightImpact();
@@ -615,7 +611,6 @@ class _HelpScreenState extends State<HelpScreen> {
     Color color,
     VoidCallback onTap,
   ) {
-    final theme = Theme.of(context);
     return GestureDetector(
       onTap: () {
         if (mounted) {

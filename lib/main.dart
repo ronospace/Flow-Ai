@@ -57,15 +57,14 @@ void main() async {
         }) {}; // Disable debug prints in release
   }
 
-  // Initialize only critical services synchronously
+  // Initialize critical services before building the app to avoid auth/Firebase race conditions
+  await _initializeCriticalServices();
+
   runApp(const FlowAIApp());
 
   Future.microtask(() async {
-    await _initializeCriticalServices();
-    _initializeNonCriticalServices();
+    await _initializeNonCriticalServices();
   });
-
-
 }
 
 Future<void> _initializeCriticalServices() async {

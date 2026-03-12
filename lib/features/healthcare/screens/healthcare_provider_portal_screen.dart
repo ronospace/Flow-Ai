@@ -37,7 +37,6 @@ class _HealthcareProviderPortalScreenState
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
 
     return Scaffold(
       body: Container(
@@ -345,7 +344,6 @@ class _HealthcareProviderPortalScreenState
     DataFormat format,
   ) {
     final isSelected = _selectedFormat == format;
-    final theme = Theme.of(context);
 
     return InkWell(
       onTap: () {

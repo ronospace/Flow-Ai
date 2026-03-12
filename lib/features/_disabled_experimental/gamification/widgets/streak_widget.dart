@@ -258,8 +258,6 @@ class StreakWidget extends StatelessWidget {
                 date.month == now.month &&
                 date.day == now.day;
 
-            final isFuture = date.isAfter(now);
-
             return Column(
               children: [
                 Text(

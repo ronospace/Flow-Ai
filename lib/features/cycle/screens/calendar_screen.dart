@@ -57,7 +57,6 @@ class _CalendarScreenState extends State<CalendarScreen>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -116,7 +115,6 @@ class _CalendarScreenState extends State<CalendarScreen>
   }
 
   Widget _buildHeader() {
-    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(20),
       child: Row(
@@ -235,7 +233,6 @@ class _CalendarScreenState extends State<CalendarScreen>
   }
 
   Widget _buildCalendar(CycleProvider cycleProvider) {
-    final theme = Theme.of(context);
     return TableCalendar<CycleData>(
       firstDay: DateTime.utc(2020, 1, 1),
       lastDay: DateTime.utc(2030, 12, 31),
@@ -353,7 +350,6 @@ class _CalendarScreenState extends State<CalendarScreen>
     bool isToday = false,
   }) {
     final dayInfo = _getDayInfo(day, cycleProvider);
-    final theme = Theme.of(context);
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
@@ -642,7 +638,6 @@ class _CalendarScreenState extends State<CalendarScreen>
   Widget _buildCurrentCycleInfo() {
     return Consumer<CycleProvider>(
       builder: (context, cycleProvider, child) {
-        final theme = Theme.of(context);
         final currentCycle = cycleProvider.cycleData?.currentCycle;
         final predictions = cycleProvider.predictions;
 

@@ -102,7 +102,6 @@ class _InteractiveOnboardingScreenState
     BuildContext context,
     EnhancedOnboardingController controller,
   ) {
-    final theme = Theme.of(context);
 
     return Container(
       padding: const EdgeInsets.all(24),
@@ -174,7 +173,6 @@ class _InteractiveOnboardingScreenState
     BuildContext context,
     EnhancedOnboardingController controller,
   ) {
-    final theme = Theme.of(context);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
@@ -551,7 +549,6 @@ class _InteractiveOnboardingScreenState
     BuildContext context,
     EnhancedOnboardingController controller,
   ) {
-    final theme = Theme.of(context);
     final data = controller.data;
 
     return Container(
@@ -624,7 +621,6 @@ class _InteractiveOnboardingScreenState
     required String title,
     required String subtitle,
   }) {
-    final theme = Theme.of(context);
 
     return Row(
       children: [
@@ -849,7 +845,6 @@ class AdaptiveButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return SizedBox(
       width: double.infinity,
       height: 52,

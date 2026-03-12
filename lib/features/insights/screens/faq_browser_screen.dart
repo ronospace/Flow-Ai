@@ -110,8 +110,6 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final localizations = AppLocalizations.of(context);
 
     return Scaffold(
       body: CustomScrollView(
@@ -347,7 +345,6 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
   }
 
   Widget _buildFAQCard(FAQItem faq, int index) {
-    final theme = Theme.of(context);
 
     return Container(
           margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),

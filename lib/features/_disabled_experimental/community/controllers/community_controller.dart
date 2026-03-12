@@ -156,8 +156,6 @@ class CommunityController extends ChangeNotifier {
   Future<void> joinDiscussion(String discussionId) async {
     try {
       await _communityService.joinDiscussion(discussionId);
-
-      final index = _discussions.indexWhere((d) => d.id == discussionId);
       if (index != -1) {
         _discussions[index] = _discussions[index].copyWith(
           participantCount: _discussions[index].participantCount + 1,
@@ -254,8 +252,6 @@ class CommunityController extends ChangeNotifier {
   Future<void> answerQuestion(String questionId, String answer) async {
     try {
       await _communityService.answerQuestion(questionId, answer);
-
-      final index = _expertQuestions.indexWhere((q) => q.id == questionId);
       if (index != -1) {
         _expertQuestions[index] = _expertQuestions[index].copyWith(
           answerCount: _expertQuestions[index].answerCount + 1,
@@ -412,8 +408,6 @@ class CommunityController extends ChangeNotifier {
   Future<void> reactToStory(String storyId, String reaction) async {
     try {
       await _communityService.reactToStory(storyId, reaction);
-
-      final index = _symptomStories.indexWhere((s) => s.id == storyId);
       if (index != -1) {
         _symptomStories[index] = _symptomStories[index].copyWith(
           reactionCount: _symptomStories[index].reactionCount + 1,
@@ -428,8 +422,6 @@ class CommunityController extends ChangeNotifier {
   Future<void> followStory(String storyId) async {
     try {
       await _communityService.followStory(storyId);
-
-      final index = _symptomStories.indexWhere((s) => s.id == storyId);
       if (index != -1) {
         _symptomStories[index] = _symptomStories[index].copyWith(
           isFollowing: true,

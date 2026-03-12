@@ -390,7 +390,6 @@ class PerformanceOptimizationService {
         if (freedSpace >= neededSpace) break;
 
         final key = entry.key;
-        final size = entry.value.size;
 
         if (key.startsWith('data_')) {
           _dataCache.remove(key.substring(5));

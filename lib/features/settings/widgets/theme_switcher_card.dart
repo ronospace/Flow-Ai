@@ -12,8 +12,6 @@ class ThemeSwitcherCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
 
     return Consumer<SettingsProvider>(
       builder: (context, settings, child) {
@@ -164,7 +162,6 @@ class _ThemeOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
 
     return GestureDetector(
       onTap: onTap,

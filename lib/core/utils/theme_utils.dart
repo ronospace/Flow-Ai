@@ -5,7 +5,6 @@ import '../theme/app_theme.dart';
 class ThemeUtils {
   /// Get theme-aware text color for primary content
   static Color getPrimaryTextColor(BuildContext context) {
-    final theme = Theme.of(context);
     return theme.brightness == Brightness.dark
         ? AppTheme.darkText
         : AppTheme.lightText;
@@ -13,7 +12,6 @@ class ThemeUtils {
 
   /// Get theme-aware text color for secondary content
   static Color getSecondaryTextColor(BuildContext context) {
-    final theme = Theme.of(context);
     return theme.brightness == Brightness.dark
         ? AppTheme.darkTextSecondary
         : AppTheme.lightTextSecondary;
@@ -21,7 +19,6 @@ class ThemeUtils {
 
   /// Get theme-aware background color
   static Color getBackgroundColor(BuildContext context) {
-    final theme = Theme.of(context);
     return theme.brightness == Brightness.dark
         ? AppTheme.darkBackground
         : AppTheme.lightBackground;
@@ -29,7 +26,6 @@ class ThemeUtils {
 
   /// Get theme-aware surface color
   static Color getSurfaceColor(BuildContext context) {
-    final theme = Theme.of(context);
     return theme.brightness == Brightness.dark
         ? AppTheme.darkSurface
         : AppTheme.lightSurface;
@@ -37,7 +33,6 @@ class ThemeUtils {
 
   /// Get theme-aware card color
   static Color getCardColor(BuildContext context) {
-    final theme = Theme.of(context);
     return theme.brightness == Brightness.dark
         ? AppTheme.darkCard
         : AppTheme.lightCard;
@@ -50,7 +45,6 @@ class ThemeUtils {
 
   /// Get theme-aware shadow color
   static Color getShadowColor(BuildContext context) {
-    final theme = Theme.of(context);
     return theme.brightness == Brightness.dark
         ? Colors.black.withValues(alpha: 0.5)
         : Colors.black.withValues(alpha: 0.1);
@@ -63,7 +57,6 @@ class ThemeUtils {
 
   /// Get theme-aware border color
   static Color getBorderColor(BuildContext context, {double opacity = 0.2}) {
-    final theme = Theme.of(context);
     return theme.brightness == Brightness.dark
         ? AppTheme.darkTextSecondary.withValues(alpha: opacity)
         : AppTheme.lightTextSecondary.withValues(alpha: opacity);
@@ -76,7 +69,6 @@ class ThemeUtils {
 
   /// Get theme-aware overlay color for modal backgrounds
   static Color getOverlayColor(BuildContext context) {
-    final theme = Theme.of(context);
     return theme.brightness == Brightness.dark
         ? Colors.black.withValues(alpha: 0.8)
         : Colors.black.withValues(alpha: 0.5);
@@ -125,7 +117,6 @@ class ThemeUtils {
 
   /// Get theme-aware colors for input fields
   static Color getInputFillColor(BuildContext context) {
-    final theme = Theme.of(context);
     return theme.brightness == Brightness.dark
         ? AppTheme.darkSurface
         : AppTheme.lightGrey;
@@ -133,7 +124,6 @@ class ThemeUtils {
 
   /// Get theme-aware colors for disabled states
   static Color getDisabledColor(BuildContext context) {
-    final theme = Theme.of(context);
     return theme.brightness == Brightness.dark
         ? AppTheme.darkTextSecondary.withValues(alpha: 0.5)
         : AppTheme.lightTextSecondary.withValues(alpha: 0.5);
@@ -158,7 +148,6 @@ class ThemeUtils {
     required Color lightColor,
     required Color darkColor,
   }) {
-    final theme = Theme.of(context);
     return theme.brightness == Brightness.dark ? darkColor : lightColor;
   }
 
@@ -169,7 +158,6 @@ class ThemeUtils {
 
   /// Get theme-aware icon color
   static Color getIconColor(BuildContext context, {double opacity = 1.0}) {
-    final theme = Theme.of(context);
     return theme.brightness == Brightness.dark
         ? AppTheme.darkText.withValues(alpha: opacity)
         : AppTheme.lightText.withValues(alpha: opacity);
@@ -177,7 +165,6 @@ class ThemeUtils {
 
   /// Get theme-aware placeholder text color
   static Color getPlaceholderColor(BuildContext context) {
-    final theme = Theme.of(context);
     return theme.brightness == Brightness.dark
         ? AppTheme.darkTextSecondary.withValues(alpha: 0.7)
         : AppTheme.lightTextSecondary.withValues(alpha: 0.7);

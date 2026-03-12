@@ -676,7 +676,6 @@ class PredictiveEngine {
   }
 
   List<List<double>> _generateWeightMatrix(int inputSize, int outputSize) {
-    final random = math.Random();
     final scale = math.sqrt(2.0 / inputSize); // He initialization
     return List.generate(
       inputSize,
@@ -1039,7 +1038,6 @@ class PredictiveEngine {
     // Simplified decision tree simulation
     double result = 0.5;
     final seed = treeIndex * 42;
-    final random = math.Random(seed);
 
     for (int i = 0; i < features.length; i++) {
       if (random.nextBool()) {
@@ -1081,7 +1079,6 @@ class PredictiveEngine {
     int ovulationDay,
   ) {
     final forecast = <Map<String, double>>[];
-    final random = math.Random();
 
     // Generate forecast for key days in the cycle
     final keyDays = [1, 7, 14, 21, cycleLength];

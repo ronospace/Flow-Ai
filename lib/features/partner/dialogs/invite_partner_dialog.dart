@@ -272,7 +272,6 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
         ),
         const SizedBox(height: 12),
         ..._predefinedMessages.asMap().entries.map((entry) {
-          final index = entry.key;
           final message = entry.value;
           return _buildMessageTemplate(message, index);
         }),

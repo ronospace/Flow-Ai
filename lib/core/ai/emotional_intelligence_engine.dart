@@ -854,7 +854,6 @@ class MoodPredictor {
     }
 
     // Add some randomness and pattern influence
-    final random = math.Random().nextDouble() * 0.2 - 0.1;
     return (baseScore + random).clamp(0.0, 1.0);
   }
 

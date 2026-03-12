@@ -80,7 +80,6 @@ class AdvancedAIEngine {
 
     // Calculate cycle length patterns
     final lengths = cycles.map((c) => c.length).toList();
-    final avgLength = lengths.reduce((a, b) => a + b) / lengths.length;
     final variance = _calculateVariance(lengths);
     final regularity = _calculateRegularity(lengths);
 

@@ -145,7 +145,6 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
   }
 
   Widget _buildHeader(SyncStatus overallStatus) {
-    final theme = Theme.of(context);
     return Row(
       children: [
         Container(
@@ -212,7 +211,6 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
   }
 
   Widget _buildOverallStatus(SyncStatus overallStatus) {
-    final theme = Theme.of(context);
     final totalDataPoints = _syncData.values
         .map((data) => data.dataPoints)
         .fold<int>(0, (sum, points) => sum + points);
@@ -274,7 +272,6 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
   }
 
   Widget _buildSyncDataList() {
-    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -294,7 +291,6 @@ class _BiometricSyncStatusState extends State<BiometricSyncStatus>
   }
 
   Widget _buildSyncDataItem(String dataType, SyncDataPoint data) {
-    final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6),
       padding: const EdgeInsets.all(12),

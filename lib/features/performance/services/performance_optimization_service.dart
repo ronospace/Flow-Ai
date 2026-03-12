@@ -227,7 +227,6 @@ class PerformanceOptimizationService {
       final availableCount = stats['available'] as int;
       for (int i = 0; i < availableCount ~/ 2; i++) {
         try {
-          final item = pool.acquire();
           // Don't release back to reduce pool size
         } catch (e) {
           break;

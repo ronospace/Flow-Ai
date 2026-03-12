@@ -43,7 +43,6 @@ class _SetupFormState extends State<SetupForm> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
 
     return Form(
       key: _formKey,

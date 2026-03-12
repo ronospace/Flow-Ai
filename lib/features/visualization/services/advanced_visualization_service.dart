@@ -556,7 +556,6 @@ class AdvancedVisualizationService {
     required List<String> symptoms,
   }) {
     final Map<String, Map<String, double>> matrix = {};
-    final random = math.Random();
 
     for (final symptom1 in symptoms) {
       matrix[symptom1] = {};
@@ -579,7 +578,6 @@ class AdvancedVisualizationService {
     DateRange dateRange,
   ) async {
     final List<DataPoint> sleepData = [];
-    final random = math.Random();
 
     DateTime currentDate = dateRange.start;
     while (currentDate.isBefore(dateRange.end)) {
@@ -623,7 +621,6 @@ class AdvancedVisualizationService {
     DateRange dateRange,
   ) async {
     final List<DataPoint> activityData = [];
-    final random = math.Random();
 
     DateTime currentDate = dateRange.start;
     while (currentDate.isBefore(dateRange.end)) {

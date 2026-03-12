@@ -149,7 +149,6 @@ class _FuturePlansScreenState extends State<FuturePlansScreen>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
 
     return Scaffold(
       body: CustomScrollView(

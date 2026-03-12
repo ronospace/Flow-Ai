@@ -74,8 +74,6 @@ class _HealthScreenState extends State<HealthScreen>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final localizations = AppLocalizations.of(context);
 
     return Scaffold(
       body: Container(
@@ -124,7 +122,6 @@ class _HealthScreenState extends State<HealthScreen>
   }
 
   Widget _buildHealthHeader(AppLocalizations localizations) {
-    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -200,7 +197,6 @@ class _HealthScreenState extends State<HealthScreen>
   }
 
   Widget _buildHealthScoreCard(AppLocalizations localizations) {
-    final theme = Theme.of(context);
     final healthScore = 0.82; // Mock data
 
     return Container(
@@ -283,7 +279,6 @@ class _HealthScreenState extends State<HealthScreen>
   }
 
   Widget _buildBiometricGrid(AppLocalizations localizations) {
-    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -349,7 +344,6 @@ class _HealthScreenState extends State<HealthScreen>
     Animation<double> animation,
     String status,
   ) {
-    final theme = Theme.of(context);
     return Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
@@ -447,7 +441,6 @@ class _HealthScreenState extends State<HealthScreen>
   }
 
   Widget _buildHealthInsightsSection(AppLocalizations localizations) {
-    final theme = Theme.of(context);
     final insights = [
       {
         'title': 'Excellent Sleep Pattern',
@@ -562,7 +555,6 @@ class _HealthScreenState extends State<HealthScreen>
   }
 
   Widget _buildSymptomTracker(AppLocalizations localizations) {
-    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -671,7 +663,6 @@ class _HealthScreenState extends State<HealthScreen>
   }
 
   Widget _buildHealthGoals(AppLocalizations localizations) {
-    final theme = Theme.of(context);
     final goals = [
       {
         'title': 'Daily Steps',

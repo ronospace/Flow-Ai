@@ -230,7 +230,6 @@ class PartnerSharingService {
 
   String _generateInvitationCode() {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    final random = Random.secure();
     return String.fromCharCodes(
       Iterable.generate(
         8,

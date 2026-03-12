@@ -14,7 +14,6 @@ class OnboardingProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final steps = OnboardingStep.values
         .where(
           (step) =>
@@ -102,7 +101,6 @@ class _StepIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
 
     Color getColor() {
       if (isCompleted) return theme.colorScheme.primary;

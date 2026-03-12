@@ -48,7 +48,6 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
         gradient: AppTheme.backgroundGradient(
@@ -570,7 +569,6 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
     required String subtitle,
     required Widget child,
   }) {
-    final theme = Theme.of(context);
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -616,7 +614,6 @@ class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
     required bool isSelected,
     required VoidCallback onTap,
   }) {
-    final theme = Theme.of(context);
 
     return Container(
       decoration: BoxDecoration(

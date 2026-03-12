@@ -30,7 +30,6 @@ class ComingSoonCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final effectiveAccentColor = accentColor ?? _getTypeColor();
 
     return Container(

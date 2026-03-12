@@ -212,7 +212,6 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final currentColor = _getColorForValue(widget.value);
     final levelText = _getLevelText(widget.value);
     final neuralColors = _getNeuralNetworkColors(widget.value);

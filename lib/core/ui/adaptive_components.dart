@@ -54,7 +54,6 @@ class AdaptiveComponents {
     double? elevation,
     bool centerTitle = false,
   }) {
-    final theme = Theme.of(context);
     final platformInfo = _platformService.platformInfo;
 
     if (platformInfo.platform == TargetPlatform.iOS && platformInfo.isMobile) {
@@ -107,7 +106,6 @@ class AdaptiveComponents {
     double? height,
     EdgeInsetsGeometry? padding,
   }) {
-    final theme = Theme.of(context);
     final platformInfo = _platformService.platformInfo;
 
     if (platformInfo.platform == TargetPlatform.iOS && platformInfo.isMobile) {
@@ -257,7 +255,6 @@ class AdaptiveComponents {
     Widget? suffixIcon,
     EdgeInsetsGeometry? padding,
   }) {
-    final theme = Theme.of(context);
     final platformInfo = _platformService.platformInfo;
 
     if (platformInfo.platform == TargetPlatform.iOS && platformInfo.isMobile) {
@@ -379,7 +376,6 @@ class AdaptiveComponents {
     String? label,
     bool enabled = true,
   }) {
-    final theme = Theme.of(context);
     final platformInfo = _platformService.platformInfo;
 
     Widget switchWidget;
@@ -441,7 +437,6 @@ class AdaptiveComponents {
     String? label,
     bool enabled = true,
   }) {
-    final theme = Theme.of(context);
     final platformInfo = _platformService.platformInfo;
 
     if (platformInfo.platform == TargetPlatform.iOS && platformInfo.isMobile) {
@@ -476,7 +471,6 @@ class AdaptiveComponents {
     required ValueChanged<T> onChanged,
     bool enabled = true,
   }) {
-    final theme = Theme.of(context);
     final platformInfo = _platformService.platformInfo;
 
     if (platformInfo.platform == TargetPlatform.iOS && platformInfo.isMobile) {
@@ -537,7 +531,6 @@ class AdaptiveComponents {
     double? size,
     Color? color,
   }) {
-    final theme = Theme.of(context);
     final platformInfo = _platformService.platformInfo;
 
     if (platformInfo.platform == TargetPlatform.iOS && platformInfo.isMobile) {

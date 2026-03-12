@@ -13,7 +13,6 @@ class AIPredictionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
 
     return GestureDetector(
           onTap: onTap,
@@ -167,7 +166,6 @@ class AIPredictionCard extends StatelessWidget {
 
   Widget _buildPredictionDisplay(ThemeData theme) {
     final daysUntil = prediction.daysUntilNextPeriod;
-    final isToday = daysUntil == 0;
     final isPast = daysUntil < 0;
 
     return Row(
@@ -456,7 +454,6 @@ class AIPredictionSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final daysUntil = prediction.daysUntilNextPeriod;
 
     return GestureDetector(
