@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/ui/adaptive_messages.dart';
 import 'package:flutter/services.dart';
 
 class ComingSoonCard extends StatefulWidget {
@@ -132,13 +133,9 @@ class _ComingSoonCardState extends State<ComingSoonCard>
             onPressed: () {
               Navigator.pop(context);
               // TODO: Implement notification signup
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text(
-                    'We\'ll notify you when this feature is ready!',
-                  ),
-                  duration: Duration(seconds: 2),
-                ),
+              AdaptiveMessages.showSuccess(
+                context,
+                "We'll notify you when this feature is ready!",
               );
             },
             style: ElevatedButton.styleFrom(

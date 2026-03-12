@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'dart:async';
 import 'package:health/health.dart';
 import '../utils/app_logger.dart';
+import 'package:flutter/foundation.dart';
 
 /// Biometric insight types
 enum BiometricInsightType {
@@ -94,6 +96,15 @@ class AdvancedBiometricService {
   final Map<HealthDataType, List<HealthDataPoint>> _dataCache = {};
   DateTime? _lastSyncTime;
 
+  bool get _isIOSSimulator {
+    if (kIsWeb || !Platform.isIOS) return false;
+    final env = Platform.environment;
+    return env.containsKey('SIMULATOR_DEVICE_NAME') ||
+        env.containsKey('SIMULATOR_UDID') ||
+        env.containsKey('IPHONE_SIMULATOR_ROOT') ||
+        env['TARGET_OS_SIMULATOR'] == '1';
+  }
+
   /// Available health data types for menstrual health tracking
   static const List<HealthDataType> _supportedDataTypes = [
     HealthDataType.HEART_RATE,
@@ -123,6 +134,15 @@ class AdvancedBiometricService {
 
     try {
       AppLogger.info('🩺 Initializing Advanced Biometric Integration...');
+
+      if (_isIOSSimulator) {
+        AppLogger.warning(
+          'iOS Simulator detected - skipping HealthKit biometric initialization',
+        );
+        _initializeMockService();
+        _isInitialized = true;
+        return;
+      }
 
       _health = Health();
 

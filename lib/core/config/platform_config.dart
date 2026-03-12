@@ -236,7 +236,7 @@ class PlatformConfig {
     try {
       AppLogger.system('🔄 Initializing Platform Configuration...');
 
-      final configs = {
+      final _ = {
         'firebase': getFirebaseConfig(),
         'api': getApiEndpoints(),
         'cache': getCacheConfig(),

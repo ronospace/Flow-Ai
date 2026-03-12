@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/ui/adaptive_messages.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
@@ -352,21 +353,9 @@ class _ComingSoonScreenState extends State<ComingSoonScreen>
 
   void _handleNotifyMe(String feature) {
     HapticFeedback.lightImpact();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Icon(Icons.notifications_active, color: Colors.white),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text('You\'ll be notified when $feature is ready!'),
-            ),
-          ],
-        ),
-        backgroundColor: AppTheme.successGreen,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      ),
+    AdaptiveMessages.showSuccess(
+      context,
+      "You'll be notified when $feature is ready!",
     );
   }
 
@@ -443,24 +432,9 @@ class _ComingSoonScreenState extends State<ComingSoonScreen>
                       text: 'Join Beta',
                       onPressed: () {
                         Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Row(
-                              children: [
-                                const Icon(
-                                  Icons.rocket_launch,
-                                  color: Colors.white,
-                                ),
-                                const SizedBox(width: 8),
-                                Text('Welcome to the $feature beta program!'),
-                              ],
-                            ),
-                            backgroundColor: AppTheme.accentMint,
-                            behavior: SnackBarBehavior.floating,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
+                        AdaptiveMessages.showSuccess(
+                          context,
+                          "Welcome to the $feature beta program!",
                         );
                       },
                     ),

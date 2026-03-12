@@ -316,7 +316,6 @@ class SettingsProvider extends ChangeNotifier {
     notifyListeners();
     await _savePreferences();
     final auth = AuthService();
-    await auth.initialize();
     await auth.setBiometricEnabled(enabled);
   }
 

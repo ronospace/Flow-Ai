@@ -13,6 +13,7 @@ class ProductionAnalyticsService {
 
   SharedPreferences? _prefs;
   bool _isInitialized = false;
+  bool _initializing = false;
   bool _analyticsEnabled = true;
   String? _userId;
   Map<String, dynamic> _sessionData = {};
@@ -24,7 +25,8 @@ class ProductionAnalyticsService {
 
   /// Initialize the production analytics service
   Future<void> initialize({String? userId}) async {
-    if (_isInitialized) return;
+    if (_isInitialized || _initializing) return;
+    _initializing = true;
 
     try {
       _prefs = await SharedPreferences.getInstance();
@@ -39,6 +41,7 @@ class ProductionAnalyticsService {
       };
 
       _isInitialized = true;
+      _initializing = false;
 
       // Track app launch
       await trackEvent('app_launch', {
@@ -46,7 +49,10 @@ class ProductionAnalyticsService {
         'cold_start': true,
       });
 
-      AppLogger.success('Production Analytics Service initialized');
+      if (!_sessionData.containsKey('init_logged')) {
+        AppLogger.success('Production Analytics Service initialized');
+        _sessionData['init_logged'] = true;
+      }
     } catch (e) {
       AppLogger.error('Failed to initialize Production Analytics Service', e);
     }

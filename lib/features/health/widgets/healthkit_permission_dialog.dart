@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
+import 'dart:io';
 
 /// Mandatory HealthKit disclosure dialog
 /// Shows BEFORE requesting HealthKit permissions (App Store Guideline 2.5.1)
@@ -30,6 +31,7 @@ class HealthKitPermissionDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final platformName = Platform.isIOS ? 'Apple HealthKit' : 'Health Connect';
 
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -50,7 +52,7 @@ class HealthKitPermissionDialog extends StatelessWidget {
           const SizedBox(width: 12),
           Expanded(
             child: Text(
-              'Apple HealthKit Integration',
+              '${platformName} Integration',
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: AppTheme.secondaryBlue,
@@ -90,7 +92,7 @@ class HealthKitPermissionDialog extends StatelessWidget {
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          'App Store Guideline 2.5.1 - HealthKit Transparency',
+                          Platform.isIOS ? 'App Store Guideline 2.5.1 - HealthKit Transparency' : 'Health Connect data disclosure',
                           style: TextStyle(
                             fontSize: 11,
                             color: AppTheme.warningOrange.withValues(
@@ -108,7 +110,7 @@ class HealthKitPermissionDialog extends StatelessWidget {
 
             // Main disclosure
             Text(
-              'Flow Ai uses Apple HealthKit to access your health data for enhanced cycle predictions and personalized insights.',
+              Platform.isIOS ? 'Flow Ai uses Apple HealthKit to access your health data for enhanced cycle predictions and personalized insights.' : 'Flow Ai uses Health Connect to access your health data for enhanced cycle predictions and personalized insights.',
               style: theme.textTheme.bodyLarge?.copyWith(
                 fontWeight: FontWeight.w500,
                 height: 1.5,
@@ -180,7 +182,7 @@ class HealthKitPermissionDialog extends StatelessWidget {
 
             // Optional note
             Text(
-              'HealthKit integration is optional. You can enable or disable at any time in Settings → Health → Data Access & Devices.',
+              Platform.isIOS ? 'HealthKit integration is optional. You can enable or disable it any time in iOS Settings → Health → Data Access & Devices.' : 'Health Connect integration is optional. You can manage it any time in Android Settings → Apps → Health Connect → App permissions.',
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 fontSize: 11,

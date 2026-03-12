@@ -156,25 +156,8 @@ class AuthService {
       _localUserService = LocalUserService();
       await _localUserService!.initialize();
 
-      // 🔄 Auto-sync local user with Firebase
-      final localUser = await _localUserService!.getCurrentUser();
-      if (localUser != null && _auth != null && _auth!.currentUser == null) {
-        try {
-          await _auth!.signInWithEmailAndPassword(
-            email: localUser.email,
-            password: localUser.uid, // deterministic fallback password
-          );
-        } catch (_) {
-          try {
-            await _auth!.createUserWithEmailAndPassword(
-              email: localUser.email,
-              password: localUser.uid,
-            );
-          } catch (e) {
-            AppLogger.warning("Firebase silent sync failed: ");
-          }
-        }
-      }
+      // Startup-safe: skip Firebase account sync during app initialization.
+      // Local auth remains available; explicit auth flows can handle remote sync later.
 
       _isInitialized = true;
       AppLogger.auth(
@@ -387,9 +370,11 @@ class AuthService {
 
       // Fallback to local authentication
       if (_localUserService != null) {
-        final localResult = await _localUserService!.signInUser(
+        final localResult = await _localUserService!.createUser(
           email: email,
           password: password,
+          displayName: displayName,
+          username: username,
         );
 
         if (localResult.isSuccess) {
@@ -542,15 +527,10 @@ return AuthResult.success(userCredential.user);
   /// Sign in with Apple (Firebase)
   Future<AuthResult> signInWithApple() async {
     try {
-      if (_auth == null) {
-        return AuthResult.failure('Authentication not initialized.');
-      }
-
       if (kIsWeb) {
         return AuthResult.failure('Apple Sign-In not supported on web.');
       }
 
-      // Apple Sign-In is not reliable on Simulator; validate on a physical device for production.
       if (Platform.isIOS &&
           Platform.environment.containsKey('SIMULATOR_DEVICE_NAME')) {
         return AuthResult.failure(
@@ -558,12 +538,13 @@ return AuthResult.success(userCredential.user);
         );
       }
 
-      // Apple Sign-In is not reliable on Simulator; validate on a physical device for production.
-      if (Platform.isIOS &&
-          Platform.environment.containsKey('SIMULATOR_DEVICE_NAME')) {
-        return AuthResult.failure(
-          'Apple Sign-In requires a real iPhone (not Simulator).',
-        );
+      if (Firebase.apps.isNotEmpty && _auth == null) {
+        _auth = FirebaseAuth.instance;
+        _firebaseAvailable = true;
+      }
+
+      if (_auth == null) {
+        return AuthResult.failure('Authentication not initialized.');
       }
 
       final appleCredential = await SignInWithApple.getAppleIDCredential(
@@ -579,7 +560,7 @@ return AuthResult.success(userCredential.user);
       );
 
       final userCredential = await _auth!.signInWithCredential(oauthCredential);
-return AuthResult.success(userCredential.user);
+      return AuthResult.success(userCredential.user);
     } catch (e) {
       return AuthResult.failure('Apple sign-in failed: $e');
     }
@@ -825,12 +806,6 @@ return AuthResult.success(userCredential.user);
       return Map<String, dynamic>.from(json.decode(userDataString));
     }
     return null;
-  }
-
-  Future<void> _clearStoredUserData() async {
-    if (_prefs != null) {
-      await _prefs!.remove(_userDataKey);
-    }
   }
 
   /// Clear all user-related data from local storage

@@ -674,19 +674,8 @@ class _FuturisticAuthScreenState extends State<FuturisticAuthScreen>
 
         Row(
               children: [
-                // Google button
-                Expanded(
-                  child: _buildSocialButton(
-                    icon: Icons.g_mobiledata,
-                    label: 'Google',
-                    onPressed: _isLoading ? null : _handleGoogleSignIn,
-                    colors: [const Color(0xFF4285F4), const Color(0xFF34A853)],
-                  ),
-                ),
 
-                const SizedBox(width: 16),
-
-                // Apple button (iOS only)
+                // iOS → Apple
                 if (PlatformService().platformInfo.platform ==
                     TargetPlatform.iOS)
                   Expanded(
@@ -699,12 +688,18 @@ class _FuturisticAuthScreenState extends State<FuturisticAuthScreen>
                         const Color(0xFF434343),
                       ],
                     ),
-                  ),
+                  )
 
-                // Spacer if not iOS
-                if (PlatformService().platformInfo.platform !=
-                    TargetPlatform.iOS)
-                  const Expanded(child: SizedBox()),
+                // Android → Google
+                else
+                  Expanded(
+                    child: _buildSocialButton(
+                      icon: Icons.g_mobiledata,
+                      label: 'Google',
+                      onPressed: _isLoading ? null : _handleGoogleSignIn,
+                      colors: [const Color(0xFF4285F4), const Color(0xFF34A853)],
+                    ),
+                  ),
               ],
             )
             .animate(controller: _socialController)

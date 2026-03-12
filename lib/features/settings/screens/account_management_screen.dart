@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/ui/adaptive_messages.dart';
 import '../../../core/services/auth_service.dart';
 import '../providers/settings_provider.dart';
 import '../widgets/settings_section.dart';
@@ -70,8 +71,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
         debugPrint('📧 Loaded email from metadata: ${userMetadata['email']}');
       } else {
         // Fallback to auth service if metadata doesn't have email
-        final authService = AuthService();
-        await authService.initialize();
+        final authService = Provider.of<AuthService>(context, listen: false);
         final userData = await authService.getUserData();
         if (userData != null &&
             userData['email'] != null &&
@@ -530,11 +530,9 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
 
   Future<void> _saveDisplayName() async {
     if (_displayNameController.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Display name cannot be empty'),
-          backgroundColor: AppTheme.primaryRose,
-        ),
+      await AdaptiveMessages.showError(
+        context,
+        'Display name cannot be empty',
       );
       return;
     }
@@ -655,21 +653,17 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
 
   Future<void> _changePassword() async {
     if (_newPasswordController.text != _confirmPasswordController.text) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Passwords do not match'),
-          backgroundColor: AppTheme.primaryRose,
-        ),
+      await AdaptiveMessages.showError(
+        context,
+        'Passwords do not match',
       );
       return;
     }
 
     if (_newPasswordController.text.length < 6) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Password must be at least 6 characters'),
-          backgroundColor: AppTheme.primaryRose,
-        ),
+      await AdaptiveMessages.showError(
+        context,
+        'Password must be at least 6 characters',
       );
       return;
     }

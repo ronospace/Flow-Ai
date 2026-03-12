@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/ui/adaptive_messages.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../../core/theme/app_theme.dart';
@@ -219,11 +220,9 @@ class ProfileSection extends StatelessWidget {
                 await settings.updateDisplayName(name);
 
                 if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Display name updated!'),
-                      backgroundColor: AppTheme.successGreen,
-                    ),
+                  AdaptiveMessages.showSuccess(
+                    context,
+                    'Display name updated!',
                   );
                   Navigator.pop(context);
                 }
@@ -350,22 +349,18 @@ class ProfileSection extends StatelessWidget {
   void _selectFromCamera(BuildContext context, SettingsProvider settings) {
     // TODO: Implement camera selection
     Navigator.pop(context);
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Camera selection coming soon!'),
-        backgroundColor: AppTheme.secondaryBlue,
-      ),
+    AdaptiveMessages.showInfo(
+      context,
+      'Camera selection coming soon!',
     );
   }
 
   void _selectFromGallery(BuildContext context, SettingsProvider settings) {
     // TODO: Implement gallery selection
     Navigator.pop(context);
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Gallery selection coming soon!'),
-        backgroundColor: AppTheme.secondaryBlue,
-      ),
+    AdaptiveMessages.showInfo(
+      context,
+      'Gallery selection coming soon!',
     );
   }
 
@@ -375,11 +370,9 @@ class ProfileSection extends StatelessWidget {
 
     if (context.mounted) {
       Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Avatar removed!'),
-          backgroundColor: AppTheme.successGreen,
-        ),
+      AdaptiveMessages.showSuccess(
+        context,
+        'Avatar removed!',
       );
     }
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../core/ui/adaptive_messages.dart';
 import '../controllers/enhanced_onboarding_controller.dart';
 import '../widgets/personality_quiz_widget.dart';
 import '../widgets/cycle_history_import_widget.dart';
@@ -767,11 +768,9 @@ class _InteractiveOnboardingScreenState
         break;
     }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Theme.of(context).colorScheme.error,
-      ),
+    AdaptiveMessages.showError(
+      context,
+      message,
     );
   }
 

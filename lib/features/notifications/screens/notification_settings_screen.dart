@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/ui/adaptive_messages.dart';
 import 'package:provider/provider.dart';
 import '../../../core/notifications/smart_notification_system.dart';
 import '../../../core/services/user_service.dart';
@@ -787,24 +788,18 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
         );
 
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: const Text('Test notification sent!'),
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              behavior: SnackBarBehavior.floating,
-            ),
+          AdaptiveMessages.showSuccess(
+            context,
+            'Test notification sent!',
           );
         }
       }
     } catch (e) {
       debugPrint('Error sending test notification: $e');
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Failed to send test notification'),
-            backgroundColor: Colors.red,
-            behavior: SnackBarBehavior.floating,
-          ),
+        AdaptiveMessages.showError(
+          context,
+          'Failed to send test notification',
         );
       }
     }
@@ -816,23 +811,17 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
       // await NotificationPreferencesService.savePreferences(_preferences);
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Preferences saved successfully!'),
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            behavior: SnackBarBehavior.floating,
-          ),
+        AdaptiveMessages.showSuccess(
+          context,
+          'Preferences saved successfully!',
         );
       }
     } catch (e) {
       debugPrint('Error saving preferences: $e');
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Failed to save preferences'),
-            backgroundColor: Colors.red,
-            behavior: SnackBarBehavior.floating,
-          ),
+        AdaptiveMessages.showError(
+          context,
+          'Failed to save preferences',
         );
       }
     }

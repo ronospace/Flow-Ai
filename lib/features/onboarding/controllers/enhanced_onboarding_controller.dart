@@ -9,7 +9,8 @@ import '../../../core/services/auth_service.dart';
 class EnhancedOnboardingController extends ChangeNotifier {
   final UserPreferencesService _preferencesService = UserPreferencesService();
   final NotificationService _notificationService = NotificationService.instance;
-  final AuthService _authService = AuthService();
+  // AuthService access should come via AppStateService
+  // final AuthService _authService = AuthService();
 
   // Current onboarding state
   OnboardingData _data = OnboardingData();
@@ -45,7 +46,7 @@ class EnhancedOnboardingController extends ChangeNotifier {
     _setLoading(true);
     try {
       // Check if user is already authenticated
-      final isAuthenticated = await _authService.isAuthenticated;
+      final isAuthenticated = await AuthService().isAuthenticated;
       if (!isAuthenticated) {
         _setError('Please sign in to continue with onboarding');
         return;
@@ -70,9 +71,7 @@ class EnhancedOnboardingController extends ChangeNotifier {
       final periodLength = _preferencesService.getAveragePeriodLength();
       final trackingGoals = _preferencesService.getTrackingGoals();
 
-      if (cycleLength != null ||
-          periodLength != null ||
-          trackingGoals.isNotEmpty) {
+      if (trackingGoals.isNotEmpty) {
         _data = _data.copyWith(
           averageCycleLength: cycleLength,
           averagePeriodLength: periodLength,
@@ -418,7 +417,7 @@ class EnhancedOnboardingController extends ChangeNotifier {
   Future<bool> isOnboardingRequired() async {
     try {
       final isCompleted = _preferencesService.isOnboardingCompleted();
-      final isAuthenticated = await _authService.isAuthenticated;
+      final isAuthenticated = await AuthService().isAuthenticated;
       return !isCompleted && isAuthenticated;
     } catch (e) {
       debugPrint('Error checking onboarding requirement: $e');

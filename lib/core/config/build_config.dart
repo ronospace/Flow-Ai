@@ -11,8 +11,6 @@ class BuildConfig {
 
   /// Get required dependencies for each platform
   Map<String, List<String>> getRequiredDependencies() {
-    final platformInfo = _platformService.platformInfo;
-
     return {
       'common': [
         'flutter',
@@ -86,7 +84,6 @@ class BuildConfig {
   /// Get platform-specific compiler definitions
   Map<String, String> getCompilerDefinitions() {
     final platformInfo = _platformService.platformInfo;
-
     final definitions = <String, String>{
       'FLUTTER_COMPILED': 'true',
       'APP_VERSION': '1.0.0',
@@ -119,7 +116,6 @@ class BuildConfig {
   /// Get build arguments for different platforms
   Map<String, List<String>> getBuildArguments() {
     final platformInfo = _platformService.platformInfo;
-
     final args = <String, List<String>>{};
 
     if (platformInfo.platform == TargetPlatform.android) {
@@ -208,7 +204,6 @@ class BuildConfig {
   /// Get desktop build configurations
   Map<String, dynamic> getDesktopBuildConfig() {
     final platformInfo = _platformService.platformInfo;
-
     final config = <String, dynamic>{
       'enableAOT': !kDebugMode,
       'enableTreeShaking': !kDebugMode,
@@ -241,13 +236,13 @@ class BuildConfig {
   /// Generate pubspec.yaml dependencies section
   String generatePubspecDependencies() {
     final dependencies = getRequiredDependencies();
-    final platformInfo = _platformService.platformInfo;
-
     final buffer = StringBuffer();
     buffer.writeln('dependencies:');
     buffer.writeln('  flutter:');
     buffer.writeln('    sdk: flutter');
     buffer.writeln();
+
+    final platformInfo = _platformService.platformInfo;
 
     // Add common dependencies
     for (final dep in dependencies['common']!) {
@@ -820,7 +815,6 @@ const String BUILD_ENVIRONMENT = ENVIRONMENT;
 
 /// Build utilities for fixing common platform issues
 class BuildUtilities {
-  static final PlatformService _platformService = PlatformService();
 
   /// Fix common iOS build issues
   static List<String> getiOSBuildFixes() {

@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
-import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/models/cycle_data.dart';
 import '../../../core/database/database_service.dart';
 import '../../../generated/app_localizations.dart';
 import '../../../core/widgets/modern_button.dart';
+import '../../../core/ui/adaptive_messages.dart';
 import '../widgets/flow_intensity_picker.dart';
 import '../widgets/symptom_selector.dart';
 import '../widgets/mood_energy_slider.dart';
@@ -175,8 +175,6 @@ class _TrackingScreenState extends State<TrackingScreen>
 
     try {
       final databaseService = DatabaseService();
-      final localizations = AppLocalizations.of(context);
-
       // Append quick notes tags to notes if selected
       final quickNotesText = _selectedQuickNotes.isEmpty
           ? ''
@@ -221,120 +219,7 @@ class _TrackingScreenState extends State<TrackingScreen>
           }
         });
 
-        // Show enhanced success feedback with animation and improved styling
-        final theme = Theme.of(context);
-
-        // Use a try-catch to handle ScaffoldMessenger context issues
-        try {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Container(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.surface,
-                        borderRadius: BorderRadius.circular(18),
-                        boxShadow: [
-                          BoxShadow(
-                            color: theme.shadowColor.withValues(alpha: 0.15),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Icon(
-                        Icons.celebration,
-                        color: AppTheme.primaryRose,
-                        size: 20,
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Row(
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  '🎉 Data Successfully Saved!',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                    color: theme.colorScheme.onPrimary,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Tracking for ${DateFormat('MMMM d, yyyy').format(_selectedDate)} securely stored',
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: theme.colorScheme.onPrimary,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.onPrimary.withValues(
-                          alpha: 0.2,
-                        ),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        '✓',
-                        style: TextStyle(
-                          color: theme.colorScheme.onPrimary,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              backgroundColor: AppTheme.primaryRose,
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              margin: const EdgeInsets.all(16),
-              duration: const Duration(
-                milliseconds: 1000,
-              ), // Fast display for better UX
-              elevation: 12,
-            ),
-          );
-        } catch (e) {
-          // Fallback: show simple success indicator if ScaffoldMessenger fails
-          debugPrint(
-            '✅ Data saved successfully for ${DateFormat('MMMM d, yyyy').format(_selectedDate)}',
-          );
-        }
-
-        // Auto-navigate removed - let user control tab switching manually
-        // This allows proper completion of subcategories within each tab
-
-        // Smart post-save navigation after delay
-        // _scheduleSmartNavigation();
-
-        // Always show a quick action suggestion after 2 seconds for user engagement
-        // _scheduleQuickActionSuggestion();
+        await AdaptiveMessages.showSuccess(context, 'Saved');
       }
     } catch (e) {
       // Handle save errors
@@ -348,66 +233,7 @@ class _TrackingScreenState extends State<TrackingScreen>
         // Error haptic feedback
         HapticFeedback.heavyImpact();
 
-        final theme = Theme.of(context);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Row(
-              children: [
-                Container(
-                  width: 24,
-                  height: 24,
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.onError.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(
-                    Icons.error_outline,
-                    color: theme.colorScheme.onError,
-                    size: 16,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Text(
-                        'Save Failed',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14,
-                        ),
-                      ),
-                      Text(
-                        'Please check your connection and try again',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: theme.colorScheme.onError.withValues(
-                            alpha: 0.1,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            backgroundColor: Colors.red.shade600,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            margin: const EdgeInsets.all(16),
-            duration: const Duration(seconds: 4),
-            elevation: 8,
-            action: SnackBarAction(
-              label: 'Retry',
-              textColor: theme.colorScheme.onError,
-              onPressed: _saveTrackingData,
-            ),
-          ),
-        );
+        await AdaptiveMessages.showError(context, 'Failed to save tracking data');
       }
     }
   }
@@ -1282,222 +1108,10 @@ class _TrackingScreenState extends State<TrackingScreen>
         return 'Heavy flow - monitor iron intake and rest.';
       case FlowIntensity.veryHeavy:
         return 'Very heavy flow - consider tracking for your doctor.';
-      default:
-        return 'Keep tracking for better insights';
     }
   }
 
-  // Auto-navigate to next tab after save
-  void _autoNavigateToNextTab() {
-    // Get current tab index
-    final currentTabIndex = _tabController.index;
-    final totalTabs = _tabController.length;
 
-    // Only navigate if not on last tab
-    if (currentTabIndex < totalTabs - 1) {
-      // Schedule navigation with small delay for better UX
-      Timer(const Duration(milliseconds: 800), () {
-        if (mounted) {
-          // Animate to next tab
-          _tabController.animateTo(currentTabIndex + 1);
 
-          // Provide haptic feedback
-          HapticFeedback.selectionClick();
-        }
-      });
-    }
-  }
 
-  // Smart navigation helper methods
-  bool _shouldShowSmartNavigation() {
-    // Only show navigation suggestion for critical situations
-    final hasCriticalData =
-        (_flowIntensity == FlowIntensity.heavy ||
-            _flowIntensity == FlowIntensity.veryHeavy) ||
-        (_symptoms.length >= 3) || // Multiple symptoms
-        (_pain >= 4.0) || // High pain
-        (_painAreas.length >= 2); // Multiple pain areas
-
-    return hasCriticalData;
-  }
-
-  void _navigateToInsights() {
-    // Navigate to insights/analytics page
-    context.go('/insights');
-  }
-
-  void _scheduleSmartNavigation() {
-    // Only schedule auto-navigation if user has entered substantial tracking data
-    if (!_shouldShowSmartNavigation()) return;
-
-    // Wait 6 seconds after save confirmation, then show navigation options
-    Timer(const Duration(seconds: 6), () {
-      if (!mounted) return;
-
-      // Determine best next screen based on tracked data
-      String nextScreen = _determineNextScreen();
-      String screenTitle = _getScreenTitle(nextScreen);
-
-      // Show bottom sheet with navigation options
-      _showSmartNavigationSheet(nextScreen, screenTitle);
-    });
-  }
-
-  void _scheduleQuickActionSuggestion() {
-    // Show a quick action suggestion for all users after 2 seconds
-    Timer(const Duration(seconds: 2), () {
-      if (!mounted) return;
-
-      // Don't show if critical navigation is already scheduled
-      if (_shouldShowSmartNavigation()) return;
-
-      // Show a brief, helpful next action
-      _showQuickActionSnackBar();
-    });
-  }
-
-  void _showQuickActionSnackBar() {
-    final theme = Theme.of(context);
-
-    try {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Row(
-            children: [
-              Icon(
-                Icons.lightbulb_outline,
-                color: AppTheme.accentMint,
-                size: 20,
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  'Great job tracking! View your progress or add more entries.',
-                  style: TextStyle(
-                    color: theme.colorScheme.onSurface,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          backgroundColor: theme.colorScheme.surface,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          margin: const EdgeInsets.all(16),
-          duration: const Duration(seconds: 3),
-          action: SnackBarAction(
-            label: 'View Progress',
-            textColor: AppTheme.primaryRose,
-            onPressed: () => context.go('/insights'),
-          ),
-        ),
-      );
-    } catch (e) {
-      // Fallback: log success message if ScaffoldMessenger fails
-      debugPrint(
-        '💡 Quick action suggestion: View your progress or add more entries',
-      );
-    }
-  }
-
-  String _determineNextScreen() {
-    // Smart logic to suggest next screen based on what was tracked
-    if (_symptoms.isNotEmpty || _pain > 2.0) {
-      return '/insights'; // Show health insights if symptoms or pain
-    } else if (_flowIntensity != FlowIntensity.none) {
-      return '/cycle'; // Show cycle overview for flow tracking
-    } else if (_notes.isNotEmpty && _notes.length > 50) {
-      return '/journal'; // Show journal/notes history for detailed entries
-    } else {
-      return '/home'; // Default to home screen
-    }
-  }
-
-  String _getScreenTitle(String route) {
-    switch (route) {
-      case '/insights':
-        return 'Health Insights';
-      case '/cycle':
-        return 'Cycle Overview';
-      case '/journal':
-        return 'Personal Journal';
-      case '/home':
-      default:
-        return 'Home Dashboard';
-    }
-  }
-
-  void _showSmartNavigationSheet(String nextScreen, String screenTitle) {
-    final theme = Theme.of(context);
-
-    try {
-      // Show a more subtle snackbar instead of full modal
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Row(
-            children: [
-              Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
-                  ),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Icon(Icons.auto_awesome, color: Colors.white, size: 16),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'AI Insights Available',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: theme.colorScheme.onSurface,
-                        fontSize: 14,
-                      ),
-                    ),
-                    Text(
-                      'View personalized health recommendations',
-                      style: TextStyle(
-                        color: theme.colorScheme.onSurface.withValues(
-                          alpha: 0.8,
-                        ),
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          backgroundColor: theme.colorScheme.surface,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          margin: const EdgeInsets.all(16),
-          duration: const Duration(seconds: 4),
-          elevation: 8,
-          action: SnackBarAction(
-            label: 'View Insights',
-            textColor: AppTheme.primaryRose,
-            onPressed: () => context.go(nextScreen),
-          ),
-        ),
-      );
-    } catch (e) {
-      // Fallback: log smart navigation suggestion if ScaffoldMessenger fails
-      debugPrint(
-        '🤖 AI Insights Available: View personalized health recommendations at $screenTitle',
-      );
-    }
-  }
 }

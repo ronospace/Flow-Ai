@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import '../models/user_profile.dart';
 import 'local_user_service.dart';
-import 'auth_service.dart';
 
 /// Service for managing user profiles and related operations
 class UserService extends ChangeNotifier {
@@ -14,7 +13,8 @@ class UserService extends ChangeNotifier {
   bool _isInitialized = false;
 
   final LocalUserService _localUserService = LocalUserService();
-  final AuthService _authService = AuthService();
+  // AuthService access should come via AppStateService
+  // final AuthService _authService = AuthService();
 
   UserProfile? get currentUser => _currentUser;
   bool get isInitialized => _isInitialized;

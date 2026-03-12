@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/ui/adaptive_messages.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/ai/period_prediction_engine.dart';
@@ -59,11 +60,9 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
         setState(() {
           isLoading = false;
         });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to generate prediction: $e'),
-            backgroundColor: AppTheme.primaryRose,
-          ),
+        AdaptiveMessages.showError(
+          context,
+          'Failed to generate prediction: $e',
         );
       }
     }

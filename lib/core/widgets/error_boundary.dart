@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../theme/app_theme.dart';
+import '../ui/adaptive_messages.dart';
 import '../services/app_enhancement_service.dart';
 import '../utils/app_logger.dart';
 
@@ -402,21 +403,10 @@ ${_stackTrace != null ? '\nStack Trace:\n${_stackTrace.toString()}' : ''}
         await Clipboard.setData(ClipboardData(text: errorReport));
 
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: const Row(
-                children: [
-                  Icon(Icons.copy_rounded, color: Colors.white),
-                  SizedBox(width: 8),
-                  Text('Error details copied to clipboard'),
-                ],
-              ),
-              backgroundColor: AppTheme.successGreen,
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
+          AdaptiveMessages.showSuccess(
+            context,
+            'Error details copied',
+            duration: const Duration(milliseconds: 1000),
           );
         }
       }

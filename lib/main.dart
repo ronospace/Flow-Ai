@@ -28,7 +28,6 @@ import 'core/services/navigation_service.dart';
 import 'core/services/ai_conversation_memory.dart';
 import 'core/services/offline_service.dart';
 import 'core/services/app_state_service.dart';
-import 'core/services/local_user_service.dart';
 import 'core/services/memory_manager.dart';
 import 'core/services/platform_service.dart';
 import 'core/services/production_analytics_service.dart';
@@ -43,7 +42,7 @@ import 'features/insights/providers/insights_provider.dart';
 import 'features/health/providers/health_provider.dart';
 import 'features/settings/providers/settings_provider.dart';
 import 'features/premium/providers/premium_provider.dart';
-import 'core/services/auth_service.dart';
+import 'features/premium/providers/subscription_provider.dart';
 import 'features/analytics/providers/analytics_provider.dart';
 
 void main() async {
@@ -66,8 +65,7 @@ void main() async {
     _initializeNonCriticalServices();
   });
 
-  // Initialize non-critical services asynchronously after app launch
-  _initializeNonCriticalServices();
+
 }
 
 Future<void> _initializeCriticalServices() async {
@@ -111,19 +109,24 @@ Future<void> _initializeNonCriticalServices() async {
   await Future.delayed(const Duration(milliseconds: 100));
 
   // Initialize services in parallel with optimized batching for faster startup
+  // Tier 1: lightweight services
   await Future.wait([
-    _initializeMemoryManager(),
-    _initializeAdMob(),
-    _initializeAI(),
     _initializeNotifications(),
     _initializeNavigation(),
-    _initializeAuth(),
-    _initializeLocalUserService(),
-    _initializeAIMemory(),
     _initializeOfflineService(),
     _initializeProductionAnalytics(),
-    _initializeFuturisticServices(),
-  ], eagerError: false); // Don't fail all services if one fails
+  ], eagerError: false);
+
+  // Tier 2: heavy services moved to background
+  Future.microtask(() async {
+    await Future.wait([
+      _initializeMemoryManager(),
+      _initializeAdMob(),
+      _initializeAI(),
+      _initializeAIMemory(),
+      _initializeFuturisticServices(),
+    ], eagerError: false);
+  }); // Don't fail all services if one fails
 
   // Background preloading for faster UI responsiveness
   _preloadCriticalData();
@@ -170,22 +173,6 @@ Future<void> _initializeNavigation() async {
 }
 
 // Auth is now initialized by AppStateService
-Future<void> _initializeAuth() async {
-  // Skip this since it's already handled by AppStateService
-  AppLogger.auth(
-    'Authentication Service already initialized via AppStateService',
-  );
-}
-
-Future<void> _initializeLocalUserService() async {
-  try {
-    await LocalUserService().initialize();
-    AppLogger.success('Local User Service initialized');
-  } catch (e) {
-    AppLogger.warning('Local User Service initialization failed: $e');
-  }
-}
-
 Future<void> _initializeAIMemory() async {
   try {
     await AIConversationMemory().initialize();
@@ -219,7 +206,7 @@ Future<void> _initializeMemoryManager() async {
 Future<void> _initializeProductionAnalytics() async {
   try {
     await ProductionAnalyticsService().initialize();
-    AppLogger.success('Production Analytics Service initialized');
+    // analytics service logs its own initialization
   } catch (e) {
     AppLogger.warning('Production Analytics Service initialization failed: $e');
   }
@@ -291,7 +278,6 @@ class FlowAIApp extends StatefulWidget {
 
 
 class _FlowAIAppState extends State<FlowAIApp> {
-  final AuthService _authService = AuthService();
   final AppLinks _appLinks = AppLinks();
   StreamSubscription<Uri>? _linkSub;
 
@@ -381,8 +367,8 @@ class _FlowAIAppState extends State<FlowAIApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        Provider<AppStateService>.value(value: AppStateService()),
         ChangeNotifierProvider(create: (_) => PartnerService()),
-        Provider<AuthService>.value(value: _authService),
         ChangeNotifierProvider(create: (_) => OnboardingProvider()),
         ChangeNotifierProvider(create: (_) => CycleProvider()),
         ChangeNotifierProvider(create: (_) => InsightsProvider()),
@@ -391,6 +377,7 @@ class _FlowAIAppState extends State<FlowAIApp> {
         ChangeNotifierProvider.value(value: settingsProvider),
         ChangeNotifierProvider.value(value: progressiveDisclosureService),
         ChangeNotifierProvider(create: (_) => PremiumProvider()),
+        ChangeNotifierProvider(create: (_) => SubscriptionProvider()),
       ],
       child: Consumer<SettingsProvider>(
         builder: (context, settings, child) {

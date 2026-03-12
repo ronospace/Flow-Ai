@@ -6,6 +6,7 @@ import '../models/onboarding_step.dart';
 import '../widgets/onboarding_page.dart';
 import '../widgets/setup_form.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/ui/adaptive_messages.dart';
 import 'package:go_router/go_router.dart';
 import '../../../generated/app_localizations.dart';
 
@@ -78,7 +79,18 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                     _buildProgressIndicator(provider, theme),
                     // Page content
                     Expanded(
-                      child: PageView.builder(
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTapUp: (details) {
+                          final width = MediaQuery.of(context).size.width;
+                          final dx = details.globalPosition.dx;
+                          if (dx < width * 0.22 && !provider.isFirstStep) {
+                            _previousStep(provider);
+                          } else if (dx > width * 0.78) {
+                            _nextStep(provider);
+                          }
+                        },
+                        child: PageView.builder(
                         controller: _pageController,
                         onPageChanged: (index) {
                           provider.setCurrentStep(index);
@@ -103,6 +115,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                         },
                       ),
                     ),
+                  ),
                     // Navigation buttons
                     _buildNavigationButtons(provider, theme, localizations),
                   ],
@@ -192,25 +205,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       padding: const EdgeInsets.all(20),
       child: Row(
         children: [
-          // Back button
-          if (!provider.isFirstStep)
-            Expanded(
-              child: OutlinedButton(
-                onPressed: () => _previousStep(provider),
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  side: BorderSide(color: theme.colorScheme.primary),
-                ),
-                child: Text(
-                  localizations.previous,
-                  style: TextStyle(color: theme.colorScheme.primary),
-                ),
-              ),
-            ),
-          if (!provider.isFirstStep) const SizedBox(width: 12),
-          // Next/Complete button
           Expanded(
-            flex: provider.isFirstStep ? 1 : 1,
             child: ElevatedButton(
               onPressed: () => _nextStep(provider),
               style: ElevatedButton.styleFrom(
@@ -221,14 +216,26 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: Text(
-                provider.isLastStep
-                    ? localizations.getStarted
-                    : localizations.next,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  color: theme.colorScheme.onPrimary,
-                  fontWeight: FontWeight.w600,
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    provider.isLastStep
+                        ? localizations.getStarted
+                        : localizations.next,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      color: theme.colorScheme.onPrimary,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  if (!provider.isLastStep) ...[
+                    const SizedBox(width: 8),
+                    Icon(
+                      Icons.arrow_forward_rounded,
+                      color: theme.colorScheme.onPrimary,
+                    ),
+                  ],
+                ],
               ),
             ),
           ),
@@ -380,33 +387,11 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
   /// Helper method to show success messages (works with both Material and Cupertino)
   void _showSuccessMessage(String message) {
-    try {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-    } catch (e) {
-      // Fallback to debug print if ScaffoldMessenger is not available
-      debugPrint('Success: $message');
-    }
+    AdaptiveMessages.showSuccess(context, message);
   }
 
   /// Helper method to show error messages (works with both Material and Cupertino)
   void _showErrorMessage(String message) {
-    try {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: Theme.of(context).colorScheme.error,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-    } catch (e) {
-      // Fallback to debug print if ScaffoldMessenger is not available
-      debugPrint('Error: $message');
-    }
+    AdaptiveMessages.showError(context, message);
   }
 }

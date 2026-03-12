@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/ui/adaptive_messages.dart';
 import 'package:provider/provider.dart';
 import '../providers/premium_provider.dart';
 import '../models/subscription.dart';
@@ -486,20 +487,14 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen>
                 );
 
                 if (success && mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Subscription activated successfully!'),
-                      backgroundColor: Colors.green,
-                    ),
+                  AdaptiveMessages.showSuccess(
+                    context,
+                    'Subscription activated successfully!',
                   );
                 } else if (!success && mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        provider.error ?? 'Purchase failed. Please try again.',
-                      ),
-                      backgroundColor: Colors.red,
-                    ),
+                  AdaptiveMessages.showError(
+                    context,
+                    provider.error ?? 'Purchase failed. Please try again.',
                   );
                 }
               },
@@ -527,15 +522,14 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen>
       onPressed: () async {
         final success = await provider.restoreSubscription();
         if (success && mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Subscription restored successfully!'),
-              backgroundColor: Colors.green,
-            ),
+          AdaptiveMessages.showSuccess(
+            context,
+            'Subscription restored successfully!',
           );
         } else if (!success && mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('No subscription found to restore.')),
+          AdaptiveMessages.showInfo(
+            context,
+            'No subscription found to restore.',
           );
         }
       },
@@ -831,11 +825,9 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen>
                 final success = await provider.cancelSubscription();
 
                 if (success && mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Subscription cancelled successfully'),
-                      backgroundColor: Colors.orange,
-                    ),
+                  AdaptiveMessages.showSuccess(
+                    context,
+                    'Subscription cancelled successfully',
                   );
                 }
               }

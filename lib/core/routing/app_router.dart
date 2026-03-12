@@ -21,6 +21,8 @@ import '../../features/settings/screens/settings_screen.dart';
 import '../../features/partner/screens/partner_dashboard_screen.dart';
 import '../../features/feedback/screens/feedback_screen.dart';
 import '../../features/future_plans/screens/future_plans_screen.dart';
+import '../../features/premium/screens/premium_subscription_screen.dart';
+import '../../features/premium/screens/premium_paywall_screen.dart';
 import 'package:flow_ai/core/deeplinks/invite_gate_page.dart';
 import 'package:flow_ai/core/deeplinks/deep_link_normalizer.dart';
 
@@ -159,6 +161,17 @@ class AppRouter {
             builder: (_) => aicoach.AICoachScreen(),
           ),
         ),
+      ),
+
+      GoRoute(
+        path: '/premium',
+        name: 'premium',
+        builder: (context, state) => const PremiumSubscriptionScreen(),
+      ),
+      GoRoute(
+        path: '/premium/paywall',
+        name: 'premium-paywall',
+        builder: (context, state) => const PremiumPaywallScreen(),
       ),
 
       // Feedback and Future Plans Routes
