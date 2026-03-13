@@ -46,6 +46,8 @@ class _PersonalInfoStepScreenState extends State<PersonalInfoStepScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final localizations = AppLocalizations.of(context);
 
     return Container(
       decoration: BoxDecoration(
@@ -175,6 +177,7 @@ class _PersonalInfoStepScreenState extends State<PersonalInfoStepScreen> {
     required IconData icon,
     String? Function(String?)? validator,
   }) {
+    final theme = Theme.of(context);
 
     return Container(
       decoration: BoxDecoration(

@@ -90,6 +90,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       children: [
         // Body map
@@ -169,6 +170,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
     bool isActive,
     bool isSelected,
   ) {
+    final theme = Theme.of(context);
     final color = _getColorForIntensity(intensity);
 
     return GestureDetector(
@@ -240,6 +242,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
   }
 
   Widget _buildSelectedAreaDetails() {
+    final theme = Theme.of(context);
     final area = _bodyAreas[_selectedArea!]!;
     final intensity = widget.painAreas[_selectedArea!] ?? 0.0;
 
@@ -325,6 +328,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
   }
 
   Widget _buildPainIntensitySlider() {
+    final theme = Theme.of(context);
     final intensity = widget.painAreas[_selectedArea!] ?? 0.0;
     final color = _getColorForIntensity(intensity);
 
@@ -395,6 +399,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
   }
 
   Widget _buildQuickPainLevels() {
+    final theme = Theme.of(context);
     if (_selectedArea == null) {
       return Container(
         padding: const EdgeInsets.all(20),
@@ -514,6 +519,8 @@ class _PainBodyMapState extends State<PainBodyMap> {
       Color(0xFFFF5722), // 4 - Severe
       AppTheme.primaryRose, // 5 - Very severe
     ];
+
+    final index = intensity.round().clamp(0, colors.length - 1);
     return colors[index];
   }
 
@@ -560,6 +567,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
       context: context,
       backgroundColor: Colors.transparent,
       builder: (modalContext) {
+        final theme = Theme.of(modalContext);
         return Container(
           decoration: BoxDecoration(
             color: theme.colorScheme.surface,

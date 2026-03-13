@@ -13,6 +13,7 @@ class ThemeSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       height: MediaQuery.of(context).size.height * 0.4,
       decoration: BoxDecoration(
@@ -133,6 +134,7 @@ class ThemeSelector extends StatelessWidget {
     IconData icon,
     Color iconColor,
   ) {
+    final theme = Theme.of(context);
     final isSelected = settings.preferences.themeMode == themeMode;
 
     return Container(

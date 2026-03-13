@@ -188,6 +188,7 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
   }
 
   Widget _buildHeader(BuildContext context) {
+    final theme = Theme.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -224,6 +225,7 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
   }
 
   Widget _buildPrivacyPromise(BuildContext context) {
+    final theme = Theme.of(context);
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -300,6 +302,7 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
     BuildContext context,
     Map<String, dynamic> option,
   ) {
+    final theme = Theme.of(context);
     bool currentValue;
 
     switch (option['id']) {
@@ -461,6 +464,7 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
   }
 
   Widget _buildDataRightsSection(BuildContext context) {
+    final theme = Theme.of(context);
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -535,6 +539,7 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
     required String title,
     required String description,
   }) {
+    final theme = Theme.of(context);
 
     return Row(
       children: [
@@ -571,6 +576,7 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
   }
 
   Widget _buildSecurityFeatures(BuildContext context) {
+    final theme = Theme.of(context);
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -656,6 +662,7 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
     required String title,
     required String subtitle,
   }) {
+    final theme = Theme.of(context);
 
     return Column(
       children: [

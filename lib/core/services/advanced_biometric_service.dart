@@ -546,6 +546,7 @@ class AdvancedBiometricService {
       if (!_isInitialized || _health == null) return;
 
       final now = DateTime.now();
+      final startTime = _lastSyncTime ?? now.subtract(const Duration(days: 7));
 
       for (final dataType in _supportedDataTypes) {
         try {

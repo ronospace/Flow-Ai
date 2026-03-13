@@ -33,6 +33,7 @@ class _MedicalCitationsSectionState extends State<MedicalCitationsSection> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -172,6 +173,7 @@ class _MedicalCitationsSectionState extends State<MedicalCitationsSection> {
   }
 
   Widget _buildCitationsList(BuildContext context) {
+    final theme = Theme.of(context);
     final allCitations = MedicalCitationsDatabase.getAllCitations();
 
     // Filter by category
@@ -264,6 +266,7 @@ class _MedicalCitationsSectionState extends State<MedicalCitationsSection> {
   }
 
   Widget _buildCitationCard(BuildContext context, MedicalCitation citation) {
+    final theme = Theme.of(context);
 
     return Card(
       margin: const EdgeInsets.only(bottom: 12),

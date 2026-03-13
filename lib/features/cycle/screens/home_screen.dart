@@ -14,6 +14,7 @@ import '../providers/cycle_provider.dart';
 import '../../insights/providers/insights_provider.dart';
 import '../../settings/providers/settings_provider.dart';
 import '../../../core/services/cycle_calculation_engine.dart';
+import '../../../core/widgets/coming_soon_widget.dart';
 import '../../healthcare/screens/healthcare_provider_portal_screen.dart';
 import '../../analytics/screens/enhanced_analytics_dashboard_screen.dart';
 import '../../../core/ai/period_prediction_engine.dart';
@@ -169,6 +170,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildBannerAdWidget() {
+    final theme = Theme.of(context);
     return Container(
       width: double.infinity,
       height: 60,
@@ -190,6 +192,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildPremiumInsightsUnlockWidget() {
+    final localizations = AppLocalizations.of(context);
+    final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(20),
@@ -348,6 +352,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildLockedAdvancedInsightTeaserWidget() {
+    final localizations = AppLocalizations.of(context);
+    final theme = Theme.of(context);
 
     final teaser = Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -486,6 +492,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   void _showRewardedAdForInsights() {
+    final localizations = AppLocalizations.of(context);
+    final theme = Theme.of(context);
     _adMobService.showRewardedAdWithFrequency(
       onRewarded: (reward) {
         // User watched the full ad, unlock premium insights
@@ -529,6 +537,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final localizations = AppLocalizations.of(context);
     final appState = context.read<AppStateService>();
     final user = appState.auth.currentUser;
 
@@ -544,7 +554,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         backgroundColor: Colors.transparent,
         elevation: 0,
 
-
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
@@ -557,7 +566,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             ),
           ),
         ],
-
       ),
       body: Stack(
         children: [
@@ -652,6 +660,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildLoadingInterface(AppLocalizations localizations) {
+    final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
     return Container(
@@ -740,6 +749,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildRevolutionaryHeader(SettingsProvider settingsProvider) {
+    final theme = Theme.of(context);
+    final localizations = AppLocalizations.of(context);
     final now = DateTime.now();
     final baseGreeting = now.hour < 12
         ? localizations.goodMorning
@@ -928,6 +939,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
 
   Widget _buildCycleInfo(String label, String value) {
+    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -983,6 +995,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildHealthDashboardMatrix(CycleProvider provider) {
+    final theme = Theme.of(context);
+    final localizations = AppLocalizations.of(context);
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -1120,19 +1134,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     Color color,
     String accuracy,
   ) {
+    final theme = Theme.of(context);
     return Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [
-                color.withValues(alpha: 0.10),
-                color.withValues(alpha: 0.035),
-              ],
+              colors: [theme.cardColor, color.withValues(alpha: 0.02)],
             ),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: color.withValues(alpha: 0.28), width: 1.2),
+            border: Border.all(color: color.withValues(alpha: 0.2), width: 1),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1186,6 +1198,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildPredictiveAnalyticsCenter(CycleProvider provider) {
+    final theme = Theme.of(context);
+    final localizations = AppLocalizations.of(context);
     final prediction = provider.predictions;
 
     return Container(
@@ -1425,6 +1439,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildAIHealthInsightsPortal(InsightsProvider provider) {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -1683,6 +1698,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildSmartActionCommandCenter() {
+    final theme = Theme.of(context);
+    final localizations = AppLocalizations.of(context);
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -1812,7 +1829,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               colors: [Colors.white, color.withValues(alpha: 0.03)],
             ),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: color.withValues(alpha: 0.28), width: 1.2),
+            border: Border.all(color: color.withValues(alpha: 0.2), width: 1),
           ),
           child: Material(
             color: Colors.transparent,
@@ -1886,6 +1903,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildHealthTrendsVisualization() {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -2191,6 +2209,7 @@ class HealthScorePainter extends CustomPainter {
 
 extension _PremiumFeaturesMethods on _HomeScreenState {
   Widget _buildPremiumFeaturesPreview() {
+    final theme = Theme.of(context);
 
     return Container(
       padding: const EdgeInsets.all(24),
@@ -2336,6 +2355,7 @@ extension _PremiumFeaturesMethods on _HomeScreenState {
     String estimatedDate,
     VoidCallback onTap,
   ) {
+    final theme = Theme.of(context);
 
     return Container(
           decoration: BoxDecoration(
@@ -2345,7 +2365,7 @@ extension _PremiumFeaturesMethods on _HomeScreenState {
               colors: [Colors.white, color.withValues(alpha: 0.02)],
             ),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: color.withValues(alpha: 0.28), width: 1.2),
+            border: Border.all(color: color.withValues(alpha: 0.2), width: 1),
           ),
           child: Material(
             color: Colors.transparent,
@@ -2512,6 +2532,7 @@ class _LazyWidgetState extends State<_LazyWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     // Only build widget when it's needed (when scrolled into view)
     if (!_isBuilt) {
       // Use a post-frame callback to defer building until the frame is complete

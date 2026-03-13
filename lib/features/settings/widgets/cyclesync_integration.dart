@@ -22,6 +22,7 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
   Widget build(BuildContext context) {
     return Consumer<SettingsProvider>(
       builder: (context, settings, child) {
+        final isConnected = settings.preferences.syncWithCycleSync;
 
         return SettingsSection(
           title: 'Flow iQ Integration',

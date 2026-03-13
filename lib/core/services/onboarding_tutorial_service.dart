@@ -404,6 +404,7 @@ class TutorialOverlayWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final isLastStep = currentStep == totalSteps - 1;
 
     return Material(

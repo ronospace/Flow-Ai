@@ -97,6 +97,7 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
   }
 
   Widget _buildFiltersAndSort(BuildContext context) {
+    final theme = Theme.of(context);
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -234,6 +235,7 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
     Discussion discussion,
     int index,
   ) {
+    final theme = Theme.of(context);
 
     return AnimatedContainer(
       duration: Duration(milliseconds: 100 + (index * 50)),
@@ -461,6 +463,7 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
     bool isActive = false,
     Color? color,
   }) {
+    final theme = Theme.of(context);
     final buttonColor = isActive && color != null
         ? color
         : theme.colorScheme.onSurface.withValues(alpha: 0.7);
@@ -491,6 +494,7 @@ class _DiscussionBoardWidgetState extends State<DiscussionBoardWidget>
   }
 
   Widget _buildEmptyState(BuildContext context) {
+    final theme = Theme.of(context);
 
     return Center(
       child: Padding(

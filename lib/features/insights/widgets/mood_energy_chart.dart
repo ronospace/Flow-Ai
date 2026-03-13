@@ -17,6 +17,7 @@ class MoodEnergyChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final filteredData = _getFilteredData();
 
     if (filteredData.isEmpty) {
@@ -287,6 +288,7 @@ class MoodEnergyChart extends StatelessWidget {
   }
 
   Widget _buildEmptyState(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(40),
       decoration: BoxDecoration(
@@ -330,6 +332,7 @@ class MoodEnergyChart extends StatelessWidget {
   }
 
   Widget _buildLegendItem(String label, Color color, BuildContext context) {
+    final theme = Theme.of(context);
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -361,6 +364,7 @@ class MoodEnergyChart extends StatelessWidget {
     IconData icon,
     BuildContext context,
   ) {
+    final theme = Theme.of(context);
     return Column(
       children: [
         Icon(icon, color: color, size: 16),
@@ -414,6 +418,7 @@ class MoodEnergyChart extends StatelessWidget {
 
   List<FlSpot> _getMoodData(List<CycleData> data) {
     return data.asMap().entries.map((entry) {
+      final index = entry.key.toDouble();
       final cycle = entry.value;
       // Mock mood data based on cycle phase
       final moodScore = _getMockMoodScore(cycle);
@@ -423,6 +428,7 @@ class MoodEnergyChart extends StatelessWidget {
 
   List<FlSpot> _getEnergyData(List<CycleData> data) {
     return data.asMap().entries.map((entry) {
+      final index = entry.key.toDouble();
       final cycle = entry.value;
       // Mock energy data based on cycle phase
       final energyScore = _getMockEnergyScore(cycle);

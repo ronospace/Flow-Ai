@@ -52,6 +52,7 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
 
     return AnimatedBuilder(
       animation: _fadeAnimation,
@@ -181,6 +182,7 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
           ),
           const SizedBox(height: 12),
           ...recentMessages.asMap().entries.map((entry) {
+            final index = entry.key;
             final message = entry.value;
             return _buildMessagePreview(theme, message, index);
           }),
@@ -530,6 +532,7 @@ class _PartnerCommunicationWidgetState extends State<PartnerCommunicationWidget>
   }
 
   Widget _buildAvatar(bool isFromPartner) {
+    final theme = Theme.of(context);
     return Container(
       width: 32,
       height: 32,

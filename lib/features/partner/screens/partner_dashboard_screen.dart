@@ -97,6 +97,8 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final localizations = AppLocalizations.of(context);
 
     return Scaffold(
       body: Consumer<PartnerService>(
@@ -230,6 +232,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     AppLocalizations localizations,
     PartnerService partnerService,
   ) {
+    final partnership = partnerService.currentPartnership!;
     // Service Partnership doesn't have status field, so assume active if partnership exists
     final isConnected =
         partnerService.hasPartner &&
@@ -403,6 +406,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     IconData icon,
     Color color,
   ) {
+    final theme = Theme.of(context);
     return Column(
       children: [
         Icon(icon, color: color, size: 20),
@@ -522,6 +526,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
   }
 
   Widget _buildActionCard(_ActionButton action) {
+    final theme = Theme.of(context);
     return Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -674,6 +679,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     PartnerService partnerService,
   ) {
     // Get current user ID from partnership
+    final partnership = partnerService.currentPartnership;
     if (partnership == null) {
       return const SizedBox.shrink();
     }
@@ -702,6 +708,8 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
           type = CareActionType.checkIn;
           break;
       }
+
+      final partnership = partnerService.currentPartnership!;
       return CareAction(
         id: pa.id,
         partnershipId: pa.partnershipId,

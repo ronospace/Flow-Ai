@@ -44,6 +44,7 @@ class AdvancedPredictionModels {
 
     // Simple irregularity calculation
     final lengths = cycles.map((c) => c.length).toList();
+    final avgLength = lengths.reduce((a, b) => a + b) / lengths.length;
     final variance =
         lengths
             .map((l) => (l - avgLength) * (l - avgLength))

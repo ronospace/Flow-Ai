@@ -108,6 +108,7 @@ class _GamificationDashboardScreenState
     BuildContext context,
     GamificationController controller,
   ) {
+    final theme = Theme.of(context);
 
     return SliverAppBar(
       expandedHeight: 280,
@@ -203,6 +204,7 @@ class _GamificationDashboardScreenState
     BuildContext context,
     GamificationController controller,
   ) {
+    final theme = Theme.of(context);
 
     return Row(
       children: [
@@ -250,6 +252,7 @@ class _GamificationDashboardScreenState
     required String subtitle,
     required Color color,
   }) {
+    final theme = Theme.of(context);
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -420,6 +423,7 @@ class _GamificationDashboardScreenState
     required IconData icon,
     required Color color,
   }) {
+    final theme = Theme.of(context);
 
     return Row(
       children: [
@@ -462,6 +466,7 @@ class _GamificationDashboardScreenState
     BuildContext context,
     GamificationController controller,
   ) {
+    final theme = Theme.of(context);
 
     return Container(
       padding: const EdgeInsets.all(20),

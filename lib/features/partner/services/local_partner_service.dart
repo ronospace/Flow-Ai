@@ -106,6 +106,8 @@ class LocalPartnerService {
     // Get current user info
     final userInfo = await _getCurrentUserInfo();
     final inviteeUserId = userInfo['userId']!;
+    final inviteeUserName = userInfo['userName']!;
+    final inviteeEmail = userInfo['userEmail'];
 
     // Find invitation
     final invitation = await _findInvitationByCode(invitationCode);
@@ -325,6 +327,8 @@ class LocalPartnerService {
     Map<String, dynamic>? metadata,
   }) async {
     await _ensureInitialized();
+
+    final partnership = await getCurrentPartnership();
     if (partnership == null) {
       throw Exception('No active partnership');
     }
@@ -407,6 +411,8 @@ class LocalPartnerService {
     Map<String, dynamic>? data,
   }) async {
     await _ensureInitialized();
+
+    final partnership = await getCurrentPartnership();
     if (partnership == null) {
       throw Exception('No active partnership');
     }
@@ -441,6 +447,7 @@ class LocalPartnerService {
     await _ensureInitialized();
     final partnerships = await getAllPartnerships();
     try {
+      final partnership = partnerships.firstWhere((p) => p.id == partnershipId);
       final updatedPrivacySettings = partnership.privacySettings.copyWith(
         shareDetailedSymptoms: settings.sharePhysicalSymptoms,
         shareMoodData: settings.shareMoodData,
@@ -511,6 +518,7 @@ class LocalPartnerService {
   /// Generate invitation code
   String _generateInvitationCode() {
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Removed confusing chars
+    final random = Random();
     return List.generate(6, (_) => chars[random.nextInt(chars.length)]).join();
   }
 }

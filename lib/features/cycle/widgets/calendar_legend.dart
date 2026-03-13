@@ -7,6 +7,7 @@ class CalendarLegend extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -127,6 +128,7 @@ class CalendarLegend extends StatelessWidget {
     Color color,
     String emoji,
   ) {
+    final theme = Theme.of(context);
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -171,6 +173,7 @@ class CalendarLegend extends StatelessWidget {
     Color? borderColor,
     bool hasRobotIcon = false,
   }) {
+    final theme = Theme.of(context);
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -227,6 +230,7 @@ class CalendarLegend extends StatelessWidget {
         Flexible(
           child: Builder(
             builder: (context) {
+              final theme = Theme.of(context);
               return Text(
                 label,
                 style: TextStyle(

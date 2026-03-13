@@ -101,6 +101,7 @@ class _PartnerCareActionsWidgetState extends State<PartnerCareActionsWidget>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
 
     return AnimatedBuilder(
       animation: _fadeAnimation,

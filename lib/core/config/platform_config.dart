@@ -449,6 +449,7 @@ class PlatformPermissions {
   /// Get required permissions for each platform
   static List<String> getRequiredPermissions() {
     final platformInfo = _platformService.platformInfo;
+    final permissions = <String>[];
 
     if (platformInfo.platform == TargetPlatform.android) {
       permissions.addAll([
@@ -492,6 +493,7 @@ class PlatformPermissions {
   /// Get optional permissions
   static List<String> getOptionalPermissions() {
     final platformInfo = _platformService.platformInfo;
+    final permissions = <String>[];
 
     if (platformInfo.platform == TargetPlatform.android) {
       permissions.addAll([

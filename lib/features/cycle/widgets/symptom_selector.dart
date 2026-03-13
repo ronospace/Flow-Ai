@@ -24,6 +24,7 @@ class SymptomSelector extends StatefulWidget {
 
 class _SymptomSelectorState extends State<SymptomSelector> {
   Map<String, List<SymptomOption>> _getSymptomCategories(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
     return {
       localizations.physical: [
         SymptomOption(localizations.cramps, '🔥', AppTheme.primaryRose),
@@ -74,6 +75,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final symptomCategories = _getSymptomCategories(context);
     if (_expandedCategory.isEmpty) {
       _expandedCategory = symptomCategories.keys.first;
@@ -105,6 +107,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
   }
 
   Widget _buildSelectedSymptomsSummary() {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -210,6 +213,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
   }
 
   Widget _buildCategorySelector() {
+    final theme = Theme.of(context);
     final symptomCategories = _getSymptomCategories(context);
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -294,6 +298,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
     double severity,
     int index,
   ) {
+    final theme = Theme.of(context);
     return GestureDetector(
           onTap: () {
             final updatedSymptoms = Set<String>.from(widget.selectedSymptoms);
@@ -397,6 +402,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
   }
 
   Widget _buildSeveritySlider(String symptom, double severity, Color color) {
+    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

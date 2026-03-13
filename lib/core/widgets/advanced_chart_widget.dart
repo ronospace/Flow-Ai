@@ -166,6 +166,7 @@ class _AdvancedChartWidgetState extends State<AdvancedChartWidget>
         lineBarsData: [
           LineChartBarData(
             spots: widget.data.asMap().entries.map((entry) {
+              final index = entry.key;
               final point = entry.value;
               return FlSpot(index.toDouble(), point.value * _animation.value);
             }).toList(),
@@ -203,6 +204,7 @@ class _AdvancedChartWidgetState extends State<AdvancedChartWidget>
         titlesData: FlTitlesData(show: true),
         borderData: FlBorderData(show: false),
         barGroups: widget.data.asMap().entries.map((entry) {
+          final index = entry.key;
           final point = entry.value;
           return BarChartGroupData(
             x: index,

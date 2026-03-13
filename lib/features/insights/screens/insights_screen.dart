@@ -53,6 +53,7 @@ class _InsightsScreenState extends State<InsightsScreen>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return PopScope(
       canPop: true,
       onPopInvokedWithResult: (didPop, result) {
@@ -107,6 +108,7 @@ class _InsightsScreenState extends State<InsightsScreen>
   }
 
   Widget _buildHeader() {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(20),
       child: Row(
@@ -173,6 +175,7 @@ class _InsightsScreenState extends State<InsightsScreen>
   }
 
   Widget _buildTimePeriodSelector() {
+    final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
@@ -188,6 +191,7 @@ class _InsightsScreenState extends State<InsightsScreen>
       ),
       child: Row(
         children: _timePeriods.asMap().entries.map((entry) {
+          final index = entry.key;
           final period = entry.value;
           final isSelected = _selectedPeriod == period['months'];
 
@@ -234,6 +238,7 @@ class _InsightsScreenState extends State<InsightsScreen>
   }
 
   Widget _buildTabBar() {
+    final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
@@ -288,6 +293,7 @@ class _InsightsScreenState extends State<InsightsScreen>
   Widget _buildOverviewTab() {
     return Consumer2<InsightsProvider, CycleProvider>(
       builder: (context, insightsProvider, cycleProvider, child) {
+        final theme = Theme.of(context);
         if (insightsProvider.isLoading || cycleProvider.isLoading) {
           return Center(
             child: CircularProgressIndicator(
@@ -339,6 +345,7 @@ class _InsightsScreenState extends State<InsightsScreen>
               const SizedBox(height: 16),
 
               ...insightsProvider.insights.asMap().entries.map((entry) {
+                final index = entry.key;
                 final insight = entry.value;
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 16),

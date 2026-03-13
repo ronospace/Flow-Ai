@@ -176,6 +176,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
       lastDate: DateTime.now(),
       initialDateRange: _selectedRange,
       builder: (context, child) {
+        final theme = Theme.of(context);
         return Theme(
           data: theme.copyWith(
             colorScheme: theme.colorScheme.copyWith(
@@ -198,6 +199,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -244,6 +246,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
   }
 
   Widget _buildAppBar() {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -443,6 +446,7 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
   }
 
   Widget _buildTabBar() {
+    final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       decoration: BoxDecoration(

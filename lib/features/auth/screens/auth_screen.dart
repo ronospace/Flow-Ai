@@ -92,8 +92,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       await _authService.isBiometricEnabled();
 
       setState(() {
-        _biometricsAvailable =
-            isAvailable && isDeviceSupported && availableBiometrics.isNotEmpty;
+        _biometricsAvailable = isAvailable && isDeviceSupported && availableBiometrics.isNotEmpty;
         _availableBiometrics = availableBiometrics;
       });
     } catch (e) {
@@ -116,6 +115,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
 
     // Use adaptive scaffold that automatically adjusts to platform conventions
     return AdaptiveComponents.adaptiveScaffold(
@@ -404,6 +405,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
           _buildSocialLogin(theme),
 
           const SizedBox(height: 24),
+
         ],
       ),
     );
@@ -490,12 +492,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       debugPrint("BIO: tap -> calling authService");
       debugPrint("BIO: calling auth service");
       final result = await _authService.authenticateWithBiometrics();
-      debugPrint(
-        "BIO: auth result success=${result.isSuccess} error=${result.error}",
-      );
-      debugPrint(
-        "BIO: result success=${result.isSuccess} error=${result.error}",
-      );
+      debugPrint("BIO: auth result success=${result.isSuccess} error=${result.error}");
+      debugPrint("BIO: result success=${result.isSuccess} error=${result.error}");
 
       if (!mounted) return;
 
@@ -527,8 +525,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         // Navigate to main app
         if (mounted) {
           final pending = PendingDeepLinkService.consumePendingRoute();
-          _router.go(pending ?? '/home');
-          PendingDeepLinkService.clearPendingRoute();
+        _router.go(pending ?? '/home');
+        PendingDeepLinkService.clearPendingRoute();
         }
       } else {
         _showErrorMessage(result.error ?? 'Biometric authentication failed');
@@ -650,8 +648,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       if (!mounted) return;
 
       final pending = PendingDeepLinkService.consumePendingRoute();
-      _router.go(pending ?? '/home');
-      PendingDeepLinkService.clearPendingRoute();
+        _router.go(pending ?? '/home');
+        PendingDeepLinkService.clearPendingRoute();
     } catch (e) {
       debugPrint('❌ Auth error: $e');
       final errorMessage = e.toString().replaceFirst('Exception: ', '');
@@ -700,8 +698,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         // Navigate to main app
         if (mounted) {
           final pending = PendingDeepLinkService.consumePendingRoute();
-          _router.go(pending ?? '/home');
-          PendingDeepLinkService.clearPendingRoute();
+        _router.go(pending ?? '/home');
+        PendingDeepLinkService.clearPendingRoute();
         }
       } else {
         _showErrorMessage(result.error ?? 'Google sign-in failed');
@@ -734,9 +732,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
       // Perform Apple Sign-In
       final result = await _authService.signInWithApple();
-      debugPrint(
-        'APPLE: result isSuccess=${result.isSuccess} error=${result.error}',
-      );
+      debugPrint('APPLE: result isSuccess=${result.isSuccess} error=${result.error}');
 
       if (!mounted) return;
 
@@ -762,8 +758,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         // Navigate to main app
         if (mounted) {
           final pending = PendingDeepLinkService.consumePendingRoute();
-          _router.go(pending ?? '/home');
-          PendingDeepLinkService.clearPendingRoute();
+        _router.go(pending ?? '/home');
+        PendingDeepLinkService.clearPendingRoute();
         }
       } else {
         debugPrint('APPLE: failure branch showing error');

@@ -294,6 +294,7 @@ class PlatformService {
 
   /// Get platform-appropriate button style
   ButtonStyle getAdaptiveButtonStyle(BuildContext context) {
+    final theme = Theme.of(context);
 
     if (platformInfo.platform == TargetPlatform.iOS) {
       return ElevatedButton.styleFrom(

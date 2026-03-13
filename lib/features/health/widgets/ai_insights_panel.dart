@@ -471,6 +471,7 @@ class _AIInsightsPanelState extends State<AIInsightsPanel>
   }
 
   List<Map<String, dynamic>> _getInsights() {
+    final random = math.Random();
 
     return [
       {

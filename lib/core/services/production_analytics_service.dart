@@ -186,6 +186,7 @@ class ProductionAnalyticsService {
   /// Track app session duration
   Future<void> trackSessionEnd() async {
     if (_sessionData.containsKey('session_start')) {
+      final startTime = DateTime.parse(_sessionData['session_start']);
       final duration = DateTime.now().difference(startTime).inSeconds;
 
       await trackEvent('session_end', {

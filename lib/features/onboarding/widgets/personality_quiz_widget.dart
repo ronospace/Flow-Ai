@@ -225,6 +225,7 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
   }
 
   Widget _buildHeader(BuildContext context) {
+    final theme = Theme.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -293,6 +294,7 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
   }
 
   Widget _buildDateOfBirthField(BuildContext context) {
+    final theme = Theme.of(context);
 
     return InkWell(
       onTap: () => _selectDateOfBirth(context),
@@ -366,6 +368,7 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
     BuildContext context,
     Map<String, dynamic> type,
   ) {
+    final theme = Theme.of(context);
     final isSelected = _selectedPersonalityType == type['id'];
 
     return InkWell(
@@ -511,6 +514,7 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
     BuildContext context, {
     required Map<String, dynamic> interest,
   }) {
+    final theme = Theme.of(context);
     final isSelected = _selectedInterests.contains(interest['id']);
 
     return FilterChip(
@@ -553,6 +557,7 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
     required bool isSelected,
     required VoidCallback onTap,
   }) {
+    final theme = Theme.of(context);
 
     return InkWell(
       onTap: onTap,
@@ -626,6 +631,7 @@ class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>
     String? subtitle,
     required Widget child,
   }) {
+    final theme = Theme.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

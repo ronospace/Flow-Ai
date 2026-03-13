@@ -66,6 +66,8 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final localizations = AppLocalizations.of(context);
 
     return AnimatedBuilder(
       animation: _dialogController,

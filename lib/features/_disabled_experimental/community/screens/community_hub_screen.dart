@@ -124,6 +124,7 @@ class _CommunityHubScreenState extends State<CommunityHubScreen>
     BuildContext context,
     CommunityController controller,
   ) {
+    final theme = Theme.of(context);
 
     return SliverAppBar(
       expandedHeight: 200,
@@ -213,6 +214,7 @@ class _CommunityHubScreenState extends State<CommunityHubScreen>
   }
 
   Tab _buildTab(BuildContext context, Map<String, dynamic> tab) {
+    final theme = Theme.of(context);
 
     return Tab(
       child: Row(

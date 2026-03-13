@@ -13,6 +13,7 @@ class RecommendationsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
 
     if (recommendations.isEmpty) {
       return _buildEmptyState(theme);

@@ -700,6 +700,7 @@ class HealthScoringEngine {
 
     // Cycle regularity
     final lengths = cycles.map((c) => c.length).toList();
+    final avgLength = lengths.reduce((a, b) => a + b) / lengths.length;
     final variance =
         lengths.map((l) => math.pow(l - avgLength, 2)).reduce((a, b) => a + b) /
         lengths.length;
@@ -1002,6 +1003,7 @@ class FertilityAnalyzer {
     // Cycle regularity
     if (cycles.isNotEmpty) {
       final lengths = cycles.map((c) => c.length).toList();
+      final avgLength = lengths.reduce((a, b) => a + b) / lengths.length;
       final variance =
           lengths
               .map((l) => math.pow(l - avgLength, 2))
@@ -1098,6 +1100,7 @@ class FertilityAnalyzer {
 
     // Higher confidence with more regular cycles
     final lengths = cycles.map((c) => c.length).toList();
+    final avgLength = lengths.reduce((a, b) => a + b) / lengths.length;
     final variance =
         lengths.map((l) => math.pow(l - avgLength, 2)).reduce((a, b) => a + b) /
         lengths.length;

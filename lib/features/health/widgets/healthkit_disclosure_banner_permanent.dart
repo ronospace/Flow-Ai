@@ -10,6 +10,7 @@ class HealthKitDisclosureBannerPermanent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final platformName = Platform.isIOS ? 'Apple HealthKit' : 'Health Connect';
 
     return Container(

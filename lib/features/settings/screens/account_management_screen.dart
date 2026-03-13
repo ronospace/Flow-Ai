@@ -96,6 +96,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
 
     return Scaffold(
       body: Container(
@@ -194,6 +195,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
   }
 
   Widget _buildProfileSection() {
+    final theme = Theme.of(context);
 
     return SettingsSection(
       title: 'Profile Information',
@@ -263,6 +265,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
               ] else ...[
                 Consumer<SettingsProvider>(
                   builder: (context, settings, child) {
+                    final theme = Theme.of(context);
                     return Text(
                       settings.preferences.displayName,
                       style: theme.textTheme.bodyLarge?.copyWith(

@@ -78,6 +78,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
     // Initialize chat service after first build to get localizations
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      final localizations = AppLocalizations.of(context);
       final settingsProvider = context.read<SettingsProvider>();
       final userPreferences = settingsProvider.preferences;
 
@@ -219,6 +220,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final screenSize = MediaQuery.of(context).size;
 
     return Stack(
@@ -409,6 +411,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   }
 
   Widget _buildCustomInput() {
+    final theme = Theme.of(context);
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -954,6 +957,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   }
 
   Widget _buildQuickReplies() {
+    final theme = Theme.of(context);
     final suggestions = _chatService.getSuggestedReplies();
 
     return Container(

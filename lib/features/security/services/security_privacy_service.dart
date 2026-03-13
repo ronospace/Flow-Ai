@@ -614,6 +614,7 @@ class SecurityPrivacyService {
   }
 
   String _generateSecureToken() {
+    final random = math.Random.secure();
     final List<int> bytes = List<int>.generate(32, (i) => random.nextInt(256));
     return base64Encode(bytes);
   }

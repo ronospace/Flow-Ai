@@ -83,7 +83,7 @@ class AdvancedAnalyticsService {
         manufacturer: androidInfo.manufacturer,
         osVersion: androidInfo.version.release,
         screenSize:
-            '${ui.PlatformDispatcher.instance.views.first.physicalSize.width}x${ui.PlatformDispatcher.instance.views.first.physicalSize.height}',
+            '${androidInfo.displayMetrics.widthPx}x${androidInfo.displayMetrics.heightPx}',
         locale: ui.PlatformDispatcher.instance.locale.toString(),
       );
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {

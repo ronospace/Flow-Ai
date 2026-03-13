@@ -20,6 +20,7 @@ class FlowIntensityPicker extends StatefulWidget {
 
 class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
   List<FlowIntensityOption> _getIntensityOptions(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
     return [
       FlowIntensityOption(
         intensity: FlowIntensity.none,
@@ -111,6 +112,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final intensityOptions = _getIntensityOptions(context);
     final selectedOption = intensityOptions.firstWhere(
       (option) => option.intensity == widget.selectedIntensity,
@@ -164,6 +166,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
   }
 
   Widget _buildFlowVisualization(FlowIntensityOption option) {
+    final theme = Theme.of(context);
     return Container(
       height: 120,
       margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -260,6 +263,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
   }
 
   Widget _buildAIInsightsPanel(FlowIntensityOption option) {
+    final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(16),
@@ -323,6 +327,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
   }
 
   Widget _buildFlowIntensityCard(FlowIntensityOption option, bool isSelected) {
+    final theme = Theme.of(context);
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200), // Reduced animation time
       decoration: BoxDecoration(
@@ -460,6 +465,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
   }
 
   String _getAIInsight(FlowIntensityOption option) {
+    final localizations = AppLocalizations.of(context);
     switch (option.intensity) {
       case FlowIntensity.spotting:
         return localizations.spottingInsight;
@@ -477,6 +483,8 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
   }
 
   void _showMedicalInfo(FlowIntensityOption option) {
+    final localizations = AppLocalizations.of(context);
+    final theme = Theme.of(context);
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,

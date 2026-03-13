@@ -54,6 +54,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final localizations = AppLocalizations.of(context);
 
     return Consumer<OnboardingProvider>(
       builder: (context, provider, child) {
@@ -295,12 +297,14 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     } catch (e) {
       debugPrint('Onboarding completion error: $e');
       if (mounted) {
+        final localizations = AppLocalizations.of(context);
         _showErrorMessage('${localizations.error}: $e');
       }
     }
   }
 
   Future<void> _skipOnboarding(OnboardingProvider provider) async {
+    final localizations = AppLocalizations.of(context);
     final shouldSkip = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -336,6 +340,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     if (step.data?['permission'] == 'notifications') {
       final granted = await provider.requestNotificationPermission();
       if (granted && mounted) {
+        final localizations = AppLocalizations.of(context);
         HapticFeedback.lightImpact();
         _showSuccessMessage(
           '${localizations.notifications} ${localizations.success.toLowerCase()}!',
@@ -366,6 +371,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       }
 
       if (mounted) {
+        final localizations = AppLocalizations.of(context);
         HapticFeedback.lightImpact();
         if (!useDemoData) {
           _showSuccessMessage('${localizations.success}!');
@@ -373,6 +379,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       }
     } catch (e) {
       if (mounted) {
+        final localizations = AppLocalizations.of(context);
         _showErrorMessage('${localizations.error}: $e');
       }
     }

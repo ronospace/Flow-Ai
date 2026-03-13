@@ -34,6 +34,7 @@ class AppleSignInService {
 
   /// Sign in with Apple (Disabled - returns failure)
   Future<AuthResult> signIn() async {
+    final enhancementService = AppEnhancementService();
     enhancementService.startPerformanceTrace('apple_signin');
 
     try {

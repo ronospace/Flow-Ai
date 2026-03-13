@@ -244,6 +244,7 @@ class AdaptiveAIEngine {
 
     // Length bias correction
     if (bias.lengthBias.abs() > 0.5) {
+      final adjustment = (bias.lengthBias * _adaptationRate).round();
       correctedPrediction = CyclePrediction(
         predictedStartDate: prediction.predictedStartDate,
         predictedLength: (prediction.predictedLength + adjustment).clamp(

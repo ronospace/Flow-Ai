@@ -56,6 +56,7 @@ class _CompleteStepState extends State<CompleteStep>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
 
     return Padding(
       padding: const EdgeInsets.all(24.0),
@@ -237,6 +238,7 @@ class _CompleteStepState extends State<CompleteStep>
     IconData icon,
     String text,
   ) {
+    final theme = Theme.of(context);
 
     return Row(
       children: [

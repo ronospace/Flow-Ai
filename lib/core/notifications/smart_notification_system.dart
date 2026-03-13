@@ -763,6 +763,7 @@ class NotificationContentGenerator {
     String userName,
     Map<String, dynamic>? data,
   ) {
+    final alertType = data?['alert_type'] ?? 'general';
     final severity = data?['severity'] ?? 'low';
 
     String emoji = severity == 'high'

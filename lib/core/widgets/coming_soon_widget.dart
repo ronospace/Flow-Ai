@@ -28,6 +28,8 @@ class ComingSoonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final size = MediaQuery.of(context).size;
 
     return Container(
       decoration: BoxDecoration(
@@ -161,6 +163,7 @@ class ComingSoonWidget extends StatelessWidget {
   }
 
   Widget _buildTitleSection(BuildContext context) {
+    final theme = Theme.of(context);
 
     return Column(
       children: [
@@ -225,6 +228,7 @@ class ComingSoonWidget extends StatelessWidget {
   }
 
   Widget _buildFeatureList(BuildContext context, Size screenSize) {
+    final theme = Theme.of(context);
     final isCompact = screenSize.height < 700;
     final maxFeatures = isCompact ? 3 : featureList!.length;
 
@@ -266,6 +270,7 @@ class ComingSoonWidget extends StatelessWidget {
           ...featureList!.take(maxFeatures).toList().asMap().entries.map((
             entry,
           ) {
+            final index = entry.key;
             final feature = entry.value;
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 3),
@@ -320,6 +325,7 @@ class ComingSoonWidget extends StatelessWidget {
   }
 
   Widget _buildEstimatedDate(BuildContext context) {
+    final theme = Theme.of(context);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

@@ -93,6 +93,7 @@ class _ModernButtonState extends State<ModernButton>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final isEnabled = widget.onPressed != null && !widget.isLoading;
 
     return AnimatedBuilder(

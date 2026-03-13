@@ -15,6 +15,8 @@ class OnboardingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final localizations = AppLocalizations.of(context);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24.0),

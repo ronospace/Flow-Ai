@@ -76,6 +76,8 @@ class _SettingsScreenState extends State<SettingsScreen>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       body: Container(
@@ -996,6 +998,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   void _showHealthKitInfo(BuildContext context) {
     // Show the full disclosure dialog
     _showHealthKitFullDisclosure(context);
+    final theme = Theme.of(context);
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -1130,6 +1133,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   void _showHealthDataPrivacy(BuildContext context) {
+    final theme = Theme.of(context);
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -1440,7 +1444,7 @@ class _SettingsScreenState extends State<SettingsScreen>
           context,
           listen: false,
         );
-        await onboardingProvider.resetOnboarding();
+        onboardingProvider.resetOnboarding();
         AppLogger.auth('✅ Onboarding data cleared');
       } catch (e) {
         AppLogger.warning('⚠️ Failed to clear onboarding data: $e');

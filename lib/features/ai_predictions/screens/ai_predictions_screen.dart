@@ -76,6 +76,7 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       body: CustomScrollView(
@@ -109,6 +110,7 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
   }
 
   Widget _buildAppBar() {
+    final theme = Theme.of(context);
     return SliverAppBar(
       expandedHeight: 120,
       floating: false,
@@ -163,6 +165,7 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
   }
 
   Widget _buildLoadingCard() {
+    final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.all(24),
@@ -240,6 +243,7 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
   }
 
   Widget _buildEducationSection() {
+    final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.all(20),
@@ -308,6 +312,7 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
   }
 
   Widget _buildEducationItem(IconData icon, String title, String description) {
+    final theme = Theme.of(context);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

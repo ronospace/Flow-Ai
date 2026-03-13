@@ -39,6 +39,7 @@ class _LanguageSelectorState extends State<LanguageSelector> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       height: MediaQuery.of(context).size.height * 0.75,
       decoration: BoxDecoration(
@@ -212,6 +213,7 @@ class _LanguageSelectorState extends State<LanguageSelector> {
                                 // Capture context-dependent things BEFORE the await
                                 final messenger = ScaffoldMessenger.of(context);
                                 final navigator = Navigator.of(context);
+                                final l10n = AppLocalizations.of(context);
 
                                 await settings.updateLanguage(language);
 

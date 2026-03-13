@@ -16,6 +16,7 @@ class PredictionAccuracyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -198,6 +199,7 @@ class PredictionAccuracyCard extends StatelessWidget {
     IconData icon,
     Color color,
   ) {
+    final theme = Theme.of(context);
     return Column(
       children: [
         Icon(icon, color: color, size: 20),
