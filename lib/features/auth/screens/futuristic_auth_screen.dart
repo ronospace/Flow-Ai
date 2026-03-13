@@ -105,7 +105,6 @@ class _FuturisticAuthScreenState extends State<FuturisticAuthScreen>
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
 
     return Scaffold(
       body: Stack(
@@ -674,7 +673,6 @@ class _FuturisticAuthScreenState extends State<FuturisticAuthScreen>
 
         Row(
               children: [
-
                 // iOS → Apple
                 if (PlatformService().platformInfo.platform ==
                     TargetPlatform.iOS)
@@ -689,7 +687,6 @@ class _FuturisticAuthScreenState extends State<FuturisticAuthScreen>
                       ],
                     ),
                   )
-
                 // Android → Google
                 else
                   Expanded(
@@ -697,7 +694,10 @@ class _FuturisticAuthScreenState extends State<FuturisticAuthScreen>
                       icon: Icons.g_mobiledata,
                       label: 'Google',
                       onPressed: _isLoading ? null : _handleGoogleSignIn,
-                      colors: [const Color(0xFF4285F4), const Color(0xFF34A853)],
+                      colors: [
+                        const Color(0xFF4285F4),
+                        const Color(0xFF34A853),
+                      ],
                     ),
                   ),
               ],

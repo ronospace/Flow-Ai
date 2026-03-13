@@ -35,7 +35,6 @@ class FlowAiLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final logoColor = color ?? theme.colorScheme.primary;
 
     Widget logoContent;
@@ -220,7 +219,6 @@ class FlowAiLogo extends StatelessWidget {
   }
 
   Widget _buildWithWordmark(BuildContext context, Color logoColor) {
-    final theme = Theme.of(context);
 
     final wordmark = Text(
       'Flow Ai',
