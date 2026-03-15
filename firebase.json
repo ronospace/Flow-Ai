@@ -35,6 +35,11 @@
       }
     }
   },
+
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+
   "hosting": {
     "public": "build/web",
     "ignore": [
@@ -53,6 +58,7 @@
       }
     ]
   },
+
   "functions": [
     {
       "source": "functions",

@@ -56,6 +56,8 @@ class _AuthChoiceScreenState extends State<AuthChoiceScreen>
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final localizations = AppLocalizations.of(context);
 
     return Scaffold(
       body: Stack(

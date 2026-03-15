@@ -71,15 +71,21 @@ class _InviteGatePageState extends State<InviteGatePage> {
       builder: (_) => JoinPartnerDialog(
         initialCode: widget.code,
         onJoinWithCode: (c) async {
-          await partnerService!.acceptPartnerInvitation(c);
+          final partnership = await partnerService!.acceptPartnerInvitation(c);
+          if (!mounted) return;
+
+          if (partnership != null) {
+            context.go('/partner-dashboard');
+            return;
+          }
+
+          throw Exception('Invitation code invalid, expired, or not found.');
         },
       ),
     );
 
     if (!mounted) return;
-    if (context.canPop()) {
-      context.pop();
-    } else {
+    if (!context.canPop()) {
       context.go('/home');
     }
   }
@@ -87,6 +93,10 @@ class _InviteGatePageState extends State<InviteGatePage> {
   @override
   Widget build(BuildContext context) {
     debugPrint('🔗 InviteGatePage built: code=${widget.code}');
-    return Scaffold(body: Center(child: Text('Invite code: ${widget.code}')));
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
   }
 }

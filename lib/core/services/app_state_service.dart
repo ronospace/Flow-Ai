@@ -118,8 +118,7 @@ class AppStateService {
     // Sign out user
     await _authService.signOut();
 
-    // Reset onboarding status
-    await _preferencesService.setOnboardingComplete(false);
+    // Do NOT reset onboarding status on sign out
 
     debugPrint('🔄 App state reset');
   }

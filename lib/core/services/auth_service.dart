@@ -1,3 +1,4 @@
+import '../services/app_state_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
@@ -215,8 +216,12 @@ class AuthService {
 
       final bool isAvailable = await isBiometricAvailable();
       debugPrint("BIO: service isAvailable=$isAvailable");
-      debugPrint("BIO: isAvailable=$isAvailable enabled=${isBiometricEnabled()}");
-      debugPrint("BIO: service isAvailable=$isAvailable enabled=${isBiometricEnabled()}");
+      debugPrint(
+        "BIO: isAvailable=$isAvailable enabled=${isBiometricEnabled()}",
+      );
+      debugPrint(
+        "BIO: service isAvailable=$isAvailable enabled=${isBiometricEnabled()}",
+      );
       if (!isAvailable) {
         return AuthResult.failure(
           'Biometric authentication is not available on this device',
@@ -516,8 +521,14 @@ class AuthService {
 
       final userCredential = await _auth!.signInWithCredential(credential);
 
-      await _storeUserData({'uid': userCredential.user?.uid,'email': userCredential.user?.email,'provider':'google','lastLogin':DateTime.now().toIso8601String()});
-return AuthResult.success(userCredential.user);
+      await _storeUserData({
+        'uid': userCredential.user?.uid,
+        'email': userCredential.user?.email,
+        'provider': 'google',
+        'lastLogin': DateTime.now().toIso8601String(),
+      });
+      await AppStateService().preferences.setOnboardingComplete(true);
+      return AuthResult.success(userCredential.user);
     } catch (e) {
       return AuthResult.failure('Google sign-in failed: $e');
     }
@@ -535,8 +546,12 @@ return AuthResult.success(userCredential.user);
 
   Future<AuthResult> signInWithApple() async {
     try {
-      debugPrint('APPLE_AUTH: apps=${Firebase.apps.length} authNull=${_auth == null} firebaseAvailable=$_firebaseAvailable');
-      debugPrint('APPLE_AUTH: apps=${Firebase.apps.length} authNull=${_auth == null} firebaseAvailable=$_firebaseAvailable');
+      debugPrint(
+        'APPLE_AUTH: apps=${Firebase.apps.length} authNull=${_auth == null} firebaseAvailable=$_firebaseAvailable',
+      );
+      debugPrint(
+        'APPLE_AUTH: apps=${Firebase.apps.length} authNull=${_auth == null} firebaseAvailable=$_firebaseAvailable',
+      );
       if (kIsWeb) {
         return AuthResult.failure('Apple Sign-In not supported on web.');
       }
@@ -569,6 +584,7 @@ return AuthResult.success(userCredential.user);
       );
 
       final userCredential = await _auth!.signInWithCredential(oauthCredential);
+      await AppStateService().preferences.setOnboardingComplete(true);
       return AuthResult.success(userCredential.user);
     } catch (e) {
       return AuthResult.failure('Apple sign-in failed: $e');

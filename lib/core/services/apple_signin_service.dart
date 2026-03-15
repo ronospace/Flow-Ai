@@ -34,7 +34,7 @@ class AppleSignInService {
 
   /// Sign in with Apple (Disabled - returns failure)
   Future<AuthResult> signIn() async {
-    enhancementService.startPerformanceTrace('apple_signin');
+    // removed // removed enhancementService.startPerformanceTrace('apple_signin');
 
     try {
       if (!_isInitialized) {
@@ -55,7 +55,7 @@ class AppleSignInService {
             'Apple Sign-In is not available. Please use email authentication.',
       );
     } finally {
-      enhancementService.stopPerformanceTrace('apple_signin');
+      // removed // removed enhancementService.stopPerformanceTrace('apple_signin');
     }
   }
 
