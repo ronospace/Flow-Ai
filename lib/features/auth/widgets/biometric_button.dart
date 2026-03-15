@@ -45,6 +45,7 @@ class _BiometricButtonState extends State<BiometricButton>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
 
     // Determine which biometric type is available
     IconData biometricIcon = Icons.fingerprint;

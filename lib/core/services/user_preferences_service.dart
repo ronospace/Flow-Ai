@@ -4,6 +4,11 @@ import '../models/user_profile.dart';
 
 /// Service for managing user preferences and settings
 class UserPreferencesService {
+  static final UserPreferencesService _instance =
+      UserPreferencesService._internal();
+  factory UserPreferencesService() => _instance;
+  UserPreferencesService._internal();
+
   static const String _keyThemeMode = 'theme_mode';
   static const String _keyLanguageCode = 'language_code';
   static const String _keyNotifications = 'notifications_enabled';
@@ -43,19 +48,31 @@ class UserPreferencesService {
   }
 
   // Language settings
-  String get languageCode => _prefs.getString(_keyLanguageCode) ?? 'en';
+  String get languageCode {
+    if (!_isInitialized) return 'en';
+    return _prefs.getString(_keyLanguageCode) ?? 'en';
+  }
+
   Future<void> setLanguageCode(String code) async {
     await _prefs.setString(_keyLanguageCode, code);
   }
 
   // Notification settings
-  bool get notificationsEnabled => _prefs.getBool(_keyNotifications) ?? true;
+  bool get notificationsEnabled {
+    if (!_isInitialized) return true;
+    return _prefs.getBool(_keyNotifications) ?? true;
+  }
+
   Future<void> setNotificationsEnabled(bool enabled) async {
     await _prefs.setBool(_keyNotifications, enabled);
   }
 
   // Biometric settings
-  bool get biometricsEnabled => _prefs.getBool(_keyBiometrics) ?? false;
+  bool get biometricsEnabled {
+    if (!_isInitialized) return false;
+    return _prefs.getBool(_keyBiometrics) ?? false;
+  }
+
   Future<void> setBiometricsEnabled(bool enabled) async {
     await _prefs.setBool(_keyBiometrics, enabled);
   }

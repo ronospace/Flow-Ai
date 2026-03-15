@@ -1,0 +1,21 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    match /partnerInvites/{inviteId} {
+      allow read: if signedIn();
+      allow create: if signedIn();
+      allow update: if signedIn();
+      allow delete: if false;
+    }
+
+    match /partnerConnections/{connectionId} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+  }
+}

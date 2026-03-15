@@ -220,8 +220,12 @@ class _SettingsScreenState extends State<SettingsScreen>
                                   Icons.favorite,
                                   color: AppTheme.primaryRose,
                                 ),
-                                title: Platform.isIOS ? 'HealthKit Integration' : 'Health Connect Integration',
-                                subtitle: Platform.isIOS ? 'Manage Apple HealthKit data access' : 'Manage Health Connect data access',
+                                title: Platform.isIOS
+                                    ? 'HealthKit Integration'
+                                    : 'Health Connect Integration',
+                                subtitle: Platform.isIOS
+                                    ? 'Manage Apple HealthKit data access'
+                                    : 'Manage Health Connect data access',
                                 onTap: () => _showHealthKitInfo(context),
                                 trailing: const Icon(
                                   Icons.arrow_forward_ios,
@@ -874,7 +878,9 @@ class _SettingsScreenState extends State<SettingsScreen>
               ),
               const SizedBox(height: 16),
               Text(
-                Platform.isIOS ? 'Flow Ai uses Apple HealthKit to access your health data for enhanced cycle predictions and personalized insights.' : 'Flow Ai uses Health Connect to access your health data for enhanced cycle predictions and personalized insights.',
+                Platform.isIOS
+                    ? 'Flow Ai uses Apple HealthKit to access your health data for enhanced cycle predictions and personalized insights.'
+                    : 'Flow Ai uses Health Connect to access your health data for enhanced cycle predictions and personalized insights.',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.w500,
                   height: 1.5,
@@ -937,7 +943,9 @@ class _SettingsScreenState extends State<SettingsScreen>
               ),
               const SizedBox(height: 12),
               Text(
-                Platform.isIOS ? 'You can manage HealthKit access at any time in iOS Settings → Health → Data Access & Devices.' : 'You can manage Health Connect access at any time in Android Settings → Apps → Health Connect → App permissions.',
+                Platform.isIOS
+                    ? 'You can manage HealthKit access at any time in iOS Settings → Health → Data Access & Devices.'
+                    : 'You can manage Health Connect access at any time in Android Settings → Apps → Health Connect → App permissions.',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(
                     context,
@@ -1007,7 +1015,11 @@ class _SettingsScreenState extends State<SettingsScreen>
           children: [
             Icon(Icons.health_and_safety, color: AppTheme.primaryRose),
             const SizedBox(width: 12),
-            Text(Platform.isIOS ? 'HealthKit Integration' : 'Health Connect Integration'),
+            Text(
+              Platform.isIOS
+                  ? 'HealthKit Integration'
+                  : 'Health Connect Integration',
+            ),
           ],
         ),
         content: SingleChildScrollView(
@@ -1439,13 +1451,8 @@ class _SettingsScreenState extends State<SettingsScreen>
       }
 
       try {
-        // Clear onboarding state (user will need to go through onboarding again)
-        final onboardingProvider = Provider.of<OnboardingProvider>(
-          context,
-          listen: false,
-        );
-        onboardingProvider.resetOnboarding();
-        AppLogger.auth('✅ Onboarding data cleared');
+        // Preserve onboarding state to avoid forcing onboarding again
+        AppLogger.auth('ℹ️ Onboarding state preserved');
       } catch (e) {
         AppLogger.warning('⚠️ Failed to clear onboarding data: $e');
       }

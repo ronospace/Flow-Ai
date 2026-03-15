@@ -271,6 +271,7 @@ class LocalUserService {
   }
 
   String _generateUserId() {
+    final random = Random();
     final timestamp = DateTime.now().millisecondsSinceEpoch;
     final randomNum = random.nextInt(999999);
     return 'local_$timestamp$randomNum';

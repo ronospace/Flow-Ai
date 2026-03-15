@@ -6,7 +6,7 @@ import '../../../core/theme/app_theme.dart';
 
 class JoinPartnerDialog extends StatefulWidget {
   final String? initialCode;
-  final Function(String) onJoinWithCode;
+  final Future<void> Function(String) onJoinWithCode;
 
   const JoinPartnerDialog({super.key, this.initialCode, required this.onJoinWithCode});
 
@@ -77,17 +77,17 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                     end: Alignment.bottomRight,
                     colors: [
                       Colors.white,
-                      AppTheme.secondaryBlue.withValues(alpha: 0.02),
+                      const Color(0xFFFF6B8A).withValues(alpha: 0.02),
                     ],
                   ),
                   borderRadius: BorderRadius.circular(28),
                   border: Border.all(
-                    color: AppTheme.secondaryBlue.withValues(alpha: 0.2),
+                    color: const Color(0xFFFF6B8A).withValues(alpha: 0.2),
                     width: 2,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: AppTheme.secondaryBlue.withValues(alpha: 0.2),
+                      color: const Color(0xFFFF6B8A).withValues(alpha: 0.2),
                       blurRadius: 30,
                       offset: const Offset(0, 15),
                     ),
@@ -113,7 +113,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppTheme.secondaryBlue.withValues(alpha: 0.1),
+            const Color(0xFFFF6B8A).withValues(alpha: 0.1),
             AppTheme.accentMint.withValues(alpha: 0.05),
           ],
         ),
@@ -123,12 +123,13 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
         ),
       ),
       child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
-                colors: [AppTheme.secondaryBlue, AppTheme.accentMint],
+                colors: [const Color(0xFFFF6B8A), AppTheme.accentMint],
               ),
               borderRadius: BorderRadius.circular(16),
             ),
@@ -137,7 +138,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
           const SizedBox(width: 16),
           Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
                   'Join Partner',
@@ -170,7 +171,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
       child: Form(
         key: _formKey,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _buildInstructionSection(),
             const SizedBox(height: 24),
@@ -187,12 +188,12 @@ SizedBox(
   child: ElevatedButton.icon(
     onPressed: () {
       Navigator.pop(context);
-      context.go('/qr-join');
+      context.push('/qr-join');
     },
     icon: const Icon(Icons.qr_code_scanner, size: 22),
     label: const Text('Scan QR Code'),
     style: ElevatedButton.styleFrom(
-      backgroundColor: AppTheme.secondaryBlue,
+      backgroundColor: const Color(0xFFFF6B8A),
       foregroundColor: Colors.white,
       elevation: 0,
       padding: const EdgeInsets.symmetric(vertical: 16),
@@ -212,11 +213,12 @@ _buildAlternativeOptions(),
 
   Widget _buildInstructionSection() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Row(
+              mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.info_outline, color: AppTheme.secondaryBlue, size: 20),
+            Icon(Icons.info_outline, color: const Color(0xFFFF6B8A), size: 20),
             const SizedBox(width: 8),
             Text(
               'How to Join',
@@ -251,19 +253,20 @@ _buildAlternativeOptions(),
 
   Widget _buildInstructionStep(String number, String text, IconData icon) {
     return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
           width: 24,
           height: 24,
           decoration: BoxDecoration(
-            color: AppTheme.secondaryBlue.withValues(alpha: 0.1),
+            color: const Color(0xFFFF6B8A).withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Center(
             child: Text(
               number,
               style: TextStyle(
-                color: AppTheme.secondaryBlue,
+                color: const Color(0xFFFF6B8A),
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
               ),
@@ -285,7 +288,7 @@ _buildAlternativeOptions(),
 
   Widget _buildCodeInput() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
           'Invitation Code',
@@ -303,6 +306,7 @@ _buildAlternativeOptions(),
         ),
         const SizedBox(height: 16),
         Row(
+              mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
               child: TextFormField(
@@ -324,9 +328,17 @@ _buildAlternativeOptions(),
                     color: AppTheme.lightGrey,
                     letterSpacing: 4,
                   ),
-                  prefixIcon: Icon(
-                    Icons.vpn_key,
-                    color: AppTheme.secondaryBlue,
+                  prefixIconConstraints: const BoxConstraints(
+                    minWidth: 36,
+                    minHeight: 36,
+                  ),
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 4),
+                    child: Icon(
+                      Icons.vpn_key,
+                      size: 18,
+                      color: const Color(0xFFFF6B8A),
+                    ),
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
@@ -335,7 +347,7 @@ _buildAlternativeOptions(),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                     borderSide: BorderSide(
-                      color: AppTheme.secondaryBlue,
+                      color: const Color(0xFFFF6B8A),
                       width: 2,
                     ),
                   ),
@@ -367,10 +379,10 @@ _buildAlternativeOptions(),
             const SizedBox(width: 12),
             IconButton(
               onPressed: _pasteFromClipboard,
-              icon: Icon(Icons.content_paste, color: AppTheme.secondaryBlue),
+              icon: Icon(Icons.content_paste, color: const Color(0xFFFF6B8A)),
               tooltip: 'Paste from clipboard',
               style: IconButton.styleFrom(
-                backgroundColor: AppTheme.secondaryBlue.withValues(alpha: 0.1),
+                backgroundColor: const Color(0xFFFF6B8A).withValues(alpha: 0.1),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -391,6 +403,7 @@ _buildAlternativeOptions(),
         border: Border.all(color: Colors.red.withValues(alpha: 0.3), width: 1),
       ),
       child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.error_outline, color: Colors.red, size: 20),
           const SizedBox(width: 12),
@@ -407,9 +420,10 @@ _buildAlternativeOptions(),
 
   Widget _buildAlternativeOptions() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Row(
+              mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(child: Divider(color: AppTheme.lightGrey, thickness: 1)),
             Padding(
@@ -462,12 +476,13 @@ _buildAlternativeOptions(),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(icon, color: AppTheme.mediumGrey, size: 20),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
                     title,
@@ -501,7 +516,7 @@ _buildAlternativeOptions(),
               ? null
               : _handleJoin,
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppTheme.secondaryBlue,
+            backgroundColor: const Color(0xFFFF6B8A),
             foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(vertical: 16),
             shape: RoundedRectangleBorder(
@@ -519,7 +534,7 @@ _buildAlternativeOptions(),
                   ),
                 )
               : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Icon(Icons.link, size: 18),
                     const SizedBox(width: 8),
@@ -572,7 +587,7 @@ _buildAlternativeOptions(),
         }
 
         // Call the callback - parent will handle PartnerService call
-        widget.onJoinWithCode(code);
+        await widget.onJoinWithCode(code);
 
         if (mounted) {
           Navigator.pop(context);

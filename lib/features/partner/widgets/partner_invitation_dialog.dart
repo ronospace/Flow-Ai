@@ -612,16 +612,17 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
   }
 
   Future<void> _generateInvitation() async {
+    debugPrint('🔥 generateInvitation triggered');
     setState(() => _isLoading = true);
 
     try {
       final invitation = await widget.partnerService.sendPartnerInvitation(
-        inviteeEmail: 'temp@example.com', // Temporary email for code generation
+        inviteeEmail: DateTime.now().millisecondsSinceEpoch.toString() + "@flow.invite",
       );
 
-      if (invitation != null) {
-        setState(() => _generatedInvitation = invitation);
-      }
+      setState(() {
+        _generatedInvitation = invitation;
+      });
     } catch (e) {
       _showErrorMessage('Error generating invitation: $e');
     } finally {

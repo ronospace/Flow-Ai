@@ -60,5 +60,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+    <key>NSCameraUsageDescription</key>
+    <string>Flow Ai uses the camera to scan partner QR codes securely.</string>
 </dict>
 </plist>

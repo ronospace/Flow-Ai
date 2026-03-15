@@ -1,3 +1,6 @@
+import "package:firebase_auth/firebase_auth.dart";
+import "package:cloud_firestore/cloud_firestore.dart";
+import "package:cloud_functions/cloud_functions.dart";
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'local_partner_service.dart';
@@ -8,11 +11,11 @@ class PartnerService extends ChangeNotifier {
   static final PartnerService _instance = PartnerService._internal();
   factory PartnerService() => _instance;
   PartnerService._internal() {
-    debugPrint('✅ PartnerService: Using local partner service');
+    debugPrint('✅ PartnerService: Using Firebase partner service');
   }
 
   final LocalPartnerService _localService = LocalPartnerService();
-  final bool _firebaseAvailable = false;
+  final bool _firebaseAvailable = true;
 
   Partnership? _currentPartnership;
   List<PartnerMessage> _messages = [];
@@ -36,11 +39,15 @@ class PartnerService extends ChangeNotifier {
   Future<void> initialize() async {
     _setLoading(true);
     try {
-      await _localService.initialize();
-      await _loadPartnership();
-      await _loadMessages();
-      await _loadCareActions();
-      debugPrint('✅ PartnerService initialized');
+      if (_firebaseAvailable) {
+        debugPrint('✅ PartnerService initialized (Firebase mode)');
+      } else {
+        await _localService.initialize();
+        await _loadPartnership();
+        await _loadMessages();
+        await _loadCareActions();
+        debugPrint('✅ PartnerService initialized (local mode)');
+      }
     } catch (e) {
       _setError('Failed to initialize: $e');
     } finally {
@@ -51,9 +58,11 @@ class PartnerService extends ChangeNotifier {
   /// Load partnership for current user
   Future<void> _loadPartnership() async {
     try {
+      if (_firebaseAvailable) {
+        return;
+      }
       final partnership = await _localService.getCurrentPartnership();
       if (partnership != null) {
-        // Convert model Partnership to service Partnership
         _currentPartnership = Partnership(
           id: partnership.id,
           primaryUserId: partnership.userId1,
@@ -82,7 +91,7 @@ class PartnerService extends ChangeNotifier {
 
   /// Load messages for current partnership
   Future<void> _loadMessages() async {
-    if (_currentPartnership == null) return;
+    if (_firebaseAvailable || _currentPartnership == null) return;
 
     try {
       final messages = await _localService.getMessages(_currentPartnership!.id);
@@ -95,7 +104,7 @@ class PartnerService extends ChangeNotifier {
 
   /// Load care actions for current partnership
   Future<void> _loadCareActions() async {
-    if (_currentPartnership == null) return;
+    if (_firebaseAvailable || _currentPartnership == null) return;
 
     try {
       final actions = await _localService.getCareActions(
@@ -116,15 +125,64 @@ class PartnerService extends ChangeNotifier {
   }) async {
     _setLoading(true);
     try {
-      final invitation = await _localService.createPartnerInvitation(
-        personalMessage: personalMessage,
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        throw Exception('User not authenticated');
+      }
+
+      final now = DateTime.now();
+      final expiresAt = now.add(const Duration(days: 7));
+      final invitationCode = now.microsecondsSinceEpoch.toRadixString(36).toUpperCase().substring(0, 6);
+      final invitationLink = 'https://flow-ai-656b3.web.app/invite/$invitationCode';
+
+      final invitation = PartnerInvitation(
+        id: invitationCode,
+        inviterId: user.uid,
+        inviterName: user.displayName ?? 'User',
+        inviterEmail: user.email,
+        inviteeEmail: inviteeEmail,
+        inviteePhone: inviteePhone,
+        invitationCode: invitationCode,
+        createdAt: now,
+        expiresAt: expiresAt,
+        message: personalMessage,
       );
 
-      debugPrint('✅ Partner invitation created: ${invitation.invitationCode}');
+      await FirebaseFirestore.instance
+          .collection('partnerInvites')
+          .doc(invitationCode)
+          .set({
+        'id': invitation.id,
+        'fromUid': invitation.inviterId,
+        'fromName': invitation.inviterName,
+        'fromEmail': invitation.inviterEmail,
+        'toEmail': inviteeEmail,
+        'inviteePhone': inviteePhone,
+        'invitationCode': invitation.invitationCode,
+        'invitationLink': invitationLink,
+        'personalMessage': personalMessage,
+        'createdAt': now.toIso8601String(),
+        'expiresAt': expiresAt.toIso8601String(),
+        'status': 'pending',
+      });
 
+      try {
+        final callable = FirebaseFunctions.instance.httpsCallable('sendPartnerInvite');
+        await callable.call({
+          'email': inviteeEmail,
+          'personalMessage': personalMessage,
+          'invitationCode': invitationCode,
+          'invitationLink': invitationLink,
+        });
+      } catch (e) {
+        debugPrint('⚠️ Email invite send failed: $e');
+      }
+
+      debugPrint('✅ Partner invitation created: ${invitation.invitationCode}');
       return invitation;
     } catch (e) {
       _setError('Failed to create invitation: $e');
+      debugPrint('❌ Failed to create invitation: $e');
       return null;
     } finally {
       _setLoading(false);
@@ -135,24 +193,100 @@ class PartnerService extends ChangeNotifier {
   Future<Partnership?> acceptPartnerInvitation(String invitationCode) async {
     _setLoading(true);
     try {
-      final partnershipData = await _localService.acceptPartnerInvitation(
-        invitationCode,
-      );
+      if (!_firebaseAvailable) {
+        final partnershipData = await _localService.acceptPartnerInvitation(
+          invitationCode,
+        );
 
-      if (partnershipData != null) {
-        // Reload partnership to get updated state
-        await _loadPartnership();
-        await _loadMessages();
-        await _loadCareActions();
-        notifyListeners();
-        debugPrint('✅ Partnership accepted');
-        return _currentPartnership;
+        if (partnershipData != null) {
+          await _loadPartnership();
+          await _loadMessages();
+          await _loadCareActions();
+          notifyListeners();
+          debugPrint('✅ Partnership accepted');
+          return _currentPartnership;
+        }
+
+        _setError('Failed to accept invitation');
+        return null;
       }
 
-      _setError('Failed to accept invitation');
-      return null;
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        throw Exception('User not authenticated');
+      }
+
+      final code = invitationCode.trim();
+      final inviteQuery = await FirebaseFirestore.instance
+          .collection('partnerInvites')
+          .where('invitationCode', isEqualTo: code)
+          .limit(1)
+          .get();
+
+      if (inviteQuery.docs.isEmpty) {
+        throw Exception('Invitation code not found');
+      }
+
+      final inviteDoc = inviteQuery.docs.first;
+      final data = inviteDoc.data();
+      final fromUid = (data['fromUid'] ?? '').toString();
+
+      if (fromUid.isEmpty) {
+        throw Exception('Invitation missing sender');
+      }
+      if (fromUid == user.uid) {
+        throw Exception('Cannot accept your own invitation');
+      }
+
+      final partnershipId = 'partnership_${DateTime.now().millisecondsSinceEpoch}';
+      final now = DateTime.now();
+
+      final partnership = Partnership(
+        id: partnershipId,
+        primaryUserId: fromUid,
+        partnerUserId: user.uid,
+        primaryUserName: (data['fromName'] ?? 'Partner').toString(),
+        partnerUserName: user.displayName ?? 'User',
+        primaryUserEmail: data['fromEmail']?.toString(),
+        partnerUserEmail: user.email,
+        createdAt: now,
+        lastActiveAt: now,
+        sharingSettings: const PartnerSharingSettings(),
+      );
+
+      final batch = FirebaseFirestore.instance.batch();
+
+      batch.set(
+        FirebaseFirestore.instance.collection('partnerConnections').doc(partnershipId),
+        {
+          'id': partnership.id,
+          'primaryUserId': partnership.primaryUserId,
+          'partnerUserId': partnership.partnerUserId,
+          'primaryUserName': partnership.primaryUserName,
+          'partnerUserName': partnership.partnerUserName,
+          'primaryUserEmail': partnership.primaryUserEmail,
+          'partnerUserEmail': partnership.partnerUserEmail,
+          'createdAt': now.toIso8601String(),
+          'lastActiveAt': now.toIso8601String(),
+          'sharingSettings': partnership.sharingSettings.toJson(),
+        },
+      );
+
+      batch.update(inviteDoc.reference, {
+        'acceptedByUid': user.uid,
+        'acceptedAt': now.toIso8601String(),
+        'status': 'accepted',
+      });
+
+      await batch.commit();
+
+      _currentPartnership = partnership;
+      notifyListeners();
+      debugPrint('✅ Partnership accepted via Firebase');
+      return _currentPartnership;
     } catch (e) {
       _setError('Failed to accept invitation: $e');
+      debugPrint('❌ Failed to accept invitation: $e');
       return null;
     } finally {
       _setLoading(false);

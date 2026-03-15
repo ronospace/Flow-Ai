@@ -116,6 +116,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
 
     // Use adaptive scaffold that automatically adjusts to platform conventions
     return AdaptiveComponents.adaptiveScaffold(
@@ -443,18 +445,29 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
         // Social Login Buttons
         if (PlatformService().platformInfo.platform == TargetPlatform.iOS)
-          Center(
-            child: SizedBox(
-              width: 260,
-              child: SocialLoginButton(
-                icon: Icons.apple,
-                label: 'Apple',
-                onPressed: _isLoading ? null : _handleAppleSignIn,
-                backgroundColor: Colors.black,
-                iconColor: Colors.white,
-                textColor: Colors.white,
+          Row(
+            children: [
+              Expanded(
+                child: SocialLoginButton(
+                  icon: Icons.apple,
+                  label: 'Apple',
+                  onPressed: _isLoading ? null : _handleAppleSignIn,
+                  backgroundColor: Colors.black,
+                  iconColor: Colors.white,
+                  textColor: Colors.white,
+                ),
               ),
-            ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: SocialLoginButton(
+                  icon: Icons.g_mobiledata,
+                  label: 'Google',
+                  onPressed: _isLoading ? null : _handleGoogleSignIn,
+                  backgroundColor: Colors.white,
+                  iconColor: const Color(0xFF4285F4),
+                ),
+              ),
+            ],
           )
         else
           Center(
