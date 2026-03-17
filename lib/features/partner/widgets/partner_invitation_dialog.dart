@@ -271,6 +271,19 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                   ).hasMatch(value)) {
                     return 'Please enter a valid email address';
                   }
+
+                  final lower = value.toLowerCase();
+
+                  if (lower.endsWith('@gmail.co') ||
+                      lower.endsWith('@gamil.com') ||
+                      lower.endsWith('@gnail.com') ||
+                      lower.endsWith('@gmail.con') ||
+                      lower.endsWith('@yahoo.co') ||
+                      lower.endsWith('@outlook.co') ||
+                      lower.endsWith('@icloud.co')) {
+                    return 'Did you mean .com?';
+                  }
+
                   return null;
                 },
               ),
