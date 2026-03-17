@@ -135,7 +135,7 @@ class PartnerService extends ChangeNotifier {
         personalMessage: personalMessage,
       );
 
-      debugPrint('✅ Partner invitation created: ${invitation.invitationCode}');
+      debugPrint('📨 Partner invitation send flow completed');
 
       return invitation;
     } catch (e) {
