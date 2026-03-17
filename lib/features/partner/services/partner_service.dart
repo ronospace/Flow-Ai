@@ -108,6 +108,15 @@ class PartnerService extends ChangeNotifier {
     }
   }
 
+  /// Create invitation without sending email (QR / link flow)
+  Future<PartnerInvitation> createPartnerInvitation({
+    String? personalMessage,
+  }) async {
+    return _localService.createPartnerInvitation(
+      personalMessage: personalMessage,
+    );
+  }
+
   /// Send invitation to partner
   Future<PartnerInvitation?> sendPartnerInvitation({
     required String inviteeEmail,
@@ -116,6 +125,12 @@ class PartnerService extends ChangeNotifier {
   }) async {
     _setLoading(true);
     try {
+      // TEMP VALIDATION GUARD (pre-backend)
+      final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
+      if (!emailRegex.hasMatch(inviteeEmail)) {
+        throw Exception('Invalid email address');
+      }
+
       final invitation = await _localService.createPartnerInvitation(
         personalMessage: personalMessage,
       );
@@ -124,12 +139,13 @@ class PartnerService extends ChangeNotifier {
 
       return invitation;
     } catch (e) {
-      _setError('Failed to create invitation: $e');
+      _setError('Failed to send invitation: $e');
       return null;
     } finally {
       _setLoading(false);
     }
   }
+
 
   /// Accept partner invitation
   Future<Partnership?> acceptPartnerInvitation(String invitationCode) async {
