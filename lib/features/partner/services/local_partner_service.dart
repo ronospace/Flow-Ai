@@ -1,4 +1,3 @@
-import "package:cloud_firestore/cloud_firestore.dart";
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
@@ -80,34 +79,21 @@ class LocalPartnerService {
     final invitationCode = _generateInvitationCode();
     final now = DateTime.now();
     final invitation = PartnerInvitation(
-      id: invitationCode,
+      id: 'inv_${DateTime.now().millisecondsSinceEpoch}',
       inviterId: userInfo['userId']!,
       inviterName: userInfo['userName']!,
       inviterEmail: userInfo['userEmail'],
-      inviteeEmail: '',
+      inviteeEmail: userInfo['userEmail'] ?? '', // Will be filled when accepted
       invitationCode: invitationCode,
       createdAt: now,
       expiresAt: now.add(expirationDuration),
       message: personalMessage,
     );
 
-    await FirebaseFirestore.instance
-        .collection('partner_invites')
-        .doc(invitationCode)
-        .set({
-      'id': invitation.id,
-      'inviterId': invitation.inviterId,
-      'inviterName': invitation.inviterName,
-      'inviterEmail': invitation.inviterEmail,
-      'inviteeEmail': invitation.inviteeEmail,
-      'invitationCode': invitation.invitationCode,
-      'createdAt': invitation.createdAt.toIso8601String(),
-      'expiresAt': invitation.expiresAt.toIso8601String(),
-      'message': invitation.message,
-      'status': 'pending',
-    });
+    // Save invitation
+    await _saveInvitation(invitation);
+    debugPrint('✅ Partner invitation created: $invitationCode');
 
-    debugPrint('✅ Partner invitation created in Firestore: $invitationCode');
     return invitation;
   }
 
@@ -117,45 +103,46 @@ class LocalPartnerService {
   ) async {
     await _ensureInitialized();
 
+    // Get current user info
     final userInfo = await _getCurrentUserInfo();
     final inviteeUserId = userInfo['userId']!;
-    final code = invitationCode.trim().toUpperCase();
+    final inviteeUserName = userInfo['userName']!;
+    final inviteeEmail = userInfo['userEmail'];
 
-    final inviteRef = FirebaseFirestore.instance
-        .collection('partner_invites')
-        .doc(code);
-    final inviteSnap = await inviteRef.get();
-
-    if (!inviteSnap.exists) {
-      debugPrint('❌ Invitation not found: $code');
+    // Find invitation
+    final invitation = await _findInvitationByCode(invitationCode);
+    if (invitation == null) {
+      debugPrint('❌ Invitation not found: $invitationCode');
       return null;
     }
 
-    final data = inviteSnap.data()!;
-    final inviterId = (data['inviterId'] ?? '').toString();
-    final status = (data['status'] ?? 'pending').toString();
-    final expiresAtRaw = (data['expiresAt'] ?? '').toString();
-
-    if (inviterId.isEmpty) {
-      debugPrint('❌ Invitation missing inviterId');
-      return null;
-    }
-    if (status != 'pending') {
-      debugPrint('❌ Invitation already used');
-      return null;
-    }
-    if (inviterId == inviteeUserId) {
-      debugPrint('❌ Cannot connect to yourself');
-      return null;
-    }
-    if (expiresAtRaw.isEmpty || DateTime.now().isAfter(DateTime.parse(expiresAtRaw))) {
+    // Check if expired
+    if (DateTime.now().isAfter(invitation.expiresAt)) {
       debugPrint('❌ Invitation expired');
       return null;
     }
 
+    // Check if user is trying to connect to themselves
+    if (invitation.inviterId == inviteeUserId) {
+      debugPrint('❌ Cannot connect to yourself');
+      return null;
+    }
+
+    // Check if partnership already exists
+    final existing = await getPartnershipBetween(
+      invitation.inviterId,
+      inviteeUserId,
+    );
+    if (existing != null) {
+      debugPrint('⚠️ Partnership already exists');
+      return existing.toJson();
+    }
+
+    // Get inviter name from invitation
+    // Create partnership using partner_models.dart structure
     final partnership = Partnership(
       id: 'partnership_${DateTime.now().millisecondsSinceEpoch}',
-      userId1: inviterId,
+      userId1: invitation.inviterId,
       userId2: inviteeUserId,
       customName1: null,
       customName2: null,
@@ -165,34 +152,14 @@ class LocalPartnerService {
       lastActiveAt: DateTime.now(),
     );
 
-    final batch = FirebaseFirestore.instance.batch();
-
-    batch.set(
-      FirebaseFirestore.instance.collection('partner_connections').doc(partnership.id),
-      {
-        'id': partnership.id,
-        'userId1': partnership.userId1,
-        'userId2': partnership.userId2,
-        'customName1': partnership.customName1,
-        'customName2': partnership.customName2,
-        'establishedAt': partnership.establishedAt.toIso8601String(),
-        'status': partnership.status.name,
-        'privacySettings': partnership.privacySettings.toJson(),
-        'lastActiveAt': partnership.lastActiveAt?.toIso8601String(),
-      },
-    );
-
-    batch.update(inviteRef, {
-      'status': 'accepted',
-      'acceptedByUserId': inviteeUserId,
-      'acceptedAt': DateTime.now().toIso8601String(),
-    });
-
-    await batch.commit();
-
+    // Save partnership
     await _savePartnership(partnership);
 
-    debugPrint('✅ Partnership created in Firestore: ${partnership.id}');
+    // Remove invitation (one-time use)
+    await _removeInvitation(invitation.id);
+
+    debugPrint('✅ Partnership created: ${partnership.id}');
+
     return partnership.toJson();
   }
 

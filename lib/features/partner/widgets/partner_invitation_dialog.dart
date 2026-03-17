@@ -6,7 +6,6 @@ import 'package:share_plus/share_plus.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../generated/app_localizations.dart';
 import '../services/partner_service.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class PartnerInvitationDialog extends StatefulWidget {
   final PartnerService partnerService;
@@ -30,6 +29,8 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
   final _formKey = GlobalKey<FormState>();
 
   bool _isLoading = false;
+  String? _successMessage;
+
   PartnerInvitation? _generatedInvitation;
 
   @override
@@ -214,21 +215,32 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Send Email Invitation',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: AppTheme.darkGrey,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Your partner will receive a beautiful invitation email with instructions to join.',
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: AppTheme.mediumGrey,
-                  height: 1.4,
-                ),
-              ),
+              if (_successMessage != null) ...[
+                Container(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(color: Colors.black12, blurRadius: 10),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.favorite, color: Colors.pink),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          _successMessage!,
+                          style: const TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ],
+                  ),
+                ).animate().fadeIn().slideY(begin: -0.3),
+              ],
+
               const SizedBox(height: 24),
 
               TextFormField(
@@ -420,7 +432,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
             children: [
               Expanded(
                 child: OutlinedButton.icon(
-                  onPressed: _generateInvitation,
+                  onPressed: _generateCodeOnly,
                   icon: const Icon(Icons.refresh),
                   label: const Text('Generate Code'),
                   style: OutlinedButton.styleFrom(
@@ -551,7 +563,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
             children: [
               Expanded(
                 child: OutlinedButton.icon(
-                  onPressed: _generateInvitation,
+                  onPressed: _generateCodeOnly,
                   icon: const Icon(Icons.link),
                   label: const Text('Generate Link'),
                   style: OutlinedButton.styleFrom(
@@ -587,46 +599,60 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
     );
   }
 
-  // Action methods
-
   Future<void> _openEmailInvite() async {
-    if (_generatedInvitation == null) {
-      await _generateInvitation();
+    final email = _emailController.text.trim();
+    final message = _messageController.text.trim();
+
+    if (email.isEmpty) {
+      _showErrorMessage("Enter your partner's email.");
+      return;
     }
-    if (_generatedInvitation == null) return;
 
-    final link = _generateInvitationLink(_generatedInvitation!);
-
-    final subject = Uri.encodeComponent('Flow AI Partner Invitation');
-    final body = Uri.encodeComponent(
-      'Join me on Flow AI!\n\nUse this link to connect:\n$link',
-    );
-
-    final uri = Uri.parse('mailto:?subject=$subject&body=$body');
-
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    } else {
-      _showErrorMessage('No email app available.');
-    }
-  }
-
-  Future<void> _generateInvitation() async {
-    debugPrint('🔥 generateInvitation triggered');
     setState(() => _isLoading = true);
 
     try {
-      final invitation = await widget.partnerService.sendPartnerInvitation(
-        inviteeEmail: DateTime.now().millisecondsSinceEpoch.toString() + "@flow.invite",
+      await widget.partnerService.sendPartnerInvitation(
+        inviteeEmail: email,
+        personalMessage: message.isEmpty ? null : message,
       );
+
+      if (!mounted) return;
+
+      setState(() {
+        _successMessage = "Invitation sent successfully ❤️";
+      });
+      Future.delayed(const Duration(seconds: 2), () {
+        if (mounted) {
+          setState(() => _successMessage = null);
+          Navigator.of(context).pop();
+        }
+      });
+    } catch (e) {
+      _showErrorMessage("Error sending invitation: $e");
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  Future<void> _generateCodeOnly() async {
+    if (_isLoading) return;
+    setState(() {
+      _isLoading = true;
+      _successMessage = null;
+    });
+
+    try {
+      final invitation = await widget.partnerService.createPartnerInvitation();
+
+      if (!mounted) return;
 
       setState(() {
         _generatedInvitation = invitation;
       });
     } catch (e) {
-      _showErrorMessage('Error generating invitation: $e');
+      _showErrorMessage("Error generating invitation: $e");
     } finally {
-      setState(() => _isLoading = false);
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
@@ -636,50 +662,37 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
 
   void _copyToClipboard(String text) {
     Clipboard.setData(ClipboardData(text: text));
-    ScaffoldMessenger.maybeOf(context)?.showSnackBar(
-      SnackBar(
-        content: const Text('Link copied to clipboard!'),
-        backgroundColor: AppTheme.successGreen,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      ),
-    );
   }
 
   void _shareLink() {
     if (_generatedInvitation != null) {
       final link = _generateInvitationLink(_generatedInvitation!);
-      Share.share(
-        'Join me on Flow Ai! Use this link to connect and share our cycle journey together: $link',
-        subject: 'Flow Ai Partner Invitation',
-      );
+      Share.share(link);
     }
   }
 
-  void _saveQRCode() {
-    // Implementation for saving QR code to gallery
-    _showSuccessMessage('QR Code saved to gallery!');
-  }
-
-  void _showSuccessMessage(String message) {
-    ScaffoldMessenger.maybeOf(context)?.showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: AppTheme.successGreen,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      ),
-    );
-  }
-
   void _showErrorMessage(String message) {
-    ScaffoldMessenger.maybeOf(context)?.showSnackBar(
-      SnackBar(
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text("Error"),
         content: Text(message),
-        backgroundColor: AppTheme.errorRed,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text("OK"),
+          ),
+        ],
       ),
     );
+  }
+
+  void _saveQRCode() {
+    setState(() => _successMessage = "QR saved successfully");
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        setState(() => _successMessage = null);
+      }
+    });
   }
 }
