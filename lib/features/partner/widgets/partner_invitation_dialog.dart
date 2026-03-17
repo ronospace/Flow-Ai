@@ -28,8 +28,10 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
   final _messageController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+
   bool _isLoading = false;
   String? _successMessage;
+
 
   PartnerInvitation? _generatedInvitation;
 
@@ -603,24 +605,33 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
     final email = _emailController.text.trim();
     final message = _messageController.text.trim();
 
-    if (email.isEmpty) {
-      _showErrorMessage("Enter your partner's email.");
+    if (_successMessage != null) {
+      setState(() => _successMessage = null);
+    }
+
+    if (!_formKey.currentState!.validate()) {
       return;
     }
 
     setState(() => _isLoading = true);
 
     try {
-      await widget.partnerService.sendPartnerInvitation(
+      final result = await widget.partnerService.sendPartnerInvitation(
         inviteeEmail: email,
         personalMessage: message.isEmpty ? null : message,
       );
 
       if (!mounted) return;
 
+      if (result == null) {
+        _showErrorMessage("Failed to send invitation");
+        return;
+      }
+
       setState(() {
         _successMessage = "Invitation sent successfully ❤️";
       });
+
       Future.delayed(const Duration(seconds: 2), () {
         if (mounted) {
           setState(() => _successMessage = null);
@@ -633,6 +644,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
       if (mounted) setState(() => _isLoading = false);
     }
   }
+
 
   Future<void> _generateCodeOnly() async {
     if (_isLoading) return;
