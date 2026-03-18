@@ -159,7 +159,7 @@ class AvatarRingPainter extends CustomPainter {
     canvas.drawArc(
       rect,
       progress * math.pi * 2,
-      math.pi * 0.95,
+      math.pi * 0.55,
       false,
       paint,
     );
