@@ -1,3 +1,4 @@
+import 'package:cloud_functions/cloud_functions.dart';
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'local_partner_service.dart';
@@ -135,7 +136,19 @@ class PartnerService extends ChangeNotifier {
         personalMessage: personalMessage,
       );
 
-      debugPrint('📨 Partner invitation send flow completed');
+      final invitationCode = invitation.invitationCode;
+      final invitationLink = "https://flowai.app/invite/$invitationCode";
+
+      final callable = FirebaseFunctions.instance.httpsCallable("sendPartnerInvite");
+
+      await callable.call({
+        "email": inviteeEmail,
+        "personalMessage": personalMessage ?? "",
+        "invitationCode": invitationCode,
+        "invitationLink": invitationLink,
+      });
+
+      debugPrint("📨 Partner invitation email sent");
 
       return invitation;
     } catch (e) {
