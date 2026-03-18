@@ -141,7 +141,7 @@ class AvatarRingPainter extends CustomPainter {
 
     final paint = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.2
+      ..strokeWidth = 1.8
       ..strokeCap = StrokeCap.round
       ..shader = SweepGradient(
         startAngle: 0,
@@ -152,7 +152,7 @@ class AvatarRingPainter extends CustomPainter {
           Color(0xFFC850F2),
           Color(0x00C850F2),
         ],
-        stops: const [0.0, 0.18, 0.34, 1.0],
+        stops: const [0.0, 0.25, 0.5, 1.0],
         transform: GradientRotation(progress * math.pi * 2),
       ).createShader(rect);
 
