@@ -25,6 +25,7 @@ class InsightsScreen extends StatefulWidget {
 class _InsightsScreenState extends State<InsightsScreen>
     with TickerProviderStateMixin {
   late TabController _tabController;
+  late AnimationController _aiPulseController;
   int _selectedPeriod = 3; // 3 months default
 
   final List<Map<String, dynamic>> _timePeriods = [
@@ -37,6 +38,10 @@ class _InsightsScreenState extends State<InsightsScreen>
   @override
   void initState() {
     super.initState();
+    _aiPulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3),
+    )..repeat(reverse: true);
     _tabController = TabController(length: 3, vsync: this);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -47,6 +52,7 @@ class _InsightsScreenState extends State<InsightsScreen>
 
   @override
   void dispose() {
+    _aiPulseController.dispose();
     _tabController.dispose();
     super.dispose();
   }
@@ -147,6 +153,13 @@ class _InsightsScreenState extends State<InsightsScreen>
               ),
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
+                BoxShadow(
+                  color: AppTheme.secondaryBlue.withValues(
+                    alpha: 0.2 + (0.2 * _aiPulseController.value),
+                  ),
+                  blurRadius: 8 + (6 * _aiPulseController.value),
+                  offset: const Offset(0, 4),
+                ),
                 BoxShadow(
                   color: AppTheme.secondaryBlue.withValues(alpha: 0.3),
                   blurRadius: 10,

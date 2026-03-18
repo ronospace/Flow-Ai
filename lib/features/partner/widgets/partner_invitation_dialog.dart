@@ -30,6 +30,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
 
 
   bool _isLoading = false;
+  bool _isExecutingInvite = false;
   String? _successMessage;
   bool _isSent = false;
 
@@ -315,7 +316,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
-                  onPressed: _isLoading ? null : _openEmailInvite,
+                  onPressed: (_isLoading || _isSent) ? null : _openEmailInvite,
                   icon: _isLoading
                       ? SizedBox(
                           width: 20,
@@ -616,6 +617,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
   }
 
   Future<void> _openEmailInvite() async {
+    if (_isExecutingInvite || _isSent || _isLoading) return;
     final email = _emailController.text.trim();
     final message = _messageController.text.trim();
 
@@ -627,7 +629,10 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
       return;
     }
 
-    setState(() => _isLoading = true);
+    setState(() {
+      _isExecutingInvite = true;
+      _isLoading = true;
+    });
 
     try {
       final result = await widget.partnerService.sendPartnerInvitation(
@@ -656,7 +661,14 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
     } catch (e) {
       _showErrorMessage("Error sending invitation: $e");
     } finally {
-      if (mounted) setState(() => _isLoading = false);
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _isExecutingInvite = false;
+        });
+      } else {
+        _isExecutingInvite = false;
+      }
     }
   }
 
@@ -680,6 +692,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
       _showErrorMessage("Error generating invitation: $e");
     } finally {
       if (mounted) setState(() => _isLoading = false);
+      _isExecutingInvite = false;
     }
   }
 

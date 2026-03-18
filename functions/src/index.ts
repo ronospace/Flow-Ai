@@ -1,12 +1,14 @@
 /* eslint-disable max-len */
 import {onCall, HttpsError} from "firebase-functions/v2/https";
 import {defineSecret} from "firebase-functions/params";
+import {getFirestore} from "firebase-admin/firestore";
 import {initializeApp} from "firebase-admin/app";
 
 import sgMail from "@sendgrid/mail";
 
 initializeApp();
 
+const db = getFirestore();
 
 const SENDGRID_API_KEY = defineSecret("SENDGRID_API_KEY");
 const SENDGRID_FROM_EMAIL = defineSecret("SENDGRID_FROM_EMAIL");
@@ -34,6 +36,18 @@ export const sendPartnerInvite = onCall(
       throw new HttpsError("invalid-argument", "Missing invitationLink");
     }
 
+    await db.collection("partnerInvites").doc(invitationCode).set({
+      fromUid: uid,
+      toEmail: email,
+      personalMessage,
+      invitationCode,
+      invitationLink,
+      status: "created",
+      emailStatus: "queued",
+      sendgridStatus: null,
+      createdAt: Date.now(),
+    }, {merge: true});
+
     const html = `
       <div style="font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.4">
         <h2>You're invited to connect on Flow Ai</h2>
@@ -53,9 +67,20 @@ export const sendPartnerInvite = onCall(
         subject: "Flow Ai Partner Invitation",
         html,
       });
+      await db.collection("partnerInvites").doc(invitationCode).set({
+        emailStatus: "sent",
+        sendgridStatus: resp?.statusCode ?? null,
+        emailSentAt: Date.now(),
+      }, {merge: true});
+      console.log("SENDGRID_OK", JSON.stringify({
+        statusCode: resp?.statusCode ?? null,
+        to: email,
+        from: fromEmail,
+      }));
       return {
         ok: true,
-        statusCode: resp?.statusCode ?? null,
+        sendgridStatus: resp?.statusCode ?? null,
+        sentTo: email,
       };
     } catch (err: unknown) {
       const e = err as { code?: unknown; response?: { statusCode?: unknown; body?: unknown } } | null;

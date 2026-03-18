@@ -164,29 +164,6 @@ class PredictionAccuracyCard extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 12),
-
-          // View Sources link
-          GestureDetector(
-            onTap: () {
-              _showCitationDialog(context);
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.menu_book, size: 14, color: AppTheme.secondaryBlue),
-                const SizedBox(width: 6),
-                Text(
-                  'View Sources',
-                  style: TextStyle(
-                    color: AppTheme.secondaryBlue,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     ).animate().fadeIn().slideY(begin: 0.2, end: 0);

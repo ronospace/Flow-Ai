@@ -1,0 +1,74 @@
+lib/core/health/advanced_health_analytics.dart:class ConditionScreeningResult {
+lib/core/services/preventive_health_insights.dart:class HealthScreeningReport {
+lib/features/_disabled_experimental/community/screens/community_hub_screen.dart:class CommunityHubScreen extends StatefulWidget {
+lib/features/_disabled_experimental/community/screens/community_hub_screen.dart:class _CommunityHubScreenState extends State<CommunityHubScreen>
+lib/features/_disabled_experimental/gamification/screens/gamification_dashboard_screen.dart:class GamificationDashboardScreen extends StatefulWidget {
+lib/features/_disabled_experimental/gamification/screens/gamification_dashboard_screen.dart:class _GamificationDashboardScreenState
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:class AIPredictionsScreen extends StatefulWidget {
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:class _AIPredictionsScreenState extends State<AIPredictionsScreen>
+lib/features/analytics/screens/analytics_dashboard_screen.dart:class AnalyticsDashboardScreen extends StatefulWidget {
+lib/features/analytics/screens/analytics_dashboard_screen.dart:class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:class EnhancedAnalyticsDashboardScreen extends StatefulWidget {
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:class _EnhancedAnalyticsDashboardScreenState
+lib/features/auth/screens/auth_choice_screen.dart:class AuthChoiceScreen extends StatefulWidget {
+lib/features/auth/screens/auth_choice_screen.dart:class _AuthChoiceScreenState extends State<AuthChoiceScreen>
+lib/features/auth/screens/auth_screen.dart:class AuthScreen extends StatefulWidget {
+lib/features/auth/screens/auth_screen.dart:class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
+lib/features/auth/screens/futuristic_auth_screen.dart:class FuturisticAuthScreen extends StatefulWidget {
+lib/features/auth/screens/futuristic_auth_screen.dart:class _FuturisticAuthScreenState extends State<FuturisticAuthScreen>
+lib/features/biometric/screens/biometric_dashboard_screen.dart:class BiometricDashboardScreen extends StatefulWidget {
+lib/features/biometric/screens/biometric_dashboard_screen.dart:class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
+lib/features/coming_soon/screens/coming_soon_screen.dart:class ComingSoonScreen extends StatefulWidget {
+lib/features/coming_soon/screens/coming_soon_screen.dart:class _ComingSoonScreenState extends State<ComingSoonScreen>
+lib/features/cycle/screens/calendar_screen.dart:class CalendarScreen extends StatefulWidget {
+lib/features/cycle/screens/calendar_screen.dart:class _CalendarScreenState extends State<CalendarScreen>
+lib/features/cycle/screens/home_screen.dart:class HomeScreen extends StatefulWidget {
+lib/features/cycle/screens/home_screen.dart:class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+lib/features/cycle/screens/tracking_screen.dart:class TrackingScreen extends StatefulWidget {
+lib/features/cycle/screens/tracking_screen.dart:class _TrackingScreenState extends State<TrackingScreen>
+lib/features/deployment/models/deployment_models.dart:class Screenshot {
+lib/features/feedback/screens/feedback_screen.dart:class FeedbackScreen extends StatefulWidget {
+lib/features/feedback/screens/feedback_screen.dart:class _FeedbackScreenState extends State<FeedbackScreen>
+lib/features/future_plans/screens/future_plans_screen.dart:class FuturePlansScreen extends StatefulWidget {
+lib/features/future_plans/screens/future_plans_screen.dart:class _FuturePlansScreenState extends State<FuturePlansScreen>
+lib/features/health/screens/health_screen.dart:class HealthScreen extends StatefulWidget {
+lib/features/health/screens/health_screen.dart:class _HealthScreenState extends State<HealthScreen>
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:class HealthcareProviderPortalScreen extends StatefulWidget {
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:class _HealthcareProviderPortalScreenState
+lib/features/insights/screens/ai_coach_screen.dart:class AICoachScreen extends StatelessWidget {
+lib/features/insights/screens/analytics_dashboard_screen.dart:class AnalyticsDashboardScreen extends StatefulWidget {
+lib/features/insights/screens/analytics_dashboard_screen.dart:class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
+lib/features/insights/screens/faq_browser_screen.dart:class FAQBrowserScreen extends StatefulWidget {
+lib/features/insights/screens/faq_browser_screen.dart:class _FAQBrowserScreenState extends State<FAQBrowserScreen>
+lib/features/insights/screens/insights_screen.dart:class InsightsScreen extends StatefulWidget {
+lib/features/insights/screens/insights_screen.dart:class _InsightsScreenState extends State<InsightsScreen>
+lib/features/notifications/screens/notification_settings_screen.dart:class NotificationSettingsScreen extends StatefulWidget {
+lib/features/notifications/screens/notification_settings_screen.dart:class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
+lib/features/onboarding/screens/cycle_history_step_screen.dart:class CycleHistoryStepScreen extends StatefulWidget {
+lib/features/onboarding/screens/cycle_history_step_screen.dart:class _CycleHistoryStepScreenState extends State<CycleHistoryStepScreen> {
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:class InteractiveOnboardingScreen extends StatefulWidget {
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:class _InteractiveOnboardingScreenState
+lib/features/onboarding/screens/onboarding_screen.dart:class OnboardingScreen extends StatefulWidget {
+lib/features/onboarding/screens/onboarding_screen.dart:class _OnboardingScreenState extends State<OnboardingScreen>
+lib/features/onboarding/screens/personal_info_step_screen.dart:class PersonalInfoStepScreen extends StatefulWidget {
+lib/features/onboarding/screens/personal_info_step_screen.dart:class _PersonalInfoStepScreenState extends State<PersonalInfoStepScreen> {
+lib/features/onboarding/screens/setup_screen.dart:class SetupScreen extends StatelessWidget {
+lib/features/onboarding/screens/splash_screen.dart:class SplashScreen extends StatefulWidget {
+lib/features/onboarding/screens/splash_screen.dart:class _SplashScreenState extends State<SplashScreen>
+lib/features/onboarding/screens/welcome_step_screen.dart:class WelcomeStepScreen extends StatelessWidget {
+lib/features/partner/screens/partner_dashboard_screen.dart:class PartnerDashboardScreen extends StatefulWidget {
+lib/features/partner/screens/partner_dashboard_screen.dart:class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
+lib/features/partner/screens/partner_privacy_settings_screen.dart:class PartnerPrivacySettingsScreen extends StatefulWidget {
+lib/features/partner/screens/partner_privacy_settings_screen.dart:class _PartnerPrivacySettingsScreenState
+lib/features/partner/screens/qr_join_screen.dart:class QrJoinScreen extends StatefulWidget {
+lib/features/partner/screens/qr_join_screen.dart:class _QrJoinScreenState extends State<QrJoinScreen> {
+lib/features/premium/screens/premium_paywall_screen.dart:class PremiumPaywallScreen extends StatefulWidget {
+lib/features/premium/screens/premium_paywall_screen.dart:class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
+lib/features/premium/screens/premium_subscription_screen.dart:class PremiumSubscriptionScreen extends StatefulWidget {
+lib/features/premium/screens/premium_subscription_screen.dart:class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen>
+lib/features/settings/screens/account_management_screen.dart:class AccountManagementScreen extends StatefulWidget {
+lib/features/settings/screens/account_management_screen.dart:class _AccountManagementScreenState extends State<AccountManagementScreen> {
+lib/features/settings/screens/help_screen.dart:class HelpScreen extends StatefulWidget {
+lib/features/settings/screens/help_screen.dart:class _HelpScreenState extends State<HelpScreen> {
+lib/features/settings/screens/settings_screen.dart:class SettingsScreen extends StatefulWidget {
+lib/features/settings/screens/settings_screen.dart:class _SettingsScreenState extends State<SettingsScreen>

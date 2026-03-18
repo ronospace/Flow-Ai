@@ -174,7 +174,7 @@ class _HealthScreenState extends State<HealthScreen>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Health Dashboard',
+                      'Wellness Overview',
                       style: theme.textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: theme.colorScheme.onSurface,
@@ -182,7 +182,7 @@ class _HealthScreenState extends State<HealthScreen>
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Comprehensive health monitoring',
+                      'Your personal wellness snapshot',
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.onSurface.withValues(
                           alpha: 0.7,
@@ -251,13 +251,7 @@ class _HealthScreenState extends State<HealthScreen>
                     color: AppTheme.successGreen.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Text(
-                    'Excellent',
-                    style: TextStyle(
-                      color: AppTheme.successGreen,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: const SizedBox.shrink(),
                 ),
               ],
             ),
@@ -309,7 +303,7 @@ class _HealthScreenState extends State<HealthScreen>
               Icons.favorite,
               AppTheme.primaryRose,
               _heartRateAnimation,
-              'Normal',
+              '',
             ),
             _buildBiometricCard(
               'Temperature',
@@ -317,7 +311,7 @@ class _HealthScreenState extends State<HealthScreen>
               Icons.thermostat,
               AppTheme.warningOrange,
               _temperatureAnimation,
-              'Normal',
+              '',
             ),
             _buildBiometricCard(
               'Sleep Quality',
@@ -325,7 +319,7 @@ class _HealthScreenState extends State<HealthScreen>
               Icons.bedtime,
               AppTheme.secondaryBlue,
               _sleepAnimation,
-              'Excellent',
+              '',
             ),
             _buildBiometricCard(
               'Stress Level',
@@ -333,7 +327,7 @@ class _HealthScreenState extends State<HealthScreen>
               Icons.psychology,
               AppTheme.accentMint,
               _heartRateAnimation,
-              'Good',
+              '',
             ),
           ],
         ),
