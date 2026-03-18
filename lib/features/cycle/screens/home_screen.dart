@@ -859,6 +859,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 ),
               ),
 
+              const SizedBox(width: 16),
+
               // REVOLUTIONARY: Real-time Health Score Indicator
               Column(
                 children: [
