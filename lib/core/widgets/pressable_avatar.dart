@@ -21,14 +21,20 @@ class _PressableAvatarState extends State<PressableAvatar>
     with SingleTickerProviderStateMixin {
   double _scale = 1.0;
   late final AnimationController _ringController;
+  late final Animation<double> _ringAnimation;
 
   @override
   void initState() {
     super.initState();
     _ringController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 6),
-    )..repeat();
+      duration: const Duration(seconds: 4),
+    );
+    _ringAnimation = CurvedAnimation(
+      parent: _ringController,
+      curve: Curves.easeInOut,
+    );
+    _ringController.repeat();
   }
 
   @override
@@ -92,7 +98,7 @@ class _PressableAvatarState extends State<PressableAvatar>
                 builder: (_, __) {
                   return CustomPaint(
                     size: const Size(48, 48),
-                    painter: AvatarRingPainter(_ringController.value),
+                    painter: AvatarRingPainter(_ringAnimation.value),
                   );
                 },
               ),
