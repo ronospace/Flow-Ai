@@ -850,9 +850,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 ],
                               ),
                             )
-                            .animate()
-                            .shimmer(duration: 2000.ms)
-                            .then(delay: 1000.ms),
                       ],
                     ),
                   ],
