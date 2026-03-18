@@ -1,9 +1,8 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 class PressableAvatar extends StatefulWidget {
   final VoidCallback onTap;
-
-  // identity (optional)
   final String? displayName;
   final String? photoUrl;
 
@@ -18,8 +17,25 @@ class PressableAvatar extends StatefulWidget {
   State<PressableAvatar> createState() => _PressableAvatarState();
 }
 
-class _PressableAvatarState extends State<PressableAvatar> {
+class _PressableAvatarState extends State<PressableAvatar>
+    with SingleTickerProviderStateMixin {
   double _scale = 1.0;
+  late final AnimationController _ringController;
+
+  @override
+  void initState() {
+    super.initState();
+    _ringController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 6),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _ringController.dispose();
+    super.dispose();
+  }
 
   void _onTapDown(TapDownDetails details) => setState(() => _scale = 0.94);
   void _onTapUp(TapUpDetails details) => setState(() => _scale = 1.0);
@@ -28,7 +44,6 @@ class _PressableAvatarState extends State<PressableAvatar> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     final photoUrl = widget.photoUrl;
     final displayName = widget.displayName;
 
@@ -45,18 +60,12 @@ class _PressableAvatarState extends State<PressableAvatar> {
         ),
       );
     } else if (displayName != null && displayName.trim().isNotEmpty) {
-      final parts = displayName.trim().split(RegExp(r"\s+"));
-      final initials =
-          (parts.first[0] + (parts.length > 1 ? parts.last[0] : ""))
-              .toUpperCase();
-
-      avatarContent = Center(
-        child: Text(
-          initials,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: theme.colorScheme.primary,
-          ),
+      avatarContent = Text(
+        displayName.trim()[0].toUpperCase(),
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w700,
+          color: theme.colorScheme.primary,
         ),
       );
     } else {
@@ -72,34 +81,38 @@ class _PressableAvatarState extends State<PressableAvatar> {
         scale: _scale,
         duration: const Duration(milliseconds: 120),
         curve: Curves.easeOut,
-        child: Container(
-          width: 42,
-          height: 42,
-          padding: const EdgeInsets.all(2.4),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: const LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color(0xFFFF6FA5),
-                Color(0xFFC850F2),
-              ],
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFFC850F2).withOpacity(0.28),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
+        child: SizedBox(
+          width: 48,
+          height: 48,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              AnimatedBuilder(
+                animation: _ringController,
+                builder: (_, __) {
+                  return CustomPaint(
+                    size: const Size(48, 48),
+                    painter: AvatarRingPainter(_ringController.value),
+                  );
+                },
+              ),
+              Container(
+                width: 42,
+                height: 42,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: theme.scaffoldBackgroundColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFFC850F2).withOpacity(0.18),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Center(child: avatarContent),
               ),
             ],
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: theme.scaffoldBackgroundColor,
-            ),
-            child: Center(child: avatarContent),
           ),
         ),
       ),
@@ -107,6 +120,53 @@ class _PressableAvatarState extends State<PressableAvatar> {
   }
 
   Widget _fallbackIcon(ThemeData theme) {
-    return Icon(Icons.person_rounded, size: 19, color: theme.colorScheme.primary);
+    return Icon(
+      Icons.person_rounded,
+      size: 19,
+      color: theme.colorScheme.primary,
+    );
+  }
+}
+
+class AvatarRingPainter extends CustomPainter {
+  final double progress;
+
+  AvatarRingPainter(this.progress);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = size.center(Offset.zero);
+    final radius = (size.width / 2) - 2;
+    final rect = Rect.fromCircle(center: center, radius: radius);
+
+    final paint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.2
+      ..strokeCap = StrokeCap.round
+      ..shader = SweepGradient(
+        startAngle: 0,
+        endAngle: math.pi * 2,
+        colors: const [
+          Color(0x00FF6FA5),
+          Color(0xFFFF6FA5),
+          Color(0xFFC850F2),
+          Color(0x00C850F2),
+        ],
+        stops: const [0.0, 0.18, 0.34, 1.0],
+        transform: GradientRotation(progress * math.pi * 2),
+      ).createShader(rect);
+
+    canvas.drawArc(
+      rect,
+      progress * math.pi * 2,
+      math.pi * 0.95,
+      false,
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant AvatarRingPainter oldDelegate) {
+    return oldDelegate.progress != progress;
   }
 }
