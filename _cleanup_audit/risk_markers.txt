@@ -1,0 +1,81 @@
+lib/generated/app_localizations_ga.dart:// ignore: unused_import
+lib/generated/app_localizations_fr.dart:// ignore: unused_import
+lib/generated/app_localizations_et.dart:// ignore: unused_import
+lib/generated/app_localizations_cy.dart:// ignore: unused_import
+lib/generated/app_localizations_ko.dart:// ignore: unused_import
+lib/generated/app_localizations_he.dart:// ignore: unused_import
+lib/generated/app_localizations_el.dart:// ignore: unused_import
+lib/generated/app_localizations_hi.dart:// ignore: unused_import
+lib/generated/app_localizations_ro.dart:// ignore: unused_import
+lib/generated/app_localizations_bg.dart:// ignore: unused_import
+lib/generated/app_localizations_da.dart:// ignore: unused_import
+lib/generated/app_localizations_lv.dart:// ignore: unused_import
+lib/generated/app_localizations_no.dart:// ignore: unused_import
+lib/generated/app_localizations_vi.dart:// ignore: unused_import
+lib/generated/app_localizations_cs.dart:// ignore: unused_import
+lib/generated/app_localizations_th.dart:// ignore: unused_import
+lib/generated/app_localizations_sv.dart:// ignore: unused_import
+lib/generated/app_localizations_ar.dart:// ignore: unused_import
+lib/generated/app_localizations_es.dart:// ignore: unused_import
+lib/generated/app_localizations_lt.dart:// ignore: unused_import
+lib/generated/app_localizations_is.dart:// ignore: unused_import
+lib/generated/app_localizations_hu.dart:// ignore: unused_import
+lib/generated/app_localizations_bn.dart:// ignore: unused_import
+lib/generated/app_localizations_zh.dart:// ignore: unused_import
+lib/generated/app_localizations_tr.dart:// ignore: unused_import
+lib/generated/app_localizations_sl.dart:// ignore: unused_import
+lib/generated/app_localizations_ja.dart:// ignore: unused_import
+lib/generated/app_localizations_nl.dart:// ignore: unused_import
+lib/generated/app_localizations_ru.dart:// ignore: unused_import
+lib/generated/app_localizations_pl.dart:// ignore: unused_import
+lib/generated/app_localizations_uk.dart:// ignore: unused_import
+lib/generated/app_localizations_de.dart:// ignore: unused_import
+lib/generated/app_localizations_mt.dart:// ignore: unused_import
+lib/generated/app_localizations_fi.dart:// ignore: unused_import
+lib/generated/app_localizations_hr.dart:// ignore: unused_import
+lib/generated/app_localizations_it.dart:// ignore: unused_import
+lib/generated/app_localizations_pt.dart:// ignore: unused_import
+lib/generated/app_localizations_sk.dart:// ignore: unused_import
+lib/generated/app_localizations_en.dart:// ignore: unused_import
+lib/core/biometrics/advanced_biometric_engine.dart:    // ignore: unused_local_variable
+lib/core/ai/period_prediction_engine.dart:  // ignore: unused_field
+lib/core/ai/period_prediction_engine.dart:  // ignore: unused_field
+lib/core/ai/period_prediction_engine.dart:  // ignore: unused_field
+lib/core/services/real_cycle_service.dart:      userId: 'unknown', // TODO: Get from auth service
+lib/core/services/local_user_service.dart:    return null; // TODO: Implement proper conversion if needed
+lib/core/services/enhanced_ai_chat_service.dart:      // Build health context for FlowAI (currently unused but available for future use)
+lib/core/services/memory_manager.dart:      recommendations.add('Close unused features');
+lib/core/services/auth_service.dart:      //     // Use a different method since fetchSignInMethodsForEmail is deprecated
+lib/core/services/ai_chat_service.dart:      // Build health context for FlowAI (currently unused but available for future use)
+lib/core/services/app_enhancement_service.dart:    // TODO: Integrate with Firebase Crashlytics, Sentry, or similar service
+lib/core/services/app_enhancement_service.dart:    // TODO: Integrate with Firebase Performance, Google Analytics, etc.
+lib/features/settings/screens/account_management_screen.dart:            // TODO: Navigate to privacy settings
+lib/features/settings/screens/account_management_screen.dart:            // TODO: Implement 2FA setup
+lib/features/settings/screens/account_management_screen.dart:            // TODO: Implement data backup
+lib/features/settings/screens/account_management_screen.dart:            // TODO: Show connected accounts
+lib/features/settings/screens/account_management_screen.dart:    // TODO: Implement actual password change
+lib/features/settings/screens/account_management_screen.dart:              // TODO: Implement cache clearing
+lib/features/settings/screens/account_management_screen.dart:              // TODO: Implement account deactivation
+lib/features/settings/screens/account_management_screen.dart:              // TODO: Implement account deletion
+lib/features/settings/widgets/profile_section.dart:    // TODO: Implement camera selection
+lib/features/settings/widgets/profile_section.dart:    // TODO: Implement gallery selection
+lib/features/partner/dialogs/join_partner_dialog.dart:    // TODO: Implement request invitation dialog
+lib/features/partner/dialogs/join_partner_dialog.dart:    // TODO: Implement manual connection dialog
+lib/features/partner/services/partner_service.dart:    // TODO: Implement AI insights generation based on shared data
+lib/features/partner/widgets/partner_care_actions_widget.dart:                  // TODO: Navigate to full care history
+lib/features/coming_soon/widgets/coming_soon_card.dart:              // TODO: Implement notification signup
+lib/features/tracking/services/feelings_database_service.dart:        'user_id': 'current_user', // TODO: Get actual user ID
+lib/features/premium/providers/premium_provider.dart:      // TODO: Persist usage data to local storage or analytics service
+lib/features/premium/providers/premium_provider.dart:    // TODO: Load monthly usage data from local storage
+lib/features/premium/screens/premium_paywall_screen.dart:    const userId = 'current_user_id'; // TODO: Get from auth provider
+lib/features/premium/services/subscription_analytics_service.dart:  // TODO: Replace with your actual analytics service (Firebase, Mixpanel, Amplitude, etc.)
+lib/features/premium/services/subscription_analytics_service.dart:      // TODO: Implement your analytics service
+lib/features/premium/services/subscription_analytics_service.dart:      // TODO: Implement your analytics service
+lib/features/premium/services/subscription_service.dart:      // TODO: Send to backend for verification
+lib/features/premium/services/subscription_service.dart:      // TODO: Send to backend for verification
+lib/features/premium/services/subscription_service.dart:        // TODO: Implement proper parsing from JSON
+lib/features/premium/services/subscription_service.dart:    // TODO: Implement proper JSON serialization
+lib/features/onboarding/providers/onboarding_provider.dart:// These are minimal stubs to keep legacy onboarding code compiling.
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:    // TODO: Implement data export functionality
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:    // TODO: Implement data sharing functionality
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:    // TODO: Implement reminder functionality

@@ -1,0 +1,215 @@
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 93.0.0 (97.0.0 available)
+  analyzer 10.0.1 (11.0.0 available)
+  archive 3.6.1 (4.0.9 available)
+  bloc 8.1.4 (9.2.0 available)
+  build_config 1.2.0 (1.3.0 available)
+  build_runner 2.11.1 (2.12.2 available)
+  characters 1.4.0 (1.4.1 available)
+  confetti 0.7.0 (0.8.0 available)
+  connectivity_plus 5.0.2 (7.0.0 available)
+  connectivity_plus_platform_interface 1.2.4 (2.0.1 available)
+  csv 5.1.1 (7.2.0 available)
+  dart_style 3.1.6 (3.1.7 available)
+  device_info_plus 9.1.2 (12.3.0 available)
+  file_picker 8.3.7 (10.3.10 available)
+  fl_chart 0.65.0 (1.2.0 available)
+  flutter_chat_ui 1.6.15 (2.11.1 available)
+  flutter_link_previewer 3.2.2 (4.2.0 available)
+  flutter_local_notifications 17.2.4 (21.0.0 available)
+  flutter_local_notifications_linux 4.0.1 (8.0.0 available)
+  flutter_local_notifications_platform_interface 7.2.0 (11.0.0 available)
+  geolocator 10.1.1 (14.0.2 available)
+  geolocator_android 4.6.2 (5.0.2 available)
+  geolocator_web 2.2.1 (4.1.3 available)
+  go_router 13.2.5 (17.1.0 available)
+  google_mobile_ads 5.3.1 (7.0.0 available)
+  google_sign_in 6.3.0 (7.2.0 available)
+  google_sign_in_android 6.2.1 (7.2.9 available)
+  google_sign_in_ios 5.9.0 (6.3.0 available)
+  google_sign_in_platform_interface 2.5.0 (3.1.0 available)
+  google_sign_in_web 0.12.4+4 (1.1.3 available)
+  health 13.1.4 (13.3.1 available)
+  hooks 1.0.1 (1.0.2 available)
+  hydrated_bloc 9.1.5 (10.1.1 available)
+  image 4.3.0 (4.8.0 available)
+  in_app_purchase 3.2.0 (3.2.3 available)
+  in_app_purchase_android 0.3.6+13 (0.4.0+8 available)
+  in_app_purchase_storekit 0.3.22+1 (0.4.8+1 available)
+  js 0.6.7 (0.7.2 available)
+  local_auth 2.3.0 (3.0.1 available)
+  local_auth_android 1.0.56 (2.0.5 available)
+  local_auth_darwin 1.6.1 (2.0.3 available)
+  local_auth_windows 1.0.11 (2.0.1 available)
+  lottie 3.3.0 (3.3.2 available)
+  matcher 0.12.17 (0.12.19 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  meta 1.17.0 (1.18.1 available)
+  mime 1.0.6 (2.0.0 available)
+  native_toolchain_c 0.17.4 (0.17.5 available)
+  package_info_plus 4.2.0 (9.0.0 available)
+  package_info_plus_platform_interface 2.0.1 (3.2.1 available)
+  permission_handler 11.4.0 (12.0.1 available)
+  permission_handler_android 12.1.0 (13.0.1 available)
+  pointycastle 3.9.1 (4.0.0 available)
+  rive 0.12.4 (0.14.4 available)
+  rive_common 0.2.8 (0.4.15 available)
+  source_gen 4.2.0 (4.2.1 available)
+  sqflite_android 2.4.2+2 (2.4.2+3 available)
+  test_api 0.7.7 (0.7.10 available)
+  tflite_flutter 0.10.4 (0.12.1 available)
+  timezone 0.9.4 (0.11.0 available)
+  vibration 3.1.7 (3.1.8 available)
+  webview_flutter_wkwebview 3.23.7 (3.24.0 available)
+  win32 5.15.0 (6.0.0 available)
+  win32_registry 1.1.5 (3.0.2 available)
+Got dependencies!
+64 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Analyzing flow_ai...                                            
+
+warning • The value of the field '_fertilityModel' isn't used • lib/core/ai/advanced_prediction_engine.dart:12:30 • unused_field
+warning • The value of the field '_hormonePatternModel' isn't used • lib/core/ai/advanced_prediction_engine.dart:13:30 • unused_field
+warning • The value of the field '_cycleIrregularityModel' isn't used • lib/core/ai/advanced_prediction_engine.dart:14:30 • unused_field
+warning • The value of the field '_symptomPredictionModel' isn't used • lib/core/ai/advanced_prediction_engine.dart:15:30 • unused_field
+warning • The value of the field '_knowledgeBase' isn't used • lib/core/clinical/clinical_intelligence_engine.dart:618:31 • unused_field
+warning • The value of the field '_knowledgeBase' isn't used • lib/core/clinical/clinical_intelligence_engine.dart:878:31 • unused_field
+warning • The value of the field '_knowledgeBase' isn't used • lib/core/clinical/clinical_intelligence_engine.dart:1011:31 • unused_field
+warning • The value of the field '_trackingWindow' isn't used • lib/core/feelings/daily_feelings_tracker.dart:22:25 • unused_field
+warning • The value of the local variable 'alertType' isn't used • lib/core/notifications/smart_notification_system.dart:766:11 • unused_local_variable
+warning • The value of the field '_defaultIV' isn't used • lib/core/security/security_manager.dart:26:11 • unused_field
+warning • The value of the field '_userSpecificWeights' isn't used • lib/core/services/adaptive_ai_engine.dart:21:29 • unused_field
+warning • The value of the field '_hormonalPatterns' isn't used • lib/core/services/adaptive_ai_engine.dart:23:37 • unused_field
+warning • The value of the field '_forgettingFactor' isn't used • lib/core/services/adaptive_ai_engine.dart:25:16 • unused_field
+warning • The value of the field '_hormoneAwareModel' isn't used • lib/core/services/adaptive_ai_engine.dart:28:29 • unused_field
+warning • The value of the field '_selfCorrectionModel' isn't used • lib/core/services/adaptive_ai_engine.dart:29:29 • unused_field
+warning • The value of the field '_androidAppOpenAdUnitId' isn't used • lib/core/services/admob_service.dart:25:23 • unused_field
+warning • The value of the field '_androidNativeAdUnitId' isn't used • lib/core/services/admob_service.dart:27:23 • unused_field
+warning • The value of the field '_androidRewardedInterstitialAdUnitId' isn't used • lib/core/services/admob_service.dart:29:23 • unused_field
+warning • The value of the field '_iosAppOpenAdUnitId' isn't used • lib/core/services/admob_service.dart:39:23 • unused_field
+warning • The value of the field '_iosNativeAdUnitId' isn't used • lib/core/services/admob_service.dart:41:23 • unused_field
+warning • The value of the field '_iosRewardedInterstitialAdUnitId' isn't used • lib/core/services/admob_service.dart:43:23 • unused_field
+warning • The value of the field '_personalFactors' isn't used • lib/core/services/advanced_ai_engine.dart:25:23 • unused_field
+warning • The declaration '_triggerAIAnalysis' isn't referenced • lib/core/services/advanced_biometric_service.dart:246:8 • unused_element
+warning • The value of the field '_localizations' isn't used • lib/core/services/ai_chat_service.dart:29:21 • unused_field
+warning • The value of the field '_patternModel' isn't used • lib/core/services/ai_engine.dart:22:29 • unused_field
+warning • The value of the field '_insightModel' isn't used • lib/core/services/ai_engine.dart:23:29 • unused_field
+warning • The value of the local variable 'avgLength' isn't used • lib/core/services/ai_engine.dart:234:11 • unused_local_variable
+warning • The declaration '_calculateAverageCycleLength' isn't referenced • lib/core/services/ai_engine.dart:254:10 • unused_element
+warning • The declaration '_calculatePredictionConfidence' isn't referenced • lib/core/services/ai_engine.dart:260:10 • unused_element
+warning • The value of the field '_calculationEngine' isn't used • lib/core/services/analytics_service.dart:15:37 • unused_field
+warning • Unused import: 'app_enhancement_service.dart' • lib/core/services/apple_signin_service.dart:2:8 • unused_import
+warning • The value of the field '_isAvailable' isn't used • lib/core/services/apple_signin_service.dart:12:8 • unused_field
+warning • The value of the field '_stressModel' isn't used • lib/core/services/biometric_engine.dart:22:29 • unused_field
+warning • The value of the field '_correlationEngine' isn't used • lib/core/services/biometric_engine.dart:23:29 • unused_field
+warning • The declaration 'takeLast' isn't referenced • lib/core/services/biometric_engine.dart:882:15 • unused_element
+warning • The value of the field '_localizations' isn't used • lib/core/services/enhanced_ai_chat_service.dart:30:21 • unused_field
+warning • The declaration '_getPersonalResponse' isn't referenced • lib/core/services/enhanced_ai_chat_service.dart:688:10 • unused_element
+warning • The value of the field '_biometricCorrelations' isn't used • lib/core/services/enhanced_ai_engine.dart:18:29 • unused_field
+warning • The value of the field '_intelligentInsights' isn't used • lib/core/services/enhanced_ai_engine.dart:19:29 • unused_field
+warning • The value of the field '_textAnalysisModel' isn't used • lib/core/services/multimodal_symptom_analyzer.dart:20:29 • unused_field
+warning • The value of the field '_voiceAnalysisModel' isn't used • lib/core/services/multimodal_symptom_analyzer.dart:21:29 • unused_field
+warning • The value of the field '_imageAnalysisModel' isn't used • lib/core/services/multimodal_symptom_analyzer.dart:22:29 • unused_field
+warning • The value of the field '_contextualAnalysisModel' isn't used • lib/core/services/multimodal_symptom_analyzer.dart:23:29 • unused_field
+warning • The value of the field '_smartJournalingModel' isn't used • lib/core/services/multimodal_symptom_analyzer.dart:24:29 • unused_field
+warning • The value of the field '_databaseService' isn't used • lib/core/services/offline_service.dart:19:24 • unused_field
+warning • The value of the field '_lastMemoryUsage' isn't used • lib/core/services/performance_optimization_service.dart:24:13 • unused_field
+warning • A value of type 'Null' can't be returned by the 'onError' handler because it must be assignable to 'FutureOr<T>' • lib/core/services/performance_optimizer.dart:131:14 • invalid_return_type_for_catch_error
+warning • The value of the field '_userProfileModel' isn't used • lib/core/services/personalization_engine.dart:19:29 • unused_field
+warning • The value of the field '_preferenceEngine' isn't used • lib/core/services/personalization_engine.dart:23:29 • unused_field
+warning • The value of the local variable 'adjustment' isn't used • lib/core/services/personalization_engine.dart:355:15 • unused_local_variable
+warning • The value of the local variable 'adjustment' isn't used • lib/core/services/personalization_engine.dart:360:15 • unused_local_variable
+warning • The value of the local variable 'adjustment' isn't used • lib/core/services/personalization_engine.dart:365:15 • unused_local_variable
+warning • The declaration 'takeLast' isn't referenced • lib/core/services/personalization_engine.dart:719:15 • unused_element
+warning • The left operand can't be null, so the right operand is never executed • lib/core/services/platform_service.dart:136:47 • dead_null_aware_expression
+warning • The value of the local variable 'theme' isn't used • lib/core/services/platform_service.dart:297:11 • unused_local_variable
+warning • The value of the field '_timeSeriesModel' isn't used • lib/core/services/predictive_engine.dart:19:29 • unused_field
+warning • The value of the field '_reinforcementModel' isn't used • lib/core/services/predictive_engine.dart:21:29 • unused_field
+warning • The value of the field '_modelAccuracies' isn't used • lib/core/services/predictive_engine.dart:24:28 • unused_field
+warning • The value of the field '_thyroidAnalysisModel' isn't used • lib/core/services/preventive_health_insights.dart:22:29 • unused_field
+warning • The value of the field '_endometriosisDetectionModel' isn't used • lib/core/services/preventive_health_insights.dart:23:29 • unused_field
+warning • The value of the field '_fertilityOptimizationModel' isn't used • lib/core/services/preventive_health_insights.dart:24:29 • unused_field
+warning • The value of the field '_hormonalShiftDetectionModel' isn't used • lib/core/services/preventive_health_insights.dart:25:29 • unused_field
+warning • The value of the field '_medicalConditionMarkers' isn't used • lib/core/services/preventive_health_insights.dart:28:34 • unused_field
+warning • The value of the field '_warningSignPatterns' isn't used • lib/core/services/preventive_health_insights.dart:30:34 • unused_field
+warning • The value of the local variable 'avgLength' isn't used • lib/core/services/preventive_health_insights.dart:1592:11 • unused_local_variable
+warning • This default clause is covered by the previous cases • lib/core/services/smart_notification_service.dart:561:7 • unreachable_switch_default
+warning • The value of the field '_modelLoaded' isn't used • lib/core/services/tflite_prediction_service.dart:15:8 • unused_field
+warning • The declaration '_prepareInputTensor' isn't referenced • lib/core/services/tflite_prediction_service.dart:95:28 • unused_element
+warning • The declaration '_processModelOutput' isn't referenced • lib/core/services/tflite_prediction_service.dart:141:25 • unused_element
+warning • The declaration '_registerController' isn't referenced • lib/core/visuals/consumer_visual_engine.dart:227:8 • unused_element
+warning • The declaration '_captureError' isn't referenced • lib/core/widgets/error_boundary.dart:47:8 • unused_element
+warning • The value of the local variable 'enhancementService' isn't used • lib/core/widgets/error_boundary.dart:56:13 • unused_local_variable
+warning • The value of the local variable 'isToday' isn't used • lib/features/ai_predictions/widgets/ai_prediction_card.dart:170:11 • unused_local_variable
+warning • The declaration '_buildOverviewMetricCard' isn't referenced • lib/features/analytics/screens/analytics_dashboard_screen.dart:1017:10 • unused_element
+warning • The declaration '_showRecommendationDetails' isn't referenced • lib/features/analytics/screens/analytics_dashboard_screen.dart:1136:8 • unused_element
+warning • The declaration '_showInfoMessage' isn't referenced • lib/features/auth/screens/auth_screen.dart:991:8 • unused_element
+warning • The declaration '_showSuccessMessage' isn't referenced • lib/features/auth/screens/futuristic_auth_screen.dart:780:8 • unused_element
+warning • The declaration '_showErrorMessage' isn't referenced • lib/features/auth/screens/futuristic_auth_screen.dart:786:8 • unused_element
+warning • The declaration '_showInfoMessage' isn't referenced • lib/features/auth/screens/futuristic_auth_screen.dart:792:8 • unused_element
+warning • The declaration '_buildFuturisticButton' isn't referenced • lib/features/auth/screens/futuristic_auth_screen.dart:798:10 • unused_element
+warning • The value of the local variable 'theme' isn't used • lib/features/biometric/widgets/biometric_chart_widget.dart:62:11 • unused_local_variable
+warning • The value of the local variable 'theme' isn't used • lib/features/biometric/widgets/biometric_chart_widget.dart:271:11 • unused_local_variable
+warning • This default clause is covered by the previous cases • lib/features/biometric/widgets/biometric_chart_widget.dart:431:7 • unreachable_switch_default
+warning • The value of the local variable 'theme' isn't used • lib/features/biometric/widgets/health_metrics_card.dart:212:11 • unused_local_variable
+warning • The value of the field '_analysisHistoryDays' isn't used • lib/features/clinical/services/clinical_intelligence_service.dart:26:20 • unused_field
+warning • The value of the field '_abnormalThreshold' isn't used • lib/features/clinical/services/clinical_intelligence_service.dart:27:23 • unused_field
+warning • The value of the field '_criticalThreshold' isn't used • lib/features/clinical/services/clinical_intelligence_service.dart:28:23 • unused_field
+warning • The value of the local variable 'theme' isn't used • lib/features/coming_soon/widgets/feature_preview_card.dart:45:11 • unused_local_variable
+warning • The declaration '_getFlowIndicatorSize' isn't referenced • lib/features/cycle/screens/calendar_screen.dart:571:10 • unused_element
+warning • Unused import: '../../../core/widgets/coming_soon_widget.dart' • lib/features/cycle/screens/home_screen.dart:17:8 • unused_import
+warning • The declaration '_buildCycleInfo' isn't referenced • lib/features/cycle/screens/home_screen.dart:941:10 • unused_element
+warning • The declaration '_buildActionCard' isn't referenced • lib/features/cycle/screens/home_screen.dart:967:10 • unused_element
+warning • The declaration '_handleNotifyMe' isn't referenced • lib/features/cycle/screens/home_screen.dart:2479:8 • unused_element
+warning • The value of the local variable 'theme' isn't used • lib/features/cycle/widgets/flow_intensity_picker.dart:115:11 • unused_local_variable
+warning • The declaration '_buildFlowVisualization' isn't referenced • lib/features/cycle/widgets/flow_intensity_picker.dart:168:10 • unused_element
+warning • The value of the local variable 'theme' isn't used • lib/features/cycle/widgets/flow_intensity_picker.dart:169:11 • unused_local_variable
+warning • The declaration '_SafeBoxShadow' isn't referenced • lib/features/cycle/widgets/mood_energy_slider.dart:1044:7 • unused_element
+warning • The value of the local variable 'theme' isn't used • lib/features/cycle/widgets/symptom_selector.dart:78:11 • unused_local_variable
+warning • The value of the local variable 'theme' isn't used • lib/features/cycle/widgets/tracking_summary_card.dart:16:11 • unused_local_variable
+warning • The declaration '_formatDateLocal' isn't referenced • lib/features/cycle/widgets/tracking_summary_card.dart:333:10 • unused_element
+warning • The value of the local variable 'l10n' isn't used • lib/features/cycle/widgets/tracking_summary_card.dart:383:11 • unused_local_variable
+warning • The value of the local variable 'l10n' isn't used • lib/features/cycle/widgets/tracking_summary_card.dart:401:11 • unused_local_variable
+warning • The value of the field '_tempDirectory' isn't used • lib/features/data_management/services/data_export_import_service.dart:27:14 • unused_field
+warning • The value of the field '_exportConfigKey' isn't used • lib/features/data_management/services/data_export_import_service.dart:30:23 • unused_field
+warning • The value of the field '_lastExportKey' isn't used • lib/features/data_management/services/data_export_import_service.dart:31:23 • unused_field
+warning • The value of the field '_compressionLevel' isn't used • lib/features/data_management/services/data_export_import_service.dart:34:20 • unused_field
+warning • The value of the local variable 'startTime' isn't used • lib/features/deployment/services/deployment_service.dart:632:11 • unused_local_variable
+warning • The value of the local variable 'random' isn't used • lib/features/health/widgets/ai_insights_panel.dart:474:11 • unused_local_variable
+warning • The value of the local variable 'l10n' isn't used • lib/features/health/widgets/healthkit_disclosure_banner.dart:28:11 • unused_local_variable
+warning • The value of the field '_aiService' isn't used • lib/features/insights/screens/consumer_intelligence_dashboard.dart:26:31 • unused_field
+warning • The value of the local variable 'index' isn't used • lib/features/insights/screens/insights_screen.dart:194:17 • unused_local_variable
+warning • The value of the field '_expandAnimation' isn't used • lib/features/insights/widgets/floating_ai_chat.dart:30:26 • unused_field
+warning • The value of the field '_showQuickReplies' isn't used • lib/features/insights/widgets/floating_ai_chat.dart:35:8 • unused_field
+warning • The value of the field '_initialHeight' isn't used • lib/features/insights/widgets/floating_ai_chat.dart:39:10 • unused_field
+warning • The left operand can't be null, so the right operand is never executed • lib/features/insights/widgets/floating_ai_chat.dart:87:11 • dead_null_aware_expression
+warning • The left operand can't be null, so the right operand is never executed • lib/features/insights/widgets/floating_ai_chat.dart:88:11 • dead_null_aware_expression
+warning • The declaration '_buildCustomInput' isn't referenced • lib/features/insights/widgets/floating_ai_chat.dart:413:10 • unused_element
+warning • The declaration '_buildQuickReplies' isn't referenced • lib/features/insights/widgets/floating_ai_chat.dart:959:10 • unused_element
+warning • The value of the field '_isInitialized' isn't used • lib/features/onboarding/providers/onboarding_provider.dart:30:8 • unused_field
+warning • The value of the local variable 'localizations' isn't used • lib/features/onboarding/screens/personal_info_step_screen.dart:50:11 • unused_local_variable
+warning • The value of the local variable 'localizations' isn't used • lib/features/onboarding/screens/welcome_step_screen.dart:14:11 • unused_local_variable
+warning • The value of the local variable 'size' isn't used • lib/features/onboarding/screens/welcome_step_screen.dart:15:11 • unused_local_variable
+warning • The value of the field '_isImporting' isn't used • lib/features/onboarding/widgets/cycle_history_import_widget.dart:87:8 • unused_field
+warning • The left operand can't be null, so the right operand is never executed • lib/features/onboarding/widgets/cycle_history_import_widget.dart:129:56 • dead_null_aware_expression
+warning • The declaration '_setFirstTimeTracking' isn't referenced • lib/features/onboarding/widgets/cycle_history_import_widget.dart:891:8 • unused_element
+warning • The value of the local variable 'isFuture' isn't used • lib/features/onboarding/widgets/onboarding_progress_widget.dart:192:11 • unused_local_variable
+warning • Using multiple 'hide' or 'show' combinators is never necessary and often produces surprising results • lib/features/partner/screens/partner_dashboard_screen.dart:8:5 • multiple_combinators
+warning • The name PartnerCareAction is shown, but isn't used • lib/features/partner/screens/partner_dashboard_screen.dart:17:9 • unused_shown_name
+warning • The name PartnerInvitation is shown, but isn't used • lib/features/partner/screens/partner_dashboard_screen.dart:19:9 • unused_shown_name
+warning • The name PartnerSharingSettings is shown, but isn't used • lib/features/partner/screens/partner_dashboard_screen.dart:20:9 • unused_shown_name
+warning • The value of the local variable 'isConnected' isn't used • lib/features/partner/screens/partner_dashboard_screen.dart:237:11 • unused_local_variable
+warning • The left operand can't be null, so the right operand is never executed • lib/features/partner/screens/partner_dashboard_screen.dart:239:52 • dead_null_aware_expression
+warning • The value of the local variable 'partnership' isn't used • lib/features/partner/screens/partner_dashboard_screen.dart:712:13 • unused_local_variable
+warning • The name PartnerInsight is shown, but isn't used • lib/features/partner/services/local_partner_service.dart:16:9 • unused_shown_name
+warning • The name PartnerInsightType is shown, but isn't used • lib/features/partner/services/local_partner_service.dart:17:9 • unused_shown_name
+warning • The value of the field '_insightsKey' isn't used • lib/features/partner/services/local_partner_service.dart:33:23 • unused_field
+warning • The declaration '_saveInvitation' isn't referenced • lib/features/partner/services/local_partner_service.dart:305:16 • unused_element
+warning • The declaration '_findInvitationByCode' isn't referenced • lib/features/partner/services/local_partner_service.dart:321:30 • unused_element
+warning • The declaration '_removeInvitation' isn't referenced • lib/features/partner/services/local_partner_service.dart:348:16 • unused_element
+warning • Unused import: 'package:url_launcher/url_launcher.dart' • lib/features/partner/widgets/partner_invitation_dialog.dart:9:8 • unused_import
+warning • The declaration '_generateCodeOnly' isn't referenced • lib/features/partner/widgets/partner_invitation_dialog.dart:598:16 • unused_element
+  error • The named parameter 'inviteeEmail' is required, but there's no corresponding argument • lib/features/partner/widgets/partner_invitation_dialog.dart:602:54 • missing_required_argument
+
+142 issues found. (ran in 12.2s)

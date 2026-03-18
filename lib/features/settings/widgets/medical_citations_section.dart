@@ -49,12 +49,12 @@ class _MedicalCitationsSectionState extends State<MedicalCitationsSection> {
                   Icon(
                     Icons.medical_information,
                     color: AppTheme.secondaryBlue,
-                    size: 28,
+                    size: 22,
                   ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      'Medical Sources & Citations',
+                      'Sources',
                       style: theme.textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppTheme.secondaryBlue,
@@ -62,14 +62,6 @@ class _MedicalCitationsSectionState extends State<MedicalCitationsSection> {
                     ),
                   ),
                 ],
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'All medical information in this app is based on the following sources from reputable medical organizations and peer-reviewed research.',
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                  height: 1.5,
-                ),
               ),
               const SizedBox(height: 8),
               Container(
@@ -91,7 +83,7 @@ class _MedicalCitationsSectionState extends State<MedicalCitationsSection> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'This information is for awareness only. Not medical advice. Consult a healthcare provider for medical concerns.',
+                        'For awareness only. Not medical advice.',
                         style: TextStyle(
                           fontSize: 12,
                           color: AppTheme.warningOrange,
