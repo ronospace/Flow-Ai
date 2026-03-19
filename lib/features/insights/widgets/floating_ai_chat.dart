@@ -671,6 +671,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
+                    "",
                     style: TextStyle(
                       fontSize: 11,
                       color: Colors.white.withValues(alpha: 0.9),
