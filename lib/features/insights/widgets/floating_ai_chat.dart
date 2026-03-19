@@ -21,7 +21,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     with TickerProviderStateMixin {
   bool _isExpanded = false;
   bool _isFullScreen = false;
-  double _chatHeight = 0.5; // Percentage of screen height
+  double _chatHeight = 0.4; // Percentage of screen height
   late AnimationController _fabController;
   late AnimationController _chatController;
   late AnimationController _expandController;
@@ -414,9 +414,9 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     final theme = Theme.of(context);
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: theme.cardColor,
+        color: Colors.transparent,
         border: Border(top: BorderSide(color: theme.dividerColor, width: 0.5)),
       ),
       child: Row(
@@ -850,14 +850,14 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: theme.cardColor,
+        color: Colors.transparent,
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(_isFullScreen ? 16 : 24),
           bottomRight: Radius.circular(_isFullScreen ? 16 : 24),
         ),
         border: Border(
           top: BorderSide(
-            color: theme.dividerColor.withValues(alpha: 0.3),
+            color: Colors.transparent,
             width: 1,
           ),
         ),
@@ -961,7 +961,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     final suggestions = _chatService.getSuggestedReplies();
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: theme.cardColor.withValues(alpha: 0.5),
         border: Border(top: BorderSide(color: theme.dividerColor, width: 0.5)),
