@@ -671,7 +671,6 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
-                    'AI-generated insights for awareness only. Not medical advice.',
                     style: TextStyle(
                       fontSize: 11,
                       color: Colors.white.withValues(alpha: 0.9),
