@@ -670,7 +670,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             ),
             const SizedBox(width: 10),
             Text(
-              'Suggested Questions',
+              ' ',
               style: theme.textTheme.titleMedium?.copyWith(
                 color: AppTheme.primaryRose,
                 fontWeight: FontWeight.bold,
