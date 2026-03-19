@@ -229,12 +229,12 @@ class CycleRegularityIndicator extends StatelessWidget {
               _showCitationDialog(context);
             },
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              // mainAxisAlignment removed
               children: [
-                Icon(Icons.menu_book, size: 14, color: AppTheme.primaryPurple),
+                const SizedBox.shrink(),
                 const SizedBox(width: 6),
                 Text(
-                  'View Sources',
+                  '',
                   style: TextStyle(
                     color: AppTheme.primaryPurple,
                     fontSize: 12,
