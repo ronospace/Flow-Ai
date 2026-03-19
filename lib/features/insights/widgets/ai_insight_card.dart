@@ -198,70 +198,74 @@ class AIInsightCard extends StatelessWidget {
               ),
             ),
 
-          // Medical Citations Section - ALWAYS SHOWN for App Store compliance (1.4.1)
-          const SizedBox(height: 20),
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: AppTheme.secondaryBlue.withValues(alpha: 0.05),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: AppTheme.secondaryBlue.withValues(alpha: 0.2),
-                width: 1.5,
+          const SizedBox(height: 16),
+          Theme(
+            data: theme,
+            child: ExpansionTile(
+              tilePadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+              childrenPadding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+              collapsedBackgroundColor: theme.brightness == Brightness.dark
+                  ? theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.28)
+                  : AppTheme.secondaryBlue.withValues(alpha: 0.05),
+              backgroundColor: theme.brightness == Brightness.dark
+                  ? theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.36)
+                  : AppTheme.secondaryBlue.withValues(alpha: 0.08),
+              collapsedShape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: BorderSide(
+                  color: theme.brightness == Brightness.dark
+                      ? theme.colorScheme.outline.withValues(alpha: 0.22)
+                      : AppTheme.secondaryBlue.withValues(alpha: 0.18),
+                  width: 1,
+                ),
               ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: BorderSide(
+                  color: theme.brightness == Brightness.dark
+                      ? theme.colorScheme.outline.withValues(alpha: 0.28)
+                      : AppTheme.secondaryBlue.withValues(alpha: 0.22),
+                  width: 1,
+                ),
+              ),
+              leading: Icon(
+                Icons.library_books_outlined,
+                size: 16,
+                color: theme.brightness == Brightness.dark
+                    ? theme.colorScheme.primary.withValues(alpha: 0.9)
+                    : AppTheme.secondaryBlue,
+              ),
+              title: Text(
+                'Sources',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.78),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              subtitle: Text(
+                'Research references available',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.56),
+                ),
+              ),
+              iconColor: theme.colorScheme.onSurface.withValues(alpha: 0.56),
+              collapsedIconColor: theme.colorScheme.onSurface.withValues(alpha: 0.44),
               children: [
-                Row(
-                  children: [
-                    Icon(
-                      Icons.medical_information,
-                      size: 18,
-                      color: AppTheme.secondaryBlue,
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    insight.allCitations.isNotEmpty
+                        ? '${insight.allCitations.length} reference${insight.allCitations.length == 1 ? '' : 's'} available'
+                        : 'References available in settings',
+                    style: TextStyle(
+                      fontSize: 11,
+                      height: 1.4,
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.64),
                     ),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Medical Sources & Citations',
-                      style: theme.textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppTheme.secondaryBlue,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'This information is based on medical research and clinical guidelines. All health-related insights include citations from reputable medical sources:',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                    fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(height: 12),
-                if (insight.allCitations.isNotEmpty) ...[
-                  ...insight.allCitations.map(
-                    (citation) => _buildCitationItem(context, citation),
-                  ),
-                ] else ...[
-                  // Default citation if none provided - ensures compliance
-                  _buildCitationItem(
-                    context,
-                    const MedicalCitation(
-                      id: 'default_nih',
-                      title: 'Menstruation and the Menstrual Cycle',
-                      source:
-                          'National Institutes of Health - Office of Research on Women\'s Health',
-                      url:
-                          'https://orwh.od.nih.gov/sex-differences/menstruation-menstrual-cycle',
-                      year: '2021',
-                      authors: ['National Institutes of Health'],
-                      description:
-                          'Evidence-based information on menstrual health',
-                    ),
-                  ),
-                ],
               ],
             ),
           ),
