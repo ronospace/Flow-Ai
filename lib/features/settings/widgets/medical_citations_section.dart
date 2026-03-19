@@ -80,7 +80,7 @@ class _MedicalCitationsSectionState extends State<MedicalCitationsSection> {
                       size: 16,
                       color: AppTheme.warningOrange,
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 4),
                     Expanded(
                       child: Text(
                         'For awareness only. Not medical advice.',
@@ -126,8 +126,8 @@ class _MedicalCitationsSectionState extends State<MedicalCitationsSection> {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                _buildCategoryChip(context, null, 'All Categories'),
-                const SizedBox(width: 8),
+                
+                const SizedBox(width: 4),
                 ..._categoryLabels.entries.map(
                   (entry) => Padding(
                     padding: const EdgeInsets.only(right: 8),
