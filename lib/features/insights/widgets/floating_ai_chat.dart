@@ -661,7 +661,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   // Enhanced Chat Area - Better spacing and padding
   Widget _buildChatArea(ThemeData theme) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: Theme(
         data: theme.copyWith(primaryColor: AppTheme.primaryRose),
         child: Chat(
@@ -676,23 +676,23 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             backgroundColor: theme.scaffoldBackgroundColor,
             inputBackgroundColor: theme.cardColor,
             inputTextColor: theme.textTheme.bodyMedium?.color ?? Colors.black,
-            messageBorderRadius: 18,
-            messageInsetsHorizontal: 20,
-            messageInsetsVertical: 14,
+            messageBorderRadius: 14,
+            messageInsetsHorizontal: 14,
+            messageInsetsVertical: 10,
             receivedMessageBodyTextStyle:
                 theme.textTheme.bodyMedium?.copyWith(
                   color: theme.textTheme.bodyMedium?.color,
-                  fontSize: 16,
+                  fontSize: 15,
                   height: 1.5,
                 ) ??
-                const TextStyle(fontSize: 16, height: 1.5),
+                const TextStyle(fontSize: 15, height: 1.5),
             sentMessageBodyTextStyle:
                 theme.textTheme.bodyMedium?.copyWith(
                   color: Colors.white,
-                  fontSize: 16,
+                  fontSize: 15,
                   height: 1.5,
                 ) ??
-                const TextStyle(color: Colors.white, fontSize: 16, height: 1.5),
+                const TextStyle(color: Colors.white, fontSize: 15, height: 1.5),
           ),
           showUserAvatars: true,
           showUserNames: false,
@@ -733,7 +733,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               style: theme.textTheme.titleMedium?.copyWith(
                 color: AppTheme.primaryRose,
                 fontWeight: FontWeight.bold,
-                fontSize: 16,
+                fontSize: 15,
               ),
             ),
           ],
@@ -867,7 +867,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 keyboardType: TextInputType.multiline,
                 textCapitalization: TextCapitalization.sentences,
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  fontSize: 16,
+                  fontSize: 15,
                   height: 1.4,
                 ),
                 onSubmitted: (text) {
