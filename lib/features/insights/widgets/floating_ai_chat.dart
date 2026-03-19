@@ -410,65 +410,6 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     );
   }
 
-  Widget _buildCustomInput() {
-    final theme = Theme.of(context);
-
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: Colors.transparent,
-        
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              controller: _textController,
-              decoration: InputDecoration(
-                hintText: 'Ask about health, science, technology, lifestyle...',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(25),
-                  borderSide: BorderSide.none,
-                ),
-                filled: true,
-                fillColor: theme.scaffoldBackgroundColor,
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 12,
-                ),
-              ),
-              maxLines: null,
-              keyboardType: TextInputType.multiline,
-              textCapitalization: TextCapitalization.sentences,
-              onSubmitted: (text) {
-                if (text.trim().isNotEmpty) {
-                  _handleSendPressed(types.PartialText(text: text.trim()));
-                  _textController.clear();
-                }
-              },
-            ),
-          ),
-          const SizedBox(width: 8),
-          FloatingActionButton.small(
-            heroTag: "ai_chat_send_fab",
-            onPressed: () {
-              final text = _textController.text.trim();
-              if (text.isNotEmpty) {
-                _handleSendPressed(types.PartialText(text: text));
-                _textController.clear();
-              }
-            },
-            backgroundColor: AppTheme.primaryRose,
-            child: Icon(
-              Icons.send,
-              color: theme.colorScheme.onPrimary,
-              size: 16,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   // Enhanced Header with Controls
   Widget _buildEnhancedHeader(ThemeData theme) {
