@@ -103,7 +103,7 @@ class _MedicalCitationsSectionState extends State<MedicalCitationsSection> {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
           child: TextField(
             decoration: InputDecoration(
-              hintText: 'Search citations...',
+              hintText: 'Search sources',
               prefixIcon: const Icon(Icons.search),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
