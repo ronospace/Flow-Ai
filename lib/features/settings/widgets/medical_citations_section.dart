@@ -56,7 +56,7 @@ class _MedicalCitationsSectionState extends State<MedicalCitationsSection> {
                     child: Text(
                       'Sources',
                       style: theme.textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w500,
                         color: AppTheme.secondaryBlue,
                       ),
                     ),
@@ -85,7 +85,7 @@ class _MedicalCitationsSectionState extends State<MedicalCitationsSection> {
                       child: Text(
                         'For awareness only. Not medical advice.',
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 11,
                           color: AppTheme.warningOrange,
                           fontWeight: FontWeight.w500,
                         ),
@@ -243,7 +243,7 @@ class _MedicalCitationsSectionState extends State<MedicalCitationsSection> {
             Text(
               categoryLabel,
               style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w500,
                 color: AppTheme.secondaryBlue,
               ),
             ),
@@ -261,14 +261,14 @@ class _MedicalCitationsSectionState extends State<MedicalCitationsSection> {
     final theme = Theme.of(context);
 
     return Card(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 8),
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(color: AppTheme.secondaryBlue.withValues(alpha: 0.2)),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -282,8 +282,8 @@ class _MedicalCitationsSectionState extends State<MedicalCitationsSection> {
               child: Text(
                 citation.source,
                 style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w500,
                   color: AppTheme.secondaryBlue,
                 ),
               ),
@@ -294,7 +294,7 @@ class _MedicalCitationsSectionState extends State<MedicalCitationsSection> {
             Text(
               citation.title,
               style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w500,
                 height: 1.3,
               ),
             ),
