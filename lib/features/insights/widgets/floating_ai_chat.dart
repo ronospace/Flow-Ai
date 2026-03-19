@@ -417,7 +417,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Colors.transparent,
-        border: Border(top: BorderSide(color: theme.dividerColor, width: 0.5)),
+        
       ),
       child: Row(
         children: [
@@ -963,8 +963,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: theme.cardColor.withValues(alpha: 0.5),
-        border: Border(top: BorderSide(color: theme.dividerColor, width: 0.5)),
+        color: Colors.transparent,
+        
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
