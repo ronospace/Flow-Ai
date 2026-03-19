@@ -665,7 +665,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               child: Icon(
                 Icons.auto_awesome_rounded,
                 color: Colors.white,
-                size: 18,
+                size: 14,
               ),
             ),
             const SizedBox(width: 10),
