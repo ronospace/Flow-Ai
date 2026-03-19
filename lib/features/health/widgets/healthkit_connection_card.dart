@@ -21,7 +21,7 @@ class HealthKitConnectionCard extends StatelessWidget {
         final isIOS = Platform.isIOS;
         final platformName = isIOS ? 'Apple HealthKit' : 'Health Connect';
         final platformShort = isIOS ? 'HealthKit' : 'Health Connect';
-        final disclosureLabel = isIOS ? 'Uses HealthKit' : 'Uses Android Health';
+        final disclosureLabel = isIOS ? '' : 'Uses Android Health';
         final syncSource = isIOS ? 'Apple Health' : 'Android Health';
 
         return Container(
@@ -91,7 +91,7 @@ class HealthKitConnectionCard extends StatelessWidget {
                                     ? '${platformName} Connected'
                                     : 'Connect ${platformName}',
                                 style: theme.textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w600,
                                   color: theme.colorScheme.onSurface,
                                   fontSize: 16,
                                 ),
@@ -111,11 +111,11 @@ class HealthKitConnectionCard extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Text(
-                                  'CONNECTED',
+                                  'Connected',
                                   style: TextStyle(
                                     color: AppTheme.successGreen,
                                     fontSize: 10,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                               ),
@@ -280,7 +280,7 @@ class HealthKitConnectionCard extends StatelessWidget {
                             'Required Disclosure',
                             style: TextStyle(
                               fontSize: 13,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w600,
                               color: AppTheme.warningOrange,
                             ),
                           ),
@@ -309,7 +309,7 @@ class HealthKitConnectionCard extends StatelessWidget {
               Text(
                 'Health data we may access:',
                 style: theme.textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               const SizedBox(height: 8),
