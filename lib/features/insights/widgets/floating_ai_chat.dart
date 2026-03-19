@@ -21,7 +21,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     with TickerProviderStateMixin {
   bool _isExpanded = false;
   bool _isFullScreen = false;
-  double _chatHeight = 0.4; // Percentage of screen height
+  double _chatHeight = 0.32; // Percentage of screen height
   late AnimationController _fabController;
   late AnimationController _chatController;
   late AnimationController _expandController;
@@ -366,7 +366,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                                                   ],
                                                 ),
                                                 borderRadius:
-                                                    BorderRadius.circular(8),
+                                                    BorderRadius.circular(6),
                                                 boxShadow: [
                                                   BoxShadow(
                                                     color: AppTheme.successGreen
@@ -660,7 +660,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 gradient: LinearGradient(
                   colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
                 ),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(6),
               ),
               child: Icon(
                 Icons.auto_awesome_rounded,
