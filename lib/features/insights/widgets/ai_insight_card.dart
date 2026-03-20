@@ -100,8 +100,8 @@ class AIInsightCard extends StatelessWidget {
           // Description
           Text(
             insight.description,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
               height: 1.5,
             ),
           ),
@@ -125,8 +125,8 @@ class AIInsightCard extends StatelessWidget {
                   children: [
                     Container(
                       margin: const EdgeInsets.only(top: 8, right: 8),
-                      width: 4,
-                      height: 4,
+                      width: 2,
+                      height: 2,
                       decoration: BoxDecoration(
                         color: _getInsightTypeColor(),
                         shape: BoxShape.circle,
@@ -137,9 +137,9 @@ class AIInsightCard extends StatelessWidget {
                         recommendation,
                         style: TextStyle(
                           color: theme.colorScheme.onSurface.withValues(
-                            alpha: 0.7,
+                            alpha: 0.5,
                           ),
-                          fontSize: 14,
+                          fontSize: 12,
                           height: 1.4,
                         ),
                       ),
@@ -224,7 +224,7 @@ class AIInsightCard extends StatelessWidget {
                 'Sources',
                 style: TextStyle(
                   fontSize: 12,
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.78),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.58),
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -247,7 +247,7 @@ class AIInsightCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 11,
                       height: 1.4,
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.64),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.54),
                     ),
                   ),
                 ),
@@ -367,7 +367,7 @@ class AIInsightCard extends StatelessWidget {
                 ),
             ],
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 2),
           // Citation title
           Text(
             citation.title,
@@ -390,7 +390,7 @@ class AIInsightCard extends StatelessWidget {
                   size: 12,
                   color: AppTheme.secondaryBlue,
                 ),
-                const SizedBox(width: 4),
+                const SizedBox(width: 2),
                 Text(
                   'View Source',
                   style: TextStyle(
