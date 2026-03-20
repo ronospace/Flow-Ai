@@ -339,7 +339,7 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
         backgroundColor: AppTheme.primaryRose,
         icon: const Icon(Icons.psychology, color: Colors.white),
         label: const Text(
-          'Ask Mira',
+          'Ask Zyra',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ).animate().scale(delay: 1500.ms),
@@ -517,7 +517,7 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Ask Mira AI',
+                              'Ask Zyra AI',
                               style: Theme.of(context).textTheme.titleLarge
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ),

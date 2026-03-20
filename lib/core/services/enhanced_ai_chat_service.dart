@@ -164,7 +164,7 @@ class EnhancedAIChatService {
 
     _aiUser = types.User(
       id: 'ai_flowai_enhanced',
-      firstName: 'Mira',
+      firstName: 'Zyra',
       lastName: 'AI',
       imageUrl: 'https://i.pravatar.cc/300?img=47', // AI avatar
     );
@@ -198,7 +198,7 @@ class EnhancedAIChatService {
 
     // Add enhanced welcome message
     _addAIMessage(
-      "Hi $userName! 👋 I'm Mira, your enhanced AI assistant. I can help you with:\n\n🩸 Reproductive health & cycle tracking\n💡 General knowledge & science\n🔬 Technology & lifestyle questions\n❓ FAQs on various topics\n\nWhat would you like to explore today?",
+      "Hi $userName! 👋 I'm Zyra, your enhanced AI assistant. I can help you with:\n\n🩸 Reproductive health & cycle tracking\n💡 General knowledge & science\n🔬 Technology & lifestyle questions\n❓ FAQs on various topics\n\nWhat would you like to explore today?",
     );
 
     _isInitialized = true;
@@ -624,7 +624,7 @@ class EnhancedAIChatService {
   // Response generators for different topics
   String _getHealthResponse(String message) {
     final responses = [
-      "Great health question! 🏥 ${_getRandomHealthFact()} Would you like specific guidance on tracking this in the app?",
+      "Here’s a helpful perspective: ${_getRandomHealthFact()} Would you like specific guidance on tracking this in the app?",
       "I'm here to help with your reproductive health! 💖 ${_getRandomHealthTip()} What specific aspect would you like to explore?",
       "Health is so important! 🌟 ${_getRandomHealthInsight()} Feel free to ask more detailed questions.",
     ];
@@ -633,7 +633,7 @@ class EnhancedAIChatService {
 
   String _getTechnologyResponse(String message) {
     final responses = [
-      "Technology is fascinating! 💻 ${_getRandomTechFact()} I can explain more about how this works if you're interested.",
+      "Here’s a simple explanation: ${_getRandomTechFact()} I can explain more about how this works if you're interested.",
       "Great tech question! 🚀 ${_getRandomTechInsight()} Would you like me to break this down further?",
       "I love discussing technology! ⚡ ${_getRandomTechTip()} What specific aspect interests you most?",
     ];
@@ -642,7 +642,7 @@ class EnhancedAIChatService {
 
   String _getScienceResponse(String message) {
     final responses = [
-      "Science is amazing! 🔬 ${_getRandomScienceFact()} The natural world is full of incredible phenomena.",
+      "Here’s a clear explanation: ${_getRandomScienceFact()} The natural world is full of incredible phenomena.",
       "Excellent scientific question! 🧪 ${_getRandomScienceInsight()} Science helps us understand our world better.",
       "I enjoy exploring scientific topics! 🌟 ${_getRandomScienceExplanation()} Would you like to dive deeper?",
     ];
@@ -651,7 +651,7 @@ class EnhancedAIChatService {
 
   String _getLifestyleResponse(String message) {
     final responses = [
-      "Lifestyle choices matter so much! 🌱 ${_getRandomLifestyleTip()} Small changes can make big differences.",
+      "Here’s a helpful insight: ${_getRandomLifestyleTip()} Small changes can make big differences.",
       "Great wellness question! 💪 ${_getRandomWellnessFact()} Taking care of yourself is so important.",
       "I love discussing healthy living! ✨ ${_getRandomLifestyleInsight()} What area would you like to focus on?",
     ];
@@ -687,11 +687,11 @@ class EnhancedAIChatService {
 
   String _getPersonalResponse(String message) {
     if (message.contains('who are you') || message.contains('about you')) {
-      return "I'm Mira, your enhanced AI assistant! ✨ I'm designed to help with reproductive health tracking, but I also love discussing science, technology, lifestyle, and general knowledge. I'm here to learn with you and provide helpful information on almost any topic. What would you like to explore together?";
+      return "I'm Zyra. I can help with cycle tracking, health topics, and general questions. What would you like to explore?";
     } else if (message.contains('hello') || message.contains('hi')) {
-      return "Hello! 👋 I'm excited to chat with you today. I can help with cycle tracking, answer health questions, discuss science and technology, share interesting facts, or just have a friendly conversation. What's on your mind?";
+      return "Hello. I can help with cycle tracking, health information, science, technology, and app guidance. What’s on your mind?";
     } else if (message.contains('thank')) {
-      return "You're so welcome! 💕 I genuinely enjoy helping and learning together. Whether it's health questions, curious facts, or just chatting - I'm here for it all. Feel free to ask me anything!";
+      return "You're welcome. I'm here if you’d like to explore more.";
     } else {
       return "I'm here and ready to help! 😊 As your AI companion, I can discuss health topics, answer questions about science and technology, share interesting facts, or help you navigate the app. What would you like to explore?";
     }
@@ -738,14 +738,14 @@ class EnhancedAIChatService {
     List<types.Message> conversationHistory,
   ) {
     if (message.contains('who are you') || message.contains('about you')) {
-      return "I'm Mira, your enhanced AI assistant! ✨ I'm designed to help with reproductive health tracking, but I also love discussing science, technology, lifestyle, and general knowledge. I remember our conversations to provide better, more personalized responses. What would you like to explore together?";
+      return "I'm Zyra, your enhanced AI assistant! ✨ I'm designed to help with reproductive health tracking, but I also love discussing science, technology, lifestyle, and general knowledge. I remember our conversations to provide better, more personalized responses. What would you like to explore together?";
     } else if (message.contains('hello') || message.contains('hi')) {
       final greeting = conversationHistory.isEmpty
           ? "Hello! 👋 I'm excited to meet you and chat today."
           : "Hello again! 👋 Great to continue our conversation.";
       return "$greeting I can help with cycle tracking, answer health questions, discuss science and technology, share interesting facts, or just have a friendly conversation. What's on your mind?";
     } else if (message.contains('thank')) {
-      return "You're so welcome! 💕 I genuinely enjoy helping and learning together. Whether it's health questions, curious facts, or just chatting - I'm here for it all. Feel free to ask me anything!";
+      return "You're welcome. I'm here if you’d like to explore more.";
     } else {
       final personalNote = conversationHistory.isNotEmpty
           ? "I remember our previous chats and I'm here to continue helping! "
@@ -765,7 +765,7 @@ class EnhancedAIChatService {
     // Add contextual information if available
     if (contextPrompt != null && contextPrompt.isNotEmpty) {
       enhancedResponse +=
-          "\n\n💡 Based on our conversation, I wanted to add: This connects to what we discussed earlier about similar topics.";
+          "\n\nNote: This may relate to earlier topics in our conversation.";
     }
 
     // Add personalized insights if relevant
@@ -774,7 +774,7 @@ class EnhancedAIChatService {
       final interests = personalizedInsights['interests'] as String? ?? '';
       if (interests.isNotEmpty) {
         enhancedResponse +=
-            "\n\n🎯 Since you're interested in $interests, you might also enjoy exploring related topics!";
+            "\n\nRelated topic: $interests, you might also enjoy exploring related topics!";
       }
     }
 
@@ -1243,7 +1243,7 @@ class EnhancedAIChatService {
 
     // Re-add enhanced welcome message
     await _addAIMessage(
-      "Hello again! 👋 I'm your enhanced AI assistant Mira. I can help with health questions, discuss science and technology, share fascinating facts, or just chat about whatever interests you. What's on your mind today?",
+      "Hello again. I can help with health information, science, technology, and app guidance. What would you like to explore today?",
     );
   }
 

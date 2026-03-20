@@ -20,14 +20,14 @@ class MedicalDisclaimerBanner extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            AppTheme.warningOrange.withValues(alpha: 0.08),
-            AppTheme.warningOrange.withValues(alpha: 0.05),
+            AppTheme.warningOrange.withValues(alpha: 0.03),
+            AppTheme.warningOrange.withValues(alpha: 0.03),
           ],
         ),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: AppTheme.warningOrange.withValues(alpha: 0.2),
-          width: 1.5,
+          width: 1,
         ),
       ),
       child: Row(
@@ -93,7 +93,7 @@ class MedicalDisclaimerBanner extends StatelessWidget {
                     );
                   },
                   child: Text(
-                    'View medical sources and citations →',
+                    'View sources →',
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: AppTheme.secondaryBlue,
                       fontWeight: FontWeight.w600,

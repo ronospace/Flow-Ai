@@ -159,7 +159,7 @@ class _MedicalCitationsSectionState extends State<MedicalCitationsSection> {
           _selectedCategory = selected ? category : null;
         });
       },
-      selectedColor: AppTheme.secondaryBlue.withValues(alpha: 0.2),
+      selectedColor: AppTheme.secondaryBlue.withValues(alpha: 0.1),
       checkmarkColor: AppTheme.secondaryBlue,
     );
   }
@@ -262,13 +262,13 @@ class _MedicalCitationsSectionState extends State<MedicalCitationsSection> {
 
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
-      elevation: 2,
+      elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: AppTheme.secondaryBlue.withValues(alpha: 0.2)),
+        side: BorderSide(color: AppTheme.secondaryBlue.withValues(alpha: 0.1)),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

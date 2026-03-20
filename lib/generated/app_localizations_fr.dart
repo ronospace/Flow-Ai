@@ -1573,7 +1573,7 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get askMira => 'Demander à Mira';
+  String get askZyra => 'Demander à Zyra';
 
   @override
   String get askRelatedQuestion => 'Poser une question liée';
@@ -1582,7 +1582,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get verified => 'Vérifié';
 
   @override
-  String get askMiraAI => 'Demander à Mira IA';
+  String get askZyraAI => 'Demander à Zyra IA';
 
   @override
   String get getPersonalizedAnswers =>

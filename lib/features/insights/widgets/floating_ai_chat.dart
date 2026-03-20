@@ -246,22 +246,18 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   alignment: Alignment.bottomCenter,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: theme.scaffoldBackgroundColor,
+                      color: theme.cardColor,
                       borderRadius: BorderRadius.circular(
                         _isFullScreen ? 16 : 24,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: theme.shadowColor.withValues(alpha: 0.2),
-                          blurRadius: 20,
-                          spreadRadius: 4,
+                          color: theme.shadowColor.withValues(alpha: 0.12),
+                          blurRadius: 18,
+                          spreadRadius: 0,
                           offset: const Offset(0, 8),
                         ),
                       ],
-                      border: Border.all(
-                        color: AppTheme.primaryRose.withValues(alpha: 0.15),
-                        width: 1.5,
-                      ),
                     ),
                     child: Column(
                       children: [
@@ -504,7 +500,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Mira AI Assistant',
+                      'Zyra AI Assistant',
                       style: theme.textTheme.titleLarge?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -781,11 +777,11 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             child: Container(
               constraints: const BoxConstraints(maxHeight: 120),
               decoration: BoxDecoration(
-                color: theme.scaffoldBackgroundColor,
+                color: theme.cardColor.withValues(alpha: 0.72),
                 borderRadius: BorderRadius.circular(28),
                 border: Border.all(
-                  color: AppTheme.primaryRose.withValues(alpha: 0.2),
-                  width: 1.5,
+                  color: theme.dividerColor.withValues(alpha: 0.08),
+                  width: 1,
                 ),
               ),
               child: TextField(
@@ -831,13 +827,6 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 end: Alignment.bottomRight,
               ),
               borderRadius: BorderRadius.circular(28),
-              boxShadow: [
-                BoxShadow(
-                  color: AppTheme.primaryRose.withValues(alpha: 0.4),
-                  blurRadius: 12,
-                  offset: const Offset(0, 4),
-                ),
-              ],
             ),
             child: Material(
               color: Colors.transparent,

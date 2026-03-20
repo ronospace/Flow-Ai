@@ -3126,8 +3126,8 @@ abstract class AppLocalizations {
   /// Button label to ask AI assistant
   ///
   /// In en, this message translates to:
-  /// **'Ask Mira'**
-  String get askMira;
+  /// **'Ask Zyra'**
+  String get askZyra;
 
   /// Button to ask AI about related topics
   ///
@@ -3144,8 +3144,8 @@ abstract class AppLocalizations {
   /// AI chat dialog title
   ///
   /// In en, this message translates to:
-  /// **'Ask Mira AI'**
-  String get askMiraAI;
+  /// **'Ask Zyra AI'**
+  String get askZyraAI;
 
   /// AI chat dialog subtitle
   ///

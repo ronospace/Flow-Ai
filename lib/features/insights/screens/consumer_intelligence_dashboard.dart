@@ -1072,9 +1072,9 @@ class _ConsumerIntelligenceDashboardState
                   () => _recordTemperature(context),
                 ),
                 _buildQuickActionChip(
-                  'Ask Mira AI',
+                  'Ask Zyra AI',
                   Icons.psychology,
-                  () => _askMiraAI(context),
+                  () => _askZyraAI(context),
                 ),
                 _buildQuickActionChip(
                   'View Calendar',
@@ -1695,7 +1695,7 @@ class _ConsumerIntelligenceDashboardState
     Navigator.pushNamed(context, '/tracking/temperature');
   }
 
-  void _askMiraAI(BuildContext context) {
+  void _askZyraAI(BuildContext context) {
     Navigator.pushNamed(context, '/ai/chat');
   }
 
