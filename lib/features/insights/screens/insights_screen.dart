@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../../generated/app_localizations.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import '../../../core/theme/app_theme.dart';
@@ -132,7 +133,7 @@ class _InsightsScreenState extends State<InsightsScreen>
                   ),
                 ).animate().fadeIn().slideX(begin: -0.3, end: 0),
                 Text(
-                  'Powered by machine learning',
+                  AppLocalizations.of(context).learnYourPatterns,
                   style: theme.textTheme.bodyLarge?.copyWith(
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
