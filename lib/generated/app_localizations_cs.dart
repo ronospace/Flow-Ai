@@ -1613,8 +1613,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get cycleAwarenessInsights => 'Cycle Awareness & Personal Insights';
 
   @override
-  String get learnYourPatterns =>
-      'Learn your patterns. Understand your rhythm. Powered by AI.';
+  String get learnYourPatterns => 'Powered by Machine Learning';
 
   @override
   String get basedOnYourLoggedData => 'Based on your logged information';

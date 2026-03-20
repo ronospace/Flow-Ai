@@ -1653,7 +1653,7 @@
     "description": "Non-medical app positioning"
   },
   
-  "learnYourPatterns": "Learn your patterns. Understand your rhythm. Powered by AI.",
+  "learnYourPatterns": "Powered by Machine Learning",
   "@learnYourPatterns": {
     "description": "Safe app tagline focused on awareness"
   },

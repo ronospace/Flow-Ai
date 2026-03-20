@@ -337,13 +337,7 @@ class _InsightsScreenState extends State<InsightsScreen>
 
               const SizedBox(height: 20),
 
-              // Prediction Accuracy
-              PredictionAccuracyCard(
-                accuracy: 0.87,
-                totalPredictions: cycleProvider.cycles.length,
-                correctPredictions: (cycleProvider.cycles.length * 0.87)
-                    .round(),
-              ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.3, end: 0),
+              const SizedBox.shrink(),
 
               const SizedBox(height: 20),
 
