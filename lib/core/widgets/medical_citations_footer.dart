@@ -18,11 +18,11 @@ class MedicalCitationsFooter extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppTheme.secondaryBlue.withValues(alpha: 0.08),
+        color: AppTheme.secondaryBlue.withValues(alpha: 0.04),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: AppTheme.secondaryBlue.withValues(alpha: 0.2),
-          width: 1.5,
+          color: AppTheme.secondaryBlue.withValues(alpha: 0.1),
+          width: 1,
         ),
       ),
       child: Column(
@@ -41,7 +41,7 @@ class MedicalCitationsFooter extends StatelessWidget {
                 child: Text(
                   'Medical Sources Available',
                   style: theme.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     color: AppTheme.secondaryBlue,
                   ),
                 ),
@@ -52,7 +52,7 @@ class MedicalCitationsFooter extends StatelessWidget {
           Text(
             'All health information in this app is based on medical research and clinical guidelines from reputable sources including ACOG, NIH, WHO, and peer-reviewed journals.',
             style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
               height: 1.4,
             ),
           ),
@@ -90,7 +90,7 @@ class MedicalCitationsFooter extends StatelessWidget {
                 );
               },
               icon: const Icon(Icons.library_books, size: 18),
-              label: const Text('View All Medical Sources'),
+              label: const Text('View sources'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppTheme.secondaryBlue,
                 foregroundColor: Colors.white,

@@ -20,13 +20,13 @@ class MedicalDisclaimerBanner extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            AppTheme.warningOrange.withValues(alpha: 0.15),
+            AppTheme.warningOrange.withValues(alpha: 0.08),
             AppTheme.warningOrange.withValues(alpha: 0.05),
           ],
         ),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: AppTheme.warningOrange.withValues(alpha: 0.4),
+          color: AppTheme.warningOrange.withValues(alpha: 0.2),
           width: 1.5,
         ),
       ),
@@ -46,7 +46,7 @@ class MedicalDisclaimerBanner extends StatelessWidget {
                 Text(
                   'Health Information Disclaimer',
                   style: theme.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     color: AppTheme.warningOrange,
                   ),
                 ),

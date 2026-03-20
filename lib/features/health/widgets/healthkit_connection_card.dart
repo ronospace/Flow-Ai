@@ -165,7 +165,7 @@ class HealthKitConnectionCard extends StatelessWidget {
                             'View full disclosure in Settings',
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: AppTheme.secondaryBlue,
-                              fontSize: 11,
+                              fontSize: 10,
                               decoration: TextDecoration.underline,
                             ),
                           ),
@@ -288,7 +288,7 @@ class HealthKitConnectionCard extends StatelessWidget {
                           Text(
                             Platform.isIOS ? 'App Store Guideline 2.5.1 - HealthKit Transparency' : 'Health Connect data disclosure',
                             style: TextStyle(
-                              fontSize: 11,
+                              fontSize: 10,
                               color: AppTheme.warningOrange.withValues(
                                 alpha: 0.9,
                               ),
@@ -371,7 +371,7 @@ class HealthKitConnectionCard extends StatelessWidget {
                 Platform.isIOS ? 'You can manage HealthKit access at any time in iOS Settings → Health → Data Access & Devices.' : 'You can manage Health Connect access at any time in Android Settings → Apps → Health Connect → App permissions.',
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                  fontSize: 11,
+                  fontSize: 10,
                   fontStyle: FontStyle.italic,
                 ),
               ),
