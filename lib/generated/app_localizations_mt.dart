@@ -1559,7 +1559,7 @@ class AppLocalizationsMt extends AppLocalizations {
   }
 
   @override
-  String get askMira => 'Ask Mira';
+  String get askZyra => 'Ask Zyra';
 
   @override
   String get askRelatedQuestion => 'Ask related question';
@@ -1568,7 +1568,7 @@ class AppLocalizationsMt extends AppLocalizations {
   String get verified => 'Verified';
 
   @override
-  String get askMiraAI => 'Ask Mira AI';
+  String get askZyraAI => 'Ask Zyra AI';
 
   @override
   String get getPersonalizedAnswers =>

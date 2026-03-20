@@ -1563,8 +1563,8 @@
     }
   },
   
-  "askMira": "Ask Mira",
-  "@askMira": {
+  "askZyra": "Ask Zyra",
+  "@askZyra": {
     "description": "Button label to ask AI assistant"
   },
   
@@ -1578,8 +1578,8 @@
     "description": "Verified content indicator"
   },
   
-  "askMiraAI": "Ask Mira AI",
-  "@askMiraAI": {
+  "askZyraAI": "Ask Zyra AI",
+  "@askZyraAI": {
     "description": "AI chat dialog title"
   },
   

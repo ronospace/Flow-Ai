@@ -18,10 +18,10 @@ class MedicalCitationsFooter extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppTheme.secondaryBlue.withValues(alpha: 0.04),
-        borderRadius: BorderRadius.circular(12),
+        color: AppTheme.secondaryBlue.withValues(alpha: 0.02),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: AppTheme.secondaryBlue.withValues(alpha: 0.1),
+          color: AppTheme.secondaryBlue.withValues(alpha: 0.08),
           width: 1,
         ),
       ),

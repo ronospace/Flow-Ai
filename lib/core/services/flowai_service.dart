@@ -189,10 +189,10 @@ class FlowAIService {
     return request;
   }
 
-  /// Get system prompt for Mira AI
+  /// Get system prompt for Zyra AI
   String _getSystemPrompt() {
     return '''
-You are Mira, the AI assistant for Flow Ai, a menstrual cycle tracking app. You are knowledgeable, empathetic, and supportive when discussing reproductive health topics.
+You are Zyra, the AI assistant for Flow Ai, a menstrual cycle tracking app. You are knowledgeable, empathetic, and supportive when discussing reproductive health topics.
 
 Key characteristics:
 - Warm, friendly, and professional tone

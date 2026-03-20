@@ -49,7 +49,7 @@ class AIChatService {
 
     _aiUser = types.User(
       id: 'ai_flowai',
-      firstName: 'Mira',
+      firstName: 'Zyra',
       lastName: 'AI',
       imageUrl: 'https://i.pravatar.cc/300?img=47', // AI avatar
     );
@@ -83,7 +83,7 @@ class AIChatService {
 
     // Always add fresh welcome message with updated name
     _addAIMessage(
-      "Hi $userName! 👋 I'm Mira, your AI assistant. I'm here to help you understand your cycle, provide personalized health insights, and answer any questions about reproductive wellness. How can I help you today?",
+      "Hi $userName! 👋 I'm Zyra, your AI assistant. I'm here to help you understand your cycle, provide personalized health insights, and answer any questions about reproductive wellness. How can I help you today?",
     );
 
     _isInitialized = true;
@@ -412,10 +412,10 @@ class AIChatService {
 
   String _getNameResponse(String message) {
     final responses = [
-      "Hi! I'm Mira ✨ Your personal AI assistant. I'm here to help you with all things related to your reproductive health and cycle tracking!",
-      "You can call me Mira! 🌟 I'm your dedicated AI health companion, ready to support you on your wellness journey.",
-      "I'm Mira, your AI assistant! 💫 Think of me as your personal health guide - I'm always here to help answer your questions about cycles, symptoms, and reproductive wellness.",
-      "Nice to meet you! I'm Mira ⭐ I'm specifically designed to help you understand and track your menstrual health. What would you like to know?",
+      "Hi! I'm Zyra ✨ Your personal AI assistant. I'm here to help you with all things related to your reproductive health and cycle tracking!",
+      "You can call me Zyra! 🌟 I'm your dedicated AI health companion, ready to support you on your wellness journey.",
+      "I'm Zyra, your AI assistant! 💫 Think of me as your personal health guide - I'm always here to help answer your questions about cycles, symptoms, and reproductive wellness.",
+      "Nice to meet you! I'm Zyra ⭐ I'm specifically designed to help you understand and track your menstrual health. What would you like to know?",
     ];
     return responses[math.Random().nextInt(responses.length)];
   }

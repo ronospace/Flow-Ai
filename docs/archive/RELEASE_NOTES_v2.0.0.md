@@ -18,7 +18,7 @@ This is a major milestone release marking Flow Ai as production-ready for public
 ### 📚 **Enhanced FAQ & Knowledge Base**
 - **New FAQ Browser Screen**: Comprehensive help system with searchable content
 - **Categories & Filtering**: Organized FAQ content by topic with advanced search
-- **AI-Powered Help**: Integrated AI assistant (Mira) for personalized support
+- **AI-Powered Help**: Integrated AI assistant (Zyra) for personalized support
 - **Verification System**: Verified answers and reliable health information
 
 ### 🎯 **Smart Action Command Center**
@@ -60,7 +60,7 @@ This is a major milestone release marking Flow Ai as production-ready for public
 - **Loading Performance**: Faster app startup and screen transitions
 
 ### 🤖 **AI Assistant Improvements**
-- **Enhanced Mira AI**: More intelligent and helpful responses
+- **Enhanced Zyra AI**: More intelligent and helpful responses
 - **Personalized Insights**: Tailored health recommendations
 - **Multi-Topic Support**: Health, science, technology, and lifestyle knowledge
 - **Contextual Awareness**: Better understanding of user conversations
@@ -154,7 +154,7 @@ This is a major milestone release marking Flow Ai as production-ready for public
 
 ### 🆘 **Getting Help**
 - **In-App FAQ**: Comprehensive help system with search
-- **AI Assistant**: Ask Mira for immediate help
+- **AI Assistant**: Ask Zyra for immediate help
 - **Support Email**: support@flowai.com
 - **User Documentation**: Available in all supported languages
 
