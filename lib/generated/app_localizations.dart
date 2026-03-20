@@ -3222,7 +3222,7 @@ abstract class AppLocalizations {
   /// Safe app tagline focused on awareness
   ///
   /// In en, this message translates to:
-  /// **'Learn your patterns. Understand your rhythm. Powered by AI.'**
+  /// **'Powered by Machine Learning'**
   String get learnYourPatterns;
 
   /// Clarification that insights are based on user data
