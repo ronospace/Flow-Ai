@@ -429,11 +429,11 @@ class EnhancedAIChatService {
     );
     if (citations.isEmpty) {
       // Still add disclaimer even if no specific citation found
-      return '$response\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n⚠️ Medical Information Disclosure (App Store Guideline 1.4.1)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nThis information is for awareness only and is not medical advice. Consult a healthcare provider for medical concerns.\n\n📚 View all medical sources and citations: Settings → Medical Sources & Citations\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━';
+      return '$response\n\n\n\n\n\nAI-generated insight. Not medical advice.\n\n\n';
     }
 
     final citation = citations.first;
-    return '$response\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n📚 Medical Source & Citation (Required Disclosure - App Store 1.4.1)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n📖 Source: ${citation.source}\n📝 ${citation.title}${citation.year != null ? ' (${citation.year})' : ''}\n🔗 View Full Source: ${citation.url}\n\n⚠️ This information is for awareness only. Not medical advice. Consult a healthcare provider for medical concerns.\n\n💡 View all medical sources: Settings → Medical Sources & Citations\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━';
+    return '$response\n\n\n\n\n\nSource: ${citation.source}\n📝 ${citation.title}${citation.year != null ? ' (${citation.year})' : ''}\n  ${citation.url}\n\n⚠️ This information is for awareness only. Not medical advice. Consult a healthcare provider for medical concerns.\n\n💡 View all medical sources: Settings → Medical Sources & Citations\n';
   }
 
   // FAQ Database search

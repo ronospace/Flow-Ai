@@ -1193,11 +1193,11 @@ class InsightGenerator {
 
     // Add encouraging close
     if (mood == InsightMood.supportive) {
-      insight.write('Remember, difficult days are temporary. 🤗');
+      insight.write('This pattern may shift with time and awareness.');
     } else if (mood == InsightMood.positive) {
-      insight.write('Keep up the great work! 🌟');
+      insight.write('Things seem to be moving in a positive direction.');
     } else {
-      insight.write('Take care of yourself today. 💖');
+      insight.write('It may help to take things gently today.');
     }
 
     return DailyInsight(
@@ -1225,9 +1225,9 @@ class InsightGenerator {
     } else if (recentAverage >= 6) {
       return 'You\'re doing well! A little gratitude practice could boost you even higher.';
     } else if (recentAverage >= 4) {
-      return 'Small consistent actions can make a big difference. Try a 5-minute walk.';
+      return 'Small, consistent actions may help over time. A short walk could be a gentle start.';
     } else {
-      return 'Be extra kind to yourself right now. One small positive action at a time.';
+      return 'This might be a time to go gently. One small step at a time can help.';
     }
   }
 
