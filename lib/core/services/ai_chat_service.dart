@@ -263,7 +263,7 @@ class AIChatService {
     if (citations.isEmpty) return response;
 
     final citation = citations.first;
-    return '$response\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n📚 Medical Source: ${citation.source}\n📖 ${citation.title} (${citation.year})\n🔗 View Source: ${citation.url}\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n💡 Tip: View all medical sources in Settings → Medical Sources & Citations';
+    return '$response\n\n\nSource: ${citation.source}\n📖 ${citation.title} (${citation.year})\n ${citation.url}\n\n\n';
   }
 
   /// Add medical citation to FlowAI responses based on content analysis
