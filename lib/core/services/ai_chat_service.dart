@@ -474,64 +474,19 @@ class AIChatService {
 
   /// Get suggested quick replies based on conversation context
   List<String> getSuggestedReplies() {
-    // Get personalized suggestions based on conversation history
-    final personalizedSuggestions =
-        _conversationMemory?.getPersonalizedSuggestions() ?? [];
-
-    // If we have personalized suggestions, use them
-    if (personalizedSuggestions.isNotEmpty) {
-      return personalizedSuggestions;
-    }
-
-    // Enhanced suggestion categories for better user experience
-    final timeBasedSuggestions = _getTimeBasedSuggestions();
-    final contextualSuggestions = _getContextualSuggestions();
-    final educationalSuggestions = _getEducationalSuggestions();
-    final healthSuggestions = _getHealthSuggestions();
-
-    // Combine suggestions from different categories
-    final allSuggestions = [
-      ...timeBasedSuggestions,
-      ...contextualSuggestions,
-      ...educationalSuggestions,
-      ...healthSuggestions,
-    ];
-
-    // Return 6-8 diverse suggestions
-    final shuffled = List<String>.from(allSuggestions)..shuffle();
-    return shuffled.take(8).toList();
-  }
-
-  /// Get time-based contextual suggestions
-  List<String> _getTimeBasedSuggestions() {
-    final hour = DateTime.now().hour;
-
-    if (hour >= 6 && hour < 12) {
-      // Morning suggestions
-      return [
-        "How am I feeling this morning?",
-        "Should I exercise during my period?",
-        "What's my cycle status today?",
-        "Best breakfast for my cycle phase?",
-      ];
-    } else if (hour >= 12 && hour < 17) {
-      // Afternoon suggestions
-      return [
-        "Managing afternoon fatigue during cycle",
-        "Healthy snacks for PMS cravings",
-        "When should I expect my next period?",
-        "Tracking my energy levels",
-      ];
-    } else {
-      // Evening suggestions
-      return [
-        "How to improve sleep during my cycle?",
-        "Evening self-care for PMS",
-        "Reflecting on today's symptoms",
-        "Relaxation techniques for cramps",
-      ];
-    }
-  }
+  return [
+    "When will my next period start?",
+    "Am I in my fertile window today?",
+    "Why is my period late or early?",
+    "What phase of my cycle am I in?",
+    "What do my current symptoms mean?",
+    "How can I reduce cramps naturally?",
+    "Is my cycle regular or irregular?",
+    "Can I get pregnant right now?",
+    "How long is my luteal phase?",
+    "What affects my hormonal balance?",
+  ];
+}
 
   /// Get contextual suggestions based on app usage patterns
   List<String> _getContextualSuggestions() {
