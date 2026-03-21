@@ -1035,163 +1035,19 @@ class EnhancedAIChatService {
 
   /// Get enhanced suggested replies based on conversation context
   List<String> getSuggestedReplies() {
-    // Get personalized suggestions based on conversation history
-    final personalizedSuggestions =
-        _conversationMemory?.getPersonalizedSuggestions() ?? [];
-
-    // If we have personalized suggestions, use them
-    
-
-    // Enhanced default suggestions covering multiple topics
-    final suggestions = [
-      // Health & cycle (15+ questions)
-      "When will my next period start?",
-      "How do I track symptoms?",
-      "What causes PMS?",
-      "Help with fertility tracking",
-      "Normal cycle length range?",
-      "How to deal with menstrual pain?",
-      "Best foods during periods",
-      "Exercise during menstruation",
-      "Understanding ovulation signs",
-      "Birth control options",
-      "Irregular periods causes",
-      "Pregnancy symptoms vs PMS",
-      "Hormone changes explained",
-      "PCOS information",
-      "Endometriosis symptoms",
-      "When to see a gynecologist?",
-      "Menopause preparation",
-      "Fertility diet tips",
-
-      // Science & knowledge (20+ questions)
-      "How does photosynthesis work?",
-      "What is artificial intelligence?",
-      "Explain climate change",
-      "Fun science facts",
-      "How do vaccines work?",
-      "What is DNA?",
-      "Explain gravity",
-      "Why is the sky blue?",
-      "How does the brain work?",
-      "What are black holes?",
-      "Evolution explained simply",
-      "Chemistry in daily life",
-      "Physics principles",
-      "Ocean science facts",
-      "Human anatomy basics",
-      "Renewable energy types",
-      "Space exploration facts",
-      "Genetics for beginners",
-      "Environmental science",
-      "Weather patterns",
-      "Animal behavior insights",
-      "Plant biology basics",
-
-      // Technology (15+ questions)
-      "How does GPS work?",
-      "What is cloud computing?",
-      "Explain machine learning",
-      "Technology tips",
-      "Internet basics",
-      "Smartphone technology",
-      "Social media safety",
-      "Cybersecurity tips",
-      "Future of AI",
-      "Virtual reality explained",
-      "Blockchain basics",
-      "Programming concepts",
-      "Digital privacy",
-      "Computer hardware",
-      "Software development",
-      "Tech career advice",
-      "Gaming technology",
-      "Smart home devices",
-
-      // Lifestyle & wellness (20+ questions)
-      "Healthy lifestyle tips",
-      "How much sleep do I need?",
-      "Stress management advice",
-      "Exercise during period",
-      "Meditation techniques",
-      "Nutrition basics",
-      "Hydration importance",
-      "Mental health support",
-      "Work-life balance",
-      "Healthy meal planning",
-      "Fitness for beginners",
-      "Yoga benefits",
-      "Mindfulness practices",
-      "Self-care routines",
-      "Sleep hygiene tips",
-      "Anxiety management",
-      "Building good habits",
-      "Time management",
-      "Relationship advice",
-      "Confidence building",
-      "Goal setting strategies",
-      "Productivity hacks",
-
-      // General knowledge (15+ questions)
-      "Random interesting facts",
-      "Math in daily life",
-      "Space and astronomy",
-      "World history highlights",
-      "Geography fun facts",
-      "Cultural differences",
-      "Language learning tips",
-      "Art appreciation",
-      "Music theory basics",
-      "Literature classics",
-      "Philosophy for beginners",
-      "Psychology insights",
-      "Economics simplified",
-      "Political systems",
-      "Current events discussion",
-      "Travel knowledge",
-
-      // App features (10+ questions)
-      "How to use the app",
-      "App features overview",
-      "Understanding predictions",
-      "Data insights explanation",
-      "Tracking accuracy",
-      "Privacy settings",
-      "Export data options",
-      "Notification customization",
-      "Sync across devices",
-      "AI recommendations",
-      "Troubleshooting help",
-
-      // Personal development (10+ questions)
-      "Career growth tips",
-      "Leadership skills",
-      "Communication improvement",
-      "Creative thinking",
-      "Problem-solving techniques",
-      "Decision-making strategies",
-      "Learning techniques",
-      "Memory improvement",
-      "Focus and concentration",
-      "Overcoming procrastination",
-
-      // Fun & entertainment (10+ questions)
-      "Tell me a joke",
-      "Fun trivia questions",
-      "Movie recommendations",
-      "Book suggestions",
-      "Game ideas",
-      "Interesting hobbies",
-      "Creative activities",
-      "Weekend plans",
-      "Travel destinations",
-      "Cultural experiences",
-    ];
-
-    // Return 8-12 random suggestions for better variety
-    final shuffled = List<String>.from(suggestions)..shuffle();
-    return shuffled.take(12).toList();
-  }
+  return [
+    "When will my next period start?",
+    "Am I in my fertile window today?",
+    "Why is my period late or early?",
+    "What phase of my cycle am I in?",
+    "What do my current symptoms mean?",
+    "How can I reduce cramps naturally?",
+    "Is my cycle regular or irregular?",
+    "Can I get pregnant right now?",
+    "How long is my luteal phase?",
+    "What affects my hormonal balance?",
+  ];
+}
 
   /// Search FAQ database with specific query
   List<FAQItem> searchFAQs(String query, {String? category}) {
