@@ -87,15 +87,15 @@ class AIConversationMemory {
       'hormones', 'health', 'exercise', 'nutrition', 'stress', 'sleep',
 
       // Science topics
-      'science', 'physics', 'chemistry', 'biology', 'dna', 'photosynthesis',
+         'biology', 'dna', 
       'gravity', 'space', 'planets', 'evolution', 'atoms', 'molecules',
 
       // Technology topics
       'technology',
       'computer',
       'ai',
-      'artificial intelligence',
-      'machine learning',
+      
+      
       'smartphone', 'internet', 'cloud', 'software', 'hardware', 'programming',
 
       // Lifestyle topics
@@ -193,7 +193,7 @@ class AIConversationMemory {
 
   /// Get personalized response suggestions based on memory
   List<String> getPersonalizedSuggestions() {
-    final suggestions = <String>[];
+    var suggestions = <String>[];
 
     // Add suggestions based on topics of interest - enhanced for multi-topic AI
     if (_topicsOfInterest.contains('mood')) {
@@ -242,16 +242,17 @@ class AIConversationMemory {
     // Enhanced default suggestions if no patterns found
     if (suggestions.isEmpty) {
       suggestions.addAll([
-        'When will my next period start?',
-        'How do I track symptoms?',
-        'Fun science facts',
-        'How does GPS work?',
-        'Healthy lifestyle tips',
-        'Understanding my cycle phases',
-      ]);
+  "When will my next period start?",
+  "Am I in my fertile window today?",
+  "Why is my period late or early?",
+  "What phase of my cycle am I in?",
+  "How can I reduce cramps naturally?",
+  "Can I get pregnant right now?",
+]);
     }
 
-    return suggestions.take(4).toList();
+    suggestions = suggestions.where((s) => s.toLowerCase().contains("period") || s.toLowerCase().contains("cycle") || s.toLowerCase().contains("fertile") || s.toLowerCase().contains("ovulation") || s.toLowerCase().contains("pms") || s.toLowerCase().contains("cramps")).toList();
+return suggestions.take(6).toList();
   }
 
   /// Get contextual AI response based on memory - enhanced for better context

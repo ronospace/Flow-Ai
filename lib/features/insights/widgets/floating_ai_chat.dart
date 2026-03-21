@@ -21,7 +21,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     with TickerProviderStateMixin {
   bool _isExpanded = false;
   bool _isFullScreen = false;
-  double _chatHeight = 0.32; // Percentage of screen height
+  double _chatHeight = 0.5; // Percentage of screen height
   late AnimationController _fabController;
   late AnimationController _chatController;
   late AnimationController _expandController;
@@ -246,18 +246,22 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   alignment: Alignment.bottomCenter,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: theme.cardColor,
+                      color: theme.scaffoldBackgroundColor,
                       borderRadius: BorderRadius.circular(
                         _isFullScreen ? 16 : 24,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: theme.shadowColor.withValues(alpha: 0.12),
-                          blurRadius: 18,
-                          spreadRadius: 0,
+                          color: theme.shadowColor.withValues(alpha: 0.2),
+                          blurRadius: 20,
+                          spreadRadius: 4,
                           offset: const Offset(0, 8),
                         ),
                       ],
+                      border: Border.all(
+                        color: AppTheme.primaryRose.withValues(alpha: 0.15),
+                        width: 1.5,
+                      ),
                     ),
                     child: Column(
                       children: [
@@ -362,7 +366,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                                                   ],
                                                 ),
                                                 borderRadius:
-                                                    BorderRadius.circular(6),
+                                                    BorderRadius.circular(8),
                                                 boxShadow: [
                                                   BoxShadow(
                                                     color: AppTheme.successGreen
@@ -406,6 +410,65 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     );
   }
 
+  Widget _buildCustomInput() {
+    final theme = Theme.of(context);
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: theme.cardColor,
+        border: Border(top: BorderSide(color: theme.dividerColor, width: 0.5)),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: _textController,
+              decoration: InputDecoration(
+                hintText: 'Ask about health, science, technology, lifestyle...',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25),
+                  borderSide: BorderSide.none,
+                ),
+                filled: true,
+                fillColor: theme.scaffoldBackgroundColor,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 12,
+                ),
+              ),
+              maxLines: null,
+              keyboardType: TextInputType.multiline,
+              textCapitalization: TextCapitalization.sentences,
+              onSubmitted: (text) {
+                if (text.trim().isNotEmpty) {
+                  _handleSendPressed(types.PartialText(text: text.trim()));
+                  _textController.clear();
+                }
+              },
+            ),
+          ),
+          const SizedBox(width: 8),
+          FloatingActionButton.small(
+            heroTag: "ai_chat_send_fab",
+            onPressed: () {
+              final text = _textController.text.trim();
+              if (text.isNotEmpty) {
+                _handleSendPressed(types.PartialText(text: text));
+                _textController.clear();
+              }
+            },
+            backgroundColor: AppTheme.primaryRose,
+            child: Icon(
+              Icons.send,
+              color: theme.colorScheme.onPrimary,
+              size: 16,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   // Enhanced Header with Controls
   Widget _buildEnhancedHeader(ThemeData theme) {
@@ -500,7 +563,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Zyra AI Assistant',
+                      'Mira AI Assistant',
                       style: theme.textTheme.titleLarge?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -590,6 +653,35 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
           // Medical Disclaimer (Guideline 1.4.1)
           const SizedBox(height: 12),
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.info_outline,
+                  size: 14,
+                  color: Colors.white.withValues(alpha: 0.9),
+                ),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    'AI-generated insights for awareness only. Not medical advice.',
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: Colors.white.withValues(alpha: 0.9),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -598,7 +690,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   // Enhanced Chat Area - Better spacing and padding
   Widget _buildChatArea(ThemeData theme) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Theme(
         data: theme.copyWith(primaryColor: AppTheme.primaryRose),
         child: Chat(
@@ -613,23 +705,23 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             backgroundColor: theme.scaffoldBackgroundColor,
             inputBackgroundColor: theme.cardColor,
             inputTextColor: theme.textTheme.bodyMedium?.color ?? Colors.black,
-            messageBorderRadius: 14,
-            messageInsetsHorizontal: 14,
-            messageInsetsVertical: 10,
+            messageBorderRadius: 18,
+            messageInsetsHorizontal: 20,
+            messageInsetsVertical: 14,
             receivedMessageBodyTextStyle:
                 theme.textTheme.bodyMedium?.copyWith(
                   color: theme.textTheme.bodyMedium?.color,
-                  fontSize: 15,
+                  fontSize: 16,
                   height: 1.5,
                 ) ??
-                const TextStyle(fontSize: 15, height: 1.5),
+                const TextStyle(fontSize: 16, height: 1.5),
             sentMessageBodyTextStyle:
                 theme.textTheme.bodyMedium?.copyWith(
                   color: Colors.white,
-                  fontSize: 15,
+                  fontSize: 16,
                   height: 1.5,
                 ) ??
-                const TextStyle(color: Colors.white, fontSize: 15, height: 1.5),
+                const TextStyle(color: Colors.white, fontSize: 16, height: 1.5),
           ),
           showUserAvatars: true,
           showUserNames: false,
@@ -641,7 +733,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
   // Enhanced Quick Replies - More visible and professional
   Widget _buildEnhancedQuickReplies(ThemeData theme) {
-    final suggestions = _chatService.getSuggestedReplies().take(4).toList();
+    final suggestions = _chatService.getSuggestedReplies().toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -656,21 +748,21 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 gradient: LinearGradient(
                   colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
                 ),
-                borderRadius: BorderRadius.circular(6),
+                borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
                 Icons.auto_awesome_rounded,
                 color: Colors.white,
-                size: 14,
+                size: 18,
               ),
             ),
             const SizedBox(width: 10),
             Text(
-              ' ',
+              'Suggested Questions',
               style: theme.textTheme.titleMedium?.copyWith(
                 color: AppTheme.primaryRose,
                 fontWeight: FontWeight.bold,
-                fontSize: 15,
+                fontSize: 16,
               ),
             ),
           ],
@@ -758,14 +850,14 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.transparent,
+        color: theme.cardColor,
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(_isFullScreen ? 16 : 24),
           bottomRight: Radius.circular(_isFullScreen ? 16 : 24),
         ),
         border: Border(
           top: BorderSide(
-            color: Colors.transparent,
+            color: theme.dividerColor.withValues(alpha: 0.3),
             width: 1,
           ),
         ),
@@ -777,11 +869,11 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             child: Container(
               constraints: const BoxConstraints(maxHeight: 120),
               decoration: BoxDecoration(
-                color: theme.cardColor.withValues(alpha: 0.72),
+                color: theme.scaffoldBackgroundColor,
                 borderRadius: BorderRadius.circular(28),
                 border: Border.all(
-                  color: theme.dividerColor.withValues(alpha: 0.08),
-                  width: 1,
+                  color: AppTheme.primaryRose.withValues(alpha: 0.2),
+                  width: 1.5,
                 ),
               ),
               child: TextField(
@@ -804,7 +896,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 keyboardType: TextInputType.multiline,
                 textCapitalization: TextCapitalization.sentences,
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  fontSize: 15,
+                  fontSize: 16,
                   height: 1.4,
                 ),
                 onSubmitted: (text) {
@@ -827,6 +919,13 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 end: Alignment.bottomRight,
               ),
               borderRadius: BorderRadius.circular(28),
+              boxShadow: [
+                BoxShadow(
+                  color: AppTheme.primaryRose.withValues(alpha: 0.4),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
             ),
             child: Material(
               color: Colors.transparent,
@@ -862,10 +961,10 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     final suggestions = _chatService.getSuggestedReplies();
 
     return Container(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.transparent,
-        
+        color: theme.cardColor.withValues(alpha: 0.5),
+        border: Border(top: BorderSide(color: theme.dividerColor, width: 0.5)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

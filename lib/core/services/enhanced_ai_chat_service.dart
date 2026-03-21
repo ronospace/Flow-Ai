@@ -1040,9 +1040,7 @@ class EnhancedAIChatService {
         _conversationMemory?.getPersonalizedSuggestions() ?? [];
 
     // If we have personalized suggestions, use them
-    if (personalizedSuggestions.isNotEmpty) {
-      return personalizedSuggestions;
-    }
+    
 
     // Enhanced default suggestions covering multiple topics
     final suggestions = [

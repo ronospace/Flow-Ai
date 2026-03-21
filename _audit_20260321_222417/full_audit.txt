@@ -1,0 +1,729 @@
+=== PUBSPEC DUPLICATES ===
+
+=== FLUTTER ANALYZE ===
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 93.0.0 (98.0.0 available)
+  analyzer 10.0.1 (12.0.0 available)
+  archive 3.6.1 (4.0.9 available)
+  bloc 8.1.4 (9.2.0 available)
+  build 4.0.4 (4.0.5 available)
+  build_config 1.2.0 (1.3.0 available)
+  build_runner 2.11.1 (2.13.1 available)
+  characters 1.4.0 (1.4.1 available)
+  confetti 0.7.0 (0.8.0 available)
+  connectivity_plus 5.0.2 (7.0.0 available)
+  connectivity_plus_platform_interface 1.2.4 (2.0.1 available)
+  csv 5.1.1 (8.0.0 available)
+  dart_style 3.1.6 (3.1.8 available)
+  device_info_plus 9.1.2 (12.3.0 available)
+  file_picker 8.3.7 (10.3.10 available)
+  fl_chart 0.65.0 (1.2.0 available)
+  flutter_chat_ui 1.6.15 (2.11.1 available)
+  flutter_link_previewer 3.2.2 (4.2.0 available)
+  flutter_local_notifications 17.2.4 (21.0.0 available)
+  flutter_local_notifications_linux 4.0.1 (8.0.0 available)
+  flutter_local_notifications_platform_interface 7.2.0 (11.0.0 available)
+  geolocator 10.1.1 (14.0.2 available)
+  geolocator_android 4.6.2 (5.0.2 available)
+  geolocator_web 2.2.1 (4.1.3 available)
+  go_router 13.2.5 (17.1.0 available)
+  google_mobile_ads 5.3.1 (7.0.0 available)
+  google_sign_in 6.3.0 (7.2.0 available)
+  google_sign_in_android 6.2.1 (7.2.9 available)
+  google_sign_in_ios 5.9.0 (6.3.0 available)
+  google_sign_in_platform_interface 2.5.0 (3.1.0 available)
+  google_sign_in_web 0.12.4+4 (1.1.3 available)
+  health 13.1.4 (13.3.1 available)
+  hooks 1.0.1 (1.0.2 available)
+  hydrated_bloc 9.1.5 (10.1.1 available)
+  image 4.3.0 (4.8.0 available)
+  js 0.6.7 (0.7.2 available)
+  json_serializable 6.13.0 (6.13.1 available)
+  local_auth 2.3.0 (3.0.1 available)
+  local_auth_android 1.0.56 (2.0.7 available)
+  local_auth_darwin 1.6.1 (2.0.3 available)
+  local_auth_windows 1.0.11 (2.0.1 available)
+  logger 2.6.2 (2.7.0 available)
+  lottie 3.3.0 (3.3.2 available)
+  matcher 0.12.17 (0.12.19 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  meta 1.17.0 (1.18.2 available)
+  mime 1.0.6 (2.0.0 available)
+  native_toolchain_c 0.17.4 (0.17.6 available)
+  package_info_plus 4.2.0 (9.0.0 available)
+  package_info_plus_platform_interface 2.0.1 (3.2.1 available)
+  pdf 3.11.3 (3.12.0 available)
+  permission_handler 11.4.0 (12.0.1 available)
+  permission_handler_android 12.1.0 (13.0.1 available)
+  pointycastle 3.9.1 (4.0.0 available)
+  rive 0.12.4 (0.14.4 available)
+  rive_common 0.2.8 (0.4.15 available)
+  source_gen 4.2.0 (4.2.2 available)
+  source_helper 1.3.10 (1.3.11 available)
+  sqflite_android 2.4.2+2 (2.4.2+3 available)
+  test_api 0.7.7 (0.7.11 available)
+  tflite_flutter 0.10.4 (0.12.1 available)
+  timezone 0.9.4 (0.11.0 available)
+  vector_math 2.2.0 (2.3.0 available)
+  vibration 3.1.7 (3.1.8 available)
+  webview_flutter_wkwebview 3.23.7 (3.24.1 available)
+  win32 5.15.0 (6.0.0 available)
+  win32_registry 1.1.5 (3.0.2 available)
+Got dependencies!
+67 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Analyzing flow_ai...                                            
+
+warning • The value of the field '_fertilityModel' isn't used • lib/core/ai/advanced_prediction_engine.dart:12:30 • unused_field
+warning • The value of the field '_hormonePatternModel' isn't used • lib/core/ai/advanced_prediction_engine.dart:13:30 • unused_field
+warning • The value of the field '_cycleIrregularityModel' isn't used • lib/core/ai/advanced_prediction_engine.dart:14:30 • unused_field
+warning • The value of the field '_symptomPredictionModel' isn't used • lib/core/ai/advanced_prediction_engine.dart:15:30 • unused_field
+warning • The value of the field '_knowledgeBase' isn't used • lib/core/clinical/clinical_intelligence_engine.dart:618:31 • unused_field
+warning • The value of the field '_knowledgeBase' isn't used • lib/core/clinical/clinical_intelligence_engine.dart:878:31 • unused_field
+warning • The value of the field '_knowledgeBase' isn't used • lib/core/clinical/clinical_intelligence_engine.dart:1011:31 • unused_field
+warning • The value of the field '_trackingWindow' isn't used • lib/core/feelings/daily_feelings_tracker.dart:22:25 • unused_field
+warning • The value of the local variable 'alertType' isn't used • lib/core/notifications/smart_notification_system.dart:766:11 • unused_local_variable
+warning • The value of the field '_defaultIV' isn't used • lib/core/security/security_manager.dart:26:11 • unused_field
+warning • The value of the field '_userSpecificWeights' isn't used • lib/core/services/adaptive_ai_engine.dart:21:29 • unused_field
+warning • The value of the field '_hormonalPatterns' isn't used • lib/core/services/adaptive_ai_engine.dart:23:37 • unused_field
+warning • The value of the field '_forgettingFactor' isn't used • lib/core/services/adaptive_ai_engine.dart:25:16 • unused_field
+warning • The value of the field '_hormoneAwareModel' isn't used • lib/core/services/adaptive_ai_engine.dart:28:29 • unused_field
+warning • The value of the field '_selfCorrectionModel' isn't used • lib/core/services/adaptive_ai_engine.dart:29:29 • unused_field
+warning • The value of the field '_androidAppOpenAdUnitId' isn't used • lib/core/services/admob_service.dart:25:23 • unused_field
+warning • The value of the field '_androidNativeAdUnitId' isn't used • lib/core/services/admob_service.dart:27:23 • unused_field
+warning • The value of the field '_androidRewardedInterstitialAdUnitId' isn't used • lib/core/services/admob_service.dart:29:23 • unused_field
+warning • The value of the field '_iosAppOpenAdUnitId' isn't used • lib/core/services/admob_service.dart:39:23 • unused_field
+warning • The value of the field '_iosNativeAdUnitId' isn't used • lib/core/services/admob_service.dart:41:23 • unused_field
+warning • The value of the field '_iosRewardedInterstitialAdUnitId' isn't used • lib/core/services/admob_service.dart:43:23 • unused_field
+warning • The value of the field '_personalFactors' isn't used • lib/core/services/advanced_ai_engine.dart:25:23 • unused_field
+warning • The declaration '_triggerAIAnalysis' isn't referenced • lib/core/services/advanced_biometric_service.dart:246:8 • unused_element
+warning • The value of the field '_localizations' isn't used • lib/core/services/ai_chat_service.dart:29:21 • unused_field
+warning • The declaration '_getContextualSuggestions' isn't referenced • lib/core/services/ai_chat_service.dart:492:16 • unused_element
+warning • The declaration '_getEducationalSuggestions' isn't referenced • lib/core/services/ai_chat_service.dart:510:16 • unused_element
+warning • The declaration '_getHealthSuggestions' isn't referenced • lib/core/services/ai_chat_service.dart:530:16 • unused_element
+warning • The value of the field '_patternModel' isn't used • lib/core/services/ai_engine.dart:22:29 • unused_field
+warning • The value of the field '_insightModel' isn't used • lib/core/services/ai_engine.dart:23:29 • unused_field
+warning • The value of the local variable 'avgLength' isn't used • lib/core/services/ai_engine.dart:234:11 • unused_local_variable
+warning • The declaration '_calculateAverageCycleLength' isn't referenced • lib/core/services/ai_engine.dart:254:10 • unused_element
+warning • The declaration '_calculatePredictionConfidence' isn't referenced • lib/core/services/ai_engine.dart:260:10 • unused_element
+warning • The value of the field '_calculationEngine' isn't used • lib/core/services/analytics_service.dart:15:37 • unused_field
+warning • Unused import: 'app_enhancement_service.dart' • lib/core/services/apple_signin_service.dart:2:8 • unused_import
+warning • The value of the field '_isAvailable' isn't used • lib/core/services/apple_signin_service.dart:12:8 • unused_field
+warning • The value of the field '_stressModel' isn't used • lib/core/services/biometric_engine.dart:22:29 • unused_field
+warning • The value of the field '_correlationEngine' isn't used • lib/core/services/biometric_engine.dart:23:29 • unused_field
+warning • The declaration 'takeLast' isn't referenced • lib/core/services/biometric_engine.dart:882:15 • unused_element
+warning • The value of the field '_localizations' isn't used • lib/core/services/enhanced_ai_chat_service.dart:30:21 • unused_field
+warning • The declaration '_getPersonalResponse' isn't referenced • lib/core/services/enhanced_ai_chat_service.dart:688:10 • unused_element
+warning • The value of the local variable 'personalizedSuggestions' isn't used • lib/core/services/enhanced_ai_chat_service.dart:1039:11 • unused_local_variable
+warning • The value of the field '_biometricCorrelations' isn't used • lib/core/services/enhanced_ai_engine.dart:18:29 • unused_field
+warning • The value of the field '_intelligentInsights' isn't used • lib/core/services/enhanced_ai_engine.dart:19:29 • unused_field
+warning • The value of the field '_textAnalysisModel' isn't used • lib/core/services/multimodal_symptom_analyzer.dart:20:29 • unused_field
+warning • The value of the field '_voiceAnalysisModel' isn't used • lib/core/services/multimodal_symptom_analyzer.dart:21:29 • unused_field
+warning • The value of the field '_imageAnalysisModel' isn't used • lib/core/services/multimodal_symptom_analyzer.dart:22:29 • unused_field
+warning • The value of the field '_contextualAnalysisModel' isn't used • lib/core/services/multimodal_symptom_analyzer.dart:23:29 • unused_field
+warning • The value of the field '_smartJournalingModel' isn't used • lib/core/services/multimodal_symptom_analyzer.dart:24:29 • unused_field
+warning • The value of the field '_databaseService' isn't used • lib/core/services/offline_service.dart:19:24 • unused_field
+warning • The value of the field '_lastMemoryUsage' isn't used • lib/core/services/performance_optimization_service.dart:24:13 • unused_field
+warning • A value of type 'Null' can't be returned by the 'onError' handler because it must be assignable to 'FutureOr<T>' • lib/core/services/performance_optimizer.dart:131:14 • invalid_return_type_for_catch_error
+warning • The value of the field '_userProfileModel' isn't used • lib/core/services/personalization_engine.dart:19:29 • unused_field
+warning • The value of the field '_preferenceEngine' isn't used • lib/core/services/personalization_engine.dart:23:29 • unused_field
+warning • The value of the local variable 'adjustment' isn't used • lib/core/services/personalization_engine.dart:355:15 • unused_local_variable
+warning • The value of the local variable 'adjustment' isn't used • lib/core/services/personalization_engine.dart:360:15 • unused_local_variable
+warning • The value of the local variable 'adjustment' isn't used • lib/core/services/personalization_engine.dart:365:15 • unused_local_variable
+warning • The declaration 'takeLast' isn't referenced • lib/core/services/personalization_engine.dart:719:15 • unused_element
+warning • The left operand can't be null, so the right operand is never executed • lib/core/services/platform_service.dart:136:47 • dead_null_aware_expression
+warning • The value of the local variable 'theme' isn't used • lib/core/services/platform_service.dart:297:11 • unused_local_variable
+warning • The value of the field '_timeSeriesModel' isn't used • lib/core/services/predictive_engine.dart:19:29 • unused_field
+warning • The value of the field '_reinforcementModel' isn't used • lib/core/services/predictive_engine.dart:21:29 • unused_field
+warning • The value of the field '_modelAccuracies' isn't used • lib/core/services/predictive_engine.dart:24:28 • unused_field
+warning • The value of the field '_thyroidAnalysisModel' isn't used • lib/core/services/preventive_health_insights.dart:22:29 • unused_field
+warning • The value of the field '_endometriosisDetectionModel' isn't used • lib/core/services/preventive_health_insights.dart:23:29 • unused_field
+warning • The value of the field '_fertilityOptimizationModel' isn't used • lib/core/services/preventive_health_insights.dart:24:29 • unused_field
+warning • The value of the field '_hormonalShiftDetectionModel' isn't used • lib/core/services/preventive_health_insights.dart:25:29 • unused_field
+warning • The value of the field '_medicalConditionMarkers' isn't used • lib/core/services/preventive_health_insights.dart:28:34 • unused_field
+warning • The value of the field '_warningSignPatterns' isn't used • lib/core/services/preventive_health_insights.dart:30:34 • unused_field
+warning • The value of the local variable 'avgLength' isn't used • lib/core/services/preventive_health_insights.dart:1592:11 • unused_local_variable
+warning • This default clause is covered by the previous cases • lib/core/services/smart_notification_service.dart:561:7 • unreachable_switch_default
+warning • The value of the field '_modelLoaded' isn't used • lib/core/services/tflite_prediction_service.dart:15:8 • unused_field
+warning • The declaration '_prepareInputTensor' isn't referenced • lib/core/services/tflite_prediction_service.dart:95:28 • unused_element
+warning • The declaration '_processModelOutput' isn't referenced • lib/core/services/tflite_prediction_service.dart:141:25 • unused_element
+warning • The declaration '_registerController' isn't referenced • lib/core/visuals/consumer_visual_engine.dart:227:8 • unused_element
+warning • The declaration '_captureError' isn't referenced • lib/core/widgets/error_boundary.dart:47:8 • unused_element
+warning • The value of the local variable 'enhancementService' isn't used • lib/core/widgets/error_boundary.dart:56:13 • unused_local_variable
+warning • The value of the local variable 'isToday' isn't used • lib/features/ai_predictions/widgets/ai_prediction_card.dart:170:11 • unused_local_variable
+warning • The declaration '_buildOverviewMetricCard' isn't referenced • lib/features/analytics/screens/analytics_dashboard_screen.dart:1017:10 • unused_element
+warning • The declaration '_showRecommendationDetails' isn't referenced • lib/features/analytics/screens/analytics_dashboard_screen.dart:1136:8 • unused_element
+warning • The declaration '_showInfoMessage' isn't referenced • lib/features/auth/screens/auth_screen.dart:991:8 • unused_element
+warning • The declaration '_showSuccessMessage' isn't referenced • lib/features/auth/screens/futuristic_auth_screen.dart:780:8 • unused_element
+warning • The declaration '_showErrorMessage' isn't referenced • lib/features/auth/screens/futuristic_auth_screen.dart:786:8 • unused_element
+warning • The declaration '_showInfoMessage' isn't referenced • lib/features/auth/screens/futuristic_auth_screen.dart:792:8 • unused_element
+warning • The declaration '_buildFuturisticButton' isn't referenced • lib/features/auth/screens/futuristic_auth_screen.dart:798:10 • unused_element
+warning • The value of the local variable 'theme' isn't used • lib/features/biometric/widgets/biometric_chart_widget.dart:62:11 • unused_local_variable
+warning • The value of the local variable 'theme' isn't used • lib/features/biometric/widgets/biometric_chart_widget.dart:271:11 • unused_local_variable
+warning • This default clause is covered by the previous cases • lib/features/biometric/widgets/biometric_chart_widget.dart:431:7 • unreachable_switch_default
+warning • The value of the local variable 'theme' isn't used • lib/features/biometric/widgets/health_metrics_card.dart:212:11 • unused_local_variable
+warning • The value of the field '_analysisHistoryDays' isn't used • lib/features/clinical/services/clinical_intelligence_service.dart:26:20 • unused_field
+warning • The value of the field '_abnormalThreshold' isn't used • lib/features/clinical/services/clinical_intelligence_service.dart:27:23 • unused_field
+warning • The value of the field '_criticalThreshold' isn't used • lib/features/clinical/services/clinical_intelligence_service.dart:28:23 • unused_field
+warning • The value of the local variable 'theme' isn't used • lib/features/coming_soon/widgets/feature_preview_card.dart:45:11 • unused_local_variable
+warning • The declaration '_getFlowIndicatorSize' isn't referenced • lib/features/cycle/screens/calendar_screen.dart:571:10 • unused_element
+warning • Unused import: '../../../core/widgets/coming_soon_widget.dart' • lib/features/cycle/screens/home_screen.dart:17:8 • unused_import
+warning • The declaration '_buildCycleInfo' isn't referenced • lib/features/cycle/screens/home_screen.dart:935:10 • unused_element
+warning • The declaration '_buildActionCard' isn't referenced • lib/features/cycle/screens/home_screen.dart:961:10 • unused_element
+warning • The declaration '_handleNotifyMe' isn't referenced • lib/features/cycle/screens/home_screen.dart:2473:8 • unused_element
+warning • The value of the local variable 'theme' isn't used • lib/features/cycle/widgets/flow_intensity_picker.dart:115:11 • unused_local_variable
+warning • The declaration '_buildFlowVisualization' isn't referenced • lib/features/cycle/widgets/flow_intensity_picker.dart:168:10 • unused_element
+warning • The value of the local variable 'theme' isn't used • lib/features/cycle/widgets/flow_intensity_picker.dart:169:11 • unused_local_variable
+warning • The declaration '_SafeBoxShadow' isn't referenced • lib/features/cycle/widgets/mood_energy_slider.dart:1044:7 • unused_element
+warning • The value of the local variable 'theme' isn't used • lib/features/cycle/widgets/symptom_selector.dart:78:11 • unused_local_variable
+warning • The value of the local variable 'theme' isn't used • lib/features/cycle/widgets/tracking_summary_card.dart:16:11 • unused_local_variable
+warning • The declaration '_formatDateLocal' isn't referenced • lib/features/cycle/widgets/tracking_summary_card.dart:333:10 • unused_element
+warning • The value of the local variable 'l10n' isn't used • lib/features/cycle/widgets/tracking_summary_card.dart:383:11 • unused_local_variable
+warning • The value of the local variable 'l10n' isn't used • lib/features/cycle/widgets/tracking_summary_card.dart:401:11 • unused_local_variable
+warning • The value of the field '_tempDirectory' isn't used • lib/features/data_management/services/data_export_import_service.dart:27:14 • unused_field
+warning • The value of the field '_exportConfigKey' isn't used • lib/features/data_management/services/data_export_import_service.dart:30:23 • unused_field
+warning • The value of the field '_lastExportKey' isn't used • lib/features/data_management/services/data_export_import_service.dart:31:23 • unused_field
+warning • The value of the field '_compressionLevel' isn't used • lib/features/data_management/services/data_export_import_service.dart:34:20 • unused_field
+warning • The value of the local variable 'startTime' isn't used • lib/features/deployment/services/deployment_service.dart:632:11 • unused_local_variable
+warning • The value of the local variable 'random' isn't used • lib/features/health/widgets/ai_insights_panel.dart:474:11 • unused_local_variable
+warning • The value of the local variable 'l10n' isn't used • lib/features/health/widgets/healthkit_disclosure_banner.dart:28:11 • unused_local_variable
+warning • The value of the field '_aiService' isn't used • lib/features/insights/screens/consumer_intelligence_dashboard.dart:26:31 • unused_field
+warning • Unused import: '../widgets/prediction_accuracy_card.dart' • lib/features/insights/screens/insights_screen.dart:13:8 • unused_import
+warning • The value of the local variable 'index' isn't used • lib/features/insights/screens/insights_screen.dart:208:17 • unused_local_variable
+warning • The declaration '_getConfidenceColor' isn't referenced • lib/features/insights/widgets/ai_insight_card.dart:324:9 • unused_element
+warning • The declaration '_buildCitationItem' isn't referenced • lib/features/insights/widgets/ai_insight_card.dart:334:10 • unused_element
+warning • The value of the field '_expandAnimation' isn't used • lib/features/insights/widgets/floating_ai_chat.dart:30:26 • unused_field
+warning • The value of the field '_isTyping' isn't used • lib/features/insights/widgets/floating_ai_chat.dart:34:8 • unused_field
+warning • The value of the field '_showQuickReplies' isn't used • lib/features/insights/widgets/floating_ai_chat.dart:35:8 • unused_field
+warning • The value of the field '_initialHeight' isn't used • lib/features/insights/widgets/floating_ai_chat.dart:39:10 • unused_field
+warning • The left operand can't be null, so the right operand is never executed • lib/features/insights/widgets/floating_ai_chat.dart:87:11 • dead_null_aware_expression
+warning • The left operand can't be null, so the right operand is never executed • lib/features/insights/widgets/floating_ai_chat.dart:88:11 • dead_null_aware_expression
+warning • The declaration '_toggleFullScreen' isn't referenced • lib/features/insights/widgets/floating_ai_chat.dart:156:8 • unused_element
+warning • The declaration '_adjustChatHeight' isn't referenced • lib/features/insights/widgets/floating_ai_chat.dart:169:8 • unused_element
+warning • The declaration '_shouldShowQuickQuestions' isn't referenced • lib/features/insights/widgets/floating_ai_chat.dart:178:8 • unused_element
+warning • The declaration '_handleSendPressed' isn't referenced • lib/features/insights/widgets/floating_ai_chat.dart:192:8 • unused_element
+warning • The declaration '_handleMessageTap' isn't referenced • lib/features/insights/widgets/floating_ai_chat.dart:210:8 • unused_element
+warning • The declaration '_handlePreviewDataFetched' isn't referenced • lib/features/insights/widgets/floating_ai_chat.dart:214:8 • unused_element
+  error • Expected an identifier • lib/features/insights/widgets/floating_ai_chat.dart:266:28 • missing_identifier
+  error • Expected an identifier • lib/features/insights/widgets/floating_ai_chat.dart:270:35 • missing_identifier
+  error • The argument type 'int' can't be assigned to the parameter type 'Widget'.  • lib/features/insights/widgets/floating_ai_chat.dart:270:35 • argument_type_not_assignable
+  error • The argument for the named parameter 'child' was already specified • lib/features/insights/widgets/floating_ai_chat.dart:271:33 • duplicate_named_argument
+  error • Expected an identifier • lib/features/insights/widgets/floating_ai_chat.dart:275:31 • missing_identifier
+  error • Expected to find ')' • lib/features/insights/widgets/floating_ai_chat.dart:275:31 • expected_token
+  error • Expected to find ';' • lib/features/insights/widgets/floating_ai_chat.dart:285:25 • expected_token
+warning • Dead code • lib/features/insights/widgets/floating_ai_chat.dart:285:26 • dead_code
+  error • Expected an identifier • lib/features/insights/widgets/floating_ai_chat.dart:285:26 • missing_identifier
+  error • Unexpected text ';' • lib/features/insights/widgets/floating_ai_chat.dart:285:26 • unexpected_token
+  error • Expected to find ';' • lib/features/insights/widgets/floating_ai_chat.dart:291:1 • expected_token
+  error • Expected an identifier • lib/features/insights/widgets/floating_ai_chat.dart:291:2 • missing_identifier
+  error • Unexpected text ';' • lib/features/insights/widgets/floating_ai_chat.dart:291:2 • unexpected_token
+  error • Expected to find ')' • lib/features/insights/widgets/floating_ai_chat.dart:292:23 • expected_token
+  error • Expected to find '}' • lib/features/insights/widgets/floating_ai_chat.dart:292:23 • expected_token
+  error • Expected to find ';' • lib/features/insights/widgets/floating_ai_chat.dart:293:21 • expected_token
+warning • Dead code • lib/features/insights/widgets/floating_ai_chat.dart:293:22 • dead_code
+  error • Expected an identifier • lib/features/insights/widgets/floating_ai_chat.dart:293:22 • missing_identifier
+  error • Expected to find ';' • lib/features/insights/widgets/floating_ai_chat.dart:293:22 • expected_token
+  error • Unexpected text ';' • lib/features/insights/widgets/floating_ai_chat.dart:293:22 • unexpected_token
+  error • Expected an identifier • lib/features/insights/widgets/floating_ai_chat.dart:294:19 • missing_identifier
+  error • Expected to find ';' • lib/features/insights/widgets/floating_ai_chat.dart:294:19 • expected_token
+  error • Unexpected text ';' • lib/features/insights/widgets/floating_ai_chat.dart:294:19 • unexpected_token
+  error • Expected an identifier • lib/features/insights/widgets/floating_ai_chat.dart:294:20 • missing_identifier
+  error • Expected to find ';' • lib/features/insights/widgets/floating_ai_chat.dart:294:20 • expected_token
+  error • Unexpected text ';' • lib/features/insights/widgets/floating_ai_chat.dart:294:20 • unexpected_token
+  error • Expected an identifier • lib/features/insights/widgets/floating_ai_chat.dart:295:17 • missing_identifier
+  error • Unexpected text ';' • lib/features/insights/widgets/floating_ai_chat.dart:295:17 • unexpected_token
+  error • Expected a class member • lib/features/insights/widgets/floating_ai_chat.dart:296:16 • expected_class_member
+  error • Expected a class member • lib/features/insights/widgets/floating_ai_chat.dart:297:13 • expected_class_member
+  error • Expected a class member • lib/features/insights/widgets/floating_ai_chat.dart:297:14 • expected_class_member
+  error • Expected a class member • lib/features/insights/widgets/floating_ai_chat.dart:298:11 • expected_class_member
+  error • Expected a class member • lib/features/insights/widgets/floating_ai_chat.dart:298:12 • expected_class_member
+  error • Named parameters must be enclosed in curly braces ('{' and '}') • lib/features/insights/widgets/floating_ai_chat.dart:302:16 • named_parameter_outside_group
+  error • Using a colon as the separator before a default value is no longer supported • lib/features/insights/widgets/floating_ai_chat.dart:302:16 • obsolete_colon_for_default_value
+  error • Named parameters must be enclosed in curly braces ('{' and '}') • lib/features/insights/widgets/floating_ai_chat.dart:303:17 • named_parameter_outside_group
+  error • Using a colon as the separator before a default value is no longer supported • lib/features/insights/widgets/floating_ai_chat.dart:303:17 • obsolete_colon_for_default_value
+  error • Named parameters must be enclosed in curly braces ('{' and '}') • lib/features/insights/widgets/floating_ai_chat.dart:304:16 • named_parameter_outside_group
+  error • Using a colon as the separator before a default value is no longer supported • lib/features/insights/widgets/floating_ai_chat.dart:304:16 • obsolete_colon_for_default_value
+  error • The default value of an optional parameter must be constant • lib/features/insights/widgets/floating_ai_chat.dart:304:18 • non_constant_default_value
+  error • The named parameter 'top' isn't defined • lib/features/insights/widgets/floating_ai_chat.dart:351:37 • undefined_named_parameter
+  error • A function body must be provided • lib/features/insights/widgets/floating_ai_chat.dart:404:10 • missing_function_body
+  error • Expected a class member • lib/features/insights/widgets/floating_ai_chat.dart:404:10 • expected_class_member
+  error • Expected a class member • lib/features/insights/widgets/floating_ai_chat.dart:405:7 • expected_class_member
+  error • Expected a class member • lib/features/insights/widgets/floating_ai_chat.dart:405:8 • expected_class_member
+  error • Expected a class member • lib/features/insights/widgets/floating_ai_chat.dart:406:5 • expected_class_member
+  error • Expected a class member • lib/features/insights/widgets/floating_ai_chat.dart:406:6 • expected_class_member
+warning • The declaration '_buildCustomInput' isn't referenced • lib/features/insights/widgets/floating_ai_chat.dart:409:10 • unused_element
+  error • Undefined name 'context' • lib/features/insights/widgets/floating_ai_chat.dart:410:28 • undefined_identifier
+  error • Undefined name '_textController' • lib/features/insights/widgets/floating_ai_chat.dart:422:27 • undefined_identifier
+  error • The function '_handleSendPressed' isn't defined • lib/features/insights/widgets/floating_ai_chat.dart:441:19 • undefined_function
+  error • Undefined name '_textController' • lib/features/insights/widgets/floating_ai_chat.dart:442:19 • undefined_identifier
+  error • Undefined name '_textController' • lib/features/insights/widgets/floating_ai_chat.dart:451:28 • undefined_identifier
+  error • The function '_handleSendPressed' isn't defined • lib/features/insights/widgets/floating_ai_chat.dart:453:17 • undefined_function
+  error • Undefined name '_textController' • lib/features/insights/widgets/floating_ai_chat.dart:454:17 • undefined_identifier
+warning • The declaration '_buildEnhancedHeader' isn't referenced • lib/features/insights/widgets/floating_ai_chat.dart:470:10 • unused_element
+  error • Undefined name '_isFullScreen' • lib/features/insights/widgets/floating_ai_chat.dart:480:36 • undefined_identifier
+  error • Undefined name '_isFullScreen' • lib/features/insights/widgets/floating_ai_chat.dart:481:37 • undefined_identifier
+  error • Undefined name '_initialHeight' • lib/features/insights/widgets/floating_ai_chat.dart:495:19 • undefined_identifier
+  error • Undefined name '_chatHeight' • lib/features/insights/widgets/floating_ai_chat.dart:495:36 • undefined_identifier
+  error • Undefined name '_isResizing' • lib/features/insights/widgets/floating_ai_chat.dart:496:19 • undefined_identifier
+  error • Undefined name '_isFullScreen' • lib/features/insights/widgets/floating_ai_chat.dart:499:24 • undefined_identifier
+  error • Undefined name '_isResizing' • lib/features/insights/widgets/floating_ai_chat.dart:499:41 • undefined_identifier
+  error • The function '_adjustChatHeight' isn't defined • lib/features/insights/widgets/floating_ai_chat.dart:500:21 • undefined_function
+  error • Undefined name '_isResizing' • lib/features/insights/widgets/floating_ai_chat.dart:504:19 • undefined_identifier
+  error • Expected an identifier • lib/features/insights/widgets/floating_ai_chat.dart:521:11 • missing_identifier
+  error • Expected to find ')' • lib/features/insights/widgets/floating_ai_chat.dart:521:11 • expected_token
+  error • Expected to find ';' • lib/features/insights/widgets/floating_ai_chat.dart:586:15 • expected_token
+warning • Dead code • lib/features/insights/widgets/floating_ai_chat.dart:586:16 • dead_code
+  error • Expected an identifier • lib/features/insights/widgets/floating_ai_chat.dart:586:16 • missing_identifier
+  error • Unexpected text ';' • lib/features/insights/widgets/floating_ai_chat.dart:586:16 • unexpected_token
+  error • Undefined name '_toggleFullScreen' • lib/features/insights/widgets/floating_ai_chat.dart:594:28 • undefined_identifier
+  error • Undefined name '_isFullScreen' • lib/features/insights/widgets/floating_ai_chat.dart:604:25 • undefined_identifier
+  error • Undefined name '_toggleChat' • lib/features/insights/widgets/floating_ai_chat.dart:617:28 • undefined_identifier
+  error • Expected to find ';' • lib/features/insights/widgets/floating_ai_chat.dart:634:15 • expected_token
+  error • Expected an identifier • lib/features/insights/widgets/floating_ai_chat.dart:634:16 • missing_identifier
+  error • Expected to find ';' • lib/features/insights/widgets/floating_ai_chat.dart:634:16 • expected_token
+  error • Unexpected text ';' • lib/features/insights/widgets/floating_ai_chat.dart:634:16 • unexpected_token
+  error • Expected an identifier • lib/features/insights/widgets/floating_ai_chat.dart:635:13 • missing_identifier
+  error • Expected to find ';' • lib/features/insights/widgets/floating_ai_chat.dart:635:13 • expected_token
+  error • Unexpected text ';' • lib/features/insights/widgets/floating_ai_chat.dart:635:13 • unexpected_token
+  error • Expected an identifier • lib/features/insights/widgets/floating_ai_chat.dart:635:14 • missing_identifier
+  error • Expected to find ';' • lib/features/insights/widgets/floating_ai_chat.dart:635:14 • expected_token
+  error • Unexpected text ';' • lib/features/insights/widgets/floating_ai_chat.dart:635:14 • unexpected_token
+  error • Expected an identifier • lib/features/insights/widgets/floating_ai_chat.dart:636:11 • missing_identifier
+  error • Expected to find ';' • lib/features/insights/widgets/floating_ai_chat.dart:636:11 • expected_token
+  error • Unexpected text ';' • lib/features/insights/widgets/floating_ai_chat.dart:636:11 • unexpected_token
+  error • Expected an identifier • lib/features/insights/widgets/floating_ai_chat.dart:636:12 • missing_identifier
+  error • Unexpected text ';' • lib/features/insights/widgets/floating_ai_chat.dart:636:12 • unexpected_token
+  error • Expected to find ';' • lib/features/insights/widgets/floating_ai_chat.dart:639:36 • expected_token
+  error • Expected an identifier • lib/features/insights/widgets/floating_ai_chat.dart:639:37 • missing_identifier
+  error • Unexpected text ';' • lib/features/insights/widgets/floating_ai_chat.dart:639:37 • unexpected_token
+  error • Expected to find ';' • lib/features/insights/widgets/floating_ai_chat.dart:668:11 • expected_token
+  error • Expected an identifier • lib/features/insights/widgets/floating_ai_chat.dart:668:12 • missing_identifier
+  error • Expected to find ';' • lib/features/insights/widgets/floating_ai_chat.dart:668:12 • expected_token
+  error • Unexpected text ';' • lib/features/insights/widgets/floating_ai_chat.dart:668:12 • unexpected_token
+  error • Expected an identifier • lib/features/insights/widgets/floating_ai_chat.dart:669:9 • missing_identifier
+  error • Expected to find ';' • lib/features/insights/widgets/floating_ai_chat.dart:669:9 • expected_token
+  error • Unexpected text ';' • lib/features/insights/widgets/floating_ai_chat.dart:669:9 • unexpected_token
+  error • Expected an identifier • lib/features/insights/widgets/floating_ai_chat.dart:669:10 • missing_identifier
+  error • Expected to find ';' • lib/features/insights/widgets/floating_ai_chat.dart:669:10 • expected_token
+  error • Unexpected text ';' • lib/features/insights/widgets/floating_ai_chat.dart:669:10 • unexpected_token
+  error • Expected an identifier • lib/features/insights/widgets/floating_ai_chat.dart:670:7 • missing_identifier
+  error • Expected to find ';' • lib/features/insights/widgets/floating_ai_chat.dart:670:7 • expected_token
+  error • Unexpected text ';' • lib/features/insights/widgets/floating_ai_chat.dart:670:7 • unexpected_token
+  error • Expected an identifier • lib/features/insights/widgets/floating_ai_chat.dart:670:8 • missing_identifier
+  error • Expected to find ';' • lib/features/insights/widgets/floating_ai_chat.dart:670:8 • expected_token
+  error • Unexpected text ';' • lib/features/insights/widgets/floating_ai_chat.dart:670:8 • unexpected_token
+  error • Expected an identifier • lib/features/insights/widgets/floating_ai_chat.dart:671:5 • missing_identifier
+  error • Unexpected text ';' • lib/features/insights/widgets/floating_ai_chat.dart:671:5 • unexpected_token
+  error • Undefined name '_messages' • lib/features/insights/widgets/floating_ai_chat.dart:681:21 • undefined_identifier
+  error • Undefined name '_handleSendPressed' • lib/features/insights/widgets/floating_ai_chat.dart:682:26 • undefined_identifier
+  error • Undefined name '_handleMessageTap' • lib/features/insights/widgets/floating_ai_chat.dart:683:25 • undefined_identifier
+  error • Undefined name '_handlePreviewDataFetched' • lib/features/insights/widgets/floating_ai_chat.dart:684:33 • undefined_identifier
+  error • Undefined name '_chatService' • lib/features/insights/widgets/floating_ai_chat.dart:685:17 • undefined_identifier
+warning • The declaration '_buildEnhancedQuickReplies' isn't referenced • lib/features/insights/widgets/floating_ai_chat.dart:719:10 • unused_element
+  error • Undefined name '_chatService' • lib/features/insights/widgets/floating_ai_chat.dart:720:25 • undefined_identifier
+  error • Undefined name '_chatService' • lib/features/insights/widgets/floating_ai_chat.dart:775:33 • undefined_identifier
+  error • The function 'setState' isn't defined • lib/features/insights/widgets/floating_ai_chat.dart:785:13 • undefined_function
+  error • Undefined name '_isTyping' • lib/features/insights/widgets/floating_ai_chat.dart:786:15 • undefined_identifier
+  error • Undefined name '_showQuickReplies' • lib/features/insights/widgets/floating_ai_chat.dart:787:15 • undefined_identifier
+  error • Undefined name '_chatService' • lib/features/insights/widgets/floating_ai_chat.dart:790:13 • undefined_identifier
+  error • Undefined name '_isFullScreen' • lib/features/insights/widgets/floating_ai_chat.dart:839:39 • undefined_identifier
+  error • Undefined name '_isFullScreen' • lib/features/insights/widgets/floating_ai_chat.dart:840:40 • undefined_identifier
+  error • Undefined name '_textController' • lib/features/insights/widgets/floating_ai_chat.dart:864:29 • undefined_identifier
+  error • The function '_handleSendPressed' isn't defined • lib/features/insights/widgets/floating_ai_chat.dart:888:21 • undefined_function
+  error • Undefined name '_textController' • lib/features/insights/widgets/floating_ai_chat.dart:889:21 • undefined_identifier
+  error • Undefined name '_textController' • lib/features/insights/widgets/floating_ai_chat.dart:918:32 • undefined_identifier
+  error • The function '_handleSendPressed' isn't defined • lib/features/insights/widgets/floating_ai_chat.dart:920:21 • undefined_function
+  error • Undefined name '_textController' • lib/features/insights/widgets/floating_ai_chat.dart:921:21 • undefined_identifier
+warning • The declaration '_showCitationDialog' isn't referenced • lib/features/insights/widgets/prediction_accuracy_card.dart:238:8 • unused_element
+warning • The value of the field '_isInitialized' isn't used • lib/features/onboarding/providers/onboarding_provider.dart:30:8 • unused_field
+warning • The value of the local variable 'localizations' isn't used • lib/features/onboarding/screens/personal_info_step_screen.dart:50:11 • unused_local_variable
+warning • The value of the local variable 'localizations' isn't used • lib/features/onboarding/screens/welcome_step_screen.dart:14:11 • unused_local_variable
+warning • The value of the local variable 'size' isn't used • lib/features/onboarding/screens/welcome_step_screen.dart:15:11 • unused_local_variable
+warning • The value of the field '_isImporting' isn't used • lib/features/onboarding/widgets/cycle_history_import_widget.dart:87:8 • unused_field
+warning • The left operand can't be null, so the right operand is never executed • lib/features/onboarding/widgets/cycle_history_import_widget.dart:129:56 • dead_null_aware_expression
+warning • The declaration '_setFirstTimeTracking' isn't referenced • lib/features/onboarding/widgets/cycle_history_import_widget.dart:891:8 • unused_element
+warning • The value of the local variable 'isFuture' isn't used • lib/features/onboarding/widgets/onboarding_progress_widget.dart:192:11 • unused_local_variable
+warning • Using multiple 'hide' or 'show' combinators is never necessary and often produces surprising results • lib/features/partner/screens/partner_dashboard_screen.dart:8:5 • multiple_combinators
+warning • The name PartnerCareAction is shown, but isn't used • lib/features/partner/screens/partner_dashboard_screen.dart:17:9 • unused_shown_name
+warning • The name PartnerInvitation is shown, but isn't used • lib/features/partner/screens/partner_dashboard_screen.dart:19:9 • unused_shown_name
+warning • The name PartnerSharingSettings is shown, but isn't used • lib/features/partner/screens/partner_dashboard_screen.dart:20:9 • unused_shown_name
+warning • The value of the local variable 'isConnected' isn't used • lib/features/partner/screens/partner_dashboard_screen.dart:237:11 • unused_local_variable
+warning • The left operand can't be null, so the right operand is never executed • lib/features/partner/screens/partner_dashboard_screen.dart:239:52 • dead_null_aware_expression
+warning • The value of the local variable 'partnership' isn't used • lib/features/partner/screens/partner_dashboard_screen.dart:712:13 • unused_local_variable
+warning • The name PartnerInsight is shown, but isn't used • lib/features/partner/services/local_partner_service.dart:15:9 • unused_shown_name
+warning • The name PartnerInsightType is shown, but isn't used • lib/features/partner/services/local_partner_service.dart:16:9 • unused_shown_name
+warning • The value of the field '_insightsKey' isn't used • lib/features/partner/services/local_partner_service.dart:32:23 • unused_field
+warning • The value of the local variable 'inviteeUserName' isn't used • lib/features/partner/services/local_partner_service.dart:109:11 • unused_local_variable
+warning • The value of the local variable 'inviteeEmail' isn't used • lib/features/partner/services/local_partner_service.dart:110:11 • unused_local_variable
+
+
+=== MERGE/TODO MARKERS ===
+lib/generated/app_localizations_es.dart:799:  String get all => 'Todo';
+lib/l10n/app_es.arb:229:  "all": "Todo",
+lib/core/database/database_service.dart:774:      fertilityScore: map['fertility_score']?.toDouble(),
+lib/core/database/database_service.dart:785:      mood: map['mood']?.toDouble(),
+lib/core/database/database_service.dart:786:      energy: map['energy']?.toDouble(),
+lib/core/database/database_service.dart:787:      pain: map['pain']?.toDouble(),
+lib/core/biometrics/advanced_biometric_engine.dart:230:    final hrv = (hrvData as num?)?.toDouble() ?? 40.0;
+lib/core/biometrics/advanced_biometric_engine.dart:280:    final temp = (tempData as num?)?.toDouble() ?? 36.5;
+lib/core/biometrics/advanced_biometric_engine.dart:318:    final glucose = (glucoseData as num?)?.toDouble() ?? 95.0;
+lib/core/biometrics/advanced_biometric_engine.dart:472:        return snapshot.fusedData['hrv']?.toDouble();
+lib/core/biometrics/advanced_biometric_engine.dart:474:        return snapshot.fusedData['temperature']?.toDouble();
+lib/core/biometrics/advanced_biometric_engine.dart:476:        return snapshot.fusedData['glucose']?.toDouble();
+lib/core/intelligence/consumer_intelligence_engine.dart:214:    return (baseConfidence + dataConfidence).round().toDouble();
+lib/core/health/advanced_health_analytics.dart:738:      final stability = (moodData['stability'] as num?)?.toDouble() ?? 0.5;
+lib/core/health/advanced_health_analytics.dart:755:      final weight = (biometrics['weight'] as num?)?.toDouble();
+lib/core/health/advanced_health_analytics.dart:756:      final height = (biometrics['height'] as num?)?.toDouble();
+lib/core/health/advanced_health_analytics.dart:767:      final energy = (biometrics['energy_level'] as num?)?.toDouble() ?? 0.5;
+lib/core/health/advanced_health_analytics.dart:780:      final hrv = (biometrics['hrv'] as num?)?.toDouble();
+lib/core/health/advanced_health_analytics.dart:788:      final restingHR = (biometrics['resting_heart_rate'] as num?)?.toDouble();
+lib/core/health/advanced_health_analytics.dart:806:          (emotional['wellness_score'] as num?)?.toDouble() ?? 0.5;
+lib/core/health/advanced_health_analytics.dart:807:      final stability = (emotional['stability'] as num?)?.toDouble() ?? 0.5;
+lib/core/health/advanced_health_analytics.dart:828:          (biometrics['energy_stability'] as num?)?.toDouble() ?? 0.5;
+lib/core/health/advanced_health_analytics.dart:843:      final painLevel = (symptoms['pain_level'] as num?)?.toDouble() ?? 0.0;
+lib/core/health/advanced_health_analytics.dart:846:      final energyLevel = (symptoms['energy_level'] as num?)?.toDouble() ?? 0.5;
+lib/core/health/advanced_health_analytics.dart:852:          (biometrics['wellness_indicator'] as num?)?.toDouble() ?? 0.7;
+lib/core/health/advanced_health_analytics.dart:862:    final painLevel = (symptoms['pain_level'] as num?)?.toDouble() ?? 0.0;
+lib/core/health/advanced_health_analytics.dart:873:      final energyLevel = (symptoms['energy_level'] as num?)?.toDouble() ?? 0.5;
+lib/core/health/advanced_health_analytics.dart:879:          (biometrics['sleep_quality'] as num?)?.toDouble() ?? 0.7;
+lib/core/health/advanced_health_analytics.dart:889:    final moodRating = (symptoms['mood_rating'] as num?)?.toDouble() ?? 0.7;
+lib/core/health/advanced_health_analytics.dart:1316:      final stability = (emotional['stability'] as num?)?.toDouble() ?? 0.7;
+lib/core/health/advanced_health_analytics.dart:1326:      final energy = (biometrics['energy_level'] as num?)?.toDouble() ?? 0.7;
+lib/core/health/advanced_health_analytics.dart:1368:      final energy = (biometrics['energy_level'] as num?)?.toDouble() ?? 0.7;
+lib/core/health/advanced_health_analytics.dart:1755:      final painLevel = (symptoms['pain_level'] as num?)?.toDouble() ?? 0.0;
+lib/core/health/advanced_health_analytics.dart:1879:      final stability = (emotional['stability'] as num?)?.toDouble() ?? 0.7;
+lib/core/health/advanced_health_analytics.dart:1918:          (biometrics['sleep_quality'] as num?)?.toDouble() ?? 0.7;
+lib/core/health/advanced_health_analytics.dart:2234:      lengths.map((l) => l.toDouble()).toList(),
+lib/core/health/advanced_health_analytics.dart:2237:      lengths.map((l) => l.toDouble()).toList(),
+lib/core/health/advanced_health_analytics.dart:2318:    final x = List.generate(n, (i) => i.toDouble());
+lib/core/utils/safe_shadows.dart:256:        return SafeShadows.elevation(elevation.toDouble());
+lib/core/utils/list_extensions.dart:27:    return fold<num>(0, (sum, item) => sum + item).toDouble() / length;
+lib/core/models/community_models.g.dart:142:  compatibilityScore: (json['compatibilityScore'] as num).toDouble(),
+lib/core/models/community_models.g.dart:271:  rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
+lib/core/models/cycle_data.dart:147:      fertilityScore: json['fertilityScore']?.toDouble(),
+lib/core/models/cycle_data.dart:158:      mood: json['mood']?.toDouble(),
+lib/core/models/cycle_data.dart:159:      energy: json['energy']?.toDouble(),
+lib/core/models/cycle_data.dart:160:      pain: json['pain']?.toDouble(),
+lib/core/models/cycle_data.dart:264:      averageLength: cycleLength?.toDouble(),
+lib/core/models/cycle_data.dart:265:      averagePeriodLength: periodLength?.toDouble(),
+lib/core/models/cycle_data.dart:433:      temperature: json['temperature']?.toDouble(),
+lib/core/models/user_profile.dart:106:          ? (json['weight'] as num).toDouble()
+lib/core/models/user_profile.dart:109:          ? (json['height'] as num).toDouble()
+lib/core/models/user_profile.dart:161:      originalValue: json['original_value'].toDouble(),
+lib/core/models/user_profile.dart:162:      correctedValue: json['corrected_value'].toDouble(),
+lib/core/models/user_profile.dart:164:      impactScore: json['impact_score'].toDouble(),
+lib/core/models/user_profile.dart:229:      confidence: json['confidence'].toDouble(),
+lib/core/models/user_profile.dart:230:      relevanceScore: json['relevance_score'].toDouble(),
+lib/core/models/user_profile.dart:301:      personalRelevance: json['personal_relevance'].toDouble(),
+lib/core/models/user_profile.dart:344:      confidence: json['confidence'].toDouble(),
+lib/core/models/user_profile.dart:392:      value: json['value'].toDouble(),
+lib/core/models/user_profile.dart:393:      personalBaseline: json['personal_baseline'].toDouble(),
+lib/core/models/user_profile.dart:394:      deviation: json['deviation'].toDouble(),
+lib/core/models/symptom_tracking.dart:72:      overallSeverity: json['overallSeverity']?.toDouble(),
+lib/core/models/symptom_tracking.dart:209:      severity: json['severity']?.toDouble(),
+lib/core/models/biometric_data.dart:31:      beatsPerMinute: (json['beats_per_minute'] as num).toDouble(),
+lib/core/models/biometric_data.dart:33:      reliability: json['reliability']?.toDouble(),
+lib/core/models/biometric_data.dart:117:      rmssd: (json['rmssd'] as num).toDouble(),
+lib/core/models/biometric_data.dart:118:      sdnn: (json['sdnn'] as num).toDouble(),
+lib/core/models/biometric_data.dart:119:      pnn50: (json['pnn50'] as num).toDouble(),
+lib/core/models/biometric_data.dart:120:      triangularIndex: (json['triangular_index'] as num).toDouble(),
+lib/core/models/biometric_data.dart:121:      stressScore: json['stress_score']?.toDouble(),
+lib/core/models/biometric_data.dart:238:      efficiency: (json['efficiency'] as num).toDouble(),
+lib/core/models/biometric_data.dart:239:      deepSleepPercentage: (json['deep_sleep_percentage'] as num).toDouble(),
+lib/core/models/biometric_data.dart:240:      remSleepPercentage: (json['rem_sleep_percentage'] as num).toDouble(),
+lib/core/models/biometric_data.dart:241:      lightSleepPercentage: (json['light_sleep_percentage'] as num).toDouble(),
+lib/core/models/biometric_data.dart:254:      sleepScore: json['sleep_score']?.toDouble(),
+lib/core/models/biometric_data.dart:362:      temperature: (json['temperature'] as num).toDouble(),
+lib/core/models/biometric_data.dart:365:      ambientTemperature: json['ambient_temperature']?.toDouble(),
+lib/core/models/biometric_data.dart:366:      humidity: json['humidity']?.toDouble(),
+lib/core/models/biometric_data.dart:474:      stressLevel: (json['stress_level'] as num).toDouble(),
+lib/core/models/biometric_data.dart:478:            (key, value) => MapEntry(key, (value as num).toDouble()),
+lib/core/models/biometric_data.dart:525:      distanceKm: (json['distance_km'] as num).toDouble(),
+lib/core/models/biometric_data.dart:526:      caloriesBurned: (json['calories_burned'] as num).toDouble(),
+lib/core/models/biometric_data.dart:527:      activeMinutes: (json['active_minutes'] as num).toDouble(),
+lib/core/models/biometric_data.dart:528:      maxHeartRate: (json['max_heart_rate'] as num).toDouble(),
+lib/core/models/biometric_data.dart:529:      averageHeartRate: (json['average_heart_rate'] as num).toDouble(),
+lib/core/models/biometric_data.dart:531:      vo2Max: json['vo2_max']?.toDouble(),
+lib/core/models/biometric_data.dart:640:      value: (json['value'] as num).toDouble(),
+lib/core/models/biometric_data.dart:645:      confidence: json['confidence']?.toDouble(),
+lib/core/ai/period_prediction_engine.dart:123:    final cycleLengths = data.map((cycle) => cycle.length.toDouble()).toList();
+lib/core/ai/period_prediction_engine.dart:193:    final targets = data.map((cycle) => cycle.length.toDouble()).toList();
+lib/core/ai/period_prediction_engine.dart:347:    final cycleLengths = data.map((cycle) => cycle.length.toDouble()).toList();
+lib/core/ai/period_prediction_engine.dart:410:    return data.map((cycle) => cycle.length.toDouble()).toList();
+lib/core/ai/period_prediction_engine.dart:451:    return 1.0 + (dominantFrequency.toDouble() - 2.0) * 0.05;
+lib/core/ai/period_prediction_engine.dart:459:    final x = List.generate(n, (i) => i.toDouble());
+lib/core/ai/period_prediction_engine.dart:478:            cycle.symptoms.length.toDouble(),
+lib/core/ai/period_prediction_engine.dart:615:      monthlyAvgs.putIfAbsent(month, () => []).add(cycle.length.toDouble());
+lib/core/ai/advanced_prediction_engine.dart:502:    final lengths = cycles.map((c) => c.length.toDouble()).toList();
+lib/core/ai/neural_prediction_engine.dart:438:      final lengths = historicalData.map((c) => c.length.toDouble()).toList();
+lib/core/ai/neural_prediction_engine.dart:441:      features.add(lengths.length.toDouble());
+lib/core/ai/neural_prediction_engine.dart:447:                _flowIntensityToDouble(c.flowIntensity ?? FlowIntensity.none),
+lib/core/ai/neural_prediction_engine.dart:461:  double _flowIntensityToDouble(FlowIntensity intensity) {
+lib/core/ai/neural_prediction_engine.dart:500:      features.add((biometricData['heart_rate'] as num?)?.toDouble() ?? 70.0);
+lib/core/ai/neural_prediction_engine.dart:502:        (biometricData['body_temperature'] as num?)?.toDouble() ?? 36.5,
+lib/core/ai/neural_prediction_engine.dart:504:      features.add((biometricData['hrv'] as num?)?.toDouble() ?? 40.0);
+lib/core/ai/neural_prediction_engine.dart:505:      features.add((biometricData['sleep_quality'] as num?)?.toDouble() ?? 0.7);
+lib/core/ai/neural_prediction_engine.dart:527:        (lifestyleData['exercise_frequency'] as num?)?.toDouble() ?? 3.0,
+lib/core/ai/neural_prediction_engine.dart:529:      features.add((lifestyleData['stress_level'] as num?)?.toDouble() ?? 0.5);
+lib/core/ai/neural_prediction_engine.dart:530:      features.add((lifestyleData['sleep_hours'] as num?)?.toDouble() ?? 7.5);
+lib/core/ai/neural_prediction_engine.dart:532:        (lifestyleData['caffeine_intake'] as num?)?.toDouble() ?? 1.0,
+lib/core/ai/neural_prediction_engine.dart:554:      features.add((moodData['overall_mood'] as num?)?.toDouble() ?? 0.5);
+lib/core/ai/neural_prediction_engine.dart:555:      features.add((moodData['energy_level'] as num?)?.toDouble() ?? 0.5);
+lib/core/ai/neural_prediction_engine.dart:556:      features.add((moodData['anxiety_level'] as num?)?.toDouble() ?? 0.3);
+lib/core/ai/neural_prediction_engine.dart:593:      (user.age?.toDouble() ?? 25.0) / 100.0, // Normalized age
+lib/core/ai/neural_prediction_engine.dart:595:      user.healthConcerns.length.toDouble() / 10.0,
+lib/core/performance/performance_optimization_engine.dart:420:            .toDouble();
+lib/core/services/advanced_ai_engine.dart:402:    return variance.toDouble();
+lib/core/services/advanced_ai_engine.dart:502:    final x = List.generate(n, (i) => i.toDouble());
+lib/core/services/advanced_ai_engine.dart:503:    final y = lengths.map((e) => e.toDouble()).toList();
+lib/core/services/advanced_ai_engine.dart:535:        .map((e) => e is int ? e.toDouble() : e as double)
+lib/core/services/advanced_ai_engine.dart:546:        .map((e) => e is int ? e.toDouble() : e as double)
+lib/core/services/advanced_ai_engine.dart:886:        .map((f) => f.actualDate.difference(f.predictedDate).inDays.toDouble())
+lib/core/services/real_cycle_service.dart:65:          stats['cycle_stats']['avg_length']?.toDouble() ?? 28.0,
+lib/core/services/real_cycle_service.dart:93:      userId: 'unknown', // TODO: Get from auth service
+lib/core/services/real_cycle_service.dart:133:    final min = stats['cycle_stats']['min_length']?.toDouble() ?? 28.0;
+lib/core/services/real_cycle_service.dart:134:    final max = stats['cycle_stats']['max_length']?.toDouble() ?? 28.0;
+lib/core/services/real_cycle_service.dart:135:    final avg = stats['cycle_stats']['avg_length']?.toDouble() ?? 28.0;
+lib/core/services/real_cycle_service.dart:165:        totalMood += (data['mood'] as num).toDouble();
+lib/core/services/real_cycle_service.dart:169:        totalEnergy += (data['energy'] as num).toDouble();
+lib/core/services/real_cycle_service.dart:173:        totalPain += (data['pain'] as num).toDouble();
+lib/core/services/analytics_service.dart:30:    if (value is int) return value.toDouble();
+lib/core/services/analytics_service.dart:31:    if (value is num) return value.toDouble();
+lib/core/services/analytics_service.dart:309:        (cycleLengths[i] - cycleLengths[i - 1]).abs().toDouble(),
+lib/core/services/analytics_service.dart:462:                    .map((t) => t.mood!.toDouble())
+lib/core/services/analytics_service.dart:476:                    .map((t) => t.energy!.toDouble())
+lib/core/services/analytics_service.dart:734:    final x = List.generate(n, (i) => i.toDouble());
+lib/core/services/local_user_service.dart:353:    return null; // TODO: Implement proper conversion if needed
+lib/core/services/enhanced_ai_engine.dart:201:            c.length.toDouble(),
+lib/core/services/enhanced_ai_engine.dart:202:            c.mood?.toDouble() ?? 3.0,
+lib/core/services/enhanced_ai_engine.dart:203:            c.energy?.toDouble() ?? 3.0,
+lib/core/services/enhanced_ai_engine.dart:204:            c.symptoms.length.toDouble(),
+lib/core/services/enhanced_ai_engine.dart:331:        basePrediction.predictedLength.toDouble(),
+lib/core/services/enhanced_ai_engine.dart:374:        finalLength.toDouble(),
+lib/core/services/predictive_engine.dart:323:      cycles.map((c) => c.length.toDouble()).toList(),
+lib/core/services/predictive_engine.dart:445:      if (cycleLength is num) cycleLengths.add(cycleLength.toDouble());
+lib/core/services/predictive_engine.dart:446:      if (ovulationDay is num) ovulationDays.add(ovulationDay.toDouble());
+lib/core/services/predictive_engine.dart:637:        return inputs.map((x) => math.max(0, x).toDouble()).toList();
+lib/core/services/predictive_engine.dart:639:        return inputs.map((x) => (1 / (1 + math.exp(-x))).toDouble()).toList();
+lib/core/services/predictive_engine.dart:731:        cycles.last.length.toDouble(),
+lib/core/services/predictive_engine.dart:732:        cycles.length < 2 ? 28.0 : cycles[cycles.length - 2].length.toDouble(),
+lib/core/services/predictive_engine.dart:742:      profile.age?.toDouble() ?? 25.0,
+lib/core/services/predictive_engine.dart:743:      profile.healthConcerns.length.toDouble(),
+lib/core/services/predictive_engine.dart:788:        cycles.last.length.toDouble(),
+lib/core/services/predictive_engine.dart:789:        cycles.length.toDouble(),
+lib/core/services/predictive_engine.dart:795:      features.add(uniqueSymptoms.length.toDouble());
+lib/core/services/predictive_engine.dart:817:      profile.age?.toDouble() ?? 25.0,
+lib/core/services/predictive_engine.dart:818:      profile.healthConcerns.length.toDouble(),
+lib/core/services/predictive_engine.dart:1119:        'day': day.toDouble(),
+lib/core/services/enhanced_ai_chat_service.dart:1133:      "Productivity hacks",
+lib/core/services/adaptive_ai_engine.dart:668:      averageCycleLength: avgLength.toDouble(),
+lib/core/services/export_import_service.dart:209:              mood: (tracking['mood'] as num?)?.toDouble(),
+lib/core/services/export_import_service.dart:210:              energy: (tracking['energy'] as num?)?.toDouble(),
+lib/core/services/export_import_service.dart:211:              pain: (tracking['pain'] as num?)?.toDouble(),
+lib/core/services/ml_pattern_recognition_service.dart:36:        .map((c) => c.cycleLength!.toDouble())
+lib/core/services/ml_pattern_recognition_service.dart:47:        .map((c) => c.cycleLength!.toDouble())
+lib/core/services/ml_pattern_recognition_service.dart:92:        .map((c) => c.cycleLength!.toDouble())
+lib/core/services/ml_pattern_recognition_service.dart:240:            .map((t) => (t['mood'] as num).toDouble())
+lib/core/services/ml_pattern_recognition_service.dart:246:            .map((t) => (t['energy'] as num).toDouble())
+lib/core/services/ml_pattern_recognition_service.dart:252:            .map((t) => (t['sleepHours'] as num).toDouble())
+lib/core/services/ml_pattern_recognition_service.dart:263:    final x = List.generate(n, (i) => i.toDouble());
+lib/core/services/ml_pattern_recognition_service.dart:293:      changeRate: slope.toDouble(),
+lib/core/services/ml_pattern_recognition_service.dart:398:        totalPain += (dayData['pain'] as num).toDouble();
+lib/core/services/preventive_health_insights.dart:474:    final lengths = cycles.map((c) => c.length.toDouble()).toList();
+lib/core/services/preventive_health_insights.dart:854:        .map((c) => c.flowIntensity!.index.toDouble())
+lib/core/services/preventive_health_insights.dart:978:        .map((c) => c.pain!.toDouble())
+lib/core/services/preventive_health_insights.dart:1019:        .map((c) => c.symptoms.length.toDouble())
+lib/core/services/preventive_health_insights.dart:1024:    final x = List.generate(n, (i) => i.toDouble());
+lib/core/services/preventive_health_insights.dart:1179:            cycle.endDate?.difference(cycle.ovulationDate!).inDays.toDouble() ??
+lib/core/services/preventive_health_insights.dart:1548:        .map((c) => c.flowIntensity!.index.toDouble())
+lib/core/services/preventive_health_insights.dart:1591:    final cycleLengths = cycles.map((c) => c.length.toDouble()).toList();
+lib/core/services/preventive_health_insights.dart:1613:        .map((c) => c.flowIntensity!.index.toDouble())
+lib/core/services/preventive_health_insights.dart:1636:        ovulationTimings.add(dayOfCycle.toDouble());
+lib/core/services/biometric_integration_service.dart:374:        value: (data['value'] as num).toDouble(),
+lib/core/services/biometric_integration_service.dart:540:          value: (baseHRV + stressModifier).toDouble().clamp(20.0, 100.0),
+lib/core/services/biometric_integration_service.dart:598:          value: calories.toDouble(),
+lib/core/services/biometric_integration_service.dart:752:        value: (data['value'] as num).toDouble(),
+lib/core/services/hyper_personalization_service.dart:46:        (behaviorSignals?['adherence_rate'] as num?)?.toDouble() ?? 0.7;
+lib/core/services/advanced_biometric_service.dart:310:          .map((d) => (d.value as NumericHealthValue).numericValue.toDouble())
+lib/core/services/advanced_biometric_service.dart:360:          .map((d) => (d.value as NumericHealthValue).numericValue.toDouble())
+lib/core/services/advanced_biometric_service.dart:405:          .map((d) => (d.value as NumericHealthValue).numericValue.toDouble())
+lib/core/services/advanced_biometric_service.dart:456:            .map((d) => (d.value as NumericHealthValue).numericValue.toDouble())
+lib/core/services/advanced_biometric_service.dart:465:            .map((d) => (d.value as NumericHealthValue).numericValue.toDouble())
+lib/core/services/advanced_biometric_service.dart:671:      return value.numericValue.toDouble();
+lib/core/services/ai_engine.dart:236:      lengths.map((l) => l.toDouble()).toList(),
+lib/core/services/ai_engine.dart:263:    final lengths = cycles.map((c) => c.length.toDouble()).toList();
+lib/core/services/ai_engine.dart:271:    final lengths = cycles.map((c) => c.length.toDouble()).toList();
+lib/core/services/ai_engine.dart:445:      completedCycles.map((c) => c.actualLength.toDouble()).toList(),
+lib/core/services/ai_engine.dart:468:      final likelihood = math.min(1.0, occurrences / cycles.length.toDouble());
+lib/core/services/ai_engine.dart:588:      cyclesWithSymptoms / math.max(1, cycles.length).toDouble(),
+lib/core/services/ai_engine.dart:724:      lengths.map((l) => l.toDouble()).toList(),
+lib/core/services/cloud_sync_service.dart:188:            mood: data.mood?.toDouble(),
+lib/core/services/cloud_sync_service.dart:189:            energy: data.energy?.toDouble(),
+lib/core/services/app_enhancement_service.dart:158:    // TODO: Integrate with Firebase Crashlytics, Sentry, or similar service
+lib/core/services/app_enhancement_service.dart:202:    // TODO: Integrate with Firebase Performance, Google Analytics, etc.
+lib/core/services/cycle_calculation_engine.dart:158:        : averageCycleLength.toDouble();
+lib/core/widgets/advanced_chart_widget.dart:163:        maxX: widget.data.length.toDouble() - 1,
+lib/core/widgets/advanced_chart_widget.dart:171:              return FlSpot(index.toDouble(), point.value * _animation.value);
+lib/core/widgets/advanced_chart_widget.dart:244:                entry.key.toDouble(),
+lib/core/analytics/performance_analytics_dashboard.dart:598:      final x = i.toDouble();
+lib/core/analytics/performance_analytics_dashboard.dart:894:      final x = i.toDouble();
+lib/features/visualization/models/visualization_models.dart:65:      x: json['x'].toDouble(),
+lib/features/visualization/models/visualization_models.dart:66:      y: json['y'].toDouble(),
+lib/features/visualization/models/visualization_models.dart:67:      z: json['z']?.toDouble(),
+lib/features/visualization/models/visualization_models.dart:212:      minimum: json['minimum']?.toDouble(),
+lib/features/visualization/models/visualization_models.dart:213:      maximum: json['maximum']?.toDouble(),
+lib/features/visualization/models/visualization_models.dart:423:      value: json['value'].toDouble(),
+lib/features/visualization/models/visualization_models.dart:424:      value2: json['value2']?.toDouble(),
+lib/features/visualization/services/advanced_visualization_service.dart:86:                x: entry.date.millisecondsSinceEpoch.toDouble(),
+lib/features/visualization/services/advanced_visualization_service.dart:97:              x: entry.date.millisecondsSinceEpoch.toDouble(),
+lib/features/visualization/services/advanced_visualization_service.dart:256:              x: xIndex.toDouble(),
+lib/features/visualization/services/advanced_visualization_service.dart:257:              y: yIndex.toDouble(),
+lib/features/visualization/services/advanced_visualization_service.dart:469:            x: currentDate.millisecondsSinceEpoch.toDouble(),
+lib/features/visualization/services/advanced_visualization_service.dart:479:            x: currentDate.millisecondsSinceEpoch.toDouble(),
+lib/features/visualization/services/advanced_visualization_service.dart:489:            x: currentDate.millisecondsSinceEpoch.toDouble(),
+lib/features/visualization/services/advanced_visualization_service.dart:516:        x: futureDate.millisecondsSinceEpoch.toDouble(),
+lib/features/visualization/services/advanced_visualization_service.dart:528:            .toDouble(),
+lib/features/visualization/services/advanced_visualization_service.dart:543:        value: DateTime.now().millisecondsSinceEpoch.toDouble(),
+lib/features/visualization/services/advanced_visualization_service.dart:588:          x: currentDate.millisecondsSinceEpoch.toDouble(),
+lib/features/visualization/services/advanced_visualization_service.dart:632:          x: currentDate.millisecondsSinceEpoch.toDouble(),
+lib/features/visualization/services/advanced_visualization_service.dart:680:        x: symptomCounts.keys.toList().indexOf(entry.key).toDouble(),
+lib/features/visualization/services/advanced_visualization_service.dart:681:        y: entry.value.toDouble(),
+lib/features/insights/screens/analytics_dashboard_screen.dart:587:              return FlSpot(index.toDouble(), 26 + (index % 3).toDouble());
+lib/features/insights/screens/analytics_dashboard_screen.dart:612:                toY: 4 + (index % 2).toDouble(),
+lib/features/insights/screens/analytics_dashboard_screen.dart:646:                toY: (5 - index).toDouble() * 2,
+lib/features/insights/screens/analytics_dashboard_screen.dart:670:              return FlSpot(index.toDouble(), y);
+lib/features/insights/screens/analytics_dashboard_screen.dart:705:              return FlSpot(index.toDouble(), y);
+lib/features/insights/screens/analytics_dashboard_screen.dart:729:              return FlSpot(index.toDouble(), y);
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:665:        index.toDouble(),
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:726:        .map((entry) => FlSpot(entry.key.toDouble(), entry.value.value))
+lib/features/insights/widgets/cycle_length_chart.dart:187:      return FlSpot(entry.key.toDouble(), entry.value.length.toDouble());
+lib/features/insights/widgets/cycle_length_chart.dart:224:                ? (cycles.length / 5).roundToDouble()
+lib/features/insights/widgets/mood_energy_chart.dart:177:                maxX: (filteredData.length - 1).toDouble(),
+lib/features/insights/widgets/mood_energy_chart.dart:421:      final index = entry.key.toDouble();
+lib/features/insights/widgets/mood_energy_chart.dart:425:      return FlSpot(index, moodScore.toDouble());
+lib/features/insights/widgets/mood_energy_chart.dart:431:      final index = entry.key.toDouble();
+lib/features/insights/widgets/mood_energy_chart.dart:435:      return FlSpot(index, energyScore.toDouble());
+lib/features/settings/screens/account_management_screen.dart:375:            // TODO: Navigate to privacy settings
+lib/features/settings/screens/account_management_screen.dart:394:            // TODO: Implement 2FA setup
+lib/features/settings/screens/account_management_screen.dart:453:            // TODO: Implement data backup
+lib/features/settings/screens/account_management_screen.dart:496:            // TODO: Show connected accounts
+lib/features/settings/screens/account_management_screen.dart:671:    // TODO: Implement actual password change
+lib/features/settings/screens/account_management_screen.dart:743:              // TODO: Implement cache clearing
+lib/features/settings/screens/account_management_screen.dart:784:              // TODO: Implement account deactivation
+lib/features/settings/screens/account_management_screen.dart:935:              // TODO: Implement account deletion
+lib/features/settings/widgets/profile_section.dart:350:    // TODO: Implement camera selection
+lib/features/settings/widgets/profile_section.dart:359:    // TODO: Implement gallery selection
+lib/features/_disabled_experimental/gamification/models/advanced_leaderboard.g.dart:129:      averageScore: (json['averageScore'] as num).toDouble(),
+lib/features/_disabled_experimental/gamification/models/advanced_leaderboard.g.dart:209:  averageDailyScore: (json['averageDailyScore'] as num?)?.toDouble() ?? 0.0,
+lib/features/_disabled_experimental/gamification/models/advanced_leaderboard.g.dart:212:  consistencyScore: (json['consistencyScore'] as num?)?.toDouble() ?? 0.0,
+lib/features/_disabled_experimental/gamification/models/advanced_leaderboard.g.dart:239:  participationRate: (json['participationRate'] as num).toDouble(),
+lib/features/_disabled_experimental/gamification/models/advanced_leaderboard.g.dart:246:  averageRankChange: (json['averageRankChange'] as num).toDouble(),
+lib/features/_disabled_experimental/gamification/models/advanced_leaderboard.g.dart:250:    (k, e) => MapEntry(k, (e as num).toDouble()),
+lib/features/_disabled_experimental/gamification/models/advanced_achievement.g.dart:25:      progress: (json['progress'] as num?)?.toDouble() ?? 0.0,
+lib/features/_disabled_experimental/gamification/models/advanced_achievement.g.dart:26:      maxProgress: (json['maxProgress'] as num?)?.toDouble() ?? 1.0,
+lib/features/_disabled_experimental/gamification/models/advanced_achievement.g.dart:97:      requiredProgress: (json['requiredProgress'] as num).toDouble(),
+lib/features/_disabled_experimental/gamification/models/advanced_achievement.g.dart:131:          ?.toDouble(),
+lib/features/_disabled_experimental/gamification/models/advanced_achievement.g.dart:133:      completionRate: (json['completionRate'] as num?)?.toDouble() ?? 0.0,
+lib/features/_disabled_experimental/gamification/models/advanced_achievement.g.dart:239:      completionRate: (json['completionRate'] as num).toDouble(),
+lib/features/_disabled_experimental/healthcare/models/healthcare_models.dart:553:      amount: (json['amount'] as num).toDouble(),
+lib/features/_disabled_experimental/healthcare/models/healthcare_models.dart:557:      copay: (json['copay'] as num?)?.toDouble(),
+lib/features/_disabled_experimental/healthcare/models/healthcare_models.dart:624:      patientSatisfaction: (json['patient_satisfaction'] as num).toDouble(),
+lib/features/_disabled_experimental/healthcare/models/medical_report.dart:216:      confidence: (json['confidence'] as num).toDouble(),
+lib/features/_disabled_experimental/healthcare/models/telehealth_session.dart:118:      cost: (json['cost'] as num).toDouble(),
+lib/features/_disabled_experimental/healthcare/models/telehealth_session.dart:299:      copay: (json['copay'] as num).toDouble(),
+lib/features/_disabled_experimental/healthcare/models/telehealth_session.dart:300:      coverage: (json['coverage'] as num).toDouble(),
+lib/features/_disabled_experimental/community/models/knowledge_base_article.g.dart:21:  rating: (json['rating'] as num?)?.toDouble(),
+lib/features/_disabled_experimental/community/models/knowledge_base_article.g.dart:169:      averageRating: (json['averageRating'] as num?)?.toDouble() ?? 0.0,
+lib/features/_disabled_experimental/community/models/expert_profile.g.dart:25:      rating: (json['rating'] as num).toDouble(),
+lib/features/_disabled_experimental/community/models/expert_profile.g.dart:28:      responseRate: (json['responseRate'] as num).toDouble(),
+lib/features/health/screens/real_time_health_dashboard.dart:381:                      _latestBiometrics!.fusedData['heart_rate']?.toDouble() ??
+lib/features/health/screens/real_time_health_dashboard.dart:388:                      _latestBiometrics!.fusedData['temperature']?.toDouble() ??
+lib/features/health/screens/real_time_health_dashboard.dart:464:          value: biometrics.fusedData['heart_rate']?.toDouble() ?? 75.0,
+lib/features/health/screens/real_time_health_dashboard.dart:472:          value: biometrics.fusedData['temperature']?.toDouble() ?? 36.5,
+lib/features/health/screens/real_time_health_dashboard.dart:480:          value: biometrics.fusedData['hrv']?.toDouble() ?? 45.0,
+lib/features/health/screens/real_time_health_dashboard.dart:488:          value: biometrics.fusedData['sleep_score']?.toDouble() ?? 82.0,
+lib/features/health/screens/real_time_health_dashboard.dart:848:      data.add(FlSpot(i.toDouble(), value));
+lib/features/health/widgets/health_trend_chart.dart:212:      maxX: widget.data.length.toDouble() - 1,
+lib/features/health/widgets/health_trend_chart.dart:298:            interval: math.max(1, (widget.data.length / 5).ceil().toDouble()),
+lib/features/health/widgets/health_trend_chart.dart:365:    return (minValue * 0.9).floorToDouble();
+lib/features/health/widgets/health_trend_chart.dart:372:    return (maxValue * 1.1).ceilToDouble();
+lib/features/health/widgets/health_trend_chart.dart:468:      FlSpot(widget.data.length.toDouble() - 1, targetValue),
+lib/features/cycle/models/cycle_data.g.dart:51:  bodyTemperature: (json['bodyTemperature'] as num?)?.toDouble(),
+lib/features/cycle/models/cycle_data.g.dart:97:      averageCycleLength: (json['averageCycleLength'] as num).toDouble(),
+lib/features/cycle/models/cycle_data.g.dart:98:      averagePeriodLength: (json['averagePeriodLength'] as num).toDouble(),
+lib/features/cycle/models/cycle_data.g.dart:99:      cycleVariability: (json['cycleVariability'] as num).toDouble(),
+lib/features/cycle/models/period_prediction.g.dart:15:      confidence: (json['confidence'] as num).toDouble(),
+lib/features/cycle/models/symptom_tracking.g.dart:58:        MapEntry($enumDecode(_$MoodCategoryEnumMap, k), (e as num).toDouble()),
+lib/features/cycle/models/symptom_tracking.g.dart:62:        MapEntry($enumDecode(_$EnergyTypeEnumMap, k), (e as num).toDouble()),
+lib/features/cycle/models/symptom_tracking.g.dart:64:  overallWellbeing: (json['overallWellbeing'] as num?)?.toDouble(),
+lib/features/cycle/screens/tracking_screen.dart:104:          _mood = existingData['mood']?.toDouble() ?? 3.0;
+lib/features/cycle/screens/tracking_screen.dart:105:          _energy = existingData['energy']?.toDouble() ?? 3.0;
+
+=== CHAT / SUGGESTION PATHS ===
+
+=== RISKY LAYOUT PATTERNS ===
+
+=== IOS CONFIG ===
+ios/Podfile.bak:31:  use_frameworks!
+ios/Pods/SwiftyGif/README.md:30:use_frameworks!
+ios/Pods/ReachabilitySwift/README.md:42:    use_frameworks!
+ios/Pods/DKImagePickerController/README.md:377:    use_frameworks!
+ios/Pods/SDWebImage/README.md:237:Swift project previously had to use `use_frameworks!` to make all Pods into dynamic framework to let CocoaPods work.
+ios/Pods/SDWebImage/README.md:239:However, starting with `CocoaPods 1.5.0+` (with `Xcode 9+`), which supports to build both Objective-C && Swift code into static framework. You can use modular headers to use SDWebImage as static framework, without the need of `use_frameworks!`:
+ios/Pods/SDWebImage/README.md:244:# use_modular_headers!
+ios/Pods/SDWebImage/README.md:250:If not, you still need to add `use_frameworks!` to use SDWebImage as dynamic framework:
+ios/Pods/SDWebImage/README.md:254:use_frameworks!
+ios/Podfile:3:use_modular_headers!
+ios/Podfile:4:use_frameworks! :linkage => :static
+ios/Podfile:5:use_frameworks! :linkage => :static
+ios/Podfile:34:  # use_frameworks!
+
+=== ANDROID CONFIG ===
+android/app/build.gradle.kts.bak.desugar.1772132023:9:    namespace = "com.flowai.flow_ai"
+android/app/build.gradle.kts.bak.desugar.1772132023:10:    compileSdk = flutter.compileSdkVersion
+android/app/build.gradle.kts.bak.desugar.1772132023:24:        applicationId = "com.flowai.flow_ai"
+android/app/build.gradle.kts.bak.desugar.1772132023:27:        minSdk = flutter.minSdkVersion
+android/app/build.gradle.kts.bak.desugar.1772132023:28:        targetSdk = flutter.targetSdkVersion
+android/app/build.gradle.kts.bak.desugar.1772132025:9:    namespace = "com.flowai.flow_ai"
+android/app/build.gradle.kts.bak.desugar.1772132025:10:    compileSdk = flutter.compileSdkVersion
+android/app/build.gradle.kts.bak.desugar.1772132025:24:        applicationId = "com.flowai.flow_ai"
+android/app/build.gradle.kts.bak.desugar.1772132025:27:        minSdk = flutter.minSdkVersion
+android/app/build.gradle.kts.bak.desugar.1772132025:28:        targetSdk = flutter.targetSdkVersion
+android/app/build.gradle.kts.bak.1772107539:9:    namespace = "com.flowai.flow_ai"
+android/app/build.gradle.kts.bak.1772107539:10:    compileSdk = flutter.compileSdkVersion
+android/app/build.gradle.kts.bak.1772107539:24:        applicationId = "com.flowai.flow_ai"
+android/app/build.gradle.kts.bak.1772107539:27:        minSdk = flutter.minSdkVersion
+android/app/build.gradle.kts.bak.1772107539:28:        targetSdk = flutter.targetSdkVersion
+android/app/build.gradle.kts.bak:9:    namespace = "com.flowai.flow_ai"
+android/app/build.gradle.kts.bak:10:    compileSdk = flutter.compileSdkVersion
+android/app/build.gradle.kts.bak:24:        applicationId = "com.flowai.flow_ai"
+android/app/build.gradle.kts.bak:27:        minSdk = flutter.minSdkVersion
+android/app/build.gradle.kts.bak:28:        targetSdk = flutter.targetSdkVersion
+android/app/build.gradle.kts.bak.1772133836:9:    namespace = "com.flowai.flow_ai"
+android/app/build.gradle.kts.bak.1772133836:10:    compileSdk = flutter.compileSdkVersion
+android/app/build.gradle.kts.bak.1772133836:24:        applicationId = "com.flowai.flow_ai"
+android/app/build.gradle.kts.bak.1772133836:27:        minSdk = flutter.minSdkVersion
+android/app/build.gradle.kts.bak.1772133836:28:        targetSdk = flutter.targetSdkVersion
+android/app/build.gradle.kts.bak_disable_lint_20260227_233913:12:    namespace = "com.flowai.app"
+android/app/build.gradle.kts.bak_disable_lint_20260227_233913:13:    compileSdk = flutter.compileSdkVersion
+android/app/build.gradle.kts.bak_disable_lint_20260227_233913:28:        applicationId = "com.flowai.app"
+android/app/build.gradle.kts.bak_disable_lint_20260227_233913:31:        minSdk = 26
+android/app/build.gradle.kts.bak_disable_lint_20260227_233913:32:        targetSdk = flutter.targetSdkVersion
+android/app/build.gradle.kts.bak.minsdk.1772133973:9:    namespace = "com.flowai.flow_ai"
+android/app/build.gradle.kts.bak.minsdk.1772133973:10:    compileSdk = flutter.compileSdkVersion
+android/app/build.gradle.kts.bak.minsdk.1772133973:25:        applicationId = "com.flowai.flow_ai"
+android/app/build.gradle.kts.bak.minsdk.1772133973:28:        minSdk = flutter.minSdkVersion
+android/app/build.gradle.kts.bak.minsdk.1772133973:29:        targetSdk = flutter.targetSdkVersion
+android/app/build.gradle.kts:17:namespace = "com.flowai.app"
+android/app/build.gradle.kts:18:    compileSdk = flutter.compileSdkVersion
+android/app/build.gradle.kts:33:        applicationId = "com.flowai.app"
+android/app/build.gradle.kts:36:        minSdk = 26
+android/app/build.gradle.kts:37:        targetSdk = flutter.targetSdkVersion
+android/app/build.gradle.kts.bak_tflite_gpu_20260227_232928:12:    namespace = "com.flowai.app"
+android/app/build.gradle.kts.bak_tflite_gpu_20260227_232928:13:    compileSdk = flutter.compileSdkVersion
+android/app/build.gradle.kts.bak_tflite_gpu_20260227_232928:28:        applicationId = "com.flowai.app"
+android/app/build.gradle.kts.bak_tflite_gpu_20260227_232928:31:        minSdk = 26
+android/app/build.gradle.kts.bak_tflite_gpu_20260227_232928:32:        targetSdk = flutter.targetSdkVersion
+Binary file android/.gradle/8.13/executionHistory/executionHistory.bin matches
+android/build/reports/problems/problems-report.html:653:{"diagnostics":[{"locations":[{"path":"build file '/Users/ronos/.pub-cache/hosted/pub.dev/app_links-7.0.0/android/build.gradle'","line":1}],"problem":[{"text":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated."}],"severity":"WARNING","problemDetails":[{"text":"This is scheduled to be removed in Gradle 10.0."}],"contextualLabel":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated.","documentationLink":"https://docs.gradle.org/8.13/userguide/upgrading_version_8.html#groovy_space_assignment_syntax","problemId":[{"name":"deprecation","displayName":"Deprecation"},{"name":"properties-should-be-assigned-using-the-propname-value-syntax-setting-a-property-via-the-gradle-generated-propname-value-or-propname-value-syntax-in-groovy-dsl","displayName":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated."}],"solutions":[[{"text":"Use assignment ('group = <value>') instead."}]]},{"locations":[{"path":"build file '/Users/ronos/.pub-cache/hosted/pub.dev/app_links-7.0.0/android/build.gradle'","line":2}],"problem":[{"text":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated."}],"severity":"WARNING","problemDetails":[{"text":"This is scheduled to be removed in Gradle 10.0."}],"contextualLabel":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated.","documentationLink":"https://docs.gradle.org/8.13/userguide/upgrading_version_8.html#groovy_space_assignment_syntax","problemId":[{"name":"deprecation","displayName":"Deprecation"},{"name":"properties-should-be-assigned-using-the-propname-value-syntax-setting-a-property-via-the-gradle-generated-propname-value-or-propname-value-syntax-in-groovy-dsl","displayName":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated."}],"solutions":[[{"text":"Use assignment ('version = <value>') instead."}]]},{"locations":[{"path":"build file '/Users/ronos/.pub-cache/hosted/pub.dev/cloud_firestore-6.1.3/android/build.gradle'","line":1}],"problem":[{"text":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated."}],"severity":"WARNING","problemDetails":[{"text":"This is scheduled to be removed in Gradle 10.0."}],"contextualLabel":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated.","documentationLink":"https://docs.gradle.org/8.13/userguide/upgrading_version_8.html#groovy_space_assignment_syntax","problemId":[{"name":"deprecation","displayName":"Deprecation"},{"name":"properties-should-be-assigned-using-the-propname-value-syntax-setting-a-property-via-the-gradle-generated-propname-value-or-propname-value-syntax-in-groovy-dsl","displayName":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated."}],"solutions":[[{"text":"Use assignment ('group = <value>') instead."}]]},{"locations":[{"path":"build file '/Users/ronos/.pub-cache/hosted/pub.dev/cloud_firestore-6.1.3/android/build.gradle'","line":2}],"problem":[{"text":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated."}],"severity":"WARNING","problemDetails":[{"text":"This is scheduled to be removed in Gradle 10.0."}],"contextualLabel":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated.","documentationLink":"https://docs.gradle.org/8.13/userguide/upgrading_version_8.html#groovy_space_assignment_syntax","problemId":[{"name":"deprecation","displayName":"Deprecation"},{"name":"properties-should-be-assigned-using-the-propname-value-syntax-setting-a-property-via-the-gradle-generated-propname-value-or-propname-value-syntax-in-groovy-dsl","displayName":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated."}],"solutions":[[{"text":"Use assignment ('version = <value>') instead."}]]},{"locations":[{"path":"build file '/Users/ronos/.pub-cache/hosted/pub.dev/cloud_firestore-6.1.3/android/build.gradle'","line":41}],"problem":[{"text":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated."}],"severity":"WARNING","problemDetails":[{"text":"This is scheduled to be removed in Gradle 10.0."}],"contextualLabel":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated.","documentationLink":"https://docs.gradle.org/8.13/userguide/upgrading_version_8.html#groovy_space_assignment_syntax","problemId":[{"name":"deprecation","displayName":"Deprecation"},{"name":"properties-should-be-assigned-using-the-propname-value-syntax-setting-a-property-via-the-gradle-generated-propname-value-or-propname-value-syntax-in-groovy-dsl","displayName":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated."}],"solutions":[[{"text":"Use assignment ('namespace = <value>') instead."}]]},{"locations":[{"path":"build file '/Users/ronos/.pub-cache/hosted/pub.dev/cloud_firestore-6.1.3/android/build.gradle'","line":57}],"problem":[{"text":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated."}],"severity":"WARNING","problemDetails":[{"text":"This is scheduled to be removed in Gradle 10.0."}],"contextualLabel":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated.","documentationLink":"https://docs.gradle.org/8.13/userguide/upgrading_version_8.html#groovy_space_assignment_syntax","problemId":[{"name":"deprecation","displayName":"Deprecation"},{"name":"properties-should-be-assigned-using-the-propname-value-syntax-setting-a-property-via-the-gradle-generated-propname-value-or-propname-value-syntax-in-groovy-dsl","displayName":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated."}],"solutions":[[{"text":"Use assignment ('buildConfig = <value>') instead."}]]},{"locations":[{"path":"build file '/Users/ronos/.pub-cache/hosted/pub.dev/cloud_functions-6.0.7/android/build.gradle'","line":1}],"problem":[{"text":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated."}],"severity":"WARNING","problemDetails":[{"text":"This is scheduled to be removed in Gradle 10.0."}],"contextualLabel":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated.","documentationLink":"https://docs.gradle.org/8.13/userguide/upgrading_version_8.html#groovy_space_assignment_syntax","problemId":[{"name":"deprecation","displayName":"Deprecation"},{"name":"properties-should-be-assigned-using-the-propname-value-syntax-setting-a-property-via-the-gradle-generated-propname-value-or-propname-value-syntax-in-groovy-dsl","displayName":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated."}],"solutions":[[{"text":"Use assignment ('group = <value>') instead."}]]},{"locations":[{"path":"build file '/Users/ronos/.pub-cache/hosted/pub.dev/cloud_functions-6.0.7/android/build.gradle'","line":2}],"problem":[{"text":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated."}],"severity":"WARNING","problemDetails":[{"text":"This is scheduled to be removed in Gradle 10.0."}],"contextualLabel":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated.","documentationLink":"https://docs.gradle.org/8.13/userguide/upgrading_version_8.html#groovy_space_assignment_syntax","problemId":[{"name":"deprecation","displayName":"Deprecation"},{"name":"properties-should-be-assigned-using-the-propname-value-syntax-setting-a-property-via-the-gradle-generated-propname-value-or-propname-value-syntax-in-groovy-dsl","displayName":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated."}],"solutions":[[{"text":"Use assignment ('version = <value>') instead."}]]},{"locations":[{"path":"build file '/Users/ronos/.pub-cache/hosted/pub.dev/cloud_functions-6.0.7/android/build.gradle'","line":44}],"problem":[{"text":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated."}],"severity":"WARNING","problemDetails":[{"text":"This is scheduled to be removed in Gradle 10.0."}],"contextualLabel":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated.","documentationLink":"https://docs.gradle.org/8.13/userguide/upgrading_version_8.html#groovy_space_assignment_syntax","problemId":[{"name":"deprecation","displayName":"Deprecation"},{"name":"properties-should-be-assigned-using-the-propname-value-syntax-setting-a-property-via-the-gradle-generated-propname-value-or-propname-value-syntax-in-groovy-dsl","displayName":"Properties should be assigned using the 'propName = value' syntax. Setting a property via the Gradle-generated 'propName value' or 'propName(value)' syntax in Groovy DSL has been deprecated."}],"solutions":[[{"text":"Use assignment ('namespace = <value>') instead."}]]}],"problemsReport":{"totalProblemCount":9,"buildName":"android","requestedTasks":"assembleDebug","documentationLink":"https://docs.gradle.org/8.13/userguide/reporting_problems.html","documentationLinkCaption":"Problem report","summaries":[]}}
