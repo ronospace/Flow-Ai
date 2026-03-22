@@ -33,6 +33,21 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   List<types.Message> _messages = [];
   bool _isTyping = false;
   bool _showQuickReplies = true;
+  bool _isSuggestionsExpanded = true;
+  final List<String> _suggestedQuestions = [
+    "When will my next period start?",
+    "Is my cycle regular?",
+    "Can I get pregnant today?",
+    "What are my fertile days?",
+    "Why is my period late?",
+    "What do my symptoms mean?",
+    "How long is a normal cycle?",
+    "When am I ovulating?",
+    "Is spotting normal?",
+    "How can I reduce cramps?"
+  ];
+
+
   late TextEditingController _textController;
 
   // For resize gesture
@@ -234,10 +249,10 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             left: 8,
             top: _isFullScreen
                 ? MediaQuery.of(context).padding.top + 8
-                : screenSize.height * 0.12,
+                : screenSize.height * 0.06,
             bottom: _isFullScreen
                 ? MediaQuery.of(context).padding.bottom + 8
-                : 80,
+                : 16,
             child: AnimatedBuilder(
               animation: _chatAnimation,
               builder: (context, child) {
@@ -274,7 +289,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                             children: [
                               // Chat Messages Area - More space allocated
                               Expanded(
-                                flex: _shouldShowQuickQuestions() ? 5 : 9,
+                                flex: 1,
                                 child: _buildChatArea(theme),
                               ),
 
@@ -511,7 +526,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   _isResizing = false;
                 },
                 child: Container(
-                  width: 80, // Larger hit area for better UX
+                  width: 16, // Larger hit area for better UX
                   height: 30, // Larger hit area
                   padding: const EdgeInsets.symmetric(vertical: 13),
                   child: Container(
@@ -736,6 +751,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     final suggestions = _chatService.getSuggestedReplies().toList();
 
     return Column(
+
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -784,6 +800,41 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     );
   }
 
+  Widget _buildSuggestionsSection(ThemeData theme) {
+    return Column(
+
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              _isSuggestionsExpanded = !_isSuggestionsExpanded;
+            });
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("Suggestions", style: theme.textTheme.titleMedium),
+              Icon(_isSuggestionsExpanded ? Icons.expand_less : Icons.expand_more),
+            ],
+          ),
+        ),
+        if (_isSuggestionsExpanded) ...[
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: _suggestedQuestions
+                .asMap()
+                .entries
+                .map((entry) => _buildSuggestionChip(entry.value, theme, entry.key))
+                .toList(),
+          ),
+        ],
+      ],
+    );
+  }
+
   // Suggestion Chip - More prominent and professional
   Widget _buildSuggestionChip(String suggestion, ThemeData theme, int index) {
     return InkWell(
@@ -800,7 +851,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
             setState(() {
               _isTyping = true;
-              _showQuickReplies = false;
+              _isSuggestionsExpanded = false;
             });
 
             _chatService.sendMessage(message);

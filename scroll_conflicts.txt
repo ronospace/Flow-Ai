@@ -1,0 +1,125 @@
+lib/core/routing/app_router.dart:350:              child: SingleChildScrollView(
+lib/core/performance/performance_monitor.dart:919:  /// Create performance-aware ListView
+lib/core/performance/performance_monitor.dart:920:  static Widget createOptimizedListView({
+lib/core/performance/performance_monitor.dart:925:    return ListView.builder(
+lib/core/widgets/error_boundary.dart:344:                              child: SingleChildScrollView(
+lib/core/widgets/coming_soon_widget.dart:45:        child: SingleChildScrollView(
+lib/core/widgets/citation_widget.dart:75:        content: SingleChildScrollView(
+lib/features/insights/screens/faq_browser_screen.dart:232:              child: ListView.builder(
+lib/features/insights/screens/insights_screen.dart:319:        return SingleChildScrollView(
+lib/features/insights/screens/insights_screen.dart:384:        return SingleChildScrollView(
+lib/features/insights/screens/insights_screen.dart:420:        return SingleChildScrollView(
+lib/features/insights/screens/analytics_dashboard_screen.dart:230:        return SingleChildScrollView(
+lib/features/insights/screens/analytics_dashboard_screen.dart:285:        return SingleChildScrollView(
+lib/features/insights/screens/analytics_dashboard_screen.dart:311:    return SingleChildScrollView(
+lib/features/insights/screens/analytics_dashboard_screen.dart:343:    return SingleChildScrollView(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1376:          child: ListView(
+lib/features/insights/widgets/floating_ai_chat.dart:774:          child: ListView.separated(
+lib/features/insights/widgets/prediction_accuracy_card.dart:249:        content: SingleChildScrollView(
+lib/features/insights/widgets/cycle_regularity_indicator.dart:370:        content: SingleChildScrollView(
+lib/features/settings/screens/settings_screen.dart:844:        content: SingleChildScrollView(
+lib/features/settings/screens/settings_screen.dart:1025:        content: SingleChildScrollView(
+lib/features/settings/screens/settings_screen.dart:1160:        content: SingleChildScrollView(
+lib/features/settings/screens/settings_screen.dart:1653:          child: ListView.builder(
+lib/features/settings/screens/help_screen.dart:118:      body: SingleChildScrollView(
+lib/features/settings/widgets/language_selector.dart:137:                return ListView.builder(
+lib/features/settings/widgets/theme_selector.dart:76:                return ListView(
+lib/features/settings/widgets/medical_citations_section.dart:125:          child: SingleChildScrollView(
+lib/features/settings/widgets/medical_citations_section.dart:231:    return ListView.builder(
+lib/features/settings/widgets/cyclesync_integration.dart:519:            content: const SingleChildScrollView(
+lib/features/settings/widgets/cyclesync_integration.dart:762:        content: const SingleChildScrollView(
+lib/features/future_plans/screens/future_plans_screen.dart:253:                  SingleChildScrollView(
+lib/features/_disabled_experimental/gamification/screens/gamification_dashboard_screen.dart:534:          SingleChildScrollView(
+lib/features/_disabled_experimental/community/screens/community_hub_screen.dart:385:    return SingleChildScrollView(
+lib/features/_disabled_experimental/community/widgets/discussion_board_widget.dart:126:                child: SingleChildScrollView(
+lib/features/_disabled_experimental/community/widgets/discussion_board_widget.dart:171:                child: SingleChildScrollView(
+lib/features/_disabled_experimental/community/widgets/discussion_board_widget.dart:218:        child: ListView.builder(
+lib/features/_disabled_experimental/community/widgets/expert_qa_widget.dart:132:      child: ListView.builder(
+lib/features/_disabled_experimental/community/widgets/expert_qa_widget.dart:182:    return ListView.builder(
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:170:    return ListView.builder(
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:203:    return ListView.builder(
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:233:    return ListView.builder(
+lib/features/_disabled_experimental/community/widgets/symptom_sharing_widget.dart:110:      child: ListView.builder(
+lib/features/_disabled_experimental/community/widgets/symptom_sharing_widget.dart:143:      child: ListView.builder(
+lib/features/auth/screens/futuristic_auth_screen.dart:117:            child: SingleChildScrollView(
+lib/features/auth/screens/auth_screen.dart:204:    return SingleChildScrollView(
+lib/features/health/screens/real_time_health_dashboard.dart:454:    return GridView.count(
+lib/features/health/screens/real_time_health_dashboard.dart:596:    return SingleChildScrollView(
+lib/features/health/screens/health_screen.dart:90:              return SingleChildScrollView(
+lib/features/health/screens/health_screen.dart:292:        GridView.count(
+lib/features/health/widgets/healthkit_connection_card.dart:253:        content: SingleChildScrollView(
+lib/features/health/widgets/healthkit_permission_dialog.dart:64:      content: SingleChildScrollView(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:54:                child: SingleChildScrollView(
+lib/features/cycle/screens/calendar_screen.dart:100:                        return SingleChildScrollView(
+lib/features/cycle/screens/tracking_screen.dart:457:    return SingleChildScrollView(
+lib/features/cycle/screens/tracking_screen.dart:585:    return SingleChildScrollView(
+lib/features/cycle/screens/tracking_screen.dart:638:    return SingleChildScrollView(
+lib/features/cycle/screens/tracking_screen.dart:697:    return SingleChildScrollView(
+lib/features/cycle/screens/home_screen.dart:588:                        return SingleChildScrollView(
+lib/features/cycle/screens/home_screen.dart:1063:          GridView.count(
+lib/features/cycle/screens/home_screen.dart:1765:          GridView.count(
+lib/features/cycle/screens/home_screen.dart:2294:          GridView.count(
+lib/features/cycle/widgets/day_detail_sheet.dart:50:                child: SingleChildScrollView(
+lib/features/cycle/widgets/pain_body_map.dart:639:              GridView.builder(
+lib/features/cycle/widgets/flow_intensity_picker.dart:128:          child: GridView.builder(
+lib/features/cycle/widgets/flow_intensity_picker.dart:566:              child: SingleChildScrollView(
+lib/features/cycle/widgets/symptom_selector.dart:83:    return SingleChildScrollView(
+lib/features/cycle/widgets/symptom_selector.dart:218:    return SingleChildScrollView(
+lib/features/cycle/widgets/symptom_selector.dart:280:    return ListView.builder(
+lib/features/feedback/screens/feedback_screen.dart:135:      body: SingleChildScrollView(
+lib/features/partner/screens/partner_dashboard_screen.dart:503:    return GridView.builder(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:157:            child: SingleChildScrollView(
+lib/features/partner/dialogs/invite_partner_dialog.dart:102:                      child: SingleChildScrollView(
+lib/features/partner/dialogs/join_partner_dialog.dart:96:                child: SingleChildScrollView(
+lib/features/partner/widgets/partner_care_actions_widget.dart:265:          GridView.builder(
+lib/features/partner/widgets/partner_care_actions_widget.dart:441:          ListView.builder(
+lib/features/partner/widgets/partner_communication_widget.dart:444:            child: ListView.builder(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:218:        child: SingleChildScrollView(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:383:    return SingleChildScrollView(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:547:    return SingleChildScrollView(
+lib/features/partner/widgets/partner_invitation_dialog.dart:218:        child: SingleChildScrollView(
+lib/features/partner/widgets/partner_invitation_dialog.dart:351:    return SingleChildScrollView(
+lib/features/partner/widgets/partner_invitation_dialog.dart:489:    return SingleChildScrollView(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:522:    return SingleChildScrollView(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:556:    return SingleChildScrollView(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:621:    return SingleChildScrollView(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:768:    return GridView.count(
+lib/features/biometric/widgets/health_metrics_card.dart:213:    return GridView.count(
+lib/features/coming_soon/screens/coming_soon_screen.dart:159:    return SingleChildScrollView(
+lib/features/coming_soon/screens/coming_soon_screen.dart:216:    return SingleChildScrollView(
+lib/features/coming_soon/screens/coming_soon_screen.dart:277:    return SingleChildScrollView(
+lib/features/coming_soon/widgets/feature_preview_card.dart:506:                    child: ListView.builder(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:729:            child: GridView.builder(
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:429:              child: SingleChildScrollView(
+lib/features/premium/widgets/premium_feature_widget.dart:469:        content: SingleChildScrollView(
+lib/features/premium/widgets/premium_feature_widget.dart:618:            SingleChildScrollView(
+lib/features/premium/widgets/subscription_status_widget.dart:567:                child: ListView(
+lib/features/notifications/screens/notification_settings_screen.dart:147:      child: SingleChildScrollView(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:179:    return SingleChildScrollView(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:281:    return SingleChildScrollView(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:335:    return SingleChildScrollView(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:389:    return SingleChildScrollView(
+lib/features/onboarding/screens/cycle_history_step_screen.dart:58:      child: SingleChildScrollView(
+lib/features/onboarding/widgets/goal_selection_widget.dart:241:      child: SingleChildScrollView(
+lib/features/onboarding/widgets/onboarding_page.dart:21:    return SingleChildScrollView(
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:169:        child: SingleChildScrollView(
+lib/features/onboarding/widgets/personality_quiz_widget.dart:205:      child: SingleChildScrollView(
+lib/features/onboarding/widgets/setup_form.dart:50:      child: SingleChildScrollView(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:169:        child: SingleChildScrollView(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:179:    return SingleChildScrollView(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:368:    return GridView.count(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:968:    return SingleChildScrollView(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:988:    return SingleChildScrollView(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:1005:    return SingleChildScrollView(
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:343:        SingleChildScrollView(
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:397:        SingleChildScrollView(
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:626:    return GridView.builder(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:278:    return SingleChildScrollView(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:321:    return SingleChildScrollView(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:361:    return SingleChildScrollView(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:393:    return SingleChildScrollView(
+lib/features/analytics/widgets/trend_chart_widget.dart:88:    return GridView.count(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:18:    return SingleChildScrollView(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:244:    return GridView(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:979:          GridView.count(
+lib/features/analytics/widgets/recommendations_list.dart:22:    return ListView.separated(

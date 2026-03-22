@@ -1,0 +1,4 @@
+lib/core/services/enhanced_ai_chat_service.dart:1037:  List<String> getSuggestedReplies() {
+lib/core/services/ai_chat_service.dart:476:  List<String> getSuggestedReplies() {
+lib/features/insights/widgets/floating_ai_chat.dart:736:    final suggestions = _chatService.getSuggestedReplies().toList();
+lib/features/insights/widgets/floating_ai_chat.dart:961:    final suggestions = _chatService.getSuggestedReplies();
