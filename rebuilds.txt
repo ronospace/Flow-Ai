@@ -1,0 +1,449 @@
+lib/core/ui/adaptive_components.dart:807:  Widget build(BuildContext context) {
+lib/core/visuals/consumer_visual_engine.dart:490:  Widget build(BuildContext context) {
+lib/core/visuals/consumer_visual_engine.dart:592:  Widget build(BuildContext context) {
+lib/core/visuals/consumer_visual_engine.dart:675:  Widget build(BuildContext context) {
+lib/core/visuals/consumer_visual_engine.dart:809:  Widget build(BuildContext context) {
+lib/core/deeplinks/invite_gate_page.dart:94:  Widget build(BuildContext context) {
+lib/core/routing/app_router.dart:217:  Widget build(BuildContext context) {
+lib/core/routing/app_router.dart:290:    setState(() {
+lib/core/routing/app_router.dart:317:  Widget build(BuildContext context) {
+lib/core/performance/performance_monitor.dart:895:  static Widget measureWidgetBuild(Widget child, String widgetName) {
+lib/core/performance/performance_monitor.dart:928:        return PerformanceUtils.measureWidgetBuild(
+lib/core/services/offline_service.dart:372:        setState(() {
+lib/core/services/navigation_service.dart:193:  Widget build(BuildContext context) {
+lib/core/services/onboarding_tutorial_service.dart:406:  Widget build(BuildContext context) {
+lib/core/services/performance_service.dart:582:  Widget build(BuildContext context) {
+lib/core/widgets/notification_icon.dart:20:  void _onTapDown(TapDownDetails _) => setState(() => _scale = 0.9);
+lib/core/widgets/notification_icon.dart:21:  void _onTapUp(TapUpDetails _) => setState(() => _scale = 1.0);
+lib/core/widgets/notification_icon.dart:22:  void _onTapCancel() => setState(() => _scale = 1.0);
+lib/core/widgets/notification_icon.dart:25:  Widget build(BuildContext context) {
+lib/core/widgets/animated_micro_interactions.dart:24:  Widget build(BuildContext context) {
+lib/core/widgets/animated_micro_interactions.dart:80:  Widget build(BuildContext context) {
+lib/core/widgets/animated_micro_interactions.dart:148:    setState(() {
+lib/core/widgets/animated_micro_interactions.dart:168:    setState(() {
+lib/core/widgets/animated_micro_interactions.dart:174:  Widget build(BuildContext context) {
+lib/core/widgets/animated_micro_interactions.dart:216:  Widget build(BuildContext context) {
+lib/core/widgets/animated_micro_interactions.dart:280:  Widget build(BuildContext context) {
+lib/core/widgets/error_boundary.dart:39:  Widget build(BuildContext context) {
+lib/core/widgets/error_boundary.dart:48:    setState(() {
+lib/core/widgets/error_boundary.dart:250:                            setState(() {
+lib/core/widgets/error_boundary.dart:376:      setState(() {
+lib/core/widgets/error_boundary.dart:433:  Widget build(BuildContext context) {
+lib/core/widgets/medical_citations_footer.dart:14:  Widget build(BuildContext context) {
+lib/core/widgets/medical_disclaimer_banner.dart:12:  Widget build(BuildContext context) {
+lib/core/widgets/advanced_chart_widget.dart:61:  Widget build(BuildContext context) {
+lib/core/widgets/coming_soon_widget.dart:30:  Widget build(BuildContext context) {
+lib/core/widgets/modern_button.dart:73:      setState(() => _isPressed = true);
+lib/core/widgets/modern_button.dart:89:      setState(() => _isPressed = false);
+lib/core/widgets/modern_button.dart:95:  Widget build(BuildContext context) {
+lib/core/widgets/citation_widget.dart:30:  Widget build(BuildContext context) {
+lib/core/widgets/flow_ai_logo.dart:37:  Widget build(BuildContext context) {
+lib/core/widgets/coming_soon_card.dart:32:  Widget build(BuildContext context) {
+lib/core/widgets/pressable_avatar.dart:46:  void _onTapDown(TapDownDetails details) => setState(() => _scale = 0.94);
+lib/core/widgets/pressable_avatar.dart:47:  void _onTapUp(TapUpDetails details) => setState(() => _scale = 1.0);
+lib/core/widgets/pressable_avatar.dart:48:  void _onTapCancel() => setState(() => _scale = 1.0);
+lib/core/widgets/pressable_avatar.dart:51:  Widget build(BuildContext context) {
+lib/core/analytics/performance_analytics_dashboard.dart:1331:  Widget build(BuildContext context) {
+lib/core/analytics/performance_analytics_dashboard.dart:1391:  Widget build(BuildContext context) {
+lib/features/insights/screens/ai_coach_screen.dart:11:  Widget build(BuildContext context) {
+lib/features/insights/screens/faq_browser_screen.dart:70:    setState(() {
+lib/features/insights/screens/faq_browser_screen.dart:76:    setState(() {
+lib/features/insights/screens/faq_browser_screen.dart:91:      setState(() {
+lib/features/insights/screens/faq_browser_screen.dart:102:    setState(() {
+lib/features/insights/screens/faq_browser_screen.dart:112:  Widget build(BuildContext context) {
+lib/features/insights/screens/insights_screen.dart:62:  Widget build(BuildContext context) {
+lib/features/insights/screens/insights_screen.dart:215:                setState(() {
+lib/features/insights/screens/analytics_dashboard_screen.dart:40:  Widget build(BuildContext context) {
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:73:      setState(() {
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:80:      setState(() {
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:123:        setState(() {
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:133:  Widget build(BuildContext context) {
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:66:    setState(() => _isLoading = true);
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:75:      setState(() => _isLoading = false);
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:102:      setState(() {
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:117:    setState(() => _isRefreshing = true);
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:124:      setState(() => _isRefreshing = false);
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:130:  Widget build(BuildContext context) {
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1165:    setState(() {
+lib/features/insights/widgets/floating_ai_chat.dart:100:        setState(() {
+lib/features/insights/widgets/floating_ai_chat.dart:138:    setState(() {
+lib/features/insights/widgets/floating_ai_chat.dart:157:    setState(() {
+lib/features/insights/widgets/floating_ai_chat.dart:170:    setState(() {
+lib/features/insights/widgets/floating_ai_chat.dart:203:    setState(() {
+lib/features/insights/widgets/floating_ai_chat.dart:222:  Widget build(BuildContext context) {
+lib/features/insights/widgets/floating_ai_chat.dart:801:            setState(() {
+lib/features/insights/widgets/floating_ai_chat.dart:996:                  setState(() {
+lib/features/insights/widgets/prediction_accuracy_card.dart:18:  Widget build(BuildContext context) {
+lib/features/insights/widgets/ai_insight_card.dart.bak:15:  Widget build(BuildContext context) {
+lib/features/insights/widgets/ai_insight_card.dart:15:  Widget build(BuildContext context) {
+lib/features/insights/widgets/cycle_length_chart.dart:17:  Widget build(BuildContext context) {
+lib/features/insights/widgets/cycle_regularity_indicator.dart:20:  Widget build(BuildContext context) {
+lib/features/insights/widgets/symptom_heatmap.dart:18:  Widget build(BuildContext context) {
+lib/features/insights/widgets/mood_energy_chart.dart:19:  Widget build(BuildContext context) {
+lib/features/settings/screens/account_management_screen.dart:98:  Widget build(BuildContext context) {
+lib/features/settings/screens/account_management_screen.dart:231:                      setState(() {
+lib/features/settings/screens/account_management_screen.dart:544:      setState(() {
+lib/features/settings/screens/account_management_screen.dart:596:                      setState(() => _showPassword = !_showPassword),
+lib/features/settings/screens/account_management_screen.dart:612:                      setState(() => _showNewPassword = !_showNewPassword),
+lib/features/settings/screens/account_management_screen.dart:629:                  onPressed: () => setState(
+lib/features/settings/screens/account_management_screen.dart:682:    setState(() => _isExporting = true);
+lib/features/settings/screens/account_management_screen.dart:716:      if (mounted) setState(() => _isExporting = false);
+lib/features/settings/screens/account_management_screen.dart:898:      setState(() {});
+lib/features/settings/screens/settings_screen.dart:78:  Widget build(BuildContext context) {
+lib/features/settings/screens/help_screen.dart:77:  Widget build(BuildContext context) {
+lib/features/settings/screens/help_screen.dart:230:                        setState(() {});
+lib/features/settings/widgets/theme_switcher_card.dart:14:  Widget build(BuildContext context) {
+lib/features/settings/widgets/theme_switcher_card.dart:166:  Widget build(BuildContext context) {
+lib/features/settings/widgets/settings_section.dart:17:  Widget build(BuildContext context) {
+lib/features/settings/widgets/language_selector.dart:41:  Widget build(BuildContext context) {
+lib/features/settings/widgets/language_selector.dart:109:                  setState(() {
+lib/features/settings/widgets/theme_selector.dart:15:  Widget build(BuildContext context) {
+lib/features/settings/widgets/profile_section.dart:13:  Widget build(BuildContext context) {
+lib/features/settings/widgets/medical_citations_section.dart:35:  Widget build(BuildContext context) {
+lib/features/settings/widgets/medical_citations_section.dart:115:              setState(() {
+lib/features/settings/widgets/medical_citations_section.dart:158:        setState(() {
+lib/features/settings/widgets/cyclesync_integration.dart:22:  Widget build(BuildContext context) {
+lib/features/settings/widgets/cyclesync_integration.dart:339:    setState(() {
+lib/features/settings/widgets/cyclesync_integration.dart:350:        setState(() {
+lib/features/settings/widgets/settings_tile.dart:25:  Widget build(BuildContext context) {
+lib/features/future_plans/screens/future_plans_screen.dart:151:  Widget build(BuildContext context) {
+lib/features/future_plans/screens/future_plans_screen.dart:260:                              setState(() => _selectedCategory = category),
+lib/features/_disabled_experimental/gamification/screens/gamification_dashboard_screen.dart:86:  Widget build(BuildContext context) {
+lib/features/_disabled_experimental/gamification/screens/gamification_dashboard_screen.dart:87:    super.build(context);
+lib/features/_disabled_experimental/gamification/widgets/achievement_card.dart:17:  Widget build(BuildContext context) {
+lib/features/_disabled_experimental/gamification/widgets/achievement_card.dart:261:  Widget build(BuildContext context) {
+lib/features/_disabled_experimental/gamification/widgets/streak_widget.dart:11:  Widget build(BuildContext context) {
+lib/features/_disabled_experimental/gamification/widgets/streak_widget.dart:363:  Widget build(BuildContext context) {
+lib/features/_disabled_experimental/gamification/widgets/challenge_card.dart:17:  Widget build(BuildContext context) {
+lib/features/_disabled_experimental/gamification/widgets/challenge_card.dart:347:  Widget build(BuildContext context) {
+lib/features/_disabled_experimental/community/screens/community_hub_screen.dart:98:  Widget build(BuildContext context) {
+lib/features/_disabled_experimental/community/screens/community_hub_screen.dart:99:    super.build(context);
+lib/features/_disabled_experimental/community/screens/community_hub_screen.dart:554:  Widget build(
+lib/features/_disabled_experimental/community/screens/community_hub_screen.dart:567:  bool shouldRebuild(_SliverTabBarDelegate oldDelegate) {
+lib/features/_disabled_experimental/community/widgets/community_achievements_widget.dart:17:  Widget build(BuildContext context) {
+lib/features/_disabled_experimental/community/widgets/discussion_board_widget.dart:90:  Widget build(BuildContext context) {
+lib/features/_disabled_experimental/community/widgets/discussion_board_widget.dart:138:                                  setState(() {
+lib/features/_disabled_experimental/community/widgets/discussion_board_widget.dart:183:                                  setState(() {
+lib/features/_disabled_experimental/community/widgets/expert_qa_widget.dart:45:  Widget build(BuildContext context) {
+lib/features/_disabled_experimental/community/widgets/expert_qa_widget.dart:89:                setState(() {
+lib/features/_disabled_experimental/community/widgets/expert_qa_widget.dart:143:                setState(() {
+lib/features/_disabled_experimental/community/widgets/community_stats_widget.dart:11:  Widget build(BuildContext context) {
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:44:  Widget build(BuildContext context) {
+lib/features/_disabled_experimental/community/widgets/symptom_sharing_widget.dart:31:  Widget build(BuildContext context) {
+lib/features/_disabled_experimental/community/widgets/symptom_sharing_widget.dart:98:        setState(() {
+lib/features/_disabled_experimental/community/widgets/symptom_sharing_widget.dart:123:                setState(() {
+lib/features/auth/screens/auth_choice_screen.dart:58:  Widget build(BuildContext context) {
+lib/features/auth/screens/futuristic_auth_screen.dart:84:      setState(() {
+lib/features/auth/screens/futuristic_auth_screen.dart:107:  Widget build(BuildContext context) {
+lib/features/auth/screens/futuristic_auth_screen.dart:361:          setState(() {
+lib/features/auth/screens/futuristic_auth_screen.dart:501:              setState(() {
+lib/features/auth/screens/futuristic_auth_screen.dart:526:                setState(() {
+lib/features/auth/screens/auth_screen.dart:94:      setState(() {
+lib/features/auth/screens/auth_screen.dart:118:  Widget build(BuildContext context) {
+lib/features/auth/screens/auth_screen.dart:307:                    setState(() {
+lib/features/auth/screens/auth_screen.dart:365:                      setState(() {
+lib/features/auth/screens/auth_screen.dart:421:        setState(() {
+lib/features/auth/screens/auth_screen.dart:497:    setState(() {
+lib/features/auth/screens/auth_screen.dart:554:        setState(() {
+lib/features/auth/screens/auth_screen.dart:592:    setState(() {
+lib/features/auth/screens/auth_screen.dart:605:          setState(() {
+lib/features/auth/screens/auth_screen.dart:611:        setState(() {
+lib/features/auth/screens/auth_screen.dart:624:          setState(() {
+lib/features/auth/screens/auth_screen.dart:678:        setState(() {
+lib/features/auth/screens/auth_screen.dart:688:    setState(() {
+lib/features/auth/screens/auth_screen.dart:727:        setState(() {
+lib/features/auth/screens/auth_screen.dart:741:    setState(() {
+lib/features/auth/screens/auth_screen.dart:790:        setState(() {
+lib/features/auth/screens/auth_screen.dart:933:                                    setState(() => isResetting = true);
+lib/features/auth/screens/auth_screen.dart:961:                                      setState(() => isResetting = false);
+lib/features/auth/widgets/auth_text_field.dart:29:  Widget build(BuildContext context) {
+lib/features/auth/widgets/biometric_button.dart:47:  Widget build(BuildContext context) {
+lib/features/auth/widgets/social_login_button.dart:24:  Widget build(BuildContext context) {
+lib/features/health/screens/real_time_health_dashboard.dart:105:      setState(() {
+lib/features/health/screens/real_time_health_dashboard.dart:112:      setState(() {
+lib/features/health/screens/real_time_health_dashboard.dart:131:    setState(() {
+lib/features/health/screens/real_time_health_dashboard.dart:141:    setState(() {
+lib/features/health/screens/real_time_health_dashboard.dart:150:      setState(() {
+lib/features/health/screens/real_time_health_dashboard.dart:171:      setState(() {
+lib/features/health/screens/real_time_health_dashboard.dart:214:  Widget build(BuildContext context) {
+lib/features/health/screens/real_time_health_dashboard.dart:565:        setState(() {
+lib/features/health/screens/real_time_health_dashboard.dart:611:          setState(() {
+lib/features/health/screens/real_time_health_dashboard.dart:931:    setState(() {
+lib/features/health/screens/real_time_health_dashboard.dart:937:    setState(() {
+lib/features/health/screens/health_screen.dart:76:  Widget build(BuildContext context) {
+lib/features/health/widgets/healthkit_disclosure_banner.dart:25:  Widget build(BuildContext context) {
+lib/features/health/widgets/healthkit_connection_card.dart:15:  Widget build(BuildContext context) {
+lib/features/health/widgets/health_integration_coming_soon_card.dart:12:  Widget build(BuildContext context) {
+lib/features/health/widgets/healthkit_disclosure_banner_permanent.dart:12:  Widget build(BuildContext context) {
+lib/features/health/widgets/biometric_pulse_indicator.dart:92:  Widget build(BuildContext context) {
+lib/features/health/widgets/healthkit_permission_dialog.dart:32:  Widget build(BuildContext context) {
+lib/features/health/widgets/ai_insights_panel.dart:50:  Widget build(BuildContext context) {
+lib/features/health/widgets/ai_insights_panel.dart:148:          setState(() {
+lib/features/health/widgets/ai_insights_panel.dart:462:    setState(() {
+lib/features/health/widgets/health_trend_chart.dart:58:  Widget build(BuildContext context) {
+lib/features/health/widgets/health_trend_chart.dart:218:          setState(() {
+lib/features/health/widgets/real_time_metric_card.dart:52:  Widget build(BuildContext context) {
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:39:  Widget build(BuildContext context) {
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:269:        setState(() {
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:352:        setState(() {
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:506:    setState(() {
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:529:        setState(() {
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:551:      setState(() {
+lib/features/cycle/screens/calendar_screen.dart:59:  Widget build(BuildContext context) {
+lib/features/cycle/screens/calendar_screen.dart:165:                  setState(() {
+lib/features/cycle/screens/calendar_screen.dart:201:                  setState(() {
+lib/features/cycle/screens/calendar_screen.dart:333:        setState(() {
+lib/features/cycle/screens/calendar_screen.dart:342:        setState(() {
+lib/features/cycle/screens/tracking_screen.dart:86:        setState(() {
+lib/features/cycle/screens/tracking_screen.dart:133:        setState(() {
+lib/features/cycle/screens/tracking_screen.dart:155:      setState(() {
+lib/features/cycle/screens/tracking_screen.dart:172:    setState(() {
+lib/features/cycle/screens/tracking_screen.dart:206:        setState(() {
+lib/features/cycle/screens/tracking_screen.dart:216:            setState(() {
+lib/features/cycle/screens/tracking_screen.dart:229:        setState(() {
+lib/features/cycle/screens/tracking_screen.dart:242:  Widget build(BuildContext context) {
+lib/features/cycle/screens/tracking_screen.dart:476:              setState(() {
+lib/features/cycle/screens/tracking_screen.dart:562:                setState(() {
+lib/features/cycle/screens/tracking_screen.dart:569:                setState(() {
+lib/features/cycle/screens/tracking_screen.dart:609:              setState(() {
+lib/features/cycle/screens/tracking_screen.dart:622:              setState(() {
+lib/features/cycle/screens/tracking_screen.dart:662:              setState(() {
+lib/features/cycle/screens/tracking_screen.dart:678:                setState(() {
+lib/features/cycle/screens/tracking_screen.dart:854:                      setState(() {
+lib/features/cycle/screens/tracking_screen.dart:907:        setState(() {
+lib/features/cycle/screens/tracking_screen.dart:1066:      setState(() {
+lib/features/cycle/screens/home_screen.dart:134:      setState(() {
+lib/features/cycle/screens/home_screen.dart:142:      setState(() {
+lib/features/cycle/screens/home_screen.dart:158:        setState(() {
+lib/features/cycle/screens/home_screen.dart:165:        setState(() {
+lib/features/cycle/screens/home_screen.dart:539:  Widget build(BuildContext context) {
+lib/features/cycle/screens/home_screen.dart:2528:  Widget build(BuildContext context) {
+lib/features/cycle/screens/home_screen.dart:2535:          setState(() {
+lib/features/cycle/widgets/day_detail_sheet.dart:21:  Widget build(BuildContext context) {
+lib/features/cycle/widgets/pain_body_map.dart:92:  Widget build(BuildContext context) {
+lib/features/cycle/widgets/pain_body_map.dart:178:        setState(() {
+lib/features/cycle/widgets/pain_body_map.dart:312:                    setState(() {
+lib/features/cycle/widgets/pain_body_map.dart:388:                    setState(() {
+lib/features/cycle/widgets/pain_body_map.dart:466:                        setState(() {
+lib/features/cycle/widgets/pain_body_map.dart:662:                      setState(() {
+lib/features/cycle/widgets/flow_intensity_picker.dart:114:  Widget build(BuildContext context) {
+lib/features/cycle/widgets/tracking_summary_card.dart:15:  Widget build(BuildContext context) {
+lib/features/cycle/widgets/mood_energy_slider.dart:214:  Widget build(BuildContext context) {
+lib/features/cycle/widgets/calendar_legend.dart:9:  Widget build(BuildContext context) {
+lib/features/cycle/widgets/cycle_phase_indicator.dart:21:  Widget build(BuildContext context) {
+lib/features/cycle/widgets/symptom_selector.dart:77:  Widget build(BuildContext context) {
+lib/features/cycle/widgets/symptom_selector.dart:227:                setState(() {
+lib/features/feedback/screens/feedback_screen.dart:58:    setState(() => _isSubmitting = true);
+lib/features/feedback/screens/feedback_screen.dart:65:    setState(() => _isSubmitting = false);
+lib/features/feedback/screens/feedback_screen.dart:117:  Widget build(BuildContext context) {
+lib/features/feedback/screens/feedback_screen.dart:196:                    setState(() => _rating = index + 1);
+lib/features/feedback/screens/feedback_screen.dart:229:                    setState(() => _selectedCategory = entry.key);
+lib/features/partner/screens/qr_join_screen.dart:47:  Widget build(BuildContext context) {
+lib/features/partner/screens/partner_dashboard_screen.dart:99:  Widget build(BuildContext context) {
+lib/features/partner/screens/partner_privacy_settings_screen.dart:53:      setState(() {
+lib/features/partner/screens/partner_privacy_settings_screen.dart:64:      setState(() {
+lib/features/partner/screens/partner_privacy_settings_screen.dart:74:    setState(() => _isLoading = true);
+lib/features/partner/screens/partner_privacy_settings_screen.dart:81:      setState(() {
+lib/features/partner/screens/partner_privacy_settings_screen.dart:108:      setState(() => _isLoading = false);
+lib/features/partner/screens/partner_privacy_settings_screen.dart:113:    setState(() {
+lib/features/partner/screens/partner_privacy_settings_screen.dart:120:  Widget build(BuildContext context) {
+lib/features/partner/dialogs/invite_partner_dialog.dart:63:  Widget build(BuildContext context) {
+lib/features/partner/dialogs/invite_partner_dialog.dart:315:        onTap: () => setState(() => _messageController.text = message),
+lib/features/partner/dialogs/invite_partner_dialog.dart:444:                      setState(() => _currentStep = _currentStep - 1);
+lib/features/partner/dialogs/invite_partner_dialog.dart:505:        setState(() => _currentStep = 1);
+lib/features/partner/dialogs/invite_partner_dialog.dart:515:    setState(() => _isLoading = true);
+lib/features/partner/dialogs/invite_partner_dialog.dart:530:      setState(() => _isLoading = false);
+lib/features/partner/dialogs/join_partner_dialog.dart:62:  Widget build(BuildContext context) {
+lib/features/partner/dialogs/join_partner_dialog.dart:372:                  setState(() => _errorMessage = null);
+lib/features/partner/dialogs/join_partner_dialog.dart:564:          setState(() {
+lib/features/partner/dialogs/join_partner_dialog.dart:577:      setState(() {
+lib/features/partner/dialogs/join_partner_dialog.dart:596:        setState(() {
+lib/features/partner/widgets/partner_care_actions_widget.dart:103:  Widget build(BuildContext context) {
+lib/features/partner/widgets/partner_care_actions_widget.dart:218:                    setState(() => _showQuickActions = !_showQuickActions),
+lib/features/partner/widgets/partner_care_actions_widget.dart:715:                    setState(() => selectedType = type);
+lib/features/partner/widgets/partner_communication_widget.dart:54:  Widget build(BuildContext context) {
+lib/features/partner/widgets/partner_communication_widget.dart:157:            onPressed: () => setState(() => _isExpanded = !_isExpanded),
+lib/features/partner/widgets/partner_communication_widget.dart:192:              onTap: () => setState(() => _isExpanded = true),
+lib/features/partner/widgets/partner_communication_widget.dart:434:                onPressed: () => setState(() => _isExpanded = false),
+lib/features/partner/widgets/partner_cycle_insight_widget.dart:11:  Widget build(BuildContext context) {
+lib/features/partner/widgets/partner_insights_widget.dart:16:  Widget build(BuildContext context) {
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:73:  Widget build(BuildContext context) {
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:708:      setState(() => _successMessage = null);
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:715:    setState(() => _isLoading = true);
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:730:      setState(() {
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:738:          setState(() => _successMessage = null);
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:745:      if (mounted) setState(() => _isLoading = false);
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:752:    setState(() {
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:762:      setState(() {
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:768:      if (mounted) setState(() => _isLoading = false);
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:788:    setState(() {
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:796:        setState(() => _errorMessage = null);
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:802:    setState(() => _successMessage = "QR saved successfully");
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:805:        setState(() => _successMessage = null);
+lib/features/partner/widgets/partner_invitation_dialog.dart:73:  Widget build(BuildContext context) {
+lib/features/partner/widgets/partner_invitation_dialog.dart:625:      setState(() => _successMessage = null);
+lib/features/partner/widgets/partner_invitation_dialog.dart:632:    setState(() {
+lib/features/partner/widgets/partner_invitation_dialog.dart:650:      setState(() {
+lib/features/partner/widgets/partner_invitation_dialog.dart:657:          setState(() => _successMessage = null);
+lib/features/partner/widgets/partner_invitation_dialog.dart:665:        setState(() {
+lib/features/partner/widgets/partner_invitation_dialog.dart:678:    setState(() {
+lib/features/partner/widgets/partner_invitation_dialog.dart:688:      setState(() {
+lib/features/partner/widgets/partner_invitation_dialog.dart:694:      if (mounted) setState(() => _isLoading = false);
+lib/features/partner/widgets/partner_invitation_dialog.dart:731:    setState(() => _successMessage = "QR saved successfully");
+lib/features/partner/widgets/partner_invitation_dialog.dart:734:        setState(() => _successMessage = null);
+lib/features/biometric/screens/biometric_dashboard_screen.dart:61:      setState(() {
+lib/features/biometric/screens/biometric_dashboard_screen.dart:78:        setState(() {
+lib/features/biometric/screens/biometric_dashboard_screen.dart:87:      setState(() {
+lib/features/biometric/screens/biometric_dashboard_screen.dart:104:      setState(() {
+lib/features/biometric/screens/biometric_dashboard_screen.dart:110:      setState(() {
+lib/features/biometric/screens/biometric_dashboard_screen.dart:121:    setState(() {
+lib/features/biometric/screens/biometric_dashboard_screen.dart:166:      setState(() {
+lib/features/biometric/screens/biometric_dashboard_screen.dart:192:      setState(() {
+lib/features/biometric/screens/biometric_dashboard_screen.dart:201:  Widget build(BuildContext context) {
+lib/features/biometric/widgets/biometric_chart_widget.dart:61:  Widget build(BuildContext context) {
+lib/features/biometric/widgets/biometric_chart_widget.dart:190:              onTap: () => setState(() {}),
+lib/features/biometric/widgets/biometric_chart_widget.dart:214:      setState(() {
+lib/features/biometric/widgets/biometric_chart_widget.dart:259:            onTap: () => setState(() {
+lib/features/biometric/widgets/biometric_sync_status.dart:82:    setState(() {
+lib/features/biometric/widgets/biometric_sync_status.dart:91:    setState(() {
+lib/features/biometric/widgets/biometric_sync_status.dart:114:  Widget build(BuildContext context) {
+lib/features/biometric/widgets/correlation_insights_card.dart:20:  Widget build(BuildContext context) {
+lib/features/biometric/widgets/health_metrics_card.dart:28:  Widget build(BuildContext context) {
+lib/features/biometric/widgets/health_metrics_card.dart:211:  Widget build(BuildContext context) {
+lib/features/deployment/services/deployment_service.dart:1024:      await _performBuild(buildResult);
+lib/features/deployment/services/deployment_service.dart:1122:  Future<void> _performBuild(BuildResult buildResult) async {
+lib/features/coming_soon/screens/coming_soon_screen.dart:50:  Widget build(BuildContext context) {
+lib/features/coming_soon/screens/coming_soon_screen.dart:71:                    setState(() => _currentPage = index);
+lib/features/coming_soon/widgets/feature_preview_card.dart:44:  Widget build(BuildContext context) {
+lib/features/coming_soon/widgets/feature_preview_card.dart:49:        setState(() => _isHovered = true);
+lib/features/coming_soon/widgets/feature_preview_card.dart:53:        setState(() => _isHovered = false);
+lib/features/coming_soon/widgets/waitlist_signup_widget.dart:38:  Widget build(BuildContext context) {
+lib/features/coming_soon/widgets/waitlist_signup_widget.dart:229:                setState(() {
+lib/features/coming_soon/widgets/waitlist_signup_widget.dart:432:    setState(() => _isLoading = true);
+lib/features/coming_soon/widgets/waitlist_signup_widget.dart:452:      setState(() {
+lib/features/coming_soon/widgets/waitlist_signup_widget.dart:459:      setState(() => _isLoading = false);
+lib/features/coming_soon/widgets/coming_soon_card.dart:153:  Widget build(BuildContext context) {
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:10:  Widget build(BuildContext context) {
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:175:  Widget build(BuildContext context) {
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:227:                onTap: () => setState(() => _isExpanded = !_isExpanded),
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:79:    setState(() => _isLoading = true);
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:88:      setState(() => _isLoading = false);
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:97:      setState(() {
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:113:    setState(() {
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:127:    setState(() => _isSaving = true);
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:150:      setState(() {
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:170:      setState(() => _isSaving = false);
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:176:  Widget build(BuildContext context) {
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:449:                    setState(() {
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:620:                setState(() {
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:710:                setState(() {
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:845:                    setState(() {
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:894:                      setState(() {
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:1034:                  setState(() {
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:1351:    setState(() {
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:1385:                  setState(() {
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:1409:      setState(() {
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:39:      setState(() {
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:53:        setState(() {
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:60:        setState(() {
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:78:  Widget build(BuildContext context) {
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:15:  Widget build(BuildContext context) {
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:458:  Widget build(BuildContext context) {
+lib/features/premium/screens/premium_subscription_screen.dart:38:  Widget build(BuildContext context) {
+lib/features/premium/screens/premium_subscription_screen.dart:212:          setState(() {
+lib/features/premium/screens/premium_subscription_screen.dart:428:          setState(() {
+lib/features/premium/screens/premium_subscription_screen.dart:455:                    setState(() {
+lib/features/premium/screens/premium_paywall_screen.dart:47:  Widget build(BuildContext context) {
+lib/features/premium/screens/premium_paywall_screen.dart:339:                setState(() {
+lib/features/premium/screens/premium_paywall_screen.dart:359:                setState(() {
+lib/features/premium/widgets/premium_feature_widget.dart:22:  Widget build(BuildContext context) {
+lib/features/premium/widgets/premium_feature_widget.dart:573:  Widget build(BuildContext context) {
+lib/features/premium/widgets/premium_feature_widget.dart:604:  Widget build(BuildContext context) {
+lib/features/premium/widgets/feature_comparison_widget.dart:10:  Widget build(BuildContext context) {
+lib/features/premium/widgets/subscription_tier_card.dart:26:  Widget build(BuildContext context) {
+lib/features/premium/widgets/upgrade_prompt_dialog.dart:37:  Widget build(BuildContext context) {
+lib/features/premium/widgets/subscription_status_widget.dart:18:  Widget build(BuildContext context) {
+lib/features/premium/widgets/premium_upgrade_prompt.dart:22:  Widget build(BuildContext context) {
+lib/features/premium/widgets/premium_upgrade_prompt.dart:187:  Widget build(BuildContext context) {
+lib/features/premium/widgets/premium_upgrade_prompt.dart:210:  Widget build(BuildContext context) {
+lib/features/notifications/screens/notification_settings_screen.dart:57:      setState(() {
+lib/features/notifications/screens/notification_settings_screen.dart:62:      setState(() {
+lib/features/notifications/screens/notification_settings_screen.dart:69:  Widget build(BuildContext context) {
+lib/features/notifications/screens/notification_settings_screen.dart:309:            setState(() {
+lib/features/notifications/screens/notification_settings_screen.dart:375:                (time) => setState(() => _quietTimeStart = time),
+lib/features/notifications/screens/notification_settings_screen.dart:383:                (time) => setState(() => _quietTimeEnd = time),
+lib/features/notifications/screens/notification_settings_screen.dart:524:            setState(() {
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:69:  Widget build(BuildContext context) {
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:851:  Widget build(BuildContext context) {
+lib/features/onboarding/screens/onboarding_screen.dart:56:  Widget build(BuildContext context) {
+lib/features/onboarding/screens/cycle_history_step_screen.dart:50:  Widget build(BuildContext context) {
+lib/features/onboarding/screens/cycle_history_step_screen.dart:194:                  onTap: () => setState(() => _isFirstTimeTracking = true),
+lib/features/onboarding/screens/cycle_history_step_screen.dart:204:                  onTap: () => setState(() => _isFirstTimeTracking = false),
+lib/features/onboarding/screens/cycle_history_step_screen.dart:249:                  setState(() {
+lib/features/onboarding/screens/cycle_history_step_screen.dart:408:                setState(() {
+lib/features/onboarding/screens/cycle_history_step_screen.dart:484:                setState(() {
+lib/features/onboarding/screens/cycle_history_step_screen.dart:515:              setState(() {
+lib/features/onboarding/screens/cycle_history_step_screen.dart:548:              setState(() {
+lib/features/onboarding/screens/cycle_history_step_screen.dart:736:      setState(() {
+lib/features/onboarding/screens/personal_info_step_screen.dart:48:  Widget build(BuildContext context) {
+lib/features/onboarding/screens/personal_info_step_screen.dart:333:      setState(() {
+lib/features/onboarding/screens/welcome_step_screen.dart:12:  Widget build(BuildContext context) {
+lib/features/onboarding/screens/steps/complete_step.dart:58:  Widget build(BuildContext context) {
+lib/features/onboarding/screens/setup_screen.dart:7:  Widget build(BuildContext context) {
+lib/features/onboarding/screens/splash_screen.dart:81:  Widget build(BuildContext context) {
+lib/features/onboarding/widgets/goal_selection_widget.dart:238:  Widget build(BuildContext context) {
+lib/features/onboarding/widgets/goal_selection_widget.dart:322:        setState(() {
+lib/features/onboarding/widgets/goal_selection_widget.dart:506:        setState(() {
+lib/features/onboarding/widgets/goal_selection_widget.dart:633:        setState(() {
+lib/features/onboarding/widgets/onboarding_page.dart:17:  Widget build(BuildContext context) {
+lib/features/onboarding/widgets/onboarding_progress_widget.dart:87:  Widget build(BuildContext context) {
+lib/features/onboarding/widgets/onboarding_progress_widget.dart:345:  Widget build(BuildContext context) {
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:147:    setState(() {
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:164:  Widget build(BuildContext context) {
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:696:    setState(() {
+lib/features/onboarding/widgets/personality_quiz_widget.dart:202:  Widget build(BuildContext context) {
+lib/features/onboarding/widgets/personality_quiz_widget.dart:376:        setState(() {
+lib/features/onboarding/widgets/personality_quiz_widget.dart:458:                    setState(() {
+lib/features/onboarding/widgets/personality_quiz_widget.dart:485:                    setState(() {
+lib/features/onboarding/widgets/personality_quiz_widget.dart:539:        setState(() {
+lib/features/onboarding/widgets/personality_quiz_widget.dart:675:      setState(() {
+lib/features/onboarding/widgets/setup_form.dart:45:  Widget build(BuildContext context) {
+lib/features/onboarding/widgets/setup_form.dart:155:                    setState(() {
+lib/features/onboarding/widgets/setup_form.dart:223:                    setState(() {
+lib/features/onboarding/widgets/setup_form.dart:294:                setState(() {
+lib/features/onboarding/widgets/setup_form.dart:349:                setState(() {
+lib/features/onboarding/widgets/onboarding_progress.dart:16:  Widget build(BuildContext context) {
+lib/features/onboarding/widgets/onboarding_progress.dart:104:  Widget build(BuildContext context) {
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:164:  Widget build(BuildContext context) {
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:283:        setState(() {
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:892:    setState(() {
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:913:      setState(() {
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:921:    setState(() {
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:931:      setState(() {
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:951:      setState(() {
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:956:      setState(() {
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:971:    setState(() {
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:979:      setState(() {
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:997:      setState(() {
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:1004:    setState(() {
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:1012:      setState(() {
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:1026:      setState(() {
+lib/features/analytics/screens/analytics_dashboard_screen.dart:40:  Widget build(BuildContext context) {
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:98:    setState(() => _isLoading = true);
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:112:      setState(() {
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:119:      setState(() => _isLoading = false);
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:132:  Widget build(BuildContext context) {
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:349:                onTap: () => setState(() => _selectedTimeRange = range),
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:403:                onTap: () => setState(() => _currentView = view),
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:865:              onChanged: (value) => setState(() => _showPredictions = value),
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:887:              onChanged: (value) => setState(() => _showCorrelations = value),
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:924:                setState(() {
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:44:  Widget build(BuildContext context) {
+lib/features/analytics/widgets/trend_chart_widget.dart:12:  Widget build(BuildContext context) {
+lib/features/analytics/widgets/cycle_analytics_card.dart:11:  Widget build(BuildContext context) {
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:15:  Widget build(BuildContext context) {
+lib/features/analytics/widgets/recommendations_list.dart:15:  Widget build(BuildContext context) {
+lib/features/analytics/widgets/prediction_analytics_card.dart:11:  Widget build(BuildContext context) {
+lib/features/analytics/widgets/health_analytics_card.dart:12:  Widget build(BuildContext context) {
+lib/main.dart:309:      setState(() {
+lib/main.dart:367:  Widget build(BuildContext context) {

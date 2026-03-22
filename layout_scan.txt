@@ -1,0 +1,2084 @@
+lib/core/ui/adaptive_messages.dart:93:          content: Row(
+lib/core/ui/adaptive_messages.dart:97:              Expanded(
+lib/core/ui/adaptive_components.dart:69:                ? Row(mainAxisSize: MainAxisSize.min, children: actions)
+lib/core/ui/adaptive_components.dart:128:          child: Row(
+lib/core/ui/adaptive_components.dart:171:            child: Row(
+lib/core/ui/adaptive_components.dart:207:            child: Row(
+lib/core/ui/adaptive_components.dart:266:        child: Column(
+lib/core/ui/adaptive_components.dart:411:      return Row(
+lib/core/ui/adaptive_components.dart:414:          Expanded(
+lib/core/ui/adaptive_components.dart:679:            child: Column(
+lib/core/ui/adaptive_components.dart:684:                  child: Column(
+lib/core/utils/time_utils.dart:111:  static bool isTomorrow(DateTime dateTime) {
+lib/core/utils/time_utils.dart:217:    } else if (isTomorrow(dateTime)) {
+lib/core/enhancements/app_enhancements.dart:40:    return Column(
+lib/core/enhancements/app_enhancements.dart:46:          child: Stack(
+lib/core/enhancements/app_enhancements.dart:151:            : Row(
+lib/core/enhancements/app_enhancements.dart:237:    return Column(
+lib/core/enhancements/app_enhancements.dart:288:    return Column(
+lib/core/visuals/consumer_visual_engine.dart:497:          child: Stack(
+lib/core/routing/app_router.dart:353:                child: Row(
+lib/core/routing/app_router.dart:380:        child: Column(
+lib/core/services/export_import_service.dart:497:          return pw.Column(
+lib/core/services/data_export_service.dart:176:    return pw.Column(
+lib/core/services/data_export_service.dart:204:      child: pw.Column(
+lib/core/services/data_export_service.dart:212:          pw.Row(
+lib/core/services/data_export_service.dart:230:    return pw.Column(
+lib/core/services/data_export_service.dart:248:    return pw.Column(
+lib/core/services/data_export_service.dart:281:    return pw.Column(
+lib/core/services/data_export_service.dart:299:    return pw.Column(
+lib/core/services/onboarding_tutorial_service.dart:413:        child: Stack(
+lib/core/services/onboarding_tutorial_service.dart:433:                  child: Column(
+lib/core/services/onboarding_tutorial_service.dart:438:                      Row(
+lib/core/services/onboarding_tutorial_service.dart:488:                      Row(
+lib/core/widgets/notification_icon.dart:36:        child: Stack(
+lib/core/widgets/animated_micro_interactions.dart:81:    return Stack(
+lib/core/widgets/error_boundary.dart:75:          child: Column(
+lib/core/widgets/error_boundary.dart:139:              Column(
+lib/core/widgets/error_boundary.dart:165:                              child: Row(
+lib/core/widgets/error_boundary.dart:215:                          child: Row(
+lib/core/widgets/error_boundary.dart:255:                          child: Row(
+lib/core/widgets/error_boundary.dart:301:                      child: Column(
+lib/core/widgets/error_boundary.dart:304:                          Row(
+lib/core/widgets/medical_citations_footer.dart:28:      child: Column(
+lib/core/widgets/medical_citations_footer.dart:32:          Row(
+lib/core/widgets/medical_citations_footer.dart:40:              Expanded(
+lib/core/widgets/medical_citations_footer.dart:72:                      child: Column(
+lib/core/widgets/medical_citations_footer.dart:85:                          const Expanded(child: MedicalCitationsSection()),
+lib/core/widgets/medical_disclaimer_banner.dart:33:      child: Row(
+lib/core/widgets/medical_disclaimer_banner.dart:41:          Expanded(
+lib/core/widgets/medical_disclaimer_banner.dart:42:            child: Column(
+lib/core/widgets/medical_disclaimer_banner.dart:72:                          child: Column(
+lib/core/widgets/medical_disclaimer_banner.dart:88:                              const Expanded(child: MedicalCitationsSection()),
+lib/core/widgets/advanced_chart_widget.dart:82:      child: Column(
+lib/core/widgets/coming_soon_widget.dart:49:            child: Column(
+lib/core/widgets/coming_soon_widget.dart:108:      child: Stack(
+lib/core/widgets/coming_soon_widget.dart:168:    return Column(
+lib/core/widgets/coming_soon_widget.dart:250:      child: Column(
+lib/core/widgets/coming_soon_widget.dart:254:          Row(
+lib/core/widgets/coming_soon_widget.dart:278:                  Row(
+lib/core/widgets/coming_soon_widget.dart:291:                          Expanded(
+lib/core/widgets/coming_soon_widget.dart:345:      child: Row(
+lib/core/widgets/modern_button.dart:303:    return Row(
+lib/core/widgets/modern_button.dart:311:        Flexible(
+lib/core/widgets/citation_widget.dart:33:      child: Row(
+lib/core/widgets/citation_widget.dart:59:        title: Row(
+lib/core/widgets/citation_widget.dart:67:            Expanded(
+lib/core/widgets/citation_widget.dart:76:          child: Column(
+lib/core/widgets/citation_widget.dart:108:      child: Row(
+lib/core/widgets/citation_widget.dart:113:          Expanded(
+lib/core/widgets/citation_widget.dart:114:            child: Column(
+lib/core/widgets/flow_ai_logo.dart:106:        child: Stack(
+lib/core/widgets/flow_ai_logo.dart:133:                child: Stack(
+lib/core/widgets/flow_ai_logo.dart:159:                      child: Row(
+lib/core/widgets/flow_ai_logo.dart:238:        return Row(
+lib/core/widgets/flow_ai_logo.dart:248:        return Column(
+lib/core/widgets/coming_soon_card.dart:62:      child: Column(
+lib/core/widgets/coming_soon_card.dart:82:            child: Row(
+lib/core/widgets/coming_soon_card.dart:110:                Expanded(
+lib/core/widgets/coming_soon_card.dart:111:                  child: Column(
+lib/core/widgets/coming_soon_card.dart:171:            child: Column(
+lib/core/widgets/coming_soon_card.dart:196:                      child: Row(
+lib/core/widgets/coming_soon_card.dart:208:                          Expanded(
+lib/core/widgets/coming_soon_card.dart:243:                    child: Row(
+lib/core/widgets/coming_soon_card.dart:301:                      child: Row(
+lib/core/widgets/pressable_avatar.dart:93:          child: Stack(
+lib/core/analytics/performance_analytics_dashboard.dart:517:        child: Column(
+lib/core/analytics/performance_analytics_dashboard.dart:1335:        child: Column(
+lib/core/analytics/performance_analytics_dashboard.dart:1343:            _buildMetricRow(
+lib/core/analytics/performance_analytics_dashboard.dart:1347:            _buildMetricRow(
+lib/core/analytics/performance_analytics_dashboard.dart:1351:            _buildMetricRow(
+lib/core/analytics/performance_analytics_dashboard.dart:1355:            _buildMetricRow(
+lib/core/analytics/performance_analytics_dashboard.dart:1365:  Widget _buildMetricRow(String label, String value) {
+lib/core/analytics/performance_analytics_dashboard.dart:1368:      child: Row(
+lib/core/analytics/performance_analytics_dashboard.dart:1395:        child: Column(
+lib/core/analytics/performance_analytics_dashboard.dart:1413:      child: Row(
+lib/core/analytics/performance_analytics_dashboard.dart:1418:          Expanded(child: Text(insight.message)),
+lib/features/insights/screens/ai_coach_screen.dart:19:      body: Column(
+lib/features/insights/screens/ai_coach_screen.dart:21:          Expanded(
+lib/features/insights/screens/ai_coach_screen.dart:43:        title: Row(
+lib/features/insights/screens/faq_browser_screen.dart:138:                    child: Column(
+lib/features/insights/screens/faq_browser_screen.dart:398:                child: Column(
+lib/features/insights/screens/faq_browser_screen.dart:409:                    Row(
+lib/features/insights/screens/faq_browser_screen.dart:478:            child: Column(
+lib/features/insights/screens/faq_browser_screen.dart:494:                  child: Row(
+lib/features/insights/screens/faq_browser_screen.dart:515:                      Expanded(
+lib/features/insights/screens/faq_browser_screen.dart:516:                        child: Column(
+lib/features/insights/screens/faq_browser_screen.dart:555:                    child: Row(
+lib/features/insights/screens/faq_browser_screen.dart:557:                        Expanded(
+lib/features/insights/screens/faq_browser_screen.dart:576:                Expanded(
+lib/features/insights/screens/faq_browser_screen.dart:578:                    child: Column(
+lib/features/insights/screens/insights_screen.dart:73:        body: Stack(
+lib/features/insights/screens/insights_screen.dart:82:                child: Column(
+lib/features/insights/screens/insights_screen.dart:94:                    Expanded(
+lib/features/insights/screens/insights_screen.dart:121:      child: Row(
+lib/features/insights/screens/insights_screen.dart:124:          Expanded(
+lib/features/insights/screens/insights_screen.dart:125:            child: Column(
+lib/features/insights/screens/insights_screen.dart:171:            child: Row(
+lib/features/insights/screens/insights_screen.dart:206:      child: Row(
+lib/features/insights/screens/insights_screen.dart:212:          return Expanded(
+lib/features/insights/screens/insights_screen.dart:321:          child: Column(
+lib/features/insights/screens/insights_screen.dart:386:          child: Column(
+lib/features/insights/screens/insights_screen.dart:422:          child: Column(
+lib/features/insights/screens/analytics_dashboard_screen.dart:52:          child: Column(
+lib/features/insights/screens/analytics_dashboard_screen.dart:61:              Expanded(
+lib/features/insights/screens/analytics_dashboard_screen.dart:82:      child: Row(
+lib/features/insights/screens/analytics_dashboard_screen.dart:86:          Expanded(
+lib/features/insights/screens/analytics_dashboard_screen.dart:87:            child: Column(
+lib/features/insights/screens/analytics_dashboard_screen.dart:148:                child: Row(
+lib/features/insights/screens/analytics_dashboard_screen.dart:232:          child: Column(
+lib/features/insights/screens/analytics_dashboard_screen.dart:245:              Row(
+lib/features/insights/screens/analytics_dashboard_screen.dart:247:                  Expanded(
+lib/features/insights/screens/analytics_dashboard_screen.dart:256:                  Expanded(
+lib/features/insights/screens/analytics_dashboard_screen.dart:287:          child: Column(
+lib/features/insights/screens/analytics_dashboard_screen.dart:313:      child: Column(
+lib/features/insights/screens/analytics_dashboard_screen.dart:345:      child: Column(
+lib/features/insights/screens/analytics_dashboard_screen.dart:414:      child: Column(
+lib/features/insights/screens/analytics_dashboard_screen.dart:459:      child: Column(
+lib/features/insights/screens/analytics_dashboard_screen.dart:512:      child: Column(
+lib/features/insights/screens/analytics_dashboard_screen.dart:515:          Row(
+lib/features/insights/screens/analytics_dashboard_screen.dart:528:              Expanded(
+lib/features/insights/screens/analytics_dashboard_screen.dart:765:      child: Column(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:137:          child: Column(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:257:        child: Column(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:260:            Row(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:276:                Expanded(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:277:                  child: Column(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:297:            Row(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:299:                return Expanded(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:315:      child: Column(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:317:          Stack(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:356:          child: Column(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:384:        child: Column(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:387:            Row(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:408:                  child: Row(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:502:      child: Column(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:524:        child: Column(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:527:            Row(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:541:                child: Column(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:581:      child: Column(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:584:          Row(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:588:              Expanded(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:638:        child: Column(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:641:            Row(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:723:        child: Column(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:726:            Row(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:755:      child: Row(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:759:          Expanded(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:194:              child: Column(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:198:                  Row(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:214:                      Expanded(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:215:                        child: Column(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:263:    return Row(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:301:      child: Column(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:334:        child: Column(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:345:            Row(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:347:                Expanded(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:357:                Expanded(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:369:            Row(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:371:                Expanded(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:381:                Expanded(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:419:      child: Column(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:422:          Row(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:475:        child: Column(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:478:            Row(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:554:      child: Column(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:557:          Row(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:575:              Expanded(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:576:                child: Column(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:628:            Row(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:679:        child: Column(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:793:        child: Column(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:836:      child: Column(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:839:          Row(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:855:              Expanded(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:886:          Row(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:888:              Expanded(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:919:        child: Column(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:930:            Row(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:932:                Expanded(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:942:                Expanded(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:954:            Row(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:956:                Expanded(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:966:                Expanded(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1007:        child: Column(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1044:        child: Column(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1115:        child: Row(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1394:              Row(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1412:                  Expanded(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1413:                    child: Column(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1453:              Row(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1455:                  Expanded(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1462:                      child: Column(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1487:                  Expanded(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1494:                      child: Column(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1532:                  child: Column(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1535:                      Row(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1569:              Row(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1571:                  Expanded(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1588:                  Expanded(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1656:        child: Column(
+lib/features/insights/widgets/floating_ai_chat.dart:226:    return Stack(
+lib/features/insights/widgets/floating_ai_chat.dart:266:                    child: Column(
+lib/features/insights/widgets/floating_ai_chat.dart:272:                        Expanded(
+lib/features/insights/widgets/floating_ai_chat.dart:273:                          child: Column(
+lib/features/insights/widgets/floating_ai_chat.dart:276:                              Expanded(
+lib/features/insights/widgets/floating_ai_chat.dart:345:                          : Stack(
+lib/features/insights/widgets/floating_ai_chat.dart:422:      child: Row(
+lib/features/insights/widgets/floating_ai_chat.dart:424:          Expanded(
+lib/features/insights/widgets/floating_ai_chat.dart:495:      child: Column(
+lib/features/insights/widgets/floating_ai_chat.dart:531:          Row(
+lib/features/insights/widgets/floating_ai_chat.dart:561:              Expanded(
+lib/features/insights/widgets/floating_ai_chat.dart:562:                child: Column(
+lib/features/insights/widgets/floating_ai_chat.dart:574:                    Row(
+lib/features/insights/widgets/floating_ai_chat.dart:605:              Row(
+lib/features/insights/widgets/floating_ai_chat.dart:663:            child: Row(
+lib/features/insights/widgets/floating_ai_chat.dart:672:                Expanded(
+lib/features/insights/widgets/floating_ai_chat.dart:738:    return Column(
+lib/features/insights/widgets/floating_ai_chat.dart:743:        Row(
+lib/features/insights/widgets/floating_ai_chat.dart:865:      child: Row(
+lib/features/insights/widgets/floating_ai_chat.dart:868:          Expanded(
+lib/features/insights/widgets/floating_ai_chat.dart:969:      child: Column(
+lib/features/insights/widgets/prediction_accuracy_card.dart:33:      child: Column(
+lib/features/insights/widgets/prediction_accuracy_card.dart:37:          Row(
+lib/features/insights/widgets/prediction_accuracy_card.dart:66:            child: Stack(
+lib/features/insights/widgets/prediction_accuracy_card.dart:81:                Column(
+lib/features/insights/widgets/prediction_accuracy_card.dart:107:          Row(
+lib/features/insights/widgets/prediction_accuracy_card.dart:143:            child: Column(
+lib/features/insights/widgets/prediction_accuracy_card.dart:180:    return Column(
+lib/features/insights/widgets/prediction_accuracy_card.dart:242:        title: Row(
+lib/features/insights/widgets/prediction_accuracy_card.dart:250:          child: Column(
+lib/features/insights/widgets/prediction_accuracy_card.dart:301:      child: Row(
+lib/features/insights/widgets/prediction_accuracy_card.dart:306:          Expanded(
+lib/features/insights/widgets/prediction_accuracy_card.dart:307:            child: Column(
+lib/features/insights/widgets/ai_insight_card.dart.bak:33:      child: Column(
+lib/features/insights/widgets/ai_insight_card.dart.bak:46:            child: Row(
+lib/features/insights/widgets/ai_insight_card.dart.bak:55:                Expanded(
+lib/features/insights/widgets/ai_insight_card.dart.bak:71:          Row(
+lib/features/insights/widgets/ai_insight_card.dart.bak:86:              Expanded(
+lib/features/insights/widgets/ai_insight_card.dart.bak:123:                child: Row(
+lib/features/insights/widgets/ai_insight_card.dart.bak:135:                    Expanded(
+lib/features/insights/widgets/ai_insight_card.dart.bak:165:              child: Row(
+lib/features/insights/widgets/ai_insight_card.dart.bak:344:      child: Column(
+lib/features/insights/widgets/ai_insight_card.dart.bak:348:          Row(
+lib/features/insights/widgets/ai_insight_card.dart.bak:350:              Expanded(
+lib/features/insights/widgets/ai_insight_card.dart.bak:385:            child: Row(
+lib/features/insights/widgets/ai_insight_card.dart:33:      child: Column(
+lib/features/insights/widgets/ai_insight_card.dart:46:            child: Row(
+lib/features/insights/widgets/ai_insight_card.dart:55:                Expanded(
+lib/features/insights/widgets/ai_insight_card.dart:71:          Row(
+lib/features/insights/widgets/ai_insight_card.dart:86:              Expanded(
+lib/features/insights/widgets/ai_insight_card.dart:123:                child: Row(
+lib/features/insights/widgets/ai_insight_card.dart:135:                    Expanded(
+lib/features/insights/widgets/ai_insight_card.dart:165:              child: Row(
+lib/features/insights/widgets/ai_insight_card.dart:344:      child: Column(
+lib/features/insights/widgets/ai_insight_card.dart:348:          Row(
+lib/features/insights/widgets/ai_insight_card.dart:350:              Expanded(
+lib/features/insights/widgets/ai_insight_card.dart:385:            child: Row(
+lib/features/insights/widgets/cycle_length_chart.dart:38:      child: Column(
+lib/features/insights/widgets/cycle_length_chart.dart:42:          Row(
+lib/features/insights/widgets/cycle_length_chart.dart:60:              Expanded(
+lib/features/insights/widgets/cycle_length_chart.dart:61:                child: Column(
+lib/features/insights/widgets/cycle_length_chart.dart:110:    return Column(
+lib/features/insights/widgets/cycle_length_chart.dart:155:        child: Column(
+lib/features/insights/widgets/cycle_regularity_indicator.dart:35:      child: Column(
+lib/features/insights/widgets/cycle_regularity_indicator.dart:39:          Row(
+lib/features/insights/widgets/cycle_regularity_indicator.dart:67:          Row(
+lib/features/insights/widgets/cycle_regularity_indicator.dart:69:              Expanded(
+lib/features/insights/widgets/cycle_regularity_indicator.dart:70:                child: Column(
+lib/features/insights/widgets/cycle_regularity_indicator.dart:73:                    Row(
+lib/features/insights/widgets/cycle_regularity_indicator.dart:132:            child: Column(
+lib/features/insights/widgets/cycle_regularity_indicator.dart:134:                Row(
+lib/features/insights/widgets/cycle_regularity_indicator.dart:136:                    Expanded(
+lib/features/insights/widgets/cycle_regularity_indicator.dart:146:                    Expanded(
+lib/features/insights/widgets/cycle_regularity_indicator.dart:158:                Row(
+lib/features/insights/widgets/cycle_regularity_indicator.dart:160:                    Expanded(
+lib/features/insights/widgets/cycle_regularity_indicator.dart:170:                    Expanded(
+lib/features/insights/widgets/cycle_regularity_indicator.dart:201:            child: Row(
+lib/features/insights/widgets/cycle_regularity_indicator.dart:209:                Expanded(
+lib/features/insights/widgets/cycle_regularity_indicator.dart:231:            child: Row(
+lib/features/insights/widgets/cycle_regularity_indicator.dart:260:    return Column(
+lib/features/insights/widgets/cycle_regularity_indicator.dart:263:        Row(
+lib/features/insights/widgets/cycle_regularity_indicator.dart:363:        title: Row(
+lib/features/insights/widgets/cycle_regularity_indicator.dart:371:          child: Column(
+lib/features/insights/widgets/cycle_regularity_indicator.dart:418:      child: Row(
+lib/features/insights/widgets/cycle_regularity_indicator.dart:423:          Expanded(
+lib/features/insights/widgets/cycle_regularity_indicator.dart:424:            child: Column(
+lib/features/insights/widgets/symptom_heatmap.dart:42:      child: Column(
+lib/features/insights/widgets/symptom_heatmap.dart:46:          Row(
+lib/features/insights/widgets/symptom_heatmap.dart:49:              Row(
+lib/features/insights/widgets/symptom_heatmap.dart:88:            Row(
+lib/features/insights/widgets/symptom_heatmap.dart:119:                child: Row(
+lib/features/insights/widgets/symptom_heatmap.dart:138:                    Expanded(
+lib/features/insights/widgets/symptom_heatmap.dart:139:                      child: Row(
+lib/features/insights/widgets/symptom_heatmap.dart:147:                              return Expanded(
+lib/features/insights/widgets/symptom_heatmap.dart:218:            child: Column(
+lib/features/insights/widgets/symptom_heatmap.dart:234:                    child: Row(
+lib/features/insights/widgets/symptom_heatmap.dart:242:                        Expanded(
+lib/features/insights/widgets/symptom_heatmap.dart:280:      child: Column(
+lib/features/insights/widgets/mood_energy_chart.dart:43:      child: Column(
+lib/features/insights/widgets/mood_energy_chart.dart:47:          Row(
+lib/features/insights/widgets/mood_energy_chart.dart:50:              Row(
+lib/features/insights/widgets/mood_energy_chart.dart:87:          Row(
+lib/features/insights/widgets/mood_energy_chart.dart:258:            child: Row(
+lib/features/insights/widgets/mood_energy_chart.dart:305:      child: Column(
+lib/features/insights/widgets/mood_energy_chart.dart:336:    return Row(
+lib/features/insights/widgets/mood_energy_chart.dart:368:    return Column(
+lib/features/settings/screens/account_management_screen.dart:127:                  title: Row(
+lib/features/settings/screens/account_management_screen.dart:149:                      Flexible(
+lib/features/settings/screens/account_management_screen.dart:169:                  child: Column(
+lib/features/settings/screens/account_management_screen.dart:215:          child: Column(
+lib/features/settings/screens/account_management_screen.dart:218:              Row(
+lib/features/settings/screens/account_management_screen.dart:252:                Row(
+lib/features/settings/screens/account_management_screen.dart:254:                    Expanded(
+lib/features/settings/screens/account_management_screen.dart:294:          child: Column(
+lib/features/settings/screens/account_management_screen.dart:297:              Row(
+lib/features/settings/screens/account_management_screen.dart:550:          content: Row(
+lib/features/settings/screens/account_management_screen.dart:575:        title: const Row(
+lib/features/settings/screens/account_management_screen.dart:582:        content: Column(
+lib/features/settings/screens/account_management_screen.dart:697:          content: Row(
+lib/features/settings/screens/account_management_screen.dart:725:        title: const Row(
+lib/features/settings/screens/account_management_screen.dart:766:        title: const Row(
+lib/features/settings/screens/account_management_screen.dart:807:        title: const Row(
+lib/features/settings/screens/account_management_screen.dart:814:        content: const Column(
+lib/features/settings/screens/account_management_screen.dart:867:          content: Column(
+lib/features/settings/screens/account_management_screen.dart:886:          content: Row(
+lib/features/settings/screens/account_management_screen.dart:917:        title: const Row(
+lib/features/settings/screens/settings_screen.dart:102:                  title: Row(
+lib/features/settings/screens/settings_screen.dart:146:                  child: Column(
+lib/features/settings/screens/settings_screen.dart:343:                                        child: Row(
+lib/features/settings/screens/settings_screen.dart:832:        title: Row(
+lib/features/settings/screens/settings_screen.dart:836:            Expanded(
+lib/features/settings/screens/settings_screen.dart:845:          child: Column(
+lib/features/settings/screens/settings_screen.dart:858:                child: Row(
+lib/features/settings/screens/settings_screen.dart:866:                    Expanded(
+lib/features/settings/screens/settings_screen.dart:924:                child: Row(
+lib/features/settings/screens/settings_screen.dart:933:                    Expanded(
+lib/features/settings/screens/settings_screen.dart:984:      child: Row(
+lib/features/settings/screens/settings_screen.dart:993:          Expanded(
+lib/features/settings/screens/settings_screen.dart:1014:        title: Row(
+lib/features/settings/screens/settings_screen.dart:1026:          child: Column(
+lib/features/settings/screens/settings_screen.dart:1053:                child: Column(
+lib/features/settings/screens/settings_screen.dart:1056:                    Row(
+lib/features/settings/screens/settings_screen.dart:1105:      child: Row(
+lib/features/settings/screens/settings_screen.dart:1126:          child: Column(
+lib/features/settings/screens/settings_screen.dart:1139:              const Expanded(child: MedicalCitationsSection()),
+lib/features/settings/screens/settings_screen.dart:1153:        title: Row(
+lib/features/settings/screens/settings_screen.dart:1161:          child: Column(
+lib/features/settings/screens/settings_screen.dart:1174:                child: Column(
+lib/features/settings/screens/settings_screen.dart:1309:          title: Row(
+lib/features/settings/screens/settings_screen.dart:1497:            child: Column(
+lib/features/settings/screens/settings_screen.dart:1547:        content: Column(
+lib/features/settings/screens/settings_screen.dart:1596:        title: Row(
+lib/features/settings/screens/settings_screen.dart:1717:        title: Row(
+lib/features/settings/screens/settings_screen.dart:1779:      title: Row(
+lib/features/settings/screens/settings_screen.dart:1788:        child: Column(
+lib/features/settings/screens/settings_screen.dart:1820:    child: Column(
+lib/features/settings/screens/settings_screen.dart:1823:        Row(
+lib/features/settings/screens/help_screen.dart:84:        title: Row(
+lib/features/settings/screens/help_screen.dart:120:        child: Column(
+lib/features/settings/screens/help_screen.dart:142:              child: Column(
+lib/features/settings/screens/help_screen.dart:253:              child: Column(
+lib/features/settings/screens/help_screen.dart:256:                  Row(
+lib/features/settings/screens/help_screen.dart:277:                      Expanded(
+lib/features/settings/screens/help_screen.dart:278:                        child: Column(
+lib/features/settings/screens/help_screen.dart:367:        child: Row(
+lib/features/settings/screens/help_screen.dart:379:            Expanded(
+lib/features/settings/screens/help_screen.dart:380:              child: Column(
+lib/features/settings/screens/help_screen.dart:444:        title: Row(
+lib/features/settings/screens/help_screen.dart:465:        content: Column(
+lib/features/settings/screens/help_screen.dart:531:        title: Row(
+lib/features/settings/screens/help_screen.dart:548:        content: Column(
+lib/features/settings/screens/help_screen.dart:564:              child: Row(
+lib/features/settings/screens/help_screen.dart:566:                  const Expanded(
+lib/features/settings/screens/help_screen.dart:633:        child: Row(
+lib/features/settings/screens/help_screen.dart:645:            Expanded(
+lib/features/settings/screens/help_screen.dart:646:              child: Column(
+lib/features/settings/widgets/theme_switcher_card.dart:41:                child: Column(
+lib/features/settings/widgets/theme_switcher_card.dart:45:                    Row(
+lib/features/settings/widgets/theme_switcher_card.dart:66:                        Expanded(
+lib/features/settings/widgets/theme_switcher_card.dart:67:                          child: Column(
+lib/features/settings/widgets/theme_switcher_card.dart:96:                    Row(
+lib/features/settings/widgets/theme_switcher_card.dart:98:                        Expanded(
+lib/features/settings/widgets/theme_switcher_card.dart:112:                        Expanded(
+lib/features/settings/widgets/theme_switcher_card.dart:126:                        Expanded(
+lib/features/settings/widgets/theme_switcher_card.dart:191:        child: Column(
+lib/features/settings/widgets/settings_section.dart:31:      child: Column(
+lib/features/settings/widgets/settings_section.dart:37:            child: Row(
+lib/features/settings/widgets/settings_section.dart:51:                Expanded(
+lib/features/settings/widgets/language_selector.dart:52:      child: Column(
+lib/features/settings/widgets/language_selector.dart:68:            child: Row(
+lib/features/settings/widgets/language_selector.dart:132:          Expanded(
+lib/features/settings/widgets/theme_selector.dart:26:      child: Column(
+lib/features/settings/widgets/theme_selector.dart:42:            child: Row(
+lib/features/settings/widgets/theme_selector.dart:73:          Expanded(
+lib/features/settings/widgets/profile_section.dart:40:          child: Row(
+lib/features/settings/widgets/profile_section.dart:82:              Expanded(
+lib/features/settings/widgets/profile_section.dart:83:                child: Column(
+lib/features/settings/widgets/profile_section.dart:89:                      child: Row(
+lib/features/settings/widgets/profile_section.dart:91:                          Expanded(
+lib/features/settings/widgets/profile_section.dart:128:                    Row(
+lib/features/settings/widgets/profile_section.dart:175:      child: Row(
+lib/features/settings/widgets/profile_section.dart:254:        child: Column(
+lib/features/settings/widgets/profile_section.dart:278:            Row(
+lib/features/settings/widgets/profile_section.dart:319:      child: Column(
+lib/features/settings/widgets/medical_citations_section.dart:38:    return Column(
+lib/features/settings/widgets/medical_citations_section.dart:44:          child: Column(
+lib/features/settings/widgets/medical_citations_section.dart:47:              Row(
+lib/features/settings/widgets/medical_citations_section.dart:55:                  Expanded(
+lib/features/settings/widgets/medical_citations_section.dart:76:                child: Row(
+lib/features/settings/widgets/medical_citations_section.dart:84:                    Expanded(
+lib/features/settings/widgets/medical_citations_section.dart:127:            child: Row(
+lib/features/settings/widgets/medical_citations_section.dart:143:        Expanded(child: _buildCitationsList(context)),
+lib/features/settings/widgets/medical_citations_section.dart:194:        child: Column(
+lib/features/settings/widgets/medical_citations_section.dart:239:        return Column(
+lib/features/settings/widgets/medical_citations_section.dart:272:        child: Column(
+lib/features/settings/widgets/medical_citations_section.dart:305:              Row(
+lib/features/settings/widgets/medical_citations_section.dart:314:                    Expanded(
+lib/features/settings/widgets/cyclesync_integration.dart:55:              child: Column(
+lib/features/settings/widgets/cyclesync_integration.dart:57:                  Row(
+lib/features/settings/widgets/cyclesync_integration.dart:80:                      Expanded(
+lib/features/settings/widgets/cyclesync_integration.dart:81:                        child: Column(
+lib/features/settings/widgets/cyclesync_integration.dart:84:                            Row(
+lib/features/settings/widgets/cyclesync_integration.dart:142:                      child: Row(
+lib/features/settings/widgets/cyclesync_integration.dart:150:                          Expanded(
+lib/features/settings/widgets/cyclesync_integration.dart:151:                            child: Column(
+lib/features/settings/widgets/cyclesync_integration.dart:271:              child: Column(
+lib/features/settings/widgets/cyclesync_integration.dart:274:                  Row(
+lib/features/settings/widgets/cyclesync_integration.dart:306:                    child: const Row(
+lib/features/settings/widgets/cyclesync_integration.dart:400:        content: const Column(
+lib/features/settings/widgets/cyclesync_integration.dart:443:        child: Column(
+lib/features/settings/widgets/cyclesync_integration.dart:465:            const Expanded(
+lib/features/settings/widgets/cyclesync_integration.dart:467:                child: Column(
+lib/features/settings/widgets/cyclesync_integration.dart:497:            title: Row(
+lib/features/settings/widgets/cyclesync_integration.dart:511:                const Expanded(
+lib/features/settings/widgets/cyclesync_integration.dart:520:              child: Column(
+lib/features/settings/widgets/cyclesync_integration.dart:619:          child: Column(
+lib/features/settings/widgets/cyclesync_integration.dart:673:                child: Column(
+lib/features/settings/widgets/cyclesync_integration.dart:739:      child: Row(
+lib/features/settings/widgets/cyclesync_integration.dart:743:          Expanded(
+lib/features/settings/widgets/cyclesync_integration.dart:763:          child: Column(
+lib/features/settings/widgets/settings_tile.dart:43:            child: Row(
+lib/features/settings/widgets/settings_tile.dart:47:                Expanded(
+lib/features/settings/widgets/settings_tile.dart:48:                  child: Column(
+lib/features/future_plans/screens/future_plans_screen.dart:164:              background: Stack(
+lib/features/future_plans/screens/future_plans_screen.dart:211:                    child: Column(
+lib/features/future_plans/screens/future_plans_screen.dart:243:              child: Column(
+lib/features/future_plans/screens/future_plans_screen.dart:255:                    child: Row(
+lib/features/future_plans/screens/future_plans_screen.dart:332:              child: Column(
+lib/features/_disabled_experimental/gamification/screens/gamification_dashboard_screen.dart:149:              child: Column(
+lib/features/_disabled_experimental/gamification/screens/gamification_dashboard_screen.dart:209:    return Row(
+lib/features/_disabled_experimental/gamification/screens/gamification_dashboard_screen.dart:211:        Expanded(
+lib/features/_disabled_experimental/gamification/screens/gamification_dashboard_screen.dart:223:        Expanded(
+lib/features/_disabled_experimental/gamification/screens/gamification_dashboard_screen.dart:235:        Expanded(
+lib/features/_disabled_experimental/gamification/screens/gamification_dashboard_screen.dart:266:      child: Column(
+lib/features/_disabled_experimental/gamification/screens/gamification_dashboard_screen.dart:301:            child: Column(
+lib/features/_disabled_experimental/gamification/screens/gamification_dashboard_screen.dart:428:    return Row(
+lib/features/_disabled_experimental/gamification/screens/gamification_dashboard_screen.dart:441:        Expanded(
+lib/features/_disabled_experimental/gamification/screens/gamification_dashboard_screen.dart:442:          child: Column(
+lib/features/_disabled_experimental/gamification/screens/gamification_dashboard_screen.dart:487:      child: Column(
+lib/features/_disabled_experimental/gamification/screens/gamification_dashboard_screen.dart:489:          Row(
+lib/features/_disabled_experimental/gamification/screens/gamification_dashboard_screen.dart:499:              Expanded(
+lib/features/_disabled_experimental/gamification/screens/gamification_dashboard_screen.dart:500:                child: Column(
+lib/features/_disabled_experimental/gamification/screens/gamification_dashboard_screen.dart:536:            child: Row(
+lib/features/_disabled_experimental/gamification/screens/gamification_dashboard_screen.dart:548:                      child: Column(
+lib/features/_disabled_experimental/gamification/screens/gamification_dashboard_screen.dart:633:        content: Column(
+lib/features/_disabled_experimental/gamification/widgets/achievement_card.dart:39:            child: Column(
+lib/features/_disabled_experimental/gamification/widgets/achievement_card.dart:42:                Row(
+lib/features/_disabled_experimental/gamification/widgets/achievement_card.dart:61:                    Expanded(
+lib/features/_disabled_experimental/gamification/widgets/achievement_card.dart:62:                      child: Column(
+lib/features/_disabled_experimental/gamification/widgets/achievement_card.dart:65:                          Row(
+lib/features/_disabled_experimental/gamification/widgets/achievement_card.dart:67:                              Expanded(
+lib/features/_disabled_experimental/gamification/widgets/achievement_card.dart:157:                  Column(
+lib/features/_disabled_experimental/gamification/widgets/achievement_card.dart:160:                      Row(
+lib/features/_disabled_experimental/gamification/widgets/achievement_card.dart:196:                Row(
+lib/features/_disabled_experimental/gamification/widgets/achievement_card.dart:200:                    Row(
+lib/features/_disabled_experimental/gamification/widgets/achievement_card.dart:282:            child: Column(
+lib/features/_disabled_experimental/gamification/widgets/streak_widget.dart:33:            child: Column(
+lib/features/_disabled_experimental/gamification/widgets/streak_widget.dart:37:                Row(
+lib/features/_disabled_experimental/gamification/widgets/streak_widget.dart:56:                    Expanded(
+lib/features/_disabled_experimental/gamification/widgets/streak_widget.dart:57:                      child: Column(
+lib/features/_disabled_experimental/gamification/widgets/streak_widget.dart:89:                      child: Column(
+lib/features/_disabled_experimental/gamification/widgets/streak_widget.dart:115:                Row(
+lib/features/_disabled_experimental/gamification/widgets/streak_widget.dart:117:                    Expanded(
+lib/features/_disabled_experimental/gamification/widgets/streak_widget.dart:126:                    Expanded(
+lib/features/_disabled_experimental/gamification/widgets/streak_widget.dart:135:                    Expanded(
+lib/features/_disabled_experimental/gamification/widgets/streak_widget.dart:166:                    child: Row(
+lib/features/_disabled_experimental/gamification/widgets/streak_widget.dart:170:                        Expanded(
+lib/features/_disabled_experimental/gamification/widgets/streak_widget.dart:211:      child: Column(
+lib/features/_disabled_experimental/gamification/widgets/streak_widget.dart:233:    return Column(
+lib/features/_disabled_experimental/gamification/widgets/streak_widget.dart:245:        Row(
+lib/features/_disabled_experimental/gamification/widgets/streak_widget.dart:263:            return Column(
+lib/features/_disabled_experimental/gamification/widgets/streak_widget.dart:385:          child: Column(
+lib/features/_disabled_experimental/gamification/widgets/challenge_card.dart:39:            child: Column(
+lib/features/_disabled_experimental/gamification/widgets/challenge_card.dart:43:                Row(
+lib/features/_disabled_experimental/gamification/widgets/challenge_card.dart:62:                    Expanded(
+lib/features/_disabled_experimental/gamification/widgets/challenge_card.dart:63:                      child: Column(
+lib/features/_disabled_experimental/gamification/widgets/challenge_card.dart:74:                          Row(
+lib/features/_disabled_experimental/gamification/widgets/challenge_card.dart:137:                  Column(
+lib/features/_disabled_experimental/gamification/widgets/challenge_card.dart:140:                      Row(
+lib/features/_disabled_experimental/gamification/widgets/challenge_card.dart:181:                Row(
+lib/features/_disabled_experimental/gamification/widgets/challenge_card.dart:199:                    Expanded(
+lib/features/_disabled_experimental/gamification/widgets/challenge_card.dart:224:                      child: Row(
+lib/features/_disabled_experimental/gamification/widgets/challenge_card.dart:228:                          Expanded(
+lib/features/_disabled_experimental/gamification/widgets/challenge_card.dart:245:                Row(
+lib/features/_disabled_experimental/gamification/widgets/challenge_card.dart:249:                    Row(
+lib/features/_disabled_experimental/gamification/widgets/challenge_card.dart:309:                        child: Row(
+lib/features/_disabled_experimental/gamification/widgets/challenge_card.dart:370:            child: Column(
+lib/features/_disabled_experimental/gamification/widgets/challenge_card.dart:374:                Row(
+lib/features/_disabled_experimental/gamification/widgets/challenge_card.dart:453:                Row(
+lib/features/_disabled_experimental/community/screens/community_hub_screen.dart:153:              child: Column(
+lib/features/_disabled_experimental/community/screens/community_hub_screen.dart:220:      child: Row(
+lib/features/_disabled_experimental/community/screens/community_hub_screen.dart:394:        child: Column(
+lib/features/_disabled_experimental/community/screens/community_hub_screen.dart:471:            Row(
+lib/features/_disabled_experimental/community/screens/community_hub_screen.dart:473:                Expanded(
+lib/features/_disabled_experimental/community/screens/community_hub_screen.dart:483:                Expanded(
+lib/features/_disabled_experimental/community/widgets/community_achievements_widget.dart:26:        child: Column(
+lib/features/_disabled_experimental/community/widgets/community_achievements_widget.dart:29:            Row(
+lib/features/_disabled_experimental/community/widgets/community_achievements_widget.dart:79:      child: Row(
+lib/features/_disabled_experimental/community/widgets/community_achievements_widget.dart:97:          Expanded(
+lib/features/_disabled_experimental/community/widgets/community_achievements_widget.dart:98:            child: Column(
+lib/features/_disabled_experimental/community/widgets/discussion_board_widget.dart:91:    return Column(
+lib/features/_disabled_experimental/community/widgets/discussion_board_widget.dart:94:        Expanded(child: _buildDiscussionList(context)),
+lib/features/_disabled_experimental/community/widgets/discussion_board_widget.dart:112:      child: Column(
+lib/features/_disabled_experimental/community/widgets/discussion_board_widget.dart:115:          Row(
+lib/features/_disabled_experimental/community/widgets/discussion_board_widget.dart:125:              Expanded(
+lib/features/_disabled_experimental/community/widgets/discussion_board_widget.dart:128:                  child: Row(
+lib/features/_disabled_experimental/community/widgets/discussion_board_widget.dart:160:          Row(
+lib/features/_disabled_experimental/community/widgets/discussion_board_widget.dart:170:              Expanded(
+lib/features/_disabled_experimental/community/widgets/discussion_board_widget.dart:173:                  child: Row(
+lib/features/_disabled_experimental/community/widgets/discussion_board_widget.dart:258:            child: Column(
+lib/features/_disabled_experimental/community/widgets/discussion_board_widget.dart:262:                Row(
+lib/features/_disabled_experimental/community/widgets/discussion_board_widget.dart:371:                Row(
+lib/features/_disabled_experimental/community/widgets/discussion_board_widget.dart:427:                        child: Row(
+lib/features/_disabled_experimental/community/widgets/discussion_board_widget.dart:476:        child: Row(
+lib/features/_disabled_experimental/community/widgets/discussion_board_widget.dart:502:        child: Column(
+lib/features/_disabled_experimental/community/widgets/discussion_board_widget.dart:674:      builder: (context) => Column(
+lib/features/_disabled_experimental/community/widgets/discussion_board_widget.dart:719:        child: Column(
+lib/features/_disabled_experimental/community/widgets/expert_qa_widget.dart:46:    return Column(
+lib/features/_disabled_experimental/community/widgets/expert_qa_widget.dart:52:        Expanded(child: _buildQuestionsList()),
+lib/features/_disabled_experimental/community/widgets/expert_qa_widget.dart:61:        child: Column(
+lib/features/_disabled_experimental/community/widgets/expert_qa_widget.dart:64:            Row(
+lib/features/_disabled_experimental/community/widgets/expert_qa_widget.dart:107:            Row(
+lib/features/_disabled_experimental/community/widgets/expert_qa_widget.dart:110:                const Expanded(
+lib/features/_disabled_experimental/community/widgets/expert_qa_widget.dart:164:        child: Column(
+lib/features/_disabled_experimental/community/widgets/expert_qa_widget.dart:195:        child: Column(
+lib/features/_disabled_experimental/community/widgets/expert_qa_widget.dart:198:            Row(
+lib/features/_disabled_experimental/community/widgets/expert_qa_widget.dart:228:                child: Column(
+lib/features/_disabled_experimental/community/widgets/expert_qa_widget.dart:231:                    Row(
+lib/features/_disabled_experimental/community/widgets/expert_qa_widget.dart:270:            Row(
+lib/features/_disabled_experimental/community/widgets/expert_qa_widget.dart:358:      child: Row(
+lib/features/_disabled_experimental/community/widgets/expert_qa_widget.dart:387:        child: Row(
+lib/features/_disabled_experimental/community/widgets/community_stats_widget.dart:15:        child: Column(
+lib/features/_disabled_experimental/community/widgets/community_stats_widget.dart:18:            Row(
+lib/features/_disabled_experimental/community/widgets/community_stats_widget.dart:33:            _buildStatRow(
+lib/features/_disabled_experimental/community/widgets/community_stats_widget.dart:37:            _buildStatRow(
+lib/features/_disabled_experimental/community/widgets/community_stats_widget.dart:41:            _buildStatRow(
+lib/features/_disabled_experimental/community/widgets/community_stats_widget.dart:45:            _buildStatRow('Cycle Buddies', stats.totalBuddiesCount.toString()),
+lib/features/_disabled_experimental/community/widgets/community_stats_widget.dart:46:            _buildStatRow('Shared Stories', stats.totalStoriesCount.toString()),
+lib/features/_disabled_experimental/community/widgets/community_stats_widget.dart:55:  Widget _buildStatRow(String label, String value) {
+lib/features/_disabled_experimental/community/widgets/community_stats_widget.dart:58:      child: Row(
+lib/features/_disabled_experimental/community/widgets/community_stats_widget.dart:77:      child: Row(
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:45:    return Column(
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:94:        Expanded(
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:113:        child: Row(
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:128:            const Expanded(
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:129:              child: Column(
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:152:        child: Column(
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:185:        child: Column(
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:215:        child: Column(
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:251:        child: Column(
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:254:            Row(
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:271:                Expanded(
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:272:                  child: Column(
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:275:                      Row(
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:336:              Row(
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:338:                  Expanded(
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:346:                  Expanded(
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:370:        child: Column(
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:373:            Row(
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:390:                Expanded(
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:391:                  child: Column(
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:431:            Row(
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:433:                Expanded(
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:445:                Expanded(
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:503:      child: Row(
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:519:    return Column(
+lib/features/_disabled_experimental/community/widgets/symptom_sharing_widget.dart:35:    return Column(
+lib/features/_disabled_experimental/community/widgets/symptom_sharing_widget.dart:49:    return Row(
+lib/features/_disabled_experimental/community/widgets/symptom_sharing_widget.dart:53:        Expanded(
+lib/features/_disabled_experimental/community/widgets/symptom_sharing_widget.dart:54:          child: Column(
+lib/features/_disabled_experimental/community/widgets/symptom_sharing_widget.dart:142:    return Expanded(
+lib/features/_disabled_experimental/community/widgets/symptom_sharing_widget.dart:160:          child: Column(
+lib/features/_disabled_experimental/community/widgets/symptom_sharing_widget.dart:163:              Row(
+lib/features/_disabled_experimental/community/widgets/symptom_sharing_widget.dart:180:                  Expanded(
+lib/features/_disabled_experimental/community/widgets/symptom_sharing_widget.dart:181:                    child: Column(
+lib/features/_disabled_experimental/community/widgets/symptom_sharing_widget.dart:246:          child: Row(
+lib/features/_disabled_experimental/community/widgets/symptom_sharing_widget.dart:256:          child: Row(
+lib/features/_disabled_experimental/community/widgets/symptom_sharing_widget.dart:288:    return Row(
+lib/features/_disabled_experimental/community/widgets/symptom_sharing_widget.dart:307:    return Row(
+lib/features/_disabled_experimental/community/widgets/symptom_sharing_widget.dart:327:      child: Column(
+lib/features/auth/screens/auth_choice_screen.dart:63:      body: Stack(
+lib/features/auth/screens/auth_choice_screen.dart:72:              child: Column(
+lib/features/auth/screens/auth_choice_screen.dart:141:    return Column(
+lib/features/auth/screens/auth_choice_screen.dart:231:    return Column(
+lib/features/auth/screens/auth_choice_screen.dart:305:                  child: Row(
+lib/features/auth/screens/auth_choice_screen.dart:324:                      Expanded(
+lib/features/auth/screens/auth_choice_screen.dart:325:                        child: Column(
+lib/features/auth/screens/futuristic_auth_screen.dart:110:      body: Stack(
+lib/features/auth/screens/futuristic_auth_screen.dart:121:                child: Column(
+lib/features/auth/screens/futuristic_auth_screen.dart:181:    return Column(
+lib/features/auth/screens/futuristic_auth_screen.dart:297:              child: Column(
+lib/features/auth/screens/futuristic_auth_screen.dart:348:      child: Row(
+lib/features/auth/screens/futuristic_auth_screen.dart:350:          Expanded(child: _buildTab('Sign In', _isLogin)),
+lib/features/auth/screens/futuristic_auth_screen.dart:351:          Expanded(child: _buildTab('Sign Up', !_isLogin)),
+lib/features/auth/screens/futuristic_auth_screen.dart:427:    return Row(
+lib/features/auth/screens/futuristic_auth_screen.dart:429:        Expanded(
+lib/features/auth/screens/futuristic_auth_screen.dart:453:        Expanded(
+lib/features/auth/screens/futuristic_auth_screen.dart:471:    return Column(
+lib/features/auth/screens/futuristic_auth_screen.dart:635:                : Row(
+lib/features/auth/screens/futuristic_auth_screen.dart:661:    return Column(
+lib/features/auth/screens/futuristic_auth_screen.dart:674:        Row(
+lib/features/auth/screens/futuristic_auth_screen.dart:678:                  Expanded(
+lib/features/auth/screens/futuristic_auth_screen.dart:691:                Expanded(
+lib/features/auth/screens/futuristic_auth_screen.dart:738:            child: Row(
+lib/features/auth/screens/futuristic_auth_screen.dart:828:            child: Row(
+lib/features/auth/screens/auth_screen.dart:138:          child: Column(
+lib/features/auth/screens/auth_screen.dart:144:              Expanded(
+lib/features/auth/screens/auth_screen.dart:161:      child: Column(
+lib/features/auth/screens/auth_screen.dart:206:      child: Column(
+lib/features/auth/screens/auth_screen.dart:226:            Row(
+lib/features/auth/screens/auth_screen.dart:228:                Expanded(
+lib/features/auth/screens/auth_screen.dart:245:                Expanded(
+lib/features/auth/screens/auth_screen.dart:433:    return Column(
+lib/features/auth/screens/auth_screen.dart:448:          Row(
+lib/features/auth/screens/auth_screen.dart:450:              Expanded(
+lib/features/auth/screens/auth_screen.dart:461:              Expanded(
+lib/features/auth/screens/auth_screen.dart:840:                child: Column(
+lib/features/auth/screens/auth_screen.dart:899:                    Row(
+lib/features/auth/screens/auth_screen.dart:901:                        Expanded(
+lib/features/auth/screens/auth_screen.dart:914:                        Expanded(
+lib/features/auth/widgets/biometric_button.dart:89:            child: Row(
+lib/features/auth/widgets/biometric_button.dart:131:                Expanded(
+lib/features/auth/widgets/social_login_button.dart:59:            child: Row(
+lib/features/health/screens/real_time_health_dashboard.dart:223:      child: Column(
+lib/features/health/screens/real_time_health_dashboard.dart:328:      child: Column(
+lib/features/health/screens/real_time_health_dashboard.dart:331:          Row(
+lib/features/health/screens/real_time_health_dashboard.dart:346:              Expanded(
+lib/features/health/screens/real_time_health_dashboard.dart:347:                child: Column(
+lib/features/health/screens/real_time_health_dashboard.dart:377:            Row(
+lib/features/health/screens/real_time_health_dashboard.dart:400:    return Column(
+lib/features/health/screens/real_time_health_dashboard.dart:403:        Row(
+lib/features/health/screens/real_time_health_dashboard.dart:420:              child: Row(
+lib/features/health/screens/real_time_health_dashboard.dart:499:    return Column(
+lib/features/health/screens/real_time_health_dashboard.dart:502:        Row(
+lib/features/health/screens/real_time_health_dashboard.dart:549:      child: Row(
+lib/features/health/screens/real_time_health_dashboard.dart:598:      child: Row(
+lib/features/health/screens/real_time_health_dashboard.dart:625:          child: Row(
+lib/features/health/screens/real_time_health_dashboard.dart:650:    return Column(
+lib/features/health/screens/real_time_health_dashboard.dart:669:    return Column(
+lib/features/health/screens/real_time_health_dashboard.dart:688:            child: Column(
+lib/features/health/screens/real_time_health_dashboard.dart:690:                _buildPerformanceRow(
+lib/features/health/screens/real_time_health_dashboard.dart:697:                _buildPerformanceRow(
+lib/features/health/screens/real_time_health_dashboard.dart:704:                _buildPerformanceRow(
+lib/features/health/screens/real_time_health_dashboard.dart:717:  Widget _buildPerformanceRow(
+lib/features/health/screens/real_time_health_dashboard.dart:723:    return Row(
+lib/features/health/screens/real_time_health_dashboard.dart:725:        Expanded(
+lib/features/health/screens/real_time_health_dashboard.dart:732:        Expanded(
+lib/features/health/screens/real_time_health_dashboard.dart:743:        Expanded(
+lib/features/health/screens/real_time_health_dashboard.dart:758:    return Column(
+lib/features/health/screens/real_time_health_dashboard.dart:776:          child: Column(
+lib/features/health/screens/real_time_health_dashboard.dart:795:    return Column(
+lib/features/health/screens/real_time_health_dashboard.dart:812:                child: Row(
+lib/features/health/screens/real_time_health_dashboard.dart:819:                    Expanded(
+lib/features/health/screens/real_time_health_dashboard.dart:869:        child: Column(
+lib/features/health/screens/health_screen.dart:92:                child: Column(
+lib/features/health/screens/health_screen.dart:152:      child: Column(
+lib/features/health/screens/health_screen.dart:155:          Row(
+lib/features/health/screens/health_screen.dart:172:              Expanded(
+lib/features/health/screens/health_screen.dart:173:                child: Column(
+lib/features/health/screens/health_screen.dart:223:      child: Row(
+lib/features/health/screens/health_screen.dart:225:          Expanded(
+lib/features/health/screens/health_screen.dart:226:            child: Column(
+lib/features/health/screens/health_screen.dart:281:    return Column(
+lib/features/health/screens/health_screen.dart:365:          child: Column(
+lib/features/health/screens/health_screen.dart:368:              Row(
+lib/features/health/screens/health_screen.dart:469:    return Column(
+lib/features/health/screens/health_screen.dart:510:                child: Row(
+lib/features/health/screens/health_screen.dart:525:                    Expanded(
+lib/features/health/screens/health_screen.dart:526:                      child: Column(
+lib/features/health/screens/health_screen.dart:577:      child: Column(
+lib/features/health/screens/health_screen.dart:580:          Row(
+lib/features/health/screens/health_screen.dart:593:              Expanded(
+lib/features/health/screens/health_screen.dart:685:    return Column(
+lib/features/health/screens/health_screen.dart:720:                child: Column(
+lib/features/health/screens/health_screen.dart:723:                    Row(
+lib/features/health/screens/health_screen.dart:725:                        Expanded(
+lib/features/health/widgets/healthkit_disclosure_banner.dart:48:      child: Column(
+lib/features/health/widgets/healthkit_disclosure_banner.dart:53:          Row(
+lib/features/health/widgets/healthkit_disclosure_banner.dart:68:              Expanded(
+lib/features/health/widgets/healthkit_disclosure_banner.dart:69:                child: Column(
+lib/features/health/widgets/healthkit_disclosure_banner.dart:118:            child: Column(
+lib/features/health/widgets/healthkit_disclosure_banner.dart:121:                Row(
+lib/features/health/widgets/healthkit_disclosure_banner.dart:162:            child: Column(
+lib/features/health/widgets/healthkit_disclosure_banner.dart:204:          Row(
+lib/features/health/widgets/healthkit_disclosure_banner.dart:209:              Expanded(
+lib/features/health/widgets/healthkit_disclosure_banner.dart:224:          Row(
+lib/features/health/widgets/healthkit_disclosure_banner.dart:226:              Expanded(
+lib/features/health/widgets/healthkit_disclosure_banner.dart:241:              Expanded(
+lib/features/health/widgets/healthkit_disclosure_banner.dart:275:      child: Row(
+lib/features/health/widgets/healthkit_disclosure_banner.dart:284:          Expanded(
+lib/features/health/widgets/healthkit_disclosure_banner.dart:309:        title: Row(
+lib/features/health/widgets/healthkit_disclosure_banner.dart:316:        content: Column(
+lib/features/health/widgets/healthkit_disclosure_banner.dart:353:      child: Row(
+lib/features/health/widgets/healthkit_disclosure_banner.dart:374:          Expanded(
+lib/features/health/widgets/healthkit_connection_card.dart:51:          child: Column(
+lib/features/health/widgets/healthkit_connection_card.dart:54:              Row(
+lib/features/health/widgets/healthkit_connection_card.dart:81:                  Expanded(
+lib/features/health/widgets/healthkit_connection_card.dart:82:                    child: Column(
+lib/features/health/widgets/healthkit_connection_card.dart:86:                        Row(
+lib/features/health/widgets/healthkit_connection_card.dart:88:                            Expanded(
+lib/features/health/widgets/healthkit_connection_card.dart:126:                        Row(
+lib/features/health/widgets/healthkit_connection_card.dart:180:                Row(
+lib/features/health/widgets/healthkit_connection_card.dart:182:                    Expanded(
+lib/features/health/widgets/healthkit_connection_card.dart:241:        title: Row(
+lib/features/health/widgets/healthkit_connection_card.dart:245:            Expanded(
+lib/features/health/widgets/healthkit_connection_card.dart:254:          child: Column(
+lib/features/health/widgets/healthkit_connection_card.dart:267:                child: Row(
+lib/features/health/widgets/healthkit_connection_card.dart:275:                    Expanded(
+lib/features/health/widgets/healthkit_connection_card.dart:276:                      child: Column(
+lib/features/health/widgets/healthkit_connection_card.dart:351:                child: Row(
+lib/features/health/widgets/healthkit_connection_card.dart:360:                    Expanded(
+lib/features/health/widgets/healthkit_connection_card.dart:394:      child: Row(
+lib/features/health/widgets/healthkit_connection_card.dart:403:          Expanded(
+lib/features/health/widgets/health_integration_coming_soon_card.dart:32:      child: Row(
+lib/features/health/widgets/health_integration_coming_soon_card.dart:51:          Expanded(
+lib/features/health/widgets/health_integration_coming_soon_card.dart:52:            child: Column(
+lib/features/health/widgets/health_integration_coming_soon_card.dart:55:                Row(
+lib/features/health/widgets/health_integration_coming_soon_card.dart:57:                    Expanded(
+lib/features/health/widgets/healthkit_disclosure_banner_permanent.dart:27:      child: Column(
+lib/features/health/widgets/healthkit_disclosure_banner_permanent.dart:31:          Row(
+lib/features/health/widgets/healthkit_disclosure_banner_permanent.dart:39:              Expanded(
+lib/features/health/widgets/healthkit_disclosure_banner_permanent.dart:76:          Row(
+lib/features/health/widgets/healthkit_disclosure_banner_permanent.dart:81:              Expanded(
+lib/features/health/widgets/healthkit_disclosure_banner_permanent.dart:120:      child: Row(
+lib/features/health/widgets/biometric_pulse_indicator.dart:98:      child: Stack(
+lib/features/health/widgets/biometric_pulse_indicator.dart:169:    return Column(
+lib/features/health/widgets/healthkit_permission_dialog.dart:38:      title: Row(
+lib/features/health/widgets/healthkit_permission_dialog.dart:53:          Expanded(
+lib/features/health/widgets/healthkit_permission_dialog.dart:65:        child: Column(
+lib/features/health/widgets/healthkit_permission_dialog.dart:77:              child: Row(
+lib/features/health/widgets/healthkit_permission_dialog.dart:81:                  Expanded(
+lib/features/health/widgets/healthkit_permission_dialog.dart:82:                    child: Column(
+lib/features/health/widgets/healthkit_permission_dialog.dart:163:              child: Row(
+lib/features/health/widgets/healthkit_permission_dialog.dart:172:                  Expanded(
+lib/features/health/widgets/healthkit_permission_dialog.dart:222:      child: Row(
+lib/features/health/widgets/healthkit_permission_dialog.dart:231:          Expanded(
+lib/features/health/widgets/ai_insights_panel.dart:62:        child: Column(
+lib/features/health/widgets/ai_insights_panel.dart:91:      child: Row(
+lib/features/health/widgets/ai_insights_panel.dart:102:          Expanded(
+lib/features/health/widgets/ai_insights_panel.dart:103:            child: Column(
+lib/features/health/widgets/ai_insights_panel.dart:173:      child: Column(
+lib/features/health/widgets/ai_insights_panel.dart:176:          Row(
+lib/features/health/widgets/ai_insights_panel.dart:187:              Expanded(
+lib/features/health/widgets/ai_insights_panel.dart:212:          Row(
+lib/features/health/widgets/ai_insights_panel.dart:214:              Expanded(
+lib/features/health/widgets/ai_insights_panel.dart:266:        child: Column(
+lib/features/health/widgets/ai_insights_panel.dart:283:    return Column(
+lib/features/health/widgets/ai_insights_panel.dart:305:      child: Row(
+lib/features/health/widgets/ai_insights_panel.dart:317:          Expanded(
+lib/features/health/widgets/ai_insights_panel.dart:318:            child: Column(
+lib/features/health/widgets/ai_insights_panel.dart:360:    return Column(
+lib/features/health/widgets/ai_insights_panel.dart:387:      child: Row(
+lib/features/health/widgets/ai_insights_panel.dart:391:          Expanded(
+lib/features/health/widgets/ai_insights_panel.dart:392:            child: Column(
+lib/features/health/widgets/ai_insights_panel.dart:433:          child: Row(
+lib/features/health/widgets/ai_insights_panel.dart:461:  void _toggleExpanded() {
+lib/features/health/widgets/health_trend_chart.dart:59:    return Column(
+lib/features/health/widgets/health_trend_chart.dart:63:        Expanded(
+lib/features/health/widgets/health_trend_chart.dart:84:    return Row(
+lib/features/health/widgets/health_trend_chart.dart:87:        Column(
+lib/features/health/widgets/health_trend_chart.dart:127:      child: Column(
+lib/features/health/widgets/health_trend_chart.dart:139:            Row(
+lib/features/health/widgets/health_trend_chart.dart:164:    return Row(
+lib/features/health/widgets/health_trend_chart.dart:185:    return Row(
+lib/features/health/widgets/real_time_metric_card.dart:72:        child: Column(
+lib/features/health/widgets/real_time_metric_card.dart:75:            Row(
+lib/features/health/widgets/real_time_metric_card.dart:107:            Row(
+lib/features/health/widgets/real_time_metric_card.dart:147:        child: Row(
+lib/features/health/widgets/real_time_metric_card.dart:174:      child: Row(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:50:          child: Column(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:53:              Expanded(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:56:                  child: Column(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:94:      child: Row(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:114:          Expanded(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:115:            child: Column(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:154:      child: Column(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:157:          Row(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:185:            child: Row(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:194:                Expanded(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:212:    return Column(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:284:    return Column(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:294:        Row(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:296:            Expanded(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:305:            Expanded(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:316:        Row(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:318:            Expanded(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:327:            Expanded(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:372:        child: Column(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:452:      child: Column(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:455:          Row(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:470:              Expanded(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:482:          Row(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:484:              Expanded(
+lib/features/cycle/screens/calendar_screen.dart:69:          child: Column(
+lib/features/cycle/screens/calendar_screen.dart:78:              Expanded(
+lib/features/cycle/screens/calendar_screen.dart:122:      child: Row(
+lib/features/cycle/screens/calendar_screen.dart:125:          Expanded(
+lib/features/cycle/screens/calendar_screen.dart:126:            child: Column(
+lib/features/cycle/screens/calendar_screen.dart:393:      child: Stack(
+lib/features/cycle/screens/calendar_screen.dart:663:          child: Row(
+lib/features/cycle/screens/calendar_screen.dart:666:              Expanded(
+lib/features/cycle/screens/calendar_screen.dart:667:                child: Column(
+lib/features/cycle/screens/calendar_screen.dart:709:                Expanded(
+lib/features/cycle/screens/calendar_screen.dart:710:                  child: Column(
+lib/features/cycle/screens/tracking_screen.dart:252:          child: Column(
+lib/features/cycle/screens/tracking_screen.dart:261:              Expanded(
+lib/features/cycle/screens/tracking_screen.dart:290:      child: Row(
+lib/features/cycle/screens/tracking_screen.dart:293:          Expanded(
+lib/features/cycle/screens/tracking_screen.dart:312:                child: Row(
+lib/features/cycle/screens/tracking_screen.dart:320:                    Column(
+lib/features/cycle/screens/tracking_screen.dart:447:      child: Row(
+lib/features/cycle/screens/tracking_screen.dart:459:      child: Column(
+lib/features/cycle/screens/tracking_screen.dart:499:              child: Row(
+lib/features/cycle/screens/tracking_screen.dart:507:                  Expanded(
+lib/features/cycle/screens/tracking_screen.dart:530:    return Column(
+lib/features/cycle/screens/tracking_screen.dart:535:          child: Column(
+lib/features/cycle/screens/tracking_screen.dart:555:        Expanded(
+lib/features/cycle/screens/tracking_screen.dart:587:      child: Column(
+lib/features/cycle/screens/tracking_screen.dart:640:      child: Column(
+lib/features/cycle/screens/tracking_screen.dart:699:      child: Column(
+lib/features/cycle/screens/tracking_screen.dart:741:            child: Column(
+lib/features/cycle/screens/tracking_screen.dart:760:                  child: Row(
+lib/features/cycle/screens/tracking_screen.dart:781:                      Expanded(
+lib/features/cycle/screens/tracking_screen.dart:782:                        child: Column(
+lib/features/cycle/screens/tracking_screen.dart:945:        child: Row(
+lib/features/cycle/screens/home_screen.dart:215:      child: Column(
+lib/features/cycle/screens/home_screen.dart:217:          Row(
+lib/features/cycle/screens/home_screen.dart:234:              Expanded(
+lib/features/cycle/screens/home_screen.dart:235:                child: Column(
+lib/features/cycle/screens/home_screen.dart:296:                child: Row(
+lib/features/cycle/screens/home_screen.dart:320:          Row(
+lib/features/cycle/screens/home_screen.dart:324:              Expanded(
+lib/features/cycle/screens/home_screen.dart:335:          Row(
+lib/features/cycle/screens/home_screen.dart:339:              Expanded(
+lib/features/cycle/screens/home_screen.dart:366:      child: Column(
+lib/features/cycle/screens/home_screen.dart:383:              child: Row(
+lib/features/cycle/screens/home_screen.dart:391:                  Expanded(
+lib/features/cycle/screens/home_screen.dart:410:    return Stack(
+lib/features/cycle/screens/home_screen.dart:462:                      child: Row(
+lib/features/cycle/screens/home_screen.dart:471:                          Flexible(
+lib/features/cycle/screens/home_screen.dart:507:            content: Row(
+lib/features/cycle/screens/home_screen.dart:570:      body: Stack(
+lib/features/cycle/screens/home_screen.dart:590:                          child: Column(
+lib/features/cycle/screens/home_screen.dart:670:      child: Column(
+lib/features/cycle/screens/home_screen.dart:673:          Stack(
+lib/features/cycle/screens/home_screen.dart:794:      child: Column(
+lib/features/cycle/screens/home_screen.dart:796:          Row(
+lib/features/cycle/screens/home_screen.dart:798:              Expanded(
+lib/features/cycle/screens/home_screen.dart:799:                child: Column(
+lib/features/cycle/screens/home_screen.dart:817:                    Row(
+lib/features/cycle/screens/home_screen.dart:833:                              child: Row(
+lib/features/cycle/screens/home_screen.dart:862:              Column(
+lib/features/cycle/screens/home_screen.dart:864:                  Stack(
+lib/features/cycle/screens/home_screen.dart:885:                      Column(
+lib/features/cycle/screens/home_screen.dart:937:    return Column(
+lib/features/cycle/screens/home_screen.dart:973:          child: Column(
+lib/features/cycle/screens/home_screen.dart:1018:      child: Column(
+lib/features/cycle/screens/home_screen.dart:1021:          Row(
+lib/features/cycle/screens/home_screen.dart:1038:              Expanded(
+lib/features/cycle/screens/home_screen.dart:1039:                child: Column(
+lib/features/cycle/screens/home_screen.dart:1143:          child: Column(
+lib/features/cycle/screens/home_screen.dart:1146:              Row(
+lib/features/cycle/screens/home_screen.dart:1220:      child: Column(
+lib/features/cycle/screens/home_screen.dart:1223:          Row(
+lib/features/cycle/screens/home_screen.dart:1240:              Expanded(
+lib/features/cycle/screens/home_screen.dart:1241:                child: Column(
+lib/features/cycle/screens/home_screen.dart:1281:            Row(
+lib/features/cycle/screens/home_screen.dart:1283:                Expanded(
+lib/features/cycle/screens/home_screen.dart:1301:                    child: Column(
+lib/features/cycle/screens/home_screen.dart:1333:                Expanded(
+lib/features/cycle/screens/home_screen.dart:1351:                    child: Column(
+lib/features/cycle/screens/home_screen.dart:1354:                        Row(
+lib/features/cycle/screens/home_screen.dart:1403:              child: Column(
+lib/features/cycle/screens/home_screen.dart:1461:      child: Column(
+lib/features/cycle/screens/home_screen.dart:1464:          Row(
+lib/features/cycle/screens/home_screen.dart:1481:              Expanded(
+lib/features/cycle/screens/home_screen.dart:1482:                child: Column(
+lib/features/cycle/screens/home_screen.dart:1539:                            child: Column(
+lib/features/cycle/screens/home_screen.dart:1542:                                Row(
+lib/features/cycle/screens/home_screen.dart:1558:                                    Expanded(
+lib/features/cycle/screens/home_screen.dart:1662:              child: Column(
+lib/features/cycle/screens/home_screen.dart:1721:      child: Column(
+lib/features/cycle/screens/home_screen.dart:1724:          Row(
+lib/features/cycle/screens/home_screen.dart:1741:              Expanded(
+lib/features/cycle/screens/home_screen.dart:1742:                child: Column(
+lib/features/cycle/screens/home_screen.dart:1838:                child: Column(
+lib/features/cycle/screens/home_screen.dart:1842:                    Row(
+lib/features/cycle/screens/home_screen.dart:1861:                    Column(
+lib/features/cycle/screens/home_screen.dart:1922:      child: Column(
+lib/features/cycle/screens/home_screen.dart:1925:          Row(
+lib/features/cycle/screens/home_screen.dart:1942:              Expanded(
+lib/features/cycle/screens/home_screen.dart:1943:                child: Column(
+lib/features/cycle/screens/home_screen.dart:1985:            child: Row(
+lib/features/cycle/screens/home_screen.dart:1987:                Expanded(
+lib/features/cycle/screens/home_screen.dart:1989:                  child: Column(
+lib/features/cycle/screens/home_screen.dart:2026:                Expanded(
+lib/features/cycle/screens/home_screen.dart:2048:          Row(
+lib/features/cycle/screens/home_screen.dart:2050:              Expanded(
+lib/features/cycle/screens/home_screen.dart:2061:                  child: Column(
+lib/features/cycle/screens/home_screen.dart:2064:                      Row(
+lib/features/cycle/screens/home_screen.dart:2096:              Expanded(
+lib/features/cycle/screens/home_screen.dart:2107:                  child: Column(
+lib/features/cycle/screens/home_screen.dart:2110:                      Row(
+lib/features/cycle/screens/home_screen.dart:2232:      child: Column(
+lib/features/cycle/screens/home_screen.dart:2235:          Row(
+lib/features/cycle/screens/home_screen.dart:2252:              Expanded(
+lib/features/cycle/screens/home_screen.dart:2253:                child: Column(
+lib/features/cycle/screens/home_screen.dart:2374:                child: Column(
+lib/features/cycle/screens/home_screen.dart:2378:                    Row(
+lib/features/cycle/screens/home_screen.dart:2412:                    Flexible(
+lib/features/cycle/screens/home_screen.dart:2425:                    Flexible(
+lib/features/cycle/screens/home_screen.dart:2439:                    Row(
+lib/features/cycle/screens/home_screen.dart:2443:                        Flexible(
+lib/features/cycle/screens/home_screen.dart:2482:        content: Row(
+lib/features/cycle/screens/home_screen.dart:2490:            Expanded(
+lib/features/cycle/screens/home_screen.dart:2709:        child: Row(
+lib/features/cycle/screens/home_screen.dart:2727:            Expanded(
+lib/features/cycle/screens/home_screen.dart:2728:              child: Column(
+lib/features/cycle/widgets/day_detail_sheet.dart:35:          child: Column(
+lib/features/cycle/widgets/day_detail_sheet.dart:49:              Expanded(
+lib/features/cycle/widgets/day_detail_sheet.dart:54:                    child: Column(
+lib/features/cycle/widgets/day_detail_sheet.dart:95:    return Row(
+lib/features/cycle/widgets/day_detail_sheet.dart:132:        Expanded(
+lib/features/cycle/widgets/day_detail_sheet.dart:133:          child: Column(
+lib/features/cycle/widgets/day_detail_sheet.dart:159:                  child: Row(
+lib/features/cycle/widgets/day_detail_sheet.dart:198:      child: Column(
+lib/features/cycle/widgets/day_detail_sheet.dart:201:          Row(
+lib/features/cycle/widgets/day_detail_sheet.dart:220:          Row(
+lib/features/cycle/widgets/day_detail_sheet.dart:222:              Expanded(
+lib/features/cycle/widgets/day_detail_sheet.dart:230:                Expanded(
+lib/features/cycle/widgets/day_detail_sheet.dart:259:      child: Column(
+lib/features/cycle/widgets/day_detail_sheet.dart:262:          Row(
+lib/features/cycle/widgets/day_detail_sheet.dart:266:              Expanded(
+lib/features/cycle/widgets/day_detail_sheet.dart:267:                child: Column(
+lib/features/cycle/widgets/day_detail_sheet.dart:304:                child: Row(
+lib/features/cycle/widgets/day_detail_sheet.dart:314:                    Expanded(
+lib/features/cycle/widgets/day_detail_sheet.dart:348:      child: Column(
+lib/features/cycle/widgets/day_detail_sheet.dart:351:          Row(
+lib/features/cycle/widgets/day_detail_sheet.dart:366:              Expanded(
+lib/features/cycle/widgets/day_detail_sheet.dart:367:                child: Column(
+lib/features/cycle/widgets/day_detail_sheet.dart:405:    return Column(
+lib/features/cycle/widgets/day_detail_sheet.dart:418:        Row(
+lib/features/cycle/widgets/day_detail_sheet.dart:420:            Expanded(
+lib/features/cycle/widgets/day_detail_sheet.dart:433:            Expanded(
+lib/features/cycle/widgets/day_detail_sheet.dart:470:            child: Column(
+lib/features/cycle/widgets/day_detail_sheet.dart:492:    return Column(
+lib/features/cycle/widgets/day_detail_sheet.dart:495:        Row(
+lib/features/cycle/widgets/pain_body_map.dart:94:    return Column(
+lib/features/cycle/widgets/pain_body_map.dart:97:        Expanded(
+lib/features/cycle/widgets/pain_body_map.dart:114:              child: Stack(
+lib/features/cycle/widgets/pain_body_map.dart:124:                      return Stack(
+lib/features/cycle/widgets/pain_body_map.dart:217:          child: Column(
+lib/features/cycle/widgets/pain_body_map.dart:263:      child: Column(
+lib/features/cycle/widgets/pain_body_map.dart:265:          Row(
+lib/features/cycle/widgets/pain_body_map.dart:279:              Expanded(
+lib/features/cycle/widgets/pain_body_map.dart:280:                child: Column(
+lib/features/cycle/widgets/pain_body_map.dart:335:    return Column(
+lib/features/cycle/widgets/pain_body_map.dart:337:        Row(
+lib/features/cycle/widgets/pain_body_map.dart:410:        child: Row(
+lib/features/cycle/widgets/pain_body_map.dart:439:      child: Column(
+lib/features/cycle/widgets/pain_body_map.dart:449:          Row(
+lib/features/cycle/widgets/pain_body_map.dart:482:                  child: Column(
+lib/features/cycle/widgets/pain_body_map.dart:580:          child: Column(
+lib/features/cycle/widgets/pain_body_map.dart:596:              Row(
+lib/features/cycle/widgets/pain_body_map.dart:613:                  Expanded(
+lib/features/cycle/widgets/pain_body_map.dart:614:                    child: Column(
+lib/features/cycle/widgets/pain_body_map.dart:676:                              child: Column(
+lib/features/cycle/widgets/pain_body_map.dart:723:                child: Row(
+lib/features/cycle/widgets/pain_body_map.dart:731:                    Expanded(
+lib/features/cycle/widgets/flow_intensity_picker.dart:122:    return Column(
+lib/features/cycle/widgets/flow_intensity_picker.dart:188:      child: Row(
+lib/features/cycle/widgets/flow_intensity_picker.dart:191:          Expanded(
+lib/features/cycle/widgets/flow_intensity_picker.dart:218:          Expanded(
+lib/features/cycle/widgets/flow_intensity_picker.dart:222:              child: Column(
+lib/features/cycle/widgets/flow_intensity_picker.dart:243:                    Row(
+lib/features/cycle/widgets/flow_intensity_picker.dart:283:      child: Row(
+lib/features/cycle/widgets/flow_intensity_picker.dart:301:          Expanded(
+lib/features/cycle/widgets/flow_intensity_picker.dart:302:            child: Column(
+lib/features/cycle/widgets/flow_intensity_picker.dart:364:        child: Column(
+lib/features/cycle/widgets/flow_intensity_picker.dart:387:            Flexible(
+lib/features/cycle/widgets/flow_intensity_picker.dart:404:            Flexible(
+lib/features/cycle/widgets/flow_intensity_picker.dart:427:                child: Row(
+lib/features/cycle/widgets/flow_intensity_picker.dart:501:        child: Column(
+lib/features/cycle/widgets/flow_intensity_picker.dart:517:              child: Row(
+lib/features/cycle/widgets/flow_intensity_picker.dart:539:                  Expanded(
+lib/features/cycle/widgets/flow_intensity_picker.dart:540:                    child: Column(
+lib/features/cycle/widgets/flow_intensity_picker.dart:565:            Expanded(
+lib/features/cycle/widgets/flow_intensity_picker.dart:568:                child: Column(
+lib/features/cycle/widgets/flow_intensity_picker.dart:601:                          child: Row(
+lib/features/cycle/widgets/tracking_summary_card.dart:31:      child: Column(
+lib/features/cycle/widgets/tracking_summary_card.dart:67:    return Row(
+lib/features/cycle/widgets/tracking_summary_card.dart:85:        Expanded(
+lib/features/cycle/widgets/tracking_summary_card.dart:86:          child: Column(
+lib/features/cycle/widgets/tracking_summary_card.dart:115:    return Row(
+lib/features/cycle/widgets/tracking_summary_card.dart:132:        Column(
+lib/features/cycle/widgets/tracking_summary_card.dart:158:    return Column(
+lib/features/cycle/widgets/tracking_summary_card.dart:209:    return Row(
+lib/features/cycle/widgets/tracking_summary_card.dart:212:          Expanded(
+lib/features/cycle/widgets/tracking_summary_card.dart:223:          Expanded(
+lib/features/cycle/widgets/tracking_summary_card.dart:245:    return Row(
+lib/features/cycle/widgets/tracking_summary_card.dart:259:        Column(
+lib/features/cycle/widgets/tracking_summary_card.dart:285:    return Column(
+lib/features/cycle/widgets/tracking_summary_card.dart:288:        Row(
+lib/features/cycle/widgets/mood_energy_slider.dart:221:    return Column(
+lib/features/cycle/widgets/mood_energy_slider.dart:254:          child: Column(
+lib/features/cycle/widgets/mood_energy_slider.dart:257:              Row(
+lib/features/cycle/widgets/mood_energy_slider.dart:259:                  Column(
+lib/features/cycle/widgets/mood_energy_slider.dart:289:                    child: Stack(
+lib/features/cycle/widgets/mood_energy_slider.dart:344:              Stack(
+lib/features/cycle/widgets/mood_energy_slider.dart:411:                          child: Stack(
+lib/features/cycle/widgets/mood_energy_slider.dart:522:                              child: Stack(
+lib/features/cycle/widgets/mood_energy_slider.dart:570:                child: Stack(
+lib/features/cycle/widgets/mood_energy_slider.dart:629:                child: Row(
+lib/features/cycle/widgets/mood_energy_slider.dart:632:                    Column(
+lib/features/cycle/widgets/mood_energy_slider.dart:651:                    Column(
+lib/features/cycle/widgets/mood_energy_slider.dart:705:          child: Column(
+lib/features/cycle/widgets/mood_energy_slider.dart:709:              Row(
+lib/features/cycle/widgets/mood_energy_slider.dart:744:                  Expanded(
+lib/features/cycle/widgets/mood_energy_slider.dart:745:                    child: Column(
+lib/features/cycle/widgets/calendar_legend.dart:24:      child: Column(
+lib/features/cycle/widgets/calendar_legend.dart:27:          Row(
+lib/features/cycle/widgets/calendar_legend.dart:44:            child: Row(
+lib/features/cycle/widgets/calendar_legend.dart:46:                Flexible(
+lib/features/cycle/widgets/calendar_legend.dart:54:                Flexible(
+lib/features/cycle/widgets/calendar_legend.dart:67:            child: Row(
+lib/features/cycle/widgets/calendar_legend.dart:69:                Flexible(
+lib/features/cycle/widgets/calendar_legend.dart:77:                Flexible(
+lib/features/cycle/widgets/calendar_legend.dart:91:          Row(
+lib/features/cycle/widgets/calendar_legend.dart:102:          Row(
+lib/features/cycle/widgets/calendar_legend.dart:132:    return Row(
+lib/features/cycle/widgets/calendar_legend.dart:152:        Flexible(
+lib/features/cycle/widgets/calendar_legend.dart:177:    return Row(
+lib/features/cycle/widgets/calendar_legend.dart:195:        Flexible(
+lib/features/cycle/widgets/calendar_legend.dart:211:    return Row(
+lib/features/cycle/widgets/calendar_legend.dart:230:        Flexible(
+lib/features/cycle/widgets/cycle_phase_indicator.dart:41:      child: Column(
+lib/features/cycle/widgets/cycle_phase_indicator.dart:45:          Row(
+lib/features/cycle/widgets/cycle_phase_indicator.dart:62:              Expanded(
+lib/features/cycle/widgets/cycle_phase_indicator.dart:63:                child: Column(
+lib/features/cycle/widgets/cycle_phase_indicator.dart:88:                child: Stack(
+lib/features/cycle/widgets/cycle_phase_indicator.dart:126:          Column(
+lib/features/cycle/widgets/cycle_phase_indicator.dart:162:      child: Row(
+lib/features/cycle/widgets/symptom_selector.dart:88:        child: Column(
+lib/features/cycle/widgets/symptom_selector.dart:102:            Expanded(child: _buildSymptomsList()),
+lib/features/cycle/widgets/symptom_selector.dart:124:      child: Column(
+lib/features/cycle/widgets/symptom_selector.dart:127:          Row(
+lib/features/cycle/widgets/symptom_selector.dart:171:      child: Row(
+lib/features/cycle/widgets/symptom_selector.dart:220:      child: Row(
+lib/features/cycle/widgets/symptom_selector.dart:333:            child: Column(
+lib/features/cycle/widgets/symptom_selector.dart:335:                Row(
+lib/features/cycle/widgets/symptom_selector.dart:353:                    Expanded(
+lib/features/cycle/widgets/symptom_selector.dart:406:    return Column(
+lib/features/cycle/widgets/symptom_selector.dart:409:        Row(
+lib/features/feedback/screens/feedback_screen.dart:93:        title: const Row(
+lib/features/feedback/screens/feedback_screen.dart:137:        child: Column(
+lib/features/feedback/screens/feedback_screen.dart:158:              child: const Column(
+lib/features/feedback/screens/feedback_screen.dart:190:            Row(
+lib/features/feedback/screens/feedback_screen.dart:248:                    child: Row(
+lib/features/feedback/screens/feedback_screen.dart:355:                          ? const Row(
+lib/features/feedback/screens/feedback_screen.dart:398:              child: Row(
+lib/features/feedback/screens/feedback_screen.dart:402:                  Expanded(
+lib/features/partner/screens/partner_dashboard_screen.dart:263:            child: Column(
+lib/features/partner/screens/partner_dashboard_screen.dart:265:                Row(
+lib/features/partner/screens/partner_dashboard_screen.dart:270:                    Expanded(
+lib/features/partner/screens/partner_dashboard_screen.dart:271:                      child: Column(
+lib/features/partner/screens/partner_dashboard_screen.dart:305:                            child: Row(
+lib/features/partner/screens/partner_dashboard_screen.dart:339:                Row(
+lib/features/partner/screens/partner_dashboard_screen.dart:410:    return Column(
+lib/features/partner/screens/partner_dashboard_screen.dart:557:                child: Column(
+lib/features/partner/screens/partner_dashboard_screen.dart:762:      child: Column(
+lib/features/partner/screens/partner_dashboard_screen.dart:812:          Row(
+lib/features/partner/screens/partner_dashboard_screen.dart:814:              Expanded(
+lib/features/partner/screens/partner_dashboard_screen.dart:831:              Expanded(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:159:              child: Column(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:471:      child: Column(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:474:          Row(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:487:              Expanded(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:488:                child: Column(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:510:          Row(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:537:    return Expanded(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:544:        child: Column(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:581:      child: Column(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:598:            child: Row(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:602:                Expanded(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:603:                  child: Column(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:651:      child: Row(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:667:          Expanded(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:668:            child: Column(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:671:                Row(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:731:    return Column(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:745:            child: Row(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:749:                Expanded(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:764:        Row(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:766:            Expanded(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:783:              Expanded(
+lib/features/partner/dialogs/invite_partner_dialog.dart:97:                child: Column(
+lib/features/partner/dialogs/invite_partner_dialog.dart:101:                    Flexible(
+lib/features/partner/dialogs/invite_partner_dialog.dart:133:      child: Row(
+lib/features/partner/dialogs/invite_partner_dialog.dart:146:          Expanded(
+lib/features/partner/dialogs/invite_partner_dialog.dart:147:            child: Column(
+lib/features/partner/dialogs/invite_partner_dialog.dart:187:    return Column(
+lib/features/partner/dialogs/invite_partner_dialog.dart:245:    return Column(
+lib/features/partner/dialogs/invite_partner_dialog.dart:331:          child: Row(
+lib/features/partner/dialogs/invite_partner_dialog.dart:343:              Expanded(
+lib/features/partner/dialogs/invite_partner_dialog.dart:357:    return Row(
+lib/features/partner/dialogs/invite_partner_dialog.dart:360:        Expanded(
+lib/features/partner/dialogs/invite_partner_dialog.dart:375:    return Column(
+lib/features/partner/dialogs/invite_partner_dialog.dart:419:      child: Row(
+lib/features/partner/dialogs/invite_partner_dialog.dart:423:          Expanded(
+lib/features/partner/dialogs/invite_partner_dialog.dart:437:      child: Row(
+lib/features/partner/dialogs/invite_partner_dialog.dart:446:              child: Row(
+lib/features/partner/dialogs/invite_partner_dialog.dart:457:          Expanded(
+lib/features/partner/dialogs/invite_partner_dialog.dart:478:                  : Row(
+lib/features/partner/dialogs/invite_partner_dialog.dart:535:            content: Row(
+lib/features/partner/dialogs/join_partner_dialog.dart:97:                  child: Column(
+lib/features/partner/dialogs/join_partner_dialog.dart:125:      child: Row(
+lib/features/partner/dialogs/join_partner_dialog.dart:139:          Expanded(
+lib/features/partner/dialogs/join_partner_dialog.dart:140:            child: Column(
+lib/features/partner/dialogs/join_partner_dialog.dart:173:        child: Column(
+lib/features/partner/dialogs/join_partner_dialog.dart:215:    return Column(
+lib/features/partner/dialogs/join_partner_dialog.dart:218:        Row(
+lib/features/partner/dialogs/join_partner_dialog.dart:255:    return Row(
+lib/features/partner/dialogs/join_partner_dialog.dart:279:        Expanded(
+lib/features/partner/dialogs/join_partner_dialog.dart:290:    return Column(
+lib/features/partner/dialogs/join_partner_dialog.dart:308:        Row(
+lib/features/partner/dialogs/join_partner_dialog.dart:311:            Expanded(
+lib/features/partner/dialogs/join_partner_dialog.dart:405:      child: Row(
+lib/features/partner/dialogs/join_partner_dialog.dart:410:          Expanded(
+lib/features/partner/dialogs/join_partner_dialog.dart:422:    return Column(
+lib/features/partner/dialogs/join_partner_dialog.dart:425:        Row(
+lib/features/partner/dialogs/join_partner_dialog.dart:428:            Expanded(child: Divider(color: AppTheme.lightGrey, thickness: 1)),
+lib/features/partner/dialogs/join_partner_dialog.dart:436:            Expanded(child: Divider(color: AppTheme.lightGrey, thickness: 1)),
+lib/features/partner/dialogs/join_partner_dialog.dart:478:        child: Row(
+lib/features/partner/dialogs/join_partner_dialog.dart:483:            Expanded(
+lib/features/partner/dialogs/join_partner_dialog.dart:484:              child: Column(
+lib/features/partner/dialogs/join_partner_dialog.dart:536:              : Row(
+lib/features/partner/widgets/partner_care_actions_widget.dart:134:            child: Column(
+lib/features/partner/widgets/partner_care_actions_widget.dart:167:      child: Row(
+lib/features/partner/widgets/partner_care_actions_widget.dart:192:          Expanded(
+lib/features/partner/widgets/partner_care_actions_widget.dart:193:            child: Column(
+lib/features/partner/widgets/partner_care_actions_widget.dart:214:          Row(
+lib/features/partner/widgets/partner_care_actions_widget.dart:254:      child: Column(
+lib/features/partner/widgets/partner_care_actions_widget.dart:312:              child: Column(
+lib/features/partner/widgets/partner_care_actions_widget.dart:315:                  Row(
+lib/features/partner/widgets/partner_care_actions_widget.dart:395:        child: Column(
+lib/features/partner/widgets/partner_care_actions_widget.dart:421:      child: Column(
+lib/features/partner/widgets/partner_care_actions_widget.dart:424:          Row(
+lib/features/partner/widgets/partner_care_actions_widget.dart:489:      child: Row(
+lib/features/partner/widgets/partner_care_actions_widget.dart:506:          Expanded(
+lib/features/partner/widgets/partner_care_actions_widget.dart:507:            child: Column(
+lib/features/partner/widgets/partner_care_actions_widget.dart:510:                Row(
+lib/features/partner/widgets/partner_care_actions_widget.dart:557:        child: Column(
+lib/features/partner/widgets/partner_care_actions_widget.dart:581:        title: Row(
+lib/features/partner/widgets/partner_care_actions_widget.dart:594:        content: Column(
+lib/features/partner/widgets/partner_care_actions_widget.dart:668:          title: Row(
+lib/features/partner/widgets/partner_care_actions_widget.dart:681:          content: Column(
+lib/features/partner/widgets/partner_care_actions_widget.dart:704:                    child: Row(
+lib/features/partner/widgets/partner_communication_widget.dart:85:            child: Column(
+lib/features/partner/widgets/partner_communication_widget.dart:117:      child: Row(
+lib/features/partner/widgets/partner_communication_widget.dart:134:          Expanded(
+lib/features/partner/widgets/partner_communication_widget.dart:135:            child: Column(
+lib/features/partner/widgets/partner_communication_widget.dart:173:      child: Column(
+lib/features/partner/widgets/partner_communication_widget.dart:218:      child: Row(
+lib/features/partner/widgets/partner_communication_widget.dart:238:          Expanded(
+lib/features/partner/widgets/partner_communication_widget.dart:239:            child: Column(
+lib/features/partner/widgets/partner_communication_widget.dart:242:                Row(
+lib/features/partner/widgets/partner_communication_widget.dart:298:      child: Column(
+lib/features/partner/widgets/partner_communication_widget.dart:347:        child: Row(
+lib/features/partner/widgets/partner_communication_widget.dart:367:    return Row(
+lib/features/partner/widgets/partner_communication_widget.dart:369:        Expanded(
+lib/features/partner/widgets/partner_communication_widget.dart:420:      child: Column(
+lib/features/partner/widgets/partner_communication_widget.dart:423:          Row(
+lib/features/partner/widgets/partner_communication_widget.dart:443:          Expanded(
+lib/features/partner/widgets/partner_communication_widget.dart:464:      child: Row(
+lib/features/partner/widgets/partner_communication_widget.dart:471:          Expanded(
+lib/features/partner/widgets/partner_communication_widget.dart:472:            child: Column(
+lib/features/partner/widgets/partner_cycle_insight_widget.dart:20:        child: Column(
+lib/features/partner/widgets/partner_cycle_insight_widget.dart:23:            Row(
+lib/features/partner/widgets/partner_insights_widget.dart:29:        child: Column(
+lib/features/partner/widgets/partner_insights_widget.dart:32:            Row(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:101:                child: Column(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:105:                    Expanded(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:142:      child: Row(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:155:          Expanded(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:156:            child: Column(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:219:          child: Column(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:233:                  child: Row(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:237:                      Expanded(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:350:                    child: Row(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:361:                        Expanded(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:385:      child: Column(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:419:                child: Column(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:436:                        child: Column(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:480:          Row(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:482:              Expanded(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:498:              Expanded(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:514:                    child: Row(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:525:                        Expanded(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:549:      child: Column(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:587:            child: Column(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:600:                    child: Row(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:602:                        Expanded(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:637:          Row(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:639:              Expanded(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:655:              Expanded(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:671:                    child: Row(
+lib/features/partner/widgets/partner_invitation_dialog.dart.bak_before_feedback_button_fix:682:                        Expanded(
+lib/features/partner/widgets/partner_invitation_dialog.dart:101:                child: Column(
+lib/features/partner/widgets/partner_invitation_dialog.dart:105:                    Expanded(
+lib/features/partner/widgets/partner_invitation_dialog.dart:142:      child: Row(
+lib/features/partner/widgets/partner_invitation_dialog.dart:155:          Expanded(
+lib/features/partner/widgets/partner_invitation_dialog.dart:156:            child: Column(
+lib/features/partner/widgets/partner_invitation_dialog.dart:219:          child: Column(
+lib/features/partner/widgets/partner_invitation_dialog.dart:233:                  child: Row(
+lib/features/partner/widgets/partner_invitation_dialog.dart:237:                      Expanded(
+lib/features/partner/widgets/partner_invitation_dialog.dart:353:      child: Column(
+lib/features/partner/widgets/partner_invitation_dialog.dart:387:                child: Column(
+lib/features/partner/widgets/partner_invitation_dialog.dart:404:                        child: Column(
+lib/features/partner/widgets/partner_invitation_dialog.dart:448:          Row(
+lib/features/partner/widgets/partner_invitation_dialog.dart:450:              Expanded(
+lib/features/partner/widgets/partner_invitation_dialog.dart:466:              Expanded(
+lib/features/partner/widgets/partner_invitation_dialog.dart:491:      child: Column(
+lib/features/partner/widgets/partner_invitation_dialog.dart:529:            child: Column(
+lib/features/partner/widgets/partner_invitation_dialog.dart:542:                    child: Row(
+lib/features/partner/widgets/partner_invitation_dialog.dart:544:                        Expanded(
+lib/features/partner/widgets/partner_invitation_dialog.dart:579:          Row(
+lib/features/partner/widgets/partner_invitation_dialog.dart:581:              Expanded(
+lib/features/partner/widgets/partner_invitation_dialog.dart:597:              Expanded(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:141:          content: Row(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:211:          child: Column(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:234:              Expanded(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:252:      child: Column(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:254:          Row(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:257:              Expanded(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:258:                child: Column(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:283:              Row(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:298:                      child: Row(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:392:      child: Row(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:408:          Expanded(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:409:            child: Column(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:492:      child: Row(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:524:      child: Column(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:558:      child: Column(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:623:      child: Column(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:673:      child: Column(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:714:      child: Row(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:735:          Expanded(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:736:            child: Column(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:835:      child: Column(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:838:          Row(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:891:      child: Row(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:895:          Expanded(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:931:      child: Row(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:946:          Expanded(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:968:      child: Column(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:1010:      child: Column(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:1032:      child: Row(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:1043:          Expanded(child: Text(name)),
+lib/features/biometric/screens/biometric_dashboard_screen.dart:1071:      child: Column(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:1123:      child: Column(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:1143:      child: Column(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:1178:      child: Column(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:1212:      child: Column(
+lib/features/biometric/widgets/biometric_chart_widget.dart:80:      child: Column(
+lib/features/biometric/widgets/biometric_chart_widget.dart:101:    return Row(
+lib/features/biometric/widgets/biometric_chart_widget.dart:117:        Expanded(
+lib/features/biometric/widgets/biometric_chart_widget.dart:118:          child: Column(
+lib/features/biometric/widgets/biometric_chart_widget.dart:234:      child: Row(
+lib/features/biometric/widgets/biometric_chart_widget.dart:238:          Expanded(
+lib/features/biometric/widgets/biometric_chart_widget.dart:239:            child: Column(
+lib/features/biometric/widgets/biometric_chart_widget.dart:277:    return Row(
+lib/features/biometric/widgets/biometric_chart_widget.dart:280:          Expanded(
+lib/features/biometric/widgets/biometric_chart_widget.dart:291:          Expanded(
+lib/features/biometric/widgets/biometric_chart_widget.dart:327:      child: Row(
+lib/features/biometric/widgets/biometric_chart_widget.dart:331:          Expanded(
+lib/features/biometric/widgets/biometric_chart_widget.dart:332:            child: Column(
+lib/features/biometric/widgets/biometric_chart_widget.dart:366:      child: Column(
+lib/features/biometric/widgets/biometric_sync_status.dart:130:      child: Column(
+lib/features/biometric/widgets/biometric_sync_status.dart:149:    return Row(
+lib/features/biometric/widgets/biometric_sync_status.dart:180:        Expanded(
+lib/features/biometric/widgets/biometric_sync_status.dart:181:          child: Column(
+lib/features/biometric/widgets/biometric_sync_status.dart:234:      child: Row(
+lib/features/biometric/widgets/biometric_sync_status.dart:236:          Expanded(
+lib/features/biometric/widgets/biometric_sync_status.dart:237:            child: Column(
+lib/features/biometric/widgets/biometric_sync_status.dart:278:    return Column(
+lib/features/biometric/widgets/biometric_sync_status.dart:308:      child: Row(
+lib/features/biometric/widgets/biometric_sync_status.dart:326:          Expanded(
+lib/features/biometric/widgets/biometric_sync_status.dart:327:            child: Column(
+lib/features/biometric/widgets/biometric_sync_status.dart:330:                Row(
+lib/features/biometric/widgets/biometric_sync_status.dart:414:            child: Row(
+lib/features/biometric/widgets/correlation_insights_card.dart:38:      child: Column(
+lib/features/biometric/widgets/correlation_insights_card.dart:71:    return Row(
+lib/features/biometric/widgets/correlation_insights_card.dart:85:        Expanded(
+lib/features/biometric/widgets/correlation_insights_card.dart:86:          child: Column(
+lib/features/biometric/widgets/correlation_insights_card.dart:132:      child: Row(
+lib/features/biometric/widgets/correlation_insights_card.dart:147:          Expanded(
+lib/features/biometric/widgets/correlation_insights_card.dart:148:            child: Column(
+lib/features/biometric/widgets/correlation_insights_card.dart:170:          Column(
+lib/features/biometric/widgets/correlation_insights_card.dart:209:      child: Column(
+lib/features/biometric/widgets/correlation_insights_card.dart:254:        child: Row(
+lib/features/biometric/widgets/correlation_insights_card.dart:285:        child: Row(
+lib/features/biometric/widgets/correlation_insights_card.dart:289:            Expanded(
+lib/features/biometric/widgets/correlation_insights_card.dart:309:      child: Column(
+lib/features/biometric/widgets/correlation_insights_card.dart:312:          Row(
+lib/features/biometric/widgets/health_metrics_card.dart:46:        child: Column(
+lib/features/biometric/widgets/health_metrics_card.dart:51:            Row(
+lib/features/biometric/widgets/health_metrics_card.dart:70:            Row(
+lib/features/biometric/widgets/health_metrics_card.dart:73:                Flexible(
+lib/features/biometric/widgets/health_metrics_card.dart:130:        child: Row(
+lib/features/biometric/widgets/health_metrics_card.dart:159:      child: Row(
+lib/features/coming_soon/screens/coming_soon_screen.dart:61:          child: Column(
+lib/features/coming_soon/screens/coming_soon_screen.dart:67:              Expanded(
+lib/features/coming_soon/screens/coming_soon_screen.dart:95:      child: Column(
+lib/features/coming_soon/screens/coming_soon_screen.dart:160:      child: Column(
+lib/features/coming_soon/screens/coming_soon_screen.dart:217:      child: Column(
+lib/features/coming_soon/screens/coming_soon_screen.dart:278:      child: Column(
+lib/features/coming_soon/screens/coming_soon_screen.dart:335:    return Row(
+lib/features/coming_soon/screens/coming_soon_screen.dart:381:          child: Column(
+lib/features/coming_soon/screens/coming_soon_screen.dart:421:              Row(
+lib/features/coming_soon/screens/coming_soon_screen.dart:423:                  Expanded(
+lib/features/coming_soon/screens/coming_soon_screen.dart:430:                  Expanded(
+lib/features/coming_soon/widgets/feature_preview_card.dart:87:            child: Column(
+lib/features/coming_soon/widgets/feature_preview_card.dart:105:      child: Row(
+lib/features/coming_soon/widgets/feature_preview_card.dart:133:          Expanded(
+lib/features/coming_soon/widgets/feature_preview_card.dart:134:            child: Column(
+lib/features/coming_soon/widgets/feature_preview_card.dart:137:                Row(
+lib/features/coming_soon/widgets/feature_preview_card.dart:139:                    Expanded(
+lib/features/coming_soon/widgets/feature_preview_card.dart:223:    return Row(
+lib/features/coming_soon/widgets/feature_preview_card.dart:246:      child: Column(
+lib/features/coming_soon/widgets/feature_preview_card.dart:279:              child: Row(
+lib/features/coming_soon/widgets/feature_preview_card.dart:291:                  Expanded(
+lib/features/coming_soon/widgets/feature_preview_card.dart:309:          Row(
+lib/features/coming_soon/widgets/feature_preview_card.dart:311:              Expanded(
+lib/features/coming_soon/widgets/feature_preview_card.dart:320:              Expanded(
+lib/features/coming_soon/widgets/feature_preview_card.dart:358:        child: Row(
+lib/features/coming_soon/widgets/feature_preview_card.dart:405:      child: Column(
+lib/features/coming_soon/widgets/feature_preview_card.dart:419:          Expanded(
+lib/features/coming_soon/widgets/feature_preview_card.dart:422:              child: Column(
+lib/features/coming_soon/widgets/feature_preview_card.dart:426:                  Row(
+lib/features/coming_soon/widgets/feature_preview_card.dart:446:                      Expanded(
+lib/features/coming_soon/widgets/feature_preview_card.dart:447:                        child: Column(
+lib/features/coming_soon/widgets/feature_preview_card.dart:505:                  Expanded(
+lib/features/coming_soon/widgets/feature_preview_card.dart:520:                          child: Row(
+lib/features/coming_soon/widgets/feature_preview_card.dart:528:                              Expanded(
+lib/features/coming_soon/widgets/waitlist_signup_widget.dart:59:        child: Column(
+lib/features/coming_soon/widgets/waitlist_signup_widget.dart:78:    return Row(
+lib/features/coming_soon/widgets/waitlist_signup_widget.dart:91:        Expanded(
+lib/features/coming_soon/widgets/waitlist_signup_widget.dart:92:          child: Column(
+lib/features/coming_soon/widgets/waitlist_signup_widget.dart:118:    return Column(
+lib/features/coming_soon/widgets/waitlist_signup_widget.dart:210:    return Column(
+lib/features/coming_soon/widgets/waitlist_signup_widget.dart:254:                child: Row(
+lib/features/coming_soon/widgets/waitlist_signup_widget.dart:289:      child: Row(
+lib/features/coming_soon/widgets/waitlist_signup_widget.dart:294:          Expanded(
+lib/features/coming_soon/widgets/waitlist_signup_widget.dart:332:            : Row(
+lib/features/coming_soon/widgets/waitlist_signup_widget.dart:355:      child: Column(
+lib/features/coming_soon/widgets/waitlist_signup_widget.dart:399:            child: Column(
+lib/features/coming_soon/widgets/coming_soon_card.dart:88:        title: Row(
+lib/features/coming_soon/widgets/coming_soon_card.dart:95:        content: Column(
+lib/features/coming_soon/widgets/coming_soon_card.dart:109:                child: Row(
+lib/features/coming_soon/widgets/coming_soon_card.dart:175:                child: Stack(
+lib/features/coming_soon/widgets/coming_soon_card.dart:197:                      child: Column(
+lib/features/coming_soon/widgets/coming_soon_card.dart:201:                          Row(
+lib/features/coming_soon/widgets/coming_soon_card.dart:270:                            Row(
+lib/features/coming_soon/widgets/coming_soon_card.dart:301:                              child: Stack(
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:13:    return Column(
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:177:      child: Row(
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:181:          Column(
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:201:                Expanded(
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:223:          Expanded(
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:245:      child: Column(
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:249:          Row(
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:252:              Expanded(
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:253:                child: Column(
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:256:                    Row(
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:258:                        Expanded(
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:358:    return Row(
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:379:    return Column(
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:382:        Row(
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:415:    return Column(
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:430:            child: Row(
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:442:                Expanded(
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:468:            child: Row(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:242:              child: Column(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:246:                  Row(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:262:                      Expanded(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:263:                        child: Column(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:301:      child: Column(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:335:          child: Row(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:343:              Expanded(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:344:                child: Column(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:397:          child: Column(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:400:              Row(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:457:              Row(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:546:      child: Column(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:578:      child: Column(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:581:          Row(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:636:      child: Column(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:668:      child: Column(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:671:          Row(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:726:      child: Column(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:728:          Expanded(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:759:                    child: Column(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:777:                          Row(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:815:      child: Column(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:919:        child: Column(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:943:                  child: Row(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:951:                      Expanded(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:989:          child: Column(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:992:              Row(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:1065:          child: Column(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:1068:              Row(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:1117:                  return Column(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:1123:                            child: Row(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:1131:                                Expanded(
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:129:        title: Row(
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:184:      child: Column(
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:264:      child: Column(
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:267:          Row(
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:316:    return Row(
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:321:        Expanded(
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:322:          child: Column(
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:355:      child: Column(
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:358:          Row(
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:417:        child: Column(
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:428:            Expanded(
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:431:                child: Column(
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:466:                          child: Row(
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:475:                              Expanded(
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:47:              child: Column(
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:101:    return Row(
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:125:        Expanded(
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:126:          child: Column(
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:173:    return Row(
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:175:        Expanded(
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:176:          child: Column(
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:213:          child: Column(
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:242:    return Row(
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:258:        Expanded(
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:279:    return Column(
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:282:        Row(
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:301:                child: Row(
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:313:                    Expanded(
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:347:      child: Column(
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:350:          Row(
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:364:          Row(
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:366:              Expanded(
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:367:                child: Column(
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:478:        child: Row(
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:496:            Expanded(
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:497:              child: Column(
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:500:                  Row(
+lib/features/premium/screens/premium_subscription_screen.dart:66:            child: Column(
+lib/features/premium/screens/premium_subscription_screen.dart:94:            child: Column(
+lib/features/premium/screens/premium_subscription_screen.dart:158:      child: Column(
+lib/features/premium/screens/premium_subscription_screen.dart:189:    return Column(
+lib/features/premium/screens/premium_subscription_screen.dart:231:          child: Row(
+lib/features/premium/screens/premium_subscription_screen.dart:257:              Expanded(
+lib/features/premium/screens/premium_subscription_screen.dart:258:                child: Column(
+lib/features/premium/screens/premium_subscription_screen.dart:261:                    Row(
+lib/features/premium/screens/premium_subscription_screen.dart:307:              Column(
+lib/features/premium/screens/premium_subscription_screen.dart:336:        child: Column(
+lib/features/premium/screens/premium_subscription_screen.dart:346:            ...features.map((feature) => _buildFeatureRow(feature)),
+lib/features/premium/screens/premium_subscription_screen.dart:353:  Widget _buildFeatureRow(PremiumFeature feature) {
+lib/features/premium/screens/premium_subscription_screen.dart:358:      child: Row(
+lib/features/premium/screens/premium_subscription_screen.dart:368:          Expanded(
+lib/features/premium/screens/premium_subscription_screen.dart:369:            child: Column(
+lib/features/premium/screens/premium_subscription_screen.dart:404:    return Column(
+lib/features/premium/screens/premium_subscription_screen.dart:448:          child: Row(
+lib/features/premium/screens/premium_subscription_screen.dart:546:        child: Column(
+lib/features/premium/screens/premium_subscription_screen.dart:548:            Row(
+lib/features/premium/screens/premium_subscription_screen.dart:556:                Expanded(
+lib/features/premium/screens/premium_subscription_screen.dart:557:                  child: Column(
+lib/features/premium/screens/premium_subscription_screen.dart:601:            Row(
+lib/features/premium/screens/premium_subscription_screen.dart:603:                Expanded(
+lib/features/premium/screens/premium_subscription_screen.dart:611:                Expanded(
+lib/features/premium/screens/premium_subscription_screen.dart:636:      child: Column(
+lib/features/premium/screens/premium_subscription_screen.dart:664:        child: Column(
+lib/features/premium/screens/premium_subscription_screen.dart:684:      child: Row(
+lib/features/premium/screens/premium_subscription_screen.dart:701:          Expanded(
+lib/features/premium/screens/premium_subscription_screen.dart:702:            child: Column(
+lib/features/premium/screens/premium_subscription_screen.dart:731:        child: Column(
+lib/features/premium/screens/premium_subscription_screen.dart:741:            Row(
+lib/features/premium/screens/premium_subscription_screen.dart:743:                Expanded(
+lib/features/premium/screens/premium_subscription_screen.dart:753:                Expanded(
+lib/features/premium/screens/premium_subscription_screen.dart:780:      child: Column(
+lib/features/premium/screens/premium_subscription_screen.dart:805:    return Column(
+lib/features/premium/screens/premium_paywall_screen.dart:55:            return Stack(
+lib/features/premium/screens/premium_paywall_screen.dart:79:                        child: Column(
+lib/features/premium/screens/premium_paywall_screen.dart:250:      child: Column(
+lib/features/premium/screens/premium_paywall_screen.dart:276:      child: Row(
+lib/features/premium/screens/premium_paywall_screen.dart:291:          Expanded(
+lib/features/premium/screens/premium_paywall_screen.dart:292:            child: Column(
+lib/features/premium/screens/premium_paywall_screen.dart:330:      child: Column(
+lib/features/premium/screens/premium_paywall_screen.dart:393:        child: Row(
+lib/features/premium/screens/premium_paywall_screen.dart:419:            Expanded(
+lib/features/premium/screens/premium_paywall_screen.dart:420:              child: Column(
+lib/features/premium/screens/premium_paywall_screen.dart:423:                  Row(
+lib/features/premium/screens/premium_paywall_screen.dart:469:            Column(
+lib/features/premium/widgets/premium_feature_widget.dart:52:        child: Row(
+lib/features/premium/widgets/premium_feature_widget.dart:56:            Expanded(
+lib/features/premium/widgets/premium_feature_widget.dart:57:              child: Column(
+lib/features/premium/widgets/premium_feature_widget.dart:60:                  Row(
+lib/features/premium/widgets/premium_feature_widget.dart:62:                      Expanded(
+lib/features/premium/widgets/premium_feature_widget.dart:140:          child: Column(
+lib/features/premium/widgets/premium_feature_widget.dart:143:              Row(
+lib/features/premium/widgets/premium_feature_widget.dart:148:                  Expanded(
+lib/features/premium/widgets/premium_feature_widget.dart:149:                    child: Column(
+lib/features/premium/widgets/premium_feature_widget.dart:152:                        Row(
+lib/features/premium/widgets/premium_feature_widget.dart:154:                            Expanded(
+lib/features/premium/widgets/premium_feature_widget.dart:262:    return Column(
+lib/features/premium/widgets/premium_feature_widget.dart:289:      child: Row(
+lib/features/premium/widgets/premium_feature_widget.dart:304:          Expanded(
+lib/features/premium/widgets/premium_feature_widget.dart:336:      child: Column(
+lib/features/premium/widgets/premium_feature_widget.dart:339:          Row(
+lib/features/premium/widgets/premium_feature_widget.dart:408:    return Row(
+lib/features/premium/widgets/premium_feature_widget.dart:410:        Expanded(
+lib/features/premium/widgets/premium_feature_widget.dart:423:        Expanded(
+lib/features/premium/widgets/premium_feature_widget.dart:470:          child: Column(
+lib/features/premium/widgets/premium_feature_widget.dart:490:                    child: Row(
+lib/features/premium/widgets/premium_feature_widget.dart:499:                        Expanded(
+lib/features/premium/widgets/premium_feature_widget.dart:574:    return Column(
+lib/features/premium/widgets/premium_feature_widget.dart:608:        child: Column(
+lib/features/premium/widgets/premium_feature_widget.dart:622:                  const DataColumn(label: Text('Feature')),
+lib/features/premium/widgets/premium_feature_widget.dart:624:                    (tier) => DataColumn(
+lib/features/premium/widgets/premium_feature_widget.dart:634:                      (feature) => DataRow(
+lib/features/premium/widgets/premium_feature_widget.dart:637:                            Row(
+lib/features/premium/widgets/feature_comparison_widget.dart:18:      child: Column(
+lib/features/premium/widgets/feature_comparison_widget.dart:35:            child: Row(
+lib/features/premium/widgets/feature_comparison_widget.dart:37:                Expanded(
+lib/features/premium/widgets/feature_comparison_widget.dart:48:                Expanded(child: _buildTierHeader('Basic', AppTheme.mediumGrey)),
+lib/features/premium/widgets/feature_comparison_widget.dart:49:                Expanded(
+lib/features/premium/widgets/feature_comparison_widget.dart:52:                Expanded(
+lib/features/premium/widgets/feature_comparison_widget.dart:60:          _buildFeatureRow(
+lib/features/premium/widgets/feature_comparison_widget.dart:66:          _buildFeatureRow(
+lib/features/premium/widgets/feature_comparison_widget.dart:72:          _buildFeatureRow(
+lib/features/premium/widgets/feature_comparison_widget.dart:79:          _buildFeatureRow(
+lib/features/premium/widgets/feature_comparison_widget.dart:85:          _buildFeatureRow(
+lib/features/premium/widgets/feature_comparison_widget.dart:91:          _buildFeatureRow(
+lib/features/premium/widgets/feature_comparison_widget.dart:98:          _buildFeatureRow(
+lib/features/premium/widgets/feature_comparison_widget.dart:104:          _buildFeatureRow(
+lib/features/premium/widgets/feature_comparison_widget.dart:110:          _buildFeatureRow(
+lib/features/premium/widgets/feature_comparison_widget.dart:116:          _buildFeatureRow(
+lib/features/premium/widgets/feature_comparison_widget.dart:123:          _buildFeatureRow(
+lib/features/premium/widgets/feature_comparison_widget.dart:136:    return Column(
+lib/features/premium/widgets/feature_comparison_widget.dart:157:  Widget _buildFeatureRow(
+lib/features/premium/widgets/feature_comparison_widget.dart:176:      child: Row(
+lib/features/premium/widgets/feature_comparison_widget.dart:178:          Expanded(
+lib/features/premium/widgets/feature_comparison_widget.dart:185:          Expanded(child: _buildFeatureIndicator(basic, basicNote)),
+lib/features/premium/widgets/feature_comparison_widget.dart:186:          Expanded(child: _buildFeatureIndicator(premium, premiumNote)),
+lib/features/premium/widgets/feature_comparison_widget.dart:187:          Expanded(child: _buildFeatureIndicator(ultimate, ultimateNote)),
+lib/features/premium/widgets/feature_comparison_widget.dart:195:      child: Column(
+lib/features/premium/widgets/subscription_tier_card.dart:31:      child: Stack(
+lib/features/premium/widgets/subscription_tier_card.dart:55:            child: Column(
+lib/features/premium/widgets/subscription_tier_card.dart:59:                Row(
+lib/features/premium/widgets/subscription_tier_card.dart:78:                    Expanded(
+lib/features/premium/widgets/subscription_tier_card.dart:79:                      child: Column(
+lib/features/premium/widgets/subscription_tier_card.dart:125:                Row(
+lib/features/premium/widgets/subscription_tier_card.dart:178:                    child: Row(
+lib/features/premium/widgets/subscription_tier_card.dart:187:                        Expanded(
+lib/features/premium/widgets/subscription_tier_card.dart:260:                child: Row(
+lib/features/premium/widgets/upgrade_prompt_dialog.dart:54:        child: Column(
+lib/features/premium/widgets/upgrade_prompt_dialog.dart:137:              child: Row(
+lib/features/premium/widgets/upgrade_prompt_dialog.dart:204:    return Column(
+lib/features/premium/widgets/upgrade_prompt_dialog.dart:208:          child: Row(
+lib/features/premium/widgets/upgrade_prompt_dialog.dart:212:              Expanded(
+lib/features/premium/widgets/subscription_status_widget.dart:62:            child: Column(
+lib/features/premium/widgets/subscription_status_widget.dart:65:                Row(
+lib/features/premium/widgets/subscription_status_widget.dart:82:                    Expanded(
+lib/features/premium/widgets/subscription_status_widget.dart:83:                      child: Column(
+lib/features/premium/widgets/subscription_status_widget.dart:142:          child: Row(
+lib/features/premium/widgets/subscription_status_widget.dart:159:              Expanded(
+lib/features/premium/widgets/subscription_status_widget.dart:160:                child: Column(
+lib/features/premium/widgets/subscription_status_widget.dart:220:          child: Column(
+lib/features/premium/widgets/subscription_status_widget.dart:224:              Row(
+lib/features/premium/widgets/subscription_status_widget.dart:239:                  Expanded(
+lib/features/premium/widgets/subscription_status_widget.dart:240:                    child: Column(
+lib/features/premium/widgets/subscription_status_widget.dart:243:                        Row(
+lib/features/premium/widgets/subscription_status_widget.dart:282:                child: Column(
+lib/features/premium/widgets/subscription_status_widget.dart:284:                    _buildDetailRow(
+lib/features/premium/widgets/subscription_status_widget.dart:291:                    _buildDetailRow(
+lib/features/premium/widgets/subscription_status_widget.dart:300:                    _buildDetailRow(
+lib/features/premium/widgets/subscription_status_widget.dart:323:                  child: Row(
+lib/features/premium/widgets/subscription_status_widget.dart:327:                      Expanded(
+lib/features/premium/widgets/subscription_status_widget.dart:352:                  child: Row(
+lib/features/premium/widgets/subscription_status_widget.dart:356:                      Expanded(
+lib/features/premium/widgets/subscription_status_widget.dart:373:              Row(
+lib/features/premium/widgets/subscription_status_widget.dart:375:                  Expanded(
+lib/features/premium/widgets/subscription_status_widget.dart:385:                  Expanded(
+lib/features/premium/widgets/subscription_status_widget.dart:410:    return Column(
+lib/features/premium/widgets/subscription_status_widget.dart:423:            child: Row(
+lib/features/premium/widgets/subscription_status_widget.dart:457:  Widget _buildDetailRow(
+lib/features/premium/widgets/subscription_status_widget.dart:463:    return Row(
+lib/features/premium/widgets/subscription_status_widget.dart:531:          child: Column(
+lib/features/premium/widgets/subscription_status_widget.dart:566:              Expanded(
+lib/features/premium/widgets/subscription_status_widget.dart:632:        child: Row(
+lib/features/premium/widgets/subscription_status_widget.dart:649:            Expanded(
+lib/features/premium/widgets/subscription_status_widget.dart:650:              child: Column(
+lib/features/premium/widgets/premium_upgrade_prompt.dart:34:      child: Column(
+lib/features/premium/widgets/premium_upgrade_prompt.dart:38:          Row(
+lib/features/premium/widgets/premium_upgrade_prompt.dart:53:              Expanded(
+lib/features/premium/widgets/premium_upgrade_prompt.dart:109:      title: Row(
+lib/features/premium/widgets/premium_upgrade_prompt.dart:113:          Expanded(child: Text(title)),
+lib/features/premium/widgets/premium_upgrade_prompt.dart:236:          child: Row(
+lib/features/premium/widgets/premium_upgrade_prompt.dart:243:              Expanded(
+lib/features/premium/widgets/premium_upgrade_prompt.dart:244:                child: Column(
+lib/features/notifications/screens/notification_settings_screen.dart:126:      child: Column(
+lib/features/notifications/screens/notification_settings_screen.dart:149:        child: Column(
+lib/features/notifications/screens/notification_settings_screen.dart:182:      child: Row(
+lib/features/notifications/screens/notification_settings_screen.dart:206:          const Expanded(
+lib/features/notifications/screens/notification_settings_screen.dart:207:            child: Column(
+lib/features/notifications/screens/notification_settings_screen.dart:232:    return Column(
+lib/features/notifications/screens/notification_settings_screen.dart:319:    return Column(
+lib/features/notifications/screens/notification_settings_screen.dart:344:      child: Column(
+lib/features/notifications/screens/notification_settings_screen.dart:357:    return Column(
+lib/features/notifications/screens/notification_settings_screen.dart:369:        Row(
+lib/features/notifications/screens/notification_settings_screen.dart:371:            Expanded(
+lib/features/notifications/screens/notification_settings_screen.dart:379:            Expanded(
+lib/features/notifications/screens/notification_settings_screen.dart:429:        child: Column(
+lib/features/notifications/screens/notification_settings_screen.dart:455:    return Row(
+lib/features/notifications/screens/notification_settings_screen.dart:491:    return Row(
+lib/features/notifications/screens/notification_settings_screen.dart:494:        const Column(
+lib/features/notifications/screens/notification_settings_screen.dart:534:    return Column(
+lib/features/notifications/screens/notification_settings_screen.dart:559:      child: Column(
+lib/features/notifications/screens/notification_settings_screen.dart:596:    return Row(
+lib/features/notifications/screens/notification_settings_screen.dart:611:        Expanded(
+lib/features/notifications/screens/notification_settings_screen.dart:612:          child: Column(
+lib/features/notifications/screens/notification_settings_screen.dart:649:    return Column(
+lib/features/notifications/screens/notification_settings_screen.dart:680:        child: Row(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:75:            child: Column(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:81:                Expanded(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:109:      child: Column(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:112:          Row(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:181:      child: Column(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:283:      child: Column(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:337:      child: Column(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:391:      child: Column(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:477:    return Column(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:482:              child: Row(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:502:                  Expanded(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:503:                    child: Column(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:566:      child: Column(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:629:    return Row(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:635:        Expanded(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:636:          child: Column(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:665:      child: Row(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:668:            Expanded(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:682:          Expanded(
+lib/features/onboarding/screens/onboarding_screen.dart:65:            child: Stack(
+lib/features/onboarding/screens/onboarding_screen.dart:76:                Column(
+lib/features/onboarding/screens/onboarding_screen.dart:81:                    Expanded(
+lib/features/onboarding/screens/onboarding_screen.dart:140:      child: Row(
+lib/features/onboarding/screens/onboarding_screen.dart:154:          Row(
+lib/features/onboarding/screens/onboarding_screen.dart:206:      child: Row(
+lib/features/onboarding/screens/onboarding_screen.dart:208:          Expanded(
+lib/features/onboarding/screens/onboarding_screen.dart:219:              child: Row(
+lib/features/onboarding/screens/cycle_history_step_screen.dart:60:        child: Column(
+lib/features/onboarding/screens/cycle_history_step_screen.dart:64:            Row(
+lib/features/onboarding/screens/cycle_history_step_screen.dart:81:                Expanded(
+lib/features/onboarding/screens/cycle_history_step_screen.dart:82:                  child: Column(
+lib/features/onboarding/screens/cycle_history_step_screen.dart:184:      child: Column(
+lib/features/onboarding/screens/cycle_history_step_screen.dart:186:          Row(
+lib/features/onboarding/screens/cycle_history_step_screen.dart:188:              Expanded(
+lib/features/onboarding/screens/cycle_history_step_screen.dart:198:              Expanded(
+lib/features/onboarding/screens/cycle_history_step_screen.dart:229:      child: Column(
+lib/features/onboarding/screens/cycle_history_step_screen.dart:292:              child: Row(
+lib/features/onboarding/screens/cycle_history_step_screen.dart:307:                  Expanded(
+lib/features/onboarding/screens/cycle_history_step_screen.dart:308:                    child: Column(
+lib/features/onboarding/screens/cycle_history_step_screen.dart:367:        child: Column(
+lib/features/onboarding/screens/cycle_history_step_screen.dart:369:            Row(
+lib/features/onboarding/screens/cycle_history_step_screen.dart:413:            Row(
+lib/features/onboarding/screens/cycle_history_step_screen.dart:443:        child: Column(
+lib/features/onboarding/screens/cycle_history_step_screen.dart:445:            Row(
+lib/features/onboarding/screens/cycle_history_step_screen.dart:489:            Row(
+lib/features/onboarding/screens/cycle_history_step_screen.dart:588:      child: Column(
+lib/features/onboarding/screens/cycle_history_step_screen.dart:641:            child: Column(
+lib/features/onboarding/screens/personal_info_step_screen.dart:62:          child: Column(
+lib/features/onboarding/screens/personal_info_step_screen.dart:66:              Row(
+lib/features/onboarding/screens/personal_info_step_screen.dart:83:                  Expanded(
+lib/features/onboarding/screens/personal_info_step_screen.dart:84:                    child: Column(
+lib/features/onboarding/screens/personal_info_step_screen.dart:252:            child: Row(
+lib/features/onboarding/screens/personal_info_step_screen.dart:267:                Expanded(
+lib/features/onboarding/screens/personal_info_step_screen.dart:268:                  child: Column(
+lib/features/onboarding/screens/welcome_step_screen.dart:25:        child: Column(
+lib/features/onboarding/screens/welcome_step_screen.dart:124:              child: Column(
+lib/features/onboarding/screens/welcome_step_screen.dart:126:                  Row(
+lib/features/onboarding/screens/welcome_step_screen.dart:204:        child: Row(
+lib/features/onboarding/screens/welcome_step_screen.dart:219:            Expanded(
+lib/features/onboarding/screens/steps/complete_step.dart:63:      child: Column(
+lib/features/onboarding/screens/steps/complete_step.dart:107:                child: Column(
+lib/features/onboarding/screens/steps/complete_step.dart:149:              child: Column(
+lib/features/onboarding/screens/steps/complete_step.dart:243:    return Row(
+lib/features/onboarding/screens/steps/complete_step.dart:254:        Expanded(
+lib/features/onboarding/screens/splash_screen.dart:133:            child: Stack(
+lib/features/onboarding/screens/splash_screen.dart:168:                  child: Column(
+lib/features/onboarding/screens/splash_screen.dart:211:                              child: Stack(
+lib/features/onboarding/screens/splash_screen.dart:299:                      Column(
+lib/features/onboarding/widgets/goal_selection_widget.dart:243:        child: Column(
+lib/features/onboarding/widgets/goal_selection_widget.dart:264:    return Column(
+lib/features/onboarding/widgets/goal_selection_widget.dart:291:    return Column(
+lib/features/onboarding/widgets/goal_selection_widget.dart:342:        child: Row(
+lib/features/onboarding/widgets/goal_selection_widget.dart:363:            Expanded(
+lib/features/onboarding/widgets/goal_selection_widget.dart:364:              child: Column(
+lib/features/onboarding/widgets/goal_selection_widget.dart:422:    return Column(
+lib/features/onboarding/widgets/goal_selection_widget.dart:425:        Row(
+lib/features/onboarding/widgets/goal_selection_widget.dart:454:    return Column(
+lib/features/onboarding/widgets/goal_selection_widget.dart:458:            (entry) => Column(
+lib/features/onboarding/widgets/goal_selection_widget.dart:488:    return Column(
+lib/features/onboarding/widgets/goal_selection_widget.dart:531:        child: Row(
+lib/features/onboarding/widgets/goal_selection_widget.dart:544:            Expanded(
+lib/features/onboarding/widgets/goal_selection_widget.dart:545:              child: Column(
+lib/features/onboarding/widgets/goal_selection_widget.dart:548:                  Row(
+lib/features/onboarding/widgets/goal_selection_widget.dart:550:                      Expanded(
+lib/features/onboarding/widgets/goal_selection_widget.dart:617:      label: Row(
+lib/features/onboarding/widgets/goal_selection_widget.dart:674:      child: Column(
+lib/features/onboarding/widgets/goal_selection_widget.dart:677:          Row(
+lib/features/onboarding/widgets/goal_selection_widget.dart:727:            child: Row(
+lib/features/onboarding/widgets/goal_selection_widget.dart:737:                Expanded(
+lib/features/onboarding/widgets/onboarding_page.dart:29:        child: Column(
+lib/features/onboarding/widgets/onboarding_page.dart:105:    return Column(
+lib/features/onboarding/widgets/onboarding_page.dart:109:          child: Row(
+lib/features/onboarding/widgets/onboarding_page.dart:117:              Expanded(
+lib/features/onboarding/widgets/onboarding_page.dart:136:    return Column(
+lib/features/onboarding/widgets/onboarding_page.dart:148:          child: Row(
+lib/features/onboarding/widgets/onboarding_page.dart:152:              Expanded(
+lib/features/onboarding/widgets/onboarding_progress_widget.dart:92:    return Column(
+lib/features/onboarding/widgets/onboarding_progress_widget.dart:164:    return Row(
+lib/features/onboarding/widgets/onboarding_progress_widget.dart:166:        return Expanded(
+lib/features/onboarding/widgets/onboarding_progress_widget.dart:263:    return Column(
+lib/features/onboarding/widgets/onboarding_progress_widget.dart:362:      child: Column(
+lib/features/onboarding/widgets/onboarding_progress_widget.dart:365:          Row(
+lib/features/onboarding/widgets/onboarding_progress_widget.dart:413:    return Row(
+lib/features/onboarding/widgets/onboarding_progress_widget.dart:415:        Expanded(
+lib/features/onboarding/widgets/onboarding_progress_widget.dart:425:        Expanded(
+lib/features/onboarding/widgets/onboarding_progress_widget.dart:435:        Expanded(
+lib/features/onboarding/widgets/onboarding_progress_widget.dart:457:    return Column(
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:171:          child: Column(
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:193:    return Column(
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:196:        Row(
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:202:            Expanded(
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:246:      child: Column(
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:279:    return Column(
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:349:            child: Column(
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:351:                Row(
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:370:                    Expanded(
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:371:                      child: Column(
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:374:                          Row(
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:376:                              Expanded(
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:478:      child: Column(
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:481:          Row(
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:544:    return Row(
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:554:        Expanded(
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:555:          child: Column(
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:588:      child: Column(
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:591:          Row(
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:609:          Row(
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:611:              Expanded(
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:620:              Expanded(
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:633:          Row(
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:635:              Expanded(
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:644:              Expanded(
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:667:    return Column(
+lib/features/onboarding/widgets/personality_quiz_widget.dart:207:        child: Column(
+lib/features/onboarding/widgets/personality_quiz_widget.dart:230:    return Column(
+lib/features/onboarding/widgets/personality_quiz_widget.dart:258:      child: Column(
+lib/features/onboarding/widgets/personality_quiz_widget.dart:310:        child: Row(
+lib/features/onboarding/widgets/personality_quiz_widget.dart:317:            Expanded(
+lib/features/onboarding/widgets/personality_quiz_widget.dart:318:              child: Column(
+lib/features/onboarding/widgets/personality_quiz_widget.dart:354:      child: Column(
+lib/features/onboarding/widgets/personality_quiz_widget.dart:397:        child: Row(
+lib/features/onboarding/widgets/personality_quiz_widget.dart:410:            Expanded(
+lib/features/onboarding/widgets/personality_quiz_widget.dart:411:              child: Column(
+lib/features/onboarding/widgets/personality_quiz_widget.dart:448:      child: Column(
+lib/features/onboarding/widgets/personality_quiz_widget.dart:475:      child: Column(
+lib/features/onboarding/widgets/personality_quiz_widget.dart:521:      label: Row(
+lib/features/onboarding/widgets/personality_quiz_widget.dart:579:        child: Row(
+lib/features/onboarding/widgets/personality_quiz_widget.dart:590:            Expanded(
+lib/features/onboarding/widgets/personality_quiz_widget.dart:591:              child: Column(
+lib/features/onboarding/widgets/personality_quiz_widget.dart:636:    return Column(
+lib/features/onboarding/widgets/setup_form.dart:52:        child: Column(
+lib/features/onboarding/widgets/setup_form.dart:119:    return Column(
+lib/features/onboarding/widgets/setup_form.dart:145:          child: Row(
+lib/features/onboarding/widgets/setup_form.dart:147:              Expanded(
+lib/features/onboarding/widgets/setup_form.dart:187:    return Column(
+lib/features/onboarding/widgets/setup_form.dart:213:          child: Row(
+lib/features/onboarding/widgets/setup_form.dart:215:              Expanded(
+lib/features/onboarding/widgets/setup_form.dart:255:    return Column(
+lib/features/onboarding/widgets/setup_form.dart:278:              label: Row(
+lib/features/onboarding/widgets/setup_form.dart:317:    return Column(
+lib/features/onboarding/widgets/onboarding_progress.dart:27:      child: Column(
+lib/features/onboarding/widgets/onboarding_progress.dart:30:          Row(
+lib/features/onboarding/widgets/onboarding_progress.dart:66:          Row(
+lib/features/onboarding/widgets/onboarding_progress.dart:119:    return Column(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:171:          child: Column(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:197:    return Column(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:233:      child: Column(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:235:          Row(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:237:              Expanded(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:249:              Expanded(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:303:        child: Row(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:316:            Expanded(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:317:              child: Column(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:375:      child: Column(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:378:          Row(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:421:          Row(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:423:              Expanded(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:435:              Expanded(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:455:              child: Row(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:461:                  Expanded(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:490:      child: Column(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:533:      child: Row(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:551:          Expanded(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:552:            child: Column(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:597:      child: Column(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:639:    return Column(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:655:        Row(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:657:            Expanded(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:669:            Expanded(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:704:        child: Row(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:713:            Expanded(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:714:              child: Column(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:763:      child: Row(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:770:          Expanded(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:771:            child: Column(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:810:      child: Column(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:813:          Row(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:844:                  child: Row(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:53:          child: Column(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:57:              Expanded(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:86:      child: Row(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:93:          Expanded(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:94:            child: Column(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:158:      child: Column(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:181:      child: Column(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:244:      child: Column(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:246:          Row(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:276:              Expanded(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:277:                child: Column(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:309:          Row(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:311:              Expanded(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:318:              Expanded(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:325:              Expanded(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:340:    return Column(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:443:      child: Column(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:446:          Row(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:509:      child: Column(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:512:          Row(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:564:      child: Row(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:573:          Expanded(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:607:      child: Column(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:625:          Row(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:627:              Expanded(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:637:              Expanded(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:673:      child: Column(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:691:          Row(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:728:      child: Column(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:731:          Row(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:746:              Column(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:767:          Row(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:769:              Expanded(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:780:              Expanded(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:812:      child: Column(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:815:          Row(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:970:      child: Column(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:990:      child: Column(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:1007:      child: Column(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:1038:      child: Column(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:1041:          Row(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:1085:        child: Column(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:1141:        content: Column(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:1157:                child: Row(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:1166:                    Expanded(child: Text(item)),
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:179:              child: Column(
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:183:                  Row(
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:201:                      Expanded(
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:202:                        child: Column(
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:262:        child: Column(
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:307:        child: Column(
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:331:    return Column(
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:345:          child: Row(
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:385:    return Column(
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:399:          child: Row(
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:421:                  child: Row(
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:450:    return Column(
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:453:        Row(
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:491:              child: Row(
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:534:        child: Column(
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:600:      child: Column(
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:659:      child: Column(
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:662:          Row(
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:673:              Expanded(
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:695:          Row(
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:843:        child: Column(
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:914:        content: Column(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:57:          child: Column(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:61:              Expanded(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:95:      child: Row(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:116:          Expanded(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:117:            child: Column(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:231:        child: Column(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:280:      child: Column(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:323:      child: Column(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:363:      child: Column(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:395:      child: Column(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:442:        child: Column(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:446:            Row(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:514:        child: Column(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:518:            Row(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:589:        title: Row(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:604:            Expanded(child: Text(recommendation.title)),
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:607:        content: Column(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:623:                child: Row(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:635:                    Expanded(child: Text(item)),
+lib/features/analytics/widgets/trend_chart_widget.dart:31:      child: Column(
+lib/features/analytics/widgets/trend_chart_widget.dart:36:          Row(
+lib/features/analytics/widgets/trend_chart_widget.dart:44:              Expanded(
+lib/features/analytics/widgets/trend_chart_widget.dart:45:                child: Column(
+lib/features/analytics/widgets/trend_chart_widget.dart:121:      child: Row(
+lib/features/analytics/widgets/trend_chart_widget.dart:125:          Expanded(
+lib/features/analytics/widgets/trend_chart_widget.dart:126:            child: Column(
+lib/features/analytics/widgets/trend_chart_widget.dart:141:                Row(
+lib/features/analytics/widgets/trend_chart_widget.dart:170:    return Column(
+lib/features/analytics/widgets/trend_chart_widget.dart:256:        Row(
+lib/features/analytics/widgets/trend_chart_widget.dart:271:    return Column(
+lib/features/analytics/widgets/trend_chart_widget.dart:311:      child: Column(
+lib/features/analytics/widgets/trend_chart_widget.dart:315:          Row(
+lib/features/analytics/widgets/trend_chart_widget.dart:333:                child: Row(
+lib/features/analytics/widgets/trend_chart_widget.dart:387:          Row(
+lib/features/analytics/widgets/trend_chart_widget.dart:412:    return Row(
+lib/features/analytics/widgets/cycle_analytics_card.dart:30:      child: Column(
+lib/features/analytics/widgets/cycle_analytics_card.dart:34:          Row(
+lib/features/analytics/widgets/cycle_analytics_card.dart:38:              Expanded(
+lib/features/analytics/widgets/cycle_analytics_card.dart:39:                child: Column(
+lib/features/analytics/widgets/cycle_analytics_card.dart:65:          Row(
+lib/features/analytics/widgets/cycle_analytics_card.dart:67:              Expanded(
+lib/features/analytics/widgets/cycle_analytics_card.dart:77:              Expanded(
+lib/features/analytics/widgets/cycle_analytics_card.dart:89:          Row(
+lib/features/analytics/widgets/cycle_analytics_card.dart:91:              Expanded(
+lib/features/analytics/widgets/cycle_analytics_card.dart:101:              Expanded(
+lib/features/analytics/widgets/cycle_analytics_card.dart:144:      child: Column(
+lib/features/analytics/widgets/cycle_analytics_card.dart:147:          Row(
+lib/features/analytics/widgets/cycle_analytics_card.dart:181:    return Column(
+lib/features/analytics/widgets/cycle_analytics_card.dart:248:        Row(
+lib/features/analytics/widgets/cycle_analytics_card.dart:280:    return Column(
+lib/features/analytics/widgets/cycle_analytics_card.dart:291:        Row(
+lib/features/analytics/widgets/cycle_analytics_card.dart:293:            Expanded(
+lib/features/analytics/widgets/cycle_analytics_card.dart:307:                child: Column(
+lib/features/analytics/widgets/cycle_analytics_card.dart:347:    return Column(
+lib/features/analytics/widgets/cycle_analytics_card.dart:363:                child: Row(
+lib/features/analytics/widgets/cycle_analytics_card.dart:365:                    Expanded(
+lib/features/analytics/widgets/cycle_analytics_card.dart:374:                    Expanded(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:20:      child: Column(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:94:      child: Column(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:96:          Row(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:102:                child: Stack(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:111:                      child: Column(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:136:              Expanded(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:137:                child: Column(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:157:                    Row(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:178:          Row(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:180:              Expanded(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:187:              Expanded(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:194:              Expanded(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:209:    return Column(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:327:      child: Column(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:330:          Row(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:347:                child: Row(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:439:      child: Column(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:442:          Row(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:457:              Expanded(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:458:                child: Column(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:485:                child: Row(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:527:      child: Row(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:543:          Expanded(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:574:      child: Column(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:592:          Row(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:594:              Expanded(child: _buildComparisonChart(theme)),
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:596:              Expanded(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:597:                child: Column(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:707:      child: Column(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:725:          Row(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:764:      child: Column(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:767:          Row(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:890:          Row(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:904:    return Row(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:936:      child: Column(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:939:          Row(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:954:              Expanded(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:955:                child: Column(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:1048:      child: Column(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:1051:          Row(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:1055:              Expanded(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:1075:          Row(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:1113:      child: Column(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:1116:          Row(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:1163:      child: Row(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:1178:          Expanded(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:1179:            child: Column(
+lib/features/analytics/widgets/recommendations_list.dart:44:      child: Column(
+lib/features/analytics/widgets/recommendations_list.dart:95:        child: Column(
+lib/features/analytics/widgets/recommendations_list.dart:99:            Row(
+lib/features/analytics/widgets/recommendations_list.dart:110:                Expanded(
+lib/features/analytics/widgets/recommendations_list.dart:111:                  child: Column(
+lib/features/analytics/widgets/recommendations_list.dart:122:                      Row(
+lib/features/analytics/widgets/recommendations_list.dart:169:                      child: Row(
+lib/features/analytics/widgets/recommendations_list.dart:182:                          Expanded(
+lib/features/analytics/widgets/prediction_analytics_card.dart:30:      child: Column(
+lib/features/analytics/widgets/prediction_analytics_card.dart:34:          Row(
+lib/features/analytics/widgets/prediction_analytics_card.dart:38:              Expanded(
+lib/features/analytics/widgets/prediction_analytics_card.dart:39:                child: Column(
+lib/features/analytics/widgets/prediction_analytics_card.dart:65:          Row(
+lib/features/analytics/widgets/prediction_analytics_card.dart:67:              Expanded(
+lib/features/analytics/widgets/prediction_analytics_card.dart:77:              Expanded(
+lib/features/analytics/widgets/prediction_analytics_card.dart:89:          Row(
+lib/features/analytics/widgets/prediction_analytics_card.dart:91:              Expanded(
+lib/features/analytics/widgets/prediction_analytics_card.dart:101:              Expanded(
+lib/features/analytics/widgets/prediction_analytics_card.dart:143:      child: Column(
+lib/features/analytics/widgets/prediction_analytics_card.dart:146:          Row(
+lib/features/analytics/widgets/prediction_analytics_card.dart:184:    return Column(
+lib/features/analytics/widgets/prediction_analytics_card.dart:291:        Row(
+lib/features/analytics/widgets/prediction_analytics_card.dart:325:    return Column(
+lib/features/analytics/widgets/prediction_analytics_card.dart:415:    return Column(
+lib/features/analytics/widgets/prediction_analytics_card.dart:437:            child: Row(
+lib/features/analytics/widgets/prediction_analytics_card.dart:445:                Expanded(
+lib/features/analytics/widgets/health_analytics_card.dart:31:      child: Column(
+lib/features/analytics/widgets/health_analytics_card.dart:35:          Row(
+lib/features/analytics/widgets/health_analytics_card.dart:43:              Expanded(
+lib/features/analytics/widgets/health_analytics_card.dart:44:                child: Column(
+lib/features/analytics/widgets/health_analytics_card.dart:74:          Row(
+lib/features/analytics/widgets/health_analytics_card.dart:76:              Expanded(
+lib/features/analytics/widgets/health_analytics_card.dart:86:              Expanded(
+lib/features/analytics/widgets/health_analytics_card.dart:98:          Row(
+lib/features/analytics/widgets/health_analytics_card.dart:100:              Expanded(
+lib/features/analytics/widgets/health_analytics_card.dart:111:              Expanded(child: _buildWellnessTipsCard(theme)),
+lib/features/analytics/widgets/health_analytics_card.dart:141:      child: Row(
+lib/features/analytics/widgets/health_analytics_card.dart:155:          Expanded(
+lib/features/analytics/widgets/health_analytics_card.dart:156:            child: Column(
+lib/features/analytics/widgets/health_analytics_card.dart:167:                Row(
+lib/features/analytics/widgets/health_analytics_card.dart:220:      child: Column(
+lib/features/analytics/widgets/health_analytics_card.dart:223:          Row(
+lib/features/analytics/widgets/health_analytics_card.dart:265:      child: Column(
+lib/features/analytics/widgets/health_analytics_card.dart:268:          Row(
+lib/features/analytics/widgets/health_analytics_card.dart:301:    return Column(
+lib/features/analytics/widgets/health_analytics_card.dart:412:        Row(
+lib/features/analytics/widgets/health_analytics_card.dart:425:    return Row(

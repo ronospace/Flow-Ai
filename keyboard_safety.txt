@@ -1,0 +1,80 @@
+lib/core/ui/adaptive_components.dart:10:  static Widget adaptiveScaffold({
+lib/core/ui/adaptive_components.dart:25:      return CupertinoPageScaffold(
+lib/core/ui/adaptive_components.dart:28:        child: SafeArea(child: body ?? const SizedBox.shrink()),
+lib/core/ui/adaptive_components.dart:31:      return Scaffold(
+lib/core/ui/adaptive_components.dart:678:          return SafeArea(
+lib/core/deeplinks/invite_gate_page.dart:96:    return const Scaffold(
+lib/core/routing/app_router.dart:222:          return const Scaffold(
+lib/core/routing/app_router.dart:334:      child: Scaffold(
+lib/core/routing/app_router.dart:347:          child: SafeArea(
+lib/core/services/onboarding_tutorial_service.dart:412:      child: SafeArea(
+lib/core/widgets/error_boundary.dart:68:    return Scaffold(
+lib/core/widgets/error_boundary.dart:72:      body: SafeArea(
+lib/core/widgets/coming_soon_widget.dart:44:      child: SafeArea(
+lib/features/insights/screens/ai_coach_screen.dart:12:    return Scaffold(
+lib/features/insights/screens/faq_browser_screen.dart:116:    return Scaffold(
+lib/features/insights/screens/faq_browser_screen.dart:135:                child: SafeArea(
+lib/features/insights/screens/insights_screen.dart:72:      child: Scaffold(
+lib/features/insights/screens/insights_screen.dart:81:              child: SafeArea(
+lib/features/insights/screens/analytics_dashboard_screen.dart:44:    return Scaffold(
+lib/features/insights/screens/analytics_dashboard_screen.dart:51:        child: SafeArea(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:135:      return Scaffold(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:181:    return Scaffold(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:134:    return Scaffold(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:191:          child: SafeArea(
+lib/features/settings/screens/account_management_screen.dart:101:    return Scaffold(
+lib/features/settings/screens/account_management_screen.dart:108:        child: SafeArea(
+lib/features/settings/screens/settings_screen.dart:82:    return Scaffold(
+lib/features/settings/screens/settings_screen.dart:89:        child: SafeArea(
+lib/features/settings/screens/help_screen.dart:81:    return Scaffold(
+lib/features/future_plans/screens/future_plans_screen.dart:154:    return Scaffold(
+lib/features/_disabled_experimental/gamification/screens/gamification_dashboard_screen.dart:91:        return Scaffold(
+lib/features/_disabled_experimental/gamification/screens/gamification_dashboard_screen.dart:146:          child: SafeArea(
+lib/features/_disabled_experimental/community/screens/community_hub_screen.dart:103:        return Scaffold(
+lib/features/_disabled_experimental/community/screens/community_hub_screen.dart:150:          child: SafeArea(
+lib/features/_disabled_experimental/community/screens/community_hub_screen.dart:392:          bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+lib/features/auth/screens/auth_choice_screen.dart:62:    return Scaffold(
+lib/features/auth/screens/auth_choice_screen.dart:69:          SafeArea(
+lib/features/auth/screens/futuristic_auth_screen.dart:109:    return Scaffold(
+lib/features/auth/screens/futuristic_auth_screen.dart:116:          SafeArea(
+lib/features/auth/screens/auth_screen.dart:123:    return AdaptiveComponents.adaptiveScaffold(
+lib/features/auth/screens/auth_screen.dart:137:        child: SafeArea(
+lib/features/health/screens/real_time_health_dashboard.dart:215:    return Scaffold(
+lib/features/health/screens/health_screen.dart:80:    return Scaffold(
+lib/features/health/screens/health_screen.dart:87:        child: SafeArea(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:42:    return Scaffold(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:49:        child: SafeArea(
+lib/features/cycle/screens/calendar_screen.dart:61:    return Scaffold(
+lib/features/cycle/screens/calendar_screen.dart:68:        child: SafeArea(
+lib/features/cycle/screens/tracking_screen.dart:244:    return Scaffold(
+lib/features/cycle/screens/tracking_screen.dart:251:        child: SafeArea(
+lib/features/cycle/screens/home_screen.dart:545:    return Scaffold(
+lib/features/cycle/screens/home_screen.dart:574:              return SafeArea(
+lib/features/feedback/screens/feedback_screen.dart:120:    return Scaffold(
+lib/features/partner/screens/qr_join_screen.dart:48:    return Scaffold(
+lib/features/partner/screens/partner_dashboard_screen.dart:103:    return Scaffold(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:123:      return Scaffold(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:133:    return Scaffold(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:203:    return Scaffold(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:210:        child: SafeArea(
+lib/features/coming_soon/screens/coming_soon_screen.dart:53:    return Scaffold(
+lib/features/coming_soon/screens/coming_soon_screen.dart:60:        child: SafeArea(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:179:    return Scaffold(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:239:          child: SafeArea(
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:80:    return Scaffold(
+lib/features/premium/screens/premium_subscription_screen.dart:39:    return Scaffold(
+lib/features/premium/screens/premium_paywall_screen.dart:48:    return Scaffold(
+lib/features/premium/screens/premium_paywall_screen.dart:50:      body: SafeArea(
+lib/features/notifications/screens/notification_settings_screen.dart:70:    return Scaffold(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:72:        return Scaffold(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:74:          body: SafeArea(
+lib/features/onboarding/screens/onboarding_screen.dart:62:        return Scaffold(
+lib/features/onboarding/screens/onboarding_screen.dart:64:          body: SafeArea(
+lib/features/onboarding/screens/setup_screen.dart:8:    return const Scaffold(body: Center(child: Text('Setup Screen')));
+lib/features/onboarding/screens/splash_screen.dart:84:    return Scaffold(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:44:    return Scaffold(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:52:        child: SafeArea(
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:133:    return Scaffold(
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:176:          child: SafeArea(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:48:    return Scaffold(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:56:        child: SafeArea(
