@@ -21,7 +21,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     with TickerProviderStateMixin {
   bool _isExpanded = false;
   bool _isFullScreen = false;
-  double _chatHeight = 0.5; // Percentage of screen height
+  double _chatHeight = 0.4; // Percentage of screen height
   late AnimationController _fabController;
   late AnimationController _chatController;
   late AnimationController _expandController;
@@ -176,7 +176,17 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   /// Determine if Quick Questions should be shown
   /// Show when there's only the welcome message (no user messages yet)
   bool _shouldShowQuickQuestions() {
-    return true;
+    // If no messages at all, show quick questions
+    if (_messages.isEmpty) return true;
+
+    // If only one message and it's from AI (welcome message), show quick questions
+    if (_messages.length == 1) {
+      final firstMessage = _messages.first;
+      return firstMessage.author.id == 'ai_flowai_enhanced';
+    }
+
+    // Otherwise, don't show quick questions
+    return false;
   }
 
   void _handleSendPressed(types.PartialText message) {
@@ -264,7 +274,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                             children: [
                               // Chat Messages Area - More space allocated
                               Expanded(
-                                flex: 1,
+                                flex: _shouldShowQuickQuestions() ? 5 : 9,
                                 child: _buildChatArea(theme),
                               ),
 
@@ -404,9 +414,9 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     final theme = Theme.of(context);
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: theme.cardColor,
+        color: Colors.transparent,
         border: Border(top: BorderSide(color: theme.dividerColor, width: 0.5)),
       ),
       child: Row(
@@ -415,7 +425,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             child: TextField(
               controller: _textController,
               decoration: InputDecoration(
-                hintText: 'Ask about your cycle, fertility, or symptoms...',
+                hintText: 'Ask about health, science, technology, lifestyle...',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(25),
                   borderSide: BorderSide.none,
@@ -723,7 +733,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
   // Enhanced Quick Replies - More visible and professional
   Widget _buildEnhancedQuickReplies(ThemeData theme) {
-    final suggestions = _chatService.getSuggestedReplies().take(10).toList();
+    final suggestions = _chatService.getSuggestedReplies().take(4).toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -790,7 +800,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
             setState(() {
               _isTyping = true;
-                          });
+              _showQuickReplies = false;
+            });
 
             _chatService.sendMessage(message);
           },
@@ -839,14 +850,14 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: theme.cardColor,
+        color: Colors.transparent,
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(_isFullScreen ? 16 : 24),
           bottomRight: Radius.circular(_isFullScreen ? 16 : 24),
         ),
         border: Border(
           top: BorderSide(
-            color: theme.dividerColor.withValues(alpha: 0.3),
+            color: Colors.transparent,
             width: 1,
           ),
         ),
@@ -869,7 +880,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 controller: _textController,
                 decoration: InputDecoration(
                   hintText:
-                      'Ask about your cycle, fertility, or symptoms...',
+                      'Ask about health, science, technology, lifestyle...',
                   hintStyle: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.hintColor.withValues(alpha: 0.7),
                     fontSize: 15,
@@ -950,7 +961,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     final suggestions = _chatService.getSuggestedReplies();
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: theme.cardColor.withValues(alpha: 0.5),
         border: Border(top: BorderSide(color: theme.dividerColor, width: 0.5)),
