@@ -198,7 +198,7 @@ class EnhancedAIChatService {
 
     // Add enhanced welcome message
     _addAIMessage(
-      "Hi $userName! 👋 I'm Zyra, your enhanced AI assistant. I can help you with:\n\n🩸 Reproductive health & cycle tracking\n💡 General knowledge & science\n🔬 Technology & lifestyle questions\n❓ FAQs on various topics\n\nWhat would you like to explore today?",
+      "Hi $userName! 👋 I'm Zyra, your menstrual health assistant. I can help you with:\n\n🩸 Menstrual cycle tracking\n🌸 Fertility and ovulation questions\n💗 Period symptoms and PMS\n📅 Cycle patterns and timing\n\nWhat would you like to explore today?",
     );
 
     _isInitialized = true;
