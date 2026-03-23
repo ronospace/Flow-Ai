@@ -10,7 +10,6 @@ import '../providers/insights_provider.dart';
 import '../../cycle/providers/cycle_provider.dart';
 import '../widgets/cycle_length_chart.dart';
 import '../widgets/ai_insight_card.dart';
-import '../widgets/prediction_accuracy_card.dart';
 import '../widgets/cycle_regularity_indicator.dart';
 import '../widgets/mood_energy_chart.dart';
 import '../widgets/symptom_heatmap.dart';
@@ -106,8 +105,7 @@ class _InsightsScreenState extends State<InsightsScreen>
               ),
             ),
 
-            // Floating AI Chat - only render if mounted
-            if (mounted) const FloatingAIChat(),
+            const FloatingAIChat(),
           ],
         ),
       ),
@@ -205,7 +203,7 @@ class _InsightsScreenState extends State<InsightsScreen>
       ),
       child: Row(
         children: _timePeriods.asMap().entries.map((entry) {
-          final index = entry.key;
+          
           final period = entry.value;
           final isSelected = _selectedPeriod == period['months'];
 
@@ -353,13 +351,13 @@ class _InsightsScreenState extends State<InsightsScreen>
               const SizedBox(height: 16),
 
               ...insightsProvider.insights.asMap().entries.map((entry) {
-                final index = entry.key;
+                
                 final insight = entry.value;
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 16),
                   child: AIInsightCard(insight: insight)
                       .animate()
-                      .fadeIn(delay: Duration(milliseconds: 300 + index * 100))
+                      .fadeIn(delay: Duration(milliseconds: 300 + entry.key * 100))
                       .slideX(begin: 0.3, end: 0),
                 );
               }),
