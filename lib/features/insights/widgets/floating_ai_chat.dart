@@ -265,16 +265,21 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                             children: [
                               // Chat Messages Area - More space allocated
                               Expanded(
-                                flex: true ? 5 : 9,
+                                flex: (_shouldShowQuickQuestions() && _showQuickReplies) ? 5 : 9,
                                 child: _buildChatArea(theme),
                               ),
 
                               // Quick Replies Section - More prominent and visible
-                              if (true)
+                              if (_isExpanded)
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 12,
+                                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 2),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(18),
+                                    border: Border.all(
+                                      color: AppTheme.primaryPurple.withValues(alpha: 0.18),
+                                      width: 1,
+                                    ),
                                   ),
                                   child: _buildEnhancedQuickReplies(theme),
                                 ),
@@ -313,7 +318,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               decoration: InputDecoration(
                 hintText: 'Ask about health, science, technology, lifestyle...',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(25),
+                  borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide.none,
                 ),
                 filled: true,
@@ -456,7 +461,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                         fontSize: 20,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 2),
                     Row(
                       children: [
                         Container(
@@ -538,7 +543,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
           ),
 
           // Medical Disclaimer (Guideline 1.4.1)
-          const SizedBox(height: 12),
+          const SizedBox(height: 6),
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
@@ -668,10 +673,10 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             )
           ],
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 2),
         if (_showQuickReplies)
           SizedBox(
-            height: 50,
+            height: 30,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: suggestions.length,
@@ -705,9 +710,9 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
             _chatService.sendMessage(message);
           },
-          borderRadius: BorderRadius.circular(25),
+          borderRadius: BorderRadius.circular(20),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 3),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
@@ -718,7 +723,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               borderRadius: BorderRadius.circular(25),
               border: Border.all(
                 color: AppTheme.primaryRose.withValues(alpha: 0.4),
-                width: 1.5,
+                width: 1.0,
               ),
               boxShadow: [
                 BoxShadow(
