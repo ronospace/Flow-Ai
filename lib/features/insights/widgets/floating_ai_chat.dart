@@ -48,6 +48,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
       vsync: this,
     );
 
+    _isExpanded = true;
+    _isExpanded = true;
     _chatController = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -230,8 +232,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
           AnimatedPositioned(
             duration: Duration(milliseconds: 300),
             curve: Curves.easeOutCubic,
-            right: 8,
             left: 8,
+            right: 8,
             top: _isFullScreen
                 ? MediaQuery.of(context).padding.top + 8
                 : screenSize.height * 0.12,
@@ -246,21 +248,10 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   alignment: Alignment.bottomCenter,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: theme.scaffoldBackgroundColor,
-                      borderRadius: BorderRadius.circular(
-                        _isFullScreen ? 16 : 24,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: theme.shadowColor.withValues(alpha: 0.2),
-                          blurRadius: 20,
-                          spreadRadius: 4,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
+                      color: theme.cardColor.withValues(alpha: 0.6),
+                      borderRadius: BorderRadius.circular(_isFullScreen ? 16 : 24),
                       border: Border.all(
-                        color: AppTheme.primaryRose.withValues(alpha: 0.15),
-                        width: 1.5,
+                        color: Colors.white.withValues(alpha: 0.2),
                       ),
                     ),
                     child: Column(
@@ -274,12 +265,12 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                             children: [
                               // Chat Messages Area - More space allocated
                               Expanded(
-                                flex: _shouldShowQuickQuestions() ? 5 : 9,
+                                flex: true ? 5 : 9,
                                 child: _buildChatArea(theme),
                               ),
 
                               // Quick Replies Section - More prominent and visible
-                              if (_shouldShowQuickQuestions())
+                              if (true)
                                 Container(
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 16,
@@ -301,111 +292,6 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             ),
           ),
 
-        // Enhanced Floating Action Button
-        Positioned(
-          right: 16,
-          bottom: 16,
-          child: AnimatedBuilder(
-            animation: _fabAnimation,
-            builder: (context, child) {
-              return Transform.scale(
-                scale: _isExpanded ? 1.0 : (1.0 + _fabAnimation.value * 0.1),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(28),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppTheme.primaryRose.withValues(alpha: 0.4),
-                        blurRadius: 16,
-                        spreadRadius: 2,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: FloatingActionButton(
-                    heroTag: "ai_chat_main_fab",
-                    onPressed: _toggleChat,
-                    backgroundColor: AppTheme.primaryRose,
-                    elevation: 0,
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 300),
-                      transitionBuilder: (child, animation) {
-                        return RotationTransition(
-                          turns: animation,
-                          child: child,
-                        );
-                      },
-                      child: _isExpanded
-                          ? Icon(
-                              Icons.close_rounded,
-                              color: Colors.white,
-                              key: const ValueKey('close'),
-                              size: 28,
-                            )
-                          : Stack(
-                              key: const ValueKey('chat'),
-                              children: [
-                                Icon(
-                                  Icons.psychology_rounded,
-                                  color: Colors.white,
-                                  size: 28,
-                                ),
-                                if (!_isExpanded)
-                                  Positioned(
-                                    top: -2,
-                                    right: -2,
-                                    child:
-                                        Container(
-                                              width: 16,
-                                              height: 16,
-                                              decoration: BoxDecoration(
-                                                gradient: const LinearGradient(
-                                                  colors: [
-                                                    AppTheme.successGreen,
-                                                    AppTheme.accentMint,
-                                                  ],
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: AppTheme.successGreen
-                                                        .withValues(alpha: 0.5),
-                                                    blurRadius: 8,
-                                                    spreadRadius: 1,
-                                                  ),
-                                                ],
-                                              ),
-                                              child: Icon(
-                                                Icons.auto_awesome,
-                                                color: Colors.white,
-                                                size: 10,
-                                              ),
-                                            )
-                                            .animate(
-                                              onPlay: (controller) =>
-                                                  controller.repeat(),
-                                            )
-                                            .shimmer(
-                                              duration: 2000.ms,
-                                              color: Colors.white.withValues(
-                                                alpha: 0.5,
-                                              ),
-                                            )
-                                            .then(delay: 1000.ms)
-                                            .fadeOut(duration: 500.ms)
-                                            .then(delay: 1000.ms)
-                                            .fadeIn(duration: 500.ms),
-                                  ),
-                              ],
-                            ),
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
       ],
     );
   }
@@ -640,7 +526,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                         color: Colors.white.withValues(alpha: 0.1),
                       ),
                       child: Icon(
-                        Icons.close_rounded,
+                        Icons.cancel,
                         color: Colors.white,
                         size: 24,
                       ),
@@ -733,7 +619,18 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
   // Enhanced Quick Replies - More visible and professional
   Widget _buildEnhancedQuickReplies(ThemeData theme) {
-    final suggestions = _chatService.getSuggestedReplies().take(4).toList();
+    final suggestions = [
+      "When is my next period?",
+      "Am I in my fertile window?",
+      "What does this symptom mean?",
+      "Why is my cycle late?",
+      "Ovulation today?",
+      "Cycle irregular?",
+      "Pregnancy risk?",
+      "Hormonal imbalance signs?",
+      "PMS or something else?",
+      "Best time to conceive?"
+    ];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -741,47 +638,51 @@ class _FloatingAIChatState extends State<FloatingAIChat>
       children: [
         // Header - More prominent
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+            Row(children: [
+              Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(colors: [AppTheme.primaryRose, AppTheme.primaryPurple]),
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                borderRadius: BorderRadius.circular(8),
+                child: Icon(Icons.auto_awesome_rounded, color: Colors.white, size: 18),
               ),
-              child: Icon(
-                Icons.auto_awesome_rounded,
-                color: Colors.white,
-                size: 18,
+              const SizedBox(width: 10),
+              Text("Suggested Questions",
+                style: theme.textTheme.titleMedium?.copyWith(
+                  color: AppTheme.primaryRose,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
               ),
-            ),
-            const SizedBox(width: 10),
-            Text(
-              'Suggested Questions',
-              style: theme.textTheme.titleMedium?.copyWith(
-                color: AppTheme.primaryRose,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
+            ]),
+            IconButton(
+              icon: Icon(_showQuickReplies ? Icons.expand_less : Icons.expand_more),
+              onPressed: () {
+                setState(() {
+                  _showQuickReplies = !_showQuickReplies;
+                });
+              },
+            )
           ],
         ),
-        const SizedBox(height: 16),
-        // Suggestions - Horizontal scrollable for better visibility
-        SizedBox(
-          height: 50,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: suggestions.length,
-            separatorBuilder: (context, index) => const SizedBox(width: 12),
-            itemBuilder: (context, index) {
-              return _buildSuggestionChip(suggestions[index], theme, index);
-            },
+        const SizedBox(height: 12),
+        if (_showQuickReplies)
+          SizedBox(
+            height: 50,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: suggestions.length,
+              separatorBuilder: (context, index) => const SizedBox(width: 12),
+              itemBuilder: (context, index) {
+                return _buildSuggestionChip(suggestions[index], theme, index);
+              },
+            ),
           ),
-        ),
-      ],
-    );
+        ],
+      );
   }
 
   // Suggestion Chip - More prominent and professional
@@ -800,7 +701,6 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
             setState(() {
               _isTyping = true;
-              _showQuickReplies = false;
             });
 
             _chatService.sendMessage(message);
