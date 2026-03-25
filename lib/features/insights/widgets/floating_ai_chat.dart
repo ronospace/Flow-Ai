@@ -265,7 +265,6 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                             children: [
                               // Chat Messages Area - More space allocated
                               Expanded(
-                                flex: (_shouldShowQuickQuestions() && _showQuickReplies) ? 5 : 9,
                                 child: _buildChatArea(theme),
                               ),
 
@@ -861,75 +860,4 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     );
   }
 
-  Widget _buildQuickReplies() {
-    final theme = Theme.of(context);
-    final suggestions = _chatService.getSuggestedReplies();
-
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: theme.cardColor.withValues(alpha: 0.5),
-        border: Border(top: BorderSide(color: theme.dividerColor, width: 0.5)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Quick questions:',
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: AppTheme.mediumGrey,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: suggestions.map((suggestion) {
-              return InkWell(
-                onTap: () {
-                  final currentUser = _chatService.currentUser;
-                  if (currentUser == null) return;
-
-                  final message = types.TextMessage(
-                    author: currentUser,
-                    createdAt: DateTime.now().millisecondsSinceEpoch,
-                    id: const Uuid().v4(),
-                    text: suggestion,
-                  );
-
-                  setState(() {
-                    _isTyping = true;
-                  });
-
-                  _chatService.sendMessage(message);
-                },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppTheme.primaryRose.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: AppTheme.primaryRose.withValues(alpha: 0.3),
-                      width: 1,
-                    ),
-                  ),
-                  child: Text(
-                    suggestion,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: AppTheme.primaryRose,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-        ],
-      ),
-    );
   }
-}
