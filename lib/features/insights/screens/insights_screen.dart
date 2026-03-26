@@ -13,7 +13,7 @@ import '../widgets/ai_insight_card.dart';
 import '../widgets/cycle_regularity_indicator.dart';
 import '../widgets/mood_energy_chart.dart';
 import '../widgets/symptom_heatmap.dart';
-import '../widgets/floating_ai_chat.dart';
+import '../widgets/floating_ai_chat_v2.dart';
 
 class InsightsScreen extends StatefulWidget {
   const InsightsScreen({super.key});
@@ -24,6 +24,57 @@ class InsightsScreen extends StatefulWidget {
 
 class _InsightsScreenState extends State<InsightsScreen>
     with TickerProviderStateMixin {
+
+  bool _isChatOpen = false;
+
+  Widget _buildFloatingAI() {
+    if (_isChatOpen) {
+      return Positioned(
+        left: 14,
+        right: 14,
+        bottom: 88,
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width - 28,
+          height: MediaQuery.of(context).size.height * 0.42,
+          child: ZyraFlowAIChatV2(
+            key: const ValueKey("chat"),
+            onClose: () => setState(() => _isChatOpen = false),
+          ),
+        ),
+      );
+    }
+
+    return Positioned(
+      right: 18,
+      bottom: 104,
+      child: GestureDetector(
+        onTap: () => setState(() => _isChatOpen = true),
+        child: Container(
+          width: 64,
+          height: 64,
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [Color(0xFFF56CAB), Color(0xFFB06AE3)],
+            ),
+            borderRadius: BorderRadius.circular(22),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.14),
+                blurRadius: 14,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: const Icon(
+            Icons.auto_awesome_rounded,
+            color: Colors.white,
+            size: 26,
+          ),
+        ),
+      ),
+    );
+  }
+
   late TabController _tabController;
   late AnimationController _aiPulseController;
   int _selectedPeriod = 3; // 3 months default
@@ -105,7 +156,7 @@ class _InsightsScreenState extends State<InsightsScreen>
               ),
             ),
 
-            const FloatingAIChat(),
+            _buildFloatingAI(),
           ],
         ),
       ),

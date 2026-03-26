@@ -1,0 +1,9 @@
+lib/features/insights/widgets/floating_ai_chat.dart:3:import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+lib/features/insights/widgets/floating_ai_chat_v2.dart:2:import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204359:3:import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+lib/features/insights/widgets/floating_ai_chat_v2.dart.bak.20260326_054305:2:import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203517:3:import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204329:3:import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260325_004442:3:import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203844:3:import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_185808:3:import 'package:flutter_chat_ui/flutter_chat_ui.dart';

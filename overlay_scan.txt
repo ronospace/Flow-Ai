@@ -1,0 +1,130 @@
+lib/generated/app_localizations_ga.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_fr.dart:1596:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_et.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_cy.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations.dart:3166:  String get useFloatingChatInInsights;
+lib/generated/app_localizations_ko.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_he.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_el.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_hi.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_ro.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_bg.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_da.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_lv.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_no.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_vi.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_cs.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_th.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_sv.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_ar.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_es.dart:1587:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_lt.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_is.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_hu.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_bn.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_zh.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_tr.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_sl.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_ja.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_nl.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_ru.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_pl.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_uk.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_de.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_mt.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_fi.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_hr.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_it.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_pt.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_sk.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_en.dart:1582:  String get useFloatingChatInInsights =>
+lib/l10n/app_es.arb:324:  "useFloatingChatInInsights": "Por ahora, usa el chat flotante en la pantalla de análisis",
+lib/l10n/app_fr.arb:807:  "useFloatingChatInInsights": "Pour l'instant, utilisez le chat flottant dans l'écran d'analyses",
+lib/l10n/app_en.arb:1596:  "useFloatingChatInInsights": "For now, use the floating chat in the insights screen",
+lib/l10n/app_en.arb:1597:  "@useFloatingChatInInsights": {
+lib/core/config/platform_config.dart:228:      'enablePerformanceOverlay': false,
+lib/core/utils/theme_utils.dart:78:  static Color getOverlayColor(BuildContext context) {
+lib/core/theme/app_theme.dart:204:      // Floating Action Button Theme
+lib/core/theme/app_theme.dart:205:      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+lib/core/theme/app_theme.dart:365:      // Floating Action Button Theme for dark mode
+lib/core/theme/app_theme.dart:366:      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+lib/core/services/platform_service.dart:159:        SystemChrome.setSystemUIOverlayStyle(
+lib/core/services/platform_service.dart:160:          const SystemUiOverlayStyle(
+lib/core/services/onboarding_tutorial_service.dart:311:class TutorialOverlayController {
+lib/core/services/onboarding_tutorial_service.dart:318:  OverlayEntry? _overlayEntry;
+lib/core/services/onboarding_tutorial_service.dart:320:  TutorialOverlayController({
+lib/core/services/onboarding_tutorial_service.dart:335:    _showOverlay();
+lib/core/services/onboarding_tutorial_service.dart:339:  void _showOverlay() {
+lib/core/services/onboarding_tutorial_service.dart:346:    _overlayEntry = OverlayEntry(
+lib/core/services/onboarding_tutorial_service.dart:347:      builder: (context) => TutorialOverlayWidget(
+lib/core/services/onboarding_tutorial_service.dart:357:    Overlay.of(context).insert(_overlayEntry!);
+lib/core/services/onboarding_tutorial_service.dart:363:    _showOverlay();
+lib/core/services/onboarding_tutorial_service.dart:369:    _showOverlay();
+lib/core/services/onboarding_tutorial_service.dart:387:class TutorialOverlayWidget extends StatelessWidget {
+lib/core/services/onboarding_tutorial_service.dart:395:  const TutorialOverlayWidget({
+lib/features/insights/screens/faq_browser_screen.dart:334:      // Floating Action Button for AI Chat
+lib/features/insights/screens/faq_browser_screen.dart:335:      floatingActionButton: FloatingActionButton.extended(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:207:      floatingActionButton: _buildFloatingActionButton(),
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:767:  Widget _buildFloatingActionButton() {
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:773:          child: FloatingActionButton(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:166:      // Floating refresh button
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:167:      floatingActionButton: _buildFloatingActionButton(),
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1135:  Widget _buildFloatingActionButton() {
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1139:      child: FloatingActionButton(
+lib/features/insights/widgets/floating_ai_chat.dart:12:/// Floating AI Chat Widget for insights screen
+lib/features/insights/widgets/floating_ai_chat.dart:13:class FloatingAIChat extends StatefulWidget {
+lib/features/insights/widgets/floating_ai_chat.dart:14:  const FloatingAIChat({super.key});
+lib/features/insights/widgets/floating_ai_chat.dart:17:  State<FloatingAIChat> createState() => _FloatingAIChatState();
+lib/features/insights/widgets/floating_ai_chat.dart:20:class _FloatingAIChatState extends State<FloatingAIChat>
+lib/features/insights/widgets/floating_ai_chat.dart:335:          FloatingActionButton.small(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204359:12:/// Floating AI Chat Widget for insights screen
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204359:13:class FloatingAIChat extends StatefulWidget {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204359:14:  const FloatingAIChat({super.key});
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204359:17:  State<FloatingAIChat> createState() => _FloatingAIChatState();
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204359:20:class _FloatingAIChatState extends State<FloatingAIChat>
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204359:375:          FloatingActionButton.small(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203517:12:/// Floating AI Chat Widget for insights screen
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203517:13:class FloatingAIChat extends StatefulWidget {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203517:14:  const FloatingAIChat({super.key});
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203517:17:  State<FloatingAIChat> createState() => _FloatingAIChatState();
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203517:20:class _FloatingAIChatState extends State<FloatingAIChat>
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203517:338:          FloatingActionButton.small(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204329:12:/// Floating AI Chat Widget for insights screen
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204329:13:class FloatingAIChat extends StatefulWidget {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204329:14:  const FloatingAIChat({super.key});
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204329:17:  State<FloatingAIChat> createState() => _FloatingAIChatState();
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204329:20:class _FloatingAIChatState extends State<FloatingAIChat>
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204329:338:          FloatingActionButton.small(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260325_004442:12:/// Floating AI Chat Widget for insights screen
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260325_004442:13:class FloatingAIChat extends StatefulWidget {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260325_004442:14:  const FloatingAIChat({super.key});
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260325_004442:17:  State<FloatingAIChat> createState() => _FloatingAIChatState();
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260325_004442:20:class _FloatingAIChatState extends State<FloatingAIChat>
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260325_004442:343:          FloatingActionButton.small(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203844:12:/// Floating AI Chat Widget for insights screen
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203844:13:class FloatingAIChat extends StatefulWidget {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203844:14:  const FloatingAIChat({super.key});
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203844:17:  State<FloatingAIChat> createState() => _FloatingAIChatState();
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203844:20:class _FloatingAIChatState extends State<FloatingAIChat>
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203844:338:          FloatingActionButton.small(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_185808:12:/// Floating AI Chat Widget for insights screen
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_185808:13:class FloatingAIChat extends StatefulWidget {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_185808:14:  const FloatingAIChat({super.key});
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_185808:17:  State<FloatingAIChat> createState() => _FloatingAIChatState();
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_185808:20:class _FloatingAIChatState extends State<FloatingAIChat>
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_185808:338:          FloatingActionButton.small(
+lib/features/future_plans/screens/future_plans_screen.dart:194:                  // Floating particles effect
+lib/features/_disabled_experimental/community/screens/community_hub_screen.dart:117:          floatingActionButton: _buildFloatingActionButton(context, controller),
+lib/features/_disabled_experimental/community/screens/community_hub_screen.dart:309:  Widget? _buildFloatingActionButton(
+lib/features/_disabled_experimental/community/screens/community_hub_screen.dart:317:        return FloatingActionButton.extended(
+lib/features/_disabled_experimental/community/screens/community_hub_screen.dart:325:        return FloatingActionButton.extended(
+lib/features/_disabled_experimental/community/screens/community_hub_screen.dart:333:        return FloatingActionButton.extended(
+lib/features/_disabled_experimental/community/screens/community_hub_screen.dart:341:        return FloatingActionButton.extended(
+lib/features/cycle/widgets/mood_energy_slider.dart:603:                        overlayShape: const RoundSliderOverlayShape(
+lib/features/partner/widgets/partner_communication_widget.dart:400:        FloatingActionButton.small(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:214:      // Floating save button
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:1160:      child: FloatingActionButton.extended(
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:388:    return FloatingActionButton.extended(
+lib/features/onboarding/screens/splash_screen.dart:135:                // Floating particles for enhanced feminine effect
+lib/main.dart:390:          SystemChrome.setSystemUIOverlayStyle(
+lib/main.dart:391:            SystemUiOverlayStyle(

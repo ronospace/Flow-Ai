@@ -1,0 +1,320 @@
+lib/generated/app_localizations_ga.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_ga.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_ga.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_fr.dart:1592:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_fr.dart:1596:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_fr.dart:1600:  String get goToAIChat => 'Aller au Chat IA';
+lib/generated/app_localizations_et.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_et.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_et.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_cy.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_cy.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_cy.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations.dart:3160:  String get fullChatExperienceComingSoon;
+lib/generated/app_localizations.dart:3166:  String get useFloatingChatInInsights;
+lib/generated/app_localizations.dart:3171:  /// **'Go to AI Chat'**
+lib/generated/app_localizations.dart:3172:  String get goToAIChat;
+lib/generated/app_localizations_ko.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_ko.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_ko.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_he.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_he.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_he.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_el.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_el.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_el.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_hi.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_hi.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_hi.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_ro.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_ro.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_ro.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_bg.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_bg.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_bg.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_da.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_da.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_da.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_lv.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_lv.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_lv.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_no.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_no.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_no.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_vi.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_vi.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_vi.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_cs.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_cs.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_cs.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_th.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_th.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_th.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_sv.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_sv.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_sv.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_ar.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_ar.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_ar.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_es.dart:1583:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_es.dart:1587:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_es.dart:1591:  String get goToAIChat => 'Ir al Chat IA';
+lib/generated/app_localizations_lt.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_lt.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_lt.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_is.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_is.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_is.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_hu.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_hu.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_hu.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_bn.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_bn.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_bn.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_zh.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_zh.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_zh.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_tr.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_tr.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_tr.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_sl.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_sl.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_sl.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_ja.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_ja.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_ja.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_nl.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_nl.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_nl.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_ru.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_ru.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_ru.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_pl.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_pl.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_pl.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_uk.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_uk.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_uk.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_de.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_de.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_de.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_mt.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_mt.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_mt.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_fi.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_fi.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_fi.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_hr.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_hr.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_hr.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_it.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_it.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_it.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_pt.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_pt.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_pt.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_sk.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_sk.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_sk.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/generated/app_localizations_en.dart:1578:  String get fullChatExperienceComingSoon =>
+lib/generated/app_localizations_en.dart:1582:  String get useFloatingChatInInsights =>
+lib/generated/app_localizations_en.dart:1586:  String get goToAIChat => 'Go to AI Chat';
+lib/l10n/app_es.arb:323:  "fullChatExperienceComingSoon": "¡La experiencia de chat completa llegará pronto!",
+lib/l10n/app_es.arb:324:  "useFloatingChatInInsights": "Por ahora, usa el chat flotante en la pantalla de análisis",
+lib/l10n/app_es.arb:325:  "goToAIChat": "Ir al Chat IA",
+lib/l10n/app_fr.arb:806:  "fullChatExperienceComingSoon": "L'expérience de chat complète arrive bientôt !",
+lib/l10n/app_fr.arb:807:  "useFloatingChatInInsights": "Pour l'instant, utilisez le chat flottant dans l'écran d'analyses",
+lib/l10n/app_fr.arb:808:  "goToAIChat": "Aller au Chat IA",
+lib/l10n/app_en.arb:1591:  "fullChatExperienceComingSoon": "Full chat experience coming soon!",
+lib/l10n/app_en.arb:1592:  "@fullChatExperienceComingSoon": {
+lib/l10n/app_en.arb:1596:  "useFloatingChatInInsights": "For now, use the floating chat in the insights screen",
+lib/l10n/app_en.arb:1597:  "@useFloatingChatInInsights": {
+lib/l10n/app_en.arb:1601:  "goToAIChat": "Go to AI Chat",
+lib/l10n/app_en.arb:1602:  "@goToAIChat": {
+lib/core/ai/emotional_intelligence_engine.dart:22:  late EmpatheticChatbot _chatbot;
+lib/core/ai/emotional_intelligence_engine.dart:60:    _chatbot = EmpatheticChatbot();
+lib/core/ai/emotional_intelligence_engine.dart:175:  Future<ChatbotResponse> getChatbotResponse({
+lib/core/ai/emotional_intelligence_engine.dart:922:class EmpatheticChatbot {
+lib/core/ai/emotional_intelligence_engine.dart:927:  Future<ChatbotResponse> generateResponse({
+lib/core/ai/emotional_intelligence_engine.dart:948:    return ChatbotResponse(
+lib/core/ai/emotional_intelligence_engine.dart:1484:class ChatbotResponse {
+lib/core/ai/emotional_intelligence_engine.dart:1492:  ChatbotResponse({
+lib/core/services/enhanced_ai_chat_service.dart:13:/// Enhanced AI Chat Service with comprehensive FAQ and general knowledge
+lib/core/services/enhanced_ai_chat_service.dart:14:class EnhancedAIChatService {
+lib/core/services/enhanced_ai_chat_service.dart:15:  static final EnhancedAIChatService _instance =
+lib/core/services/enhanced_ai_chat_service.dart:16:      EnhancedAIChatService._internal();
+lib/core/services/enhanced_ai_chat_service.dart:17:  factory EnhancedAIChatService() => _instance;
+lib/core/services/enhanced_ai_chat_service.dart:18:  EnhancedAIChatService._internal();
+lib/core/services/enhanced_ai_chat_service.dart:1134:      final response = await _flowAIService.sendHealthChatMessage(
+lib/core/services/onboarding_tutorial_service.dart:265:          'Chat with your personal AI coach for cycle insights, symptom analysis, and health recommendations.',
+lib/core/services/ai_chat_service.dart:13:/// AI Chat Service for real-time health conversations
+lib/core/services/ai_chat_service.dart:14:class AIChatService {
+lib/core/services/ai_chat_service.dart:15:  static final AIChatService _instance = AIChatService._internal();
+lib/core/services/ai_chat_service.dart:16:  factory AIChatService() => _instance;
+lib/core/services/ai_chat_service.dart:17:  AIChatService._internal();
+lib/core/services/ai_chat_service.dart:615:      final response = await _flowAIService.sendHealthChatMessage(
+lib/core/services/flowai_service.dart:53:  Future<FlowAIResponse> sendChatMessage({
+lib/core/services/flowai_service.dart:71:      final requestBody = _buildChatRequest(
+lib/core/services/flowai_service.dart:86:      return _handleChatResponse(response);
+lib/core/services/flowai_service.dart:97:  Future<FlowAIResponse> sendHealthChatMessage({
+lib/core/services/flowai_service.dart:111:    return sendChatMessage(
+lib/core/services/flowai_service.dart:131:    return sendChatMessage(
+lib/core/services/flowai_service.dart:163:  Map<String, dynamic> _buildChatRequest({
+lib/core/services/flowai_service.dart:264:  FlowAIResponse _handleChatResponse(http.Response response) {
+lib/features/insights/screens/faq_browser_screen.dart:17:  final EnhancedAIChatService _chatService = EnhancedAIChatService();
+lib/features/insights/screens/faq_browser_screen.dart:334:      // Floating Action Button for AI Chat
+lib/features/insights/screens/faq_browser_screen.dart:337:          _showAIChatDialog(context);
+lib/features/insights/screens/faq_browser_screen.dart:457:    _showAIChatDialog(context, initialMessage: "Tell me more about: $question");
+lib/features/insights/screens/faq_browser_screen.dart:460:  void _showAIChatDialog(BuildContext context, {String? initialMessage}) {
+lib/features/insights/screens/faq_browser_screen.dart:618:                            'Go to AI Chat',
+lib/features/insights/screens/insights_screen.dart.bak.20260326_051939:108:            const ZyraFlowAIChatV2(),
+lib/features/insights/screens/insights_screen.dart.bak.20260326_053944:108:            const ZyraFlowAIChatV2(),
+lib/features/insights/screens/insights_screen.dart:108:            Positioned(right: 16, bottom: 100, child: SizedBox(width: 80, height: 80, child: ZyraFlowAIChatV2())),
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:26:  final EnhancedAIChatService _aiService = EnhancedAIChatService();
+lib/features/insights/widgets/floating_ai_chat.dart:12:/// Floating AI Chat Widget for insights screen
+lib/features/insights/widgets/floating_ai_chat.dart:13:class FloatingAIChat extends StatefulWidget {
+lib/features/insights/widgets/floating_ai_chat.dart:14:  const FloatingAIChat({super.key});
+lib/features/insights/widgets/floating_ai_chat.dart:17:  State<FloatingAIChat> createState() => _FloatingAIChatState();
+lib/features/insights/widgets/floating_ai_chat.dart:20:class _FloatingAIChatState extends State<FloatingAIChat>
+lib/features/insights/widgets/floating_ai_chat.dart:32:  final EnhancedAIChatService _chatService = EnhancedAIChatService();
+lib/features/insights/widgets/floating_ai_chat.dart:139:  void _toggleChat() {
+lib/features/insights/widgets/floating_ai_chat.dart:171:  void _adjustChatHeight(double delta) {
+lib/features/insights/widgets/floating_ai_chat.dart:231:        // Enhanced Chat Interface - NO OVERLAY
+lib/features/insights/widgets/floating_ai_chat.dart:267:                              // Chat Messages Area - More space allocated
+lib/features/insights/widgets/floating_ai_chat.dart:269:                                child: _buildChatArea(theme),
+lib/features/insights/widgets/floating_ai_chat.dart:390:                    _adjustChatHeight(details.delta.dy);
+lib/features/insights/widgets/floating_ai_chat.dart:516:                    onTap: _toggleChat,
+lib/features/insights/widgets/floating_ai_chat.dart:573:  // Enhanced Chat Area - Better spacing and padding
+lib/features/insights/widgets/floating_ai_chat.dart:574:  Widget _buildChatArea(ThemeData theme) {
+lib/features/insights/widgets/floating_ai_chat.dart:579:        child: Chat(
+lib/features/insights/widgets/floating_ai_chat.dart:585:          theme: DefaultChatTheme(
+lib/features/insights/widgets/floating_ai_chat_v2.dart:5:class ZyraFlowAIChatV2 extends StatefulWidget {
+lib/features/insights/widgets/floating_ai_chat_v2.dart:6:  const ZyraFlowAIChatV2({super.key});
+lib/features/insights/widgets/floating_ai_chat_v2.dart:9:  State<ZyraFlowAIChatV2> createState() => _ZyraFlowAIChatV2State();
+lib/features/insights/widgets/floating_ai_chat_v2.dart:12:class _ZyraFlowAIChatV2State extends State<ZyraFlowAIChatV2> {
+lib/features/insights/widgets/floating_ai_chat_v2.dart:34:            Expanded(child: _buildChat()),
+lib/features/insights/widgets/floating_ai_chat_v2.dart:69:  Widget _buildChat() {
+lib/features/insights/widgets/floating_ai_chat_v2.dart:70:    return Chat(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204359:12:/// Floating AI Chat Widget for insights screen
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204359:13:class FloatingAIChat extends StatefulWidget {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204359:14:  const FloatingAIChat({super.key});
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204359:17:  State<FloatingAIChat> createState() => _FloatingAIChatState();
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204359:20:class _FloatingAIChatState extends State<FloatingAIChat>
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204359:32:  final EnhancedAIChatService _chatService = EnhancedAIChatService();
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204359:139:  void _toggleChat() {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204359:171:  void _adjustChatHeight(double delta) {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204359:230:        // Enhanced Chat Interface - NO OVERLAY
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204359:266:                              // Chat Messages Area - More space allocated
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204359:269:                                child: _buildChatArea(theme),
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204359:429:                    _adjustChatHeight(details.delta.dy);
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204359:553:                onTap: _toggleChat,
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204359:606:  // Enhanced Chat Area - Better spacing and padding
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204359:607:  Widget _buildChatArea(ThemeData theme) {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204359:612:        child: Chat(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204359:618:          theme: DefaultChatTheme(
+lib/features/insights/widgets/floating_ai_chat_v2.dart.bak.20260326_054305:5:class ZyraFlowAIChatV2 extends StatefulWidget {
+lib/features/insights/widgets/floating_ai_chat_v2.dart.bak.20260326_054305:6:  const ZyraFlowAIChatV2({super.key});
+lib/features/insights/widgets/floating_ai_chat_v2.dart.bak.20260326_054305:9:  State<ZyraFlowAIChatV2> createState() => _ZyraFlowAIChatV2State();
+lib/features/insights/widgets/floating_ai_chat_v2.dart.bak.20260326_054305:12:class _ZyraFlowAIChatV2State extends State<ZyraFlowAIChatV2> {
+lib/features/insights/widgets/floating_ai_chat_v2.dart.bak.20260326_054305:34:            Expanded(child: _buildChat()),
+lib/features/insights/widgets/floating_ai_chat_v2.dart.bak.20260326_054305:69:  Widget _buildChat() {
+lib/features/insights/widgets/floating_ai_chat_v2.dart.bak.20260326_054305:70:    return Chat(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203517:12:/// Floating AI Chat Widget for insights screen
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203517:13:class FloatingAIChat extends StatefulWidget {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203517:14:  const FloatingAIChat({super.key});
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203517:17:  State<FloatingAIChat> createState() => _FloatingAIChatState();
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203517:20:class _FloatingAIChatState extends State<FloatingAIChat>
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203517:32:  final EnhancedAIChatService _chatService = EnhancedAIChatService();
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203517:139:  void _toggleChat() {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203517:171:  void _adjustChatHeight(double delta) {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203517:230:        // Enhanced Chat Interface - NO OVERLAY
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203517:266:                              // Chat Messages Area - More space allocated
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203517:269:                                child: _buildChatArea(theme),
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203517:392:                    _adjustChatHeight(details.delta.dy);
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203517:516:                onTap: _toggleChat,
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203517:569:  // Enhanced Chat Area - Better spacing and padding
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203517:570:  Widget _buildChatArea(ThemeData theme) {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203517:575:        child: Chat(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203517:581:          theme: DefaultChatTheme(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204329:12:/// Floating AI Chat Widget for insights screen
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204329:13:class FloatingAIChat extends StatefulWidget {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204329:14:  const FloatingAIChat({super.key});
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204329:17:  State<FloatingAIChat> createState() => _FloatingAIChatState();
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204329:20:class _FloatingAIChatState extends State<FloatingAIChat>
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204329:32:  final EnhancedAIChatService _chatService = EnhancedAIChatService();
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204329:139:  void _toggleChat() {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204329:171:  void _adjustChatHeight(double delta) {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204329:230:        // Enhanced Chat Interface - NO OVERLAY
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204329:266:                              // Chat Messages Area - More space allocated
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204329:269:                                child: _buildChatArea(theme),
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204329:392:                    _adjustChatHeight(details.delta.dy);
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204329:516:                onTap: _toggleChat,
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204329:569:  // Enhanced Chat Area - Better spacing and padding
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204329:570:  Widget _buildChatArea(ThemeData theme) {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204329:575:        child: Chat(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204329:581:          theme: DefaultChatTheme(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260325_004442:12:/// Floating AI Chat Widget for insights screen
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260325_004442:13:class FloatingAIChat extends StatefulWidget {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260325_004442:14:  const FloatingAIChat({super.key});
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260325_004442:17:  State<FloatingAIChat> createState() => _FloatingAIChatState();
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260325_004442:20:class _FloatingAIChatState extends State<FloatingAIChat>
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260325_004442:32:  final EnhancedAIChatService _chatService = EnhancedAIChatService();
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260325_004442:139:  void _toggleChat() {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260325_004442:171:  void _adjustChatHeight(double delta) {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260325_004442:230:        // Enhanced Chat Interface - NO OVERLAY
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260325_004442:266:                              // Chat Messages Area - More space allocated
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260325_004442:269:                                child: _buildChatArea(theme),
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260325_004442:398:                    _adjustChatHeight(details.delta.dy);
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260325_004442:524:                    onTap: _toggleChat,
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260325_004442:581:  // Enhanced Chat Area - Better spacing and padding
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260325_004442:582:  Widget _buildChatArea(ThemeData theme) {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260325_004442:587:        child: Chat(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260325_004442:593:          theme: DefaultChatTheme(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203844:12:/// Floating AI Chat Widget for insights screen
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203844:13:class FloatingAIChat extends StatefulWidget {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203844:14:  const FloatingAIChat({super.key});
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203844:17:  State<FloatingAIChat> createState() => _FloatingAIChatState();
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203844:20:class _FloatingAIChatState extends State<FloatingAIChat>
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203844:32:  final EnhancedAIChatService _chatService = EnhancedAIChatService();
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203844:139:  void _toggleChat() {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203844:171:  void _adjustChatHeight(double delta) {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203844:230:        // Enhanced Chat Interface - NO OVERLAY
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203844:266:                              // Chat Messages Area - More space allocated
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203844:269:                                child: _buildChatArea(theme),
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203844:392:                    _adjustChatHeight(details.delta.dy);
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203844:516:                onTap: _toggleChat,
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203844:569:  // Enhanced Chat Area - Better spacing and padding
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203844:570:  Widget _buildChatArea(ThemeData theme) {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203844:575:        child: Chat(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203844:581:          theme: DefaultChatTheme(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_185808:12:/// Floating AI Chat Widget for insights screen
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_185808:13:class FloatingAIChat extends StatefulWidget {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_185808:14:  const FloatingAIChat({super.key});
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_185808:17:  State<FloatingAIChat> createState() => _FloatingAIChatState();
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_185808:20:class _FloatingAIChatState extends State<FloatingAIChat>
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_185808:32:  final EnhancedAIChatService _chatService = EnhancedAIChatService();
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_185808:139:  void _toggleChat() {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_185808:171:  void _adjustChatHeight(double delta) {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_185808:230:        // Enhanced Chat Interface - NO OVERLAY
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_185808:266:                              // Chat Messages Area - More space allocated
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_185808:269:                                child: _buildChatArea(theme),
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_185808:392:                    _adjustChatHeight(details.delta.dy);
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_185808:516:                onTap: _toggleChat,
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_185808:569:  // Enhanced Chat Area - Better spacing and padding
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_185808:570:  Widget _buildChatArea(ThemeData theme) {
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_185808:575:        child: Chat(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_185808:581:          theme: DefaultChatTheme(
+lib/features/settings/screens/help_screen.dart:319:                    'Live Chat',
+lib/features/settings/screens/help_screen.dart:320:                    'Chat with our support team',
+lib/features/settings/screens/help_screen.dart:322:                    () => _showLiveChat(context),
+lib/features/settings/screens/help_screen.dart:438:  void _showLiveChat(BuildContext context) {
+lib/features/settings/screens/help_screen.dart:462:            const Text('Live Chat Support'),
+lib/features/settings/screens/help_screen.dart:474:            _buildChatOption(
+lib/features/settings/screens/help_screen.dart:482:            _buildChatOption(
+lib/features/settings/screens/help_screen.dart:611:  Widget _buildChatOption(
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:342:                      label: const Text('Chat'),
+lib/features/_disabled_experimental/community/widgets/cycle_buddy_widget.dart:537:      SnackBar(content: Text('Chat with ${buddy.name} coming soon!')),
+lib/features/partner/screens/partner_dashboard_screen.dart:475:        subtitle: 'Chat with partner',
+lib/features/partner/widgets/partner_communication_widget.dart:93:                if (_isExpanded) ...[_buildExpandedChat(theme)],
+lib/features/partner/widgets/partner_communication_widget.dart:139:                  'Partner Chat',
+lib/features/partner/widgets/partner_communication_widget.dart:409:  Widget _buildExpandedChat(ThemeData theme) {

@@ -1,0 +1,55 @@
+lib/core/ui/adaptive_components.dart:239:  static Widget adaptiveTextField({
+lib/core/ui/adaptive_components.dart:279:            CupertinoTextField(
+lib/core/ui/adaptive_components.dart:324:        child: TextField(
+lib/core/enhancements/app_enhancements.dart:334:  static Widget buildEnhancedTextField({
+lib/features/insights/screens/faq_browser_screen.dart:198:                child: TextField(
+lib/features/insights/widgets/floating_ai_chat.dart:308:            child: TextField(
+lib/features/insights/widgets/floating_ai_chat.dart:776:              child: TextField(
+lib/features/insights/widgets/floating_ai_chat_v2.dart:111:            child: TextField(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204359:348:            child: TextField(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204359:810:              child: TextField(
+lib/features/insights/widgets/floating_ai_chat_v2.dart.bak.20260326_054305:111:            child: TextField(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203517:311:            child: TextField(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203517:772:              child: TextField(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204329:311:            child: TextField(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_204329:772:              child: TextField(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260325_004442:316:            child: TextField(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260325_004442:784:              child: TextField(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203844:311:            child: TextField(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_203844:772:              child: TextField(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_185808:311:            child: TextField(
+lib/features/insights/widgets/floating_ai_chat.dart.bak.20260324_185808:772:              child: TextField(
+lib/features/settings/screens/account_management_screen.dart:244:                TextField(
+lib/features/settings/screens/account_management_screen.dart:585:            TextField(
+lib/features/settings/screens/account_management_screen.dart:601:            TextField(
+lib/features/settings/screens/account_management_screen.dart:617:            TextField(
+lib/features/settings/widgets/language_selector.dart:106:              child: TextField(
+lib/features/settings/widgets/profile_section.dart:202:        content: TextField(
+lib/features/settings/widgets/medical_citations_section.dart:104:          child: TextField(
+lib/features/_disabled_experimental/community/widgets/expert_qa_widget.dart:95:            TextField(
+lib/features/_disabled_experimental/community/widgets/symptom_sharing_widget.dart:81:    return TextField(
+lib/features/auth/screens/futuristic_auth_screen.dart:474:        _buildModernTextField(
+lib/features/auth/screens/futuristic_auth_screen.dart:485:          _buildModernTextField(
+lib/features/auth/screens/futuristic_auth_screen.dart:494:        _buildModernTextField(
+lib/features/auth/screens/futuristic_auth_screen.dart:519:          _buildModernTextField(
+lib/features/auth/screens/futuristic_auth_screen.dart:561:  Widget _buildModernTextField({
+lib/features/auth/screens/futuristic_auth_screen.dart:575:      child: TextField(
+lib/features/auth/screens/auth_screen.dart:259:          AdaptiveComponents.adaptiveTextField(
+lib/features/auth/screens/auth_screen.dart:277:            AdaptiveComponents.adaptiveTextField(
+lib/features/auth/screens/auth_screen.dart:294:          AdaptiveComponents.adaptiveTextField(
+lib/features/auth/screens/auth_screen.dart:354:            AdaptiveComponents.adaptiveTextField(
+lib/features/auth/screens/auth_screen.dart:888:                    AuthTextField(
+lib/features/auth/widgets/auth_text_field.dart:4:class AuthTextField extends StatelessWidget {
+lib/features/auth/widgets/auth_text_field.dart:15:  const AuthTextField({
+lib/features/auth/widgets/auth_text_field.dart:44:      child: TextField(
+lib/features/cycle/screens/tracking_screen.dart:830:                  child: TextField(
+lib/features/feedback/screens/feedback_screen.dart:286:            TextField(
+lib/features/feedback/screens/feedback_screen.dart:315:            TextField(
+lib/features/partner/widgets/partner_care_actions_widget.dart:602:            TextField(
+lib/features/partner/widgets/partner_care_actions_widget.dart:720:              TextField(
+lib/features/partner/widgets/partner_communication_widget.dart:370:          child: TextField(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:1011:              TextField(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:1373:          content: TextField(
+lib/features/onboarding/screens/personal_info_step_screen.dart:111:              _buildTextField(
+lib/features/onboarding/screens/personal_info_step_screen.dart:127:              _buildTextField(
+lib/features/onboarding/screens/personal_info_step_screen.dart:173:  Widget _buildTextField({
