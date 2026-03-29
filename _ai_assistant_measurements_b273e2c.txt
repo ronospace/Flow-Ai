@@ -1,0 +1,87 @@
+=== COMMIT ===
+b273e2c
+
+=== INSIGHTS SCREEN AI ENTRY ===
+144:          const SizedBox(width: 8),
+173:                const SizedBox(width: 6),
+336:              const SizedBox(height: 20),
+340:              const SizedBox(height: 20),
+351:              const SizedBox(height: 16),
+357:                  padding: const EdgeInsets.only(bottom: 16),
+393:              const SizedBox(height: 20),
+
+=== FLOATING AI CHAT MEASUREMENTS ===
+235:            left: 8,
+236:            right: 8,
+237:            top: _isFullScreen
+240:            bottom: _isFullScreen
+252:                      borderRadius: BorderRadius.circular(_isFullScreen ? 16 : 24),
+275:                                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 2),
+277:                                    borderRadius: BorderRadius.circular(18),
+280:                                      width: 1,
+307:      padding: const EdgeInsets.all(8),
+310:        border: Border(top: BorderSide(color: theme.dividerColor, width: 0.5)),
+315:            child: TextField(
+320:                  borderRadius: BorderRadius.circular(20),
+341:          const SizedBox(width: 8),
+366:      padding: const EdgeInsets.all(20),
+373:        borderRadius: BorderRadius.only(
+404:                  width: 80, // Larger hit area for better UX
+405:                  height: 30, // Larger hit area
+406:                  padding: const EdgeInsets.symmetric(vertical: 13),
+408:                    width: 40,
+409:                    height: 4,
+412:                      borderRadius: BorderRadius.circular(2),
+418:          if (!_isFullScreen) const SizedBox(height: 16),
+425:                    width: 48,
+426:                    height: 48,
+429:                      borderRadius: BorderRadius.circular(24),
+432:                        width: 2,
+448:              const SizedBox(width: 16),
+463:                    const SizedBox(height: 2),
+467:                              width: 8,
+468:                              height: 8,
+471:                                borderRadius: BorderRadius.circular(4),
+480:                        const SizedBox(width: 8),
+503:                      width: 48,
+504:                      height: 48,
+506:                        borderRadius: BorderRadius.circular(24),
+519:                  const SizedBox(width: 8),
+526:                      width: 48,
+527:                      height: 48,
+529:                        borderRadius: BorderRadius.circular(24),
+545:          const SizedBox(height: 6),
+547:            padding: const EdgeInsets.all(8),
+550:              borderRadius: BorderRadius.circular(8),
+561:                const SizedBox(width: 6),
+583:      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+605:                  height: 1.5,
+607:                const TextStyle(fontSize: 16, height: 1.5),
+612:                  height: 1.5,
+614:                const TextStyle(color: Colors.white, fontSize: 16, height: 1.5),
+649:                padding: const EdgeInsets.all(6),
+652:                  borderRadius: BorderRadius.circular(8),
+656:              const SizedBox(width: 10),
+675:        const SizedBox(height: 2),
+677:          SizedBox(
+678:            height: 30,
+682:              separatorBuilder: (context, index) => const SizedBox(width: 12),
+684:                return _buildSuggestionChip(suggestions[index], theme, index);
+693:  Widget _buildSuggestionChip(String suggestion, ThemeData theme, int index) {
+712:          borderRadius: BorderRadius.circular(20),
+714:            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 3),
+722:              borderRadius: BorderRadius.circular(25),
+725:                width: 1.0,
+755:      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+758:        borderRadius: BorderRadius.only(
+763:          top: BorderSide(
+765:            width: 1,
+777:                borderRadius: BorderRadius.circular(28),
+780:                  width: 1.5,
+783:              child: TextField(
+804:                  height: 1.4,
+815:          const SizedBox(width: 12),
+825:              borderRadius: BorderRadius.circular(28),
+844:                borderRadius: BorderRadius.circular(28),
+846:                  width: 52,
+847:                  height: 52,

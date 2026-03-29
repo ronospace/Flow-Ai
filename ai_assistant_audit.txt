@@ -1,0 +1,189 @@
+=== ACTIVE MOUNTS ===
+lib/features/insights/screens/insights_screen.dart:16:import '../widgets/floating_ai_chat.dart';
+lib/features/insights/screens/insights_screen.dart:108:            const FloatingAIChat(),
+lib/features/insights/widgets/floating_ai_chat.dart:13:class FloatingAIChat extends StatefulWidget {
+lib/features/insights/widgets/floating_ai_chat.dart:14:  const FloatingAIChat({super.key});
+lib/features/insights/widgets/floating_ai_chat.dart:17:  State<FloatingAIChat> createState() => _FloatingAIChatState();
+lib/features/insights/widgets/floating_ai_chat.dart:20:class _FloatingAIChatState extends State<FloatingAIChat>
+
+=== INPUT SYSTEMS ===
+lib/features/insights/screens/faq_browser_screen.dart:198:                child: TextField(
+lib/features/insights/widgets/floating_ai_chat.dart:403:            child: TextField(
+lib/features/insights/widgets/floating_ai_chat.dart:871:              child: TextField(
+
+=== CHAT SYSTEMS ===
+lib/features/insights/screens/insights_screen.dart:108:            const FloatingAIChat(),
+lib/features/insights/widgets/floating_ai_chat.dart:3:import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+lib/features/insights/widgets/floating_ai_chat.dart:14:  const FloatingAIChat({super.key});
+lib/features/insights/widgets/floating_ai_chat.dart:139:  void _toggleChat() {
+lib/features/insights/widgets/floating_ai_chat.dart:674:        child: Chat(
+
+=== ACTIVE WIDGET STATE / CONTROLLERS ===
+22:  bool _isExpanded = false;
+23:  bool _isFullScreen = false;
+24:  double _chatHeight = 0.4; // Percentage of screen height
+25:  late AnimationController _fabController;
+26:  late AnimationController _chatController;
+27:  late AnimationController _expandController;
+36:  late TextEditingController _textController;
+40:  bool _isResizing = false;
+46:    _fabController = AnimationController(
+51:    _isExpanded = true;
+52:    _isExpanded = true;
+53:    _chatController = AnimationController(
+58:    _expandController = AnimationController(
+64:      parent: _fabController,
+69:      parent: _chatController,
+74:      parent: _expandController,
+79:    _textController = TextEditingController();
+100:    _chatService.messagesStream.listen((messages) {
+118:    _fabController.stop();
+119:    _chatController.stop();
+120:    _expandController.stop();
+121:    _fabController.dispose();
+122:    _chatController.dispose();
+123:    _expandController.dispose();
+129:    if (!_isExpanded) {
+130:      _fabController.repeat(reverse: true);
+135:    _fabController.stop();
+136:    _fabController.reset();
+141:      _isExpanded = !_isExpanded;
+142:      if (!_isExpanded) {
+143:        _isFullScreen = false;
+144:        _chatHeight = 0.5;
+148:    if (_isExpanded) {
+150:      _chatController.forward();
+152:      _chatController.reverse();
+153:      _expandController.reverse();
+160:      _isFullScreen = !_isFullScreen;
+161:      _chatHeight = _isFullScreen ? 0.9 : 0.6;
+164:    if (_isFullScreen) {
+165:      _expandController.forward();
+167:      _expandController.reverse();
+173:      _chatHeight = (_chatHeight - delta / MediaQuery.of(context).size.height)
+255:        if (_isExpanded)
+325:            top: _isFullScreen
+328:            bottom: _isFullScreen
+340:                      borderRadius: BorderRadius.circular(_isFullScreen ? 16 : 24),
+360:                              if (_isExpanded)
+462:          topLeft: Radius.circular(_isFullScreen ? 16 : 24),
+463:          topRight: Radius.circular(_isFullScreen ? 16 : 24),
+476:          if (!_isFullScreen)
+480:                  _initialHeight = _chatHeight;
+481:                  _isResizing = true;
+484:                  if (!_isFullScreen && _isResizing) {
+489:                  _isResizing = false;
+506:          if (!_isFullScreen) const SizedBox(height: 16),
+598:                        _isFullScreen
+847:          bottomLeft: Radius.circular(_isFullScreen ? 16 : 24),
+848:          bottomRight: Radius.circular(_isFullScreen ? 16 : 24),
+
+=== RISKY / POSSIBLY UNUSED METHODS ===
+158:  void _toggleFullScreen() {
+171:  void _adjustChatHeight(double delta) {
+180:  bool _shouldShowQuickQuestions() {
+348:                        _buildEnhancedHeader(theme),
+371:                                  child: _buildEnhancedQuickReplies(theme),
+378:                        _buildEnhancedInput(theme),
+391:  Widget _buildCustomInput() {
+452:  Widget _buildEnhancedHeader(ThemeData theme) {
+485:                    _adjustChatHeight(details.delta.dy);
+588:                    onTap: _toggleFullScreen,
+713:  Widget _buildEnhancedQuickReplies(ThemeData theme) {
+841:  Widget _buildEnhancedInput(ThemeData theme) {
+
+=== LAYOUT RISK PATTERNS ===
+186:          Positioned(
+187:            right: 18,
+188:            bottom: 104,
+191:              child: Container(
+192:                width: 58,
+193:                height: 58,
+252:    return Stack(
+256:          AnimatedPositioned(
+259:          Positioned(
+260:            right: 18,
+261:            bottom: 104,
+264:              child: Container(
+265:                width: 58,
+266:                height: 58,
+291:          Positioned(
+292:            right: 18,
+293:            bottom: 104,
+296:              child: Container(
+297:                width: 58,
+298:                height: 58,
+323:            left: 8,
+324:            right: 8,
+325:            top: _isFullScreen
+328:            bottom: _isFullScreen
+334:                return Transform.scale(
+337:                  child: Container(
+345:                    child: Column(
+351:                        Expanded(
+352:                          child: Column(
+355:                              Expanded(
+361:                                Container(
+368:                                      width: 1,
+394:    return Container(
+398:        border: Border(top: BorderSide(color: theme.dividerColor, width: 0.5)),
+402:          Expanded(
+429:          const SizedBox(width: 8),
+453:    return Container(
+473:      child: Column(
+491:                child: Container(
+492:                  width: 80, // Larger hit area for better UX
+493:                  height: 30, // Larger hit area
+495:                  child: Container(
+496:                    width: 40,
+497:                    height: 4,
+506:          if (!_isFullScreen) const SizedBox(height: 16),
+512:              Container(
+513:                    width: 48,
+514:                    height: 48,
+520:                        width: 2,
+536:              const SizedBox(width: 16),
+539:              Expanded(
+540:                child: Column(
+551:                    const SizedBox(height: 2),
+554:                        Container(
+555:                              width: 8,
+556:                              height: 8,
+568:                        const SizedBox(width: 8),
+590:                    child: Container(
+591:                      width: 48,
+592:                      height: 48,
+607:                  const SizedBox(width: 8),
+613:                    child: Container(
+614:                      width: 48,
+615:                      height: 48,
+633:          const SizedBox(height: 6),
+634:          Container(
+649:                const SizedBox(width: 6),
+650:                Expanded(
+670:    return Container(
+693:                  height: 1.5,
+695:                const TextStyle(fontSize: 16, height: 1.5),
+700:                  height: 1.5,
+702:                const TextStyle(color: Colors.white, fontSize: 16, height: 1.5),
+706:          customBottomWidget: Container(), // We'll use our enhanced input
+727:    return Column(
+736:              Container(
+744:              const SizedBox(width: 10),
+763:        const SizedBox(height: 2),
+766:            height: 30,
+770:              separatorBuilder: (context, index) => const SizedBox(width: 12),
+801:          child: Container(
+813:                width: 1.0,
+842:    return Container(
+851:          top: BorderSide(
+853:            width: 1,
+860:          Expanded(
+861:            child: Container(
+868:                  width: 1.5,
+892:                  height: 1.4,
+903:          const SizedBox(width: 12),
+906:          Container(
+933:                child: Container(
+934:                  width: 52,
+935:                  height: 52,
