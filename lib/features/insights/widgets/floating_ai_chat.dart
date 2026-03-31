@@ -251,7 +251,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 : screenSize.height * 0.18,
             bottom: _isFullScreen
                 ? MediaQuery.of(context).padding.bottom + 8
-                : 72,
+                : MediaQuery.of(context).viewInsets.bottom,
             child: AnimatedBuilder(
               animation: _chatAnimation,
               builder: (context, child) {
@@ -290,13 +290,13 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                         // Enhanced Input Area
                         _buildEnhancedInput(theme),
 
-                        const SizedBox(height: 4),
+                        const SizedBox(height: 0),
 
                         if (_shouldShowQuickQuestions())
                           Container(
-                            padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
+                            padding: const EdgeInsets.fromLTRB(16, 4, 16, 2),
                             child: Padding(
-      padding: const EdgeInsets.only(bottom: 24),
+      padding: const EdgeInsets.only(bottom: 6),
       child: _buildEnhancedQuickReplies(theme),
     ),
                           ),
