@@ -11,7 +11,8 @@ import 'package:uuid/uuid.dart';
 
 /// Floating AI Chat Widget for insights screen
 class FloatingAIChat extends StatefulWidget {
-  const FloatingAIChat({super.key});
+  final GlobalKey tabsKey;
+  const FloatingAIChat({super.key, required this.tabsKey});
 
   @override
   State<FloatingAIChat> createState() => _FloatingAIChatState();
@@ -232,6 +233,14 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     // Handle preview data if needed
   }
 
+  double _getTabsBottom() {
+    final ctx = widget.tabsKey.currentContext;
+    if (ctx == null) return 200;
+    final box = ctx.findRenderObject() as RenderBox;
+    final pos = box.localToGlobal(Offset.zero);
+    return pos.dy + box.size.height + 8;
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -248,7 +257,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             left: 8,
             top: _isFullScreen
                 ? MediaQuery.of(context).padding.top + 8
-                : screenSize.height * 0.18,
+                : _getTabsBottom(),
             bottom: _isFullScreen
                 ? MediaQuery.of(context).padding.bottom + 8
                 : MediaQuery.of(context).viewInsets.bottom,
