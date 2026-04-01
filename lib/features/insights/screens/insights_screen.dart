@@ -25,6 +25,7 @@ class InsightsScreen extends StatefulWidget {
 
 class _InsightsScreenState extends State<InsightsScreen>
     with TickerProviderStateMixin {
+  final GlobalKey tabsKey = GlobalKey();
   late TabController _tabController;
   late AnimationController _aiPulseController;
   int _selectedPeriod = 3; // 3 months default
@@ -107,7 +108,7 @@ class _InsightsScreenState extends State<InsightsScreen>
             ),
 
             // Floating AI Chat - only render if mounted
-            if (mounted) const FloatingAIChat(),
+            if (mounted) FloatingAIChat(tabsKey: tabsKey),
           ],
         ),
       ),
@@ -254,6 +255,7 @@ class _InsightsScreenState extends State<InsightsScreen>
   Widget _buildTabBar() {
     final theme = Theme.of(context);
     return Container(
+      key: tabsKey,
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface.withValues(alpha: 0.9),
