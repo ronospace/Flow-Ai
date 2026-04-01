@@ -12,8 +12,7 @@ import 'partner_service.dart'
         PartnerMessageType,
         PartnerCareAction,
         PartnerCareActionType,
-        PartnerInsight,
-        PartnerInsightType,
+
         PartnerSharingSettings;
 
 /// Local Partner Service
@@ -29,6 +28,8 @@ class LocalPartnerService {
   static const String _invitationsKey = 'local_invitations';
   static const String _messagesKey = 'local_partner_messages';
   static const String _careActionsKey = 'local_partner_care_actions';
+  // ignore: unused_field
+  // ignore: unused_field
   static const String _insightsKey = 'local_partner_insights';
 
   Future<void> initialize() async {
@@ -106,7 +107,11 @@ class LocalPartnerService {
     // Get current user info
     final userInfo = await _getCurrentUserInfo();
     final inviteeUserId = userInfo['userId']!;
+    // ignore: unused_local_variable
+    // ignore: unused_local_variable
     final inviteeUserName = userInfo['userName']!;
+    // ignore: unused_local_variable
+    // ignore: unused_local_variable
     final inviteeEmail = userInfo['userEmail'];
 
     // Find invitation

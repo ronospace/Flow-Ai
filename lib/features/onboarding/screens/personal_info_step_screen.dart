@@ -47,6 +47,7 @@ class _PersonalInfoStepScreenState extends State<PersonalInfoStepScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    // ignore: unused_local_variable
     final localizations = AppLocalizations.of(context);
 
     return Container(

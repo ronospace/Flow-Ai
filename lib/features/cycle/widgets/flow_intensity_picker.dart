@@ -112,6 +112,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     final theme = Theme.of(context);
     final intensityOptions = _getIntensityOptions(context);
     final selectedOption = intensityOptions.firstWhere(
@@ -165,7 +166,9 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
     );
   }
 
+  // ignore: unused_element
   Widget _buildFlowVisualization(FlowIntensityOption option) {
+    // ignore: unused_local_variable
     final theme = Theme.of(context);
     return Container(
       height: 120,
@@ -263,6 +266,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
   }
 
   Widget _buildAIInsightsPanel(FlowIntensityOption option) {
+    // ignore: unused_local_variable
     final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -327,6 +331,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
   }
 
   Widget _buildFlowIntensityCard(FlowIntensityOption option, bool isSelected) {
+    // ignore: unused_local_variable
     final theme = Theme.of(context);
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200), // Reduced animation time
@@ -484,6 +489,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
 
   void _showMedicalInfo(FlowIntensityOption option) {
     final localizations = AppLocalizations.of(context);
+    // ignore: unused_local_variable
     final theme = Theme.of(context);
     showModalBottomSheet(
       context: context,

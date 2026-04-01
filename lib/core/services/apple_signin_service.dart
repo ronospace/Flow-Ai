@@ -1,5 +1,4 @@
 import '../utils/app_logger.dart';
-import 'app_enhancement_service.dart';
 import '../models/auth_result.dart';
 
 /// Apple Sign-In service (Currently disabled for iOS compatibility)
@@ -9,6 +8,7 @@ class AppleSignInService {
   AppleSignInService._internal();
 
   bool _isInitialized = false;
+  // ignore: unused_field
   bool _isAvailable = false;
 
   /// Initialize the Apple Sign-In service

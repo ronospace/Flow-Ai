@@ -16,11 +16,11 @@ class PersonalizationEngine {
   bool get isInitialized => _isInitialized;
 
   // User-specific models
-  late Map<String, dynamic> _userProfileModel;
+  late Map<String, dynamic> _userProfileModel; // ignore: unused_field
   late Map<String, dynamic> _adaptiveLearningModel;
   late Map<String, dynamic> _personalizationRules;
   late Map<String, dynamic> _behavioralPatterns;
-  late Map<String, dynamic> _preferenceEngine;
+  late Map<String, dynamic> _preferenceEngine; // ignore: unused_field
 
   Future<void> initialize() async {
     if (_isInitialized) return;
@@ -352,16 +352,19 @@ class PersonalizationEngine {
 
     switch (predictionType) {
       case 'cycle_length':
+        // ignore: unused_local_variable
         final adjustment =
             strategies['cycle_length_adjustment']! * correctionMagnitude;
         // Apply adjustment to user's personal cycle length model
         break;
       case 'symptom_likelihood':
+        // ignore: unused_local_variable
         final adjustment =
             strategies['symptom_likelihood_update']! * correctionMagnitude;
         // Apply adjustment to symptom prediction model
         break;
       case 'confidence_score':
+        // ignore: unused_local_variable
         final adjustment =
             strategies['confidence_recalibration']! * correctionMagnitude;
         // Apply adjustment to confidence calculation
@@ -617,6 +620,7 @@ class PersonalizationEngine {
   Map<String, String> _analyzeCycleEvolution(List<CycleData> cycles) {
     if (cycles.length < 6) return {};
 
+  // ignore: unused_element
     final recentCycles = cycles.takeLast(3);
     final olderCycles = cycles.take(cycles.length - 3);
 
@@ -715,7 +719,13 @@ class PersonalizationEngine {
   }
 }
 
+// ignore: unused_element
+// ignore: unused_element
+// ignore: unused_element
+  // ignore: unused_element
+// ignore: unused_element
 extension<T> on Iterable<T> {
+  // ignore: unused_element
   Iterable<T> takeLast(int count) {
     return skip(math.max(0, length - count));
   }

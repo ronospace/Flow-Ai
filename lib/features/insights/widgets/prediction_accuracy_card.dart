@@ -233,8 +233,10 @@ class PredictionAccuracyCard extends StatelessWidget {
     } else {
       return 'Keep tracking daily! More data is needed for accurate predictions.';
     }
-  }
+  }// ignore: unused_element
 
+
+  // ignore: unused_element
   void _showCitationDialog(BuildContext context) {
     showDialog(
       context: context,

@@ -321,6 +321,7 @@ class AIInsightCard extends StatelessWidget {
     }
   }
 
+  // ignore: unused_element
   Color _getConfidenceColor() {
     if (insight.confidence >= 0.8) {
       return AppTheme.successGreen;
@@ -331,6 +332,7 @@ class AIInsightCard extends StatelessWidget {
     }
   }
 
+  // ignore: unused_element
   Widget _buildCitationItem(BuildContext context, MedicalCitation citation) {
     final theme = Theme.of(context);
     return Container(

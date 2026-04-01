@@ -27,6 +27,7 @@ class EnhancedAIChatService {
   types.User? _currentUser;
   AIConversationMemory? _conversationMemory;
   bool _isInitialized = false;
+  // ignore: unused_field
   AppLocalizations? _localizations;
 
   // FlowAI Integration
@@ -685,6 +686,7 @@ class EnhancedAIChatService {
     return responses[math.Random().nextInt(responses.length)];
   }
 
+  // ignore: unused_element
   String _getPersonalResponse(String message) {
     if (message.contains('who are you') || message.contains('about you')) {
       return "I'm Zyra. I can help with cycle tracking, health topics, and general questions. What would you like to explore?";

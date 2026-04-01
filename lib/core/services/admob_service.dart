@@ -22,10 +22,13 @@ class AdMobService {
       'ca-app-pub-8707491489514576/8812021403';
   static const String _androidRewardedAdUnitId =
       'ca-app-pub-8707491489514576/7894240148';
+  // ignore: unused_field
   static const String _androidAppOpenAdUnitId =
       'ca-app-pub-8707491489514576/7498939737';
+  // ignore: unused_field
   static const String _androidNativeAdUnitId =
       'ca-app-pub-8707491489514576/2837639998';
+  // ignore: unused_field
   static const String _androidRewardedInterstitialAdUnitId =
       'ca-app-pub-8707491489514576/8114534323';
 
@@ -36,10 +39,13 @@ class AdMobService {
       'ca-app-pub-8707491489514576/4558432692';
   static const String _iosRewardedAdUnitId =
       'ca-app-pub-8707491489514576/2833485150';
+  // ignore: unused_field
   static const String _iosAppOpenAdUnitId =
       'ca-app-pub-8707491489514576/1932269355';
+  // ignore: unused_field
   static const String _iosNativeAdUnitId =
       'ca-app-pub-8707491489514576/3245351026';
+  // ignore: unused_field
   static const String _iosRewardedInterstitialAdUnitId =
       'ca-app-pub-8707491489514576/2881586612';
 

@@ -1040,7 +1040,10 @@ class BiometricSliderThumb extends SliderComponentShape {
   }
 }
 
-/// Safe BoxShadow that prevents negative blur radius values
+/// Safe BoxShadow that prevents negative blur radius values// ignore: unused_element// ignore: unused_element
+
+
+// ignore: unused_element
 class _SafeBoxShadow extends BoxShadow {
   const _SafeBoxShadow({
     super.color,

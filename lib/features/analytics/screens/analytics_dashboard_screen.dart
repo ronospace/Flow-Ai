@@ -1014,6 +1014,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
     );
   }
 
+  // ignore: unused_element
   Widget _buildOverviewMetricCard({
     required String title,
     required String value,
@@ -1072,6 +1073,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
     );
   }
 
+  // ignore: unused_element
   void _showTimeRangeSelector(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -1125,6 +1127,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
     );
   }
 
+  // ignore: unused_element
   Widget _buildTimeRangeOption(String title, VoidCallback onTap) {
     return ListTile(
       title: Text(title),
@@ -1133,6 +1136,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
     );
   }
 
+  // ignore: unused_element
   void _showRecommendationDetails(BuildContext context, recommendation) {
     showDialog(
       context: context,

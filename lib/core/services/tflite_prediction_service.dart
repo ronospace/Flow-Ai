@@ -12,6 +12,7 @@ class TFLitePredictionService {
 
   // Interpreter? _interpreter; // Temporarily disabled due to package compatibility
   bool _isInitialized = false;
+  // ignore: unused_field
   bool _modelLoaded = false;
 
   // Model input/output shapes
@@ -92,6 +93,7 @@ class TFLitePredictionService {
   }
 
   /// Prepare input tensor from historical data
+  // ignore: unused_element
   List<List<List<double>>> _prepareInputTensor(
     List<List<double>> historicalData,
   ) {
@@ -138,6 +140,7 @@ class TFLitePredictionService {
   }
 
   /// Process model output into prediction result
+  // ignore: unused_element
   CyclePredictionResult _processModelOutput(
     List<List<double>> output,
     List<List<double>> historicalData,

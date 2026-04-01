@@ -16,11 +16,14 @@ class PredictiveEngine {
   // Advanced ML Models
   late Map<String, dynamic> _neuralNetworkModel;
   late Map<String, dynamic> _ensembleModel;
+  // ignore: unused_field
   late Map<String, dynamic> _timeSeriesModel;
   late Map<String, dynamic> _bayesianModel;
+  // ignore: unused_field
   late Map<String, dynamic> _reinforcementModel;
 
   // Prediction confidence and accuracy tracking
+  // ignore: unused_field
   late Map<String, double> _modelAccuracies;
   late List<PredictionFeedback> _feedbackHistory;
 

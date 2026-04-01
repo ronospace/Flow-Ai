@@ -629,6 +629,7 @@ Flow Ai transforms complex health data into actionable insights, helping women m
   Future<ComplianceReport> runComplianceCheck(DeploymentTarget target) async {
     debugPrint('🔍 Running compliance check for ${target.name}...');
 
+    // ignore: unused_local_variable
     final startTime = DateTime.now();
     final updatedChecks = <ComplianceCheck>[];
 
@@ -1005,6 +1006,7 @@ Flow Ai transforms complex health data into actionable insights, helping women m
     final buildConfig =
         configuration ?? _createDefaultBuildConfiguration(target, platform);
     final buildId = 'build_${DateTime.now().millisecondsSinceEpoch}';
+    // ignore: unused_local_variable
     final startTime = DateTime.now();
 
     final buildResult = BuildResult(

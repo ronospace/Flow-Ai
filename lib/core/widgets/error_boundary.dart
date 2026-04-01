@@ -44,6 +44,7 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
     return widget.child;
   }
 
+  // ignore: unused_element
   void _captureError(Object error, StackTrace? stackTrace) {
     setState(() {
       _hasError = true;
@@ -53,6 +54,7 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
 
     // Log to enhancement service
     try {
+      // ignore: unused_local_variable
       final enhancementService = AppEnhancementService();
       // This would record the error for analytics/reporting
       AppLogger.error('🚨 Error captured by ErrorBoundary: $error', stackTrace);

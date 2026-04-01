@@ -19,7 +19,6 @@ class DailyFeelingsTracker {
   // Tracking configuration
   static const int _morningHour = 9; // 9 AM
   static const int _eveningHour = 21; // 9 PM
-  static const Duration _trackingWindow = Duration(hours: 3);
 
   // Data storage
   final List<FeelingsEntry> _feelingsHistory = [];

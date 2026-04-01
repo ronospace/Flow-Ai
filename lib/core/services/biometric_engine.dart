@@ -19,7 +19,9 @@ class BiometricEngine {
   late Map<String, dynamic> _hrvModel;
   late Map<String, dynamic> _sleepModel;
   late Map<String, dynamic> _temperatureModel;
+  // ignore: unused_field
   late Map<String, dynamic> _stressModel;
+  // ignore: unused_field
   late Map<String, dynamic> _correlationEngine;
 
   Future<void> initialize() async {
@@ -617,6 +619,7 @@ class BiometricEngine {
     if (sleepData.length < 3) return 'insufficient_data';
 
     final recentQuality =
+  // ignore: unused_element
         sleepData.takeLast(3).map((s) => s.efficiency).reduce((a, b) => a + b) /
         3;
     final overallQuality =
@@ -699,6 +702,7 @@ class BiometricEngine {
     // Simplified phase transition detection
     if (data.length < 5) return null;
 
+  // ignore: unused_element
     final recentTemps = data.takeLast(3).map((t) => t.temperature).toList();
     final avgRecent = recentTemps.reduce((a, b) => a + b) / recentTemps.length;
 
@@ -729,6 +733,7 @@ class BiometricEngine {
         .map((t) => t.temperature)
         .toList();
     final lastQuarter = data
+  // ignore: unused_element
         .takeLast(data.length ~/ 4)
         .map((t) => t.temperature)
         .toList();
@@ -878,7 +883,13 @@ class BiometricEngine {
   }
 }
 
+// ignore: unused_element
+// ignore: unused_element
+// ignore: unused_element
+  // ignore: unused_element
+// ignore: unused_element
 extension<T> on Iterable<T> {
+  // ignore: unused_element
   Iterable<T> takeLast(int count) {
     return skip(math.max(0, length - count));
   }

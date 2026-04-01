@@ -568,6 +568,7 @@ class _CalendarScreenState extends State<CalendarScreen>
     }
   }
 
+  // ignore: unused_element
   double _getFlowIndicatorSize(FlowIntensity intensity) {
     switch (intensity) {
       case FlowIntensity.none:

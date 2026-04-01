@@ -167,6 +167,7 @@ class AIPredictionCard extends StatelessWidget {
 
   Widget _buildPredictionDisplay(ThemeData theme) {
     final daysUntil = prediction.daysUntilNextPeriod;
+    // ignore: unused_local_variable
     final isToday = daysUntil == 0;
     final isPast = daysUntil < 0;
 

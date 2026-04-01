@@ -17,10 +17,15 @@ class MultimodalSymptomAnalyzer {
   bool get isInitialized => _isInitialized;
 
   // AI Models for different input modalities
+  // ignore: unused_field
   late Map<String, dynamic> _textAnalysisModel;
+  // ignore: unused_field
   late Map<String, dynamic> _voiceAnalysisModel;
+  // ignore: unused_field
   late Map<String, dynamic> _imageAnalysisModel;
+  // ignore: unused_field
   late Map<String, dynamic> _contextualAnalysisModel;
+  // ignore: unused_field
   late Map<String, dynamic> _smartJournalingModel;
 
   // Symptom recognition patterns

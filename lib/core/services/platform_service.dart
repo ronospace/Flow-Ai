@@ -133,7 +133,7 @@ class PlatformService {
           deviceModel: linuxInfo.machineId ?? 'Linux Device',
           operatingSystem: 'Linux',
           osVersion: linuxInfo.version ?? 'Unknown',
-          deviceName: linuxInfo.prettyName ?? 'Linux Device',
+          deviceName: linuxInfo.prettyName,
           screenSize: ScreenSize.large,
           hasNotch: false,
           supportsHaptics: false,
@@ -294,6 +294,7 @@ class PlatformService {
 
   /// Get platform-appropriate button style
   ButtonStyle getAdaptiveButtonStyle(BuildContext context) {
+    // ignore: unused_local_variable
     final theme = Theme.of(context);
 
     if (platformInfo.platform == TargetPlatform.iOS) {

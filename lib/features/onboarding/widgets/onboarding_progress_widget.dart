@@ -189,7 +189,6 @@ class _OnboardingProgressWidgetState extends State<OnboardingProgressWidget>
     final theme = Theme.of(context);
     final isCompleted = stepIndex < widget.currentStep;
     final isCurrent = stepIndex == widget.currentStep;
-    final isFuture = stepIndex > widget.currentStep;
 
     Color indicatorColor;
     Color textColor;
