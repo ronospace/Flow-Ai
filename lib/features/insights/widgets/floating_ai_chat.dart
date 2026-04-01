@@ -28,13 +28,15 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   late AnimationController _expandController;
   late Animation<double> _fabAnimation;
   late Animation<double> _chatAnimation;
-  late Animation<double> _expandAnimation;
+  
 
   final EnhancedAIChatService _chatService = EnhancedAIChatService();
   List<types.Message> _messages = [];
   bool _isTyping = false;
-  bool _showQuickReplies = true;
+  // removed unused _showQuickReplies
+  // ignore: unused_field
   bool _isSuggestionsExpanded = true;
+  // ignore: unused_field
   final List<String> _suggestedQuestions = [
     "When will my next period start?",
     "Is my cycle regular?",
@@ -51,7 +53,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   late TextEditingController _textController;
 
   // For resize gesture
-  double _initialHeight = 0.5;
+  // ignore: unused_field
+  double _initialHeight = 0;
   bool _isResizing = false;
 
   @override
@@ -83,10 +86,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
       curve: Curves.easeOutCubic,
     );
 
-    _expandAnimation = CurvedAnimation(
-      parent: _expandController,
-      curve: Curves.easeInOut,
-    );
+    
 
     // Initialize text controller
     _textController = TextEditingController();
@@ -98,9 +98,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
       final userPreferences = settingsProvider.preferences;
 
       final userName =
-          userPreferences.displayName ??
-          userPreferences.userId.split('_').last ??
-          'User';
+          userPreferences.displayName;
 
       _chatService.initialize(
         userId: userPreferences.userId,
@@ -244,7 +242,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final screenSize = MediaQuery.of(context).size;
+    
 
     return Stack(
       children: [
@@ -420,66 +418,6 @@ class _FloatingAIChatState extends State<FloatingAIChat>
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildCustomInput() {
-    final theme = Theme.of(context);
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.transparent,
-        border: Border(top: BorderSide(color: theme.dividerColor, width: 0.5)),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              controller: _textController,
-              decoration: InputDecoration(
-                hintText: 'Ask about health, science, technology, lifestyle...',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(25),
-                  borderSide: BorderSide.none,
-                ),
-                filled: true,
-                fillColor: theme.scaffoldBackgroundColor,
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 12,
-                ),
-              ),
-              maxLines: null,
-              keyboardType: TextInputType.multiline,
-              textCapitalization: TextCapitalization.sentences,
-              onSubmitted: (text) {
-                if (text.trim().isNotEmpty) {
-                  _handleSendPressed(types.PartialText(text: text.trim()));
-                  _textController.clear();
-                }
-              },
-            ),
-          ),
-          const SizedBox(width: 8),
-          FloatingActionButton.small(
-            heroTag: "ai_chat_send_fab",
-            onPressed: () {
-              final text = _textController.text.trim();
-              if (text.isNotEmpty) {
-                _handleSendPressed(types.PartialText(text: text));
-                _textController.clear();
-              }
-            },
-            backgroundColor: AppTheme.primaryRose,
-            child: Icon(
-              Icons.send,
-              color: theme.colorScheme.onPrimary,
-              size: 16,
-            ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -797,45 +735,6 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     );
   }
 
-  Widget _buildSuggestionsSection(ThemeData theme) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        GestureDetector(
-          onTap: () {
-            setState(() {
-              _isSuggestionsExpanded = !_isSuggestionsExpanded;
-            });
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("Suggestions", style: theme.textTheme.titleMedium),
-              Icon(
-                _isSuggestionsExpanded ? Icons.expand_less : Icons.expand_more,
-              ),
-            ],
-          ),
-        ),
-        if (_isSuggestionsExpanded) ...[
-          const SizedBox(height: 4),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: _suggestedQuestions
-                .asMap()
-                .entries
-                .map(
-                  (entry) =>
-                      _buildSuggestionChip(entry.value, theme, entry.key),
-                )
-                .toList(),
-          ),
-        ],
-      ],
-    );
-  }
-
   // Suggestion Chip - More prominent and professional
   Widget _buildSuggestionChip(String suggestion, ThemeData theme, int index) {
     return InkWell(
@@ -1003,75 +902,4 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     );
   }
 
-  Widget _buildQuickReplies() {
-    final theme = Theme.of(context);
-    final suggestions = _chatService.getSuggestedReplies();
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: theme.cardColor.withValues(alpha: 0.5),
-        border: Border(top: BorderSide(color: theme.dividerColor, width: 0.5)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Quick questions:',
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: AppTheme.mediumGrey,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: suggestions.map((suggestion) {
-              return InkWell(
-                onTap: () {
-                  final currentUser = _chatService.currentUser;
-                  if (currentUser == null) return;
-
-                  final message = types.TextMessage(
-                    author: currentUser,
-                    createdAt: DateTime.now().millisecondsSinceEpoch,
-                    id: const Uuid().v4(),
-                    text: suggestion,
-                  );
-
-                  setState(() {
-                    _isTyping = true;
-                  });
-
-                  _chatService.sendMessage(message);
-                },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppTheme.primaryRose.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: AppTheme.primaryRose.withValues(alpha: 0.3),
-                      width: 1,
-                    ),
-                  ),
-                  child: Text(
-                    suggestion,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: AppTheme.primaryRose,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-        ],
-      ),
-    );
-  }
 }

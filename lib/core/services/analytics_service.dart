@@ -12,6 +12,7 @@ class AnalyticsService {
   AnalyticsService._internal();
 
   final DatabaseService _databaseService = DatabaseService();
+  // ignore: unused_field
   late final CycleCalculationEngine _calculationEngine = CycleCalculationEngine(
     _databaseService,
   );

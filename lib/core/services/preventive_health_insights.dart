@@ -19,15 +19,15 @@ class PreventiveHealthInsights {
 
   // Medical condition detection models
   late Map<String, dynamic> _pcosDetectionModel;
-  late Map<String, dynamic> _thyroidAnalysisModel;
-  late Map<String, dynamic> _endometriosisDetectionModel;
-  late Map<String, dynamic> _fertilityOptimizationModel;
-  late Map<String, dynamic> _hormonalShiftDetectionModel;
+  late Map<String, dynamic> _thyroidAnalysisModel; // ignore: unused_field
+  late Map<String, dynamic> _endometriosisDetectionModel; // ignore: unused_field
+  late Map<String, dynamic> _fertilityOptimizationModel; // ignore: unused_field
+  late Map<String, dynamic> _hormonalShiftDetectionModel; // ignore: unused_field
 
   // Risk assessment parameters
-  late Map<String, List<String>> _medicalConditionMarkers;
+  late Map<String, List<String>> _medicalConditionMarkers; // ignore: unused_field
   late Map<String, Map<String, double>> _riskFactorWeights;
-  late Map<String, List<String>> _warningSignPatterns;
+  late Map<String, List<String>> _warningSignPatterns; // ignore: unused_field
 
   Future<void> initialize() async {
     if (_isInitialized) return;
@@ -739,6 +739,7 @@ class PreventiveHealthInsights {
     double riskScore = 0.0;
 
     // Check for long cycles
+    // ignore: unused_local_variable
     final avgLength = _calculateAverageCycleLength(cycles);
     if (avgLength > 35) {
       indicators.add('Prolonged menstrual cycles');
@@ -786,6 +787,7 @@ class PreventiveHealthInsights {
     double riskScore = 0.0;
 
     // Check for short cycles
+    // ignore: unused_local_variable
     final avgLength = _calculateAverageCycleLength(cycles);
     if (avgLength < 21) {
       indicators.add('Shortened menstrual cycles');
@@ -1191,6 +1193,7 @@ class PreventiveHealthInsights {
       };
     }
 
+    // ignore: unused_local_variable
     final avgLength =
         lutealLengths.reduce((a, b) => a + b) / lutealLengths.length;
     final consistency =
@@ -1589,6 +1592,7 @@ class PreventiveHealthInsights {
 
     // Cycle length deviation from personal average
     final cycleLengths = cycles.map((c) => c.length.toDouble()).toList();
+    // ignore: unused_local_variable
     final avgLength =
         cycleLengths.reduce((a, b) => a + b) / cycleLengths.length;
     final lengthVariability = _calculateVariability(cycleLengths);

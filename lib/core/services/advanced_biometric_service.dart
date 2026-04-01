@@ -242,7 +242,11 @@ class AdvancedBiometricService {
     );
   }
 
-  /// Trigger AI analysis for new biometric data
+  /// Trigger AI analysis for new biometric data// ignore: unused_element// ignore: unused_element
+
+
+  // ignore: unused_element
+  // ignore: unused_element
   void _triggerAIAnalysis(List<HealthDataPoint> newData) {
     // Analyze new data with AI engine for cycle insights
     Timer(const Duration(milliseconds: 500), () async {

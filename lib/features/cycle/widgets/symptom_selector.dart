@@ -75,6 +75,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     final theme = Theme.of(context);
     final symptomCategories = _getSymptomCategories(context);
     if (_expandedCategory.isEmpty) {
@@ -107,6 +108,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
   }
 
   Widget _buildSelectedSymptomsSummary() {
+    // ignore: unused_local_variable
     final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(16),
@@ -213,6 +215,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
   }
 
   Widget _buildCategorySelector() {
+    // ignore: unused_local_variable
     final theme = Theme.of(context);
     final symptomCategories = _getSymptomCategories(context);
     return SingleChildScrollView(
@@ -298,6 +301,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
     double severity,
     int index,
   ) {
+    // ignore: unused_local_variable
     final theme = Theme.of(context);
     return GestureDetector(
           onTap: () {
@@ -402,6 +406,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
   }
 
   Widget _buildSeveritySlider(String symptom, double severity, Color color) {
+    // ignore: unused_local_variable
     final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

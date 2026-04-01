@@ -26,6 +26,7 @@ class AIChatService {
   types.User? _currentUser;
   AIConversationMemory? _conversationMemory;
   bool _isInitialized = false;
+  // ignore: unused_field
   AppLocalizations? _localizations;
 
   // FlowAI Integration
@@ -489,6 +490,7 @@ class AIChatService {
 }
 
   /// Get contextual suggestions based on app usage patterns
+  // ignore: unused_element
   List<String> _getContextualSuggestions() {
     return [
       "When will my next period start?",
@@ -507,6 +509,7 @@ class AIChatService {
   }
 
   /// Get educational suggestions for learning
+  // ignore: unused_element
   List<String> _getEducationalSuggestions() {
     return [
       "Explain the menstrual cycle phases",
@@ -527,6 +530,7 @@ class AIChatService {
   }
 
   /// Get health and wellness suggestions
+  // ignore: unused_element
   List<String> _getHealthSuggestions() {
     return [
       "Best foods for iron deficiency",

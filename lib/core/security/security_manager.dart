@@ -23,6 +23,7 @@ class SecurityManager {
   // Encryption components
   late Encrypter _encrypter;
   late encrypt.Key _masterKey;
+  // ignore: unused_field
   late IV _defaultIV;
 
   // Biometric authentication

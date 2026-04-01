@@ -615,6 +615,7 @@ class ClinicalKnowledgeBase {
 
 /// Risk assessment engine
 class RiskAssessmentEngine {
+  // ignore: unused_field
   final ClinicalKnowledgeBase _knowledgeBase;
 
   RiskAssessmentEngine(this._knowledgeBase);
@@ -751,6 +752,7 @@ class RiskAssessmentEngine {
 
 /// Symptom analyzer
 class SymptomAnalyzer {
+  // ignore: unused_field
   final ClinicalKnowledgeBase _knowledgeBase;
 
   SymptomAnalyzer(this._knowledgeBase);
@@ -875,6 +877,7 @@ class SymptomAnalyzer {
 
 /// Treatment recommendation engine
 class TreatmentRecommendationEngine {
+  // ignore: unused_field
   final ClinicalKnowledgeBase _knowledgeBase;
 
   TreatmentRecommendationEngine(this._knowledgeBase);
@@ -1008,6 +1011,7 @@ class TreatmentRecommendationEngine {
 
 /// Clinical decision support system
 class ClinicalDecisionSupport {
+  // ignore: unused_field
   final ClinicalKnowledgeBase _knowledgeBase;
 
   ClinicalDecisionSupport(this._knowledgeBase);

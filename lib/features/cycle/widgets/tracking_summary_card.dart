@@ -13,6 +13,7 @@ class TrackingSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -62,7 +63,9 @@ class TrackingSummaryCard extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context) {
+    // ignore: unused_local_variable
     final theme = Theme.of(context);
+    // ignore: unused_local_variable
     final l10n = AppLocalizations.of(context);
     return Row(
       children: [
@@ -205,6 +208,7 @@ class TrackingSummaryCard extends StatelessWidget {
   }
 
   Widget _buildMoodEnergySection(BuildContext context) {
+    // ignore: unused_local_variable
     final l10n = AppLocalizations.of(context);
     return Row(
       children: [
@@ -330,7 +334,9 @@ class TrackingSummaryCard extends StatelessWidget {
     return DateTime.now().difference(cycleData.startDate).inDays + 1;
   }
 
+  // ignore: unused_element
   String _formatDateLocal(BuildContext context, DateTime date) {
+    // ignore: unused_local_variable
     final l10n = AppLocalizations.of(context);
     return DateFormat.yMMMd(l10n.localeName).format(date);
   }
@@ -380,6 +386,7 @@ class TrackingSummaryCard extends StatelessWidget {
   }
 
   String _getMoodText(BuildContext context, double mood) {
+    // ignore: unused_local_variable
     final l10n = AppLocalizations.of(context);
     if (mood <= 1) return 'Sad';
     if (mood <= 2) return 'Low';
@@ -398,6 +405,7 @@ class TrackingSummaryCard extends StatelessWidget {
 
   String _getEnergyText(BuildContext context, double energy) {
     // Map energy to generic localized labels
+    // ignore: unused_local_variable
     final l10n = AppLocalizations.of(context);
     if (energy <= 1) return 'Low';
     if (energy <= 2) return 'Medium';

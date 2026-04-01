@@ -21,7 +21,10 @@ class AdvancedAIEngine {
   final SymptomPredictionModel _symptomModel = SymptomPredictionModel();
 
   // Learning parameters
-  double _userAccuracyScore = 0.75; // Starts at 75%, learns to 95%+
+  double _userAccuracyScore = 0.75; // Starts at 75%, learns to 95%+// ignore: unused_field// ignore: unused_field
+
+
+  // ignore: unused_field
   Map<String, double> _personalFactors = {};
   List<PredictionFeedback> _feedbackHistory = [];
 

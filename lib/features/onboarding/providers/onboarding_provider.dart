@@ -27,6 +27,7 @@ class OnboardingProvider extends ChangeNotifier {
   final DemoDataService _demoDataService = DemoDataService();
   final OnboardingTutorialService _tutorialService =
       OnboardingTutorialService();
+  // ignore: unused_field
   bool _isInitialized = false;
   bool _useDemoData = false;
   DemoDataSet? _demoDataSet;

@@ -777,24 +777,28 @@ class _FuturisticAuthScreenState extends State<FuturisticAuthScreen>
     // Same implementation as original auth_screen.dart
   }
 
+  // ignore: unused_element
   void _showSuccessMessage(String message) {
     if (mounted) {
       AdaptiveMessages.showSuccess(context, message);
     }
   }
 
+  // ignore: unused_element
   void _showErrorMessage(String message) {
     if (mounted) {
       AdaptiveMessages.showError(context, message);
     }
   }
 
+  // ignore: unused_element
   void _showInfoMessage(String message) {
     if (mounted) {
       AdaptiveMessages.showInfo(context, message);
     }
   }
 
+  // ignore: unused_element
   Widget _buildFuturisticButton({
     required String text,
     required VoidCallback? onPressed,

@@ -19,7 +19,9 @@ class AIEngine {
 
   // Enhanced AI Models for Week 1 Implementation
   late Map<String, dynamic> _predictionModel;
+  // ignore: unused_field
   late Map<String, dynamic> _patternModel;
+  // ignore: unused_field
   late Map<String, dynamic> _insightModel;
   late Map<String, dynamic> _symptomModel;
   late Map<String, dynamic> _moodEnergyModel;
@@ -231,6 +233,7 @@ class AIEngine {
 
     // Detect length variations
     final lengths = cycles.map((c) => c.length).toList();
+    // ignore: unused_local_variable
     final avgLength = lengths.reduce((a, b) => a + b) / lengths.length;
     final variance = _calculateVariance(
       lengths.map((l) => l.toDouble()).toList(),
@@ -251,12 +254,14 @@ class AIEngine {
   }
 
   /// Private helper methods
+  // ignore: unused_element
   double _calculateAverageCycleLength(List<CycleData> cycles) {
     if (cycles.isEmpty) return 28.0;
     final lengths = cycles.map((c) => c.length).toList();
     return lengths.reduce((a, b) => a + b) / lengths.length;
   }
 
+  // ignore: unused_element
   double _calculatePredictionConfidence(List<CycleData> cycles) {
     if (cycles.length < 3) return 0.6;
 

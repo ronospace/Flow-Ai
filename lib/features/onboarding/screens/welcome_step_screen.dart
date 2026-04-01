@@ -11,7 +11,9 @@ class WelcomeStepScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    // ignore: unused_local_variable
     final localizations = AppLocalizations.of(context);
+    // ignore: unused_local_variable
     final size = MediaQuery.of(context).size;
 
     return Container(

@@ -84,7 +84,9 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
   ];
 
   List<Map<String, DateTime>> _importedCycles = [];
+  // ignore: unused_field
   bool _isImporting = false;
+  // ignore: unused_field
   String? _importError;
 
   @override
@@ -116,17 +118,19 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
     _animationController.forward();
   }
 
+  // ignore: unused_element
   void _initializeControllers() {
     _cycleLengthController.addListener(_onManualDataChanged);
     _periodLengthController.addListener(_onManualDataChanged);
   }
 
+  // ignore: unused_element
   void _loadInitialData() {
     final data = widget.initialData;
     _lastPeriodDate = data.lastPeriodDate;
     _averageCycleLength = data.averageCycleLength;
     _averagePeriodLength = data.averagePeriodLength;
-    _isFirstTimeTracking = data.isFirstTimeTracking ?? false;
+    _isFirstTimeTracking = data.isFirstTimeTracking;
     _previousTrackingMethod = data.previousTrackingMethod;
 
     _cycleLengthController.text = _averageCycleLength?.toString() ?? '';
@@ -888,6 +892,7 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
     );
   }
 
+  // ignore: unused_element
   void _setFirstTimeTracking(bool isFirstTime) {
     setState(() {
       _isFirstTimeTracking = isFirstTime;

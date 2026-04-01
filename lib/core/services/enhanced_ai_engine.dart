@@ -15,7 +15,9 @@ class EnhancedAIEngine {
   // Enhanced AI Models
   late Map<String, dynamic> _advancedPredictionModel;
   late Map<String, dynamic> _personalizedPatterns;
+  // ignore: unused_field
   late Map<String, dynamic> _biometricCorrelations;
+  // ignore: unused_field
   late Map<String, dynamic> _intelligentInsights;
 
   Future<void> initialize() async {

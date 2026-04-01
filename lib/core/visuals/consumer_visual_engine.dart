@@ -223,7 +223,10 @@ class ConsumerVisualEngine {
     );
   }
 
-  /// Register animation controller for cleanup
+  /// Register animation controller for cleanup// ignore: unused_element// ignore: unused_element
+
+
+  // ignore: unused_element
   void _registerController(AnimationController controller) {
     _activeControllers.add(controller);
   }

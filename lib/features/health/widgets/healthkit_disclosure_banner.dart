@@ -25,6 +25,7 @@ class HealthKitDisclosureBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final platformName = Platform.isIOS ? 'Apple HealthKit' : 'Health Connect';
+    // ignore: unused_local_variable
     final l10n = AppLocalizations.of(context);
 
     return Container(

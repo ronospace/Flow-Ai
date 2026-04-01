@@ -23,8 +23,11 @@ class ClinicalIntelligenceService {
   SharedPreferences? _prefs;
 
   // Clinical analysis configuration
+  // ignore: unused_field
   static const int _analysisHistoryDays = 90;
+  // ignore: unused_field
   static const double _abnormalThreshold = 0.7;
+  // ignore: unused_field
   static const double _criticalThreshold = 0.9;
 
   /// Initialize the clinical intelligence service

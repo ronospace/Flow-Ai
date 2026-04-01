@@ -15,7 +15,11 @@ class OfflineService {
   OfflineService._internal();
 
   late Connectivity _connectivity;
-  late SharedPreferences _prefs;
+  late SharedPreferences _prefs;// ignore: unused_field// ignore: unused_field
+
+
+  // ignore: unused_element
+  // ignore: unused_field
   late DatabaseService _databaseService;
 
   List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
@@ -46,7 +50,11 @@ class OfflineService {
   /// Initialize offline service
   Future<void> initialize() async {
     _connectivity = Connectivity();
-    _prefs = await SharedPreferences.getInstance();
+    _prefs = await SharedPreferences.getInstance();// ignore: unused_field// ignore: unused_field
+
+
+  // ignore: unused_element
+  // ignore: unused_field
     _databaseService = DatabaseService();
 
     // Load sync queue from storage

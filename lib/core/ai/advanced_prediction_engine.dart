@@ -9,9 +9,13 @@ class AdvancedPredictionEngine {
   AdvancedPredictionEngine._internal();
 
   // Machine learning models (simplified for demo)
+  // ignore: unused_field
   final Map<String, dynamic> _fertilityModel = {};
+  // ignore: unused_field
   final Map<String, dynamic> _hormonePatternModel = {};
+  // ignore: unused_field
   final Map<String, dynamic> _cycleIrregularityModel = {};
+  // ignore: unused_field
   final Map<String, dynamic> _symptomPredictionModel = {};
 
   // Confidence thresholds

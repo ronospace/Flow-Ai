@@ -128,7 +128,7 @@ class PerformanceOptimizer {
       cacheDuration: cacheDuration,
     ).catchError((error) {
       debugPrint('⚠️ Preload failed for $key: $error');
-      return null;
+      return Future<T>.value(null as T);
     });
   }
 

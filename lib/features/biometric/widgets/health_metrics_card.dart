@@ -26,6 +26,7 @@ class HealthMetricsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     final theme = Theme.of(context);
     return GestureDetector(
       onTap: onTap,
@@ -209,6 +210,7 @@ class HealthMetricsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     final theme = Theme.of(context);
     return GridView.count(
       crossAxisCount: crossAxisCount,

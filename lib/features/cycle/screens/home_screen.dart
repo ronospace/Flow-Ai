@@ -14,7 +14,6 @@ import '../providers/cycle_provider.dart';
 import '../../insights/providers/insights_provider.dart';
 import '../../settings/providers/settings_provider.dart';
 import '../../../core/services/cycle_calculation_engine.dart';
-import '../../../core/widgets/coming_soon_widget.dart';
 import '../../healthcare/screens/healthcare_provider_portal_screen.dart';
 import '../../analytics/screens/enhanced_analytics_dashboard_screen.dart';
 import '../../../core/ai/period_prediction_engine.dart';
@@ -932,6 +931,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
 
+  // ignore: unused_element
   Widget _buildCycleInfo(String label, String value) {
     final theme = Theme.of(context);
     return Column(
@@ -958,6 +958,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
 
 
+  // ignore: unused_element
   Widget _buildActionCard({
     required IconData icon,
     required String title,
@@ -2470,6 +2471,7 @@ extension _PremiumFeaturesMethods on _HomeScreenState {
   }
 
 
+  // ignore: unused_element
   void _handleNotifyMe(String featureName) {
     // Safely close the dialog
     if (Navigator.canPop(context)) {

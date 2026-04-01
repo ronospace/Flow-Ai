@@ -18,14 +18,19 @@ class AdaptiveAIEngine {
   bool get isInitialized => _baseEngine.isInitialized;
 
   // Self-correction and learning parameters
+  // ignore: unused_field
   final Map<String, double> _userSpecificWeights = {};
   final List<PredictionCorrection> _correctionHistory = [];
+  // ignore: unused_field
   final Map<String, HormonePattern> _hormonalPatterns = {};
   double _adaptationRate = 0.15;
+  // ignore: unused_field
   final double _forgettingFactor = 0.95;
 
   // Hormone-aware model parameters
+  // ignore: unused_field
   late Map<String, dynamic> _hormoneAwareModel;
+  // ignore: unused_field
   late Map<String, dynamic> _selfCorrectionModel;
   late Map<String, dynamic> _individualAdaptationModel;
 

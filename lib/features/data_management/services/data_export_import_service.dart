@@ -24,13 +24,17 @@ class DataExportImportService {
   bool _isInitialized = false;
   SharedPreferences? _prefs;
   Directory? _documentsDirectory;
+  // ignore: unused_field
   Directory? _tempDirectory;
 
   // Export/Import configuration
+  // ignore: unused_field
   static const String _exportConfigKey = 'export_config';
+  // ignore: unused_field
   static const String _lastExportKey = 'last_export_timestamp';
   static const String _importHistoryKey = 'import_history';
   static const int _maxExportHistory = 50;
+  // ignore: unused_field
   static const int _compressionLevel = 6;
 
   /// Initialize the data export/import service

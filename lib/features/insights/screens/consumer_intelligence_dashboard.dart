@@ -4,7 +4,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'dart:math' as math;
 
 import '../../../core/services/biometric_integration_service.dart';
-import '../../../core/services/enhanced_ai_chat_service.dart';
 import '../../../core/models/biometric_data.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../generated/app_localizations.dart';
@@ -23,8 +22,6 @@ class _ConsumerIntelligenceDashboardState
     with TickerProviderStateMixin {
   final BiometricIntegrationService _biometricService =
       BiometricIntegrationService.instance;
-  final EnhancedAIChatService _aiService = EnhancedAIChatService();
-
   late AnimationController _animationController;
   late AnimationController _refreshController;
 
