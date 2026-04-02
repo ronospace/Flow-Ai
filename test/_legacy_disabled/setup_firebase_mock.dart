@@ -1,0 +1,1 @@
+import 'package:firebase_core/firebase_core.dart'; import 'package:firebase_core_mocks/firebase_core_mocks.dart'; import 'package:firebase_auth_mocks/firebase_auth_mocks.dart'; Future<void> setupFirebaseMock() async{final app=MockFirebaseApp(); await Firebase.initializeApp(options: app.options); final auth=MockFirebaseAuth();}

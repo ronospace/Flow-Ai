@@ -504,15 +504,15 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       debugPrint("BIO: calling auth service");
       final result = await _authService.authenticateWithBiometrics();
       debugPrint(
-        "BIO: auth result success=${result.isSuccess} error=${result.error}",
+        "BIO: auth result success=${result} error=${result}",
       );
       debugPrint(
-        "BIO: result success=${result.isSuccess} error=${result.error}",
+        "BIO: result success=${result} error=${result}",
       );
 
       if (!mounted) return;
 
-      if (result.isSuccess) {
+      if (result == true) {
         debugPrint('APPLE: success branch');
         HapticFeedback.lightImpact();
         // suppressed biometric banner
@@ -544,7 +544,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
           PendingDeepLinkService.clearPendingRoute();
         }
       } else {
-        _showErrorMessage(result.error ?? 'Biometric authentication failed');
+        _showErrorMessage('Biometric authentication failed');
       }
     } catch (e) {
       debugPrint('Biometric authentication error: $e');
@@ -600,12 +600,12 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
           email: _emailController.text.trim(),
           password: _passwordController.text,
         );
-        if (!result.isSuccess) {
+        if (result != true) {
           // Show forgot password after failed login attempt
           setState(() {
             _showForgotPassword = true;
           });
-          throw Exception(result.error);
+          throw Exception('Sign up failed');
         }
         // Reset forgot password visibility on successful login
         setState(() {
@@ -638,8 +638,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
           password: _passwordController.text,
           displayName: _displayNameController.text.trim(),
         );
-        if (!result.isSuccess) {
-          throw Exception(result.error);
+        if (result != true) {
+          throw Exception('Sign up failed');
         }
         _showSuccessMessage('Account created successfully!');
       }
@@ -695,7 +695,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
       if (!mounted) return;
 
-      if (result.isSuccess) {
+      if (result == true) {
         HapticFeedback.lightImpact();
         _showSuccessMessage('Welcome! Signed in with Google successfully!');
 
@@ -717,7 +717,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
           PendingDeepLinkService.clearPendingRoute();
         }
       } else {
-        _showErrorMessage(result.error ?? 'Google sign-in failed');
+        _showErrorMessage('Google sign-in failed');
       }
     } catch (e) {
       debugPrint('Google sign-in error: $e');
@@ -748,12 +748,12 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       // Perform Apple Sign-In
       final result = await _authService.signInWithApple();
       debugPrint(
-        'APPLE: result isSuccess=${result.isSuccess} error=${result.error}',
+        'APPLE: result isSuccess=${result} error=${result}',
       );
 
       if (!mounted) return;
 
-      if (result.isSuccess) {
+      if (result == true) {
         HapticFeedback.lightImpact();
         _showSuccessMessage('Welcome! Signed in with Apple successfully!');
 
@@ -780,7 +780,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         }
       } else {
         debugPrint('APPLE: failure branch showing error');
-        _showErrorMessage(result.error ?? 'Apple sign-in failed');
+        _showErrorMessage('Apple sign-in failed');
       }
     } catch (e) {
       debugPrint('Apple sign-in error: $e');
@@ -940,18 +940,16 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                                       if (!mounted) return;
 
                                       final result = await _authService
-                                          .resetPassword(
-                                            resetEmailController.text.trim(),
-                                          );
+                                          .resetPassword(email: resetEmailController.text.trim());
 
                                       if (!mounted) return;
-                                      if (result.isSuccess) {
+                                      if (result == true) {
                                         dialogNavigator.pop();
                                         _showSuccessMessage(
                                           'Password reset link sent! Check your email.',
                                         );
                                       } else {
-                                        throw Exception(result.error);
+                                        throw Exception('Sign up failed');
                                       }
                                     } catch (e) {
                                       _showErrorMessage(

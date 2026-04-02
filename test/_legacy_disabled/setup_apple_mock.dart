@@ -1,0 +1,1 @@
+import 'package:flow_ai/core/services/apple_signin_service.dart'; class FakeAppleSignInService extends AppleSignInService{@override Future<bool> isAvailable() async=>true; @override Future<String?> getCredentialState(String userIdentifier) async=>'authorized';}

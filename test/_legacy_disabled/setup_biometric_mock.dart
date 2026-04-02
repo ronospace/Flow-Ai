@@ -1,0 +1,1 @@
+import 'package:flow_ai/core/services/biometric_auth_service.dart'; class FakeBiometricService extends BiometricAuthService{@override Future<bool> authenticateWithBiometrics({String? reason}) async=>true; @override Future<bool> isAvailable() async=>true;}
