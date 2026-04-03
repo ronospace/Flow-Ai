@@ -90,8 +90,7 @@ class _InsightsScreenState extends State<InsightsScreen>
 
                     // Tab Bar
                     _buildTabBar(
-          isScrollable: false,
-          labelPadding: EdgeInsets.symmetric(horizontal: 8),),
+          ),
 
                     // Tab Content
                     Expanded(
@@ -290,7 +289,7 @@ class _InsightsScreenState extends State<InsightsScreen>
           Tab(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Text('Overview', overflow: TextOverflow.visible),
+              child: FittedBox(fit: BoxFit.scaleDown, child: Text('Overview')),
             ),
           ),
           Tab(
