@@ -368,7 +368,26 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                         );
                       },
                       child: _isExpanded
-                          ? Icon(
+                          ? TweenAnimationBuilder(
+  tween: Tween(begin: 0.6, end: 1.0),
+  duration: const Duration(seconds: 2),
+  curve: Curves.easeInOut,
+  builder: (context, double value, child) {
+    return Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            color: AppTheme.primaryPurple.withOpacity(0.4 * value),
+            blurRadius: 12 * value,
+            spreadRadius: 1 * value,
+          ),
+        ],
+      ),
+      child: child,
+    );
+  },
+  child: Icon(
                               Icons.close_rounded,
                               color: Colors.white,
                               key: const ValueKey('close'),
