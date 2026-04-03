@@ -25,6 +25,7 @@ class InsightsScreen extends StatefulWidget {
 class _InsightsScreenState extends State<InsightsScreen>
     with TickerProviderStateMixin {
   final GlobalKey tabsKey = GlobalKey();
+  final GlobalKey periodSelectorKey = GlobalKey();
   late TabController _tabController;
   late AnimationController _aiPulseController;
   int _selectedPeriod = 3; // 3 months default
@@ -88,7 +89,9 @@ class _InsightsScreenState extends State<InsightsScreen>
                     _buildTimePeriodSelector(),
 
                     // Tab Bar
-                    _buildTabBar(),
+                    _buildTabBar(
+          isScrollable: false,
+          labelPadding: EdgeInsets.symmetric(horizontal: 8),),
 
                     // Tab Content
                     Expanded(
@@ -107,7 +110,7 @@ class _InsightsScreenState extends State<InsightsScreen>
             ),
 
             // Floating AI Chat - only render if mounted
-            if (mounted) FloatingAIChat(tabsKey: tabsKey),
+            if (mounted) FloatingAIChat(tabsKey: tabsKey, periodSelectorKey: periodSelectorKey),
           ],
         ),
       ),
@@ -191,6 +194,7 @@ class _InsightsScreenState extends State<InsightsScreen>
   Widget _buildTimePeriodSelector() {
     final theme = Theme.of(context);
     return Container(
+      key: periodSelectorKey,
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface.withValues(alpha: 0.9),
@@ -286,7 +290,7 @@ class _InsightsScreenState extends State<InsightsScreen>
           Tab(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Text('Overview'),
+              child: Text('Overview', overflow: TextOverflow.visible),
             ),
           ),
           Tab(
