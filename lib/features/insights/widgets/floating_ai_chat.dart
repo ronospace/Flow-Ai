@@ -272,7 +272,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             right: 20,
             left: 20,
             top: _isFullScreen
-                ? _getPeriodSelectorTop()
+                ? _getPeriodSelectorTop() + 4
                 : _getTabsBottom(),
             bottom: _isFullScreen
                 ? MediaQuery.of(context).padding.bottom + 8
