@@ -403,8 +403,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                                               ),
                                             )
                                             .animate(
-                                              onPlay: (controller) =>
-                                                  controller.repeat(),
+                                              onPlay: null,
                                             )
                                             .shimmer(
                                               duration: 2000.ms,
@@ -508,7 +507,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       size: 24,
                     ),
                   )
-                  .animate(onPlay: (controller) => controller.repeat())
+                  .animate(onPlay: null)
                   .shimmer(
                     duration: 3000.ms,
                     color: Colors.white.withValues(alpha: 0.3),
@@ -542,7 +541,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                               ),
                             )
                             .animate(
-                              onPlay: (controller) => controller.repeat(),
+                              onPlay: null,
                             )
                             .fadeIn(duration: 1000.ms)
                             .then(delay: 500.ms)
