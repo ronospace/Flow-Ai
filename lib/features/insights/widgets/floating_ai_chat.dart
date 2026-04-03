@@ -262,7 +262,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             curve: Curves.easeOutCubic,
             right: 20,
             left: 20,
-            top: (_isFullScreen || keyboardOpen)
+            top: _isFullScreen
                 ? MediaQuery.of(context).padding.top + 8
                 : _getTabsBottom(),
             bottom: _isFullScreen
