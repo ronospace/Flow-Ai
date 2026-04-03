@@ -36,6 +36,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   final EnhancedAIChatService _chatService = EnhancedAIChatService();
   List<types.Message> _messages = [];
   bool _isTyping = false;
+  bool _quickRepliesCollapsed = false;
   // removed unused _showQuickReplies
   // ignore: unused_field
   bool _isSuggestionsExpanded = true;
@@ -269,10 +270,10 @@ class _FloatingAIChatState extends State<FloatingAIChat>
           AnimatedPositioned(
             duration: Duration(milliseconds: 300),
             curve: Curves.easeOutCubic,
-            right: 20,
-            left: 20,
+            right: _isFullScreen ? 24 : 20,
+            left: _isFullScreen ? 24 : 20,
             top: _isFullScreen
-                ? _getPeriodSelectorTop() + 4
+                ? _getPeriodSelectorTop()
                 : _getTabsBottom(),
             bottom: _isFullScreen
                 ? MediaQuery.of(context).padding.bottom + 8
@@ -314,13 +315,15 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
                         const SizedBox(height: 0),
 
-                        if (!keyboardOpen && _shouldShowQuickQuestions())
+                        if (!keyboardOpen &&
+                            _shouldShowQuickQuestions() &&
+                            !_quickRepliesCollapsed)
                           Container(
                             padding: const EdgeInsets.fromLTRB(16, 4, 16, 2),
                             child: Padding(
-      padding: const EdgeInsets.only(bottom: 6),
-      child: _buildEnhancedQuickReplies(theme),
-    ),
+                              padding: const EdgeInsets.only(bottom: 6),
+                              child: _buildEnhancedQuickReplies(theme),
+                            ),
                           ),
                       ],
                     ),
@@ -771,6 +774,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             setState(() {
               _isTyping = true;
               _isSuggestionsExpanded = false;
+              _quickRepliesCollapsed = true;
             });
 
             _chatService.sendMessage(message);
