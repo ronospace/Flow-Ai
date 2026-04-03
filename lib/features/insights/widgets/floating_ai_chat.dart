@@ -368,26 +368,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                         );
                       },
                       child: _isExpanded
-                          ? TweenAnimationBuilder(
-  tween: Tween(begin: 0.6, end: 1.0),
-  duration: const Duration(seconds: 2),
-  curve: Curves.easeInOut,
-  builder: (context, double value, child) {
-    return Container(
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        boxShadow: [
-          BoxShadow(
-            color: AppTheme.primaryPurple.withOpacity(0.4 * value),
-            blurRadius: 12 * value,
-            spreadRadius: 1 * value,
-          ),
-        ],
-      ),
-      child: child,
-    );
-  },
-  child: Icon(
+                          ? Icon(
                               Icons.close_rounded,
                               color: Colors.white,
                               key: const ValueKey('close'),
@@ -448,8 +429,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                                             .fadeIn(duration: 500.ms),
                                   ),
                               ],
-                            ),
-                    ),
+                            )                    ),
                   ),
                 ),
               );
@@ -550,39 +530,39 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               // Title and Status
               Expanded(
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Zyra AI Assistant',
+                      'Zyra AI',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.titleLarge?.copyWith(
                         color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                        height: 1.0,
+                        letterSpacing: -0.2,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 2),
                     Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Container(
-                              width: 8,
-                              height: 8,
-                              decoration: BoxDecoration(
-                                color: AppTheme.successGreen,
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                            )
-                            .animate(
-                              onPlay: null,
-                            )
-                            .fadeIn(duration: 1000.ms)
-                            .then(delay: 500.ms)
-                            .fadeOut(duration: 1000.ms),
+                        _buildLiveStatusIndicator(),
                         const SizedBox(width: 8),
-                        Text(
-                          _isTyping ? 'Thinking...' : 'Ready to help',
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: Colors.white.withValues(alpha: 0.8),
-                            fontSize: 14,
+                        AnimatedDefaultTextStyle(
+                          duration: const Duration(milliseconds: 220),
+                          style: theme.textTheme.bodyMedium!.copyWith(
+                            color: Colors.white.withValues(alpha: _isTyping ? 0.9 : 0.78),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            height: 1.05,
+                            letterSpacing: _isTyping ? 0.08 : 0.0,
+                          ),
+                          child: Text(
+                            _isTyping ? 'Thinking...' : 'Ready to assist',
                           ),
                         ),
                       ],
@@ -836,6 +816,76 @@ class _FloatingAIChatState extends State<FloatingAIChat>
         .animate()
         .fadeIn(duration: 300.ms, delay: (index * 100).ms)
         .slideX(begin: 0.3, end: 0);
+  }
+
+
+  Widget _buildLiveStatusIndicator() {
+    final isThinking = _isTyping;
+    final coreColor = isThinking ? AppTheme.primaryPurple : AppTheme.accentMint;
+    final haloColor = isThinking ? AppTheme.primaryRose : AppTheme.secondaryBlue;
+    final pulseDuration = isThinking ? 1050.ms : 1600.ms;
+    final haloBegin = isThinking ? 0.82 : 0.76;
+    final haloEnd = isThinking ? 1.28 : 1.18;
+    final dotBegin = isThinking ? 0.94 : 0.97;
+    final dotEnd = isThinking ? 1.09 : 1.05;
+
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          width: 16,
+          height: 16,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: haloColor.withValues(alpha: isThinking ? 0.20 : 0.18),
+          ),
+        )
+            .animate(onPlay: null)
+            .scaleXY(
+              begin: haloBegin,
+              end: haloEnd,
+              duration: pulseDuration,
+              curve: Curves.easeInOut,
+            )
+            .fadeIn(duration: 180.ms)
+            .then(delay: 120.ms)
+            .fadeOut(duration: isThinking ? 520.ms : 900.ms),
+
+        Container(
+          width: 9,
+          height: 9,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: isThinking
+                ? const LinearGradient(
+                    colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  )
+                : const LinearGradient(
+                    colors: [AppTheme.secondaryBlue, AppTheme.accentMint],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+            color: null,
+            boxShadow: [
+              BoxShadow(
+                color: coreColor.withValues(alpha: isThinking ? 0.46 : 0.44),
+                blurRadius: isThinking ? 13 : 10,
+                spreadRadius: isThinking ? 1.8 : 1.4,
+              ),
+            ],
+          ),
+        )
+            .animate(onPlay: null)
+            .scaleXY(
+              begin: dotBegin,
+              end: dotEnd,
+              duration: pulseDuration,
+              curve: Curves.easeInOut,
+            ),
+      ],
+    );
   }
 
   // Enhanced Input Area - Better spacing and visibility
