@@ -13,7 +13,8 @@ import 'package:uuid/uuid.dart';
 /// Floating AI Chat Widget for insights screen
 class FloatingAIChat extends StatefulWidget {
   final GlobalKey tabsKey;
-  const FloatingAIChat({super.key, required this.tabsKey});
+  final GlobalKey periodSelectorKey;
+  const FloatingAIChat({super.key, required this.tabsKey, required this.periodSelectorKey});
 
   @override
   State<FloatingAIChat> createState() => _FloatingAIChatState();
@@ -247,6 +248,14 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     return pos.dy + box.size.height + 8;
   }
 
+  double _getPeriodSelectorTop() {
+    final ctx = widget.periodSelectorKey.currentContext;
+    if (ctx == null) return MediaQuery.of(context).padding.top + 80;
+    final box = ctx.findRenderObject() as RenderBox;
+    final pos = box.localToGlobal(Offset.zero);
+    return pos.dy;
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -263,7 +272,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             right: 20,
             left: 20,
             top: _isFullScreen
-                ? MediaQuery.of(context).padding.top + 8
+                ? _getPeriodSelectorTop()
                 : _getTabsBottom(),
             bottom: _isFullScreen
                 ? MediaQuery.of(context).padding.bottom + 8
@@ -522,7 +531,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Mira AI Assistant',
+                      'Zyra AI Assistant',
                       style: theme.textTheme.titleLarge?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
