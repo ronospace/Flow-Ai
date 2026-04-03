@@ -51,6 +51,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   ];
 
   late TextEditingController _textController;
+  late FocusNode _inputFocusNode;
 
   // For resize gesture
   // ignore: unused_field
@@ -90,6 +91,9 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
     // Initialize text controller
     _textController = TextEditingController();
+    _inputFocusNode = FocusNode()..addListener(() {
+      if (mounted) setState(() {});
+    });
 
     // Initialize chat service after first build to get localizations
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -133,6 +137,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     _chatController.dispose();
     _expandController.dispose();
     _textController.dispose();
+    _inputFocusNode.dispose();
     super.dispose();
   }
 
@@ -242,6 +247,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final keyboardOpen = _inputFocusNode.hasFocus;
     
 
     return Stack(
@@ -253,12 +259,12 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             curve: Curves.easeOutCubic,
             right: 20,
             left: 20,
-            top: _isFullScreen
+            top: (_isFullScreen || keyboardOpen)
                 ? MediaQuery.of(context).padding.top + 8
                 : _getTabsBottom(),
             bottom: _isFullScreen
                 ? MediaQuery.of(context).padding.bottom + 8
-                : MediaQuery.of(context).viewInsets.bottom,
+                : 8,
             child: AnimatedBuilder(
               animation: _chatAnimation,
               builder: (context, child) {
@@ -284,7 +290,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                     child: Column(
                       children: [
                         // Enhanced Draggable Header with Controls
-                        _buildEnhancedHeader(theme),
+                        _buildEnhancedHeader(theme, compact: keyboardOpen),
 
                         // Main content area - improved spacing
                         Expanded(
@@ -296,7 +302,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
                         const SizedBox(height: 0),
 
-                        if (MediaQuery.of(context).viewInsets.bottom == 0 && _shouldShowQuickQuestions())
+                        if (!keyboardOpen && _shouldShowQuickQuestions())
                           Container(
                             padding: const EdgeInsets.fromLTRB(16, 4, 16, 2),
                             child: Padding(
@@ -422,7 +428,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   }
 
   // Enhanced Header with Controls
-  Widget _buildEnhancedHeader(ThemeData theme) {
+  Widget _buildEnhancedHeader(ThemeData theme, {bool compact = false}) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -446,7 +452,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
       child: Column(
         children: [
           // Resize Handle - Only draggable area
-          if (!_isFullScreen)
+          if (!_isFullScreen && !compact)
             Center(
               child: GestureDetector(
                 onPanStart: (details) {
@@ -476,7 +482,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 ),
               ),
             ),
-          if (!_isFullScreen) const SizedBox(height: 16),
+          if (!_isFullScreen && !compact) const SizedBox(height: 16),
 
           // Header Content
           Row(
@@ -602,37 +608,39 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             ],
           ),
 
-          // Medical Disclaimer (Guideline 1.4.1)
-          const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.info_outline,
-                  size: 14,
-                  color: Colors.white.withValues(alpha: 0.9),
-                ),
-                const SizedBox(width: 6),
-                Expanded(
-                  child: Text(
-                    'AI-generated insights for awareness only. Not medical advice.',
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: Colors.white.withValues(alpha: 0.9),
-                      fontWeight: FontWeight.w500,
+          if (!compact) ...[
+            // Medical Disclaimer (Guideline 1.4.1)
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.info_outline,
+                    size: 14,
+                    color: Colors.white.withValues(alpha: 0.9),
+                  ),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      'AI-generated insights for awareness only. Not medical advice.',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: Colors.white.withValues(alpha: 0.9),
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
+          ],
         ],
       ),
     );
@@ -824,6 +832,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               ),
               child: TextField(
                 controller: _textController,
+                focusNode: _inputFocusNode,
                 decoration: InputDecoration(
                   hintText:
                       'Ask about health, science, technology, lifestyle...',
