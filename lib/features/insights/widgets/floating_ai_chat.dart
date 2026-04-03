@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
@@ -28,6 +29,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   late AnimationController _expandController;
   late Animation<double> _fabAnimation;
   late Animation<double> _chatAnimation;
+  late StreamSubscription _messagesSub;
   
 
   final EnhancedAIChatService _chatService = EnhancedAIChatService();
@@ -112,7 +114,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     });
 
     // Listen to messages
-    _chatService.messagesStream.listen((messages) {
+    _messagesSub = _chatService.messagesStream.listen((messages) {
       if (mounted) {
         setState(() {
           _messages = messages;
@@ -137,6 +139,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     _chatController.dispose();
     _expandController.dispose();
     _textController.dispose();
+    _messagesSub.cancel();
     _inputFocusNode.dispose();
     super.dispose();
   }
@@ -684,7 +687,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
           ),
           showUserAvatars: true,
           showUserNames: false,
-          customBottomWidget: Container(), // We'll use our enhanced input
+          customBottomWidget: const SizedBox.shrink(), // We'll use our enhanced input
         ),
       ),
     );
