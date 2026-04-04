@@ -140,6 +140,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     _fabController.dispose();
     _chatController.dispose();
     _expandController.dispose();
+    _pulseController.dispose();
     _textController.dispose();
     _messagesSub.cancel();
     _inputFocusNode.dispose();
@@ -566,7 +567,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                             ],
                           ),
                           child: FadeTransition(
-                            opacity: _pulseController,
+                            opacity: Tween(begin: 0.6, end: 1.0).animate(_pulseController),
                             child: Text(
                               'LIVE',
                               style: theme.textTheme.labelSmall?.copyWith(
