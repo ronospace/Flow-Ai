@@ -289,6 +289,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                         _isFullScreen ? 16 : 24,
                       ),
                       boxShadow: [
+                              BoxShadow(color: Colors.white.withValues(alpha: 0.05 + (0.1 * _pulseController.value)), blurRadius: 10 + (6 * _pulseController.value), spreadRadius: 0.5),
                         BoxShadow(
                           color: theme.shadowColor.withValues(alpha: 0.2),
                           blurRadius: 12,
@@ -347,6 +348,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(28),
                     boxShadow: [
+                              BoxShadow(color: Colors.white.withValues(alpha: 0.05 + (0.1 * _pulseController.value)), blurRadius: 10 + (6 * _pulseController.value), spreadRadius: 0.5),
                       BoxShadow(
                         color: AppTheme.primaryRose.withValues(alpha: 0.4),
                         blurRadius: 16,
@@ -401,6 +403,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                                                 borderRadius:
                                                     BorderRadius.circular(8),
                                                 boxShadow: [
+                              BoxShadow(color: Colors.white.withValues(alpha: 0.05 + (0.1 * _pulseController.value)), blurRadius: 10 + (6 * _pulseController.value), spreadRadius: 0.5),
                                                   BoxShadow(
                                                     color: AppTheme.successGreen
                                                         .withValues(alpha: 0.5),
@@ -456,6 +459,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
           topRight: Radius.circular(_isFullScreen ? 16 : 24),
         ),
         boxShadow: [
+                              BoxShadow(color: Colors.white.withValues(alpha: 0.05 + (0.1 * _pulseController.value)), blurRadius: 10 + (6 * _pulseController.value), spreadRadius: 0.5),
           BoxShadow(
             color: AppTheme.primaryRose.withValues(alpha: 0.2),
             blurRadius: 8,
@@ -559,6 +563,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                             color: Colors.white.withValues(alpha: 0.18),
                             borderRadius: BorderRadius.circular(6),
                             boxShadow: [
+                              BoxShadow(color: Colors.white.withValues(alpha: 0.05 + (0.1 * _pulseController.value)), blurRadius: 10 + (6 * _pulseController.value), spreadRadius: 0.5),
                               BoxShadow(
                                 color: Colors.white.withValues(alpha: 0.25),
                                 blurRadius: 8,
@@ -856,6 +861,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 width: 1,
               ),
               boxShadow: [
+                              BoxShadow(color: Colors.white.withValues(alpha: 0.05 + (0.1 * _pulseController.value)), blurRadius: 10 + (6 * _pulseController.value), spreadRadius: 0.5),
                 BoxShadow(
                   color: AppTheme.primaryRose.withValues(alpha: 0.1),
                   blurRadius: 4,
@@ -931,6 +937,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   ),
             color: null,
             boxShadow: [
+                              BoxShadow(color: Colors.white.withValues(alpha: 0.05 + (0.1 * _pulseController.value)), blurRadius: 10 + (6 * _pulseController.value), spreadRadius: 0.5),
               BoxShadow(
                 color: coreColor.withValues(alpha: isThinking ? 0.46 : 0.44),
                 blurRadius: isThinking ? 13 : 10,
@@ -1021,6 +1028,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               ),
               borderRadius: BorderRadius.circular(28),
               boxShadow: [
+                              BoxShadow(color: Colors.white.withValues(alpha: 0.05 + (0.1 * _pulseController.value)), blurRadius: 10 + (6 * _pulseController.value), spreadRadius: 0.5),
                 BoxShadow(
                   color: AppTheme.primaryRose.withValues(alpha: 0.4),
                   blurRadius: 12,
