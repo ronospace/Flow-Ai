@@ -534,35 +534,70 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      'Zyra AI',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.titleLarge?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18,
-                        height: 1.0,
-                        letterSpacing: -0.2,
-                      ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Zyra AI',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.titleLarge?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18,
+                            height: 1.0,
+                            letterSpacing: -0.2,
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        AnimatedContainer(duration: const Duration(milliseconds: 900),curve: Curves.easeInOut, padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2), decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.18), borderRadius: BorderRadius.circular(6), boxShadow:[BoxShadow(color: Colors.white.withValues(alpha:0.25), blurRadius: 8, spreadRadius: 0.5)]), child: Text('LIVE',
+                            style: theme.textTheme.labelSmall?.copyWith(
+                              color: Colors.white,
+                              fontSize: 9,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 2),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         _buildLiveStatusIndicator(),
-                        const SizedBox(width: 8),
-                        AnimatedDefaultTextStyle(
-                          duration: const Duration(milliseconds: 220),
-                          style: theme.textTheme.bodyMedium!.copyWith(
-                            color: Colors.white.withValues(alpha: _isTyping ? 0.9 : 0.78),
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                            height: 1.05,
-                            letterSpacing: _isTyping ? 0.08 : 0.0,
+                        const SizedBox(width: 6),
+                        if (_isTyping)
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.12),
+                              borderRadius: BorderRadius.circular(999),
+                            ),
+                            child: Text(
+                              'LIVE',
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: Colors.white,
+                                fontSize: 9,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
                           ),
-                          child: Text(
-                            _isTyping ? 'Thinking...' : 'Ready to assist',
+                        const SizedBox(width: 4),
+                        Flexible(
+                          child: AnimatedDefaultTextStyle(
+                            duration: const Duration(milliseconds: 220),
+                            style: theme.textTheme.bodyMedium!.copyWith(
+                              color: Colors.white.withValues(alpha: _isTyping ? 0.9 : 0.78),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                              height: 1.05,
+                              letterSpacing: _isTyping ? 0.08 : 0.0,
+                            ),
+                            child: Text(
+                              _isTyping ? 'Thinking...' : 'Ready to assist',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ),
                       ],
@@ -596,7 +631,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                     ),
                   ),
 
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 4),
 
                   // Close Button - Enhanced with better tap handling
                   GestureDetector(
