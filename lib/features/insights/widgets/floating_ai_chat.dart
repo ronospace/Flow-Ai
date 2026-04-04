@@ -28,6 +28,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   late AnimationController _fabController;
   late AnimationController _chatController;
   late AnimationController _expandController;
+  late AnimationController _pulseController;
   late Animation<double> _fabAnimation;
   late Animation<double> _chatAnimation;
   late StreamSubscription _messagesSub;
@@ -76,10 +77,9 @@ class _FloatingAIChatState extends State<FloatingAIChat>
       vsync: this,
     );
 
-    _expandController = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
+    _expandController = AnimationController(duration: const Duration(milliseconds: 300), vsync: this);
+
+    _pulseController = AnimationController(duration: const Duration(milliseconds: 900), vsync: this)..repeat(reverse: true);
 
     _fabAnimation = CurvedAnimation(
       parent: _fabController,
@@ -550,11 +550,30 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                           ),
                         ),
                         const SizedBox(width: 6),
-                        AnimatedContainer(duration: const Duration(milliseconds: 900),curve: Curves.easeInOut, padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2), decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.18), borderRadius: BorderRadius.circular(6), boxShadow:[BoxShadow(color: Colors.white.withValues(alpha:0.25), blurRadius: 8, spreadRadius: 0.5)]), child: Text('LIVE',
-                            style: theme.textTheme.labelSmall?.copyWith(
-                              color: Colors.white,
-                              fontSize: 9,
-                              fontWeight: FontWeight.w700,
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 900),
+                          curve: Curves.easeInOut,
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.18),
+                            borderRadius: BorderRadius.circular(6),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.white.withValues(alpha: 0.25),
+                                blurRadius: 8,
+                                spreadRadius: 0.5,
+                              ),
+                            ],
+                          ),
+                          child: FadeTransition(
+                            opacity: _pulseController,
+                            child: Text(
+                              'LIVE',
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: Colors.white,
+                                fontSize: 9,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                           ),
                         ),
@@ -579,8 +598,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                                 color: Colors.white,
                                 fontSize: 9,
                                 fontWeight: FontWeight.w700,
-                              ),
                             ),
+                          ),
                           ),
                         const SizedBox(width: 4),
                         Flexible(
@@ -589,7 +608,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                             style: theme.textTheme.bodyMedium!.copyWith(
                               color: Colors.white.withValues(alpha: _isTyping ? 0.9 : 0.78),
                               fontSize: 13,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w400,
                               height: 1.05,
                               letterSpacing: _isTyping ? 0.08 : 0.0,
                             ),
@@ -669,19 +688,14 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
-                    Icons.info_outline,
-                    size: 14,
-                    color: Colors.white.withValues(alpha: 0.9),
-                  ),
                   const SizedBox(width: 6),
                   Expanded(
                     child: Text(
-                      'AI-generated insights for awareness only. Not medical advice.',
+                      _getInsightsBannerText(),
                       style: TextStyle(
-                        fontSize: 11,
+                        fontSize: 12,
                         color: Colors.white.withValues(alpha: 0.9),
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
                   ),
@@ -692,6 +706,18 @@ class _FloatingAIChatState extends State<FloatingAIChat>
         ],
       ),
     );
+  }
+
+  String _getInsightsBannerText() {
+    if (_isTyping) {
+      return 'Analyzing your patterns…';
+    }
+
+    if (_messages.length > 1) {
+      return 'Insight based on your cycle data';
+    }
+
+    return '✦ Personalized AI insights ⓘ Not medical advice';
   }
 
   // Enhanced Chat Area - Better spacing and padding
