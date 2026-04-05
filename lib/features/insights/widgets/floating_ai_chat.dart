@@ -22,6 +22,7 @@ class FloatingAIChat extends StatefulWidget {
 
 class _FloatingAIChatState extends State<FloatingAIChat>
     with TickerProviderStateMixin {
+  static const _thinkingDelay = Duration(milliseconds: 900);
   bool _isExpanded = false;
   bool _isFullScreen = false;
   double _chatHeight = 0.5; // Percentage of screen height
@@ -79,13 +80,13 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
     _expandController = AnimationController(duration: const Duration(milliseconds: 300), vsync: this);
 
-    _pulseController = AnimationController(duration: const Duration(milliseconds: 900), vsync: this)
+    _pulseController = AnimationController(duration: const Duration(milliseconds: 820), vsync: this)
   ..addListener(() { if (mounted) setState(() {}); })
   ..repeat(reverse: true);
 
     _fabAnimation = CurvedAnimation(
       parent: _fabController,
-      curve: Curves.easeInOut,
+      curve: Curves.easeInOutCubic,
     );
 
     _chatAnimation = CurvedAnimation(
@@ -123,7 +124,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
         setState(() {
   _messages = messages;
   if (messages.isNotEmpty && messages.last.author.id == 'ai_flowai_enhanced') {
-    Future.delayed(const Duration(milliseconds: 600), () {
+    Future.delayed(_thinkingDelay, () {
       if (mounted) setState(() => _isTyping = false);
     });
   }
@@ -562,8 +563,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                         ),
                         const SizedBox(width: 6),
                         AnimatedContainer(
-                          duration: const Duration(milliseconds: 900),
-                          curve: Curves.easeInOut,
+                          duration: const Duration(milliseconds: 820),
+                          curve: Curves.easeInOutCubic,
                           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.18),
@@ -571,15 +572,19 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                             boxShadow: [
                               
                               BoxShadow(
-  color: Colors.white.withValues(alpha: 0.18 + (0.25 * _pulseController.value)),
-  blurRadius: 10 + (10 * _pulseController.value),
+  color: Colors.white.withValues(alpha: 0.24 + (0.42 * _pulseController.value)),
+  blurRadius: 14 + (16 * _pulseController.value),
   spreadRadius: 0.4,
 ),
                             ],
                           ),
-                          child: FadeTransition(
-                            opacity: Tween(begin: 0.6, end: 1.0).animate(_pulseController),
-                            child: Text(
+                                                    child: FadeTransition(
+                            opacity: Tween(begin: 0.55, end: 1.0).animate(_pulseController),
+                            child: ScaleTransition(
+                              scale: Tween(begin: 0.90, end: 1.03).animate(
+                                _pulseController,
+                              ),
+                              child: Text(
                               'LIVE',
                               style: theme.textTheme.labelSmall?.copyWith(
                                 color: Colors.white,
@@ -587,6 +592,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
+                          ),
                           ),
                         ),
                       ],
@@ -706,7 +712,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
   String _getInsightsBannerText() {
     if (_isTyping) {
-      return 'Analyzing your patterns' + '.' * ((_pulseController.value * 3).floor() + 1);
+      return 'Analyzing your patterns ✨' + '.' * ((_pulseController.value * 3).floor() + 1);
     }
 
     if (_messages.length > 1) {
@@ -903,7 +909,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               begin: haloBegin,
               end: haloEnd,
               duration: pulseDuration,
-              curve: Curves.easeInOut,
+              curve: Curves.easeInOutCubic,
             )
             .fadeIn(duration: 180.ms)
             .then(delay: 120.ms)
@@ -941,7 +947,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               begin: dotBegin,
               end: dotEnd,
               duration: pulseDuration,
-              curve: Curves.easeInOut,
+              curve: Curves.easeInOutCubic,
             ),
       ],
     );
