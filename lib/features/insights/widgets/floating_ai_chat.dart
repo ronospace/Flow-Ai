@@ -305,7 +305,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                         ),
                       ],
                       border: Border.all(
-                        color: AppTheme.primaryRose.withValues(alpha: 0.15),
+                        color: AppTheme.primaryRose.withValues(alpha: 0.08),
                         width: 1,
                       ),
                     ),
@@ -319,12 +319,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                           child: _buildChatArea(theme),
                         ),
 
-                        // Enhanced Input Area
-                        const SizedBox(height: 8),
-      _buildEnhancedInput(theme),
-
-                        const SizedBox(height: 0),
-
+                        // Suggested Questions (above input)
                         if (!keyboardOpen &&
                             _shouldShowQuickQuestions() &&
                             !_quickRepliesCollapsed)
@@ -335,6 +330,10 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                               child: _buildEnhancedQuickReplies(theme),
                             ),
                           ),
+
+                        // Input Area (last = primary)
+                        const SizedBox(height: 8),
+                        _buildEnhancedInput(theme),
                       ],
                     ),
                 );
@@ -358,7 +357,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                     boxShadow: [
                               
                       BoxShadow(
-                        color: AppTheme.primaryRose.withValues(alpha: 0.4),
+                        color: AppTheme.primaryRose.withValues(alpha: 0.2),
                         blurRadius: 16,
                         spreadRadius: 2,
                         offset: const Offset(0, 4),
@@ -687,7 +686,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.15),
+                color: Colors.white.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
               ),
@@ -750,17 +749,17 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             receivedMessageBodyTextStyle:
                 theme.textTheme.bodyMedium?.copyWith(
                   color: theme.textTheme.bodyMedium?.color,
-                  fontSize: 16,
+                  fontSize: 14,
                   height: 1.5,
                 ) ??
-                const TextStyle(fontSize: 16, height: 1.5),
+                const TextStyle(fontSize: 14, height: 1.5),
             sentMessageBodyTextStyle:
                 theme.textTheme.bodyMedium?.copyWith(
                   color: Colors.white,
-                  fontSize: 16,
+                  fontSize: 14,
                   height: 1.5,
                 ) ??
-                const TextStyle(color: Colors.white, fontSize: 16, height: 1.5),
+                const TextStyle(color: Colors.white, fontSize: 14, height: 1.5),
           ),
           showUserAvatars: true,
           showUserNames: false,
@@ -790,7 +789,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
-                Icons.auto_awesome_rounded,
+                Icons.auto_awesome_outlined,
                 color: Colors.white,
                 size: 18,
               ),
@@ -800,8 +799,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               'Suggested Questions',
               style: theme.textTheme.titleMedium?.copyWith(
                 color: AppTheme.primaryRose,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                fontSize: 14,
               ),
             ),
           ],
@@ -851,13 +850,13 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  AppTheme.primaryRose.withValues(alpha: 0.15),
-                  AppTheme.primaryPurple.withValues(alpha: 0.15),
+                  AppTheme.primaryRose.withValues(alpha: 0.08),
+                  AppTheme.primaryPurple.withValues(alpha: 0.08),
                 ],
               ),
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                color: AppTheme.primaryRose.withValues(alpha: 0.4),
+                color: AppTheme.primaryRose.withValues(alpha: 0.2),
                 width: 1,
               ),
               boxShadow: [
@@ -984,6 +983,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 ),
               ),
               child: TextField(
+                enableInteractiveSelection: false,
                 controller: _textController,
                 focusNode: _inputFocusNode,
                 decoration: InputDecoration(
@@ -1004,7 +1004,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 keyboardType: TextInputType.multiline,
                 textCapitalization: TextCapitalization.sentences,
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  fontSize: 16,
+                  fontSize: 14,
                   height: 1.4,
                 ),
                 onSubmitted: (text) {
@@ -1030,7 +1030,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               boxShadow: [
                               
                 BoxShadow(
-                  color: AppTheme.primaryRose.withValues(alpha: 0.4),
+                  color: AppTheme.primaryRose.withValues(alpha: 0.2),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),
