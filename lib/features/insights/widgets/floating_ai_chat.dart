@@ -79,7 +79,9 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
     _expandController = AnimationController(duration: const Duration(milliseconds: 300), vsync: this);
 
-    _pulseController = AnimationController(duration: const Duration(milliseconds: 900), vsync: this)..repeat(reverse: true);
+    _pulseController = AnimationController(duration: const Duration(milliseconds: 900), vsync: this)
+  ..addListener(() { if (mounted) setState(() {}); })
+  ..repeat(reverse: true);
 
     _fabAnimation = CurvedAnimation(
       parent: _fabController,
@@ -119,9 +121,13 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     _messagesSub = _chatService.messagesStream.listen((messages) {
       if (mounted) {
         setState(() {
-          _messages = messages;
-          _isTyping = false;
-        });
+  _messages = messages;
+  if (messages.isNotEmpty && messages.last.author.id == 'ai_flowai_enhanced') {
+    Future.delayed(const Duration(milliseconds: 600), () {
+      if (mounted) setState(() => _isTyping = false);
+    });
+  }
+});
       }
     });
 
