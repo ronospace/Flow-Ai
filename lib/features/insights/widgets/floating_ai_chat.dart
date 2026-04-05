@@ -524,10 +524,13 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                         width: 2,
                       ),
                     ),
-                    child: Icon(
-                      Icons.psychology_rounded,
-                      color: Colors.white,
-                      size: 24,
+                    child: Transform.scale(
+                      scale: 0.965 + (_pulseController.value * 0.08),
+                      child: Icon(
+                        Icons.psychology_rounded,
+                        color: Colors.white,
+                        size: 24,
+                      ),
                     ),
                   )
                   .animate(onPlay: null)
