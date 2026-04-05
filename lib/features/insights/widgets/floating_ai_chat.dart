@@ -582,7 +582,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                             opacity: Tween(begin: 0.55, end: 1.0).animate(_pulseController),
                             child: ScaleTransition(
                               scale: Tween(begin: 0.90, end: 1.03).animate(
-                                _pulseController,
+                                CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
                               ),
                               child: Text(
                               'LIVE',
