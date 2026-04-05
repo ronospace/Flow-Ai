@@ -320,7 +320,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                         ),
 
                         // Enhanced Input Area
-                        _buildEnhancedInput(theme),
+                        const SizedBox(height: 8),
+      _buildEnhancedInput(theme),
 
                         const SizedBox(height: 0),
 
@@ -507,7 +508,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 ),
               ),
             ),
-          if (!_isFullScreen && !compact) const SizedBox(height: 16),
+          if (!_isFullScreen && !compact) const SizedBox(height: 4),
 
           // Header Content
           Row(
@@ -794,7 +795,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 size: 18,
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 8),
             Text(
               'Suggested Questions',
               style: theme.textTheme.titleMedium?.copyWith(
@@ -805,10 +806,10 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             ),
           ],
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 4),
         // Suggestions - Horizontal scrollable for better visibility
         SizedBox(
-          height: 50,
+          height: 34,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: suggestions.length,
@@ -844,9 +845,9 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
             _chatService.sendMessage(message);
           },
-          borderRadius: BorderRadius.circular(25),
+          borderRadius: BorderRadius.circular(14),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
@@ -854,7 +855,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   AppTheme.primaryPurple.withValues(alpha: 0.15),
                 ],
               ),
-              borderRadius: BorderRadius.circular(25),
+              borderRadius: BorderRadius.circular(14),
               border: Border.all(
                 color: AppTheme.primaryRose.withValues(alpha: 0.4),
                 width: 1,
