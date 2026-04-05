@@ -669,7 +669,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                         color: Colors.white.withValues(alpha: 0.1),
                       ),
                       child: Icon(
-                        Icons.close_rounded,
+                        Icons.keyboard_arrow_down_rounded,
                         color: Colors.white,
                         size: 24,
                       ),
