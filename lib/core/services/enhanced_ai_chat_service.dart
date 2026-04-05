@@ -214,10 +214,7 @@ class EnhancedAIChatService {
     // Store in conversation memory
     await _conversationMemory?.storeMessage(message);
 
-    // Simulate typing delay
-    await Future.delayed(const Duration(milliseconds: 800));
-
-    // Generate AI response with context
+        // Generate AI response with context
     final contextPrompt = _conversationMemory?.getContextualPrompt(
       message.text,
     );
@@ -225,7 +222,42 @@ class EnhancedAIChatService {
       message.text,
       contextPrompt: contextPrompt,
     );
-    _addAIMessage(response);
+    await _streamAIResponse(response);
+  }
+
+
+
+  Future<void> _streamAIResponse(String text) async {
+    if (_aiUser == null) return;
+
+    final words = text.split(' ');
+    String current = '';
+
+    final message = types.TextMessage(
+      author: _aiUser!,
+      createdAt: DateTime.now().millisecondsSinceEpoch,
+      id: _uuid.v4(),
+      text: '',
+    );
+
+    _messages.insert(0, message);
+    _notifyListeners();
+
+    for (final word in words) {
+      current += (current.isEmpty ? '' : ' ') + word;
+
+      _messages[0] = types.TextMessage(
+        author: _aiUser!,
+        createdAt: message.createdAt,
+        id: message.id,
+        text: current,
+      );
+
+      _notifyListeners();
+      await Future.delayed(const Duration(milliseconds: 45));
+    }
+
+    await _conversationMemory?.storeMessage(_messages[0]);
   }
 
   /// Add AI message to conversation
