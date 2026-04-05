@@ -80,7 +80,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
     _expandController = AnimationController(duration: const Duration(milliseconds: 300), vsync: this);
 
-    _pulseController = AnimationController(duration: const Duration(milliseconds: 820), vsync: this)
+    _pulseController = AnimationController(duration: const Duration(milliseconds: 950), vsync: this)
   ..addListener(() { if (mounted) setState(() {}); })
   ..repeat(reverse: true);
 
@@ -563,7 +563,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                         ),
                         const SizedBox(width: 6),
                         AnimatedContainer(
-                          duration: const Duration(milliseconds: 820),
+                          duration: const Duration(milliseconds: 950),
                           curve: Curves.easeInOutCubic,
                           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
@@ -572,14 +572,14 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                             boxShadow: [
                               
                               BoxShadow(
-  color: Colors.white.withValues(alpha: 0.24 + (0.42 * _pulseController.value)),
-  blurRadius: 14 + (16 * _pulseController.value),
+  color: Colors.white.withValues(alpha: 0.26 + (0.48 * _pulseController.value)),
+  blurRadius: 16 + (18 * _pulseController.value),
   spreadRadius: 0.4,
 ),
                             ],
                           ),
                                                     child: FadeTransition(
-                            opacity: Tween(begin: 0.55, end: 1.0).animate(_pulseController),
+                            opacity: Tween(begin: 0.55, end: 1.0).animate(CurvedAnimation(parent: _pulseController, curve: Curves.easeOut)),
                             child: ScaleTransition(
                               scale: Tween(begin: 0.90, end: 1.03).animate(
                                 CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
