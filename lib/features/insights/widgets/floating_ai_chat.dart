@@ -125,7 +125,17 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   _messages = messages;
   if (messages.isNotEmpty && messages.last.author.id == 'ai_flowai_enhanced') {
     Future.delayed(_thinkingDelay, () {
-      if (mounted) setState(() => _isTyping = false);
+      if (!mounted) return;
+
+      final keyboardOpen = _inputFocusNode.hasFocus;
+
+      setState(() {
+        _isTyping = false;
+        if (!keyboardOpen) {
+          _quickRepliesCollapsed = false;
+          _isSuggestionsExpanded = true;
+        }
+      });
     });
   }
 });
@@ -207,17 +217,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   /// Determine if Quick Questions should be shown
   /// Show when there's only the welcome message (no user messages yet)
   bool _shouldShowQuickQuestions() {
-    // If no messages at all, show quick questions
-    if (_messages.isEmpty) return true;
-
-    // If only one message and it's from AI (welcome message), show quick questions
-    if (_messages.length == 1) {
-      final firstMessage = _messages.first;
-      return firstMessage.author.id == 'ai_flowai_enhanced';
-    }
-
-    // Otherwise, don't show quick questions
-    return false;
+    return true;
   }
 
   void _handleSendPressed(types.PartialText message) {
