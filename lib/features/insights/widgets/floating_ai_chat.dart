@@ -651,6 +651,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                         const SizedBox(width: 4),
                         Flexible(
                           child: AnimatedDefaultTextStyle(
+                            curve: Curves.easeOutCubic,
                             duration: const Duration(milliseconds: 220),
                             style: theme.textTheme.bodyMedium!.copyWith(
                               color: Colors.white.withValues(alpha: (_isThinking || _isStreaming) ? 0.9 : 0.78),
@@ -957,7 +958,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     final isThinking = _isThinking;
     final coreColor = isThinking ? AppTheme.primaryPurple : AppTheme.accentMint;
     final haloColor = isThinking ? AppTheme.primaryRose : AppTheme.secondaryBlue;
-    final pulseDuration = isThinking ? 1050.ms : 1600.ms;
+    final pulseDuration = isThinking ? 900.ms : 1400.ms;
     final haloBegin = isThinking ? 0.82 : 0.76;
     final haloEnd = isThinking ? 1.28 : 1.18;
     final dotBegin = isThinking ? 0.94 : 0.97;
@@ -1006,8 +1007,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                               
               BoxShadow(
                 color: coreColor.withValues(alpha: isThinking ? 0.46 : 0.44),
-                blurRadius: isThinking ? 13 : 10,
-                spreadRadius: isThinking ? 1.8 : 1.4,
+                blurRadius: isThinking ? 12 : 10,
+                spreadRadius: isThinking ? 1.6 : 1.4,
               ),
             ],
           ),
