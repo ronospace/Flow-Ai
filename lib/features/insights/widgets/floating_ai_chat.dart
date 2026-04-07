@@ -38,6 +38,10 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   final EnhancedAIChatService _chatService = EnhancedAIChatService();
   List<types.Message> _messages = [];
   bool _isTyping = false;
+  bool _isThinking = false;
+  bool _isStreaming = false;
+  String? _lastAiMessageId;
+
   bool _quickRepliesCollapsed = false;
   // removed unused _showQuickReplies
   // ignore: unused_field
@@ -122,32 +126,54 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     _messagesSub = _chatService.messagesStream.listen((messages) {
       if (mounted) {
         setState(() {
-  _messages = messages;
-  if (messages.isNotEmpty &&
-      messages.first.author.id == 'ai_flowai_enhanced' &&
-      messages.first is types.TextMessage) {
-    final latestText = (messages.first as types.TextMessage).text;
+          _messages = messages;
 
-    Future.delayed(_thinkingDelay, () {
-      if (!mounted) return;
+          final latestAiMessage = messages.isNotEmpty &&
+                  messages.first.author.id == 'ai_flowai_enhanced' &&
+                  messages.first is types.TextMessage
+              ? messages.first as types.TextMessage
+              : null;
 
-      final currentText = (_messages.isNotEmpty && _messages.first is types.TextMessage)
-          ? (_messages.first as types.TextMessage).text
-          : '';
-      if (currentText != latestText) return;
+          if (latestAiMessage != null) {
+            final isNewAiReply = latestAiMessage.id != _lastAiMessageId;
 
-      final keyboardOpen = _inputFocusNode.hasFocus;
+            if (_isTyping && _isThinking && isNewAiReply) {
+              Future.delayed(const Duration(milliseconds: 120), () {
+                if (!mounted) return;
+                setState(() {
+                  _isThinking = false;
+                  _isStreaming = true;
+                });
+              });
+            }
 
-      setState(() {
-        _isTyping = false;
-        if (!keyboardOpen) {
-          _quickRepliesCollapsed = false;
-          _isSuggestionsExpanded = true;
-        }
-      });
-    });
-  }
-});
+            _lastAiMessageId = latestAiMessage.id;
+            final latestText = latestAiMessage.text;
+
+            Future.delayed(_thinkingDelay, () {
+              if (!mounted) return;
+
+              final currentText = (_messages.isNotEmpty &&
+                      _messages.first.author.id == 'ai_flowai_enhanced' &&
+                      _messages.first is types.TextMessage)
+                  ? (_messages.first as types.TextMessage).text
+                  : '';
+              if (currentText != latestText) return;
+
+              final keyboardOpen = _inputFocusNode.hasFocus;
+
+              setState(() {
+                _isTyping = false;
+                _isThinking = false;
+                _isStreaming = false;
+                if (!keyboardOpen) {
+                  _quickRepliesCollapsed = false;
+                  _isSuggestionsExpanded = true;
+                }
+              });
+            });
+          }
+        });
       }
     });
 
@@ -242,6 +268,13 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
     setState(() {
       _isTyping = true;
+      _isThinking = true;
+      _isStreaming = false;
+      _lastAiMessageId = (_messages.isNotEmpty &&
+              _messages.first.author.id == 'ai_flowai_enhanced' &&
+              _messages.first is types.TextMessage)
+          ? (_messages.first as types.TextMessage).id
+          : null;
     });
 
     _chatService.sendMessage(textMessage);
@@ -627,7 +660,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                               letterSpacing: _isTyping ? 0.08 : 0.0,
                             ),
                             child: Text(
-                              _isTyping ? 'Thinking...' : 'Ready to assist',
+                              _isThinking ? 'Thinking...' : (_isStreaming ? 'Typing...' : 'Ready to assist'),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -723,7 +756,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   }
 
   String _getInsightsBannerText() {
-    if (_isTyping) {
+    if (_isTyping && _isThinking) {
       return 'Analyzing your patterns ✨' + '.' * ((_pulseController.value * 3).floor() + 1);
     }
 
@@ -863,6 +896,13 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
             setState(() {
               _isTyping = true;
+              _isThinking = true;
+              _isStreaming = false;
+              _lastAiMessageId = (_messages.isNotEmpty &&
+                      _messages.first.author.id == 'ai_flowai_enhanced' &&
+                      _messages.first is types.TextMessage)
+                  ? (_messages.first as types.TextMessage).id
+                  : null;
               _isSuggestionsExpanded = false;
               _quickRepliesCollapsed = true;
             });
@@ -912,7 +952,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
 
   Widget _buildLiveStatusIndicator() {
-    final isThinking = _isTyping;
+    final isThinking = _isThinking;
     final coreColor = isThinking ? AppTheme.primaryPurple : AppTheme.accentMint;
     final haloColor = isThinking ? AppTheme.primaryRose : AppTheme.secondaryBlue;
     final pulseDuration = isThinking ? 1050.ms : 1600.ms;
