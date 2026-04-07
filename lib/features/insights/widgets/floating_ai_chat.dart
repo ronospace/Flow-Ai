@@ -123,9 +123,18 @@ class _FloatingAIChatState extends State<FloatingAIChat>
       if (mounted) {
         setState(() {
   _messages = messages;
-  if (messages.isNotEmpty && messages.last.author.id == 'ai_flowai_enhanced') {
+  if (messages.isNotEmpty &&
+      messages.first.author.id == 'ai_flowai_enhanced' &&
+      messages.first is types.TextMessage) {
+    final latestText = (messages.first as types.TextMessage).text;
+
     Future.delayed(_thinkingDelay, () {
       if (!mounted) return;
+
+      final currentText = (_messages.isNotEmpty && _messages.first is types.TextMessage)
+          ? (_messages.first as types.TextMessage).text
+          : '';
+      if (currentText != latestText) return;
 
       final keyboardOpen = _inputFocusNode.hasFocus;
 
@@ -778,46 +787,62 @@ class _FloatingAIChatState extends State<FloatingAIChat>
       mainAxisSize: MainAxisSize.min,
       children: [
         // Header - More prominent
-        Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              _isSuggestionsExpanded = !_isSuggestionsExpanded;
+            });
+          },
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+                  ),
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                borderRadius: BorderRadius.circular(8),
+                child: Icon(
+                  Icons.auto_awesome_outlined,
+                  color: Colors.white,
+                  size: 18,
+                ),
               ),
-              child: Icon(
-                Icons.auto_awesome_outlined,
-                color: Colors.white,
+              const SizedBox(width: 8),
+              Text(
+                'Suggested Questions',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  color: AppTheme.primaryRose,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                ),
+              ),
+              const Spacer(),
+              Icon(
+                _isSuggestionsExpanded
+                    ? Icons.expand_less
+                    : Icons.expand_more,
+                color: AppTheme.primaryRose,
                 size: 18,
               ),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              'Suggested Questions',
-              style: theme.textTheme.titleMedium?.copyWith(
-                color: AppTheme.primaryRose,
-                fontWeight: FontWeight.w500,
-                fontSize: 14,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
         const SizedBox(height: 4),
         // Suggestions - Horizontal scrollable for better visibility
-        SizedBox(
-          height: 34,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: suggestions.length,
-            separatorBuilder: (context, index) => const SizedBox(width: 12),
-            itemBuilder: (context, index) {
-              return _buildSuggestionChip(suggestions[index], theme, index);
-            },
+        if (_isSuggestionsExpanded)
+          SizedBox(
+            height: 34,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: suggestions.length,
+              separatorBuilder: (context, index) => const SizedBox(width: 12),
+              itemBuilder: (context, index) {
+                return _buildSuggestionChip(suggestions[index], theme, index);
+              },
+            ),
           ),
-        ),
       ],
     );
   }
