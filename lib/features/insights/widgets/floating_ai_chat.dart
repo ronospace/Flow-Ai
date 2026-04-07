@@ -70,6 +70,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
   @override
   void initState() {
+
     super.initState();
 
     _fabController = AnimationController(
@@ -185,6 +186,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
   @override
   void dispose() {
+
     // Ensure animations are stopped and controllers disposed properly
     _fabController.stop();
     _chatController.stop();
@@ -663,7 +665,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                             child: Text(
                               _isThinking
                                     ? 'Thinking...'
-                                    : (_isStreaming ? 'Typing...' : 'Ready to assist'),
+                                    : (_isStreaming ? 'Typing...' : 'Ready to assist ⚡'),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -782,6 +784,35 @@ class _FloatingAIChatState extends State<FloatingAIChat>
         data: theme.copyWith(primaryColor: AppTheme.primaryRose),
         child: Chat(
           messages: _messages,
+          textMessageBuilder: (message, {required int messageWidth, required bool showName}) {
+            final isAI = message.author.id == 'ai_flowai_enhanced';
+            final isLatest = _messages.isNotEmpty && _messages.last.id == message.id;
+
+            if (isAI && isLatest && _isStreaming) {
+              return RichText(
+                text: TextSpan(
+                  style: const TextStyle(color: Colors.white),
+                  children: [
+                    TextSpan(
+                      text: (message.author.id == 'ai_flowai_enhanced' &&
+                             _messages.isNotEmpty &&
+                             _messages.last.id == message.id &&
+                             _isStreaming)
+                          ? message.text + '|'
+                          : message.text,
+                    ),
+                    const WidgetSpan(
+                      child: Text('|'),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            return Text(
+              message.text,
+            );
+          },
           onSendPressed: _handleSendPressed,
           onMessageTap: _handleMessageTap,
           onPreviewDataFetched: _handlePreviewDataFetched,
@@ -1029,7 +1060,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   }
 
   // Enhanced Input Area - Better spacing and visibility
-  Widget _buildEnhancedInput(ThemeData theme) {
+Widget _buildEnhancedInput(ThemeData theme) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
