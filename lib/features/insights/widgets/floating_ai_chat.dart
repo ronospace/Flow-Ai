@@ -759,12 +759,16 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   }
 
   String _getInsightsBannerText() {
-    if (_isTyping && _isThinking) {
+    if (_isThinking) {
       return 'Analyzing your patterns ✨' + '.' * ((_pulseController.value * 3).floor() + 1);
     }
 
+    if (_isStreaming) {
+      return 'Preparing your guidance ✨';
+    }
+
     if (_messages.length > 1) {
-      return 'Insight based on your cycle data';
+      return 'Insight based on your cycle data 🌙';
     }
 
     return '✦ Personalized AI insights ⓘ Not medical advice';
