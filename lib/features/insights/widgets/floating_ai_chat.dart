@@ -653,14 +653,16 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                           child: AnimatedDefaultTextStyle(
                             duration: const Duration(milliseconds: 220),
                             style: theme.textTheme.bodyMedium!.copyWith(
-                              color: Colors.white.withValues(alpha: _isTyping ? 0.9 : 0.78),
+                              color: Colors.white.withValues(alpha: (_isThinking || _isStreaming) ? 0.9 : 0.78),
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
                               height: 1.05,
-                              letterSpacing: _isTyping ? 0.08 : 0.0,
+                              letterSpacing: (_isThinking || _isStreaming) ? 0.08 : 0.0,
                             ),
                             child: Text(
-                              _isThinking ? 'Thinking...' : (_isStreaming ? 'Typing...' : 'Ready to assist'),
+                              _isThinking
+                                    ? 'Thinking...'
+                                    : (_isStreaming ? 'Typing...' : 'Ready to assist'),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
