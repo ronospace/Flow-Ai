@@ -38,6 +38,10 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   final EnhancedAIChatService _chatService = EnhancedAIChatService();
   List<types.Message> _messages = [];
   bool _isTyping = false;
+  bool _isThinking = false;
+  bool _isStreaming = false;
+  String? _lastAiMessageId;
+
   bool _quickRepliesCollapsed = false;
   // removed unused _showQuickReplies
   // ignore: unused_field
@@ -66,6 +70,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
   @override
   void initState() {
+
     super.initState();
 
     _fabController = AnimationController(
@@ -122,23 +127,54 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     _messagesSub = _chatService.messagesStream.listen((messages) {
       if (mounted) {
         setState(() {
-  _messages = messages;
-  if (messages.isNotEmpty && messages.last.author.id == 'ai_flowai_enhanced') {
-    Future.delayed(_thinkingDelay, () {
-      if (!mounted) return;
+          _messages = messages;
 
-      final keyboardOpen = _inputFocusNode.hasFocus;
+          final latestAiMessage = messages.isNotEmpty &&
+                  messages.first.author.id == 'ai_flowai_enhanced' &&
+                  messages.first is types.TextMessage
+              ? messages.first as types.TextMessage
+              : null;
 
-      setState(() {
-        _isTyping = false;
-        if (!keyboardOpen) {
-          _quickRepliesCollapsed = false;
-          _isSuggestionsExpanded = true;
-        }
-      });
-    });
-  }
-});
+          if (latestAiMessage != null) {
+            final isNewAiReply = latestAiMessage.id != _lastAiMessageId;
+
+            if (_isTyping && _isThinking && isNewAiReply) {
+              Future.delayed(const Duration(milliseconds: 120), () {
+                if (!mounted) return;
+                setState(() {
+                  _isThinking = false;
+                  _isStreaming = true;
+                });
+              });
+            }
+
+            _lastAiMessageId = latestAiMessage.id;
+            final latestText = latestAiMessage.text;
+
+            Future.delayed(_thinkingDelay, () {
+              if (!mounted) return;
+
+              final currentText = (_messages.isNotEmpty &&
+                      _messages.first.author.id == 'ai_flowai_enhanced' &&
+                      _messages.first is types.TextMessage)
+                  ? (_messages.first as types.TextMessage).text
+                  : '';
+              if (currentText != latestText) return;
+
+              final keyboardOpen = _inputFocusNode.hasFocus;
+
+              setState(() {
+                _isTyping = false;
+                _isThinking = false;
+                _isStreaming = false;
+                if (!keyboardOpen) {
+                  _quickRepliesCollapsed = false;
+                  _isSuggestionsExpanded = true;
+                }
+              });
+            });
+          }
+        });
       }
     });
 
@@ -150,6 +186,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
   @override
   void dispose() {
+
     // Ensure animations are stopped and controllers disposed properly
     _fabController.stop();
     _chatController.stop();
@@ -233,6 +270,13 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
     setState(() {
       _isTyping = true;
+      _isThinking = true;
+      _isStreaming = false;
+      _lastAiMessageId = (_messages.isNotEmpty &&
+              _messages.first.author.id == 'ai_flowai_enhanced' &&
+              _messages.first is types.TextMessage)
+          ? (_messages.first as types.TextMessage).id
+          : null;
     });
 
     _chatService.sendMessage(textMessage);
@@ -609,16 +653,19 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                         const SizedBox(width: 4),
                         Flexible(
                           child: AnimatedDefaultTextStyle(
+                            curve: Curves.easeOutCubic,
                             duration: const Duration(milliseconds: 220),
                             style: theme.textTheme.bodyMedium!.copyWith(
-                              color: Colors.white.withValues(alpha: _isTyping ? 0.9 : 0.78),
+                              color: Colors.white.withValues(alpha: (_isThinking || _isStreaming) ? 0.9 : 0.78),
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
                               height: 1.05,
-                              letterSpacing: _isTyping ? 0.08 : 0.0,
+                              letterSpacing: (_isThinking || _isStreaming) ? 0.08 : 0.0,
                             ),
                             child: Text(
-                              _isTyping ? 'Thinking...' : 'Ready to assist',
+                              _isThinking
+                                    ? 'Thinking...'
+                                    : (_isStreaming ? 'Typing...' : 'Ready to assist ⚡'),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -714,12 +761,16 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   }
 
   String _getInsightsBannerText() {
-    if (_isTyping) {
+    if (_isThinking) {
       return 'Analyzing your patterns ✨' + '.' * ((_pulseController.value * 3).floor() + 1);
     }
 
+    if (_isStreaming) {
+      return 'Preparing your guidance ✨';
+    }
+
     if (_messages.length > 1) {
-      return 'Insight based on your cycle data';
+      return 'Insight based on your cycle data 🌙';
     }
 
     return '✦ Personalized AI insights ⓘ Not medical advice';
@@ -733,6 +784,35 @@ class _FloatingAIChatState extends State<FloatingAIChat>
         data: theme.copyWith(primaryColor: AppTheme.primaryRose),
         child: Chat(
           messages: _messages,
+          textMessageBuilder: (message, {required int messageWidth, required bool showName}) {
+            final isAI = message.author.id == 'ai_flowai_enhanced';
+            final isLatest = _messages.isNotEmpty && _messages.last.id == message.id;
+
+            if (isAI && isLatest && _isStreaming) {
+              return RichText(
+                text: TextSpan(
+                  style: const TextStyle(color: Colors.white),
+                  children: [
+                    TextSpan(
+                      text: (message.author.id == 'ai_flowai_enhanced' &&
+                             _messages.isNotEmpty &&
+                             _messages.last.id == message.id &&
+                             _isStreaming)
+                          ? message.text + '|'
+                          : message.text,
+                    ),
+                    const WidgetSpan(
+                      child: Text('|'),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            return Text(
+              message.text,
+            );
+          },
           onSendPressed: _handleSendPressed,
           onMessageTap: _handleMessageTap,
           onPreviewDataFetched: _handlePreviewDataFetched,
@@ -778,46 +858,62 @@ class _FloatingAIChatState extends State<FloatingAIChat>
       mainAxisSize: MainAxisSize.min,
       children: [
         // Header - More prominent
-        Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              _isSuggestionsExpanded = !_isSuggestionsExpanded;
+            });
+          },
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+                  ),
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                borderRadius: BorderRadius.circular(8),
+                child: Icon(
+                  Icons.auto_awesome_outlined,
+                  color: Colors.white,
+                  size: 18,
+                ),
               ),
-              child: Icon(
-                Icons.auto_awesome_outlined,
-                color: Colors.white,
+              const SizedBox(width: 8),
+              Text(
+                'Suggested Questions',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  color: AppTheme.primaryRose,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                ),
+              ),
+              const Spacer(),
+              Icon(
+                _isSuggestionsExpanded
+                    ? Icons.expand_less
+                    : Icons.expand_more,
+                color: AppTheme.primaryRose,
                 size: 18,
               ),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              'Suggested Questions',
-              style: theme.textTheme.titleMedium?.copyWith(
-                color: AppTheme.primaryRose,
-                fontWeight: FontWeight.w500,
-                fontSize: 14,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
         const SizedBox(height: 4),
         // Suggestions - Horizontal scrollable for better visibility
-        SizedBox(
-          height: 34,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: suggestions.length,
-            separatorBuilder: (context, index) => const SizedBox(width: 12),
-            itemBuilder: (context, index) {
-              return _buildSuggestionChip(suggestions[index], theme, index);
-            },
+        if (_isSuggestionsExpanded)
+          SizedBox(
+            height: 34,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: suggestions.length,
+              separatorBuilder: (context, index) => const SizedBox(width: 12),
+              itemBuilder: (context, index) {
+                return _buildSuggestionChip(suggestions[index], theme, index);
+              },
+            ),
           ),
-        ),
       ],
     );
   }
@@ -838,6 +934,13 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
             setState(() {
               _isTyping = true;
+              _isThinking = true;
+              _isStreaming = false;
+              _lastAiMessageId = (_messages.isNotEmpty &&
+                      _messages.first.author.id == 'ai_flowai_enhanced' &&
+                      _messages.first is types.TextMessage)
+                  ? (_messages.first as types.TextMessage).id
+                  : null;
               _isSuggestionsExpanded = false;
               _quickRepliesCollapsed = true;
             });
@@ -887,10 +990,10 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
 
   Widget _buildLiveStatusIndicator() {
-    final isThinking = _isTyping;
+    final isThinking = _isThinking;
     final coreColor = isThinking ? AppTheme.primaryPurple : AppTheme.accentMint;
     final haloColor = isThinking ? AppTheme.primaryRose : AppTheme.secondaryBlue;
-    final pulseDuration = isThinking ? 1050.ms : 1600.ms;
+    final pulseDuration = isThinking ? 900.ms : 1400.ms;
     final haloBegin = isThinking ? 0.82 : 0.76;
     final haloEnd = isThinking ? 1.28 : 1.18;
     final dotBegin = isThinking ? 0.94 : 0.97;
@@ -939,8 +1042,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                               
               BoxShadow(
                 color: coreColor.withValues(alpha: isThinking ? 0.46 : 0.44),
-                blurRadius: isThinking ? 13 : 10,
-                spreadRadius: isThinking ? 1.8 : 1.4,
+                blurRadius: isThinking ? 12 : 10,
+                spreadRadius: isThinking ? 1.6 : 1.4,
               ),
             ],
           ),
@@ -957,7 +1060,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   }
 
   // Enhanced Input Area - Better spacing and visibility
-  Widget _buildEnhancedInput(ThemeData theme) {
+Widget _buildEnhancedInput(ThemeData theme) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
