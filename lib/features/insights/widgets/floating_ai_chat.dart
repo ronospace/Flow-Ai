@@ -73,6 +73,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
     super.initState();
 
+
     _fabController = AnimationController(
       duration: const Duration(milliseconds: 300),
       vsync: this,

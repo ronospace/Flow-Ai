@@ -199,7 +199,7 @@ class EnhancedAIChatService {
 
     // Add enhanced welcome message
     _addAIMessage(
-      "Hi $userName! 👋\n\nI'm Zyra, your menstrual health assistant. How can I help you today?",
+      "Hi $userName! 👋\n\nI'm Zyra, your menstrual health assistant. How can I help you today? 🌸",
     );
 
     _isInitialized = true;
