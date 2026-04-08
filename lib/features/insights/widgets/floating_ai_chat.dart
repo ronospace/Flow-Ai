@@ -779,7 +779,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   // Enhanced Chat Area - Better spacing and padding
   Widget _buildChatArea(ThemeData theme) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(12, 32, 12, 8),
+      padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
       child: Theme(
         data: theme.copyWith(primaryColor: AppTheme.primaryRose),
         child: Chat(
@@ -790,6 +790,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
           onPreviewDataFetched: _handlePreviewDataFetched,
           user: _chatService.currentUser ?? types.User(id: 'fallback_user'),
           theme: DefaultChatTheme(
+            dateDividerMargin: const EdgeInsets.fromLTRB(0, 4, 0, 8),
+
             primaryColor: AppTheme.primaryRose,
             secondaryColor: AppTheme.secondaryBlue.withValues(alpha: 0.1),
             backgroundColor: theme.scaffoldBackgroundColor,
