@@ -299,7 +299,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     if (ctx == null) return 200;
     final box = ctx.findRenderObject() as RenderBox;
     final pos = box.localToGlobal(Offset.zero);
-    return pos.dy + box.size.height + 8;
+    final value = pos.dy + box.size.height + 8;
+    return value;
   }
 
   double _getPeriodSelectorTop() {
