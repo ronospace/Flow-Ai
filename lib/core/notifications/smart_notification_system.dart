@@ -668,7 +668,7 @@ class NotificationContentGenerator {
     Map<String, dynamic>? healthData,
     Map<String, dynamic> userContext,
   ) {
-    final userName = user.displayName ?? 'there';
+    final userName = user.displayName ?? 'User';
 
     switch (type) {
       case NotificationType.cyclePhase:
