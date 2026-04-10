@@ -159,6 +159,14 @@ class EnhancedAIChatService {
   }) async {
     if (_isInitialized) {
       _currentUser = types.User(id: userId, firstName: userName);
+
+      if (_messages.isNotEmpty && _messages.first.author.id == "ai_flowai_enhanced" && _messages.first is types.TextMessage) {
+        final updated = (_messages.first as types.TextMessage).copyWith(
+          text: "Hi $userName! 👋\n\nI'm Zyra, your menstrual health assistant. How can I help you today? 🌸",
+        );
+        _messages[0] = updated;
+        _notifyListeners();
+      }
       return;
     }
 
