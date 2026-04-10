@@ -45,6 +45,8 @@ import 'features/premium/providers/premium_provider.dart';
 import 'features/premium/providers/subscription_provider.dart';
 import 'features/analytics/providers/analytics_provider.dart';
 
+const bool ENABLE_PD = false;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Configure Flutter for production performance
@@ -290,7 +292,8 @@ class _FlowAIAppState extends State<FlowAIApp> {
     settingsProvider = SettingsProvider();
     progressiveDisclosureService = ProgressiveDisclosureService();
     _initializeSettings();
-    _initializeProgressiveDisclosure();
+    // DISABLED FOR TEST
+    // DISABLED FOR TEST
     _initDeepLinks();
 
     // Consume any pending deep link AFTER router is mounted.
@@ -312,17 +315,7 @@ class _FlowAIAppState extends State<FlowAIApp> {
     }
   }
 
-  Future<void> _initializeProgressiveDisclosure() async {
-    try {
-      await progressiveDisclosureService.initialize();
-      AppLogger.success('Progressive Disclosure Service initialized');
-    } catch (e) {
-      AppLogger.warning('Progressive Disclosure initialization failed: $e');
-    }
-  }
-
-
-  void _handleDeepLink(Uri uri) {
+void _handleDeepLink(Uri uri) {
     final normalized = DeepLinkNormalizer.normalizeToAppPath(uri.toString());
     if (normalized == null) return;
 
