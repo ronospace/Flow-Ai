@@ -356,7 +356,7 @@ class EnhancedOnboardingController extends ChangeNotifier {
   /// Schedule welcome notification
   Future<void> _scheduleWelcomeNotification() async {
     try {
-      final userName = _data.preferredName ?? _data.fullName ?? 'there';
+      final userName = _data.preferredName ?? _data.fullName ?? 'User';
       await _notificationService.scheduleNotification(
         id: 0,
         title: 'Welcome to Flow Ai, $userName! 🌸',
