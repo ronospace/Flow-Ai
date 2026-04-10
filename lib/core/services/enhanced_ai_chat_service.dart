@@ -12,6 +12,7 @@ import '../../core/models/medical_citation.dart';
 
 /// Enhanced AI Chat Service with comprehensive FAQ and general knowledge
 class EnhancedAIChatService {
+  String _buildWelcomeMessage(String userName) => "Hi ! 👋\n\nI'm Zyra, your menstrual health assistant. How can I help you today? 🌸";
   static final EnhancedAIChatService _instance =
       EnhancedAIChatService._internal();
   factory EnhancedAIChatService() => _instance;
@@ -162,7 +163,7 @@ class EnhancedAIChatService {
 
       if (_messages.isNotEmpty && _messages.first.author.id == "ai_flowai_enhanced" && _messages.first is types.TextMessage) {
         final updated = (_messages.first as types.TextMessage).copyWith(
-          text: "Hi $userName! 👋\n\nI'm Zyra, your menstrual health assistant. How can I help you today? 🌸",
+          text: _buildWelcomeMessage(userName),
         );
         _messages[0] = updated;
         _notifyListeners();
@@ -210,7 +211,7 @@ class EnhancedAIChatService {
 
     // Add enhanced welcome message
     _addAIMessage(
-      "Hi $userName! 👋\n\nI'm Zyra, your menstrual health assistant. How can I help you today? 🌸",
+      _buildWelcomeMessage(userName),
     );
 
     _isInitialized = true;
