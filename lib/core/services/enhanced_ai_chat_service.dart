@@ -157,7 +157,10 @@ class EnhancedAIChatService {
     AppLocalizations? localizations,
     String? flowAIApiKey,
   }) async {
-    if (_isInitialized) return;
+    if (_isInitialized) {
+      _currentUser = types.User(id: userId, firstName: userName);
+      return;
+    }
 
     _localizations = localizations;
 

@@ -213,6 +213,15 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   }
 
   void _toggleChat() {
+    final settingsProvider = context.read<SettingsProvider>();
+    final userPreferences = settingsProvider.preferences;
+
+    _chatService.initialize(
+      userId: userPreferences.userId,
+      userName: userPreferences.displayName.isNotEmpty ? userPreferences.displayName : "there",
+      localizations: AppLocalizations.of(context),
+    );
+
     setState(() {
       _isExpanded = !_isExpanded;
       if (!_isExpanded) {
