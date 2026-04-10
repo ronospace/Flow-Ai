@@ -111,7 +111,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     // Initialize chat service after first build to get localizations
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final localizations = AppLocalizations.of(context);
-      final settingsProvider = context.read<SettingsProvider>();
+      final settingsProvider = context.watch<SettingsProvider>();
       final userPreferences = settingsProvider.preferences;
 
       final userName = userPreferences.displayName.isNotEmpty ? userPreferences.displayName : 'User';
@@ -213,7 +213,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   }
 
   void _toggleChat() {
-    final settingsProvider = context.read<SettingsProvider>();
+    final settingsProvider = context.watch<SettingsProvider>();
     final userPreferences = settingsProvider.preferences;
 
     _chatService.initialize(
