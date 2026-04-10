@@ -57,7 +57,9 @@ class SettingsProvider extends ChangeNotifier {
       await appState.auth.signUpWithEmail(
         email: "local.ai",
         password: "password123",
-        displayName: (await appState.auth.getUserData())?["email"]?.split("@")[0] ?? "User",
+        displayName:
+            (await appState.auth.getUserData())?["email"]?.split("@")[0] ??
+            "User",
       );
     }
     await _syncUserDataFromAuth();
@@ -96,12 +98,6 @@ class SettingsProvider extends ChangeNotifier {
             final emailParts = email.split('@');
             if (emailParts.isNotEmpty) {
               finalDisplayName = emailParts.first;
-              // Capitalize first letter
-              if (finalDisplayName.isNotEmpty) {
-                finalDisplayName =
-                    finalDisplayName[0].toUpperCase() +
-                    finalDisplayName.substring(1).toLowerCase();
-              }
             }
           }
         }
@@ -110,7 +106,30 @@ class SettingsProvider extends ChangeNotifier {
         if (finalDisplayName == null || finalDisplayName.isEmpty) {
           finalDisplayName = 'User';
         }
+        // === SMART NAME FORMATTING (GLOBAL) ===
+        if (finalDisplayName.isNotEmpty) {
+          String name = finalDisplayName.trim();
 
+          // Remove trailing numbers
+          name = name.replaceAll(RegExp(r'\d+$'), '');
+
+          // Replace separators
+          name = name.replaceAll(RegExp(r'[_\.-]'), ' ');
+
+          // Smart shorten (only if single word & long)
+          if (!name.contains(" ") && name.length > 6) {
+            name = name.substring(0, name.length ~/ 2);
+          }
+
+          // Capitalize words
+          name = name
+              .split(" ")
+              .where((w) => w.isNotEmpty)
+              .map((w) => w[0].toUpperCase() + w.substring(1).toLowerCase())
+              .join(" ");
+
+          finalDisplayName = name.isEmpty ? "User" : name;
+        }
         // Always update if we have valid data - be more aggressive about syncing
         bool hasChanges = false;
 
