@@ -114,7 +114,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
       final settingsProvider = context.read<SettingsProvider>();
       final userPreferences = settingsProvider.preferences;
 
-      final userName = userPreferences.displayName.isNotEmpty ? userPreferences.displayName : "there";
+      final userName = userPreferences.displayName;
 
       _chatService.initialize(
         userId: userPreferences.userId,
@@ -218,7 +218,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
     _chatService.initialize(
       userId: userPreferences.userId,
-      userName: userPreferences.displayName.isNotEmpty ? userPreferences.displayName : "there",
+      userName: userPreferences.displayName,
       localizations: AppLocalizations.of(context),
     );
 
