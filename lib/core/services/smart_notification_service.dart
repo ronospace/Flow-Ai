@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import '../models/cycle_data.dart';
 import '../models/biometric_data.dart';
-import 'enhanced_ai_engine.dart';
+import 'ai_engine.dart';
 import 'biometric_integration_service.dart';
 
 /// AI-powered smart notification system for personalized cycle and health insights
@@ -182,7 +182,7 @@ class SmartNotificationService {
       final mockCycles = _generateMockCycleData();
 
       // Generate AI predictions
-      final aiEngine = EnhancedAIEngine.instance;
+      final aiEngine = AIEngine.instance;
       if (aiEngine.isInitialized) {
         final prediction = await aiEngine.predictNextCycleAdvanced(mockCycles);
 
@@ -442,7 +442,7 @@ class SmartNotificationService {
     if (!_notificationPreferences['ai_coaching']!) return;
 
     try {
-      final aiEngine = EnhancedAIEngine.instance;
+      final aiEngine = AIEngine.instance;
       if (aiEngine.isInitialized) {
         final mockCycles = _generateMockCycleData();
         final insights = await aiEngine.generateAdvancedInsights(mockCycles);
