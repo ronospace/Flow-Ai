@@ -45,6 +45,21 @@ class SettingsProvider extends ChangeNotifier {
   // Initialize settings from storage
   Future<void> initializeSettings() async {
     await _loadPreferences();
+
+    final appState = AppStateService();
+    if (!appState.isInitialized) {
+      await appState.initialize();
+    }
+
+    final existingUser = await appState.auth.getUserData();
+    if (existingUser == null) {
+      debugPrint("🆕 Creating initial local user");
+      await appState.auth.signUpWithEmail(
+        email: "local.ai",
+        password: "password123",
+        displayName: (await appState.auth.getUserData())?["email"]?.split("@")[0] ?? "User",
+      );
+    }
     await _syncUserDataFromAuth();
   }
 
