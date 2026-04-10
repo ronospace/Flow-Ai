@@ -12,7 +12,7 @@ import '../../core/models/medical_citation.dart';
 
 /// Enhanced AI Chat Service with comprehensive FAQ and general knowledge
 class EnhancedAIChatService {
-  String _buildWelcomeMessage(String userName) => "Hi ! 👋\n\nI'm Zyra, your menstrual health assistant. How can I help you today? 🌸";
+  String _buildWelcomeMessage(String userName) => "Hi $userName! 👋\n\nI'm Zyra, your menstrual health assistant. How can I help you today? 🌸";
   static final EnhancedAIChatService _instance =
       EnhancedAIChatService._internal();
   factory EnhancedAIChatService() => _instance;
