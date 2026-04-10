@@ -115,6 +115,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
       final userPreferences = settingsProvider.preferences;
 
       final userName = userPreferences.displayName;
+      if (userName.isEmpty) return;
 
       _chatService.initialize(
         userId: userPreferences.userId,
