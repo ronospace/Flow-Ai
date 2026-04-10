@@ -78,7 +78,6 @@ class SettingsProvider extends ChangeNotifier {
 
       if (userData != null) {
         String? displayName = userData['displayName'];
-        String? username = userData['username'];
         String? uid = userData['uid'];
         String? email = userData['email'];
         String? photoURL = userData['photoURL'];
@@ -86,9 +85,26 @@ class SettingsProvider extends ChangeNotifier {
         // Smart name resolution with multiple fallbacks
         String? finalDisplayName = displayName;
 
+        // Prefer human-readable names only
+        if (finalDisplayName != null && finalDisplayName.contains(RegExp(r"[0-9]"))) {
+          finalDisplayName = null;
+        }
+
+
+        // Normalize display name
+        if (finalDisplayName != null && finalDisplayName.isNotEmpty) {
+          if (finalDisplayName.contains("@")) {
+            finalDisplayName = finalDisplayName.split("@").first;
+          }
+          if (finalDisplayName.contains(".")) {
+            finalDisplayName = finalDisplayName.split(".").first;
+          }
+          finalDisplayName = finalDisplayName[0].toUpperCase() + finalDisplayName.substring(1).toLowerCase();
+        }
+
+
         // Try displayName first
         if (finalDisplayName == null || finalDisplayName.isEmpty) {
-          finalDisplayName = username;
         }
 
         // If still empty, extract from email
@@ -161,7 +177,6 @@ class SettingsProvider extends ChangeNotifier {
             'provider': userData['provider'],
             'profileComplete': userData['profileComplete'] ?? true,
             'lastSync': DateTime.now().toIso8601String(),
-            'username': username,
             'displayName': finalDisplayName,
             'uid': uid,
           });
