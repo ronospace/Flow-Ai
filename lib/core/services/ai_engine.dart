@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'enhanced_ai_engine.dart';
 import 'package:flutter/foundation.dart';
 import '../models/cycle_data.dart';
 import '../models/ai_insights.dart';
@@ -6,6 +7,7 @@ import 'flowai_service.dart';
 import '../config/flowiq_config.dart';
 
 class AIEngine {
+  final _enhanced = EnhancedAIEngine.instance;
   static final AIEngine _instance = AIEngine._internal();
   static AIEngine get instance => _instance;
   AIEngine._internal();
@@ -873,5 +875,14 @@ class AIEngine {
       return 'Enhanced with FlowAI';
     }
     return 'Local processing only';
+  }
+
+
+  Future<CyclePrediction> predictNextCycleAdvanced(List<CycleData> cycles) async {
+    return _enhanced.predictNextCycleAdvanced(cycles);
+  }
+
+  Future<List<AIInsight>> generateAdvancedInsights(List<CycleData> cycles) async {
+    return _enhanced.generateAdvancedInsights(cycles);
   }
 }
