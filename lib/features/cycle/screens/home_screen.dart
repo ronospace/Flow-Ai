@@ -1491,7 +1491,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       ),
                     ),
                     Text(
-                      'Personalized health intelligence',
+                      'Personalized Health Intelligence',
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: AppTheme.mediumGrey,
                       ),
@@ -1952,7 +1952,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       ),
                     ),
                     Text(
-                      'Long-term health patterns',
+                      'Long-Term Health Patterns',
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: AppTheme.mediumGrey,
                       ),
@@ -2374,7 +2374,7 @@ extension _PremiumFeaturesMethods on _HomeScreenState {
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
+                  mainAxisSize: MainAxisSize.max,
                   children: [
                     Row(
                       children: [
