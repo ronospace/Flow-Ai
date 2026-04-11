@@ -2255,14 +2255,14 @@ extension _PremiumFeaturesMethods on _HomeScreenState {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Premium Features Coming Soon',
+                      'Premium Advanced Features',
                       style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppTheme.darkGrey,
                       ),
                     ),
                     Text(
-                      'Advanced health intelligence features',
+                      'Health Intelligence Features',
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: AppTheme.mediumGrey,
                       ),
@@ -2314,7 +2314,7 @@ extension _PremiumFeaturesMethods on _HomeScreenState {
                 'Securely share cycle data with trusted partners',
                 Icons.favorite_rounded,
                 AppTheme.primaryRose,
-                'Q3 2026',
+                'NEW',
                 () => _navigateToPartnerSharing(),
               ),
 
@@ -2323,7 +2323,7 @@ extension _PremiumFeaturesMethods on _HomeScreenState {
                 'Export data for medical appointments',
                 Icons.medical_services_rounded,
                 AppTheme.secondaryBlue,
-                'Q4 2026',
+                'NEW',
                 () => _navigateToHealthcarePortal(),
               ),
 
@@ -2332,7 +2332,7 @@ extension _PremiumFeaturesMethods on _HomeScreenState {
                 'Deep insights with predictive modeling',
                 Icons.analytics_rounded,
                 AppTheme.accentMint,
-                'Q1 2026',
+                'NEW',
                 () => _navigateToAdvancedAnalytics(),
               ),
             ],
@@ -2443,7 +2443,7 @@ extension _PremiumFeaturesMethods on _HomeScreenState {
                         const SizedBox(width: 4),
                         Flexible(
                           child: Text(
-                            'Coming Soon',
+                            estimatedDate == 'Q2 2026' ? 'Coming Soon' : 'Active',
                             style: TextStyle(
                               color: color,
                               fontSize: 9,
