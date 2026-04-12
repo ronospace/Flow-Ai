@@ -28,12 +28,10 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
   final _messageController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-
   bool _isLoading = false;
   bool _isExecutingInvite = false;
   String? _successMessage;
   bool _isSent = false;
-
 
   PartnerInvitation? _generatedInvitation;
 
@@ -81,7 +79,13 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
           scale: _scaleAnimation.value,
           child: FadeTransition(
             opacity: _fadeAnimation,
-            child: Dialog(insetPadding: const EdgeInsets.only(top: 68, left: 16, right: 16, bottom: 16),
+            child: Dialog(
+              insetPadding: const EdgeInsets.only(
+                top: 48,
+                left: 16,
+                right: 16,
+                bottom: 16,
+              ),
               backgroundColor: Colors.transparent,
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.9,
@@ -164,7 +168,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                   ),
                 ),
                 Text(
-                  'Share your cycle journey together',
+                  'Share Your Love And Cycle Journey Together 💖',
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: AppTheme.mediumGrey,
                   ),
@@ -329,9 +333,15 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                           ),
                         )
                       : Icon(_isSent ? Icons.check : Icons.send),
-                  label: Text(_isLoading ? 'Sending...' : (_isSent ? 'Sent ✓' : 'Send Invitation')),
+                  label: Text(
+                    _isLoading
+                        ? 'Sending...'
+                        : (_isSent ? 'Sent ✓' : 'Send Invitation'),
+                  ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: _isSent ? AppTheme.primaryRose.withOpacity(0.35) : AppTheme.primaryRose,
+                    backgroundColor: _isSent
+                        ? AppTheme.primaryRose.withOpacity(0.35)
+                        : AppTheme.primaryRose,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
@@ -360,16 +370,6 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
               color: AppTheme.darkGrey,
             ),
           ),
-          const SizedBox(height: 8),
-          Text(
-            'Show the QR code or save it to share later.',
-            textAlign: TextAlign.center,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: AppTheme.mediumGrey,
-              height: 1.2,
-            ),
-          ),
-          const SizedBox(height: 8),
 
           Container(
                 padding: const EdgeInsets.all(8),
@@ -469,7 +469,9 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                   icon: const Icon(Icons.save),
                   label: const Text('Save QR'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: _isSent ? AppTheme.primaryRose.withOpacity(0.35) : AppTheme.primaryRose,
+                    backgroundColor: _isSent
+                        ? AppTheme.primaryRose.withOpacity(0.35)
+                        : AppTheme.primaryRose,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
@@ -600,7 +602,9 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                   icon: const Icon(Icons.share),
                   label: const Text('Share'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: _isSent ? AppTheme.primaryRose.withOpacity(0.35) : AppTheme.primaryRose,
+                    backgroundColor: _isSent
+                        ? AppTheme.primaryRose.withOpacity(0.35)
+                        : AppTheme.primaryRose,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
@@ -671,7 +675,6 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
       }
     }
   }
-
 
   Future<void> _generateCodeOnly() async {
     if (_isLoading) return;
