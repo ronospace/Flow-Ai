@@ -81,7 +81,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
           scale: _scaleAnimation.value,
           child: FadeTransition(
             opacity: _fadeAnimation,
-            child: Dialog(insetPadding: const EdgeInsets.only(top: 120, left: 16, right: 16, bottom: 16),
+            child: Dialog(insetPadding: const EdgeInsets.only(top: 68, left: 16, right: 16, bottom: 16),
               backgroundColor: Colors.transparent,
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.9,
@@ -142,7 +142,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
                 colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
@@ -245,7 +245,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                 ).animate().fadeIn().slideY(begin: -0.3),
               ],
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 10),
 
               TextFormField(
                 controller: _emailController,
@@ -289,7 +289,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                   return null;
                 },
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 6),
 
               TextFormField(
                 controller: _messageController,
@@ -311,7 +311,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                 ),
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 10),
 
               SizedBox(
                 width: double.infinity,
@@ -362,17 +362,17 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
           ),
           const SizedBox(height: 8),
           Text(
-            'Show this QR code to your partner or save it to share later.',
+            'Show the QR code or save it to share later.',
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: AppTheme.mediumGrey,
-              height: 1.4,
+              height: 1.2,
             ),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: 8),
 
           Container(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
@@ -390,13 +390,13 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                       QrImageView(
                         data: _generateInvitationLink(_generatedInvitation!),
                         version: QrVersions.auto,
-                        size: 200.0,
+                        size: 140.0,
                         foregroundColor: AppTheme.darkGrey,
                       )
                     else
                       Container(
-                        width: 200,
-                        height: 200,
+                        width: 140,
+                        height: 140,
                         decoration: BoxDecoration(
                           color: AppTheme.lightGrey.withValues(alpha: 0.3),
                           borderRadius: BorderRadius.circular(16),
@@ -406,10 +406,10 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                           children: [
                             Icon(
                               Icons.qr_code,
-                              size: 60,
+                              size: 52,
                               color: AppTheme.mediumGrey,
                             ),
-                            const SizedBox(height: 12),
+                            const SizedBox(height: 8),
                             Text(
                               'Generate QR Code',
                               style: TextStyle(
@@ -421,7 +421,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                         ),
                       ),
 
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 6),
 
                     Text(
                       'Flow Ai Partner Invitation',
@@ -443,7 +443,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
               .scale(begin: const Offset(0.8, 0.8))
               .fadeIn(delay: 200.ms),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 10),
 
           Row(
             children: [
@@ -504,13 +504,13 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: AppTheme.mediumGrey,
-              height: 1.4,
+              height: 1.2,
             ),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: 8),
 
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
@@ -529,7 +529,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
             child: Column(
               children: [
                 Icon(Icons.link, size: 48, color: AppTheme.primaryRose),
-                const SizedBox(height: 16),
+                const SizedBox(height: 6),
 
                 if (_generatedInvitation != null) ...[
                   Container(
@@ -574,7 +574,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
             ),
           ).animate().fadeIn(delay: 200.ms),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 10),
 
           Row(
             children: [
