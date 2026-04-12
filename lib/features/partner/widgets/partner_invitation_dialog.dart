@@ -81,7 +81,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
           scale: _scaleAnimation.value,
           child: FadeTransition(
             opacity: _fadeAnimation,
-            child: Dialog(
+            child: Dialog(insetPadding: const EdgeInsets.only(top: 120, left: 16, right: 16, bottom: 16),
               backgroundColor: Colors.transparent,
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.9,
