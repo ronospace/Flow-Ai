@@ -71,6 +71,8 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localizations = AppLocalizations.of(context);
+    final media = MediaQuery.of(context);
+    final safeHeight = media.size.height - media.padding.top - media.padding.bottom;
 
     return AnimatedBuilder(
       animation: _dialogController,
@@ -80,16 +82,11 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
           child: FadeTransition(
             opacity: _fadeAnimation,
             child: Dialog(
-              insetPadding: const EdgeInsets.only(
-                top: 48,
-                left: 16,
-                right: 16,
-                bottom: 16,
-              ),
+              insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
               backgroundColor: Colors.transparent,
               child: Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                height: MediaQuery.of(context).size.height * 0.7,
+                width: media.size.width * 0.9,
+                height: safeHeight * 0.68,
                 decoration: BoxDecoration(
                   color: theme.scaffoldBackgroundColor,
                   borderRadius: BorderRadius.circular(28),
