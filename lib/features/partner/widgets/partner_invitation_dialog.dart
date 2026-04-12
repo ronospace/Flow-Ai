@@ -146,7 +146,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
                 colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
@@ -226,7 +226,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
               if (_successMessage != null) ...[
                 Container(
                   margin: const EdgeInsets.only(bottom: 16),
-                  padding: const EdgeInsets.all(14),
+                  padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
@@ -249,7 +249,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                 ).animate().fadeIn().slideY(begin: -0.3),
               ],
 
-              const SizedBox(height: 10),
+              const SizedBox(height: 16),
 
               TextFormField(
                 controller: _emailController,
@@ -293,7 +293,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                   return null;
                 },
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 16),
 
               TextFormField(
                 controller: _messageController,
@@ -315,7 +315,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                 ),
               ),
 
-              const SizedBox(height: 10),
+              const SizedBox(height: 16),
 
               SizedBox(
                 width: double.infinity,
@@ -372,7 +372,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
           ),
 
           Container(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
@@ -390,13 +390,13 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                       QrImageView(
                         data: _generateInvitationLink(_generatedInvitation!),
                         version: QrVersions.auto,
-                        size: 140.0,
+                        size: MediaQuery.of(context).size.width * 0.32,
                         foregroundColor: AppTheme.darkGrey,
                       )
                     else
                       Container(
-                        width: 140,
-                        height: 140,
+                        width: MediaQuery.of(context).size.width * 0.32,
+                        height: MediaQuery.of(context).size.width * 0.32,
                         decoration: BoxDecoration(
                           color: AppTheme.lightGrey.withValues(alpha: 0.3),
                           borderRadius: BorderRadius.circular(16),
@@ -409,7 +409,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                               size: 52,
                               color: AppTheme.mediumGrey,
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 16),
                             Text(
                               'Generate QR Code',
                               style: TextStyle(
@@ -421,7 +421,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                         ),
                       ),
 
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 16),
 
                     Text(
                       'Flow Ai Partner Invitation',
@@ -443,7 +443,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
               .scale(begin: const Offset(0.8, 0.8))
               .fadeIn(delay: 200.ms),
 
-          const SizedBox(height: 10),
+          const SizedBox(height: 16),
 
           Row(
             children: [
@@ -500,7 +500,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
               color: AppTheme.darkGrey,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 16),
           Text(
             'Generate a secure link that your partner can use to join from any device.',
             textAlign: TextAlign.center,
@@ -509,10 +509,10 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
               height: 1.2,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 16),
 
           Container(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
@@ -531,11 +531,11 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
             child: Column(
               children: [
                 Icon(Icons.link, size: 48, color: AppTheme.primaryRose),
-                const SizedBox(height: 6),
+                const SizedBox(height: 16),
 
                 if (_generatedInvitation != null) ...[
                   Container(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12),
@@ -576,7 +576,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
             ),
           ).animate().fadeIn(delay: 200.ms),
 
-          const SizedBox(height: 10),
+          const SizedBox(height: 16),
 
           Row(
             children: [
