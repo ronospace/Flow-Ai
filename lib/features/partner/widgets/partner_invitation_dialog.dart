@@ -81,7 +81,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
             opacity: _fadeAnimation,
             child: Dialog(
               insetPadding: const EdgeInsets.only(
-                top: 48,
+                top: 56,
                 left: 16,
                 right: 16,
                 bottom: 16,
