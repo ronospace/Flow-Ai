@@ -168,9 +168,12 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                   ),
                 ),
                 Text(
-                  'Share Your Love And Cycle Journey Together 💖',
+                  'Share Your Love & Cycle Journey Together 💖',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: AppTheme.mediumGrey,
+                    height: 1.1,
                   ),
                 ),
               ],
