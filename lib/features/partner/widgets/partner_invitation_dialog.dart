@@ -89,7 +89,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
               backgroundColor: Colors.transparent,
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.9,
-                height: MediaQuery.of(context).size.height * 0.7,
+                height: MediaQuery.of(context).size.height * 0.72,
                 decoration: BoxDecoration(
                   color: theme.scaffoldBackgroundColor,
                   borderRadius: BorderRadius.circular(28),
@@ -364,7 +364,6 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             'QR Code Invitation',
@@ -494,7 +493,6 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             'Share Invitation Link',
