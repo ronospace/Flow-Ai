@@ -81,14 +81,14 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
           child: FadeTransition(
             opacity: _fadeAnimation,
             child: Dialog(
-              insetPadding: const EdgeInsets.fromLTRB(16, 64, 16, 56),
+              insetPadding: const EdgeInsets.fromLTRB(16, 64, 16, 40),
               backgroundColor: Colors.transparent,
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     final dialogHeight =
-                        (constraints.maxHeight * 0.74).clamp(0.0, 620.0).toDouble();
+                        (constraints.maxHeight * 0.78).clamp(0.0, 680.0).toDouble();
                     return Center(
                       child: ConstrainedBox(
                         constraints: BoxConstraints(
@@ -102,7 +102,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.black.withValues(alpha: 0.3),
-                                blurRadius: 20,
+                                blurRadius: 24,
                                 spreadRadius: 5,
                                 offset: const Offset(0, 10),
                               ),
@@ -396,9 +396,10 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: AppTheme.primaryRose.withValues(alpha: 0.2),
+                      color: AppTheme.primaryRose.withValues(alpha: 0.28),
                       blurRadius: 20,
-                      offset: const Offset(0, 8),
+                      spreadRadius: 1,
+                      offset: const Offset(0, 10),
                     ),
                   ],
                 ),
