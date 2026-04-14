@@ -450,7 +450,7 @@ final dialogHeight = kb > 0
                       ],
                     ),
                   ).animate().scale(begin: const Offset(0.8, 0.8)).fadeIn(delay: 200.ms),
-                  const SizedBox(height: 8),
+                  SizedBox(height: Theme.of(context).platform == TargetPlatform.android ? 20 : 8),
                   Row(
                     children: [
                       Expanded(
