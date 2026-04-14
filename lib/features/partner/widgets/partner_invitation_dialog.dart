@@ -381,13 +381,6 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            'QR Code Invitation',
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: AppTheme.darkGrey,
-            ),
-          ),
 
           Container(
                 padding: const EdgeInsets.all(16),
@@ -441,14 +434,6 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                       ),
 
                     const SizedBox(height: 12),
-
-                    Text(
-                      'Flow Ai Partner Invitation',
-                      style: theme.textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppTheme.darkGrey,
-                      ),
-                    ),
                     Text(
                       'Scan to connect',
                       style: theme.textTheme.bodySmall?.copyWith(
