@@ -269,7 +269,7 @@ final dialogHeight = kb > 0
                 ).animate().fadeIn().slideY(begin: -0.3),
               ],
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 8),
 
               TextFormField(
                 controller: _emailController,
@@ -499,12 +499,14 @@ final dialogHeight = kb > 0
 
   Widget _buildLinkShareTab(ThemeData theme, AppLocalizations localizations) {
     return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       padding: const EdgeInsets.all(24),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          // removed share title
           Text(
-            'Share Invitation Link',
+            '',
             style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
               color: AppTheme.darkGrey,
@@ -512,7 +514,7 @@ final dialogHeight = kb > 0
           ),
           const SizedBox(height: 16),
           Text(
-            'Generate a secure link that your partner can use to join from any device.',
+            'Partner can join instantly from any device.',
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: AppTheme.mediumGrey,
