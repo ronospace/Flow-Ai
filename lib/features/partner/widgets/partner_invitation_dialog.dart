@@ -378,138 +378,124 @@ final dialogHeight = kb > 0
   }
 
   Widget _buildQRCodeTab(ThemeData theme, AppLocalizations localizations) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox.shrink(),
-
-          /* removed empty title */
-          Text(
-            '',
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: AppTheme.darkGrey,
-            ),
-          ),
-
-          Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppTheme.primaryRose.withValues(alpha: 0.28),
-                      blurRadius: 20,
-                      spreadRadius: 1,
-                      offset: const Offset(0, 10),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    if (_generatedInvitation != null)
-                      QrImageView(
-                        data: _generateInvitationLink(_generatedInvitation!),
-                        version: QrVersions.auto,
-                        size: 176,
-                        foregroundColor: AppTheme.darkGrey,
-                      )
-                    else
-                      Container(
-                        width: 176,
-                        height: 176,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(24),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight - 48),
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                        padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: AppTheme.lightGrey.withValues(alpha: 0.3),
-                          borderRadius: BorderRadius.circular(16),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppTheme.primaryRose.withValues(alpha: 0.28),
+                              blurRadius: 20,
+                              spreadRadius: 1,
+                              offset: const Offset(0, 10),
+                            ),
+                          ],
                         ),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
-                              Icons.qr_code,
-                              size: 52,
-                              color: AppTheme.mediumGrey,
-                            ),
+                            if (_generatedInvitation != null)
+                              QrImageView(
+                                data: _generateInvitationLink(_generatedInvitation!),
+                                version: QrVersions.auto,
+                                size: 176,
+                                foregroundColor: AppTheme.darkGrey,
+                              )
+                            else
+                              Container(
+                                width: 176,
+                                height: 176,
+                                decoration: BoxDecoration(
+                                  color: AppTheme.lightGrey.withValues(alpha: 0.3),
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.qr_code,
+                                      size: 52,
+                                      color: AppTheme.mediumGrey,
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      'Generate QR Code',
+                                      style: TextStyle(
+                                        color: AppTheme.mediumGrey,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             const SizedBox(height: 8),
                             Text(
-                              'Generate QR Code',
-                              style: TextStyle(
+                              'Scan to connect',
+                              style: theme.textTheme.bodySmall?.copyWith(
                                 color: AppTheme.mediumGrey,
-                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ],
                         ),
+                      )
+                      .animate()
+                      .scale(begin: const Offset(0.8, 0.8))
+                      .fadeIn(delay: 200.ms),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          onPressed: _generateCodeOnly,
+                          icon: const Icon(Icons.refresh),
+                          label: const Text('Generate Code'),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: AppTheme.primaryRose,
+                            side: BorderSide(color: AppTheme.primaryRose),
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                        ),
                       ),
-
-                    const SizedBox(height: 8),
-
-                    SizedBox.shrink(),
-                    /* removed empty subtitle */
-                    Text(
-                      '',
-                      style: theme.textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppTheme.darkGrey,
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: _generatedInvitation != null ? _saveQRCode : null,
+                          icon: const Icon(Icons.save),
+                          label: const Text('Save QR'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: _isSent
+                                ? AppTheme.primaryRose.withOpacity(0.35)
+                                : AppTheme.primaryRose,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                    Text(
-                      'Scan to connect',
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: AppTheme.mediumGrey,
-                      ),
-                    ),
-                  ],
-                ),
-              )
-              .animate()
-              .scale(begin: const Offset(0.8, 0.8))
-              .fadeIn(delay: 200.ms),
-
-          const SizedBox(height: 8),
-
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton.icon(
-                  onPressed: _generateCodeOnly,
-                  icon: const Icon(Icons.refresh),
-                  label: const Text('Generate Code'),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: AppTheme.primaryRose,
-                    side: BorderSide(color: AppTheme.primaryRose),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
+                    ],
                   ),
-                ),
+                ],
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: ElevatedButton.icon(
-                  onPressed: _generatedInvitation != null ? _saveQRCode : null,
-                  icon: const Icon(Icons.save),
-                  label: const Text('Save QR'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _isSent
-                        ? AppTheme.primaryRose.withOpacity(0.35)
-                        : AppTheme.primaryRose,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
