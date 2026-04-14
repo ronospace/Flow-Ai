@@ -381,7 +381,7 @@ final dialogHeight = kb > 0
     return LayoutBuilder(
       builder: (context, constraints) {
         return SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
+          physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           padding: const EdgeInsets.all(24),
           child: ConstrainedBox(
             constraints: BoxConstraints(minHeight: constraints.maxHeight - 48),
@@ -450,7 +450,7 @@ final dialogHeight = kb > 0
                       ],
                     ),
                   ).animate().scale(begin: const Offset(0.8, 0.8)).fadeIn(delay: 200.ms),
-                  SizedBox(height: Theme.of(context).platform == TargetPlatform.android ? 20 : 8),
+                  const SizedBox(height: 8),
                   Row(
                     children: [
                       Expanded(
