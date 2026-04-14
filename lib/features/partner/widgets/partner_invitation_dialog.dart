@@ -81,7 +81,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
             opacity: _fadeAnimation,
             child: Dialog(
               insetPadding: const EdgeInsets.only(
-                top: 55,
+                top: 48,
                 left: 16,
                 right: 16,
                 bottom: 16,
@@ -89,7 +89,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
               backgroundColor: Colors.transparent,
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.9,
-                height: MediaQuery.of(context).size.height * 0.72,
+                height: MediaQuery.of(context).size.height * 0.7,
                 decoration: BoxDecoration(
                   color: theme.scaffoldBackgroundColor,
                   borderRadius: BorderRadius.circular(28),
@@ -168,12 +168,9 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                   ),
                 ),
                 Text(
-                  'Share Your Love & Cycle Journey Together 💖',
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+                  'Share Your Love And Cycle Journey Together 💖',
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: AppTheme.mediumGrey,
-                    height: 1.1,
                   ),
                 ),
               ],
@@ -364,6 +361,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             'QR Code Invitation',
@@ -493,6 +491,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             'Share Invitation Link',
