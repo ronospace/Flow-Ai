@@ -81,14 +81,14 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
           child: FadeTransition(
             opacity: _fadeAnimation,
             child: Dialog(
-              insetPadding: const EdgeInsets.fromLTRB(16, 56, 16, 72),
+              insetPadding: const EdgeInsets.fromLTRB(16, 64, 16, 56),
               backgroundColor: Colors.transparent,
-              child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     final dialogHeight =
                         (constraints.maxHeight * 0.74).clamp(0.0, 620.0).toDouble();
-
                     return Center(
                       child: ConstrainedBox(
                         constraints: BoxConstraints(
@@ -97,9 +97,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                         ),
                         child: Container(
                           width: double.infinity,
-                          height: dialogHeight,
                           decoration: BoxDecoration(
-                            color: theme.scaffoldBackgroundColor,
                             borderRadius: BorderRadius.circular(28),
                             boxShadow: [
                               BoxShadow(
@@ -141,7 +139,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
 
   Widget _buildHeader(ThemeData theme, AppLocalizations localizations) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(20, 18, 20, 18),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -159,14 +157,14 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
                 colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
               ),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: const Icon(Icons.favorite, color: Colors.white, size: 24),
+            child: const Icon(Icons.favorite, color: Colors.white, size: 22),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -200,19 +198,19 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
 
   Widget _buildTabBar(ThemeData theme, AppLocalizations localizations) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(24, 16, 24, 20),
+      margin: const EdgeInsets.fromLTRB(20, 12, 20, 16),
       decoration: BoxDecoration(
         color: AppTheme.lightGrey.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(16),
       ),
-      child: SizedBox(height: 72,
+      child: SizedBox(height: 64,
       child: TabBar(
         controller: _tabController,
         indicator: BoxDecoration(
           gradient: const LinearGradient(
             colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
           ),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(14),
         ),
         indicatorSize: TabBarIndicatorSize.tab,
         splashBorderRadius: BorderRadius.circular(16),
@@ -224,9 +222,9 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
         labelPadding: EdgeInsets.zero,
         tabAlignment: TabAlignment.fill,
         tabs: const [
-          Tab(icon: Icon(Icons.email, size: 22), height: 72, text: 'Email'),
-          Tab(icon: Icon(Icons.qr_code, size: 22), height: 72, text: 'QR Code'),
-          Tab(icon: Icon(Icons.share, size: 22), height: 72, text: 'Share Link'),
+          Tab(icon: Icon(Icons.email, size: 22), height: 64, text: 'Email'),
+          Tab(icon: Icon(Icons.qr_code, size: 22), height: 64, text: 'QR Code'),
+          Tab(icon: Icon(Icons.share, size: 22), height: 64, text: 'Share Link'),
         ],
       ),
     
@@ -410,13 +408,13 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                       QrImageView(
                         data: _generateInvitationLink(_generatedInvitation!),
                         version: QrVersions.auto,
-                        size: MediaQuery.of(context).size.width * 0.32,
+                        size: 200,
                         foregroundColor: AppTheme.darkGrey,
                       )
                     else
                       Container(
-                        width: MediaQuery.of(context).size.width * 0.32,
-                        height: MediaQuery.of(context).size.width * 0.32,
+                        width: 200,
+                        height: 200,
                         decoration: BoxDecoration(
                           color: AppTheme.lightGrey.withValues(alpha: 0.3),
                           borderRadius: BorderRadius.circular(16),
@@ -429,7 +427,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                               size: 52,
                               color: AppTheme.mediumGrey,
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 12),
                             Text(
                               'Generate QR Code',
                               style: TextStyle(
@@ -441,7 +439,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                         ),
                       ),
 
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 12),
 
                     Text(
                       'Flow Ai Partner Invitation',
@@ -463,7 +461,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
               .scale(begin: const Offset(0.8, 0.8))
               .fadeIn(delay: 200.ms),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
 
           Row(
             children: [
