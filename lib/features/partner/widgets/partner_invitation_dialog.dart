@@ -81,14 +81,16 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
           child: FadeTransition(
             opacity: _fadeAnimation,
             child: Dialog(
-              insetPadding: const EdgeInsets.fromLTRB(16, 64, 16, 40),
+              insetPadding: EdgeInsets.fromLTRB(16, 64, 16, MediaQuery.of(context).viewInsets.bottom > 0 ? 12 : 40),
               backgroundColor: Colors.transparent,
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: LayoutBuilder(
                   builder: (context, constraints) {
-                    final dialogHeight =
-                        (constraints.maxHeight * 0.78).clamp(0.0, 680.0).toDouble();
+                    final kb = MediaQuery.of(context).viewInsets.bottom;
+final dialogHeight = kb > 0
+    ? (constraints.maxHeight * 0.58).clamp(0.0, 560.0).toDouble()
+    : (constraints.maxHeight * 0.78).clamp(0.0, 680.0).toDouble();
                     return Center(
                       child: ConstrainedBox(
                         constraints: BoxConstraints(
@@ -157,7 +159,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
                 colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
@@ -381,6 +383,16 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          SizedBox.shrink(),
+
+          /* removed empty title */
+          Text(
+            '',
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: AppTheme.darkGrey,
+            ),
+          ),
 
           Container(
                 padding: const EdgeInsets.all(16),
@@ -402,13 +414,13 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                       QrImageView(
                         data: _generateInvitationLink(_generatedInvitation!),
                         version: QrVersions.auto,
-                        size: 200,
+                        size: 176,
                         foregroundColor: AppTheme.darkGrey,
                       )
                     else
                       Container(
-                        width: 200,
-                        height: 200,
+                        width: 176,
+                        height: 176,
                         decoration: BoxDecoration(
                           color: AppTheme.lightGrey.withValues(alpha: 0.3),
                           borderRadius: BorderRadius.circular(16),
@@ -421,7 +433,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                               size: 52,
                               color: AppTheme.mediumGrey,
                             ),
-                            const SizedBox(height: 12),
+                            const SizedBox(height: 8),
                             Text(
                               'Generate QR Code',
                               style: TextStyle(
@@ -433,7 +445,17 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                         ),
                       ),
 
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 8),
+
+                    SizedBox.shrink(),
+                    /* removed empty subtitle */
+                    Text(
+                      '',
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.darkGrey,
+                      ),
+                    ),
                     Text(
                       'Scan to connect',
                       style: theme.textTheme.bodySmall?.copyWith(
@@ -447,7 +469,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
               .scale(begin: const Offset(0.8, 0.8))
               .fadeIn(delay: 200.ms),
 
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
 
           Row(
             children: [
