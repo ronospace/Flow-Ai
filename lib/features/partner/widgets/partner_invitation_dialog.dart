@@ -385,73 +385,71 @@ final dialogHeight = kb > 0
           padding: const EdgeInsets.all(24),
           child: ConstrainedBox(
             constraints: BoxConstraints(minHeight: constraints.maxHeight - 48),
-            child: Center(
+            child: Transform.translate(
+              offset: const Offset(0, 18),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppTheme.primaryRose.withValues(alpha: 0.28),
-                              blurRadius: 20,
-                              spreadRadius: 1,
-                              offset: const Offset(0, 10),
-                            ),
-                          ],
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppTheme.primaryRose.withValues(alpha: 0.28),
+                          blurRadius: 20,
+                          spreadRadius: 1,
+                          offset: const Offset(0, 10),
                         ),
-                        child: Column(
-                          children: [
-                            if (_generatedInvitation != null)
-                              QrImageView(
-                                data: _generateInvitationLink(_generatedInvitation!),
-                                version: QrVersions.auto,
-                                size: 176,
-                                foregroundColor: AppTheme.darkGrey,
-                              )
-                            else
-                              Container(
-                                width: 176,
-                                height: 176,
-                                decoration: BoxDecoration(
-                                  color: AppTheme.lightGrey.withValues(alpha: 0.3),
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.qr_code,
-                                      size: 52,
-                                      color: AppTheme.mediumGrey,
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      'Generate QR Code',
-                                      style: TextStyle(
-                                        color: AppTheme.mediumGrey,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'Scan to connect',
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: AppTheme.mediumGrey,
-                              ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        if (_generatedInvitation != null)
+                          QrImageView(
+                            data: _generateInvitationLink(_generatedInvitation!),
+                            version: QrVersions.auto,
+                            size: 176,
+                            foregroundColor: AppTheme.darkGrey,
+                          )
+                        else
+                          Container(
+                            width: 176,
+                            height: 176,
+                            decoration: BoxDecoration(
+                              color: AppTheme.lightGrey.withValues(alpha: 0.3),
+                              borderRadius: BorderRadius.circular(16),
                             ),
-                          ],
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.qr_code,
+                                  size: 52,
+                                  color: AppTheme.mediumGrey,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Generate QR Code',
+                                  style: TextStyle(
+                                    color: AppTheme.mediumGrey,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Scan to connect',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: AppTheme.mediumGrey,
+                          ),
                         ),
-                      )
-                      .animate()
-                      .scale(begin: const Offset(0.8, 0.8))
-                      .fadeIn(delay: 200.ms),
+                      ],
+                    ),
+                  ).animate().scale(begin: const Offset(0.8, 0.8)).fadeIn(delay: 200.ms),
                   const SizedBox(height: 8),
                   Row(
                     children: [
