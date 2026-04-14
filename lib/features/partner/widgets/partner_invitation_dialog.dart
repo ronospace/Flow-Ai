@@ -68,6 +68,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
   }
 
   @override
+
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localizations = AppLocalizations.of(context);
@@ -80,43 +81,55 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
           child: FadeTransition(
             opacity: _fadeAnimation,
             child: Dialog(
-              insetPadding: const EdgeInsets.only(
-                top: 48,
-                left: 16,
-                right: 16,
-                bottom: 16,
-              ),
+              insetPadding: const EdgeInsets.fromLTRB(16, 56, 16, 72),
               backgroundColor: Colors.transparent,
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                height: MediaQuery.of(context).size.height * 0.7,
-                decoration: BoxDecoration(
-                  color: theme.scaffoldBackgroundColor,
-                  borderRadius: BorderRadius.circular(28),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.3),
-                      blurRadius: 20,
-                      spreadRadius: 5,
-                      offset: const Offset(0, 10),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    _buildHeader(theme, localizations),
-                    _buildTabBar(theme, localizations),
-                    Expanded(
-                      child: TabBarView(
-                        controller: _tabController,
-                        children: [
-                          _buildEmailInviteTab(theme, localizations),
-                          _buildQRCodeTab(theme, localizations),
-                          _buildLinkShareTab(theme, localizations),
-                        ],
+              child: SafeArea(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final dialogHeight =
+                        (constraints.maxHeight * 0.74).clamp(0.0, 620.0).toDouble();
+
+                    return Center(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: 420,
+                          maxHeight: dialogHeight,
+                        ),
+                        child: Container(
+                          width: double.infinity,
+                          height: dialogHeight,
+                          decoration: BoxDecoration(
+                            color: theme.scaffoldBackgroundColor,
+                            borderRadius: BorderRadius.circular(28),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.3),
+                                blurRadius: 20,
+                                spreadRadius: 5,
+                                offset: const Offset(0, 10),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            children: [
+                              _buildHeader(theme, localizations),
+                              _buildTabBar(theme, localizations),
+                              Expanded(
+                                child: TabBarView(
+                                  controller: _tabController,
+                                  children: [
+                                    _buildEmailInviteTab(theme, localizations),
+                                    _buildQRCodeTab(theme, localizations),
+                                    _buildLinkShareTab(theme, localizations),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
+                    );
+                  },
                 ),
               ),
             ),
@@ -128,7 +141,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
 
   Widget _buildHeader(ThemeData theme, AppLocalizations localizations) {
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -146,7 +159,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
                 colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
@@ -187,11 +200,12 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
 
   Widget _buildTabBar(ThemeData theme, AppLocalizations localizations) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      margin: const EdgeInsets.fromLTRB(24, 16, 24, 20),
       decoration: BoxDecoration(
         color: AppTheme.lightGrey.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(16),
       ),
+      child: SizedBox(height: 72,
       child: TabBar(
         controller: _tabController,
         indicator: BoxDecoration(
@@ -201,15 +215,21 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
           borderRadius: BorderRadius.circular(12),
         ),
         indicatorSize: TabBarIndicatorSize.tab,
+        splashBorderRadius: BorderRadius.circular(16),
         dividerColor: Colors.transparent,
         labelColor: Colors.white,
         unselectedLabelColor: AppTheme.mediumGrey,
-        labelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+        labelStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+        unselectedLabelStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+        labelPadding: EdgeInsets.zero,
+        tabAlignment: TabAlignment.fill,
         tabs: const [
-          Tab(icon: Icon(Icons.email, size: 20), text: 'Email'),
-          Tab(icon: Icon(Icons.qr_code, size: 20), text: 'QR Code'),
-          Tab(icon: Icon(Icons.share, size: 20), text: 'Share Link'),
+          Tab(icon: Icon(Icons.email, size: 22), height: 72, text: 'Email'),
+          Tab(icon: Icon(Icons.qr_code, size: 22), height: 72, text: 'QR Code'),
+          Tab(icon: Icon(Icons.share, size: 22), height: 72, text: 'Share Link'),
         ],
+      ),
+    
       ),
     ).animate().fadeIn(delay: 200.ms);
   }
@@ -226,7 +246,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
               if (_successMessage != null) ...[
                 Container(
                   margin: const EdgeInsets.only(bottom: 16),
-                  padding: const EdgeInsets.all(24),
+                  padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
@@ -372,7 +392,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
           ),
 
           Container(
-                padding: const EdgeInsets.all(24),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
@@ -512,7 +532,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
           const SizedBox(height: 16),
 
           Container(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
@@ -535,7 +555,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
 
                 if (_generatedInvitation != null) ...[
                   Container(
-                    padding: const EdgeInsets.all(24),
+                    padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12),
