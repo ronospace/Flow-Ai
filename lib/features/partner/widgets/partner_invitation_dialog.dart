@@ -505,28 +505,11 @@ final dialogHeight = kb > 0
           padding: const EdgeInsets.all(24),
           child: ConstrainedBox(
             constraints: BoxConstraints(minHeight: constraints.maxHeight - 48),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
+            child: Transform.translate(
+              offset: const Offset(0, 18),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
         children: [
-          // removed share title
-          Text(
-            '',
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: AppTheme.darkGrey,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Partner can join instantly from any device.',
-            textAlign: TextAlign.center,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: AppTheme.mediumGrey,
-              height: 1.2,
-            ),
-          ),
-          const SizedBox(height: 16),
-
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -632,6 +615,7 @@ final dialogHeight = kb > 0
             ],
           ),
               ],
+              ),
             ),
           ),
         );
