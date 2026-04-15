@@ -89,7 +89,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                   builder: (context, constraints) {
                     final kb = MediaQuery.of(context).viewInsets.bottom;
 final dialogHeight = kb > 0
-    ? (constraints.maxHeight * 0.58).clamp(0.0, 560.0).toDouble()
+    ? (constraints.maxHeight * 0.82).clamp(0.0, 720.0).toDouble()
     : (constraints.maxHeight * 0.78).clamp(0.0, 680.0).toDouble();
                     return Center(
                       child: ConstrainedBox(
@@ -236,7 +236,7 @@ final dialogHeight = kb > 0
 
   Widget _buildEmailInviteTab(ThemeData theme, AppLocalizations localizations) {
     return Transform.translate(
-      offset: const Offset(0, 18),
+      offset: Offset.zero,
       child: Padding(
         padding: const EdgeInsets.all(24),
       child: Form(
@@ -396,7 +396,7 @@ final dialogHeight = kb > 0
           child: ConstrainedBox(
             constraints: BoxConstraints(minHeight: constraints.maxHeight - 48),
             child: Transform.translate(
-              offset: const Offset(0, 18),
+              offset: Offset.zero,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -516,7 +516,7 @@ final dialogHeight = kb > 0
           child: ConstrainedBox(
             constraints: BoxConstraints(minHeight: constraints.maxHeight - 48),
             child: Transform.translate(
-              offset: const Offset(0, 18),
+              offset: Offset.zero,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
         children: [
