@@ -231,15 +231,18 @@ final dialogHeight = kb > 0
       ),
     
       ),
-    ).animate().fadeIn(delay: 200.ms);
+    ).animate().fadeIn(delay: 120.ms).scale(begin: const Offset(0.96,0.96), curve: Curves.easeOutBack);
   }
 
   Widget _buildEmailInviteTab(ThemeData theme, AppLocalizations localizations) {
-    return Padding(
-      padding: const EdgeInsets.all(24),
+    return Transform.translate(
+      offset: const Offset(0, 18),
+      child: Padding(
+        padding: const EdgeInsets.all(24),
       child: Form(
         key: _formKey,
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -274,9 +277,12 @@ final dialogHeight = kb > 0
               TextFormField(
                 controller: _emailController,
                 decoration: InputDecoration(
-                  labelText: 'Partner\'s Email',
-                  hintText: 'Enter your partner\'s email address',
-                  prefixIcon: Icon(Icons.email, color: AppTheme.primaryRose),
+                                    alignLabelWithHint: true,
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                  hintText: 'Partner\'s Email',
+                                    prefixIcon: Icon(Icons.email_outlined, size: 20, color: AppTheme.primaryRose),
+                  filled: true,
+                  fillColor: Colors.white.withOpacity(0.06),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
@@ -319,9 +325,12 @@ final dialogHeight = kb > 0
                 controller: _messageController,
                 maxLines: 3,
                 decoration: InputDecoration(
-                  labelText: 'Personal Message (Optional)',
-                  hintText: 'Add a personal touch to your invitation...',
-                  prefixIcon: Icon(Icons.message, color: AppTheme.primaryRose),
+                                    alignLabelWithHint: true,
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                  hintText: 'Personal Message (Optional)',
+                                    prefixIcon: Icon(Icons.message_outlined, size: 20, color: AppTheme.primaryRose),
+                  filled: true,
+                  fillColor: Colors.white.withOpacity(0.06),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
@@ -373,6 +382,7 @@ final dialogHeight = kb > 0
             ],
           ),
         ),
+      ),
       ),
     ).animate().fadeIn(delay: 300.ms);
   }
@@ -449,7 +459,7 @@ final dialogHeight = kb > 0
                         ),
                       ],
                     ),
-                  ).animate().scale(begin: const Offset(0.8, 0.8)).fadeIn(delay: 200.ms),
+                  ).animate().scale(begin: const Offset(0.92,0.92), curve: Curves.easeOutBack).fadeIn(delay: 120.ms),
                   const SizedBox(height: 8),
                   Row(
                     children: [
@@ -573,7 +583,7 @@ final dialogHeight = kb > 0
                 ],
               ],
             ),
-          ).animate().fadeIn(delay: 200.ms),
+          ).animate().fadeIn(delay: 120.ms).scale(begin: const Offset(0.96,0.96), curve: Curves.easeOutBack),
 
           const SizedBox(height: 16),
 
