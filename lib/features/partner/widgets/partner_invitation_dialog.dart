@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -97,7 +98,7 @@ final dialogHeight = kb > 0
                           maxWidth: 420,
                           maxHeight: dialogHeight,
                         ),
-                        child: Container(
+                        child: BackdropFilter(filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18), child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(28),
@@ -126,7 +127,7 @@ final dialogHeight = kb > 0
                               ),
                             ],
                           ),
-                        ),
+                        )),
                       ),
                     );
                   },
@@ -161,12 +162,12 @@ final dialogHeight = kb > 0
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
+              gradient: LinearGradient(
                 colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
               ),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: const Icon(Icons.favorite, color: Colors.white, size: 22),
+            child: Icon(Icons.favorite, color: Colors.white, size: 22),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -209,7 +210,7 @@ final dialogHeight = kb > 0
       child: TabBar(
         controller: _tabController,
         indicator: BoxDecoration(
-          gradient: const LinearGradient(
+          gradient: LinearGradient(
             colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
           ),
           borderRadius: BorderRadius.circular(14),
@@ -251,7 +252,7 @@ final dialogHeight = kb > 0
                   margin: const EdgeInsets.only(bottom: 16),
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Colors.white.withValues(alpha: 0.14),
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(color: Colors.black12, blurRadius: 10),
@@ -419,7 +420,7 @@ final dialogHeight = kb > 0
                       boxShadow: [
                         BoxShadow(
                           color: AppTheme.primaryRose.withValues(alpha: 0.28),
-                          blurRadius: 20,
+                          blurRadius: 26,
                           spreadRadius: 1,
                           offset: const Offset(0, 10),
                         ),
@@ -444,6 +445,7 @@ final dialogHeight = kb > 0
                             ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                               children: [
                                 Icon(
                                   Icons.qr_code,
@@ -535,19 +537,19 @@ final dialogHeight = kb > 0
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  AppTheme.primaryRose.withValues(alpha: 0.1),
-                  AppTheme.primaryPurple.withValues(alpha: 0.1),
-                ],
-              ),
+              color: Colors.white.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: AppTheme.primaryRose.withValues(alpha: 0.2),
-                width: 2,
+                color: Colors.white.withValues(alpha: 0.22),
+                width: 1.2,
               ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.12),
+                  blurRadius: 24,
+                  offset: Offset(0, 10),
+                ),
+              ],
             ),
             child: Column(
               children: [
@@ -558,9 +560,12 @@ final dialogHeight = kb > 0
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: AppTheme.lightGrey, width: 1),
+                      color: Colors.white.withValues(alpha: 0.22),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.45),
+                        width: 1.2,
+                      ),
                     ),
                     child: Row(
                       children: [
