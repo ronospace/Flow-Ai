@@ -84,7 +84,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
               insetPadding: EdgeInsets.fromLTRB(16, 64, 16, MediaQuery.of(context).viewInsets.bottom > 0 ? 12 : 40),
               backgroundColor: Colors.transparent,
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
+                padding: const EdgeInsets.only(top: 18, bottom: 12),
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     final kb = MediaQuery.of(context).viewInsets.bottom;
@@ -103,7 +103,7 @@ final dialogHeight = kb > 0
                             borderRadius: BorderRadius.circular(28),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.3),
+                                color: Colors.black.withValues(alpha: 0.40),
                                 blurRadius: 24,
                                 spreadRadius: 5,
                                 offset: const Offset(0, 10),
@@ -183,7 +183,7 @@ final dialogHeight = kb > 0
                 Text(
                   'Share Your Love And Cycle Journey Together 💖',
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: AppTheme.mediumGrey,
+                    color: AppTheme.mediumGrey.withValues(alpha: 0.88),
                   ),
                 ),
               ],
@@ -272,19 +272,24 @@ final dialogHeight = kb > 0
                 ).animate().fadeIn().slideY(begin: -0.3),
               ],
 
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
 
               TextFormField(
                 controller: _emailController,
                 decoration: InputDecoration(
-                                    alignLabelWithHint: true,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                                                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                   hintText: 'Partner\'s Email',
                                     prefixIcon: Icon(Icons.email_outlined, size: 20, color: AppTheme.primaryRose),
+                  prefixIconConstraints: const BoxConstraints(minWidth: 48, minHeight: 48),
                   filled: true,
-                  fillColor: Colors.white.withOpacity(0.06),
+                  fillColor: Colors.white.withOpacity(0.92),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(color: Colors.white.withOpacity(0.22)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(color: Colors.white.withOpacity(0.22)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
@@ -319,20 +324,25 @@ final dialogHeight = kb > 0
                   return null;
                 },
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 24),
 
               TextFormField(
                 controller: _messageController,
                 maxLines: 3,
                 decoration: InputDecoration(
-                                    alignLabelWithHint: true,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                                                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                   hintText: 'Personal Message (Optional)',
                                     prefixIcon: Icon(Icons.message_outlined, size: 20, color: AppTheme.primaryRose),
+                  prefixIconConstraints: const BoxConstraints(minWidth: 48, minHeight: 48),
                   filled: true,
-                  fillColor: Colors.white.withOpacity(0.06),
+                  fillColor: Colors.white.withOpacity(0.92),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(color: Colors.white.withOpacity(0.22)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(color: Colors.white.withOpacity(0.22)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
@@ -344,7 +354,7 @@ final dialogHeight = kb > 0
                 ),
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 26),
 
               SizedBox(
                 width: double.infinity,
@@ -400,6 +410,7 @@ final dialogHeight = kb > 0
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  const SizedBox(height: 12),
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
@@ -520,6 +531,7 @@ final dialogHeight = kb > 0
               child: Column(
                 mainAxisSize: MainAxisSize.min,
         children: [
+          const SizedBox(height: 12),
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
