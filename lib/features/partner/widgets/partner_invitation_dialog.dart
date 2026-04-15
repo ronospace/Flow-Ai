@@ -498,11 +498,15 @@ final dialogHeight = kb > 0
   }
 
   Widget _buildLinkShareTab(ThemeData theme, AppLocalizations localizations) {
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          padding: const EdgeInsets.all(24),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight - 48),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
         children: [
           // removed share title
           Text(
@@ -627,8 +631,11 @@ final dialogHeight = kb > 0
               ),
             ],
           ),
-        ],
-      ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
