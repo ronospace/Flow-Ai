@@ -98,14 +98,14 @@ final dialogHeight = kb > 0
                           maxWidth: 420,
                           maxHeight: dialogHeight,
                         ),
-                        child: BackdropFilter(filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18), child: Container(
+                        child: BackdropFilter(filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10), child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(28),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.40),
-                                blurRadius: 24,
+                                color: Colors.black.withValues(alpha: 0.04),
+                                blurRadius: 12,
                                 spreadRadius: 5,
                                 offset: const Offset(0, 10),
                               ),
@@ -252,7 +252,7 @@ final dialogHeight = kb > 0
                   margin: const EdgeInsets.only(bottom: 16),
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.14),
+                    color: Colors.white.withValues(alpha: 0.06),
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(color: Colors.black12, blurRadius: 10),
@@ -421,7 +421,7 @@ final dialogHeight = kb > 0
                         BoxShadow(
                           color: AppTheme.primaryRose.withValues(alpha: 0.28),
                           blurRadius: 26,
-                          spreadRadius: 1,
+                          spreadRadius: 0,
                           offset: const Offset(0, 10),
                         ),
                       ],
@@ -540,13 +540,13 @@ final dialogHeight = kb > 0
               color: Colors.white.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: Colors.white.withValues(alpha: 0.22),
+                color: Colors.white.withValues(alpha: 0.12),
                 width: 1.2,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.12),
-                  blurRadius: 24,
+                  color: Colors.black.withValues(alpha: 0.06),
+                  blurRadius: 12,
                   offset: Offset(0, 10),
                 ),
               ],
@@ -560,7 +560,7 @@ final dialogHeight = kb > 0
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.22),
+                      color: Colors.white.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
                         color: Colors.white.withValues(alpha: 0.45),
