@@ -1,3 +1,4 @@
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -100,7 +101,12 @@ final dialogHeight = kb > 0
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.08),
                             borderRadius: BorderRadius.circular(28),
+                            border: Border.all(
+                              color: Colors.white.withValues(alpha: 0.18),
+                              width: 1,
+                            ),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.black.withValues(alpha: 0.30),
@@ -110,25 +116,35 @@ final dialogHeight = kb > 0
                               ),
                             ],
                           ),
-                          child: Column(
-                            children: [
-                              _buildHeader(theme, localizations),
-                              _buildTabBar(theme, localizations),
-                              Expanded(
-                                child: TabBarView(
-                                  controller: _tabController,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(28),
+                            child: BackdropFilter(
+                              filter: ui.ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+                              child: Container(
+                                color: Colors.white.withValues(alpha: 0.04),
+                                child: Column(
                                   children: [
-                                    _buildEmailInviteTab(theme, localizations),
-                                    _buildQRCodeTab(theme, localizations),
-                                    _buildLinkShareTab(theme, localizations),
+                                    _buildHeader(theme, localizations),
+                                    _buildTabBar(theme, localizations),
+                                    Expanded(
+                                      child: TabBarView(
+                                        controller: _tabController,
+                                        children: [
+                                          _buildEmailInviteTab(theme, localizations),
+                                          _buildQRCodeTab(theme, localizations),
+                                          _buildLinkShareTab(theme, localizations),
+                                        ],
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
                     );
+
                   },
                 ),
               ),
@@ -282,14 +298,14 @@ final dialogHeight = kb > 0
                                     prefixIcon: Icon(Icons.email_outlined, size: 20, color: AppTheme.primaryRose),
                   prefixIconConstraints: const BoxConstraints(minWidth: 48, minHeight: 48),
                   filled: true,
-                  fillColor: Colors.white.withOpacity(0.18),
+                  fillColor: Colors.white.withOpacity(0.92),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide(color: Colors.white.withOpacity(0.30)),
+                    borderSide: BorderSide(color: Colors.white.withOpacity(0.22)),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide(color: Colors.white.withOpacity(0.30)),
+                    borderSide: BorderSide(color: Colors.white.withOpacity(0.22)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
@@ -335,14 +351,14 @@ final dialogHeight = kb > 0
                                     prefixIcon: Icon(Icons.message_outlined, size: 20, color: AppTheme.primaryRose),
                   prefixIconConstraints: const BoxConstraints(minWidth: 48, minHeight: 48),
                   filled: true,
-                  fillColor: Colors.white.withOpacity(0.18),
+                  fillColor: Colors.white.withOpacity(0.92),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide(color: Colors.white.withOpacity(0.30)),
+                    borderSide: BorderSide(color: Colors.white.withOpacity(0.22)),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide(color: Colors.white.withOpacity(0.30)),
+                    borderSide: BorderSide(color: Colors.white.withOpacity(0.22)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
