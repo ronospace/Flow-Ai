@@ -98,14 +98,14 @@ final dialogHeight = kb > 0
                           maxWidth: 420,
                           maxHeight: dialogHeight,
                         ),
-                        child: BackdropFilter(filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10), child: Container(
+                        child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(28),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.04),
-                                blurRadius: 12,
+                                color: Colors.black.withValues(alpha: 0.30),
+                                blurRadius: 20,
                                 spreadRadius: 5,
                                 offset: const Offset(0, 10),
                               ),
@@ -127,7 +127,7 @@ final dialogHeight = kb > 0
                               ),
                             ],
                           ),
-                        )),
+                        ),
                       ),
                     );
                   },

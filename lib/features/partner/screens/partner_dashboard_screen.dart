@@ -844,6 +844,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     showDialog(
       context: context,
       useRootNavigator: true,
+      barrierColor: Colors.black.withValues(alpha: 0.06),
       builder: (context) =>
           PartnerInvitationDialog(partnerService: partnerService),
     );
