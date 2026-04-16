@@ -94,8 +94,8 @@ final dialogHeight = kb > 0
                       duration: const Duration(milliseconds: 180),
                       curve: Curves.easeOut,
                       padding: EdgeInsets.only(
-                        top: kb > 0 ? 16 : 64,
-                        bottom: kb > 0 ? 0 : 40,
+                        top: kb > 0 ? 8 : 56,
+                        bottom: kb > 0 ? 0 : 48,
                       ),
                       child: Center(
                         child: ConstrainedBox(
