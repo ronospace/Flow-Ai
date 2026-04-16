@@ -1,0 +1,427 @@
+lib/core/intelligence/consumer_intelligence_engine.dart:7:/// 🧠 Consumer Intelligence Engine
+lib/core/intelligence/consumer_intelligence_engine.dart:10:class ConsumerIntelligenceEngine {
+lib/core/intelligence/consumer_intelligence_engine.dart:11:  static final ConsumerIntelligenceEngine _instance =
+lib/core/intelligence/consumer_intelligence_engine.dart:12:      ConsumerIntelligenceEngine._internal();
+lib/core/intelligence/consumer_intelligence_engine.dart:13:  static ConsumerIntelligenceEngine get instance => _instance;
+lib/core/intelligence/consumer_intelligence_engine.dart:14:  ConsumerIntelligenceEngine._internal();
+lib/core/intelligence/consumer_intelligence_engine.dart:31:      AppLogger.success('🧠 Initializing Consumer Intelligence Engine...');
+lib/core/intelligence/consumer_intelligence_engine.dart:50:        '✅ Consumer Intelligence Engine initialized successfully',
+lib/core/intelligence/consumer_intelligence_engine.dart:53:      AppLogger.error('Failed to initialize Consumer Intelligence Engine: $e');
+lib/core/visuals/consumer_visual_engine.dart:7:/// 🎨 Consumer Visual Engine
+lib/core/visuals/consumer_visual_engine.dart:10:class ConsumerVisualEngine {
+lib/core/visuals/consumer_visual_engine.dart:11:  static final ConsumerVisualEngine _instance =
+lib/core/visuals/consumer_visual_engine.dart:12:      ConsumerVisualEngine._internal();
+lib/core/visuals/consumer_visual_engine.dart:13:  static ConsumerVisualEngine get instance => _instance;
+lib/core/visuals/consumer_visual_engine.dart:14:  ConsumerVisualEngine._internal();
+lib/core/visuals/consumer_visual_engine.dart:79:      AppLogger.success('🎨 Initializing Consumer Visual Engine...');
+lib/core/visuals/consumer_visual_engine.dart:95:      AppLogger.success('✅ Consumer Visual Engine initialized successfully');
+lib/core/visuals/consumer_visual_engine.dart:97:      AppLogger.error('Failed to initialize Consumer Visual Engine: $e');
+lib/core/visuals/consumer_visual_engine.dart:266:        ConsumerVisualEngine._moodPalettes[moodState] ??
+lib/core/visuals/consumer_visual_engine.dart:267:        ConsumerVisualEngine._moodPalettes[MoodState.neutral]!;
+lib/core/routing/app_router.dart:290:    setState(() {
+lib/core/feelings/daily_feelings_tracker.dart:68:    bool isConsumerApp = true,
+lib/core/feelings/daily_feelings_tracker.dart:87:        appType: isConsumerApp ? AppType.consumer : AppType.clinical,
+lib/core/feelings/daily_feelings_tracker.dart:180:    bool isConsumerApp = true,
+lib/core/feelings/daily_feelings_tracker.dart:190:              (isConsumerApp ? AppType.consumer : AppType.clinical);
+lib/core/feelings/daily_feelings_tracker.dart:193:    return await _analytics.generateReport(entries, daysBack, isConsumerApp);
+lib/core/feelings/daily_feelings_tracker.dart:200:    bool isConsumerApp = true,
+lib/core/feelings/daily_feelings_tracker.dart:210:              (isConsumerApp ? AppType.consumer : AppType.clinical);
+lib/core/feelings/daily_feelings_tracker.dart:407:    bool isConsumerApp = true,
+lib/core/feelings/daily_feelings_tracker.dart:415:          (isConsumerApp ? AppType.consumer : AppType.clinical))
+lib/core/feelings/daily_feelings_tracker.dart:451:    bool isConsumerApp,
+lib/core/feelings/daily_feelings_tracker.dart:471:      isConsumerApp,
+lib/core/feelings/daily_feelings_tracker.dart:524:    bool isConsumerApp,
+lib/core/feelings/daily_feelings_tracker.dart:531:        isConsumerApp
+lib/core/feelings/daily_feelings_tracker.dart:537:        isConsumerApp
+lib/core/feelings/daily_feelings_tracker.dart:543:        isConsumerApp
+lib/core/feelings/daily_feelings_tracker.dart:549:        isConsumerApp
+lib/core/feelings/daily_feelings_tracker.dart:559:          isConsumerApp
+lib/core/feelings/daily_feelings_tracker.dart:566:          isConsumerApp
+lib/core/feelings/daily_feelings_tracker.dart:573:          isConsumerApp
+lib/core/feelings/daily_feelings_tracker.dart:584:        isConsumerApp
+lib/core/feelings/daily_feelings_tracker.dart:590:        isConsumerApp
+lib/core/services/offline_service.dart:380:        setState(() {
+lib/core/services/progressive_disclosure_service.dart:6:class ProgressiveDisclosureService extends ChangeNotifier {
+lib/core/services/user_service.dart:6:class UserService extends ChangeNotifier {
+lib/core/widgets/notification_icon.dart:20:  void _onTapDown(TapDownDetails _) => setState(() => _scale = 0.9);
+lib/core/widgets/notification_icon.dart:21:  void _onTapUp(TapUpDetails _) => setState(() => _scale = 1.0);
+lib/core/widgets/notification_icon.dart:22:  void _onTapCancel() => setState(() => _scale = 1.0);
+lib/core/widgets/animated_micro_interactions.dart:148:    setState(() {
+lib/core/widgets/animated_micro_interactions.dart:168:    setState(() {
+lib/core/widgets/error_boundary.dart:49:    setState(() {
+lib/core/widgets/error_boundary.dart:252:                            setState(() {
+lib/core/widgets/error_boundary.dart:378:      setState(() {
+lib/core/widgets/modern_button.dart:73:      setState(() => _isPressed = true);
+lib/core/widgets/modern_button.dart:89:      setState(() => _isPressed = false);
+lib/core/widgets/pressable_avatar.dart:46:  void _onTapDown(TapDownDetails details) => setState(() => _scale = 0.94);
+lib/core/widgets/pressable_avatar.dart:47:  void _onTapUp(TapUpDetails details) => setState(() => _scale = 1.0);
+lib/core/widgets/pressable_avatar.dart:48:  void _onTapCancel() => setState(() => _scale = 1.0);
+lib/core/analytics/performance_analytics_dashboard.dart:72:    bool isConsumerApp = true,
+lib/core/analytics/performance_analytics_dashboard.dart:78:        '${userId}_${period.name}_${isConsumerApp ? 'consumer' : 'clinical'}';
+lib/core/analytics/performance_analytics_dashboard.dart:101:        isConsumerApp: isConsumerApp,
+lib/core/analytics/performance_analytics_dashboard.dart:108:        isConsumerApp: isConsumerApp,
+lib/core/analytics/performance_analytics_dashboard.dart:115:        isConsumerApp: isConsumerApp,
+lib/core/analytics/performance_analytics_dashboard.dart:129:        isConsumerApp: isConsumerApp,
+lib/core/analytics/performance_analytics_dashboard.dart:143:        isConsumerApp: isConsumerApp,
+lib/core/analytics/performance_analytics_dashboard.dart:203:    bool isConsumerApp = true,
+lib/core/analytics/performance_analytics_dashboard.dart:209:        isConsumerApp: isConsumerApp,
+lib/core/analytics/performance_analytics_dashboard.dart:222:          isConsumerApp: isConsumerApp,
+lib/core/analytics/performance_analytics_dashboard.dart:232:    bool isConsumerApp = true,
+lib/core/analytics/performance_analytics_dashboard.dart:239:        isConsumerApp: isConsumerApp,
+lib/core/analytics/performance_analytics_dashboard.dart:252:          isConsumerApp: isConsumerApp,
+lib/core/analytics/performance_analytics_dashboard.dart:262:    bool isConsumerApp = true,
+lib/core/analytics/performance_analytics_dashboard.dart:270:      isConsumerApp: isConsumerApp,
+lib/core/analytics/performance_analytics_dashboard.dart:281:    bool isConsumerApp = true,
+lib/core/analytics/performance_analytics_dashboard.dart:289:      isConsumerApp: isConsumerApp,
+lib/core/analytics/performance_analytics_dashboard.dart:304:      isConsumerApp: isConsumerApp,
+lib/core/analytics/performance_analytics_dashboard.dart:341:      isConsumerApp: isConsumerApp,
+lib/core/analytics/performance_analytics_dashboard.dart:356:        isConsumerApp,
+lib/core/analytics/performance_analytics_dashboard.dart:462:    bool isConsumerApp,
+lib/core/analytics/performance_analytics_dashboard.dart:469:        isConsumerApp
+lib/core/analytics/performance_analytics_dashboard.dart:475:        isConsumerApp
+lib/core/analytics/performance_analytics_dashboard.dart:485:        isConsumerApp
+lib/core/analytics/performance_analytics_dashboard.dart:495:        isConsumerApp
+lib/core/analytics/performance_analytics_dashboard.dart:821:    required bool isConsumerApp,
+lib/core/analytics/performance_analytics_dashboard.dart:846:      isConsumerApp: isConsumerApp,
+lib/core/analytics/performance_analytics_dashboard.dart:961:    required bool isConsumerApp,
+lib/core/analytics/performance_analytics_dashboard.dart:1137:    required bool isConsumerApp,
+lib/core/analytics/performance_analytics_dashboard.dart:1147:          message: isConsumerApp
+lib/core/analytics/performance_analytics_dashboard.dart:1158:          message: isConsumerApp
+lib/core/analytics/performance_analytics_dashboard.dart:1172:          message: isConsumerApp
+lib/core/analytics/performance_analytics_dashboard.dart:1183:          message: isConsumerApp
+lib/core/analytics/performance_analytics_dashboard.dart:1197:          message: isConsumerApp
+lib/core/analytics/performance_analytics_dashboard.dart:1208:          message: isConsumerApp
+lib/core/analytics/performance_analytics_dashboard.dart:1222:          message: isConsumerApp
+lib/core/analytics/performance_analytics_dashboard.dart:1233:          message: isConsumerApp
+lib/core/analytics/performance_analytics_dashboard.dart:1252:              message: isConsumerApp
+lib/core/analytics/performance_analytics_dashboard.dart:1322:  final bool isConsumerApp;
+lib/core/analytics/performance_analytics_dashboard.dart:1327:    required this.isConsumerApp,
+lib/core/analytics/performance_analytics_dashboard.dart:1339:              isConsumerApp ? 'Your Wellness Metrics' : 'Patient Metrics',
+lib/core/analytics/performance_analytics_dashboard.dart:1382:  final bool isConsumerApp;
+lib/core/analytics/performance_analytics_dashboard.dart:1387:    required this.isConsumerApp,
+lib/core/analytics/performance_analytics_dashboard.dart:1399:              isConsumerApp ? 'Your Insights' : 'Patient Insights',
+lib/core/analytics/performance_analytics_dashboard.dart:1506:  final bool isConsumerApp;
+lib/core/analytics/performance_analytics_dashboard.dart:1518:    required this.isConsumerApp,
+lib/features/insights/providers/insights_provider.dart:4:class InsightsProvider extends ChangeNotifier {
+lib/features/insights/screens/faq_browser_screen.dart:70:    setState(() {
+lib/features/insights/screens/faq_browser_screen.dart:76:    setState(() {
+lib/features/insights/screens/faq_browser_screen.dart:91:      setState(() {
+lib/features/insights/screens/faq_browser_screen.dart:102:    setState(() {
+lib/features/insights/screens/insights_screen.dart:219:                setState(() {
+lib/features/insights/screens/insights_screen.dart:313:    return Consumer2<InsightsProvider, CycleProvider>(
+lib/features/insights/screens/insights_screen.dart:380:    return Consumer<CycleProvider>(
+lib/features/insights/screens/insights_screen.dart:416:    return Consumer<CycleProvider>(
+lib/features/insights/screens/analytics_dashboard_screen.dart:114:    return Consumer<PremiumProvider>(
+lib/features/insights/screens/analytics_dashboard_screen.dart:219:    return Consumer<CycleProvider>(
+lib/features/insights/screens/analytics_dashboard_screen.dart:283:    return Consumer<CycleProvider>(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:11:/// Enhanced Consumer Intelligence Dashboard with real-time biometric integration
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:12:class EnhancedConsumerDashboard extends StatefulWidget {
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:13:  const EnhancedConsumerDashboard({super.key});
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:16:  State<EnhancedConsumerDashboard> createState() =>
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:17:      _EnhancedConsumerDashboardState();
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:20:class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:59:      AppLogger.info('🔄 Initializing Enhanced Consumer Dashboard...');
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:73:      setState(() {
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:80:      setState(() {
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:123:        setState(() {
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:11:/// Consumer Intelligence Dashboard with AI insights and predictions
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:12:class ConsumerIntelligenceDashboard extends StatefulWidget {
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:13:  const ConsumerIntelligenceDashboard({super.key});
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:16:  State<ConsumerIntelligenceDashboard> createState() =>
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:17:      _ConsumerIntelligenceDashboardState();
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:20:class _ConsumerIntelligenceDashboardState
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:21:    extends State<ConsumerIntelligenceDashboard>
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:63:    setState(() => _isLoading = true);
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:72:      setState(() => _isLoading = false);
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:99:      setState(() {
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:114:    setState(() => _isRefreshing = true);
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:121:      setState(() => _isRefreshing = false);
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1162:    setState(() {
+lib/features/insights/widgets/floating_ai_chat.dart:90:  ..addListener(() { if (mounted) setState(() {}); })
+lib/features/insights/widgets/floating_ai_chat.dart:108:      if (mounted) setState(() {});
+lib/features/insights/widgets/floating_ai_chat.dart:129:        setState(() {
+lib/features/insights/widgets/floating_ai_chat.dart:144:                setState(() {
+lib/features/insights/widgets/floating_ai_chat.dart:166:              setState(() {
+lib/features/insights/widgets/floating_ai_chat.dart:225:    setState(() {
+lib/features/insights/widgets/floating_ai_chat.dart:244:    setState(() {
+lib/features/insights/widgets/floating_ai_chat.dart:257:    setState(() {
+lib/features/insights/widgets/floating_ai_chat.dart:280:    setState(() {
+lib/features/insights/widgets/floating_ai_chat.dart:847:            setState(() {
+lib/features/insights/widgets/floating_ai_chat.dart:919:            setState(() {
+lib/features/settings/providers/settings_provider.dart:9:class SettingsProvider extends ChangeNotifier {
+lib/features/settings/screens/account_management_screen.dart:231:                      setState(() {
+lib/features/settings/screens/account_management_screen.dart:266:                Consumer<SettingsProvider>(
+lib/features/settings/screens/account_management_screen.dart:544:      setState(() {
+lib/features/settings/screens/account_management_screen.dart:596:                      setState(() => _showPassword = !_showPassword),
+lib/features/settings/screens/account_management_screen.dart:612:                      setState(() => _showNewPassword = !_showNewPassword),
+lib/features/settings/screens/account_management_screen.dart:629:                  onPressed: () => setState(
+lib/features/settings/screens/account_management_screen.dart:682:    setState(() => _isExporting = true);
+lib/features/settings/screens/account_management_screen.dart:716:      if (mounted) setState(() => _isExporting = false);
+lib/features/settings/screens/account_management_screen.dart:898:      setState(() {});
+lib/features/settings/screens/settings_screen.dart:177:                                trailing: Consumer<SettingsProvider>(
+lib/features/settings/screens/settings_screen.dart:275:                              Consumer<SettingsProvider>(
+lib/features/settings/screens/settings_screen.dart:315:                              Consumer<SettingsProvider>(
+lib/features/settings/screens/settings_screen.dart:385:                              Consumer<SettingsProvider>(
+lib/features/settings/screens/settings_screen.dart:423:                              Consumer<SettingsProvider>(
+lib/features/settings/screens/settings_screen.dart:537:                                trailing: Consumer<SettingsProvider>(
+lib/features/settings/screens/help_screen.dart:230:                        setState(() {});
+lib/features/settings/widgets/theme_switcher_card.dart:18:    return Consumer<SettingsProvider>(
+lib/features/settings/widgets/language_selector.dart:109:                  setState(() {
+lib/features/settings/widgets/language_selector.dart:133:            child: Consumer<SettingsProvider>(
+lib/features/settings/widgets/theme_selector.dart:74:            child: Consumer<SettingsProvider>(
+lib/features/settings/widgets/profile_section.dart:14:    return Consumer<SettingsProvider>(
+lib/features/settings/widgets/medical_citations_section.dart:115:              setState(() {
+lib/features/settings/widgets/medical_citations_section.dart:158:        setState(() {
+lib/features/settings/widgets/cyclesync_integration.dart:23:    return Consumer<SettingsProvider>(
+lib/features/settings/widgets/cyclesync_integration.dart:339:    setState(() {
+lib/features/settings/widgets/cyclesync_integration.dart:350:        setState(() {
+lib/features/future_plans/screens/future_plans_screen.dart:260:                              setState(() => _selectedCategory = category),
+lib/features/_disabled_experimental/gamification/screens/gamification_dashboard_screen.dart:89:    return Consumer<GamificationController>(
+lib/features/_disabled_experimental/gamification/controllers/gamification_controller.dart:13:class GamificationController extends ChangeNotifier {
+lib/features/_disabled_experimental/community/screens/community_hub_screen.dart:101:    return Consumer<CommunityController>(
+lib/features/_disabled_experimental/community/controllers/community_controller.dart:8:class CommunityController extends ChangeNotifier {
+lib/features/_disabled_experimental/community/widgets/discussion_board_widget.dart:138:                                  setState(() {
+lib/features/_disabled_experimental/community/widgets/discussion_board_widget.dart:183:                                  setState(() {
+lib/features/_disabled_experimental/community/widgets/expert_qa_widget.dart:89:                setState(() {
+lib/features/_disabled_experimental/community/widgets/expert_qa_widget.dart:143:                setState(() {
+lib/features/_disabled_experimental/community/widgets/symptom_sharing_widget.dart:98:        setState(() {
+lib/features/_disabled_experimental/community/widgets/symptom_sharing_widget.dart:123:                setState(() {
+lib/features/auth/screens/futuristic_auth_screen.dart:84:      setState(() {
+lib/features/auth/screens/futuristic_auth_screen.dart:361:          setState(() {
+lib/features/auth/screens/futuristic_auth_screen.dart:501:              setState(() {
+lib/features/auth/screens/futuristic_auth_screen.dart:526:                setState(() {
+lib/features/auth/screens/auth_screen.dart:94:      setState(() {
+lib/features/auth/screens/auth_screen.dart:307:                    setState(() {
+lib/features/auth/screens/auth_screen.dart:365:                      setState(() {
+lib/features/auth/screens/auth_screen.dart:421:        setState(() {
+lib/features/auth/screens/auth_screen.dart:497:    setState(() {
+lib/features/auth/screens/auth_screen.dart:554:        setState(() {
+lib/features/auth/screens/auth_screen.dart:592:    setState(() {
+lib/features/auth/screens/auth_screen.dart:605:          setState(() {
+lib/features/auth/screens/auth_screen.dart:611:        setState(() {
+lib/features/auth/screens/auth_screen.dart:624:          setState(() {
+lib/features/auth/screens/auth_screen.dart:678:        setState(() {
+lib/features/auth/screens/auth_screen.dart:688:    setState(() {
+lib/features/auth/screens/auth_screen.dart:727:        setState(() {
+lib/features/auth/screens/auth_screen.dart:741:    setState(() {
+lib/features/auth/screens/auth_screen.dart:790:        setState(() {
+lib/features/auth/screens/auth_screen.dart:933:                                    setState(() => isResetting = true);
+lib/features/auth/screens/auth_screen.dart:961:                                      setState(() => isResetting = false);
+lib/features/health/providers/health_provider.dart:6:class HealthProvider extends ChangeNotifier {
+lib/features/health/screens/real_time_health_dashboard.dart:105:      setState(() {
+lib/features/health/screens/real_time_health_dashboard.dart:112:      setState(() {
+lib/features/health/screens/real_time_health_dashboard.dart:131:    setState(() {
+lib/features/health/screens/real_time_health_dashboard.dart:141:    setState(() {
+lib/features/health/screens/real_time_health_dashboard.dart:150:      setState(() {
+lib/features/health/screens/real_time_health_dashboard.dart:171:      setState(() {
+lib/features/health/screens/real_time_health_dashboard.dart:565:        setState(() {
+lib/features/health/screens/real_time_health_dashboard.dart:611:          setState(() {
+lib/features/health/screens/real_time_health_dashboard.dart:931:    setState(() {
+lib/features/health/screens/real_time_health_dashboard.dart:937:    setState(() {
+lib/features/health/screens/health_screen.dart:88:          child: Consumer<HealthProvider>(
+lib/features/health/widgets/healthkit_connection_card.dart:18:    return Consumer<HealthProvider>(
+lib/features/health/widgets/ai_insights_panel.dart:148:          setState(() {
+lib/features/health/widgets/ai_insights_panel.dart:462:    setState(() {
+lib/features/health/widgets/health_trend_chart.dart:218:          setState(() {
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:269:        setState(() {
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:352:        setState(() {
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:506:    setState(() {
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:529:        setState(() {
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:551:      setState(() {
+lib/features/cycle/providers/cycle_provider.dart:8:class CycleProvider extends ChangeNotifier {
+lib/features/cycle/screens/calendar_screen.dart:98:                    child: Consumer<CycleProvider>(
+lib/features/cycle/screens/calendar_screen.dart:165:                  setState(() {
+lib/features/cycle/screens/calendar_screen.dart:201:                  setState(() {
+lib/features/cycle/screens/calendar_screen.dart:333:        setState(() {
+lib/features/cycle/screens/calendar_screen.dart:342:        setState(() {
+lib/features/cycle/screens/calendar_screen.dart:644:    return Consumer<CycleProvider>(
+lib/features/cycle/screens/tracking_screen.dart:86:        setState(() {
+lib/features/cycle/screens/tracking_screen.dart:133:        setState(() {
+lib/features/cycle/screens/tracking_screen.dart:155:      setState(() {
+lib/features/cycle/screens/tracking_screen.dart:172:    setState(() {
+lib/features/cycle/screens/tracking_screen.dart:206:        setState(() {
+lib/features/cycle/screens/tracking_screen.dart:216:            setState(() {
+lib/features/cycle/screens/tracking_screen.dart:229:        setState(() {
+lib/features/cycle/screens/tracking_screen.dart:476:              setState(() {
+lib/features/cycle/screens/tracking_screen.dart:562:                setState(() {
+lib/features/cycle/screens/tracking_screen.dart:569:                setState(() {
+lib/features/cycle/screens/tracking_screen.dart:609:              setState(() {
+lib/features/cycle/screens/tracking_screen.dart:622:              setState(() {
+lib/features/cycle/screens/tracking_screen.dart:662:              setState(() {
+lib/features/cycle/screens/tracking_screen.dart:678:                setState(() {
+lib/features/cycle/screens/tracking_screen.dart:854:                      setState(() {
+lib/features/cycle/screens/tracking_screen.dart:907:        setState(() {
+lib/features/cycle/screens/tracking_screen.dart:1066:      setState(() {
+lib/features/cycle/screens/home_screen.dart:133:      setState(() {
+lib/features/cycle/screens/home_screen.dart:141:      setState(() {
+lib/features/cycle/screens/home_screen.dart:157:        setState(() {
+lib/features/cycle/screens/home_screen.dart:164:        setState(() {
+lib/features/cycle/screens/home_screen.dart:571:          Consumer<SettingsProvider>(
+lib/features/cycle/screens/home_screen.dart:574:                child: Consumer3<CycleProvider, InsightsProvider, SettingsProvider>(
+lib/features/cycle/screens/home_screen.dart:2537:          setState(() {
+lib/features/cycle/widgets/pain_body_map.dart:178:        setState(() {
+lib/features/cycle/widgets/pain_body_map.dart:312:                    setState(() {
+lib/features/cycle/widgets/pain_body_map.dart:388:                    setState(() {
+lib/features/cycle/widgets/pain_body_map.dart:466:                        setState(() {
+lib/features/cycle/widgets/pain_body_map.dart:662:                      setState(() {
+lib/features/cycle/widgets/symptom_selector.dart:230:                setState(() {
+lib/features/feedback/screens/feedback_screen.dart:58:    setState(() => _isSubmitting = true);
+lib/features/feedback/screens/feedback_screen.dart:65:    setState(() => _isSubmitting = false);
+lib/features/feedback/screens/feedback_screen.dart:196:                    setState(() => _rating = index + 1);
+lib/features/feedback/screens/feedback_screen.dart:229:                    setState(() => _selectedCategory = entry.key);
+lib/features/partner/screens/partner_dashboard_screen.dart:94:      body: Consumer<PartnerService>(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:53:      setState(() {
+lib/features/partner/screens/partner_privacy_settings_screen.dart:64:      setState(() {
+lib/features/partner/screens/partner_privacy_settings_screen.dart:74:    setState(() => _isLoading = true);
+lib/features/partner/screens/partner_privacy_settings_screen.dart:81:      setState(() {
+lib/features/partner/screens/partner_privacy_settings_screen.dart:108:      setState(() => _isLoading = false);
+lib/features/partner/screens/partner_privacy_settings_screen.dart:113:    setState(() {
+lib/features/partner/dialogs/invite_partner_dialog.dart:315:        onTap: () => setState(() => _messageController.text = message),
+lib/features/partner/dialogs/invite_partner_dialog.dart:444:                      setState(() => _currentStep = _currentStep - 1);
+lib/features/partner/dialogs/invite_partner_dialog.dart:505:        setState(() => _currentStep = 1);
+lib/features/partner/dialogs/invite_partner_dialog.dart:515:    setState(() => _isLoading = true);
+lib/features/partner/dialogs/invite_partner_dialog.dart:530:      setState(() => _isLoading = false);
+lib/features/partner/dialogs/join_partner_dialog.dart:372:                  setState(() => _errorMessage = null);
+lib/features/partner/dialogs/join_partner_dialog.dart:564:          setState(() {
+lib/features/partner/dialogs/join_partner_dialog.dart:577:      setState(() {
+lib/features/partner/dialogs/join_partner_dialog.dart:596:        setState(() {
+lib/features/partner/services/partner_service.dart:8:class PartnerService extends ChangeNotifier {
+lib/features/partner/widgets/partner_care_actions_widget.dart:218:                    setState(() => _showQuickActions = !_showQuickActions),
+lib/features/partner/widgets/partner_care_actions_widget.dart:715:                    setState(() => selectedType = type);
+lib/features/partner/widgets/partner_communication_widget.dart:157:            onPressed: () => setState(() => _isExpanded = !_isExpanded),
+lib/features/partner/widgets/partner_communication_widget.dart:192:              onTap: () => setState(() => _isExpanded = true),
+lib/features/partner/widgets/partner_communication_widget.dart:434:                onPressed: () => setState(() => _isExpanded = false),
+lib/features/partner/widgets/partner_invitation_dialog.dart:648:      setState(() => _successMessage = null);
+lib/features/partner/widgets/partner_invitation_dialog.dart:655:    setState(() {
+lib/features/partner/widgets/partner_invitation_dialog.dart:673:      setState(() {
+lib/features/partner/widgets/partner_invitation_dialog.dart:680:          setState(() => _successMessage = null);
+lib/features/partner/widgets/partner_invitation_dialog.dart:688:        setState(() {
+lib/features/partner/widgets/partner_invitation_dialog.dart:700:    setState(() {
+lib/features/partner/widgets/partner_invitation_dialog.dart:710:      setState(() {
+lib/features/partner/widgets/partner_invitation_dialog.dart:716:      if (mounted) setState(() => _isLoading = false);
+lib/features/partner/widgets/partner_invitation_dialog.dart:753:    setState(() => _successMessage = "QR saved successfully");
+lib/features/partner/widgets/partner_invitation_dialog.dart:756:        setState(() => _successMessage = null);
+lib/features/biometric/screens/biometric_dashboard_screen.dart:61:      setState(() {
+lib/features/biometric/screens/biometric_dashboard_screen.dart:78:        setState(() {
+lib/features/biometric/screens/biometric_dashboard_screen.dart:87:      setState(() {
+lib/features/biometric/screens/biometric_dashboard_screen.dart:104:      setState(() {
+lib/features/biometric/screens/biometric_dashboard_screen.dart:110:      setState(() {
+lib/features/biometric/screens/biometric_dashboard_screen.dart:121:    setState(() {
+lib/features/biometric/screens/biometric_dashboard_screen.dart:166:      setState(() {
+lib/features/biometric/screens/biometric_dashboard_screen.dart:192:      setState(() {
+lib/features/biometric/widgets/biometric_chart_widget.dart:192:              onTap: () => setState(() {}),
+lib/features/biometric/widgets/biometric_chart_widget.dart:216:      setState(() {
+lib/features/biometric/widgets/biometric_chart_widget.dart:262:            onTap: () => setState(() {
+lib/features/biometric/widgets/biometric_sync_status.dart:82:    setState(() {
+lib/features/biometric/widgets/biometric_sync_status.dart:91:    setState(() {
+lib/features/coming_soon/screens/coming_soon_screen.dart:71:                    setState(() => _currentPage = index);
+lib/features/coming_soon/widgets/feature_preview_card.dart:50:        setState(() => _isHovered = true);
+lib/features/coming_soon/widgets/feature_preview_card.dart:54:        setState(() => _isHovered = false);
+lib/features/coming_soon/widgets/waitlist_signup_widget.dart:229:                setState(() {
+lib/features/coming_soon/widgets/waitlist_signup_widget.dart:432:    setState(() => _isLoading = true);
+lib/features/coming_soon/widgets/waitlist_signup_widget.dart:452:      setState(() {
+lib/features/coming_soon/widgets/waitlist_signup_widget.dart:459:      setState(() => _isLoading = false);
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:227:                onTap: () => setState(() => _isExpanded = !_isExpanded),
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:79:    setState(() => _isLoading = true);
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:88:      setState(() => _isLoading = false);
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:97:      setState(() {
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:113:    setState(() {
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:127:    setState(() => _isSaving = true);
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:150:      setState(() {
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:170:      setState(() => _isSaving = false);
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:449:                    setState(() {
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:620:                setState(() {
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:710:                setState(() {
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:845:                    setState(() {
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:894:                      setState(() {
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:1034:                  setState(() {
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:1351:    setState(() {
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:1385:                  setState(() {
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:1409:      setState(() {
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:39:      setState(() {
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:53:        setState(() {
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:60:        setState(() {
+lib/features/premium/providers/subscription_provider.dart:5:class SubscriptionProvider extends ChangeNotifier {
+lib/features/premium/providers/premium_provider.dart:7:class PremiumProvider extends ChangeNotifier {
+lib/features/premium/screens/premium_subscription_screen.dart:41:      body: Consumer<PremiumProvider>(
+lib/features/premium/screens/premium_subscription_screen.dart:212:          setState(() {
+lib/features/premium/screens/premium_subscription_screen.dart:428:          setState(() {
+lib/features/premium/screens/premium_subscription_screen.dart:455:                    setState(() {
+lib/features/premium/screens/premium_paywall_screen.dart:51:        child: Consumer<SubscriptionProvider>(
+lib/features/premium/screens/premium_paywall_screen.dart:339:                setState(() {
+lib/features/premium/screens/premium_paywall_screen.dart:359:                setState(() {
+lib/features/premium/widgets/premium_feature_widget.dart:23:    return Consumer<PremiumProvider>(
+lib/features/premium/widgets/subscription_status_widget.dart:19:    return Consumer<PremiumProvider>(
+lib/features/premium/widgets/premium_upgrade_prompt.dart:188:    return Consumer<SubscriptionProvider>(
+lib/features/premium/widgets/premium_upgrade_prompt.dart:211:    return Consumer<SubscriptionProvider>(
+lib/features/notifications/screens/notification_settings_screen.dart:57:      setState(() {
+lib/features/notifications/screens/notification_settings_screen.dart:62:      setState(() {
+lib/features/notifications/screens/notification_settings_screen.dart:309:            setState(() {
+lib/features/notifications/screens/notification_settings_screen.dart:375:                (time) => setState(() => _quietTimeStart = time),
+lib/features/notifications/screens/notification_settings_screen.dart:383:                (time) => setState(() => _quietTimeEnd = time),
+lib/features/notifications/screens/notification_settings_screen.dart:524:            setState(() {
+lib/features/onboarding/providers/onboarding_provider.dart:20:class OnboardingProvider extends ChangeNotifier {
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:70:    return Consumer<EnhancedOnboardingController>(
+lib/features/onboarding/screens/onboarding_screen.dart:60:    return Consumer<OnboardingProvider>(
+lib/features/onboarding/screens/cycle_history_step_screen.dart:194:                  onTap: () => setState(() => _isFirstTimeTracking = true),
+lib/features/onboarding/screens/cycle_history_step_screen.dart:204:                  onTap: () => setState(() => _isFirstTimeTracking = false),
+lib/features/onboarding/screens/cycle_history_step_screen.dart:249:                  setState(() {
+lib/features/onboarding/screens/cycle_history_step_screen.dart:408:                setState(() {
+lib/features/onboarding/screens/cycle_history_step_screen.dart:484:                setState(() {
+lib/features/onboarding/screens/cycle_history_step_screen.dart:515:              setState(() {
+lib/features/onboarding/screens/cycle_history_step_screen.dart:548:              setState(() {
+lib/features/onboarding/screens/cycle_history_step_screen.dart:736:      setState(() {
+lib/features/onboarding/screens/personal_info_step_screen.dart:334:      setState(() {
+lib/features/onboarding/controllers/onboarding_controller.dart:8:class OnboardingController extends ChangeNotifier {
+lib/features/onboarding/controllers/enhanced_onboarding_controller.dart:9:class EnhancedOnboardingController extends ChangeNotifier {
+lib/features/onboarding/widgets/goal_selection_widget.dart:322:        setState(() {
+lib/features/onboarding/widgets/goal_selection_widget.dart:506:        setState(() {
+lib/features/onboarding/widgets/goal_selection_widget.dart:633:        setState(() {
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:147:    setState(() {
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:696:    setState(() {
+lib/features/onboarding/widgets/personality_quiz_widget.dart:376:        setState(() {
+lib/features/onboarding/widgets/personality_quiz_widget.dart:458:                    setState(() {
+lib/features/onboarding/widgets/personality_quiz_widget.dart:485:                    setState(() {
+lib/features/onboarding/widgets/personality_quiz_widget.dart:539:        setState(() {
+lib/features/onboarding/widgets/personality_quiz_widget.dart:675:      setState(() {
+lib/features/onboarding/widgets/setup_form.dart:155:                    setState(() {
+lib/features/onboarding/widgets/setup_form.dart:223:                    setState(() {
+lib/features/onboarding/widgets/setup_form.dart:294:                setState(() {
+lib/features/onboarding/widgets/setup_form.dart:349:                setState(() {
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:287:        setState(() {
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:897:    setState(() {
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:918:      setState(() {
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:926:    setState(() {
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:936:      setState(() {
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:956:      setState(() {
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:961:      setState(() {
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:976:    setState(() {
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:984:      setState(() {
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:1002:      setState(() {
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:1009:    setState(() {
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:1017:      setState(() {
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:1031:      setState(() {
+lib/features/analytics/providers/analytics_provider.dart:4:class AnalyticsProvider extends ChangeNotifier {
+lib/features/analytics/screens/analytics_dashboard_screen.dart:58:                child: Consumer<AnalyticsProvider>(
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:98:    setState(() => _isLoading = true);
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:112:      setState(() {
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:119:      setState(() => _isLoading = false);
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:349:                onTap: () => setState(() => _selectedTimeRange = range),
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:403:                onTap: () => setState(() => _currentView = view),
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:865:              onChanged: (value) => setState(() => _showPredictions = value),
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:887:              onChanged: (value) => setState(() => _showCorrelations = value),
+lib/features/analytics/screens/advanced_data_visualization_dashboard.dart:924:                setState(() {
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:62:                child: Consumer<AnalyticsProvider>(
+lib/main.dart:312:      setState(() {
+lib/main.dart:363:        Provider<AppStateService>.value(value: AppStateService()),
+lib/main.dart:364:        ChangeNotifierProvider(create: (_) => PartnerService()),
+lib/main.dart:365:        ChangeNotifierProvider(create: (_) => OnboardingProvider()),
+lib/main.dart:366:        ChangeNotifierProvider(create: (_) => CycleProvider()),
+lib/main.dart:367:        ChangeNotifierProvider(create: (_) => InsightsProvider()),
+lib/main.dart:368:        ChangeNotifierProvider(create: (_) => AnalyticsProvider()),
+lib/main.dart:369:        ChangeNotifierProvider(create: (_) => HealthProvider()),
+lib/main.dart:370:        ChangeNotifierProvider.value(value: settingsProvider),
+lib/main.dart:371:        ChangeNotifierProvider.value(value: progressiveDisclosureService),
+lib/main.dart:372:        ChangeNotifierProvider(create: (_) => PremiumProvider()),
+lib/main.dart:373:        ChangeNotifierProvider(create: (_) => SubscriptionProvider()),
+lib/main.dart:375:      child: Consumer<SettingsProvider>(

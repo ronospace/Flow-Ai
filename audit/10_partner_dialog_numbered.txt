@@ -1,0 +1,760 @@
+     1	import 'package:flutter/material.dart';
+     2	import 'package:flutter/services.dart';
+     3	import 'package:flutter_animate/flutter_animate.dart';
+     4	import 'package:qr_flutter/qr_flutter.dart';
+     5	import 'package:share_plus/share_plus.dart';
+     6	import '../../../core/theme/app_theme.dart';
+     7	import '../../../generated/app_localizations.dart';
+     8	import '../services/partner_service.dart';
+     9	
+    10	class PartnerInvitationDialog extends StatefulWidget {
+    11	  final PartnerService partnerService;
+    12	
+    13	  const PartnerInvitationDialog({super.key, required this.partnerService});
+    14	
+    15	  @override
+    16	  State<PartnerInvitationDialog> createState() =>
+    17	      _PartnerInvitationDialogState();
+    18	}
+    19	
+    20	class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
+    21	    with TickerProviderStateMixin {
+    22	  late TabController _tabController;
+    23	  late AnimationController _dialogController;
+    24	  late Animation<double> _scaleAnimation;
+    25	  late Animation<double> _fadeAnimation;
+    26	
+    27	  final _emailController = TextEditingController();
+    28	  final _messageController = TextEditingController();
+    29	  final _formKey = GlobalKey<FormState>();
+    30	
+    31	  bool _isLoading = false;
+    32	  bool _isExecutingInvite = false;
+    33	  String? _successMessage;
+    34	  bool _isSent = false;
+    35	
+    36	  PartnerInvitation? _generatedInvitation;
+    37	
+    38	  @override
+    39	  void initState() {
+    40	    super.initState();
+    41	
+    42	    _tabController = TabController(length: 3, vsync: this);
+    43	    _dialogController = AnimationController(
+    44	      duration: const Duration(milliseconds: 600),
+    45	      vsync: this,
+    46	    );
+    47	
+    48	    _scaleAnimation = CurvedAnimation(
+    49	      parent: _dialogController,
+    50	      curve: Curves.elasticOut,
+    51	    );
+    52	
+    53	    _fadeAnimation = CurvedAnimation(
+    54	      parent: _dialogController,
+    55	      curve: Curves.easeIn,
+    56	    );
+    57	
+    58	    _dialogController.forward();
+    59	  }
+    60	
+    61	  @override
+    62	  void dispose() {
+    63	    _tabController.dispose();
+    64	    _dialogController.dispose();
+    65	    _emailController.dispose();
+    66	    _messageController.dispose();
+    67	    super.dispose();
+    68	  }
+    69	
+    70	  @override
+    71	
+    72	  Widget build(BuildContext context) {
+    73	    final theme = Theme.of(context);
+    74	    final localizations = AppLocalizations.of(context);
+    75	
+    76	    return AnimatedBuilder(
+    77	      animation: _dialogController,
+    78	      builder: (context, child) {
+    79	        return Transform.scale(
+    80	          scale: _scaleAnimation.value,
+    81	          child: FadeTransition(
+    82	            opacity: _fadeAnimation,
+    83	            child: Dialog(
+    84	              insetPadding: EdgeInsets.fromLTRB(16, 64, 16, MediaQuery.of(context).viewInsets.bottom > 0 ? 12 : 40),
+    85	              backgroundColor: Colors.transparent,
+    86	              child: Padding(
+    87	                padding: const EdgeInsets.symmetric(vertical: 8),
+    88	                child: LayoutBuilder(
+    89	                  builder: (context, constraints) {
+    90	                    final kb = MediaQuery.of(context).viewInsets.bottom;
+    91	final dialogHeight = kb > 0
+    92	    ? (constraints.maxHeight * 0.58).clamp(0.0, 560.0).toDouble()
+    93	    : (constraints.maxHeight * 0.78).clamp(0.0, 680.0).toDouble();
+    94	                    return Center(
+    95	                      child: ConstrainedBox(
+    96	                        constraints: BoxConstraints(
+    97	                          maxWidth: 420,
+    98	                          maxHeight: dialogHeight,
+    99	                        ),
+   100	                        child: Container(
+   101	                          width: double.infinity,
+   102	                          decoration: BoxDecoration(
+   103	                            borderRadius: BorderRadius.circular(28),
+   104	                            boxShadow: [
+   105	                              BoxShadow(
+   106	                                color: Colors.black.withValues(alpha: 0.3),
+   107	                                blurRadius: 24,
+   108	                                spreadRadius: 5,
+   109	                                offset: const Offset(0, 10),
+   110	                              ),
+   111	                            ],
+   112	                          ),
+   113	                          child: Column(
+   114	                            children: [
+   115	                              _buildHeader(theme, localizations),
+   116	                              _buildTabBar(theme, localizations),
+   117	                              Expanded(
+   118	                                child: TabBarView(
+   119	                                  controller: _tabController,
+   120	                                  children: [
+   121	                                    _buildEmailInviteTab(theme, localizations),
+   122	                                    _buildQRCodeTab(theme, localizations),
+   123	                                    _buildLinkShareTab(theme, localizations),
+   124	                                  ],
+   125	                                ),
+   126	                              ),
+   127	                            ],
+   128	                          ),
+   129	                        ),
+   130	                      ),
+   131	                    );
+   132	                  },
+   133	                ),
+   134	              ),
+   135	            ),
+   136	          ),
+   137	        );
+   138	      },
+   139	    );
+   140	  }
+   141	
+   142	  Widget _buildHeader(ThemeData theme, AppLocalizations localizations) {
+   143	    return Container(
+   144	      padding: const EdgeInsets.fromLTRB(20, 18, 20, 18),
+   145	      decoration: BoxDecoration(
+   146	        gradient: LinearGradient(
+   147	          begin: Alignment.topLeft,
+   148	          end: Alignment.bottomRight,
+   149	          colors: [
+   150	            AppTheme.primaryRose.withValues(alpha: 0.1),
+   151	            AppTheme.primaryPurple.withValues(alpha: 0.1),
+   152	          ],
+   153	        ),
+   154	        borderRadius: const BorderRadius.only(
+   155	          topLeft: Radius.circular(28),
+   156	          topRight: Radius.circular(28),
+   157	        ),
+   158	      ),
+   159	      child: Row(
+   160	        children: [
+   161	          Container(
+   162	            padding: const EdgeInsets.all(12),
+   163	            decoration: BoxDecoration(
+   164	              gradient: const LinearGradient(
+   165	                colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+   166	              ),
+   167	              borderRadius: BorderRadius.circular(16),
+   168	            ),
+   169	            child: const Icon(Icons.favorite, color: Colors.white, size: 22),
+   170	          ),
+   171	          const SizedBox(width: 16),
+   172	          Expanded(
+   173	            child: Column(
+   174	              crossAxisAlignment: CrossAxisAlignment.start,
+   175	              children: [
+   176	                Text(
+   177	                  'Invite Your Partner',
+   178	                  style: theme.textTheme.titleLarge?.copyWith(
+   179	                    fontWeight: FontWeight.bold,
+   180	                    color: AppTheme.darkGrey,
+   181	                  ),
+   182	                ),
+   183	                Text(
+   184	                  'Share Your Love And Cycle Journey Together 💖',
+   185	                  style: theme.textTheme.bodyMedium?.copyWith(
+   186	                    color: AppTheme.mediumGrey,
+   187	                  ),
+   188	                ),
+   189	              ],
+   190	            ),
+   191	          ),
+   192	          IconButton(
+   193	            onPressed: () => Navigator.of(context).pop(),
+   194	            icon: Icon(Icons.close, color: AppTheme.mediumGrey),
+   195	          ),
+   196	        ],
+   197	      ),
+   198	    ).animate().slideY(begin: -0.3, end: 0, duration: 400.ms);
+   199	  }
+   200	
+   201	  Widget _buildTabBar(ThemeData theme, AppLocalizations localizations) {
+   202	    return Container(
+   203	      margin: const EdgeInsets.fromLTRB(20, 12, 20, 16),
+   204	      decoration: BoxDecoration(
+   205	        color: AppTheme.lightGrey.withValues(alpha: 0.3),
+   206	        borderRadius: BorderRadius.circular(16),
+   207	      ),
+   208	      child: SizedBox(height: 64,
+   209	      child: TabBar(
+   210	        controller: _tabController,
+   211	        indicator: BoxDecoration(
+   212	          gradient: const LinearGradient(
+   213	            colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+   214	          ),
+   215	          borderRadius: BorderRadius.circular(14),
+   216	        ),
+   217	        indicatorSize: TabBarIndicatorSize.tab,
+   218	        splashBorderRadius: BorderRadius.circular(16),
+   219	        dividerColor: Colors.transparent,
+   220	        labelColor: Colors.white,
+   221	        unselectedLabelColor: AppTheme.mediumGrey,
+   222	        labelStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+   223	        unselectedLabelStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+   224	        labelPadding: EdgeInsets.zero,
+   225	        tabAlignment: TabAlignment.fill,
+   226	        tabs: const [
+   227	          Tab(icon: Icon(Icons.email, size: 22), height: 64, text: 'Email'),
+   228	          Tab(icon: Icon(Icons.qr_code, size: 22), height: 64, text: 'QR Code'),
+   229	          Tab(icon: Icon(Icons.share, size: 22), height: 64, text: 'Share Link'),
+   230	        ],
+   231	      ),
+   232	    
+   233	      ),
+   234	    ).animate().fadeIn(delay: 200.ms);
+   235	  }
+   236	
+   237	  Widget _buildEmailInviteTab(ThemeData theme, AppLocalizations localizations) {
+   238	    return Padding(
+   239	      padding: const EdgeInsets.all(24),
+   240	      child: Form(
+   241	        key: _formKey,
+   242	        child: SingleChildScrollView(
+   243	          child: Column(
+   244	            crossAxisAlignment: CrossAxisAlignment.start,
+   245	            children: [
+   246	              if (_successMessage != null) ...[
+   247	                Container(
+   248	                  margin: const EdgeInsets.only(bottom: 16),
+   249	                  padding: const EdgeInsets.all(16),
+   250	                  decoration: BoxDecoration(
+   251	                    color: Colors.white,
+   252	                    borderRadius: BorderRadius.circular(16),
+   253	                    boxShadow: [
+   254	                      BoxShadow(color: Colors.black12, blurRadius: 10),
+   255	                    ],
+   256	                  ),
+   257	                  child: Row(
+   258	                    children: [
+   259	                      const Icon(Icons.favorite, color: Colors.pink),
+   260	                      const SizedBox(width: 10),
+   261	                      Expanded(
+   262	                        child: Text(
+   263	                          _successMessage!,
+   264	                          style: const TextStyle(fontWeight: FontWeight.w600),
+   265	                        ),
+   266	                      ),
+   267	                    ],
+   268	                  ),
+   269	                ).animate().fadeIn().slideY(begin: -0.3),
+   270	              ],
+   271	
+   272	              const SizedBox(height: 8),
+   273	
+   274	              TextFormField(
+   275	                controller: _emailController,
+   276	                decoration: InputDecoration(
+   277	                  labelText: 'Partner\'s Email',
+   278	                  hintText: 'Enter your partner\'s email address',
+   279	                  prefixIcon: Icon(Icons.email, color: AppTheme.primaryRose),
+   280	                  border: OutlineInputBorder(
+   281	                    borderRadius: BorderRadius.circular(16),
+   282	                  ),
+   283	                  focusedBorder: OutlineInputBorder(
+   284	                    borderRadius: BorderRadius.circular(16),
+   285	                    borderSide: BorderSide(
+   286	                      color: AppTheme.primaryRose,
+   287	                      width: 2,
+   288	                    ),
+   289	                  ),
+   290	                ),
+   291	                validator: (value) {
+   292	                  if (value == null || value.isEmpty) {
+   293	                    return 'Please enter an email address';
+   294	                  }
+   295	                  if (!RegExp(
+   296	                    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+   297	                  ).hasMatch(value)) {
+   298	                    return 'Please enter a valid email address';
+   299	                  }
+   300	
+   301	                  final lower = value.toLowerCase();
+   302	
+   303	                  if (lower.endsWith('@gmail.co') ||
+   304	                      lower.endsWith('@gamil.com') ||
+   305	                      lower.endsWith('@gnail.com') ||
+   306	                      lower.endsWith('@gmail.con') ||
+   307	                      lower.endsWith('@yahoo.co') ||
+   308	                      lower.endsWith('@outlook.co') ||
+   309	                      lower.endsWith('@icloud.co')) {
+   310	                    return 'Did you mean .com?';
+   311	                  }
+   312	
+   313	                  return null;
+   314	                },
+   315	              ),
+   316	              const SizedBox(height: 16),
+   317	
+   318	              TextFormField(
+   319	                controller: _messageController,
+   320	                maxLines: 3,
+   321	                decoration: InputDecoration(
+   322	                  labelText: 'Personal Message (Optional)',
+   323	                  hintText: 'Add a personal touch to your invitation...',
+   324	                  prefixIcon: Icon(Icons.message, color: AppTheme.primaryRose),
+   325	                  border: OutlineInputBorder(
+   326	                    borderRadius: BorderRadius.circular(16),
+   327	                  ),
+   328	                  focusedBorder: OutlineInputBorder(
+   329	                    borderRadius: BorderRadius.circular(16),
+   330	                    borderSide: BorderSide(
+   331	                      color: AppTheme.primaryRose,
+   332	                      width: 2,
+   333	                    ),
+   334	                  ),
+   335	                ),
+   336	              ),
+   337	
+   338	              const SizedBox(height: 16),
+   339	
+   340	              SizedBox(
+   341	                width: double.infinity,
+   342	                child: ElevatedButton.icon(
+   343	                  onPressed: (_isLoading || _isSent) ? null : _openEmailInvite,
+   344	                  icon: _isLoading
+   345	                      ? SizedBox(
+   346	                          width: 20,
+   347	                          height: 20,
+   348	                          child: CircularProgressIndicator(
+   349	                            strokeWidth: 2,
+   350	                            valueColor: AlwaysStoppedAnimation<Color>(
+   351	                              Colors.white,
+   352	                            ),
+   353	                          ),
+   354	                        )
+   355	                      : Icon(_isSent ? Icons.check : Icons.send),
+   356	                  label: Text(
+   357	                    _isLoading
+   358	                        ? 'Sending...'
+   359	                        : (_isSent ? 'Sent ✓' : 'Send Invitation'),
+   360	                  ),
+   361	                  style: ElevatedButton.styleFrom(
+   362	                    backgroundColor: _isSent
+   363	                        ? AppTheme.primaryRose.withOpacity(0.35)
+   364	                        : AppTheme.primaryRose,
+   365	                    foregroundColor: Colors.white,
+   366	                    padding: const EdgeInsets.symmetric(vertical: 16),
+   367	                    shape: RoundedRectangleBorder(
+   368	                      borderRadius: BorderRadius.circular(16),
+   369	                    ),
+   370	                  ),
+   371	                ),
+   372	              ),
+   373	            ],
+   374	          ),
+   375	        ),
+   376	      ),
+   377	    ).animate().fadeIn(delay: 300.ms);
+   378	  }
+   379	
+   380	  Widget _buildQRCodeTab(ThemeData theme, AppLocalizations localizations) {
+   381	    return LayoutBuilder(
+   382	      builder: (context, constraints) {
+   383	        return SingleChildScrollView(
+   384	          physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+   385	          padding: const EdgeInsets.all(24),
+   386	          child: ConstrainedBox(
+   387	            constraints: BoxConstraints(minHeight: constraints.maxHeight - 48),
+   388	            child: Transform.translate(
+   389	              offset: const Offset(0, 18),
+   390	              child: Column(
+   391	                mainAxisSize: MainAxisSize.min,
+   392	                children: [
+   393	                  Container(
+   394	                    padding: const EdgeInsets.all(16),
+   395	                    decoration: BoxDecoration(
+   396	                      color: Colors.white,
+   397	                      borderRadius: BorderRadius.circular(20),
+   398	                      boxShadow: [
+   399	                        BoxShadow(
+   400	                          color: AppTheme.primaryRose.withValues(alpha: 0.28),
+   401	                          blurRadius: 20,
+   402	                          spreadRadius: 1,
+   403	                          offset: const Offset(0, 10),
+   404	                        ),
+   405	                      ],
+   406	                    ),
+   407	                    child: Column(
+   408	                      children: [
+   409	                        if (_generatedInvitation != null)
+   410	                          QrImageView(
+   411	                            data: _generateInvitationLink(_generatedInvitation!),
+   412	                            version: QrVersions.auto,
+   413	                            size: 176,
+   414	                            foregroundColor: AppTheme.darkGrey,
+   415	                          )
+   416	                        else
+   417	                          Container(
+   418	                            width: 176,
+   419	                            height: 176,
+   420	                            decoration: BoxDecoration(
+   421	                              color: AppTheme.lightGrey.withValues(alpha: 0.3),
+   422	                              borderRadius: BorderRadius.circular(16),
+   423	                            ),
+   424	                            child: Column(
+   425	                              mainAxisAlignment: MainAxisAlignment.center,
+   426	                              children: [
+   427	                                Icon(
+   428	                                  Icons.qr_code,
+   429	                                  size: 52,
+   430	                                  color: AppTheme.mediumGrey,
+   431	                                ),
+   432	                                const SizedBox(height: 8),
+   433	                                Text(
+   434	                                  'Generate QR Code',
+   435	                                  style: TextStyle(
+   436	                                    color: AppTheme.mediumGrey,
+   437	                                    fontWeight: FontWeight.w500,
+   438	                                  ),
+   439	                                ),
+   440	                              ],
+   441	                            ),
+   442	                          ),
+   443	                        const SizedBox(height: 8),
+   444	                        Text(
+   445	                          'Scan to connect',
+   446	                          style: theme.textTheme.bodySmall?.copyWith(
+   447	                            color: AppTheme.mediumGrey,
+   448	                          ),
+   449	                        ),
+   450	                      ],
+   451	                    ),
+   452	                  ).animate().scale(begin: const Offset(0.8, 0.8)).fadeIn(delay: 200.ms),
+   453	                  const SizedBox(height: 8),
+   454	                  Row(
+   455	                    children: [
+   456	                      Expanded(
+   457	                        child: OutlinedButton.icon(
+   458	                          onPressed: _generateCodeOnly,
+   459	                          icon: const Icon(Icons.refresh),
+   460	                          label: const Text('Generate Code'),
+   461	                          style: OutlinedButton.styleFrom(
+   462	                            foregroundColor: AppTheme.primaryRose,
+   463	                            side: BorderSide(color: AppTheme.primaryRose),
+   464	                            padding: const EdgeInsets.symmetric(vertical: 16),
+   465	                            shape: RoundedRectangleBorder(
+   466	                              borderRadius: BorderRadius.circular(16),
+   467	                            ),
+   468	                          ),
+   469	                        ),
+   470	                      ),
+   471	                      const SizedBox(width: 12),
+   472	                      Expanded(
+   473	                        child: ElevatedButton.icon(
+   474	                          onPressed: _generatedInvitation != null ? _saveQRCode : null,
+   475	                          icon: const Icon(Icons.save),
+   476	                          label: const Text('Save QR'),
+   477	                          style: ElevatedButton.styleFrom(
+   478	                            backgroundColor: _isSent
+   479	                                ? AppTheme.primaryRose.withOpacity(0.35)
+   480	                                : AppTheme.primaryRose,
+   481	                            foregroundColor: Colors.white,
+   482	                            padding: const EdgeInsets.symmetric(vertical: 16),
+   483	                            shape: RoundedRectangleBorder(
+   484	                              borderRadius: BorderRadius.circular(16),
+   485	                            ),
+   486	                          ),
+   487	                        ),
+   488	                      ),
+   489	                    ],
+   490	                  ),
+   491	                ],
+   492	              ),
+   493	            ),
+   494	          ),
+   495	        );
+   496	      },
+   497	    );
+   498	  }
+   499	
+   500	  Widget _buildLinkShareTab(ThemeData theme, AppLocalizations localizations) {
+   501	    return LayoutBuilder(
+   502	      builder: (context, constraints) {
+   503	        return SingleChildScrollView(
+   504	          physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+   505	          padding: const EdgeInsets.all(24),
+   506	          child: ConstrainedBox(
+   507	            constraints: BoxConstraints(minHeight: constraints.maxHeight - 48),
+   508	            child: Column(
+   509	              mainAxisSize: MainAxisSize.min,
+   510	        children: [
+   511	          // removed share title
+   512	          Text(
+   513	            '',
+   514	            style: theme.textTheme.titleMedium?.copyWith(
+   515	              fontWeight: FontWeight.bold,
+   516	              color: AppTheme.darkGrey,
+   517	            ),
+   518	          ),
+   519	          const SizedBox(height: 16),
+   520	          Text(
+   521	            'Partner can join instantly from any device.',
+   522	            textAlign: TextAlign.center,
+   523	            style: theme.textTheme.bodyMedium?.copyWith(
+   524	              color: AppTheme.mediumGrey,
+   525	              height: 1.2,
+   526	            ),
+   527	          ),
+   528	          const SizedBox(height: 16),
+   529	
+   530	          Container(
+   531	            padding: const EdgeInsets.all(16),
+   532	            decoration: BoxDecoration(
+   533	              gradient: LinearGradient(
+   534	                begin: Alignment.topLeft,
+   535	                end: Alignment.bottomRight,
+   536	                colors: [
+   537	                  AppTheme.primaryRose.withValues(alpha: 0.1),
+   538	                  AppTheme.primaryPurple.withValues(alpha: 0.1),
+   539	                ],
+   540	              ),
+   541	              borderRadius: BorderRadius.circular(20),
+   542	              border: Border.all(
+   543	                color: AppTheme.primaryRose.withValues(alpha: 0.2),
+   544	                width: 2,
+   545	              ),
+   546	            ),
+   547	            child: Column(
+   548	              children: [
+   549	                Icon(Icons.link, size: 48, color: AppTheme.primaryRose),
+   550	                const SizedBox(height: 16),
+   551	
+   552	                if (_generatedInvitation != null) ...[
+   553	                  Container(
+   554	                    padding: const EdgeInsets.all(16),
+   555	                    decoration: BoxDecoration(
+   556	                      color: Colors.white,
+   557	                      borderRadius: BorderRadius.circular(12),
+   558	                      border: Border.all(color: AppTheme.lightGrey, width: 1),
+   559	                    ),
+   560	                    child: Row(
+   561	                      children: [
+   562	                        Expanded(
+   563	                          child: Text(
+   564	                            _generateInvitationLink(_generatedInvitation!),
+   565	                            style: TextStyle(
+   566	                              color: AppTheme.mediumGrey,
+   567	                              fontSize: 12,
+   568	                            ),
+   569	                            overflow: TextOverflow.ellipsis,
+   570	                          ),
+   571	                        ),
+   572	                        IconButton(
+   573	                          onPressed: () => _copyToClipboard(
+   574	                            _generateInvitationLink(_generatedInvitation!),
+   575	                          ),
+   576	                          icon: Icon(
+   577	                            Icons.copy,
+   578	                            color: AppTheme.primaryRose,
+   579	                            size: 20,
+   580	                          ),
+   581	                        ),
+   582	                      ],
+   583	                    ),
+   584	                  ),
+   585	                ] else ...[
+   586	                  Text(
+   587	                    'Link will appear here after generation',
+   588	                    style: TextStyle(color: AppTheme.mediumGrey),
+   589	                  ),
+   590	                ],
+   591	              ],
+   592	            ),
+   593	          ).animate().fadeIn(delay: 200.ms),
+   594	
+   595	          const SizedBox(height: 16),
+   596	
+   597	          Row(
+   598	            children: [
+   599	              Expanded(
+   600	                child: OutlinedButton.icon(
+   601	                  onPressed: _generateCodeOnly,
+   602	                  icon: const Icon(Icons.link),
+   603	                  label: const Text('Generate Link'),
+   604	                  style: OutlinedButton.styleFrom(
+   605	                    foregroundColor: AppTheme.primaryRose,
+   606	                    side: BorderSide(color: AppTheme.primaryRose),
+   607	                    padding: const EdgeInsets.symmetric(vertical: 16),
+   608	                    shape: RoundedRectangleBorder(
+   609	                      borderRadius: BorderRadius.circular(16),
+   610	                    ),
+   611	                  ),
+   612	                ),
+   613	              ),
+   614	              const SizedBox(width: 12),
+   615	              Expanded(
+   616	                child: ElevatedButton.icon(
+   617	                  onPressed: _generatedInvitation != null ? _shareLink : null,
+   618	                  icon: const Icon(Icons.share),
+   619	                  label: const Text('Share'),
+   620	                  style: ElevatedButton.styleFrom(
+   621	                    backgroundColor: _isSent
+   622	                        ? AppTheme.primaryRose.withOpacity(0.35)
+   623	                        : AppTheme.primaryRose,
+   624	                    foregroundColor: Colors.white,
+   625	                    padding: const EdgeInsets.symmetric(vertical: 16),
+   626	                    shape: RoundedRectangleBorder(
+   627	                      borderRadius: BorderRadius.circular(16),
+   628	                    ),
+   629	                  ),
+   630	                ),
+   631	              ),
+   632	            ],
+   633	          ),
+   634	              ],
+   635	            ),
+   636	          ),
+   637	        );
+   638	      },
+   639	    );
+   640	  }
+   641	
+   642	  Future<void> _openEmailInvite() async {
+   643	    if (_isExecutingInvite || _isSent || _isLoading) return;
+   644	    final email = _emailController.text.trim();
+   645	    final message = _messageController.text.trim();
+   646	
+   647	    if (_successMessage != null) {
+   648	      setState(() => _successMessage = null);
+   649	    }
+   650	
+   651	    if (!_formKey.currentState!.validate()) {
+   652	      return;
+   653	    }
+   654	
+   655	    setState(() {
+   656	      _isExecutingInvite = true;
+   657	      _isLoading = true;
+   658	    });
+   659	
+   660	    try {
+   661	      final result = await widget.partnerService.sendPartnerInvitation(
+   662	        inviteeEmail: email,
+   663	        personalMessage: message.isEmpty ? null : message,
+   664	      );
+   665	
+   666	      if (!mounted) return;
+   667	
+   668	      if (result == null) {
+   669	        _showErrorMessage("Failed to send invitation");
+   670	        return;
+   671	      }
+   672	
+   673	      setState(() {
+   674	        _successMessage = "Invitation sent successfully ❤️";
+   675	        _isSent = true;
+   676	      });
+   677	
+   678	      Future.delayed(const Duration(seconds: 2), () {
+   679	        if (mounted) {
+   680	          setState(() => _successMessage = null);
+   681	          Navigator.of(context).pop();
+   682	        }
+   683	      });
+   684	    } catch (e) {
+   685	      _showErrorMessage("Error sending invitation: $e");
+   686	    } finally {
+   687	      if (mounted) {
+   688	        setState(() {
+   689	          _isLoading = false;
+   690	          _isExecutingInvite = false;
+   691	        });
+   692	      } else {
+   693	        _isExecutingInvite = false;
+   694	      }
+   695	    }
+   696	  }
+   697	
+   698	  Future<void> _generateCodeOnly() async {
+   699	    if (_isLoading) return;
+   700	    setState(() {
+   701	      _isLoading = true;
+   702	      _successMessage = null;
+   703	    });
+   704	
+   705	    try {
+   706	      final invitation = await widget.partnerService.createPartnerInvitation();
+   707	
+   708	      if (!mounted) return;
+   709	
+   710	      setState(() {
+   711	        _generatedInvitation = invitation;
+   712	      });
+   713	    } catch (e) {
+   714	      _showErrorMessage("Error generating invitation: $e");
+   715	    } finally {
+   716	      if (mounted) setState(() => _isLoading = false);
+   717	      _isExecutingInvite = false;
+   718	    }
+   719	  }
+   720	
+   721	  String _generateInvitationLink(PartnerInvitation invitation) {
+   722	    return 'https://flow-ai-656b3.web.app/invite/${invitation.invitationCode}';
+   723	  }
+   724	
+   725	  void _copyToClipboard(String text) {
+   726	    Clipboard.setData(ClipboardData(text: text));
+   727	  }
+   728	
+   729	  void _shareLink() {
+   730	    if (_generatedInvitation != null) {
+   731	      final link = _generateInvitationLink(_generatedInvitation!);
+   732	      Share.share(link);
+   733	    }
+   734	  }
+   735	
+   736	  void _showErrorMessage(String message) {
+   737	    showDialog(
+   738	      context: context,
+   739	      builder: (_) => AlertDialog(
+   740	        title: const Text("Error"),
+   741	        content: Text(message),
+   742	        actions: [
+   743	          TextButton(
+   744	            onPressed: () => Navigator.of(context).pop(),
+   745	            child: const Text("OK"),
+   746	          ),
+   747	        ],
+   748	      ),
+   749	    );
+   750	  }
+   751	
+   752	  void _saveQRCode() {
+   753	    setState(() => _successMessage = "QR saved successfully");
+   754	    Future.delayed(const Duration(seconds: 2), () {
+   755	      if (mounted) {
+   756	        setState(() => _successMessage = null);
+   757	      }
+   758	    });
+   759	  }
+   760	}
