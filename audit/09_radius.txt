@@ -1,0 +1,13 @@
+  34 BorderRadius.circular(16),
+  28 BorderRadius.circular(12),
+   9 BorderRadius.circular(20),
+   8 BorderRadius.only(
+   3 BorderRadius.circular(8),
+   3 BorderRadius.circular(28),
+   3 BorderRadius.circular(24),
+   2 BorderRadius.circular(25),
+   1 BorderRadius: BorderRadius.circular(16),
+   1 BorderRadius.circular(60),
+   1 BorderRadius.circular(20)),
+   1 BorderRadius.circular(2),
+   1 BorderRadius.circular(14),

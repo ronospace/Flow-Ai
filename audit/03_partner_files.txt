@@ -1,0 +1,15 @@
+lib/core/services/partner_sharing_service.dart
+lib/features/partner/dialogs/invite_partner_dialog.dart
+lib/features/partner/dialogs/join_partner_dialog.dart
+lib/features/partner/models/partner_insight.dart
+lib/features/partner/models/partner_models.dart
+lib/features/partner/screens/partner_dashboard_screen.dart
+lib/features/partner/screens/partner_privacy_settings_screen.dart
+lib/features/partner/screens/qr_join_screen.dart
+lib/features/partner/services/local_partner_service.dart
+lib/features/partner/services/partner_service.dart
+lib/features/partner/widgets/partner_care_actions_widget.dart
+lib/features/partner/widgets/partner_communication_widget.dart
+lib/features/partner/widgets/partner_cycle_insight_widget.dart
+lib/features/partner/widgets/partner_insights_widget.dart
+lib/features/partner/widgets/partner_invitation_dialog.dart
