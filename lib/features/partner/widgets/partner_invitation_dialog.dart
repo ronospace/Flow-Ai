@@ -282,14 +282,14 @@ final dialogHeight = kb > 0
                                     prefixIcon: Icon(Icons.email_outlined, size: 20, color: AppTheme.primaryRose),
                   prefixIconConstraints: const BoxConstraints(minWidth: 48, minHeight: 48),
                   filled: true,
-                  fillColor: Colors.white.withOpacity(0.92),
+                  fillColor: Colors.white.withOpacity(0.18),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide(color: Colors.white.withOpacity(0.22)),
+                    borderSide: BorderSide(color: Colors.white.withOpacity(0.30)),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide(color: Colors.white.withOpacity(0.22)),
+                    borderSide: BorderSide(color: Colors.white.withOpacity(0.30)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
@@ -335,14 +335,14 @@ final dialogHeight = kb > 0
                                     prefixIcon: Icon(Icons.message_outlined, size: 20, color: AppTheme.primaryRose),
                   prefixIconConstraints: const BoxConstraints(minWidth: 48, minHeight: 48),
                   filled: true,
-                  fillColor: Colors.white.withOpacity(0.92),
+                  fillColor: Colors.white.withOpacity(0.18),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide(color: Colors.white.withOpacity(0.22)),
+                    borderSide: BorderSide(color: Colors.white.withOpacity(0.30)),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide(color: Colors.white.withOpacity(0.22)),
+                    borderSide: BorderSide(color: Colors.white.withOpacity(0.30)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
