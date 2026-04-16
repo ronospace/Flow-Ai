@@ -88,12 +88,20 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                   builder: (context, constraints) {
                     final kb = MediaQuery.of(context).viewInsets.bottom;
 final dialogHeight = kb > 0
-    ? (constraints.maxHeight * 0.78).clamp(0.0, 680.0).toDouble()
-    : (constraints.maxHeight * 0.78).clamp(0.0, 680.0).toDouble();
-                    return Center(
-                      child: ConstrainedBox(
+    ? (constraints.maxHeight - kb).clamp(320.0, 680.0).toDouble()
+    : (constraints.maxHeight * 0.78).clamp(320.0, 680.0).toDouble();
+                    return AnimatedPadding(
+                      duration: const Duration(milliseconds: 180),
+                      curve: Curves.easeOut,
+                      padding: EdgeInsets.only(
+                        top: kb > 0 ? 16 : 64,
+                        bottom: kb > 0 ? 0 : 40,
+                      ),
+                      child: Center(
+                        child: ConstrainedBox(
                         constraints: BoxConstraints(
                           maxWidth: 420,
+                          minHeight: kb > 0 ? dialogHeight : 0,
                           maxHeight: dialogHeight,
                         ),
                         child: Container(
@@ -141,7 +149,8 @@ final dialogHeight = kb > 0
                           ),
                         ),
                       ),
-                    );
+                    ),
+                  );
 
                   },
                 ),
