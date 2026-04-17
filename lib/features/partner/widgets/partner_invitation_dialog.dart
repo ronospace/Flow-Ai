@@ -77,31 +77,34 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
     return AnimatedBuilder(
       animation: _dialogController,
       builder: (context, child) {
+        final kb = MediaQuery.of(context).viewInsets.bottom;
+        final keyboardOpen = kb > 0;
+
         return Transform.scale(
           scale: _scaleAnimation.value,
           child: FadeTransition(
             opacity: _fadeAnimation,
             child: Dialog(
-              insetPadding: const EdgeInsets.fromLTRB(16, 64, 16, 40),
+              insetPadding: keyboardOpen
+                  ? const EdgeInsets.fromLTRB(16, 64, 16, 0)
+                  : const EdgeInsets.fromLTRB(16, 64, 16, 40),
               backgroundColor: Colors.transparent,
               child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    final kb = MediaQuery.of(context).viewInsets.bottom;
-final dialogHeight = kb > 0
-    ? (constraints.maxHeight - kb).clamp(320.0, 680.0).toDouble()
-    : (constraints.maxHeight * 0.78).clamp(320.0, 680.0).toDouble();
-                    return AnimatedPadding(
-                      duration: const Duration(milliseconds: 180),
-                      curve: Curves.easeOut,
-                      padding: EdgeInsets.only(
-                        top: kb > 0 ? 8 : 56,
-                        bottom: kb > 0 ? 0 : 48,
-                      ),
-                      child: Center(
-                        child: ConstrainedBox(
+                builder: (context, constraints) {
+                  final dialogHeight = keyboardOpen
+                      ? constraints.maxHeight.clamp(320.0, 680.0).toDouble()
+                      : (constraints.maxHeight * 0.78).clamp(320.0, 680.0).toDouble();
+
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      top: 56,
+                      bottom: keyboardOpen ? 0 : 48,
+                    ),
+                    child: Align(
+                      alignment: keyboardOpen ? Alignment.topCenter : Alignment.center,
+                      child: ConstrainedBox(
                         constraints: BoxConstraints(
                           maxWidth: 420,
-                          minHeight: kb > 0 ? dialogHeight : 0,
                           maxHeight: dialogHeight,
                         ),
                         child: Container(
@@ -151,9 +154,8 @@ final dialogHeight = kb > 0
                       ),
                     ),
                   );
-
-                  },
-                ),
+                },
+              ),
             ),
           ),
         );
@@ -257,16 +259,17 @@ final dialogHeight = kb > 0
   }
 
   Widget _buildEmailInviteTab(ThemeData theme, AppLocalizations localizations) {
-    return Transform.translate(
-      offset: Offset.zero,
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-      child: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
           physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          padding: const EdgeInsets.all(24),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight - 48),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (_successMessage != null) ...[
                 Container(
@@ -413,10 +416,11 @@ final dialogHeight = kb > 0
                 ),
               ),
             ],
+              ),
+            ),
           ),
-        ),
-      ),
-      ),
+        );
+      },
     ).animate().fadeIn(delay: 300.ms);
   }
 
