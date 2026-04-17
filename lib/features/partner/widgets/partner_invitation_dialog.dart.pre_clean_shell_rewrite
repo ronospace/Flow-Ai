@@ -27,8 +27,6 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
 
   final _emailController = TextEditingController();
   final _messageController = TextEditingController();
-  final _emailFocus = FocusNode();
-  final _messageFocus = FocusNode();
   final _formKey = GlobalKey<FormState>();
 
   bool _isLoading = false;
@@ -41,8 +39,6 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
   @override
   void initState() {
     super.initState();
-    _emailFocus.addListener(() => setState(() {}));
-    _messageFocus.addListener(() => setState(() {}));
 
     _tabController = TabController(length: 3, vsync: this);
     _dialogController = AnimationController(
@@ -69,8 +65,6 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
     _dialogController.dispose();
     _emailController.dispose();
     _messageController.dispose();
-    _emailFocus.dispose();
-    _messageFocus.dispose();
     super.dispose();
   }
 
@@ -83,34 +77,35 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
     return AnimatedBuilder(
       animation: _dialogController,
       builder: (context, child) {
-        final kb = MediaQuery.of(context).viewInsets.bottom;
-        final keyboardOpen = kb > 0;
-
         return Transform.scale(
           scale: _scaleAnimation.value,
           child: FadeTransition(
             opacity: _fadeAnimation,
             child: Dialog(
-              insetPadding: keyboardOpen
+              insetPadding: MediaQuery.of(context).viewInsets.bottom > 0
                   ? const EdgeInsets.fromLTRB(16, 64, 16, 0)
                   : const EdgeInsets.fromLTRB(16, 64, 16, 40),
               backgroundColor: Colors.transparent,
               child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final dialogHeight = keyboardOpen
-                      ? constraints.maxHeight.clamp(320.0, 680.0).toDouble()
-                      : (constraints.maxHeight * 0.78).clamp(320.0, 680.0).toDouble();
-
-                  return Padding(
-                    padding: EdgeInsets.only(
-                      top: 56,
-                      bottom: keyboardOpen ? 0 : 48,
-                    ),
-                    child: Align(
-                      alignment: keyboardOpen ? Alignment.topCenter : Alignment.center,
-                      child: ConstrainedBox(
+                  builder: (context, constraints) {
+                    final kb = MediaQuery.of(context).viewInsets.bottom;
+final dialogHeight = kb > 0
+    ? (constraints.maxHeight - (kb * 0.00)).clamp(320.0, 680.0).toDouble()
+    : (constraints.maxHeight * 0.78).clamp(320.0, 680.0).toDouble();
+                    return AnimatedPadding(
+                      duration: const Duration(milliseconds: 180),
+                      curve: Curves.easeOut,
+                      padding: EdgeInsets.only(
+                        top: 56,
+                        bottom: kb > 0 ? 0 : 48,
+                      ),
+                      child: Transform.translate(
+                          offset: Offset(0, kb > 0 ? kb * 0.42 : 0),
+                          child: Align(alignment: kb > 0 ? Alignment.topCenter : Alignment.center,
+                        child: ConstrainedBox(
                         constraints: BoxConstraints(
                           maxWidth: 420,
+                          minHeight: kb > 0 ? dialogHeight : 0,
                           maxHeight: dialogHeight,
                         ),
                         child: Container(
@@ -158,10 +153,12 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                           ),
                         ),
                       ),
+                        ),
                     ),
                   );
-                },
-              ),
+
+                  },
+                ),
             ),
           ),
         );
@@ -267,14 +264,10 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
   Widget _buildEmailInviteTab(ThemeData theme, AppLocalizations localizations) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        return GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            padding: EdgeInsets.fromLTRB(24, 24, 24, MediaQuery.of(context).viewInsets.bottom > 0 ? 4 : 24),
-            child: ConstrainedBox(
+        return SingleChildScrollView(
+          physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          padding: const EdgeInsets.all(24),
+          child: ConstrainedBox(
             constraints: BoxConstraints(minHeight: constraints.maxHeight - 48),
             child: Form(
               key: _formKey,
@@ -309,10 +302,8 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
 
               const SizedBox(height: 12),
 
-              if (!_messageFocus.hasFocus)
               TextFormField(
                 controller: _emailController,
-                focusNode: _emailFocus,
                 decoration: InputDecoration(
                                                       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                   hintText: 'Partner\'s Email',
@@ -361,12 +352,10 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                   return null;
                 },
               ),
-              SizedBox(height: MediaQuery.of(context).viewInsets.bottom > 0 ? 8 : 24),
+              const SizedBox(height: 24),
 
-              if (!_emailFocus.hasFocus)
               TextFormField(
                 controller: _messageController,
-                focusNode: _messageFocus,
                 maxLines: 3,
                 decoration: InputDecoration(
                                                       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
@@ -395,8 +384,8 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
 
               const SizedBox(height: 26),
 
-              if (!_emailFocus.hasFocus && !_messageFocus.hasFocus)
-              SizedBox(
+              if (MediaQuery.of(context).viewInsets.bottom == 0)
+                SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
                   onPressed: (_isLoading || _isSent) ? null : _openEmailInvite,
@@ -433,7 +422,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
               ),
             ),
           ),
-        ));
+        );
       },
     ).animate().fadeIn(delay: 300.ms);
   }
