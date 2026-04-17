@@ -27,6 +27,8 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
 
   final _emailController = TextEditingController();
   final _messageController = TextEditingController();
+  final _emailFocus = FocusNode();
+  final _messageFocus = FocusNode();
   final _formKey = GlobalKey<FormState>();
 
   bool _isLoading = false;
@@ -39,6 +41,8 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
   @override
   void initState() {
     super.initState();
+    _emailFocus.addListener(() => setState(() {}));
+    _messageFocus.addListener(() => setState(() {}));
 
     _tabController = TabController(length: 3, vsync: this);
     _dialogController = AnimationController(
@@ -65,6 +69,8 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
     _dialogController.dispose();
     _emailController.dispose();
     _messageController.dispose();
+    _emailFocus.dispose();
+    _messageFocus.dispose();
     super.dispose();
   }
 
@@ -263,7 +269,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
       builder: (context, constraints) {
         return SingleChildScrollView(
           physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-          padding: const EdgeInsets.all(24),
+          padding: EdgeInsets.fromLTRB(24, 24, 24, MediaQuery.of(context).viewInsets.bottom > 0 ? 4 : 24),
           child: ConstrainedBox(
             constraints: BoxConstraints(minHeight: constraints.maxHeight - 48),
             child: Form(
@@ -299,8 +305,10 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
 
               const SizedBox(height: 12),
 
+              if (!_messageFocus.hasFocus)
               TextFormField(
                 controller: _emailController,
+                focusNode: _emailFocus,
                 decoration: InputDecoration(
                                                       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                   hintText: 'Partner\'s Email',
@@ -349,10 +357,12 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                   return null;
                 },
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: MediaQuery.of(context).viewInsets.bottom > 0 ? 8 : 24),
 
+              if (!_emailFocus.hasFocus)
               TextFormField(
                 controller: _messageController,
+                focusNode: _messageFocus,
                 maxLines: 3,
                 decoration: InputDecoration(
                                                       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
@@ -381,7 +391,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
 
               const SizedBox(height: 26),
 
-              if (MediaQuery.of(context).viewInsets.bottom == 0)
+              if (!_emailFocus.hasFocus && !_messageFocus.hasFocus)
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
