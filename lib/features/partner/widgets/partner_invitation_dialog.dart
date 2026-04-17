@@ -267,10 +267,14 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
   Widget _buildEmailInviteTab(ThemeData theme, AppLocalizations localizations) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        return SingleChildScrollView(
-          physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-          padding: EdgeInsets.fromLTRB(24, 24, 24, MediaQuery.of(context).viewInsets.bottom > 0 ? 4 : 24),
-          child: ConstrainedBox(
+        return GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            padding: EdgeInsets.fromLTRB(24, 24, 24, MediaQuery.of(context).viewInsets.bottom > 0 ? 4 : 24),
+            child: ConstrainedBox(
             constraints: BoxConstraints(minHeight: constraints.maxHeight - 48),
             child: Form(
               key: _formKey,
@@ -429,7 +433,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
               ),
             ),
           ),
-        );
+        ));
       },
     ).animate().fadeIn(delay: 300.ms);
   }
