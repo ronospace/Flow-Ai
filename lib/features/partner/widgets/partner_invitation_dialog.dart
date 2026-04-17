@@ -396,7 +396,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
               const SizedBox(height: 26),
 
               if (!_emailFocus.hasFocus && !_messageFocus.hasFocus)
-                SizedBox(
+              SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
                   onPressed: (_isLoading || _isSent) ? null : _openEmailInvite,
