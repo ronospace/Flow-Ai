@@ -268,7 +268,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
     return LayoutBuilder(
       builder: (context, constraints) {
         return GestureDetector(
-          behavior: HitTestBehavior.translucent,
+          behavior: HitTestBehavior.deferToChild,
           onTap: () => FocusScope.of(context).unfocus(),
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
@@ -363,8 +363,12 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
               ),
               SizedBox(height: MediaQuery.of(context).viewInsets.bottom > 0 ? 8 : 24),
 
-              if (!_emailFocus.hasFocus)
-              TextFormField(
+              Visibility(
+                visible: !_emailFocus.hasFocus,
+                maintainState: true,
+                maintainAnimation: true,
+                maintainSize: false,
+                child: TextFormField(
                 controller: _messageController,
                 focusNode: _messageFocus,
                 maxLines: 3,
@@ -391,6 +395,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                     ),
                   ),
                 ),
+              ),
               ),
 
               const SizedBox(height: 26),
