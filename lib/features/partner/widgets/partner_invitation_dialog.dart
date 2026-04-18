@@ -1,9 +1,8 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:share_plus/share_plus.dart';
+import 'partner_invitation_actions.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../generated/app_localizations.dart';
 import '../services/partner_service.dart';
@@ -626,7 +625,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                           children: [
                             if (_generatedInvitation != null)
                               QrImageView(
-                                data: _generateInvitationLink(
+                                data: PartnerInvitationActions.generateInvitationLink(
                                   _generatedInvitation!,
                                 ),
                                 version: QrVersions.auto,
@@ -785,7 +784,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                                   children: [
                                     Expanded(
                                       child: Text(
-                                        _generateInvitationLink(
+                                        PartnerInvitationActions.generateInvitationLink(
                                           _generatedInvitation!,
                                         ),
                                         style: TextStyle(
@@ -796,8 +795,8 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                                       ),
                                     ),
                                     IconButton(
-                                      onPressed: () => _copyToClipboard(
-                                        _generateInvitationLink(
+                                      onPressed: () => PartnerInvitationActions.copyToClipboard(
+                                        PartnerInvitationActions.generateInvitationLink(
                                           _generatedInvitation!,
                                         ),
                                       ),
@@ -956,18 +955,9 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
     }
   }
 
-  String _generateInvitationLink(PartnerInvitation invitation) {
-    return 'https://flow-ai-656b3.web.app/invite/${invitation.invitationCode}';
-  }
-
-  void _copyToClipboard(String text) {
-    Clipboard.setData(ClipboardData(text: text));
-  }
-
   void _shareLink() {
     if (_generatedInvitation != null) {
-      final link = _generateInvitationLink(_generatedInvitation!);
-      Share.share(link);
+      PartnerInvitationActions.shareLink(_generatedInvitation!);
     }
   }
 
