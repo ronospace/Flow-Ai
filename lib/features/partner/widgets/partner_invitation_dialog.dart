@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'partner_invitation_actions.dart';
 import 'partner_invitation_qr_tab.dart';
+import 'partner_invitation_link_tab.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../generated/app_localizations.dart';
 import '../services/partner_service.dart';
@@ -198,9 +199,11 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                                             onGenerateCode: _generateCodeOnly,
                                             onSaveQr: _saveQRCode,
                                           ),
-                                          _buildLinkShareTab(
-                                            theme,
-                                            localizations,
+                                          PartnerInvitationLinkTab(
+                                            generatedInvitation: _generatedInvitation,
+                                            isSent: _isSent,
+                                            onGenerateLink: _generateCodeOnly,
+                                            onShareLink: _shareLink,
                                           ),
                                         ],
                                       ),
@@ -593,154 +596,6 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
         );
       },
     ).animate().fadeIn(delay: 300.ms);
-  }
-
-  Widget _buildLinkShareTab(ThemeData theme, AppLocalizations localizations) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return SingleChildScrollView(
-          physics: const BouncingScrollPhysics(
-            parent: AlwaysScrollableScrollPhysics(),
-          ),
-          padding: const EdgeInsets.all(24),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: constraints.maxHeight - 48),
-            child: Transform.translate(
-              offset: Offset.zero,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const SizedBox(height: 12),
-                  Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.08),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.12),
-                            width: 1.2,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.06),
-                              blurRadius: 12,
-                              offset: Offset(0, 10),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          children: [
-                            Icon(
-                              Icons.link,
-                              size: 48,
-                              color: AppTheme.primaryRose,
-                            ),
-                            const SizedBox(height: 16),
-
-                            if (_generatedInvitation != null) ...[
-                              Container(
-                                padding: const EdgeInsets.all(16),
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withValues(alpha: 0.12),
-                                  borderRadius: BorderRadius.circular(16),
-                                  border: Border.all(
-                                    color: Colors.white.withValues(alpha: 0.45),
-                                    width: 1.2,
-                                  ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        PartnerInvitationActions.generateInvitationLink(
-                                          _generatedInvitation!,
-                                        ),
-                                        style: TextStyle(
-                                          color: AppTheme.mediumGrey,
-                                          fontSize: 12,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    IconButton(
-                                      onPressed: () => PartnerInvitationActions.copyToClipboard(
-                                        PartnerInvitationActions.generateInvitationLink(
-                                          _generatedInvitation!,
-                                        ),
-                                      ),
-                                      icon: Icon(
-                                        Icons.copy,
-                                        color: AppTheme.primaryRose,
-                                        size: 20,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ] else ...[
-                              Text(
-                                'Link will appear here after generation',
-                                style: TextStyle(color: AppTheme.mediumGrey),
-                              ),
-                            ],
-                          ],
-                        ),
-                      )
-                      .animate()
-                      .fadeIn(delay: 120.ms)
-                      .scale(
-                        begin: const Offset(0.96, 0.96),
-                        curve: Curves.easeOutBack,
-                      ),
-
-                  const SizedBox(height: 16),
-
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton.icon(
-                          onPressed: _generateCodeOnly,
-                          icon: const Icon(Icons.link),
-                          label: const Text('Generate Link'),
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: AppTheme.primaryRose,
-                            side: BorderSide(color: AppTheme.primaryRose),
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: ElevatedButton.icon(
-                          onPressed: _generatedInvitation != null
-                              ? _shareLink
-                              : null,
-                          icon: const Icon(Icons.share),
-                          label: const Text('Share'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: _isSent
-                                ? AppTheme.primaryRose.withOpacity(0.35)
-                                : AppTheme.primaryRose,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
   }
 
   Future<void> _openEmailInvite() async {
