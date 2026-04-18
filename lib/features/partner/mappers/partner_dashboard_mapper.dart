@@ -1,4 +1,5 @@
 import '../models/partner_models.dart' as model;
+import '../models/partner_insight.dart' as insight_model;
 
 class PartnerDashboardMapper {
   static model.Partnership toPartnership(dynamic ps) {
@@ -51,6 +52,23 @@ class PartnerDashboardMapper {
       createdAt: pm.sentAt,
       readAt: pm.isRead ? pm.sentAt : null,
       metadata: pm.metadata,
+    );
+  }
+
+  static insight_model.PartnerInsight toPartnerInsight(dynamic pi) {
+    return insight_model.PartnerInsight(
+      id: pi.id,
+      partnershipId: pi.partnershipId,
+      type: insight_model.PartnerInsightType.values.firstWhere(
+        (e) => e.name == pi.type.name,
+        orElse: () => insight_model.PartnerInsightType.supportSuggestion,
+      ),
+      title: pi.title,
+      content: pi.content,
+      actionSuggestions: pi.actionSuggestions,
+      generatedAt: pi.generatedAt,
+      expiresAt: pi.expiresAt,
+      isRead: pi.isRead,
     );
   }
 }

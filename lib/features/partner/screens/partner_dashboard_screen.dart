@@ -15,7 +15,6 @@ import '../models/partner_models.dart'
     show
         CareAction,
         CareActionType;
-import '../models/partner_insight.dart';
 import '../widgets/partner_cycle_insight_widget.dart';
 import '../widgets/partner_communication_widget.dart';
 import '../widgets/partner_care_actions_widget.dart';
@@ -456,23 +455,9 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     AppLocalizations localizations,
     PartnerService partnerService,
   ) {
-    // Convert PartnerInsight from service to PartnerInsight from models
-    final insights = partnerService.insights.map((pi) {
-      return PartnerInsight(
-        id: pi.id,
-        partnershipId: pi.partnershipId,
-        type: PartnerInsightType.values.firstWhere(
-          (e) => e.name == pi.type.name,
-          orElse: () => PartnerInsightType.supportSuggestion,
-        ),
-        title: pi.title,
-        content: pi.content,
-        actionSuggestions: pi.actionSuggestions,
-        generatedAt: pi.generatedAt,
-        expiresAt: pi.expiresAt,
-        isRead: pi.isRead,
-      );
-    }).toList();
+    final insights = partnerService.insights
+        .map(PartnerDashboardMapper.toPartnerInsight)
+        .toList();
 
     return PartnerInsightsWidget(
       insights: insights,
