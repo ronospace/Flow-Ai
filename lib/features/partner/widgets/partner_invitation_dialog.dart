@@ -357,6 +357,8 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                       TextFormField(
                         controller: _emailController,
                         focusNode: _emailFocus,
+                        showCursor: true,
+                        cursorColor: const Color(0xFF8EF7C6),
                         decoration: InputDecoration(
                           contentPadding: const EdgeInsets.symmetric(
                             horizontal: 16,
@@ -425,6 +427,8 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                       TextFormField(
                         controller: _messageController,
                         focusNode: _messageFocus,
+                        showCursor: true,
+                        cursorColor: const Color(0xFF8EF7C6),
                         maxLines: 3,
                         textInputAction: TextInputAction.send,
                         onFieldSubmitted: (_) => _openEmailInvite(),
@@ -482,6 +486,8 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                       TextFormField(
                         controller: _emailController,
                         focusNode: _emailFocus,
+                        showCursor: true,
+                        cursorColor: const Color(0xFF8EF7C6),
                         decoration: InputDecoration(
                           contentPadding: const EdgeInsets.symmetric(
                             horizontal: 16,
@@ -550,6 +556,8 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                       TextFormField(
                         controller: _messageController,
                         focusNode: _messageFocus,
+                        showCursor: true,
+                        cursorColor: const Color(0xFF8EF7C6),
                         maxLines: 3,
                         textInputAction: TextInputAction.send,
                         onFieldSubmitted: (_) => _openEmailInvite(),
