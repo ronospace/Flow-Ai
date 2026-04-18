@@ -23,7 +23,7 @@ import '../../ai_predictions/screens/ai_predictions_screen.dart';
 import 'dart:math' as math;
 import 'dart:ui';
 import '../../../core/widgets/pressable_avatar.dart';
-import '../widgets/premium_feature_preview_card.dart';
+import '../widgets/premium_features_preview.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -475,7 +475,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
                               // Premium Features Coming Soon
                               _LazyWidget(
-                                builder: () => _buildPremiumFeaturesPreview(),
+                                builder: () => PremiumFeaturesPreview(
+                                  onAICoach: () => _navigateToAICoach(),
+                                  onPartnerSharing: () => _navigateToPartnerSharing(),
+                                  onHealthcarePortal: () => _navigateToHealthcarePortal(),
+                                  onAdvancedAnalytics: () => _navigateToAdvancedAnalytics(),
+                                ),
                               ),
 
                               // Banner Ad - load last to not impact UI
@@ -2050,145 +2055,6 @@ class HealthScorePainter extends CustomPainter {
 }
 
 extension _PremiumFeaturesMethods on _HomeScreenState {
-  Widget _buildPremiumFeaturesPreview() {
-    final theme = Theme.of(context);
-
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            theme.cardColor,
-            AppTheme.primaryPurple.withValues(alpha: 0.02),
-          ],
-        ),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: AppTheme.primaryPurple.withValues(alpha: 0.1),
-          width: 2,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 24,
-            offset: const Offset(0, 12),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [AppTheme.primaryPurple, AppTheme.primaryRose],
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Icon(
-                  Icons.stars_rounded,
-                  color: Colors.white,
-                  size: 20,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Premium Advanced Features',
-                      style: theme.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppTheme.darkGrey,
-                      ),
-                    ),
-                    Text(
-                      'Health Intelligence Features',
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: AppTheme.mediumGrey,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [AppTheme.primaryPurple, AppTheme.primaryRose],
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Text(
-                  'PREVIEW',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
-
-          // Premium feature cards grid
-          GridView.count(
-            crossAxisCount: 2,
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            childAspectRatio: 0.85,
-            children: [
-              PremiumFeaturePreviewCard(
-                title: 'AI Health Coach',
-                description: 'Personal health guidance powered by advanced AI',
-                icon: Icons.psychology_rounded,
-                color: AppTheme.primaryPurple,
-                estimatedDate: 'Q2 2026',
-                onTap: () => _navigateToAICoach(),
-              ),
-
-              PremiumFeaturePreviewCard(
-                title: 'Partner Sharing',
-                description: 'Securely share cycle data with trusted partners',
-                icon: Icons.favorite_rounded,
-                color: AppTheme.primaryRose,
-                estimatedDate: 'NEW',
-                onTap: () => _navigateToPartnerSharing(),
-              ),
-
-              PremiumFeaturePreviewCard(
-                title: 'Healthcare Portal',
-                description: 'Export data for medical appointments',
-                icon: Icons.medical_services_rounded,
-                color: AppTheme.secondaryBlue,
-                estimatedDate: 'NEW',
-                onTap: () => _navigateToHealthcarePortal(),
-              ),
-
-              PremiumFeaturePreviewCard(
-                title: 'Advanced Analytics',
-                description: 'Deep insights with predictive modeling',
-                icon: Icons.analytics_rounded,
-                color: AppTheme.accentMint,
-                estimatedDate: 'NEW',
-                onTap: () => _navigateToAdvancedAnalytics(),
-              ),
-            ],
-          ),
-        ],
-      ),
-    ).animate().fadeIn(delay: 1200.ms).slideY(begin: 0.3, end: 0);
-  }
-
 
 }
 
