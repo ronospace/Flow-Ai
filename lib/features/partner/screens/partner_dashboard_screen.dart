@@ -27,6 +27,7 @@ import '../widgets/partner_care_actions_widget.dart';
 import '../widgets/partner_insights_widget.dart';
 import '../widgets/partner_invitation_dialog.dart';
 import '../widgets/partner_connection_stat.dart';
+import '../widgets/partner_avatar_badge.dart';
 import '../dialogs/join_partner_dialog.dart';
 
 class PartnerDashboardScreen extends StatefulWidget {
@@ -252,7 +253,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
               children: [
                 Row(
                   children: [
-                    _buildPartnerAvatar(partnership.primaryUserName, true),
+                    PartnerAvatarBadge(name: partnership.primaryUserName, isPrimary: true),
                     const SizedBox(width: 16),
 
                     Expanded(
@@ -318,7 +319,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                     ),
 
                     const SizedBox(width: 16),
-                    _buildPartnerAvatar(partnership.partnerUserName, false),
+                    PartnerAvatarBadge(name: partnership.partnerUserName, isPrimary: false),
                   ],
                 ),
 
@@ -352,40 +353,6 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
           ),
         );
       },
-    );
-  }
-
-
-  Widget _buildPartnerAvatar(String name, bool isPrimary) {
-    return Container(
-      width: 60,
-      height: 60,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: isPrimary
-              ? [AppTheme.primaryRose, AppTheme.primaryPurple]
-              : [AppTheme.secondaryBlue, AppTheme.accentMint],
-        ),
-        shape: BoxShape.circle,
-        border: Border.all(color: Theme.of(context).cardColor, width: 3),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Center(
-        child: Text(
-          name.isNotEmpty ? name[0].toUpperCase() : '?',
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
     );
   }
 
