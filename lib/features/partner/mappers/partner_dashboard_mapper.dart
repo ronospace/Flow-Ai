@@ -24,4 +24,33 @@ class PartnerDashboardMapper {
       lastActiveAt: ps.lastActiveAt,
     );
   }
+
+  static model.PartnerMessage toPartnerMessage(dynamic pm) {
+    model.PartnerMessageType type;
+    switch (pm.type.name) {
+      case 'text':
+        type = model.PartnerMessageType.text;
+        break;
+      case 'careAction':
+        type = model.PartnerMessageType.careAction;
+        break;
+      case 'insight':
+        type = model.PartnerMessageType.supportive;
+        break;
+      default:
+        type = model.PartnerMessageType.text;
+    }
+
+    return model.PartnerMessage(
+      id: pm.id,
+      partnershipId: pm.partnershipId,
+      senderId: pm.senderId,
+      receiverId: pm.receiverId,
+      content: pm.content,
+      type: type,
+      createdAt: pm.sentAt,
+      readAt: pm.isRead ? pm.sentAt : null,
+      metadata: pm.metadata,
+    );
+  }
 }

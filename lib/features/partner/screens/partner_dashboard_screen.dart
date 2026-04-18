@@ -13,8 +13,6 @@ import '../services/partner_service.dart'
     show PartnerMessageType;
 import '../models/partner_models.dart'
     show
-        PartnerMessage,
-        PartnerMessageType,
         CareAction,
         CareActionType;
 import '../models/partner_insight.dart';
@@ -440,36 +438,9 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     AppLocalizations localizations,
     PartnerService partnerService,
   ) {
-    // Convert PartnerMessage from service to PartnerMessage from models
-    final messages = partnerService.messages.map((pm) {
-      // Map PartnerMessageType from service to PartnerMessageType from models
-      PartnerMessageType type;
-      switch (pm.type.name) {
-        case 'text':
-          type = PartnerMessageType.text;
-          break;
-        case 'careAction':
-          type = PartnerMessageType.careAction;
-          break;
-        case 'insight':
-          type = PartnerMessageType.supportive;
-          break;
-        default:
-          type = PartnerMessageType.text;
-      }
-
-      return PartnerMessage(
-        id: pm.id,
-        partnershipId: pm.partnershipId,
-        senderId: pm.senderId,
-        receiverId: pm.receiverId,
-        content: pm.content,
-        type: type,
-        createdAt: pm.sentAt, // Service uses sentAt
-        readAt: pm.isRead ? pm.sentAt : null, // Service uses isRead boolean
-        metadata: pm.metadata,
-      );
-    }).toList();
+    final messages = partnerService.messages
+        .map(PartnerDashboardMapper.toPartnerMessage)
+        .toList();
 
     return PartnerCommunicationWidget(
       messages: messages.take(3).toList(),
