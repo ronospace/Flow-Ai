@@ -76,7 +76,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      Colors.white,
+                      Colors.white.withValues(alpha: 0.72),
                       const Color(0xFFFF6B8A).withValues(alpha: 0.02),
                     ],
                   ),
@@ -88,8 +88,8 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                   boxShadow: [
                     BoxShadow(
                       color: const Color(0xFFFF6B8A).withValues(alpha: 0.2),
-                      blurRadius: 30,
-                      offset: const Offset(0, 15),
+                      blurRadius: 14,
+                      offset: const Offset(0, 8),
                     ),
                   ],
                 ),
