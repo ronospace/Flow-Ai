@@ -21,7 +21,7 @@ class PartnerInvitationDialog extends StatefulWidget {
 }
 
 class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   late TabController _tabController;
   late AnimationController _dialogController;
   late Animation<double> _scaleAnimation;
@@ -44,6 +44,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     void syncInviteInputMode() {
       if (!mounted) return;
       final nextMode = _emailFocus.hasFocus
@@ -79,10 +80,25 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
     _dialogController.forward();
   }
 
+
+  @override
+  void didChangeMetrics() {
+    super.didChangeMetrics();
+    final bottom = WidgetsBinding.instance.platformDispatcher.views.first.viewInsets.bottom;
+    if (bottom == 0 &&
+        mounted &&
+        !_emailFocus.hasFocus &&
+        !_messageFocus.hasFocus &&
+        _inviteInputMode != _InviteInputMode.idle) {
+      setState(() => _inviteInputMode = _InviteInputMode.idle);
+    }
+  }
+
   @override
   void dispose() {
     _tabController.dispose();
     _dialogController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     _emailController.dispose();
     _messageController.dispose();
     _emailFocus.dispose();
@@ -322,7 +338,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
             controller: _emailController,
             focusNode: _emailFocus,
             showCursor: true,
-            cursorColor: const Color(0xFF5FBFEF),
+            cursorColor: const Color(0xFFFF6FAE),
             textInputAction: TextInputAction.done,
             onTap: () {
               if (_inviteInputMode != _InviteInputMode.email) {
@@ -397,15 +413,21 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
             controller: _messageController,
             focusNode: _messageFocus,
             showCursor: true,
-            cursorColor: const Color(0xFF5FBFEF),
+            cursorColor: const Color(0xFFFF6FAE),
             maxLines: 3,
-            textInputAction: TextInputAction.send,
+            textInputAction: _emailController.text.trim().isEmpty ? TextInputAction.done : TextInputAction.send,
             onTap: () {
               if (_inviteInputMode != _InviteInputMode.message) {
                 setState(() => _inviteInputMode = _InviteInputMode.message);
               }
             },
-            onFieldSubmitted: (_) => _openEmailInvite(),
+            onFieldSubmitted: (_) {
+              if (_emailController.text.trim().isEmpty) {
+                _messageFocus.unfocus();
+              } else {
+                _openEmailInvite();
+              }
+            },
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 16,
