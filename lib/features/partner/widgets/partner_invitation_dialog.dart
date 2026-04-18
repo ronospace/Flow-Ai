@@ -8,6 +8,8 @@ import '../../../core/theme/app_theme.dart';
 import '../../../generated/app_localizations.dart';
 import '../services/partner_service.dart';
 
+enum _InviteInputMode { idle, email, message }
+
 class PartnerInvitationDialog extends StatefulWidget {
   final PartnerService partnerService;
 
@@ -37,12 +39,26 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
   bool _isSent = false;
 
   PartnerInvitation? _generatedInvitation;
+  _InviteInputMode _inviteInputMode = _InviteInputMode.idle;
 
   @override
   void initState() {
     super.initState();
-    _emailFocus.addListener(() => setState(() {}));
-    _messageFocus.addListener(() => setState(() {}));
+    void syncInviteInputMode() {
+      if (!mounted) return;
+      final nextMode = _emailFocus.hasFocus
+          ? _InviteInputMode.email
+          : _messageFocus.hasFocus
+          ? _InviteInputMode.message
+          : _InviteInputMode.idle;
+
+      if (_inviteInputMode != nextMode) {
+        setState(() => _inviteInputMode = nextMode);
+      }
+    }
+
+    _emailFocus.addListener(syncInviteInputMode);
+    _messageFocus.addListener(syncInviteInputMode);
 
     _tabController = TabController(length: 3, vsync: this);
     _dialogController = AnimationController(
@@ -300,6 +316,145 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
   Widget _buildEmailInviteTab(ThemeData theme, AppLocalizations localizations) {
     return LayoutBuilder(
       builder: (context, constraints) {
+        Widget emailField() {
+          return TextFormField(
+            key: const ValueKey('invite_email_field'),
+            controller: _emailController,
+            focusNode: _emailFocus,
+            showCursor: true,
+            cursorColor: const Color(0xFF5FBFEF),
+            textInputAction: TextInputAction.done,
+            onTap: () {
+              if (_inviteInputMode != _InviteInputMode.email) {
+                setState(() => _inviteInputMode = _InviteInputMode.email);
+              }
+            },
+            onEditingComplete: () => _emailFocus.unfocus(),
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 20,
+              ),
+              hintText: 'Partner\'s Email',
+              prefixIcon: Icon(
+                Icons.email_outlined,
+                size: 20,
+                color: AppTheme.primaryRose,
+              ),
+              prefixIconConstraints: const BoxConstraints(
+                minWidth: 48,
+                minHeight: 48,
+              ),
+              filled: true,
+              fillColor: AppTheme.primaryRose.withValues(alpha: 0.16),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: BorderSide(
+                  color: Colors.white.withValues(alpha: 0.42),
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: BorderSide(
+                  color: Colors.white.withValues(alpha: 0.42),
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: BorderSide(color: AppTheme.primaryRose, width: 2),
+              ),
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter an email address';
+              }
+              if (!RegExp(
+                r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+              ).hasMatch(value)) {
+                return 'Please enter a valid email address';
+              }
+
+              final lower = value.toLowerCase();
+
+              if (lower.endsWith('@gmail.co') ||
+                  lower.endsWith('@gamil.com') ||
+                  lower.endsWith('@gnail.com') ||
+                  lower.endsWith('@gmail.con') ||
+                  lower.endsWith('@yahoo.co') ||
+                  lower.endsWith('@outlook.co') ||
+                  lower.endsWith('@icloud.co')) {
+                return 'Did you mean .com?';
+              }
+
+              return null;
+            },
+          );
+        }
+
+        Widget messageField() {
+          return TextFormField(
+            key: const ValueKey('invite_message_field'),
+            controller: _messageController,
+            focusNode: _messageFocus,
+            showCursor: true,
+            cursorColor: const Color(0xFF5FBFEF),
+            maxLines: 3,
+            textInputAction: TextInputAction.send,
+            onTap: () {
+              if (_inviteInputMode != _InviteInputMode.message) {
+                setState(() => _inviteInputMode = _InviteInputMode.message);
+              }
+            },
+            onFieldSubmitted: (_) => _openEmailInvite(),
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 20,
+              ),
+              hintText: 'Personal Message (Optional)',
+              prefixIcon: Icon(
+                Icons.message_outlined,
+                size: 20,
+                color: AppTheme.primaryRose,
+              ),
+              prefixIconConstraints: const BoxConstraints(
+                minWidth: 48,
+                minHeight: 48,
+              ),
+              suffixIcon: _inviteInputMode == _InviteInputMode.message
+                  ? IconButton(
+                      onPressed: (_isLoading || _isSent)
+                          ? null
+                          : _openEmailInvite,
+                      icon: Icon(
+                        Icons.send,
+                        size: 20,
+                        color: AppTheme.primaryRose,
+                      ),
+                    )
+                  : null,
+              filled: true,
+              fillColor: AppTheme.primaryPurple.withValues(alpha: 0.16),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: BorderSide(
+                  color: Colors.white.withValues(alpha: 0.42),
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: BorderSide(
+                  color: Colors.white.withValues(alpha: 0.42),
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: BorderSide(color: AppTheme.primaryRose, width: 2),
+              ),
+            ),
+          );
+        }
+
         return GestureDetector(
           behavior: HitTestBehavior.deferToChild,
           onTap: () => FocusScope.of(context).unfocus(),
@@ -353,254 +508,14 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
 
                     const SizedBox(height: 12),
 
-                    if (_emailFocus.hasFocus) ...[
-                      TextFormField(
-                        controller: _emailController,
-                        focusNode: _emailFocus,
-                        showCursor: true,
-                        cursorColor: const Color(0xFF5FBFEF),
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 20,
-                          ),
-                          hintText: 'Partner\'s Email',
-                          prefixIcon: Icon(
-                            Icons.email_outlined,
-                            size: 20,
-                            color: AppTheme.primaryRose,
-                          ),
-                          prefixIconConstraints: const BoxConstraints(
-                            minWidth: 48,
-                            minHeight: 48,
-                          ),
-                          filled: true,
-                          fillColor: AppTheme.primaryRose.withValues(
-                            alpha: 0.16,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide(
-                              color: Colors.white.withValues(alpha: 0.42),
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide(
-                              color: Colors.white.withValues(alpha: 0.42),
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide(
-                              color: AppTheme.primaryRose,
-                              width: 2,
-                            ),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter an email address';
-                          }
-                          if (!RegExp(
-                            r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                          ).hasMatch(value)) {
-                            return 'Please enter a valid email address';
-                          }
-
-                          final lower = value.toLowerCase();
-
-                          if (lower.endsWith('@gmail.co') ||
-                              lower.endsWith('@gamil.com') ||
-                              lower.endsWith('@gnail.com') ||
-                              lower.endsWith('@gmail.con') ||
-                              lower.endsWith('@yahoo.co') ||
-                              lower.endsWith('@outlook.co') ||
-                              lower.endsWith('@icloud.co')) {
-                            return 'Did you mean .com?';
-                          }
-
-                          return null;
-                        },
-                      ),
-                    ] else if (_messageFocus.hasFocus) ...[
-                      TextFormField(
-                        controller: _messageController,
-                        focusNode: _messageFocus,
-                        showCursor: true,
-                        cursorColor: const Color(0xFF5FBFEF),
-                        maxLines: 3,
-                        textInputAction: TextInputAction.send,
-                        onFieldSubmitted: (_) => _openEmailInvite(),
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 20,
-                          ),
-                          hintText: 'Personal Message (Optional)',
-                          prefixIcon: Icon(
-                            Icons.message_outlined,
-                            size: 20,
-                            color: AppTheme.primaryRose,
-                          ),
-                          prefixIconConstraints: const BoxConstraints(
-                            minWidth: 48,
-                            minHeight: 48,
-                          ),
-                          suffixIcon: IconButton(
-                            onPressed: (_isLoading || _isSent)
-                                ? null
-                                : _openEmailInvite,
-                            icon: Icon(
-                              Icons.send,
-                              size: 20,
-                              color: AppTheme.primaryRose,
-                            ),
-                          ),
-                          filled: true,
-                          fillColor: AppTheme.primaryPurple.withValues(
-                            alpha: 0.16,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide(
-                              color: Colors.white.withValues(alpha: 0.42),
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide(
-                              color: Colors.white.withValues(alpha: 0.42),
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide(
-                              color: AppTheme.primaryRose,
-                              width: 2,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ] else ...[
-                      TextFormField(
-                        controller: _emailController,
-                        focusNode: _emailFocus,
-                        showCursor: true,
-                        cursorColor: const Color(0xFF5FBFEF),
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 20,
-                          ),
-                          hintText: 'Partner\'s Email',
-                          prefixIcon: Icon(
-                            Icons.email_outlined,
-                            size: 20,
-                            color: AppTheme.primaryRose,
-                          ),
-                          prefixIconConstraints: const BoxConstraints(
-                            minWidth: 48,
-                            minHeight: 48,
-                          ),
-                          filled: true,
-                          fillColor: AppTheme.primaryRose.withValues(
-                            alpha: 0.16,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide(
-                              color: Colors.white.withValues(alpha: 0.42),
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide(
-                              color: Colors.white.withValues(alpha: 0.42),
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide(
-                              color: AppTheme.primaryRose,
-                              width: 2,
-                            ),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter an email address';
-                          }
-                          if (!RegExp(
-                            r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                          ).hasMatch(value)) {
-                            return 'Please enter a valid email address';
-                          }
-
-                          final lower = value.toLowerCase();
-
-                          if (lower.endsWith('@gmail.co') ||
-                              lower.endsWith('@gamil.com') ||
-                              lower.endsWith('@gnail.com') ||
-                              lower.endsWith('@gmail.con') ||
-                              lower.endsWith('@yahoo.co') ||
-                              lower.endsWith('@outlook.co') ||
-                              lower.endsWith('@icloud.co')) {
-                            return 'Did you mean .com?';
-                          }
-
-                          return null;
-                        },
-                      ),
+                    if (_inviteInputMode != _InviteInputMode.message)
+                      emailField(),
+                    if (_inviteInputMode == _InviteInputMode.idle)
                       const SizedBox(height: 24),
-                      TextFormField(
-                        controller: _messageController,
-                        focusNode: _messageFocus,
-                        showCursor: true,
-                        cursorColor: const Color(0xFF5FBFEF),
-                        maxLines: 3,
-                        textInputAction: TextInputAction.send,
-                        onFieldSubmitted: (_) => _openEmailInvite(),
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 20,
-                          ),
-                          hintText: 'Personal Message (Optional)',
-                          prefixIcon: Icon(
-                            Icons.message_outlined,
-                            size: 20,
-                            color: AppTheme.primaryRose,
-                          ),
-                          prefixIconConstraints: const BoxConstraints(
-                            minWidth: 48,
-                            minHeight: 48,
-                          ),
-                          filled: true,
-                          fillColor: AppTheme.primaryPurple.withValues(
-                            alpha: 0.16,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide(
-                              color: Colors.white.withValues(alpha: 0.42),
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide(
-                              color: Colors.white.withValues(alpha: 0.42),
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide(
-                              color: AppTheme.primaryRose,
-                              width: 2,
-                            ),
-                          ),
-                        ),
-                      ),
+                    if (_inviteInputMode != _InviteInputMode.email)
+                      messageField(),
+
+                    if (_inviteInputMode == _InviteInputMode.idle) ...[
                       const SizedBox(height: 26),
                       SizedBox(
                         width: double.infinity,
@@ -936,6 +851,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
 
   Future<void> _openEmailInvite() async {
     if (_isExecutingInvite || _isSent || _isLoading) return;
+    FocusScope.of(context).unfocus();
     final email = _emailController.text.trim();
     final message = _messageController.text.trim();
 
