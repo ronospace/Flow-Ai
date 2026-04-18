@@ -187,7 +187,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                 title: Text(
                   partnerService.hasPartner
                       ? 'Partner Connection'
-                      : 'Connect with Partner',
+                      : 'Connect with Partner 🫂',
                   style: theme.textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: theme.colorScheme.onSurface,
