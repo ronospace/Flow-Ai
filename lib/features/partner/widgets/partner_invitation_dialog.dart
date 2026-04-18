@@ -40,11 +40,13 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
 
   PartnerInvitation? _generatedInvitation;
   _InviteInputMode _inviteInputMode = _InviteInputMode.idle;
+  bool _wasKeyboardVisible = false;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _wasKeyboardVisible = WidgetsBinding.instance.platformDispatcher.views.first.viewInsets.bottom > 0;
     void syncInviteInputMode() {
       if (!mounted) return;
       final nextMode = _emailFocus.hasFocus
@@ -84,14 +86,17 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
   @override
   void didChangeMetrics() {
     super.didChangeMetrics();
-    final bottom = WidgetsBinding.instance.platformDispatcher.views.first.viewInsets.bottom;
-    if (bottom == 0 &&
+    final isKeyboardVisible =
+        WidgetsBinding.instance.platformDispatcher.views.first.viewInsets.bottom > 0;
+
+    if (_wasKeyboardVisible &&
+        !isKeyboardVisible &&
         mounted &&
-        !_emailFocus.hasFocus &&
-        !_messageFocus.hasFocus &&
         _inviteInputMode != _InviteInputMode.idle) {
       setState(() => _inviteInputMode = _InviteInputMode.idle);
     }
+
+    _wasKeyboardVisible = isKeyboardVisible;
   }
 
   @override
