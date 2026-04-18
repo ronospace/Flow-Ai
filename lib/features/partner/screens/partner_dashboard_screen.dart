@@ -26,6 +26,7 @@ import '../widgets/partner_communication_widget.dart';
 import '../widgets/partner_care_actions_widget.dart';
 import '../widgets/partner_insights_widget.dart';
 import '../widgets/partner_invitation_dialog.dart';
+import '../widgets/partner_connection_stat.dart';
 import '../dialogs/join_partner_dialog.dart';
 
 class PartnerDashboardScreen extends StatefulWidget {
@@ -326,23 +327,23 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _buildConnectionStat(
-                      'Days Connected',
-                      '${DateTime.now().difference(partnership.createdAt).inDays}',
-                      Icons.favorite,
-                      AppTheme.primaryRose,
+                    PartnerConnectionStat(
+                      label: 'Days Connected',
+                      value: '${DateTime.now().difference(partnership.createdAt).inDays}',
+                      icon: Icons.favorite,
+                      color: AppTheme.primaryRose,
                     ),
-                    _buildConnectionStat(
-                      'Messages',
-                      '${partnerService.messages.length}',
-                      Icons.chat,
-                      AppTheme.secondaryBlue,
+                    PartnerConnectionStat(
+                      label: 'Messages',
+                      value: '${partnerService.messages.length}',
+                      icon: Icons.chat,
+                      color: AppTheme.secondaryBlue,
                     ),
-                    _buildConnectionStat(
-                      'Care Actions',
-                      '${partnerService.careActions.length}',
-                      Icons.healing,
-                      AppTheme.accentMint,
+                    PartnerConnectionStat(
+                      label: 'Care Actions',
+                      value: '${partnerService.careActions.length}',
+                      icon: Icons.healing,
+                      color: AppTheme.accentMint,
                     ),
                   ],
                 ),
@@ -353,6 +354,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
       },
     );
   }
+
 
   Widget _buildPartnerAvatar(String name, bool isPrimary) {
     return Container(
@@ -384,36 +386,6 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildConnectionStat(
-    String label,
-    String value,
-    IconData icon,
-    Color color,
-  ) {
-    final theme = Theme.of(context);
-    return Column(
-      children: [
-        Icon(icon, color: color, size: 20),
-        const SizedBox(height: 4),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: color,
-          ),
-        ),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-          ),
-        ),
-      ],
     );
   }
 
