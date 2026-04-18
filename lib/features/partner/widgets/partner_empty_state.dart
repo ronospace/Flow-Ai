@@ -44,7 +44,7 @@ class PartnerEmptyState extends StatelessWidget {
             'Connect with Your Partner',
             style: theme.textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.bold,
-              color: theme.colorScheme.onSurface,
+              color: AppTheme.primaryRose,
             ),
           ).animate().fadeIn(delay: 200.ms),
           const SizedBox(height: 16),
