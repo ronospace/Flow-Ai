@@ -372,7 +372,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     showDialog(
       context: context,
       useRootNavigator: true,
-      barrierColor: Colors.black.withValues(alpha: 0.06),
+      barrierColor: Colors.transparent,
       builder: (context) =>
           PartnerInvitationDialog(partnerService: partnerService),
     );
@@ -385,6 +385,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     showDialog(
       context: context,
       useRootNavigator: true,
+      barrierColor: Colors.transparent,
       builder: (context) => JoinPartnerDialog(
         onJoinWithCode: (code) async {
           final partnership = await partnerService.acceptPartnerInvitation(

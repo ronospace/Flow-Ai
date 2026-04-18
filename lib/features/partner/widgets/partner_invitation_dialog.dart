@@ -1,4 +1,3 @@
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'partner_invitation_actions.dart';
@@ -157,31 +156,26 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.08),
+                            color: Colors.transparent,
                             borderRadius: BorderRadius.circular(28),
                             border: Border.all(
-                              color: Colors.white.withValues(alpha: 0.18),
+                              color: Colors.white.withValues(alpha: 0.10),
                               width: 1,
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.38),
-                                blurRadius: 28,
-                                spreadRadius: 8,
+                                color: Colors.transparent,
+                                blurRadius: 0,
+                                spreadRadius: 0,
                                 offset: const Offset(0, 10),
                               ),
                             ],
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(28),
-                            child: BackdropFilter(
-                              filter: ui.ImageFilter.blur(
-                                sigmaX: 12,
-                                sigmaY: 12,
-                              ),
-                              child: Container(
-                                color: Colors.white.withValues(alpha: 0.04),
-                                child: Column(
+                            child: Container(
+                              color: Colors.transparent,
+                              child: Column(
                                   children: [
                                     _buildHeader(theme, localizations),
                                     _buildTabBar(theme, localizations),
@@ -234,8 +228,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                           ),
                         ),
                       ),
-                    ),
-                  );
+                    );
                 },
               ),
             ),
@@ -272,7 +265,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
               ),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: Icon(Icons.favorite, color: Colors.white, size: 22),
+            child: Icon(Icons.favorite, color: Colors.white.withValues(alpha: 0.03), size: 22),
           ),
           const SizedBox(width: 16),
           Expanded(
