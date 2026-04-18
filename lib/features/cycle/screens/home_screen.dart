@@ -23,6 +23,7 @@ import '../../ai_predictions/screens/ai_predictions_screen.dart';
 import 'dart:math' as math;
 import 'dart:ui';
 import '../../../core/widgets/pressable_avatar.dart';
+import '../widgets/premium_feature_preview_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -2146,40 +2147,40 @@ extension _PremiumFeaturesMethods on _HomeScreenState {
             physics: const NeverScrollableScrollPhysics(),
             childAspectRatio: 0.85,
             children: [
-              _buildPremiumFeatureCard(
-                'AI Health Coach',
-                'Personal health guidance powered by advanced AI',
-                Icons.psychology_rounded,
-                AppTheme.primaryPurple,
-                'Q2 2026',
-                () => _navigateToAICoach(),
+              PremiumFeaturePreviewCard(
+                title: 'AI Health Coach',
+                description: 'Personal health guidance powered by advanced AI',
+                icon: Icons.psychology_rounded,
+                color: AppTheme.primaryPurple,
+                estimatedDate: 'Q2 2026',
+                onTap: () => _navigateToAICoach(),
               ),
 
-              _buildPremiumFeatureCard(
-                'Partner Sharing',
-                'Securely share cycle data with trusted partners',
-                Icons.favorite_rounded,
-                AppTheme.primaryRose,
-                'NEW',
-                () => _navigateToPartnerSharing(),
+              PremiumFeaturePreviewCard(
+                title: 'Partner Sharing',
+                description: 'Securely share cycle data with trusted partners',
+                icon: Icons.favorite_rounded,
+                color: AppTheme.primaryRose,
+                estimatedDate: 'NEW',
+                onTap: () => _navigateToPartnerSharing(),
               ),
 
-              _buildPremiumFeatureCard(
-                'Healthcare Portal',
-                'Export data for medical appointments',
-                Icons.medical_services_rounded,
-                AppTheme.secondaryBlue,
-                'NEW',
-                () => _navigateToHealthcarePortal(),
+              PremiumFeaturePreviewCard(
+                title: 'Healthcare Portal',
+                description: 'Export data for medical appointments',
+                icon: Icons.medical_services_rounded,
+                color: AppTheme.secondaryBlue,
+                estimatedDate: 'NEW',
+                onTap: () => _navigateToHealthcarePortal(),
               ),
 
-              _buildPremiumFeatureCard(
-                'Advanced Analytics',
-                'Deep insights with predictive modeling',
-                Icons.analytics_rounded,
-                AppTheme.accentMint,
-                'NEW',
-                () => _navigateToAdvancedAnalytics(),
+              PremiumFeaturePreviewCard(
+                title: 'Advanced Analytics',
+                description: 'Deep insights with predictive modeling',
+                icon: Icons.analytics_rounded,
+                color: AppTheme.accentMint,
+                estimatedDate: 'NEW',
+                onTap: () => _navigateToAdvancedAnalytics(),
               ),
             ],
           ),
@@ -2188,174 +2189,7 @@ extension _PremiumFeaturesMethods on _HomeScreenState {
     ).animate().fadeIn(delay: 1200.ms).slideY(begin: 0.3, end: 0);
   }
 
-  Widget _buildPremiumFeatureCard(
-    String title,
-    String description,
-    IconData icon,
-    Color color,
-    String estimatedDate,
-    VoidCallback onTap,
-  ) {
-    final theme = Theme.of(context);
 
-    return Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Colors.white, color.withValues(alpha: 0.02)],
-            ),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: color.withValues(alpha: 0.2), width: 1),
-          ),
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: () {
-                HapticFeedback.lightImpact();
-                onTap();
-              },
-              borderRadius: BorderRadius.circular(16),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            color: color.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Icon(icon, color: color, size: 18),
-                        ),
-                        const Spacer(),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 6,
-                            vertical: 2,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppTheme.warningOrange.withValues(
-                              alpha: 0.1,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            estimatedDate,
-                            style: TextStyle(
-                              color: AppTheme.warningOrange,
-                              fontSize: 8,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Flexible(
-                      child: Text(
-                        title,
-                        style: theme.textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppTheme.darkGrey,
-                          fontSize: 12,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Flexible(
-                      flex: 2,
-                      child: Text(
-                        description,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: AppTheme.mediumGrey,
-                          height: 1.2,
-                          fontSize: 10,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Icon(Icons.schedule_rounded, color: color, size: 12),
-                        const SizedBox(width: 4),
-                        Flexible(
-                          child: Text(
-                            estimatedDate == 'Q2 2026' ? 'Coming Soon' : 'Active',
-                            style: TextStyle(
-                              color: color,
-                              fontSize: 9,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        Icon(
-                          Icons.arrow_forward_ios,
-                          color: AppTheme.mediumGrey,
-                          size: 10,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        )
-        .animate()
-        .shimmer(duration: 4000.ms, color: color.withValues(alpha: 0.03))
-        .then(delay: 3000.ms);
-  }
-
-
-  // ignore: unused_element
-  void _handleNotifyMe(String featureName) {
-    // Safely close the dialog
-    if (Navigator.canPop(context)) {
-      Navigator.of(context).pop();
-    }
-
-    // Show confirmation snackbar
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Icon(
-              Icons.notifications_active,
-              color: Colors.white,
-              size: 20,
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                'You\'ll be notified when $featureName is ready!',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: AppTheme.primaryPurple,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        duration: const Duration(seconds: 3),
-      ),
-    );
-
-    // Here you could also save the notification preference to local storage
-    // or send it to your backend for future notifications
-  }
 }
 
 // Lazy loading widget to improve performance
