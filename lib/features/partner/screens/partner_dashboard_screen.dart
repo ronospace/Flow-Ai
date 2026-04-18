@@ -15,8 +15,7 @@ import '../widgets/partner_communication_widget.dart';
 import '../widgets/partner_care_actions_widget.dart';
 import '../widgets/partner_insights_widget.dart';
 import '../widgets/partner_invitation_dialog.dart';
-import '../widgets/partner_connection_stat.dart';
-import '../widgets/partner_avatar_badge.dart';
+import '../widgets/partner_dashboard_header.dart';
 import '../widgets/partner_quick_action_card.dart';
 import '../mappers/partner_dashboard_mapper.dart';
 import '../dialogs/join_partner_dialog.dart';
@@ -94,10 +93,13 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                 sliver: SliverList(
                   delegate: SliverChildListDelegate([
                     if (partnerService.hasPartner) ...[
-                      _buildPartnershipHeader(
-                        theme,
-                        localizations,
-                        partnerService,
+                      PartnerDashboardHeader(
+                        animation: _contentAnimation,
+                        primaryUserName: partnerService.currentPartnership!.primaryUserName,
+                        partnerUserName: partnerService.currentPartnership!.partnerUserName,
+                        createdAt: partnerService.currentPartnership!.createdAt,
+                        messageCount: partnerService.messages.length,
+                        careActionCount: partnerService.careActions.length,
                       ),
                       const SizedBox(height: 24),
 
@@ -207,143 +209,6 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
             ),
           ),
       ],
-    );
-  }
-
-  Widget _buildPartnershipHeader(
-    ThemeData theme,
-    AppLocalizations localizations,
-    PartnerService partnerService,
-  ) {
-    final partnership = partnerService.currentPartnership!;
-    // Service Partnership doesn't have status field, so assume active if partnership exists
-
-    return AnimatedBuilder(
-      animation: _contentAnimation,
-      builder: (context, child) {
-        return Transform.scale(
-          scale: 0.8 + (_contentAnimation.value * 0.2),
-          child: Container(
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  AppTheme.primaryRose.withValues(alpha: 0.1),
-                  AppTheme.primaryPurple.withValues(alpha: 0.1),
-                ],
-              ),
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(
-                color: AppTheme.primaryRose.withValues(alpha: 0.2),
-                width: 2,
-              ),
-            ),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    PartnerAvatarBadge(name: partnership.primaryUserName, isPrimary: true),
-                    const SizedBox(width: 16),
-
-                    Expanded(
-                      child: Column(
-                        children: [
-                          Container(
-                                width: 60,
-                                height: 3,
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      AppTheme.primaryRose,
-                                      AppTheme.primaryPurple,
-                                    ],
-                                  ),
-                                  borderRadius: BorderRadius.circular(2),
-                                ),
-                              )
-                              .animate(
-                                onPlay: (controller) => controller.repeat(),
-                              )
-                              .shimmer(duration: 2000.ms)
-                              .then(delay: 1000.ms),
-
-                          const SizedBox(height: 8),
-
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 6,
-                            ),
-                            decoration: BoxDecoration(
-                              color: AppTheme.warningOrange.withValues(
-                                alpha: 0.1,
-                              ),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Container(
-                                  width: 8,
-                                  height: 8,
-                                  decoration: BoxDecoration(
-                                    color: AppTheme.warningOrange,
-                                    shape: BoxShape.circle,
-                                  ),
-                                ),
-                                const SizedBox(width: 6),
-                                Text(
-                                  'Partner sync disabled',
-                                  style: TextStyle(
-                                    color: AppTheme.warningOrange,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    const SizedBox(width: 16),
-                    PartnerAvatarBadge(name: partnership.partnerUserName, isPrimary: false),
-                  ],
-                ),
-
-                const SizedBox(height: 20),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    PartnerConnectionStat(
-                      label: 'Days Connected',
-                      value: '${DateTime.now().difference(partnership.createdAt).inDays}',
-                      icon: Icons.favorite,
-                      color: AppTheme.primaryRose,
-                    ),
-                    PartnerConnectionStat(
-                      label: 'Messages',
-                      value: '${partnerService.messages.length}',
-                      icon: Icons.chat,
-                      color: AppTheme.secondaryBlue,
-                    ),
-                    PartnerConnectionStat(
-                      label: 'Care Actions',
-                      value: '${partnerService.careActions.length}',
-                      icon: Icons.healing,
-                      color: AppTheme.accentMint,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
     );
   }
 
