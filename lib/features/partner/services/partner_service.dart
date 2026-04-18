@@ -1,7 +1,7 @@
-import 'package:cloud_functions/cloud_functions.dart';
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'local_partner_service.dart';
+import 'partner_invite_actions.dart';
 import '../models/partner_service_models.dart';
 export '../models/partner_service_models.dart';
 
@@ -15,6 +15,7 @@ class PartnerService extends ChangeNotifier {
   }
 
   final LocalPartnerService _localService = LocalPartnerService();
+  late final PartnerInviteActions _inviteActions = PartnerInviteActions(_localService);
   final bool _firebaseAvailable = false;
 
   Partnership? _currentPartnership;
@@ -115,7 +116,7 @@ class PartnerService extends ChangeNotifier {
   Future<PartnerInvitation> createPartnerInvitation({
     String? personalMessage,
   }) async {
-    return _localService.createPartnerInvitation(
+    return _inviteActions.createInvitation(
       personalMessage: personalMessage,
     );
   }
@@ -128,31 +129,10 @@ class PartnerService extends ChangeNotifier {
   }) async {
     _setLoading(true);
     try {
-      // TEMP VALIDATION GUARD (pre-backend)
-      final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
-      if (!emailRegex.hasMatch(inviteeEmail)) {
-        throw Exception('Invalid email address');
-      }
-
-      final invitation = await _localService.createPartnerInvitation(
+      return await _inviteActions.sendInvitation(
+        inviteeEmail: inviteeEmail,
         personalMessage: personalMessage,
       );
-
-      final invitationCode = invitation.invitationCode;
-      final invitationLink = "https://flowai.app/invite/$invitationCode";
-
-      final callable = FirebaseFunctions.instance.httpsCallable("sendPartnerInvite");
-
-      await callable.call({
-        "email": inviteeEmail,
-        "personalMessage": personalMessage ?? "",
-        "invitationCode": invitationCode,
-        "invitationLink": invitationLink,
-      });
-
-      debugPrint("📨 Partner invitation email sent");
-
-      return invitation;
     } catch (e) {
       _setError('Failed to send invitation: $e');
       return null;
@@ -160,7 +140,6 @@ class PartnerService extends ChangeNotifier {
       _setLoading(false);
     }
   }
-
 
   /// Accept partner invitation
   Future<Partnership?> acceptPartnerInvitation(String invitationCode) async {
