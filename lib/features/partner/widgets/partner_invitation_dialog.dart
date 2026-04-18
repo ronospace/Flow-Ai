@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'partner_invitation_actions.dart';
 import 'partner_invitation_qr_tab.dart';
 import 'partner_invitation_link_tab.dart';
+import 'partner_invitation_email_tab.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../generated/app_localizations.dart';
 import '../services/partner_service.dart';
@@ -188,9 +189,27 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                                       child: TabBarView(
                                         controller: _tabController,
                                         children: [
-                                          _buildEmailInviteTab(
-                                            theme,
-                                            localizations,
+                                          PartnerInvitationEmailTab(
+                                            emailController: _emailController,
+                                            messageController: _messageController,
+                                            emailFocus: _emailFocus,
+                                            messageFocus: _messageFocus,
+                                            formKey: _formKey,
+                                            inviteInputMode: InviteInputMode.values[_inviteInputMode.index],
+                                            isLoading: _isLoading,
+                                            isSent: _isSent,
+                                            successMessage: _successMessage,
+                                            onSubmit: _openEmailInvite,
+                                            onEmailTap: () {
+                                              if (_inviteInputMode != _InviteInputMode.email) {
+                                                setState(() => _inviteInputMode = _InviteInputMode.email);
+                                              }
+                                            },
+                                            onMessageTap: () {
+                                              if (_inviteInputMode != _InviteInputMode.message) {
+                                                setState(() => _inviteInputMode = _InviteInputMode.message);
+                                              }
+                                            },
                                           ),
                                           PartnerInvitationQrTab(
                                             theme: theme,
@@ -340,262 +359,6 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
         .animate()
         .fadeIn(delay: 120.ms)
         .scale(begin: const Offset(0.96, 0.96), curve: Curves.easeOutBack);
-  }
-
-  Widget _buildEmailInviteTab(ThemeData theme, AppLocalizations localizations) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        Widget emailField() {
-          return TextFormField(
-            key: const ValueKey('invite_email_field'),
-            controller: _emailController,
-            focusNode: _emailFocus,
-            showCursor: true,
-            cursorColor: const Color(0xFFFF6FAE),
-            textInputAction: TextInputAction.done,
-            onTap: () {
-              if (_inviteInputMode != _InviteInputMode.email) {
-                setState(() => _inviteInputMode = _InviteInputMode.email);
-              }
-            },
-            onEditingComplete: () => _emailFocus.unfocus(),
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 20,
-              ),
-              hintText: 'Partner\'s Email',
-              prefixIcon: Icon(
-                Icons.email_outlined,
-                size: 20,
-                color: AppTheme.primaryRose,
-              ),
-              prefixIconConstraints: const BoxConstraints(
-                minWidth: 48,
-                minHeight: 48,
-              ),
-              filled: true,
-              fillColor: AppTheme.primaryRose.withValues(alpha: 0.16),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide(
-                  color: Colors.white.withValues(alpha: 0.42),
-                ),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide(
-                  color: Colors.white.withValues(alpha: 0.42),
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide(color: AppTheme.primaryRose, width: 2),
-              ),
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter an email address';
-              }
-              if (!RegExp(
-                r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-              ).hasMatch(value)) {
-                return 'Please enter a valid email address';
-              }
-
-              final lower = value.toLowerCase();
-
-              if (lower.endsWith('@gmail.co') ||
-                  lower.endsWith('@gamil.com') ||
-                  lower.endsWith('@gnail.com') ||
-                  lower.endsWith('@gmail.con') ||
-                  lower.endsWith('@yahoo.co') ||
-                  lower.endsWith('@outlook.co') ||
-                  lower.endsWith('@icloud.co')) {
-                return 'Did you mean .com?';
-              }
-
-              return null;
-            },
-          );
-        }
-
-        Widget messageField() {
-          return TextFormField(
-            key: const ValueKey('invite_message_field'),
-            controller: _messageController,
-            focusNode: _messageFocus,
-            showCursor: true,
-            cursorColor: const Color(0xFFFF6FAE),
-            maxLines: 3,
-            textInputAction: _emailController.text.trim().isEmpty ? TextInputAction.done : TextInputAction.send,
-            onTap: () {
-              if (_inviteInputMode != _InviteInputMode.message) {
-                setState(() => _inviteInputMode = _InviteInputMode.message);
-              }
-            },
-            onFieldSubmitted: (_) {
-              if (_emailController.text.trim().isEmpty) {
-                _messageFocus.unfocus();
-              } else {
-                _openEmailInvite();
-              }
-            },
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 20,
-              ),
-              hintText: 'Personal Message (Optional)',
-              prefixIcon: Icon(
-                Icons.message_outlined,
-                size: 20,
-                color: AppTheme.primaryRose,
-              ),
-              prefixIconConstraints: const BoxConstraints(
-                minWidth: 48,
-                minHeight: 48,
-              ),
-              suffixIcon: _inviteInputMode == _InviteInputMode.message
-                  ? IconButton(
-                      onPressed: (_isLoading || _isSent)
-                          ? null
-                          : _openEmailInvite,
-                      icon: Icon(
-                        Icons.send,
-                        size: 20,
-                        color: AppTheme.primaryRose,
-                      ),
-                    )
-                  : null,
-              filled: true,
-              fillColor: AppTheme.primaryPurple.withValues(alpha: 0.16),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide(
-                  color: Colors.white.withValues(alpha: 0.42),
-                ),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide(
-                  color: Colors.white.withValues(alpha: 0.42),
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide(color: AppTheme.primaryRose, width: 2),
-              ),
-            ),
-          );
-        }
-
-        return GestureDetector(
-          behavior: HitTestBehavior.deferToChild,
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(
-              parent: AlwaysScrollableScrollPhysics(),
-            ),
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            padding: EdgeInsets.fromLTRB(
-              24,
-              24,
-              24,
-              MediaQuery.of(context).viewInsets.bottom > 0 ? 4 : 24,
-            ),
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: constraints.maxHeight - 48,
-              ),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (_successMessage != null) ...[
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 16),
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.06),
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            BoxShadow(color: Colors.black12, blurRadius: 10),
-                          ],
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.favorite, color: Colors.pink),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Text(
-                                _successMessage!,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ).animate().fadeIn().slideY(begin: -0.3),
-                    ],
-
-                    const SizedBox(height: 12),
-
-                    if (_inviteInputMode != _InviteInputMode.message)
-                      emailField(),
-                    if (_inviteInputMode == _InviteInputMode.idle)
-                      const SizedBox(height: 24),
-                    if (_inviteInputMode != _InviteInputMode.email)
-                      messageField(),
-
-                    if (_inviteInputMode == _InviteInputMode.idle) ...[
-                      const SizedBox(height: 26),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton.icon(
-                          onPressed: (_isLoading || _isSent)
-                              ? null
-                              : _openEmailInvite,
-                          icon: _isLoading
-                              ? SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      Colors.white,
-                                    ),
-                                  ),
-                                )
-                              : Icon(_isSent ? Icons.check : Icons.send),
-                          label: Text(
-                            _isLoading
-                                ? 'Sending...'
-                                : (_isSent ? 'Sent ✓' : 'Send Invitation'),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: _isSent
-                                ? AppTheme.primaryRose.withOpacity(0.35)
-                                : AppTheme.primaryRose,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    ).animate().fadeIn(delay: 300.ms);
   }
 
   Future<void> _openEmailInvite() async {
