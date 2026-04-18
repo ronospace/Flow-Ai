@@ -75,7 +75,6 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
   }
 
   @override
-
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localizations = AppLocalizations.of(context);
@@ -99,7 +98,9 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                 builder: (context, constraints) {
                   final dialogHeight = keyboardOpen
                       ? constraints.maxHeight.clamp(320.0, 680.0).toDouble()
-                      : (constraints.maxHeight * 0.78).clamp(320.0, 680.0).toDouble();
+                      : (constraints.maxHeight * 0.78)
+                            .clamp(320.0, 680.0)
+                            .toDouble();
 
                   return Padding(
                     padding: EdgeInsets.only(
@@ -107,7 +108,9 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                       bottom: keyboardOpen ? 0 : 48,
                     ),
                     child: Align(
-                      alignment: keyboardOpen ? Alignment.topCenter : Alignment.center,
+                      alignment: keyboardOpen
+                          ? Alignment.topCenter
+                          : Alignment.center,
                       child: ConstrainedBox(
                         constraints: BoxConstraints(
                           maxWidth: 420,
@@ -134,7 +137,10 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(28),
                             child: BackdropFilter(
-                              filter: ui.ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+                              filter: ui.ImageFilter.blur(
+                                sigmaX: 12,
+                                sigmaY: 12,
+                              ),
                               child: Container(
                                 color: Colors.white.withValues(alpha: 0.04),
                                 child: Column(
@@ -145,9 +151,15 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                                       child: TabBarView(
                                         controller: _tabController,
                                         children: [
-                                          _buildEmailInviteTab(theme, localizations),
+                                          _buildEmailInviteTab(
+                                            theme,
+                                            localizations,
+                                          ),
                                           _buildQRCodeTab(theme, localizations),
-                                          _buildLinkShareTab(theme, localizations),
+                                          _buildLinkShareTab(
+                                            theme,
+                                            localizations,
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -230,38 +242,59 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
 
   Widget _buildTabBar(ThemeData theme, AppLocalizations localizations) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(20, 12, 20, 16),
-      decoration: BoxDecoration(
-        color: AppTheme.lightGrey.withValues(alpha: 0.3),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: SizedBox(height: 64,
-      child: TabBar(
-        controller: _tabController,
-        indicator: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+          margin: const EdgeInsets.fromLTRB(20, 12, 20, 16),
+          decoration: BoxDecoration(
+            color: AppTheme.lightGrey.withValues(alpha: 0.3),
+            borderRadius: BorderRadius.circular(16),
           ),
-          borderRadius: BorderRadius.circular(14),
-        ),
-        indicatorSize: TabBarIndicatorSize.tab,
-        splashBorderRadius: BorderRadius.circular(16),
-        dividerColor: Colors.transparent,
-        labelColor: Colors.white,
-        unselectedLabelColor: AppTheme.mediumGrey,
-        labelStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-        unselectedLabelStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-        labelPadding: EdgeInsets.zero,
-        tabAlignment: TabAlignment.fill,
-        tabs: const [
-          Tab(icon: Icon(Icons.email, size: 22), height: 64, text: 'Email'),
-          Tab(icon: Icon(Icons.qr_code, size: 22), height: 64, text: 'QR Code'),
-          Tab(icon: Icon(Icons.share, size: 22), height: 64, text: 'Share Link'),
-        ],
-      ),
-    
-      ),
-    ).animate().fadeIn(delay: 120.ms).scale(begin: const Offset(0.96,0.96), curve: Curves.easeOutBack);
+          child: SizedBox(
+            height: 64,
+            child: TabBar(
+              controller: _tabController,
+              indicator: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+                ),
+                borderRadius: BorderRadius.circular(14),
+              ),
+              indicatorSize: TabBarIndicatorSize.tab,
+              splashBorderRadius: BorderRadius.circular(16),
+              dividerColor: Colors.transparent,
+              labelColor: Colors.white,
+              unselectedLabelColor: AppTheme.mediumGrey,
+              labelStyle: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+              unselectedLabelStyle: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+              labelPadding: EdgeInsets.zero,
+              tabAlignment: TabAlignment.fill,
+              tabs: const [
+                Tab(
+                  icon: Icon(Icons.email, size: 22),
+                  height: 64,
+                  text: 'Email',
+                ),
+                Tab(
+                  icon: Icon(Icons.qr_code, size: 22),
+                  height: 64,
+                  text: 'QR Code',
+                ),
+                Tab(
+                  icon: Icon(Icons.share, size: 22),
+                  height: 64,
+                  text: 'Share Link',
+                ),
+              ],
+            ),
+          ),
+        )
+        .animate()
+        .fadeIn(delay: 120.ms)
+        .scale(begin: const Offset(0.96, 0.96), curve: Curves.easeOutBack);
   }
 
   Widget _buildEmailInviteTab(ThemeData theme, AppLocalizations localizations) {
@@ -271,174 +304,243 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
           behavior: HitTestBehavior.deferToChild,
           onTap: () => FocusScope.of(context).unfocus(),
           child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics(),
+            ),
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            padding: EdgeInsets.fromLTRB(24, 24, 24, MediaQuery.of(context).viewInsets.bottom > 0 ? 4 : 24),
+            padding: EdgeInsets.fromLTRB(
+              24,
+              24,
+              24,
+              MediaQuery.of(context).viewInsets.bottom > 0 ? 4 : 24,
+            ),
             child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: constraints.maxHeight - 48),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (_successMessage != null) ...[
-                Container(
-                  margin: const EdgeInsets.only(bottom: 16),
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.06),
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(color: Colors.black12, blurRadius: 10),
-                    ],
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.favorite, color: Colors.pink),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Text(
-                          _successMessage!,
-                          style: const TextStyle(fontWeight: FontWeight.w600),
+              constraints: BoxConstraints(
+                minHeight: constraints.maxHeight - 48,
+              ),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (_successMessage != null) ...[
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 16),
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.06),
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(color: Colors.black12, blurRadius: 10),
+                          ],
                         ),
-                      ),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.favorite, color: Colors.pink),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                _successMessage!,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ).animate().fadeIn().slideY(begin: -0.3),
                     ],
-                  ),
-                ).animate().fadeIn().slideY(begin: -0.3),
-              ],
 
-              const SizedBox(height: 12),
+                    const SizedBox(height: 12),
 
-              if (!_messageFocus.hasFocus)
-              TextFormField(
-                controller: _emailController,
-                focusNode: _emailFocus,
-                decoration: InputDecoration(
-                                                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                  hintText: 'Partner\'s Email',
-                                    prefixIcon: Icon(Icons.email_outlined, size: 20, color: AppTheme.primaryRose),
-                  prefixIconConstraints: const BoxConstraints(minWidth: 48, minHeight: 48),
-                  filled: true,
-                  fillColor: AppTheme.primaryRose.withValues(alpha: 0.16),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.42)),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.42)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide(
-                      color: AppTheme.primaryRose,
-                      width: 2,
-                    ),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter an email address';
-                  }
-                  if (!RegExp(
-                    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                  ).hasMatch(value)) {
-                    return 'Please enter a valid email address';
-                  }
-
-                  final lower = value.toLowerCase();
-
-                  if (lower.endsWith('@gmail.co') ||
-                      lower.endsWith('@gamil.com') ||
-                      lower.endsWith('@gnail.com') ||
-                      lower.endsWith('@gmail.con') ||
-                      lower.endsWith('@yahoo.co') ||
-                      lower.endsWith('@outlook.co') ||
-                      lower.endsWith('@icloud.co')) {
-                    return 'Did you mean .com?';
-                  }
-
-                  return null;
-                },
-              ),
-              SizedBox(height: MediaQuery.of(context).viewInsets.bottom > 0 ? 8 : 24),
-
-              Visibility(
-                visible: !_emailFocus.hasFocus,
-                maintainState: true,
-                maintainAnimation: true,
-                maintainSize: false,
-                child: TextFormField(
-                controller: _messageController,
-                focusNode: _messageFocus,
-                maxLines: 3,
-                decoration: InputDecoration(
-                                                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                  hintText: 'Personal Message (Optional)',
-                                    prefixIcon: Icon(Icons.message_outlined, size: 20, color: AppTheme.primaryRose),
-                  prefixIconConstraints: const BoxConstraints(minWidth: 48, minHeight: 48),
-                  filled: true,
-                  fillColor: AppTheme.primaryPurple.withValues(alpha: 0.16),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.42)),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.42)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide(
-                      color: AppTheme.primaryRose,
-                      width: 2,
-                    ),
-                  ),
-                ),
-              ),
-              ),
-
-              const SizedBox(height: 26),
-
-              if (!_emailFocus.hasFocus && !_messageFocus.hasFocus)
-              SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton.icon(
-                  onPressed: (_isLoading || _isSent) ? null : _openEmailInvite,
-                  icon: _isLoading
-                      ? SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.white,
+                    AnimatedSize(
+                      duration: const Duration(milliseconds: 160),
+                      child: SizedBox(
+                        height: _messageFocus.hasFocus ? 0 : null,
+                        child: TextFormField(
+                          controller: _emailController,
+                          focusNode: _emailFocus,
+                          decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 20,
+                            ),
+                            hintText: 'Partner\'s Email',
+                            prefixIcon: Icon(
+                              Icons.email_outlined,
+                              size: 20,
+                              color: AppTheme.primaryRose,
+                            ),
+                            prefixIconConstraints: const BoxConstraints(
+                              minWidth: 48,
+                              minHeight: 48,
+                            ),
+                            filled: true,
+                            fillColor: AppTheme.primaryRose.withValues(
+                              alpha: 0.16,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide(
+                                color: Colors.white.withValues(alpha: 0.42),
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide(
+                                color: Colors.white.withValues(alpha: 0.42),
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide(
+                                color: AppTheme.primaryRose,
+                                width: 2,
+                              ),
                             ),
                           ),
-                        )
-                      : Icon(_isSent ? Icons.check : Icons.send),
-                  label: Text(
-                    _isLoading
-                        ? 'Sending...'
-                        : (_isSent ? 'Sent ✓' : 'Send Invitation'),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _isSent
-                        ? AppTheme.primaryRose.withOpacity(0.35)
-                        : AppTheme.primaryRose,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter an email address';
+                            }
+                            if (!RegExp(
+                              r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                            ).hasMatch(value)) {
+                              return 'Please enter a valid email address';
+                            }
+
+                            final lower = value.toLowerCase();
+
+                            if (lower.endsWith('@gmail.co') ||
+                                lower.endsWith('@gamil.com') ||
+                                lower.endsWith('@gnail.com') ||
+                                lower.endsWith('@gmail.con') ||
+                                lower.endsWith('@yahoo.co') ||
+                                lower.endsWith('@outlook.co') ||
+                                lower.endsWith('@icloud.co')) {
+                              return 'Did you mean .com?';
+                            }
+
+                            return null;
+                          },
+                        ),
+                      ),
                     ),
-                  ),
+                    SizedBox(
+                      height: MediaQuery.of(context).viewInsets.bottom > 0
+                          ? 8
+                          : 24,
+                    ),
+
+                    AnimatedSize(
+                      duration: const Duration(milliseconds: 160),
+                      child: SizedBox(
+                        height: _emailFocus.hasFocus ? 0 : null,
+                        child: TextFormField(
+                          controller: _messageController,
+                          focusNode: _messageFocus,
+                          maxLines: 3,
+                          textInputAction: TextInputAction.send,
+                          onFieldSubmitted: (_) => _openEmailInvite(),
+                          decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 20,
+                            ),
+                            hintText: 'Personal Message (Optional)',
+                            prefixIcon: Icon(
+                              Icons.message_outlined,
+                              size: 20,
+                              color: AppTheme.primaryRose,
+                            ),
+                            prefixIconConstraints: const BoxConstraints(
+                              minWidth: 48,
+                              minHeight: 48,
+                            ),
+                            suffixIcon: _messageFocus.hasFocus
+                                ? IconButton(
+                                    onPressed: (_isLoading || _isSent)
+                                        ? null
+                                        : _openEmailInvite,
+                                    icon: Icon(
+                                      Icons.send,
+                                      size: 20,
+                                      color: AppTheme.primaryRose,
+                                    ),
+                                  )
+                                : null,
+                            filled: true,
+                            fillColor: AppTheme.primaryPurple.withValues(
+                              alpha: 0.16,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide(
+                                color: Colors.white.withValues(alpha: 0.42),
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide(
+                                color: Colors.white.withValues(alpha: 0.42),
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide(
+                                color: AppTheme.primaryRose,
+                                width: 2,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 26),
+
+                    if (!_emailFocus.hasFocus && !_messageFocus.hasFocus)
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          onPressed: (_isLoading || _isSent)
+                              ? null
+                              : _openEmailInvite,
+                          icon: _isLoading
+                              ? SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white,
+                                    ),
+                                  ),
+                                )
+                              : Icon(_isSent ? Icons.check : Icons.send),
+                          label: Text(
+                            _isLoading
+                                ? 'Sending...'
+                                : (_isSent ? 'Sent ✓' : 'Send Invitation'),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: _isSent
+                                ? AppTheme.primaryRose.withOpacity(0.35)
+                                : AppTheme.primaryRose,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
-              ),
-            ],
               ),
             ),
           ),
-        ));
+        );
       },
     ).animate().fadeIn(delay: 300.ms);
   }
@@ -447,7 +549,9 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
     return LayoutBuilder(
       builder: (context, constraints) {
         return SingleChildScrollView(
-          physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics(),
+          ),
           padding: const EdgeInsets.all(24),
           child: ConstrainedBox(
             constraints: BoxConstraints(minHeight: constraints.maxHeight - 48),
@@ -458,66 +562,78 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                 children: [
                   const SizedBox(height: 12),
                   Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppTheme.primaryRose.withValues(alpha: 0.28),
-                          blurRadius: 26,
-                          spreadRadius: 0,
-                          offset: const Offset(0, 10),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        if (_generatedInvitation != null)
-                          QrImageView(
-                            data: _generateInvitationLink(_generatedInvitation!),
-                            version: QrVersions.auto,
-                            size: 176,
-                            foregroundColor: AppTheme.darkGrey,
-                          )
-                        else
-                          Container(
-                            width: 176,
-                            height: 176,
-                            decoration: BoxDecoration(
-                              color: AppTheme.lightGrey.withValues(alpha: 0.3),
-                              borderRadius: BorderRadius.circular(16),
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppTheme.primaryRose.withValues(
+                                alpha: 0.28,
+                              ),
+                              blurRadius: 26,
+                              spreadRadius: 0,
+                              offset: const Offset(0, 10),
                             ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.qr_code,
-                                  size: 52,
-                                  color: AppTheme.mediumGrey,
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            if (_generatedInvitation != null)
+                              QrImageView(
+                                data: _generateInvitationLink(
+                                  _generatedInvitation!,
                                 ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  'Generate QR Code',
-                                  style: TextStyle(
-                                    color: AppTheme.mediumGrey,
-                                    fontWeight: FontWeight.w500,
+                                version: QrVersions.auto,
+                                size: 176,
+                                foregroundColor: AppTheme.darkGrey,
+                              )
+                            else
+                              Container(
+                                width: 176,
+                                height: 176,
+                                decoration: BoxDecoration(
+                                  color: AppTheme.lightGrey.withValues(
+                                    alpha: 0.3,
                                   ),
+                                  borderRadius: BorderRadius.circular(16),
                                 ),
-                              ],
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Icons.qr_code,
+                                      size: 52,
+                                      color: AppTheme.mediumGrey,
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      'Generate QR Code',
+                                      style: TextStyle(
+                                        color: AppTheme.mediumGrey,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Scan to connect',
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: AppTheme.mediumGrey,
+                              ),
                             ),
-                          ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Scan to connect',
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: AppTheme.mediumGrey,
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ).animate().scale(begin: const Offset(0.92,0.92), curve: Curves.easeOutBack).fadeIn(delay: 120.ms),
+                      )
+                      .animate()
+                      .scale(
+                        begin: const Offset(0.92, 0.92),
+                        curve: Curves.easeOutBack,
+                      )
+                      .fadeIn(delay: 120.ms),
                   const SizedBox(height: 8),
                   Row(
                     children: [
@@ -539,7 +655,9 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                       const SizedBox(width: 12),
                       Expanded(
                         child: ElevatedButton.icon(
-                          onPressed: _generatedInvitation != null ? _saveQRCode : null,
+                          onPressed: _generatedInvitation != null
+                              ? _saveQRCode
+                              : null,
                           icon: const Icon(Icons.save),
                           label: const Text('Save QR'),
                           style: ElevatedButton.styleFrom(
@@ -569,7 +687,9 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
     return LayoutBuilder(
       builder: (context, constraints) {
         return SingleChildScrollView(
-          physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics(),
+          ),
           padding: const EdgeInsets.all(24),
           child: ConstrainedBox(
             constraints: BoxConstraints(minHeight: constraints.maxHeight - 48),
@@ -577,116 +697,132 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
               offset: Offset.zero,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.08),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: Colors.white.withValues(alpha: 0.12),
-                width: 1.2,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.06),
-                  blurRadius: 12,
-                  offset: Offset(0, 10),
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                Icon(Icons.link, size: 48, color: AppTheme.primaryRose),
-                const SizedBox(height: 16),
-
-                if (_generatedInvitation != null) ...[
+                children: [
+                  const SizedBox(height: 12),
                   Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.45),
-                        width: 1.2,
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            _generateInvitationLink(_generatedInvitation!),
-                            style: TextStyle(
-                              color: AppTheme.mediumGrey,
-                              fontSize: 12,
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.12),
+                            width: 1.2,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.06),
+                              blurRadius: 12,
+                              offset: Offset(0, 10),
                             ),
-                            overflow: TextOverflow.ellipsis,
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.link,
+                              size: 48,
+                              color: AppTheme.primaryRose,
+                            ),
+                            const SizedBox(height: 16),
+
+                            if (_generatedInvitation != null) ...[
+                              Container(
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withValues(alpha: 0.12),
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(
+                                    color: Colors.white.withValues(alpha: 0.45),
+                                    width: 1.2,
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        _generateInvitationLink(
+                                          _generatedInvitation!,
+                                        ),
+                                        style: TextStyle(
+                                          color: AppTheme.mediumGrey,
+                                          fontSize: 12,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () => _copyToClipboard(
+                                        _generateInvitationLink(
+                                          _generatedInvitation!,
+                                        ),
+                                      ),
+                                      icon: Icon(
+                                        Icons.copy,
+                                        color: AppTheme.primaryRose,
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ] else ...[
+                              Text(
+                                'Link will appear here after generation',
+                                style: TextStyle(color: AppTheme.mediumGrey),
+                              ),
+                            ],
+                          ],
+                        ),
+                      )
+                      .animate()
+                      .fadeIn(delay: 120.ms)
+                      .scale(
+                        begin: const Offset(0.96, 0.96),
+                        curve: Curves.easeOutBack,
+                      ),
+
+                  const SizedBox(height: 16),
+
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          onPressed: _generateCodeOnly,
+                          icon: const Icon(Icons.link),
+                          label: const Text('Generate Link'),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: AppTheme.primaryRose,
+                            side: BorderSide(color: AppTheme.primaryRose),
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
                           ),
                         ),
-                        IconButton(
-                          onPressed: () => _copyToClipboard(
-                            _generateInvitationLink(_generatedInvitation!),
-                          ),
-                          icon: Icon(
-                            Icons.copy,
-                            color: AppTheme.primaryRose,
-                            size: 20,
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: _generatedInvitation != null
+                              ? _shareLink
+                              : null,
+                          icon: const Icon(Icons.share),
+                          label: const Text('Share'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: _isSent
+                                ? AppTheme.primaryRose.withOpacity(0.35)
+                                : AppTheme.primaryRose,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                ] else ...[
-                  Text(
-                    'Link will appear here after generation',
-                    style: TextStyle(color: AppTheme.mediumGrey),
+                      ),
+                    ],
                   ),
                 ],
-              ],
-            ),
-          ).animate().fadeIn(delay: 120.ms).scale(begin: const Offset(0.96,0.96), curve: Curves.easeOutBack),
-
-          const SizedBox(height: 16),
-
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton.icon(
-                  onPressed: _generateCodeOnly,
-                  icon: const Icon(Icons.link),
-                  label: const Text('Generate Link'),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: AppTheme.primaryRose,
-                    side: BorderSide(color: AppTheme.primaryRose),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: ElevatedButton.icon(
-                  onPressed: _generatedInvitation != null ? _shareLink : null,
-                  icon: const Icon(Icons.share),
-                  label: const Text('Share'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _isSent
-                        ? AppTheme.primaryRose.withOpacity(0.35)
-                        : AppTheme.primaryRose,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-              ],
               ),
             ),
           ),
