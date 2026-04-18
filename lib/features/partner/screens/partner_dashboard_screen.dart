@@ -13,11 +13,8 @@ import '../services/partner_service.dart'
     show PartnerMessageType;
 import '../models/partner_models.dart'
     show
-        Partnership,
-        PartnershipStatus,
         PartnerMessage,
         PartnerMessageType,
-        PartnerPrivacySettings,
         CareAction,
         CareActionType;
 import '../models/partner_insight.dart';
@@ -28,6 +25,7 @@ import '../widgets/partner_insights_widget.dart';
 import '../widgets/partner_invitation_dialog.dart';
 import '../widgets/partner_connection_stat.dart';
 import '../widgets/partner_avatar_badge.dart';
+import '../mappers/partner_dashboard_mapper.dart';
 import '../dialogs/join_partner_dialog.dart';
 
 class PartnerDashboardScreen extends StatefulWidget {
@@ -361,29 +359,8 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     AppLocalizations localizations,
     PartnerService partnerService,
   ) {
-    // Convert service Partnership to model Partnership
     final ps = partnerService.currentPartnership!;
-    final partnership = Partnership(
-      id: ps.id,
-      userId1: ps.primaryUserId,
-      userId2: ps.partnerUserId,
-      customName1: ps.primaryUserName,
-      customName2: ps.partnerUserName,
-      establishedAt: ps.createdAt,
-      status: PartnershipStatus.active, // Assume active if partnership exists
-      privacySettings: PartnerPrivacySettings(
-        shareBasicCycleInfo: ps.sharingSettings.shareSymptoms,
-        shareDetailedSymptoms: ps.sharingSettings.sharePhysicalSymptoms,
-        shareMoodData: ps.sharingSettings.shareMoodData,
-        shareEnergyLevels: true,
-        sharePainData: ps.sharingSettings.sharePhysicalSymptoms,
-        shareAIInsights: ps.sharingSettings.allowInsights,
-        sharePredictions: ps.sharingSettings.sharePredictions,
-        allowNotifications: ps.sharingSettings.sendNotifications,
-        allowCareActions: true,
-      ),
-      lastActiveAt: ps.lastActiveAt,
-    );
+    final partnership = PartnerDashboardMapper.toPartnership(ps);
 
     return PartnerCycleInsightWidget(
       partnership: partnership,
