@@ -25,6 +25,7 @@ import '../widgets/partner_insights_widget.dart';
 import '../widgets/partner_invitation_dialog.dart';
 import '../widgets/partner_connection_stat.dart';
 import '../widgets/partner_avatar_badge.dart';
+import '../widgets/partner_quick_action_card.dart';
 import '../mappers/partner_dashboard_mapper.dart';
 import '../dialogs/join_partner_dialog.dart';
 
@@ -420,87 +421,18 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
           builder: (context, child) {
             return Transform.translate(
               offset: Offset(0, (1 - _contentAnimation.value) * 50),
-              child: _buildActionCard(action),
+              child: PartnerQuickActionCard(
+                title: action.title,
+                subtitle: action.subtitle,
+                icon: action.icon,
+                color: action.color,
+                onTap: action.onTap,
+              ),
             );
           },
         ).animate(delay: (300 + index * 100).ms).fadeIn();
       },
     );
-  }
-
-  Widget _buildActionCard(_ActionButton action) {
-    final theme = Theme.of(context);
-    return Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [theme.cardColor, action.color.withValues(alpha: 0.05)],
-            ),
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: action.color.withValues(alpha: 0.2),
-              width: 1.5,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: action.color.withValues(alpha: 0.1),
-                blurRadius: 12,
-                offset: const Offset(0, 6),
-              ),
-            ],
-          ),
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: action.onTap,
-              borderRadius: BorderRadius.circular(20),
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            action.color,
-                            action.color.withValues(alpha: 0.7),
-                          ],
-                        ),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Icon(action.icon, color: Colors.white, size: 24),
-                    ),
-                    const Spacer(),
-                    Text(
-                      action.title,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: theme.colorScheme.onSurface,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      action.subtitle,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: theme.colorScheme.onSurface.withValues(
-                          alpha: 0.6,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        )
-        .animate(onPlay: (controller) => controller.repeat())
-        .shimmer(duration: 3000.ms, color: action.color.withValues(alpha: 0.1))
-        .then(delay: 2000.ms);
   }
 
   Widget _buildCommunicationCard(
