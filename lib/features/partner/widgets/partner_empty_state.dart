@@ -26,12 +26,26 @@ class PartnerEmptyState extends StatelessWidget {
             height: 120,
             decoration: BoxDecoration(
               gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
                 colors: [
-                  AppTheme.primaryRose.withValues(alpha: 0.1),
-                  AppTheme.primaryPurple.withValues(alpha: 0.1),
+                  AppTheme.primaryRose.withValues(alpha: 0.14),
+                  AppTheme.primaryPurple.withValues(alpha: 0.08),
                 ],
               ),
               borderRadius: BorderRadius.circular(60),
+              border: Border.all(
+                color: AppTheme.primaryRose.withValues(alpha: 0.08),
+                width: 1.2,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: AppTheme.primaryRose.withValues(alpha: 0.10),
+                  blurRadius: 18,
+                  spreadRadius: 2,
+                  offset: const Offset(0, 8),
+                ),
+              ],
             ),
             child: Icon(
               Icons.favorite_border,
