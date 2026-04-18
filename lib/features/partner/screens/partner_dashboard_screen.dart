@@ -6,15 +6,10 @@ import '../../../core/theme/app_theme.dart';
 import '../../../generated/app_localizations.dart';
 import '../services/partner_service.dart'
     show
-        PartnerService,
-        PartnerCareActionType;
+        PartnerService;
 import '../services/partner_service.dart'
     as service_types
     show PartnerMessageType;
-import '../models/partner_models.dart'
-    show
-        CareAction,
-        CareActionType;
 import '../widgets/partner_cycle_insight_widget.dart';
 import '../widgets/partner_communication_widget.dart';
 import '../widgets/partner_care_actions_widget.dart';
@@ -481,59 +476,17 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     final currentUserId = partnership
         .primaryUserId; // Service will handle determining the correct user
 
-    // Convert PartnerCareAction to CareAction for widget
-    final careActions = partnerService.careActions.map((pa) {
-      // Map PartnerCareActionType to CareActionType
-      CareActionType type;
-      switch (pa.type) {
-        case PartnerCareActionType.emotionalSupport:
-          type = CareActionType.support;
-          break;
-        case PartnerCareActionType.physicalCare:
-          type = CareActionType.symptomsHelp;
-          break;
-        case PartnerCareActionType.thoughtfulGesture:
-          type = CareActionType.gift;
-          break;
-        case PartnerCareActionType.other:
-          type = CareActionType.checkIn;
-          break;
-      }
-
-      return CareAction(
-        id: pa.id,
-        partnershipId: pa.partnershipId,
-        senderId: pa.performedByUserId,
-        receiverId: pa.forUserId,
-        type: type,
-        title: pa.title,
-        description: pa.description,
-        createdAt: pa.performedAt,
-        completedAt: null,
-      );
-    }).toList();
+    final careActions = partnerService.careActions
+        .map(PartnerDashboardMapper.toCareAction)
+        .toList();
 
     return PartnerCareActionsWidget(
       careActions: careActions.take(5).toList(),
       onSendCareAction: (careAction) async {
-        // Convert CareActionType to PartnerCareActionType
-        PartnerCareActionType type;
-        switch (careAction.type) {
-          case CareActionType.support:
-            type = PartnerCareActionType.emotionalSupport;
-            break;
-          case CareActionType.symptomsHelp:
-            type = PartnerCareActionType.physicalCare;
-            break;
-          case CareActionType.gift:
-            type = PartnerCareActionType.thoughtfulGesture;
-            break;
-          default:
-            type = PartnerCareActionType.other;
-        }
-
         await partnerService.sendCareAction(
-          type: type,
+          type: PartnerDashboardMapper.toPartnerCareActionType(
+            careAction.type,
+          ),
           title: careAction.title,
           description: careAction.description,
         );
