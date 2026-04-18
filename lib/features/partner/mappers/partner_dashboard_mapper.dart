@@ -1,5 +1,6 @@
 import '../models/partner_models.dart' as model;
 import '../models/partner_insight.dart' as insight_model;
+import '../services/partner_service.dart' as service;
 
 class PartnerDashboardMapper {
   static model.Partnership toPartnership(dynamic ps) {
@@ -70,5 +71,49 @@ class PartnerDashboardMapper {
       expiresAt: pi.expiresAt,
       isRead: pi.isRead,
     );
+  }
+
+  static model.CareAction toCareAction(dynamic pa) {
+    model.CareActionType type;
+    switch (pa.type) {
+      case service.PartnerCareActionType.emotionalSupport:
+        type = model.CareActionType.support;
+        break;
+      case service.PartnerCareActionType.physicalCare:
+        type = model.CareActionType.symptomsHelp;
+        break;
+      case service.PartnerCareActionType.thoughtfulGesture:
+        type = model.CareActionType.gift;
+        break;
+      default:
+        type = model.CareActionType.checkIn;
+    }
+
+    return model.CareAction(
+      id: pa.id,
+      partnershipId: pa.partnershipId,
+      senderId: pa.performedByUserId,
+      receiverId: pa.forUserId,
+      type: type,
+      title: pa.title,
+      description: pa.description,
+      createdAt: pa.performedAt,
+      completedAt: null,
+    );
+  }
+
+  static service.PartnerCareActionType toPartnerCareActionType(
+    model.CareActionType type,
+  ) {
+    switch (type) {
+      case model.CareActionType.support:
+        return service.PartnerCareActionType.emotionalSupport;
+      case model.CareActionType.symptomsHelp:
+        return service.PartnerCareActionType.physicalCare;
+      case model.CareActionType.gift:
+        return service.PartnerCareActionType.thoughtfulGesture;
+      default:
+        return service.PartnerCareActionType.other;
+    }
   }
 }
