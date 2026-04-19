@@ -376,7 +376,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.email, size: 22),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text('Email'),
                     ],
                   ),
@@ -387,7 +387,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.qr_code, size: 22),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text('QR Code'),
                     ],
                   ),
@@ -398,7 +398,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.share, size: 22),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text('Share Link'),
                     ],
                   ),
