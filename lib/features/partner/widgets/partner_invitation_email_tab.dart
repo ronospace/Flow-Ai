@@ -64,13 +64,13 @@ class PartnerInvitationEmailTab extends StatelessWidget {
           filled: true,
           fillColor: AppTheme.primaryRose.withValues(alpha: 0.16),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(22),
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(22),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(22),
             borderSide: BorderSide(color: AppTheme.primaryRose, width: 2),
           ),
         ),
@@ -145,13 +145,13 @@ class PartnerInvitationEmailTab extends StatelessWidget {
           filled: true,
           fillColor: AppTheme.primaryPurple.withValues(alpha: 0.16),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(22),
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(22),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(22),
             borderSide: BorderSide(color: AppTheme.primaryRose, width: 2),
           ),
         ),
@@ -188,7 +188,7 @@ class PartnerInvitationEmailTab extends StatelessWidget {
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.06),
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(22),
                         ),
                         child: Row(
                           children: [
@@ -238,7 +238,11 @@ class PartnerInvitationEmailTab extends StatelessWidget {
                                 ? AppTheme.primaryRose.withOpacity(0.35)
                                 : AppTheme.primaryRose,
                             foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            minimumSize: const Size.fromHeight(56),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(22),
+                            ),
+                            textStyle: const TextStyle(fontWeight: FontWeight.w600),
                           ),
                         ),
                       ),
