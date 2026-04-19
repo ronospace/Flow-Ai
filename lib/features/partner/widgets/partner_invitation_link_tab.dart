@@ -118,32 +118,36 @@ class PartnerInvitationLinkTab extends StatelessWidget {
                     Expanded(
                       child: OutlinedButton.icon(
                         onPressed: onGenerateLink,
-                        icon: const Icon(Icons.link),
+                        icon: const Icon(Icons.link, size: 20),
                         label: const Text('Generate Link'),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: AppTheme.primaryRose,
                           side: BorderSide(color: AppTheme.primaryRose),
-                          minimumSize: const Size.fromHeight(56),
+                          minimumSize: const Size(double.infinity, 56),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          visualDensity: VisualDensity.compact,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(22),
+                            borderRadius: BorderRadius.circular(16),
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 14),
+                    const SizedBox(width: 16),
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: generatedInvitation != null ? onShareLink : null,
-                        icon: const Icon(Icons.share),
+                        icon: const Icon(Icons.share, size: 20),
                         label: const Text('Share'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: isSent
                               ? AppTheme.primaryRose.withOpacity(0.35)
                               : AppTheme.primaryRose,
                           foregroundColor: Colors.white,
-                          minimumSize: const Size.fromHeight(56),
+                          minimumSize: const Size(double.infinity, 56),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          visualDensity: VisualDensity.compact,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(22),
+                            borderRadius: BorderRadius.circular(16),
                           ),
                         ),
                       ),

@@ -111,29 +111,33 @@ class PartnerInvitationQrTab extends StatelessWidget {
                         style: OutlinedButton.styleFrom(
                           foregroundColor: AppTheme.primaryRose,
                           side: const BorderSide(width: 1.5, color: AppTheme.primaryRose),
-                          minimumSize: const Size.fromHeight(56),
-                          textStyle: const TextStyle(fontWeight: FontWeight.w600),
+                          minimumSize: const Size(double.infinity, 56),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                          visualDensity: VisualDensity.compact,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(22),
+                            borderRadius: BorderRadius.circular(16),
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 14),
+                    const SizedBox(width: 16),
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: generatedInvitation != null ? onSaveQr : null,
-                        icon: const Icon(Icons.save),
+                        icon: const Icon(Icons.save, size: 20),
                         label: const Text('Save QR'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: isSent
                               ? AppTheme.primaryRose.withOpacity(0.35)
                               : AppTheme.primaryRose,
                           foregroundColor: Colors.white,
-                          minimumSize: const Size.fromHeight(56),
-                          textStyle: const TextStyle(fontWeight: FontWeight.w600),
+                          minimumSize: const Size(double.infinity, 56),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                          visualDensity: VisualDensity.compact,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(22),
+                            borderRadius: BorderRadius.circular(16),
                           ),
                         ),
                       ),

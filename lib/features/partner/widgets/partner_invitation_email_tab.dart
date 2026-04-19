@@ -238,11 +238,13 @@ class PartnerInvitationEmailTab extends StatelessWidget {
                                 ? AppTheme.primaryRose.withOpacity(0.35)
                                 : AppTheme.primaryRose,
                             foregroundColor: Colors.white,
-                            minimumSize: const Size.fromHeight(56),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(22),
+                            minimumSize: const Size(double.infinity, 56),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                            visualDensity: VisualDensity.compact,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
                             ),
-                            textStyle: const TextStyle(fontWeight: FontWeight.w600),
+                            textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                           ),
                         ),
                       ),
