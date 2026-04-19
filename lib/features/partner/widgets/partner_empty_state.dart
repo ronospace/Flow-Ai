@@ -62,13 +62,15 @@ class PartnerEmptyState extends StatelessWidget {
               Expanded(
                 child: ElevatedButton.icon(
                   onPressed: onInvite,
-                  icon: const Icon(Icons.send),
+                  icon: const Icon(Icons.send, size: 20),
                   label: const Text('Invite Partner'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppTheme.primaryRose,
                     foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
+                    minimumSize: const Size(double.infinity, 56),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                    visualDensity: VisualDensity.compact,
+                          shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
@@ -78,13 +80,15 @@ class PartnerEmptyState extends StatelessWidget {
               Expanded(
                 child: OutlinedButton.icon(
                   onPressed: onJoin,
-                  icon: const Icon(Icons.link),
+                  icon: const Icon(Icons.link, size: 20),
                   label: const Text('Join Partner'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: AppTheme.primaryRose,
                     side: BorderSide(color: AppTheme.primaryRose),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
+                    minimumSize: const Size(double.infinity, 56),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                    visualDensity: VisualDensity.compact,
+                          shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
