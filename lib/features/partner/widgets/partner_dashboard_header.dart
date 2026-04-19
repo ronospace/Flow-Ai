@@ -56,18 +56,18 @@ class PartnerDashboardHeader extends StatelessWidget {
                       child: Column(
                         children: [
                           Container(
-                            width: 60,
-                            height: 3,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  AppTheme.primaryRose,
-                                  AppTheme.primaryPurple,
-                                ],
-                              ),
-                              borderRadius: BorderRadius.circular(2),
-                            ),
-                          )
+                                width: 60,
+                                height: 3,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      AppTheme.primaryRose,
+                                      AppTheme.primaryPurple,
+                                    ],
+                                  ),
+                                  borderRadius: BorderRadius.circular(2),
+                                ),
+                              )
                               .animate(onPlay: (c) => c.repeat())
                               .shimmer(duration: 2000.ms)
                               .then(delay: 1000.ms),
@@ -78,7 +78,9 @@ class PartnerDashboardHeader extends StatelessWidget {
                               vertical: 6,
                             ),
                             decoration: BoxDecoration(
-                              color: AppTheme.warningOrange.withValues(alpha: 0.1),
+                              color: AppTheme.warningOrange.withValues(
+                                alpha: 0.1,
+                              ),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Row(

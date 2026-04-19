@@ -28,11 +28,11 @@ class PartnerInvitationLinkTab extends StatelessWidget {
           ),
           padding: const EdgeInsets.all(24),
           child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: constraints.maxHeight - 48),
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const SizedBox(height: 12),
+                const SizedBox(height: 18),
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
@@ -112,7 +112,7 @@ class PartnerInvitationLinkTab extends StatelessWidget {
                    begin: const Offset(0.96, 0.96),
                    curve: Curves.easeOutBack,
                  ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 18),
                 Row(
                   children: [
                     Expanded(
@@ -132,7 +132,7 @@ class PartnerInvitationLinkTab extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 16),
+                    const SizedBox(width: 12),
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: generatedInvitation != null ? onShareLink : null,

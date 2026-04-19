@@ -1,0 +1,834 @@
+==== FILE MAP ====
+lib/core/deeplinks/invite_gate_page.dart
+lib/core/deeplinks/pending_invite_store.dart
+lib/core/services/partner_sharing_service.dart
+lib/features/partner/dialogs/invite_partner_dialog.dart
+lib/features/partner/dialogs/join_partner_dialog.dart
+lib/features/partner/mappers/partner_dashboard_mapper.dart
+lib/features/partner/models/partner_insight.dart
+lib/features/partner/models/partner_models.dart
+lib/features/partner/models/partner_service_models.dart
+lib/features/partner/screens/partner_dashboard_screen.dart
+lib/features/partner/screens/partner_privacy_settings_screen.dart
+lib/features/partner/screens/qr_join_screen.dart
+lib/features/partner/services/local_partner_service.dart
+lib/features/partner/services/partner_invite_actions.dart
+lib/features/partner/services/partner_service.dart
+lib/features/partner/widgets/partner_avatar_badge.dart
+lib/features/partner/widgets/partner_care_actions_widget.dart
+lib/features/partner/widgets/partner_communication_widget.dart
+lib/features/partner/widgets/partner_connection_stat.dart
+lib/features/partner/widgets/partner_cycle_insight_widget.dart
+lib/features/partner/widgets/partner_dashboard_header.dart
+lib/features/partner/widgets/partner_empty_state.dart
+lib/features/partner/widgets/partner_insights_widget.dart
+lib/features/partner/widgets/partner_invitation_actions.dart
+lib/features/partner/widgets/partner_invitation_dialog.dart
+lib/features/partner/widgets/partner_invitation_email_tab.dart
+lib/features/partner/widgets/partner_invitation_link_tab.dart
+lib/features/partner/widgets/partner_invitation_qr_tab.dart
+lib/features/partner/widgets/partner_quick_action_card.dart
+
+==== PARTNER FEATURE REFERENCES ====
+lib/features/partner/widgets/partner_invitation_dialog.dart:4:import 'partner_invitation_qr_tab.dart';
+lib/features/partner/widgets/partner_invitation_dialog.dart:5:import 'partner_invitation_link_tab.dart';
+lib/features/partner/widgets/partner_invitation_dialog.dart:6:import 'partner_invitation_email_tab.dart';
+lib/features/partner/screens/partner_dashboard_screen.dart:17:import '../widgets/partner_invitation_dialog.dart';
+lib/features/partner/screens/partner_dashboard_screen.dart:18:import '../widgets/partner_dashboard_header.dart';
+lib/features/partner/screens/partner_dashboard_screen.dart:19:import '../widgets/partner_empty_state.dart';
+lib/features/partner/screens/partner_dashboard_screen.dart:20:import '../widgets/partner_quick_action_card.dart';
+
+==== LAYOUT CONSTANTS ====
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:32:          padding: const EdgeInsets.all(24),
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:34:            constraints: BoxConstraints(minHeight: constraints.maxHeight - 48),
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:36:            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:40:                const SizedBox(height: 12),
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:42:                  padding: const EdgeInsets.all(16),
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:45:                    borderRadius: BorderRadius.circular(20),
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:48:                        color: AppTheme.primaryRose.withValues(alpha: 0.28),
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:50:                        offset: const Offset(0, 10),
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:67:                          width: 176,
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:68:                          height: 176,
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:71:                            borderRadius: BorderRadius.circular(22),
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:81:                              const SizedBox(height: 8),
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:92:                      const SizedBox(height: 8),
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:104:                ).fadeIn(delay: 120.ms),
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:105:                const SizedBox(height: 18),
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:111:                        icon: const Icon(Icons.refresh, size: 20),
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:115:                          side: const BorderSide(width: 1.5, color: AppTheme.primaryRose),
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:116:                          minimumSize: const Size(double.infinity, 56),
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:117:                          padding: const EdgeInsets.symmetric(vertical: 16),
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:118:                          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:121:                            borderRadius: BorderRadius.circular(16),
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:126:                    const SizedBox(width: 12),
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:130:                        icon: const Icon(Icons.save, size: 20),
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:137:                          minimumSize: const Size(double.infinity, 56),
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:138:                          padding: const EdgeInsets.symmetric(vertical: 16),
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:139:                          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:142:                            borderRadius: BorderRadius.circular(16),
+lib/features/partner/widgets/partner_dashboard_header.dart:31:          scale: 0.8 + (animation.value * 0.2),
+lib/features/partner/widgets/partner_dashboard_header.dart:33:            padding: const EdgeInsets.all(24),
+lib/features/partner/widgets/partner_dashboard_header.dart:43:              borderRadius: BorderRadius.circular(24),
+lib/features/partner/widgets/partner_dashboard_header.dart:46:                width: 2,
+lib/features/partner/widgets/partner_dashboard_header.dart:54:                    const SizedBox(width: 16),
+lib/features/partner/widgets/partner_dashboard_header.dart:59:                                width: 60,
+lib/features/partner/widgets/partner_dashboard_header.dart:60:                                height: 3,
+lib/features/partner/widgets/partner_dashboard_header.dart:68:                                  borderRadius: BorderRadius.circular(2),
+lib/features/partner/widgets/partner_dashboard_header.dart:72:                              .shimmer(duration: 2000.ms)
+lib/features/partner/widgets/partner_dashboard_header.dart:73:                              .then(delay: 1000.ms),
+lib/features/partner/widgets/partner_dashboard_header.dart:74:                          const SizedBox(height: 8),
+lib/features/partner/widgets/partner_dashboard_header.dart:76:                            padding: const EdgeInsets.symmetric(
+lib/features/partner/widgets/partner_dashboard_header.dart:77:                              horizontal: 12,
+lib/features/partner/widgets/partner_dashboard_header.dart:84:                              borderRadius: BorderRadius.circular(12),
+lib/features/partner/widgets/partner_dashboard_header.dart:90:                                  width: 8,
+lib/features/partner/widgets/partner_dashboard_header.dart:91:                                  height: 8,
+lib/features/partner/widgets/partner_dashboard_header.dart:97:                                const SizedBox(width: 6),
+lib/features/partner/widgets/partner_dashboard_header.dart:102:                                    fontSize: 12,
+lib/features/partner/widgets/partner_dashboard_header.dart:112:                    const SizedBox(width: 16),
+lib/features/partner/widgets/partner_dashboard_header.dart:116:                const SizedBox(height: 20),
+lib/features/partner/widgets/partner_connection_stat.dart:23:        Icon(icon, color: color, size: 20),
+lib/features/partner/widgets/partner_connection_stat.dart:24:        const SizedBox(height: 4),
+lib/features/partner/widgets/partner_connection_stat.dart:28:            fontSize: 18,
+lib/features/partner/widgets/partner_connection_stat.dart:36:            fontSize: 12,
+lib/features/partner/widgets/partner_empty_state.dart:24:          const SizedBox(height: 60),
+lib/features/partner/widgets/partner_empty_state.dart:26:                width: 120,
+lib/features/partner/widgets/partner_empty_state.dart:27:                height: 120,
+lib/features/partner/widgets/partner_empty_state.dart:35:                  borderRadius: BorderRadius.circular(60),
+lib/features/partner/widgets/partner_empty_state.dart:45:              .fadeIn(duration: 800.ms),
+lib/features/partner/widgets/partner_empty_state.dart:46:          const SizedBox(height: 32),
+lib/features/partner/widgets/partner_empty_state.dart:53:          ).animate().fadeIn(delay: 200.ms),
+lib/features/partner/widgets/partner_empty_state.dart:54:          const SizedBox(height: 16),
+lib/features/partner/widgets/partner_empty_state.dart:60:              height: 1.5,
+lib/features/partner/widgets/partner_empty_state.dart:63:          const SizedBox(height: 40),
+lib/features/partner/widgets/partner_empty_state.dart:67:              SizedBox(
+lib/features/partner/widgets/partner_empty_state.dart:68:                width: defaultTargetPlatform == TargetPlatform.iOS
+lib/features/partner/widgets/partner_empty_state.dart:69:                    ? 164
+lib/features/partner/widgets/partner_empty_state.dart:70:                    : 156,
+lib/features/partner/widgets/partner_empty_state.dart:73:                  icon: const Icon(Icons.send, size: 20),
+lib/features/partner/widgets/partner_empty_state.dart:78:                    minimumSize: const Size(double.infinity, 56),
+lib/features/partner/widgets/partner_empty_state.dart:79:                    padding: const EdgeInsets.symmetric(vertical: 16),
+lib/features/partner/widgets/partner_empty_state.dart:82:                      borderRadius: BorderRadius.circular(16),
+lib/features/partner/widgets/partner_empty_state.dart:87:              const SizedBox(width: 12),
+lib/features/partner/widgets/partner_empty_state.dart:88:              SizedBox(
+lib/features/partner/widgets/partner_empty_state.dart:89:                width: defaultTargetPlatform == TargetPlatform.iOS
+lib/features/partner/widgets/partner_empty_state.dart:90:                    ? 164
+lib/features/partner/widgets/partner_empty_state.dart:91:                    : 156,
+lib/features/partner/widgets/partner_empty_state.dart:94:                  icon: const Icon(Icons.link, size: 20),
+lib/features/partner/widgets/partner_empty_state.dart:99:                    minimumSize: const Size(double.infinity, 56),
+lib/features/partner/widgets/partner_empty_state.dart:100:                    padding: const EdgeInsets.symmetric(vertical: 16),
+lib/features/partner/widgets/partner_empty_state.dart:103:                      borderRadius: BorderRadius.circular(16),
+lib/features/partner/widgets/partner_insights_widget.dart:18:      return const SizedBox.shrink();
+lib/features/partner/widgets/partner_insights_widget.dart:24:        borderRadius: BorderRadius.circular(16),
+lib/features/partner/widgets/partner_insights_widget.dart:25:        side: BorderSide(color: AppTheme.lightGrey, width: 1),
+lib/features/partner/widgets/partner_insights_widget.dart:28:        padding: const EdgeInsets.all(20),
+lib/features/partner/widgets/partner_insights_widget.dart:35:                const SizedBox(width: 12),
+lib/features/partner/widgets/partner_insights_widget.dart:39:                    fontSize: 18,
+lib/features/partner/widgets/partner_insights_widget.dart:46:            const SizedBox(height: 16),
+lib/features/partner/widgets/partner_insights_widget.dart:51:                    padding: const EdgeInsets.only(bottom: 12),
+lib/features/partner/widgets/partner_insights_widget.dart:53:                      contentPadding: EdgeInsets.zero,
+lib/features/partner/widgets/partner_insights_widget.dart:57:                          fontSize: 14,
+lib/features/partner/widgets/partner_insights_widget.dart:65:                          fontSize: 12,
+lib/features/partner/widgets/partner_avatar_badge.dart:17:      width: 60,
+lib/features/partner/widgets/partner_avatar_badge.dart:18:      height: 60,
+lib/features/partner/widgets/partner_avatar_badge.dart:26:        border: Border.all(color: Theme.of(context).cardColor, width: 3),
+lib/features/partner/widgets/partner_avatar_badge.dart:30:            blurRadius: 8,
+lib/features/partner/widgets/partner_care_actions_widget.dart:42:      'gradient': [AppTheme.primaryRose, Color(0xFFFF8A95)],
+lib/features/partner/widgets/partner_care_actions_widget.dart:79:      duration: const Duration(milliseconds: 800),
+lib/features/partner/widgets/partner_care_actions_widget.dart:121:              borderRadius: BorderRadius.circular(24),
+lib/features/partner/widgets/partner_care_actions_widget.dart:124:                width: 2,
+lib/features/partner/widgets/partner_care_actions_widget.dart:129:                  blurRadius: 20,
+lib/features/partner/widgets/partner_care_actions_widget.dart:130:                  offset: const Offset(0, 8),
+lib/features/partner/widgets/partner_care_actions_widget.dart:154:      padding: const EdgeInsets.all(20),
+lib/features/partner/widgets/partner_care_actions_widget.dart:162:        borderRadius: const BorderRadius.only(
+lib/features/partner/widgets/partner_care_actions_widget.dart:175:                  padding: const EdgeInsets.all(8),
+lib/features/partner/widgets/partner_care_actions_widget.dart:180:                    borderRadius: BorderRadius.circular(12),
+lib/features/partner/widgets/partner_care_actions_widget.dart:185:                    size: 20,
+lib/features/partner/widgets/partner_care_actions_widget.dart:191:          const SizedBox(width: 12),
+lib/features/partner/widgets/partner_care_actions_widget.dart:227:                  padding: const EdgeInsets.symmetric(
+lib/features/partner/widgets/partner_care_actions_widget.dart:228:                    horizontal: 8,
+lib/features/partner/widgets/partner_care_actions_widget.dart:233:                    borderRadius: BorderRadius.circular(12),
+lib/features/partner/widgets/partner_care_actions_widget.dart:240:                      fontSize: 12,
+lib/features/partner/widgets/partner_care_actions_widget.dart:253:      padding: const EdgeInsets.all(20),
+lib/features/partner/widgets/partner_care_actions_widget.dart:264:          const SizedBox(height: 16),
+lib/features/partner/widgets/partner_care_actions_widget.dart:270:              crossAxisSpacing: 12,
+lib/features/partner/widgets/partner_care_actions_widget.dart:271:              mainAxisSpacing: 12,
+lib/features/partner/widgets/partner_care_actions_widget.dart:280:          const SizedBox(height: 20),
+lib/features/partner/widgets/partner_care_actions_widget.dart:301:              borderRadius: BorderRadius.circular(20),
+lib/features/partner/widgets/partner_care_actions_widget.dart:311:              padding: const EdgeInsets.all(16),
+lib/features/partner/widgets/partner_care_actions_widget.dart:322:                      Icon(action['icon'], color: Colors.white, size: 20),
+lib/features/partner/widgets/partner_care_actions_widget.dart:325:                  const SizedBox(height: 8),
+lib/features/partner/widgets/partner_care_actions_widget.dart:331:                      fontSize: 16,
+lib/features/partner/widgets/partner_care_actions_widget.dart:334:                  const SizedBox(height: 4),
+lib/features/partner/widgets/partner_care_actions_widget.dart:339:                      fontSize: 12,
+lib/features/partner/widgets/partner_care_actions_widget.dart:348:        .scale(begin: const Offset(0.8, 0.8))
+lib/features/partner/widgets/partner_care_actions_widget.dart:355:        border: Border.all(color: AppTheme.lightGrey, width: 2),
+lib/features/partner/widgets/partner_care_actions_widget.dart:356:        borderRadius: BorderRadius.circular(16),
+lib/features/partner/widgets/partner_care_actions_widget.dart:360:          padding: const EdgeInsets.all(8),
+lib/features/partner/widgets/partner_care_actions_widget.dart:363:            borderRadius: BorderRadius.circular(12),
+lib/features/partner/widgets/partner_care_actions_widget.dart:379:          style: TextStyle(color: AppTheme.mediumGrey, fontSize: 12),
+lib/features/partner/widgets/partner_care_actions_widget.dart:384:          size: 16,
+lib/features/partner/widgets/partner_care_actions_widget.dart:394:        padding: const EdgeInsets.all(40),
+lib/features/partner/widgets/partner_care_actions_widget.dart:397:            Icon(Icons.history, size: 48, color: AppTheme.lightGrey),
+lib/features/partner/widgets/partner_care_actions_widget.dart:398:            const SizedBox(height: 16),
+lib/features/partner/widgets/partner_care_actions_widget.dart:406:            const SizedBox(height: 8),
+lib/features/partner/widgets/partner_care_actions_widget.dart:416:      ).animate().fadeIn().scale(begin: const Offset(0.8, 0.8));
+lib/features/partner/widgets/partner_care_actions_widget.dart:420:      padding: const EdgeInsets.all(20),
+lib/features/partner/widgets/partner_care_actions_widget.dart:436:                style: TextStyle(color: AppTheme.lightGrey, fontSize: 10),
+lib/features/partner/widgets/partner_care_actions_widget.dart:440:          const SizedBox(height: 16),
+lib/features/partner/widgets/partner_care_actions_widget.dart:451:            const SizedBox(height: 12),
+lib/features/partner/widgets/partner_care_actions_widget.dart:479:      margin: const EdgeInsets.only(bottom: 12),
+lib/features/partner/widgets/partner_care_actions_widget.dart:480:      padding: const EdgeInsets.all(16),
+lib/features/partner/widgets/partner_care_actions_widget.dart:483:        borderRadius: BorderRadius.circular(16),
+lib/features/partner/widgets/partner_care_actions_widget.dart:486:          width: 1,
+lib/features/partner/widgets/partner_care_actions_widget.dart:492:            width: 40,
+lib/features/partner/widgets/partner_care_actions_widget.dart:493:            height: 40,
+lib/features/partner/widgets/partner_care_actions_widget.dart:496:              borderRadius: BorderRadius.circular(12),
+lib/features/partner/widgets/partner_care_actions_widget.dart:501:                style: const TextStyle(fontSize: 20),
+lib/features/partner/widgets/partner_care_actions_widget.dart:505:          const SizedBox(width: 16),
+lib/features/partner/widgets/partner_care_actions_widget.dart:519:                        fontSize: 14,
+lib/features/partner/widgets/partner_care_actions_widget.dart:522:                    const SizedBox(width: 8),
+lib/features/partner/widgets/partner_care_actions_widget.dart:528:                        fontSize: 14,
+lib/features/partner/widgets/partner_care_actions_widget.dart:533:                const SizedBox(height: 4),
+lib/features/partner/widgets/partner_care_actions_widget.dart:540:                const SizedBox(height: 4),
+lib/features/partner/widgets/partner_care_actions_widget.dart:550:    ).animate(delay: (index * 100).ms).slideX(begin: -0.2, end: 0).fadeIn();
+lib/features/partner/widgets/partner_care_actions_widget.dart:555:      padding: const EdgeInsets.all(20),
+lib/features/partner/widgets/partner_care_actions_widget.dart:563:            const SizedBox(height: 12),
+lib/features/partner/widgets/partner_care_actions_widget.dart:566:              style: TextStyle(color: AppTheme.mediumGrey, fontSize: 12),
+lib/features/partner/widgets/partner_care_actions_widget.dart:580:        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+lib/features/partner/widgets/partner_care_actions_widget.dart:584:            const SizedBox(width: 12),
+lib/features/partner/widgets/partner_care_actions_widget.dart:599:              style: TextStyle(color: AppTheme.mediumGrey, fontSize: 14),
+lib/features/partner/widgets/partner_care_actions_widget.dart:601:            const SizedBox(height: 16),
+lib/features/partner/widgets/partner_care_actions_widget.dart:607:                  borderRadius: BorderRadius.circular(12),
+lib/features/partner/widgets/partner_care_actions_widget.dart:610:                  borderRadius: BorderRadius.circular(12),
+lib/features/partner/widgets/partner_care_actions_widget.dart:611:                  borderSide: BorderSide(color: actionInfo['color'], width: 2),
+lib/features/partner/widgets/partner_care_actions_widget.dart:615:              maxLength: 200,
+lib/features/partner/widgets/partner_care_actions_widget.dart:647:                borderRadius: BorderRadius.circular(12),
+lib/features/partner/widgets/partner_care_actions_widget.dart:666:            borderRadius: BorderRadius.circular(20),
+lib/features/partner/widgets/partner_care_actions_widget.dart:671:              const SizedBox(width: 12),
+lib/features/partner/widgets/partner_care_actions_widget.dart:686:                style: TextStyle(color: AppTheme.mediumGrey, fontSize: 14),
+lib/features/partner/widgets/partner_care_actions_widget.dart:688:              const SizedBox(height: 16),
+lib/features/partner/widgets/partner_care_actions_widget.dart:694:                    borderRadius: BorderRadius.circular(12),
+lib/features/partner/widgets/partner_care_actions_widget.dart:707:                        const SizedBox(width: 8),
+lib/features/partner/widgets/partner_care_actions_widget.dart:719:              const SizedBox(height: 16),
+lib/features/partner/widgets/partner_care_actions_widget.dart:725:                    borderRadius: BorderRadius.circular(12),
+lib/features/partner/widgets/partner_care_actions_widget.dart:728:                    borderRadius: BorderRadius.circular(12),
+lib/features/partner/widgets/partner_care_actions_widget.dart:731:                      width: 2,
+lib/features/partner/widgets/partner_care_actions_widget.dart:768:                  borderRadius: BorderRadius.circular(12),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:50:          contentPadding: const EdgeInsets.symmetric(
+lib/features/partner/widgets/partner_invitation_email_tab.dart:51:            horizontal: 16,
+lib/features/partner/widgets/partner_invitation_email_tab.dart:52:            vertical: 20,
+lib/features/partner/widgets/partner_invitation_email_tab.dart:57:            size: 20,
+lib/features/partner/widgets/partner_invitation_email_tab.dart:60:          prefixIconConstraints: const BoxConstraints(
+lib/features/partner/widgets/partner_invitation_email_tab.dart:61:            minWidth: 48,
+lib/features/partner/widgets/partner_invitation_email_tab.dart:62:            minHeight: 48,
+lib/features/partner/widgets/partner_invitation_email_tab.dart:65:          fillColor: AppTheme.primaryRose.withValues(alpha: 0.16),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:66:          border: OutlineInputBorder(borderRadius: BorderRadius.circular(22)),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:68:            borderRadius: BorderRadius.circular(22),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:71:            borderRadius: BorderRadius.circular(22),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:72:            borderSide: BorderSide(color: AppTheme.primaryRose, width: 2),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:117:          contentPadding: const EdgeInsets.symmetric(
+lib/features/partner/widgets/partner_invitation_email_tab.dart:118:            horizontal: 16,
+lib/features/partner/widgets/partner_invitation_email_tab.dart:119:            vertical: 20,
+lib/features/partner/widgets/partner_invitation_email_tab.dart:124:            size: 20,
+lib/features/partner/widgets/partner_invitation_email_tab.dart:127:          prefixIconConstraints: const BoxConstraints(
+lib/features/partner/widgets/partner_invitation_email_tab.dart:128:            minWidth: 48,
+lib/features/partner/widgets/partner_invitation_email_tab.dart:129:            minHeight: 48,
+lib/features/partner/widgets/partner_invitation_email_tab.dart:133:            icon: Icon(Icons.send, size: 20, color: AppTheme.primaryRose),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:136:          fillColor: AppTheme.primaryPurple.withValues(alpha: 0.16),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:137:          border: OutlineInputBorder(borderRadius: BorderRadius.circular(22)),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:139:            borderRadius: BorderRadius.circular(22),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:142:            borderRadius: BorderRadius.circular(22),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:143:            borderSide: BorderSide(color: AppTheme.primaryRose, width: 2),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:158:            padding: EdgeInsets.fromLTRB(
+lib/features/partner/widgets/partner_invitation_email_tab.dart:171:                      margin: const EdgeInsets.only(bottom: 16),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:172:                      padding: const EdgeInsets.all(16),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:175:                        borderRadius: BorderRadius.circular(22),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:180:                          const SizedBox(width: 10),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:193:                  const SizedBox(height: 18),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:197:                    const SizedBox(height: 18),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:201:                    const SizedBox(height: 12),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:202:                    SizedBox(
+lib/features/partner/widgets/partner_invitation_email_tab.dart:203:                      width: double.infinity,
+lib/features/partner/widgets/partner_invitation_email_tab.dart:207:                            ? const SizedBox(
+lib/features/partner/widgets/partner_invitation_email_tab.dart:208:                                width: 20,
+lib/features/partner/widgets/partner_invitation_email_tab.dart:209:                                height: 20,
+lib/features/partner/widgets/partner_invitation_email_tab.dart:216:                                size: 20,
+lib/features/partner/widgets/partner_invitation_email_tab.dart:229:                          minimumSize: const Size(double.infinity, 56),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:230:                          padding: const EdgeInsets.symmetric(vertical: 16),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:233:                            borderRadius: BorderRadius.circular(16),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:236:                            fontSize: 16,
+lib/features/partner/widgets/partner_quick_action_card.dart:31:            borderRadius: BorderRadius.circular(20),
+lib/features/partner/widgets/partner_quick_action_card.dart:32:            border: Border.all(color: color.withValues(alpha: 0.2), width: 1.5),
+lib/features/partner/widgets/partner_quick_action_card.dart:36:                blurRadius: 12,
+lib/features/partner/widgets/partner_quick_action_card.dart:45:              borderRadius: BorderRadius.circular(20),
+lib/features/partner/widgets/partner_quick_action_card.dart:47:                padding: const EdgeInsets.all(20),
+lib/features/partner/widgets/partner_quick_action_card.dart:52:                      padding: const EdgeInsets.all(12),
+lib/features/partner/widgets/partner_quick_action_card.dart:57:                        borderRadius: BorderRadius.circular(12),
+lib/features/partner/widgets/partner_quick_action_card.dart:65:                        fontSize: 16,
+lib/features/partner/widgets/partner_quick_action_card.dart:70:                    const SizedBox(height: 4),
+lib/features/partner/widgets/partner_quick_action_card.dart:74:                        fontSize: 12,
+lib/features/partner/widgets/partner_quick_action_card.dart:88:        .then(delay: 2000.ms);
+lib/features/partner/widgets/partner_invitation_dialog.dart:145:                  ? const EdgeInsets.fromLTRB(16, 64, 16, 0)
+lib/features/partner/widgets/partner_invitation_dialog.dart:146:                  : const EdgeInsets.fromLTRB(16, 64, 16, 40),
+lib/features/partner/widgets/partner_invitation_dialog.dart:151:                      ? constraints.maxHeight.clamp(320.0, 680.0).toDouble()
+lib/features/partner/widgets/partner_invitation_dialog.dart:152:                      : (constraints.maxHeight * 0.78)
+lib/features/partner/widgets/partner_invitation_dialog.dart:153:                            .clamp(320.0, 680.0)
+lib/features/partner/widgets/partner_invitation_dialog.dart:157:                    padding: EdgeInsets.only(
+lib/features/partner/widgets/partner_invitation_dialog.dart:158:                      top: 56,
+lib/features/partner/widgets/partner_invitation_dialog.dart:159:                      bottom: keyboardOpen ? 0 : 48,
+lib/features/partner/widgets/partner_invitation_dialog.dart:166:                        constraints: BoxConstraints(
+lib/features/partner/widgets/partner_invitation_dialog.dart:167:                          maxWidth: 420,
+lib/features/partner/widgets/partner_invitation_dialog.dart:171:                          width: double.infinity,
+lib/features/partner/widgets/partner_invitation_dialog.dart:174:                            borderRadius: BorderRadius.circular(28),
+lib/features/partner/widgets/partner_invitation_dialog.dart:176:                              color: Colors.white.withValues(alpha: 0.10),
+lib/features/partner/widgets/partner_invitation_dialog.dart:177:                              width: 1,
+lib/features/partner/widgets/partner_invitation_dialog.dart:184:                                offset: const Offset(0, 10),
+lib/features/partner/widgets/partner_invitation_dialog.dart:189:                            borderRadius: BorderRadius.circular(28),
+lib/features/partner/widgets/partner_invitation_dialog.dart:271:      padding: const EdgeInsets.fromLTRB(20, 18, 20, 18),
+lib/features/partner/widgets/partner_invitation_dialog.dart:281:        borderRadius: const BorderRadius.only(
+lib/features/partner/widgets/partner_invitation_dialog.dart:282:          topLeft: Radius.circular(28),
+lib/features/partner/widgets/partner_invitation_dialog.dart:283:          topRight: Radius.circular(28),
+lib/features/partner/widgets/partner_invitation_dialog.dart:289:            padding: const EdgeInsets.all(12),
+lib/features/partner/widgets/partner_invitation_dialog.dart:294:              borderRadius: BorderRadius.circular(16),
+lib/features/partner/widgets/partner_invitation_dialog.dart:302:          const SizedBox(width: 16),
+lib/features/partner/widgets/partner_invitation_dialog.dart:317:                    color: AppTheme.mediumGrey.withValues(alpha: 0.88),
+lib/features/partner/widgets/partner_invitation_dialog.dart:334:          margin: const EdgeInsets.fromLTRB(20, 12, 20, 16),
+lib/features/partner/widgets/partner_invitation_dialog.dart:337:            borderRadius: BorderRadius.circular(16),
+lib/features/partner/widgets/partner_invitation_dialog.dart:339:          child: SizedBox(
+lib/features/partner/widgets/partner_invitation_dialog.dart:340:            height: 64,
+lib/features/partner/widgets/partner_invitation_dialog.dart:347:                borderRadius: BorderRadius.circular(14),
+lib/features/partner/widgets/partner_invitation_dialog.dart:350:              splashBorderRadius: BorderRadius.circular(16),
+lib/features/partner/widgets/partner_invitation_dialog.dart:362:              labelPadding: EdgeInsets.zero,
+lib/features/partner/widgets/partner_invitation_dialog.dart:367:                  height: 64,
+lib/features/partner/widgets/partner_invitation_dialog.dart:372:                  height: 64,
+lib/features/partner/widgets/partner_invitation_dialog.dart:377:                  height: 64,
+lib/features/partner/widgets/partner_invitation_dialog.dart:385:        .fadeIn(delay: 120.ms)
+lib/features/partner/widgets/partner_cycle_insight_widget.dart:15:        borderRadius: BorderRadius.circular(16),
+lib/features/partner/widgets/partner_cycle_insight_widget.dart:16:        side: BorderSide(color: AppTheme.lightGrey, width: 1),
+lib/features/partner/widgets/partner_cycle_insight_widget.dart:19:        padding: const EdgeInsets.all(20),
+lib/features/partner/widgets/partner_cycle_insight_widget.dart:26:                const SizedBox(width: 12),
+lib/features/partner/widgets/partner_cycle_insight_widget.dart:30:                    fontSize: 18,
+lib/features/partner/widgets/partner_cycle_insight_widget.dart:37:            const SizedBox(height: 16),
+lib/features/partner/widgets/partner_cycle_insight_widget.dart:40:              style: TextStyle(fontSize: 14, color: AppTheme.textSecondary),
+lib/features/partner/widgets/partner_invitation_actions.dart:7:    return 'https://flow-ai-656b3.web.app/invite/${invitation.invitationCode}';
+lib/features/partner/widgets/partner_invitation_link_tab.dart:29:          padding: const EdgeInsets.all(24),
+lib/features/partner/widgets/partner_invitation_link_tab.dart:31:            constraints: BoxConstraints(minHeight: constraints.maxHeight - 48),
+lib/features/partner/widgets/partner_invitation_link_tab.dart:33:            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+lib/features/partner/widgets/partner_invitation_link_tab.dart:37:                const SizedBox(height: 12),
+lib/features/partner/widgets/partner_invitation_link_tab.dart:39:                  padding: const EdgeInsets.all(16),
+lib/features/partner/widgets/partner_invitation_link_tab.dart:41:                    color: Colors.white.withValues(alpha: 0.08),
+lib/features/partner/widgets/partner_invitation_link_tab.dart:42:                    borderRadius: BorderRadius.circular(20),
+lib/features/partner/widgets/partner_invitation_link_tab.dart:44:                      color: Colors.white.withValues(alpha: 0.12),
+lib/features/partner/widgets/partner_invitation_link_tab.dart:45:                      width: 1.2,
+lib/features/partner/widgets/partner_invitation_link_tab.dart:50:                        blurRadius: 12,
+lib/features/partner/widgets/partner_invitation_link_tab.dart:51:                        offset: const Offset(0, 10),
+lib/features/partner/widgets/partner_invitation_link_tab.dart:59:                        size: 48,
+lib/features/partner/widgets/partner_invitation_link_tab.dart:62:                      const SizedBox(height: 16),
+lib/features/partner/widgets/partner_invitation_link_tab.dart:65:                          padding: const EdgeInsets.all(16),
+lib/features/partner/widgets/partner_invitation_link_tab.dart:67:                            color: Colors.white.withValues(alpha: 0.12),
+lib/features/partner/widgets/partner_invitation_link_tab.dart:68:                            borderRadius: BorderRadius.circular(22),
+lib/features/partner/widgets/partner_invitation_link_tab.dart:71:                              width: 1.2,
+lib/features/partner/widgets/partner_invitation_link_tab.dart:83:                                    fontSize: 12,
+lib/features/partner/widgets/partner_invitation_link_tab.dart:97:                                  size: 20,
+lib/features/partner/widgets/partner_invitation_link_tab.dart:112:                 .fadeIn(delay: 120.ms)
+lib/features/partner/widgets/partner_invitation_link_tab.dart:117:                const SizedBox(height: 18),
+lib/features/partner/widgets/partner_invitation_link_tab.dart:123:                        icon: const Icon(Icons.link, size: 20),
+lib/features/partner/widgets/partner_invitation_link_tab.dart:128:                          minimumSize: const Size(double.infinity, 56),
+lib/features/partner/widgets/partner_invitation_link_tab.dart:129:                          padding: const EdgeInsets.symmetric(vertical: 16),
+lib/features/partner/widgets/partner_invitation_link_tab.dart:132:                            borderRadius: BorderRadius.circular(16),
+lib/features/partner/widgets/partner_invitation_link_tab.dart:137:                    const SizedBox(width: 12),
+lib/features/partner/widgets/partner_invitation_link_tab.dart:141:                        icon: const Icon(Icons.share, size: 20),
+lib/features/partner/widgets/partner_invitation_link_tab.dart:148:                          minimumSize: const Size(double.infinity, 56),
+lib/features/partner/widgets/partner_invitation_link_tab.dart:149:                          padding: const EdgeInsets.symmetric(vertical: 16),
+lib/features/partner/widgets/partner_invitation_link_tab.dart:152:                            borderRadius: BorderRadius.circular(16),
+lib/features/partner/widgets/partner_communication_widget.dart:72:              borderRadius: BorderRadius.circular(24),
+lib/features/partner/widgets/partner_communication_widget.dart:75:                width: 2,
+lib/features/partner/widgets/partner_communication_widget.dart:80:                  blurRadius: 20,
+lib/features/partner/widgets/partner_communication_widget.dart:81:                  offset: const Offset(0, 8),
+lib/features/partner/widgets/partner_communication_widget.dart:104:      padding: const EdgeInsets.all(20),
+lib/features/partner/widgets/partner_communication_widget.dart:112:        borderRadius: const BorderRadius.only(
+lib/features/partner/widgets/partner_communication_widget.dart:120:            padding: const EdgeInsets.all(8),
+lib/features/partner/widgets/partner_communication_widget.dart:125:              borderRadius: BorderRadius.circular(12),
+lib/features/partner/widgets/partner_communication_widget.dart:130:              size: 20,
+lib/features/partner/widgets/partner_communication_widget.dart:133:          const SizedBox(width: 12),
+lib/features/partner/widgets/partner_communication_widget.dart:172:      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+lib/features/partner/widgets/partner_communication_widget.dart:183:          const SizedBox(height: 12),
+lib/features/partner/widgets/partner_communication_widget.dart:190:            const SizedBox(height: 8),
+lib/features/partner/widgets/partner_communication_widget.dart:197:                  fontSize: 12,
+lib/features/partner/widgets/partner_communication_widget.dart:217:      margin: const EdgeInsets.only(bottom: 8),
+lib/features/partner/widgets/partner_communication_widget.dart:221:            width: 32,
+lib/features/partner/widgets/partner_communication_widget.dart:222:            height: 32,
+lib/features/partner/widgets/partner_communication_widget.dart:234:              size: 16,
+lib/features/partner/widgets/partner_communication_widget.dart:237:          const SizedBox(width: 12),
+lib/features/partner/widgets/partner_communication_widget.dart:247:                        fontSize: 12,
+lib/features/partner/widgets/partner_communication_widget.dart:252:                    const SizedBox(width: 8),
+lib/features/partner/widgets/partner_communication_widget.dart:256:                        fontSize: 10,
+lib/features/partner/widgets/partner_communication_widget.dart:264:                const SizedBox(height: 2),
+lib/features/partner/widgets/partner_communication_widget.dart:268:                    fontSize: 14,
+lib/features/partner/widgets/partner_communication_widget.dart:279:              padding: const EdgeInsets.all(4),
+lib/features/partner/widgets/partner_communication_widget.dart:282:                borderRadius: BorderRadius.circular(8),
+lib/features/partner/widgets/partner_communication_widget.dart:287:                size: 12,
+lib/features/partner/widgets/partner_communication_widget.dart:292:    ).animate(delay: (index * 100).ms).fadeIn().slideX(begin: -0.2, end: 0);
+lib/features/partner/widgets/partner_communication_widget.dart:297:      padding: const EdgeInsets.all(20),
+lib/features/partner/widgets/partner_communication_widget.dart:308:          const SizedBox(height: 12),
+lib/features/partner/widgets/partner_communication_widget.dart:310:            spacing: 8,
+lib/features/partner/widgets/partner_communication_widget.dart:311:            runSpacing: 8,
+lib/features/partner/widgets/partner_communication_widget.dart:322:          const SizedBox(height: 16),
+lib/features/partner/widgets/partner_communication_widget.dart:333:        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+lib/features/partner/widgets/partner_communication_widget.dart:341:          borderRadius: BorderRadius.circular(20),
+lib/features/partner/widgets/partner_communication_widget.dart:344:            width: 1,
+lib/features/partner/widgets/partner_communication_widget.dart:350:            Icon(icon, color: AppTheme.primaryRose, size: 16),
+lib/features/partner/widgets/partner_communication_widget.dart:351:            const SizedBox(width: 6),
+lib/features/partner/widgets/partner_communication_widget.dart:356:                fontSize: 12,
+lib/features/partner/widgets/partner_communication_widget.dart:363:    ).animate().scale(begin: const Offset(0.8, 0.8)).fadeIn();
+lib/features/partner/widgets/partner_communication_widget.dart:378:                borderRadius: BorderRadius.circular(25),
+lib/features/partner/widgets/partner_communication_widget.dart:384:                borderRadius: BorderRadius.circular(25),
+lib/features/partner/widgets/partner_communication_widget.dart:385:                borderSide: BorderSide(color: AppTheme.primaryRose, width: 2),
+lib/features/partner/widgets/partner_communication_widget.dart:387:              contentPadding: const EdgeInsets.symmetric(
+lib/features/partner/widgets/partner_communication_widget.dart:388:                horizontal: 20,
+lib/features/partner/widgets/partner_communication_widget.dart:389:                vertical: 12,
+lib/features/partner/widgets/partner_communication_widget.dart:399:        const SizedBox(width: 12),
+lib/features/partner/widgets/partner_communication_widget.dart:403:          child: Icon(Icons.send, color: theme.colorScheme.onPrimary, size: 16),
+lib/features/partner/widgets/partner_communication_widget.dart:411:      height: 300,
+lib/features/partner/widgets/partner_communication_widget.dart:412:      padding: const EdgeInsets.all(20),
+lib/features/partner/widgets/partner_communication_widget.dart:415:        borderRadius: const BorderRadius.only(
+lib/features/partner/widgets/partner_communication_widget.dart:442:          const SizedBox(height: 16),
+lib/features/partner/widgets/partner_communication_widget.dart:463:      margin: const EdgeInsets.only(bottom: 16),
+lib/features/partner/widgets/partner_communication_widget.dart:469:            const SizedBox(width: 12),
+lib/features/partner/widgets/partner_communication_widget.dart:478:                  padding: const EdgeInsets.all(16),
+lib/features/partner/widgets/partner_communication_widget.dart:493:                    borderRadius: BorderRadius.only(
+lib/features/partner/widgets/partner_communication_widget.dart:494:                      topLeft: const Radius.circular(20),
+lib/features/partner/widgets/partner_communication_widget.dart:495:                      topRight: const Radius.circular(20),
+lib/features/partner/widgets/partner_communication_widget.dart:498:                          : const Radius.circular(20),
+lib/features/partner/widgets/partner_communication_widget.dart:500:                          ? const Radius.circular(20)
+lib/features/partner/widgets/partner_communication_widget.dart:510:                      fontSize: 14,
+lib/features/partner/widgets/partner_communication_widget.dart:514:                const SizedBox(height: 4),
+lib/features/partner/widgets/partner_communication_widget.dart:518:                    fontSize: 10,
+lib/features/partner/widgets/partner_communication_widget.dart:526:            const SizedBox(width: 12),
+lib/features/partner/widgets/partner_communication_widget.dart:537:      width: 32,
+lib/features/partner/widgets/partner_communication_widget.dart:538:      height: 32,
+lib/features/partner/widgets/partner_communication_widget.dart:546:        border: Border.all(color: theme.cardColor, width: 2),
+lib/features/partner/widgets/partner_communication_widget.dart:551:        size: 16,
+
+==== SCROLL / SPRING / OVERSCROLL ====
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:28:        return SingleChildScrollView(
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:29:          physics: const BouncingScrollPhysics(
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:30:            parent: AlwaysScrollableScrollPhysics(),
+lib/features/partner/widgets/partner_invitation_dialog.dart:198:                                      controller: _tabController,
+lib/features/partner/widgets/partner_invitation_dialog.dart:199:                                      physics: const BouncingScrollPhysics(
+lib/features/partner/widgets/partner_invitation_dialog.dart:200:                                        parent: AlwaysScrollableScrollPhysics(),
+lib/features/partner/widgets/partner_invitation_dialog.dart:342:              controller: _tabController,
+lib/features/partner/widgets/partner_communication_widget.dart:371:            controller: _messageController,
+lib/features/partner/widgets/partner_communication_widget.dart:444:            child: ListView.builder(
+lib/features/partner/widgets/partner_invitation_link_tab.dart:25:        return SingleChildScrollView(
+lib/features/partner/widgets/partner_invitation_link_tab.dart:26:          physics: const BouncingScrollPhysics(
+lib/features/partner/widgets/partner_invitation_link_tab.dart:27:            parent: AlwaysScrollableScrollPhysics(),
+lib/features/partner/widgets/partner_care_actions_widget.dart:267:            physics: const NeverScrollableScrollPhysics(),
+lib/features/partner/widgets/partner_care_actions_widget.dart:441:          ListView.builder(
+lib/features/partner/widgets/partner_care_actions_widget.dart:443:            physics: const NeverScrollableScrollPhysics(),
+lib/features/partner/widgets/partner_care_actions_widget.dart:603:              controller: messageController,
+lib/features/partner/widgets/partner_care_actions_widget.dart:721:                controller: messageController,
+lib/features/partner/widgets/partner_invitation_email_tab.dart:42:        controller: emailController,
+lib/features/partner/widgets/partner_invitation_email_tab.dart:100:        controller: messageController,
+lib/features/partner/widgets/partner_invitation_email_tab.dart:153:          child: SingleChildScrollView(
+lib/features/partner/widgets/partner_invitation_email_tab.dart:154:            physics: const BouncingScrollPhysics(
+lib/features/partner/widgets/partner_invitation_email_tab.dart:155:              parent: AlwaysScrollableScrollPhysics(),
+
+==== COLORS / THEME ====
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:44:                    color: Colors.white,
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:48:                        color: AppTheme.primaryRose.withValues(alpha: 0.28),
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:70:                            color: AppTheme.lightGrey.withValues(alpha: 0.3),
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:95:                        style: theme.textTheme.bodySmall?.copyWith(
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:133:                          backgroundColor: isSent
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:134:                              ? AppTheme.primaryRose.withOpacity(0.35)
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:136:                          foregroundColor: Colors.white,
+lib/features/partner/widgets/partner_dashboard_header.dart:39:                  AppTheme.primaryRose.withValues(alpha: 0.1),
+lib/features/partner/widgets/partner_dashboard_header.dart:40:                  AppTheme.primaryPurple.withValues(alpha: 0.1),
+lib/features/partner/widgets/partner_dashboard_header.dart:45:                color: AppTheme.primaryRose.withValues(alpha: 0.2),
+lib/features/partner/widgets/partner_dashboard_header.dart:81:                              color: AppTheme.warningOrange.withValues(
+lib/features/partner/widgets/partner_quick_action_card.dart:22:    final theme = Theme.of(context);
+lib/features/partner/widgets/partner_quick_action_card.dart:29:              colors: [theme.cardColor, color.withValues(alpha: 0.05)],
+lib/features/partner/widgets/partner_quick_action_card.dart:32:            border: Border.all(color: color.withValues(alpha: 0.2), width: 1.5),
+lib/features/partner/widgets/partner_quick_action_card.dart:35:                color: color.withValues(alpha: 0.1),
+lib/features/partner/widgets/partner_quick_action_card.dart:42:            color: Colors.transparent,
+lib/features/partner/widgets/partner_quick_action_card.dart:55:                          colors: [color, color.withValues(alpha: 0.7)],
+lib/features/partner/widgets/partner_quick_action_card.dart:59:                      child: Icon(icon, color: Colors.white, size: 24),
+lib/features/partner/widgets/partner_quick_action_card.dart:67:                        color: theme.colorScheme.onSurface,
+lib/features/partner/widgets/partner_quick_action_card.dart:75:                        color: theme.colorScheme.onSurface.withValues(
+lib/features/partner/widgets/partner_quick_action_card.dart:87:        .shimmer(duration: 3000.ms, color: color.withValues(alpha: 0.1))
+lib/features/partner/widgets/partner_connection_stat.dart:19:    final theme = Theme.of(context);
+lib/features/partner/widgets/partner_connection_stat.dart:37:            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+lib/features/partner/widgets/partner_invitation_dialog.dart:130:    final theme = Theme.of(context);
+lib/features/partner/widgets/partner_invitation_dialog.dart:147:              backgroundColor: Colors.transparent,
+lib/features/partner/widgets/partner_invitation_dialog.dart:173:                            color: Colors.transparent,
+lib/features/partner/widgets/partner_invitation_dialog.dart:176:                              color: Colors.white.withValues(alpha: 0.10),
+lib/features/partner/widgets/partner_invitation_dialog.dart:181:                                color: Colors.transparent,
+lib/features/partner/widgets/partner_invitation_dialog.dart:191:                              color: Colors.transparent,
+lib/features/partner/widgets/partner_invitation_dialog.dart:277:            AppTheme.primaryRose.withValues(alpha: 0.1),
+lib/features/partner/widgets/partner_invitation_dialog.dart:278:            AppTheme.primaryPurple.withValues(alpha: 0.1),
+lib/features/partner/widgets/partner_invitation_dialog.dart:298:              color: Colors.white.withValues(alpha: 0.03),
+lib/features/partner/widgets/partner_invitation_dialog.dart:309:                  style: theme.textTheme.titleLarge?.copyWith(
+lib/features/partner/widgets/partner_invitation_dialog.dart:316:                  style: theme.textTheme.bodyMedium?.copyWith(
+lib/features/partner/widgets/partner_invitation_dialog.dart:317:                    color: AppTheme.mediumGrey.withValues(alpha: 0.88),
+lib/features/partner/widgets/partner_invitation_dialog.dart:336:            color: AppTheme.lightGrey.withValues(alpha: 0.3),
+lib/features/partner/widgets/partner_invitation_dialog.dart:351:              dividerColor: Colors.transparent,
+lib/features/partner/widgets/partner_invitation_dialog.dart:352:              labelColor: Colors.white,
+lib/features/partner/widgets/partner_insights_widget.dart:34:                Icon(Icons.lightbulb_outline, color: AppTheme.warningOrange),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:45:        cursorColor: const Color(0xFFFF6FAE),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:56:            Icons.email_outlined,
+lib/features/partner/widgets/partner_invitation_email_tab.dart:65:          fillColor: AppTheme.primaryRose.withValues(alpha: 0.16),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:103:        cursorColor: const Color(0xFFFF6FAE),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:123:            Icons.message_outlined,
+lib/features/partner/widgets/partner_invitation_email_tab.dart:136:          fillColor: AppTheme.primaryPurple.withValues(alpha: 0.16),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:174:                        color: Colors.white.withValues(alpha: 0.06),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:179:                          const Icon(Icons.favorite, color: Colors.pink),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:217:                                color: Colors.white,
+lib/features/partner/widgets/partner_invitation_email_tab.dart:225:                          backgroundColor: isSent
+lib/features/partner/widgets/partner_invitation_email_tab.dart:226:                              ? AppTheme.primaryRose.withOpacity(0.35)
+lib/features/partner/widgets/partner_invitation_email_tab.dart:228:                          foregroundColor: Colors.white,
+lib/features/partner/widgets/partner_avatar_badge.dart:26:        border: Border.all(color: Theme.of(context).cardColor, width: 3),
+lib/features/partner/widgets/partner_avatar_badge.dart:29:            color: Colors.black.withValues(alpha: 0.1),
+lib/features/partner/widgets/partner_avatar_badge.dart:39:            color: Colors.white,
+lib/features/partner/widgets/partner_empty_state.dart:31:                      AppTheme.primaryRose.withValues(alpha: 0.1),
+lib/features/partner/widgets/partner_empty_state.dart:32:                      AppTheme.primaryPurple.withValues(alpha: 0.1),
+lib/features/partner/widgets/partner_empty_state.dart:49:            style: theme.textTheme.headlineMedium?.copyWith(
+lib/features/partner/widgets/partner_empty_state.dart:58:            style: theme.textTheme.bodyLarge?.copyWith(
+lib/features/partner/widgets/partner_empty_state.dart:59:              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+lib/features/partner/widgets/partner_empty_state.dart:76:                    backgroundColor: AppTheme.primaryRose,
+lib/features/partner/widgets/partner_empty_state.dart:77:                    foregroundColor: Colors.white,
+lib/features/partner/widgets/partner_communication_widget.dart:55:    final theme = Theme.of(context);
+lib/features/partner/widgets/partner_communication_widget.dart:69:                  AppTheme.primaryRose.withValues(alpha: 0.02),
+lib/features/partner/widgets/partner_communication_widget.dart:74:                color: AppTheme.primaryRose.withValues(alpha: 0.2),
+lib/features/partner/widgets/partner_communication_widget.dart:79:                  color: AppTheme.primaryRose.withValues(alpha: 0.1),
+lib/features/partner/widgets/partner_communication_widget.dart:108:            AppTheme.primaryRose.withValues(alpha: 0.1),
+lib/features/partner/widgets/partner_communication_widget.dart:109:            AppTheme.primaryPurple.withValues(alpha: 0.1),
+lib/features/partner/widgets/partner_communication_widget.dart:129:              color: theme.colorScheme.onPrimary,
+lib/features/partner/widgets/partner_communication_widget.dart:140:                  style: theme.textTheme.titleMedium?.copyWith(
+lib/features/partner/widgets/partner_communication_widget.dart:142:                    color: theme.colorScheme.onSurface,
+lib/features/partner/widgets/partner_communication_widget.dart:149:                  style: theme.textTheme.bodySmall?.copyWith(
+lib/features/partner/widgets/partner_communication_widget.dart:150:                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+lib/features/partner/widgets/partner_communication_widget.dart:178:            style: theme.textTheme.bodySmall?.copyWith(
+lib/features/partner/widgets/partner_communication_widget.dart:179:              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+lib/features/partner/widgets/partner_communication_widget.dart:233:              color: theme.colorScheme.onPrimary,
+lib/features/partner/widgets/partner_communication_widget.dart:249:                        color: theme.colorScheme.onSurface,
+lib/features/partner/widgets/partner_communication_widget.dart:257:                        color: theme.colorScheme.onSurface.withValues(
+lib/features/partner/widgets/partner_communication_widget.dart:269:                    color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+lib/features/partner/widgets/partner_communication_widget.dart:281:                color: AppTheme.accentMint.withValues(alpha: 0.2),
+lib/features/partner/widgets/partner_communication_widget.dart:303:            style: theme.textTheme.bodySmall?.copyWith(
+lib/features/partner/widgets/partner_communication_widget.dart:304:              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+lib/features/partner/widgets/partner_communication_widget.dart:337:              AppTheme.primaryRose.withValues(alpha: 0.1),
+lib/features/partner/widgets/partner_communication_widget.dart:338:              AppTheme.primaryPurple.withValues(alpha: 0.1),
+lib/features/partner/widgets/partner_communication_widget.dart:343:            color: AppTheme.primaryRose.withValues(alpha: 0.3),
+lib/features/partner/widgets/partner_communication_widget.dart:375:                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+lib/features/partner/widgets/partner_communication_widget.dart:380:                  color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
+lib/features/partner/widgets/partner_communication_widget.dart:402:          backgroundColor: AppTheme.primaryRose,
+lib/features/partner/widgets/partner_communication_widget.dart:403:          child: Icon(Icons.send, color: theme.colorScheme.onPrimary, size: 16),
+lib/features/partner/widgets/partner_communication_widget.dart:414:        color: theme.scaffoldBackgroundColor.withValues(alpha: 0.5),
+lib/features/partner/widgets/partner_communication_widget.dart:427:                style: theme.textTheme.titleMedium?.copyWith(
+lib/features/partner/widgets/partner_communication_widget.dart:429:                  color: theme.colorScheme.onSurface,
+lib/features/partner/widgets/partner_communication_widget.dart:483:                              AppTheme.lightGrey.withValues(alpha: 0.5),
+lib/features/partner/widgets/partner_communication_widget.dart:484:                              AppTheme.lightGrey.withValues(alpha: 0.2),
+lib/features/partner/widgets/partner_communication_widget.dart:508:                          ? theme.colorScheme.onSurface
+lib/features/partner/widgets/partner_communication_widget.dart:509:                          : Colors.white,
+lib/features/partner/widgets/partner_communication_widget.dart:519:                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+lib/features/partner/widgets/partner_communication_widget.dart:535:    final theme = Theme.of(context);
+lib/features/partner/widgets/partner_communication_widget.dart:550:        color: theme.colorScheme.onPrimary,
+lib/features/partner/widgets/partner_invitation_link_tab.dart:41:                    color: Colors.white.withValues(alpha: 0.08),
+lib/features/partner/widgets/partner_invitation_link_tab.dart:44:                      color: Colors.white.withValues(alpha: 0.12),
+lib/features/partner/widgets/partner_invitation_link_tab.dart:49:                        color: Colors.black.withValues(alpha: 0.06),
+lib/features/partner/widgets/partner_invitation_link_tab.dart:67:                            color: Colors.white.withValues(alpha: 0.12),
+lib/features/partner/widgets/partner_invitation_link_tab.dart:70:                              color: Colors.white.withValues(alpha: 0.45),
+lib/features/partner/widgets/partner_invitation_link_tab.dart:144:                          backgroundColor: isSent
+lib/features/partner/widgets/partner_invitation_link_tab.dart:145:                              ? AppTheme.primaryRose.withOpacity(0.35)
+lib/features/partner/widgets/partner_invitation_link_tab.dart:147:                          foregroundColor: Colors.white,
+lib/features/partner/widgets/partner_care_actions_widget.dart:42:      'gradient': [AppTheme.primaryRose, Color(0xFFFF8A95)],
+lib/features/partner/widgets/partner_care_actions_widget.dart:51:      'gradient': [AppTheme.primaryPurple, Color(0xFF9D7BEA)],
+lib/features/partner/widgets/partner_care_actions_widget.dart:69:      'gradient': [AppTheme.warningOrange, Color(0xFFFFE066)],
+lib/features/partner/widgets/partner_care_actions_widget.dart:104:    final theme = Theme.of(context);
+lib/features/partner/widgets/partner_care_actions_widget.dart:117:                  Colors.white,
+lib/features/partner/widgets/partner_care_actions_widget.dart:118:                  AppTheme.warningOrange.withValues(alpha: 0.03),
+lib/features/partner/widgets/partner_care_actions_widget.dart:123:                color: AppTheme.warningOrange.withValues(alpha: 0.3),
+lib/features/partner/widgets/partner_care_actions_widget.dart:128:                  color: AppTheme.warningOrange.withValues(alpha: 0.15),
+lib/features/partner/widgets/partner_care_actions_widget.dart:158:            AppTheme.warningOrange.withValues(alpha: 0.1),
+lib/features/partner/widgets/partner_care_actions_widget.dart:159:            AppTheme.primaryRose.withValues(alpha: 0.05),
+lib/features/partner/widgets/partner_care_actions_widget.dart:184:                    color: Colors.white,
+lib/features/partner/widgets/partner_care_actions_widget.dart:198:                  style: theme.textTheme.titleMedium?.copyWith(
+lib/features/partner/widgets/partner_care_actions_widget.dart:207:                  style: theme.textTheme.bodySmall?.copyWith(
+lib/features/partner/widgets/partner_care_actions_widget.dart:232:                    color: AppTheme.warningOrange.withValues(alpha: 0.2),
+lib/features/partner/widgets/partner_care_actions_widget.dart:259:            style: theme.textTheme.bodySmall?.copyWith(
+lib/features/partner/widgets/partner_care_actions_widget.dart:304:                  color: action['color'].withValues(alpha: 0.3),
+lib/features/partner/widgets/partner_care_actions_widget.dart:322:                      Icon(action['icon'], color: Colors.white, size: 20),
+lib/features/partner/widgets/partner_care_actions_widget.dart:329:                      color: Colors.white,
+lib/features/partner/widgets/partner_care_actions_widget.dart:338:                      color: Colors.white.withValues(alpha: 0.9),
+lib/features/partner/widgets/partner_care_actions_widget.dart:362:            color: AppTheme.lightGrey.withValues(alpha: 0.5),
+lib/features/partner/widgets/partner_care_actions_widget.dart:366:            Icons.add_circle_outline,
+lib/features/partner/widgets/partner_care_actions_widget.dart:401:              style: theme.textTheme.titleMedium?.copyWith(
+lib/features/partner/widgets/partner_care_actions_widget.dart:409:              style: theme.textTheme.bodySmall?.copyWith(
+lib/features/partner/widgets/partner_care_actions_widget.dart:428:                style: theme.textTheme.bodySmall?.copyWith(
+lib/features/partner/widgets/partner_care_actions_widget.dart:485:          color: (actionInfo['color'] as Color).withValues(alpha: 0.3),
+lib/features/partner/widgets/partner_care_actions_widget.dart:645:              backgroundColor: actionInfo['color'],
+lib/features/partner/widgets/partner_care_actions_widget.dart:650:            child: const Text('Send', style: TextStyle(color: Colors.white)),
+lib/features/partner/widgets/partner_care_actions_widget.dart:766:                backgroundColor: AppTheme.primaryRose,
+lib/features/partner/widgets/partner_care_actions_widget.dart:771:              child: const Text('Send', style: TextStyle(color: Colors.white)),
+
+==== LIFECYCLE / CONTROLLERS ====
+lib/features/partner/widgets/partner_invitation_dialog.dart:25:  late TabController _tabController;
+lib/features/partner/widgets/partner_invitation_dialog.dart:26:  late AnimationController _dialogController;
+lib/features/partner/widgets/partner_invitation_dialog.dart:30:  final _emailController = TextEditingController();
+lib/features/partner/widgets/partner_invitation_dialog.dart:31:  final _messageController = TextEditingController();
+lib/features/partner/widgets/partner_invitation_dialog.dart:32:  final _emailFocus = FocusNode();
+lib/features/partner/widgets/partner_invitation_dialog.dart:33:  final _messageFocus = FocusNode();
+lib/features/partner/widgets/partner_invitation_dialog.dart:46:  void initState() {
+lib/features/partner/widgets/partner_invitation_dialog.dart:47:    super.initState();
+lib/features/partner/widgets/partner_invitation_dialog.dart:71:    _emailFocus.addListener(syncInviteInputMode);
+lib/features/partner/widgets/partner_invitation_dialog.dart:72:    _messageFocus.addListener(syncInviteInputMode);
+lib/features/partner/widgets/partner_invitation_dialog.dart:74:    _tabController = TabController(length: 3, vsync: this);
+lib/features/partner/widgets/partner_invitation_dialog.dart:75:    _dialogController = AnimationController(
+lib/features/partner/widgets/partner_invitation_dialog.dart:117:  void dispose() {
+lib/features/partner/widgets/partner_invitation_dialog.dart:118:    _tabController.dispose();
+lib/features/partner/widgets/partner_invitation_dialog.dart:119:    _dialogController.dispose();
+lib/features/partner/widgets/partner_invitation_dialog.dart:121:    _emailController.dispose();
+lib/features/partner/widgets/partner_invitation_dialog.dart:122:    _messageController.dispose();
+lib/features/partner/widgets/partner_invitation_dialog.dart:123:    _emailFocus.dispose();
+lib/features/partner/widgets/partner_invitation_dialog.dart:124:    _messageFocus.dispose();
+lib/features/partner/widgets/partner_invitation_dialog.dart:125:    super.dispose();
+lib/features/partner/widgets/partner_communication_widget.dart:24:  late AnimationController _controller;
+lib/features/partner/widgets/partner_communication_widget.dart:26:  final TextEditingController _messageController = TextEditingController();
+lib/features/partner/widgets/partner_communication_widget.dart:30:  void initState() {
+lib/features/partner/widgets/partner_communication_widget.dart:31:    super.initState();
+lib/features/partner/widgets/partner_communication_widget.dart:33:    _controller = AnimationController(
+lib/features/partner/widgets/partner_communication_widget.dart:47:  void dispose() {
+lib/features/partner/widgets/partner_communication_widget.dart:48:    _controller.dispose();
+lib/features/partner/widgets/partner_communication_widget.dart:49:    _messageController.dispose();
+lib/features/partner/widgets/partner_communication_widget.dart:50:    super.dispose();
+lib/features/partner/widgets/partner_care_actions_widget.dart:30:  late AnimationController _controller;
+lib/features/partner/widgets/partner_care_actions_widget.dart:75:  void initState() {
+lib/features/partner/widgets/partner_care_actions_widget.dart:76:    super.initState();
+lib/features/partner/widgets/partner_care_actions_widget.dart:78:    _controller = AnimationController(
+lib/features/partner/widgets/partner_care_actions_widget.dart:97:  void dispose() {
+lib/features/partner/widgets/partner_care_actions_widget.dart:98:    _controller.dispose();
+lib/features/partner/widgets/partner_care_actions_widget.dart:99:    super.dispose();
+lib/features/partner/widgets/partner_care_actions_widget.dart:575:    final TextEditingController messageController = TextEditingController();
+lib/features/partner/widgets/partner_care_actions_widget.dart:658:    final TextEditingController messageController = TextEditingController();
+lib/features/partner/widgets/partner_invitation_email_tab.dart:8:  final TextEditingController emailController;
+lib/features/partner/widgets/partner_invitation_email_tab.dart:9:  final TextEditingController messageController;
+lib/features/partner/widgets/partner_invitation_email_tab.dart:10:  final FocusNode emailFocus;
+lib/features/partner/widgets/partner_invitation_email_tab.dart:11:  final FocusNode messageFocus;
+
+==== ACTION OWNERSHIP ====
+lib/features/partner/widgets/partner_invitation_dialog.dart:24:    with TickerProviderStateMixin, WidgetsBindingObserver {
+lib/features/partner/widgets/partner_invitation_dialog.dart:42:  _InviteInputMode _inviteInputMode = _InviteInputMode.idle;
+lib/features/partner/widgets/partner_invitation_dialog.dart:66:      if (_inviteInputMode != nextMode) {
+lib/features/partner/widgets/partner_invitation_dialog.dart:67:        setState(() => _inviteInputMode = nextMode);
+lib/features/partner/widgets/partner_invitation_dialog.dart:109:        _inviteInputMode != _InviteInputMode.idle) {
+lib/features/partner/widgets/partner_invitation_dialog.dart:110:      setState(() => _inviteInputMode = _InviteInputMode.idle);
+lib/features/partner/widgets/partner_invitation_dialog.dart:209:                                          inviteInputMode: InviteInputMode
+lib/features/partner/widgets/partner_invitation_dialog.dart:210:                                              .values[_inviteInputMode.index],
+lib/features/partner/widgets/partner_invitation_dialog.dart:216:                                            if (_inviteInputMode !=
+lib/features/partner/widgets/partner_invitation_dialog.dart:218:                                              setState(
+lib/features/partner/widgets/partner_invitation_dialog.dart:219:                                                () => _inviteInputMode =
+lib/features/partner/widgets/partner_invitation_dialog.dart:225:                                            if (_inviteInputMode !=
+lib/features/partner/widgets/partner_invitation_dialog.dart:227:                                              setState(
+lib/features/partner/widgets/partner_invitation_dialog.dart:228:                                                () => _inviteInputMode =
+lib/features/partner/widgets/partner_invitation_dialog.dart:247:                                          onShareLink: _shareLink,
+lib/features/partner/widgets/partner_invitation_dialog.dart:324:            onPressed: () => Navigator.of(context).pop(),
+lib/features/partner/widgets/partner_invitation_dialog.dart:396:      setState(() => _successMessage = null);
+lib/features/partner/widgets/partner_invitation_dialog.dart:403:    setState(() {
+lib/features/partner/widgets/partner_invitation_dialog.dart:410:        inviteeEmail: email,
+lib/features/partner/widgets/partner_invitation_dialog.dart:421:      setState(() {
+lib/features/partner/widgets/partner_invitation_dialog.dart:428:          setState(() => _successMessage = null);
+lib/features/partner/widgets/partner_invitation_dialog.dart:429:          Navigator.of(context).pop();
+lib/features/partner/widgets/partner_invitation_dialog.dart:436:        setState(() {
+lib/features/partner/widgets/partner_invitation_dialog.dart:448:    setState(() {
+lib/features/partner/widgets/partner_invitation_dialog.dart:458:      setState(() {
+lib/features/partner/widgets/partner_invitation_dialog.dart:464:      if (mounted) setState(() => _isLoading = false);
+lib/features/partner/widgets/partner_invitation_dialog.dart:469:  void _shareLink() {
+lib/features/partner/widgets/partner_invitation_dialog.dart:471:      PartnerInvitationActions.shareLink(_generatedInvitation!);
+lib/features/partner/widgets/partner_invitation_dialog.dart:476:    showDialog(
+lib/features/partner/widgets/partner_invitation_dialog.dart:483:            onPressed: () => Navigator.of(context).pop(),
+lib/features/partner/widgets/partner_invitation_dialog.dart:492:    setState(() => _successMessage = "QR saved successfully");
+lib/features/partner/widgets/partner_invitation_dialog.dart:495:        setState(() => _successMessage = null);
+lib/features/partner/widgets/partner_communication_widget.dart:23:    with TickerProviderStateMixin {
+lib/features/partner/widgets/partner_communication_widget.dart:157:            onPressed: () => setState(() => _isExpanded = !_isExpanded),
+lib/features/partner/widgets/partner_communication_widget.dart:192:              onTap: () => setState(() => _isExpanded = true),
+lib/features/partner/widgets/partner_communication_widget.dart:434:                onPressed: () => setState(() => _isExpanded = false),
+lib/features/partner/widgets/partner_invitation_actions.dart:7:    return 'https://flow-ai-656b3.web.app/invite/${invitation.invitationCode}';
+lib/features/partner/widgets/partner_invitation_actions.dart:10:  static Future<void> copyToClipboard(String text) {
+lib/features/partner/widgets/partner_invitation_actions.dart:11:    return Clipboard.setData(ClipboardData(text: text));
+lib/features/partner/widgets/partner_invitation_actions.dart:14:  static Future<void> shareLink(PartnerInvitation invitation) {
+lib/features/partner/widgets/partner_invitation_link_tab.dart:89:                                onPressed: () => PartnerInvitationActions.copyToClipboard(
+lib/features/partner/widgets/partner_invitation_email_tab.dart:13:  final InviteInputMode inviteInputMode;
+lib/features/partner/widgets/partner_invitation_email_tab.dart:28:    required this.inviteInputMode,
+lib/features/partner/widgets/partner_invitation_email_tab.dart:41:        key: const ValueKey('invite_email_field'),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:99:        key: const ValueKey('invite_message_field'),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:195:                  if (inviteInputMode != InviteInputMode.message) emailField(),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:196:                  if (inviteInputMode == InviteInputMode.idle)
+lib/features/partner/widgets/partner_invitation_email_tab.dart:198:                  if (inviteInputMode != InviteInputMode.email) messageField(),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:200:                  if (inviteInputMode == InviteInputMode.idle) ...[
+lib/features/partner/widgets/partner_care_actions_widget.dart:29:    with TickerProviderStateMixin {
+lib/features/partner/widgets/partner_care_actions_widget.dart:218:                    setState(() => _showQuickActions = !_showQuickActions),
+lib/features/partner/widgets/partner_care_actions_widget.dart:577:    showDialog(
+lib/features/partner/widgets/partner_care_actions_widget.dart:621:            onPressed: () => Navigator.pop(context),
+lib/features/partner/widgets/partner_care_actions_widget.dart:642:              Navigator.pop(context);
+lib/features/partner/widgets/partner_care_actions_widget.dart:661:    showDialog(
+lib/features/partner/widgets/partner_care_actions_widget.dart:715:                    setState(() => selectedType = type);
+lib/features/partner/widgets/partner_care_actions_widget.dart:742:              onPressed: () => Navigator.pop(context),
+lib/features/partner/widgets/partner_care_actions_widget.dart:762:                      Navigator.pop(context);
+lib/features/partner/models/partner_service_models.dart:4:  final String inviterId;
+lib/features/partner/models/partner_service_models.dart:5:  final String inviterName;
+lib/features/partner/models/partner_service_models.dart:6:  final String? inviterEmail;
+lib/features/partner/models/partner_service_models.dart:7:  final String inviteeEmail;
+lib/features/partner/models/partner_service_models.dart:8:  final String? inviteePhone;
+lib/features/partner/models/partner_service_models.dart:16:    required this.inviterId,
+lib/features/partner/models/partner_service_models.dart:17:    required this.inviterName,
+lib/features/partner/models/partner_service_models.dart:18:    this.inviterEmail,
+lib/features/partner/models/partner_service_models.dart:19:    required this.inviteeEmail,
+lib/features/partner/models/partner_service_models.dart:20:    this.inviteePhone,
+lib/features/partner/models/partner_service_models.dart:30:      'inviterId': inviterId,
+lib/features/partner/models/partner_service_models.dart:31:      'inviterName': inviterName,
+lib/features/partner/models/partner_service_models.dart:32:      'inviterEmail': inviterEmail,
+lib/features/partner/models/partner_service_models.dart:33:      'inviteeEmail': inviteeEmail,
+lib/features/partner/models/partner_service_models.dart:34:      'inviteePhone': inviteePhone,
+lib/features/partner/models/partner_service_models.dart:45:      inviterId: json['inviterId'],
+lib/features/partner/models/partner_service_models.dart:46:      inviterName: json['inviterName'],
+lib/features/partner/models/partner_service_models.dart:47:      inviterEmail: json['inviterEmail'],
+lib/features/partner/models/partner_service_models.dart:48:      inviteeEmail: json['inviteeEmail'],
+lib/features/partner/models/partner_service_models.dart:49:      inviteePhone: json['inviteePhone'],
+lib/features/partner/models/partner_service_models.dart:375:enum PartnershipStatus { invited, active, paused, ended }
+lib/features/partner/dialogs/join_partner_dialog.dart:18:    with TickerProviderStateMixin {
+lib/features/partner/dialogs/join_partner_dialog.dart:160:            onPressed: () => Navigator.pop(context),
+lib/features/partner/dialogs/join_partner_dialog.dart:190:      Navigator.pop(context);
+lib/features/partner/dialogs/join_partner_dialog.dart:372:                  setState(() => _errorMessage = null);
+lib/features/partner/dialogs/join_partner_dialog.dart:381:              onPressed: _pasteFromClipboard,
+lib/features/partner/dialogs/join_partner_dialog.dart:445:            Navigator.pop(context);
+lib/features/partner/dialogs/join_partner_dialog.dart:455:            Navigator.pop(context);
+lib/features/partner/dialogs/join_partner_dialog.dart:555:  Future<void> _pasteFromClipboard() async {
+lib/features/partner/dialogs/join_partner_dialog.dart:557:      final data = await Clipboard.getData(Clipboard.kTextPlain);
+lib/features/partner/dialogs/join_partner_dialog.dart:564:          setState(() {
+lib/features/partner/dialogs/join_partner_dialog.dart:577:      setState(() {
+lib/features/partner/dialogs/join_partner_dialog.dart:593:          Navigator.pop(context);
+lib/features/partner/dialogs/join_partner_dialog.dart:596:        setState(() {
+lib/features/partner/dialogs/join_partner_dialog.dart:606:    ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+lib/features/partner/dialogs/join_partner_dialog.dart:607:      SnackBar(
+lib/features/partner/dialogs/join_partner_dialog.dart:609:        behavior: SnackBarBehavior.floating,
+lib/features/partner/dialogs/join_partner_dialog.dart:616:    ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+lib/features/partner/dialogs/join_partner_dialog.dart:617:      SnackBar(
+lib/features/partner/dialogs/join_partner_dialog.dart:619:        behavior: SnackBarBehavior.floating,
+lib/features/partner/dialogs/invite_partner_dialog.dart:15:    with TickerProviderStateMixin {
+lib/features/partner/dialogs/invite_partner_dialog.dart:167:            onPressed: () => Navigator.pop(context),
+lib/features/partner/dialogs/invite_partner_dialog.dart:315:        onTap: () => setState(() => _messageController.text = message),
+lib/features/partner/dialogs/invite_partner_dialog.dart:444:                      setState(() => _currentStep = _currentStep - 1);
+lib/features/partner/dialogs/invite_partner_dialog.dart:505:        setState(() => _currentStep = 1);
+lib/features/partner/dialogs/invite_partner_dialog.dart:515:    setState(() => _isLoading = true);
+lib/features/partner/dialogs/invite_partner_dialog.dart:527:        Navigator.pop(context);
+lib/features/partner/dialogs/invite_partner_dialog.dart:530:      setState(() => _isLoading = false);
+lib/features/partner/dialogs/invite_partner_dialog.dart:533:        ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+lib/features/partner/dialogs/invite_partner_dialog.dart:534:          SnackBar(
+lib/features/partner/dialogs/invite_partner_dialog.dart:543:            behavior: SnackBarBehavior.floating,
+lib/features/partner/services/local_partner_service.dart:84:      inviterId: userInfo['userId']!,
+lib/features/partner/services/local_partner_service.dart:85:      inviterName: userInfo['userName']!,
+lib/features/partner/services/local_partner_service.dart:86:      inviterEmail: userInfo['userEmail'],
+lib/features/partner/services/local_partner_service.dart:87:      inviteeEmail: userInfo['userEmail'] ?? '', // Will be filled when accepted
+lib/features/partner/services/local_partner_service.dart:109:    final inviteeUserId = userInfo['userId']!;
+lib/features/partner/services/local_partner_service.dart:112:    final inviteeUserName = userInfo['userName']!;
+lib/features/partner/services/local_partner_service.dart:115:    final inviteeEmail = userInfo['userEmail'];
+lib/features/partner/services/local_partner_service.dart:131:    if (invitation.inviterId == inviteeUserId) {
+lib/features/partner/services/local_partner_service.dart:138:      invitation.inviterId,
+lib/features/partner/services/local_partner_service.dart:139:      inviteeUserId,
+lib/features/partner/services/local_partner_service.dart:146:    // Get inviter name from invitation
+lib/features/partner/services/local_partner_service.dart:150:      userId1: invitation.inviterId,
+lib/features/partner/services/local_partner_service.dart:151:      userId2: inviteeUserId,
+lib/features/partner/services/partner_service.dart:4:import 'partner_invite_actions.dart';
+lib/features/partner/services/partner_service.dart:18:  late final PartnerInviteActions _inviteActions = PartnerInviteActions(_localService);
+lib/features/partner/services/partner_service.dart:119:    return _inviteActions.createInvitation(
+lib/features/partner/services/partner_service.dart:126:    required String inviteeEmail,
+lib/features/partner/services/partner_service.dart:127:    String? inviteePhone,
+lib/features/partner/services/partner_service.dart:132:      return await _inviteActions.sendInvitation(
+lib/features/partner/services/partner_service.dart:133:        inviteeEmail: inviteeEmail,
+lib/features/partner/screens/partner_privacy_settings_screen.dart:17:    with TickerProviderStateMixin {
+lib/features/partner/screens/partner_privacy_settings_screen.dart:53:      setState(() {
+lib/features/partner/screens/partner_privacy_settings_screen.dart:64:      setState(() {
+lib/features/partner/screens/partner_privacy_settings_screen.dart:74:    setState(() => _isLoading = true);
+lib/features/partner/screens/partner_privacy_settings_screen.dart:81:      setState(() {
+lib/features/partner/screens/partner_privacy_settings_screen.dart:86:      ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:87:        SnackBar(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:90:          behavior: SnackBarBehavior.floating,
+lib/features/partner/screens/partner_privacy_settings_screen.dart:97:      ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:98:        SnackBar(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:101:          behavior: SnackBarBehavior.floating,
+lib/features/partner/screens/partner_privacy_settings_screen.dart:108:      setState(() => _isLoading = false);
+lib/features/partner/screens/partner_privacy_settings_screen.dart:113:    setState(() {
+lib/features/partner/services/partner_invite_actions.dart:18:    required String inviteeEmail,
+lib/features/partner/services/partner_invite_actions.dart:22:    if (!emailRegex.hasMatch(inviteeEmail)) {
+lib/features/partner/services/partner_invite_actions.dart:31:    final link = "https://flowai.app/invite/$code";
+lib/features/partner/services/partner_invite_actions.dart:35:      'email': inviteeEmail,
+lib/features/partner/screens/qr_join_screen.dart:23:    // Prefer real invite links like /invite/ABC123
+lib/features/partner/screens/qr_join_screen.dart:24:    final linkMatch = RegExp(r'/invite/([A-Z0-9]{6})', caseSensitive: false)
+lib/features/partner/screens/qr_join_screen.dart:42:      context.push('/invite/$normalizedCode');
+lib/features/partner/screens/partner_dashboard_screen.dart:32:    with TickerProviderStateMixin {
+lib/features/partner/screens/partner_dashboard_screen.dart:87:      body: Consumer<PartnerService>(
+lib/features/partner/screens/partner_dashboard_screen.dart:372:    showDialog(
+lib/features/partner/screens/partner_dashboard_screen.dart:374:      useRootNavigator: true,
+lib/features/partner/screens/partner_dashboard_screen.dart:385:    showDialog(
+lib/features/partner/screens/partner_dashboard_screen.dart:387:      useRootNavigator: true,
+lib/features/partner/screens/partner_dashboard_screen.dart:395:            Navigator.of(context, rootNavigator: true).pop(); 
+lib/features/partner/screens/partner_dashboard_screen.dart:407:    showDialog(
+lib/features/partner/screens/partner_dashboard_screen.dart:409:      useRootNavigator: true,
+lib/features/partner/screens/partner_dashboard_screen.dart:415:            onPressed: () => Navigator.of(context).pop(),
+
+==== TEST SURFACE ====
+test/features/partner/partner_invitation_dialog_test.dart
+test/features/partner/partner_service_test.dart
+
+test/features/partner/partner_service_test.dart:8:  group('PartnerService', () {
+test/features/partner/partner_service_test.dart:16:    test('createPartnerInvitation completes', () async {
+test/features/partner/partner_service_test.dart:21:      expect(result, isNotNull);
+test/features/partner/partner_service_test.dart:24:    test('sendPartnerInvitation resets loading state', () async {
+test/features/partner/partner_service_test.dart:30:      expect(service.isLoading, false);
+test/features/partner/partner_service_test.dart:33:    test('getPartnerFeatureStatus returns expected keys', () async {
+test/features/partner/partner_service_test.dart:36:      expect(result, contains('firebaseAvailable'));
+test/features/partner/partner_service_test.dart:37:      expect(result, contains('partnerFeaturesEnabled'));
+test/features/partner/partner_service_test.dart:38:      expect(result, contains('hasActivePartnership'));
+test/features/partner/partner_service_test.dart:39:      expect(result, contains('message'));
+test/features/partner/partner_service_test.dart:42:    test('loading state is false after status check', () async {
+test/features/partner/partner_service_test.dart:44:      expect(service.isLoading, false);
+test/features/partner/partner_invitation_dialog_test.dart:17:  testWidgets('Partner invitation dialog renders tabs', (tester) async {
+test/features/partner/partner_invitation_dialog_test.dart:18:    await tester.pumpWidget(
+test/features/partner/partner_invitation_dialog_test.dart:28:    expect(find.byType(TabBar), findsOneWidget);
+test/features/partner/partner_invitation_dialog_test.dart:29:    expect(find.byType(TabBarView), findsOneWidget);
+test/features/partner/partner_invitation_dialog_test.dart:30:    expect(find.textContaining('Email'), findsWidgets);
+test/features/partner/partner_invitation_dialog_test.dart:31:    expect(find.textContaining('QR'), findsWidgets);
+test/features/partner/partner_invitation_dialog_test.dart:32:    expect(find.textContaining('Link'), findsWidgets);
+test/features/partner/partner_invitation_dialog_test.dart:35:  testWidgets('Can switch to QR and Link tabs', (tester) async {
+test/features/partner/partner_invitation_dialog_test.dart:36:    await tester.pumpWidget(
+test/features/partner/partner_invitation_dialog_test.dart:46:    await tester.tap(find.textContaining('QR').first);
+test/features/partner/partner_invitation_dialog_test.dart:49:    await tester.tap(find.textContaining('Link').first);
+test/features/partner/partner_invitation_dialog_test.dart:52:    expect(find.byType(TabBarView), findsOneWidget);
+test/features/partner/partner_invitation_dialog_test.dart:55:  testWidgets('Email validation shows required error for empty input', (tester) async {
+test/features/partner/partner_invitation_dialog_test.dart:56:    await tester.pumpWidget(
+test/features/partner/partner_invitation_dialog_test.dart:65:    await tester.ensureVisible(find.textContaining('Send').first);
+test/features/partner/partner_invitation_dialog_test.dart:66:    await tester.tap(find.textContaining('Send').first, warnIfMissed: false);
+test/features/partner/partner_invitation_dialog_test.dart:69:    expect(find.text('Please enter an email address'), findsOneWidget);
+test/features/partner/partner_invitation_dialog_test.dart:72:  testWidgets('Email validation rejects malformed email', (tester) async {
+test/features/partner/partner_invitation_dialog_test.dart:73:    await tester.pumpWidget(
+test/features/partner/partner_invitation_dialog_test.dart:82:    await tester.enterText(
+test/features/partner/partner_invitation_dialog_test.dart:83:      find.byKey(const ValueKey('invite_email_field')),
+test/features/partner/partner_invitation_dialog_test.dart:86:    await tester.ensureVisible(find.textContaining('Send').first);
+test/features/partner/partner_invitation_dialog_test.dart:87:    await tester.tap(find.textContaining('Send').first, warnIfMissed: false);
+test/features/partner/partner_invitation_dialog_test.dart:90:    expect(find.text('Please enter a valid email address'), findsOneWidget);
+test/features/partner/partner_invitation_dialog_test.dart:93:  testWidgets('Email validation detects typo domain', (tester) async {
+test/features/partner/partner_invitation_dialog_test.dart:94:    await tester.pumpWidget(
+test/features/partner/partner_invitation_dialog_test.dart:103:    await tester.enterText(
+test/features/partner/partner_invitation_dialog_test.dart:104:      find.byKey(const ValueKey('invite_email_field')),
+test/features/partner/partner_invitation_dialog_test.dart:107:    await tester.ensureVisible(find.textContaining('Send').first);
+test/features/partner/partner_invitation_dialog_test.dart:108:    await tester.tap(find.textContaining('Send').first, warnIfMissed: false);
+test/features/partner/partner_invitation_dialog_test.dart:111:    expect(find.text('Did you mean .com?'), findsOneWidget);
+test/features/partner/partner_invitation_dialog_test.dart:114:  testWidgets('Valid email does not show validation errors', (tester) async {
+test/features/partner/partner_invitation_dialog_test.dart:115:    await tester.pumpWidget(
+test/features/partner/partner_invitation_dialog_test.dart:124:    await tester.enterText(
+test/features/partner/partner_invitation_dialog_test.dart:125:      find.byKey(const ValueKey('invite_email_field')),
+test/features/partner/partner_invitation_dialog_test.dart:128:    await tester.ensureVisible(find.textContaining('Send').first);
+test/features/partner/partner_invitation_dialog_test.dart:129:    await tester.tap(find.textContaining('Send').first, warnIfMissed: false);
+test/features/partner/partner_invitation_dialog_test.dart:132:    expect(find.text('Please enter an email address'), findsNothing);
+test/features/partner/partner_invitation_dialog_test.dart:133:    expect(find.text('Please enter a valid email address'), findsNothing);
+test/features/partner/partner_invitation_dialog_test.dart:134:    expect(find.text('Did you mean .com?'), findsNothing);
