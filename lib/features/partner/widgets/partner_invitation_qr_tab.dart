@@ -31,11 +31,11 @@ class PartnerInvitationQrTab extends StatelessWidget {
           ),
           padding: const EdgeInsets.all(24),
           child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            constraints: BoxConstraints(minHeight: constraints.maxHeight - 72),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const SizedBox(height: 18),
+                const SizedBox(height: 2),
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
@@ -100,7 +100,7 @@ class PartnerInvitationQrTab extends StatelessWidget {
                   begin: const Offset(0.92, 0.92),
                   curve: Curves.easeOutBack,
                 ).fadeIn(delay: 120.ms),
-                const SizedBox(height: 18),
+                const SizedBox(height: 12),
                 Row(
                   children: [
                     Expanded(

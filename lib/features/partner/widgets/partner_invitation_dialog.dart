@@ -170,16 +170,16 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            color: Colors.transparent,
+                            color: theme.colorScheme.surface,
                             borderRadius: BorderRadius.circular(28),
                             border: Border.all(
-                              color: Colors.white.withValues(alpha: 0.10),
+                              color: theme.colorScheme.outline.withValues(alpha: 0.22),
                               width: 1,
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.transparent,
-                                blurRadius: 0,
+                                color: Colors.black.withValues(alpha: 0.08),
+                                blurRadius: 24,
                                 spreadRadius: 0,
                                 offset: const Offset(0, 10),
                               ),
@@ -188,7 +188,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(28),
                             child: Container(
-                              color: Colors.transparent,
+                              color: theme.colorScheme.surface,
                               child: Column(
                                 children: [
                                   _buildHeader(theme, localizations),
