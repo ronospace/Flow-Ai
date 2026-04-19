@@ -28,7 +28,7 @@ class PartnerInvitationLinkTab extends StatelessWidget {
           ),
           padding: const EdgeInsets.all(24),
           child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            constraints: BoxConstraints(minHeight: constraints.maxHeight - 72),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -39,16 +39,9 @@ class PartnerInvitationLinkTab extends StatelessWidget {
                     color: Colors.white.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.12),
-                      width: 1.2,
+                      color: AppTheme.primaryRose.withValues(alpha: 0.22),
+                      width: 1.4,
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.06),
-                        blurRadius: 12,
-                        offset: const Offset(0, 10),
-                      ),
-                    ],
                   ),
                   child: Column(
                     children: [
@@ -65,7 +58,7 @@ class PartnerInvitationLinkTab extends StatelessWidget {
                             color: Colors.white.withValues(alpha: 0.12),
                             borderRadius: BorderRadius.circular(22),
                             border: Border.all(
-                              color: Colors.white.withValues(alpha: 0.45),
+                              color: AppTheme.primaryRose.withValues(alpha: 0.12),
                               width: 1.2,
                             ),
                           ),
