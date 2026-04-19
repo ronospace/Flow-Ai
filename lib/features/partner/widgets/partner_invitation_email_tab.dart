@@ -63,9 +63,7 @@ class PartnerInvitationEmailTab extends StatelessWidget {
           ),
           filled: true,
           fillColor: AppTheme.primaryRose.withValues(alpha: 0.16),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(22),
-          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(22)),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(22),
           ),
@@ -78,9 +76,7 @@ class PartnerInvitationEmailTab extends StatelessWidget {
           if (value == null || value.isEmpty) {
             return 'Please enter an email address';
           }
-          if (!RegExp(
-            r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-          ).hasMatch(value)) {
+          if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
             return 'Please enter a valid email address';
           }
           final lower = value.toLowerCase();
@@ -132,21 +128,13 @@ class PartnerInvitationEmailTab extends StatelessWidget {
             minWidth: 48,
             minHeight: 48,
           ),
-          suffixIcon: inviteInputMode == InviteInputMode.message
-              ? IconButton(
-                  onPressed: (isLoading || isSent) ? null : onSubmit,
-                  icon: Icon(
-                    Icons.send,
-                    size: 20,
-                    color: AppTheme.primaryRose,
-                  ),
-                )
-              : null,
+          suffixIcon: IconButton(
+            onPressed: (isLoading || isSent) ? null : onSubmit,
+            icon: Icon(Icons.send, size: 20, color: AppTheme.primaryRose),
+          ),
           filled: true,
           fillColor: AppTheme.primaryPurple.withValues(alpha: 0.16),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(22),
-          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(22)),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(22),
           ),
@@ -173,84 +161,86 @@ class PartnerInvitationEmailTab extends StatelessWidget {
               24,
               MediaQuery.of(context).viewInsets.bottom > 0 ? 4 : 24,
             ),
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: constraints.maxHeight - 48,
-              ),
-              child: Form(
-                key: formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (successMessage != null)
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 16),
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.06),
-                          borderRadius: BorderRadius.circular(22),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.favorite, color: Colors.pink),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Text(
-                                successMessage!,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                ),
+            child: Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (successMessage != null)
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 16),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.06),
+                        borderRadius: BorderRadius.circular(22),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.favorite, color: Colors.pink),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              successMessage!,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
-                          ],
-                        ),
-                      ).animate().fadeIn().slideY(begin: -0.3),
-
-                    const SizedBox(height: 12),
-
-                    if (inviteInputMode != InviteInputMode.message) emailField(),
-                    if (inviteInputMode == InviteInputMode.idle)
-                      const SizedBox(height: 24),
-                    if (inviteInputMode != InviteInputMode.email) messageField(),
-
-                    if (inviteInputMode == InviteInputMode.idle) ...[
-                      const SizedBox(height: 26),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton.icon(
-                          onPressed: (isLoading || isSent) ? null : onSubmit,
-                          icon: isLoading
-                              ? const SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                  ),
-                                )
-                              : Icon(isSent ? Icons.check : Icons.send),
-                          label: Text(
-                            isLoading
-                                ? 'Sending...'
-                                : (isSent ? 'Sent ✓' : 'Send Invitation'),
                           ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: isSent
-                                ? AppTheme.primaryRose.withOpacity(0.35)
-                                : AppTheme.primaryRose,
-                            foregroundColor: Colors.white,
-                            minimumSize: const Size(double.infinity, 56),
+                        ],
+                      ),
+                    ).animate().fadeIn().slideY(begin: -0.3),
+
+                  const SizedBox(height: 18),
+
+                  if (inviteInputMode != InviteInputMode.message) emailField(),
+                  if (inviteInputMode == InviteInputMode.idle)
+                    const SizedBox(height: 18),
+                  if (inviteInputMode != InviteInputMode.email) messageField(),
+
+                  if (inviteInputMode == InviteInputMode.idle) ...[
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: (isLoading || isSent) ? null : onSubmit,
+                        icon: isLoading
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : Icon(
+                                isSent ? Icons.check : Icons.send,
+                                size: 20,
+                                color: Colors.white,
+                              ),
+                        label: Text(
+                          isLoading
+                              ? 'Sending...'
+                              : (isSent ? 'Sent ✓' : 'Send Invitation'),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: isSent
+                              ? AppTheme.primaryRose.withOpacity(0.35)
+                              : AppTheme.primaryRose,
+                          foregroundColor: Colors.white,
+                          minimumSize: const Size(double.infinity, 56),
                           padding: const EdgeInsets.symmetric(vertical: 16),
-                            visualDensity: VisualDensity.compact,
+                          visualDensity: VisualDensity.compact,
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          textStyle: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
-                    ],
+                    ),
                   ],
-                ),
+                ],
               ),
             ),
           ),

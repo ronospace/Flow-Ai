@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
 
@@ -22,23 +23,26 @@ class PartnerEmptyState extends StatelessWidget {
         children: [
           const SizedBox(height: 60),
           Container(
-            width: 120,
-            height: 120,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  AppTheme.primaryRose.withValues(alpha: 0.1),
-                  AppTheme.primaryPurple.withValues(alpha: 0.1),
-                ],
-              ),
-              borderRadius: BorderRadius.circular(60),
-            ),
-            child: Icon(
-              Icons.favorite_border,
-              size: 60,
-              color: AppTheme.primaryRose,
-            ),
-          ).animate().scale(begin: const Offset(0.5, 0.5)).fadeIn(duration: 800.ms),
+                width: 120,
+                height: 120,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      AppTheme.primaryRose.withValues(alpha: 0.1),
+                      AppTheme.primaryPurple.withValues(alpha: 0.1),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(60),
+                ),
+                child: Icon(
+                  Icons.favorite_border,
+                  size: 60,
+                  color: AppTheme.primaryRose,
+                ),
+              )
+              .animate()
+              .scale(begin: const Offset(0.5, 0.5))
+              .fadeIn(duration: 800.ms),
           const SizedBox(height: 32),
           Text(
             'Connect with Your Partner',
@@ -58,8 +62,12 @@ class PartnerEmptyState extends StatelessWidget {
           ).animate().fadeIn(delay: 400.ms),
           const SizedBox(height: 40),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Expanded(
+              SizedBox(
+                width: defaultTargetPlatform == TargetPlatform.iOS
+                    ? 164
+                    : 156,
                 child: ElevatedButton.icon(
                   onPressed: onInvite,
                   icon: const Icon(Icons.send, size: 20),
@@ -68,16 +76,19 @@ class PartnerEmptyState extends StatelessWidget {
                     backgroundColor: AppTheme.primaryRose,
                     foregroundColor: Colors.white,
                     minimumSize: const Size(double.infinity, 56),
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     visualDensity: VisualDensity.compact,
-                          shape: RoundedRectangleBorder(
+                    shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
                 ),
               ),
-              const SizedBox(width: 16),
-              Expanded(
+              const SizedBox(width: 12),
+              SizedBox(
+                width: defaultTargetPlatform == TargetPlatform.iOS
+                    ? 164
+                    : 156,
                 child: OutlinedButton.icon(
                   onPressed: onJoin,
                   icon: const Icon(Icons.link, size: 20),
@@ -86,9 +97,9 @@ class PartnerEmptyState extends StatelessWidget {
                     foregroundColor: AppTheme.primaryRose,
                     side: BorderSide(color: AppTheme.primaryRose),
                     minimumSize: const Size(double.infinity, 56),
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     visualDensity: VisualDensity.compact,
-                          shape: RoundedRectangleBorder(
+                    shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),

@@ -46,7 +46,15 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _wasKeyboardVisible = WidgetsBinding.instance.platformDispatcher.views.first.viewInsets.bottom > 0;
+    _wasKeyboardVisible =
+        WidgetsBinding
+            .instance
+            .platformDispatcher
+            .views
+            .first
+            .viewInsets
+            .bottom >
+        0;
     void syncInviteInputMode() {
       if (!mounted) return;
       final nextMode = _emailFocus.hasFocus
@@ -82,12 +90,18 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
     _dialogController.forward();
   }
 
-
   @override
   void didChangeMetrics() {
     super.didChangeMetrics();
     final isKeyboardVisible =
-        WidgetsBinding.instance.platformDispatcher.views.first.viewInsets.bottom > 0;
+        WidgetsBinding
+            .instance
+            .platformDispatcher
+            .views
+            .first
+            .viewInsets
+            .bottom >
+        0;
 
     if (_wasKeyboardVisible &&
         !isKeyboardVisible &&
@@ -176,59 +190,73 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                             child: Container(
                               color: Colors.transparent,
                               child: Column(
-                                  children: [
-                                    _buildHeader(theme, localizations),
-                                    _buildTabBar(theme, localizations),
-                                    Expanded(
-                                      child: TabBarView(
-                                        controller: _tabController,
-                                        children: [
-                                          PartnerInvitationEmailTab(
-                                            emailController: _emailController,
-                                            messageController: _messageController,
-                                            emailFocus: _emailFocus,
-                                            messageFocus: _messageFocus,
-                                            formKey: _formKey,
-                                            inviteInputMode: InviteInputMode.values[_inviteInputMode.index],
-                                            isLoading: _isLoading,
-                                            isSent: _isSent,
-                                            successMessage: _successMessage,
-                                            onSubmit: _openEmailInvite,
-                                            onEmailTap: () {
-                                              if (_inviteInputMode != _InviteInputMode.email) {
-                                                setState(() => _inviteInputMode = _InviteInputMode.email);
-                                              }
-                                            },
-                                            onMessageTap: () {
-                                              if (_inviteInputMode != _InviteInputMode.message) {
-                                                setState(() => _inviteInputMode = _InviteInputMode.message);
-                                              }
-                                            },
-                                          ),
-                                          PartnerInvitationQrTab(
-                                            theme: theme,
-                                            generatedInvitation: _generatedInvitation,
-                                            isSent: _isSent,
-                                            onGenerateCode: _generateCodeOnly,
-                                            onSaveQr: _saveQRCode,
-                                          ),
-                                          PartnerInvitationLinkTab(
-                                            generatedInvitation: _generatedInvitation,
-                                            isSent: _isSent,
-                                            onGenerateLink: _generateCodeOnly,
-                                            onShareLink: _shareLink,
-                                          ),
-                                        ],
+                                children: [
+                                  _buildHeader(theme, localizations),
+                                  _buildTabBar(theme, localizations),
+                                  Expanded(
+                                    child: TabBarView(
+                                      controller: _tabController,
+                                      physics: const BouncingScrollPhysics(
+                                        parent: AlwaysScrollableScrollPhysics(),
                                       ),
+                                      children: [
+                                        PartnerInvitationEmailTab(
+                                          emailController: _emailController,
+                                          messageController: _messageController,
+                                          emailFocus: _emailFocus,
+                                          messageFocus: _messageFocus,
+                                          formKey: _formKey,
+                                          inviteInputMode: InviteInputMode
+                                              .values[_inviteInputMode.index],
+                                          isLoading: _isLoading,
+                                          isSent: _isSent,
+                                          successMessage: _successMessage,
+                                          onSubmit: _openEmailInvite,
+                                          onEmailTap: () {
+                                            if (_inviteInputMode !=
+                                                _InviteInputMode.email) {
+                                              setState(
+                                                () => _inviteInputMode =
+                                                    _InviteInputMode.email,
+                                              );
+                                            }
+                                          },
+                                          onMessageTap: () {
+                                            if (_inviteInputMode !=
+                                                _InviteInputMode.message) {
+                                              setState(
+                                                () => _inviteInputMode =
+                                                    _InviteInputMode.message,
+                                              );
+                                            }
+                                          },
+                                        ),
+                                        PartnerInvitationQrTab(
+                                          theme: theme,
+                                          generatedInvitation:
+                                              _generatedInvitation,
+                                          isSent: _isSent,
+                                          onGenerateCode: _generateCodeOnly,
+                                          onSaveQr: _saveQRCode,
+                                        ),
+                                        PartnerInvitationLinkTab(
+                                          generatedInvitation:
+                                              _generatedInvitation,
+                                          isSent: _isSent,
+                                          onGenerateLink: _generateCodeOnly,
+                                          onShareLink: _shareLink,
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
                         ),
                       ),
-                    );
+                    ),
+                  );
                 },
               ),
             ),
@@ -265,7 +293,11 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
               ),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: Icon(Icons.favorite, color: Colors.white.withValues(alpha: 0.03), size: 22),
+            child: Icon(
+              Icons.favorite,
+              color: Colors.white.withValues(alpha: 0.03),
+              size: 22,
+            ),
           ),
           const SizedBox(width: 16),
           Expanded(
