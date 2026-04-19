@@ -49,7 +49,7 @@ class PartnerInvitationEmailTab extends StatelessWidget {
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 16,
-            vertical: 20,
+            vertical: 18,
           ),
           hintText: "Partner's Email",
           prefixIcon: Icon(
@@ -116,7 +116,7 @@ class PartnerInvitationEmailTab extends StatelessWidget {
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 16,
-            vertical: 20,
+            vertical: 18,
           ),
           hintText: 'Personal Message (Optional)',
           prefixIcon: Icon(
@@ -190,11 +190,11 @@ class PartnerInvitationEmailTab extends StatelessWidget {
                       ),
                     ).animate().fadeIn().slideY(begin: -0.3),
 
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 12),
 
                   if (inviteInputMode != InviteInputMode.message) emailField(),
                   if (inviteInputMode == InviteInputMode.idle)
-                    const SizedBox(height: 18),
+                    const SizedBox(height: 12),
                   if (inviteInputMode != InviteInputMode.email) messageField(),
 
                   if (inviteInputMode == InviteInputMode.idle) ...[
