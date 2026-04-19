@@ -63,7 +63,7 @@ class PartnerInvitationLinkTab extends StatelessWidget {
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.12),
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(22),
                             border: Border.all(
                               color: Colors.white.withValues(alpha: 0.45),
                               width: 1.2,
@@ -112,7 +112,7 @@ class PartnerInvitationLinkTab extends StatelessWidget {
                    begin: const Offset(0.96, 0.96),
                    curve: Curves.easeOutBack,
                  ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 20),
                 Row(
                   children: [
                     Expanded(
@@ -123,14 +123,14 @@ class PartnerInvitationLinkTab extends StatelessWidget {
                         style: OutlinedButton.styleFrom(
                           foregroundColor: AppTheme.primaryRose,
                           side: BorderSide(color: AppTheme.primaryRose),
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          minimumSize: const Size.fromHeight(56),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(22),
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 14),
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: generatedInvitation != null ? onShareLink : null,
@@ -141,9 +141,9 @@ class PartnerInvitationLinkTab extends StatelessWidget {
                               ? AppTheme.primaryRose.withOpacity(0.35)
                               : AppTheme.primaryRose,
                           foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          minimumSize: const Size.fromHeight(56),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(22),
                           ),
                         ),
                       ),

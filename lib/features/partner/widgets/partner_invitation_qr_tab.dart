@@ -66,7 +66,7 @@ class PartnerInvitationQrTab extends StatelessWidget {
                           height: 176,
                           decoration: BoxDecoration(
                             color: AppTheme.lightGrey.withValues(alpha: 0.3),
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(22),
                           ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -100,17 +100,26 @@ class PartnerInvitationQrTab extends StatelessWidget {
                   begin: const Offset(0.92, 0.92),
                   curve: Curves.easeOutBack,
                 ).fadeIn(delay: 120.ms),
-                const SizedBox(height: 8),
+                const SizedBox(height: 20),
                 Row(
                   children: [
                     Expanded(
                       child: OutlinedButton.icon(
                         onPressed: onGenerateCode,
-                        icon: const Icon(Icons.refresh),
+                        icon: const Icon(Icons.refresh, size: 20),
                         label: const Text('Generate Code'),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppTheme.primaryRose,
+                          side: const BorderSide(width: 1.5, color: AppTheme.primaryRose),
+                          minimumSize: const Size.fromHeight(56),
+                          textStyle: const TextStyle(fontWeight: FontWeight.w600),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(22),
+                          ),
+                        ),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 14),
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: generatedInvitation != null ? onSaveQr : null,
@@ -120,6 +129,12 @@ class PartnerInvitationQrTab extends StatelessWidget {
                           backgroundColor: isSent
                               ? AppTheme.primaryRose.withOpacity(0.35)
                               : AppTheme.primaryRose,
+                          foregroundColor: Colors.white,
+                          minimumSize: const Size.fromHeight(56),
+                          textStyle: const TextStyle(fontWeight: FontWeight.w600),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(22),
+                          ),
                         ),
                       ),
                     ),
