@@ -63,13 +63,40 @@ class PartnerInvitationEmailTab extends StatelessWidget {
           ),
           filled: true,
           fillColor: AppTheme.primaryRose.withValues(alpha: 0.16),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(22)),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(22),
+            borderSide: BorderSide(
+              color: AppTheme.primaryRose.withValues(alpha: 0.14),
+              width: 1.2,
+            ),
+          ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(22),
+            borderSide: BorderSide(
+              color: AppTheme.primaryRose.withValues(alpha: 0.18),
+              width: 1.2,
+            ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(22),
-            borderSide: BorderSide(color: AppTheme.primaryRose, width: 2),
+            borderSide: BorderSide(
+              color: AppTheme.primaryRose,
+              width: 1.8,
+            ),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(22),
+            borderSide: BorderSide(
+              color: Colors.redAccent,
+              width: 1.4,
+            ),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(22),
+            borderSide: BorderSide(
+              color: Colors.redAccent,
+              width: 1.8,
+            ),
           ),
         ),
         validator: (value) {
@@ -134,13 +161,40 @@ class PartnerInvitationEmailTab extends StatelessWidget {
           ),
           filled: true,
           fillColor: AppTheme.primaryPurple.withValues(alpha: 0.16),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(22)),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(22),
+            borderSide: BorderSide(
+              color: AppTheme.primaryRose.withValues(alpha: 0.14),
+              width: 1.2,
+            ),
+          ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(22),
+            borderSide: BorderSide(
+              color: AppTheme.primaryRose.withValues(alpha: 0.18),
+              width: 1.2,
+            ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(22),
-            borderSide: BorderSide(color: AppTheme.primaryRose, width: 2),
+            borderSide: BorderSide(
+              color: AppTheme.primaryRose,
+              width: 1.8,
+            ),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(22),
+            borderSide: BorderSide(
+              color: Colors.redAccent,
+              width: 1.4,
+            ),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(22),
+            borderSide: BorderSide(
+              color: Colors.redAccent,
+              width: 1.8,
+            ),
           ),
         ),
       );

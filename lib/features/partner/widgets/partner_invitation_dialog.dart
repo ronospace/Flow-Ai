@@ -336,7 +336,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
             color: AppTheme.lightGrey.withValues(alpha: 0.22),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: AppTheme.primaryRose.withValues(alpha: 0.10),
+              color: AppTheme.primaryRose.withValues(alpha: 0.16),
               width: 1,
             ),
           ),
