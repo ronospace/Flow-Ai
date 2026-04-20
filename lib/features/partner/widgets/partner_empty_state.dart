@@ -43,7 +43,7 @@ class PartnerEmptyState extends StatelessWidget {
               .animate()
               .scale(begin: const Offset(0.5, 0.5))
               .fadeIn(duration: 800.ms),
-          const SizedBox(height: 32),
+          const SizedBox(height: 24),
           Text(
             'Connect with Your Partner',
             style: theme.textTheme.headlineMedium?.copyWith(
@@ -51,7 +51,7 @@ class PartnerEmptyState extends StatelessWidget {
               color: AppTheme.primaryRose,
             ),
           ).animate().fadeIn(delay: 200.ms),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           Text(
             'Share your cycle journey together.\nGet support, insights, and stay connected.',
             textAlign: TextAlign.center,
@@ -60,7 +60,7 @@ class PartnerEmptyState extends StatelessWidget {
               height: 1.5,
             ),
           ).animate().fadeIn(delay: 400.ms),
-          const SizedBox(height: 40),
+          const SizedBox(height: 32),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -75,7 +75,7 @@ class PartnerEmptyState extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppTheme.primaryRose,
                     foregroundColor: Colors.white,
-                    minimumSize: const Size(double.infinity, 56),
+                    minimumSize: const Size(double.infinity, 54),
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     visualDensity: VisualDensity.compact,
@@ -96,8 +96,8 @@ class PartnerEmptyState extends StatelessWidget {
                   label: const Text('Join Partner'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: AppTheme.primaryRose,
-                    side: const BorderSide(width: 1.5, color: AppTheme.primaryRose),
-                    minimumSize: const Size(double.infinity, 56),
+                    side: const BorderSide(width: 1.8, color: AppTheme.primaryRose),
+                    minimumSize: const Size(double.infinity, 54),
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     visualDensity: VisualDensity.compact,
