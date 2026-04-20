@@ -70,7 +70,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
             child: Align(
               alignment: Alignment.center,
               child: Dialog(
-                insetPadding: const EdgeInsets.fromLTRB(16, 62, 16, 22),
+                insetPadding: const EdgeInsets.fromLTRB(16, 66, 16, 26),
                 backgroundColor: Colors.transparent,
                 child: Container(
                   constraints: const BoxConstraints(maxWidth: 400),
