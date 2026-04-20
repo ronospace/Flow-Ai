@@ -115,9 +115,10 @@ class PartnerInvitationLinkTab extends StatelessWidget {
                         label: const Text('Generate Link'),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: AppTheme.primaryRose,
-                          side: BorderSide(color: AppTheme.primaryRose),
+                          side: const BorderSide(width: 1.5, color: AppTheme.primaryRose),
                           minimumSize: const Size(double.infinity, 56),
                           padding: const EdgeInsets.symmetric(vertical: 16),
+                          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                           visualDensity: VisualDensity.compact,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
@@ -138,6 +139,7 @@ class PartnerInvitationLinkTab extends StatelessWidget {
                           foregroundColor: Colors.white,
                           minimumSize: const Size(double.infinity, 56),
                           padding: const EdgeInsets.symmetric(vertical: 16),
+                          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                           visualDensity: VisualDensity.compact,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),

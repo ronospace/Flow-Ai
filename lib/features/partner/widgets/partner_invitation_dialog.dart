@@ -333,8 +333,12 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
     return Container(
           margin: const EdgeInsets.fromLTRB(20, 12, 20, 16),
           decoration: BoxDecoration(
-            color: AppTheme.lightGrey.withValues(alpha: 0.3),
+            color: AppTheme.lightGrey.withValues(alpha: 0.22),
             borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: AppTheme.primaryRose.withValues(alpha: 0.10),
+              width: 1,
+            ),
           ),
           child: SizedBox(
             height: 64,
@@ -345,6 +349,10 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                   colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
                 ),
                 borderRadius: BorderRadius.circular(14),
+              ),
+              indicatorPadding: const EdgeInsets.symmetric(
+                horizontal: 2,
+                vertical: 2,
               ),
               indicatorSize: TabBarIndicatorSize.tab,
               splashBorderRadius: BorderRadius.circular(16),
@@ -363,19 +371,37 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
               tabAlignment: TabAlignment.fill,
               tabs: const [
                 Tab(
-                  icon: Icon(Icons.email, size: 22),
                   height: 64,
-                  text: 'Email',
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.email, size: 22),
+                      SizedBox(height: 2),
+                      Text('Email'),
+                    ],
+                  ),
                 ),
                 Tab(
-                  icon: Icon(Icons.qr_code, size: 22),
                   height: 64,
-                  text: 'QR Code',
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.qr_code, size: 22),
+                      SizedBox(height: 2),
+                      Text('QR Code'),
+                    ],
+                  ),
                 ),
                 Tab(
-                  icon: Icon(Icons.share, size: 22),
                   height: 64,
-                  text: 'Share Link',
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.share, size: 22),
+                      SizedBox(height: 2),
+                      Text('Share Link'),
+                    ],
+                  ),
                 ),
               ],
             ),
