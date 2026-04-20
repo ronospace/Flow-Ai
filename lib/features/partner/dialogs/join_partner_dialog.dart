@@ -70,7 +70,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
             child: Align(
               alignment: Alignment.center,
               child: Dialog(
-                insetPadding: const EdgeInsets.fromLTRB(16, 66, 16, 26),
+                insetPadding: const EdgeInsets.fromLTRB(16, 64, 16, 24),
                 backgroundColor: Colors.transparent,
                 child: Container(
                   constraints: const BoxConstraints(maxWidth: 400),
@@ -194,9 +194,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
               const SizedBox(height: 16),
               _buildErrorMessage(),
             ],
-            const SizedBox(height: 24),
-            
-const SizedBox(height: 16),
+            const SizedBox(height: 16),
 SizedBox(
   width: double.infinity,
   child: ElevatedButton(
