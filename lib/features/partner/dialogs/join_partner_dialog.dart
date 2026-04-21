@@ -92,17 +92,17 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                               end: Alignment.bottomRight,
                               colors: [
                                 Colors.white,
-                                const Color(0xFFFF6B8A).withValues(alpha: 0.02),
+                                Colors.white,
                               ],
                             ),
                             borderRadius: BorderRadius.circular(28),
                             border: Border.all(
-                              color: const Color(0xFFFF6B8A).withValues(alpha: 0.2),
+                              color: AppTheme.primaryRose.withValues(alpha: 0.2),
                               width: 2,
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: const Color(0xFFFF6B8A).withValues(alpha: 0.2),
+                                color: AppTheme.primaryRose.withValues(alpha: 0.2),
                                 blurRadius: 30,
                                 offset: const Offset(0, 15),
                               ),
@@ -135,12 +135,12 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
 
   Widget _buildHeader() {
     return Container(
-      padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            const Color(0xFFFF6B8A).withValues(alpha: 0.1),
-            AppTheme.accentMint.withValues(alpha: 0.05),
+            AppTheme.primaryRose.withValues(alpha: 0.1),
+            AppTheme.primaryPurple.withValues(alpha: 0.05),
           ],
         ),
         borderRadius: const BorderRadius.only(
@@ -149,22 +149,22 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
         ),
       ),
       child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              
         children: [
           Container(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
-                colors: [const Color(0xFFFF6B8A), AppTheme.accentMint],
+                colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
               ),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: const Icon(Icons.group_add, color: Colors.white, size: 22),
+            child: const Icon(Icons.group_add, color: Colors.white, size: 24),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'Join Partner',
@@ -195,11 +195,11 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
     return Form(
         key: _formKey,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Enter the invitation code your partner shared with you.',
-              textAlign: TextAlign.center,
+              
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: AppTheme.mediumGrey,
               ),
@@ -218,7 +218,7 @@ SizedBox(
         ? null
         : _handleJoin,
     style: ElevatedButton.styleFrom(
-      backgroundColor: const Color(0xFFFF6B8A),
+      backgroundColor: AppTheme.darkGrey,
       foregroundColor: Colors.white,
       elevation: 0,
       padding: const EdgeInsets.symmetric(vertical: 16),
@@ -262,8 +262,8 @@ SizedBox(
     icon: const Icon(Icons.qr_code_scanner, size: 20),
     label: const Text('Scan QR Code'),
     style: OutlinedButton.styleFrom(
-      foregroundColor: const Color(0xFFFF6B8A),
-      side: const BorderSide(color: Color(0xFFFF6B8A)),
+      foregroundColor: AppTheme.mediumGrey,
+      side: BorderSide(color: AppTheme.lightGrey),
       padding: const EdgeInsets.symmetric(vertical: 16),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -298,7 +298,6 @@ _buildAlternativeOptions(),
         ),
         const SizedBox(height: 16),
         Row(
-              mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
               child: TextFormField(
@@ -315,7 +314,7 @@ _buildAlternativeOptions(),
                   UpperCaseTextFormatter(),
                 ],
                 decoration: InputDecoration(
-                  hintText: 'ABCDEFG8',
+                  hintText: 'ABC123',
                   hintStyle: TextStyle(
                     color: AppTheme.lightGrey,
                     letterSpacing: 4,
@@ -329,7 +328,7 @@ _buildAlternativeOptions(),
                     child: Icon(
                       Icons.vpn_key,
                       size: 18,
-                      color: const Color(0xFFFF6B8A),
+                      color: AppTheme.mediumGrey,
                     ),
                   ),
                   border: OutlineInputBorder(
@@ -339,7 +338,7 @@ _buildAlternativeOptions(),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                     borderSide: BorderSide(
-                      color: const Color(0xFFFF6B8A),
+                      color: AppTheme.lightGrey,
                       width: 2,
                     ),
                   ),
@@ -348,7 +347,7 @@ _buildAlternativeOptions(),
                     borderSide: const BorderSide(color: Colors.red, width: 2),
                   ),
                   filled: true,
-                  fillColor: Colors.white.withValues(alpha: 0.98),
+                  fillColor: Colors.white,
                   contentPadding: const EdgeInsets.symmetric(vertical: 16),
                 ),
                 validator: (value) {
@@ -371,10 +370,10 @@ _buildAlternativeOptions(),
             const SizedBox(width: 10),
             IconButton(
               onPressed: _pasteFromClipboard,
-              icon: Icon(Icons.content_paste, color: const Color(0xFFFF6B8A)),
+              icon: Icon(Icons.content_paste, color: AppTheme.mediumGrey),
               tooltip: 'Paste from clipboard',
               style: IconButton.styleFrom(
-                backgroundColor: const Color(0xFFFF6B8A).withValues(alpha: 0.1),
+                backgroundColor: AppTheme.lightGrey.withValues(alpha: 0.2),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -428,7 +427,7 @@ _buildAlternativeOptions(),
             Expanded(child: Divider(color: AppTheme.lightGrey, thickness: 1)),
           ],
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 8),
         _buildAlternativeOption(
           'Request New Invitation',
           'Ask your partner to send a new invitation',
@@ -438,7 +437,7 @@ _buildAlternativeOptions(),
             _showRequestInvitationDialog();
           },
         ),
-        const SizedBox(height: 6),
+        const SizedBox(height: 8),
         _buildAlternativeOption(
           'Manual Connection',
           'Connect using partner\'s email address',
@@ -462,7 +461,7 @@ _buildAlternativeOptions(),
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
       child: Container(
-        padding: const EdgeInsets.fromLTRB(16, 74, 16, 30),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           border: Border.all(color: AppTheme.lightGrey, width: 1),
           borderRadius: BorderRadius.circular(12),
