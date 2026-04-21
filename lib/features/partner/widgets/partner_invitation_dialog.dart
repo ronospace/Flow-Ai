@@ -176,7 +176,14 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                               color: theme.colorScheme.outline.withValues(alpha: 0.22),
                               width: 1,
                             ),
-                            boxShadow: [],
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.08),
+                                blurRadius: 24,
+                                spreadRadius: 0,
+                                offset: const Offset(0, 10),
+                              ),
+                            ],
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(28),

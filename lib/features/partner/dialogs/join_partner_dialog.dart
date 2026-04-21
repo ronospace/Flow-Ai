@@ -67,42 +67,64 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
           opacity: _fadeAnimation,
           child: ScaleTransition(
             scale: _scaleAnimation,
-            child: Align(
-              alignment: Alignment.center,
-              child: Dialog(
-                insetPadding: const EdgeInsets.fromLTRB(16, 64, 16, 24),
-                backgroundColor: Colors.transparent,
-                child: Container(
-                  constraints: const BoxConstraints(maxWidth: 400),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Colors.white,
-                        const Color(0xFFFF6B8A).withValues(alpha: 0.02),
-                      ],
-                    ),
-                    borderRadius: BorderRadius.circular(28),
-                    border: Border.all(
-                      color: const Color(0xFFFF6B8A).withValues(alpha: 0.2),
-                      width: 2,
-                    ),
-                    boxShadow: [],
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _buildHeader(),
-                      Flexible(
-                        child: SingleChildScrollView(
-                          padding: const EdgeInsets.symmetric(horizontal: 24),
-                          child: _buildContent(),
+            child: Dialog(
+              insetPadding: const EdgeInsets.fromLTRB(16, 74, 16, 30),
+              backgroundColor: Colors.transparent,
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final dialogHeight = (constraints.maxHeight * 0.78)
+                      .clamp(320.0, 680.0)
+                      .toDouble();
+
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 48, bottom: 48),
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: 420,
+                          maxHeight: dialogHeight,
+                        ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                Colors.white,
+                                const Color(0xFFFF6B8A).withValues(alpha: 0.02),
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(28),
+                            border: Border.all(
+                              color: const Color(0xFFFF6B8A).withValues(alpha: 0.2),
+                              width: 2,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFFFF6B8A).withValues(alpha: 0.2),
+                                blurRadius: 30,
+                                offset: const Offset(0, 15),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              _buildHeader(),
+                              Flexible(
+                                child: SingleChildScrollView(
+                                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                                  child: _buildContent(),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                },
               ),
             ),
           ),
@@ -440,7 +462,7 @@ _buildAlternativeOptions(),
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(16, 74, 16, 30),
         decoration: BoxDecoration(
           border: Border.all(color: AppTheme.lightGrey, width: 1),
           borderRadius: BorderRadius.circular(12),
