@@ -143,7 +143,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
             child: Dialog(
               insetPadding: keyboardOpen
                   ? const EdgeInsets.fromLTRB(16, 64, 16, 0)
-                  : const EdgeInsets.fromLTRB(16, 64, 16, 40),
+                  : const EdgeInsets.fromLTRB(16, 74, 16, 30),
               backgroundColor: Colors.transparent,
               child: LayoutBuilder(
                 builder: (context, constraints) {
@@ -155,7 +155,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
 
                   return Padding(
                     padding: EdgeInsets.only(
-                      top: 56,
+                      top: 48,
                       bottom: keyboardOpen ? 0 : 48,
                     ),
                     child: Align(
