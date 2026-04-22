@@ -77,8 +77,8 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      Colors.white,
-                      AppTheme.primaryRose.withValues(alpha: 0.02),
+                      Theme.of(context).brightness == Brightness.dark ? const Color(0xFF121212) : Theme.of(context).cardColor,
+                      AppTheme.primaryRose.withValues(alpha: Theme.of(context).brightness == Brightness.dark ? 0.08 : 0.02),
                     ],
                   ),
                   borderRadius: BorderRadius.circular(28),
@@ -105,6 +105,7 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
                       ),
                     ),
                     _buildFooter(),
+                    _buildBottomHandle(),
                   ],
                 ),
               ),
@@ -140,7 +141,7 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
               ),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: const Icon(Icons.person_add, color: Colors.white, size: 24),
+            child: Icon(Icons.person_add, color: Colors.white, size: 24),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -151,21 +152,17 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
                   'Invite Partner',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: AppTheme.darkGrey,
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
                   ),
                 ),
                 Text(
                   'Share your journey together',
                   style: Theme.of(
                     context,
-                  ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGrey),
+                  ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).hintColor),
                 ),
               ],
             ),
-          ),
-          IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(Icons.close, color: AppTheme.mediumGrey),
           ),
         ],
       ),
@@ -194,7 +191,7 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
           'Enter Partner\'s Email',
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.bold,
-            color: AppTheme.darkGrey,
+            color: Theme.of(context).textTheme.bodyLarge?.color,
           ),
         ),
         const SizedBox(height: 8),
@@ -202,7 +199,7 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
           'We\'ll send them an invitation to connect with you on Flow Ai.',
           style: Theme.of(
             context,
-          ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGrey),
+          ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).hintColor),
         ),
         const SizedBox(height: 24),
         TextFormField(
@@ -215,14 +212,14 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
             prefixIcon: Icon(Icons.email_outlined, color: AppTheme.primaryRose),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: AppTheme.lightGrey),
+              borderSide: BorderSide(color: Theme.of(context).dividerColor),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
               borderSide: BorderSide(color: AppTheme.primaryRose, width: 2),
             ),
             filled: true,
-            fillColor: Colors.white,
+            fillColor: Theme.of(context).cardColor,
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -252,7 +249,7 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
           'Personal Message',
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.bold,
-            color: AppTheme.darkGrey,
+            color: Theme.of(context).textTheme.bodyLarge?.color,
           ),
         ),
         const SizedBox(height: 8),
@@ -260,14 +257,14 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
           'Add a personal touch to your invitation (optional).',
           style: Theme.of(
             context,
-          ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGrey),
+          ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).hintColor),
         ),
         const SizedBox(height: 24),
         Text(
           'Quick Templates',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             fontWeight: FontWeight.w600,
-            color: AppTheme.darkGrey,
+            color: Theme.of(context).textTheme.bodyLarge?.color,
           ),
         ),
         const SizedBox(height: 12),
@@ -281,7 +278,7 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
           'Custom Message',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             fontWeight: FontWeight.w600,
-            color: AppTheme.darkGrey,
+            color: Theme.of(context).textTheme.bodyLarge?.color,
           ),
         ),
         const SizedBox(height: 12),
@@ -293,14 +290,14 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
             hintText: 'Write your personal invitation message...',
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: AppTheme.lightGrey),
+              borderSide: BorderSide(color: Theme.of(context).dividerColor),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
               borderSide: BorderSide(color: AppTheme.primaryRose, width: 2),
             ),
             filled: true,
-            fillColor: Colors.white,
+            fillColor: Theme.of(context).cardColor,
           ),
         ),
         const SizedBox(height: 24),
@@ -320,13 +317,13 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
             border: Border.all(
               color: _messageController.text == message
                   ? AppTheme.primaryRose
-                  : AppTheme.lightGrey,
+                  : Theme.of(context).dividerColor,
               width: _messageController.text == message ? 2 : 1,
             ),
             borderRadius: BorderRadius.circular(12),
             color: _messageController.text == message
                 ? AppTheme.primaryRose.withValues(alpha: 0.05)
-                : Colors.white,
+                : Theme.of(context).cardColor,
           ),
           child: Row(
             children: [
@@ -336,14 +333,14 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
                     : Icons.radio_button_unchecked,
                 color: _messageController.text == message
                     ? AppTheme.primaryRose
-                    : AppTheme.lightGrey,
+                    : Theme.of(context).dividerColor,
                 size: 20,
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
                   message,
-                  style: TextStyle(color: AppTheme.darkGrey, fontSize: 14),
+                  style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontSize: 14),
                 ),
               ),
             ],
@@ -360,7 +357,7 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
         Expanded(
           child: Container(
             height: 2,
-            color: _currentStep > 0 ? AppTheme.primaryRose : AppTheme.lightGrey,
+            color: _currentStep > 0 ? AppTheme.primaryRose : Theme.of(context).dividerColor,
           ),
         ),
         _buildStepDot(1, 'Message'),
@@ -383,12 +380,12 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
                     colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
                   )
                 : null,
-            color: isActive ? null : AppTheme.lightGrey,
+            color: isActive ? null : Theme.of(context).dividerColor,
             shape: BoxShape.circle,
           ),
           child: Icon(
             isCompleted ? Icons.check : Icons.circle,
-            color: Colors.white,
+            color: Theme.of(context).cardColor,
             size: 16,
           ),
         ),
@@ -423,7 +420,7 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
           Expanded(
             child: Text(
               'Your partner will need to accept the invitation before you can share any cycle data.',
-              style: TextStyle(color: AppTheme.darkGrey, fontSize: 13),
+              style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontSize: 13),
             ),
           ),
         ],
@@ -446,9 +443,9 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.arrow_back, size: 16, color: AppTheme.mediumGrey),
+                  Icon(Icons.arrow_back, size: 16, color: Theme.of(context).hintColor),
                   const SizedBox(width: 8),
-                  Text('Back', style: TextStyle(color: AppTheme.mediumGrey)),
+                  Text('Back', style: TextStyle(color: Theme.of(context).hintColor)),
                 ],
               ),
             ),
@@ -495,6 +492,26 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
             ),
           ),
         ],
+      ),
+    );
+  }
+
+
+  Widget _buildBottomHandle() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 4, 24, 16),
+      child: GestureDetector(
+        onTap: () => Navigator.pop(context),
+        child: Center(
+          child: Container(
+            width: 40,
+            height: 4,
+            decoration: BoxDecoration(
+              color: Theme.of(context).dividerColor.withValues(alpha: 0.7),
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+        ),
       ),
     );
   }

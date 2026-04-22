@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
@@ -19,6 +18,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
   late Animation<double> _fadeAnimation;
+  late TabController _tabController;
 
   final TextEditingController _codeController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -29,6 +29,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(length: 3, vsync: this);
 
     if (widget.initialCode != null && widget.initialCode!.isNotEmpty) {
       _codeController.text = widget.initialCode!;
@@ -53,6 +54,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
 
   @override
   void dispose() {
+    _tabController.dispose();
     _animationController.dispose();
     _codeController.dispose();
     super.dispose();
@@ -91,8 +93,8 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                               colors: [
-                                Colors.white,
-                                Colors.white,
+                                Theme.of(context).cardColor,
+                                Theme.of(context).cardColor,
                               ],
                             ),
                             borderRadius: BorderRadius.circular(28),
@@ -113,8 +115,8 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               _buildHeader(),
-                              Flexible(
-                                child: SingleChildScrollView(
+                              Expanded(
+                                child: Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 24),
                                   child: _buildContent(),
                                 ),
@@ -161,7 +163,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
               ),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: const Icon(Icons.group_add, color: Colors.white, size: 24),
+            child: Icon(Icons.group_add, color: Colors.white, size: 24),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -172,14 +174,14 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                   'Join Partner',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: AppTheme.darkGrey,
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
                   ),
                 ),
                 Text(
                   'Use your invitation code',
                   style: Theme.of(
                     context,
-                  ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGrey),
+                  ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).hintColor),
                 ),
               ],
             ),
@@ -210,7 +212,7 @@ Widget _buildHeaderCollapseControl() {
           color: Colors.white.withValues(alpha: 0.78),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: AppTheme.mediumGrey.withValues(alpha: 0.35),
+            color: Theme.of(context).hintColor.withValues(alpha: 0.35),
             width: 1,
           ),
           boxShadow: [
@@ -221,10 +223,10 @@ Widget _buildHeaderCollapseControl() {
             ),
           ],
         ),
-        child: const Icon(
+        child: Icon(
           Icons.keyboard_arrow_down_rounded,
           size: 22,
-          color: AppTheme.mediumGrey,
+          color: Theme.of(context).hintColor,
         ),
       ),
     );
@@ -235,9 +237,9 @@ Widget _buildHeaderCollapseControl() {
 
   Widget _buildTopTabs() {
     return Container(
-      padding: const EdgeInsets.all(2),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
       decoration: BoxDecoration(
-        color: AppTheme.lightGrey.withValues(alpha: 0.22),
+        color: Theme.of(context).dividerColor.withValues(alpha: 0.22),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: AppTheme.primaryRose.withValues(alpha: 0.16),
@@ -245,71 +247,27 @@ Widget _buildHeaderCollapseControl() {
         ),
       ),
       child: SizedBox(
-        height: 64,
-        child: Row(
-          children: [
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
-                  ),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: const Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.link, size: 22, color: Colors.white),
-                    SizedBox(height: 2),
-                    Text('Code',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+        height: 72,
+        child: TabBar(
+          controller: _tabController,
+          indicator: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
             ),
-            Expanded(
-              child: InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                  context.push('/qr-join');
-                },
-                child: const Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.qr_code, size: 22, color: AppTheme.mediumGrey),
-                    SizedBox(height: 2),
-                    Text('QR Code',
-                      style: TextStyle(
-                        color: AppTheme.mediumGrey,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.person_outline, size: 22, color: AppTheme.mediumGrey),
-                  SizedBox(height: 2),
-                  Text('Manual',
-                    style: TextStyle(
-                      color: AppTheme.mediumGrey,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            borderRadius: BorderRadius.circular(14),
+          ),
+          indicatorSize: TabBarIndicatorSize.tab,
+          indicatorPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+          labelPadding: EdgeInsets.zero,
+          dividerColor: Colors.transparent,
+          labelColor: Colors.white,
+          unselectedLabelColor: AppTheme.mediumGrey,
+          splashFactory: NoSplash.splashFactory,
+          overlayColor: WidgetStateProperty.all(Colors.transparent),
+          tabs: const [
+            Tab(icon: Icon(Icons.link, size: 22), text: 'Code'),
+            Tab(icon: Icon(Icons.qr_code, size: 22), text: 'QR Code'),
+            Tab(icon: Icon(Icons.person_outline, size: 22), text: 'Manual'),
           ],
         ),
       ),
@@ -317,92 +275,83 @@ Widget _buildHeaderCollapseControl() {
   }
 
   Widget _buildContent() {
-    return Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildTopTabs(),
-            const SizedBox(height: 20),
-            Text(
-              'Enter the invitation code your partner shared with you.',
-              
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppTheme.mediumGrey,
+    return Column(
+      children: [
+        _buildTopTabs(),
+        const SizedBox(height: 16),
+        Expanded(
+          child: TabBarView(
+            controller: _tabController,
+            physics: const PageScrollPhysics(),
+            children: [
+              LayoutBuilder(
+                builder: (context, constraints) => SingleChildScrollView(
+                  primary: false,
+                  physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                    Text(
+                      'Enter the invitation code your partner shared with you.',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).hintColor,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    _buildCodeInput(),
+                    if (_errorMessage != null) ...[
+                      const SizedBox(height: 16),
+                      _buildErrorMessage(),
+                    ],
+                    const SizedBox(height: 16),
+                    _buildJoinButton(),
+                    const SizedBox(height: 16),
+                    _buildAlternativeOptions(),
+                    const SizedBox(height: 120),
+                  ],
+                ),
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(height: 12),
-            _buildCodeInput(),
-            if (_errorMessage != null) ...[
-              const SizedBox(height: 16),
-              _buildErrorMessage(),
-            ],
-            const SizedBox(height: 16),
-SizedBox(
-  width: double.infinity,
-  child: ElevatedButton(
-    onPressed: (_isLoading || _codeController.text.trim().length != 6)
-        ? null
-        : _handleJoin,
-    style: ElevatedButton.styleFrom(
-      backgroundColor: AppTheme.darkGrey,
-      foregroundColor: Colors.white,
-      elevation: 0,
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-    ),
-    child: _isLoading
-        ? SizedBox(
-            height: 20,
-            width: 20,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-            ),
-          )
-        : Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Icon(Icons.link, size: 18),
-              SizedBox(width: 8),
-              Text(
-                'Connect with Partner',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
+              LayoutBuilder(
+                builder: (context, constraints) => SingleChildScrollView(
+                  primary: false,
+                  physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                    child: Column(
+                      children: [
+                    const SizedBox(height: 12),
+                    _buildAlternativeOptions(),
+                    const SizedBox(height: 220),
+                  ],
+                ),
+                  ),
+                ),
+              ),
+              LayoutBuilder(
+                builder: (context, constraints) => SingleChildScrollView(
+                  primary: false,
+                  physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                    child: Column(
+                      children: [
+                    const SizedBox(height: 12),
+                    _buildAlternativeOptions(),
+                    const SizedBox(height: 220),
+                  ],
+                ),
+                  ),
                 ),
               ),
             ],
           ),
-  ),
-),
-const SizedBox(height: 16),
-SizedBox(
-  width: double.infinity,
-  child: OutlinedButton.icon(
-    onPressed: () {
-      Navigator.pop(context);
-      context.push('/qr-join');
-    },
-    icon: const Icon(Icons.qr_code_scanner, size: 20),
-    label: const Text('Scan QR Code'),
-    style: OutlinedButton.styleFrom(
-      foregroundColor: AppTheme.mediumGrey,
-      side: BorderSide(color: AppTheme.lightGrey),
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-    ),
-  ),
-),
-
-_buildAlternativeOptions(),
-          ],
         ),
-      );
+      ],
+    );
   }
 
   Widget _buildCodeInput() {
@@ -413,7 +362,7 @@ _buildAlternativeOptions(),
           'Invitation Code',
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.bold,
-            color: AppTheme.darkGrey,
+            color: Theme.of(context).textTheme.bodyLarge?.color,
           ),
         ),
         const SizedBox(height: 8),
@@ -421,7 +370,7 @@ _buildAlternativeOptions(),
           'Enter the 6-character code from your partner\'s invitation.',
           style: Theme.of(
             context,
-          ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGrey),
+          ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).hintColor),
         ),
         const SizedBox(height: 16),
         Row(
@@ -443,7 +392,7 @@ _buildAlternativeOptions(),
                 decoration: InputDecoration(
                   hintText: 'ABC123',
                   hintStyle: TextStyle(
-                    color: AppTheme.lightGrey,
+                    color: Theme.of(context).dividerColor,
                     letterSpacing: 4,
                   ),
                   prefixIconConstraints: const BoxConstraints(
@@ -455,17 +404,17 @@ _buildAlternativeOptions(),
                     child: Icon(
                       Icons.vpn_key,
                       size: 18,
-                      color: AppTheme.mediumGrey,
+                      color: Theme.of(context).hintColor,
                     ),
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide(color: AppTheme.lightGrey),
+                    borderSide: BorderSide(color: Theme.of(context).dividerColor),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                     borderSide: BorderSide(
-                      color: AppTheme.lightGrey,
+                      color: Theme.of(context).dividerColor,
                       width: 2,
                     ),
                   ),
@@ -474,7 +423,7 @@ _buildAlternativeOptions(),
                     borderSide: const BorderSide(color: Colors.red, width: 2),
                   ),
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: Theme.of(context).cardColor,
                   contentPadding: const EdgeInsets.symmetric(vertical: 16),
                 ),
                 validator: (value) {
@@ -497,10 +446,10 @@ _buildAlternativeOptions(),
             const SizedBox(width: 10),
             IconButton(
               onPressed: _pasteFromClipboard,
-              icon: Icon(Icons.content_paste, color: AppTheme.mediumGrey),
+              icon: Icon(Icons.content_paste, color: Theme.of(context).hintColor),
               tooltip: 'Paste from clipboard',
               style: IconButton.styleFrom(
-                backgroundColor: AppTheme.lightGrey.withValues(alpha: 0.2),
+                backgroundColor: Theme.of(context).dividerColor.withValues(alpha: 0.2),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -510,6 +459,48 @@ _buildAlternativeOptions(),
         ),
       ],
     ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.2, end: 0);
+  }
+
+
+  Widget _buildJoinButton() {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: _isLoading ? null : _handleJoin,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppTheme.primaryRose,
+          disabledBackgroundColor: Theme.of(context).dividerColor,
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(vertical: 18),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+        child: _isLoading
+            ? const SizedBox(
+                height: 22,
+                width: 22,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: Colors.white,
+                ),
+              )
+            : const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.link, size: 20),
+                  SizedBox(width: 10),
+                  Text(
+                    'Connect with Partner',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+      ),
+    );
   }
 
   Widget _buildErrorMessage() {
@@ -543,18 +534,18 @@ _buildAlternativeOptions(),
         Row(
               mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(child: Divider(color: AppTheme.lightGrey, thickness: 1)),
+            Expanded(child: Divider(color: Theme.of(context).dividerColor, thickness: 1)),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
                 'or',
-                style: TextStyle(color: AppTheme.mediumGrey, fontSize: 11),
+                style: TextStyle(color: Theme.of(context).hintColor, fontSize: 11),
               ),
             ),
-            Expanded(child: Divider(color: AppTheme.lightGrey, thickness: 1)),
+            Expanded(child: Divider(color: Theme.of(context).dividerColor, thickness: 1)),
           ],
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 120),
         _buildAlternativeOption(
           'Request New Invitation',
           'Ask your partner to send a new invitation',
@@ -564,7 +555,7 @@ _buildAlternativeOptions(),
             _showRequestInvitationDialog();
           },
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 120),
         _buildAlternativeOption(
           'Manual Connection',
           'Connect using partner\'s email address',
@@ -590,13 +581,13 @@ _buildAlternativeOptions(),
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          border: Border.all(color: AppTheme.lightGrey, width: 1),
+          border: Border.all(color: Theme.of(context).dividerColor, width: 1),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: AppTheme.mediumGrey, size: 20),
+            Icon(icon, color: Theme.of(context).hintColor, size: 20),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
@@ -605,19 +596,19 @@ _buildAlternativeOptions(),
                   Text(
                     title,
                     style: TextStyle(
-                      color: AppTheme.darkGrey,
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                       fontWeight: FontWeight.w600,
                       fontSize: 15,
                     ),
                   ),
                   Text(
                     subtitle,
-                    style: TextStyle(color: AppTheme.mediumGrey, fontSize: 11),
+                    style: TextStyle(color: Theme.of(context).hintColor, fontSize: 11),
                   ),
                 ],
               ),
             ),
-            Icon(Icons.arrow_forward_ios, color: AppTheme.lightGrey, size: 16),
+            Icon(Icons.arrow_forward_ios, color: Theme.of(context).dividerColor, size: 16),
           ],
         ),
       ),
