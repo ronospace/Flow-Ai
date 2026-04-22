@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
+import 'invite_partner_dialog.dart';
 
 class JoinPartnerDialog extends StatefulWidget {
   final String? initialCode;
@@ -117,7 +118,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                               _buildHeader(),
                               Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                                  padding: const EdgeInsets.fromLTRB(24, 18, 24, 0),
                                   child: _buildContent(),
                                 ),
                               ),
@@ -138,7 +139,16 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
   }
 
   Widget _buildHeader() {
-    return Container(
+    return GestureDetector(
+      onPanEnd: (d) {
+        if (d.velocity.pixelsPerSecond.dx > 80) {
+          Navigator.pop(context);
+          Future.delayed(const Duration(milliseconds: 160), () {
+            showDialog(context: context, builder: (_) => InvitePartnerDialog(onSendInvite: (_, __) {}));
+          });
+        }
+      },
+      child: Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -161,7 +171,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
               gradient: const LinearGradient(
                 colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
               ),
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(Icons.group_add, color: Colors.white, size: 24),
           ),
@@ -189,7 +199,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
           _buildHeaderCollapseControl(),
         ],
       ),
-    ).animate().slideY(begin: -0.3, end: 0);
+    )).animate().slideY(begin: -0.3, end: 0);
   }
 
 
@@ -209,10 +219,10 @@ Widget _buildHeaderCollapseControl() {
         height: 38,
         margin: const EdgeInsets.only(left: 8),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.78),
+          color: Theme.of(context).brightness == Brightness.dark ? Theme.of(context).cardColor : Colors.white.withValues(alpha: 0.78),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: Theme.of(context).hintColor.withValues(alpha: 0.35),
+            color: Theme.of(context).dividerColor.withValues(alpha: Theme.of(context).brightness == Brightness.dark ? 0.55 : 0.35),
             width: 1,
           ),
           boxShadow: [
@@ -237,17 +247,17 @@ Widget _buildHeaderCollapseControl() {
 
   Widget _buildTopTabs() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+      padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: Theme.of(context).dividerColor.withValues(alpha: 0.22),
-        borderRadius: BorderRadius.circular(16),
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: AppTheme.primaryRose.withValues(alpha: 0.16),
+          color: Theme.of(context).dividerColor.withValues(alpha: 0.35),
           width: 1,
         ),
       ),
       child: SizedBox(
-        height: 72,
+        height: 60,
         child: TabBar(
           controller: _tabController,
           indicator: BoxDecoration(
@@ -257,7 +267,7 @@ Widget _buildHeaderCollapseControl() {
             borderRadius: BorderRadius.circular(14),
           ),
           indicatorSize: TabBarIndicatorSize.tab,
-          indicatorPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+          indicatorPadding: const EdgeInsets.all(2),
           labelPadding: EdgeInsets.zero,
           dividerColor: Colors.transparent,
           labelColor: Colors.white,
@@ -278,7 +288,7 @@ Widget _buildHeaderCollapseControl() {
     return Column(
       children: [
         _buildTopTabs(),
-        const SizedBox(height: 16),
+        const SizedBox(height: 12),
         Expanded(
           child: TabBarView(
             controller: _tabController,
@@ -309,48 +319,84 @@ Widget _buildHeaderCollapseControl() {
                     _buildJoinButton(),
                     const SizedBox(height: 16),
                     _buildAlternativeOptions(),
-                    const SizedBox(height: 120),
+                    const SizedBox(height: 16),
                   ],
                 ),
                   ),
                 ),
               ),
-              LayoutBuilder(
-                builder: (context, constraints) => SingleChildScrollView(
-                  primary: false,
-                  physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                    child: Column(
-                      children: [
-                    const SizedBox(height: 12),
-                    _buildAlternativeOptions(),
-                    const SizedBox(height: 220),
-                  ],
-                ),
-                  ),
-                ),
-              ),
-              LayoutBuilder(
-                builder: (context, constraints) => SingleChildScrollView(
-                  primary: false,
-                  physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                    child: Column(
-                      children: [
-                    const SizedBox(height: 12),
-                    _buildAlternativeOptions(),
-                    const SizedBox(height: 220),
-                  ],
-                ),
-                  ),
-                ),
-              ),
+              _buildQrTab(),
+              _buildManualTab(),
             ],
           ),
         ),
       ],
+    );
+  }
+
+
+
+  Widget _buildQrTab() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.qr_code_scanner, size: 72, color: AppTheme.primaryRose),
+            const SizedBox(height: 16),
+            Text(
+              'Scan Partner QR Code',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Use your camera to scan your partner invitation QR code.',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Theme.of(context).hintColor),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _showRequestInvitationDialog,
+              child: const Text('Request Invite'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildManualTab() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.alternate_email, size: 72, color: AppTheme.primaryPurple),
+            const SizedBox(height: 16),
+            Text(
+              'Manual Connection',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Connect using your partner email or invitation details.',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Theme.of(context).hintColor),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _showManualConnectionDialog,
+              child: const Text('Connect Manually'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -545,7 +591,7 @@ Widget _buildHeaderCollapseControl() {
             Expanded(child: Divider(color: Theme.of(context).dividerColor, thickness: 1)),
           ],
         ),
-        const SizedBox(height: 120),
+        const SizedBox(height: 24),
         _buildAlternativeOption(
           'Request New Invitation',
           'Ask your partner to send a new invitation',
@@ -555,7 +601,7 @@ Widget _buildHeaderCollapseControl() {
             _showRequestInvitationDialog();
           },
         ),
-        const SizedBox(height: 120),
+        const SizedBox(height: 24),
         _buildAlternativeOption(
           'Manual Connection',
           'Connect using partner\'s email address',

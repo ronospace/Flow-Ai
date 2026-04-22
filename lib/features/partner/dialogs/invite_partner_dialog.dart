@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
+import 'join_partner_dialog.dart';
 
 class InvitePartnerDialog extends StatefulWidget {
   final Function(String, String?) onSendInvite;
@@ -69,44 +70,56 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
           child: ScaleTransition(
             scale: _scaleAnimation,
             child: Dialog(
+              insetPadding: const EdgeInsets.fromLTRB(16, 74, 16, 30),
               backgroundColor: Colors.transparent,
-              child: Container(
-                constraints: const BoxConstraints(maxWidth: 400),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      Theme.of(context).brightness == Brightness.dark ? const Color(0xFF121212) : Theme.of(context).cardColor,
-                      AppTheme.primaryRose.withValues(alpha: Theme.of(context).brightness == Brightness.dark ? 0.08 : 0.02),
-                    ],
+              child: Align(
+                alignment: Alignment.center,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    maxWidth: 420,
+                    maxHeight: 680,
                   ),
-                  borderRadius: BorderRadius.circular(28),
-                  border: Border.all(
-                    color: AppTheme.primaryRose.withValues(alpha: 0.2),
-                    width: 2,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppTheme.primaryRose.withValues(alpha: 0.2),
-                      blurRadius: 30,
-                      offset: const Offset(0, 15),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _buildHeader(),
-                    Flexible(
-                      child: SingleChildScrollView(
-                        padding: const EdgeInsets.symmetric(horizontal: 24),
-                        child: Form(key: _formKey, child: _buildCurrentStep()),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Theme.of(context).cardColor,
+                          Theme.of(context).cardColor,
+                        ],
                       ),
+                      borderRadius: BorderRadius.circular(28),
+                      border: Border.all(
+                        color: AppTheme.primaryRose.withValues(alpha: 0.2),
+                        width: 2,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppTheme.primaryRose.withValues(alpha: 0.2),
+                          blurRadius: 30,
+                          offset: const Offset(0, 15),
+                        ),
+                      ],
                     ),
-                    _buildFooter(),
-                    _buildBottomHandle(),
-                  ],
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _buildHeader(),
+                        Flexible(
+                          child: SingleChildScrollView(
+                            padding: const EdgeInsets.symmetric(horizontal: 24),
+                            child: Form(
+                              key: _formKey,
+                              child: _buildCurrentStep(),
+                            ),
+                          ),
+                        ),
+                        _buildFooter(),
+                        _buildBottomHandle(),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -117,7 +130,16 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
   }
 
   Widget _buildHeader() {
-    return Container(
+    return GestureDetector(
+      onPanEnd: (d) {
+        if (d.velocity.pixelsPerSecond.dx < -80) {
+          Navigator.pop(context);
+          Future.delayed(const Duration(milliseconds: 160), () {
+            showDialog(context: context, builder: (_) => JoinPartnerDialog(onJoinWithCode: (_) async {}));
+          });
+        }
+      },
+      child: Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -166,7 +188,7 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
           ),
         ],
       ),
-    ).animate().slideY(begin: -0.3, end: 0);
+    )).animate().slideY(begin: -0.3, end: 0);
   }
 
   Widget _buildCurrentStep() {
