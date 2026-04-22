@@ -249,6 +249,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                                       ],
                                     ),
                                   ),
+                                  _buildBottomHandle(),
                                 ],
                               ),
                             ),
@@ -263,6 +264,27 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
           ),
         );
       },
+    );
+  }
+
+
+
+  Widget _buildBottomHandle() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 4, 24, 16),
+      child: GestureDetector(
+        onTap: () => Navigator.of(context).pop(),
+        child: Center(
+          child: Container(
+            width: 40,
+            height: 4,
+            decoration: BoxDecoration(
+              color: AppTheme.lightGrey,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -319,10 +341,6 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                 ),
               ],
             ),
-          ),
-          IconButton(
-            onPressed: () => Navigator.of(context).pop(),
-            icon: Icon(Icons.close, color: AppTheme.mediumGrey),
           ),
         ],
       ),
