@@ -269,24 +269,36 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
 
 
 
-  Widget _buildBottomHandle() {
+  
+Widget _buildBottomHandle() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 4, 24, 16),
+      padding: const EdgeInsets.fromLTRB(24, 6, 24, 16),
       child: GestureDetector(
-        onTap: () => Navigator.of(context).pop(),
-        child: Center(
-          child: Container(
-            width: 40,
-            height: 4,
-            decoration: BoxDecoration(
-              color: AppTheme.lightGrey,
-              borderRadius: BorderRadius.circular(2),
+        behavior: HitTestBehavior.opaque,
+        onTap: () => Navigator.pop(context),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: AppTheme.lightGrey,
+                borderRadius: BorderRadius.circular(2),
+              ),
             ),
-          ),
+            const SizedBox(height: 6),
+            Icon(
+              Icons.keyboard_arrow_down_rounded,
+              size: 22,
+              color: AppTheme.mediumGrey,
+            ),
+          ],
         ),
       ),
     );
   }
+
 
   Widget _buildHeader(ThemeData theme, AppLocalizations localizations) {
     return Container(
@@ -470,7 +482,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
       Future.delayed(const Duration(seconds: 2), () {
         if (mounted) {
           setState(() => _successMessage = null);
-          Navigator.of(context).pop();
+          Navigator.pop(context);
         }
       });
     } catch (e) {
@@ -524,7 +536,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
         content: Text(message),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => Navigator.pop(context),
             child: const Text("OK"),
           ),
         ],
