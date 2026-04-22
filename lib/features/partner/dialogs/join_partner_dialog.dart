@@ -257,21 +257,21 @@ Widget _buildHeaderCollapseControl() {
         ),
       ),
       child: SizedBox(
-        height: 60,
+        height: 58,
         child: TabBar(
           controller: _tabController,
           indicator: BoxDecoration(
             gradient: const LinearGradient(
               colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
             ),
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(10),
           ),
           indicatorSize: TabBarIndicatorSize.tab,
           indicatorPadding: const EdgeInsets.all(2),
           labelPadding: EdgeInsets.zero,
           dividerColor: Colors.transparent,
           labelColor: Colors.white,
-          unselectedLabelColor: AppTheme.mediumGrey,
+          unselectedLabelColor: Theme.of(context).hintColor,
           splashFactory: NoSplash.splashFactory,
           overlayColor: WidgetStateProperty.all(Colors.transparent),
           tabs: const [
