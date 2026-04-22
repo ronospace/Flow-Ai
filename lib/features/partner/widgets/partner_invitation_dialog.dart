@@ -273,20 +273,28 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
 
 
   
+
 Widget _buildHeaderCollapseControl() {
     return GestureDetector(
       onTap: () => Navigator.pop(context),
       child: Container(
-        width: 40,
-        height: 40,
+        width: 38,
+        height: 38,
         margin: const EdgeInsets.only(left: 8),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.55),
+          color: Theme.of(context).brightness == Brightness.dark ? Theme.of(context).cardColor : Colors.white.withValues(alpha: 0.78),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: AppTheme.lightGrey.withValues(alpha: 0.6),
+            color: AppTheme.mediumGrey.withValues(alpha: 0.35),
             width: 1,
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.03),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
         child: const Icon(
           Icons.keyboard_arrow_down_rounded,
@@ -296,6 +304,7 @@ Widget _buildHeaderCollapseControl() {
       ),
     );
   }
+
 
 
 
@@ -361,7 +370,7 @@ Widget _buildHeaderCollapseControl() {
 
   Widget _buildTabBar(ThemeData theme, AppLocalizations localizations) {
     return Container(
-          margin: const EdgeInsets.fromLTRB(20, 12, 20, 16),
+          margin: const EdgeInsets.fromLTRB(20, 14, 20, 18),
           decoration: BoxDecoration(
             color: AppTheme.lightGrey.withValues(alpha: 0.22),
             borderRadius: BorderRadius.circular(16),
@@ -371,7 +380,7 @@ Widget _buildHeaderCollapseControl() {
             ),
           ),
           child: SizedBox(
-            height: 64,
+            height: 68,
             child: TabBar(
               controller: _tabController,
               indicator: BoxDecoration(
@@ -401,34 +410,34 @@ Widget _buildHeaderCollapseControl() {
               tabAlignment: TabAlignment.fill,
               tabs: const [
                 Tab(
-                  height: 64,
+                  height: 68,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.email, size: 22),
-                      SizedBox(height: 2),
+                      SizedBox(height: 4),
                       Text('Email'),
                     ],
                   ),
                 ),
                 Tab(
-                  height: 64,
+                  height: 68,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.qr_code, size: 22),
-                      SizedBox(height: 2),
+                      SizedBox(height: 4),
                       Text('QR Code'),
                     ],
                   ),
                 ),
                 Tab(
-                  height: 64,
+                  height: 68,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.share, size: 22),
-                      SizedBox(height: 2),
+                      SizedBox(height: 4),
                       Text('Share Link'),
                     ],
                   ),
