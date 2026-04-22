@@ -272,35 +272,31 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
   
 
 
-  Widget _buildHeaderCollapseControl() {
+  
+Widget _buildHeaderCollapseControl() {
     return GestureDetector(
       onTap: () => Navigator.pop(context),
-      behavior: HitTestBehavior.opaque,
-      child: SizedBox(
-        width: 44,
-        height: 44,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 18,
-              height: 4,
-              decoration: BoxDecoration(
-                color: AppTheme.lightGrey,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            const SizedBox(height: 2),
-            const Icon(
-              Icons.keyboard_arrow_down_rounded,
-              size: 18,
-              color: AppTheme.mediumGrey,
-            ),
-          ],
+      child: Container(
+        width: 40,
+        height: 40,
+        margin: const EdgeInsets.only(left: 8),
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.55),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: AppTheme.lightGrey.withValues(alpha: 0.6),
+            width: 1,
+          ),
+        ),
+        child: const Icon(
+          Icons.keyboard_arrow_down_rounded,
+          size: 22,
+          color: AppTheme.mediumGrey,
         ),
       ),
     );
   }
+
 
 
   Widget _buildHeader(ThemeData theme, AppLocalizations localizations) {
@@ -332,7 +328,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
             ),
             child: Icon(
               Icons.favorite,
-              color: Colors.white.withValues(alpha: 0.03),
+              color: Colors.white,
               size: 22,
             ),
           ),
