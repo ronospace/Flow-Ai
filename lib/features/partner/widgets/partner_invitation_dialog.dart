@@ -249,7 +249,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                                       ],
                                     ),
                                   ),
-                                  _buildBottomHandle(),
+                                  
                                 ],
                               ),
                             ),
@@ -270,27 +270,30 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
 
 
   
-Widget _buildBottomHandle() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 6, 24, 16),
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () => Navigator.pop(context),
+
+
+  Widget _buildHeaderCollapseControl() {
+    return GestureDetector(
+      onTap: () => Navigator.pop(context),
+      behavior: HitTestBehavior.opaque,
+      child: SizedBox(
+        width: 44,
+        height: 44,
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 40,
+              width: 18,
               height: 4,
               decoration: BoxDecoration(
                 color: AppTheme.lightGrey,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
-            const SizedBox(height: 6),
-            Icon(
+            const SizedBox(height: 2),
+            const Icon(
               Icons.keyboard_arrow_down_rounded,
-              size: 22,
+              size: 18,
               color: AppTheme.mediumGrey,
             ),
           ],
@@ -354,6 +357,7 @@ Widget _buildBottomHandle() {
               ],
             ),
           ),
+          _buildHeaderCollapseControl(),
         ],
       ),
     ).animate().slideY(begin: -0.3, end: 0, duration: 400.ms);
