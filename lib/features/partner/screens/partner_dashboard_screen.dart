@@ -162,6 +162,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     PartnerService partnerService,
   ) {
     return SliverAppBar(
+      automaticallyImplyLeading: false,
       expandedHeight: 120,
       floating: true,
       pinned: true,
