@@ -106,6 +106,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                                 blurRadius: 30,
                                 offset: const Offset(0, 15),
                               ),
+                              
                             ],
                           ),
                           child: Column(
@@ -118,6 +119,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                                   child: _buildContent(),
                                 ),
                               ),
+                              
                             ],
                           ),
                         ),
@@ -182,13 +184,136 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
               ],
             ),
           ),
-          IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(Icons.close, color: AppTheme.mediumGrey),
-          ),
+          _buildHeaderCollapseControl(),
         ],
       ),
     ).animate().slideY(begin: -0.3, end: 0);
+  }
+
+
+
+
+
+  
+
+
+  
+
+Widget _buildHeaderCollapseControl() {
+    return GestureDetector(
+      onTap: () => Navigator.pop(context),
+      child: Container(
+        width: 38,
+        height: 38,
+        margin: const EdgeInsets.only(left: 8),
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.78),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: AppTheme.mediumGrey.withValues(alpha: 0.35),
+            width: 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.03),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: const Icon(
+          Icons.keyboard_arrow_down_rounded,
+          size: 22,
+          color: AppTheme.mediumGrey,
+        ),
+      ),
+    );
+  }
+
+
+
+
+  Widget _buildTopTabs() {
+    return Container(
+      padding: const EdgeInsets.all(2),
+      decoration: BoxDecoration(
+        color: AppTheme.lightGrey.withValues(alpha: 0.22),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: AppTheme.primaryRose.withValues(alpha: 0.16),
+          width: 1,
+        ),
+      ),
+      child: SizedBox(
+        height: 64,
+        child: Row(
+          children: [
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+                  ),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.link, size: 22, color: Colors.white),
+                    SizedBox(height: 2),
+                    Text('Code',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              child: InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                  context.push('/qr-join');
+                },
+                child: const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.qr_code, size: 22, color: AppTheme.mediumGrey),
+                    SizedBox(height: 2),
+                    Text('QR Code',
+                      style: TextStyle(
+                        color: AppTheme.mediumGrey,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.person_outline, size: 22, color: AppTheme.mediumGrey),
+                  SizedBox(height: 2),
+                  Text('Manual',
+                    style: TextStyle(
+                      color: AppTheme.mediumGrey,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildContent() {
@@ -197,6 +322,8 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            _buildTopTabs(),
+            const SizedBox(height: 20),
             Text(
               'Enter the invitation code your partner shared with you.',
               
