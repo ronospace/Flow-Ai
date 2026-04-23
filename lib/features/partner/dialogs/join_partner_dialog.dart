@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
 import 'invite_partner_dialog.dart';
+import '../screens/qr_join_screen.dart';
 
 class JoinPartnerDialog extends StatefulWidget {
   final String? initialCode;
@@ -401,14 +402,26 @@ Widget _buildHeaderCollapseControl() {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Use your camera to scan your partner invitation QR code.',
+                  'Tap To Scan',
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Theme.of(context).hintColor),
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: _showRequestInvitationDialog,
-                  child: const Text('Request Invite'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).cardColor,
+                    foregroundColor: AppTheme.primaryRose,
+                    elevation: 0,
+                    padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                      side: BorderSide(
+                        color: Theme.of(context).dividerColor.withValues(alpha: 0.45),
+                      ),
+                    ),
+                  ),
+                  child: const Text('📷'),
                 ),
               ],
             ),
@@ -772,12 +785,8 @@ Widget _buildHeaderCollapseControl() {
   }
 
   void _showRequestInvitationDialog() {
-    // TODO: Implement request invitation dialog
-    ScaffoldMessenger.maybeOf(context)?.showSnackBar(
-      SnackBar(
-        content: Text('Request invitation feature coming soon'),
-        behavior: SnackBarBehavior.floating,
-      ),
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const QrJoinScreen()),
     );
   }
 
