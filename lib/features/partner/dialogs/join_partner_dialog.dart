@@ -89,6 +89,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                           maxHeight: dialogHeight,
                         ),
                         child: Container(
+                          width: double.infinity,
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               begin: Alignment.topLeft,
@@ -116,9 +117,10 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               _buildHeader(),
+                              _buildTopTabs(),
                               Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
+                                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                                   child: _buildContent(),
                                 ),
                               ),
@@ -247,7 +249,7 @@ Widget _buildHeaderCollapseControl() {
 
   Widget _buildTopTabs() {
     return Container(
-      padding: const EdgeInsets.all(4),
+      margin: const EdgeInsets.fromLTRB(8, 12, 8, 14),
       decoration: BoxDecoration(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(12),
@@ -269,15 +271,46 @@ Widget _buildHeaderCollapseControl() {
           indicatorSize: TabBarIndicatorSize.tab,
           indicatorPadding: const EdgeInsets.all(2),
           labelPadding: EdgeInsets.zero,
+          tabAlignment: TabAlignment.fill,
           dividerColor: Colors.transparent,
           labelColor: Colors.white,
           unselectedLabelColor: Theme.of(context).hintColor,
           splashFactory: NoSplash.splashFactory,
           overlayColor: WidgetStateProperty.all(Colors.transparent),
           tabs: const [
-            Tab(icon: Icon(Icons.link, size: 20), text: 'Code'),
-            Tab(icon: Icon(Icons.qr_code, size: 20), text: 'QR Code'),
-            Tab(icon: Icon(Icons.person_outline, size: 20), text: 'Manual'),
+            Tab(
+              height: 56,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.link, size: 20),
+                  SizedBox(height: 4),
+                  Text('Code'),
+                ],
+              ),
+            ),
+            Tab(
+              height: 56,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.qr_code, size: 20),
+                  SizedBox(height: 4),
+                  Text('QR Code'),
+                ],
+              ),
+            ),
+            Tab(
+              height: 56,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.person_outline, size: 20),
+                  SizedBox(height: 4),
+                  Text('Manual'),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -287,7 +320,6 @@ Widget _buildHeaderCollapseControl() {
   Widget _buildContent() {
     return Column(
       children: [
-        _buildTopTabs(),
         const SizedBox(height: 14),
         Expanded(
           child: TabBarView(
