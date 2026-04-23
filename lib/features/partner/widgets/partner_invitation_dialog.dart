@@ -347,14 +347,14 @@ Widget _buildHeaderCollapseControl() {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Invite Your Partner',
+                  'Invite Your Partner 💍',
                   style: theme.textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: AppTheme.darkGrey,
+                    color: theme.textTheme.bodyLarge?.color,
                   ),
                 ),
                 Text(
-                  'Share Your Love And Cycle Journey Together 💖',
+                  'Share Your Love and Cycle Journey Together 💞',
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: AppTheme.mediumGrey.withValues(alpha: 0.88),
                   ),

@@ -183,14 +183,14 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Join Partner',
+                  'Join Your Partner 💍',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).textTheme.bodyLarge?.color,
                   ),
                 ),
                 Text(
-                  'Use your invitation code',
+                  'Connect Your Love and Cycle Journey Together 💞',
                   style: Theme.of(
                     context,
                   ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).hintColor),
@@ -343,7 +343,7 @@ Widget _buildHeaderCollapseControl() {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                     Text(
-                      'Enter the invitation code your partner shared with you.',
+                      'Use the code your partner sent to connect instantly.',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Theme.of(context).hintColor,
                       ),
@@ -388,6 +388,8 @@ Widget _buildHeaderCollapseControl() {
           child: Padding(
             padding: const EdgeInsets.all(24),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Icon(Icons.qr_code_scanner, size: 72, color: AppTheme.primaryRose),
                 const SizedBox(height: 16),
@@ -427,6 +429,8 @@ Widget _buildHeaderCollapseControl() {
           child: Padding(
             padding: const EdgeInsets.all(24),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Icon(Icons.alternate_email, size: 72, color: AppTheme.primaryPurple),
                 const SizedBox(height: 16),
@@ -460,7 +464,7 @@ Widget _buildHeaderCollapseControl() {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Invitation Code',
+          'Your Code',
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.bold,
             color: Theme.of(context).textTheme.bodyLarge?.color,
@@ -468,7 +472,7 @@ Widget _buildHeaderCollapseControl() {
         ),
         const SizedBox(height: 8),
         Text(
-          'Enter the 6-character code from your partner\'s invitation.',
+          'Enter the 6-character code to begin syncing together.',
           style: Theme.of(
             context,
           ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).hintColor),
