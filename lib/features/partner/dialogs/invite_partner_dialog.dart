@@ -17,6 +17,7 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
   late Animation<double> _fadeAnimation;
+  late TabController _tabController;
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _messageController = TextEditingController();
@@ -48,7 +49,7 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
       parent: _animationController,
       curve: Curves.easeInOut,
     );
-
+    _tabController = TabController(length: 2, vsync: this);
     _animationController.forward();
   }
 
@@ -57,6 +58,7 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
     _animationController.dispose();
     _emailController.dispose();
     _messageController.dispose();
+    _tabController.dispose();
     super.dispose();
   }
 
@@ -373,54 +375,41 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
   }
 
   Widget _buildStepIndicator() {
-    return Row(
-      children: [
-        _buildStepDot(0, 'Email'),
-        Expanded(
-          child: Container(
-            height: 2,
-            color: _currentStep > 0 ? AppTheme.primaryRose : Theme.of(context).dividerColor,
-          ),
+    return Container(
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: Theme.of(context).dividerColor.withValues(alpha: 0.35),
+          width: 1,
         ),
-        _buildStepDot(1, 'Message'),
-      ],
-    );
-  }
-
-  Widget _buildStepDot(int step, String label) {
-    final isActive = _currentStep >= step;
-    final isCompleted = _currentStep > step;
-
-    return Column(
-      children: [
-        Container(
-          width: 32,
-          height: 32,
-          decoration: BoxDecoration(
-            gradient: isActive
-                ? const LinearGradient(
-                    colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
-                  )
-                : null,
-            color: isActive ? null : Theme.of(context).dividerColor,
-            shape: BoxShape.circle,
+      ),
+      child: SizedBox(
+        height: 56,
+        child: TabBar(
+          controller: _tabController,
+          onTap: (index) => setState(() => _currentStep = index),
+          indicator: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+            ),
+            borderRadius: BorderRadius.circular(10),
           ),
-          child: Icon(
-            isCompleted ? Icons.check : Icons.circle,
-            color: Theme.of(context).cardColor,
-            size: 16,
-          ),
+          indicatorSize: TabBarIndicatorSize.tab,
+          indicatorPadding: const EdgeInsets.all(2),
+          labelPadding: EdgeInsets.zero,
+          labelColor: Colors.white,
+          unselectedLabelColor: Theme.of(context).hintColor,
+          dividerColor: Colors.transparent,
+          splashFactory: NoSplash.splashFactory,
+          overlayColor: WidgetStateProperty.all(Colors.transparent),
+          tabs: const [
+            Tab(icon: Icon(Icons.email, size: 20), text: 'Email'),
+            Tab(icon: Icon(Icons.message_outlined, size: 20), text: 'Message'),
+          ],
         ),
-        const SizedBox(height: 8),
-        Text(
-          label,
-          style: TextStyle(
-            color: isActive ? AppTheme.primaryRose : AppTheme.mediumGrey,
-            fontSize: 12,
-            fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
-          ),
-        ),
-      ],
+      ),
     );
   }
 
@@ -507,7 +496,7 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
                         const SizedBox(width: 8),
                         Icon(
                           _currentStep == 0 ? Icons.arrow_forward : Icons.send,
-                          size: 18,
+                          size: 20,
                         ),
                       ],
                     ),
