@@ -37,12 +37,12 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
     }
 
     _animationController = AnimationController(
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 600),
       vsync: this,
     );
 
     _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.elasticOut),
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOutBack),
     );
 
     _fadeAnimation = CurvedAnimation(
@@ -336,9 +336,12 @@ Widget _buildHeaderCollapseControl() {
                   physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                   child: ConstrainedBox(
                     constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                    child: Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                     Text(
                       'Enter the invitation code your partner shared with you.',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -358,8 +361,9 @@ Widget _buildHeaderCollapseControl() {
                     const SizedBox(height: 16),
                   ],
                 ),
+                      ),
+                    ),
                   ),
-                ),
               ),
               _buildQrTab(),
               _buildManualTab(),
@@ -374,62 +378,78 @@ Widget _buildHeaderCollapseControl() {
 
 
   Widget _buildQrTab() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          children: [
-            Icon(Icons.qr_code_scanner, size: 72, color: AppTheme.primaryRose),
-            const SizedBox(height: 16),
-            Text(
-              'Scan Partner QR Code',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              children: [
+                Icon(Icons.qr_code_scanner, size: 72, color: AppTheme.primaryRose),
+                const SizedBox(height: 16),
+                Text(
+                  'Scan Partner QR Code',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Use your camera to scan your partner invitation QR code.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Theme.of(context).hintColor),
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: _showRequestInvitationDialog,
+                  child: const Text('Request Invite'),
+                ),
+              ],
             ),
-            const SizedBox(height: 8),
-            Text(
-              'Use your camera to scan your partner invitation QR code.',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Theme.of(context).hintColor),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _showRequestInvitationDialog,
-              child: const Text('Request Invite'),
-            ),
-          ],
+          ),
         ),
       ),
     );
   }
 
   Widget _buildManualTab() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          children: [
-            Icon(Icons.alternate_email, size: 72, color: AppTheme.primaryPurple),
-            const SizedBox(height: 16),
-            Text(
-              'Manual Connection',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              children: [
+                Icon(Icons.alternate_email, size: 72, color: AppTheme.primaryPurple),
+                const SizedBox(height: 16),
+                Text(
+                  'Manual Connection',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Connect using your partner email or invitation details.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Theme.of(context).hintColor),
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: _showManualConnectionDialog,
+                  child: const Text('Connect Manually'),
+                ),
+              ],
             ),
-            const SizedBox(height: 8),
-            Text(
-              'Connect using your partner email or invitation details.',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Theme.of(context).hintColor),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _showManualConnectionDialog,
-              child: const Text('Connect Manually'),
-            ),
-          ],
+          ),
         ),
       ),
     );
