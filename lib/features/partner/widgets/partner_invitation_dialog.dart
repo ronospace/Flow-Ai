@@ -173,15 +173,15 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                             color: theme.colorScheme.surface,
                             borderRadius: BorderRadius.circular(28),
                             border: Border.all(
-                              color: theme.colorScheme.outline.withValues(alpha: 0.22),
-                              width: 1,
+                              color: AppTheme.primaryRose.withValues(alpha: 0.20),
+                              width: 2,
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.08),
-                                blurRadius: 24,
+                                color: AppTheme.primaryRose.withValues(alpha: 0.20),
+                                blurRadius: 30,
                                 spreadRadius: 0,
-                                offset: const Offset(0, 10),
+                                offset: const Offset(0, 15),
                               ),
                             ],
                           ),
@@ -333,7 +333,7 @@ Widget _buildHeaderCollapseControl() {
               gradient: LinearGradient(
                 colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
               ),
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
               Icons.favorite,
@@ -370,73 +370,71 @@ Widget _buildHeaderCollapseControl() {
 
   Widget _buildTabBar(ThemeData theme, AppLocalizations localizations) {
     return Container(
-          margin: const EdgeInsets.fromLTRB(20, 14, 20, 18),
+          margin: const EdgeInsets.fromLTRB(20, 12, 20, 14),
           decoration: BoxDecoration(
-            color: AppTheme.lightGrey.withValues(alpha: 0.22),
-            borderRadius: BorderRadius.circular(16),
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: AppTheme.primaryRose.withValues(alpha: 0.16),
+              color: theme.dividerColor.withValues(alpha: 0.35),
               width: 1,
             ),
           ),
           child: SizedBox(
-            height: 68,
+            height: 56,
             child: TabBar(
               controller: _tabController,
               indicator: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
                 ),
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(10),
               ),
-              indicatorPadding: const EdgeInsets.symmetric(
-                horizontal: 2,
-                vertical: 2,
-              ),
+              indicatorPadding: const EdgeInsets.all(2),
               indicatorSize: TabBarIndicatorSize.tab,
-              splashBorderRadius: BorderRadius.circular(16),
+              splashFactory: NoSplash.splashFactory,
+              overlayColor: WidgetStatePropertyAll(Colors.transparent),
               dividerColor: Colors.transparent,
               labelColor: Colors.white,
               unselectedLabelColor: AppTheme.mediumGrey,
               labelStyle: const TextStyle(
-                fontSize: 13,
+                fontSize: 12,
                 fontWeight: FontWeight.w600,
               ),
               unselectedLabelStyle: const TextStyle(
-                fontSize: 13,
+                fontSize: 12,
                 fontWeight: FontWeight.w600,
               ),
               labelPadding: EdgeInsets.zero,
               tabAlignment: TabAlignment.fill,
               tabs: const [
                 Tab(
-                  height: 68,
+                  height: 56,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.email, size: 22),
+                      Icon(Icons.email, size: 20),
                       SizedBox(height: 4),
                       Text('Email'),
                     ],
                   ),
                 ),
                 Tab(
-                  height: 68,
+                  height: 56,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.qr_code, size: 22),
+                      Icon(Icons.qr_code, size: 20),
                       SizedBox(height: 4),
                       Text('QR Code'),
                     ],
                   ),
                 ),
                 Tab(
-                  height: 68,
+                  height: 56,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.share, size: 22),
+                      Icon(Icons.share, size: 20),
                       SizedBox(height: 4),
                       Text('Share Link'),
                     ],
