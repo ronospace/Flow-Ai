@@ -324,7 +324,9 @@ Widget _buildHeaderCollapseControl() {
         Expanded(
           child: TabBarView(
             controller: _tabController,
-            physics: const PageScrollPhysics(),
+            physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics(),
+          ),
             children: [
               LayoutBuilder(
                 builder: (context, constraints) => SingleChildScrollView(
