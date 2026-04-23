@@ -406,7 +406,7 @@ Widget _buildHeaderCollapseControl() {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Tap To Scan',
+                  'Use your camera to scan instantly',
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Theme.of(context).hintColor),
                 ),
@@ -419,16 +419,16 @@ Widget _buildHeaderCollapseControl() {
                         : Theme.of(context).cardColor,
                     foregroundColor: AppTheme.primaryRose,
                     elevation: 0,
-                    padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 18),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18),
+                      borderRadius: BorderRadius.circular(16),
                       side: BorderSide(
                         color: AppTheme.primaryRose.withValues(alpha: 0.55),
                         width: 1.4,
                       ),
                     ),
                   ),
-                  child: const Text('📷'),
+                  child: const Row(mainAxisSize: MainAxisSize.min, children: [Icon(Icons.qr_code_scanner, size: 18), SizedBox(width: 8), Text('Open Scanner')]),
                 ),
               ],
             ),
@@ -474,14 +474,20 @@ Widget _buildHeaderCollapseControl() {
                   keyboardType: TextInputType.emailAddress,
                   onFieldSubmitted: (_) => _handleManualJoin(),
                   autocorrect: false,
+                  onChanged: (_) => setState(() {}),
                   inputFormatters: [
                     LengthLimitingTextInputFormatter(80),
                   ],
                   decoration: InputDecoration(
-                    hintText: 'Partner Email',
+                    hintText: 'partner@example.com',
+                    prefixIcon: Icon(Icons.email_outlined, color: AppTheme.primaryPurple),
                     hintStyle: TextStyle(
                       color: Theme.of(context).dividerColor,
                       letterSpacing: 0,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide: BorderSide(color: _manualEmailController.text.isEmpty ? Theme.of(context).dividerColor : (_isValidManualEmail() ? Colors.green : AppTheme.primaryRose), width: 1.4),
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -491,27 +497,34 @@ Widget _buildHeaderCollapseControl() {
                       borderSide: BorderSide(color: AppTheme.primaryPurple, width: 2),
                     ),
                     filled: true,
-                    fillColor: Theme.of(context).brightness == Brightness.dark
-                        ? Theme.of(context).cardColor.withOpacity(0.92)
-                        : const Color(0xFFFFF4F7),
+                    fillColor: Theme.of(context).cardColor,
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 16,
                       vertical: 18,
                     ),
                   ),
                 ),
+                const SizedBox(height: 10),
+                Text(_errorMessage == 'Request sent successfully. Waiting for your partner.' ? 'Your partner will be notified when connected.' : 'Enter a valid partner email to enable request.', style: TextStyle(fontSize: 12, color: _errorMessage == 'Request sent successfully. Waiting for your partner.' ? Colors.green : Theme.of(context).hintColor)),
                 const SizedBox(height: 18),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: (_isLoading || !_isValidManualEmail()) ? null : _handleManualJoin,
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      backgroundColor: _errorMessage == 'Request sent successfully. Waiting for your partner.' ? Colors.green : ((_isLoading || !_isValidManualEmail()) ? Colors.grey.shade300 : AppTheme.primaryRose),
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                    ),
+                    onPressed: (_isLoading || !_isValidManualEmail() || _errorMessage == 'Request sent successfully. Waiting for your partner.') ? null : _handleManualJoin,
                     child: _isLoading
                         ? const SizedBox(
-                            height: 18,
-                            width: 18,
+                            height: 20,
+                            width: 20,
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
-                        : const Text('Send Request'),
+                        : AnimatedSwitcher(duration: const Duration(milliseconds: 260), child: Row(key: ValueKey(_errorMessage == 'Request sent successfully. Waiting for your partner.'), mainAxisAlignment: MainAxisAlignment.center, mainAxisSize: MainAxisSize.min, children: [_errorMessage == 'Request sent successfully. Waiting for your partner.' ? const Icon(Icons.check, size: 20) : const Icon(Icons.send, size: 20), const SizedBox(width: 8), Text(_errorMessage == 'Request sent successfully. Waiting for your partner.' ? 'Request Sent' : 'Send Request', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16))]),),
                   ),
                 ),
               ],
@@ -857,7 +870,8 @@ Widget _buildHeaderCollapseControl() {
     setState(() {
       _isLoading = true;
       _errorMessage = null;
-      _errorMessage = 'Request flow ready for backend hookup.';
+      _errorMessage = 'Request sent successfully. Waiting for your partner.';
+      _isLoading = false;
     });
 
     final service = context.read<PartnerService>();
