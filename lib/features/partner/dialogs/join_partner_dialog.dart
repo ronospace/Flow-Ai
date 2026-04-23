@@ -118,7 +118,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                               _buildHeader(),
                               Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.fromLTRB(24, 18, 24, 0),
+                                  padding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
                                   child: _buildContent(),
                                 ),
                               ),
@@ -257,7 +257,7 @@ Widget _buildHeaderCollapseControl() {
         ),
       ),
       child: SizedBox(
-        height: 58,
+        height: 56,
         child: TabBar(
           controller: _tabController,
           indicator: BoxDecoration(
@@ -275,9 +275,9 @@ Widget _buildHeaderCollapseControl() {
           splashFactory: NoSplash.splashFactory,
           overlayColor: WidgetStateProperty.all(Colors.transparent),
           tabs: const [
-            Tab(icon: Icon(Icons.link, size: 22), text: 'Code'),
-            Tab(icon: Icon(Icons.qr_code, size: 22), text: 'QR Code'),
-            Tab(icon: Icon(Icons.person_outline, size: 22), text: 'Manual'),
+            Tab(icon: Icon(Icons.link, size: 20), text: 'Code'),
+            Tab(icon: Icon(Icons.qr_code, size: 20), text: 'QR Code'),
+            Tab(icon: Icon(Icons.person_outline, size: 20), text: 'Manual'),
           ],
         ),
       ),
@@ -288,7 +288,7 @@ Widget _buildHeaderCollapseControl() {
     return Column(
       children: [
         _buildTopTabs(),
-        const SizedBox(height: 12),
+        const SizedBox(height: 14),
         Expanded(
           child: TabBarView(
             controller: _tabController,
@@ -309,13 +309,13 @@ Widget _buildHeaderCollapseControl() {
                         color: Theme.of(context).hintColor,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 20),
                     _buildCodeInput(),
                     if (_errorMessage != null) ...[
                       const SizedBox(height: 16),
                       _buildErrorMessage(),
                     ],
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 20),
                     _buildJoinButton(),
                     const SizedBox(height: 16),
                     _buildAlternativeOptions(),
@@ -341,7 +341,6 @@ Widget _buildHeaderCollapseControl() {
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.qr_code_scanner, size: 72, color: AppTheme.primaryRose),
             const SizedBox(height: 16),
@@ -373,7 +372,6 @@ Widget _buildHeaderCollapseControl() {
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.alternate_email, size: 72, color: AppTheme.primaryPurple),
             const SizedBox(height: 16),
@@ -402,7 +400,7 @@ Widget _buildHeaderCollapseControl() {
 
   Widget _buildCodeInput() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Invitation Code',
@@ -460,7 +458,7 @@ Widget _buildHeaderCollapseControl() {
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                     borderSide: BorderSide(
-                      color: Theme.of(context).dividerColor,
+                      color: AppTheme.primaryRose,
                       width: 2,
                     ),
                   ),
@@ -512,12 +510,13 @@ Widget _buildHeaderCollapseControl() {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: _isLoading ? null : _handleJoin,
+        onPressed: (_isLoading || _codeController.text.trim().length != 6) ? null : _handleJoin,
         style: ElevatedButton.styleFrom(
           backgroundColor: AppTheme.primaryRose,
-          disabledBackgroundColor: Theme.of(context).dividerColor,
+          disabledBackgroundColor: AppTheme.primaryRose.withValues(alpha: 0.22),
           foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(vertical: 18),
+          disabledForegroundColor: AppTheme.primaryRose.withValues(alpha: 0.55),
+          padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
@@ -575,11 +574,10 @@ Widget _buildHeaderCollapseControl() {
 
   Widget _buildAlternativeOptions() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+              children: [
             Expanded(child: Divider(color: Theme.of(context).dividerColor, thickness: 1)),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -631,13 +629,12 @@ Widget _buildHeaderCollapseControl() {
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+              children: [
             Icon(icon, color: Theme.of(context).hintColor, size: 20),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     title,
@@ -669,7 +666,7 @@ Widget _buildHeaderCollapseControl() {
           RegExp(r'[^A-Z0-9]'),
           '',
         );
-        if (text.length >= 8) {
+        if (text.length >= 6) {
           setState(() {
             _codeController.text = text.substring(0, 6);
             _errorMessage = null;
