@@ -249,7 +249,7 @@ Widget _buildHeaderCollapseControl() {
 
   Widget _buildTopTabs() {
     return Container(
-      margin: const EdgeInsets.fromLTRB(8, 12, 8, 14),
+      margin: const EdgeInsets.fromLTRB(20, 12, 20, 14),
       decoration: BoxDecoration(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(12),
