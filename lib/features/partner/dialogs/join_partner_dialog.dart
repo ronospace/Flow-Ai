@@ -156,7 +156,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
         }
       },
       child: Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.fromLTRB(24, 18, 24, 24),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -185,7 +185,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
           const SizedBox(width: 16),
           Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
                   'Join Your Partner 💍',
@@ -345,15 +345,24 @@ Widget _buildHeaderCollapseControl() {
                       padding: const EdgeInsets.all(24),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
+                    Icon(Icons.link, size: 72, color: AppTheme.primaryRose),
+                    const SizedBox(height: 16),
                     Text(
-                      'Use the code your partner sent to connect instantly.',
+                      'Connect with Code',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Use a 6-character code to Synchronize',
+                      textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Theme.of(context).hintColor,
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 12),
                     _buildCodeInput(),
                     if (_errorMessage != null) ...[
                       const SizedBox(height: 16),
@@ -361,8 +370,6 @@ Widget _buildHeaderCollapseControl() {
                     ],
                     const SizedBox(height: 20),
                     _buildJoinButton(),
-                    const SizedBox(height: 16),
-                    _buildAlternativeOptions(),
                     const SizedBox(height: 16),
                   ],
                 ),
@@ -394,14 +401,14 @@ Widget _buildHeaderCollapseControl() {
             padding: const EdgeInsets.all(24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.qr_code_scanner, size: 72, color: AppTheme.primaryRose),
                 const SizedBox(height: 16),
                 Text(
                   'Scan Partner QR Code',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -450,19 +457,19 @@ Widget _buildHeaderCollapseControl() {
             padding: const EdgeInsets.all(24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.alternate_email, size: 72, color: AppTheme.primaryPurple),
                 const SizedBox(height: 16),
                 Text(
                   'Manual Connection',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Connect using your partner\'s email.',
+                  'Synchronize using your partner\'s E-Mail',
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Theme.of(context).hintColor),
                 ),
@@ -497,7 +504,7 @@ Widget _buildHeaderCollapseControl() {
                       borderSide: BorderSide(color: AppTheme.primaryPurple, width: 2),
                     ),
                     filled: true,
-                    fillColor: Theme.of(context).cardColor,
+                    fillColor: Theme.of(context).brightness == Brightness.dark ? Theme.of(context).cardColor.withOpacity(0.92) : const Color(0xFFFFF4F7),
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 16,
                       vertical: 18,
@@ -505,7 +512,7 @@ Widget _buildHeaderCollapseControl() {
                   ),
                 ),
                 const SizedBox(height: 10),
-                Text(_errorMessage == 'Request sent successfully. Waiting for your partner.' ? 'Your partner will be notified when connected.' : 'Enter a valid partner email to enable request.', style: TextStyle(fontSize: 12, color: _errorMessage == 'Request sent successfully. Waiting for your partner.' ? Colors.green : Theme.of(context).hintColor)),
+                Text(_errorMessage == 'Request sent successfully. Waiting for your partner.' ? 'Your partner will be notified when connected.' : 'Enter a valid partner E-Mail to enable request', style: TextStyle(fontSize: 12, color: _errorMessage == 'Request sent successfully. Waiting for your partner.' ? Colors.green : Theme.of(context).hintColor)),
                 const SizedBox(height: 18),
                 SizedBox(
                   width: double.infinity,
@@ -540,15 +547,7 @@ Widget _buildHeaderCollapseControl() {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Your Code',
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: Theme.of(context).textTheme.bodyLarge?.color,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          'Enter the 6-character code to begin syncing together.',
+          '',
           style: Theme.of(
             context,
           ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).hintColor),
@@ -563,7 +562,7 @@ Widget _buildHeaderCollapseControl() {
                 onFieldSubmitted: (_) => _handleJoin(),
                 controller: _codeController,
                 style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 0,
                 ),
@@ -680,8 +679,8 @@ Widget _buildHeaderCollapseControl() {
                   Text(
                     'Connect with Partner',
                     style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
@@ -712,92 +711,6 @@ Widget _buildHeaderCollapseControl() {
         ],
       ),
     ).animate().shake();
-  }
-
-  Widget _buildAlternativeOptions() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-              children: [
-            Expanded(child: Divider(color: Theme.of(context).dividerColor, thickness: 1)),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                'or',
-                style: TextStyle(color: Theme.of(context).hintColor, fontSize: 11),
-              ),
-            ),
-            Expanded(child: Divider(color: Theme.of(context).dividerColor, thickness: 1)),
-          ],
-        ),
-        const SizedBox(height: 24),
-        _buildAlternativeOption(
-          'Request New Invitation',
-          'Ask your partner to send a new invitation',
-          Icons.refresh,
-          () {
-            Navigator.pop(context);
-            _showRequestInvitationDialog();
-          },
-        ),
-        const SizedBox(height: 24),
-        _buildAlternativeOption(
-          'Manual Connection',
-          'Connect using partner\'s email address',
-          Icons.alternate_email,
-          () {
-            Navigator.pop(context);
-            _showManualConnectionDialog();
-          },
-        ),
-      ],
-    ).animate().fadeIn(delay: 600.ms);
-  }
-
-  Widget _buildAlternativeOption(
-    String title,
-    String subtitle,
-    IconData icon,
-    VoidCallback onTap,
-  ) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          border: Border.all(color: Theme.of(context).dividerColor, width: 1),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-              children: [
-            Icon(icon, color: Theme.of(context).hintColor, size: 20),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyLarge?.color,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 15,
-                    ),
-                  ),
-                  Text(
-                    subtitle,
-                    style: TextStyle(color: Theme.of(context).hintColor, fontSize: 11),
-                  ),
-                ],
-              ),
-            ),
-            Icon(Icons.arrow_forward_ios, color: Theme.of(context).dividerColor, size: 16),
-          ],
-        ),
-      ),
-    );
   }
 
   Future<void> _pasteFromClipboard() async {
@@ -855,14 +768,12 @@ Widget _buildHeaderCollapseControl() {
     );
   }
 
-  void _showManualConnectionDialog() {}
-
   void _handleManualJoin() async {
     final email = _manualEmailController.text.trim();
 
     if (email.isEmpty || !RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(email)) {
       setState(() {
-        _errorMessage = 'Enter a valid email address.';
+        _errorMessage = 'Enter a valid E-Mail address.';
       });
       return;
     }
