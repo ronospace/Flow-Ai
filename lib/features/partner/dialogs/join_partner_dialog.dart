@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../services/partner_service.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
@@ -23,7 +25,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
   late TabController _tabController;
 
   final TextEditingController _codeController = TextEditingController();
-  final TextEditingController _manualCodeController = TextEditingController();
+  final TextEditingController _manualEmailController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool _isLoading = false;
@@ -60,7 +62,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
     _tabController.dispose();
     _animationController.dispose();
     _codeController.dispose();
-    _manualCodeController.dispose();
+    _manualEmailController.dispose();
     super.dispose();
   }
 
@@ -460,25 +462,26 @@ Widget _buildHeaderCollapseControl() {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Connect using your partner email or invitation details.',
+                  'Connect using your partner\'s email.',
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Theme.of(context).hintColor),
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
-                  controller: _manualCodeController,
-                  textAlign: TextAlign.center,
-                  textCapitalization: TextCapitalization.characters,
+                  controller: _manualEmailController,
+                  textAlign: TextAlign.start,
+                  textInputAction: TextInputAction.done,
+                  keyboardType: TextInputType.emailAddress,
+                  onFieldSubmitted: (_) => _handleManualJoin(),
+                  autocorrect: false,
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'[A-Z0-9]')),
-                    LengthLimitingTextInputFormatter(6),
-                    UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(80),
                   ],
                   decoration: InputDecoration(
-                    hintText: 'Enter Code',
+                    hintText: 'Partner Email',
                     hintStyle: TextStyle(
                       color: Theme.of(context).dividerColor,
-                      letterSpacing: 4,
+                      letterSpacing: 0,
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -487,14 +490,28 @@ Widget _buildHeaderCollapseControl() {
                       borderRadius: BorderRadius.circular(16),
                       borderSide: BorderSide(color: AppTheme.primaryPurple, width: 2),
                     ),
+                    filled: true,
+                    fillColor: Theme.of(context).brightness == Brightness.dark
+                        ? Theme.of(context).cardColor.withOpacity(0.92)
+                        : const Color(0xFFFFF4F7),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 18,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 18),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: _isLoading ? null : _handleManualJoin,
-                    child: const Text('Connect Now'),
+                    onPressed: (_isLoading || !_isValidManualEmail()) ? null : _handleManualJoin,
+                    child: _isLoading
+                        ? const SizedBox(
+                            height: 18,
+                            width: 18,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Text('Send Request'),
                   ),
                 ),
               ],
@@ -532,11 +549,10 @@ Widget _buildHeaderCollapseControl() {
                 textInputAction: TextInputAction.done,
                 onFieldSubmitted: (_) => _handleJoin(),
                 controller: _codeController,
-                textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  letterSpacing: 4,
+                  letterSpacing: 0,
                 ),
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'[A-Z0-9]')),
@@ -547,7 +563,7 @@ Widget _buildHeaderCollapseControl() {
                   hintText: 'Enter Code',
                   hintStyle: TextStyle(
                     color: Theme.of(context).dividerColor,
-                    letterSpacing: 4,
+                    letterSpacing: 0,
                   ),
                   prefixIconConstraints: const BoxConstraints(
                     minWidth: 36,
@@ -595,6 +611,7 @@ Widget _buildHeaderCollapseControl() {
                   setState(() => _errorMessage = null);
                   if (value.length == 6) {
                     FocusScope.of(context).unfocus();
+                    _handleJoin();
                   }
                 },
               ),
@@ -828,11 +845,11 @@ Widget _buildHeaderCollapseControl() {
   void _showManualConnectionDialog() {}
 
   void _handleManualJoin() async {
-    final code = _manualCodeController.text.trim().toUpperCase();
+    final email = _manualEmailController.text.trim();
 
-    if (code.length != 6 || !RegExp(r'^[A-Z0-9]{6}$').hasMatch(code)) {
+    if (email.isEmpty || !RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(email)) {
       setState(() {
-        _errorMessage = 'Enter a valid 6-character code.';
+        _errorMessage = 'Enter a valid email address.';
       });
       return;
     }
@@ -840,12 +857,23 @@ Widget _buildHeaderCollapseControl() {
     setState(() {
       _isLoading = true;
       _errorMessage = null;
-      _codeController.text = code;
+      _errorMessage = 'Request flow ready for backend hookup.';
     });
 
-    _handleJoin();
+    final service = context.read<PartnerService>();
+      final result = await service.sendPartnerInvitation(
+        inviteeEmail: _manualEmailController.text.trim(),
+      );
+      setState(() => _isLoading = false);
+      if (result != null && mounted) Navigator.of(context).pop(true);
+  }
+
+  bool _isValidManualEmail() {
+    final email = _manualEmailController.text.trim();
+    return RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(email);
   }
 }
+
 
 class UpperCaseTextFormatter extends TextInputFormatter {
   @override
