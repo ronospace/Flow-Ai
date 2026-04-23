@@ -23,6 +23,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
   late TabController _tabController;
 
   final TextEditingController _codeController = TextEditingController();
+  final TextEditingController _manualCodeController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool _isLoading = false;
@@ -59,6 +60,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
     _tabController.dispose();
     _animationController.dispose();
     _codeController.dispose();
+    _manualCodeController.dispose();
     super.dispose();
   }
 
@@ -410,14 +412,17 @@ Widget _buildHeaderCollapseControl() {
                 ElevatedButton(
                   onPressed: _showRequestInvitationDialog,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).cardColor,
+                    backgroundColor: Theme.of(context).brightness == Brightness.dark
+                        ? Theme.of(context).colorScheme.surface
+                        : Theme.of(context).cardColor,
                     foregroundColor: AppTheme.primaryRose,
                     elevation: 0,
                     padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18),
                       side: BorderSide(
-                        color: Theme.of(context).dividerColor.withValues(alpha: 0.45),
+                        color: AppTheme.primaryRose.withValues(alpha: 0.55),
+                        width: 1.4,
                       ),
                     ),
                   ),
@@ -460,9 +465,37 @@ Widget _buildHeaderCollapseControl() {
                   style: TextStyle(color: Theme.of(context).hintColor),
                 ),
                 const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: _showManualConnectionDialog,
-                  child: const Text('Connect Manually'),
+                TextFormField(
+                  controller: _manualCodeController,
+                  textAlign: TextAlign.center,
+                  textCapitalization: TextCapitalization.characters,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[A-Z0-9]')),
+                    LengthLimitingTextInputFormatter(6),
+                    UpperCaseTextFormatter(),
+                  ],
+                  decoration: InputDecoration(
+                    hintText: 'Enter Code',
+                    hintStyle: TextStyle(
+                      color: Theme.of(context).dividerColor,
+                      letterSpacing: 4,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide: BorderSide(color: AppTheme.primaryPurple, width: 2),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 18),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _isLoading ? null : _handleManualJoin,
+                    child: const Text('Connect Now'),
+                  ),
                 ),
               ],
             ),
@@ -511,7 +544,7 @@ Widget _buildHeaderCollapseControl() {
                   UpperCaseTextFormatter(),
                 ],
                 decoration: InputDecoration(
-                  hintText: 'ABC123',
+                  hintText: 'Enter Code',
                   hintStyle: TextStyle(
                     color: Theme.of(context).dividerColor,
                     letterSpacing: 4,
@@ -544,8 +577,10 @@ Widget _buildHeaderCollapseControl() {
                     borderSide: const BorderSide(color: Colors.red, width: 2),
                   ),
                   filled: true,
-                  fillColor: Theme.of(context).cardColor,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                  fillColor: Theme.of(context).brightness == Brightness.dark
+                      ? Theme.of(context).cardColor.withOpacity(0.92)
+                      : const Color(0xFFFFF4F7),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 18),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -790,14 +825,25 @@ Widget _buildHeaderCollapseControl() {
     );
   }
 
-  void _showManualConnectionDialog() {
-    // TODO: Implement manual connection dialog
-    ScaffoldMessenger.maybeOf(context)?.showSnackBar(
-      SnackBar(
-        content: Text('Manual connection feature coming soon'),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+  void _showManualConnectionDialog() {}
+
+  void _handleManualJoin() async {
+    final code = _manualCodeController.text.trim().toUpperCase();
+
+    if (code.length != 6 || !RegExp(r'^[A-Z0-9]{6}$').hasMatch(code)) {
+      setState(() {
+        _errorMessage = 'Enter a valid 6-character code.';
+      });
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+      _codeController.text = code;
+    });
+
+    _handleJoin();
   }
 }
 
