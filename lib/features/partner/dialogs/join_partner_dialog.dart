@@ -318,8 +318,10 @@ Widget _buildHeaderCollapseControl() {
   }
 
   Widget _buildContent() {
-    return Column(
-      children: [
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
         const SizedBox(height: 14),
         Expanded(
           child: TabBarView(
@@ -364,7 +366,8 @@ Widget _buildHeaderCollapseControl() {
             ],
           ),
         ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -455,6 +458,9 @@ Widget _buildHeaderCollapseControl() {
           children: [
             Expanded(
               child: TextFormField(
+                autofocus: _codeController.text.isEmpty,
+                textInputAction: TextInputAction.done,
+                onFieldSubmitted: (_) => _handleJoin(),
                 controller: _codeController,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
