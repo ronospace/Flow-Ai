@@ -26,7 +26,7 @@ class PartnerInviteActions {
     );
 
     final code = invitation.invitationCode;
-    final link = "https://flowai.app/invite/$code";
+    final link = "https://flowai-demo-project.web.app/invite/$code";
 
     final callable = FirebaseFunctions.instance.httpsCallable(
       'sendPartnerInvite',

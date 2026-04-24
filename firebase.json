@@ -49,7 +49,7 @@
     ],
     "rewrites": [
       {
-        "source": "invite/**",
+        "source": "/invite/**",
         "destination": "/invite/index.html"
       },
       {
