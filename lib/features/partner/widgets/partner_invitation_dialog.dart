@@ -173,12 +173,16 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                             color: theme.colorScheme.surface,
                             borderRadius: BorderRadius.circular(28),
                             border: Border.all(
-                              color: AppTheme.primaryRose.withValues(alpha: 0.20),
+                              color: AppTheme.primaryRose.withValues(
+                                alpha: 0.20,
+                              ),
                               width: 2,
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: AppTheme.primaryRose.withValues(alpha: 0.20),
+                                color: AppTheme.primaryRose.withValues(
+                                  alpha: 0.20,
+                                ),
                                 blurRadius: 30,
                                 spreadRadius: 0,
                                 offset: const Offset(0, 15),
@@ -249,7 +253,6 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                                       ],
                                     ),
                                   ),
-                                  
                                 ],
                               ),
                             ),
@@ -267,14 +270,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
     );
   }
 
-
-
-  
-
-
-  
-
-Widget _buildHeaderCollapseControl() {
+  Widget _buildHeaderCollapseControl() {
     return GestureDetector(
       onTap: () => Navigator.pop(context),
       child: Container(
@@ -282,7 +278,9 @@ Widget _buildHeaderCollapseControl() {
         height: 38,
         margin: const EdgeInsets.only(left: 8),
         decoration: BoxDecoration(
-          color: Theme.of(context).brightness == Brightness.dark ? Theme.of(context).cardColor : Colors.white.withValues(alpha: 0.78),
+          color: Theme.of(context).brightness == Brightness.dark
+              ? Theme.of(context).cardColor
+              : Colors.white.withValues(alpha: 0.78),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: AppTheme.mediumGrey.withValues(alpha: 0.35),
@@ -304,9 +302,6 @@ Widget _buildHeaderCollapseControl() {
       ),
     );
   }
-
-
-
 
   Widget _buildHeader(ThemeData theme, AppLocalizations localizations) {
     return Container(
@@ -335,11 +330,7 @@ Widget _buildHeaderCollapseControl() {
               ),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(
-              Icons.favorite,
-              color: Colors.white,
-              size: 22,
-            ),
+            child: Icon(Icons.favorite, color: Colors.white, size: 22),
           ),
           const SizedBox(width: 16),
           Expanded(
