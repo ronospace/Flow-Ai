@@ -236,14 +236,14 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
             prefixIcon: Icon(Icons.email_outlined, color: AppTheme.primaryRose),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: Theme.of(context).dividerColor),
+              borderSide: BorderSide(color: const Color(0xFFD6B8C8), width: 1.2),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
               borderSide: BorderSide(color: AppTheme.primaryRose, width: 2),
             ),
             filled: true,
-            fillColor: Theme.of(context).cardColor,
+            fillColor: AppTheme.primaryPurple.withOpacity(0.08),
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -314,14 +314,14 @@ class _InvitePartnerDialogState extends State<InvitePartnerDialog>
             hintText: 'Write your personal invitation message...',
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: Theme.of(context).dividerColor),
+              borderSide: BorderSide(color: const Color(0xFFD6B8C8), width: 1.2),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
               borderSide: BorderSide(color: AppTheme.primaryRose, width: 2),
             ),
             filled: true,
-            fillColor: Theme.of(context).cardColor,
+            fillColor: AppTheme.primaryRose.withOpacity(0.08),
           ),
         ),
         const SizedBox(height: 24),
