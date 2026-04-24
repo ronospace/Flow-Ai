@@ -868,7 +868,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
 
     setState(() {
       _isLoading = false;
-      _errorMessage = 'Invalid or expired partner code.';
+      _errorMessage = 'Invalid or expired partner code!';
     });
   }
 
