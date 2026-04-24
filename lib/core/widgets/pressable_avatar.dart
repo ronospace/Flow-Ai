@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class PressableAvatar extends StatefulWidget {
@@ -102,21 +103,37 @@ class _PressableAvatarState extends State<PressableAvatar>
                   );
                 },
               ),
-              Container(
-                width: 42,
-                height: 42,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: theme.scaffoldBackgroundColor,
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xFFC850F2).withOpacity(0.18),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
+              ClipOval(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
+                  child: Container(
+                    width: 42,
+                    height: 42,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Colors.white.withOpacity(0.55),
+                          const Color(0xFFF3E8FF).withOpacity(0.35),
+                        ],
+                      ),
+                      border: Border.all(
+                        color: Colors.white.withOpacity(0.45),
+                        width: 1,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFFC850F2).withOpacity(0.16),
+                          blurRadius: 14,
+                          offset: const Offset(0, 6),
+                        ),
+                      ],
                     ),
-                  ],
+                    child: Center(child: avatarContent),
+                  ),
                 ),
-                child: Center(child: avatarContent),
               ),
             ],
           ),
