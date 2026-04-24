@@ -208,7 +208,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                   Text(
                     'Connect Your Love and Cycle Journey Together 💞',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppTheme.mediumGrey.withValues(alpha: 0.88),
+                      color: AppTheme.primaryRose,
                     ),
                   ),
                 ],
@@ -252,7 +252,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
         child: Icon(
           Icons.keyboard_arrow_down_rounded,
           size: 22,
-          color: const Color(0xFF9B59B6),
+          color: const Color(0xFFB07ACB),
         ),
       ),
     );
@@ -360,7 +360,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                             Icon(
                               Icons.link,
                               size: 72,
-                              color: const Color(0xFF9B59B6),
+                              color: const Color(0xFFB07ACB),
                             ),
                             const SizedBox(height: 16),
                             Text(
@@ -418,7 +418,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                 Icon(
                   Icons.qr_code_scanner,
                   size: 72,
-                  color: const Color(0xFF9B59B6),
+                  color: const Color(0xFFB07ACB),
                 ),
                 const SizedBox(height: 10),
                 Text(
@@ -489,7 +489,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                 Icon(
                   Icons.alternate_email,
                   size: 72,
-                  color: AppTheme.mediumGrey.withValues(alpha: 0.88),
+                  color: AppTheme.primaryRose,
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -519,12 +519,10 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                     hintText: 'partner@example.com',
                     prefixIcon: Icon(
                       Icons.email_outlined,
-                      color: AppTheme.mediumGrey.withValues(alpha: 0.88),
+                      color: AppTheme.primaryRose,
                     ),
                     hintStyle: TextStyle(
-                      color: Theme.of(
-                        context,
-                      ).dividerColor,
+                      color: const Color(0xFFD2BEDB),
                       letterSpacing: 0,
                     ),
                     enabledBorder: OutlineInputBorder(
@@ -544,14 +542,14 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
                       borderSide: BorderSide(
-                        color: AppTheme.mediumGrey.withValues(alpha: 0.88),
+                        color: AppTheme.primaryRose,
                         width: 2,
                       ),
                     ),
                     filled: true,
                                         fillColor: Theme.of(context).brightness == Brightness.dark
                         ? Theme.of(context).cardColor.withOpacity(0.92)
-                        : const Color(0xFFF4EEFF),
+                        : const Color(0xFFF9EEF3),
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 20,
                       vertical: 20,
@@ -682,31 +680,27 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                     child: Icon(
                       Icons.vpn_key,
                       size: 18,
-                      color: AppTheme.mediumGrey.withValues(alpha: 0.88),
+                      color: AppTheme.primaryRose,
                     ),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                     borderSide: BorderSide(
-                      color: Theme.of(
-                        context,
-                      ).dividerColor,
+                      color: const Color(0xFFD2BEDB),
                       width: 1.4,
                     ),
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                     borderSide: BorderSide(
-                      color: Theme.of(
-                        context,
-                      ).dividerColor,
+                      color: const Color(0xFFD2BEDB),
                       width: 1.4,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                     borderSide: BorderSide(
-                      color: const Color(0xFF9B59B6),
+                      color: const Color(0xFFB07ACB),
                       width: 2,
                     ),
                   ),
@@ -717,7 +711,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                   filled: true,
                                     fillColor: Theme.of(context).brightness == Brightness.dark
                       ? Theme.of(context).cardColor.withOpacity(0.92)
-                      : const Color(0xFFF4EEFF),
+                      : const Color(0xFFF3EFF8),
                   contentPadding: const EdgeInsets.symmetric(
                     vertical: 18,
                     horizontal: 20,
