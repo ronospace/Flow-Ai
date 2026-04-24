@@ -22,10 +22,10 @@ class PartnerEmptyState extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const SizedBox(height: 28),
+          const SizedBox(height: 18),
           Container(
-                width: 120,
-                height: 120,
+                width: 108,
+                height: 108,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
@@ -44,7 +44,7 @@ class PartnerEmptyState extends StatelessWidget {
               .animate()
               .scale(begin: const Offset(0.5, 0.5))
               .fadeIn(duration: 800.ms),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
           Text(
             'Connect with Your Partner',
             style: theme.textTheme.headlineMedium?.copyWith(
