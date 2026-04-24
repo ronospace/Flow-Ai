@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/services/local_user_service.dart';
 import '../models/partner_models.dart'
@@ -92,6 +93,10 @@ class LocalPartnerService {
 
     // Save invitation
     await _saveInvitation(invitation);
+    await FirebaseFirestore.instance
+        .collection('partnerInvites')
+        .doc(invitation.id)
+        .set(invitation.toJson());
     debugPrint('✅ Partner invitation created: $invitationCode');
 
     return invitation;
@@ -114,7 +119,17 @@ class LocalPartnerService {
     final inviteeEmail = userInfo['userEmail'];
 
     // Find invitation
-    final invitation = await _findInvitationByCode(invitationCode);
+    PartnerInvitation? invitation;
+    final snap = await FirebaseFirestore.instance
+        .collection('partnerInvites')
+        .where('invitationCode', isEqualTo: invitationCode)
+        .limit(1)
+        .get();
+    if (snap.docs.isNotEmpty) {
+      invitation = PartnerInvitation.fromJson(snap.docs.first.data());
+    } else {
+      invitation = await _findInvitationByCode(invitationCode);
+    }
     if (invitation == null) {
       debugPrint('❌ Invitation not found: $invitationCode');
       return null;
@@ -161,6 +176,10 @@ class LocalPartnerService {
 
     // Remove invitation (one-time use)
     await _removeInvitation(invitation.id);
+    await FirebaseFirestore.instance
+        .collection('partnerInvites')
+        .doc(invitation.id)
+        .delete();
 
     debugPrint('✅ Partnership created: ${partnership.id}');
 
