@@ -353,9 +353,9 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                               
                         BoxShadow(
                           color: theme.shadowColor.withValues(alpha: 0.2),
-                          blurRadius: 12,
+                          blurRadius: 8,
                           spreadRadius: 0,
-                          offset: const Offset(0, 8),
+                          offset: const Offset(0, 3),
                         ),
                       ],
                       border: Border.all(
@@ -399,7 +399,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
         if (!_isExpanded)
           Positioned(
           right: 16,
-          bottom: 16,
+          bottom: 28,
           child: AnimatedBuilder(
             animation: _fabAnimation,
             builder: (context, child) {
@@ -407,94 +407,57 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 scale: _isExpanded ? 1.0 : (1.0 + _fabAnimation.value * 0.1),
                 child: Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(28),
+                    borderRadius: BorderRadius.circular(22),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Colors.white.withValues(alpha: 0.34),
+                        AppTheme.primaryRose.withValues(alpha: 0.64),
+                        AppTheme.primaryPurple.withValues(alpha: 0.62),
+                      ],
+                    ),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.72),
+                      width: 1.4,
+                    ),
                     boxShadow: [
                               
                       BoxShadow(
                         color: AppTheme.primaryRose.withValues(alpha: 0.2),
-                        blurRadius: 16,
-                        spreadRadius: 2,
-                        offset: const Offset(0, 4),
+                        blurRadius: 8,
+                        spreadRadius: 0,
+                        offset: const Offset(0, 3),
                       ),
                     ],
                   ),
-                  child: FloatingActionButton(
-                    heroTag: "ai_chat_main_fab",
-                    onPressed: _toggleChat,
-                    backgroundColor: AppTheme.primaryRose,
-                    elevation: 0,
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 300),
-                      transitionBuilder: (child, animation) {
-                        return RotationTransition(
-                          turns: animation,
-                          child: child,
-                        );
-                      },
-                      child: _isExpanded
-                          ? Icon(
-                              Icons.close_rounded,
-                              color: Colors.white,
-                              key: const ValueKey('close'),
-                              size: 28,
-                            )
-                          : Stack(
-                              key: const ValueKey('chat'),
-                              children: [
-                                Icon(
-                                  Icons.psychology_rounded,
-                                  color: Colors.white,
-                                  size: 28,
-                                ),
-                                if (!_isExpanded)
-                                  Positioned(
-                                    top: -2,
-                                    right: -2,
-                                    child:
-                                        Container(
-                                              width: 16,
-                                              height: 16,
-                                              decoration: BoxDecoration(
-                                                gradient: const LinearGradient(
-                                                  colors: [
-                                                    AppTheme.successGreen,
-                                                    AppTheme.accentMint,
-                                                  ],
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                boxShadow: [
-                              
-                                                  BoxShadow(
-                                                    color: AppTheme.successGreen
-                                                        .withValues(alpha: 0.5),
-                                                    blurRadius: 8,
-                                                    spreadRadius: 1,
-                                                  ),
-                                                ],
-                                              ),
-                                              child: Icon(
-                                                Icons.auto_awesome,
-                                                color: Colors.white,
-                                                size: 10,
-                                              ),
-                                            )
-                                            .animate(
-                                              onPlay: null,
-                                            )
-                                            .shimmer(
-                                              duration: 2000.ms,
-                                              color: Colors.white.withValues(
-                                                alpha: 0.5,
-                                              ),
-                                            )
-                                            .then(delay: 1000.ms)
-                                            .fadeOut(duration: 500.ms)
-                                            .then(delay: 1000.ms)
-                                            .fadeIn(duration: 500.ms),
-                                  ),
-                              ],
-                            )                    ),
+                  child: SizedBox(
+                    width: 64,
+                    height: 64,
+                    child: FloatingActionButton(
+                      heroTag: "ai_chat_main_fab",
+                      onPressed: _toggleChat,
+                      backgroundColor: Colors.transparent,
+                      elevation: 0,
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        transitionBuilder: (child, animation) =>
+                            RotationTransition(turns: animation, child: child),
+                        child: _isExpanded
+                            ? Icon(
+                                Icons.close_rounded,
+                                key: const ValueKey('close'),
+                                color: Colors.white,
+                                size: 30,
+                              )
+                            : Icon(
+                                Icons.psychology_rounded,
+                                key: const ValueKey('chat'),
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                      ),
+                    ),
                   ),
                 ),
               );
@@ -571,12 +534,26 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                     width: 48,
                     height: 48,
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.2),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Colors.white.withValues(alpha: 0.34),
+                          Colors.white.withValues(alpha: 0.12),
+                        ],
+                      ),
                       borderRadius: BorderRadius.circular(24),
                       border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.3),
-                        width: 2,
+                        color: Colors.white.withValues(alpha: 0.38),
+                        width: 1.4,
                       ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.white.withValues(alpha: 0.08),
+                          blurRadius: 10,
+                          offset: Offset(-2, -2),
+                        ),
+                      ],
                     ),
                     child: Transform.scale(
                       scale: 0.965 + (_pulseController.value * 0.08),
@@ -624,7 +601,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                           curve: Curves.easeInOutCubic,
                           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.18),
+                            color: Colors.white.withValues(alpha: 0.34),
                             borderRadius: BorderRadius.circular(6),
                             boxShadow: [
                               
@@ -1118,7 +1095,7 @@ Widget _buildEnhancedInput(ThemeData theme) {
                               
                 BoxShadow(
                   color: AppTheme.primaryRose.withValues(alpha: 0.2),
-                  blurRadius: 12,
+                  blurRadius: 8,
                   offset: const Offset(0, 4),
                 ),
               ],
