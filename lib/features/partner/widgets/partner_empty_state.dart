@@ -19,9 +19,10 @@ class PartnerEmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const SizedBox(height: 60),
+          const SizedBox(height: 52),
           Container(
                 width: 120,
                 height: 120,
@@ -43,7 +44,7 @@ class PartnerEmptyState extends StatelessWidget {
               .animate()
               .scale(begin: const Offset(0.5, 0.5))
               .fadeIn(duration: 800.ms),
-          const SizedBox(height: 24),
+          const SizedBox(height: 20),
           Text(
             'Connect with Your Partner',
             style: theme.textTheme.headlineMedium?.copyWith(
@@ -60,7 +61,7 @@ class PartnerEmptyState extends StatelessWidget {
               height: 1.5,
             ),
           ).animate().fadeIn(delay: 400.ms),
-          const SizedBox(height: 32),
+          const SizedBox(height: 24),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -109,6 +110,7 @@ class PartnerEmptyState extends StatelessWidget {
               ),
             ],
           ).animate().fadeIn(delay: 600.ms).slideY(begin: 0.3, end: 0),
+          
         ],
       ),
     );
