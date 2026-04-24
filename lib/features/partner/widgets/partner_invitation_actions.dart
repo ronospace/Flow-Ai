@@ -4,7 +4,7 @@ import '../services/partner_service.dart';
 
 class PartnerInvitationActions {
   static String generateInvitationLink(PartnerInvitation invitation) {
-    return 'https://flow-ai-656b3.web.app/invite/${invitation.invitationCode}';
+    return 'https://flowai.app/invite/${invitation.invitationCode}';
   }
 
   static Future<void> copyToClipboard(String text) {
