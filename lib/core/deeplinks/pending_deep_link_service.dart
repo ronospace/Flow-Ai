@@ -21,5 +21,4 @@ class PendingDeepLinkService {
   static String? getPendingRoute() => peekPendingRoute();
 
   static void clearPendingRoute() => clear();
-
 }

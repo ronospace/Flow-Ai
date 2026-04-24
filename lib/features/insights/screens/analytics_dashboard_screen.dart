@@ -805,10 +805,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
 
   void _exportData(BuildContext context) {
     // Export functionality
-    AdaptiveMessages.showInfo(
-      context,
-      'Exporting analytics data...',
-    );
+    AdaptiveMessages.showInfo(context, 'Exporting analytics data...');
   }
 
   void _showPremiumPrompt(BuildContext context) {

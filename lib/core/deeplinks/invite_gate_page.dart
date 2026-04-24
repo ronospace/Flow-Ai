@@ -54,7 +54,10 @@ class _InviteGatePageState extends State<InviteGatePage> {
       debugPrint('❌ InviteGate: PartnerService not found in context: $e');
     }
 
-    debugPrint('🔗 InviteGatePage partnerService=' + (partnerService == null ? 'null' : 'ok'));
+    debugPrint(
+      '🔗 InviteGatePage partnerService=' +
+          (partnerService == null ? 'null' : 'ok'),
+    );
 
     if (partnerService == null) {
       if (!mounted) return;
@@ -93,10 +96,6 @@ class _InviteGatePageState extends State<InviteGatePage> {
   @override
   Widget build(BuildContext context) {
     debugPrint('🔗 InviteGatePage built: code=${widget.code}');
-    return const Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
+    return const Scaffold(body: Center(child: CircularProgressIndicator()));
   }
 }

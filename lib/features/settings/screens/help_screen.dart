@@ -706,10 +706,7 @@ class _HelpScreenState extends State<HelpScreen> {
 
   void _showErrorSnackBar(String message) {
     if (!mounted) return;
-    AdaptiveMessages.showError(
-      context,
-      message,
-    );
+    AdaptiveMessages.showError(context, message);
   }
 }
 

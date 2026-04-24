@@ -58,7 +58,11 @@ class PremiumFeaturesPreview extends StatelessWidget {
                   ),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(Icons.stars_rounded, color: Colors.white, size: 20),
+                child: const Icon(
+                  Icons.stars_rounded,
+                  color: Colors.white,
+                  size: 20,
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(

@@ -20,7 +20,8 @@ class PerformanceOptimizationService {
   final int _maxHistorySize = 100;
 
   // Memory management
-  Timer? _memoryCleanupTimer;  final int _memoryThresholdMB = 150; // Alert threshold
+  Timer? _memoryCleanupTimer;
+  final int _memoryThresholdMB = 150; // Alert threshold
 
   // Cache management
   final Map<String, CacheEntry> _imageCache = {};

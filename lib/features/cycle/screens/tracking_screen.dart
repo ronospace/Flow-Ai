@@ -233,7 +233,10 @@ class _TrackingScreenState extends State<TrackingScreen>
         // Error haptic feedback
         HapticFeedback.heavyImpact();
 
-        await AdaptiveMessages.showError(context, 'Failed to save tracking data');
+        await AdaptiveMessages.showError(
+          context,
+          'Failed to save tracking data',
+        );
       }
     }
   }
@@ -1110,8 +1113,4 @@ class _TrackingScreenState extends State<TrackingScreen>
         return 'Very heavy flow - consider tracking for your doctor.';
     }
   }
-
-
-
-
 }

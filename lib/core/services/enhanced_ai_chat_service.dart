@@ -12,7 +12,8 @@ import '../../core/models/medical_citation.dart';
 
 /// Enhanced AI Chat Service with comprehensive FAQ and general knowledge
 class EnhancedAIChatService {
-  String _buildWelcomeMessage(String userName) => "Hi $userName! 👋\n\nI'm Zyra, your menstrual health assistant. How can I help you today? 🌸";
+  String _buildWelcomeMessage(String userName) =>
+      "Hi $userName! 👋\n\nI'm Zyra, your menstrual health assistant. How can I help you today? 🌸";
   static final EnhancedAIChatService _instance =
       EnhancedAIChatService._internal();
   factory EnhancedAIChatService() => _instance;
@@ -161,7 +162,9 @@ class EnhancedAIChatService {
     if (_isInitialized) {
       _currentUser = types.User(id: userId, firstName: userName);
 
-      if (_messages.isNotEmpty && _messages.first.author.id == "ai_flowai_enhanced" && _messages.first is types.TextMessage) {
+      if (_messages.isNotEmpty &&
+          _messages.first.author.id == "ai_flowai_enhanced" &&
+          _messages.first is types.TextMessage) {
         final updated = (_messages.first as types.TextMessage).copyWith(
           text: _buildWelcomeMessage(userName),
         );
@@ -210,9 +213,7 @@ class EnhancedAIChatService {
     _messages.clear();
 
     // Add enhanced welcome message
-    _addAIMessage(
-      _buildWelcomeMessage(userName),
-    );
+    _addAIMessage(_buildWelcomeMessage(userName));
 
     _isInitialized = true;
   }
@@ -226,7 +227,7 @@ class EnhancedAIChatService {
     // Store in conversation memory
     await _conversationMemory?.storeMessage(message);
 
-        // Generate AI response with context
+    // Generate AI response with context
     final contextPrompt = _conversationMemory?.getContextualPrompt(
       message.text,
     );
@@ -236,8 +237,6 @@ class EnhancedAIChatService {
     );
     await _streamAIResponse(response);
   }
-
-
 
   Future<void> _streamAIResponse(String text) async {
     if (_aiUser == null) return;
@@ -1081,19 +1080,19 @@ class EnhancedAIChatService {
 
   /// Get enhanced suggested replies based on conversation context
   List<String> getSuggestedReplies() {
-  return [
-    "When will my next period start?",
-    "Am I in my fertile window today?",
-    "Why is my period late or early?",
-    "What phase of my cycle am I in?",
-    "What do my current symptoms mean?",
-    "How can I reduce cramps naturally?",
-    "Is my cycle regular or irregular?",
-    "Can I get pregnant right now?",
-    "How long is my luteal phase?",
-    "What affects my hormonal balance?",
-  ];
-}
+    return [
+      "When will my next period start?",
+      "Am I in my fertile window today?",
+      "Why is my period late or early?",
+      "What phase of my cycle am I in?",
+      "What do my current symptoms mean?",
+      "How can I reduce cramps naturally?",
+      "Is my cycle regular or irregular?",
+      "Can I get pregnant right now?",
+      "How long is my luteal phase?",
+      "What affects my hormonal balance?",
+    ];
+  }
 
   /// Search FAQ database with specific query
   List<FAQItem> searchFAQs(String query, {String? category}) {

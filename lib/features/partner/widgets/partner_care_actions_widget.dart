@@ -575,6 +575,7 @@ class _PartnerCareActionsWidgetState extends State<PartnerCareActionsWidget>
     final TextEditingController messageController = TextEditingController();
 
     showDialog(
+      barrierColor: Colors.transparent,
       context: context,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -659,6 +660,7 @@ class _PartnerCareActionsWidgetState extends State<PartnerCareActionsWidget>
     CareActionType selectedType = CareActionType.support;
 
     showDialog(
+      barrierColor: Colors.transparent,
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(

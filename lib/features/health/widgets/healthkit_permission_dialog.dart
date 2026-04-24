@@ -92,7 +92,9 @@ class HealthKitPermissionDialog extends StatelessWidget {
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          Platform.isIOS ? 'App Store Guideline 2.5.1 - HealthKit Transparency' : 'Health Connect data disclosure',
+                          Platform.isIOS
+                              ? 'App Store Guideline 2.5.1 - HealthKit Transparency'
+                              : 'Health Connect data disclosure',
                           style: TextStyle(
                             fontSize: 11,
                             color: AppTheme.warningOrange.withValues(
@@ -110,7 +112,9 @@ class HealthKitPermissionDialog extends StatelessWidget {
 
             // Main disclosure
             Text(
-              Platform.isIOS ? 'Flow Ai uses Apple HealthKit to access your health data for enhanced cycle predictions and personalized insights.' : 'Flow Ai uses Health Connect to access your health data for enhanced cycle predictions and personalized insights.',
+              Platform.isIOS
+                  ? 'Flow Ai uses Apple HealthKit to access your health data for enhanced cycle predictions and personalized insights.'
+                  : 'Flow Ai uses Health Connect to access your health data for enhanced cycle predictions and personalized insights.',
               style: theme.textTheme.bodyLarge?.copyWith(
                 fontWeight: FontWeight.w500,
                 height: 1.5,
@@ -182,7 +186,9 @@ class HealthKitPermissionDialog extends StatelessWidget {
 
             // Optional note
             Text(
-              Platform.isIOS ? 'HealthKit integration is optional. You can enable or disable it any time in iOS Settings → Health → Data Access & Devices.' : 'Health Connect integration is optional. You can manage it any time in Android Settings → Apps → Health Connect → App permissions.',
+              Platform.isIOS
+                  ? 'HealthKit integration is optional. You can enable or disable it any time in iOS Settings → Health → Data Access & Devices.'
+                  : 'Health Connect integration is optional. You can manage it any time in Android Settings → Apps → Health Connect → App permissions.',
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 fontSize: 11,

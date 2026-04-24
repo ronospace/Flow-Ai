@@ -10,7 +10,6 @@ class QrJoinScreen extends StatefulWidget {
 }
 
 class _QrJoinScreenState extends State<QrJoinScreen> {
-
   bool scanned = false;
 
   void handleCode(String code) {
@@ -21,14 +20,18 @@ class _QrJoinScreenState extends State<QrJoinScreen> {
     String? normalizedCode;
 
     // Prefer real invite links like /invite/ABC123
-    final linkMatch = RegExp(r'/invite/([A-Z0-9]{6})', caseSensitive: false)
-        .firstMatch(raw);
+    final linkMatch = RegExp(
+      r'/invite/([A-Z0-9]{6})',
+      caseSensitive: false,
+    ).firstMatch(raw);
     if (linkMatch != null) {
       normalizedCode = linkMatch.group(1)!.toUpperCase();
     } else {
       // Fallback: plain 6-char code only
-      final plainMatch = RegExp(r'^[A-Z0-9]{6}$', caseSensitive: false)
-          .firstMatch(raw);
+      final plainMatch = RegExp(
+        r'^[A-Z0-9]{6}$',
+        caseSensitive: false,
+      ).firstMatch(raw);
       if (plainMatch != null) {
         normalizedCode = plainMatch.group(0)!.toUpperCase();
       }

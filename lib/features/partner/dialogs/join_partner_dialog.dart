@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
-import 'invite_partner_dialog.dart';
+import '../widgets/partner_invitation_dialog.dart';
+import '../services/partner_service.dart';
 import '../screens/qr_join_screen.dart';
 
 class JoinPartnerDialog extends StatefulWidget {
@@ -161,8 +162,9 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
           Navigator.pop(context);
           Future.delayed(const Duration(milliseconds: 160), () {
             showDialog(
+      barrierColor: Colors.transparent,
               context: context,
-              builder: (_) => InvitePartnerDialog(onSendInvite: (_, __) {}),
+              builder: (_) => PartnerInvitationDialog(partnerService: PartnerService()),
             );
           });
         }
@@ -243,7 +245,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.03),
+              color: Colors.transparent,
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -489,7 +491,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                 Icon(
                   Icons.alternate_email,
                   size: 72,
-                  color: AppTheme.primaryRose,
+                  color: const Color(0xFFB07ACB),
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -547,7 +549,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                       ),
                     ),
                     filled: true,
-                                        fillColor: Theme.of(context).brightness == Brightness.dark
+                    fillColor: Theme.of(context).brightness == Brightness.dark
                         ? Theme.of(context).cardColor.withOpacity(0.92)
                         : const Color(0xFFF9EEF3),
                     contentPadding: const EdgeInsets.symmetric(
@@ -658,17 +660,19 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                   fontWeight: FontWeight.bold,
                   letterSpacing: 0,
                 ),
+                keyboardType: TextInputType.visiblePassword,
+                textCapitalization: TextCapitalization.characters,
+                autocorrect: false,
+                enableSuggestions: false,
                 inputFormatters: [
+                  UpperCaseTextFormatter(),
                   FilteringTextInputFormatter.allow(RegExp(r'[A-Z0-9]')),
                   LengthLimitingTextInputFormatter(6),
-                  UpperCaseTextFormatter(),
                 ],
                 decoration: InputDecoration(
                   hintText: 'Enter Code',
                   hintStyle: TextStyle(
-                    color: Theme.of(
-                      context,
-                    ).dividerColor,
+                    color: Theme.of(context).dividerColor,
                     letterSpacing: 0,
                   ),
                   prefixIconConstraints: const BoxConstraints(
@@ -709,7 +713,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                     borderSide: const BorderSide(color: Colors.red, width: 2),
                   ),
                   filled: true,
-                                    fillColor: Theme.of(context).brightness == Brightness.dark
+                  fillColor: Theme.of(context).brightness == Brightness.dark
                       ? Theme.of(context).cardColor.withOpacity(0.92)
                       : const Color(0xFFF3EFF8),
                   contentPadding: const EdgeInsets.symmetric(
@@ -898,14 +902,26 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
       _errorMessage = null;
     });
 
-    await Future.delayed(const Duration(milliseconds: 700));
+    final result = await PartnerService().sendPartnerInvitation(
+      inviteeEmail: email,
+    );
 
     if (!mounted) return;
 
-    setState(() {
-      _isLoading = false;
-      _errorMessage = 'Request sent successfully. Waiting for your partner.';
-    });
+    if (result != null) {
+      setState(() {
+        _isLoading = false;
+        _errorMessage = 'Request sent successfully. Waiting for your partner.';
+      });
+
+      await Future.delayed(const Duration(milliseconds: 1200));
+      if (mounted) Navigator.pop(context);
+    } else {
+      setState(() {
+        _isLoading = false;
+        _errorMessage = 'Failed to send invitation.';
+      });
+    }
   }
 }
 

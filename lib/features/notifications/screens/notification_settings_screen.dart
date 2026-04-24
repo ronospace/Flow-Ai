@@ -788,19 +788,13 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
         );
 
         if (mounted) {
-          AdaptiveMessages.showSuccess(
-            context,
-            'Test notification sent!',
-          );
+          AdaptiveMessages.showSuccess(context, 'Test notification sent!');
         }
       }
     } catch (e) {
       debugPrint('Error sending test notification: $e');
       if (mounted) {
-        AdaptiveMessages.showError(
-          context,
-          'Failed to send test notification',
-        );
+        AdaptiveMessages.showError(context, 'Failed to send test notification');
       }
     }
   }
@@ -819,10 +813,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
     } catch (e) {
       debugPrint('Error saving preferences: $e');
       if (mounted) {
-        AdaptiveMessages.showError(
-          context,
-          'Failed to save preferences',
-        );
+        AdaptiveMessages.showError(context, 'Failed to save preferences');
       }
     }
   }

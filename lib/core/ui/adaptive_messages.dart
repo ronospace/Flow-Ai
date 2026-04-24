@@ -143,5 +143,3 @@ class AdaptiveMessages {
     return result ?? false;
   }
 }
-
-

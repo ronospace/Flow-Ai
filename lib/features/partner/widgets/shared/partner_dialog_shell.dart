@@ -16,11 +16,9 @@ class PartnerDialogShell extends StatelessWidget {
           maxWidth: PartnerDialogTokens.maxWidth,
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(
-            PartnerDialogTokens.radiusOuter,
-          ),
+          borderRadius: BorderRadius.circular(PartnerDialogTokens.radiusOuter),
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
+            filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
             child: Container(
               constraints: BoxConstraints(maxHeight: h),
               padding: PartnerDialogTokens.shellPadding,
@@ -30,9 +28,7 @@ class PartnerDialogShell extends StatelessWidget {
                   PartnerDialogTokens.radiusOuter,
                 ),
                 boxShadow: PartnerDialogTokens.shadow,
-                border: Border.all(
-                  color: Colors.white.withValues(alpha: .45),
-                ),
+                border: Border.all(color: Colors.white.withValues(alpha: .45)),
               ),
               child: child,
             ),

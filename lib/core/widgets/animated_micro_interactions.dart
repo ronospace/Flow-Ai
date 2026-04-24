@@ -222,7 +222,7 @@ class GlassmorphismCard extends StatelessWidget {
       child: ClipRRect(
         borderRadius: borderRadius ?? BorderRadius.circular(20),
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
+          filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(opacity),

@@ -620,7 +620,7 @@ class PersonalizationEngine {
   Map<String, String> _analyzeCycleEvolution(List<CycleData> cycles) {
     if (cycles.length < 6) return {};
 
-  // ignore: unused_element
+    // ignore: unused_element
     final recentCycles = cycles.takeLast(3);
     final olderCycles = cycles.take(cycles.length - 3);
 
@@ -722,7 +722,7 @@ class PersonalizationEngine {
 // ignore: unused_element
 // ignore: unused_element
 // ignore: unused_element
-  // ignore: unused_element
+// ignore: unused_element
 // ignore: unused_element
 extension<T> on Iterable<T> {
   // ignore: unused_element

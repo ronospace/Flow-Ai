@@ -12,7 +12,6 @@ import 'partner_service.dart'
         PartnerMessageType,
         PartnerCareAction,
         PartnerCareActionType,
-
         PartnerSharingSettings;
 
 /// Local Partner Service

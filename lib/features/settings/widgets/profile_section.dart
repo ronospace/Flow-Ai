@@ -349,19 +349,13 @@ class ProfileSection extends StatelessWidget {
   void _selectFromCamera(BuildContext context, SettingsProvider settings) {
     // TODO: Implement camera selection
     Navigator.pop(context);
-    AdaptiveMessages.showInfo(
-      context,
-      'Camera selection coming soon!',
-    );
+    AdaptiveMessages.showInfo(context, 'Camera selection coming soon!');
   }
 
   void _selectFromGallery(BuildContext context, SettingsProvider settings) {
     // TODO: Implement gallery selection
     Navigator.pop(context);
-    AdaptiveMessages.showInfo(
-      context,
-      'Gallery selection coming soon!',
-    );
+    AdaptiveMessages.showInfo(context, 'Gallery selection coming soon!');
   }
 
   void _removeAvatar(BuildContext context, SettingsProvider settings) async {
@@ -370,10 +364,7 @@ class ProfileSection extends StatelessWidget {
 
     if (context.mounted) {
       Navigator.pop(context);
-      AdaptiveMessages.showSuccess(
-        context,
-        'Avatar removed!',
-      );
+      AdaptiveMessages.showSuccess(context, 'Avatar removed!');
     }
   }
 }

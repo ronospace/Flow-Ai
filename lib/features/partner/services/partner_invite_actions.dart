@@ -6,9 +6,7 @@ class PartnerInviteActions {
   final LocalPartnerService localService;
   PartnerInviteActions(this.localService);
 
-  Future<PartnerInvitation> createInvitation({
-    String? personalMessage,
-  }) {
+  Future<PartnerInvitation> createInvitation({String? personalMessage}) {
     return localService.createPartnerInvitation(
       personalMessage: personalMessage,
     );
@@ -30,7 +28,9 @@ class PartnerInviteActions {
     final code = invitation.invitationCode;
     final link = "https://flowai.app/invite/$code";
 
-    final callable = FirebaseFunctions.instance.httpsCallable('sendPartnerInvite');
+    final callable = FirebaseFunctions.instance.httpsCallable(
+      'sendPartnerInvite',
+    );
     await callable.call({
       'email': inviteeEmail,
       'personalMessage': personalMessage ?? '',

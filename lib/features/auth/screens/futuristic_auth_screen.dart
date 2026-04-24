@@ -269,7 +269,7 @@ class _FuturisticAuthScreenState extends State<FuturisticAuthScreen>
     return ClipRRect(
           borderRadius: BorderRadius.circular(32),
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+            filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
             child: Container(
               padding: const EdgeInsets.all(32),
               decoration: BoxDecoration(

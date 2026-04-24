@@ -8,12 +8,9 @@ class AdMobService {
   AdMobService._internal();
 
   // Test Ad Unit IDs (use these for development)
-  static const String _testBannerAdUnitId =
-      '';
-  static const String _testInterstitialAdUnitId =
-      '';
-  static const String _testRewardedAdUnitId =
-      '';
+  static const String _testBannerAdUnitId = '';
+  static const String _testInterstitialAdUnitId = '';
+  static const String _testRewardedAdUnitId = '';
 
   // Android Production Ad Unit IDs (App ID: ca-app-pub-3053779336)
   static const String _androidBannerAdUnitId =

@@ -86,10 +86,10 @@ class SettingsProvider extends ChangeNotifier {
         String? finalDisplayName = displayName;
 
         // Prefer human-readable names only
-        if (finalDisplayName != null && finalDisplayName.contains(RegExp(r"[0-9]"))) {
+        if (finalDisplayName != null &&
+            finalDisplayName.contains(RegExp(r"[0-9]"))) {
           finalDisplayName = null;
         }
-
 
         // Normalize display name
         if (finalDisplayName != null && finalDisplayName.isNotEmpty) {
@@ -99,13 +99,13 @@ class SettingsProvider extends ChangeNotifier {
           if (finalDisplayName.contains(".")) {
             finalDisplayName = finalDisplayName.split(".").first;
           }
-          finalDisplayName = finalDisplayName[0].toUpperCase() + finalDisplayName.substring(1).toLowerCase();
+          finalDisplayName =
+              finalDisplayName[0].toUpperCase() +
+              finalDisplayName.substring(1).toLowerCase();
         }
-
 
         // Try displayName first
-        if (finalDisplayName == null || finalDisplayName.isEmpty) {
-        }
+        if (finalDisplayName == null || finalDisplayName.isEmpty) {}
 
         // If still empty, extract from email
         if (finalDisplayName == null || finalDisplayName.isEmpty) {

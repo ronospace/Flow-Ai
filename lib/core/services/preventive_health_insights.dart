@@ -20,12 +20,15 @@ class PreventiveHealthInsights {
   // Medical condition detection models
   late Map<String, dynamic> _pcosDetectionModel;
   late Map<String, dynamic> _thyroidAnalysisModel; // ignore: unused_field
-  late Map<String, dynamic> _endometriosisDetectionModel; // ignore: unused_field
+  late Map<String, dynamic>
+  _endometriosisDetectionModel; // ignore: unused_field
   late Map<String, dynamic> _fertilityOptimizationModel; // ignore: unused_field
-  late Map<String, dynamic> _hormonalShiftDetectionModel; // ignore: unused_field
+  late Map<String, dynamic>
+  _hormonalShiftDetectionModel; // ignore: unused_field
 
   // Risk assessment parameters
-  late Map<String, List<String>> _medicalConditionMarkers; // ignore: unused_field
+  late Map<String, List<String>>
+  _medicalConditionMarkers; // ignore: unused_field
   late Map<String, Map<String, double>> _riskFactorWeights;
   late Map<String, List<String>> _warningSignPatterns; // ignore: unused_field
 

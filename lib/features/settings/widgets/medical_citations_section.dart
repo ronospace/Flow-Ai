@@ -126,7 +126,6 @@ class _MedicalCitationsSectionState extends State<MedicalCitationsSection> {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                
                 const SizedBox(width: 4),
                 ..._categoryLabels.entries.map(
                   (entry) => Padding(

@@ -544,10 +544,7 @@ class PremiumFeatureWidget extends StatelessWidget {
     provider.recordFeatureUsage(feature.type);
 
     // Show success message
-    AdaptiveMessages.showSuccess(
-      context,
-      'Using ${feature.name}...',
-    );
+    AdaptiveMessages.showSuccess(context, 'Using ${feature.name}...');
 
     // Here you would typically navigate to the feature or trigger its functionality
     // For now, we'll just show a placeholder message

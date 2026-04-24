@@ -138,7 +138,9 @@ class HealthKitDisclosureBanner extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  Platform.isIOS ? 'Flow Ai uses Apple HealthKit to access your health data for enhanced cycle predictions and personalized insights.' : 'Flow Ai uses Health Connect to access your health data for enhanced cycle predictions and personalized insights.',
+                  Platform.isIOS
+                      ? 'Flow Ai uses Apple HealthKit to access your health data for enhanced cycle predictions and personalized insights.'
+                      : 'Flow Ai uses Health Connect to access your health data for enhanced cycle predictions and personalized insights.',
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.9),
                     height: 1.5,
@@ -257,7 +259,9 @@ class HealthKitDisclosureBanner extends StatelessWidget {
 
           // Optional toggle note
           Text(
-            Platform.isIOS ? 'HealthKit integration is optional. You can enable or disable it any time in iOS Settings → Health → Data Access & Devices.' : 'Health Connect integration is optional. You can manage it any time in Android Settings → Apps → Health Connect → App permissions.',
+            Platform.isIOS
+                ? 'HealthKit integration is optional. You can enable or disable it any time in iOS Settings → Health → Data Access & Devices.'
+                : 'Health Connect integration is optional. You can manage it any time in Android Settings → Apps → Health Connect → App permissions.',
             style: theme.textTheme.bodySmall?.copyWith(
               color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
               fontSize: 11,

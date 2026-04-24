@@ -79,24 +79,15 @@ class PartnerInvitationEmailTab extends StatelessWidget {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(22),
-            borderSide: BorderSide(
-              color: AppTheme.primaryRose,
-              width: 1.8,
-            ),
+            borderSide: BorderSide(color: AppTheme.primaryRose, width: 1.8),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(22),
-            borderSide: BorderSide(
-              color: Colors.redAccent,
-              width: 1.4,
-            ),
+            borderSide: BorderSide(color: Colors.redAccent, width: 1.4),
           ),
           focusedErrorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(22),
-            borderSide: BorderSide(
-              color: Colors.redAccent,
-              width: 1.8,
-            ),
+            borderSide: BorderSide(color: Colors.redAccent, width: 1.8),
           ),
         ),
         validator: (value) {
@@ -177,24 +168,15 @@ class PartnerInvitationEmailTab extends StatelessWidget {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(22),
-            borderSide: BorderSide(
-              color: AppTheme.primaryRose,
-              width: 1.8,
-            ),
+            borderSide: BorderSide(color: AppTheme.primaryRose, width: 1.8),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(22),
-            borderSide: BorderSide(
-              color: Colors.redAccent,
-              width: 1.4,
-            ),
+            borderSide: BorderSide(color: Colors.redAccent, width: 1.4),
           ),
           focusedErrorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(22),
-            borderSide: BorderSide(
-              color: Colors.redAccent,
-              width: 1.8,
-            ),
+            borderSide: BorderSide(color: Colors.redAccent, width: 1.8),
           ),
         ),
       );

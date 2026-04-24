@@ -19,9 +19,7 @@ class AIInsightCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: _getInsightTypeColor().withOpacity(0.3),
-        ),
+        border: Border.all(color: _getInsightTypeColor().withOpacity(0.3)),
         boxShadow: [
           BoxShadow(
             color: theme.shadowColor.withOpacity(0.1),
@@ -187,7 +185,10 @@ class AIInsightCard extends StatelessWidget {
           Theme(
             data: theme,
             child: ExpansionTile(
-              tilePadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+              tilePadding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 2,
+              ),
               childrenPadding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
               collapsedBackgroundColor: theme.brightness == Brightness.dark
                   ? theme.colorScheme.surfaceContainerHighest.withOpacity(0.28)

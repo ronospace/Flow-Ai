@@ -89,8 +89,7 @@ class _InsightsScreenState extends State<InsightsScreen>
                     _buildTimePeriodSelector(),
 
                     // Tab Bar
-                    _buildTabBar(
-          ),
+                    _buildTabBar(),
 
                     // Tab Content
                     Expanded(
@@ -109,7 +108,11 @@ class _InsightsScreenState extends State<InsightsScreen>
             ),
 
             // Floating AI Chat - only render if mounted
-            if (mounted) FloatingAIChat(tabsKey: tabsKey, periodSelectorKey: periodSelectorKey),
+            if (mounted)
+              FloatingAIChat(
+                tabsKey: tabsKey,
+                periodSelectorKey: periodSelectorKey,
+              ),
           ],
         ),
       ),
@@ -359,7 +362,7 @@ class _InsightsScreenState extends State<InsightsScreen>
 
               ...insightsProvider.insights.asMap().entries.map((entry) {
                 // ignore: unused_local_variable
-          final index = entry.key;
+                final index = entry.key;
                 final insight = entry.value;
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 16),

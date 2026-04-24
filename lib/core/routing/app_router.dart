@@ -39,19 +39,18 @@ class AppRouter {
       return null;
     },
     routes: [
-
       GoRoute(
         path: '/qr-join',
         builder: (context, state) => const QrJoinScreen(),
       ),
 
-        GoRoute(
-          path: '/invite/:code',
-          builder: (context, state) {
-            final code = state.pathParameters['code'] ?? '';
-            return InviteGatePage(code: code);
-          },
-        ),
+      GoRoute(
+        path: '/invite/:code',
+        builder: (context, state) {
+          final code = state.pathParameters['code'] ?? '';
+          return InviteGatePage(code: code);
+        },
+      ),
 
       // Onboarding Routes
       GoRoute(
@@ -96,8 +95,6 @@ class AppRouter {
       ShellRoute(
         builder: (context, state, child) => MainShell(child: child),
         routes: [
-
-
           GoRoute(
             path: '/home',
             name: 'home',

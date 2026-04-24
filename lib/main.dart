@@ -66,8 +66,6 @@ void main() async {
     await _initializeCriticalServices();
     _initializeNonCriticalServices();
   });
-
-
 }
 
 Future<void> _initializeCriticalServices() async {
@@ -277,8 +275,6 @@ class FlowAIApp extends StatefulWidget {
   State<FlowAIApp> createState() => _FlowAIAppState();
 }
 
-
-
 class _FlowAIAppState extends State<FlowAIApp> {
   final AppLinks _appLinks = AppLinks();
   StreamSubscription<Uri>? _linkSub;
@@ -315,7 +311,7 @@ class _FlowAIAppState extends State<FlowAIApp> {
     }
   }
 
-void _handleDeepLink(Uri uri) {
+  void _handleDeepLink(Uri uri) {
     final normalized = DeepLinkNormalizer.normalizeToAppPath(uri.toString());
     if (normalized == null) return;
 
@@ -347,8 +343,6 @@ void _handleDeepLink(Uri uri) {
       // ignore deep link init errors
     }
   }
-
-
 
   @override
   void dispose() {
