@@ -32,6 +32,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool _isLoading = false;
+  bool _requestSent = false;
   String? _errorMessage;
 
   @override
@@ -560,15 +561,13 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  _errorMessage ==
-                          'Request sent successfully. Waiting for your partner.'
+                  _requestSent
                       ? 'Your partner will be notified when connected'
                       : 'Enter a valid partner Email to enable request',
                   style: TextStyle(
                     fontSize: 12,
                     color:
-                        _errorMessage ==
-                            'Request sent successfully. Waiting for your partner.'
+                        _requestSent
                         ? Colors.green
                         : Theme.of(context).hintColor,
                   ),
@@ -911,6 +910,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
     if (result != null) {
       setState(() {
         _isLoading = false;
+        _requestSent = true;
         _errorMessage = 'Request sent successfully. Waiting for your partner.';
       });
 
