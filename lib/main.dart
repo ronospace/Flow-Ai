@@ -47,6 +47,16 @@ import 'features/analytics/providers/analytics_provider.dart';
 
 const bool ENABLE_PD = false;
 
+
+class AppScrollBehavior extends MaterialScrollBehavior {
+  @override
+  ScrollPhysics getScrollPhysics(BuildContext context) {
+    return const BouncingScrollPhysics(
+      parent: AlwaysScrollableScrollPhysics(),
+    );
+  }
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Configure Flutter for production performance
@@ -397,6 +407,7 @@ class _FlowAIAppState extends State<FlowAIApp> {
             return CupertinoApp.router(
               title: 'Flow Ai',
               debugShowCheckedModeBanner: false,
+              scrollBehavior: AppScrollBehavior(),
               theme: CupertinoThemeData(
                 brightness: settings.themeMode == ThemeMode.dark
                     ? Brightness.dark
