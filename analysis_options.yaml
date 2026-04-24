@@ -1,5 +1,6 @@
 analyzer:
   exclude:
+    - audit/**
     - lib/features/analytics/screens/advanced_data_visualization_dashboard.dart
     - test/_legacy_disabled/**
     - lib/features/_disabled_experimental/**
