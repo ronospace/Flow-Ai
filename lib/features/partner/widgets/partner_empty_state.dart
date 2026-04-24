@@ -20,7 +20,7 @@ class PartnerEmptyState extends StatelessWidget {
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
+        
         children: [
           const SizedBox(height: 18),
           Container(
