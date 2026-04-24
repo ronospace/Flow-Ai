@@ -86,7 +86,9 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
       body: Consumer<PartnerService>(
         builder: (context, partnerService, child) {
           return CustomScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
+            physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics(),
+          ),
             slivers: [
               _buildAnimatedAppBar(theme, localizations, partnerService),
               SliverPadding(
