@@ -17,7 +17,8 @@ class PartnerEmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return Align(
+      alignment: Alignment.topCenter,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         
