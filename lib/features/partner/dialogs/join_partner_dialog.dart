@@ -187,7 +187,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [AppTheme.primaryRose, AppTheme.primaryRose],
+                  colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
                 ),
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -208,7 +208,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                   Text(
                     'Connect Your Love and Cycle Journey Together 💞',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppTheme.primaryRose,
+                      color: AppTheme.mediumGrey.withValues(alpha: 0.88),
                     ),
                   ),
                 ],
@@ -218,7 +218,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
           ],
         ),
       ),
-    ).animate().slideY(begin: -0.3, end: 0);
+    ).animate().slideY(begin: -0.3, end: 0, duration: 400.ms);
   }
 
   Widget _buildHeaderCollapseControl() {
@@ -275,7 +275,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
           controller: _tabController,
           indicator: BoxDecoration(
             gradient: const LinearGradient(
-              colors: [AppTheme.primaryRose, AppTheme.primaryRose],
+              colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
             ),
             borderRadius: BorderRadius.circular(10),
           ),
@@ -489,7 +489,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                 Icon(
                   Icons.alternate_email,
                   size: 72,
-                  color: AppTheme.primaryRose,
+                  color: AppTheme.mediumGrey.withValues(alpha: 0.88),
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -519,7 +519,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                     hintText: 'partner@example.com',
                     prefixIcon: Icon(
                       Icons.email_outlined,
-                      color: AppTheme.primaryRose,
+                      color: AppTheme.mediumGrey.withValues(alpha: 0.88),
                     ),
                     hintStyle: TextStyle(
                       color: Theme.of(
@@ -544,7 +544,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
                       borderSide: BorderSide(
-                        color: AppTheme.primaryRose,
+                        color: AppTheme.mediumGrey.withValues(alpha: 0.88),
                         width: 2,
                       ),
                     ),
@@ -682,7 +682,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                     child: Icon(
                       Icons.vpn_key,
                       size: 18,
-                      color: AppTheme.primaryRose,
+                      color: AppTheme.mediumGrey.withValues(alpha: 0.88),
                     ),
                   ),
                   enabledBorder: OutlineInputBorder(
