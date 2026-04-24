@@ -37,7 +37,6 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     with TickerProviderStateMixin {
   late AnimationController _headerController;
   late AnimationController _contentController;
-  late Animation<double> _headerAnimation;
   late Animation<double> _contentAnimation;
 
   @override
@@ -52,11 +51,6 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     _contentController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
-    );
-
-    _headerAnimation = CurvedAnimation(
-      parent: _headerController,
-      curve: Curves.easeOutBack,
     );
 
     _contentAnimation = CurvedAnimation(
@@ -165,12 +159,23 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     PartnerService partnerService,
   ) {
     return SliverAppBar(
-      expandedHeight: 120,
-      floating: true,
+      toolbarHeight: 120,
+      floating: false,
       pinned: true,
       elevation: 0,
-      backgroundColor: Colors.transparent,
-      flexibleSpace: AnimatedBuilder(
+      backgroundColor: const Color(0xFFF6EDEF),
+      title: Text(
+        partnerService.hasPartner ? 'Partner Connection' : 'Connect with Partner',
+        style: theme.textTheme.titleLarge?.copyWith(
+          fontWeight: FontWeight.bold,
+          color: theme.colorScheme.onSurface,
+        ),
+      ),
+      centerTitle: true,
+      flexibleSpace: null,
+      bottom: null,
+      // removed animated header
+      /*
         animation: _headerAnimation,
         builder: (context, child) {
           return Transform.translate(
@@ -203,9 +208,10 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
           );
         },
       ),
+*/
       leading: IconButton(
         onPressed: () => Navigator.of(context).maybePop(),
-        icon: const Icon(Icons.arrow_back_ios_new, size: 22),
+        icon: Icon(Icons.arrow_back_ios_new, size: 22, color: AppTheme.primaryRose),
       ),
       actions: [
         if (partnerService.hasPartner)
