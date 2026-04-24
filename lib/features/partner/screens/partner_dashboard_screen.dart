@@ -161,7 +161,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     PartnerService partnerService,
   ) {
     return SliverAppBar(
-      toolbarHeight: 120,
+      toolbarHeight: 96,
       floating: false,
       pinned: true,
       elevation: 0,
@@ -169,48 +169,11 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
       title: Text(
         partnerService.hasPartner ? 'Partner Connection' : 'Connect with Partner',
         style: theme.textTheme.titleLarge?.copyWith(
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w700,
           color: theme.colorScheme.onSurface,
         ),
       ),
       centerTitle: true,
-      flexibleSpace: null,
-      bottom: null,
-      // removed animated header
-      /*
-        animation: _headerAnimation,
-        builder: (context, child) {
-          return Transform.translate(
-            offset: Offset(0, (1 - _headerAnimation.value) * -50),
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    AppTheme.primaryRose.withValues(alpha: 0.1),
-                    AppTheme.primaryPurple.withValues(alpha: 0.1),
-                  ],
-                ),
-              ),
-              child: FlexibleSpaceBar(
-                title: Text(
-                  partnerService.hasPartner
-                      ? 'Partner Connection'
-                      : 'Connect with Partner',
-                  style: theme.textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.onSurface,
-                  ),
-                ),
-                centerTitle: true,
-                titlePadding: const EdgeInsets.only(bottom: 16),
-              ),
-            ),
-          );
-        },
-      ),
-*/
       leading: IconButton(
         onPressed: () => Navigator.of(context).maybePop(),
         icon: Icon(Icons.arrow_back_ios_new, size: 22, color: AppTheme.primaryRose),
@@ -796,7 +759,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
           const SizedBox(height: 16),
 
           Text(
-            'Share your cycle journey together.\nGet support, insights, and stay connected.',
+            'Share Your Cycle Journey Together\nGet Support, Insights, and Stay Connected',
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyLarge?.copyWith(
               color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
