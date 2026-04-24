@@ -562,7 +562,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                 Text(
                   _errorMessage ==
                           'Request sent successfully. Waiting for your partner.'
-                      ? 'Your partner will be notified when connected.'
+                      ? 'Your partner will be notified when connected'
                       : 'Enter a valid partner Email to enable request',
                   style: TextStyle(
                     fontSize: 12,
