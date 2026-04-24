@@ -528,6 +528,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
 
   void _showErrorMessage(String message) {
     showDialog(
+      barrierColor: Colors.transparent,
       context: context,
       builder: (_) => AlertDialog(
         title: const Text("Error"),

@@ -842,6 +842,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     PartnerService partnerService,
   ) {
     showDialog(
+      barrierColor: Colors.transparent,
       context: context,
       useRootNavigator: true,
       builder: (context) =>
@@ -854,6 +855,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     PartnerService partnerService,
   ) {
     showDialog(
+      barrierColor: Colors.transparent,
       context: context,
       useRootNavigator: true,
       builder: (context) => JoinPartnerDialog(
@@ -875,6 +877,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
   void _showMessageDialog(BuildContext context, PartnerService partnerService) {
     // Implementation for message dialog - can be enhanced later
     showDialog(
+      barrierColor: Colors.transparent,
       context: context,
       useRootNavigator: true,
       builder: (context) => AlertDialog(
