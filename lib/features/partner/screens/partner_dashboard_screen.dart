@@ -2,11 +2,11 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
+import '../../../core/services/platform_service.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../generated/app_localizations.dart';
 import '../services/partner_service.dart'
-    show
-        PartnerService;
+    show PartnerService;
 import '../services/partner_service.dart'
     as service_types
     show PartnerMessageType;
@@ -82,14 +82,31 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localizations = AppLocalizations.of(context);
+    final platformService = PlatformService();
 
     return Scaffold(
       body: Consumer<PartnerService>(
         builder: (context, partnerService, child) {
           return CustomScrollView(
+            physics: AlwaysScrollableScrollPhysics(parent: platformService.getAdaptiveScrollPhysics()),
             slivers: [
               _buildAnimatedAppBar(theme, localizations, partnerService),
-              SliverPadding(
+              if (!partnerService.hasPartner)
+                SliverFillRemaining(
+                  hasScrollBody: true,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Center(
+                        child: PartnerEmptyState(
+                        theme: theme,
+                        onInvite: () => _showPartnerInvitationDialog(context, partnerService),
+                        onJoin: () => _showJoinPartnerDialog(context, partnerService),
+                        ),
+                    ),
+                  ),
+                )
+              else
+                SliverPadding(
                 padding: const EdgeInsets.all(20),
                 sliver: SliverList(
                   delegate: SliverChildListDelegate([
@@ -137,12 +154,6 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                         localizations,
                         partnerService,
                       ),
-                    ] else ...[
-                      PartnerEmptyState(
-                        theme: theme,
-                        onInvite: () => _showPartnerInvitationDialog(context, partnerService),
-                        onJoin: () => _showJoinPartnerDialog(context, partnerService),
-                      ),
                     ],
 
                     SizedBox(
@@ -166,16 +177,14 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     return SliverAppBar(
       automaticallyImplyLeading: false,
       expandedHeight: 120,
-      floating: true,
+      floating: false,
       pinned: true,
       elevation: 0,
       backgroundColor: Colors.transparent,
       flexibleSpace: AnimatedBuilder(
         animation: _headerAnimation,
         builder: (context, child) {
-          return Transform.translate(
-            offset: Offset(0, (1 - _headerAnimation.value) * -50),
-            child: Container(
+          return Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
@@ -199,7 +208,6 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                 centerTitle: true,
                 titlePadding: const EdgeInsets.only(bottom: 16),
               ),
-            ),
           );
         },
       ),
