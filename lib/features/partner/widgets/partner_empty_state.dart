@@ -53,7 +53,7 @@ class PartnerEmptyState extends StatelessWidget {
           ).animate().fadeIn(delay: 200.ms),
           const SizedBox(height: 12),
           Text(
-            'Share your cycle journey together.\nGet support, insights, and stay connected.',
+            'Share your cycle journey together\nGet support, insights, and stay connected',
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyLarge?.copyWith(
               color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
