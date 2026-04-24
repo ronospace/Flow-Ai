@@ -17,12 +17,12 @@ class PartnerEmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.expand(
+    return Center(
       child: Column(
-        mainAxisSize: MainAxisSize.max,
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Spacer(flex: 3),
+          const SizedBox(height: 28),
           Container(
                 width: 120,
                 height: 120,
@@ -61,7 +61,7 @@ class PartnerEmptyState extends StatelessWidget {
               height: 1.5,
             ),
           ).animate().fadeIn(delay: 400.ms),
-          const SizedBox(height: 24),
+          const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -110,7 +110,7 @@ class PartnerEmptyState extends StatelessWidget {
               ),
             ],
           ).animate().fadeIn(delay: 600.ms).slideY(begin: 0.3, end: 0),
-          const Spacer(flex: 4),
+          
         ],
       ),
     );
