@@ -112,7 +112,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                         localizations,
                         partnerService,
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 70),
 
                       _buildQuickActionsGrid(
                         theme,
@@ -747,7 +747,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const SizedBox(height: 60),
+          const SizedBox(height: 70),
 
           Container(
                 width: 120,
