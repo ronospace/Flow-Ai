@@ -63,7 +63,9 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
     {
       'id': 'health_connect',
       'title': 'Health Connect',
-      'subtitle': Platform.isIOS ? 'Sync with Apple Health' : 'Sync with Health Connect',
+      'subtitle': Platform.isIOS
+          ? 'Sync with Apple Health'
+          : 'Sync with Health Connect',
       'icon': Icons.health_and_safety,
       'color': Colors.red,
     },
@@ -609,7 +611,9 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
           const SizedBox(height: 16),
 
           Text(
-            Platform.isIOS ? 'HealthKit Integration' : 'Health Connect Integration',
+            Platform.isIOS
+                ? 'HealthKit Integration'
+                : 'Health Connect Integration',
             style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
             ),

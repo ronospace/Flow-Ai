@@ -853,25 +853,31 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
   void _showJoinPartnerDialog(
     BuildContext context,
     PartnerService partnerService,
-  ) {
-    showDialog(
+  ) async {
+    final joined = await showDialog<bool>(
       barrierColor: Colors.transparent,
       context: context,
       useRootNavigator: true,
       builder: (context) => JoinPartnerDialog(
         onJoinWithCode: (code) async {
-          final partnership = await partnerService.acceptPartnerInvitation(
-            code,
-          );
+          final partnership =
+              await partnerService.acceptPartnerInvitation(code);
+
           if (partnership != null && context.mounted) {
-            Navigator.of(context, rootNavigator: true).pop();
-            Future.microtask(() {
-              if (context.mounted) context.go('/partner-dashboard');
-            });
+            Navigator.of(context, rootNavigator: true).pop(true);
           }
         },
       ),
     );
+
+    if (joined == true && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Partner connected successfully'),
+        ),
+      );
+      context.go('/partner-dashboard');
+    }
   }
 
   void _showMessageDialog(BuildContext context, PartnerService partnerService) {

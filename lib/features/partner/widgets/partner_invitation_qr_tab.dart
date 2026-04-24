@@ -37,69 +37,75 @@ class PartnerInvitationQrTab extends StatelessWidget {
               children: [
                 const SizedBox(height: 2),
                 Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppTheme.primaryRose.withValues(alpha: 0.28),
-                        blurRadius: 26,
-                        offset: const Offset(0, 10),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppTheme.primaryRose.withValues(alpha: 0.28),
+                            blurRadius: 26,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      if (generatedInvitation != null)
-                        QrImageView(
-                          data: PartnerInvitationActions.generateInvitationLink(
-                            generatedInvitation!,
-                          ),
-                          version: QrVersions.auto,
-                          size: 176,
-                          foregroundColor: AppTheme.darkGrey,
-                        )
-                      else
-                        Container(
-                          width: 176,
-                          height: 176,
-                          decoration: BoxDecoration(
-                            color: AppTheme.lightGrey.withValues(alpha: 0.3),
-                            borderRadius: BorderRadius.circular(22),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.qr_code,
-                                size: 52,
-                                color: AppTheme.mediumGrey,
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                'Generate QR Code',
-                                style: TextStyle(
-                                  color: AppTheme.mediumGrey,
-                                  fontWeight: FontWeight.w500,
+                      child: Column(
+                        children: [
+                          if (generatedInvitation != null)
+                            QrImageView(
+                              data:
+                                  PartnerInvitationActions.generateInvitationLink(
+                                    generatedInvitation!,
+                                  ),
+                              version: QrVersions.auto,
+                              size: 176,
+                              foregroundColor: AppTheme.darkGrey,
+                            )
+                          else
+                            Container(
+                              width: 176,
+                              height: 176,
+                              decoration: BoxDecoration(
+                                color: AppTheme.lightGrey.withValues(
+                                  alpha: 0.3,
                                 ),
+                                borderRadius: BorderRadius.circular(22),
                               ),
-                            ],
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.qr_code,
+                                    size: 52,
+                                    color: AppTheme.mediumGrey,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    'Generate QR Code',
+                                    style: TextStyle(
+                                      color: AppTheme.mediumGrey,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Scan to connect',
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: AppTheme.mediumGrey,
+                            ),
                           ),
-                        ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Scan to connect',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: AppTheme.mediumGrey,
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
-                ).animate().scale(
-                  begin: const Offset(0.92, 0.92),
-                  curve: Curves.easeOutBack,
-                ).fadeIn(delay: 120.ms),
+                    )
+                    .animate()
+                    .scale(
+                      begin: const Offset(0.92, 0.92),
+                      curve: Curves.easeOutBack,
+                    )
+                    .fadeIn(delay: 120.ms),
                 const SizedBox(height: 12),
                 Row(
                   children: [
@@ -110,10 +116,16 @@ class PartnerInvitationQrTab extends StatelessWidget {
                         label: const Text('Generate Code'),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: AppTheme.primaryRose,
-                          side: const BorderSide(width: 1.8, color: AppTheme.primaryRose),
+                          side: const BorderSide(
+                            width: 1.8,
+                            color: AppTheme.primaryRose,
+                          ),
                           minimumSize: const Size(double.infinity, 56),
                           padding: const EdgeInsets.symmetric(vertical: 16),
-                          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                          textStyle: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
                           visualDensity: VisualDensity.compact,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
@@ -124,21 +136,26 @@ class PartnerInvitationQrTab extends StatelessWidget {
                     const SizedBox(width: 12),
                     Expanded(
                       child: ElevatedButton.icon(
-                        onPressed: generatedInvitation != null ? onSaveQr : null,
+                        onPressed: generatedInvitation != null
+                            ? onSaveQr
+                            : null,
                         icon: const Icon(Icons.save, size: 20),
                         label: const Text('Save QR'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: generatedInvitation != null
                               ? (isSent
-                                  ? AppTheme.primaryRose.withOpacity(0.35)
-                                  : AppTheme.primaryRose)
+                                    ? AppTheme.primaryRose.withOpacity(0.35)
+                                    : AppTheme.primaryRose)
                               : AppTheme.primaryRose.withValues(alpha: 0.12),
                           foregroundColor: generatedInvitation != null
                               ? Colors.white
                               : Colors.black.withValues(alpha: 0.38),
                           minimumSize: const Size(double.infinity, 56),
                           padding: const EdgeInsets.symmetric(vertical: 16),
-                          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                          textStyle: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
                           visualDensity: VisualDensity.compact,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),

@@ -87,15 +87,14 @@ class AIConversationMemory {
       'hormones', 'health', 'exercise', 'nutrition', 'stress', 'sleep',
 
       // Science topics
-         'biology', 'dna', 
+      'biology', 'dna',
       'gravity', 'space', 'planets', 'evolution', 'atoms', 'molecules',
 
       // Technology topics
       'technology',
       'computer',
       'ai',
-      
-      
+
       'smartphone', 'internet', 'cloud', 'software', 'hardware', 'programming',
 
       // Lifestyle topics
@@ -242,17 +241,27 @@ class AIConversationMemory {
     // Enhanced default suggestions if no patterns found
     if (suggestions.isEmpty) {
       suggestions.addAll([
-  "When will my next period start?",
-  "Am I in my fertile window today?",
-  "Why is my period late or early?",
-  "What phase of my cycle am I in?",
-  "How can I reduce cramps naturally?",
-  "Can I get pregnant right now?",
-]);
+        "When will my next period start?",
+        "Am I in my fertile window today?",
+        "Why is my period late or early?",
+        "What phase of my cycle am I in?",
+        "How can I reduce cramps naturally?",
+        "Can I get pregnant right now?",
+      ]);
     }
 
-    suggestions = suggestions.where((s) => s.toLowerCase().contains("period") || s.toLowerCase().contains("cycle") || s.toLowerCase().contains("fertile") || s.toLowerCase().contains("ovulation") || s.toLowerCase().contains("pms") || s.toLowerCase().contains("cramps")).toList();
-return suggestions.take(6).toList();
+    suggestions = suggestions
+        .where(
+          (s) =>
+              s.toLowerCase().contains("period") ||
+              s.toLowerCase().contains("cycle") ||
+              s.toLowerCase().contains("fertile") ||
+              s.toLowerCase().contains("ovulation") ||
+              s.toLowerCase().contains("pms") ||
+              s.toLowerCase().contains("cramps"),
+        )
+        .toList();
+    return suggestions.take(6).toList();
   }
 
   /// Get contextual AI response based on memory - enhanced for better context

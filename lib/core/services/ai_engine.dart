@@ -875,11 +875,15 @@ class AIEngine {
     return 'Local processing only';
   }
 
-  Future<CyclePrediction> predictNextCycleAdvanced(List<CycleData> cycles) async {
+  Future<CyclePrediction> predictNextCycleAdvanced(
+    List<CycleData> cycles,
+  ) async {
     return predictNextCycle(cycles);
   }
 
-  Future<List<AIInsight>> generateAdvancedInsights(List<CycleData> cycles) async {
+  Future<List<AIInsight>> generateAdvancedInsights(
+    List<CycleData> cycles,
+  ) async {
     return generateInsights(cycles);
   }
 }

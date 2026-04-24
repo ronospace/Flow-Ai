@@ -200,7 +200,7 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
                 // Loading overlay
                 if (subscriptionProvider.isLoading)
                   Container(
-                    color: Colors.black.withOpacity(0.5),
+                    color: Colors.transparent,
                     child: const Center(child: CircularProgressIndicator()),
                   ),
               ],

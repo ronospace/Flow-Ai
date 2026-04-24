@@ -253,7 +253,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ClipRRect(
           borderRadius: BorderRadius.circular(16),
           child: ImageFiltered(
-            imageFilter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+            imageFilter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
             child: Opacity(opacity: 0.85, child: teaser),
           ),
         ),
@@ -477,9 +477,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               _LazyWidget(
                                 builder: () => PremiumFeaturesPreview(
                                   onAICoach: () => _navigateToAICoach(),
-                                  onPartnerSharing: () => _navigateToPartnerSharing(),
-                                  onHealthcarePortal: () => _navigateToHealthcarePortal(),
-                                  onAdvancedAnalytics: () => _navigateToAdvancedAnalytics(),
+                                  onPartnerSharing: () =>
+                                      _navigateToPartnerSharing(),
+                                  onHealthcarePortal: () =>
+                                      _navigateToHealthcarePortal(),
+                                  onAdvancedAnalytics: () =>
+                                      _navigateToAdvancedAnalytics(),
                                 ),
                               ),
 
@@ -663,39 +666,39 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     Row(
                       children: [
                         Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [
+                                AppTheme.secondaryBlue,
+                                AppTheme.accentMint,
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.psychology,
+                                color: theme.colorScheme.onPrimary,
+                                size: 14,
                               ),
-                              decoration: BoxDecoration(
-                                gradient: const LinearGradient(
-                                  colors: [
-                                    AppTheme.secondaryBlue,
-                                    AppTheme.accentMint,
-                                  ],
+                              const SizedBox(width: 4),
+                              Text(
+                                localizations.aiActive,
+                                style: TextStyle(
+                                  color: theme.colorScheme.onPrimary,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                borderRadius: BorderRadius.circular(12),
                               ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    Icons.psychology,
-                                    color: theme.colorScheme.onPrimary,
-                                    size: 14,
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    localizations.aiActive,
-                                    style: TextStyle(
-                                      color: theme.colorScheme.onPrimary,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ],
@@ -777,7 +780,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     ).animate().fadeIn().slideY(begin: -0.3, end: 0);
   }
 
-
   // ignore: unused_element
   Widget _buildCycleInfo(String label, String value) {
     final theme = Theme.of(context);
@@ -802,8 +804,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       ],
     );
   }
-
-
 
   // ignore: unused_element
   Widget _buildActionCard({
@@ -2054,9 +2054,7 @@ class HealthScorePainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
 
-extension _PremiumFeaturesMethods on _HomeScreenState {
-
-}
+extension _PremiumFeaturesMethods on _HomeScreenState {}
 
 // Lazy loading widget to improve performance
 class _LazyWidget extends StatefulWidget {

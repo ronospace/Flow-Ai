@@ -768,10 +768,7 @@ class _InteractiveOnboardingScreenState
         break;
     }
 
-    AdaptiveMessages.showError(
-      context,
-      message,
-    );
+    AdaptiveMessages.showError(context, message);
   }
 
   Future<void> _completeOnboarding(

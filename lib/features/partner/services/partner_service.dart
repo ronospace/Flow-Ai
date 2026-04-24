@@ -15,7 +15,9 @@ class PartnerService extends ChangeNotifier {
   }
 
   final LocalPartnerService _localService = LocalPartnerService();
-  late final PartnerInviteActions _inviteActions = PartnerInviteActions(_localService);
+  late final PartnerInviteActions _inviteActions = PartnerInviteActions(
+    _localService,
+  );
   final bool _firebaseAvailable = false;
 
   Partnership? _currentPartnership;
@@ -116,9 +118,7 @@ class PartnerService extends ChangeNotifier {
   Future<PartnerInvitation> createPartnerInvitation({
     String? personalMessage,
   }) async {
-    return _inviteActions.createInvitation(
-      personalMessage: personalMessage,
-    );
+    return _inviteActions.createInvitation(personalMessage: personalMessage);
   }
 
   /// Send invitation to partner

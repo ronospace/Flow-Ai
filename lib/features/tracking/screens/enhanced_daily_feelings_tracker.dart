@@ -153,18 +153,12 @@ class _EnhancedDailyFeelingsTrackerState
       });
 
       if (mounted) {
-        AdaptiveMessages.showSuccess(
-          context,
-          'Feelings saved successfully',
-        );
+        AdaptiveMessages.showSuccess(context, 'Feelings saved successfully');
       }
     } catch (e) {
       debugPrint('Failed to save entry: $e');
       if (mounted) {
-        AdaptiveMessages.showError(
-          context,
-          'Failed to save feelings',
-        );
+        AdaptiveMessages.showError(context, 'Failed to save feelings');
       }
     } finally {
       setState(() => _isSaving = false);

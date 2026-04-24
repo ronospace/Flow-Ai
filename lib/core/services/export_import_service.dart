@@ -30,10 +30,16 @@ class ExportImportService {
       startDate ??= DateTime.now().subtract(const Duration(days: 365));
       endDate ??= DateTime.now();
 
-      final cycles = await _databaseService.getCyclesInRange(startDate, endDate);
-      final trackingData = await _databaseService.getTrackingDataInRange(startDate, endDate);
+      final cycles = await _databaseService.getCyclesInRange(
+        startDate,
+        endDate,
+      );
+      final trackingData = await _databaseService.getTrackingDataInRange(
+        startDate,
+        endDate,
+      );
       final preferences = await _preferencesService.getAllPreferences();
-      
+
       final exportData = {
         'exportMetadata': {
           'version': '1.0',
@@ -114,7 +120,7 @@ class ExportImportService {
       endDate ??= DateTime.now();
 
       final pdf = pw.Document();
-      
+
       switch (reportType) {
         case PDFReportType.medical:
           await _addMedicalReportPages(pdf, startDate, endDate);
@@ -123,7 +129,12 @@ class ExportImportService {
           await _addSummaryReportPages(pdf, startDate, endDate);
           break;
         case PDFReportType.comprehensive:
-          await _addComprehensiveReportPages(pdf, startDate, endDate, includeCharts);
+          await _addComprehensiveReportPages(
+            pdf,
+            startDate,
+            endDate,
+            includeCharts,
+          );
           break;
       }
 
@@ -138,7 +149,7 @@ class ExportImportService {
   Future<ImportResult> importFromJSON(String jsonData) async {
     try {
       final data = jsonDecode(jsonData) as Map<String, dynamic>;
-      
+
       // Validate format
       if (!_validateJSONFormat(data)) {
         throw Exception('Invalid JSON format');
@@ -153,7 +164,7 @@ class ExportImportService {
         final cycles = (data['cycles'] as List)
             .map((c) => CycleData.fromJson(c))
             .toList();
-        
+
         for (final cycle in cycles) {
           final existing = await _databaseService.getCycleById(cycle.id);
           if (existing == null) {
@@ -184,7 +195,8 @@ class ExportImportService {
           if (v is FlowIntensity) return v;
           if (v is int) {
             final idx = v - 1;
-            if (0 <= idx < FlowIntensity.values.length) return FlowIntensity.values[idx];
+            if (idx >= 0 && idx < FlowIntensity.values.length)
+              return FlowIntensity.values[idx];
             return null;
           }
           final name = v?.toString();
@@ -197,12 +209,14 @@ class ExportImportService {
 
         for (final tracking in trackingList) {
           final date = _parseDate(tracking['date'] ?? tracking['recordedAt']);
-          final existing = await _databaseService.getTrackingByDate(date: date: date);
+          final existing = await _databaseService.getTrackingByDate(date: date);
 
           if (existing == null) {
             await _databaseService.saveDailyTracking(
               date: date,
-              flowIntensity: _parseFlow(tracking['flowIntensity'] ?? tracking['flow_intensity']),
+              flowIntensity: _parseFlow(
+                tracking['flowIntensity'] ?? tracking['flow_intensity'],
+              ),
               symptoms: (tracking['symptoms'] is List)
                   ? List<String>.from(tracking['symptoms'] as List)
                   : null,
@@ -238,17 +252,14 @@ class ExportImportService {
       );
     } catch (e) {
       debugPrint('Error importing from JSON: $e');
-      return ImportResult(
-        success: false,
-        message: 'Import failed: $e',
-      );
+      return ImportResult(success: false, message: 'Import failed: $e');
     }
   }
 
   Future<ImportResult> importFromCSV(String csvData, CSVImportType type) async {
     try {
       final csvTable = const CsvToListConverter().convert(csvData);
-      
+
       if (csvTable.isEmpty) {
         throw Exception('Empty CSV file');
       }
@@ -278,10 +289,7 @@ class ExportImportService {
       );
     } catch (e) {
       debugPrint('Error importing from CSV: $e');
-      return ImportResult(
-        success: false,
-        message: 'CSV import failed: $e',
-      );
+      return ImportResult(success: false, message: 'CSV import failed: $e');
     }
   }
 
@@ -290,22 +298,22 @@ class ExportImportService {
     // Implementation for importing from Clue app export
     try {
       final data = jsonDecode(clueData) as Map<String, dynamic>;
-      
+
       // Parse Clue's format and convert to FlowSense format
       final cycles = <CycleData>[];
       final trackingData = <DailyTrackingData>[];
-      
+
       // Convert Clue data format to FlowSense format
       // This would need to be implemented based on Clue's actual export format
-      
+
       int importedCycles = 0;
       int importedTracking = 0;
-      
+
       for (final cycle in cycles) {
         await _databaseService.insertCycle(cycle);
         importedCycles++;
       }
-      
+
       for (final tracking in trackingData) {
         await _databaseService.saveDailyTracking(date: tracking['date']);
         importedTracking++;
@@ -319,10 +327,7 @@ class ExportImportService {
       );
     } catch (e) {
       debugPrint('Error importing from Clue: $e');
-      return ImportResult(
-        success: false,
-        message: 'Clue import failed: $e',
-      );
+      return ImportResult(success: false, message: 'Clue import failed: $e');
     }
   }
 
@@ -336,26 +341,27 @@ class ExportImportService {
       );
     } catch (e) {
       debugPrint('Error importing from Flo: $e');
-      return ImportResult(
-        success: false,
-        message: 'Flo import failed: $e',
-      );
+      return ImportResult(success: false, message: 'Flo import failed: $e');
     }
   }
 
   // File operations
-  Future<String> saveExportToFile(String data, String fileName, ExportFormat format) async {
+  Future<String> saveExportToFile(
+    String data,
+    String fileName,
+    ExportFormat format,
+  ) async {
     try {
       final directory = await getApplicationDocumentsDirectory();
       final file = File('${directory.path}/$fileName');
-      
+
       if (format == ExportFormat.pdf) {
         // For PDF, data should be Uint8List
         await file.writeAsBytes(base64Decode(data));
       } else {
         await file.writeAsString(data);
       }
-      
+
       return file.path;
     } catch (e) {
       debugPrint('Error saving export to file: $e');
@@ -363,7 +369,11 @@ class ExportImportService {
     }
   }
 
-  Future<void> shareExport(String data, String fileName, ExportFormat format) async {
+  Future<void> shareExport(
+    String data,
+    String fileName,
+    ExportFormat format,
+  ) async {
     try {
       final filePath = await saveExportToFile(data, fileName, format);
       await Share.shareXFiles([XFile(filePath)]);
@@ -379,12 +389,12 @@ class ExportImportService {
         type: FileType.custom,
         allowedExtensions: ['json', 'csv'],
       );
-      
+
       if (result != null && result.files.single.path != null) {
         final file = File(result.files.single.path!);
         return await file.readAsString();
       }
-      
+
       return null;
     } catch (e) {
       debugPrint('Error picking import file: $e');
@@ -393,13 +403,24 @@ class ExportImportService {
   }
 
   // Private helper methods for CSV export
-  Future<List<List<dynamic>>> _exportCyclesToCSV(DateTime startDate, DateTime endDate) async {
+  Future<List<List<dynamic>>> _exportCyclesToCSV(
+    DateTime startDate,
+    DateTime endDate,
+  ) async {
     final cycles = await _databaseService.getCyclesInRange(startDate, endDate);
-    
+
     final csvData = <List<dynamic>>[
-      ['Cycle ID', 'Start Date', 'End Date', 'Length', 'Period Length', 'Ovulation Day', 'Notes']
+      [
+        'Cycle ID',
+        'Start Date',
+        'End Date',
+        'Length',
+        'Period Length',
+        'Ovulation Day',
+        'Notes',
+      ],
     ];
-    
+
     for (final cycle in cycles) {
       csvData.add([
         cycle.id,
@@ -411,17 +432,31 @@ class ExportImportService {
         cycle.notes ?? '',
       ]);
     }
-    
+
     return csvData;
   }
 
-  Future<List<List<dynamic>>> _exportTrackingToCSV(DateTime startDate, DateTime endDate) async {
-    final trackingData = await _databaseService.getTrackingDataInRange(startDate, endDate);
-    
+  Future<List<List<dynamic>>> _exportTrackingToCSV(
+    DateTime startDate,
+    DateTime endDate,
+  ) async {
+    final trackingData = await _databaseService.getTrackingDataInRange(
+      startDate,
+      endDate,
+    );
+
     final csvData = <List<dynamic>>[
-      ['Date', 'Flow Intensity', 'Mood', 'Energy', 'Sleep Hours', 'Symptoms', 'Notes']
+      [
+        'Date',
+        'Flow Intensity',
+        'Mood',
+        'Energy',
+        'Sleep Hours',
+        'Symptoms',
+        'Notes',
+      ],
     ];
-    
+
     for (final tracking in trackingData) {
       csvData.add([
         tracking['date'].toIso8601String(),
@@ -433,41 +468,57 @@ class ExportImportService {
         tracking['notes'] ?? '',
       ]);
     }
-    
+
     return csvData;
   }
 
-  Future<List<List<dynamic>>> _exportSymptomsToCSV(DateTime startDate, DateTime endDate) async {
-    final trackingData = await _databaseService.getTrackingDataInRange(startDate, endDate);
-    
+  Future<List<List<dynamic>>> _exportSymptomsToCSV(
+    DateTime startDate,
+    DateTime endDate,
+  ) async {
+    final trackingData = await _databaseService.getTrackingDataInRange(
+      startDate,
+      endDate,
+    );
+
     final csvData = <List<dynamic>>[
-      ['Date', 'Symptoms']
+      ['Date', 'Symptoms'],
     ];
-    
+
     for (final tracking in trackingData) {
       if (tracking['symptoms'] != null && tracking['symptoms']!.isNotEmpty) {
         for (final symptom in tracking['symptoms']!) {
-          csvData.add([
-            tracking['date'].toIso8601String(),
-            symptom,
-          ]);
+          csvData.add([tracking['date'].toIso8601String(), symptom]);
         }
       }
     }
-    
+
     return csvData;
   }
 
-  Future<List<List<dynamic>>> _exportCompleteToCSV(DateTime startDate, DateTime endDate) async {
-    final trackingData = await _databaseService.getTrackingDataInRange(startDate, endDate);
-    
+  Future<List<List<dynamic>>> _exportCompleteToCSV(
+    DateTime startDate,
+    DateTime endDate,
+  ) async {
+    final trackingData = await _databaseService.getTrackingDataInRange(
+      startDate,
+      endDate,
+    );
+
     final csvData = <List<dynamic>>[
       [
-        'Date', 'Flow Intensity', 'Mood', 'Energy', 'Sleep Hours',
-        'Temperature', 'Weight', 'Symptoms', 'Notes'
-      ]
+        'Date',
+        'Flow Intensity',
+        'Mood',
+        'Energy',
+        'Sleep Hours',
+        'Temperature',
+        'Weight',
+        'Symptoms',
+        'Notes',
+      ],
     ];
-    
+
     for (final tracking in trackingData) {
       csvData.add([
         tracking['date'].toIso8601String(),
@@ -481,15 +532,22 @@ class ExportImportService {
         tracking['notes'] ?? '',
       ]);
     }
-    
+
     return csvData;
   }
 
   // Private helper methods for PDF generation
-  Future<void> _addMedicalReportPages(pw.Document pdf, DateTime startDate, DateTime endDate) async {
+  Future<void> _addMedicalReportPages(
+    pw.Document pdf,
+    DateTime startDate,
+    DateTime endDate,
+  ) async {
     final cycles = await _databaseService.getCyclesInRange(startDate, endDate);
-    final analytics = await _analyticsService.getCycleAnalytics(startDate: startDate, endDate: endDate);
-    
+    final analytics = await _analyticsService.getCycleAnalytics(
+      startDate: startDate,
+      endDate: endDate,
+    );
+
     pdf.addPage(
       pw.Page(
         pageFormat: PdfPageFormat.a4,
@@ -499,26 +557,44 @@ class ExportImportService {
             children: [
               pw.Header(
                 level: 0,
-                child: pw.Text('FlowSense Medical Report', style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold)),
+                child: pw.Text(
+                  'FlowSense Medical Report',
+                  style: pw.TextStyle(
+                    fontSize: 24,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                ),
               ),
               pw.SizedBox(height: 20),
-              pw.Text('Report Period: ${startDate.toString().split(' ')[0]} to ${endDate.toString().split(' ')[0]}'),
+              pw.Text(
+                'Report Period: ${startDate.toString().split(' ')[0]} to ${endDate.toString().split(' ')[0]}',
+              ),
               pw.SizedBox(height: 20),
               pw.Header(level: 1, text: 'Cycle Summary'),
               pw.Text('Total Cycles: ${analytics.totalCycles}'),
-              pw.Text('Average Cycle Length: ${analytics.averageCycleLength.round()} days'),
-              pw.Text('Average Period Length: ${analytics.averagePeriodLength.round()} days'),
-              pw.Text('Cycle Regularity: ${(analytics.regularityScore * 100).round()}%'),
+              pw.Text(
+                'Average Cycle Length: ${analytics.averageCycleLength.round()} days',
+              ),
+              pw.Text(
+                'Average Period Length: ${analytics.averagePeriodLength.round()} days',
+              ),
+              pw.Text(
+                'Cycle Regularity: ${(analytics.regularityScore * 100).round()}%',
+              ),
               pw.SizedBox(height: 20),
               pw.Header(level: 1, text: 'Cycle Details'),
               pw.Table.fromTextArray(
                 headers: ['Start Date', 'Length', 'Period Length', 'Notes'],
-                data: cycles.map((cycle) => [
-                  cycle.startDate?.toString().split(' ')[0] ?? '',
-                  '${cycle.length} days',
-                  '${cycle.periodLength ?? 'N/A'} days',
-                  cycle.notes ?? '',
-                ]).toList(),
+                data: cycles
+                    .map(
+                      (cycle) => [
+                        cycle.startDate?.toString().split(' ')[0] ?? '',
+                        '${cycle.length} days',
+                        '${cycle.periodLength ?? 'N/A'} days',
+                        cycle.notes ?? '',
+                      ],
+                    )
+                    .toList(),
               ),
             ],
           );
@@ -527,24 +603,35 @@ class ExportImportService {
     );
   }
 
-  Future<void> _addSummaryReportPages(pw.Document pdf, DateTime startDate, DateTime endDate) async {
+  Future<void> _addSummaryReportPages(
+    pw.Document pdf,
+    DateTime startDate,
+    DateTime endDate,
+  ) async {
     // Implementation for summary report
   }
 
-  Future<void> _addComprehensiveReportPages(pw.Document pdf, DateTime startDate, DateTime endDate, bool includeCharts) async {
+  Future<void> _addComprehensiveReportPages(
+    pw.Document pdf,
+    DateTime startDate,
+    DateTime endDate,
+    bool includeCharts,
+  ) async {
     // Implementation for comprehensive report with charts
   }
 
   // Private helper methods for CSV import
-  Future<Map<String, int>> _importCyclesFromCSV(List<List<dynamic>> csvTable) async {
+  Future<Map<String, int>> _importCyclesFromCSV(
+    List<List<dynamic>> csvTable,
+  ) async {
     int imported = 0;
     int skipped = 0;
-    
+
     // Skip header row
     for (int i = 1; i < csvTable.length; i++) {
       try {
         final row = csvTable[i];
-        
+
         final cycle = CycleData(
           id: row[0].toString(),
           startDate: DateTime.tryParse(row[1].toString()),
@@ -554,7 +641,7 @@ class ExportImportService {
           ovulationDay: int.tryParse(row[5].toString()),
           notes: row[6].toString().isEmpty ? null : row[6].toString(),
         );
-        
+
         final existing = await _databaseService.getCycleById(cycle.id);
         if (existing == null) {
           await _databaseService.insertCycle(cycle);
@@ -567,19 +654,21 @@ class ExportImportService {
         skipped++;
       }
     }
-    
+
     return {'imported': imported, 'skipped': skipped};
   }
 
-  Future<Map<String, int>> _importTrackingFromCSV(List<List<dynamic>> csvTable) async {
+  Future<Map<String, int>> _importTrackingFromCSV(
+    List<List<dynamic>> csvTable,
+  ) async {
     int imported = 0;
     int skipped = 0;
-    
+
     // Skip header row
     for (int i = 1; i < csvTable.length; i++) {
       try {
         final row = csvTable[i];
-        
+
         final tracking = DailyTrackingData(
           id: DateTime.now().millisecondsSinceEpoch.toString(),
           date: DateTime.parse(row[0].toString()),
@@ -587,11 +676,15 @@ class ExportImportService {
           mood: int.tryParse(row[2].toString()),
           energy: int.tryParse(row[3].toString()),
           sleepHours: double.tryParse(row[4].toString()),
-          symptoms: row[5].toString().isEmpty ? null : row[5].toString().split(', '),
+          symptoms: row[5].toString().isEmpty
+              ? null
+              : row[5].toString().split(', '),
           notes: row[6].toString().isEmpty ? null : row[6].toString(),
         );
-        
-        final existing = await _databaseService.getTrackingByDate(date: tracking['date']);
+
+        final existing = await _databaseService.getTrackingByDate(
+          date: tracking['date'],
+        );
         if (existing == null) {
           await _databaseService.saveDailyTracking(date: tracking['date']);
           imported++;
@@ -603,7 +696,7 @@ class ExportImportService {
         skipped++;
       }
     }
-    
+
     return {'imported': imported, 'skipped': skipped};
   }
 
@@ -627,14 +720,17 @@ class ExportImportService {
   bool _validateJSONFormat(Map<String, dynamic> data) {
     // Check if the JSON has the expected structure
     return data.containsKey('exportMetadata') &&
-           (data.containsKey('cycles') || data.containsKey('trackingData'));
+        (data.containsKey('cycles') || data.containsKey('trackingData'));
   }
 }
 
 // Enums and models
 enum ExportFormat { json, csv, pdf }
+
 enum ExportType { cycles, tracking, symptoms, complete }
+
 enum PDFReportType { medical, summary, comprehensive }
+
 enum CSVImportType { cycles, tracking }
 
 class ImportResult {

@@ -530,10 +530,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
 
   Future<void> _saveDisplayName() async {
     if (_displayNameController.text.trim().isEmpty) {
-      await AdaptiveMessages.showError(
-        context,
-        'Display name cannot be empty',
-      );
+      await AdaptiveMessages.showError(context, 'Display name cannot be empty');
       return;
     }
 
@@ -653,10 +650,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
 
   Future<void> _changePassword() async {
     if (_newPasswordController.text != _confirmPasswordController.text) {
-      await AdaptiveMessages.showError(
-        context,
-        'Passwords do not match',
-      );
+      await AdaptiveMessages.showError(context, 'Passwords do not match');
       return;
     }
 

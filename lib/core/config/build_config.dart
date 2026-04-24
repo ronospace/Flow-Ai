@@ -815,7 +815,6 @@ const String BUILD_ENVIRONMENT = ENVIRONMENT;
 
 /// Build utilities for fixing common platform issues
 class BuildUtilities {
-
   /// Fix common iOS build issues
   static List<String> getiOSBuildFixes() {
     return [

@@ -418,10 +418,7 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
           rootNavigator: true,
         ).pop(); // Close loading dialog
 
-        AdaptiveMessages.showSuccess(
-          context,
-          'Sync completed successfully!',
-        );
+        AdaptiveMessages.showSuccess(context, 'Sync completed successfully!');
       }
     });
   }

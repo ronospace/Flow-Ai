@@ -244,7 +244,6 @@ class AdvancedBiometricService {
 
   /// Trigger AI analysis for new biometric data// ignore: unused_element// ignore: unused_element
 
-
   // ignore: unused_element
   // ignore: unused_element
   void _triggerAIAnalysis(List<HealthDataPoint> newData) {

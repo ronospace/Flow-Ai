@@ -276,7 +276,7 @@ class _AuthChoiceScreenState extends State<AuthChoiceScreen>
       child: ClipRRect(
         borderRadius: BorderRadius.circular(24),
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.15),

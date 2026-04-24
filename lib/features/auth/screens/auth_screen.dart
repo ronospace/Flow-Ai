@@ -986,9 +986,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     if (mounted) {
       AdaptiveMessages.showError(context, message);
     }
-  }// ignore: unused_element// ignore: unused_element
-
-
+  } // ignore: unused_element// ignore: unused_element
 
   // ignore: unused_element
   void _showInfoMessage(String message) {

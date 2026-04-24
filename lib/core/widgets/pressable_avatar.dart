@@ -105,7 +105,7 @@ class _PressableAvatarState extends State<PressableAvatar>
               ),
               ClipOval(
                 child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
+                  filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
                   child: Container(
                     width: 42,
                     height: 42,
@@ -179,13 +179,7 @@ class AvatarRingPainter extends CustomPainter {
         transform: GradientRotation(progress * math.pi * 2),
       ).createShader(rect);
 
-    canvas.drawArc(
-      rect,
-      progress * math.pi * 2,
-      math.pi * 0.55,
-      false,
-      paint,
-    );
+    canvas.drawArc(rect, progress * math.pi * 2, math.pi * 0.55, false, paint);
   }
 
   @override

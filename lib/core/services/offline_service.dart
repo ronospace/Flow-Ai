@@ -15,8 +15,7 @@ class OfflineService {
   OfflineService._internal();
 
   late Connectivity _connectivity;
-  late SharedPreferences _prefs;// ignore: unused_field// ignore: unused_field
-
+  late SharedPreferences _prefs; // ignore: unused_field// ignore: unused_field
 
   // ignore: unused_element
   // ignore: unused_field
@@ -50,11 +49,11 @@ class OfflineService {
   /// Initialize offline service
   Future<void> initialize() async {
     _connectivity = Connectivity();
-    _prefs = await SharedPreferences.getInstance();// ignore: unused_field// ignore: unused_field
+    _prefs =
+        await SharedPreferences.getInstance(); // ignore: unused_field// ignore: unused_field
 
-
-  // ignore: unused_element
-  // ignore: unused_field
+    // ignore: unused_element
+    // ignore: unused_field
     _databaseService = DatabaseService();
 
     // Load sync queue from storage
@@ -411,10 +410,7 @@ mixin OfflineCapableMixin<T extends StatefulWidget> on State<T> {
 
   /// Show online message to user
   void showOnlineMessage() {
-    AdaptiveMessages.showInfo(
-      context,
-      'Connection restored. Syncing data...',
-    );
+    AdaptiveMessages.showInfo(context, 'Connection restored. Syncing data...');
   }
 
   @override

@@ -21,7 +21,7 @@ class PartnerEmptyState extends StatelessWidget {
       alignment: Alignment.topCenter,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        
+
         children: [
           const SizedBox(height: 8),
           Container(
@@ -67,9 +67,7 @@ class PartnerEmptyState extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
-                width: defaultTargetPlatform == TargetPlatform.iOS
-                    ? 164
-                    : 156,
+                width: defaultTargetPlatform == TargetPlatform.iOS ? 164 : 156,
                 child: ElevatedButton.icon(
                   onPressed: onInvite,
                   icon: const Icon(Icons.send, size: 20),
@@ -79,7 +77,10 @@ class PartnerEmptyState extends StatelessWidget {
                     foregroundColor: Colors.white,
                     minimumSize: const Size(double.infinity, 54),
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    textStyle: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
                     visualDensity: VisualDensity.compact,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -89,19 +90,23 @@ class PartnerEmptyState extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               SizedBox(
-                width: defaultTargetPlatform == TargetPlatform.iOS
-                    ? 164
-                    : 156,
+                width: defaultTargetPlatform == TargetPlatform.iOS ? 164 : 156,
                 child: OutlinedButton.icon(
                   onPressed: onJoin,
                   icon: const Icon(Icons.link, size: 20),
                   label: const Text('Join Partner'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: AppTheme.primaryRose,
-                    side: const BorderSide(width: 1.8, color: AppTheme.primaryRose),
+                    side: const BorderSide(
+                      width: 1.8,
+                      color: AppTheme.primaryRose,
+                    ),
                     minimumSize: const Size(double.infinity, 54),
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    textStyle: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
                     visualDensity: VisualDensity.compact,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -111,7 +116,6 @@ class PartnerEmptyState extends StatelessWidget {
               ),
             ],
           ).animate().fadeIn(delay: 600.ms).slideY(begin: 0.3, end: 0),
-          
         ],
       ),
     );

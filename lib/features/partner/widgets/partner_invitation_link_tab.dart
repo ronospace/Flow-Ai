@@ -34,77 +34,81 @@ class PartnerInvitationLinkTab extends StatelessWidget {
               children: [
                 const SizedBox(height: 18),
                 Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.08),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: AppTheme.primaryRose.withValues(alpha: 0.22),
-                      width: 1.4,
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      Icon(
-                        Icons.link,
-                        size: 48,
-                        color: AppTheme.primaryRose,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: AppTheme.primaryRose.withValues(alpha: 0.22),
+                          width: 1.4,
+                        ),
                       ),
-                      const SizedBox(height: 16),
-                      if (generatedInvitation != null) ...[
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.12),
-                            borderRadius: BorderRadius.circular(22),
-                            border: Border.all(
-                              color: AppTheme.primaryRose.withValues(alpha: 0.12),
-                              width: 1.2,
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.link,
+                            size: 48,
+                            color: AppTheme.primaryRose,
+                          ),
+                          const SizedBox(height: 16),
+                          if (generatedInvitation != null) ...[
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.12),
+                                borderRadius: BorderRadius.circular(22),
+                                border: Border.all(
+                                  color: AppTheme.primaryRose.withValues(
+                                    alpha: 0.12,
+                                  ),
+                                  width: 1.2,
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      PartnerInvitationActions.generateInvitationLink(
+                                        generatedInvitation!,
+                                      ),
+                                      style: TextStyle(
+                                        color: AppTheme.mediumGrey,
+                                        fontSize: 12,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () =>
+                                        PartnerInvitationActions.copyToClipboard(
+                                          PartnerInvitationActions.generateInvitationLink(
+                                            generatedInvitation!,
+                                          ),
+                                        ),
+                                    icon: Icon(
+                                      Icons.copy,
+                                      color: AppTheme.primaryRose,
+                                      size: 20,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  PartnerInvitationActions.generateInvitationLink(
-                                    generatedInvitation!,
-                                  ),
-                                  style: TextStyle(
-                                    color: AppTheme.mediumGrey,
-                                    fontSize: 12,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () => PartnerInvitationActions.copyToClipboard(
-                                  PartnerInvitationActions.generateInvitationLink(
-                                    generatedInvitation!,
-                                  ),
-                                ),
-                                icon: Icon(
-                                  Icons.copy,
-                                  color: AppTheme.primaryRose,
-                                  size: 20,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ] else ...[
-                        Text(
-                          'Link will appear here after generation',
-                          style: TextStyle(color: AppTheme.mediumGrey),
-                        ),
-                      ],
-                    ],
-                  ),
-                ).animate()
-                 .fadeIn(delay: 120.ms)
-                 .scale(
-                   begin: const Offset(0.96, 0.96),
-                   curve: Curves.easeOutBack,
-                 ),
+                          ] else ...[
+                            Text(
+                              'Link will appear here after generation',
+                              style: TextStyle(color: AppTheme.mediumGrey),
+                            ),
+                          ],
+                        ],
+                      ),
+                    )
+                    .animate()
+                    .fadeIn(delay: 120.ms)
+                    .scale(
+                      begin: const Offset(0.96, 0.96),
+                      curve: Curves.easeOutBack,
+                    ),
                 const SizedBox(height: 18),
                 Row(
                   children: [
@@ -115,10 +119,16 @@ class PartnerInvitationLinkTab extends StatelessWidget {
                         label: const Text('Generate Link'),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: AppTheme.primaryRose,
-                          side: const BorderSide(width: 1.8, color: AppTheme.primaryRose),
+                          side: const BorderSide(
+                            width: 1.8,
+                            color: AppTheme.primaryRose,
+                          ),
                           minimumSize: const Size(double.infinity, 56),
                           padding: const EdgeInsets.symmetric(vertical: 16),
-                          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                          textStyle: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
                           visualDensity: VisualDensity.compact,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
@@ -129,21 +139,26 @@ class PartnerInvitationLinkTab extends StatelessWidget {
                     const SizedBox(width: 12),
                     Expanded(
                       child: ElevatedButton.icon(
-                        onPressed: generatedInvitation != null ? onShareLink : null,
+                        onPressed: generatedInvitation != null
+                            ? onShareLink
+                            : null,
                         icon: const Icon(Icons.share, size: 20),
                         label: const Text('Share'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: generatedInvitation != null
                               ? (isSent
-                                  ? AppTheme.primaryRose.withOpacity(0.35)
-                                  : AppTheme.primaryRose)
+                                    ? AppTheme.primaryRose.withOpacity(0.35)
+                                    : AppTheme.primaryRose)
                               : AppTheme.primaryRose.withValues(alpha: 0.12),
                           foregroundColor: generatedInvitation != null
                               ? Colors.white
                               : Colors.black.withValues(alpha: 0.38),
                           minimumSize: const Size(double.infinity, 56),
                           padding: const EdgeInsets.symmetric(vertical: 16),
-                          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                          textStyle: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
                           visualDensity: VisualDensity.compact,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),

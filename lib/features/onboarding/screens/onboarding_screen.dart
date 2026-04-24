@@ -91,31 +91,31 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                           }
                         },
                         child: PageView.builder(
-                        controller: _pageController,
-                        onPageChanged: (index) {
-                          provider.setCurrentStep(index);
-                          _animationController.reset();
-                          _animationController.forward();
-                        },
-                        itemCount: provider.steps.length,
-                        itemBuilder: (context, index) {
-                          final step = provider.steps[index];
-                          return FadeTransition(
-                            opacity: _fadeAnimation,
-                            child: SlideTransition(
-                              position: _slideAnimation,
-                              child: _buildStepContent(
-                                step,
-                                provider,
-                                theme,
-                                localizations,
+                          controller: _pageController,
+                          onPageChanged: (index) {
+                            provider.setCurrentStep(index);
+                            _animationController.reset();
+                            _animationController.forward();
+                          },
+                          itemCount: provider.steps.length,
+                          itemBuilder: (context, index) {
+                            final step = provider.steps[index];
+                            return FadeTransition(
+                              opacity: _fadeAnimation,
+                              child: SlideTransition(
+                                position: _slideAnimation,
+                                child: _buildStepContent(
+                                  step,
+                                  provider,
+                                  theme,
+                                  localizations,
+                                ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
                     ),
-                  ),
                     // Navigation buttons
                     _buildNavigationButtons(provider, theme, localizations),
                   ],

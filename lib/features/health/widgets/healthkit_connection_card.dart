@@ -286,7 +286,9 @@ class HealthKitConnectionCard extends StatelessWidget {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            Platform.isIOS ? 'App Store Guideline 2.5.1 - HealthKit Transparency' : 'Health Connect data disclosure',
+                            Platform.isIOS
+                                ? 'App Store Guideline 2.5.1 - HealthKit Transparency'
+                                : 'Health Connect data disclosure',
                             style: TextStyle(
                               fontSize: 10,
                               color: AppTheme.warningOrange.withValues(
@@ -368,7 +370,9 @@ class HealthKitConnectionCard extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Text(
-                Platform.isIOS ? 'You can manage HealthKit access at any time in iOS Settings → Health → Data Access & Devices.' : 'You can manage Health Connect access at any time in Android Settings → Apps → Health Connect → App permissions.',
+                Platform.isIOS
+                    ? 'You can manage HealthKit access at any time in iOS Settings → Health → Data Access & Devices.'
+                    : 'You can manage Health Connect access at any time in Android Settings → Apps → Health Connect → App permissions.',
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                   fontSize: 10,
