@@ -285,7 +285,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
           tabAlignment: TabAlignment.fill,
           dividerColor: Colors.transparent,
           labelColor: Colors.white,
-          unselectedLabelColor: Theme.of(context).hintColor,
+          unselectedLabelColor: const Color(0xFF6F6673),
           splashFactory: NoSplash.splashFactory,
           overlayColor: WidgetStateProperty.all(Colors.transparent),
           tabs: const [
@@ -768,7 +768,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
           backgroundColor: AppTheme.primaryRose,
           disabledBackgroundColor: AppTheme.primaryRose.withValues(alpha: 0.38),
           foregroundColor: Colors.white,
-          disabledForegroundColor: AppTheme.primaryRose.withValues(alpha: 0.72),
+          disabledForegroundColor: const Color(0xFFB78FA6),
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
