@@ -864,12 +864,17 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
       _errorMessage = null;
     });
 
-    await Future.delayed(const Duration(milliseconds: 700));
-
-    setState(() {
-      _isLoading = false;
-      _errorMessage = 'Invalid or expired partner code!';
-    });
+    try {
+      await widget.onJoinWithCode(code);
+      if (!mounted) return;
+      Navigator.of(context).pop(true);
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+        _errorMessage = 'Invalid or expired partner code!';
+      });
+    }
   }
 
   bool _isValidManualEmail() {
