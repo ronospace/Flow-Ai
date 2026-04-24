@@ -20,10 +20,10 @@ class PartnerEmptyState extends StatelessWidget {
     return Align(
       alignment: Alignment.topCenter,
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
         
         children: [
-          const SizedBox(height: 18),
+          const SizedBox(height: 8),
           Container(
                 width: 108,
                 height: 108,
@@ -62,7 +62,7 @@ class PartnerEmptyState extends StatelessWidget {
               height: 1.5,
             ),
           ).animate().fadeIn(delay: 400.ms),
-          const SizedBox(height: 20),
+          const SizedBox(height: 28),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
