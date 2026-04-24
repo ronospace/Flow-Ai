@@ -203,6 +203,10 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
           );
         },
       ),
+      leading: IconButton(
+        onPressed: () => Navigator.of(context).maybePop(),
+        icon: const Icon(Icons.arrow_back_ios_new, size: 22),
+      ),
       actions: [
         if (partnerService.hasPartner)
           IconButton(
