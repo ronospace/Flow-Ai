@@ -17,9 +17,13 @@ class PartnerEmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.topCenter,
-      child: Column(
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: Center(
+            child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
 
         children: [
@@ -117,6 +121,9 @@ class PartnerEmptyState extends StatelessWidget {
             ],
           ).animate().fadeIn(delay: 600.ms).slideY(begin: 0.3, end: 0),
         ],
+            ),
+          ),
+        ),
       ),
     );
   }
