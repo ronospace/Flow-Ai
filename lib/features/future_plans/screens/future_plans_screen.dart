@@ -110,7 +110,7 @@ class _FuturePlansScreenState extends State<FuturePlansScreen>
         eta: 'Q2 2026',
       ),
       ComingSoonCard(
-        title: 'Partner Sharing',
+        title: 'Partner Connect',
         description:
             'Securely share selected health insights with your partner or healthcare provider.',
         icon: Icons.share_outlined,

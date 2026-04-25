@@ -21,7 +21,7 @@ class _WaitlistSignupWidgetState extends State<WaitlistSignupWidget> {
   final List<String> _interests = [
     'AI Predictions',
     'Telemedicine',
-    'Partner Sharing',
+    'Partner Connect',
     'Health Analytics',
     'Research Participation',
     'Wearable Integration',

@@ -92,7 +92,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
             slivers: [
               _buildAnimatedAppBar(theme, localizations, partnerService),
               SliverPadding(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(16),
                 sliver: SliverList(
                   delegate: SliverChildListDelegate([
                     if (partnerService.hasPartner) ...[
@@ -165,9 +165,11 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
       floating: false,
       pinned: true,
       elevation: 0,
-      backgroundColor: const Color(0xFFF6EDEF),
+      backgroundColor: theme.brightness == Brightness.dark
+          ? theme.colorScheme.surface
+          : const Color(0xFFF6EDEF),
       title: Text(
-        partnerService.hasPartner ? 'Partner Connection' : 'Connect with Partner',
+        partnerService.hasPartner ? 'Partner Connection' : 'Partner 🫂 Connect',
         style: theme.textTheme.titleLarge?.copyWith(
           fontWeight: FontWeight.w700,
           color: theme.colorScheme.onSurface,
@@ -276,7 +278,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                                 ),
                                 const SizedBox(width: 6),
                                 Text(
-                                  'Partner sync disabled',
+                                  partnership.id.isNotEmpty ? 'Partner Sync Active' : 'No Partner Connected',
                                   style: TextStyle(
                                     color: AppTheme.warningOrange,
                                     fontSize: 12,
@@ -317,7 +319,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                       '${partnerService.careActions.length}',
                       Icons.healing,
                       AppTheme.accentMint,
-                    ),
+                      ),
                   ],
                 ),
               ],
@@ -371,7 +373,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     return Column(
       children: [
         Icon(icon, color: color, size: 20),
-        const SizedBox(height: 4),
+        const SizedBox(height: 2),
         Text(
           value,
           style: TextStyle(
@@ -514,7 +516,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
               onTap: action.onTap,
               borderRadius: BorderRadius.circular(20),
               child: Padding(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -531,7 +533,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                       ),
                       child: Icon(action.icon, color: Colors.white, size: 24),
                     ),
-                    const Spacer(),
+                    const SizedBox(height: 12),
                     Text(
                       action.title,
                       style: TextStyle(
@@ -540,14 +542,18 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                         color: theme.colorScheme.onSurface,
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      action.subtitle,
-                      style: TextStyle(
-                        fontSize: 12,
+                    const SizedBox(height: 2),
+                    Flexible(
+                      child: Text(
+                        action.subtitle,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 12,
                         color: theme.colorScheme.onSurface.withValues(
                           alpha: 0.6,
                         ),
+                      ),
                       ),
                     ),
                   ],
@@ -749,7 +755,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
           const SizedBox(height: 32),
 
           Text(
-            'Connect with Your Partner',
+            'Share Your Cycle Journey',
             style: theme.textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.bold,
               color: theme.colorScheme.onSurface,
@@ -759,7 +765,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
           const SizedBox(height: 16),
 
           Text(
-            'Share Your Cycle Journey Together\nGet Support, Insights, and Stay Connected',
+            'Get Support, Insights, and Stay Connected',
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyLarge?.copyWith(
               color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
@@ -837,9 +843,8 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
         onJoinWithCode: (code) async {
           final partnership =
               await partnerService.acceptPartnerInvitation(code);
-
-          if (partnership != null && context.mounted) {
-            Navigator.of(context, rootNavigator: true).pop(true);
+          if (partnership == null) {
+            throw Exception('join_failed');
           }
         },
       ),
@@ -847,8 +852,27 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
 
     if (joined == true && context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Partner connected successfully'),
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.fromLTRB(24, 0, 24, 32),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18),
+          ),
+          backgroundColor: const Color(0xFF1F1F1F),
+          duration: const Duration(milliseconds: 1600),
+          content: const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.favorite, color: Colors.pinkAccent, size: 18),
+              SizedBox(width: 10),
+              Flexible(
+                child: Text(
+                  'Partner Connected 💞',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+          ),
         ),
       );
       context.go('/partner-dashboard');

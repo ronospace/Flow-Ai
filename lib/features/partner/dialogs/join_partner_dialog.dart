@@ -733,7 +733,6 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                   setState(() => _errorMessage = null);
                   if (value.length == 6) {
                     FocusScope.of(context).unfocus();
-                    _handleJoin();
                   }
                 },
               ),
@@ -848,6 +847,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
   }
 
   void _handleJoin() async {
+    if (_isLoading) return;
     FocusScope.of(context).unfocus();
 
     final code = _codeController.text.trim();
@@ -867,8 +867,10 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
     try {
       await widget.onJoinWithCode(code);
       if (!mounted) return;
-      Navigator.of(context).pop(true);
-    } catch (_) {
+      Navigator.of(context, rootNavigator: true).pop(true);
+    } catch (e) {
+      debugPrint('JOIN_CATCH: $e');
+
       if (!mounted) return;
       setState(() {
         _isLoading = false;
@@ -882,10 +884,13 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
     return RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(email);
   }
 
-  void _showRequestInvitationDialog() {
-    Navigator.of(
+  Future<void> _showRequestInvitationDialog() async {
+    final joined = await Navigator.of(
       context,
-    ).push(MaterialPageRoute(builder: (_) => const QrJoinScreen()));
+    ).push<bool>(MaterialPageRoute(builder: (_) => const QrJoinScreen()));
+    if (mounted && joined == true) {
+      Navigator.of(context, rootNavigator: true).pop(true);
+    }
   }
 
   void _handleManualJoin() async {
