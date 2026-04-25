@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flow_ai/core/deeplinks/invite_gate_page.dart';
 
 class QrJoinScreen extends StatefulWidget {
   const QrJoinScreen({super.key});
@@ -12,7 +12,7 @@ class QrJoinScreen extends StatefulWidget {
 class _QrJoinScreenState extends State<QrJoinScreen> {
   bool scanned = false;
 
-  void handleCode(String code) {
+  Future<void> handleCode(String code) async {
     if (scanned) return;
 
     final raw = code.trim();
@@ -42,14 +42,29 @@ class _QrJoinScreenState extends State<QrJoinScreen> {
     scanned = true;
 
     if (mounted) {
-      context.push('/invite/$normalizedCode');
+      final joined = await Navigator.of(context).push<bool>(
+        MaterialPageRoute(
+          builder: (_) => InviteGatePage(code: normalizedCode!),
+        ),
+      );
+      if (!mounted) return;
+
+      if (joined == true) {
+        Navigator.of(context).pop(true);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Scan Partner QR")),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).maybePop(),
+        ),
+        title: const Text("Scan Partner QR"),
+      ),
       body: MobileScanner(
         controller: MobileScannerController(
           detectionSpeed: DetectionSpeed.noDuplicates,

@@ -66,7 +66,7 @@ class FeatureTimelineWidget extends StatelessWidget {
 
       TimelineItem(
         date: now.add(const Duration(days: 35)),
-        title: 'Partner Sharing Dashboard',
+        title: 'Partner Connect Dashboard',
         description:
             'Secure sharing of cycle insights with partners and healthcare providers',
         status: TimelineStatus.inProgress,

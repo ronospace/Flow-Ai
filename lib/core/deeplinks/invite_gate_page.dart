@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../ui/adaptive_messages.dart';
 
 import '../services/app_state_service.dart';
-import '../../features/partner/dialogs/join_partner_dialog.dart';
 import '../../features/partner/services/partner_service.dart';
 
 class InviteGatePage extends StatefulWidget {
@@ -68,29 +67,24 @@ class _InviteGatePageState extends State<InviteGatePage> {
       return;
     }
 
-    await showDialog<void>(
-      context: context,
-      barrierDismissible: true,
-      builder: (_) => JoinPartnerDialog(
-        initialCode: widget.code,
-        onJoinWithCode: (c) async {
-          final partnership = await partnerService!.acceptPartnerInvitation(c);
-          if (!mounted) return;
-
-          if (partnership != null) {
-            context.go('/partner-dashboard');
-            return;
-          }
-
-          throw Exception('Invitation code invalid, expired, or not found.');
-        },
-      ),
+    debugPrint('GATE_TRACE service=${partnerService.hashCode} start');
+    final partnership = await partnerService.acceptPartnerInvitation(widget.code);
+    debugPrint(
+      'GATE_TRACE result=${partnership == null ? 'null' : partnership.id} service=${partnerService.hashCode}',
     );
 
     if (!mounted) return;
-    if (!context.canPop()) {
-      context.go('/home');
+
+    if (partnership != null) {
+      Navigator.of(context).pop(true);
+      return;
     }
+
+    AdaptiveMessages.showError(
+      context,
+      'Invitation code invalid, expired, or not found.',
+    );
+    Navigator.of(context).maybePop();
   }
 
   @override

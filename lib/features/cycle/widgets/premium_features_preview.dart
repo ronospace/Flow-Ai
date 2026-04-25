@@ -122,7 +122,7 @@ class PremiumFeaturesPreview extends StatelessWidget {
                 onTap: onAICoach,
               ),
               PremiumFeaturePreviewCard(
-                title: 'Partner Sharing',
+                title: 'Partner Connect',
                 description: 'Securely share cycle data with trusted partners',
                 icon: Icons.favorite_rounded,
                 color: AppTheme.primaryRose,
