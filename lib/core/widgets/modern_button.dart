@@ -148,11 +148,15 @@ class _ModernButtonState extends State<ModernButton>
     switch (widget.type) {
       case ModernButtonType.primary:
         return BoxDecoration(
-          gradient: isEnabled
-              ? LinearGradient(colors: colors)
-              : LinearGradient(
-                  colors: [AppTheme.lightGrey, AppTheme.lightGrey],
-                ),
+          gradient: LinearGradient(
+                colors: isEnabled
+                    ? colors
+                    : (widget.gradientColors ??
+                        [
+                          AppTheme.lightGrey.withValues(alpha: 0.75),
+                          AppTheme.lightGrey.withValues(alpha: 0.55),
+                        ]),
+              ),
           borderRadius: widget.borderRadius ?? BorderRadius.circular(16),
           boxShadow: isEnabled
               ? [
@@ -327,7 +331,9 @@ class _ModernButtonState extends State<ModernButton>
 
   Color _getTextColor(ThemeData theme, bool isEnabled) {
     if (!isEnabled) {
-      return AppTheme.mediumGrey;
+      return widget.gradientColors != null
+          ? Colors.white.withValues(alpha: 0.92)
+          : AppTheme.mediumGrey;
     }
 
     switch (widget.type) {

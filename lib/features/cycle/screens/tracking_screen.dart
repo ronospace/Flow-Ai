@@ -211,7 +211,7 @@ class _TrackingScreenState extends State<TrackingScreen>
 
         // Set timer to clear the "recently saved" state after 1 second (faster feedback)
         _savedStateTimer?.cancel();
-        _savedStateTimer = Timer(const Duration(milliseconds: 1000), () {
+        _savedStateTimer = Timer(const Duration(milliseconds: 1600), () {
           if (mounted) {
             setState(() {
               _recentlySaved = false;
@@ -219,7 +219,7 @@ class _TrackingScreenState extends State<TrackingScreen>
           }
         });
 
-        await AdaptiveMessages.showSuccess(context, 'Saved');
+        
       }
     } catch (e) {
       // Handle save errors
@@ -235,7 +235,7 @@ class _TrackingScreenState extends State<TrackingScreen>
 
         await AdaptiveMessages.showError(
           context,
-          'Failed to save tracking data',
+          'Could not save tracking. Please try again.',
         );
       }
     }
@@ -303,12 +303,12 @@ class _TrackingScreenState extends State<TrackingScreen>
                 ),
                 decoration: BoxDecoration(
                   color: theme.cardColor.withValues(alpha: 0.9),
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(22),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.1),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
+                      blurRadius: 18,
+                      offset: const Offset(0, 8),
                     ),
                   ],
                 ),
@@ -362,7 +362,7 @@ class _TrackingScreenState extends State<TrackingScreen>
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
-              _hasUnsavedChanges ? 'Unsaved' : 'Synced',
+              _hasUnsavedChanges ? 'Unsaved changes' : 'Saved',
               style: TextStyle(
                 color: _hasUnsavedChanges
                     ? AppTheme.warningOrange
@@ -383,12 +383,12 @@ class _TrackingScreenState extends State<TrackingScreen>
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
         color: theme.cardColor.withValues(alpha: 0.9),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(22),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+            blurRadius: 18,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
@@ -407,7 +407,7 @@ class _TrackingScreenState extends State<TrackingScreen>
         unselectedLabelColor: theme.colorScheme.onSurface.withValues(
           alpha: 0.6,
         ),
-        labelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 10),
+        labelStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 11),
         tabs: [
           Tab(
             child: _buildTabContent(
@@ -446,10 +446,10 @@ class _TrackingScreenState extends State<TrackingScreen>
 
   Widget _buildTabContent(IconData icon, String label) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        children: [Icon(icon, size: 14), const SizedBox(width: 3), Text(label)],
+        children: [Icon(icon, size: 16), const SizedBox(width: 6), Text(label)],
       ),
     );
   }
@@ -493,7 +493,7 @@ class _TrackingScreenState extends State<TrackingScreen>
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: AppTheme.accentMint.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(22),
                 border: Border.all(
                   color: AppTheme.accentMint.withValues(alpha: 0.1),
                   width: 1,
@@ -934,7 +934,7 @@ class _TrackingScreenState extends State<TrackingScreen>
                   BoxShadow(
                     color: AppTheme.primaryRose.withValues(alpha: 0.3),
                     blurRadius: 12,
-                    offset: const Offset(0, 4),
+                    offset: const Offset(0, 8),
                   ),
                 ]
               : [
@@ -1000,11 +1000,11 @@ class _TrackingScreenState extends State<TrackingScreen>
       isEnabled = false;
       isLoading = true;
     } else if (_recentlySaved) {
-      buttonText = 'Saved ✓';
+      buttonText = 'Updated ✓';
       buttonIcon = Icons.check_rounded;
       gradientColors = [
-        AppTheme.successGreen,
-        AppTheme.successGreen.withValues(alpha: 0.8),
+        AppTheme.successGreen.withValues(alpha: 0.92),
+        AppTheme.accentMint.withValues(alpha: 0.78),
       ];
       isEnabled = false;
     } else if (_hasUnsavedChanges) {
@@ -1016,7 +1016,7 @@ class _TrackingScreenState extends State<TrackingScreen>
       ]; // Elegant gradient
       isEnabled = true;
     } else {
-      buttonText = 'Up to date';
+      buttonText = 'Saved securely';
       buttonIcon = Icons.done_rounded;
       gradientColors = [
         AppTheme.accentMint.withValues(alpha: 0.6),
@@ -1034,9 +1034,7 @@ class _TrackingScreenState extends State<TrackingScreen>
           text: buttonText,
           onPressed: isEnabled ? _saveTrackingData : null,
           icon: buttonIcon,
-          type: _hasUnsavedChanges
-              ? ModernButtonType.primary
-              : ModernButtonType.success,
+          type: ModernButtonType.primary,
           size: ModernButtonSize.medium,
           isExpanded: true,
           isLoading: isLoading,
