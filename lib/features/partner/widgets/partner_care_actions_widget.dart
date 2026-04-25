@@ -269,7 +269,7 @@ class _PartnerCareActionsWidgetState extends State<PartnerCareActionsWidget>
               crossAxisCount: 2,
               crossAxisSpacing: 12,
               mainAxisSpacing: 12,
-              childAspectRatio: 1.1,
+              childAspectRatio: 0.92,
             ),
             itemCount: _quickCareActions.length,
             itemBuilder: (context, index) {
@@ -323,12 +323,17 @@ class _PartnerCareActionsWidgetState extends State<PartnerCareActionsWidget>
                     ],
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    action['title'],
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                  Expanded(
+                    child: Text(
+                      action['title'],
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        height: 1.1,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 4),
