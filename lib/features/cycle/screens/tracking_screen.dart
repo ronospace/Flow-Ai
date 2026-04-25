@@ -302,7 +302,7 @@ class _TrackingScreenState extends State<TrackingScreen>
                   vertical: 12,
                 ),
                 decoration: BoxDecoration(
-                  color: theme.cardColor.withValues(alpha: 0.9),
+                  color: theme.cardColor.withValues(alpha: 0.72),
                   borderRadius: BorderRadius.circular(22),
                   boxShadow: [
                     BoxShadow(
@@ -356,10 +356,16 @@ class _TrackingScreenState extends State<TrackingScreen>
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
             decoration: BoxDecoration(
-              color: _hasUnsavedChanges
-                  ? AppTheme.warningOrange.withValues(alpha: 0.1)
-                  : AppTheme.accentMint.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(8),
+              color: (_hasUnsavedChanges
+                  ? AppTheme.warningOrange
+                  : AppTheme.accentMint).withValues(alpha: 0.08),
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                color: (_hasUnsavedChanges
+                        ? AppTheme.warningOrange
+                        : AppTheme.accentMint)
+                    .withValues(alpha: 0.35),
+              ),
             ),
             child: Text(
               _hasUnsavedChanges ? 'Unsaved changes' : 'Saved',
@@ -382,7 +388,7 @@ class _TrackingScreenState extends State<TrackingScreen>
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
-        color: theme.cardColor.withValues(alpha: 0.9),
+        color: theme.cardColor.withValues(alpha: 0.72),
         borderRadius: BorderRadius.circular(22),
         boxShadow: [
           BoxShadow(
@@ -400,7 +406,7 @@ class _TrackingScreenState extends State<TrackingScreen>
           gradient: const LinearGradient(
             colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
           ),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
         ),
         dividerColor: Colors.transparent,
         labelColor: theme.colorScheme.onPrimary,
@@ -772,7 +778,7 @@ class _TrackingScreenState extends State<TrackingScreen>
                               AppTheme.primaryPurple,
                             ],
                           ),
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(16),
                         ),
                         child: Icon(
                           Icons.edit_note_rounded,
@@ -811,7 +817,12 @@ class _TrackingScreenState extends State<TrackingScreen>
                           ),
                           decoration: BoxDecoration(
                             color: AppTheme.accentMint.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                color: (_hasUnsavedChanges
+                        ? AppTheme.warningOrange
+                        : AppTheme.accentMint).withValues(alpha: 0.42),
+              ),
                           ),
                           child: Text(
                             '${_notesController.text.length} chars',
@@ -1003,8 +1014,8 @@ class _TrackingScreenState extends State<TrackingScreen>
       buttonText = 'Updated ✓';
       buttonIcon = Icons.check_rounded;
       gradientColors = [
-        AppTheme.successGreen.withValues(alpha: 0.92),
-        AppTheme.accentMint.withValues(alpha: 0.78),
+        AppTheme.successGreen.withValues(alpha: 0.55),
+        AppTheme.accentMint.withValues(alpha: 0.35),
       ];
       isEnabled = false;
     } else if (_hasUnsavedChanges) {
@@ -1019,8 +1030,8 @@ class _TrackingScreenState extends State<TrackingScreen>
       buttonText = 'Saved securely';
       buttonIcon = Icons.done_rounded;
       gradientColors = [
-        AppTheme.accentMint.withValues(alpha: 0.6),
-        AppTheme.accentMint.withValues(alpha: 0.4),
+        AppTheme.accentMint.withValues(alpha: 0.32),
+        AppTheme.accentMint.withValues(alpha: 0.18),
       ];
       isEnabled = false;
     }
