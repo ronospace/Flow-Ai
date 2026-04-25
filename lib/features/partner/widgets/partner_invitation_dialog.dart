@@ -476,6 +476,9 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
         _successMessage = "Invitation sent successfully ❤️";
         _isSent = true;
       });
+      Future.delayed(const Duration(milliseconds: 600), () {
+        if (mounted) Navigator.pop(context, true);
+      });
 
       Future.delayed(const Duration(seconds: 2), () {
         if (mounted) {
@@ -511,6 +514,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
 
       setState(() {
         _generatedInvitation = invitation;
+        _isSent = true;
       });
     } catch (e) {
       _showErrorMessage("Error generating invitation: $e");
@@ -523,6 +527,7 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
   void _shareLink() {
     if (_generatedInvitation != null) {
       PartnerInvitationActions.shareLink(_generatedInvitation!);
+      Navigator.pop(context, true);
     }
   }
 

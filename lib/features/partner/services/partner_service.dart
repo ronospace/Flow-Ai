@@ -143,6 +143,7 @@ class PartnerService extends ChangeNotifier {
 
   /// Accept partner invitation
   Future<Partnership?> acceptPartnerInvitation(String invitationCode) async {
+    debugPrint('SERVICE_TRACE instance=$hashCode code=$invitationCode');
     _setLoading(true);
     try {
       final partnershipData = await _localService.acceptPartnerInvitation(
@@ -150,8 +151,20 @@ class PartnerService extends ChangeNotifier {
       );
 
       if (partnershipData != null) {
-        // Reload partnership to get updated state
-        await _loadPartnership();
+        _currentPartnership = Partnership(
+          id: partnershipData['id'],
+          primaryUserId: partnershipData['userId1'],
+          partnerUserId: partnershipData['userId2'],
+          primaryUserName: partnershipData['customName1'] ?? partnershipData['userId1'],
+          partnerUserName: partnershipData['customName2'] ?? partnershipData['userId2'],
+          primaryUserEmail: null,
+          partnerUserEmail: null,
+          createdAt: DateTime.parse(partnershipData['establishedAt']),
+          lastActiveAt: partnershipData['lastActiveAt'] != null
+              ? DateTime.parse(partnershipData['lastActiveAt'])
+              : DateTime.parse(partnershipData['establishedAt']),
+          sharingSettings: const PartnerSharingSettings(),
+        );
         await _loadMessages();
         await _loadCareActions();
         notifyListeners();
