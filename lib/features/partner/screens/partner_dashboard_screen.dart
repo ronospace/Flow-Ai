@@ -93,7 +93,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
             slivers: [
               _buildAnimatedAppBar(theme, localizations, partnerService),
               SliverPadding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(14),
                 sliver: SliverList(
                   delegate: SliverChildListDelegate([
                     if (partnerService.hasPartner) ...[
@@ -146,9 +146,10 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                     ],
 
                     const SizedBox(height: 100), // Space for bottom navigation
-                  ]),
+                  ],
                 ),
               ),
+            ),
             ],
           );
         },
@@ -478,7 +479,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
         crossAxisCount: 2,
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
-        childAspectRatio: 1.3,
+        childAspectRatio: 1.12,
       ),
       itemCount: actions.length,
       itemBuilder: (context, index) {
@@ -524,7 +525,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
               onTap: action.onTap,
               borderRadius: BorderRadius.circular(20),
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(14),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -541,16 +542,17 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                       ),
                       child: Icon(action.icon, color: Colors.white, size: 24),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 10),
                     Text(
                       action.title,
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 15,
                         fontWeight: FontWeight.bold,
                         color: theme.colorScheme.onSurface,
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 4),
+                    const Spacer(),
                     Flexible(
                       child: Text(
                         action.subtitle,
@@ -784,8 +786,10 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
           const SizedBox(height: 40),
 
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Expanded(
+              SizedBox(
+                width: 170,
                 child: ElevatedButton.icon(
                   onPressed: () =>
                       _showPartnerInvitationDialog(context, partnerService),
@@ -801,8 +805,9 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                   ),
                 ),
               ),
-              const SizedBox(width: 16),
-              Expanded(
+              const SizedBox(width: 12),
+              SizedBox(
+                width: 170,
                 child: OutlinedButton.icon(
                   onPressed: () =>
                       _showJoinPartnerDialog(context, partnerService),
