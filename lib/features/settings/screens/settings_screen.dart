@@ -1246,22 +1246,18 @@ class _SettingsScreenState extends State<SettingsScreen>
         HapticFeedback.lightImpact();
       } else {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('WhatsApp is not installed on this device'),
-              backgroundColor: AppTheme.primaryRose,
-            ),
+          AdaptiveMessages.showWarning(
+            context,
+            'WhatsApp is not installed on this device',
           );
         }
       }
     } catch (e) {
       debugPrint('Error launching WhatsApp: $e');
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Could not open WhatsApp'),
-            backgroundColor: Colors.red,
-          ),
+        AdaptiveMessages.showError(
+          context,
+          'Could not open WhatsApp',
         );
       }
     }
@@ -1277,22 +1273,18 @@ class _SettingsScreenState extends State<SettingsScreen>
         HapticFeedback.lightImpact();
       } else {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Telegram is not installed on this device'),
-              backgroundColor: AppTheme.secondaryBlue,
-            ),
+          AdaptiveMessages.showWarning(
+            context,
+            'Telegram is not installed on this device',
           );
         }
       }
     } catch (e) {
       debugPrint('Error launching Telegram: $e');
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Could not open Telegram'),
-            backgroundColor: Colors.red,
-          ),
+        AdaptiveMessages.showError(
+          context,
+          'Could not open Telegram',
         );
       }
     }
@@ -1482,7 +1474,6 @@ class _SettingsScreenState extends State<SettingsScreen>
     if (dateRange == null || !context.mounted) return;
     // Capture before async gap
     final navigator = Navigator.of(context);
-    final messenger = ScaffoldMessenger.of(context);
 
     // Show loading
     // Show loading
@@ -1518,23 +1509,19 @@ class _SettingsScreenState extends State<SettingsScreen>
 
       if (filePath != null) {
         // Show success with share option
-        _showExportSuccessAfterExport(messenger, navigator, filePath, format);
+        _showExportSuccessAfterExport(ScaffoldMessenger.of(context), navigator, filePath, format);
       } else {
-        messenger.showSnackBar(
-          const SnackBar(
-            content: Text('Export failed. Please try again.'),
-            backgroundColor: Colors.red,
-          ),
+        AdaptiveMessages.showError(
+          context,
+          'Export failed. Please try again.',
         );
       }
     } catch (e) {
       if (!mounted) return;
       navigator.pop(); // Close loading
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text('Export error: $e'),
-          backgroundColor: Colors.red,
-        ),
+      AdaptiveMessages.showError(
+        context,
+        'Export error: $e',
       );
     }
   }
@@ -1682,7 +1669,6 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   Future<void> _startTutorial(BuildContext context, String tutorialId) async {
-    final messenger = ScaffoldMessenger.of(context);
     try {
       final onboardingProvider = Provider.of<OnboardingProvider>(
         context,
@@ -1692,20 +1678,16 @@ class _SettingsScreenState extends State<SettingsScreen>
 
       if (!mounted) return;
 
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text('Tutorial "$tutorialId" will start shortly'),
-          backgroundColor: AppTheme.successGreen,
-        ),
+      AdaptiveMessages.showSuccess(
+        context,
+        'Tutorial "$tutorialId" will start shortly',
       );
     } catch (e) {
       if (!mounted) return;
 
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text('Failed to start tutorial: $e'),
-          backgroundColor: Colors.red,
-        ),
+      AdaptiveMessages.showError(
+        context,
+        'Failed to start tutorial: $e',
       );
     }
   }
@@ -1743,8 +1725,7 @@ class _SettingsScreenState extends State<SettingsScreen>
     if (confirm == true) {
       if (!context.mounted) return;
       // Capture before async gap
-      final messenger = ScaffoldMessenger.of(context);
-      try {
+        try {
         final onboardingProvider = Provider.of<OnboardingProvider>(
           context,
           listen: false,
@@ -1753,19 +1734,15 @@ class _SettingsScreenState extends State<SettingsScreen>
 
         if (!mounted) return;
         HapticFeedback.mediumImpact();
-        messenger.showSnackBar(
-          const SnackBar(
-            content: Text('All tutorials have been reset'),
-            backgroundColor: AppTheme.successGreen,
-          ),
+        AdaptiveMessages.showSuccess(
+          context,
+          'All tutorials have been reset',
         );
       } catch (e) {
         if (!mounted) return;
-        messenger.showSnackBar(
-          SnackBar(
-            content: Text('Failed to reset tutorials: $e'),
-            backgroundColor: Colors.red,
-          ),
+        AdaptiveMessages.showError(
+          context,
+          'Failed to reset tutorials: $e',
         );
       }
     }

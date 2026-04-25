@@ -1,3 +1,4 @@
+import 'package:flow_ai/core/ui/adaptive_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/subscription_models.dart';
@@ -535,7 +536,6 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
     SubscriptionProvider provider,
     String productId,
   ) async {
-    final messenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
 
     final result = await provider.purchaseSubscription(productId);
@@ -544,11 +544,9 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
 
     if (result.success) {
       // Show success message
-      messenger.showSnackBar(
-        const SnackBar(
-          content: Text('🎉 Welcome to Premium!'),
-          backgroundColor: Colors.green,
-        ),
+      AdaptiveMessages.showSuccess(
+        context,
+        '🎉 Welcome to Premium!',
       );
 
       // Close paywall
@@ -556,11 +554,9 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
     } else {
       // Show error
       if (result.error != PurchaseError.cancelled) {
-        messenger.showSnackBar(
-          SnackBar(
-            content: Text(result.errorMessage ?? 'Purchase failed'),
-            backgroundColor: Colors.red,
-          ),
+        AdaptiveMessages.showError(
+          context,
+          result.errorMessage ?? 'Purchase failed',
         );
       }
     }
@@ -570,7 +566,6 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
     BuildContext context,
     SubscriptionProvider provider,
   ) async {
-    final messenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
 
     // Get user ID (you'll need to implement this)
@@ -581,16 +576,15 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
     if (!mounted) return;
 
     if (restored) {
-      messenger.showSnackBar(
-        const SnackBar(
-          content: Text('✅ Purchases restored successfully!'),
-          backgroundColor: Colors.green,
-        ),
+      AdaptiveMessages.showSuccess(
+        context,
+        '✅ Purchases restored successfully!',
       );
       navigator.pop(true);
     } else {
-      messenger.showSnackBar(
-        const SnackBar(content: Text('No purchases found to restore')),
+      AdaptiveMessages.showInfo(
+        context,
+        'No purchases found to restore',
       );
     }
   }

@@ -542,24 +542,14 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
         _isEditingProfile = false;
       });
 
-      _snack(
-        const SnackBar(
-          content: Row(
-            children: [
-              Icon(Icons.check_circle, color: Colors.white),
-              SizedBox(width: 8),
-              Text('Display name updated successfully'),
-            ],
-          ),
-          backgroundColor: AppTheme.successGreen,
-        ),
+      AdaptiveMessages.showSuccess(
+        context,
+        'Display name updated successfully',
       );
     } catch (e) {
-      _snack(
-        SnackBar(
-          content: Text('Failed to update display name: $e'),
-          backgroundColor: AppTheme.primaryRose,
-        ),
+      AdaptiveMessages.showError(
+        context,
+        'Failed to update display name: $e',
       );
     }
   }
@@ -664,11 +654,9 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
 
     // TODO: Implement actual password change
     Navigator.pop(context);
-    _snack(
-      const SnackBar(
-        content: Text('Password change functionality coming soon!'),
-        backgroundColor: AppTheme.warningOrange,
-      ),
+    AdaptiveMessages.showInfo(
+      context,
+      'Password change functionality coming soon!',
     );
   }
 
@@ -686,25 +674,15 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
       await Share.share(csvData, subject: 'Flow Ai Data Export');
 
       if (!mounted) return;
-      _snack(
-        const SnackBar(
-          content: Row(
-            children: [
-              Icon(Icons.check_circle, color: Colors.white),
-              SizedBox(width: 8),
-              Text('Data exported successfully'),
-            ],
-          ),
-          backgroundColor: AppTheme.successGreen,
-        ),
+      AdaptiveMessages.showSuccess(
+        context,
+        'Data exported successfully',
       );
     } catch (e) {
       if (!mounted) return;
-      _snack(
-        SnackBar(
-          content: Text('Export failed: $e'),
-          backgroundColor: AppTheme.primaryRose,
-        ),
+      AdaptiveMessages.showError(
+        context,
+        'Export failed: $e',
       );
     } finally {
       if (mounted) setState(() => _isExporting = false);
@@ -735,11 +713,9 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
             onPressed: () {
               Navigator.pop(context);
               // TODO: Implement cache clearing
-              _snack(
-                const SnackBar(
-                  content: Text('Cache cleared successfully'),
-                  backgroundColor: AppTheme.successGreen,
-                ),
+              AdaptiveMessages.showSuccess(
+                context,
+                'Cache cleared successfully',
               );
             },
             style: ElevatedButton.styleFrom(
@@ -875,18 +851,9 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
       if (!mounted) return;
       navigator.pop();
 
-      _snack(
-        const SnackBar(
-          content: Row(
-            children: [
-              Icon(Icons.check_circle, color: Colors.white),
-              SizedBox(width: 8),
-              Text('All data deleted successfully'),
-            ],
-          ),
-          backgroundColor: AppTheme.successGreen,
-          duration: Duration(seconds: 4),
-        ),
+      AdaptiveMessages.showSuccess(
+        context,
+        'All data deleted successfully',
       );
 
       setState(() {});
@@ -894,11 +861,9 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
     } catch (e) {
       if (!mounted) return;
       navigator.pop();
-      _snack(
-        SnackBar(
-          content: Text('Failed to delete data: $e'),
-          backgroundColor: AppTheme.primaryRose,
-        ),
+      AdaptiveMessages.showError(
+        context,
+        'Failed to delete data: $e',
       );
     }
   }

@@ -1,3 +1,4 @@
+import 'package:flow_ai/core/ui/adaptive_messages.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -177,7 +178,14 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
       ),
       centerTitle: true,
       leading: IconButton(
-        onPressed: () => Navigator.of(context).maybePop(),
+        onPressed: () {
+          final nav = Navigator.of(context);
+          if (nav.canPop()) {
+            nav.pop();
+          } else {
+            context.go('/home');
+          }
+        },
         icon: Icon(Icons.arrow_back_ios_new, size: 22, color: AppTheme.primaryRose),
       ),
       actions: [
@@ -851,29 +859,9 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     );
 
     if (joined == true && context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          behavior: SnackBarBehavior.floating,
-          margin: const EdgeInsets.fromLTRB(24, 0, 24, 32),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18),
-          ),
-          backgroundColor: const Color(0xFF1F1F1F),
-          duration: const Duration(milliseconds: 1600),
-          content: const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.favorite, color: Colors.pinkAccent, size: 18),
-              SizedBox(width: 10),
-              Flexible(
-                child: Text(
-                  'Partner Connected 💞',
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ],
-          ),
-        ),
+      AdaptiveMessages.showSuccess(
+        context,
+        'Partner Connected 💞',
       );
       context.go('/partner-dashboard');
     }
@@ -909,7 +897,56 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     BuildContext context,
     PartnerService partnerService,
   ) {
-    // Implementation for partner settings
+    showModalBottomSheet(
+      context: context,
+      showDragHandle: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (sheetContext) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 8),
+              const Text(
+                'Partner Settings',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 18),
+              ListTile(
+                leading: const Icon(Icons.shield_outlined),
+                title: const Text('Privacy & Sharing'),
+                subtitle: const Text('Manage visibility preferences'),
+                onTap: () {
+                  Navigator.pop(sheetContext);
+                  AdaptiveMessages.showInfo(
+                    context,
+                    'Privacy controls coming soon',
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.link_off),
+                title: const Text('Disconnect Partner'),
+                subtitle: const Text('Remove current connection'),
+                onTap: () {
+                  Navigator.pop(sheetContext);
+                  AdaptiveMessages.showWarning(
+                    context,
+                    'Disconnect tools coming soon',
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   void _sendMoodCheckIn(PartnerService partnerService) {
