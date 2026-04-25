@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-/// Adaptive message display utility that automatically adjusts to platform conventions
 class AdaptiveMessages {
   static String? _lastError;
   static DateTime? _lastErrorTime;
@@ -9,43 +8,40 @@ class AdaptiveMessages {
   static Future<void> showSuccess(
     BuildContext context,
     String message, {
-    Duration duration = const Duration(milliseconds: 700),
+    Duration duration = const Duration(milliseconds: 1600),
   }) async {
-    final normalized = message.toLowerCase();
-
-    final allowSuccess =
-        normalized.contains('saved') ||
-        normalized.contains('updated') ||
-        normalized.contains('submitted');
-
-    if (!allowSuccess) return;
-
     _showSnack(
       context,
       message,
-      Colors.green,
+      const Color(0xFF1E8E3E),
       duration,
-      icon: Icons.check_circle_outline,
+      icon: Icons.check_circle_rounded,
     );
   }
 
   static Future<void> showInfo(
     BuildContext context,
     String message, {
-    Duration duration = const Duration(milliseconds: 700),
+    Duration duration = const Duration(milliseconds: 1700),
   }) async {
-    return;
+    _showSnack(
+      context,
+      message,
+      const Color(0xFF2563EB),
+      duration,
+      icon: Icons.info_rounded,
+    );
   }
 
   static Future<void> showWarning(
     BuildContext context,
     String message, {
-    Duration duration = const Duration(milliseconds: 900),
+    Duration duration = const Duration(milliseconds: 1900),
   }) async {
     _showSnack(
       context,
       message,
-      Colors.orange,
+      const Color(0xFFF59E0B),
       duration,
       icon: Icons.warning_amber_rounded,
     );
@@ -54,7 +50,7 @@ class AdaptiveMessages {
   static Future<void> showError(
     BuildContext context,
     String message, {
-    Duration duration = const Duration(milliseconds: 700),
+    Duration duration = const Duration(milliseconds: 2200),
   }) async {
     final now = DateTime.now();
 
@@ -70,9 +66,9 @@ class AdaptiveMessages {
     _showSnack(
       context,
       message,
-      Colors.red,
+      const Color(0xFFDC2626),
       duration,
-      icon: Icons.warning_amber_rounded,
+      icon: Icons.error_outline_rounded,
     );
   }
 
@@ -90,27 +86,33 @@ class AdaptiveMessages {
       ..clearSnackBars()
       ..showSnackBar(
         SnackBar(
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: color,
+          elevation: 10,
+          duration: duration,
+          margin: const EdgeInsets.fromLTRB(20, 0, 20, 28),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18),
+          ),
           content: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, color: Colors.white, size: 18),
-              const SizedBox(width: 8),
+              Icon(icon, color: Colors.white, size: 20),
+              const SizedBox(width: 10),
               Expanded(
                 child: Text(
                   message,
-                  maxLines: 1,
+                  textAlign: TextAlign.center,
+                  maxLines: 3,
                   overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    height: 1.25,
+                  ),
                 ),
               ),
             ],
           ),
-          backgroundColor: color,
-          behavior: SnackBarBehavior.floating,
-          margin: const EdgeInsets.fromLTRB(16, 0, 16, 90),
-          elevation: 4,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
-          ),
-          duration: duration,
         ),
       );
   }
@@ -125,6 +127,9 @@ class AdaptiveMessages {
     final result = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(22),
+        ),
         title: Text(title),
         content: Text(message),
         actions: [
