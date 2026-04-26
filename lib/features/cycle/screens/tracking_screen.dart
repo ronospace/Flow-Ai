@@ -476,8 +476,19 @@ class _TrackingScreenState extends State<TrackingScreen>
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [Icon(icon, size: 14), const SizedBox(width: 2), Text(label)],
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, size: 14),
+          const SizedBox(width: 2),
+          Expanded(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: Text(label),
+            ),
+          ),
+        ],
       ),
     );
   }
