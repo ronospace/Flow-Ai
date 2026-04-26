@@ -416,8 +416,8 @@ class _TrackingScreenState extends State<TrackingScreen>
       ),
       child: TabBar(
         controller: _tabController,
-        isScrollable: true,
-        tabAlignment: TabAlignment.center,
+        isScrollable: false,
+        
         indicator: BoxDecoration(
           gradient: const LinearGradient(
             colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
@@ -425,6 +425,9 @@ class _TrackingScreenState extends State<TrackingScreen>
           borderRadius: BorderRadius.circular(16),
         ),
         dividerColor: Colors.transparent,
+        indicatorSize: TabBarIndicatorSize.tab,
+        indicatorPadding: const EdgeInsets.symmetric(horizontal: 6, vertical: 5),
+        labelPadding: EdgeInsets.zero,
         labelColor: theme.colorScheme.onPrimary,
         unselectedLabelColor: theme.colorScheme.onSurface.withValues(
           alpha: 0.6,
