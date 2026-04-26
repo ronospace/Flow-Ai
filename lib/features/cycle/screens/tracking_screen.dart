@@ -416,7 +416,6 @@ class _TrackingScreenState extends State<TrackingScreen>
       ),
       child: TabBar(
         controller: _tabController,
-        onTap: (index) => _tabController.index = index,
         isScrollable: false,
         
         indicator: BoxDecoration(
