@@ -265,7 +265,7 @@ class _TrackingScreenState extends State<TrackingScreen>
                 child: PageView(
                   controller: _pageController,
                   onPageChanged: (index) {
-                    _tabController.animateTo(index);
+                    
                   },
                   children: [
                     _buildFlowTab(),
@@ -354,7 +354,7 @@ class _TrackingScreenState extends State<TrackingScreen>
 
           // Status indicator (simplified)
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
             decoration: BoxDecoration(
               color: (_hasUnsavedChanges
                   ? AppTheme.warningOrange
@@ -416,6 +416,7 @@ class _TrackingScreenState extends State<TrackingScreen>
       ),
       child: TabBar(
         controller: _tabController,
+        onTap: (index) => _tabController.index = index,
         isScrollable: false,
         
         indicator: BoxDecoration(
@@ -429,7 +430,7 @@ class _TrackingScreenState extends State<TrackingScreen>
         overlayColor: WidgetStatePropertyAll(Colors.transparent),
         splashBorderRadius: BorderRadius.circular(18),
         indicatorSize: TabBarIndicatorSize.tab,
-        indicatorPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+        indicatorPadding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
         labelPadding: EdgeInsets.zero,
         tabAlignment: TabAlignment.fill,
         labelColor: theme.colorScheme.onPrimary,
