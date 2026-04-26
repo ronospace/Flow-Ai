@@ -354,28 +354,44 @@ class _TrackingScreenState extends State<TrackingScreen>
 
           // Status indicator (simplified)
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
             decoration: BoxDecoration(
               color: (_hasUnsavedChanges
                   ? AppTheme.warningOrange
                   : AppTheme.accentMint).withValues(alpha: 0.08),
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: (_hasUnsavedChanges
                         ? AppTheme.warningOrange
                         : AppTheme.accentMint)
-                    .withValues(alpha: 0.35),
+                    .withValues(alpha: 0.32),
               ),
             ),
-            child: Text(
-              _hasUnsavedChanges ? 'Unsaved changes' : 'Saved',
-              style: TextStyle(
-                color: _hasUnsavedChanges
-                    ? AppTheme.warningOrange
-                    : AppTheme.accentMint,
-                fontWeight: FontWeight.w600,
-                fontSize: 10,
-              ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  _hasUnsavedChanges
+                      ? Icons.edit_rounded
+                      : Icons.check_circle_rounded,
+                  size: 12,
+                  color: _hasUnsavedChanges
+                      ? AppTheme.warningOrange
+                      : AppTheme.accentMint,
+                ),
+                const SizedBox(width: 5),
+                Text(
+                  _hasUnsavedChanges ? 'Unsaved' : 'Saved',
+                  style: TextStyle(
+                    color: _hasUnsavedChanges
+                        ? AppTheme.warningOrange
+                        : AppTheme.accentMint,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 11,
+                    letterSpacing: 0.1,
+                  ),
+                ),
+              ],
             ),
           ).animate().fadeIn(delay: 200.ms),
         ],
