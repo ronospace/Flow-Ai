@@ -26,7 +26,6 @@ import '../widgets/partner_care_actions_widget.dart';
 import '../widgets/partner_insights_widget.dart';
 import '../widgets/partner_invitation_dialog.dart';
 import '../dialogs/join_partner_dialog.dart';
-import '../widgets/partner_empty_state.dart';
 
 class PartnerDashboardScreen extends StatefulWidget {
   const PartnerDashboardScreen({super.key});
@@ -139,10 +138,10 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                         partnerService,
                       ),
                     ] else ...[
-                      PartnerEmptyState(
-                        theme: theme,
-                        onInvite: () => _showPartnerInvitationDialog(context, partnerService),
-                        onJoin: () => _showJoinPartnerDialog(context, partnerService),
+                      _buildNoPartnerState(
+                        theme,
+                        localizations,
+                        partnerService,
                       ),
                     ],
 
@@ -728,6 +727,107 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
       currentUserId: currentUserId,
       partnershipId: partnerService.currentPartnership?.id ?? '',
     ).animate().fadeIn(delay: 800.ms).slideY(begin: 0.3, end: 0);
+  }
+
+  Widget _buildNoPartnerState(
+    ThemeData theme,
+    AppLocalizations localizations,
+    PartnerService partnerService,
+  ) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const SizedBox(height: 70),
+
+          Container(
+                width: 120,
+                height: 120,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      AppTheme.primaryRose.withValues(alpha: 0.1),
+                      AppTheme.primaryPurple.withValues(alpha: 0.1),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(60),
+                ),
+                child: Icon(
+                  Icons.favorite_border,
+                  size: 60,
+                  color: AppTheme.primaryRose,
+                ),
+              )
+              .animate()
+              .scale(begin: const Offset(0.5, 0.5))
+              .fadeIn(duration: 800.ms),
+
+          const SizedBox(height: 32),
+
+          Text(
+            'Share Your Cycle Journey',
+            style: theme.textTheme.headlineMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: theme.colorScheme.onSurface,
+            ),
+          ).animate().fadeIn(delay: 200.ms),
+
+          const SizedBox(height: 16),
+
+          Text(
+            'Get Support, Insights, and Stay Connected',
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodyLarge?.copyWith(
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+              height: 1.5,
+            ),
+          ).animate().fadeIn(delay: 400.ms),
+
+          const SizedBox(height: 40),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 170,
+                child: ElevatedButton.icon(
+                  onPressed: () =>
+                      _showPartnerInvitationDialog(context, partnerService),
+                  icon: const Icon(Icons.send),
+                  label: const Text('Invite Partner'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppTheme.primaryRose,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              SizedBox(
+                width: 170,
+                child: OutlinedButton.icon(
+                  onPressed: () =>
+                      _showJoinPartnerDialog(context, partnerService),
+                  icon: const Icon(Icons.link),
+                  label: const Text('Join Partner'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppTheme.primaryRose,
+                    side: BorderSide(color: AppTheme.primaryRose),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ).animate().fadeIn(delay: 600.ms).slideY(begin: 0.3, end: 0),
+        ],
+      ),
+    );
   }
 
   // Dialog methods
