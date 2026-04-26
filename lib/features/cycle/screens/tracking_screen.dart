@@ -429,8 +429,9 @@ class _TrackingScreenState extends State<TrackingScreen>
         overlayColor: WidgetStatePropertyAll(Colors.transparent),
         splashBorderRadius: BorderRadius.circular(18),
         indicatorSize: TabBarIndicatorSize.tab,
-        indicatorPadding: const EdgeInsets.symmetric(horizontal: 6, vertical: 5),
+        indicatorPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
         labelPadding: EdgeInsets.zero,
+        tabAlignment: TabAlignment.fill,
         labelColor: theme.colorScheme.onPrimary,
         unselectedLabelColor: theme.colorScheme.onSurface.withValues(
           alpha: 0.6,
