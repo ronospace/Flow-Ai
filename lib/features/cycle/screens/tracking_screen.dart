@@ -1005,13 +1005,13 @@ class _TrackingScreenState extends State<TrackingScreen>
     bool isLoading = false;
 
     if (_isSaving) {
-      buttonText = '⏳ Saving...';
+      buttonText = 'Saving...';
       buttonIcon = Icons.hourglass_empty_rounded;
       gradientColors = [AppTheme.mediumGrey, AppTheme.mediumGrey];
       isEnabled = false;
       isLoading = true;
     } else if (_recentlySaved) {
-      buttonText = 'Updated ✓';
+      buttonText = 'Updated';
       buttonIcon = Icons.check_rounded;
       gradientColors = [
         AppTheme.successGreen.withValues(alpha: 0.55),
@@ -1027,7 +1027,7 @@ class _TrackingScreenState extends State<TrackingScreen>
       ]; // Elegant gradient
       isEnabled = true;
     } else {
-      buttonText = 'Saved securely';
+      buttonText = 'Saved';
       buttonIcon = Icons.done_rounded;
       gradientColors = [
         AppTheme.accentMint.withValues(alpha: 0.32),
