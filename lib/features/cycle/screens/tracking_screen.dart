@@ -994,7 +994,7 @@ class _TrackingScreenState extends State<TrackingScreen>
             Text(
               emoji,
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 15,
                 shadows: isSelected
                     ? [
                         Shadow(
