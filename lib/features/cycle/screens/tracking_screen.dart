@@ -387,7 +387,7 @@ class _TrackingScreenState extends State<TrackingScreen>
                         ? AppTheme.warningOrange
                         : AppTheme.accentMint,
                     fontWeight: FontWeight.w700,
-                    fontSize: 9.5,
+                    fontSize: 9.0,
                     letterSpacing: 0.1,
                   ),
                 ),
@@ -436,7 +436,7 @@ class _TrackingScreenState extends State<TrackingScreen>
         unselectedLabelColor: theme.colorScheme.onSurface.withValues(
           alpha: 0.6,
         ),
-        labelStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 9.5),
+        labelStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 9.0),
         tabs: [
           Tab(
             child: _buildTabContent(
@@ -482,8 +482,8 @@ class _TrackingScreenState extends State<TrackingScreen>
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(icon, size: 14),
-              const SizedBox(width: 4),
+              Icon(icon, size: 12),
+              const SizedBox(width: 2),
               Text(label, textAlign: TextAlign.center),
             ],
           ),
