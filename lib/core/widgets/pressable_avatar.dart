@@ -89,8 +89,8 @@ class _PressableAvatarState extends State<PressableAvatar>
         duration: const Duration(milliseconds: 120),
         curve: Curves.easeOut,
         child: SizedBox(
-          width: 48,
-          height: 48,
+          width: 36,
+          height: 36,
           child: Stack(
             alignment: Alignment.center,
             children: [
@@ -98,7 +98,7 @@ class _PressableAvatarState extends State<PressableAvatar>
                 animation: _ringController,
                 builder: (_, __) {
                   return CustomPaint(
-                    size: const Size(48, 48),
+                    size: const Size(42, 42),
                     painter: AvatarRingPainter(_ringAnimation.value),
                   );
                 },
