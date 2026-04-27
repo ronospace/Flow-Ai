@@ -180,13 +180,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         color: theme.cardColor,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: theme.dividerColor, width: 1),
-        boxShadow: [
-          BoxShadow(
-            color: theme.shadowColor.withValues(alpha: 0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: [...AppTheme.shadowSm(theme.shadowColor)],
       ),
       child: AdWidget(ad: _bannerAd!),
     ).animate().fadeIn(delay: 1200.ms).slideY(begin: 0.2, end: 0);
