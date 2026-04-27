@@ -114,7 +114,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
             color: theme.shadowColor.withValues(alpha: 0.1),
@@ -167,7 +167,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Row(
@@ -188,7 +188,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
             decoration: BoxDecoration(
               color: color,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
               severityText,
@@ -235,7 +235,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
+                  horizontal: 18,
                   vertical: 12,
                 ),
                 decoration: BoxDecoration(
@@ -248,7 +248,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
                         )
                       : null,
                   color: isSelected ? null : theme.colorScheme.surface,
-                  borderRadius: BorderRadius.circular(25),
+                  borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: isSelected ? Colors.transparent : AppTheme.lightGrey,
                   ),
@@ -319,7 +319,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: theme.colorScheme.surface,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: isSelected ? symptom.color : Colors.transparent,
                 width: 2,

@@ -390,9 +390,7 @@ class _FlowAIAppState extends State<FlowAIApp> {
               statusBarIconBrightness: isDark
                   ? Brightness.light
                   : Brightness.dark,
-              systemNavigationBarColor: isDark
-                  ? AppTheme.darkBackground
-                  : AppTheme.lightBackground,
+              systemNavigationBarColor: Colors.transparent,
               systemNavigationBarIconBrightness: isDark
                   ? Brightness.light
                   : Brightness.dark,

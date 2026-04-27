@@ -211,15 +211,13 @@ class _TrackingScreenState extends State<TrackingScreen>
 
         // Set timer to clear the "recently saved" state after 1 second (faster feedback)
         _savedStateTimer?.cancel();
-        _savedStateTimer = Timer(const Duration(milliseconds: 1600), () {
+        _savedStateTimer = Timer(const Duration(milliseconds: 1000), () {
           if (mounted) {
             setState(() {
               _recentlySaved = false;
             });
           }
         });
-
-        
       }
     } catch (e) {
       // Handle save errors
@@ -245,43 +243,70 @@ class _TrackingScreenState extends State<TrackingScreen>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: AppTheme.backgroundGradient(
-            theme.brightness == Brightness.dark,
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              gradient: AppTheme.backgroundGradient(
+                theme.brightness == Brightness.dark,
+              ),
+            ),
+            child: SafeArea(
+              child: Column(
+                children: [
+                  // Custom App Bar with Date Selector
+                  _buildCustomAppBar(),
+
+                  // Tab Bar
+                  _buildTabBar(),
+
+                  // Tab Content
+                  Expanded(
+                    child: PageView(
+                      controller: _pageController,
+                      onPageChanged: (index) {
+                        _tabController.animateTo(index);
+                      },
+                      children: [
+                        _buildFlowTab(),
+                        _buildSymptomsTab(),
+                        _buildMoodEnergyTab(),
+                        _buildPainTab(),
+                        _buildNotesTab(),
+                      ],
+                    ),
+                  ),
+
+                  // Floating Save Button spacer
+                  const SizedBox.shrink(),
+                ],
+              ),
+            ),
           ),
-        ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              // Custom App Bar with Date Selector
-              _buildCustomAppBar(),
-
-              // Tab Bar
-              _buildTabBar(),
-
-              // Tab Content
-              Expanded(
-                child: PageView(
-                  controller: _pageController,
-                  onPageChanged: (index) {
-                    
-                  },
-                  children: [
-                    _buildFlowTab(),
-                    _buildSymptomsTab(),
-                    _buildMoodEnergyTab(),
-                    _buildPainTab(),
-                    _buildNotesTab(),
-                  ],
+          Positioned(
+            left: 16,
+            right: 16,
+            bottom: MediaQuery.of(context).viewInsets.bottom > 0
+                ? MediaQuery.of(context).viewInsets.bottom + 12
+                : 68,
+            child: IgnorePointer(
+              ignoring: !(_hasUnsavedChanges || _isSaving || _recentlySaved),
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 220),
+                opacity: (_hasUnsavedChanges || _isSaving || _recentlySaved)
+                    ? 1
+                    : 0,
+                child: AnimatedSlide(
+                  duration: const Duration(milliseconds: 260),
+                  offset: (_hasUnsavedChanges || _isSaving || _recentlySaved)
+                      ? Offset.zero
+                      : const Offset(0, 1.2),
+                  child: _buildSaveButton(),
                 ),
               ),
-
-              // Save Button
-              _buildSaveButton(),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -289,7 +314,7 @@ class _TrackingScreenState extends State<TrackingScreen>
   Widget _buildCustomAppBar() {
     final theme = Theme.of(context);
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       child: Row(
         children: [
           // Date Selector
@@ -303,12 +328,15 @@ class _TrackingScreenState extends State<TrackingScreen>
                 ),
                 decoration: BoxDecoration(
                   color: theme.cardColor.withValues(alpha: 0.72),
-                  borderRadius: BorderRadius.circular(22),
+                  borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 18,
-                      offset: const Offset(0, 8),
+                      offset:
+                          (_hasUnsavedChanges || _isSaving || _recentlySaved)
+                          ? Offset.zero
+                          : const Offset(0, 2.2),
                     ),
                   ],
                 ),
@@ -356,15 +384,18 @@ class _TrackingScreenState extends State<TrackingScreen>
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
             decoration: BoxDecoration(
-              color: (_hasUnsavedChanges
-                  ? AppTheme.warningOrange
-                  : AppTheme.accentMint).withValues(alpha: 0.08),
-              borderRadius: BorderRadius.circular(16),
+              color:
+                  (_hasUnsavedChanges
+                          ? AppTheme.warningOrange
+                          : AppTheme.accentMint)
+                      .withValues(alpha: 0.08),
+              borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: (_hasUnsavedChanges
-                        ? AppTheme.warningOrange
-                        : AppTheme.accentMint)
-                    .withValues(alpha: 0.32),
+                color:
+                    (_hasUnsavedChanges
+                            ? AppTheme.warningOrange
+                            : AppTheme.accentMint)
+                        .withValues(alpha: 0.32),
               ),
             ),
             child: Row(
@@ -402,10 +433,10 @@ class _TrackingScreenState extends State<TrackingScreen>
   Widget _buildTabBar() {
     final theme = Theme.of(context);
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
         color: theme.cardColor.withValues(alpha: 0.72),
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.1),
@@ -417,19 +448,22 @@ class _TrackingScreenState extends State<TrackingScreen>
       child: TabBar(
         controller: _tabController,
         isScrollable: false,
-        
+
         indicator: BoxDecoration(
           gradient: const LinearGradient(
             colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
           ),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(12),
         ),
         dividerColor: Colors.transparent,
         splashFactory: NoSplash.splashFactory,
         overlayColor: WidgetStatePropertyAll(Colors.transparent),
-        splashBorderRadius: BorderRadius.circular(18),
+        splashBorderRadius: BorderRadius.circular(12),
         indicatorSize: TabBarIndicatorSize.tab,
-        indicatorPadding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        indicatorPadding: const EdgeInsets.symmetric(
+          horizontal: 4,
+          vertical: 4,
+        ),
         labelPadding: EdgeInsets.zero,
         tabAlignment: TabAlignment.fill,
         labelColor: theme.colorScheme.onPrimary,
@@ -475,7 +509,7 @@ class _TrackingScreenState extends State<TrackingScreen>
 
   Widget _buildTabContent(IconData icon, String label) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
       child: Center(
         child: FittedBox(
           fit: BoxFit.scaleDown,
@@ -496,7 +530,7 @@ class _TrackingScreenState extends State<TrackingScreen>
     final theme = Theme.of(context);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -531,7 +565,7 @@ class _TrackingScreenState extends State<TrackingScreen>
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: AppTheme.accentMint.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(22),
+                borderRadius: BorderRadius.circular(12),
                 border: Border.all(
                   color: AppTheme.accentMint.withValues(alpha: 0.1),
                   width: 1,
@@ -572,7 +606,7 @@ class _TrackingScreenState extends State<TrackingScreen>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -595,7 +629,7 @@ class _TrackingScreenState extends State<TrackingScreen>
         ),
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: SymptomSelector(
               selectedSymptoms: _symptoms,
               symptomSeverity: _symptomSeverity,
@@ -624,7 +658,7 @@ class _TrackingScreenState extends State<TrackingScreen>
     final theme = Theme.of(context);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -643,30 +677,36 @@ class _TrackingScreenState extends State<TrackingScreen>
             ),
           ),
           const SizedBox(height: 30),
-          MoodEnergySlider(
-            label: localizations.mood,
-            value: _mood,
-            onChanged: (value) {
-              setState(() {
-                _mood = value;
-              });
-              _markUnsavedChanges();
-            },
-            emoji: _getMoodEmoji(_mood),
-            color: AppTheme.primaryRose,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: MoodEnergySlider(
+              label: localizations.mood,
+              value: _mood,
+              onChanged: (value) {
+                setState(() {
+                  _mood = value;
+                });
+                _markUnsavedChanges();
+              },
+              emoji: _getMoodEmoji(_mood),
+              color: AppTheme.primaryRose,
+            ),
           ),
           const SizedBox(height: 40),
-          MoodEnergySlider(
-            label: 'Energy',
-            value: _energy,
-            onChanged: (value) {
-              setState(() {
-                _energy = value;
-              });
-              _markUnsavedChanges();
-            },
-            emoji: _getEnergyEmoji(_energy),
-            color: AppTheme.accentMint,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: MoodEnergySlider(
+              label: 'Energy',
+              value: _energy,
+              onChanged: (value) {
+                setState(() {
+                  _energy = value;
+                });
+                _markUnsavedChanges();
+              },
+              emoji: _getEnergyEmoji(_energy),
+              color: AppTheme.accentMint,
+            ),
           ),
           const SizedBox(height: 100), // Extra bottom padding
         ],
@@ -677,7 +717,7 @@ class _TrackingScreenState extends State<TrackingScreen>
   Widget _buildPainTab() {
     final theme = Theme.of(context);
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -696,38 +736,44 @@ class _TrackingScreenState extends State<TrackingScreen>
             ),
           ),
           const SizedBox(height: 30),
-          MoodEnergySlider(
-            label: 'Pain Level',
-            value: _pain,
-            onChanged: (value) {
-              setState(() {
-                _pain = value;
-              });
-              _markUnsavedChanges();
-            },
-            emoji: _getPainEmoji(_pain),
-            color: AppTheme.primaryRose,
-            min: 1,
-            max: 5,
-          ),
-          const SizedBox(height: 40),
-          SizedBox(
-            height: 400, // Fixed height for PainBodyMap
-            child: PainBodyMap(
-              painAreas: _painAreas,
-              onPainAreaChanged: (area, intensity) {
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: MoodEnergySlider(
+              label: 'Pain Level',
+              value: _pain,
+              onChanged: (value) {
                 setState(() {
-                  if (intensity > 0) {
-                    _painAreas[area] = intensity;
-                  } else {
-                    _painAreas.remove(area);
-                  }
+                  _pain = value;
                 });
                 _markUnsavedChanges();
               },
+              emoji: _getPainEmoji(_pain),
+              color: AppTheme.primaryRose,
+              min: 1,
+              max: 5,
             ),
           ),
-          const SizedBox(height: 20), // Bottom padding
+          const SizedBox(height: 40),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: SizedBox(
+              height: 400, // Fixed height for PainBodyMap
+              child: PainBodyMap(
+                painAreas: _painAreas,
+                onPainAreaChanged: (area, intensity) {
+                  setState(() {
+                    if (intensity > 0) {
+                      _painAreas[area] = intensity;
+                    } else {
+                      _painAreas.remove(area);
+                    }
+                  });
+                  _markUnsavedChanges();
+                },
+              ),
+            ),
+          ),
+          const SizedBox(height: 140), // Bottom padding
         ],
       ),
     );
@@ -736,7 +782,7 @@ class _TrackingScreenState extends State<TrackingScreen>
   Widget _buildNotesTab() {
     final theme = Theme.of(context);
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -760,151 +806,187 @@ class _TrackingScreenState extends State<TrackingScreen>
           const SizedBox(height: 30),
 
           // Notes Input Section
-          Container(
-            constraints: const BoxConstraints(minHeight: 200),
-            decoration: BoxDecoration(
-              color: theme.cardColor,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: _notesController.text.isNotEmpty
-                    ? AppTheme.primaryRose.withValues(alpha: 0.1)
-                    : theme.dividerColor,
-                width: 2,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: theme.shadowColor.withValues(alpha: 0.1),
-                  blurRadius: 20,
-                  offset: const Offset(0, 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Container(
+              constraints: const BoxConstraints(minHeight: 200),
+              decoration: BoxDecoration(
+                color: theme.cardColor,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: _notesController.text.isNotEmpty
+                      ? AppTheme.primaryRose.withValues(alpha: 0.1)
+                      : theme.dividerColor,
+                  width: 2,
                 ),
-              ],
-            ),
-            child: Column(
-              children: [
-                // Header with icon
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        AppTheme.primaryRose.withValues(alpha: 0.1),
-                        AppTheme.primaryPurple.withValues(alpha: 0.1),
-                      ],
-                    ),
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(18),
-                      topRight: Radius.circular(18),
-                    ),
+                boxShadow: [
+                  BoxShadow(
+                    color: theme.shadowColor.withValues(alpha: 0.1),
+                    blurRadius: 20,
+                    offset: const Offset(0, 8),
                   ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [
-                              AppTheme.primaryRose,
-                              AppTheme.primaryPurple,
-                            ],
-                          ),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Icon(
-                          Icons.edit_note_rounded,
-                          color: theme.colorScheme.onPrimary,
-                          size: 20,
-                        ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  // Header with icon
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 20,
+                    ),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          AppTheme.primaryRose.withValues(alpha: 0.1),
+                          AppTheme.primaryPurple.withValues(alpha: 0.1),
+                        ],
                       ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Today\'s Journal Entry',
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: theme.colorScheme.onSurface,
-                              ),
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(12),
+                        topRight: Radius.circular(12),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [
+                                AppTheme.primaryRose,
+                                AppTheme.primaryPurple,
+                              ],
                             ),
-                            Text(
-                              DateFormat('EEEE, MMMM d').format(_selectedDate),
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: theme.colorScheme.onSurface.withValues(
-                                  alpha: 0.6,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Icon(
+                            Icons.edit_note_rounded,
+                            color: theme.colorScheme.onPrimary,
+                            size: 20,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Today\'s Journal Entry',
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: theme.colorScheme.onSurface,
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      if (_notesController.text.isNotEmpty)
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppTheme.accentMint.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(14),
-              border: Border.all(
-                color: (_hasUnsavedChanges
-                        ? AppTheme.warningOrange
-                        : AppTheme.accentMint).withValues(alpha: 0.42),
-              ),
-                          ),
-                          child: Text(
-                            '${_notesController.text.length} chars',
-                            style: const TextStyle(
-                              fontSize: 10,
-                              color: AppTheme.accentMint,
-                              fontWeight: FontWeight.bold,
-                            ),
+                              Text(
+                                DateFormat(
+                                  'EEEE, MMMM d',
+                                ).format(_selectedDate),
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: theme.colorScheme.onSurface.withValues(
+                                    alpha: 0.6,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                    ],
+                        if (_notesController.text.isNotEmpty)
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppTheme.accentMint.withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color:
+                                    (_hasUnsavedChanges
+                                            ? AppTheme.warningOrange
+                                            : AppTheme.accentMint)
+                                        .withValues(alpha: 0.42),
+                              ),
+                            ),
+                            child: Text(
+                              '${_notesController.text.length} chars',
+                              style: const TextStyle(
+                                fontSize: 10,
+                                color: AppTheme.accentMint,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
-                ),
 
-                // Text Input Area
-                Container(
-                  constraints: const BoxConstraints(minHeight: 180),
-                  padding: const EdgeInsets.all(20),
-                  child: TextField(
-                    controller: _notesController,
-                    maxLines: null,
-                    minLines: 8,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      height: 1.5,
-                      color: theme.textTheme.bodyMedium?.color,
+                  // Text Input Area
+                  Container(
+                    constraints: const BoxConstraints(minHeight: 180),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 20,
                     ),
-                    decoration: InputDecoration(
-                      hintText:
-                          'How are you feeling today? Any symptoms, mood changes, or observations you\'d like to remember?\n\nTip: Recording your thoughts helps identify patterns over time.',
-                      hintStyle: TextStyle(
-                        color: theme.textTheme.bodyMedium?.color?.withValues(
-                          alpha: 0.1,
-                        ),
-                        fontSize: 14,
-                        height: 1.5,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(12),
+                        bottomRight: Radius.circular(12),
                       ),
-                      border: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
                     ),
-                    textInputAction: TextInputAction.newline,
-                    onChanged: (value) {
-                      setState(() {
-                        _notes = value;
-                      });
-                      _markUnsavedChanges();
-                    },
+                    child: TextField(
+                      controller: _notesController,
+                      textInputAction: TextInputAction.done,
+                      maxLines: null,
+                      minLines: 8,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        height: 1.5,
+                        color: theme.textTheme.bodyMedium?.color,
+                      ),
+                      decoration: InputDecoration(
+                        hintText:
+                            'How are you feeling today? Any symptoms, mood changes, or observations you\'d like to remember?\n\nTip: Recording your thoughts helps identify patterns over time.',
+                        hintStyle: TextStyle(
+                          color: theme.textTheme.bodyMedium?.color?.withValues(
+                            alpha: 0.1,
+                          ),
+                          fontSize: 14,
+                          height: 1.5,
+                        ),
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          _notes = value;
+                        });
+                      },
+                      onSubmitted: (_) {
+                        FocusScope.of(context).unfocus();
+                        if (_notesController.text.trim() != _notes.trim()) {
+                          _markUnsavedChanges();
+                        }
+                      },
+                      onEditingComplete: () {
+                        FocusScope.of(context).unfocus();
+                        if (_notesController.text.trim() != _notes.trim()) {
+                          _markUnsavedChanges();
+                        }
+                      },
+                      onTapOutside: (_) {
+                        FocusScope.of(context).unfocus();
+                        if (_notesController.text.trim() != _notes.trim()) {
+                          _markUnsavedChanges();
+                        }
+                      },
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.3, end: 0),
 
@@ -926,19 +1008,22 @@ class _TrackingScreenState extends State<TrackingScreen>
             ),
           ),
           const SizedBox(height: 16),
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: [
-              _buildQuickNote('🌙', 'Sleep quality'),
-              _buildQuickNote('🍎', 'Food cravings'),
-              _buildQuickNote('💧', 'Hydration'),
-              _buildQuickNote('🏃‍♀️', 'Exercise'),
-              _buildQuickNote('😴', 'Energy levels'),
-              _buildQuickNote('🧘‍♀️', 'Stress management'),
-            ],
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Wrap(
+              spacing: 12,
+              runSpacing: 12,
+              children: [
+                _buildQuickNote('🌙', 'Sleep quality'),
+                _buildQuickNote('🍎', 'Food cravings'),
+                _buildQuickNote('💧', 'Hydration'),
+                _buildQuickNote('🏃‍♀️', 'Exercise'),
+                _buildQuickNote('😴', 'Energy levels'),
+                _buildQuickNote('🧘‍♀️', 'Stress management'),
+              ],
+            ),
           ).animate().fadeIn(delay: 400.ms),
-          const SizedBox(height: 20),
+          const SizedBox(height: 140),
         ],
       ),
     );
@@ -967,7 +1052,7 @@ class _TrackingScreenState extends State<TrackingScreen>
           color: isSelected
               ? AppTheme.primaryRose.withValues(alpha: 0.15)
               : theme.cardColor,
-          borderRadius: BorderRadius.circular(25),
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected ? AppTheme.primaryRose : theme.dividerColor,
             width: isSelected ? 2 : 1,
@@ -1069,7 +1154,7 @@ class _TrackingScreenState extends State<TrackingScreen>
     }
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,

@@ -125,11 +125,11 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
       children: [
         // Optimized Grid View - Using better scrolling with more space
         SizedBox(
-          height: 400, // Fixed height to avoid unbounded constraints
+          height: 620, // Fixed height to avoid unbounded constraints
           child: GridView.builder(
             padding: const EdgeInsets.all(12),
             physics:
-                const BouncingScrollPhysics(), // Better scrolling performance
+                const NeverScrollableScrollPhysics(), // Better scrolling performance
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 12,
