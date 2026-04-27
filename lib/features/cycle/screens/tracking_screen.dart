@@ -440,13 +440,7 @@ class _TrackingScreenState extends State<TrackingScreen>
       decoration: BoxDecoration(
         color: theme.cardColor.withValues(alpha: 0.72),
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
-          ),
-        ],
+        boxShadow: [...AppTheme.shadowLg(Colors.black)],
       ),
       child: TabBar(
         controller: _tabController,

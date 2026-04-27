@@ -25,6 +25,29 @@ class AppTheme {
   static const double spaceXl = 20;
   static const double spaceXxl = 24;
 
+  // Shadow Tokens
+  static List<BoxShadow> shadowSm(Color color) => [
+    BoxShadow(
+      color: color.withValues(alpha: 0.10),
+      blurRadius: 8,
+      offset: const Offset(0, 4),
+    ),
+  ];
+  static List<BoxShadow> shadowMd(Color color) => [
+    BoxShadow(
+      color: color.withValues(alpha: 0.10),
+      blurRadius: 12,
+      offset: const Offset(0, 6),
+    ),
+  ];
+  static List<BoxShadow> shadowLg(Color color) => [
+    BoxShadow(
+      color: color.withValues(alpha: 0.10),
+      blurRadius: 18,
+      offset: const Offset(0, 8),
+    ),
+  ];
+
   // Light Theme Colors
   static const Color lightBackground = Color(0xFFFAFAFA);
   static const Color lightSurface = Color(0xFFFFFFFF);

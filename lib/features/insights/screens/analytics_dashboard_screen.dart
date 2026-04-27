@@ -124,13 +124,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
                 ? null
                 : theme.colorScheme.surface,
             borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: theme.shadowColor.withOpacity(0.1),
-                blurRadius: 8,
-                offset: const Offset(0, 4),
-              ),
-            ],
+            boxShadow: [...AppTheme.shadowSm(theme.shadowColor)],
           ),
           child: Material(
             color: Colors.transparent,

@@ -201,13 +201,7 @@ class _InsightsScreenState extends State<InsightsScreen>
       decoration: BoxDecoration(
         color: theme.colorScheme.surface.withValues(alpha: 0.9),
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: theme.shadowColor.withValues(alpha: 0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: [...AppTheme.shadowSm(theme.shadowColor)],
       ),
       child: Row(
         children: _timePeriods.asMap().entries.map((entry) {
