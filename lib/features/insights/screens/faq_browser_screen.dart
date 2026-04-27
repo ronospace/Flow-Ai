@@ -182,7 +182,7 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
           // Search Bar
           SliverToBoxAdapter(
             child: Container(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(AppTheme.spaceXl),
               child: Container(
                 decoration: BoxDecoration(
                   color: theme.cardColor,
@@ -394,7 +394,7 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
             ),
             children: [
               Padding(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(AppTheme.spaceXl),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -490,7 +490,7 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
 
                 // Header
                 Padding(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(AppTheme.spaceXl),
                   child: Row(
                     children: [
                       Container(
@@ -511,7 +511,7 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
                           size: 20,
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: AppTheme.spaceMd),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -544,7 +544,7 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
                       horizontal: 20,
                       vertical: 10,
                     ),
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(AppTheme.spaceLg),
                     decoration: BoxDecoration(
                       color: AppTheme.primaryPurple.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
@@ -596,7 +596,7 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
                               ?.copyWith(color: AppTheme.mediumGrey),
                           textAlign: TextAlign.center,
                         ),
-                        const SizedBox(height: 24),
+                        const SizedBox(height: AppTheme.spaceXxl),
                         ElevatedButton.icon(
                           onPressed: () {
                             Navigator.pop(context);

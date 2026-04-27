@@ -118,7 +118,7 @@ class _CalendarScreenState extends State<CalendarScreen>
   Widget _buildHeader() {
     final theme = Theme.of(context);
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(AppTheme.spaceXl),
       child: Row(
         children: [
           // Title
@@ -184,7 +184,7 @@ class _CalendarScreenState extends State<CalendarScreen>
             ),
           ).animate().fadeIn(delay: 200.ms).scale(),
 
-          const SizedBox(width: 12),
+          const SizedBox(width: AppTheme.spaceMd),
 
           // Today Button
           Container(
@@ -648,8 +648,8 @@ class _CalendarScreenState extends State<CalendarScreen>
         final predictions = cycleProvider.predictions;
 
         return Container(
-          margin: const EdgeInsets.all(20),
-          padding: const EdgeInsets.all(20),
+          margin: const EdgeInsets.all(AppTheme.spaceXl),
+          padding: const EdgeInsets.all(AppTheme.spaceXl),
           decoration: BoxDecoration(
             color: theme.colorScheme.surface,
             borderRadius: BorderRadius.circular(16),

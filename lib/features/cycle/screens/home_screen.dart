@@ -427,51 +427,51 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         }
 
                         return SingleChildScrollView(
-                          padding: const EdgeInsets.all(20),
+                          padding: const EdgeInsets.all(AppTheme.spaceXl),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               // REVOLUTIONARY: AI-Powered Dynamic Header
                               _buildRevolutionaryHeader(settings),
-                              const SizedBox(height: 24),
+                              const SizedBox(height: AppTheme.spaceXxl),
 
                               // AI Prediction Summary
                               _LazyWidget(
                                 builder: () => _buildAIPredictionSummary(),
                               ),
-                              const SizedBox(height: 24),
+                              const SizedBox(height: AppTheme.spaceXxl),
 
                               // Use lazy loading for heavy widgets to improve performance
                               _LazyWidget(
                                 builder: () =>
                                     _buildHealthDashboardMatrix(cycleProvider),
                               ),
-                              const SizedBox(height: 24),
+                              const SizedBox(height: AppTheme.spaceXxl),
 
                               _LazyWidget(
                                 builder: () => _buildPredictiveAnalyticsCenter(
                                   cycleProvider,
                                 ),
                               ),
-                              const SizedBox(height: 24),
+                              const SizedBox(height: AppTheme.spaceXxl),
 
                               _LazyWidget(
                                 builder: () => _buildAIHealthInsightsPortal(
                                   insightsProvider,
                                 ),
                               ),
-                              const SizedBox(height: 24),
+                              const SizedBox(height: AppTheme.spaceXxl),
 
                               _LazyWidget(
                                 builder: () => _buildSmartActionCommandCenter(),
                               ),
-                              const SizedBox(height: 24),
+                              const SizedBox(height: AppTheme.spaceXxl),
 
                               _LazyWidget(
                                 builder: () =>
                                     _buildHealthTrendsVisualization(),
                               ),
-                              const SizedBox(height: 24),
+                              const SizedBox(height: AppTheme.spaceXxl),
 
                               // Premium Features Coming Soon
                               _LazyWidget(
@@ -488,7 +488,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
                               // Banner Ad - load last to not impact UI
                               if (_isBannerAdReady) ...[
-                                const SizedBox(height: 24),
+                                const SizedBox(height: AppTheme.spaceXxl),
                                 _LazyWidget(
                                   builder: () => _buildBannerAdWidget(),
                                 ),
@@ -617,7 +617,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         0.75 + (math.sin(now.millisecondsSinceEpoch / 100000) * 0.2);
 
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(AppTheme.spaceXxl),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -817,7 +817,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         onTap: onTap,
         borderRadius: BorderRadius.circular(16),
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(AppTheme.spaceXl),
           child: Column(
             children: [
               Icon(icon, color: color, size: 32),
@@ -840,7 +840,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     final theme = Theme.of(context);
     final localizations = AppLocalizations.of(context);
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(AppTheme.spaceXxl),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -882,7 +882,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   size: 20,
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppTheme.spaceMd),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -905,7 +905,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppTheme.spaceXxl),
 
           // Health Matrix Grid
           GridView.count(
@@ -978,7 +978,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   ) {
     final theme = Theme.of(context);
     return Container(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(AppTheme.spaceLg),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
@@ -1045,7 +1045,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     final prediction = provider.predictions;
 
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(AppTheme.spaceXxl),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -1084,7 +1084,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   size: 20,
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppTheme.spaceMd),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1123,14 +1123,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppTheme.spaceXxl),
 
           if (prediction != null) ...[
             Row(
               children: [
                 Expanded(
                   child: Container(
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(AppTheme.spaceXl),
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topLeft,
@@ -1180,7 +1180,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
                 Expanded(
                   child: Container(
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(AppTheme.spaceXl),
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topLeft,
@@ -1239,7 +1239,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             ),
           ] else ...[
             Container(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(AppTheme.spaceXl),
               decoration: BoxDecoration(
                 color: AppTheme.lightGrey.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(16),
@@ -1283,7 +1283,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   Widget _buildAIHealthInsightsPortal(InsightsProvider provider) {
     final theme = Theme.of(context);
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(AppTheme.spaceXxl),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -1325,7 +1325,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   size: 20,
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppTheme.spaceMd),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1369,7 +1369,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   (insight) =>
                       Container(
                             margin: const EdgeInsets.only(bottom: 16),
-                            padding: const EdgeInsets.all(20),
+                            padding: const EdgeInsets.all(AppTheme.spaceXl),
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 begin: Alignment.topLeft,
@@ -1503,7 +1503,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 ),
           ] else ...[
             Container(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(AppTheme.spaceXl),
               decoration: BoxDecoration(
                 color: AppTheme.lightGrey.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(16),
@@ -1548,7 +1548,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     final theme = Theme.of(context);
     final localizations = AppLocalizations.of(context);
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(AppTheme.spaceXxl),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -1590,7 +1590,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   size: 20,
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppTheme.spaceMd),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1613,7 +1613,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppTheme.spaceXxl),
 
           GridView.count(
             crossAxisCount: 2,
@@ -1752,7 +1752,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   Widget _buildHealthTrendsVisualization() {
     final theme = Theme.of(context);
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(AppTheme.spaceXxl),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -1791,7 +1791,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   size: 20,
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppTheme.spaceMd),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1814,12 +1814,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppTheme.spaceXxl),
 
           // Trend visualization placeholder
           Container(
             height: 100,
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(AppTheme.spaceLg),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
@@ -1873,7 +1873,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   ),
                 ),
 
-                const SizedBox(width: 12),
+                const SizedBox(width: AppTheme.spaceMd),
 
                 // Trend graph visualization
                 Expanded(
@@ -1902,7 +1902,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             children: [
               Expanded(
                 child: Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(AppTheme.spaceLg),
                   decoration: BoxDecoration(
                     color: AppTheme.primaryRose.withValues(alpha: 0.05),
                     borderRadius: BorderRadius.circular(12),
@@ -1944,11 +1944,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 ),
               ),
 
-              const SizedBox(width: 12),
+              const SizedBox(width: AppTheme.spaceMd),
 
               Expanded(
                 child: Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(AppTheme.spaceLg),
                   decoration: BoxDecoration(
                     color: AppTheme.secondaryBlue.withValues(alpha: 0.05),
                     borderRadius: BorderRadius.circular(12),
@@ -2239,7 +2239,7 @@ extension _NavigationMethods on _HomeScreenState {
   Widget _buildAIPredictionSummary() {
     if (_isLoadingPrediction) {
       return Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(AppTheme.spaceXl),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
@@ -2269,7 +2269,7 @@ extension _NavigationMethods on _HomeScreenState {
                 size: 20,
               ),
             ).animate().shimmer(duration: 1200.ms),
-            const SizedBox(width: 12),
+            const SizedBox(width: AppTheme.spaceMd),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
