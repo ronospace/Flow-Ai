@@ -314,7 +314,10 @@ class _TrackingScreenState extends State<TrackingScreen>
   Widget _buildCustomAppBar() {
     final theme = Theme.of(context);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppTheme.spaceLg,
+        vertical: AppTheme.spaceXl,
+      ),
       child: Row(
         children: [
           // Date Selector
@@ -433,7 +436,7 @@ class _TrackingScreenState extends State<TrackingScreen>
   Widget _buildTabBar() {
     final theme = Theme.of(context);
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
+      margin: const EdgeInsets.symmetric(horizontal: AppTheme.spaceLg),
       decoration: BoxDecoration(
         color: theme.cardColor.withValues(alpha: 0.72),
         borderRadius: BorderRadius.circular(12),
@@ -530,7 +533,10 @@ class _TrackingScreenState extends State<TrackingScreen>
     final theme = Theme.of(context);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppTheme.spaceLg,
+        vertical: AppTheme.spaceXl,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -606,7 +612,10 @@ class _TrackingScreenState extends State<TrackingScreen>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppTheme.spaceLg,
+            vertical: AppTheme.spaceXl,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -658,7 +667,10 @@ class _TrackingScreenState extends State<TrackingScreen>
     final theme = Theme.of(context);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppTheme.spaceLg,
+        vertical: AppTheme.spaceXl,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -717,7 +729,10 @@ class _TrackingScreenState extends State<TrackingScreen>
   Widget _buildPainTab() {
     final theme = Theme.of(context);
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppTheme.spaceLg,
+        vertical: AppTheme.spaceXl,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -782,7 +797,10 @@ class _TrackingScreenState extends State<TrackingScreen>
   Widget _buildNotesTab() {
     final theme = Theme.of(context);
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppTheme.spaceLg,
+        vertical: AppTheme.spaceXl,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1154,7 +1172,10 @@ class _TrackingScreenState extends State<TrackingScreen>
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppTheme.spaceLg,
+        vertical: AppTheme.spaceXl,
+      ),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
