@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
+  // Motion Tokens
+  static const Duration motionFast = Duration(milliseconds: 200);
+  static const Duration motionBase = Duration(milliseconds: 300);
+  static const Duration motionSlow = Duration(milliseconds: 400);
+  static const Curve motionCurve = Curves.easeInOut;
+
   // Typography Tokens
   static const FontWeight fwSemi = FontWeight.w600;
   static const FontWeight fwBold = FontWeight.w700;

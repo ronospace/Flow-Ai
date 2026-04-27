@@ -33,11 +33,11 @@ class _CalendarScreenState extends State<CalendarScreen>
     super.initState();
     _pageController = PageController();
     _fadeController = AnimationController(
-      duration: const Duration(milliseconds: 300),
+      duration: AppTheme.motionBase,
       vsync: this,
     );
     _scaleController = AnimationController(
-      duration: const Duration(milliseconds: 200),
+      duration: AppTheme.motionFast,
       vsync: this,
     );
     _selectedDay = DateTime.now();
@@ -356,7 +356,7 @@ class _CalendarScreenState extends State<CalendarScreen>
     final theme = Theme.of(context);
 
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
+      duration: AppTheme.motionFast,
       margin: const EdgeInsets.all(6),
       decoration: BoxDecoration(
         gradient: isSelected
