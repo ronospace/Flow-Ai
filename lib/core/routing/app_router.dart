@@ -336,19 +336,29 @@ class _MainShellState extends State<MainShell> {
           child: Container(
             color: Colors.transparent,
             height: 72,
-            child: SingleChildScrollView(
-              controller: _scrollController,
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  _buildNavItem(0, Icons.home_rounded, 'Home'),
-                  _buildNavItem(1, Icons.calendar_month_rounded, 'Calendar'),
-                  _buildNavItem(2, Icons.add_circle_rounded, 'Track'),
-                  _buildNavItem(3, Icons.insights_rounded, 'Insights'),
-                  _buildNavItem(4, Icons.favorite_rounded, 'Health'),
-                  _buildNavItem(5, Icons.settings_rounded, 'Settings'),
-                ],
-              ),
+            child: Row(
+              children: [
+                Expanded(child: _buildNavItem(0, Icons.home_rounded, 'Home')),
+                Expanded(
+                  child: _buildNavItem(
+                    1,
+                    Icons.calendar_month_rounded,
+                    'Calendar',
+                  ),
+                ),
+                Expanded(
+                  child: _buildNavItem(2, Icons.add_circle_rounded, 'Track'),
+                ),
+                Expanded(
+                  child: _buildNavItem(3, Icons.insights_rounded, 'Insights'),
+                ),
+                Expanded(
+                  child: _buildNavItem(4, Icons.favorite_rounded, 'Health'),
+                ),
+                Expanded(
+                  child: _buildNavItem(5, Icons.settings_rounded, 'Settings'),
+                ),
+              ],
             ),
           ),
         ),
@@ -362,43 +372,49 @@ class _MainShellState extends State<MainShell> {
 
     return GestureDetector(
       onTap: () => _onNavigationTap(index),
-      child: Container(
-        width: 80,
-        padding: const EdgeInsets.symmetric(vertical: 2),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                gradient: isSelected
-                    ? const LinearGradient(
-                        colors: [Color(0xFFFF6B9D), Color(0xFF9B59B6)],
-                      )
-                    : null,
-                borderRadius: BorderRadius.circular(12),
+      child: SizedBox.expand(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 6),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: EdgeInsets.all(index == 4 ? 4 : 6),
+                decoration: BoxDecoration(
+                  gradient: isSelected
+                      ? const LinearGradient(
+                          colors: [Color(0xFFFF6B9D), Color(0xFF9B59B6)],
+                        )
+                      : null,
+                  borderRadius: BorderRadius.circular(index == 4 ? 10 : 12),
+                ),
+                child: Transform.translate(
+                  offset: index == 4 ? const Offset(0, -2) : Offset.zero,
+                  child: Icon(
+                    icon,
+                    color: isSelected
+                        ? Colors.white
+                        : theme.iconTheme.color?.withValues(alpha: 0.6),
+                    size: index == 4 ? 21 : 24,
+                  ),
+                ),
               ),
-              child: Icon(
-                icon,
-                color: isSelected
-                    ? Colors.white
-                    : theme.iconTheme.color?.withValues(alpha: 0.6),
-                size: 24,
+              SizedBox(height: index == 4 ? 2 : 4),
+              Text(
+                label,
+                style: TextStyle(
+                  color: isSelected
+                      ? const Color(0xFFFF6B9D)
+                      : theme.textTheme.bodyMedium?.color?.withValues(
+                          alpha: 0.6,
+                        ),
+                  fontSize: 10,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                ),
               ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                color: isSelected
-                    ? const Color(0xFFFF6B9D)
-                    : theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.6),
-                fontSize: 10,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

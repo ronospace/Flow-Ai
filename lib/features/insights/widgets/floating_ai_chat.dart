@@ -407,8 +407,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
         // Enhanced Floating Action Button
         if (!_isExpanded)
           Positioned(
-            right: 16,
-            bottom: 28,
+            right: 14,
+            bottom: 118,
             child: AnimatedBuilder(
               animation: _fabAnimation,
               builder: (context, child) {
@@ -416,7 +416,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   scale: _isExpanded ? 1.0 : (1.0 + _fabAnimation.value * 0.1),
                   child: Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(22),
+                      borderRadius: BorderRadius.circular(18),
                       gradient: LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
@@ -440,8 +440,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       ],
                     ),
                     child: SizedBox(
-                      width: 64,
-                      height: 64,
+                      width: 56,
+                      height: 56,
                       child: FloatingActionButton(
                         heroTag: "ai_chat_main_fab",
                         onPressed: _toggleChat,
@@ -459,13 +459,13 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                                   Icons.close_rounded,
                                   key: const ValueKey('close'),
                                   color: Colors.white,
-                                  size: 30,
+                                  size: 26,
                                 )
                               : Icon(
                                   Icons.psychology_rounded,
                                   key: const ValueKey('chat'),
                                   color: Colors.white,
-                                  size: 30,
+                                  size: 26,
                                 ),
                         ),
                       ),
