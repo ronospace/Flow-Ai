@@ -265,7 +265,7 @@ class _ConsumerIntelligenceDashboardState
           child: GestureDetector(
             onTap: () => _changeTimeframe(entry.key),
             child: AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
+              duration: AppTheme.motionBase,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
                 color: isSelected

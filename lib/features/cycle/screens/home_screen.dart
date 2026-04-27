@@ -72,17 +72,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     // Use easier easing curves
     _dashboardAnimation = CurvedAnimation(
       parent: _dashboardController,
-      curve: Curves.easeInOut,
+      curve: AppTheme.motionCurve,
     );
 
     _healthAnimation = CurvedAnimation(
       parent: _healthController,
-      curve: Curves.easeInOut,
+      curve: AppTheme.motionCurve,
     );
 
     _predictiveAnimation = CurvedAnimation(
       parent: _predictiveController,
-      curve: Curves.easeInOut,
+      curve: AppTheme.motionCurve,
     );
 
     // Start animations with a delay to not block UI

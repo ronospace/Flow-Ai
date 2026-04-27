@@ -219,7 +219,7 @@ class _InsightsScreenState extends State<InsightsScreen>
                 HapticFeedback.selectionClick();
               },
               child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
+                duration: AppTheme.motionFast,
                 margin: const EdgeInsets.all(4),
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(

@@ -44,7 +44,7 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
     super.initState();
 
     _animationController = AnimationController(
-      duration: const Duration(milliseconds: 300),
+      duration: AppTheme.motionBase,
       vsync: this,
     );
 

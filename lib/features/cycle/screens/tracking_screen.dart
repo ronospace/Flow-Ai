@@ -58,8 +58,8 @@ class _TrackingScreenState extends State<TrackingScreen>
       if (_tabController.indexIsChanging) {
         _pageController.animateToPage(
           _tabController.index,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
+          duration: AppTheme.motionBase,
+          curve: AppTheme.motionCurve,
         );
       }
     });
@@ -1058,7 +1058,7 @@ class _TrackingScreenState extends State<TrackingScreen>
         HapticFeedback.selectionClick();
       },
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
+        duration: AppTheme.motionFast,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
           color: isSelected
@@ -1171,8 +1171,8 @@ class _TrackingScreenState extends State<TrackingScreen>
         vertical: AppTheme.spaceXl,
       ),
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
+        duration: AppTheme.motionBase,
+        curve: AppTheme.motionCurve,
         child: ModernButton(
           text: buttonText,
           onPressed: isEnabled ? _saveTrackingData : null,
