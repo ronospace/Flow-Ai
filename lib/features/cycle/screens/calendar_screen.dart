@@ -214,8 +214,8 @@ class _CalendarScreenState extends State<CalendarScreen>
                     AppLocalizations.of(context).todayButton,
                     style: const TextStyle(
                       color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
+                      fontWeight: AppTheme.fwSemi,
+                      fontSize: AppTheme.fsMd,
                     ),
                   ),
                 ),
@@ -405,7 +405,7 @@ class _CalendarScreenState extends State<CalendarScreen>
               fontWeight: isSelected || isToday || dayInfo.color != null
                   ? FontWeight.bold
                   : FontWeight.w500,
-              fontSize: 14,
+              fontSize: AppTheme.fsMd,
             ),
           ),
 

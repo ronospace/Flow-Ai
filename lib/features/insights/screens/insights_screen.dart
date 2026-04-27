@@ -241,7 +241,7 @@ class _InsightsScreenState extends State<InsightsScreen>
                         ? Colors.white
                         : theme.colorScheme.onSurface.withValues(alpha: 0.7),
                     fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                    fontSize: 14,
+                    fontSize: AppTheme.fsMd,
                   ),
                 ),
               ),
@@ -281,7 +281,10 @@ class _InsightsScreenState extends State<InsightsScreen>
         unselectedLabelColor: theme.colorScheme.onSurface.withValues(
           alpha: 0.7,
         ),
-        labelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+        labelStyle: const TextStyle(
+          fontWeight: AppTheme.fwSemi,
+          fontSize: AppTheme.fsMd,
+        ),
         tabs: const [
           Tab(
             child: Padding(

@@ -230,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         color: theme.colorScheme.onSurface.withValues(
                           alpha: 0.75,
                         ),
-                        fontWeight: FontWeight.w600,
+                        fontWeight: AppTheme.fwSemi,
                       ),
                     ),
                   ),
@@ -347,7 +347,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   localizations.premiumInsightsUnlocked,
                   style: TextStyle(
                     color: theme.colorScheme.onPrimary,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: AppTheme.fwSemi,
                   ),
                 ),
               ],
@@ -574,7 +574,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             localizations.loadingAiEngine,
             style: theme.textTheme.titleMedium?.copyWith(
               color: theme.colorScheme.onSurface,
-              fontWeight: FontWeight.w600,
+              fontWeight: AppTheme.fwSemi,
             ),
           ).animate().fadeIn(delay: 500.ms),
 
@@ -686,7 +686,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 localizations.aiActive,
                                 style: TextStyle(
                                   color: theme.colorScheme.onPrimary,
-                                  fontSize: 10,
+                                  fontSize: AppTheme.fsXs,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -737,7 +737,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           Text(
                             localizations.health,
                             style: TextStyle(
-                              fontSize: 10,
+                              fontSize: AppTheme.fsXs,
                               color: AppTheme.mediumGrey,
                               fontWeight: FontWeight.w500,
                             ),
@@ -760,7 +760,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       localizations.optimal,
                       style: TextStyle(
                         color: AppTheme.successGreen,
-                        fontSize: 10,
+                        fontSize: AppTheme.fsXs,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -784,7 +784,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           label,
           style: TextStyle(
             color: theme.colorScheme.onPrimary.withValues(alpha: 0.7),
-            fontSize: 12,
+            fontSize: AppTheme.fsSm,
           ),
         ),
         Text(
@@ -792,7 +792,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           style: TextStyle(
             color: theme.colorScheme.onPrimary,
             fontSize: 16,
-            fontWeight: FontWeight.w600,
+            fontWeight: AppTheme.fwSemi,
           ),
         ),
       ],
@@ -820,7 +820,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 title,
                 style: Theme.of(
                   context,
-                ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
+                ).textTheme.titleSmall?.copyWith(fontWeight: AppTheme.fwSemi),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -1254,7 +1254,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     'Gathering Data for Predictions',
                     style: theme.textTheme.titleMedium?.copyWith(
                       color: AppTheme.mediumGrey,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: AppTheme.fwSemi,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -1426,7 +1426,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                         'AI',
                                         style: TextStyle(
                                           color: AppTheme.primaryPurple,
-                                          fontSize: 10,
+                                          fontSize: AppTheme.fsXs,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -1475,8 +1475,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                               rec,
                                               style: TextStyle(
                                                 color: AppTheme.primaryPurple,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w600,
+                                                fontSize: AppTheme.fsSm,
+                                                fontWeight: AppTheme.fwSemi,
                                               ),
                                             ),
                                           ),
@@ -1518,7 +1518,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     'AI Learning Your Patterns',
                     style: theme.textTheme.titleMedium?.copyWith(
                       color: AppTheme.mediumGrey,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: AppTheme.fwSemi,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -1715,7 +1715,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               ?.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: AppTheme.darkGrey,
-                                fontSize: 10,
+                                fontSize: AppTheme.fsXs,
                               ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -1841,7 +1841,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       Text(
                         'Cycle Regularity',
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
+                          fontWeight: AppTheme.fwSemi,
                           color: AppTheme.darkGrey,
                         ),
                         maxLines: 1,

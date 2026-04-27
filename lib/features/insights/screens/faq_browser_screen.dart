@@ -288,7 +288,7 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
                         fontWeight: isSelected
                             ? FontWeight.bold
                             : FontWeight.normal,
-                        fontSize: 12,
+                        fontSize: AppTheme.fsSm,
                       ),
                     ),
                   );
@@ -380,7 +380,7 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
             title: Text(
               faq.question,
               style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w600,
+                fontWeight: AppTheme.fwSemi,
                 color: AppTheme.darkGrey,
               ),
             ),
@@ -421,7 +421,7 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
                             'Ask related question',
                             style: TextStyle(
                               color: AppTheme.primaryPurple,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: AppTheme.fwSemi,
                             ),
                           ),
                         ),
@@ -436,7 +436,7 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
                           'Verified',
                           style: TextStyle(
                             color: AppTheme.successGreen,
-                            fontSize: 12,
+                            fontSize: AppTheme.fsSm,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
