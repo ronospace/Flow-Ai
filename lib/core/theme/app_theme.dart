@@ -17,6 +17,14 @@ class AppTheme {
   static const Color softLavender = Color(0xFFC7CEEA); // Calming lavender
   static const Color blushRose = Color(0xFFFFB6C1); // Light rose blush
 
+  // Spacing Tokens
+  static const double spaceXs = 4;
+  static const double spaceSm = 8;
+  static const double spaceMd = 12;
+  static const double spaceLg = 16;
+  static const double spaceXl = 20;
+  static const double spaceXxl = 24;
+
   // Light Theme Colors
   static const Color lightBackground = Color(0xFFFAFAFA);
   static const Color lightSurface = Color(0xFFFFFFFF);
