@@ -301,7 +301,7 @@ class _ConsumerIntelligenceDashboardState
           const CircularProgressIndicator(
             valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryPurple),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppTheme.spaceXxl),
           Text(
             'Analyzing your health data...',
             style: Theme.of(
@@ -327,7 +327,7 @@ class _ConsumerIntelligenceDashboardState
 
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(AppTheme.spaceXl),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -350,7 +350,7 @@ class _ConsumerIntelligenceDashboardState
                     _getHealthScoreColor(_metrics!.overallHealthScore),
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: AppTheme.spaceMd),
                 Expanded(
                   child: _buildMetricCard(
                     'Cycle Regularity',
@@ -374,7 +374,7 @@ class _ConsumerIntelligenceDashboardState
                     _getStressLevelColor(_metrics!.averageStressLevel),
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: AppTheme.spaceMd),
                 Expanded(
                   child: _buildMetricCard(
                     'Sleep Quality',
@@ -401,7 +401,7 @@ class _ConsumerIntelligenceDashboardState
     Color valueColor,
   ) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppTheme.spaceLg),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -532,7 +532,7 @@ class _ConsumerIntelligenceDashboardState
   /// Build insight card
   Widget _buildInsightCard(IntelligenceInsight insight) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppTheme.spaceLg),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -568,7 +568,7 @@ class _ConsumerIntelligenceDashboardState
                   size: 18,
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppTheme.spaceMd),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -672,7 +672,7 @@ class _ConsumerIntelligenceDashboardState
 
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(AppTheme.spaceXl),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -686,7 +686,7 @@ class _ConsumerIntelligenceDashboardState
             const SizedBox(height: 16),
             Container(
               height: 200,
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(AppTheme.spaceLg),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
@@ -814,7 +814,7 @@ class _ConsumerIntelligenceDashboardState
   /// Build recommendation card
   Widget _buildRecommendationCard(PersonalizedRecommendation recommendation) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppTheme.spaceLg),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -848,7 +848,7 @@ class _ConsumerIntelligenceDashboardState
                   size: 18,
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppTheme.spaceMd),
               Expanded(
                 child: Text(
                   recommendation.title,
@@ -892,7 +892,7 @@ class _ConsumerIntelligenceDashboardState
                   minHeight: 4,
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppTheme.spaceMd),
               Text(
                 'Impact: ${(recommendation.potentialImpact * 100).toInt()}%',
                 style: TextStyle(
@@ -912,7 +912,7 @@ class _ConsumerIntelligenceDashboardState
   Widget _buildAnalyticsSection(ThemeData theme) {
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(AppTheme.spaceXl),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -935,7 +935,7 @@ class _ConsumerIntelligenceDashboardState
                     () => _showCorrelations(context),
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: AppTheme.spaceMd),
                 Expanded(
                   child: _buildAnalyticsCard(
                     'Predictions',
@@ -959,7 +959,7 @@ class _ConsumerIntelligenceDashboardState
                     () => _exportData(context),
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: AppTheme.spaceMd),
                 Expanded(
                   child: _buildAnalyticsCard(
                     'Share Report',
@@ -988,7 +988,7 @@ class _ConsumerIntelligenceDashboardState
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(AppTheme.spaceLg),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -1372,7 +1372,7 @@ class _ConsumerIntelligenceDashboardState
           ),
           child: ListView(
             controller: scrollController,
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(AppTheme.spaceXl),
             children: [
               // Handle
               Center(
@@ -1432,7 +1432,7 @@ class _ConsumerIntelligenceDashboardState
                 ],
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: AppTheme.spaceXxl),
 
               // Description
               Text(
@@ -1444,14 +1444,14 @@ class _ConsumerIntelligenceDashboardState
                 ),
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: AppTheme.spaceXxl),
 
               // Confidence and data points
               Row(
                 children: [
                   Expanded(
                     child: Container(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(AppTheme.spaceLg),
                       decoration: BoxDecoration(
                         color: AppTheme.lightGrey.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
@@ -1480,10 +1480,10 @@ class _ConsumerIntelligenceDashboardState
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppTheme.spaceMd),
                   Expanded(
                     child: Container(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(AppTheme.spaceLg),
                       decoration: BoxDecoration(
                         color: AppTheme.lightGrey.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
@@ -1516,9 +1516,9 @@ class _ConsumerIntelligenceDashboardState
               ),
 
               if (insight.actionable) ...[
-                const SizedBox(height: 24),
+                const SizedBox(height: AppTheme.spaceXxl),
                 Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(AppTheme.spaceLg),
                   decoration: BoxDecoration(
                     color: AppTheme.warningOrange.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
@@ -1581,7 +1581,7 @@ class _ConsumerIntelligenceDashboardState
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppTheme.spaceMd),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
@@ -1649,7 +1649,7 @@ class _ConsumerIntelligenceDashboardState
     showModalBottomSheet(
       context: context,
       builder: (context) => Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(AppTheme.spaceXl),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

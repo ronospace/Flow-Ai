@@ -6,6 +6,7 @@ import '../../../core/services/advanced_biometric_service.dart';
 import '../../../core/services/ai_engine.dart';
 import '../../../core/utils/app_logger.dart';
 
+import '../../../core/theme/app_theme.dart';
 import 'package:flow_ai/core/models/cycle_data.dart';
 
 /// Enhanced Consumer Intelligence Dashboard with real-time biometric integration
@@ -165,7 +166,7 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
                   );
                 },
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppTheme.spaceXxl),
               Text(
                 'Loading your health insights...',
                 style: Theme.of(
@@ -185,7 +186,7 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
           slivers: [
             _buildAppBar(),
             SliverPadding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(AppTheme.spaceLg),
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
                   _buildHealthScoreCard(),
@@ -253,7 +254,7 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
   Widget _buildHealthScoreCard() {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(AppTheme.spaceXl),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -352,7 +353,7 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
     if (_currentSnapshot == null) {
       return Card(
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(AppTheme.spaceXl),
           child: Column(
             children: [
               Icon(Icons.sensors_off, size: 64, color: Colors.grey[400]),
@@ -380,7 +381,7 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
 
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(AppTheme.spaceXl),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -390,7 +391,7 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
                   Icons.monitor_heart,
                   color: Theme.of(context).primaryColor,
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: AppTheme.spaceMd),
                 const Text(
                   'Current Vitals',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -493,7 +494,7 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
     Color color,
   ) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppTheme.spaceLg),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
@@ -520,14 +521,14 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
   Widget _buildInsightsSection() {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(AppTheme.spaceXl),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
                 Icon(Icons.lightbulb, color: Theme.of(context).primaryColor),
-                const SizedBox(width: 12),
+                const SizedBox(width: AppTheme.spaceMd),
                 const Text(
                   'AI Insights',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -537,7 +538,7 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
             const SizedBox(height: 16),
             if (_insights.isEmpty)
               Container(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(AppTheme.spaceXl),
                 child: Column(
                   children: [
                     Icon(Icons.psychology, size: 48, color: Colors.grey[400]),
@@ -570,7 +571,7 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
   Widget _buildInsightCard(BiometricInsight insight) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppTheme.spaceLg),
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
@@ -584,7 +585,7 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
           Row(
             children: [
               Text(insight.type.emoji, style: const TextStyle(fontSize: 20)),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppTheme.spaceMd),
               Expanded(
                 child: Text(
                   insight.title,
@@ -634,14 +635,14 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
   Widget _buildTrendsChart() {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(AppTheme.spaceXl),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
                 Icon(Icons.trending_up, color: Theme.of(context).primaryColor),
-                const SizedBox(width: 12),
+                const SizedBox(width: AppTheme.spaceMd),
                 const Text(
                   '7-Day Trends',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -719,14 +720,14 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
 
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(AppTheme.spaceXl),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
                 Icon(Icons.recommend, color: Theme.of(context).primaryColor),
-                const SizedBox(width: 12),
+                const SizedBox(width: AppTheme.spaceMd),
                 const Text(
                   'Personalized Recommendations',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -746,7 +747,7 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
   Widget _buildRecommendationItem(String recommendation) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppTheme.spaceLg),
       decoration: BoxDecoration(
         color: Colors.blue.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
@@ -755,7 +756,7 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
       child: Row(
         children: [
           Icon(Icons.check_circle_outline, color: Colors.blue, size: 20),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppTheme.spaceMd),
           Expanded(
             child: Text(recommendation, style: const TextStyle(fontSize: 14)),
           ),
