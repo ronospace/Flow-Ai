@@ -155,8 +155,8 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
                         'Export',
                         style: TextStyle(
                           color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14,
+                          fontWeight: AppTheme.fwSemi,
+                          fontSize: AppTheme.fsMd,
                         ),
                       ),
                     ],
@@ -194,10 +194,13 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
         ),
         labelColor: Colors.white,
         unselectedLabelColor: theme.colorScheme.onSurface.withOpacity(0.6),
-        labelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+        labelStyle: const TextStyle(
+          fontWeight: AppTheme.fwSemi,
+          fontSize: AppTheme.fsSm,
+        ),
         unselectedLabelStyle: const TextStyle(
           fontWeight: FontWeight.w500,
-          fontSize: 12,
+          fontSize: AppTheme.fsSm,
         ),
         tabs: const [
           Tab(text: 'Cycles'),
@@ -542,7 +545,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
                   style: TextStyle(
                     color: color,
                     fontWeight: FontWeight.bold,
-                    fontSize: 12,
+                    fontSize: AppTheme.fsSm,
                   ),
                 ),
               ),

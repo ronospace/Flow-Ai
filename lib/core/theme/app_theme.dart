@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
+  // Typography Tokens
+  static const FontWeight fwSemi = FontWeight.w600;
+  static const FontWeight fwBold = FontWeight.w700;
+  static const double fsXs = 10;
+  static const double fsSm = 12;
+  static const double fsMd = 14;
+  static const double fsLg = 16;
+  static const double fsXl = 18;
+
   // Brand Colors
   static const Color primaryRose = Color(0xFFFF6B9D);
   static const Color primaryPurple = Color(0xFF9B59B6);

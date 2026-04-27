@@ -365,7 +365,7 @@ class _TrackingScreenState extends State<TrackingScreen>
                         Text(
                           DateFormat('MMMM d, y').format(_selectedDate),
                           style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
+                            fontWeight: AppTheme.fwSemi,
                           ),
                         ),
                       ],
@@ -420,7 +420,7 @@ class _TrackingScreenState extends State<TrackingScreen>
                     color: _hasUnsavedChanges
                         ? AppTheme.warningOrange
                         : AppTheme.accentMint,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: AppTheme.fwBold,
                     fontSize: 9.0,
                     letterSpacing: 0.1,
                   ),
@@ -467,7 +467,7 @@ class _TrackingScreenState extends State<TrackingScreen>
         unselectedLabelColor: theme.colorScheme.onSurface.withValues(
           alpha: 0.6,
         ),
-        labelStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 9.0),
+        labelStyle: const TextStyle(fontWeight: AppTheme.fwBold, fontSize: 9.0),
         tabs: [
           Tab(
             child: _buildTabContent(
@@ -926,7 +926,7 @@ class _TrackingScreenState extends State<TrackingScreen>
                             child: Text(
                               '${_notesController.text.length} chars',
                               style: const TextStyle(
-                                fontSize: 10,
+                                fontSize: AppTheme.fsXs,
                                 color: AppTheme.accentMint,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -965,7 +965,7 @@ class _TrackingScreenState extends State<TrackingScreen>
                           color: theme.textTheme.bodyMedium?.color?.withValues(
                             alpha: 0.1,
                           ),
-                          fontSize: 14,
+                          fontSize: AppTheme.fsMd,
                           height: 1.5,
                         ),
                         border: InputBorder.none,
