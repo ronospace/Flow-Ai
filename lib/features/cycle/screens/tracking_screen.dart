@@ -292,12 +292,12 @@ class _TrackingScreenState extends State<TrackingScreen>
             child: IgnorePointer(
               ignoring: !(_hasUnsavedChanges || _isSaving || _recentlySaved),
               child: AnimatedOpacity(
-                duration: const Duration(milliseconds: 220),
+                duration: AppTheme.motionFast,
                 opacity: (_hasUnsavedChanges || _isSaving || _recentlySaved)
                     ? 1
                     : 0,
                 child: AnimatedSlide(
-                  duration: const Duration(milliseconds: 260),
+                  duration: AppTheme.motionBase,
                   offset: (_hasUnsavedChanges || _isSaving || _recentlySaved)
                       ? Offset.zero
                       : const Offset(0, 1.2),
@@ -831,13 +831,7 @@ class _TrackingScreenState extends State<TrackingScreen>
                       : theme.dividerColor,
                   width: 2,
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: theme.shadowColor.withValues(alpha: 0.1),
-                    blurRadius: 20,
-                    offset: const Offset(0, 8),
-                  ),
-                ],
+                boxShadow: AppTheme.shadowLg(theme.shadowColor),
               ),
               child: Column(
                 children: [
