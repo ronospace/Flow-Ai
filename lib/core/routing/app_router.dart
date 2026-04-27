@@ -312,7 +312,6 @@ class _MainShellState extends State<MainShell> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
@@ -329,34 +328,26 @@ class _MainShellState extends State<MainShell> {
         }
       },
       child: Scaffold(
+        extendBody: true,
+        backgroundColor: Colors.transparent,
         body: widget.child,
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            color: theme.scaffoldBackgroundColor,
-            boxShadow: [
-              BoxShadow(
-                color: theme.shadowColor.withValues(alpha: 0.1),
-                blurRadius: 10,
-                offset: const Offset(0, -2),
-              ),
-            ],
-          ),
-          child: SafeArea(
-            child: SizedBox(
-              height: 80,
-              child: SingleChildScrollView(
-                controller: _scrollController,
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    _buildNavItem(0, Icons.home_rounded, 'Home'),
-                    _buildNavItem(1, Icons.calendar_month_rounded, 'Calendar'),
-                    _buildNavItem(2, Icons.add_circle_rounded, 'Track'),
-                    _buildNavItem(3, Icons.insights_rounded, 'Insights'),
-                    _buildNavItem(4, Icons.favorite_rounded, 'Health'),
-                    _buildNavItem(5, Icons.settings_rounded, 'Settings'),
-                  ],
-                ),
+        bottomNavigationBar: SafeArea(
+          top: false,
+          child: Container(
+            color: Colors.transparent,
+            height: 72,
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  _buildNavItem(0, Icons.home_rounded, 'Home'),
+                  _buildNavItem(1, Icons.calendar_month_rounded, 'Calendar'),
+                  _buildNavItem(2, Icons.add_circle_rounded, 'Track'),
+                  _buildNavItem(3, Icons.insights_rounded, 'Insights'),
+                  _buildNavItem(4, Icons.favorite_rounded, 'Health'),
+                  _buildNavItem(5, Icons.settings_rounded, 'Settings'),
+                ],
               ),
             ),
           ),
@@ -366,14 +357,14 @@ class _MainShellState extends State<MainShell> {
   }
 
   Widget _buildNavItem(int index, IconData icon, String label) {
-    final isSelected = _currentIndex == index;
     final theme = Theme.of(context);
+    final isSelected = _currentIndex == index;
 
     return GestureDetector(
       onTap: () => _onNavigationTap(index),
       child: Container(
         width: 80,
-        padding: const EdgeInsets.symmetric(vertical: 6),
+        padding: const EdgeInsets.symmetric(vertical: 2),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
