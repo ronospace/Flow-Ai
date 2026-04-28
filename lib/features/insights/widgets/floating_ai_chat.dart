@@ -351,7 +351,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
             bottom: _isFullScreen
                 ? MediaQuery.of(context).padding.bottom + 8
-                : 8,
+                : MediaQuery.of(context).padding.bottom + 8,
             child: AnimatedBuilder(
               animation: _chatAnimation,
               builder: (context, child) {
