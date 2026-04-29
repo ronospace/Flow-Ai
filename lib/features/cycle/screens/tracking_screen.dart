@@ -284,8 +284,8 @@ class _TrackingScreenState extends State<TrackingScreen>
             ),
           ),
           Positioned(
-            left: 16,
-            right: 16,
+            left: 20,
+            right: 20,
             bottom: MediaQuery.of(context).viewInsets.bottom > 0
                 ? MediaQuery.of(context).viewInsets.bottom + 12
                 : 68,
@@ -339,7 +339,7 @@ class _TrackingScreenState extends State<TrackingScreen>
                       offset:
                           (_hasUnsavedChanges || _isSaving || _recentlySaved)
                           ? Offset.zero
-                          : const Offset(0, 2.2),
+                          : const Offset(0, 1.6),
                     ),
                   ],
                 ),

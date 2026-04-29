@@ -73,6 +73,7 @@ class _PartnerPrivacySettingsScreenState
 
     setState(() => _isLoading = true);
 
+    final messenger = ScaffoldMessenger.maybeOf(context);
     try {
       await context.read<PartnerService>().updateSharingSettings(
         _tempSettings!,
@@ -83,7 +84,7 @@ class _PartnerPrivacySettingsScreenState
         _hasChanges = false;
       });
 
-      ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+      messenger?.showSnackBar(
         SnackBar(
           content: const Text('Privacy settings updated successfully!'),
           backgroundColor: AppTheme.successGreen,
@@ -94,7 +95,7 @@ class _PartnerPrivacySettingsScreenState
         ),
       );
     } catch (e) {
-      ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+      messenger?.showSnackBar(
         SnackBar(
           content: Text('Failed to update settings: $e'),
           backgroundColor: AppTheme.errorRed,

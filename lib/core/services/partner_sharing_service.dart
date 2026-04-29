@@ -1,25 +1,22 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
-import 'package:crypto/crypto.dart';
-import 'package:encrypt/encrypt.dart';
+import 'package:encrypt/encrypt.dart' as enc;
 import '../models/cycle_data.dart';
 import '../models/daily_tracking_data.dart';
-import 'database_service.dart';
+import '../database/database_service.dart';
 import 'user_preferences_service.dart';
-import 'cloud_sync_service.dart';
 
 /// Partner sharing service stub - Firebase disabled for iOS build
 /// This provides a local-only implementation until Firebase is re-enabled
 class PartnerSharingService {
   final DatabaseService _databaseService = DatabaseService();
   final UserPreferencesService _preferencesService = UserPreferencesService();
-  final CloudSyncService _cloudSyncService = CloudSyncService();
   final bool _firebaseAvailable = false;
 
   // Encryption for shared data
-  late final Encrypter _encrypter;
-  late final IV _iv;
+  late final enc.Encrypter _encrypter;
+  late final enc.IV _iv;
 
   PartnerSharingService() {
     _initializeEncryption();
@@ -29,9 +26,9 @@ class PartnerSharingService {
   }
 
   void _initializeEncryption() {
-    final key = Key.fromSecureRandom(32);
-    _encrypter = Encrypter(AES(key));
-    _iv = IV.fromSecureRandom(16);
+    final key = enc.Key.fromSecureRandom(32);
+    _encrypter = enc.Encrypter(enc.AES(key));
+    _iv = enc.IV.fromSecureRandom(16);
   }
 
   // Stub methods that throw exceptions since Firebase is disabled
@@ -155,15 +152,15 @@ class PartnerSharingService {
       debugPrint('📤 Creating local data export...');
 
       final exportData = {
-        'cycles': await _databaseService.getAllCycles(),
-        'tracking': await _databaseService.getAllTrackingData(),
-        'preferences': await _preferencesService.getAllPreferences(),
+        'cycles': _databaseService.getAllCycles(),
+        'tracking': _databaseService.getAllTrackingData(),
+        'preferences': _preferencesService.getAllPreferences(),
         'exportedAt': DateTime.now().toIso8601String(),
         'appVersion': '1.0.0',
       };
 
       final encryptedExport = _encryptData(exportData);
-      await _preferencesService.setString(
+      _preferencesService.setString(
         'local_data_export',
         jsonEncode(encryptedExport),
       );
@@ -177,9 +174,7 @@ class PartnerSharingService {
 
   Future<Map<String, dynamic>?> getLocalDataExport() async {
     try {
-      final exportString = await _preferencesService.getString(
-        'local_data_export',
-      );
+      final exportString = _preferencesService.getString('local_data_export');
       if (exportString == null) return null;
 
       final encryptedExport = jsonDecode(exportString);
@@ -202,8 +197,8 @@ class PartnerSharingService {
   }
 
   Map<String, dynamic> _decryptData(Map<String, dynamic> encryptedData) {
-    final encrypted = Encrypted.fromBase64(encryptedData['encryptedData']);
-    final iv = IV.fromBase64(encryptedData['iv']);
+    final encrypted = enc.Encrypted.fromBase64(encryptedData['encryptedData']);
+    final iv = enc.IV.fromBase64(encryptedData['iv']);
     final decrypted = _encrypter.decrypt(encrypted, iv: iv);
     return jsonDecode(decrypted);
   }
@@ -217,17 +212,18 @@ class PartnerSharingService {
     return {
       'firebaseAvailable': _firebaseAvailable,
       'sharingEnabled': false,
-      'localExportAvailable': await _hasLocalExport(),
+      'localExportAvailable': _hasLocalExport(),
       'message':
           'Partner sharing requires Firebase authentication which is disabled in this build',
     };
   }
 
   Future<bool> _hasLocalExport() async {
-    final export = await _preferencesService.getString('local_data_export');
+    final export = _preferencesService.getString('local_data_export');
     return export != null;
   }
 
+  // ignore: unused_element
   String _generateInvitationCode() {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     final random = Random.secure();

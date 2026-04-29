@@ -160,12 +160,15 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
     return GestureDetector(
       onPanEnd: (d) {
         if (d.velocity.pixelsPerSecond.dx > 80) {
-          Navigator.pop(context);
+          final nav = Navigator.of(context);
+          nav.pop();
           Future.delayed(const Duration(milliseconds: 160), () {
+            if (!mounted) return;
             showDialog(
-      barrierColor: Colors.transparent,
-              context: context,
-              builder: (_) => PartnerInvitationDialog(partnerService: PartnerService()),
+              barrierColor: Colors.transparent,
+              context: nav.context,
+              builder: (_) =>
+                  PartnerInvitationDialog(partnerService: PartnerService()),
             );
           });
         }
@@ -196,7 +199,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
               ),
               child: Icon(Icons.group_add, color: Colors.white, size: 24),
             ),
-            const SizedBox(width: 16),
+            SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -336,7 +339,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
       key: _formKey,
       child: Column(
         children: [
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Expanded(
             child: TabBarView(
               controller: _tabController,
@@ -365,29 +368,29 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                               size: 72,
                               color: const Color(0xFFB07ACB),
                             ),
-                            const SizedBox(height: 16),
+                            SizedBox(height: 16),
                             Text(
                               'Connect with Code',
                               textAlign: TextAlign.center,
                               style: Theme.of(context).textTheme.titleMedium
                                   ?.copyWith(fontWeight: FontWeight.w600),
                             ),
-                            const SizedBox(height: 4),
+                            SizedBox(height: 4),
                             Text(
                               'Use a 6-character code to Synchronize',
                               textAlign: TextAlign.center,
                               style: Theme.of(context).textTheme.bodyMedium
                                   ?.copyWith(color: const Color(0xFF9B59B6)),
                             ),
-                            const SizedBox(height: 12),
+                            SizedBox(height: 12),
                             _buildCodeInput(),
                             if (_errorMessage != null) ...[
-                              const SizedBox(height: 16),
+                              SizedBox(height: 16),
                               _buildErrorMessage(),
                             ],
-                            const SizedBox(height: 16),
+                            SizedBox(height: 16),
                             _buildJoinButton(),
-                            const SizedBox(height: 14),
+                            SizedBox(height: 14),
                           ],
                         ),
                       ),
@@ -423,20 +426,20 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                   size: 72,
                   color: const Color(0xFFB07ACB),
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
                 Text(
                   'Scan Partner QR Code',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 Text(
                   'Use your camera to scan instantly',
                   textAlign: TextAlign.center,
                   style: TextStyle(color: const Color(0xFF9B59B6)),
                 ),
-                const SizedBox(height: 14),
+                SizedBox(height: 14),
                 ElevatedButton(
                   onPressed: _showRequestInvitationDialog,
                   style: ElevatedButton.styleFrom(
@@ -494,20 +497,20 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                   size: 72,
                   color: const Color(0xFFB07ACB),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   'Manual Connection',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 Text(
                   'Synchronize using your partner\'s Email',
                   textAlign: TextAlign.center,
                   style: TextStyle(color: const Color(0xFF9B59B6)),
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
                 TextFormField(
                   autofocus: false,
                   controller: _manualEmailController,
@@ -551,7 +554,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                     ),
                     filled: true,
                     fillColor: Theme.of(context).brightness == Brightness.dark
-                        ? Theme.of(context).cardColor.withOpacity(0.92)
+                        ? Theme.of(context).cardColor.withValues(alpha: 0.92)
                         : const Color(0xFFF9EEF3),
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 20,
@@ -559,20 +562,19 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                     ),
                   ),
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
                 Text(
                   _requestSent
                       ? 'Your partner will be notified when connected'
                       : 'Enter a valid partner Email to enable request',
                   style: TextStyle(
                     fontSize: 12,
-                    color:
-                        _requestSent
+                    color: _requestSent
                         ? Colors.green
                         : Theme.of(context).hintColor,
                   ),
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -599,7 +601,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                         ? null
                         : _handleManualJoin,
                     child: _isLoading
-                        ? const SizedBox(
+                        ? SizedBox(
                             height: 20,
                             width: 20,
                             child: CircularProgressIndicator(strokeWidth: 2),
@@ -618,7 +620,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                                         'Request sent successfully. Waiting for your partner.'
                                     ? const Icon(Icons.check, size: 20)
                                     : const Icon(Icons.send, size: 20),
-                                const SizedBox(width: 4),
+                                SizedBox(width: 4),
                                 Text(
                                   _errorMessage ==
                                           'Request sent successfully. Waiting for your partner.'
@@ -713,7 +715,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                   ),
                   filled: true,
                   fillColor: Theme.of(context).brightness == Brightness.dark
-                      ? Theme.of(context).cardColor.withOpacity(0.92)
+                      ? Theme.of(context).cardColor.withValues(alpha: 0.92)
                       : const Color(0xFFF3EFF8),
                   contentPadding: const EdgeInsets.symmetric(
                     vertical: 18,
@@ -737,7 +739,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
                 },
               ),
             ),
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
             IconButton(
               iconSize: 20,
               constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
@@ -777,7 +779,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
           ),
         ),
         child: _isLoading
-            ? const SizedBox(
+            ? SizedBox(
                 height: 22,
                 width: 22,
                 child: CircularProgressIndicator(
@@ -814,7 +816,7 @@ class _JoinPartnerDialogState extends State<JoinPartnerDialog>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.error_outline, color: Colors.red, size: 20),
-          const SizedBox(width: 10),
+          SizedBox(width: 10),
           Expanded(
             child: Text(
               _errorMessage!,

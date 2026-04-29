@@ -1,11 +1,10 @@
+include: package:flutter_lints/flutter.yaml
 analyzer:
   exclude:
-    - audit/**
-    - lib/features/analytics/screens/advanced_data_visualization_dashboard.dart
-    - test/_legacy_disabled/**
+    - flutter/**
+    - build/**
+    - .dart_tool/**
+    - ios/Pods/**
+    - macos/Pods/**
     - lib/features/_disabled_experimental/**
-    - lib/core/services/export_import_service.dart
-    - lib/core/services/partner_sharing_service.dart
-  errors:
-    deprecated_member_use: ignore
-    deprecated_member_use_from_same_package: ignore
+    - lib/_quarantine/**
