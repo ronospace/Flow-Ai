@@ -89,7 +89,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       final isAvailable = await _localAuth.canCheckBiometrics;
       final isDeviceSupported = await _localAuth.isDeviceSupported();
       final availableBiometrics = await _localAuth.getAvailableBiometrics();
-      await _authService.isBiometricEnabled();
+      _authService.isBiometricEnabled();
 
       setState(() {
         _biometricsAvailable =
@@ -521,7 +521,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         try {
           // _settingsProvider captured above
           // Force an immediate sync to capture fresh auth data
-          await _settingsProvider.forceUserDataSync();
+          _settingsProvider.forceUserDataSync();
 
           if (!mounted) return;
           debugPrint(
@@ -533,7 +533,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
           );
         }
 
-        await Future.delayed(const Duration(milliseconds: 500));
+        Future.delayed(const Duration(milliseconds: 500));
 
         if (!mounted) return;
 
@@ -646,10 +646,10 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
       // Sync user data immediately to ensure username is captured and available
       try {
-        await _settingsProvider.initializeSettings();
+        _settingsProvider.initializeSettings();
         if (!mounted) return;
         // Force an immediate sync to capture fresh auth data
-        await _settingsProvider.forceUserDataSync();
+        _settingsProvider.forceUserDataSync();
         if (!mounted) return;
         debugPrint('✅ User settings synced successfully after authentication');
       } catch (syncError) {
@@ -659,7 +659,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       }
 
       // Navigate to main app
-      await Future.delayed(const Duration(milliseconds: 1000));
+      Future.delayed(const Duration(milliseconds: 1000));
       if (!mounted) return;
 
       final pending = PendingDeepLinkService.consumePendingRoute();
@@ -702,13 +702,13 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         // Sync user data
         try {
           // _settingsProvider captured above
-          await _settingsProvider.forceUserDataSync();
+          _settingsProvider.forceUserDataSync();
           debugPrint('✅ User settings synced after Google sign-in');
         } catch (syncError) {
           debugPrint('⚠️ Warning: Could not sync user settings: $syncError');
         }
 
-        await Future.delayed(const Duration(milliseconds: 500));
+        Future.delayed(const Duration(milliseconds: 500));
 
         // Navigate to main app
         if (mounted) {
@@ -760,7 +760,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         // Sync user data
         try {
           // _settingsProvider captured above
-          await _settingsProvider.forceUserDataSync();
+          _settingsProvider.forceUserDataSync();
 
           if (!mounted) return;
           debugPrint('✅ User settings synced after Apple sign-in');
@@ -768,7 +768,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
           debugPrint('⚠️ Warning: Could not sync user settings: $syncError');
         }
 
-        await Future.delayed(const Duration(milliseconds: 500));
+        Future.delayed(const Duration(milliseconds: 500));
 
         if (!mounted) return;
 

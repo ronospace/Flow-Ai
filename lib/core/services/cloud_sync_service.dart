@@ -79,10 +79,10 @@ class CloudSyncService {
 
     try {
       // Simulate local backup instead of cloud sync
-      await _createLocalBackup();
+      _createLocalBackup();
 
       _lastSyncTime = DateTime.now();
-      await _preferencesService.setLastSyncTime(_lastSyncTime!);
+      _preferencesService.setLastSyncTime(_lastSyncTime!);
 
       debugPrint('✅ Local backup completed successfully (Firebase disabled)');
     } catch (e) {
@@ -98,14 +98,14 @@ class CloudSyncService {
 
     // No-op when Firebase is disabled
     _lastSyncTime = DateTime.now();
-    await _preferencesService.setLastSyncTime(_lastSyncTime!);
+    _preferencesService.setLastSyncTime(_lastSyncTime!);
   }
 
   Future<void> bidirectionalSync() async {
     debugPrint(
       '⚠️ CloudSyncService: Cloud sync disabled, performing local backup only',
     );
-    await syncToCloud(force: true);
+    syncToCloud(force: true);
   }
 
   // Data encryption/decryption (still functional for local use)
@@ -130,16 +130,16 @@ class CloudSyncService {
   Future<void> _createLocalBackup() async {
     try {
       final backupData = {
-        'cycles': await _databaseService.getAllCycles(),
-        'tracking': await _databaseService.getAllTrackingData(),
-        'preferences': await _preferencesService.getAllPreferences(),
+        'cycles': _databaseService.getAllCycles(),
+        'tracking': _databaseService.getAllTrackingData(),
+        'preferences': _preferencesService.getAllPreferences(),
         'createdAt': DateTime.now().toIso8601String(),
       };
 
       final encryptedBackup = _encryptData(backupData);
 
       // Store encrypted backup in local preferences
-      await _preferencesService.setString(
+      _preferencesService.setString(
         'local_backup',
         jsonEncode(encryptedBackup),
       );
@@ -153,7 +153,7 @@ class CloudSyncService {
 
   Future<void> restoreFromLocalBackup() async {
     try {
-      final backupString = await _preferencesService.getString('local_backup');
+      final backupString = _preferencesService.getString('local_backup');
       if (backupString == null) {
         throw Exception('No local backup found');
       }
@@ -168,7 +168,7 @@ class CloudSyncService {
             .toList();
 
         for (final cycle in cycles) {
-          await _databaseService.updateCycle(cycle);
+          _databaseService.updateCycle(cycle);
         }
       }
 
@@ -179,7 +179,7 @@ class CloudSyncService {
             .toList();
 
         for (final data in trackingData) {
-          await _databaseService.saveDailyTracking(
+          _databaseService.saveDailyTracking(
             date: data.date,
             flowIntensity: data.flowIntensity == null
                 ? null
@@ -194,7 +194,7 @@ class CloudSyncService {
 
       // Restore preferences
       if (backupData['preferences'] != null) {
-        await _preferencesService.setAllPreferences(backupData['preferences']);
+        _preferencesService.setAllPreferences(backupData['preferences']);
       }
 
       debugPrint('✅ Local backup restored successfully');
@@ -209,14 +209,14 @@ class CloudSyncService {
     debugPrint(
       '⚠️ CloudSyncService: Creating local backup instead of cloud backup',
     );
-    await _createLocalBackup();
+    _createLocalBackup();
   }
 
   Future<void> restoreFromBackup(String backupId) async {
     debugPrint(
       '⚠️ CloudSyncService: Restoring from local backup instead of cloud backup',
     );
-    await restoreFromLocalBackup();
+    restoreFromLocalBackup();
   }
 
   void enableAutoSync({Duration interval = const Duration(hours: 6)}) {
@@ -233,7 +233,7 @@ class CloudSyncService {
 
   // Sync status (local-only)
   Future<SyncStatus> getSyncStatus() async {
-    final lastSyncTime = await _preferencesService.getLastSyncTime();
+    final lastSyncTime = _preferencesService.getLastSyncTime();
 
     return SyncStatus(
       isSignedIn: false, // Always false when Firebase is disabled
@@ -254,7 +254,7 @@ class CloudSyncService {
     );
 
     try {
-      await _preferencesService.remove('local_backup');
+      _preferencesService.remove('local_backup');
       debugPrint('✅ Local backup data deleted successfully');
     } catch (e) {
       debugPrint('❌ Error deleting local backup data: $e');
@@ -264,13 +264,13 @@ class CloudSyncService {
 
   // Utility methods
   Future<bool> hasLocalBackup() async {
-    final backup = await _preferencesService.getString('local_backup');
+    final backup = _preferencesService.getString('local_backup');
     return backup != null;
   }
 
   Future<DateTime?> getLocalBackupTime() async {
     try {
-      final backupString = await _preferencesService.getString('local_backup');
+      final backupString = _preferencesService.getString('local_backup');
       if (backupString == null) return null;
 
       final encryptedBackup = jsonDecode(backupString);

@@ -54,6 +54,8 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
     final settings = Provider.of<SettingsProvider>(context, listen: false);
     _displayNameController.text = settings.preferences.displayName;
 
+    final authService = Provider.of<AuthService>(context, listen: false);
+
     // Force a fresh sync first
     try {
       await settings.forceUserDataSync();
@@ -71,7 +73,6 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
         debugPrint('📧 Loaded email from metadata: ${userMetadata['email']}');
       } else {
         // Fallback to auth service if metadata doesn't have email
-        final authService = Provider.of<AuthService>(context, listen: false);
         final userData = await authService.getUserData();
         if (userData != null &&
             userData['email'] != null &&
@@ -542,15 +543,14 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
         _isEditingProfile = false;
       });
 
+      if (!mounted) return;
       AdaptiveMessages.showSuccess(
         context,
         'Display name updated successfully',
       );
     } catch (e) {
-      AdaptiveMessages.showError(
-        context,
-        'Failed to update display name: $e',
-      );
+      if (!mounted) return;
+      AdaptiveMessages.showError(context, 'Failed to update display name: $e');
     }
   }
 
@@ -671,19 +671,15 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
 2024-01-16,2,Medium,Fatigue,4,3
 2024-01-17,3,Light,None,5,4''';
 
-      await Share.share(csvData, subject: 'Flow Ai Data Export');
+      await SharePlus.instance.share(
+        ShareParams(text: csvData, subject: 'Flow Ai Data Export'),
+      );
 
       if (!mounted) return;
-      AdaptiveMessages.showSuccess(
-        context,
-        'Data exported successfully',
-      );
+      AdaptiveMessages.showSuccess(context, 'Data exported successfully');
     } catch (e) {
       if (!mounted) return;
-      AdaptiveMessages.showError(
-        context,
-        'Export failed: $e',
-      );
+      AdaptiveMessages.showError(context, 'Export failed: $e');
     } finally {
       if (mounted) setState(() => _isExporting = false);
     }
@@ -851,20 +847,14 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
       if (!mounted) return;
       navigator.pop();
 
-      AdaptiveMessages.showSuccess(
-        context,
-        'All data deleted successfully',
-      );
+      AdaptiveMessages.showSuccess(context, 'All data deleted successfully');
 
       setState(() {});
       _loadUserData();
     } catch (e) {
       if (!mounted) return;
       navigator.pop();
-      AdaptiveMessages.showError(
-        context,
-        'Failed to delete data: $e',
-      );
+      AdaptiveMessages.showError(context, 'Failed to delete data: $e');
     }
   }
 

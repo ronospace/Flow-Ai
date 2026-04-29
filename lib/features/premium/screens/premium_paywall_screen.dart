@@ -537,6 +537,7 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
     String productId,
   ) async {
     final navigator = Navigator.of(context);
+    final messenger = ScaffoldMessenger.maybeOf(context);
 
     final result = await provider.purchaseSubscription(productId);
 
@@ -545,7 +546,7 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
     if (result.success) {
       // Show success message
       AdaptiveMessages.showSuccess(
-        context,
+        messenger?.context ?? navigator.context,
         '🎉 Welcome to Premium!',
       );
 
@@ -555,7 +556,7 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
       // Show error
       if (result.error != PurchaseError.cancelled) {
         AdaptiveMessages.showError(
-          context,
+          messenger?.context ?? navigator.context,
           result.errorMessage ?? 'Purchase failed',
         );
       }
@@ -568,6 +569,7 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
   ) async {
     final navigator = Navigator.of(context);
 
+    final messenger = ScaffoldMessenger.maybeOf(context);
     // Get user ID (you'll need to implement this)
     const userId = 'current_user_id'; // TODO: Get from auth provider
 
@@ -577,13 +579,13 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
 
     if (restored) {
       AdaptiveMessages.showSuccess(
-        context,
+        messenger?.context ?? navigator.context,
         '✅ Purchases restored successfully!',
       );
       navigator.pop(true);
     } else {
       AdaptiveMessages.showInfo(
-        context,
+        messenger?.context ?? navigator.context,
         'No purchases found to restore',
       );
     }

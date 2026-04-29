@@ -835,7 +835,7 @@ class _SettingsScreenState extends State<SettingsScreen>
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                '${platformName} Integration',
+                '$platformName Integration',
                 style: TextStyle(color: AppTheme.secondaryBlue),
               ),
             ),
@@ -1255,10 +1255,7 @@ class _SettingsScreenState extends State<SettingsScreen>
     } catch (e) {
       debugPrint('Error launching WhatsApp: $e');
       if (mounted) {
-        AdaptiveMessages.showError(
-          context,
-          'Could not open WhatsApp',
-        );
+        AdaptiveMessages.showError(context, 'Could not open WhatsApp');
       }
     }
   }
@@ -1282,10 +1279,7 @@ class _SettingsScreenState extends State<SettingsScreen>
     } catch (e) {
       debugPrint('Error launching Telegram: $e');
       if (mounted) {
-        AdaptiveMessages.showError(
-          context,
-          'Could not open Telegram',
-        );
+        AdaptiveMessages.showError(context, 'Could not open Telegram');
       }
     }
   }
@@ -1393,7 +1387,7 @@ class _SettingsScreenState extends State<SettingsScreen>
       if (mounted) {
         await AdaptiveMessages.showError(
           context,
-          'Sign out failed: ${e.toString()}',
+          'Sign out failed: $e',
           duration: const Duration(seconds: 4),
         );
       }
@@ -1507,22 +1501,25 @@ class _SettingsScreenState extends State<SettingsScreen>
       if (!mounted) return;
       navigator.pop(); // Close loading
 
+      final messenger = ScaffoldMessenger.maybeOf(navigator.context);
       if (filePath != null) {
         // Show success with share option
-        _showExportSuccessAfterExport(ScaffoldMessenger.of(context), navigator, filePath, format);
+        _showExportSuccessAfterExport(
+          messenger ?? ScaffoldMessenger.of(navigator.context),
+          navigator,
+          filePath,
+          format,
+        );
       } else {
         AdaptiveMessages.showError(
-          context,
+          navigator.context,
           'Export failed. Please try again.',
         );
       }
     } catch (e) {
       if (!mounted) return;
       navigator.pop(); // Close loading
-      AdaptiveMessages.showError(
-        context,
-        'Export error: $e',
-      );
+      AdaptiveMessages.showError(navigator.context, 'Export error: $e');
     }
   }
 
@@ -1669,6 +1666,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   Future<void> _startTutorial(BuildContext context, String tutorialId) async {
+    final messenger = ScaffoldMessenger.maybeOf(context);
     try {
       final onboardingProvider = Provider.of<OnboardingProvider>(
         context,
@@ -1679,14 +1677,14 @@ class _SettingsScreenState extends State<SettingsScreen>
       if (!mounted) return;
 
       AdaptiveMessages.showSuccess(
-        context,
+        messenger?.context ?? context,
         'Tutorial "$tutorialId" will start shortly',
       );
     } catch (e) {
       if (!mounted) return;
 
       AdaptiveMessages.showError(
-        context,
+        messenger?.context ?? context,
         'Failed to start tutorial: $e',
       );
     }
@@ -1724,8 +1722,9 @@ class _SettingsScreenState extends State<SettingsScreen>
 
     if (confirm == true) {
       if (!context.mounted) return;
+      final messenger = ScaffoldMessenger.maybeOf(context);
       // Capture before async gap
-        try {
+      try {
         final onboardingProvider = Provider.of<OnboardingProvider>(
           context,
           listen: false,
@@ -1735,13 +1734,13 @@ class _SettingsScreenState extends State<SettingsScreen>
         if (!mounted) return;
         HapticFeedback.mediumImpact();
         AdaptiveMessages.showSuccess(
-          context,
+          messenger?.context ?? context,
           'All tutorials have been reset',
         );
       } catch (e) {
         if (!mounted) return;
         AdaptiveMessages.showError(
-          context,
+          messenger?.context ?? context,
           'Failed to reset tutorials: $e',
         );
       }
