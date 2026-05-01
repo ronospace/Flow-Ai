@@ -298,7 +298,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               builder: (context, child) {
                 return Container(
                   decoration: BoxDecoration(
-                    color: theme.scaffoldBackgroundColor,
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(
                       _isFullScreen ? 16 : 24,
                     ),
@@ -363,7 +363,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   scale: _isExpanded ? 1.0 : (1.0 + _fabAnimation.value * 0.1),
                   child: Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(28),
+                      borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
                           color: AppTheme.primaryRose.withValues(alpha: 0.2),
@@ -418,7 +418,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                                                         ],
                                                       ),
                                                   borderRadius:
-                                                      BorderRadius.circular(8),
+                                                      BorderRadius.circular(12),
                                                   boxShadow: [
                                                     BoxShadow(
                                                       color: AppTheme
@@ -511,7 +511,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                     height: 4,
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.3),
-                      borderRadius: BorderRadius.circular(2),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                 ),
@@ -528,7 +528,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                     height: 48,
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(24),
+                      borderRadius: BorderRadius.circular(12),
                       border: Border.all(
                         color: Colors.white.withValues(alpha: 0.3),
                         width: 2,
@@ -584,7 +584,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                           ),
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.18),
-                            borderRadius: BorderRadius.circular(6),
+                            borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.white.withValues(
@@ -666,7 +666,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       width: 48,
                       height: 48,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(24),
+                        borderRadius: BorderRadius.circular(12),
                         color: Colors.white.withValues(alpha: 0.1),
                       ),
                       child: Icon(
@@ -689,7 +689,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       width: 48,
                       height: 48,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(24),
+                        borderRadius: BorderRadius.circular(12),
                         color: Colors.white.withValues(alpha: 0.1),
                       ),
                       child: Icon(
@@ -711,7 +711,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.08),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
               ),
               child: Row(
@@ -768,7 +768,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             backgroundColor: theme.scaffoldBackgroundColor,
             inputBackgroundColor: theme.cardColor,
             inputTextColor: theme.textTheme.bodyMedium?.color ?? Colors.black,
-            messageBorderRadius: 18,
+            messageBorderRadius: 12,
             messageInsetsHorizontal: 20,
             messageInsetsVertical: 14,
             receivedMessageBodyTextStyle:
@@ -812,7 +812,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 gradient: LinearGradient(
                   colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
                 ),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
                 Icons.auto_awesome_outlined,
@@ -870,7 +870,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
             _chatService.sendMessage(message);
           },
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(12),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
@@ -880,7 +880,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   AppTheme.primaryPurple.withValues(alpha: 0.08),
                 ],
               ),
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: AppTheme.primaryRose.withValues(alpha: 0.2),
                 width: 1,
@@ -1002,8 +1002,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             child: Container(
               constraints: const BoxConstraints(maxHeight: 120),
               decoration: BoxDecoration(
-                color: theme.scaffoldBackgroundColor,
-                borderRadius: BorderRadius.circular(28),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
                 border: Border.all(
                   color: AppTheme.primaryRose.withValues(alpha: 0.08),
                   width: 1,
@@ -1053,7 +1053,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-              borderRadius: BorderRadius.circular(28),
+              borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
                   color: AppTheme.primaryRose.withValues(alpha: 0.2),
@@ -1072,7 +1072,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                     _textController.clear();
                   }
                 },
-                borderRadius: BorderRadius.circular(28),
+                borderRadius: BorderRadius.circular(12),
                 child: Container(
                   width: 52,
                   height: 52,
