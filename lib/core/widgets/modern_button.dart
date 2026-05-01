@@ -149,14 +149,14 @@ class _ModernButtonState extends State<ModernButton>
       case ModernButtonType.primary:
         return BoxDecoration(
           gradient: LinearGradient(
-                colors: isEnabled
-                    ? colors
-                    : (widget.gradientColors ??
-                        [
-                          AppTheme.lightGrey.withValues(alpha: 0.75),
-                          AppTheme.lightGrey.withValues(alpha: 0.55),
-                        ]),
-              ),
+            colors: isEnabled
+                ? colors
+                : (widget.gradientColors ??
+                      [
+                        AppTheme.lightGrey.withValues(alpha: 0.75),
+                        AppTheme.lightGrey.withValues(alpha: 0.55),
+                      ]),
+          ),
           borderRadius: widget.borderRadius ?? BorderRadius.circular(16),
           boxShadow: isEnabled
               ? [

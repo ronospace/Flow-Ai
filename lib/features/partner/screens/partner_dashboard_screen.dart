@@ -88,8 +88,8 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
         builder: (context, partnerService, child) {
           return CustomScrollView(
             physics: const BouncingScrollPhysics(
-            parent: AlwaysScrollableScrollPhysics(),
-          ),
+              parent: AlwaysScrollableScrollPhysics(),
+            ),
             slivers: [
               _buildAnimatedAppBar(theme, localizations, partnerService),
               SliverPadding(
@@ -146,10 +146,9 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                     ],
 
                     const SizedBox(height: 100), // Space for bottom navigation
-                  ],
+                  ]),
                 ),
               ),
-            ),
             ],
           );
         },
@@ -187,7 +186,11 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
             context.go('/home');
           }
         },
-        icon: Icon(Icons.arrow_back_ios_new, size: 22, color: AppTheme.primaryRose),
+        icon: Icon(
+          Icons.arrow_back_ios_new,
+          size: 22,
+          color: AppTheme.primaryRose,
+        ),
       ),
       actions: [
         if (partnerService.hasPartner)
@@ -287,7 +290,9 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                                 ),
                                 const SizedBox(width: 6),
                                 Text(
-                                  partnership.id.isNotEmpty ? 'Partner Sync Active' : 'No Partner Connected',
+                                  partnership.id.isNotEmpty
+                                      ? 'Partner Sync Active'
+                                      : 'No Partner Connected',
                                   style: TextStyle(
                                     color: AppTheme.warningOrange,
                                     fontSize: 12,
@@ -328,7 +333,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                       '${partnerService.careActions.length}',
                       Icons.healing,
                       AppTheme.accentMint,
-                      ),
+                    ),
                   ],
                 ),
               ],
@@ -560,10 +565,10 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: 12,
-                        color: theme.colorScheme.onSurface.withValues(
-                          alpha: 0.6,
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.6,
+                          ),
                         ),
-                      ),
                       ),
                     ),
                   ],
@@ -854,8 +859,9 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
       useRootNavigator: true,
       builder: (context) => JoinPartnerDialog(
         onJoinWithCode: (code) async {
-          final partnership =
-              await partnerService.acceptPartnerInvitation(code);
+          final partnership = await partnerService.acceptPartnerInvitation(
+            code,
+          );
           if (partnership == null) {
             throw Exception('join_failed');
           }
@@ -864,10 +870,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     );
 
     if (joined == true && context.mounted) {
-      AdaptiveMessages.showSuccess(
-        context,
-        'Partner Connected 💞',
-      );
+      AdaptiveMessages.showSuccess(context, 'Partner Connected 💞');
       context.go('/partner-dashboard');
     }
   }
@@ -917,10 +920,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
               const SizedBox(height: 8),
               const Text(
                 'Partner Settings',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                ),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 18),
               ListTile(

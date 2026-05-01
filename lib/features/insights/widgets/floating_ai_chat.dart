@@ -289,8 +289,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
           AnimatedPositioned(
             duration: Duration(milliseconds: 300),
             curve: Curves.easeOutCubic,
-            right: AppLayoutMetrics.sideMargin,
-            left: AppLayoutMetrics.sideMargin,
+            right: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+            left: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
             top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
             bottom: AppLayoutMetrics.dialogBottom(context),
             child: AnimatedBuilder(
