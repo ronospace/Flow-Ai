@@ -763,8 +763,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             inputBackgroundColor: theme.cardColor,
             inputTextColor: theme.textTheme.bodyMedium?.color ?? Colors.black,
             messageBorderRadius: 16,
-            messageInsetsHorizontal: 0,
-            messageInsetsVertical: 0,
+            messageInsetsHorizontal: 12,
+            messageInsetsVertical: 8,
             receivedMessageBodyTextStyle:
                 theme.textTheme.bodyMedium?.copyWith(
                   color: theme.textTheme.bodyMedium?.color,
