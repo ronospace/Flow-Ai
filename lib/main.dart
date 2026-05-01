@@ -47,13 +47,10 @@ import 'features/analytics/providers/analytics_provider.dart';
 
 const bool ENABLE_PD = false;
 
-
 class AppScrollBehavior extends MaterialScrollBehavior {
   @override
   ScrollPhysics getScrollPhysics(BuildContext context) {
-    return const BouncingScrollPhysics(
-      parent: AlwaysScrollableScrollPhysics(),
-    );
+    return const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics());
   }
 }
 

@@ -155,8 +155,10 @@ class PartnerService extends ChangeNotifier {
           id: partnershipData['id'],
           primaryUserId: partnershipData['userId1'],
           partnerUserId: partnershipData['userId2'],
-          primaryUserName: partnershipData['customName1'] ?? partnershipData['userId1'],
-          partnerUserName: partnershipData['customName2'] ?? partnershipData['userId2'],
+          primaryUserName:
+              partnershipData['customName1'] ?? partnershipData['userId1'],
+          partnerUserName:
+              partnershipData['customName2'] ?? partnershipData['userId2'],
           primaryUserEmail: null,
           partnerUserEmail: null,
           createdAt: DateTime.parse(partnershipData['establishedAt']),

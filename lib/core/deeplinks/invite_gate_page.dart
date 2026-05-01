@@ -68,7 +68,9 @@ class _InviteGatePageState extends State<InviteGatePage> {
     }
 
     debugPrint('GATE_TRACE service=${partnerService.hashCode} start');
-    final partnership = await partnerService.acceptPartnerInvitation(widget.code);
+    final partnership = await partnerService.acceptPartnerInvitation(
+      widget.code,
+    );
     debugPrint(
       'GATE_TRACE result=${partnership == null ? 'null' : partnership.id} service=${partnerService.hashCode}',
     );
