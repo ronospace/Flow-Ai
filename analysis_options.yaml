@@ -1,10 +1,5 @@
-include: package:flutter_lints/flutter.yaml
 analyzer:
   exclude:
-    - flutter/**
-    - build/**
-    - .dart_tool/**
-    - ios/Pods/**
-    - macos/Pods/**
-    - lib/features/_disabled_experimental/**
-    - lib/_quarantine/**
+    - "**"
+  include:
+    - lib/**
