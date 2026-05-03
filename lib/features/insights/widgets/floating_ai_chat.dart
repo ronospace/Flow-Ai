@@ -292,7 +292,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             right: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
             left: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
             top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
-            bottom: AppLayoutMetrics.dialogBottom(context),
+            bottom: _isFullScreen ? MediaQuery.of(context).padding.bottom : AppLayoutMetrics.dialogBottom(context),
             child: AnimatedBuilder(
               animation: _chatAnimation,
               builder: (context, child) {
@@ -341,7 +341,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       SizedBox(
                         height: MediaQuery.of(context).size.width > 900 ? 0 : 8,
                       ),
-                      _buildEnhancedInput(theme),
+                      if (!_isFullScreen) _buildEnhancedInput(theme),
                     ],
                   ),
                 );
@@ -353,7 +353,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
         if (!_isExpanded)
           Positioned(
             right: 16,
-            bottom: AppLayoutMetrics.dialogBottom(context),
+            bottom: _isFullScreen ? MediaQuery.of(context).padding.bottom : AppLayoutMetrics.dialogBottom(context),
             child: AnimatedBuilder(
               animation: _fabAnimation,
               builder: (context, child) {
