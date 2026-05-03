@@ -298,18 +298,18 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               builder: (context, child) {
                 return Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.surface,
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: theme.shadowColor.withValues(alpha: 0.2),
+                        color: theme.shadowColor.withOpacity(0.2),
                         blurRadius: 12,
                         spreadRadius: 0,
                         offset: const Offset(0, 8),
                       ),
                     ],
                     border: Border.all(
-                      color: AppTheme.primaryRose.withValues(alpha: 0.08),
+                      color: AppTheme.primaryRose.withOpacity(0.08),
                       width: 1,
                     ),
                   ),
@@ -364,7 +364,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
-                          color: AppTheme.primaryRose.withValues(alpha: 0.2),
+                          color: AppTheme.primaryRose.withOpacity(0.2),
                           blurRadius: 16,
                           spreadRadius: 2,
                           offset: const Offset(0, 4),
@@ -387,7 +387,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                         child: _isExpanded
                             ? Icon(
                                 Icons.close_rounded,
-                                color: Colors.white,
+                                color: Theme.of(context).colorScheme.surface,
                                 key: const ValueKey('close'),
                                 size: 28,
                               )
@@ -396,7 +396,9 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                                 children: [
                                   Icon(
                                     Icons.psychology_rounded,
-                                    color: Colors.white,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.surface,
                                     size: 28,
                                   ),
                                   if (!_isExpanded)
@@ -431,7 +433,9 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                                                 ),
                                                 child: Icon(
                                                   Icons.auto_awesome,
-                                                  color: Colors.white,
+                                                  color: Theme.of(
+                                                    context,
+                                                  ).colorScheme.surface,
                                                   size: 10,
                                                 ),
                                               )
@@ -476,7 +480,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
         ),
         boxShadow: [
           BoxShadow(
-            color: AppTheme.primaryRose.withValues(alpha: 0.2),
+            color: AppTheme.primaryRose.withOpacity(0.2),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -508,7 +512,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                     width: 40,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.3),
+                      color: Colors.white.withOpacity(0.3),
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
@@ -525,10 +529,10 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                     width: 48,
                     height: 48,
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.2),
+                      color: Colors.white.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.3),
+                        color: Colors.white.withOpacity(0.3),
                         width: 2,
                       ),
                     ),
@@ -536,7 +540,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       scale: 0.965 + (_pulseController.value * 0.08),
                       child: Icon(
                         Icons.psychology_rounded,
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.surface,
                         size: 24,
                       ),
                     ),
@@ -544,7 +548,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   .animate(onPlay: null)
                   .shimmer(
                     duration: 3000.ms,
-                    color: Colors.white.withValues(alpha: 0.3),
+                    color: Colors.white.withOpacity(0.3),
                   )
                   .then(delay: 2000.ms),
 
@@ -563,7 +567,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                         Text(
                           'Zyra AI',
                           style: theme.textTheme.titleLarge?.copyWith(
-                            color: Colors.white,
+                            color: Theme.of(context).colorScheme.surface,
                             fontWeight: FontWeight.w700,
                             fontSize: 18,
                             height: 1.0,
@@ -579,7 +583,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                             vertical: 2,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.18),
+                            color: Colors.white.withOpacity(0.18),
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: [
                               BoxShadow(
@@ -608,7 +612,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                               child: Text(
                                 'LIVE',
                                 style: theme.textTheme.labelSmall?.copyWith(
-                                  color: Colors.white,
+                                  color: Theme.of(context).colorScheme.surface,
                                   fontSize: 9,
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -661,13 +665,13 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       height: 48,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16),
-                        color: Colors.white.withValues(alpha: 0.1),
+                        color: Colors.white.withOpacity(0.1),
                       ),
                       child: Icon(
                         _isFullScreen
                             ? Icons.fullscreen_exit_rounded
                             : Icons.fullscreen_rounded,
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.surface,
                         size: 24,
                       ),
                     ),
@@ -684,11 +688,11 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       height: 48,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16),
-                        color: Colors.white.withValues(alpha: 0.1),
+                        color: Colors.white.withOpacity(0.1),
                       ),
                       child: Icon(
                         Icons.keyboard_arrow_down_rounded,
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.surface,
                         size: 24,
                       ),
                     ),
@@ -704,9 +708,9 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.08),
+                color: Colors.white.withOpacity(0.08),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+                border: Border.all(color: Colors.white.withOpacity(0.2)),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -717,7 +721,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       _getInsightsBannerText(),
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.white.withValues(alpha: 0.9),
+                        color: Colors.white.withOpacity(0.9),
                         fontWeight: FontWeight.w400,
                       ),
                     ),
@@ -749,7 +753,11 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     return Container(
       padding: EdgeInsets.zero,
       child: Theme(
-        data: theme.copyWith(primaryColor: theme.brightness == Brightness.dark ? Colors.blueGrey : AppTheme.primaryRose),
+        data: theme.copyWith(
+          primaryColor: theme.brightness == Brightness.dark
+              ? Colors.blueGrey
+              : AppTheme.primaryRose,
+        ),
         child: Chat(
           messages: _messages,
           onSendPressed: _handleSendPressed,
@@ -757,7 +765,9 @@ class _FloatingAIChatState extends State<FloatingAIChat>
           onPreviewDataFetched: _handlePreviewDataFetched,
           user: _chatService.currentUser ?? types.User(id: 'fallback_user'),
           theme: DefaultChatTheme(
-            primaryColor: theme.brightness == Brightness.dark ? Colors.blueGrey : AppTheme.primaryRose,
+            primaryColor: theme.brightness == Brightness.dark
+                ? Colors.blueGrey
+                : AppTheme.primaryRose,
             secondaryColor: Colors.grey.shade300,
             backgroundColor: theme.scaffoldBackgroundColor,
             inputBackgroundColor: theme.cardColor,
@@ -774,11 +784,15 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 const TextStyle(fontSize: 14, height: 1.5),
             sentMessageBodyTextStyle:
                 theme.textTheme.bodyMedium?.copyWith(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.surface,
                   fontSize: 14,
                   height: 1.5,
                 ) ??
-                const TextStyle(color: Colors.white, fontSize: 14, height: 1.5),
+                TextStyle(
+                  color: Theme.of(context).colorScheme.surface,
+                  fontSize: 14,
+                  height: 1.5,
+                ),
           ),
           showUserAvatars: true,
           showUserNames: false,
@@ -810,7 +824,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               ),
               child: Icon(
                 Icons.auto_awesome_outlined,
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.surface,
                 size: 18,
               ),
             ),
@@ -870,18 +884,18 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  AppTheme.primaryRose.withValues(alpha: 0.08),
-                  AppTheme.primaryPurple.withValues(alpha: 0.08),
+                  AppTheme.primaryRose.withOpacity(0.08),
+                  AppTheme.primaryPurple.withOpacity(0.08),
                 ],
               ),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: AppTheme.primaryRose.withValues(alpha: 0.2),
+                color: AppTheme.primaryRose.withOpacity(0.2),
                 width: 1,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: AppTheme.primaryRose.withValues(alpha: 0.1),
+                  color: AppTheme.primaryRose.withOpacity(0.1),
                   blurRadius: 4,
                   offset: const Offset(0, 2),
                 ),
@@ -922,7 +936,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               height: 16,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: haloColor.withValues(alpha: isThinking ? 0.20 : 0.18),
+                color: haloColor.withOpacity(isThinking ? 0.20 : 0.18),
               ),
             )
             .animate(onPlay: null)
@@ -980,7 +994,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.transparent,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(_isFullScreen ? 16 : 24),
           bottomRight: Radius.circular(_isFullScreen ? 16 : 24),
@@ -994,10 +1008,10 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             child: Container(
               constraints: const BoxConstraints(maxHeight: 120),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: AppTheme.primaryRose.withValues(alpha: 0.08),
+                  color: AppTheme.primaryRose.withOpacity(0.08),
                   width: 1,
                 ),
               ),
@@ -1009,7 +1023,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   hintText:
                       'Ask about health, science, technology, lifestyle...',
                   hintStyle: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.hintColor.withValues(alpha: 0.7),
+                    color: theme.hintColor.withOpacity(0.7),
                     fontSize: 15,
                   ),
                   border: InputBorder.none,
@@ -1048,14 +1062,14 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: AppTheme.primaryRose.withValues(alpha: 0.2),
+                  color: AppTheme.primaryRose.withOpacity(0.2),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),
               ],
             ),
             child: Material(
-              color: Colors.transparent,
+              color: Theme.of(context).colorScheme.surface,
               child: InkWell(
                 onTap: () {
                   final text = _textController.text.trim();
@@ -1071,7 +1085,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   alignment: Alignment.center,
                   child: Icon(
                     Icons.send_rounded,
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.surface,
                     size: 24,
                   ),
                 ),
