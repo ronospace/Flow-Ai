@@ -328,7 +328,11 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                           _shouldShowQuickQuestions() &&
                           !_quickRepliesCollapsed)
                         SizedBox(
-                          child: SingleChildScrollView(
+                          child: SizedBox(
+height: 60,
+child: ListView(
+scrollDirection: Axis.horizontal,
+shrinkWrap: true,
                             child: Container(
                               padding: const EdgeInsets.fromLTRB(16, 4, 16, 2),
                               child: Padding(
