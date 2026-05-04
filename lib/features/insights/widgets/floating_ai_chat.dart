@@ -1049,49 +1049,6 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               ),
             ),
           ),
-          const SizedBox(width: 12),
-
-          // Send Button - More prominent
-          Container(
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: AppTheme.primaryRose.withValues(alpha: 0.2),
-                  blurRadius: 12,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Material(
-              color: Theme.of(context).colorScheme.surface,
-              child: InkWell(
-                onTap: () {
-                  final text = _textController.text.trim();
-                  if (text.isNotEmpty) {
-                    _handleSendPressed(types.PartialText(text: text));
-                    _textController.clear();
-                  }
-                },
-                borderRadius: BorderRadius.circular(16),
-                child: Container(
-                  width: 52,
-                  height: 52,
-                  alignment: Alignment.center,
-                  child: Icon(
-                    Icons.send_rounded,
-                    color: Theme.of(context).colorScheme.surface,
-                    size: 24,
-                  ),
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );
