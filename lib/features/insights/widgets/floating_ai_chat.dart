@@ -293,7 +293,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             left: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
             top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
             bottom: _isFullScreen
-                ? MediaQuery.of(context).padding.bottom
+                ? (MediaQuery.of(context).padding.bottom + MediaQuery.of(context).viewInsets.bottom)
                 : AppLayoutMetrics.dialogBottom(context),
             child: AnimatedBuilder(
               animation: _chatAnimation,
@@ -356,7 +356,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
           Positioned(
             right: 16,
             bottom: _isFullScreen
-                ? MediaQuery.of(context).padding.bottom
+                ? (MediaQuery.of(context).padding.bottom + MediaQuery.of(context).viewInsets.bottom)
                 : AppLayoutMetrics.dialogBottom(context),
             child: AnimatedBuilder(
               animation: _fabAnimation,
@@ -754,9 +754,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
   // Enhanced Chat Area - Better spacing and padding
   Widget _buildChatArea(ThemeData theme) {
-    return Container(
-      padding: EdgeInsets.zero,
-      child: Theme(
+    return SizedBox.expand(
+child: Theme(
         data: theme.copyWith(
           primaryColor: theme.brightness == Brightness.dark
               ? Colors.blueGrey
