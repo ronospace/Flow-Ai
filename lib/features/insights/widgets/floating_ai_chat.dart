@@ -1025,21 +1025,29 @@ child: Theme(
                 ),
               ),
               child: TextField(
+  textAlignVertical: TextAlignVertical.center,
                 enableInteractiveSelection: false,
                 controller: _textController,
                 focusNode: _inputFocusNode,
                 decoration: InputDecoration(
+  contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                   hintText:
                       'Ask about health, science, technology, lifestyle...',
                   hintStyle: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.hintColor.withValues(alpha: 0.7),
                     fontSize: 15,
                   ),
-                  border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 10,
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.send_rounded, size: 20, color: Theme.of(context).colorScheme.primary),
+                    onPressed: () {
+                      final text = _textController.text.trim();
+                      if (text.isNotEmpty) {
+                        _handleSendPressed(types.PartialText(text: text));
+                        _textController.clear();
+                      }
+                    },
                   ),
+                  border: InputBorder.none,
                 ),
                 maxLines: null,
                 minLines: 1,
