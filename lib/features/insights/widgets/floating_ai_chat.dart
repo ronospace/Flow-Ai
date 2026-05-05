@@ -279,6 +279,12 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
   @override
   Widget build(BuildContext context) {
+  final mq = MediaQuery.of(context);
+  // // // // debugPrint("SCREEN HEIGHT: ");
+  // // debugPrint("SAFE TOP: ");
+  // // debugPrint("SAFE BOTTOM: ");
+  // // // // debugPrint("VIEW INSETS (keyboard): ");
+
     final theme = Theme.of(context);
     final keyboardOpen = _inputFocusNode.hasFocus;
 
@@ -294,7 +300,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
             bottom: _isFullScreen
                 ? (MediaQuery.of(context).padding.bottom + MediaQuery.of(context).viewInsets.bottom)
-                : AppLayoutMetrics.dialogBottom(context),
+                : (MediaQuery.of(context).padding.bottom + MediaQuery.of(context).viewInsets.bottom),
             child: AnimatedBuilder(
               animation: _chatAnimation,
               builder: (context, child) {
@@ -321,18 +327,14 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       _buildEnhancedHeader(theme, compact: keyboardOpen),
 
                       // Main content area - improved spacing
-                      Expanded(child: _buildChatArea(theme)),
+                      Flexible(fit: FlexFit.loose, child: _buildChatArea(theme)),
 
                       // Suggested Questions (above input)
                       if (!keyboardOpen &&
                           _shouldShowQuickQuestions() &&
                           !_quickRepliesCollapsed)
-                        SizedBox(
-                          child: SizedBox(
-height: 60,
-child: ListView(
-scrollDirection: Axis.horizontal,
-shrinkWrap: true,
+                        SizedBox(height: 80,
+  child: SingleChildScrollView(
                             child: Container(
                               padding: const EdgeInsets.fromLTRB(16, 4, 16, 2),
                               child: Padding(
@@ -347,7 +349,7 @@ shrinkWrap: true,
                       SizedBox(
                         height: MediaQuery.of(context).size.width > 900 ? 0 : 8,
                       ),
-                      _buildEnhancedInput(theme),
+                       _buildEnhancedInput(theme),
                     ],
                   ),
                 );
@@ -361,7 +363,7 @@ shrinkWrap: true,
             right: 16,
             bottom: _isFullScreen
                 ? (MediaQuery.of(context).padding.bottom + MediaQuery.of(context).viewInsets.bottom)
-                : AppLayoutMetrics.dialogBottom(context),
+                : (MediaQuery.of(context).padding.bottom + MediaQuery.of(context).viewInsets.bottom),
             child: AnimatedBuilder(
               animation: _fabAnimation,
               builder: (context, child) {
