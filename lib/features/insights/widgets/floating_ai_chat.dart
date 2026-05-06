@@ -279,11 +279,10 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
   @override
   Widget build(BuildContext context) {
-  final mq = MediaQuery.of(context);
-  // // // // debugPrint("SCREEN HEIGHT: ");
-  // // debugPrint("SAFE TOP: ");
-  // // debugPrint("SAFE BOTTOM: ");
-  // // // // debugPrint("VIEW INSETS (keyboard): ");
+    // // // // debugPrint("SCREEN HEIGHT: ");
+    // // debugPrint("SAFE TOP: ");
+    // // debugPrint("SAFE BOTTOM: ");
+    // // // // debugPrint("VIEW INSETS (keyboard): ");
 
     final theme = Theme.of(context);
     final keyboardOpen = _inputFocusNode.hasFocus;
@@ -299,8 +298,10 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             left: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
             top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
             bottom: _isFullScreen
-                ? (MediaQuery.of(context).padding.bottom + MediaQuery.of(context).viewInsets.bottom)
-                : (MediaQuery.of(context).padding.bottom + MediaQuery.of(context).viewInsets.bottom),
+                ? (MediaQuery.of(context).padding.bottom +
+                      MediaQuery.of(context).viewInsets.bottom)
+                : (MediaQuery.of(context).padding.bottom +
+                      MediaQuery.of(context).viewInsets.bottom),
             child: AnimatedBuilder(
               animation: _chatAnimation,
               builder: (context, child) {
@@ -327,14 +328,16 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       _buildEnhancedHeader(theme, compact: keyboardOpen),
 
                       // Main content area - improved spacing
-                      Flexible(fit: FlexFit.loose, child: _buildChatArea(theme)),
+                      Flexible(
+                        fit: FlexFit.loose,
+                        child: _buildChatArea(theme),
+                      ),
 
                       // Suggested Questions (above input)
-                      if (!keyboardOpen &&
-                          _shouldShowQuickQuestions() &&
-                          !_quickRepliesCollapsed)
-                        SizedBox(height: 80,
-  child: SingleChildScrollView(
+                      if (!keyboardOpen && _shouldShowQuickQuestions())
+                        SizedBox(
+                          height: 80,
+                          child: SingleChildScrollView(
                             child: Container(
                               padding: const EdgeInsets.fromLTRB(16, 4, 16, 2),
                               child: Padding(
@@ -349,7 +352,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       SizedBox(
                         height: MediaQuery.of(context).size.width > 900 ? 0 : 8,
                       ),
-                       _buildEnhancedInput(theme),
+                      _buildEnhancedInput(theme),
                     ],
                   ),
                 );
@@ -362,8 +365,10 @@ class _FloatingAIChatState extends State<FloatingAIChat>
           Positioned(
             right: 16,
             bottom: _isFullScreen
-                ? (MediaQuery.of(context).padding.bottom + MediaQuery.of(context).viewInsets.bottom)
-                : (MediaQuery.of(context).padding.bottom + MediaQuery.of(context).viewInsets.bottom),
+                ? (MediaQuery.of(context).padding.bottom +
+                      MediaQuery.of(context).viewInsets.bottom)
+                : (MediaQuery.of(context).padding.bottom +
+                      MediaQuery.of(context).viewInsets.bottom),
             child: AnimatedBuilder(
               animation: _fabAnimation,
               builder: (context, child) {
@@ -761,7 +766,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   // Enhanced Chat Area - Better spacing and padding
   Widget _buildChatArea(ThemeData theme) {
     return SizedBox.expand(
-child: Theme(
+      child: Theme(
         data: theme.copyWith(
           primaryColor: theme.brightness == Brightness.dark
               ? Colors.blueGrey
@@ -821,46 +826,66 @@ child: Theme(
       mainAxisSize: MainAxisSize.min,
       children: [
         // Header - More prominent
-        Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+        InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: () {
+            setState(() {
+              _quickRepliesCollapsed = !_quickRepliesCollapsed;
+            });
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+                    ),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Icon(
+                    Icons.auto_awesome_outlined,
+                    color: Theme.of(context).colorScheme.surface,
+                    size: 18,
+                  ),
                 ),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Icon(
-                Icons.auto_awesome_outlined,
-                color: Theme.of(context).colorScheme.surface,
-                size: 18,
-              ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'Suggested Questions',
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      color: AppTheme.primaryRose,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+                Icon(
+                  _quickRepliesCollapsed
+                      ? Icons.keyboard_arrow_down
+                      : Icons.keyboard_arrow_up,
+                  color: AppTheme.primaryRose,
+                ),
+              ],
             ),
-            const SizedBox(width: 8),
-            Text(
-              'Suggested Questions',
-              style: theme.textTheme.titleMedium?.copyWith(
-                color: AppTheme.primaryRose,
-                fontWeight: FontWeight.w500,
-                fontSize: 14,
-              ),
-            ),
-          ],
+          ),
         ),
         const SizedBox(height: 4),
         // Suggestions - Horizontal scrollable for better visibility
-        SizedBox(
-          height: 34,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: suggestions.length,
-            separatorBuilder: (context, index) => const SizedBox(width: 12),
-            itemBuilder: (context, index) {
-              return _buildSuggestionChip(suggestions[index], theme, index);
-            },
+        if (!_quickRepliesCollapsed)
+          SizedBox(
+            height: 34,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: suggestions.length,
+              separatorBuilder: (context, index) => const SizedBox(width: 12),
+              itemBuilder: (context, index) {
+                return _buildSuggestionChip(suggestions[index], theme, index);
+              },
+            ),
           ),
-        ),
       ],
     );
   }
@@ -1025,12 +1050,15 @@ child: Theme(
                 ),
               ),
               child: TextField(
-  textAlignVertical: TextAlignVertical.center,
+                textAlignVertical: TextAlignVertical.center,
                 enableInteractiveSelection: false,
                 controller: _textController,
                 focusNode: _inputFocusNode,
                 decoration: InputDecoration(
-  contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 14,
+                  ),
                   hintText:
                       'Ask about health, science, technology, lifestyle...',
                   hintStyle: theme.textTheme.bodyMedium?.copyWith(
@@ -1038,7 +1066,11 @@ child: Theme(
                     fontSize: 15,
                   ),
                   suffixIcon: IconButton(
-                    icon: Icon(Icons.send_rounded, size: 20, color: Theme.of(context).colorScheme.primary),
+                    icon: Icon(
+                      Icons.send_rounded,
+                      size: 20,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                     onPressed: () {
                       final text = _textController.text.trim();
                       if (text.isNotEmpty) {
