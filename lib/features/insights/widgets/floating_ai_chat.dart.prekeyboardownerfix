@@ -139,7 +139,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             Future.delayed(_thinkingDelay, () {
               if (!mounted) return;
 
-              final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+              final keyboardOpen = _inputFocusNode.hasFocus;
 
               setState(() {
                 _isTyping = false;
@@ -285,7 +285,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     // // // // debugPrint("VIEW INSETS (keyboard): ");
 
     final theme = Theme.of(context);
-    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+    final keyboardOpen = _inputFocusNode.hasFocus;
 
     return Stack(
       children: [
