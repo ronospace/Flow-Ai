@@ -139,7 +139,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             Future.delayed(_thinkingDelay, () {
               if (!mounted) return;
 
-              final keyboardOpen = _inputFocusNode.hasFocus;
+              final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
 
               setState(() {
                 _isTyping = false;
@@ -263,25 +263,10 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
   double _getTabsBottom() {
     final ctx = widget.tabsKey.currentContext;
-
-    final safeTop = MediaQuery.of(context).padding.top;
-
-    if (ctx == null) {
-      return safeTop + 120;
-    }
-
-    final renderObject = ctx.findRenderObject();
-
-    if (renderObject == null || renderObject is! RenderBox) {
-      return safeTop + 120;
-    }
-
-    final pos = renderObject.localToGlobal(Offset.zero);
-
-    return (pos.dy + renderObject.size.height + 8).clamp(
-      safeTop + 100,
-      MediaQuery.of(context).size.height * 0.45,
-    );
+    if (ctx == null) return 200;
+    final box = ctx.findRenderObject() as RenderBox;
+    final pos = box.localToGlobal(Offset.zero);
+    return pos.dy + box.size.height + 8;
   }
 
   double _getPeriodSelectorTop() {
@@ -300,7 +285,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     // // // // debugPrint("VIEW INSETS (keyboard): ");
 
     final theme = Theme.of(context);
-    final keyboardOpen = _inputFocusNode.hasFocus;
+    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
 
     return Stack(
       children: [
@@ -315,8 +300,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             bottom: _isFullScreen
                 ? (MediaQuery.of(context).padding.bottom +
                       MediaQuery.of(context).viewInsets.bottom)
-                : (MediaQuery.of(context).padding.bottom +
-                      MediaQuery.of(context).viewInsets.bottom),
+                : AppLayoutMetrics.dialogBottom(context),
             child: AnimatedBuilder(
               animation: _chatAnimation,
               builder: (context, child) {
@@ -346,7 +330,9 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       Expanded(child: _buildChatArea(theme)),
 
                       // Suggested Questions (above input)
-                      if (!keyboardOpen && _shouldShowQuickQuestions())
+                      if (!keyboardOpen &&
+                          _shouldShowQuickQuestions() &&
+                          !_quickRepliesCollapsed)
                         SizedBox(
                           height: 60,
                           child: ListView(
@@ -358,7 +344,9 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
                       // Input Area (last = primary)
                       SizedBox(
-                        height: MediaQuery.of(context).size.width > 900 ? 0 : 8,
+                        height: keyboardOpen
+                            ? 0
+                            : (MediaQuery.of(context).size.width > 900 ? 0 : 8),
                       ),
                       _buildEnhancedInput(theme),
                     ],
@@ -375,8 +363,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             bottom: _isFullScreen
                 ? (MediaQuery.of(context).padding.bottom +
                       MediaQuery.of(context).viewInsets.bottom)
-                : (MediaQuery.of(context).padding.bottom +
-                      MediaQuery.of(context).viewInsets.bottom),
+                : AppLayoutMetrics.dialogBottom(context),
             child: AnimatedBuilder(
               animation: _fabAnimation,
               builder: (context, child) {
@@ -549,8 +536,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             children: [
               // AI Avatar with Animation
               Container(
-                    width: 48,
-                    height: 48,
+                    width: compact ? 36 : 48,
+                    height: compact ? 36 : 48,
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(16),
@@ -564,7 +551,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       child: Icon(
                         Icons.psychology_rounded,
                         color: Theme.of(context).colorScheme.surface,
-                        size: 24,
+                        size: compact ? 18 : 24,
                       ),
                     ),
                   )
@@ -575,7 +562,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   )
                   .then(delay: 2000.ms),
 
-              const SizedBox(width: 16),
+              SizedBox(width: compact ? 10 : 16),
 
               // Title and Status
               Expanded(
@@ -645,7 +632,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                         ),
                       ],
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: compact ? 0 : 2),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -684,8 +671,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                     onTap: _toggleFullScreen,
                     behavior: HitTestBehavior.opaque,
                     child: Container(
-                      width: 48,
-                      height: 48,
+                      width: compact ? 36 : 48,
+                      height: compact ? 36 : 48,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16),
                         color: Colors.white.withValues(alpha: 0.1),
@@ -695,7 +682,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                             ? Icons.fullscreen_exit_rounded
                             : Icons.fullscreen_rounded,
                         color: Theme.of(context).colorScheme.surface,
-                        size: 24,
+                        size: compact ? 18 : 24,
                       ),
                     ),
                   ),
@@ -773,54 +760,52 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
   // Enhanced Chat Area - Better spacing and padding
   Widget _buildChatArea(ThemeData theme) {
-    return SizedBox.expand(
-      child: Theme(
-        data: theme.copyWith(
+    return Theme(
+      data: theme.copyWith(
+        primaryColor: theme.brightness == Brightness.dark
+            ? Colors.blueGrey
+            : AppTheme.primaryRose,
+      ),
+      child: Chat(
+        messages: _messages,
+        onSendPressed: _handleSendPressed,
+        onMessageTap: _handleMessageTap,
+        onPreviewDataFetched: _handlePreviewDataFetched,
+        user: _chatService.currentUser ?? types.User(id: 'fallback_user'),
+        theme: DefaultChatTheme(
           primaryColor: theme.brightness == Brightness.dark
               ? Colors.blueGrey
               : AppTheme.primaryRose,
+          secondaryColor: Theme.of(context).colorScheme.surfaceContainer,
+          backgroundColor: Colors.transparent,
+          inputBackgroundColor: Theme.of(context).colorScheme.surface,
+          inputTextColor: theme.textTheme.bodyMedium?.color ?? Colors.black,
+          messageBorderRadius: 16,
+          messageInsetsHorizontal: 12,
+          messageInsetsVertical: 8,
+          receivedMessageBodyTextStyle:
+              theme.textTheme.bodyMedium?.copyWith(
+                color: theme.textTheme.bodyMedium?.color,
+                fontSize: 14,
+                height: 1.5,
+              ) ??
+              const TextStyle(fontSize: 14, height: 1.5),
+          sentMessageBodyTextStyle:
+              theme.textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.surface,
+                fontSize: 14,
+                height: 1.5,
+              ) ??
+              TextStyle(
+                color: Theme.of(context).colorScheme.surface,
+                fontSize: 14,
+                height: 1.5,
+              ),
         ),
-        child: Chat(
-          messages: _messages,
-          onSendPressed: _handleSendPressed,
-          onMessageTap: _handleMessageTap,
-          onPreviewDataFetched: _handlePreviewDataFetched,
-          user: _chatService.currentUser ?? types.User(id: 'fallback_user'),
-          theme: DefaultChatTheme(
-            primaryColor: theme.brightness == Brightness.dark
-                ? Colors.blueGrey
-                : AppTheme.primaryRose,
-            secondaryColor: Theme.of(context).colorScheme.surfaceContainer,
-            backgroundColor: Colors.transparent,
-            inputBackgroundColor: Theme.of(context).colorScheme.surface,
-            inputTextColor: theme.textTheme.bodyMedium?.color ?? Colors.black,
-            messageBorderRadius: 16,
-            messageInsetsHorizontal: 12,
-            messageInsetsVertical: 8,
-            receivedMessageBodyTextStyle:
-                theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.textTheme.bodyMedium?.color,
-                  fontSize: 14,
-                  height: 1.5,
-                ) ??
-                const TextStyle(fontSize: 14, height: 1.5),
-            sentMessageBodyTextStyle:
-                theme.textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.surface,
-                  fontSize: 14,
-                  height: 1.5,
-                ) ??
-                TextStyle(
-                  color: Theme.of(context).colorScheme.surface,
-                  fontSize: 14,
-                  height: 1.5,
-                ),
-          ),
-          showUserAvatars: true,
-          showUserNames: false,
-          customBottomWidget:
-              const SizedBox.shrink(), // We'll use our enhanced input
-        ),
+        showUserAvatars: true,
+        showUserNames: false,
+        customBottomWidget:
+            const SizedBox.shrink(), // We'll use our enhanced input
       ),
     );
   }
@@ -1034,7 +1019,10 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   // Enhanced Input Area - Better spacing and visibility
   Widget _buildEnhancedInput(ThemeData theme) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: MediaQuery.of(context).viewInsets.bottom > 0 ? 2 : 8,
+      ),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.only(
@@ -1065,7 +1053,9 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.symmetric(
                     horizontal: 16,
-                    vertical: 14,
+                    vertical: MediaQuery.of(context).viewInsets.bottom > 0
+                        ? 8
+                        : 14,
                   ),
                   hintText:
                       'Ask about health, science, technology, lifestyle...',

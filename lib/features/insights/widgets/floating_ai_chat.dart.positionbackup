@@ -139,7 +139,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             Future.delayed(_thinkingDelay, () {
               if (!mounted) return;
 
-              final keyboardOpen = _inputFocusNode.hasFocus;
+              final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
 
               setState(() {
                 _isTyping = false;
@@ -263,25 +263,10 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
   double _getTabsBottom() {
     final ctx = widget.tabsKey.currentContext;
-
-    final safeTop = MediaQuery.of(context).padding.top;
-
-    if (ctx == null) {
-      return safeTop + 120;
-    }
-
-    final renderObject = ctx.findRenderObject();
-
-    if (renderObject == null || renderObject is! RenderBox) {
-      return safeTop + 120;
-    }
-
-    final pos = renderObject.localToGlobal(Offset.zero);
-
-    return (pos.dy + renderObject.size.height + 8).clamp(
-      safeTop + 100,
-      MediaQuery.of(context).size.height * 0.45,
-    );
+    if (ctx == null) return 200;
+    final box = ctx.findRenderObject() as RenderBox;
+    final pos = box.localToGlobal(Offset.zero);
+    return pos.dy + box.size.height + 8;
   }
 
   double _getPeriodSelectorTop() {
@@ -300,7 +285,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     // // // // debugPrint("VIEW INSETS (keyboard): ");
 
     final theme = Theme.of(context);
-    final keyboardOpen = _inputFocusNode.hasFocus;
+    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
 
     return Stack(
       children: [
@@ -346,7 +331,9 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       Expanded(child: _buildChatArea(theme)),
 
                       // Suggested Questions (above input)
-                      if (!keyboardOpen && _shouldShowQuickQuestions())
+                      if (!keyboardOpen &&
+                          _shouldShowQuickQuestions() &&
+                          !_quickRepliesCollapsed)
                         SizedBox(
                           height: 60,
                           child: ListView(
