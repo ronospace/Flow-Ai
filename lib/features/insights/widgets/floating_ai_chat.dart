@@ -263,10 +263,25 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
   double _getTabsBottom() {
     final ctx = widget.tabsKey.currentContext;
-    if (ctx == null) return 200;
-    final box = ctx.findRenderObject() as RenderBox;
-    final pos = box.localToGlobal(Offset.zero);
-    return pos.dy + box.size.height + 8;
+
+    final safeTop = MediaQuery.of(context).padding.top;
+
+    if (ctx == null) {
+      return safeTop + 120;
+    }
+
+    final renderObject = ctx.findRenderObject();
+
+    if (renderObject == null || renderObject is! RenderBox) {
+      return safeTop + 120;
+    }
+
+    final pos = renderObject.localToGlobal(Offset.zero);
+
+    return (pos.dy + renderObject.size.height + 8).clamp(
+      safeTop + 100,
+      MediaQuery.of(context).size.height * 0.45,
+    );
   }
 
   double _getPeriodSelectorTop() {
@@ -328,23 +343,16 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       _buildEnhancedHeader(theme, compact: keyboardOpen),
 
                       // Main content area - improved spacing
-                      Flexible(
-                        fit: FlexFit.loose,
-                        child: _buildChatArea(theme),
-                      ),
+                      Expanded(child: _buildChatArea(theme)),
 
                       // Suggested Questions (above input)
                       if (!keyboardOpen && _shouldShowQuickQuestions())
                         SizedBox(
-                          height: 80,
-                          child: SingleChildScrollView(
-                            child: Container(
-                              padding: const EdgeInsets.fromLTRB(16, 4, 16, 2),
-                              child: Padding(
-                                padding: const EdgeInsets.only(bottom: 6),
-                                child: _buildEnhancedQuickReplies(theme),
-                              ),
-                            ),
+                          height: 60,
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            shrinkWrap: true,
+                            children: [_buildEnhancedQuickReplies(theme)],
                           ),
                         ),
 
