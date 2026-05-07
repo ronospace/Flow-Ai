@@ -297,7 +297,11 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             right: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
             left: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
             top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
-            bottom: MediaQuery.of(context).padding.bottom,
+            bottom: _isFullScreen
+                ? (MediaQuery.of(context).padding.bottom +
+                      MediaQuery.of(context).viewInsets.bottom)
+                : (MediaQuery.of(context).padding.bottom +
+                      MediaQuery.of(context).viewInsets.bottom),
             child: AnimatedBuilder(
               animation: _chatAnimation,
               builder: (context, child) {
@@ -324,7 +328,10 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       _buildEnhancedHeader(theme, compact: keyboardOpen),
 
                       // Main content area - improved spacing
-                      Expanded(child: _buildChatArea(theme)),
+                      Flexible(
+                        fit: FlexFit.loose,
+                        child: _buildChatArea(theme),
+                      ),
 
                       // Suggested Questions (above input)
                       if (!keyboardOpen && _shouldShowQuickQuestions())

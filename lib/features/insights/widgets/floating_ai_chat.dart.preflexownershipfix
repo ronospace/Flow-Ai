@@ -324,7 +324,10 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       _buildEnhancedHeader(theme, compact: keyboardOpen),
 
                       // Main content area - improved spacing
-                      Expanded(child: _buildChatArea(theme)),
+                      Flexible(
+                        fit: FlexFit.loose,
+                        child: _buildChatArea(theme),
+                      ),
 
                       // Suggested Questions (above input)
                       if (!keyboardOpen && _shouldShowQuickQuestions())
