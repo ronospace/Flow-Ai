@@ -27,7 +27,6 @@ class FloatingAIChat extends StatefulWidget {
 
 class _FloatingAIChatState extends State<FloatingAIChat>
     with TickerProviderStateMixin {
-  static const double _floatingChatGap = 8;
   static const _thinkingDelay = Duration(milliseconds: 900);
   bool _isExpanded = false;
   bool _isFullScreen = false;
@@ -302,8 +301,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 ? (MediaQuery.of(context).padding.bottom +
                       MediaQuery.of(context).viewInsets.bottom)
                 : (MediaQuery.of(context).padding.bottom +
-                      MediaQuery.of(context).viewInsets.bottom +
-                      _floatingChatGap),
+                      MediaQuery.of(context).viewInsets.bottom),
             child: AnimatedBuilder(
               animation: _chatAnimation,
               builder: (context, child) {
@@ -370,8 +368,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 ? (MediaQuery.of(context).padding.bottom +
                       MediaQuery.of(context).viewInsets.bottom)
                 : (MediaQuery.of(context).padding.bottom +
-                      MediaQuery.of(context).viewInsets.bottom +
-                      16),
+                      MediaQuery.of(context).viewInsets.bottom),
             child: AnimatedBuilder(
               animation: _fabAnimation,
               builder: (context, child) {
