@@ -200,7 +200,7 @@ class _InsightsScreenState extends State<InsightsScreen>
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface.withValues(alpha: 0.9),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(10),
         boxShadow: [...AppTheme.shadowSm(theme.shadowColor)],
       ),
       child: Row(
@@ -220,8 +220,8 @@ class _InsightsScreenState extends State<InsightsScreen>
               },
               child: AnimatedContainer(
                 duration: AppTheme.motionFast,
-                margin: const EdgeInsets.all(4),
-                padding: const EdgeInsets.symmetric(vertical: 12),
+                margin: const EdgeInsets.all(3),
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 decoration: BoxDecoration(
                   gradient: isSelected
                       ? LinearGradient(
@@ -231,7 +231,7 @@ class _InsightsScreenState extends State<InsightsScreen>
                           ],
                         )
                       : null,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
                   period['label'],
@@ -259,7 +259,7 @@ class _InsightsScreenState extends State<InsightsScreen>
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface.withValues(alpha: 0.9),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
             color: theme.shadowColor.withValues(alpha: 0.1),
@@ -270,11 +270,17 @@ class _InsightsScreenState extends State<InsightsScreen>
       ),
       child: TabBar(
         controller: _tabController,
+        indicatorSize: TabBarIndicatorSize.tab,
+        indicatorPadding: const EdgeInsets.all(2),
+        labelPadding: EdgeInsets.zero,
+        tabAlignment: TabAlignment.fill,
+        splashFactory: NoSplash.splashFactory,
+        overlayColor: WidgetStatePropertyAll(Colors.transparent),
         indicator: BoxDecoration(
           gradient: LinearGradient(
             colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
           ),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
         ),
         dividerColor: Colors.transparent,
         labelColor: Colors.white,
@@ -288,19 +294,19 @@ class _InsightsScreenState extends State<InsightsScreen>
         tabs: const [
           Tab(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
               child: FittedBox(fit: BoxFit.scaleDown, child: Text('Overview')),
             ),
           ),
           Tab(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
               child: Text('Trends'),
             ),
           ),
           Tab(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
               child: Text('Patterns'),
             ),
           ),
