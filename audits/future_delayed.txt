@@ -1,0 +1,117 @@
+lib/core/ml/advanced_prediction_models.dart:24:      await Future.delayed(const Duration(milliseconds: 500));
+lib/core/performance/performance_optimization_engine.dart:585:    await Future.delayed(const Duration(milliseconds: 100));
+lib/core/performance/performance_optimization_engine.dart:589:    await Future.delayed(const Duration(milliseconds: 200));
+lib/core/performance/performance_optimization_engine.dart:593:    await Future.delayed(const Duration(milliseconds: 500));
+lib/core/performance/performance_optimization_engine.dart:597:    await Future.delayed(const Duration(milliseconds: 300));
+lib/core/performance/performance_optimization_engine.dart:601:    await Future.delayed(const Duration(milliseconds: 100));
+lib/core/performance/performance_optimization_engine.dart:605:    await Future.delayed(const Duration(milliseconds: 150));
+lib/core/performance/performance_optimization_engine.dart:609:    await Future.delayed(const Duration(milliseconds: 100));
+lib/core/performance/performance_optimization_engine.dart:669:    await Future.delayed(const Duration(milliseconds: 100));
+lib/core/performance/performance_optimization_engine.dart:673:    await Future.delayed(const Duration(milliseconds: 150));
+lib/core/performance/performance_optimization_engine.dart:677:    await Future.delayed(const Duration(milliseconds: 200));
+lib/core/performance/performance_optimization_engine.dart:681:    await Future.delayed(const Duration(milliseconds: 100));
+lib/core/performance/performance_optimization_engine.dart:685:    await Future.delayed(const Duration(milliseconds: 100));
+lib/core/performance/performance_optimization_engine.dart:689:    await Future.delayed(const Duration(milliseconds: 50));
+lib/core/performance/performance_optimization_engine.dart:742:    await Future.delayed(const Duration(milliseconds: 100));
+lib/core/performance/performance_optimization_engine.dart:746:    await Future.delayed(const Duration(milliseconds: 200));
+lib/core/performance/performance_optimization_engine.dart:750:    await Future.delayed(const Duration(milliseconds: 150));
+lib/core/performance/performance_optimization_engine.dart:754:    await Future.delayed(const Duration(milliseconds: 250));
+lib/core/performance/performance_optimization_engine.dart:801:    await Future.delayed(const Duration(milliseconds: 100));
+lib/core/performance/performance_optimization_engine.dart:805:    await Future.delayed(const Duration(milliseconds: 150));
+lib/core/performance/performance_optimization_engine.dart:809:    await Future.delayed(const Duration(milliseconds: 100));
+lib/core/performance/performance_optimization_engine.dart:862:    await Future.delayed(const Duration(milliseconds: 200));
+lib/core/performance/performance_optimization_engine.dart:867:    await Future.delayed(const Duration(milliseconds: 300));
+lib/core/performance/performance_optimization_engine.dart:872:    await Future.delayed(const Duration(milliseconds: 100));
+lib/core/error/error_handler.dart:453:    await Future.delayed(const Duration(milliseconds: 100));
+lib/core/error/error_handler.dart:463:    await Future.delayed(const Duration(milliseconds: 100));
+lib/core/error/error_handler.dart:473:    await Future.delayed(const Duration(milliseconds: 100));
+lib/core/services/multimodal_symptom_analyzer.dart:725:    await Future.delayed(const Duration(milliseconds: 2500));
+lib/core/services/multimodal_symptom_analyzer.dart:735:    await Future.delayed(const Duration(milliseconds: 800));
+lib/core/services/multimodal_symptom_analyzer.dart:749:    await Future.delayed(const Duration(milliseconds: 600));
+lib/core/services/multimodal_symptom_analyzer.dart:759:    await Future.delayed(const Duration(milliseconds: 500));
+lib/core/services/multimodal_symptom_analyzer.dart:769:    await Future.delayed(const Duration(milliseconds: 400));
+lib/core/services/multimodal_symptom_analyzer.dart:779:    await Future.delayed(const Duration(milliseconds: 300));
+lib/core/services/multimodal_symptom_analyzer.dart:790:    await Future.delayed(const Duration(milliseconds: 500));
+lib/core/services/multimodal_symptom_analyzer.dart:802:    await Future.delayed(const Duration(milliseconds: 1000));
+lib/core/services/multimodal_symptom_analyzer.dart:818:    await Future.delayed(const Duration(milliseconds: 800));
+lib/core/services/multimodal_symptom_analyzer.dart:835:    await Future.delayed(const Duration(milliseconds: 600));
+lib/core/services/multimodal_symptom_analyzer.dart:851:    await Future.delayed(const Duration(milliseconds: 500));
+lib/core/services/multimodal_symptom_analyzer.dart:866:    await Future.delayed(const Duration(milliseconds: 200));
+lib/core/services/multimodal_symptom_analyzer.dart:877:    await Future.delayed(const Duration(milliseconds: 300));
+lib/core/services/multimodal_symptom_analyzer.dart:961:    await Future.delayed(const Duration(milliseconds: 1500));
+lib/core/services/multimodal_symptom_analyzer.dart:987:    await Future.delayed(const Duration(milliseconds: 800));
+lib/core/services/multimodal_symptom_analyzer.dart:998:    await Future.delayed(const Duration(milliseconds: 600));
+lib/core/services/multimodal_symptom_analyzer.dart:1009:    await Future.delayed(const Duration(milliseconds: 700));
+lib/core/services/multimodal_symptom_analyzer.dart:1058:    await Future.delayed(const Duration(milliseconds: 500));
+lib/core/services/multimodal_symptom_analyzer.dart:1070:    await Future.delayed(const Duration(milliseconds: 400));
+lib/core/services/multimodal_symptom_analyzer.dart:1081:    await Future.delayed(const Duration(milliseconds: 600));
+lib/core/services/multimodal_symptom_analyzer.dart:1093:    await Future.delayed(const Duration(milliseconds: 300));
+lib/core/services/multimodal_symptom_analyzer.dart:1105:    await Future.delayed(const Duration(milliseconds: 500));
+lib/core/services/multimodal_symptom_analyzer.dart:1117:    await Future.delayed(const Duration(milliseconds: 400));
+lib/core/services/conversation_cloud_sync.dart:205:    Future.delayed(const Duration(minutes: 5), () async {
+lib/core/services/enhanced_ai_chat_service.dart:268:      await Future.delayed(const Duration(milliseconds: 45));
+lib/core/services/performance_optimizer.dart:108:    await Future.delayed(debounceDuration);
+lib/core/services/performance_optimization_service.dart:456:      await Future.delayed(const Duration(milliseconds: 100));
+lib/core/services/flowai_service.dart:321:        await Future.delayed(waitTime);
+lib/features/insights/providers/insights_provider.dart:17:    await Future.delayed(const Duration(seconds: 1));
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:139:            Future.delayed(_thinkingDelay, () {
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:139:            Future.delayed(_thinkingDelay, () {
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:139:            Future.delayed(_thinkingDelay, () {
+lib/features/insights/widgets/floating_ai_chat.dart:141:            Future.delayed(_thinkingDelay, () {
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:139:            Future.delayed(_thinkingDelay, () {
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:139:            Future.delayed(_thinkingDelay, () {
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:139:            Future.delayed(_thinkingDelay, () {
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:139:            Future.delayed(_thinkingDelay, () {
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:139:            Future.delayed(_thinkingDelay, () {
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:139:            Future.delayed(_thinkingDelay, () {
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:139:            Future.delayed(_thinkingDelay, () {
+lib/features/insights/widgets/floating_ai_chat.dart.bak:139:            Future.delayed(_thinkingDelay, () {
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:139:            Future.delayed(_thinkingDelay, () {
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:139:            Future.delayed(_thinkingDelay, () {
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:139:            Future.delayed(_thinkingDelay, () {
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:139:            Future.delayed(_thinkingDelay, () {
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:139:            Future.delayed(_thinkingDelay, () {
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:139:            Future.delayed(_thinkingDelay, () {
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:139:            Future.delayed(_thinkingDelay, () {
+lib/features/settings/screens/account_management_screen.dart:667:      await Future.delayed(const Duration(seconds: 2));
+lib/features/settings/screens/account_management_screen.dart:844:      await Future.delayed(const Duration(seconds: 3));
+lib/features/settings/widgets/cyclesync_integration.dart:369:    await Future.delayed(const Duration(seconds: 2));
+lib/features/settings/widgets/cyclesync_integration.dart:414:    Future.delayed(const Duration(seconds: 3), () {
+lib/features/auth/screens/futuristic_auth_screen.dart:70:    Future.delayed(const Duration(milliseconds: 300), () {
+lib/features/auth/screens/futuristic_auth_screen.dart:73:    Future.delayed(const Duration(milliseconds: 600), () {
+lib/features/auth/screens/auth_screen.dart:79:    Future.delayed(const Duration(milliseconds: 300), () {
+lib/features/auth/screens/auth_screen.dart:82:    Future.delayed(const Duration(milliseconds: 600), () {
+lib/features/auth/screens/auth_screen.dart:536:        Future.delayed(const Duration(milliseconds: 500));
+lib/features/auth/screens/auth_screen.dart:662:      Future.delayed(const Duration(milliseconds: 1000));
+lib/features/auth/screens/auth_screen.dart:711:        Future.delayed(const Duration(milliseconds: 500));
+lib/features/auth/screens/auth_screen.dart:771:        Future.delayed(const Duration(milliseconds: 500));
+lib/features/cycle/screens/home_screen.dart:89:    Future.delayed(const Duration(milliseconds: 500), () {
+lib/features/cycle/screens/home_screen.dart:99:      Future.delayed(const Duration(milliseconds: 200), () {
+lib/features/cycle/screens/home_screen.dart:107:      Future.delayed(const Duration(milliseconds: 1000), () {
+lib/features/cycle/screens/home_screen.dart:114:      Future.delayed(const Duration(milliseconds: 800), () {
+lib/features/cycle/screens/home_screen.dart:2182:    Future.delayed(const Duration(milliseconds: 500), () {
+lib/features/cycle/widgets/pain_body_map.dart:386:                Future.delayed(const Duration(milliseconds: 800), () {
+lib/features/cycle/widgets/pain_body_map.dart:464:                    Future.delayed(const Duration(milliseconds: 600), () {
+lib/features/feedback/screens/feedback_screen.dart:62:    await Future.delayed(const Duration(seconds: 2));
+lib/features/partner/screens/partner_dashboard_screen.dart:64:    Future.delayed(const Duration(milliseconds: 300), () {
+lib/features/partner/dialogs/join_partner_dialog.dart:165:          Future.delayed(const Duration(milliseconds: 160), () {
+lib/features/partner/dialogs/join_partner_dialog.dart:929:      await Future.delayed(const Duration(milliseconds: 1200));
+lib/features/partner/widgets/partner_invitation_dialog.dart:479:      Future.delayed(const Duration(milliseconds: 600), () {
+lib/features/partner/widgets/partner_invitation_dialog.dart:483:      Future.delayed(const Duration(seconds: 2), () {
+lib/features/partner/widgets/partner_invitation_dialog.dart:553:    Future.delayed(const Duration(seconds: 2), () {
+lib/features/biometric/widgets/biometric_sync_status.dart:89:    await Future.delayed(const Duration(seconds: 2));
+lib/features/deployment/services/deployment_service.dart:1126:    await Future.delayed(Duration(seconds: 30)); // Compile time
+lib/features/deployment/services/deployment_service.dart:1127:    await Future.delayed(Duration(seconds: 15)); // Linking time
+lib/features/deployment/services/deployment_service.dart:1128:    await Future.delayed(Duration(seconds: 5)); // Packaging time
+lib/features/coming_soon/screens/coming_soon_screen.dart:36:    Future.delayed(const Duration(milliseconds: 300), () {
+lib/features/coming_soon/widgets/waitlist_signup_widget.dart:438:      await Future.delayed(const Duration(seconds: 2));
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:46:      await Future.delayed(const Duration(milliseconds: 800));
+lib/features/premium/services/premium_service.dart:302:    await Future.delayed(const Duration(seconds: 2));
+lib/features/premium/services/premium_service.dart:369:    await Future.delayed(const Duration(seconds: 1));
+lib/features/onboarding/screens/onboarding_screen.dart:283:        await Future.delayed(const Duration(milliseconds: 100));
+lib/features/onboarding/screens/steps/complete_step.dart:45:    Future.delayed(const Duration(milliseconds: 300), () {
+lib/features/onboarding/screens/splash_screen.dart:59:    await Future.delayed(const Duration(seconds: 4));
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:937:      await Future.delayed(const Duration(seconds: 2));
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:986:      await Future.delayed(const Duration(seconds: 2));
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:1019:      await Future.delayed(const Duration(seconds: 3));
+lib/main.dart:116:  await Future.delayed(const Duration(milliseconds: 100));

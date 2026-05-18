@@ -1,0 +1,222 @@
+lib/core/ui/adaptive_messages.dart:16:      const Color(0xFF1E8E3E),
+lib/core/ui/adaptive_messages.dart:30:      const Color(0xFF2563EB),
+lib/core/ui/adaptive_messages.dart:44:      const Color(0xFFF59E0B),
+lib/core/ui/adaptive_messages.dart:69:      const Color(0xFFDC2626),
+lib/core/utils/safe_shadows.dart:9:    Color color = const Color(0xFF000000),
+lib/core/utils/theme_utils.dart:90:        : [const Color(0xFFFFF8F9), AppTheme.lightSurface];
+lib/core/theme/app_theme.dart:20:  static const Color primaryRose = Color(0xFFFF6B9D);
+lib/core/theme/app_theme.dart:21:  static const Color primaryPurple = Color(0xFF9B59B6);
+lib/core/theme/app_theme.dart:22:  static const Color secondaryBlue = Color(0xFF3498DB);
+lib/core/theme/app_theme.dart:23:  static const Color accentMint = Color(0xFF00D4AA);
+lib/core/theme/app_theme.dart:24:  static const Color accentCoral = Color(0xFFFF6B6B);
+lib/core/theme/app_theme.dart:25:  static const Color warningOrange = Color(0xFFFFA726);
+lib/core/theme/app_theme.dart:26:  static const Color errorRed = Color(0xFFE74C3C);
+lib/core/theme/app_theme.dart:27:  static const Color successGreen = Color(0xFF2ECC71);
+lib/core/theme/app_theme.dart:30:  static const Color sweetPeach = Color(0xFFFFB3BA); // Soft peachy pink
+lib/core/theme/app_theme.dart:31:  static const Color warmApricot = Color(0xFFFFCB9A); // Gentle apricot
+lib/core/theme/app_theme.dart:32:  static const Color softLavender = Color(0xFFC7CEEA); // Calming lavender
+lib/core/theme/app_theme.dart:33:  static const Color blushRose = Color(0xFFFFB6C1); // Light rose blush
+lib/core/theme/app_theme.dart:77:    colors: [Color(0x03FF6B9D), Color(0x00FFFFFF)],
+lib/core/theme/app_theme.dart:81:  static const Color lightBackground = Color(0xFFFAFAFA);
+lib/core/theme/app_theme.dart:82:  static const Color lightSurface = Color(0xFFFFFFFF);
+lib/core/theme/app_theme.dart:83:  static const Color lightCard = Color(0xFFFFFFFF);
+lib/core/theme/app_theme.dart:84:  static const Color lightText = Color(0xFF1A1A1A);
+lib/core/theme/app_theme.dart:85:  static const Color lightTextSecondary = Color(0xFF6B7280);
+lib/core/theme/app_theme.dart:88:  static const Color darkBackground = Color(0xFF0F0F0F);
+lib/core/theme/app_theme.dart:89:  static const Color darkSurface = Color(0xFF1A1A1A);
+lib/core/theme/app_theme.dart:90:  static const Color darkCard = Color(0xFF262626);
+lib/core/theme/app_theme.dart:91:  static const Color darkText = Color(0xFFE5E5E5);
+lib/core/theme/app_theme.dart:92:  static const Color darkTextSecondary = Color(0xFF9CA3AF);
+lib/core/theme/app_theme.dart:97:  static const Color lightGrey = Color(0xFFF3F4F6);
+lib/core/theme/app_theme.dart:121:          : [Color(0xFFFFF8F9), lightSurface],
+lib/core/visuals/consumer_visual_engine.dart:31:      Color(0xFFFFD700), // Gold
+lib/core/visuals/consumer_visual_engine.dart:32:      Color(0xFFFF6B35), // Orange
+lib/core/visuals/consumer_visual_engine.dart:33:      Color(0xFFFF1744), // Pink
+lib/core/visuals/consumer_visual_engine.dart:34:      Color(0xFFE040FB), // Purple
+lib/core/visuals/consumer_visual_engine.dart:37:      Color(0xFF4FC3F7), // Light Blue
+lib/core/visuals/consumer_visual_engine.dart:38:      Color(0xFF29B6F6), // Blue
+lib/core/visuals/consumer_visual_engine.dart:39:      Color(0xFF26A69A), // Teal
+lib/core/visuals/consumer_visual_engine.dart:40:      Color(0xFF66BB6A), // Green
+lib/core/visuals/consumer_visual_engine.dart:43:      Color(0xFFFF5722), // Deep Orange
+lib/core/visuals/consumer_visual_engine.dart:44:      Color(0xFFFF9800), // Orange
+lib/core/visuals/consumer_visual_engine.dart:45:      Color(0xFFFFC107), // Amber
+lib/core/visuals/consumer_visual_engine.dart:46:      Color(0xFFCDDC39), // Lime
+lib/core/visuals/consumer_visual_engine.dart:49:      Color(0xFF9C27B0), // Purple
+lib/core/visuals/consumer_visual_engine.dart:50:      Color(0xFF673AB7), // Deep Purple
+lib/core/visuals/consumer_visual_engine.dart:51:      Color(0xFF3F51B5), // Indigo
+lib/core/visuals/consumer_visual_engine.dart:52:      Color(0xFF2196F3), // Blue
+lib/core/visuals/consumer_visual_engine.dart:55:      Color(0xFF81C784), // Light Green
+lib/core/visuals/consumer_visual_engine.dart:56:      Color(0xFF4CAF50), // Green
+lib/core/visuals/consumer_visual_engine.dart:57:      Color(0xFF009688), // Teal
+lib/core/visuals/consumer_visual_engine.dart:58:      Color(0xFF00ACC1), // Cyan
+lib/core/visuals/consumer_visual_engine.dart:61:      Color(0xFF607D8B), // Blue Grey
+lib/core/visuals/consumer_visual_engine.dart:62:      Color(0xFF546E7A), // Blue Grey 600
+lib/core/visuals/consumer_visual_engine.dart:63:      Color(0xFF455A64), // Blue Grey 700
+lib/core/visuals/consumer_visual_engine.dart:64:      Color(0xFF37474F), // Blue Grey 800
+lib/core/visuals/consumer_visual_engine.dart:67:      Color(0xFF9E9E9E), // Grey
+lib/core/visuals/consumer_visual_engine.dart:68:      Color(0xFF757575), // Grey 600
+lib/core/visuals/consumer_visual_engine.dart:69:      Color(0xFF616161), // Grey 700
+lib/core/visuals/consumer_visual_engine.dart:70:      Color(0xFF424242), // Grey 800
+lib/core/routing/app_router.dart:387:                          colors: [Color(0xFFFF6B9D), Color(0xFF9B59B6)],
+lib/core/routing/app_router.dart:408:                      ? const Color(0xFFFF6B9D)
+lib/core/widgets/animated_micro_interactions.dart:19:    this.baseColor = const Color(0xFFE0E0E0),
+lib/core/widgets/animated_micro_interactions.dart:20:    this.highlightColor = const Color(0xFFF5F5F5),
+lib/core/widgets/animated_micro_interactions.dart:93:              Color(0xFFC147E9),
+lib/core/widgets/animated_micro_interactions.dart:94:              Color(0xFF4F46E5),
+lib/core/widgets/animated_micro_interactions.dart:95:              Color(0xFF10B981),
+lib/core/widgets/animated_micro_interactions.dart:96:              Color(0xFFF59E0B),
+lib/core/widgets/animated_micro_interactions.dart:248:    this.pulseColor = const Color(0xFFC147E9),
+lib/core/widgets/avatar_ring_painter.dart:15:      ..color = const Color(0xFFF6DDE8)
+lib/core/widgets/avatar_ring_painter.dart:24:        colors: [Color(0xFFFF5FA2), Color(0xFFA855F7)],
+lib/core/widgets/advanced_chart_widget.dart:21:    this.primaryColor = const Color(0xFFC147E9),
+lib/core/widgets/modern_button.dart:195:                  colors: [AppTheme.successGreen, Color(0xFF4CAF50)],
+lib/core/widgets/modern_button.dart:216:                  colors: [AppTheme.warningOrange, Color(0xFFFF9800)],
+lib/core/widgets/modern_button.dart:236:              ? const LinearGradient(colors: [Colors.red, Color(0xFFE53E3E)])
+lib/core/widgets/modern_button.dart:279:        return [AppTheme.successGreen, const Color(0xFF4CAF50)];
+lib/core/widgets/modern_button.dart:281:        return [AppTheme.warningOrange, const Color(0xFFFF9800)];
+lib/core/widgets/modern_button.dart:283:        return [Colors.red, const Color(0xFFE53E3E)];
+lib/core/widgets/flow_ai_logo.dart:67:            Color(0xFFE879F9), // Bright magenta
+lib/core/widgets/flow_ai_logo.dart:68:            Color(0xFFD946EF), // Deep rose
+lib/core/widgets/flow_ai_logo.dart:69:            Color(0xFFF97316), // Orange
+lib/core/widgets/flow_ai_logo.dart:70:            Color(0xFFA855F7), // Purple
+lib/core/widgets/flow_ai_logo.dart:76:            color: const Color(0xFF7C3AED).withValues(alpha: 0.4),
+lib/core/widgets/flow_ai_logo.dart:83:            color: const Color(0xFFFBBF24).withValues(alpha: 0.2),
+lib/core/widgets/flow_ai_logo.dart:98:              const Color(0xFFFFFFFF).withValues(alpha: 0.8),
+lib/core/widgets/flow_ai_logo.dart:99:              const Color(0xFFF8BBD9).withValues(alpha: 0.6),
+lib/core/widgets/flow_ai_logo.dart:100:              const Color(0xFFDDD6FE).withValues(alpha: 0.4),
+lib/core/widgets/flow_ai_logo.dart:101:              const Color(0xFFE879F9).withValues(alpha: 0.2),
+lib/core/widgets/flow_ai_logo.dart:123:                    colors: [Color(0xFFFFFFFF), Color(0xFFF8FAFC)],
+lib/core/widgets/flow_ai_logo.dart:127:                      color: const Color(0xFF1F2937).withValues(alpha: 0.1),
+lib/core/widgets/flow_ai_logo.dart:166:                            color: const Color(0xFFA855F7),
+lib/core/widgets/flow_ai_logo.dart:172:                            color: const Color(0xFFE879F9),
+lib/core/widgets/flow_ai_logo.dart:178:                            color: const Color(0xFFD946EF),
+lib/core/widgets/flow_ai_logo.dart:195:      [const Color(0xFFE879F9), const Color(0xFFD946EF)], // Magenta to rose
+lib/core/widgets/flow_ai_logo.dart:196:      [const Color(0xFFF97316), const Color(0xFFEAB308)], // Orange to yellow
+lib/core/widgets/flow_ai_logo.dart:197:      [const Color(0xFFA855F7), const Color(0xFF7C3AED)], // Purple to violet
+lib/core/widgets/flow_ai_logo.dart:198:      [const Color(0xFF06B6D4), const Color(0xFF0891B2)], // Cyan to blue
+lib/core/widgets/flow_ai_logo.dart:276:      [const Color(0xFFE879F9), const Color(0xFFD946EF)], // Magenta
+lib/core/widgets/flow_ai_logo.dart:277:      [const Color(0xFFF97316), const Color(0xFFEAB308)], // Orange
+lib/core/widgets/flow_ai_logo.dart:278:      [const Color(0xFFA855F7), const Color(0xFF7C3AED)], // Purple
+lib/core/widgets/flow_ai_logo.dart:279:      [const Color(0xFF06B6D4), const Color(0xFF3B82F6)], // Blue
+lib/core/widgets/pressable_avatar.dart:119:                          const Color(0xFFF3E8FF).withOpacity(0.35),
+lib/core/widgets/pressable_avatar.dart:128:                          color: const Color(0xFFC850F2).withOpacity(0.16),
+lib/core/widgets/pressable_avatar.dart:173:          Color(0x00FF6FA5),
+lib/core/widgets/pressable_avatar.dart:174:          Color(0xFFFF6FA5),
+lib/core/widgets/pressable_avatar.dart:175:          Color(0xFFC850F2),
+lib/core/widgets/pressable_avatar.dart:176:          Color(0x00C850F2),
+lib/features/settings/screens/settings_screen.dart:661:                                        Color(0xFF6C63FF),
+lib/features/settings/screens/settings_screen.dart:662:                                        Color(0xFF9C27B0),
+lib/features/settings/screens/settings_screen.dart:684:                                        Color(0xFF6C63FF),
+lib/features/settings/screens/settings_screen.dart:685:                                        Color(0xFF9C27B0),
+lib/features/future_plans/screens/future_plans_screen.dart:109:        gradientColors: const [Color(0xFF4CAF50), Color(0xFF8BC34A)],
+lib/features/future_plans/screens/future_plans_screen.dart:117:        gradientColors: const [Color(0xFFFF9800), Color(0xFFFF5722)],
+lib/features/future_plans/screens/future_plans_screen.dart:125:        gradientColors: const [Color(0xFF3F51B5), Color(0xFF9C27B0)],
+lib/features/future_plans/screens/future_plans_screen.dart:175:                                const Color(0xFFFF6B9D),
+lib/features/future_plans/screens/future_plans_screen.dart:176:                                const Color(0xFF6C63FF),
+lib/features/future_plans/screens/future_plans_screen.dart:180:                                const Color(0xFF9B59B6),
+lib/features/future_plans/screens/future_plans_screen.dart:181:                                const Color(0xFF00BCD4),
+lib/features/future_plans/screens/future_plans_screen.dart:270:                                  ? const Color(0xFFFF6B9D)
+lib/features/future_plans/screens/future_plans_screen.dart:328:                  colors: [Color(0xFF6C63FF), Color(0xFF9C27B0)],
+lib/features/future_plans/screens/future_plans_screen.dart:362:                      foregroundColor: const Color(0xFF6C63FF),
+lib/features/auth/screens/futuristic_auth_screen.dart:157:                  const Color(0xFF6366F1), // Indigo
+lib/features/auth/screens/futuristic_auth_screen.dart:158:                  const Color(0xFFA855F7), // Purple
+lib/features/auth/screens/futuristic_auth_screen.dart:162:                  const Color(0xFFA855F7), // Purple
+lib/features/auth/screens/futuristic_auth_screen.dart:163:                  const Color(0xFFEC4899), // Pink
+lib/features/auth/screens/futuristic_auth_screen.dart:167:                  const Color(0xFFEC4899), // Pink
+lib/features/auth/screens/futuristic_auth_screen.dart:168:                  const Color(0xFF6366F1), // Indigo
+lib/features/auth/screens/futuristic_auth_screen.dart:198:                    colors: [Colors.white, Color(0xFFF0ABFC)],
+lib/features/auth/screens/futuristic_auth_screen.dart:207:                      color: const Color(0xFFA855F7).withValues(alpha: 0.6),
+lib/features/auth/screens/futuristic_auth_screen.dart:216:                  color: Color(0xFFA855F7),
+lib/features/auth/screens/futuristic_auth_screen.dart:233:                colors: [Colors.white, Color(0xFFF0ABFC)],
+lib/features/auth/screens/futuristic_auth_screen.dart:373:              ? const LinearGradient(colors: [Colors.white, Color(0xFFF0ABFC)])
+lib/features/auth/screens/futuristic_auth_screen.dart:393:                ? const Color(0xFF6366F1)
+lib/features/auth/screens/futuristic_auth_screen.dart:407:                const Color(0xFFFBBF24).withValues(alpha: 0.3),
+lib/features/auth/screens/futuristic_auth_screen.dart:408:                const Color(0xFFF59E0B).withValues(alpha: 0.3),
+lib/features/auth/screens/futuristic_auth_screen.dart:413:              color: const Color(0xFFFBBF24).withValues(alpha: 0.5),
+lib/features/auth/screens/futuristic_auth_screen.dart:609:          colors: [Colors.white, Color(0xFFF0ABFC)],
+lib/features/auth/screens/futuristic_auth_screen.dart:632:                      valueColor: AlwaysStoppedAnimation(Color(0xFF6366F1)),
+lib/features/auth/screens/futuristic_auth_screen.dart:643:                          color: Color(0xFF6366F1),
+lib/features/auth/screens/futuristic_auth_screen.dart:649:                        color: Color(0xFF6366F1),
+lib/features/auth/screens/futuristic_auth_screen.dart:684:                        const Color(0xFF000000),
+lib/features/auth/screens/futuristic_auth_screen.dart:685:                        const Color(0xFF434343),
+lib/features/auth/screens/futuristic_auth_screen.dart:696:                    colors: [const Color(0xFF4285F4), const Color(0xFF34A853)],
+lib/features/auth/screens/auth_screen.dart:467:                  iconColor: const Color(0xFF4285F4),
+lib/features/auth/screens/auth_screen.dart:481:                iconColor: const Color(0xFF4285F4),
+lib/features/health/screens/real_time_health_dashboard.dart:216:      backgroundColor: const Color(0xFF0A0E21),
+lib/features/health/screens/real_time_health_dashboard.dart:295:      backgroundColor: const Color(0xFF1D1E33),
+lib/features/health/screens/real_time_health_dashboard.dart:306:              colors: [Color(0xFF1D1E33), Color(0xFF2A2D5A)],
+lib/features/health/screens/real_time_health_dashboard.dart:521:            color: const Color(0xFF1D1E33),
+lib/features/health/screens/real_time_health_dashboard.dart:546:        color: const Color(0xFF2A2D5A),
+lib/features/health/screens/real_time_health_dashboard.dart:621:                : const Color(0xFF2A2D5A),
+lib/features/health/screens/real_time_health_dashboard.dart:685:              color: const Color(0xFF1D1E33),
+lib/features/health/screens/real_time_health_dashboard.dart:773:            color: const Color(0xFF1D1E33),
+lib/features/health/screens/real_time_health_dashboard.dart:863:      backgroundColor: const Color(0xFF1D1E33),
+lib/features/health/widgets/ai_insights_panel.dart:55:          color: const Color(0xFF1D1E33),
+lib/features/health/widgets/ai_insights_panel.dart:167:        color: const Color(0xFF2A2D5A),
+lib/features/health/widgets/ai_insights_panel.dart:384:        color: const Color(0xFF2A2D5A),
+lib/features/health/widgets/health_trend_chart.dart:229:          tooltipBgColor: const Color(0xFF2A2D5A),
+lib/features/health/widgets/real_time_metric_card.dart:58:          color: const Color(0xFF1D1E33),
+lib/features/cycle/widgets/pain_body_map.dart:517:      Color(0xFFFFC107), // 2 - Mild
+lib/features/cycle/widgets/pain_body_map.dart:518:      Color(0xFFFF9800), // 3 - Moderate
+lib/features/cycle/widgets/pain_body_map.dart:519:      Color(0xFFFF5722), // 4 - Severe
+lib/features/cycle/widgets/flow_intensity_picker.dart:99:        color: Color(0xFFD32F2F),
+lib/features/cycle/widgets/tracking_summary_card.dart:358:        return const Color(0xFFD32F2F);
+lib/features/cycle/widgets/tracking_summary_card.dart:435:    if (pain <= 2) return const Color(0xFFFFC107);
+lib/features/cycle/widgets/tracking_summary_card.dart:436:    if (pain <= 3) return const Color(0xFFFF9800);
+lib/features/cycle/widgets/tracking_summary_card.dart:437:    if (pain <= 4) return const Color(0xFFFF5722);
+lib/features/cycle/widgets/symptom_selector.dart:38:        SymptomOption(localizations.bloating, '🎈', Color(0xFFFF7043)),
+lib/features/cycle/widgets/symptom_selector.dart:39:        SymptomOption(localizations.nausea, '🤢', Color(0xFF66BB6A)),
+lib/features/cycle/widgets/symptom_selector.dart:40:        SymptomOption(localizations.fatigue, '😴', Color(0xFF9575CD)),
+lib/features/cycle/widgets/symptom_selector.dart:41:        SymptomOption(localizations.hotFlashes, '🔥', Color(0xFFEF5350)),
+lib/features/cycle/widgets/symptom_selector.dart:49:        SymptomOption(localizations.irritability, '😤', Color(0xFFFF7043)),
+lib/features/cycle/widgets/symptom_selector.dart:51:        SymptomOption(localizations.depression, '😢', Color(0xFF9575CD)),
+lib/features/cycle/widgets/symptom_selector.dart:57:        SymptomOption(localizations.stress, '😫', Color(0xFFEF5350)),
+lib/features/cycle/widgets/symptom_selector.dart:60:        SymptomOption(localizations.acne, '🦠', Color(0xFFFF7043)),
+lib/features/cycle/widgets/symptom_selector.dart:62:        SymptomOption(localizations.drySkin, '🏜️', Color(0xFFBCAAA4)),
+lib/features/cycle/widgets/symptom_selector.dart:66:        SymptomOption(localizations.constipation, '🚫', Color(0xFFBCAAA4)),
+lib/features/cycle/widgets/symptom_selector.dart:68:        SymptomOption(localizations.foodCravings, '🍫', Color(0xFFFF7043)),
+lib/features/feedback/screens/feedback_screen.dart:128:              colors: [Color(0xFFFF6B9D), Color(0xFF9B59B6)],
+lib/features/feedback/screens/feedback_screen.dart:145:                  colors: [Color(0xFFFF6B9D), Color(0xFF9B59B6)],
+lib/features/feedback/screens/feedback_screen.dart:152:                    color: const Color(0xFFFF6B9D).withValues(alpha: 0.3),
+lib/features/feedback/screens/feedback_screen.dart:239:                          ? const Color(0xFFFF6B9D)
+lib/features/feedback/screens/feedback_screen.dart:244:                            ? const Color(0xFFFF6B9D)
+lib/features/feedback/screens/feedback_screen.dart:298:                    color: Color(0xFFFF6B9D),
+lib/features/feedback/screens/feedback_screen.dart:325:                    color: Color(0xFFFF6B9D),
+lib/features/feedback/screens/feedback_screen.dart:347:                        backgroundColor: const Color(0xFFFF6B9D),
+lib/features/partner/screens/partner_dashboard_screen.dart:171:          : const Color(0xFFF6EDEF),
+lib/features/partner/dialogs/join_partner_dialog.dart:243:            color: const Color(0xFFB58AAE).withValues(
+lib/features/partner/dialogs/join_partner_dialog.dart:261:          color: const Color(0xFFB07ACB),
+lib/features/partner/dialogs/join_partner_dialog.dart:274:          color: const Color(0xFFB58AAE).withValues(alpha: 0.35),
+lib/features/partner/dialogs/join_partner_dialog.dart:294:          unselectedLabelColor: const Color(0xFF6F6673),
+lib/features/partner/dialogs/join_partner_dialog.dart:369:                              color: const Color(0xFFB07ACB),
+lib/features/partner/dialogs/join_partner_dialog.dart:383:                                  ?.copyWith(color: const Color(0xFF9B59B6)),
+lib/features/partner/dialogs/join_partner_dialog.dart:427:                  color: const Color(0xFFB07ACB),
+lib/features/partner/dialogs/join_partner_dialog.dart:440:                  style: TextStyle(color: const Color(0xFF9B59B6)),
+lib/features/partner/dialogs/join_partner_dialog.dart:459:                        color: const Color(0xFF9B59B6).withValues(alpha: 0.55),
+lib/features/partner/dialogs/join_partner_dialog.dart:498:                  color: const Color(0xFFB07ACB),
+lib/features/partner/dialogs/join_partner_dialog.dart:511:                  style: TextStyle(color: const Color(0xFF9B59B6)),
+lib/features/partner/dialogs/join_partner_dialog.dart:531:                      color: const Color(0xFFD2BEDB),
+lib/features/partner/dialogs/join_partner_dialog.dart:558:                        : const Color(0xFFF9EEF3),
+lib/features/partner/dialogs/join_partner_dialog.dart:694:                      color: const Color(0xFFD2BEDB),
+lib/features/partner/dialogs/join_partner_dialog.dart:701:                      color: const Color(0xFFD2BEDB),
+lib/features/partner/dialogs/join_partner_dialog.dart:708:                      color: const Color(0xFFB07ACB),
+lib/features/partner/dialogs/join_partner_dialog.dart:719:                      : const Color(0xFFF3EFF8),
+lib/features/partner/dialogs/join_partner_dialog.dart:747:              icon: Icon(Icons.content_paste, color: const Color(0xFF9B59B6)),
+lib/features/partner/dialogs/join_partner_dialog.dart:775:          disabledForegroundColor: const Color(0xFFB78FA6),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:45:        cursorColor: const Color(0xFFFF6FAE),
+lib/features/partner/widgets/partner_invitation_email_tab.dart:121:        cursorColor: const Color(0xFFFF6FAE),
+lib/features/partner/widgets/shared/partner_dialog_tokens.dart:13:  static const List<Color> accent = [Color(0xFFFF5FA2), Color(0xFFA855F7)];
+lib/features/partner/widgets/shared/partner_dialog_tokens.dart:16:    BoxShadow(color: Color(0x14000000), blurRadius: 24, offset: Offset(0, 10)),
+lib/features/partner/widgets/partner_care_actions_widget.dart:42:      'gradient': [AppTheme.primaryRose, Color(0xFFFF8A95)],
+lib/features/partner/widgets/partner_care_actions_widget.dart:51:      'gradient': [AppTheme.primaryPurple, Color(0xFF9D7BEA)],
+lib/features/partner/widgets/partner_care_actions_widget.dart:69:      'gradient': [AppTheme.warningOrange, Color(0xFFFFE066)],
+lib/features/coming_soon/models/coming_soon_feature.dart:28:  planning('Planning', Color(0xFF9575CD)),
+lib/features/coming_soon/models/coming_soon_feature.dart:29:  inDevelopment('In Development', Color(0xFF42A5F5)),
+lib/features/coming_soon/models/coming_soon_feature.dart:30:  testing('Testing', Color(0xFFFFA726)),
+lib/features/coming_soon/models/coming_soon_feature.dart:31:  comingSoon('Coming Soon', Color(0xFF66BB6A));
+lib/features/coming_soon/widgets/feature_preview_card.dart:400:        color: Color(0xFF1a1a2e),
+lib/features/coming_soon/widgets/coming_soon_card.dart:19:    this.gradientColors = const [Color(0xFFFF6B9D), Color(0xFF9B59B6)],
+lib/features/coming_soon/widgets/coming_soon_card.dart:350:         gradientColors: const [Color(0xFF6C63FF), Color(0xFF9C27B0)],
+lib/features/coming_soon/widgets/coming_soon_card.dart:363:         gradientColors: const [Color(0xFFE91E63), Color(0xFF9C27B0)],
+lib/features/coming_soon/widgets/coming_soon_card.dart:376:         gradientColors: const [Color(0xFF00BCD4), Color(0xFF2196F3)],
+lib/features/notifications/screens/notification_settings_screen.dart:408:                  surface: Color(0xFF1E1E2E),

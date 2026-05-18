@@ -1,0 +1,96 @@
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:142:              final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:288:    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:302:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:357:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:302:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:304:                      MediaQuery.of(context).viewInsets.bottom +
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:370:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:372:                      MediaQuery.of(context).viewInsets.bottom +
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:142:              final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:288:    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:302:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:357:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart:144:              final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart:290:    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart:304:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart:306:                      MediaQuery.of(context).viewInsets.bottom +
+lib/features/insights/widgets/floating_ai_chat.dart:378:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart:380:                      MediaQuery.of(context).viewInsets.bottom +
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:302:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:304:                      MediaQuery.of(context).viewInsets.bottom),
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:362:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:364:                      MediaQuery.of(context).viewInsets.bottom),
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:142:              final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:288:    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:302:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:359:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:1018:        vertical: MediaQuery.of(context).viewInsets.bottom > 0 ? 2 : 8,
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:1050:                    vertical: MediaQuery.of(context).viewInsets.bottom > 0
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:142:              final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:288:    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:302:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:304:                      MediaQuery.of(context).viewInsets.bottom),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:369:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:371:                      MediaQuery.of(context).viewInsets.bottom),
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:302:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:304:                      MediaQuery.of(context).viewInsets.bottom),
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:369:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:371:                      MediaQuery.of(context).viewInsets.bottom),
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:142:              final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:288:    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:302:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:365:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:1024:        vertical: MediaQuery.of(context).viewInsets.bottom > 0 ? 2 : 8,
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:1056:                    vertical: MediaQuery.of(context).viewInsets.bottom > 0
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:302:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:304:                      MediaQuery.of(context).viewInsets.bottom),
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:369:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:371:                      MediaQuery.of(context).viewInsets.bottom),
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:142:              final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:288:    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:365:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:367:                      MediaQuery.of(context).viewInsets.bottom),
+lib/features/insights/widgets/floating_ai_chat.dart.bak:296:                ? (MediaQuery.of(context).padding.bottom + MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.bak:357:                ? (MediaQuery.of(context).padding.bottom + MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:302:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:304:                      MediaQuery.of(context).viewInsets.bottom),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:369:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:371:                      MediaQuery.of(context).viewInsets.bottom),
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:142:              final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:288:    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:302:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:304:                      MediaQuery.of(context).viewInsets.bottom),
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:369:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:371:                      MediaQuery.of(context).viewInsets.bottom),
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:142:              final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:288:    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:302:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:304:                      MediaQuery.of(context).viewInsets.bottom),
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:369:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:371:                      MediaQuery.of(context).viewInsets.bottom),
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:302:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:304:                      MediaQuery.of(context).viewInsets.bottom),
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:369:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:371:                      MediaQuery.of(context).viewInsets.bottom),
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:142:              final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:288:    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:302:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:304:                      MediaQuery.of(context).viewInsets.bottom),
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:364:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:366:                      MediaQuery.of(context).viewInsets.bottom),
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:142:              final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:288:    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:302:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:304:                      MediaQuery.of(context).viewInsets.bottom),
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:369:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:371:                      MediaQuery.of(context).viewInsets.bottom),
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:302:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:304:                      MediaQuery.of(context).viewInsets.bottom +
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:370:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:372:                      MediaQuery.of(context).viewInsets.bottom +
+lib/features/cycle/screens/tracking_screen.dart:289:            bottom: MediaQuery.of(context).viewInsets.bottom > 0
+lib/features/cycle/screens/tracking_screen.dart:290:                ? MediaQuery.of(context).viewInsets.bottom + 12
+lib/features/partner/widgets/partner_invitation_email_tab.dart:198:              MediaQuery.of(context).viewInsets.bottom > 0 ? 4 : 24,
+lib/features/partner/widgets/partner_invitation_dialog.dart:55:            .viewInsets
+lib/features/partner/widgets/partner_invitation_dialog.dart:102:            .viewInsets
+lib/features/partner/widgets/partner_invitation_dialog.dart:136:        final kb = MediaQuery.of(context).viewInsets.bottom;

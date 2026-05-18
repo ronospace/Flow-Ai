@@ -1,0 +1,2 @@
+lib/core/performance/performance_monitor.dart:805:class PerformanceLifecycleObserver extends WidgetsBindingObserver {
+lib/features/partner/widgets/partner_invitation_dialog.dart:24:    with TickerProviderStateMixin, WidgetsBindingObserver {

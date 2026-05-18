@@ -1,0 +1,407 @@
+lib/core/utils/theme_utils.dart:148:    return LinearGradient(
+lib/core/theme/app_theme.dart:74:  static LinearGradient zyraBodyGradient = LinearGradient(
+lib/core/theme/app_theme.dart:108:  static const LinearGradient primaryGradient = LinearGradient(
+lib/core/theme/app_theme.dart:116:    return LinearGradient(
+lib/core/enhancements/app_enhancements.dart:198:                      ? LinearGradient(
+lib/core/visuals/consumer_visual_engine.dart:200:      shaderCallback: (bounds) => LinearGradient(
+lib/core/routing/app_router.dart:386:                      ? const LinearGradient(
+lib/core/widgets/error_boundary.dart:85:                      gradient: LinearGradient(
+lib/core/widgets/error_boundary.dart:158:                              gradient: const LinearGradient(
+lib/core/widgets/avatar_ring_painter.dart:23:      ..shader = const LinearGradient(
+lib/core/widgets/medical_disclaimer_banner.dart:19:        gradient: LinearGradient(
+lib/core/widgets/advanced_chart_widget.dart:66:        gradient: LinearGradient(
+lib/core/widgets/advanced_chart_widget.dart:174:            gradient: LinearGradient(
+lib/core/widgets/advanced_chart_widget.dart:185:              gradient: LinearGradient(
+lib/core/widgets/advanced_chart_widget.dart:214:                gradient: LinearGradient(
+lib/core/widgets/advanced_chart_widget.dart:249:            gradient: LinearGradient(
+lib/core/widgets/advanced_chart_widget.dart:258:              gradient: LinearGradient(
+lib/core/widgets/coming_soon_widget.dart:37:            ? LinearGradient(
+lib/core/widgets/coming_soon_widget.dart:92:        gradient: LinearGradient(
+lib/core/widgets/coming_soon_widget.dart:138:                  gradient: LinearGradient(
+lib/core/widgets/coming_soon_widget.dart:189:            gradient: LinearGradient(
+lib/core/widgets/coming_soon_widget.dart:333:        gradient: LinearGradient(
+lib/core/widgets/modern_button.dart:151:          gradient: LinearGradient(
+lib/core/widgets/modern_button.dart:194:              ? const LinearGradient(
+lib/core/widgets/modern_button.dart:197:              : LinearGradient(
+lib/core/widgets/modern_button.dart:215:              ? const LinearGradient(
+lib/core/widgets/modern_button.dart:218:              : LinearGradient(
+lib/core/widgets/modern_button.dart:236:              ? const LinearGradient(colors: [Colors.red, Color(0xFFE53E3E)])
+lib/core/widgets/modern_button.dart:237:              : LinearGradient(
+lib/core/widgets/flow_ai_logo.dart:62:        gradient: const LinearGradient(
+lib/core/widgets/flow_ai_logo.dart:120:                  gradient: const LinearGradient(
+lib/core/widgets/flow_ai_logo.dart:205:        gradient: LinearGradient(
+lib/core/widgets/flow_ai_logo.dart:295:            LinearGradient(
+lib/core/widgets/flow_ai_logo.dart:327:            LinearGradient(
+lib/core/widgets/coming_soon_card.dart:39:        gradient: LinearGradient(
+lib/core/widgets/coming_soon_card.dart:69:              gradient: LinearGradient(
+lib/core/widgets/coming_soon_card.dart:89:                    gradient: LinearGradient(
+lib/core/widgets/coming_soon_card.dart:231:                      gradient: LinearGradient(
+lib/core/widgets/coming_soon_card.dart:289:                        gradient: LinearGradient(
+lib/core/widgets/pressable_avatar.dart:114:                      gradient: LinearGradient(
+lib/features/insights/screens/faq_browser_screen.dart:129:                  gradient: LinearGradient(
+lib/features/insights/screens/faq_browser_screen.dart:370:                gradient: LinearGradient(
+lib/features/insights/screens/faq_browser_screen.dart:500:                          gradient: const LinearGradient(
+lib/features/insights/screens/insights_screen.dart:157:              gradient: LinearGradient(
+lib/features/insights/screens/insights_screen.dart:227:                      ? LinearGradient(
+lib/features/insights/screens/insights_screen.dart:280:          gradient: LinearGradient(
+lib/features/insights/screens/analytics_dashboard_screen.dart:119:                ? const LinearGradient(
+lib/features/insights/screens/analytics_dashboard_screen.dart:190:          gradient: const LinearGradient(
+lib/features/insights/screens/analytics_dashboard_screen.dart:517:                  gradient: LinearGradient(
+lib/features/insights/screens/analytics_dashboard_screen.dart:587:            gradient: const LinearGradient(
+lib/features/insights/screens/analytics_dashboard_screen.dart:610:                gradient: const LinearGradient(
+lib/features/insights/screens/analytics_dashboard_screen.dart:670:            gradient: const LinearGradient(
+lib/features/insights/screens/analytics_dashboard_screen.dart:677:              gradient: LinearGradient(
+lib/features/insights/screens/analytics_dashboard_screen.dart:705:            gradient: const LinearGradient(
+lib/features/insights/screens/analytics_dashboard_screen.dart:729:            gradient: const LinearGradient(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:151:                        gradient: LinearGradient(
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:220:            gradient: LinearGradient(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:178:            gradient: LinearGradient(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:491:                    gradient: const LinearGradient(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:761:            gradient: const LinearGradient(
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:769:              gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:416:                                                      const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:474:        gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:830:                    gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:906:              gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:980:                    ? const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:985:                    : const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:431:                                                      const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:489:        gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:845:                    gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:921:              gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:995:                    ? const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:1000:                    : const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:416:                                                      const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:474:        gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:828:                    gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:904:              gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:978:                    ? const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:983:                    : const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart:439:                                                      const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart:497:        gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart:850:                    gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart:926:              gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart:1000:                    ? const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart:1005:                    : const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:422:                                                      const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:480:        gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:836:                    gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:912:              gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:986:                    ? const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:991:                    : const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:418:                                                      const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:476:        gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:830:                    gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:906:              gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:980:                    ? const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:985:                    : const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:429:                                                      const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:487:        gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:841:                    gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:917:              gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:991:                    ? const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:996:                    : const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:429:                                                      const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:487:        gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:843:                    gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:919:              gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:993:                    ? const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:998:                    : const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:424:                                                      const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:482:        gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:836:                    gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:912:              gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:986:                    ? const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:991:                    : const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:429:                                                      const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:487:        gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:843:                    gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:919:              gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:993:                    ? const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:998:                    : const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:425:                                                      const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:483:        gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:837:                    gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:913:              gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:987:                    ? const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:992:                    : const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.bak:416:                                                      const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.bak:474:        gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.bak:821:                gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.bak:886:              gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.bak:960:                    ? const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.bak:965:                    : const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:429:                                                      const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:487:        gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:843:                    gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:919:              gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:993:                    ? const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:998:                    : const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:429:                                                      const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:487:        gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:843:                    gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:919:              gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:993:                    ? const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:998:                    : const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:429:                                                      const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:487:        gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:841:                    gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:917:              gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:991:                    ? const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:996:                    : const LinearGradient(
+lib/features/insights/widgets/cycle_length_chart.dart:48:                  gradient: const LinearGradient(
+lib/features/insights/widgets/cycle_length_chart.dart:252:          gradient: const LinearGradient(
+lib/features/insights/widgets/cycle_length_chart.dart:270:            gradient: LinearGradient(
+lib/features/insights/widgets/cycle_regularity_indicator.dart:104:                            gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:429:                                                      const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:487:        gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:843:                    gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:919:              gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:993:                    ? const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:998:                    : const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:424:                                                      const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:482:        gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:838:                    gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:914:              gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:988:                    ? const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:993:                    : const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:429:                                                      const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:487:        gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:843:                    gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:919:              gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:993:                    ? const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:998:                    : const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:431:                                                      const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:489:        gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:845:                    gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:921:              gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:995:                    ? const LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:1000:                    : const LinearGradient(
+lib/features/settings/screens/account_management_screen.dart:135:                          gradient: LinearGradient(
+lib/features/settings/screens/settings_screen.dart:108:                              gradient: LinearGradient(
+lib/features/settings/screens/settings_screen.dart:659:                                    gradient: LinearGradient(
+lib/features/settings/screens/settings_screen.dart:682:                                    gradient: const LinearGradient(
+lib/features/settings/screens/help_screen.dart:90:                gradient: LinearGradient(
+lib/features/settings/screens/help_screen.dart:128:                gradient: const LinearGradient(
+lib/features/settings/screens/help_screen.dart:262:                          gradient: const LinearGradient(
+lib/features/settings/screens/help_screen.dart:450:                gradient: LinearGradient(
+lib/features/settings/screens/help_screen.dart:537:                gradient: LinearGradient(
+lib/features/settings/widgets/theme_switcher_card.dart:51:                            gradient: const LinearGradient(
+lib/features/settings/widgets/theme_switcher_card.dart:176:              ? const LinearGradient(
+lib/features/settings/widgets/settings_section.dart:43:                    gradient: const LinearGradient(
+lib/features/settings/widgets/language_selector.dart:74:                    gradient: const LinearGradient(
+lib/features/settings/widgets/theme_selector.dart:48:                    gradient: const LinearGradient(
+lib/features/settings/widgets/profile_section.dart:21:            gradient: LinearGradient(
+lib/features/settings/widgets/profile_section.dart:49:                    gradient: const LinearGradient(
+lib/features/settings/widgets/cyclesync_integration.dart:36:                gradient: LinearGradient(
+lib/features/settings/widgets/cyclesync_integration.dart:63:                          gradient: LinearGradient(
+lib/features/settings/widgets/cyclesync_integration.dart:500:                    gradient: const LinearGradient(
+lib/features/settings/widgets/cyclesync_integration.dart:595:            gradient: LinearGradient(
+lib/features/settings/widgets/cyclesync_integration.dart:624:                  gradient: const LinearGradient(
+lib/features/settings/widgets/cyclesync_integration.dart:708:                      gradient: const LinearGradient(
+lib/features/future_plans/screens/future_plans_screen.dart:172:                          gradient: LinearGradient(
+lib/features/future_plans/screens/future_plans_screen.dart:327:                gradient: const LinearGradient(
+lib/features/auth/screens/auth_choice_screen.dart:102:            gradient: LinearGradient(
+lib/features/auth/screens/auth_choice_screen.dart:167:              return const LinearGradient(
+lib/features/auth/screens/auth_choice_screen.dart:188:            return LinearGradient(
+lib/features/auth/screens/auth_choice_screen.dart:238:          gradient: const LinearGradient(
+lib/features/auth/screens/auth_choice_screen.dart:252:          gradient: const LinearGradient(
+lib/features/auth/screens/futuristic_auth_screen.dart:152:            gradient: LinearGradient(
+lib/features/auth/screens/futuristic_auth_screen.dart:195:                  gradient: const LinearGradient(
+lib/features/auth/screens/futuristic_auth_screen.dart:232:              shaderCallback: (bounds) => const LinearGradient(
+lib/features/auth/screens/futuristic_auth_screen.dart:276:                gradient: LinearGradient(
+lib/features/auth/screens/futuristic_auth_screen.dart:373:              ? const LinearGradient(colors: [Colors.white, Color(0xFFF0ABFC)])
+lib/features/auth/screens/futuristic_auth_screen.dart:405:            gradient: LinearGradient(
+lib/features/auth/screens/futuristic_auth_screen.dart:433:              gradient: LinearGradient(
+lib/features/auth/screens/futuristic_auth_screen.dart:457:              gradient: LinearGradient(
+lib/features/auth/screens/futuristic_auth_screen.dart:608:        gradient: const LinearGradient(
+lib/features/auth/screens/futuristic_auth_screen.dart:717:        gradient: LinearGradient(colors: colors),
+lib/features/auth/screens/futuristic_auth_screen.dart:811:        gradient: LinearGradient(colors: colors),
+lib/features/auth/screens/auth_screen.dart:127:          gradient: LinearGradient(
+lib/features/auth/screens/auth_screen.dart:819:                  gradient: LinearGradient(
+lib/features/auth/screens/auth_screen.dart:848:                        gradient: const LinearGradient(
+lib/features/auth/widgets/biometric_button.dart:74:            gradient: LinearGradient(
+lib/features/auth/widgets/biometric_button.dart:103:                          gradient: const LinearGradient(
+lib/features/health/screens/real_time_health_dashboard.dart:233:                gradient: LinearGradient(
+lib/features/health/screens/real_time_health_dashboard.dart:303:            gradient: LinearGradient(
+lib/features/health/screens/health_screen.dart:131:        gradient: LinearGradient(
+lib/features/health/screens/health_screen.dart:160:                  gradient: const LinearGradient(
+lib/features/health/screens/health_screen.dart:209:        gradient: LinearGradient(
+lib/features/health/screens/health_screen.dart:350:            gradient: LinearGradient(
+lib/features/health/screens/health_screen.dart:563:        gradient: LinearGradient(
+lib/features/health/screens/health_screen.dart:585:                  gradient: const LinearGradient(
+lib/features/health/screens/health_screen.dart:809:      ..shader = const LinearGradient(
+lib/features/health/widgets/healthkit_disclosure_banner.dart:35:        gradient: LinearGradient(
+lib/features/health/widgets/healthkit_connection_card.dart:30:            gradient: LinearGradient(
+lib/features/health/widgets/health_integration_coming_soon_card.dart:18:        gradient: LinearGradient(
+lib/features/health/widgets/ai_insights_panel.dart:81:        gradient: LinearGradient(
+lib/features/health/widgets/health_trend_chart.dart:337:            gradient: LinearGradient(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:142:        gradient: LinearGradient(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:440:        gradient: LinearGradient(
+lib/features/cycle/screens/calendar_screen.dart:192:              gradient: const LinearGradient(
+lib/features/cycle/screens/calendar_screen.dart:271:          gradient: LinearGradient(
+lib/features/cycle/screens/calendar_screen.dart:363:            ? const LinearGradient(
+lib/features/cycle/screens/calendar_screen.dart:367:            ? LinearGradient(
+lib/features/cycle/screens/calendar_screen.dart:374:            ? LinearGradient(
+lib/features/cycle/screens/calendar_screen.dart:454:                  gradient: const LinearGradient(
+lib/features/cycle/screens/tracking_screen.dart:450:          gradient: const LinearGradient(
+lib/features/cycle/screens/tracking_screen.dart:845:                      gradient: LinearGradient(
+lib/features/cycle/screens/tracking_screen.dart:864:                            gradient: const LinearGradient(
+lib/features/cycle/screens/home_screen.dart:259:              gradient: LinearGradient(
+lib/features/cycle/screens/home_screen.dart:280:                        gradient: const LinearGradient(
+lib/features/cycle/screens/home_screen.dart:557:                  gradient: const LinearGradient(
+lib/features/cycle/screens/home_screen.dart:616:        gradient: LinearGradient(
+lib/features/cycle/screens/home_screen.dart:668:                            gradient: const LinearGradient(
+lib/features/cycle/screens/home_screen.dart:839:        gradient: LinearGradient(
+lib/features/cycle/screens/home_screen.dart:868:                  gradient: const LinearGradient(
+lib/features/cycle/screens/home_screen.dart:977:            gradient: LinearGradient(
+lib/features/cycle/screens/home_screen.dart:1044:        gradient: LinearGradient(
+lib/features/cycle/screens/home_screen.dart:1070:                  gradient: const LinearGradient(
+lib/features/cycle/screens/home_screen.dart:1129:                      gradient: LinearGradient(
+lib/features/cycle/screens/home_screen.dart:1179:                      gradient: LinearGradient(
+lib/features/cycle/screens/home_screen.dart:1282:        gradient: LinearGradient(
+lib/features/cycle/screens/home_screen.dart:1311:                  gradient: const LinearGradient(
+lib/features/cycle/screens/home_screen.dart:1368:                              gradient: LinearGradient(
+lib/features/cycle/screens/home_screen.dart:1395:                                        gradient: LinearGradient(
+lib/features/cycle/screens/home_screen.dart:1458:                                              gradient: LinearGradient(
+lib/features/cycle/screens/home_screen.dart:1547:        gradient: LinearGradient(
+lib/features/cycle/screens/home_screen.dart:1576:                  gradient: const LinearGradient(
+lib/features/cycle/screens/home_screen.dart:1667:            gradient: LinearGradient(
+lib/features/cycle/screens/home_screen.dart:1751:        gradient: LinearGradient(
+lib/features/cycle/screens/home_screen.dart:1777:                  gradient: const LinearGradient(
+lib/features/cycle/screens/home_screen.dart:1818:              gradient: LinearGradient(
+lib/features/cycle/screens/home_screen.dart:2017:      ..shader = const LinearGradient(
+lib/features/cycle/screens/home_screen.dart:2238:          gradient: LinearGradient(
+lib/features/cycle/screens/home_screen.dart:2255:                gradient: const LinearGradient(
+lib/features/cycle/widgets/day_detail_sheet.dart:103:                ? LinearGradient(
+lib/features/cycle/widgets/day_detail_sheet.dart:109:                : const LinearGradient(
+lib/features/cycle/widgets/day_detail_sheet.dart:250:        gradient: LinearGradient(
+lib/features/cycle/widgets/day_detail_sheet.dart:337:        gradient: LinearGradient(
+lib/features/cycle/widgets/flow_intensity_picker.dart:177:        gradient: LinearGradient(
+lib/features/cycle/widgets/flow_intensity_picker.dart:275:        gradient: const LinearGradient(
+lib/features/cycle/widgets/flow_intensity_picker.dart:340:            ? LinearGradient(
+lib/features/cycle/widgets/flow_intensity_picker.dart:529:                      gradient: LinearGradient(
+lib/features/cycle/widgets/premium_features_preview.dart:27:        gradient: LinearGradient(
+lib/features/cycle/widgets/premium_features_preview.dart:56:                  gradient: const LinearGradient(
+lib/features/cycle/widgets/premium_features_preview.dart:91:                  gradient: const LinearGradient(
+lib/features/cycle/widgets/tracking_summary_card.dart:76:            gradient: LinearGradient(
+lib/features/cycle/widgets/premium_feature_preview_card.dart:30:            gradient: LinearGradient(
+lib/features/cycle/widgets/mood_energy_slider.dart:227:            gradient: LinearGradient(
+lib/features/cycle/widgets/mood_energy_slider.dart:286:                      gradient: LinearGradient(colors: neuralColors),
+lib/features/cycle/widgets/mood_energy_slider.dart:314:                      gradient: LinearGradient(
+lib/features/cycle/widgets/mood_energy_slider.dart:480:                                    ? LinearGradient(
+lib/features/cycle/widgets/mood_energy_slider.dart:577:                        gradient: LinearGradient(
+lib/features/cycle/widgets/mood_energy_slider.dart:684:            gradient: LinearGradient(
+lib/features/cycle/widgets/mood_energy_slider.dart:715:                          gradient: const LinearGradient(
+lib/features/cycle/widgets/calendar_legend.dart:139:            gradient: LinearGradient(
+lib/features/cycle/widgets/premium_insights_unlock_card.dart:24:        gradient: LinearGradient(
+lib/features/cycle/widgets/premium_insights_unlock_card.dart:45:                  gradient: const LinearGradient(
+lib/features/cycle/widgets/premium_insights_unlock_card.dart:80:                  gradient: const LinearGradient(
+lib/features/cycle/widgets/premium_insights_unlock_card.dart:106:                  gradient: const LinearGradient(
+lib/features/cycle/widgets/cycle_phase_indicator.dart:32:        gradient: LinearGradient(
+lib/features/cycle/widgets/symptom_selector.dart:243:                      ? const LinearGradient(
+lib/features/feedback/screens/feedback_screen.dart:127:            gradient: LinearGradient(
+lib/features/feedback/screens/feedback_screen.dart:144:                gradient: const LinearGradient(
+lib/features/partner/screens/partner_dashboard_screen.dart:224:              gradient: LinearGradient(
+lib/features/partner/screens/partner_dashboard_screen.dart:252:                                  gradient: LinearGradient(
+lib/features/partner/screens/partner_dashboard_screen.dart:352:        gradient: LinearGradient(
+lib/features/partner/screens/partner_dashboard_screen.dart:509:            gradient: LinearGradient(
+lib/features/partner/screens/partner_dashboard_screen.dart:540:                        gradient: LinearGradient(
+lib/features/partner/screens/partner_dashboard_screen.dart:752:                  gradient: LinearGradient(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:458:        gradient: LinearGradient(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:480:                  gradient: const LinearGradient(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:588:              gradient: LinearGradient(
+lib/features/partner/dialogs/join_partner_dialog.dart:103:                            gradient: LinearGradient(
+lib/features/partner/dialogs/join_partner_dialog.dart:179:          gradient: LinearGradient(
+lib/features/partner/dialogs/join_partner_dialog.dart:195:                gradient: const LinearGradient(
+lib/features/partner/dialogs/join_partner_dialog.dart:283:            gradient: const LinearGradient(
+lib/features/partner/widgets/partner_avatar_badge.dart:20:        gradient: LinearGradient(
+lib/features/partner/widgets/partner_care_actions_widget.dart:113:              gradient: LinearGradient(
+lib/features/partner/widgets/partner_care_actions_widget.dart:156:        gradient: LinearGradient(
+lib/features/partner/widgets/partner_care_actions_widget.dart:177:                    gradient: const LinearGradient(
+lib/features/partner/widgets/partner_care_actions_widget.dart:296:              gradient: LinearGradient(
+lib/features/partner/widgets/partner_care_actions_widget.dart:500:              gradient: LinearGradient(colors: actionInfo['gradient']),
+lib/features/partner/widgets/partner_empty_state.dart:37:                        gradient: LinearGradient(
+lib/features/partner/widgets/partner_communication_widget.dart:64:              gradient: LinearGradient(
+lib/features/partner/widgets/partner_communication_widget.dart:106:        gradient: LinearGradient(
+lib/features/partner/widgets/partner_communication_widget.dart:122:              gradient: const LinearGradient(
+lib/features/partner/widgets/partner_communication_widget.dart:224:              gradient: LinearGradient(
+lib/features/partner/widgets/partner_communication_widget.dart:335:          gradient: LinearGradient(
+lib/features/partner/widgets/partner_communication_widget.dart:481:                        ? LinearGradient(
+lib/features/partner/widgets/partner_communication_widget.dart:487:                        : const LinearGradient(
+lib/features/partner/widgets/partner_communication_widget.dart:540:        gradient: LinearGradient(
+lib/features/partner/widgets/partner_invitation_dialog.dart:310:        gradient: LinearGradient(
+lib/features/partner/widgets/partner_invitation_dialog.dart:328:              gradient: LinearGradient(
+lib/features/partner/widgets/partner_invitation_dialog.dart:378:                gradient: LinearGradient(
+lib/features/partner/widgets/partner_quick_action_card.dart:26:            gradient: LinearGradient(
+lib/features/partner/widgets/partner_quick_action_card.dart:54:                        gradient: LinearGradient(
+lib/features/partner/widgets/partner_dashboard_header.dart:35:              gradient: LinearGradient(
+lib/features/partner/widgets/partner_dashboard_header.dart:62:                                  gradient: LinearGradient(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:331:                        gradient: const LinearGradient(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:374:        gradient: LinearGradient(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:468:          gradient: const LinearGradient(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:705:        gradient: LinearGradient(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:938:              gradient: const LinearGradient(
+lib/features/biometric/widgets/biometric_sync_status.dart:223:        gradient: LinearGradient(
+lib/features/biometric/widgets/biometric_sync_status.dart:408:                  gradient: const LinearGradient(
+lib/features/biometric/widgets/correlation_insights_card.dart:77:            gradient: const LinearGradient(
+lib/features/biometric/widgets/correlation_insights_card.dart:243:          gradient: LinearGradient(
+lib/features/coming_soon/screens/coming_soon_screen.dart:102:                  gradient: const LinearGradient(
+lib/features/coming_soon/screens/coming_soon_screen.dart:371:            gradient: LinearGradient(
+lib/features/coming_soon/screens/coming_soon_screen.dart:388:                  gradient: const LinearGradient(
+lib/features/coming_soon/widgets/feature_preview_card.dart:113:              gradient: LinearGradient(
+lib/features/coming_soon/widgets/feature_preview_card.dart:432:                          gradient: LinearGradient(
+lib/features/coming_soon/widgets/waitlist_signup_widget.dart:83:            gradient: const LinearGradient(
+lib/features/coming_soon/widgets/coming_soon_card.dart:181:                        gradient: LinearGradient(
+lib/features/coming_soon/widgets/coming_soon_card.dart:206:                                  gradient: LinearGradient(
+lib/features/coming_soon/widgets/coming_soon_card.dart:224:                                  gradient: LinearGradient(
+lib/features/coming_soon/widgets/coming_soon_card.dart:312:                                        gradient: LinearGradient(
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:206:                      gradient: LinearGradient(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:223:            gradient: LinearGradient(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:378:            gradient: LinearGradient(
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:134:                gradient: const LinearGradient(
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:190:                  gradient: LinearGradient(
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:251:        gradient: LinearGradient(
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:23:              gradient: LinearGradient(
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:106:            gradient: const LinearGradient(
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:202:            gradient: LinearGradient(
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:339:        gradient: LinearGradient(
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:468:          gradient: LinearGradient(
+lib/features/ai_predictions/widgets/ai_prediction_card.dart:485:                gradient: const LinearGradient(
+lib/features/premium/screens/premium_subscription_screen.dart:130:            gradient: LinearGradient(
+lib/features/premium/screens/premium_subscription_screen.dart:148:        gradient: LinearGradient(
+lib/features/premium/screens/premium_paywall_screen.dart:61:                    gradient: LinearGradient(
+lib/features/premium/screens/premium_paywall_screen.dart:99:                                gradient: LinearGradient(
+lib/features/premium/widgets/premium_feature_widget.dart:125:                gradient: LinearGradient(
+lib/features/premium/widgets/feature_comparison_widget.dart:24:              gradient: LinearGradient(
+lib/features/premium/widgets/subscription_tier_card.dart:64:                        gradient: LinearGradient(
+lib/features/premium/widgets/subscription_tier_card.dart:248:                  gradient: LinearGradient(
+lib/features/premium/widgets/upgrade_prompt_dialog.dart:45:          gradient: LinearGradient(
+lib/features/premium/widgets/upgrade_prompt_dialog.dart:62:                gradient: LinearGradient(
+lib/features/premium/widgets/upgrade_prompt_dialog.dart:134:                gradient: LinearGradient(colors: _getTierGradient()),
+lib/features/premium/widgets/subscription_status_widget.dart:51:            gradient: LinearGradient(
+lib/features/premium/widgets/subscription_status_widget.dart:208:              ? LinearGradient(
+lib/features/premium/widgets/premium_upgrade_prompt.dart:26:        gradient: LinearGradient(
+lib/features/notifications/screens/notification_settings_screen.dart:171:        gradient: LinearGradient(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:189:              gradient: LinearGradient(
+lib/features/onboarding/screens/cycle_history_step_screen.dart:69:                    gradient: LinearGradient(
+lib/features/onboarding/screens/personal_info_step_screen.dart:72:                      gradient: LinearGradient(
+lib/features/onboarding/screens/welcome_step_screen.dart:36:                    gradient: LinearGradient(
+lib/features/onboarding/screens/welcome_step_screen.dart:57:                      gradient: LinearGradient(
+lib/features/onboarding/screens/steps/complete_step.dart:75:                gradient: LinearGradient(
+lib/features/onboarding/screens/splash_screen.dart:90:              gradient: LinearGradient(
+lib/features/onboarding/screens/splash_screen.dart:217:                                      return const LinearGradient(
+lib/features/onboarding/screens/splash_screen.dart:243:                              return LinearGradient(
+lib/features/onboarding/widgets/onboarding_progress_widget.dart:138:                gradient: LinearGradient(
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:237:        gradient: LinearGradient(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:226:        gradient: LinearGradient(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:252:                  gradient: LinearGradient(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:496:        gradient: LinearGradient(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:717:        gradient: LinearGradient(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:195:          gradient: LinearGradient(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:238:                gradient: LinearGradient(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:76:        gradient: LinearGradient(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:426:        gradient: LinearGradient(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:925:        gradient: LinearGradient(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:1150:        gradient: LinearGradient(
+lib/features/analytics/widgets/health_analytics_card.dart:130:        gradient: LinearGradient(

@@ -1,0 +1,228 @@
+lib/core/ui/adaptive_components.dart:252:    TextInputType? keyboardType,
+lib/core/ui/adaptive_components.dart:287:              keyboardType: keyboardType,
+lib/core/ui/adaptive_components.dart:332:          keyboardType: keyboardType,
+lib/core/enhancements/app_enhancements.dart:341:    TextInputType keyboardType = TextInputType.text,
+lib/core/enhancements/app_enhancements.dart:361:        keyboardType: keyboardType,
+lib/core/services/enhanced_ai_chat_service.dart:890:      "Learning keyboard shortcuts can make you much more efficient with computers.",
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:142:              final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:146:                if (!keyboardOpen) {
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:285:    // // // // debugPrint("VIEW INSETS (keyboard): ");
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:288:    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:327:                      _buildEnhancedHeader(theme, compact: keyboardOpen),
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:333:                      if (!keyboardOpen && _shouldShowQuickQuestions())
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:696:                        Icons.keyboard_arrow_down_rounded,
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:854:                      ? Icons.keyboard_arrow_down
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:855:                      : Icons.keyboard_arrow_up,
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:1073:                keyboardType: TextInputType.multiline,
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:142:              final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:146:                if (!keyboardOpen) {
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:285:    // // // // debugPrint("VIEW INSETS (keyboard): ");
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:288:    final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:329:                      _buildEnhancedHeader(theme, compact: keyboardOpen),
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:338:                      if (!keyboardOpen && _shouldShowQuickQuestions())
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:711:                        Icons.keyboard_arrow_down_rounded,
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:869:                      ? Icons.keyboard_arrow_down
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:870:                      : Icons.keyboard_arrow_up,
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:1088:                keyboardType: TextInputType.multiline,
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:142:              final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:146:                if (!keyboardOpen) {
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:285:    // // // // debugPrint("VIEW INSETS (keyboard): ");
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:288:    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:327:                      _buildEnhancedHeader(theme, compact: keyboardOpen),
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:333:                      if (!keyboardOpen && _shouldShowQuickQuestions())
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:696:                        Icons.keyboard_arrow_down_rounded,
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:852:                      ? Icons.keyboard_arrow_down
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:853:                      : Icons.keyboard_arrow_up,
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:1071:                keyboardType: TextInputType.multiline,
+lib/features/insights/widgets/floating_ai_chat.dart:144:              final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart:148:                if (!keyboardOpen) {
+lib/features/insights/widgets/floating_ai_chat.dart:287:    // // // // debugPrint("VIEW INSETS (keyboard): ");
+lib/features/insights/widgets/floating_ai_chat.dart:290:    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart:337:                      _buildEnhancedHeader(theme, compact: keyboardOpen),
+lib/features/insights/widgets/floating_ai_chat.dart:346:                      if (!keyboardOpen && _shouldShowQuickQuestions())
+lib/features/insights/widgets/floating_ai_chat.dart:716:                        Icons.keyboard_arrow_down_rounded,
+lib/features/insights/widgets/floating_ai_chat.dart:874:                      ? Icons.keyboard_arrow_down
+lib/features/insights/widgets/floating_ai_chat.dart:875:                      : Icons.keyboard_arrow_up,
+lib/features/insights/widgets/floating_ai_chat.dart:1098:                keyboardType: TextInputType.multiline,
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:142:              final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:146:                if (!keyboardOpen) {
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:285:    // // // // debugPrint("VIEW INSETS (keyboard): ");
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:288:    final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:328:                      _buildEnhancedHeader(theme, compact: keyboardOpen),
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:334:                      if (!keyboardOpen && _shouldShowQuickQuestions())
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:702:                        Icons.keyboard_arrow_down_rounded,
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:860:                      ? Icons.keyboard_arrow_down
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:861:                      : Icons.keyboard_arrow_up,
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:1079:                keyboardType: TextInputType.multiline,
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:142:              final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:146:                if (!keyboardOpen) {
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:285:    // // // // debugPrint("VIEW INSETS (keyboard): ");
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:288:    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:327:                      _buildEnhancedHeader(theme, compact: keyboardOpen),
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:333:                      if (!keyboardOpen && _shouldShowQuickQuestions())
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:341:                        height: keyboardOpen
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:698:                        Icons.keyboard_arrow_down_rounded,
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:854:                      ? Icons.keyboard_arrow_down
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:855:                      : Icons.keyboard_arrow_up,
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:1078:                keyboardType: TextInputType.multiline,
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:142:              final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:146:                if (!keyboardOpen) {
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:285:    // // // // debugPrint("VIEW INSETS (keyboard): ");
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:288:    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:328:                      _buildEnhancedHeader(theme, compact: keyboardOpen),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:337:                      if (!keyboardOpen && _shouldShowQuickQuestions())
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:709:                        Icons.keyboard_arrow_down_rounded,
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:865:                      ? Icons.keyboard_arrow_down
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:866:                      : Icons.keyboard_arrow_up,
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:1084:                keyboardType: TextInputType.multiline,
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:142:              final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:146:                if (!keyboardOpen) {
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:285:    // // // // debugPrint("VIEW INSETS (keyboard): ");
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:288:    final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:328:                      _buildEnhancedHeader(theme, compact: keyboardOpen),
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:337:                      if (!keyboardOpen && _shouldShowQuickQuestions())
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:709:                        Icons.keyboard_arrow_down_rounded,
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:867:                      ? Icons.keyboard_arrow_down
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:868:                      : Icons.keyboard_arrow_up,
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:1086:                keyboardType: TextInputType.multiline,
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:142:              final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:146:                if (!keyboardOpen) {
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:285:    // // // // debugPrint("VIEW INSETS (keyboard): ");
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:288:    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:327:                      _buildEnhancedHeader(theme, compact: keyboardOpen),
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:333:                      if (!keyboardOpen &&
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:347:                        height: keyboardOpen
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:704:                        Icons.keyboard_arrow_down_rounded,
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:860:                      ? Icons.keyboard_arrow_down
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:861:                      : Icons.keyboard_arrow_up,
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:1084:                keyboardType: TextInputType.multiline,
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:142:              final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:146:                if (!keyboardOpen) {
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:285:    // // // // debugPrint("VIEW INSETS (keyboard): ");
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:288:    final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:328:                      _buildEnhancedHeader(theme, compact: keyboardOpen),
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:337:                      if (!keyboardOpen && _shouldShowQuickQuestions())
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:709:                        Icons.keyboard_arrow_down_rounded,
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:867:                      ? Icons.keyboard_arrow_down
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:868:                      : Icons.keyboard_arrow_up,
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:1086:                keyboardType: TextInputType.multiline,
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:142:              final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:146:                if (!keyboardOpen) {
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:285:    // // // // debugPrint("VIEW INSETS (keyboard): ");
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:288:    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:324:                      _buildEnhancedHeader(theme, compact: keyboardOpen),
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:333:                      if (!keyboardOpen && _shouldShowQuickQuestions())
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:705:                        Icons.keyboard_arrow_down_rounded,
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:861:                      ? Icons.keyboard_arrow_down
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:862:                      : Icons.keyboard_arrow_up,
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:1080:                keyboardType: TextInputType.multiline,
+lib/features/insights/widgets/floating_ai_chat.dart.bak:142:              final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.bak:146:                if (!keyboardOpen) {
+lib/features/insights/widgets/floating_ai_chat.dart.bak:283:    final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.bak:321:                      _buildEnhancedHeader(theme, compact: keyboardOpen),
+lib/features/insights/widgets/floating_ai_chat.dart.bak:327:                      if (!keyboardOpen && _shouldShowQuickQuestions() && !_quickRepliesCollapsed)
+lib/features/insights/widgets/floating_ai_chat.dart.bak:696:                        Icons.keyboard_arrow_down_rounded,
+lib/features/insights/widgets/floating_ai_chat.dart.bak:1038:                keyboardType: TextInputType.multiline,
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:142:              final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:146:                if (!keyboardOpen) {
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:285:    // // // // debugPrint("VIEW INSETS (keyboard): ");
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:288:    final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:328:                      _buildEnhancedHeader(theme, compact: keyboardOpen),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:337:                      if (!keyboardOpen && _shouldShowQuickQuestions())
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:709:                        Icons.keyboard_arrow_down_rounded,
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:867:                      ? Icons.keyboard_arrow_down
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:868:                      : Icons.keyboard_arrow_up,
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:1086:                keyboardType: TextInputType.multiline,
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:142:              final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:146:                if (!keyboardOpen) {
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:285:    // // // // debugPrint("VIEW INSETS (keyboard): ");
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:288:    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:328:                      _buildEnhancedHeader(theme, compact: keyboardOpen),
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:337:                      if (!keyboardOpen && _shouldShowQuickQuestions())
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:709:                        Icons.keyboard_arrow_down_rounded,
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:867:                      ? Icons.keyboard_arrow_down
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:868:                      : Icons.keyboard_arrow_up,
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:1086:                keyboardType: TextInputType.multiline,
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:142:              final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:146:                if (!keyboardOpen) {
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:285:    // // // // debugPrint("VIEW INSETS (keyboard): ");
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:288:    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:328:                      _buildEnhancedHeader(theme, compact: keyboardOpen),
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:337:                      if (!keyboardOpen && _shouldShowQuickQuestions())
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:709:                        Icons.keyboard_arrow_down_rounded,
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:865:                      ? Icons.keyboard_arrow_down
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:866:                      : Icons.keyboard_arrow_up,
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:1084:                keyboardType: TextInputType.multiline,
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:142:              final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:146:                if (!keyboardOpen) {
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:285:    // // // // debugPrint("VIEW INSETS (keyboard): ");
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:288:    final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:328:                      _buildEnhancedHeader(theme, compact: keyboardOpen),
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:337:                      if (!keyboardOpen && _shouldShowQuickQuestions())
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:709:                        Icons.keyboard_arrow_down_rounded,
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:867:                      ? Icons.keyboard_arrow_down
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:868:                      : Icons.keyboard_arrow_up,
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:1086:                keyboardType: TextInputType.multiline,
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:142:              final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:146:                if (!keyboardOpen) {
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:285:    // // // // debugPrint("VIEW INSETS (keyboard): ");
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:288:    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:328:                      _buildEnhancedHeader(theme, compact: keyboardOpen),
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:334:                      if (!keyboardOpen &&
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:704:                        Icons.keyboard_arrow_down_rounded,
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:862:                      ? Icons.keyboard_arrow_down
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:863:                      : Icons.keyboard_arrow_up,
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:1081:                keyboardType: TextInputType.multiline,
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:142:              final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:146:                if (!keyboardOpen) {
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:285:    // // // // debugPrint("VIEW INSETS (keyboard): ");
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:288:    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:328:                      _buildEnhancedHeader(theme, compact: keyboardOpen),
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:337:                      if (!keyboardOpen && _shouldShowQuickQuestions())
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:709:                        Icons.keyboard_arrow_down_rounded,
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:867:                      ? Icons.keyboard_arrow_down
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:868:                      : Icons.keyboard_arrow_up,
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:1086:                keyboardType: TextInputType.multiline,
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:142:              final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:146:                if (!keyboardOpen) {
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:285:    // // // // debugPrint("VIEW INSETS (keyboard): ");
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:288:    final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:329:                      _buildEnhancedHeader(theme, compact: keyboardOpen),
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:338:                      if (!keyboardOpen && _shouldShowQuickQuestions())
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:711:                        Icons.keyboard_arrow_down_rounded,
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:869:                      ? Icons.keyboard_arrow_down
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:870:                      : Icons.keyboard_arrow_up,
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:1088:                keyboardType: TextInputType.multiline,
+lib/features/auth/screens/futuristic_auth_screen.dart:478:          keyboardType: TextInputType.emailAddress,
+lib/features/auth/screens/futuristic_auth_screen.dart:565:    TextInputType? keyboardType,
+lib/features/auth/screens/futuristic_auth_screen.dart:578:        keyboardType: keyboardType,
+lib/features/auth/screens/auth_screen.dart:265:                keyboardType: TextInputType.emailAddress,
+lib/features/auth/screens/auth_screen.dart:892:                      keyboardType: TextInputType.emailAddress,
+lib/features/auth/widgets/auth_text_field.dart:10:  final TextInputType keyboardType;
+lib/features/auth/widgets/auth_text_field.dart:22:    this.keyboardType = TextInputType.text,
+lib/features/auth/widgets/auth_text_field.dart:47:        keyboardType: keyboardType,
+lib/features/health/widgets/ai_insights_panel.dart:449:                  Icons.keyboard_arrow_down,
+lib/features/partner/dialogs/join_partner_dialog.dart:259:          Icons.keyboard_arrow_down_rounded,
+lib/features/partner/dialogs/join_partner_dialog.dart:519:                  keyboardType: TextInputType.emailAddress,
+lib/features/partner/dialogs/join_partner_dialog.dart:664:                keyboardType: TextInputType.visiblePassword,
+lib/features/partner/widgets/partner_invitation_email_tab.dart:193:            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+lib/features/partner/widgets/partner_invitation_dialog.dart:43:  bool _wasKeyboardVisible = false;
+lib/features/partner/widgets/partner_invitation_dialog.dart:49:    _wasKeyboardVisible =
+lib/features/partner/widgets/partner_invitation_dialog.dart:96:    final isKeyboardVisible =
+lib/features/partner/widgets/partner_invitation_dialog.dart:106:    if (_wasKeyboardVisible &&
+lib/features/partner/widgets/partner_invitation_dialog.dart:107:        !isKeyboardVisible &&
+lib/features/partner/widgets/partner_invitation_dialog.dart:113:    _wasKeyboardVisible = isKeyboardVisible;
+lib/features/partner/widgets/partner_invitation_dialog.dart:137:        final keyboardOpen = kb > 0;
+lib/features/partner/widgets/partner_invitation_dialog.dart:144:              insetPadding: keyboardOpen
+lib/features/partner/widgets/partner_invitation_dialog.dart:150:                  final dialogHeight = keyboardOpen
+lib/features/partner/widgets/partner_invitation_dialog.dart:159:                      bottom: keyboardOpen ? 0 : 48,
+lib/features/partner/widgets/partner_invitation_dialog.dart:162:                      alignment: keyboardOpen
+lib/features/partner/widgets/partner_invitation_dialog.dart:298:          Icons.keyboard_arrow_down_rounded,
+lib/features/coming_soon/widgets/feature_preview_card.dart:173:              Icons.keyboard_arrow_down,
+lib/features/coming_soon/widgets/waitlist_signup_widget.dart:165:          keyboardType: TextInputType.emailAddress,
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:287:                    ? Icons.keyboard_arrow_up
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:288:                    : Icons.keyboard_arrow_down,
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:246:                  keyboardType: TextInputType.number,
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:258:                  keyboardType: TextInputType.number,
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:668:                keyboardType: TextInputType.number,
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:680:                keyboardType: TextInputType.number,

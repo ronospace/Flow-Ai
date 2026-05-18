@@ -1,0 +1,2 @@
+lib/features/insights/widgets/floating_ai_chat.dart:31:  static const double _floatingChatGap = 8;
+lib/features/insights/widgets/floating_ai_chat.dart:307:                      _floatingChatGap),

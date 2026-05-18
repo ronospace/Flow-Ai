@@ -1,0 +1,106 @@
+lib/core/services/enhanced_ai_chat_service.dart:1081:  /// Get enhanced suggested replies based on conversation context
+lib/core/services/enhanced_ai_chat_service.dart:1082:  List<String> getSuggestedReplies() {
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:50:  final List<String> _suggestedQuestions = [
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:332:                      // Suggested Questions (above input)
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:809:    final suggestions = _chatService.getSuggestedReplies().toList();
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:844:                    'Suggested Questions',
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:50:  final List<String> _suggestedQuestions = [
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:337:                      // Suggested Questions (above input)
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:824:    final suggestions = _chatService.getSuggestedReplies().toList();
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:859:                    'Suggested Questions',
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:50:  final List<String> _suggestedQuestions = [
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:332:                      // Suggested Questions (above input)
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:807:    final suggestions = _chatService.getSuggestedReplies().toList();
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:842:                    'Suggested Questions',
+lib/features/insights/widgets/floating_ai_chat.dart:52:  final List<String> _suggestedQuestions = [
+lib/features/insights/widgets/floating_ai_chat.dart:345:                      // Suggested Questions (above input)
+lib/features/insights/widgets/floating_ai_chat.dart:829:    final suggestions = _chatService.getSuggestedReplies().toList();
+lib/features/insights/widgets/floating_ai_chat.dart:864:                    'Suggested Questions',
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:50:  final List<String> _suggestedQuestions = [
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:333:                      // Suggested Questions (above input)
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:815:    final suggestions = _chatService.getSuggestedReplies().toList();
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:850:                    'Suggested Questions',
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:50:  final List<String> _suggestedQuestions = [
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:332:                      // Suggested Questions (above input)
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:809:    final suggestions = _chatService.getSuggestedReplies().toList();
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:844:                    'Suggested Questions',
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:50:  final List<String> _suggestedQuestions = [
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:336:                      // Suggested Questions (above input)
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:820:    final suggestions = _chatService.getSuggestedReplies().toList();
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:855:                    'Suggested Questions',
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:50:  final List<String> _suggestedQuestions = [
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:336:                      // Suggested Questions (above input)
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:822:    final suggestions = _chatService.getSuggestedReplies().toList();
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:857:                    'Suggested Questions',
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:50:  final List<String> _suggestedQuestions = [
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:332:                      // Suggested Questions (above input)
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:815:    final suggestions = _chatService.getSuggestedReplies().toList();
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:850:                    'Suggested Questions',
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:50:  final List<String> _suggestedQuestions = [
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:336:                      // Suggested Questions (above input)
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:822:    final suggestions = _chatService.getSuggestedReplies().toList();
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:857:                    'Suggested Questions',
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:50:  final List<String> _suggestedQuestions = [
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:332:                      // Suggested Questions (above input)
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:816:    final suggestions = _chatService.getSuggestedReplies().toList();
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:851:                    'Suggested Questions',
+lib/features/insights/widgets/floating_ai_chat.dart.bak:50:  final List<String> _suggestedQuestions = [
+lib/features/insights/widgets/floating_ai_chat.dart.bak:326:                      // Suggested Questions (above input)
+lib/features/insights/widgets/floating_ai_chat.dart.bak:809:    final suggestions = _chatService.getSuggestedReplies().toList();
+lib/features/insights/widgets/floating_ai_chat.dart.bak:834:              'Suggested Questions',
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:50:  final List<String> _suggestedQuestions = [
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:336:                      // Suggested Questions (above input)
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:822:    final suggestions = _chatService.getSuggestedReplies().toList();
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:857:                    'Suggested Questions',
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:50:  final List<String> _suggestedQuestions = [
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:336:                      // Suggested Questions (above input)
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:822:    final suggestions = _chatService.getSuggestedReplies().toList();
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:857:                    'Suggested Questions',
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:50:  final List<String> _suggestedQuestions = [
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:336:                      // Suggested Questions (above input)
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:820:    final suggestions = _chatService.getSuggestedReplies().toList();
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:855:                    'Suggested Questions',
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:50:  final List<String> _suggestedQuestions = [
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:336:                      // Suggested Questions (above input)
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:822:    final suggestions = _chatService.getSuggestedReplies().toList();
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:857:                    'Suggested Questions',
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:50:  final List<String> _suggestedQuestions = [
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:333:                      // Suggested Questions (above input)
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:817:    final suggestions = _chatService.getSuggestedReplies().toList();
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:852:                    'Suggested Questions',
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:50:  final List<String> _suggestedQuestions = [
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:336:                      // Suggested Questions (above input)
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:822:    final suggestions = _chatService.getSuggestedReplies().toList();
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:857:                    'Suggested Questions',
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:50:  final List<String> _suggestedQuestions = [
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:337:                      // Suggested Questions (above input)
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:824:    final suggestions = _chatService.getSuggestedReplies().toList();
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:859:                    'Suggested Questions',
+lib/features/data_management/models/export_import_models.dart:550:  final String? suggestedFix;
+lib/features/data_management/models/export_import_models.dart:555:    this.suggestedFix,
+lib/features/data_management/models/export_import_models.dart:559:    return {'field': field, 'message': message, 'suggested_fix': suggestedFix};
+lib/features/data_management/models/export_import_models.dart:566:      suggestedFix: json['suggested_fix'],
+lib/features/deployment/models/deployment_models.dart:500:  final String? suggestedFix;
+lib/features/deployment/models/deployment_models.dart:509:    this.suggestedFix,
+lib/features/deployment/models/deployment_models.dart:523:      'suggested_fix': suggestedFix,
+lib/features/deployment/models/deployment_models.dart:537:      suggestedFix: json['suggested_fix'],
+lib/features/deployment/services/deployment_service.dart:760:          suggestedFix: 'Complete app metadata information',
+lib/features/deployment/services/deployment_service.dart:772:            suggestedFix: 'Expand app description to provide more detail',
+lib/features/deployment/services/deployment_service.dart:785:            suggestedFix: 'Add more relevant keywords',
+lib/features/deployment/services/deployment_service.dart:797:            suggestedFix: 'Add required screenshots for all device types',
+lib/features/deployment/services/deployment_service.dart:816:          suggestedFix: 'Add valid privacy policy URL',
+lib/features/deployment/services/deployment_service.dart:831:        suggestedFix:
+lib/features/deployment/services/deployment_service.dart:849:        suggestedFix:
+lib/features/deployment/services/deployment_service.dart:862:        suggestedFix:
+lib/features/deployment/services/deployment_service.dart:882:        suggestedFix: 'Review encryption implementation and key management',
+lib/features/deployment/services/deployment_service.dart:893:        suggestedFix:
+lib/features/deployment/services/deployment_service.dart:911:        suggestedFix: 'Run accessibility tests and fix identified issues',
+lib/features/deployment/services/deployment_service.dart:923:        suggestedFix: 'Test with VoiceOver (iOS) and TalkBack (Android)',
+lib/features/deployment/services/deployment_service.dart:940:          suggestedFix: 'Set appropriate age rating for health content',
+lib/features/deployment/services/deployment_service.dart:953:        suggestedFix:
+lib/features/deployment/services/deployment_service.dart:972:          suggestedFix: 'Add support for major languages in target markets',
+lib/features/deployment/services/deployment_service.dart:990:        suggestedFix: 'Run performance tests and optimize as needed',
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:864:            'Suggested Tags',
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:875:            children: _suggestedTags
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:889:                        _customTags[tag] = 'suggested';
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:1453:  static const List<String> _suggestedTags = [

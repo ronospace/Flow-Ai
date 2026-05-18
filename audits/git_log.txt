@@ -1,0 +1,10 @@
+a163701 (HEAD -> fix/tabbar-final-polish) centralize zyra aura visual tokens
+d0ece62 apply localized partner-style activation to zyra quick replies
+19ac1cc refine zyra ios aura depth and shell continuity
+6b5043a add centralized app geometry token system
+e962832 centralized zyra dialog radius system and stabilized segmented geometry
+ae17a5b fix insights segmented tab geometry alignment
+34c21f3 stabilized floating ai dialog geometry and centralized spacing system
+2a5d099 validated runtime layout architecture before stable keyboard refactor
+1ca4472 experimental layout ownership investigation state
+ef8c14d experimental layout ownership investigation state

@@ -1,0 +1,3 @@
+ ios/Runner.xcodeproj/project.pbxproj                | 4 ++++
+ lib/features/insights/widgets/floating_ai_chat.dart | 4 ++--
+ 2 files changed, 6 insertions(+), 2 deletions(-)

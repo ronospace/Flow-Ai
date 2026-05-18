@@ -1,0 +1,3 @@
+lib/core/theme/app_theme.dart:67:  static const double zyraAuraBlur = 22;
+lib/core/theme/app_theme.dart:68:  static const double zyraAuraSpread = 1;
+lib/core/theme/app_theme.dart:71:  static Color zyraAuraColor = primaryRose.withValues(alpha: 0.10);

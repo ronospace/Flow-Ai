@@ -1,0 +1,10 @@
+lib/features/insights/screens/faq_browser_screen.dart:378:              child: Icon(Icons.quiz, color: AppTheme.primaryPurple, size: 20),
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:5:import '../widgets/personality_quiz_widget.dart';
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:155:        return _buildPersonalityQuizStep(context, controller);
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:238:  Widget _buildPersonalityQuizStep(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:242:    return PersonalityQuizWidget(
+lib/features/onboarding/widgets/personality_quiz_widget.dart:4:/// 🧠 Personality Quiz Widget - Intelligent Onboarding Component
+lib/features/onboarding/widgets/personality_quiz_widget.dart:7:class PersonalityQuizWidget extends StatefulWidget {
+lib/features/onboarding/widgets/personality_quiz_widget.dart:11:  const PersonalityQuizWidget({
+lib/features/onboarding/widgets/personality_quiz_widget.dart:18:  State<PersonalityQuizWidget> createState() => _PersonalityQuizWidgetState();
+lib/features/onboarding/widgets/personality_quiz_widget.dart:21:class _PersonalityQuizWidgetState extends State<PersonalityQuizWidget>

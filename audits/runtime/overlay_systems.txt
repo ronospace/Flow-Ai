@@ -1,0 +1,63 @@
+lib/core/config/platform_config.dart:228:      'enablePerformanceOverlay': false,
+lib/core/utils/theme_utils.dart:77:  /// Get theme-aware overlay color for modal backgrounds
+lib/core/utils/theme_utils.dart:78:  static Color getOverlayColor(BuildContext context) {
+lib/core/services/platform_service.dart:159:        SystemChrome.setSystemUIOverlayStyle(
+lib/core/services/platform_service.dart:160:          const SystemUiOverlayStyle(
+lib/core/services/onboarding_tutorial_service.dart:310:/// Tutorial overlay controller for displaying interactive tutorials
+lib/core/services/onboarding_tutorial_service.dart:311:class TutorialOverlayController {
+lib/core/services/onboarding_tutorial_service.dart:318:  OverlayEntry? _overlayEntry;
+lib/core/services/onboarding_tutorial_service.dart:320:  TutorialOverlayController({
+lib/core/services/onboarding_tutorial_service.dart:335:    _showOverlay();
+lib/core/services/onboarding_tutorial_service.dart:338:  /// Show the tutorial overlay
+lib/core/services/onboarding_tutorial_service.dart:339:  void _showOverlay() {
+lib/core/services/onboarding_tutorial_service.dart:345:    _overlayEntry?.remove();
+lib/core/services/onboarding_tutorial_service.dart:346:    _overlayEntry = OverlayEntry(
+lib/core/services/onboarding_tutorial_service.dart:347:      builder: (context) => TutorialOverlayWidget(
+lib/core/services/onboarding_tutorial_service.dart:357:    Overlay.of(context).insert(_overlayEntry!);
+lib/core/services/onboarding_tutorial_service.dart:363:    _showOverlay();
+lib/core/services/onboarding_tutorial_service.dart:369:    _showOverlay();
+lib/core/services/onboarding_tutorial_service.dart:374:    _overlayEntry?.remove();
+lib/core/services/onboarding_tutorial_service.dart:375:    _overlayEntry = null;
+lib/core/services/onboarding_tutorial_service.dart:381:    _overlayEntry?.remove();
+lib/core/services/onboarding_tutorial_service.dart:382:    _overlayEntry = null;
+lib/core/services/onboarding_tutorial_service.dart:386:/// Tutorial overlay widget
+lib/core/services/onboarding_tutorial_service.dart:387:class TutorialOverlayWidget extends StatelessWidget {
+lib/core/services/onboarding_tutorial_service.dart:395:  const TutorialOverlayWidget({
+lib/core/services/onboarding_tutorial_service.dart:415:            // Tap anywhere to dismiss overlay
+lib/features/insights/screens/insights_screen.dart:278:        overlayColor: WidgetStatePropertyAll(Colors.transparent),
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:292:        // Enhanced Chat Interface - NO OVERLAY
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:292:        // Enhanced Chat Interface - NO OVERLAY
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:292:        // Enhanced Chat Interface - NO OVERLAY
+lib/features/insights/widgets/floating_ai_chat.dart:294:        // Enhanced Chat Interface - NO OVERLAY
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:292:        // Enhanced Chat Interface - NO OVERLAY
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:292:        // Enhanced Chat Interface - NO OVERLAY
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:292:        // Enhanced Chat Interface - NO OVERLAY
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:292:        // Enhanced Chat Interface - NO OVERLAY
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:292:        // Enhanced Chat Interface - NO OVERLAY
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:292:        // Enhanced Chat Interface - NO OVERLAY
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:292:        // Enhanced Chat Interface - NO OVERLAY
+lib/features/insights/widgets/floating_ai_chat.dart.bak:287:        // Enhanced Chat Interface - NO OVERLAY
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:292:        // Enhanced Chat Interface - NO OVERLAY
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:292:        // Enhanced Chat Interface - NO OVERLAY
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:292:        // Enhanced Chat Interface - NO OVERLAY
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:292:        // Enhanced Chat Interface - NO OVERLAY
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:292:        // Enhanced Chat Interface - NO OVERLAY
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:292:        // Enhanced Chat Interface - NO OVERLAY
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:292:        // Enhanced Chat Interface - NO OVERLAY
+lib/features/cycle/screens/calendar_screen.dart:412:          // Period tracking emoji overlay
+lib/features/cycle/screens/tracking_screen.dart:457:        overlayColor: WidgetStatePropertyAll(Colors.transparent),
+lib/features/cycle/widgets/pain_body_map.dart:371:            overlayColor: color.withValues(alpha: 0.2),
+lib/features/cycle/widgets/mood_energy_slider.dart:594:                        overlayColor: currentColor.withValues(alpha: 0.2),
+lib/features/cycle/widgets/mood_energy_slider.dart:603:                        overlayShape: const RoundSliderOverlayShape(
+lib/features/cycle/widgets/mood_energy_slider.dart:604:                          overlayRadius: 30,
+lib/features/cycle/widgets/symptom_selector.dart:439:            overlayColor: color.withValues(alpha: 0.2),
+lib/features/partner/dialogs/join_partner_dialog.dart:296:          overlayColor: WidgetStateProperty.all(Colors.transparent),
+lib/features/partner/widgets/partner_invitation_dialog.dart:386:              overlayColor: WidgetStatePropertyAll(Colors.transparent),
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:429:                  overlayColor: _getWellbeingColor(
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:604:              overlayColor: color.withValues(alpha: 0.1),
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:694:              overlayColor: color.withValues(alpha: 0.1),
+lib/features/premium/screens/premium_paywall_screen.dart:201:                // Loading overlay
+lib/features/onboarding/screens/onboarding_screen.dart:123:                // Loading overlay
+lib/main.dart:378:          // Update system UI overlay style based on theme
+lib/main.dart:384:          SystemChrome.setSystemUIOverlayStyle(
+lib/main.dart:385:            SystemUiOverlayStyle(

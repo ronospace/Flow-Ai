@@ -1,0 +1,98 @@
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:64:  late FocusNode _inputFocusNode;
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:112:    _inputFocusNode = FocusNode()
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:175:    _inputFocusNode.dispose();
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:1043:                focusNode: _inputFocusNode,
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:64:  late FocusNode _inputFocusNode;
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:112:    _inputFocusNode = FocusNode()
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:142:              final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:175:    _inputFocusNode.dispose();
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:288:    final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:1058:                focusNode: _inputFocusNode,
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:64:  late FocusNode _inputFocusNode;
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:112:    _inputFocusNode = FocusNode()
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:175:    _inputFocusNode.dispose();
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:1041:                focusNode: _inputFocusNode,
+lib/features/insights/widgets/floating_ai_chat.dart:66:  late FocusNode _inputFocusNode;
+lib/features/insights/widgets/floating_ai_chat.dart:114:    _inputFocusNode = FocusNode()
+lib/features/insights/widgets/floating_ai_chat.dart:177:    _inputFocusNode.dispose();
+lib/features/insights/widgets/floating_ai_chat.dart:1068:                focusNode: _inputFocusNode,
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:64:  late FocusNode _inputFocusNode;
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:112:    _inputFocusNode = FocusNode()
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:142:              final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:175:    _inputFocusNode.dispose();
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:288:    final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:1049:                focusNode: _inputFocusNode,
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:64:  late FocusNode _inputFocusNode;
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:112:    _inputFocusNode = FocusNode()
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:175:    _inputFocusNode.dispose();
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:1046:                focusNode: _inputFocusNode,
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:64:  late FocusNode _inputFocusNode;
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:112:    _inputFocusNode = FocusNode()
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:175:    _inputFocusNode.dispose();
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:1054:                focusNode: _inputFocusNode,
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:64:  late FocusNode _inputFocusNode;
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:112:    _inputFocusNode = FocusNode()
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:142:              final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:175:    _inputFocusNode.dispose();
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:288:    final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:1056:                focusNode: _inputFocusNode,
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:64:  late FocusNode _inputFocusNode;
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:112:    _inputFocusNode = FocusNode()
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:175:    _inputFocusNode.dispose();
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:1052:                focusNode: _inputFocusNode,
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:64:  late FocusNode _inputFocusNode;
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:112:    _inputFocusNode = FocusNode()
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:142:              final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:175:    _inputFocusNode.dispose();
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:288:    final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:1056:                focusNode: _inputFocusNode,
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:64:  late FocusNode _inputFocusNode;
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:112:    _inputFocusNode = FocusNode()
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:175:    _inputFocusNode.dispose();
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:1050:                focusNode: _inputFocusNode,
+lib/features/insights/widgets/floating_ai_chat.dart.bak:64:  late FocusNode _inputFocusNode;
+lib/features/insights/widgets/floating_ai_chat.dart.bak:112:    _inputFocusNode = FocusNode()
+lib/features/insights/widgets/floating_ai_chat.dart.bak:142:              final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.bak:175:    _inputFocusNode.dispose();
+lib/features/insights/widgets/floating_ai_chat.dart.bak:283:    final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.bak:1022:                focusNode: _inputFocusNode,
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:64:  late FocusNode _inputFocusNode;
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:112:    _inputFocusNode = FocusNode()
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:142:              final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:175:    _inputFocusNode.dispose();
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:288:    final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:1056:                focusNode: _inputFocusNode,
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:64:  late FocusNode _inputFocusNode;
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:112:    _inputFocusNode = FocusNode()
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:175:    _inputFocusNode.dispose();
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:1056:                focusNode: _inputFocusNode,
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:64:  late FocusNode _inputFocusNode;
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:112:    _inputFocusNode = FocusNode()
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:175:    _inputFocusNode.dispose();
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:1054:                focusNode: _inputFocusNode,
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:64:  late FocusNode _inputFocusNode;
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:112:    _inputFocusNode = FocusNode()
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:142:              final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:175:    _inputFocusNode.dispose();
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:288:    final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:1056:                focusNode: _inputFocusNode,
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:64:  late FocusNode _inputFocusNode;
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:112:    _inputFocusNode = FocusNode()
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:175:    _inputFocusNode.dispose();
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:1051:                focusNode: _inputFocusNode,
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:64:  late FocusNode _inputFocusNode;
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:112:    _inputFocusNode = FocusNode()
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:175:    _inputFocusNode.dispose();
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:1056:                focusNode: _inputFocusNode,
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:64:  late FocusNode _inputFocusNode;
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:112:    _inputFocusNode = FocusNode()
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:142:              final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:175:    _inputFocusNode.dispose();
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:288:    final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:1058:                focusNode: _inputFocusNode,
+lib/features/partner/widgets/partner_invitation_email_tab.dart:10:  final FocusNode emailFocus;
+lib/features/partner/widgets/partner_invitation_email_tab.dart:11:  final FocusNode messageFocus;
+lib/features/partner/widgets/partner_invitation_email_tab.dart:43:        focusNode: emailFocus,
+lib/features/partner/widgets/partner_invitation_email_tab.dart:119:        focusNode: messageFocus,
+lib/features/partner/widgets/partner_invitation_dialog.dart:32:  final _emailFocus = FocusNode();
+lib/features/partner/widgets/partner_invitation_dialog.dart:33:  final _messageFocus = FocusNode();

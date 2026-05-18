@@ -1,0 +1,18 @@
+lib/core/ui/app_geometry.dart:3:class AppGeometry {
+lib/core/ui/app_geometry.dart:4:  AppGeometry._();
+lib/features/insights/widgets/floating_ai_chat.dart:314:                    borderRadius: AppGeometry.dialogRadius,
+lib/features/insights/widgets/floating_ai_chat.dart:389:                      borderRadius: AppGeometry.dialogRadius,
+lib/features/insights/widgets/floating_ai_chat.dart:446:                                                      AppGeometry.dialogRadius,
+lib/features/insights/widgets/floating_ai_chat.dart:502:        borderRadius: AppGeometry.dialogRadius,
+lib/features/insights/widgets/floating_ai_chat.dart:538:                      borderRadius: AppGeometry.dialogRadius,
+lib/features/insights/widgets/floating_ai_chat.dart:555:                      borderRadius: AppGeometry.dialogRadius,
+lib/features/insights/widgets/floating_ai_chat.dart:609:                            borderRadius: AppGeometry.dialogRadius,
+lib/features/insights/widgets/floating_ai_chat.dart:689:                        borderRadius: AppGeometry.dialogRadius,
+lib/features/insights/widgets/floating_ai_chat.dart:712:                        borderRadius: AppGeometry.dialogRadius,
+lib/features/insights/widgets/floating_ai_chat.dart:734:                borderRadius: AppGeometry.dialogRadius,
+lib/features/insights/widgets/floating_ai_chat.dart:837:          borderRadius: AppGeometry.dialogRadius,
+lib/features/insights/widgets/floating_ai_chat.dart:853:                    borderRadius: AppGeometry.dialogRadius,
+lib/features/insights/widgets/floating_ai_chat.dart:922:          borderRadius: AppGeometry.dialogRadius,
+lib/features/insights/widgets/floating_ai_chat.dart:932:              borderRadius: AppGeometry.dialogRadius,
+lib/features/insights/widgets/floating_ai_chat.dart:1039:        borderRadius: AppGeometry.dialogRadius,
+lib/features/insights/widgets/floating_ai_chat.dart:1050:                borderRadius: AppGeometry.dialogRadius,

@@ -1,0 +1,337 @@
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:32:  bool _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:194:        _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:211:      _isFullScreen = !_isFullScreen;
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:212:      _chatHeight = _isFullScreen ? 0.9 : 0.6;
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:215:    if (_isFullScreen) {
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:297:            right: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:298:            left: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:300:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:355:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:480:          topLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:481:          topRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:494:          if (!_isFullScreen && !compact)
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:502:                  if (!_isFullScreen && _isResizing) {
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:524:          if (!_isFullScreen && !compact) const SizedBox(height: 4),
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:673:                        _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:1020:          bottomLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:1021:          bottomRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:32:  bool _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:194:        _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:211:      _isFullScreen = !_isFullScreen;
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:212:      _chatHeight = _isFullScreen ? 0.9 : 0.6;
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:215:    if (_isFullScreen) {
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:297:            right: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:298:            left: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:300:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:368:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:495:          topLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:496:          topRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:509:          if (!_isFullScreen && !compact)
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:517:                  if (!_isFullScreen && _isResizing) {
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:539:          if (!_isFullScreen && !compact) const SizedBox(height: 4),
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:688:                        _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:1035:          bottomLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:1036:          bottomRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:32:  bool _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:194:        _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:211:      _isFullScreen = !_isFullScreen;
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:212:      _chatHeight = _isFullScreen ? 0.9 : 0.6;
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:215:    if (_isFullScreen) {
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:297:            right: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:298:            left: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:300:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:355:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:480:          topLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:481:          topRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:494:          if (!_isFullScreen && !compact)
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:502:                  if (!_isFullScreen && _isResizing) {
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:524:          if (!_isFullScreen && !compact) const SizedBox(height: 4),
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:673:                        _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:1018:          bottomLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:1019:          bottomRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart:34:  bool _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart:196:        _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart:213:      _isFullScreen = !_isFullScreen;
+lib/features/insights/widgets/floating_ai_chat.dart:214:      _chatHeight = _isFullScreen ? 0.9 : 0.6;
+lib/features/insights/widgets/floating_ai_chat.dart:217:    if (_isFullScreen) {
+lib/features/insights/widgets/floating_ai_chat.dart:299:            right: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart:300:            left: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart:301:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart:302:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart:376:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart:514:          if (!_isFullScreen && !compact)
+lib/features/insights/widgets/floating_ai_chat.dart:522:                  if (!_isFullScreen && _isResizing) {
+lib/features/insights/widgets/floating_ai_chat.dart:544:          if (!_isFullScreen && !compact) const SizedBox(height: 4),
+lib/features/insights/widgets/floating_ai_chat.dart:693:                        _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:32:  bool _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:194:        _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:211:      _isFullScreen = !_isFullScreen;
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:212:      _chatHeight = _isFullScreen ? 0.9 : 0.6;
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:215:    if (_isFullScreen) {
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:297:            right: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:298:            left: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:300:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:360:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:486:          topLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:487:          topRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:500:          if (!_isFullScreen && !compact)
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:508:                  if (!_isFullScreen && _isResizing) {
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:530:          if (!_isFullScreen && !compact) const SizedBox(height: 4),
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:679:                        _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:1026:          bottomLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:1027:          bottomRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:32:  bool _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:194:        _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:211:      _isFullScreen = !_isFullScreen;
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:212:      _chatHeight = _isFullScreen ? 0.9 : 0.6;
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:215:    if (_isFullScreen) {
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:297:            right: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:298:            left: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:300:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:357:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:482:          topLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:483:          topRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:496:          if (!_isFullScreen && !compact)
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:504:                  if (!_isFullScreen && _isResizing) {
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:526:          if (!_isFullScreen && !compact) const SizedBox(height: 4),
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:675:                        _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:1023:          bottomLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:1024:          bottomRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:32:  bool _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:194:        _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:211:      _isFullScreen = !_isFullScreen;
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:212:      _chatHeight = _isFullScreen ? 0.9 : 0.6;
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:215:    if (_isFullScreen) {
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:297:            right: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:298:            left: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:300:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:367:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:493:          topLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:494:          topRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:507:          if (!_isFullScreen && !compact)
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:515:                  if (!_isFullScreen && _isResizing) {
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:537:          if (!_isFullScreen && !compact) const SizedBox(height: 4),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:686:                        _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:1031:          bottomLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:1032:          bottomRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:32:  bool _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:194:        _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:211:      _isFullScreen = !_isFullScreen;
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:212:      _chatHeight = _isFullScreen ? 0.9 : 0.6;
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:215:    if (_isFullScreen) {
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:297:            right: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:298:            left: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:300:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:367:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:493:          topLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:494:          topRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:507:          if (!_isFullScreen && !compact)
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:515:                  if (!_isFullScreen && _isResizing) {
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:537:          if (!_isFullScreen && !compact) const SizedBox(height: 4),
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:686:                        _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:1033:          bottomLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:1034:          bottomRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:32:  bool _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:194:        _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:211:      _isFullScreen = !_isFullScreen;
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:212:      _chatHeight = _isFullScreen ? 0.9 : 0.6;
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:215:    if (_isFullScreen) {
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:297:            right: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:298:            left: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:300:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:363:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:488:          topLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:489:          topRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:502:          if (!_isFullScreen && !compact)
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:510:                  if (!_isFullScreen && _isResizing) {
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:532:          if (!_isFullScreen && !compact) const SizedBox(height: 4),
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:681:                        _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:1029:          bottomLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:1030:          bottomRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:32:  bool _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:194:        _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:211:      _isFullScreen = !_isFullScreen;
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:212:      _chatHeight = _isFullScreen ? 0.9 : 0.6;
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:215:    if (_isFullScreen) {
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:297:            right: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:298:            left: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:300:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:367:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:493:          topLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:494:          topRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:507:          if (!_isFullScreen && !compact)
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:515:                  if (!_isFullScreen && _isResizing) {
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:537:          if (!_isFullScreen && !compact) const SizedBox(height: 4),
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:686:                        _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:1033:          bottomLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:1034:          bottomRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:32:  bool _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:194:        _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:211:      _isFullScreen = !_isFullScreen;
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:212:      _chatHeight = _isFullScreen ? 0.9 : 0.6;
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:215:    if (_isFullScreen) {
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:297:            right: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:298:            left: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:363:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:489:          topLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:490:          topRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:503:          if (!_isFullScreen && !compact)
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:511:                  if (!_isFullScreen && _isResizing) {
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:533:          if (!_isFullScreen && !compact) const SizedBox(height: 4),
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:682:                        _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:1027:          bottomLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:1028:          bottomRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.bak:32:  bool _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.bak:194:        _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.bak:211:      _isFullScreen = !_isFullScreen;
+lib/features/insights/widgets/floating_ai_chat.dart.bak:212:      _chatHeight = _isFullScreen ? 0.9 : 0.6;
+lib/features/insights/widgets/floating_ai_chat.dart.bak:215:    if (_isFullScreen) {
+lib/features/insights/widgets/floating_ai_chat.dart.bak:292:            right: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.bak:293:            left: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.bak:294:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.bak:295:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.bak:356:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.bak:480:          topLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.bak:481:          topRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.bak:494:          if (!_isFullScreen && !compact)
+lib/features/insights/widgets/floating_ai_chat.dart.bak:502:                  if (!_isFullScreen && _isResizing) {
+lib/features/insights/widgets/floating_ai_chat.dart.bak:524:          if (!_isFullScreen && !compact) const SizedBox(height: 4),
+lib/features/insights/widgets/floating_ai_chat.dart.bak:673:                        _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.bak:1000:          bottomLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.bak:1001:          bottomRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:32:  bool _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:194:        _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:211:      _isFullScreen = !_isFullScreen;
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:212:      _chatHeight = _isFullScreen ? 0.9 : 0.6;
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:215:    if (_isFullScreen) {
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:297:            right: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:298:            left: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:300:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:367:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:493:          topLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:494:          topRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:507:          if (!_isFullScreen && !compact)
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:515:                  if (!_isFullScreen && _isResizing) {
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:537:          if (!_isFullScreen && !compact) const SizedBox(height: 4),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:686:                        _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:1033:          bottomLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:1034:          bottomRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:32:  bool _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:194:        _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:211:      _isFullScreen = !_isFullScreen;
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:212:      _chatHeight = _isFullScreen ? 0.9 : 0.6;
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:215:    if (_isFullScreen) {
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:297:            right: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:298:            left: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:300:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:367:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:493:          topLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:494:          topRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:507:          if (!_isFullScreen && !compact)
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:515:                  if (!_isFullScreen && _isResizing) {
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:537:          if (!_isFullScreen && !compact) const SizedBox(height: 4),
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:686:                        _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:1033:          bottomLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:1034:          bottomRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:32:  bool _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:194:        _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:211:      _isFullScreen = !_isFullScreen;
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:212:      _chatHeight = _isFullScreen ? 0.9 : 0.6;
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:215:    if (_isFullScreen) {
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:297:            right: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:298:            left: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:300:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:367:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:493:          topLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:494:          topRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:507:          if (!_isFullScreen && !compact)
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:515:                  if (!_isFullScreen && _isResizing) {
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:537:          if (!_isFullScreen && !compact) const SizedBox(height: 4),
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:686:                        _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:1031:          bottomLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:1032:          bottomRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:32:  bool _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:194:        _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:211:      _isFullScreen = !_isFullScreen;
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:212:      _chatHeight = _isFullScreen ? 0.9 : 0.6;
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:215:    if (_isFullScreen) {
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:297:            right: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:298:            left: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:300:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:367:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:493:          topLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:494:          topRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:507:          if (!_isFullScreen && !compact)
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:515:                  if (!_isFullScreen && _isResizing) {
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:537:          if (!_isFullScreen && !compact) const SizedBox(height: 4),
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:686:                        _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:1033:          bottomLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:1034:          bottomRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:32:  bool _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:194:        _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:211:      _isFullScreen = !_isFullScreen;
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:212:      _chatHeight = _isFullScreen ? 0.9 : 0.6;
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:215:    if (_isFullScreen) {
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:297:            right: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:298:            left: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:300:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:362:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:488:          topLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:489:          topRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:502:          if (!_isFullScreen && !compact)
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:510:                  if (!_isFullScreen && _isResizing) {
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:532:          if (!_isFullScreen && !compact) const SizedBox(height: 4),
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:681:                        _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:1028:          bottomLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:1029:          bottomRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:32:  bool _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:194:        _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:211:      _isFullScreen = !_isFullScreen;
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:212:      _chatHeight = _isFullScreen ? 0.9 : 0.6;
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:215:    if (_isFullScreen) {
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:297:            right: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:298:            left: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:300:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:367:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:493:          topLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:494:          topRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:507:          if (!_isFullScreen && !compact)
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:515:                  if (!_isFullScreen && _isResizing) {
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:537:          if (!_isFullScreen && !compact) const SizedBox(height: 4),
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:686:                        _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:1033:          bottomLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:1034:          bottomRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:32:  bool _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:194:        _isFullScreen = false;
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:211:      _isFullScreen = !_isFullScreen;
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:212:      _chatHeight = _isFullScreen ? 0.9 : 0.6;
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:215:    if (_isFullScreen) {
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:297:            right: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:298:            left: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:300:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:368:            bottom: _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:495:          topLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:496:          topRight: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:509:          if (!_isFullScreen && !compact)
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:517:                  if (!_isFullScreen && _isResizing) {
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:539:          if (!_isFullScreen && !compact) const SizedBox(height: 4),
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:688:                        _isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:1035:          bottomLeft: Radius.circular(_isFullScreen ? 16 : 24),
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:1036:          bottomRight: Radius.circular(_isFullScreen ? 16 : 24),

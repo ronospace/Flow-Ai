@@ -1,0 +1,88 @@
+lib/core/widgets/error_boundary.dart:346:                              child: SingleChildScrollView(
+lib/core/widgets/coming_soon_widget.dart:45:        child: SingleChildScrollView(
+lib/core/widgets/citation_widget.dart:75:        content: SingleChildScrollView(
+lib/features/insights/screens/insights_screen.dart:330:        return SingleChildScrollView(
+lib/features/insights/screens/insights_screen.dart:396:        return SingleChildScrollView(
+lib/features/insights/screens/insights_screen.dart:432:        return SingleChildScrollView(
+lib/features/insights/screens/analytics_dashboard_screen.dart:227:        return SingleChildScrollView(
+lib/features/insights/screens/analytics_dashboard_screen.dart:282:        return SingleChildScrollView(
+lib/features/insights/screens/analytics_dashboard_screen.dart:308:    return SingleChildScrollView(
+lib/features/insights/screens/analytics_dashboard_screen.dart:340:    return SingleChildScrollView(
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:341:                          child: SingleChildScrollView(
+lib/features/insights/widgets/floating_ai_chat.dart:349:                          child: SingleChildScrollView(
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:340:                          child: SingleChildScrollView(
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:340:                          child: SingleChildScrollView(
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:340:                          child: SingleChildScrollView(
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:336:                          child: SingleChildScrollView(
+lib/features/insights/widgets/prediction_accuracy_card.dart:249:        content: SingleChildScrollView(
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:340:                          child: SingleChildScrollView(
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:340:                          child: SingleChildScrollView(
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:340:                          child: SingleChildScrollView(
+lib/features/insights/widgets/cycle_regularity_indicator.dart:370:        content: SingleChildScrollView(
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:340:                          child: SingleChildScrollView(
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:340:                          child: SingleChildScrollView(
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:341:                          child: SingleChildScrollView(
+lib/features/settings/screens/settings_screen.dart:844:        content: SingleChildScrollView(
+lib/features/settings/screens/settings_screen.dart:1025:        content: SingleChildScrollView(
+lib/features/settings/screens/settings_screen.dart:1160:        content: SingleChildScrollView(
+lib/features/settings/screens/help_screen.dart:118:      body: SingleChildScrollView(
+lib/features/settings/widgets/medical_citations_section.dart:125:          child: SingleChildScrollView(
+lib/features/settings/widgets/cyclesync_integration.dart:516:            content: const SingleChildScrollView(
+lib/features/settings/widgets/cyclesync_integration.dart:759:        content: const SingleChildScrollView(
+lib/features/future_plans/screens/future_plans_screen.dart:253:                  SingleChildScrollView(
+lib/features/auth/screens/futuristic_auth_screen.dart:117:            child: SingleChildScrollView(
+lib/features/auth/screens/auth_screen.dart:204:    return SingleChildScrollView(
+lib/features/health/screens/real_time_health_dashboard.dart:596:    return SingleChildScrollView(
+lib/features/health/screens/health_screen.dart:90:              return SingleChildScrollView(
+lib/features/health/widgets/healthkit_connection_card.dart:253:        content: SingleChildScrollView(
+lib/features/health/widgets/healthkit_permission_dialog.dart:64:      content: SingleChildScrollView(
+lib/features/healthcare/screens/healthcare_provider_portal_screen.dart:54:                child: SingleChildScrollView(
+lib/features/cycle/screens/calendar_screen.dart:100:                        return SingleChildScrollView(
+lib/features/cycle/screens/tracking_screen.dart:529:    return SingleChildScrollView(
+lib/features/cycle/screens/tracking_screen.dart:663:    return SingleChildScrollView(
+lib/features/cycle/screens/tracking_screen.dart:725:    return SingleChildScrollView(
+lib/features/cycle/screens/tracking_screen.dart:793:    return SingleChildScrollView(
+lib/features/cycle/screens/home_screen.dart:423:                        return SingleChildScrollView(
+lib/features/cycle/widgets/day_detail_sheet.dart:50:                child: SingleChildScrollView(
+lib/features/cycle/widgets/flow_intensity_picker.dart:572:              child: SingleChildScrollView(
+lib/features/cycle/widgets/symptom_selector.dart:84:    return SingleChildScrollView(
+lib/features/cycle/widgets/symptom_selector.dart:221:    return SingleChildScrollView(
+lib/features/feedback/screens/feedback_screen.dart:135:      body: SingleChildScrollView(
+lib/features/partner/screens/partner_privacy_settings_screen.dart:158:            child: SingleChildScrollView(
+lib/features/partner/dialogs/join_partner_dialog.dart:351:                  builder: (context, constraints) => SingleChildScrollView(
+lib/features/partner/dialogs/join_partner_dialog.dart:412:      builder: (context, constraints) => SingleChildScrollView(
+lib/features/partner/dialogs/join_partner_dialog.dart:483:      builder: (context, constraints) => SingleChildScrollView(
+lib/features/partner/widgets/partner_invitation_email_tab.dart:189:          child: SingleChildScrollView(
+lib/features/partner/widgets/partner_invitation_link_tab.dart:25:        return SingleChildScrollView(
+lib/features/partner/widgets/partner_empty_state.dart:21:      builder: (context, constraints) => SingleChildScrollView(
+lib/features/partner/widgets/partner_invitation_qr_tab.dart:28:        return SingleChildScrollView(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:522:    return SingleChildScrollView(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:556:    return SingleChildScrollView(
+lib/features/biometric/screens/biometric_dashboard_screen.dart:621:    return SingleChildScrollView(
+lib/features/coming_soon/screens/coming_soon_screen.dart:159:    return SingleChildScrollView(
+lib/features/coming_soon/screens/coming_soon_screen.dart:216:    return SingleChildScrollView(
+lib/features/coming_soon/screens/coming_soon_screen.dart:277:    return SingleChildScrollView(
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:429:              child: SingleChildScrollView(
+lib/features/premium/widgets/premium_feature_widget.dart:469:        content: SingleChildScrollView(
+lib/features/premium/widgets/premium_feature_widget.dart:615:            SingleChildScrollView(
+lib/features/notifications/screens/notification_settings_screen.dart:147:      child: SingleChildScrollView(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:179:    return SingleChildScrollView(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:281:    return SingleChildScrollView(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:335:    return SingleChildScrollView(
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:389:    return SingleChildScrollView(
+lib/features/onboarding/screens/cycle_history_step_screen.dart:58:      child: SingleChildScrollView(
+lib/features/onboarding/widgets/goal_selection_widget.dart:241:      child: SingleChildScrollView(
+lib/features/onboarding/widgets/onboarding_page.dart:21:    return SingleChildScrollView(
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:173:        child: SingleChildScrollView(
+lib/features/onboarding/widgets/personality_quiz_widget.dart:205:      child: SingleChildScrollView(
+lib/features/onboarding/widgets/setup_form.dart:50:      child: SingleChildScrollView(
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:175:        child: SingleChildScrollView(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:179:    return SingleChildScrollView(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:968:    return SingleChildScrollView(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:988:    return SingleChildScrollView(
+lib/features/analytics/screens/analytics_dashboard_screen.dart:1005:    return SingleChildScrollView(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:278:    return SingleChildScrollView(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:321:    return SingleChildScrollView(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:361:    return SingleChildScrollView(
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:393:    return SingleChildScrollView(
+lib/features/analytics/widgets/advanced_analytics_dashboard.dart:18:    return SingleChildScrollView(

@@ -1,0 +1,2 @@
+lib/features/partner/widgets/partner_invitation_dialog.dart:94:  void didChangeMetrics() {
+lib/features/partner/widgets/partner_invitation_dialog.dart:95:    super.didChangeMetrics();

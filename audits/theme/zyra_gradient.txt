@@ -1,0 +1,1 @@
+lib/core/theme/app_theme.dart:74:  static LinearGradient zyraBodyGradient = LinearGradient(

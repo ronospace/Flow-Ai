@@ -141,7 +141,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             Future.delayed(_thinkingDelay, () {
               if (!mounted) return;
 
-              final keyboardOpen = _inputFocusNode.hasFocus;
+              final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
 
               setState(() {
                 _isTyping = false;
@@ -287,7 +287,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     // // // // debugPrint("VIEW INSETS (keyboard): ");
 
     final theme = Theme.of(context);
-    final keyboardOpen = _inputFocusNode.hasFocus;
+    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
 
     return Stack(
       children: [
@@ -828,87 +828,72 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   Widget _buildEnhancedQuickReplies(ThemeData theme) {
     final suggestions = _chatService.getSuggestedReplies().toList();
 
-    return Container(
-      padding: const EdgeInsets.fromLTRB(12, 8, 12, 10),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            AppTheme.primaryRose.withValues(alpha: 0.035),
-            AppTheme.primaryPurple.withValues(alpha: 0.018),
-          ],
-        ),
-        borderRadius: AppGeometry.dialogRadius,
-        border: Border.all(color: AppTheme.primaryRose.withValues(alpha: 0.08)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Header - More prominent
-          InkWell(
-            borderRadius: AppGeometry.dialogRadius,
-            onTap: () {
-              setState(() {
-                _quickRepliesCollapsed = !_quickRepliesCollapsed;
-              });
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
-                      ),
-                      borderRadius: AppGeometry.dialogRadius,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Header - More prominent
+        InkWell(
+          borderRadius: AppGeometry.dialogRadius,
+          onTap: () {
+            setState(() {
+              _quickRepliesCollapsed = !_quickRepliesCollapsed;
+            });
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
                     ),
-                    child: Icon(
-                      Icons.auto_awesome_outlined,
-                      color: Theme.of(context).colorScheme.surface,
-                      size: 18,
+                    borderRadius: AppGeometry.dialogRadius,
+                  ),
+                  child: Icon(
+                    Icons.auto_awesome_outlined,
+                    color: Theme.of(context).colorScheme.surface,
+                    size: 18,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'Suggested Questions',
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      color: AppTheme.primaryRose,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'Suggested Questions',
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: AppTheme.primaryRose,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
-                  Icon(
-                    _quickRepliesCollapsed
-                        ? Icons.keyboard_arrow_down
-                        : Icons.keyboard_arrow_up,
-                    color: AppTheme.primaryRose,
-                  ),
-                ],
-              ),
+                ),
+                Icon(
+                  _quickRepliesCollapsed
+                      ? Icons.keyboard_arrow_down
+                      : Icons.keyboard_arrow_up,
+                  color: AppTheme.primaryRose,
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 4),
-          // Suggestions - Horizontal scrollable for better visibility
-          if (!_quickRepliesCollapsed)
-            SizedBox(
-              height: 34,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: suggestions.length,
-                separatorBuilder: (context, index) => const SizedBox(width: 12),
-                itemBuilder: (context, index) {
-                  return _buildSuggestionChip(suggestions[index], theme, index);
-                },
-              ),
+        ),
+        const SizedBox(height: 4),
+        // Suggestions - Horizontal scrollable for better visibility
+        if (!_quickRepliesCollapsed)
+          SizedBox(
+            height: 34,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: suggestions.length,
+              separatorBuilder: (context, index) => const SizedBox(width: 12),
+              itemBuilder: (context, index) {
+                return _buildSuggestionChip(suggestions[index], theme, index);
+              },
             ),
-        ],
-      ),
+          ),
+      ],
     );
   }
 

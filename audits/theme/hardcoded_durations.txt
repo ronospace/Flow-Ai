@@ -1,0 +1,901 @@
+lib/core/ui/adaptive_messages.dart:11:    Duration duration = const Duration(milliseconds: 1600),
+lib/core/ui/adaptive_messages.dart:25:    Duration duration = const Duration(milliseconds: 1700),
+lib/core/ui/adaptive_messages.dart:39:    Duration duration = const Duration(milliseconds: 1900),
+lib/core/ui/adaptive_messages.dart:53:    Duration duration = const Duration(milliseconds: 2200),
+lib/core/database/database_service.dart:441:      whereArgs: [now.subtract(const Duration(days: 7)).toIso8601String()],
+lib/core/database/database_service.dart:929:    final startDate = DateTime.now().subtract(Duration(days: days));
+lib/core/database/database_service.dart:1063:    final cutoffDate = DateTime.now().subtract(Duration(days: daysToKeep));
+lib/core/database/database_service.dart:1112:    final thirtyDaysAgo = DateTime.now().subtract(const Duration(days: 30));
+lib/core/biometrics/advanced_biometric_engine.dart:96:    _backgroundProcessor = Timer.periodic(const Duration(minutes: 5), (
+lib/core/biometrics/advanced_biometric_engine.dart:537:    Timer.periodic(const Duration(minutes: 1), (_) {
+lib/core/biometrics/advanced_biometric_engine.dart:599:    Timer.periodic(const Duration(minutes: 5), (_) {
+lib/core/intelligence/consumer_intelligence_engine.dart:109:        nextUpdateSuggestion: DateTime.now().add(const Duration(days: 7)),
+lib/core/intelligence/consumer_intelligence_engine.dart:279:      timeframe: const Duration(days: 3),
+lib/core/intelligence/consumer_intelligence_engine.dart:292:      final dayOfWeek = DateTime.now().add(Duration(days: day)).weekday;
+lib/core/intelligence/consumer_intelligence_engine.dart:306:          timeframe: Duration(days: day),
+lib/core/intelligence/consumer_intelligence_engine.dart:721:            duration: const Duration(minutes: 10),
+lib/core/intelligence/consumer_intelligence_engine.dart:759:          duration: const Duration(minutes: 30),
+lib/core/intelligence/consumer_intelligence_engine.dart:809:        duration: const Duration(minutes: 5),
+lib/core/intelligence/consumer_intelligence_engine.dart:819:        duration: const Duration(minutes: 15),
+lib/core/intelligence/consumer_intelligence_engine.dart:850:        duration: const Duration(minutes: 5),
+lib/core/intelligence/consumer_intelligence_engine.dart:866:        duration: const Duration(minutes: 2),
+lib/core/intelligence/consumer_intelligence_engine.dart:1286:      timeframe: const Duration(days: 1),
+lib/core/config/flowiq_config.dart:17:  static const Duration defaultTimeout = Duration(seconds: 30);
+lib/core/config/flowiq_config.dart:18:  static const Duration healthCheckTimeout = Duration(seconds: 10);
+lib/core/config/flowiq_config.dart:19:  static const Duration minRequestInterval = Duration(milliseconds: 500);
+lib/core/config/platform_config.dart:69:        'maxAge': const Duration(hours: 24),
+lib/core/config/platform_config.dart:77:        'maxAge': const Duration(days: 7),
+lib/core/config/platform_config.dart:85:        'maxAge': const Duration(days: 30),
+lib/core/config/platform_config.dart:103:          ? const Duration(milliseconds: 200)
+lib/core/config/platform_config.dart:104:          : const Duration(milliseconds: 300),
+lib/core/config/platform_config.dart:122:          ? const Duration(hours: 24)
+lib/core/config/platform_config.dart:123:          : const Duration(hours: 8),
+lib/core/config/platform_config.dart:141:          ? const Duration(milliseconds: 200)
+lib/core/config/platform_config.dart:142:          : const Duration(milliseconds: 300),
+lib/core/config/platform_config.dart:368:  static const Duration fastAnimation = Duration(milliseconds: 150);
+lib/core/config/platform_config.dart:369:  static const Duration normalAnimation = Duration(milliseconds: 300);
+lib/core/config/platform_config.dart:370:  static const Duration slowAnimation = Duration(milliseconds: 500);
+lib/core/security/security_manager.dart:39:  final Duration _sessionTimeout = const Duration(minutes: 30);
+lib/core/security/security_manager.dart:467:    final last24Hours = now.subtract(const Duration(hours: 24));
+lib/core/health/advanced_health_analytics.dart:97:    Timer.periodic(const Duration(hours: 6), (_) async {
+lib/core/health/advanced_health_analytics.dart:969:      ovulationDate: DateTime.now().add(Duration(days: ovulationDay.round())),
+lib/core/health/advanced_health_analytics.dart:971:        Duration(days: (ovulationDay - 5).round()),
+lib/core/health/advanced_health_analytics.dart:974:        Duration(days: (ovulationDay + 1).round()),
+lib/core/health/advanced_health_analytics.dart:1042:      'fertile_start': now.add(Duration(days: (ovulationDay - 5).round())),
+lib/core/health/advanced_health_analytics.dart:1043:      'peak_fertility': now.add(Duration(days: ovulationDay.round())),
+lib/core/health/advanced_health_analytics.dart:1044:      'fertile_end': now.add(Duration(days: (ovulationDay + 1).round())),
+lib/core/utils/time_utils.dart:79:    return startOfDay(dateTime.subtract(Duration(days: daysFromMonday)));
+lib/core/utils/time_utils.dart:106:    final yesterday = DateTime.now().subtract(const Duration(days: 1));
+lib/core/utils/time_utils.dart:112:    final tomorrow = DateTime.now().add(const Duration(days: 1));
+lib/core/utils/time_utils.dart:135:    return dateTime.add(Duration(days: days));
+lib/core/utils/time_utils.dart:140:    return dateTime.subtract(Duration(days: days));
+lib/core/utils/time_utils.dart:158:  static String formatDuration(Duration duration) {
+lib/core/models/cycle_data.dart:224:      fertile.add(ovulationDate!.add(Duration(days: i)));
+lib/core/models/cycle_data.dart:255:      current = current.add(const Duration(days: 1));
+lib/core/models/cycle_data.dart:597:      predictedStartDate.add(Duration(days: predictedLength - 1));
+lib/core/models/cycle_data.dart:713:    return now.isAfter(start) && now.isBefore(end.add(const Duration(days: 1)));
+lib/core/models/symptom_tracking.dart:216:          ? Duration(seconds: json['duration'])
+lib/core/models/biometric_data.dart:236:      totalDuration: Duration(minutes: json['total_duration_minutes']),
+lib/core/models/biometric_data.dart:237:      actualSleepTime: Duration(minutes: json['actual_sleep_time_minutes']),
+lib/core/models/biometric_data.dart:249:                  duration: Duration(minutes: stage['duration_minutes']),
+lib/core/models/period_prediction.dart:41:    final predictedStart = now.add(const Duration(days: 28));
+lib/core/models/period_prediction.dart:47:      predictedEndDate: predictedStart.add(const Duration(days: 5)),
+lib/core/models/period_prediction.dart:165:    final ovulationDay = cycleStart.subtract(const Duration(days: 14));
+lib/core/models/period_prediction.dart:167:      start: ovulationDay.subtract(const Duration(days: 5)),
+lib/core/models/period_prediction.dart:168:      end: ovulationDay.add(const Duration(days: 2)),
+lib/core/models/period_prediction.dart:201:        (date.isAfter(peak.subtract(const Duration(days: 1))) &&
+lib/core/models/period_prediction.dart:202:            date.isBefore(peak.add(const Duration(days: 2))))) {
+lib/core/theme/app_theme.dart:5:  static const Duration motionFast = Duration(milliseconds: 200);
+lib/core/theme/app_theme.dart:6:  static const Duration motionBase = Duration(milliseconds: 300);
+lib/core/theme/app_theme.dart:7:  static const Duration motionSlow = Duration(milliseconds: 400);
+lib/core/ml/advanced_prediction_models.dart:24:      await Future.delayed(const Duration(milliseconds: 500));
+lib/core/ml/advanced_prediction_models.dart:85:        'fertile_start': now.add(Duration(days: (ovulationDay - 5).round())),
+lib/core/ml/advanced_prediction_models.dart:86:        'peak_fertility': now.add(Duration(days: ovulationDay.round())),
+lib/core/ml/advanced_prediction_models.dart:87:        'fertile_end': now.add(Duration(days: (ovulationDay + 1).round())),
+lib/core/ai/period_prediction_engine.dart:102:        data.last.endDate ?? data.last.startDate.add(Duration(days: 5));
+lib/core/ai/period_prediction_engine.dart:104:      Duration(days: cycleLengthPrediction.round()),
+lib/core/ai/period_prediction_engine.dart:130:        data.last.endDate ?? data.last.startDate.add(Duration(days: 5));
+lib/core/ai/period_prediction_engine.dart:132:      Duration(days: posteriorMean.round()),
+lib/core/ai/period_prediction_engine.dart:175:        data.last.endDate ?? data.last.startDate.add(Duration(days: 5));
+lib/core/ai/period_prediction_engine.dart:177:      Duration(days: adjustedCycleLength.round()),
+lib/core/ai/period_prediction_engine.dart:203:        data.last.endDate ?? data.last.startDate.add(Duration(days: 5));
+lib/core/ai/period_prediction_engine.dart:205:      Duration(days: prediction.round()),
+lib/core/ai/period_prediction_engine.dart:673:      Duration(days: _defaultCycleLength.round()),
+lib/core/ai/period_prediction_engine.dart:691:      Duration(days: _defaultCycleLength.round()),
+lib/core/ai/period_prediction_engine.dart:737:    final ovulationDate = nextPeriodDate.subtract(Duration(days: 14));
+lib/core/ai/period_prediction_engine.dart:739:      ovulationDate.subtract(Duration(days: 5)), // Fertile window start
+lib/core/ai/period_prediction_engine.dart:740:      ovulationDate.add(Duration(days: 1)), // Fertile window end
+lib/core/ai/advanced_prediction_engine.dart:185:        nextUpdateDue: DateTime.now().add(const Duration(days: 7)),
+lib/core/ai/advanced_prediction_engine.dart:245:          start: DateTime.now().add(const Duration(days: 10)),
+lib/core/ai/advanced_prediction_engine.dart:246:          end: DateTime.now().add(const Duration(days: 16)),
+lib/core/ai/advanced_prediction_engine.dart:247:          peak: DateTime.now().add(const Duration(days: 14)),
+lib/core/ai/advanced_prediction_engine.dart:262:    final start = now.add(Duration(days: (avgOvulationDay - 3).round()));
+lib/core/ai/advanced_prediction_engine.dart:263:    final end = now.add(Duration(days: (avgOvulationDay + 1).round()));
+lib/core/ai/advanced_prediction_engine.dart:264:    final peak = now.add(Duration(days: avgOvulationDay.round()));
+lib/core/ai/advanced_prediction_engine.dart:281:            DateTime.now().subtract(const Duration(days: 30)),
+lib/core/ai/advanced_prediction_engine.dart:309:            DateTime.now().subtract(const Duration(days: 30)),
+lib/core/ai/advanced_prediction_engine.dart:345:    final adjustment = Duration(days: signals.dayAdjustment);
+lib/core/ai/advanced_prediction_engine.dart:357:    final adjustment = Duration(days: refinement.dayAdjustment);
+lib/core/ai/advanced_prediction_engine.dart:434:        Duration(days: (avgCycleLength * i).round()),
+lib/core/ai/advanced_prediction_engine.dart:436:      final ovulationDay = cycleStart.add(const Duration(days: 14));
+lib/core/ai/advanced_prediction_engine.dart:440:          start: ovulationDay.subtract(const Duration(days: 3)),
+lib/core/ai/advanced_prediction_engine.dart:441:          end: ovulationDay.add(const Duration(days: 1)),
+lib/core/ai/advanced_prediction_engine.dart:456:        start: now.add(const Duration(days: 10)),
+lib/core/ai/advanced_prediction_engine.dart:457:        end: now.add(const Duration(days: 16)),
+lib/core/ai/advanced_prediction_engine.dart:458:        peak: now.add(const Duration(days: 14)),
+lib/core/ai/advanced_prediction_engine.dart:461:      peakFertilityDate: now.add(const Duration(days: 14)),
+lib/core/ai/advanced_prediction_engine.dart:487:      nextUpdateDue: DateTime.now().add(const Duration(days: 7)),
+lib/core/ai/neural_prediction_engine.dart:251:    if (history.isEmpty) return DateTime.now().add(const Duration(days: 28));
+lib/core/ai/neural_prediction_engine.dart:257:    return lastPeriod.add(Duration(days: avgLength.round()));
+lib/core/ai/neural_prediction_engine.dart:268:        Duration(days: (ovulationDay - 5).round()),
+lib/core/ai/neural_prediction_engine.dart:271:        Duration(days: (ovulationDay + 1).round()),
+lib/core/ai/neural_prediction_engine.dart:274:        Duration(days: ovulationDay.round()),
+lib/core/ai/emotional_intelligence_engine.dart:81:    Timer.periodic(const Duration(hours: 1), (_) async {
+lib/core/ai/emotional_intelligence_engine.dart:295:    final cutoff = DateTime.now().subtract(const Duration(days: 90));
+lib/core/ai/emotional_intelligence_engine.dart:300:    final cutoff = DateTime.now().subtract(Duration(days: days));
+lib/core/ai/emotional_intelligence_engine.dart:1322:      'duration': _getPhaseDuration(phase),
+lib/core/ai/emotional_intelligence_engine.dart:1371:  String _getPhaseDuration(String phase) {
+lib/core/examples/personalization_example.dart:27:    createdAt: DateTime.now().subtract(const Duration(days: 30)),
+lib/core/examples/personalization_example.dart:54:    scheduledAt: DateTime.now().add(const Duration(minutes: 1)),
+lib/core/enhancements/app_enhancements.dart:118:      duration: const Duration(milliseconds: 200),
+lib/core/enhancements/app_enhancements.dart:411:    Duration duration = const Duration(milliseconds: 400),
+lib/core/visuals/consumer_visual_engine.dart:215:    Duration period = const Duration(seconds: 3),
+lib/core/visuals/consumer_visual_engine.dart:269:      duration: animated ? const Duration(seconds: 2) : Duration.zero,
+lib/core/visuals/consumer_visual_engine.dart:456:    final duration = _getPatternDuration(widget.pattern);
+lib/core/visuals/consumer_visual_engine.dart:478:  Duration _getPatternDuration(BreathingPattern pattern) {
+lib/core/visuals/consumer_visual_engine.dart:481:        return const Duration(seconds: 4); // 4-4-4 breathing
+lib/core/visuals/consumer_visual_engine.dart:483:        return const Duration(seconds: 2); // Quick energizing breath
+lib/core/visuals/consumer_visual_engine.dart:485:        return const Duration(seconds: 6); // Deep focus breathing
+lib/core/visuals/consumer_visual_engine.dart:487:        return const Duration(seconds: 8); // Slow sleep breathing
+lib/core/visuals/consumer_visual_engine.dart:772:      duration: const Duration(seconds: 2),
+lib/core/routing/app_router.dart:382:                duration: const Duration(milliseconds: 200),
+lib/core/performance/performance_monitor.dart:31:  static const Duration _memorySnapshotInterval = Duration(seconds: 30);
+lib/core/performance/performance_monitor.dart:111:      const Duration(minutes: 5),
+lib/core/performance/performance_monitor.dart:410:              const Duration(minutes: 5),
+lib/core/performance/performance_monitor.dart:418:              const Duration(minutes: 1),
+lib/core/performance/performance_monitor.dart:426:          ? Duration(
+lib/core/performance/performance_monitor.dart:442:          ? Duration(
+lib/core/performance/performance_monitor.dart:458:              DateTime.now().difference(m.timestamp) < const Duration(hours: 1),
+lib/core/performance/performance_monitor.dart:492:                const Duration(hours: 1),
+lib/core/performance/performance_monitor.dart:721:        ? Duration(
+lib/core/performance/performance_monitor.dart:745:        ? Duration(
+lib/core/performance/performance_monitor.dart:885:    client.connectionTimeout = const Duration(seconds: 15);
+lib/core/performance/performance_monitor.dart:886:    client.idleTimeout = const Duration(seconds: 15);
+lib/core/performance/performance_optimization_engine.dart:87:    _performanceMonitorTimer = Timer.periodic(const Duration(seconds: 5), (
+lib/core/performance/performance_optimization_engine.dart:96:    _memoryCleanupTimer = Timer.periodic(const Duration(minutes: 2), (_) async {
+lib/core/performance/performance_optimization_engine.dart:101:    _batteryOptimizationTimer = Timer.periodic(const Duration(minutes: 10), (
+lib/core/performance/performance_optimization_engine.dart:230:      nextOptimizationRecommended: DateTime.now().add(const Duration(hours: 2)),
+lib/core/performance/performance_optimization_engine.dart:575:      'last_cleanup': DateTime.now().subtract(const Duration(minutes: 30)),
+lib/core/performance/performance_optimization_engine.dart:585:    await Future.delayed(const Duration(milliseconds: 100));
+lib/core/performance/performance_optimization_engine.dart:589:    await Future.delayed(const Duration(milliseconds: 200));
+lib/core/performance/performance_optimization_engine.dart:593:    await Future.delayed(const Duration(milliseconds: 500));
+lib/core/performance/performance_optimization_engine.dart:597:    await Future.delayed(const Duration(milliseconds: 300));
+lib/core/performance/performance_optimization_engine.dart:601:    await Future.delayed(const Duration(milliseconds: 100));
+lib/core/performance/performance_optimization_engine.dart:605:    await Future.delayed(const Duration(milliseconds: 150));
+lib/core/performance/performance_optimization_engine.dart:609:    await Future.delayed(const Duration(milliseconds: 100));
+lib/core/performance/performance_optimization_engine.dart:669:    await Future.delayed(const Duration(milliseconds: 100));
+lib/core/performance/performance_optimization_engine.dart:673:    await Future.delayed(const Duration(milliseconds: 150));
+lib/core/performance/performance_optimization_engine.dart:677:    await Future.delayed(const Duration(milliseconds: 200));
+lib/core/performance/performance_optimization_engine.dart:681:    await Future.delayed(const Duration(milliseconds: 100));
+lib/core/performance/performance_optimization_engine.dart:685:    await Future.delayed(const Duration(milliseconds: 100));
+lib/core/performance/performance_optimization_engine.dart:689:    await Future.delayed(const Duration(milliseconds: 50));
+lib/core/performance/performance_optimization_engine.dart:742:    await Future.delayed(const Duration(milliseconds: 100));
+lib/core/performance/performance_optimization_engine.dart:746:    await Future.delayed(const Duration(milliseconds: 200));
+lib/core/performance/performance_optimization_engine.dart:750:    await Future.delayed(const Duration(milliseconds: 150));
+lib/core/performance/performance_optimization_engine.dart:754:    await Future.delayed(const Duration(milliseconds: 250));
+lib/core/performance/performance_optimization_engine.dart:801:    await Future.delayed(const Duration(milliseconds: 100));
+lib/core/performance/performance_optimization_engine.dart:805:    await Future.delayed(const Duration(milliseconds: 150));
+lib/core/performance/performance_optimization_engine.dart:809:    await Future.delayed(const Duration(milliseconds: 100));
+lib/core/performance/performance_optimization_engine.dart:862:    await Future.delayed(const Duration(milliseconds: 200));
+lib/core/performance/performance_optimization_engine.dart:867:    await Future.delayed(const Duration(milliseconds: 300));
+lib/core/performance/performance_optimization_engine.dart:872:    await Future.delayed(const Duration(milliseconds: 100));
+lib/core/error/error_handler.dart:358:    final last24Hours = now.subtract(const Duration(hours: 24));
+lib/core/error/error_handler.dart:453:    await Future.delayed(const Duration(milliseconds: 100));
+lib/core/error/error_handler.dart:463:    await Future.delayed(const Duration(milliseconds: 100));
+lib/core/error/error_handler.dart:473:    await Future.delayed(const Duration(milliseconds: 100));
+lib/core/notifications/smart_notification_system.dart:132:    _contextUpdateTimer = Timer.periodic(const Duration(minutes: 30), (_) {
+lib/core/notifications/smart_notification_system.dart:139:    _notificationOptimizationTimer = Timer.periodic(const Duration(hours: 1), (
+lib/core/notifications/smart_notification_system.dart:192:          DateTime.now().add(Duration(minutes: delayMinutes ?? 5));
+lib/core/notifications/smart_notification_system.dart:415:      return const Duration(minutes: 5);
+lib/core/notifications/smart_notification_system.dart:420:        return const Duration(hours: 1);
+lib/core/notifications/smart_notification_system.dart:422:        return const Duration(hours: 4);
+lib/core/notifications/smart_notification_system.dart:424:        return const Duration(hours: 12);
+lib/core/notifications/smart_notification_system.dart:426:        return const Duration(hours: 6);
+lib/core/notifications/smart_notification_system.dart:428:        return const Duration(days: 1);
+lib/core/notifications/smart_notification_system.dart:430:        return const Duration(hours: 2);
+lib/core/notifications/smart_notification_system.dart:580:      return now.add(Duration(minutes: delayMinutes));
+lib/core/notifications/smart_notification_system.dart:634:          return now.add(const Duration(minutes: 15));
+lib/core/notifications/smart_notification_system.dart:638:        return now.add(const Duration(minutes: 5));
+lib/core/feelings/daily_feelings_tracker.dart:126:    final tomorrow = today.add(const Duration(days: 1));
+lib/core/feelings/daily_feelings_tracker.dart:183:    final startDate = endDate.subtract(Duration(days: daysBack));
+lib/core/feelings/daily_feelings_tracker.dart:203:    final startDate = endDate.subtract(Duration(days: daysBack));
+lib/core/feelings/daily_feelings_tracker.dart:259:    _reminderTimer = Timer.periodic(const Duration(minutes: 30), (_) {
+lib/core/feelings/daily_feelings_tracker.dart:272:        : morningTime.add(const Duration(days: 1)).difference(now);
+lib/core/feelings/daily_feelings_tracker.dart:282:        : eveningTime.add(const Duration(days: 1)).difference(now);
+lib/core/feelings/daily_feelings_tracker.dart:345:      return today.add(Duration(hours: _morningHour));
+lib/core/feelings/daily_feelings_tracker.dart:350:      return today.add(Duration(hours: _eveningHour));
+lib/core/feelings/daily_feelings_tracker.dart:354:    return today.add(const Duration(days: 1, hours: _morningHour));
+lib/core/feelings/daily_feelings_tracker.dart:388:    final cutoffDate = DateTime.now().subtract(const Duration(days: maxDays));
+lib/core/services/ai_notification_scheduler.dart:118:      adjusted = adjusted.add(const Duration(hours: 2)); // Later on weekends
+lib/core/services/ai_notification_scheduler.dart:123:      adjusted = adjusted.subtract(const Duration(minutes: 15));
+lib/core/services/ai_notification_scheduler.dart:125:      adjusted = adjusted.add(const Duration(minutes: 30));
+lib/core/services/ai_notification_scheduler.dart:131:        const Duration(minutes: 10),
+lib/core/services/ai_notification_scheduler.dart:258:        ? Duration(
+lib/core/services/multimodal_symptom_analyzer.dart:725:    await Future.delayed(const Duration(milliseconds: 2500));
+lib/core/services/multimodal_symptom_analyzer.dart:735:    await Future.delayed(const Duration(milliseconds: 800));
+lib/core/services/multimodal_symptom_analyzer.dart:749:    await Future.delayed(const Duration(milliseconds: 600));
+lib/core/services/multimodal_symptom_analyzer.dart:759:    await Future.delayed(const Duration(milliseconds: 500));
+lib/core/services/multimodal_symptom_analyzer.dart:769:    await Future.delayed(const Duration(milliseconds: 400));
+lib/core/services/multimodal_symptom_analyzer.dart:779:    await Future.delayed(const Duration(milliseconds: 300));
+lib/core/services/multimodal_symptom_analyzer.dart:790:    await Future.delayed(const Duration(milliseconds: 500));
+lib/core/services/multimodal_symptom_analyzer.dart:802:    await Future.delayed(const Duration(milliseconds: 1000));
+lib/core/services/multimodal_symptom_analyzer.dart:818:    await Future.delayed(const Duration(milliseconds: 800));
+lib/core/services/multimodal_symptom_analyzer.dart:835:    await Future.delayed(const Duration(milliseconds: 600));
+lib/core/services/multimodal_symptom_analyzer.dart:851:    await Future.delayed(const Duration(milliseconds: 500));
+lib/core/services/multimodal_symptom_analyzer.dart:866:    await Future.delayed(const Duration(milliseconds: 200));
+lib/core/services/multimodal_symptom_analyzer.dart:877:    await Future.delayed(const Duration(milliseconds: 300));
+lib/core/services/multimodal_symptom_analyzer.dart:961:    await Future.delayed(const Duration(milliseconds: 1500));
+lib/core/services/multimodal_symptom_analyzer.dart:987:    await Future.delayed(const Duration(milliseconds: 800));
+lib/core/services/multimodal_symptom_analyzer.dart:998:    await Future.delayed(const Duration(milliseconds: 600));
+lib/core/services/multimodal_symptom_analyzer.dart:1009:    await Future.delayed(const Duration(milliseconds: 700));
+lib/core/services/multimodal_symptom_analyzer.dart:1058:    await Future.delayed(const Duration(milliseconds: 500));
+lib/core/services/multimodal_symptom_analyzer.dart:1070:    await Future.delayed(const Duration(milliseconds: 400));
+lib/core/services/multimodal_symptom_analyzer.dart:1081:    await Future.delayed(const Duration(milliseconds: 600));
+lib/core/services/multimodal_symptom_analyzer.dart:1093:    await Future.delayed(const Duration(milliseconds: 300));
+lib/core/services/multimodal_symptom_analyzer.dart:1105:    await Future.delayed(const Duration(milliseconds: 500));
+lib/core/services/multimodal_symptom_analyzer.dart:1117:    await Future.delayed(const Duration(milliseconds: 400));
+lib/core/services/offline_service.dart:407:      duration: const Duration(milliseconds: 1200),
+lib/core/services/conversation_cloud_sync.dart:205:    Future.delayed(const Duration(minutes: 5), () async {
+lib/core/services/advanced_ai_engine.dart:287:      Duration(days: biasAdjustment.round()),
+lib/core/services/advanced_ai_engine.dart:763:    return now.add(Duration(days: patterns.averageLength.round()));
+lib/core/services/advanced_ai_engine.dart:774:    return baseDate.add(Duration(days: tempAdjustment.round()));
+lib/core/services/advanced_ai_engine.dart:786:    return baseDate.add(Duration(days: (stressImpact * 3).round()));
+lib/core/services/advanced_ai_engine.dart:798:    return baseDate.add(Duration(days: (totalAdjustment * 2).round()));
+lib/core/services/advanced_ai_engine.dart:869:      Duration(days: (cycleLength - ovulationDay).round()),
+lib/core/services/advanced_ai_engine.dart:881:      (i) => ovulationDate.subtract(Duration(days: 5 - i)),
+lib/core/services/real_cycle_service.dart:26:        DateTime.now().subtract(const Duration(days: 180)),
+lib/core/services/real_cycle_service.dart:85:        endDate: startDate.subtract(const Duration(days: 1)),
+lib/core/services/real_cycle_service.dart:189:      DateTime.now().subtract(const Duration(days: 180)),
+lib/core/services/biometric_engine.dart:194:            analysisDate.subtract(const Duration(days: 7)),
+lib/core/services/biometric_engine.dart:253:            analysisDate.subtract(const Duration(days: 7)),
+lib/core/services/biometric_engine.dart:302:            analysisDate.subtract(const Duration(days: 7)),
+lib/core/services/biometric_engine.dart:370:            analysisDate.subtract(const Duration(days: 14)),
+lib/core/services/biometric_engine.dart:818:      'ovulation_date': analysisDate.add(const Duration(days: 14)),
+lib/core/services/analytics_service.dart:47:          startDate ??= DateTime.now().subtract(const Duration(days: 365));
+lib/core/services/analytics_service.dart:105:      cacheDuration: const Duration(minutes: 15), // Cache for 15 minutes
+lib/core/services/analytics_service.dart:120:          startDate ??= DateTime.now().subtract(const Duration(days: 90));
+lib/core/services/analytics_service.dart:173:      cacheDuration: const Duration(minutes: 15), // Cache for 15 minutes
+lib/core/services/analytics_service.dart:181:        DateTime.now().subtract(const Duration(days: 365)),
+lib/core/services/analytics_service.dart:198:      startDate ??= DateTime.now().subtract(const Duration(days: 180));
+lib/core/services/analytics_service.dart:402:        predictedStartDate: pastCycles.last.startDate.add(Duration(days: 28)),
+lib/core/services/analytics_service.dart:406:          start: DateTime.now().add(Duration(days: 12)),
+lib/core/services/analytics_service.dart:407:          end: DateTime.now().add(Duration(days: 16)),
+lib/core/services/analytics_service.dart:408:          peak: DateTime.now().add(Duration(days: 14)),
+lib/core/services/local_user_service.dart:267:          .add(const Duration(days: 30))
+lib/core/services/realtime_predictive_service.dart:32:      const Duration(hours: 6),
+lib/core/services/realtime_predictive_service.dart:56:      DateTime.now().subtract(const Duration(days: 365)),
+lib/core/services/realtime_predictive_service.dart:88:      DateTime.now().subtract(const Duration(days: 365)),
+lib/core/services/realtime_predictive_service.dart:93:      DateTime.now().subtract(const Duration(days: 90)),
+lib/core/services/realtime_predictive_service.dart:151:      DateTime.now().subtract(const Duration(days: 90)),
+lib/core/services/realtime_predictive_service.dart:171:      DateTime.now().subtract(const Duration(days: 30)),
+lib/core/services/realtime_predictive_service.dart:194:      DateTime.now().subtract(const Duration(days: 365)),
+lib/core/services/realtime_predictive_service.dart:204:      final futureDate = today.add(Duration(days: i));
+lib/core/services/realtime_predictive_service.dart:277:    return Duration(days: math.max(1, adjustedRange));
+lib/core/services/realtime_predictive_service.dart:495:    predictedDate: DateTime.now().add(const Duration(days: 28)),
+lib/core/services/realtime_predictive_service.dart:497:    confidenceRange: const Duration(days: 7),
+lib/core/services/demo_data_service.dart.disabled:21:      final endDate = startDate.add(Duration(days: cycleLength - 1));
+lib/core/services/demo_data_service.dart.disabled:22:      final nextPeriodDate = endDate.add(const Duration(days: 1));
+lib/core/services/demo_data_service.dart.disabled:27:        final date = startDate.add(Duration(days: day));
+lib/core/services/smart_notification_service.dart:135:    _notificationTimer = Timer.periodic(const Duration(minutes: 15), (_) {
+lib/core/services/smart_notification_service.dart:140:    _insightTimer = Timer.periodic(const Duration(hours: 1), (_) {
+lib/core/services/smart_notification_service.dart:145:    _biometricAnalysisTimer = Timer.periodic(const Duration(minutes: 30), (_) {
+lib/core/services/smart_notification_service.dart:202:              scheduledTime: currentTime.add(const Duration(minutes: 5)),
+lib/core/services/smart_notification_service.dart:227:                scheduledTime: currentTime.add(const Duration(minutes: 10)),
+lib/core/services/smart_notification_service.dart:259:          startDate: currentTime.subtract(const Duration(days: 1)),
+lib/core/services/smart_notification_service.dart:273:                scheduledTime: currentTime.add(const Duration(minutes: 2)),
+lib/core/services/smart_notification_service.dart:293:                scheduledTime: currentTime.add(const Duration(hours: 1)),
+lib/core/services/smart_notification_service.dart:315:                scheduledTime: currentTime.add(const Duration(minutes: 30)),
+lib/core/services/smart_notification_service.dart:397:          scheduledTime: currentTime.add(const Duration(minutes: 5)),
+lib/core/services/smart_notification_service.dart:427:            scheduledTime: currentTime.add(const Duration(hours: 2)),
+lib/core/services/smart_notification_service.dart:457:            scheduledTime: DateTime.now().add(const Duration(minutes: 30)),
+lib/core/services/smart_notification_service.dart:580:    final cutoff = DateTime.now().subtract(Duration(days: days));
+lib/core/services/smart_notification_service.dart:592:      final startDate = now.subtract(Duration(days: 30 * (index + 1)));
+lib/core/services/smart_notification_service.dart:597:        endDate: startDate.add(Duration(days: 28)),
+lib/core/services/smart_notification_service.dart:693:            scheduledTime: DateTime.now().add(const Duration(minutes: 1)),
+lib/core/services/predictive_engine.dart:404:        'cycle_start': now.add(const Duration(days: 28)),
+lib/core/services/predictive_engine.dart:406:          const Duration(days: 42),
+lib/core/services/predictive_engine.dart:408:        'fertile_start': now.add(const Duration(days: 38)),
+lib/core/services/predictive_engine.dart:409:        'fertile_end': now.add(const Duration(days: 44)),
+lib/core/services/predictive_engine.dart:411:          'menstrual': now.add(const Duration(days: 28)),
+lib/core/services/predictive_engine.dart:412:          'follicular': now.add(const Duration(days: 34)),
+lib/core/services/predictive_engine.dart:413:          'ovulatory': now.add(const Duration(days: 42)),
+lib/core/services/predictive_engine.dart:414:          'luteal': now.add(const Duration(days: 44)),
+lib/core/services/predictive_engine.dart:479:    final cycleStart = now.add(Duration(days: combined['cycle_length'] as int));
+lib/core/services/predictive_engine.dart:481:      Duration(days: combined['ovulation_day'] as int),
+lib/core/services/predictive_engine.dart:486:    combined['fertile_start'] = ovulationDate.subtract(const Duration(days: 4));
+lib/core/services/predictive_engine.dart:487:    combined['fertile_end'] = ovulationDate.add(const Duration(days: 2));
+lib/core/services/predictive_engine.dart:492:      'follicular': cycleStart.add(const Duration(days: 6)),
+lib/core/services/predictive_engine.dart:494:      'luteal': ovulationDate.add(const Duration(days: 2)),
+lib/core/services/enhanced_ai_chat_service.dart:268:      await Future.delayed(const Duration(milliseconds: 45));
+lib/core/services/adaptive_ai_engine.dart:266:      final adjustment = Duration(
+lib/core/services/adaptive_ai_engine.dart:326:          Duration(days: totalAdjustment.round()),
+lib/core/services/adaptive_ai_engine.dart:335:          Duration(days: totalAdjustment.round()),
+lib/core/services/adaptive_ai_engine.dart:581:    return DateTime.now().add(const Duration(days: 30));
+lib/core/services/export_import_service.dart:29:      startDate ??= DateTime.now().subtract(const Duration(days: 365));
+lib/core/services/export_import_service.dart:84:      startDate ??= DateTime.now().subtract(const Duration(days: 365));
+lib/core/services/export_import_service.dart:118:      startDate ??= DateTime.now().subtract(const Duration(days: 365));
+lib/core/services/memory_manager.dart:42:      _memoryMonitorTimer = Timer.periodic(const Duration(minutes: 2), (timer) {
+lib/core/services/memory_manager.dart:296:        ? const Duration(minutes: 15)
+lib/core/services/memory_manager.dart:297:        : const Duration(hours: 1);
+lib/core/services/data_export_service.dart:23:    final start = end.subtract(const Duration(days: 30));
+lib/core/services/performance_optimizer.dart:29:    _cleanupTimer = Timer.periodic(const Duration(minutes: 30), (_) {
+lib/core/services/performance_optimizer.dart:51:        final duration = cacheDuration ?? const Duration(hours: 1);
+lib/core/services/performance_optimizer.dart:96:    Duration debounceDuration = const Duration(milliseconds: 300),
+lib/core/services/performance_optimizer.dart:154:      if (age > const Duration(hours: 24)) {
+lib/core/services/auth_service.dart:128:            const Duration(seconds: 10),
+lib/core/services/ml_pattern_recognition_service.dart:117:      Duration(days: predictedLength.toInt()),
+lib/core/services/ml_pattern_recognition_service.dart:157:            day.isAfter(cycleStart.add(Duration(days: cycleLength)))) {
+lib/core/services/ml_pattern_recognition_service.dart:352:    final fertileStart = cycleStart.add(Duration(days: ovulationDay - 5));
+lib/core/services/ml_pattern_recognition_service.dart:353:    final fertileEnd = cycleStart.add(Duration(days: ovulationDay + 1));
+lib/core/services/ml_pattern_recognition_service.dart:354:    final peak = cycleStart.add(Duration(days: ovulationDay));
+lib/core/services/preventive_health_insights.dart:1892:        return now.add(const Duration(days: 30)); // 1 month
+lib/core/services/preventive_health_insights.dart:1894:        return now.add(const Duration(days: 90)); // 3 months
+lib/core/services/preventive_health_insights.dart:1896:        return now.add(const Duration(days: 180)); // 6 months
+lib/core/services/preventive_health_insights.dart:1898:        return now.add(const Duration(days: 365)); // 1 year
+lib/core/services/preventive_health_insights.dart:1953:        schedule['General Health Check'] = now.add(const Duration(days: 30));
+lib/core/services/preventive_health_insights.dart:1956:        schedule['General Health Check'] = now.add(const Duration(days: 90));
+lib/core/services/preventive_health_insights.dart:1959:        schedule['General Health Check'] = now.add(const Duration(days: 180));
+lib/core/services/preventive_health_insights.dart:1971:        return now.add(const Duration(days: 90)); // 3 months
+lib/core/services/preventive_health_insights.dart:1973:        return now.add(const Duration(days: 180)); // 6 months
+lib/core/services/preventive_health_insights.dart:1975:        return now.add(const Duration(days: 365)); // 1 year
+lib/core/services/preventive_health_insights.dart:1977:        return now.add(const Duration(days: 730)); // 2 years
+lib/core/services/biometric_integration_service.dart:81:    final startDate = endDate.subtract(const Duration(days: 30));
+lib/core/services/biometric_integration_service.dart:101:    final start = startDate ?? DateTime.now().subtract(const Duration(days: 7));
+lib/core/services/biometric_integration_service.dart:440:      date = date.add(const Duration(hours: 1))
+lib/core/services/biometric_integration_service.dart:470:      date = date.add(const Duration(days: 1))
+lib/core/services/biometric_integration_service.dart:499:      date = date.add(const Duration(hours: 6))
+lib/core/services/biometric_integration_service.dart:530:      date = date.add(const Duration(hours: 2))
+lib/core/services/biometric_integration_service.dart:560:      date = date.add(const Duration(hours: 3))
+lib/core/services/biometric_integration_service.dart:590:      date = date.add(const Duration(days: 1))
+lib/core/services/biometric_integration_service.dart:625:    Duration interval = const Duration(minutes: 5),
+lib/core/services/biometric_integration_service.dart:711:    final fiveMinutesAgo = now.subtract(const Duration(minutes: 5));
+lib/core/services/advanced_biometric_service.dart:239:    final thirtyDaysAgo = DateTime.now().subtract(const Duration(days: 30));
+lib/core/services/advanced_biometric_service.dart:251:    Timer(const Duration(milliseconds: 500), () async {
+lib/core/services/advanced_biometric_service.dart:541:    _syncTimer = Timer.periodic(const Duration(hours: 1), (timer) {
+lib/core/services/advanced_biometric_service.dart:552:      final startTime = _lastSyncTime ?? now.subtract(const Duration(days: 7));
+lib/core/services/advanced_biometric_service.dart:584:    Timer.periodic(const Duration(minutes: 30), (timer) {
+lib/core/services/advanced_biometric_service.dart:610:    final range = timeRange ?? const Duration(days: 30);
+lib/core/services/advanced_biometric_service.dart:632:        timeRange: const Duration(days: 1),
+lib/core/services/ai_engine.dart:600:        Duration(days: predictedLength - lastCycle.actualLength),
+lib/core/services/ai_engine.dart:603:      return lastCycle.startDate.add(Duration(days: predictedLength));
+lib/core/services/ai_engine.dart:610:      predictedStartDate: now.add(const Duration(days: 28)),
+lib/core/services/ai_engine.dart:614:        start: now.add(const Duration(days: 14)),
+lib/core/services/ai_engine.dart:615:        end: now.add(const Duration(days: 18)),
+lib/core/services/ai_engine.dart:616:        peak: now.add(const Duration(days: 16)),
+lib/core/services/ai_engine.dart:638:    final ovulationDate = today.add(Duration(days: adjustedOvulation));
+lib/core/services/ai_engine.dart:641:      start: ovulationDate.subtract(const Duration(days: 5)),
+lib/core/services/ai_engine.dart:642:      end: ovulationDate.add(const Duration(days: 1)),
+lib/core/services/admob_service.dart:269:  static const Duration _minInterstitialInterval = Duration(minutes: 3);
+lib/core/services/admob_service.dart:270:  static const Duration _minRewardedInterval = Duration(minutes: 1);
+lib/core/services/cloud_sync_service.dart:222:  void enableAutoSync({Duration interval = const Duration(hours: 6)}) {
+lib/core/services/performance_optimization_service.dart:72:    _performanceTimer = Timer.periodic(const Duration(seconds: 10), (
+lib/core/services/performance_optimization_service.dart:115:    _memoryCleanupTimer = Timer.periodic(const Duration(minutes: 5), (timer) {
+lib/core/services/performance_optimization_service.dart:167:    Timer.periodic(const Duration(hours: 1), (timer) {
+lib/core/services/performance_optimization_service.dart:205:    _networkCleanupTimer = Timer.periodic(const Duration(minutes: 2), (timer) {
+lib/core/services/performance_optimization_service.dart:213:      final ttlDuration = ttl ?? const Duration(hours: 1);
+lib/core/services/performance_optimization_service.dart:276:      final ttlDuration = ttl ?? const Duration(days: 1);
+lib/core/services/performance_optimization_service.dart:456:      await Future.delayed(const Duration(milliseconds: 100));
+lib/core/services/performance_optimization_service.dart:463:          const Duration(hours: 1),
+lib/core/services/performance_optimization_service.dart:594:              const Duration(minutes: 5),
+lib/core/services/ai_reminders_service.dart:35:      DateTime.now().subtract(const Duration(days: 365)),
+lib/core/services/ai_reminders_service.dart:53:      const Duration(days: 3),
+lib/core/services/ai_reminders_service.dart:133:      final fertileDate = prediction.fertileWindow.start.add(Duration(days: i));
+lib/core/services/ai_reminders_service.dart:174:      final date = DateTime.now().add(Duration(days: i));
+lib/core/services/ai_reminders_service.dart:222:      final date = DateTime.now().add(Duration(days: i));
+lib/core/services/ai_reminders_service.dart:254:      final date = DateTime.now().add(Duration(days: i));
+lib/core/services/ai_reminders_service.dart:281:      final date = DateTime.now().add(Duration(days: week * 7));
+lib/core/services/app_enhancement_service.dart:209:    Timer.periodic(const Duration(minutes: 30), (timer) {
+lib/core/services/app_enhancement_service.dart:214:    Timer.periodic(const Duration(minutes: 5), (timer) {
+lib/core/services/performance_service.dart:30:  static const Duration cacheExpiry = Duration(hours: 24);
+lib/core/services/performance_service.dart:31:  static const Duration memoryCleanupInterval = Duration(minutes: 10);
+lib/core/services/performance_service.dart:330:    _cacheCleanupTimer = Timer.periodic(const Duration(hours: 1), (timer) {
+lib/core/services/performance_service.dart:339:    _performanceMonitoringTimer = Timer.periodic(const Duration(minutes: 5), (
+lib/core/services/performance_service.dart:354:          duration: Duration(microseconds: memoryUsage.totalCacheSize),
+lib/core/services/performance_service.dart:363:          duration: Duration(microseconds: memoryUsage.cacheEntries),
+lib/core/services/performance_service.dart:378:    final cutoff = DateTime.now().subtract(const Duration(hours: 1));
+lib/core/services/lifestyle_ai_coach.dart:210:    final optimalSleepDuration = _calculateOptimalSleepDuration(
+lib/core/services/lifestyle_ai_coach.dart:714:  double _calculateOptimalSleepDuration(
+lib/core/services/lifestyle_ai_coach.dart:1268:    return DateTime.now().add(Duration(days: daysAhead[phase] ?? 7));
+lib/core/services/flowai_service.dart:21:  Duration _timeout = const Duration(seconds: 30);
+lib/core/services/flowai_service.dart:25:  static const Duration _minRequestInterval = Duration(milliseconds: 500);
+lib/core/services/flowai_service.dart:143:          .timeout(const Duration(seconds: 10));
+lib/core/services/cycle_calculation_engine.dart:43:    return now.isAfter(fertileWindowStart.subtract(const Duration(days: 1))) &&
+lib/core/services/cycle_calculation_engine.dart:44:        now.isBefore(fertileWindowEnd.add(const Duration(days: 1)));
+lib/core/services/cycle_calculation_engine.dart:72:    return date.isAfter(start.subtract(const Duration(days: 1))) &&
+lib/core/services/cycle_calculation_engine.dart:73:        date.isBefore(end.add(const Duration(days: 1)));
+lib/core/services/cycle_calculation_engine.dart:163:      Duration(days: avgLength.round()),
+lib/core/services/cycle_calculation_engine.dart:186:          Duration(days: avgLength.round() - ovulationDay + 5),
+lib/core/services/cycle_calculation_engine.dart:189:          Duration(days: avgLength.round() - ovulationDay - 1),
+lib/core/services/cycle_calculation_engine.dart:192:          Duration(days: avgLength.round() - ovulationDay),
+lib/core/services/cycle_calculation_engine.dart:269:            cycle.startDate.subtract(const Duration(days: 1)),
+lib/core/services/cycle_calculation_engine.dart:271:          referenceDate.isBefore(cycleEnd.add(const Duration(days: 1)))) {
+lib/core/services/cycle_calculation_engine.dart:348:      return referenceDate.add(Duration(days: stats.averageCycleLength));
+lib/core/services/cycle_calculation_engine.dart:357:        Duration(days: stats.averageCycleLength),
+lib/core/services/cycle_calculation_engine.dart:362:    return estimatedEnd.add(Duration(days: stats.averageCycleLength));
+lib/core/services/cycle_calculation_engine.dart:372:      Duration(days: averageLutealPhase),
+lib/core/services/cycle_calculation_engine.dart:376:    final fertileStart = ovulationDate.subtract(const Duration(days: 5));
+lib/core/services/cycle_calculation_engine.dart:388:    return nextPeriodDate.subtract(Duration(days: averageLutealPhase));
+lib/core/services/cycle_calculation_engine.dart:483:    return cycle.startDate.add(Duration(days: averageCycleLength));
+lib/core/services/cycle_calculation_engine.dart:489:      const Duration(days: averageCycleLength),
+lib/core/services/cycle_calculation_engine.dart:492:      const Duration(days: averageLutealPhase),
+lib/core/services/cycle_calculation_engine.dart:494:    final fertileStart = ovulation.subtract(const Duration(days: 5));
+lib/core/widgets/notification_icon.dart:35:        duration: const Duration(milliseconds: 120),
+lib/core/widgets/animated_micro_interactions.dart:28:      period: const Duration(milliseconds: 1500),
+lib/core/widgets/animated_micro_interactions.dart:44:    this.duration = const Duration(seconds: 3),
+lib/core/widgets/animated_micro_interactions.dart:132:      duration: const Duration(milliseconds: 200),
+lib/core/widgets/animated_micro_interactions.dart:249:    this.duration = const Duration(seconds: 2),
+lib/core/widgets/error_boundary.dart:411:            duration: const Duration(milliseconds: 1000),
+lib/core/widgets/advanced_chart_widget.dart:39:      duration: const Duration(milliseconds: 1500),
+lib/core/widgets/coming_soon_widget.dart:127:                .animate(delay: Duration(milliseconds: index * 200))
+lib/core/widgets/coming_soon_widget.dart:305:                        delay: Duration(milliseconds: 400 + (index * 50)),
+lib/core/widgets/modern_button.dart:57:      duration: const Duration(milliseconds: 150),
+lib/core/widgets/modern_button.dart:110:              duration: const Duration(milliseconds: 200),
+lib/core/widgets/pressable_avatar.dart:32:      duration: const Duration(seconds: 4),
+lib/core/widgets/pressable_avatar.dart:89:        duration: const Duration(milliseconds: 120),
+lib/core/analytics/performance_analytics_dashboard.dart:301:        Duration(days: currentDays + comparisonDays),
+lib/core/analytics/performance_analytics_dashboard.dart:303:      endDate: DateTime.now().subtract(Duration(days: currentDays)),
+lib/core/analytics/performance_analytics_dashboard.dart:437:    _cacheCleanupTimer = Timer.periodic(const Duration(hours: 1), (_) {
+lib/core/analytics/performance_analytics_dashboard.dart:662:          date: DateTime.now().add(Duration(days: days)),
+lib/features/visualization/models/visualization_models.dart:613:    this.duration = const Duration(milliseconds: 600),
+lib/features/visualization/models/visualization_models.dart:629:      duration: Duration(milliseconds: json['duration_ms'] ?? 600),
+lib/features/visualization/services/advanced_visualization_service.dart:423:        duration: const Duration(milliseconds: 800),
+lib/features/visualization/services/advanced_visualization_service.dart:433:        duration: const Duration(milliseconds: 1000),
+lib/features/visualization/services/advanced_visualization_service.dart:443:        duration: const Duration(milliseconds: 600),
+lib/features/visualization/services/advanced_visualization_service.dart:497:      currentDate = currentDate.add(const Duration(days: 1));
+lib/features/visualization/services/advanced_visualization_service.dart:511:    final DateTime futureDate = dateRange.end.add(const Duration(days: 30));
+lib/features/visualization/services/advanced_visualization_service.dart:526:            .add(const Duration(days: 14))
+lib/features/visualization/services/advanced_visualization_service.dart:594:      currentDate = currentDate.add(const Duration(days: 1));
+lib/features/visualization/services/advanced_visualization_service.dart:638:      currentDate = currentDate.add(const Duration(days: 1));
+lib/features/insights/providers/insights_provider.dart:17:    await Future.delayed(const Duration(seconds: 1));
+lib/features/insights/screens/faq_browser_screen.dart:451:        .animate(delay: Duration(milliseconds: 200 + (index * 100)))
+lib/features/insights/screens/insights_screen.dart:45:      duration: const Duration(seconds: 3),
+lib/features/insights/screens/insights_screen.dart:374:                      .fadeIn(delay: Duration(milliseconds: 300 + index * 100))
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:48:      duration: const Duration(seconds: 2),
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:53:      duration: const Duration(milliseconds: 800),
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:109:    Timer.periodic(const Duration(seconds: 30), (timer) {
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:836:        timestamp: DateTime.now().subtract(const Duration(minutes: 15)),
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:849:        timestamp: DateTime.now().subtract(const Duration(hours: 2)),
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:862:        timestamp: DateTime.now().subtract(const Duration(hours: 6)),
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:42:      duration: const Duration(milliseconds: 800),
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:47:      duration: const Duration(milliseconds: 1200),
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1135:      duration: const Duration(milliseconds: 1200),
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1149:        return endDate.subtract(const Duration(days: 7));
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1151:        return endDate.subtract(const Duration(days: 30));
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1153:        return endDate.subtract(const Duration(days: 90));
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1155:        return endDate.subtract(const Duration(days: 365));
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1157:        return endDate.subtract(const Duration(days: 7));
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1308:        estimatedTimeToEffect: const Duration(days: 14),
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1321:        estimatedTimeToEffect: const Duration(days: 7),
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:30:  static const _thinkingDelay = Duration(milliseconds: 900);
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:76:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:81:      duration: const Duration(milliseconds: 500),
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:86:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:92:            duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:295:            duration: Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:382:                        duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:581:                          duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:636:                            duration: const Duration(milliseconds: 220),
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:30:  static const _thinkingDelay = Duration(milliseconds: 900);
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:76:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:81:      duration: const Duration(milliseconds: 500),
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:86:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:92:            duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:295:            duration: Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:397:                        duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:596:                          duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:651:                            duration: const Duration(milliseconds: 220),
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:30:  static const _thinkingDelay = Duration(milliseconds: 900);
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:76:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:81:      duration: const Duration(milliseconds: 500),
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:86:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:92:            duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:295:            duration: Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:382:                        duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:581:                          duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:636:                            duration: const Duration(milliseconds: 220),
+lib/features/insights/widgets/floating_ai_chat.dart:32:  static const _thinkingDelay = Duration(milliseconds: 900);
+lib/features/insights/widgets/floating_ai_chat.dart:78:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart:83:      duration: const Duration(milliseconds: 500),
+lib/features/insights/widgets/floating_ai_chat.dart:88:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart:94:            duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart:297:            duration: Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart:405:                        duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart:601:                          duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart:656:                            duration: const Duration(milliseconds: 220),
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:30:  static const _thinkingDelay = Duration(milliseconds: 900);
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:76:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:81:      duration: const Duration(milliseconds: 500),
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:86:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:92:            duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:295:            duration: Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:388:                        duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:587:                          duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:642:                            duration: const Duration(milliseconds: 220),
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:30:  static const _thinkingDelay = Duration(milliseconds: 900);
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:76:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:81:      duration: const Duration(milliseconds: 500),
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:86:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:92:            duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:295:            duration: Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:384:                        duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:583:                          duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:638:                            duration: const Duration(milliseconds: 220),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:30:  static const _thinkingDelay = Duration(milliseconds: 900);
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:76:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:81:      duration: const Duration(milliseconds: 500),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:86:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:92:            duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:295:            duration: Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:395:                        duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:594:                          duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:649:                            duration: const Duration(milliseconds: 220),
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:30:  static const _thinkingDelay = Duration(milliseconds: 900);
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:76:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:81:      duration: const Duration(milliseconds: 500),
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:86:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:92:            duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:295:            duration: Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:395:                        duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:594:                          duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:649:                            duration: const Duration(milliseconds: 220),
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:30:  static const _thinkingDelay = Duration(milliseconds: 900);
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:76:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:81:      duration: const Duration(milliseconds: 500),
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:86:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:92:            duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:295:            duration: Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:390:                        duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:589:                          duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:644:                            duration: const Duration(milliseconds: 220),
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:30:  static const _thinkingDelay = Duration(milliseconds: 900);
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:76:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:81:      duration: const Duration(milliseconds: 500),
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:86:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:92:            duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:295:            duration: Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:395:                        duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:594:                          duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:649:                            duration: const Duration(milliseconds: 220),
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:30:  static const _thinkingDelay = Duration(milliseconds: 900);
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:76:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:81:      duration: const Duration(milliseconds: 500),
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:86:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:92:            duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:295:            duration: Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:391:                        duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:590:                          duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:645:                            duration: const Duration(milliseconds: 220),
+lib/features/insights/widgets/floating_ai_chat.dart.bak:30:  static const _thinkingDelay = Duration(milliseconds: 900);
+lib/features/insights/widgets/floating_ai_chat.dart.bak:76:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.bak:81:      duration: const Duration(milliseconds: 500),
+lib/features/insights/widgets/floating_ai_chat.dart.bak:86:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.bak:92:            duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.bak:290:            duration: Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.bak:382:                        duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.bak:581:                          duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.bak:636:                            duration: const Duration(milliseconds: 220),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:30:  static const _thinkingDelay = Duration(milliseconds: 900);
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:76:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:81:      duration: const Duration(milliseconds: 500),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:86:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:92:            duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:295:            duration: Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:395:                        duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:594:                          duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:649:                            duration: const Duration(milliseconds: 220),
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:30:  static const _thinkingDelay = Duration(milliseconds: 900);
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:76:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:81:      duration: const Duration(milliseconds: 500),
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:86:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:92:            duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:295:            duration: Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:395:                        duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:594:                          duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:649:                            duration: const Duration(milliseconds: 220),
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:30:  static const _thinkingDelay = Duration(milliseconds: 900);
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:76:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:81:      duration: const Duration(milliseconds: 500),
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:86:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:92:            duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:295:            duration: Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:395:                        duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:594:                          duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:649:                            duration: const Duration(milliseconds: 220),
+lib/features/insights/widgets/cycle_length_chart.dart:308:    final cutoffDate = DateTime.now().subtract(Duration(days: months * 30));
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:30:  static const _thinkingDelay = Duration(milliseconds: 900);
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:76:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:81:      duration: const Duration(milliseconds: 500),
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:86:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:92:            duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:295:            duration: Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:395:                        duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:594:                          duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:649:                            duration: const Duration(milliseconds: 220),
+lib/features/insights/widgets/symptom_heatmap.dart:315:        cutoffDate = now.subtract(const Duration(days: 7));
+lib/features/insights/widgets/symptom_heatmap.dart:318:        cutoffDate = now.subtract(const Duration(days: 30));
+lib/features/insights/widgets/symptom_heatmap.dart:321:        cutoffDate = now.subtract(const Duration(days: 90));
+lib/features/insights/widgets/symptom_heatmap.dart:324:        cutoffDate = now.subtract(const Duration(days: 180));
+lib/features/insights/widgets/symptom_heatmap.dart:327:        cutoffDate = now.subtract(const Duration(days: 365));
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:30:  static const _thinkingDelay = Duration(milliseconds: 900);
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:76:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:81:      duration: const Duration(milliseconds: 500),
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:86:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:92:            duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:295:            duration: Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:390:                        duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:589:                          duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:644:                            duration: const Duration(milliseconds: 220),
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:30:  static const _thinkingDelay = Duration(milliseconds: 900);
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:76:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:81:      duration: const Duration(milliseconds: 500),
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:86:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:92:            duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:295:            duration: Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:395:                        duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:594:                          duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:649:                            duration: const Duration(milliseconds: 220),
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:30:  static const _thinkingDelay = Duration(milliseconds: 900);
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:76:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:81:      duration: const Duration(milliseconds: 500),
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:86:      duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:92:            duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:295:            duration: Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:397:                        duration: const Duration(milliseconds: 300),
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:596:                          duration: const Duration(milliseconds: 950),
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:651:                            duration: const Duration(milliseconds: 220),
+lib/features/insights/widgets/mood_energy_chart.dart:397:        cutoffDate = now.subtract(const Duration(days: 7));
+lib/features/insights/widgets/mood_energy_chart.dart:400:        cutoffDate = now.subtract(const Duration(days: 30));
+lib/features/insights/widgets/mood_energy_chart.dart:403:        cutoffDate = now.subtract(const Duration(days: 90));
+lib/features/insights/widgets/mood_energy_chart.dart:406:        cutoffDate = now.subtract(const Duration(days: 180));
+lib/features/insights/widgets/mood_energy_chart.dart:409:        cutoffDate = now.subtract(const Duration(days: 365));
+lib/features/settings/screens/account_management_screen.dart:667:      await Future.delayed(const Duration(seconds: 2));
+lib/features/settings/screens/account_management_screen.dart:844:      await Future.delayed(const Duration(seconds: 3));
+lib/features/settings/screens/settings_screen.dart:58:      duration: const Duration(milliseconds: 800),
+lib/features/settings/screens/settings_screen.dart:62:      duration: const Duration(milliseconds: 1200),
+lib/features/settings/screens/settings_screen.dart:1391:          duration: const Duration(seconds: 4),
+lib/features/settings/screens/help_screen.dart:234:                  .animate(delay: Duration(milliseconds: 300 + (index * 100)))
+lib/features/settings/widgets/theme_switcher_card.dart:172:        duration: const Duration(milliseconds: 200),
+lib/features/settings/widgets/language_selector.dart:240:                        .animate(delay: Duration(milliseconds: index * 50))
+lib/features/settings/widgets/cyclesync_integration.dart:369:    await Future.delayed(const Duration(seconds: 2));
+lib/features/settings/widgets/cyclesync_integration.dart:414:    Future.delayed(const Duration(seconds: 3), () {
+lib/features/future_plans/screens/future_plans_screen.dart:23:      duration: const Duration(seconds: 3),
+lib/features/future_plans/screens/future_plans_screen.dart:262:                            duration: const Duration(milliseconds: 200),
+lib/features/security/services/security_privacy_service.dart:645:          .add(Duration(minutes: _lockoutDurationMinutes))
+lib/features/auth/screens/auth_choice_screen.dart:32:      duration: const Duration(seconds: 20),
+lib/features/auth/screens/auth_choice_screen.dart:37:      duration: const Duration(milliseconds: 2600),
+lib/features/auth/screens/futuristic_auth_screen.dart:51:      duration: const Duration(milliseconds: 1500),
+lib/features/auth/screens/futuristic_auth_screen.dart:55:      duration: const Duration(milliseconds: 1000),
+lib/features/auth/screens/futuristic_auth_screen.dart:59:      duration: const Duration(seconds: 20),
+lib/features/auth/screens/futuristic_auth_screen.dart:63:      duration: const Duration(milliseconds: 1200),
+lib/features/auth/screens/futuristic_auth_screen.dart:70:    Future.delayed(const Duration(milliseconds: 300), () {
+lib/features/auth/screens/futuristic_auth_screen.dart:73:    Future.delayed(const Duration(milliseconds: 600), () {
+lib/features/auth/screens/futuristic_auth_screen.dart:368:        duration: const Duration(milliseconds: 300),
+lib/features/auth/screens/auth_screen.dart:64:      duration: const Duration(milliseconds: 1200),
+lib/features/auth/screens/auth_screen.dart:68:      duration: const Duration(milliseconds: 800),
+lib/features/auth/screens/auth_screen.dart:72:      duration: const Duration(milliseconds: 1000),
+lib/features/auth/screens/auth_screen.dart:79:    Future.delayed(const Duration(milliseconds: 300), () {
+lib/features/auth/screens/auth_screen.dart:82:    Future.delayed(const Duration(milliseconds: 600), () {
+lib/features/auth/screens/auth_screen.dart:536:        Future.delayed(const Duration(milliseconds: 500));
+lib/features/auth/screens/auth_screen.dart:662:      Future.delayed(const Duration(milliseconds: 1000));
+lib/features/auth/screens/auth_screen.dart:711:        Future.delayed(const Duration(milliseconds: 500));
+lib/features/auth/screens/auth_screen.dart:771:        Future.delayed(const Duration(milliseconds: 500));
+lib/features/auth/widgets/biometric_button.dart:29:      duration: const Duration(milliseconds: 1500),
+lib/features/data_management/services/data_export_import_service.dart:162:          start: DateTime.now().subtract(const Duration(days: 365)),
+lib/features/health/screens/real_time_health_dashboard.dart:64:      duration: const Duration(seconds: 2),
+lib/features/health/screens/real_time_health_dashboard.dart:69:      duration: const Duration(milliseconds: 800),
+lib/features/health/screens/real_time_health_dashboard.dart:120:    _dataRefreshTimer = Timer.periodic(const Duration(seconds: 5), (_) {
+lib/features/health/screens/real_time_health_dashboard.dart:125:    _healthReportTimer = Timer.periodic(const Duration(minutes: 5), (_) {
+lib/features/health/screens/real_time_health_dashboard.dart:184:      final startDate = DateTime.now().subtract(Duration(days: 28 * (i + 1)));
+lib/features/health/screens/health_screen.dart:32:      duration: const Duration(seconds: 2),
+lib/features/health/screens/health_screen.dart:37:      duration: const Duration(seconds: 3),
+lib/features/health/screens/health_screen.dart:42:      duration: const Duration(seconds: 4),
+lib/features/health/widgets/biometric_pulse_indicator.dart:36:      duration: const Duration(milliseconds: 1000),
+lib/features/health/widgets/biometric_pulse_indicator.dart:41:      duration: const Duration(milliseconds: 2000),
+lib/features/health/widgets/biometric_pulse_indicator.dart:62:      period: Duration(milliseconds: heartRateDelay),
+lib/features/health/widgets/biometric_pulse_indicator.dart:65:      period: Duration(milliseconds: heartRateDelay * 2),
+lib/features/health/widgets/ai_insights_panel.dart:29:      duration: const Duration(milliseconds: 800),
+lib/features/health/widgets/ai_insights_panel.dart:34:      duration: const Duration(milliseconds: 300),
+lib/features/health/widgets/ai_insights_panel.dart:67:              duration: const Duration(milliseconds: 300),
+lib/features/health/widgets/ai_insights_panel.dart:447:                duration: const Duration(milliseconds: 200),
+lib/features/health/widgets/health_trend_chart.dart:33:      duration: const Duration(milliseconds: 1500),
+lib/features/health/widgets/health_trend_chart.dart:71:                  duration: const Duration(milliseconds: 250),
+lib/features/health/widgets/real_time_metric_card.dart:36:      duration: const Duration(milliseconds: 1500),
+lib/features/cycle/providers/cycle_provider.dart:51:              cacheDuration: const Duration(minutes: 10),
+lib/features/cycle/providers/cycle_provider.dart:58:              cacheDuration: const Duration(minutes: 10),
+lib/features/cycle/screens/calendar_screen.dart:496:        Duration(days: periodLength - 1),
+lib/features/cycle/screens/calendar_screen.dart:499:      if (day.isAfter(nextPeriodStart.subtract(const Duration(days: 1))) &&
+lib/features/cycle/screens/calendar_screen.dart:500:          day.isBefore(nextPeriodEnd.add(const Duration(days: 1)))) {
+lib/features/cycle/screens/calendar_screen.dart:514:      if (day.isAfter(fertileStart.subtract(const Duration(days: 1))) &&
+lib/features/cycle/screens/calendar_screen.dart:515:          day.isBefore(fertileEnd.add(const Duration(days: 1)))) {
+lib/features/cycle/screens/calendar_screen.dart:528:            (day.isAfter(ovulationDay.subtract(const Duration(days: 1))) &&
+lib/features/cycle/screens/calendar_screen.dart:529:                day.isBefore(ovulationDay.add(const Duration(days: 1))))) {
+lib/features/cycle/screens/calendar_screen.dart:639:    return date.isAfter(cycle.startDate.subtract(const Duration(days: 1))) &&
+lib/features/cycle/screens/calendar_screen.dart:640:        date.isBefore(cycleEnd.add(const Duration(days: 1)));
+lib/features/cycle/screens/tracking_screen.dart:214:        _savedStateTimer = Timer(const Duration(milliseconds: 1000), () {
+lib/features/cycle/screens/tracking_screen.dart:1189:      firstDate: DateTime.now().subtract(const Duration(days: 365)),
+lib/features/cycle/screens/tracking_screen.dart:1190:      lastDate: DateTime.now().add(const Duration(days: 30)),
+lib/features/cycle/screens/home_screen.dart:58:      duration: const Duration(seconds: 6), // Slower animation
+lib/features/cycle/screens/home_screen.dart:63:      duration: const Duration(seconds: 4), // Slower animation
+lib/features/cycle/screens/home_screen.dart:68:      duration: const Duration(seconds: 8), // Much slower animation
+lib/features/cycle/screens/home_screen.dart:89:    Future.delayed(const Duration(milliseconds: 500), () {
+lib/features/cycle/screens/home_screen.dart:99:      Future.delayed(const Duration(milliseconds: 200), () {
+lib/features/cycle/screens/home_screen.dart:107:      Future.delayed(const Duration(milliseconds: 1000), () {
+lib/features/cycle/screens/home_screen.dart:114:      Future.delayed(const Duration(milliseconds: 800), () {
+lib/features/cycle/screens/home_screen.dart:360:            duration: const Duration(seconds: 3),
+lib/features/cycle/screens/home_screen.dart:2182:    Future.delayed(const Duration(milliseconds: 500), () {
+lib/features/cycle/services/_enhanced_cycle_service.dart.disabled:284:      if (symptom.date.isAfter(startDate.subtract(const Duration(days: 1))) &&
+lib/features/cycle/services/_enhanced_cycle_service.dart.disabled:285:          symptom.date.isBefore(endDate.add(const Duration(days: 1)))) {
+lib/features/cycle/services/_enhanced_cycle_service.dart.disabled:308:      var nextPredictedStart = lastCycle.startDate.add(Duration(days: statistics.averageCycleLength));
+lib/features/cycle/services/_enhanced_cycle_service.dart.disabled:317:          predictedEndDate: nextPredictedStart.add(Duration(days: statistics.averagePeriodLength - 1)),
+lib/features/cycle/services/_enhanced_cycle_service.dart.disabled:324:        nextPredictedStart = nextPredictedStart.add(Duration(days: statistics.averageCycleLength));
+lib/features/cycle/services/_enhanced_cycle_service.dart.disabled:489:    Timer.periodic(const Duration(hours: 24), (timer) {
+lib/features/cycle/services/_enhanced_cycle_service.dart.disabled:496:    Timer.periodic(const Duration(days: 7), (timer) {
+lib/features/cycle/services/_enhanced_cycle_service.dart.disabled:504:      final cutoffDate = DateTime.now().subtract(const Duration(days: 730)); // 2 years
+lib/features/cycle/widgets/pain_body_map.dart:190:        duration: const Duration(milliseconds: 150),
+lib/features/cycle/widgets/pain_body_map.dart:386:                Future.delayed(const Duration(milliseconds: 800), () {
+lib/features/cycle/widgets/pain_body_map.dart:464:                    Future.delayed(const Duration(milliseconds: 600), () {
+lib/features/cycle/widgets/pain_body_map.dart:474:                  duration: const Duration(milliseconds: 200),
+lib/features/cycle/widgets/pain_body_map.dart:704:                            .animate(delay: Duration(milliseconds: index * 100))
+lib/features/cycle/widgets/flow_intensity_picker.dart:337:      duration: const Duration(milliseconds: 200), // Reduced animation time
+lib/features/cycle/widgets/mood_energy_slider.dart:45:      duration: const Duration(milliseconds: 800),
+lib/features/cycle/widgets/mood_energy_slider.dart:49:      duration: const Duration(seconds: 2),
+lib/features/cycle/widgets/mood_energy_slider.dart:53:      duration: const Duration(seconds: 3),
+lib/features/cycle/widgets/mood_energy_slider.dart:474:                              duration: const Duration(milliseconds: 300),
+lib/features/cycle/widgets/mood_energy_slider.dart:558:                            .animate(delay: Duration(milliseconds: index * 100))
+lib/features/cycle/widgets/calendar_legend.dart:164:      delay: Duration(milliseconds: 100 + label.hashCode % 300),
+lib/features/cycle/widgets/symptom_selector.dart:236:                duration: const Duration(milliseconds: 200),
+lib/features/cycle/widgets/symptom_selector.dart:318:            duration: const Duration(milliseconds: 200),
+lib/features/cycle/widgets/symptom_selector.dart:370:                      duration: const Duration(milliseconds: 200),
+lib/features/cycle/widgets/symptom_selector.dart:403:        .animate(delay: Duration(milliseconds: index * 50))
+lib/features/feedback/screens/feedback_screen.dart:33:      duration: const Duration(milliseconds: 300),
+lib/features/feedback/screens/feedback_screen.dart:62:    await Future.delayed(const Duration(seconds: 2));
+lib/features/feedback/screens/feedback_screen.dart:199:                    duration: const Duration(milliseconds: 200),
+lib/features/feedback/screens/feedback_screen.dart:232:                    duration: const Duration(milliseconds: 200),
+lib/features/partner/screens/partner_dashboard_screen.dart:48:      duration: const Duration(milliseconds: 1200),
+lib/features/partner/screens/partner_dashboard_screen.dart:53:      duration: const Duration(milliseconds: 800),
+lib/features/partner/screens/partner_dashboard_screen.dart:64:    Future.delayed(const Duration(milliseconds: 300), () {
+lib/features/partner/screens/partner_privacy_settings_screen.dart:31:      duration: const Duration(milliseconds: 800),
+lib/features/partner/dialogs/join_partner_dialog.dart:48:      duration: const Duration(milliseconds: 600),
+lib/features/partner/dialogs/join_partner_dialog.dart:165:          Future.delayed(const Duration(milliseconds: 160), () {
+lib/features/partner/dialogs/join_partner_dialog.dart:610:                            duration: const Duration(milliseconds: 260),
+lib/features/partner/dialogs/join_partner_dialog.dart:929:      await Future.delayed(const Duration(milliseconds: 1200));
+lib/features/partner/services/local_partner_service.dart:75:    Duration expirationDuration = const Duration(days: 7),
+lib/features/partner/widgets/partner_care_actions_widget.dart:79:      duration: const Duration(milliseconds: 800),
+lib/features/partner/widgets/partner_communication_widget.dart:34:      duration: const Duration(milliseconds: 600),
+lib/features/partner/widgets/partner_invitation_dialog.dart:76:      duration: const Duration(milliseconds: 600),
+lib/features/partner/widgets/partner_invitation_dialog.dart:479:      Future.delayed(const Duration(milliseconds: 600), () {
+lib/features/partner/widgets/partner_invitation_dialog.dart:483:      Future.delayed(const Duration(seconds: 2), () {
+lib/features/partner/widgets/partner_invitation_dialog.dart:553:    Future.delayed(const Duration(seconds: 2), () {
+lib/features/biometric/models/wearable_device.g.dart:209:      : Duration(microseconds: (json['duration'] as num).toInt()),
+lib/features/biometric/models/wearable_device.dart:229:        return const Duration(hours: 18);
+lib/features/biometric/models/wearable_device.dart:231:        return const Duration(days: 6);
+lib/features/biometric/models/wearable_device.dart:233:        return const Duration(days: 7);
+lib/features/biometric/models/wearable_device.dart:235:        return const Duration(days: 7);
+lib/features/biometric/models/wearable_device.dart:237:        return const Duration(days: 5);
+lib/features/biometric/models/wearable_device.dart:239:        return const Duration(days: 14);
+lib/features/biometric/models/wearable_device.dart:241:        return const Duration(hours: 30);
+lib/features/biometric/models/wearable_device.dart:243:        return const Duration(days: 365); // Battery scales
+lib/features/biometric/models/wearable_device.dart:245:        return const Duration(days: 7);
+lib/features/biometric/models/wearable_device.dart:500:    return Duration(
+lib/features/biometric/models/biometric_insights.g.dart:180:      : Duration(microseconds: (json['timeFrame'] as num).toInt()),
+lib/features/biometric/models/health_sync_status.g.dart:132:      : Duration(microseconds: (json['estimatedTimeRemaining'] as num).toInt()),
+lib/features/biometric/models/health_sync_status.g.dart:191:          : Duration(microseconds: (json['totalSyncTime'] as num).toInt()),
+lib/features/biometric/screens/biometric_dashboard_screen.dart:41:    start: DateTime.now().subtract(const Duration(days: 7)),
+lib/features/biometric/screens/biometric_dashboard_screen.dart:175:      firstDate: DateTime.now().subtract(const Duration(days: 365)),
+lib/features/biometric/widgets/biometric_chart_widget.dart:44:      duration: widget.animationDuration ?? const Duration(milliseconds: 1500),
+lib/features/biometric/widgets/biometric_sync_status.dart:30:      duration: const Duration(milliseconds: 1500),
+lib/features/biometric/widgets/biometric_sync_status.dart:46:        lastSync: DateTime.now().subtract(const Duration(minutes: 15)),
+lib/features/biometric/widgets/biometric_sync_status.dart:52:        lastSync: DateTime.now().subtract(const Duration(hours: 2)),
+lib/features/biometric/widgets/biometric_sync_status.dart:58:        lastSync: DateTime.now().subtract(const Duration(minutes: 30)),
+lib/features/biometric/widgets/biometric_sync_status.dart:64:        lastSync: DateTime.now().subtract(const Duration(hours: 1)),
+lib/features/biometric/widgets/biometric_sync_status.dart:70:        lastSync: DateTime.now().subtract(const Duration(minutes: 5)),
+lib/features/biometric/widgets/biometric_sync_status.dart:76:    _lastSync = DateTime.now().subtract(const Duration(minutes: 5));
+lib/features/biometric/widgets/biometric_sync_status.dart:89:    await Future.delayed(const Duration(seconds: 2));
+lib/features/deployment/services/deployment_service.dart:1049:            timestamp: startTime.add(Duration(seconds: 30)),
+lib/features/deployment/services/deployment_service.dart:1126:    await Future.delayed(Duration(seconds: 30)); // Compile time
+lib/features/deployment/services/deployment_service.dart:1127:    await Future.delayed(Duration(seconds: 15)); // Linking time
+lib/features/deployment/services/deployment_service.dart:1128:    await Future.delayed(Duration(seconds: 5)); // Packaging time
+lib/features/coming_soon/screens/coming_soon_screen.dart:27:      duration: const Duration(milliseconds: 1000),
+lib/features/coming_soon/screens/coming_soon_screen.dart:31:      duration: const Duration(milliseconds: 800),
+lib/features/coming_soon/screens/coming_soon_screen.dart:36:    Future.delayed(const Duration(milliseconds: 300), () {
+lib/features/coming_soon/screens/coming_soon_screen.dart:339:          duration: const Duration(milliseconds: 300),
+lib/features/coming_soon/widgets/feature_preview_card.dart:32:      duration: const Duration(milliseconds: 300),
+lib/features/coming_soon/widgets/feature_preview_card.dart:60:          duration: const Duration(milliseconds: 300),
+lib/features/coming_soon/widgets/feature_preview_card.dart:171:            duration: const Duration(milliseconds: 300),
+lib/features/coming_soon/widgets/waitlist_signup_widget.dart:238:                duration: const Duration(milliseconds: 200),
+lib/features/coming_soon/widgets/waitlist_signup_widget.dart:438:      await Future.delayed(const Duration(seconds: 2));
+lib/features/coming_soon/widgets/coming_soon_card.dart:41:      duration: const Duration(seconds: 2),
+lib/features/coming_soon/widgets/coming_soon_card.dart:46:      duration: const Duration(milliseconds: 200),
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:35:        date: now.subtract(const Duration(days: 30)),
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:51:        date: now.add(const Duration(days: 15)),
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:68:        date: now.add(const Duration(days: 35)),
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:85:        date: now.add(const Duration(days: 60)),
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:102:        date: now.add(const Duration(days: 75)),
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:119:        date: now.add(const Duration(days: 90)),
+lib/features/coming_soon/widgets/feature_timeline_widget.dart:136:        date: now.add(const Duration(days: 120)),
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:55:      duration: const Duration(milliseconds: 800),
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:60:      duration: const Duration(milliseconds: 600),
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:739:                    duration: const Duration(milliseconds: 200),
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:1153:      duration: const Duration(milliseconds: 200),
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:1160:          duration: const Duration(milliseconds: 300),
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:1192:    } else if (selectedDay == today.subtract(const Duration(days: 1))) {
+lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart:1398:      firstDate: DateTime.now().subtract(const Duration(days: 365)),
+lib/features/tracking/services/feelings_analytics_service.dart:257:      final startDate = endDate.subtract(const Duration(days: 14));
+lib/features/tracking/services/feelings_analytics_service.dart:328:            expiresAt: DateTime.now().add(const Duration(days: 3)),
+lib/features/tracking/services/feelings_analytics_service.dart:349:            expiresAt: DateTime.now().add(const Duration(days: 1)),
+lib/features/tracking/services/feelings_analytics_service.dart:375:            expiresAt: DateTime.now().add(const Duration(days: 7)),
+lib/features/tracking/services/feelings_analytics_service.dart:405:            expiresAt: DateTime.now().add(const Duration(days: 5)),
+lib/features/tracking/services/feelings_analytics_service.dart:430:      final startDate = endDate.subtract(Duration(days: dayRange));
+lib/features/tracking/services/feelings_database_service.dart:449:        'tracking_duration_days': _calculateTrackingDuration(
+lib/features/tracking/services/feelings_database_service.dart:461:  int? _calculateTrackingDuration(String? firstDate, String? lastDate) {
+lib/features/clinical/services/clinical_intelligence_service.dart:59:        Duration(days: analysisWindowDays),
+lib/features/performance/models/performance_models.dart:118:    this.defaultTtl = const Duration(hours: 6),
+lib/features/performance/models/performance_models.dart:145:      defaultTtl: Duration(
+lib/features/performance/models/performance_models.dart:288:      upTime: Duration(milliseconds: json['up_time_ms']),
+lib/features/performance/models/performance_models.dart:408:    this.backgroundTaskInterval = const Duration(minutes: 5),
+lib/features/performance/models/performance_models.dart:452:      backgroundTaskInterval: Duration(minutes: 1),
+lib/features/performance/models/performance_models.dart:572:    this.debounceDelay = const Duration(milliseconds: 300),
+lib/features/performance/services/database_optimizer.dart:267:      const Duration(hours: 24),
+lib/features/performance/services/database_optimizer.dart:309:      const Duration(minutes: 5),
+lib/features/performance/services/database_optimizer.dart:558:            Duration(minutes: times.length - i),
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:25:      duration: const Duration(milliseconds: 1000),
+lib/features/ai_predictions/screens/ai_predictions_screen.dart:46:      await Future.delayed(const Duration(milliseconds: 800));
+lib/features/premium/models/subscription.dart:171:    final startDate = now.subtract(const Duration(days: 15));
+lib/features/premium/models/subscription.dart:173:        ? now.subtract(const Duration(days: 1))
+lib/features/premium/models/subscription.dart:174:        : now.add(const Duration(days: 15));
+lib/features/premium/screens/premium_paywall_screen.dart:31:      duration: const Duration(milliseconds: 800),
+lib/features/premium/services/premium_service.dart:84:        endDate: DateTime.now().add(_getSubscriptionDuration(tier)),
+lib/features/premium/services/premium_service.dart:302:    await Future.delayed(const Duration(seconds: 2));
+lib/features/premium/services/premium_service.dart:306:  Duration _getSubscriptionDuration(SubscriptionTier tier) {
+lib/features/premium/services/premium_service.dart:311:        return const Duration(days: 30); // Monthly subscription
+lib/features/premium/services/premium_service.dart:369:    await Future.delayed(const Duration(seconds: 1));
+lib/features/premium/services/premium_service.dart:394:            _getSubscriptionDuration(subscription.tier),
+lib/features/premium/services/receipt_validation_service.dart:112:          .timeout(const Duration(seconds: 10));
+lib/features/premium/services/receipt_validation_service.dart:154:          .timeout(const Duration(seconds: 10));
+lib/features/premium/services/receipt_validation_service.dart:254:          .timeout(const Duration(seconds: 10));
+lib/features/premium/services/subscription_service.dart:269:        ? purchaseDate.add(const Duration(days: 365))
+lib/features/premium/services/subscription_service.dart:270:        : purchaseDate.add(const Duration(days: 30));
+lib/features/notifications/screens/notification_settings_screen.dart:34:      duration: const Duration(milliseconds: 800),
+lib/features/onboarding/providers/onboarding_provider.dart:172:      scheduledDate: DateTime.now().add(const Duration(hours: 24)),
+lib/features/onboarding/screens/interactive_onboarding_screen.dart:43:      duration: const Duration(milliseconds: 800),
+lib/features/onboarding/screens/onboarding_screen.dart:32:      duration: const Duration(milliseconds: 300),
+lib/features/onboarding/screens/onboarding_screen.dart:253:        duration: const Duration(milliseconds: 300),
+lib/features/onboarding/screens/onboarding_screen.dart:262:      duration: const Duration(milliseconds: 300),
+lib/features/onboarding/screens/onboarding_screen.dart:283:        await Future.delayed(const Duration(milliseconds: 100));
+lib/features/onboarding/screens/cycle_history_step_screen.dart:719:          _lastPeriodDate ?? DateTime.now().subtract(const Duration(days: 14)),
+lib/features/onboarding/screens/cycle_history_step_screen.dart:720:      firstDate: DateTime.now().subtract(const Duration(days: 365)),
+lib/features/onboarding/screens/personal_info_step_screen.dart:315:          DateTime.now().subtract(const Duration(days: 365 * 25)),
+lib/features/onboarding/screens/personal_info_step_screen.dart:318:        const Duration(days: 365 * 13),
+lib/features/onboarding/screens/welcome_step_screen.dart:152:                          delay: Duration(milliseconds: 600 + (index * 100)),
+lib/features/onboarding/screens/steps/complete_step.dart:26:      duration: const Duration(milliseconds: 1500),
+lib/features/onboarding/screens/steps/complete_step.dart:31:      duration: const Duration(milliseconds: 800),
+lib/features/onboarding/screens/steps/complete_step.dart:45:    Future.delayed(const Duration(milliseconds: 300), () {
+lib/features/onboarding/screens/splash_screen.dart:28:      duration: const Duration(seconds: 6),
+lib/features/onboarding/screens/splash_screen.dart:34:      duration: const Duration(seconds: 2),
+lib/features/onboarding/screens/splash_screen.dart:59:    await Future.delayed(const Duration(seconds: 4));
+lib/features/onboarding/controllers/enhanced_onboarding_controller.dart:364:        scheduledDate: DateTime.now().add(const Duration(hours: 2)),
+lib/features/onboarding/widgets/goal_selection_widget.dart:210:      duration: const Duration(milliseconds: 600),
+lib/features/onboarding/widgets/goal_selection_widget.dart:328:        duration: const Duration(milliseconds: 200),
+lib/features/onboarding/widgets/goal_selection_widget.dart:517:        duration: const Duration(milliseconds: 200),
+lib/features/onboarding/widgets/onboarding_progress_widget.dart:46:      duration: const Duration(milliseconds: 800),
+lib/features/onboarding/widgets/onboarding_progress_widget.dart:51:      duration: const Duration(milliseconds: 1500),
+lib/features/onboarding/widgets/onboarding_progress_widget.dart:296:      duration: const Duration(milliseconds: 300),
+lib/features/onboarding/widgets/privacy_preferences_widget.dart:131:      duration: const Duration(milliseconds: 800),
+lib/features/onboarding/widgets/personality_quiz_widget.dart:158:      duration: const Duration(milliseconds: 600),
+lib/features/onboarding/widgets/personality_quiz_widget.dart:383:        duration: const Duration(milliseconds: 200),
+lib/features/onboarding/widgets/personality_quiz_widget.dart:566:        duration: const Duration(milliseconds: 200),
+lib/features/onboarding/widgets/personality_quiz_widget.dart:668:          DateTime.now().subtract(const Duration(days: 365 * 25)),
+lib/features/onboarding/widgets/onboarding_progress.dart:122:          duration: const Duration(milliseconds: 200),
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:104:      duration: const Duration(milliseconds: 800),
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:295:        duration: const Duration(milliseconds: 200),
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:915:          _lastPeriodDate ?? DateTime.now().subtract(const Duration(days: 28)),
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:916:      firstDate: DateTime.now().subtract(const Duration(days: 365)),
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:937:      await Future.delayed(const Duration(seconds: 2));
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:986:      await Future.delayed(const Duration(seconds: 2));
+lib/features/onboarding/widgets/cycle_history_import_widget.dart:1019:      await Future.delayed(const Duration(seconds: 3));
+lib/features/analytics/screens/analytics_dashboard_screen.dart:1100:                DateTime.now().subtract(const Duration(days: 90)),
+lib/features/analytics/screens/analytics_dashboard_screen.dart:1107:                DateTime.now().subtract(const Duration(days: 180)),
+lib/features/analytics/screens/analytics_dashboard_screen.dart:1114:                DateTime.now().subtract(const Duration(days: 365)),
+lib/features/analytics/screens/enhanced_analytics_dashboard_screen.dart:496:        DateTime.now().subtract(Duration(days: days)),
+lib/features/analytics/services/advanced_analytics_service.dart:36:  static const Duration _sessionTimeout = Duration(minutes: 30);
+lib/features/analytics/services/advanced_analytics_service.dart:377:      averageSessionDuration: _calculateAverageSessionDuration(events),
+lib/features/analytics/services/advanced_analytics_service.dart:479:      Duration(minutes: _batchUploadIntervalMinutes),
+lib/features/analytics/services/advanced_analytics_service.dart:520:      Duration(days: _maxRetentionDays),
+lib/features/analytics/services/advanced_analytics_service.dart:566:  double _calculateAverageSessionDuration(List<AnalyticsEvent> events) {
+lib/features/analytics/services/advanced_analytics_service.dart:644:      if (lastSeen.isAfter(firstSeen.add(Duration(days: 1)))) {
+lib/features/analytics/services/advanced_analytics_service.dart:647:      if (lastSeen.isAfter(firstSeen.add(Duration(days: 7)))) {
+lib/features/analytics/services/advanced_analytics_service.dart:650:      if (lastSeen.isAfter(firstSeen.add(Duration(days: 30)))) {
+lib/features/analytics/services/advanced_analytics_service.dart:740:      Duration(days: _maxRetentionDays),
+lib/main.dart:116:  await Future.delayed(const Duration(milliseconds: 100));
+lib/main.dart:257:    cacheDuration: const Duration(minutes: 30),
+lib/main.dart:271:    cacheDuration: const Duration(minutes: 30),

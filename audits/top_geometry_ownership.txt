@@ -1,0 +1,38 @@
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:272:  double _getPeriodSelectorTop() {
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:272:  double _getPeriodSelectorTop() {
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:272:  double _getPeriodSelectorTop() {
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart:274:  double _getPeriodSelectorTop() {
+lib/features/insights/widgets/floating_ai_chat.dart:301:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:272:  double _getPeriodSelectorTop() {
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:272:  double _getPeriodSelectorTop() {
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:272:  double _getPeriodSelectorTop() {
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:272:  double _getPeriodSelectorTop() {
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:272:  double _getPeriodSelectorTop() {
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:272:  double _getPeriodSelectorTop() {
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:272:  double _getPeriodSelectorTop() {
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.bak:272:  double _getPeriodSelectorTop() {
+lib/features/insights/widgets/floating_ai_chat.dart.bak:294:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:272:  double _getPeriodSelectorTop() {
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:272:  double _getPeriodSelectorTop() {
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:272:  double _getPeriodSelectorTop() {
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:272:  double _getPeriodSelectorTop() {
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:272:  double _getPeriodSelectorTop() {
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:272:  double _getPeriodSelectorTop() {
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:272:  double _getPeriodSelectorTop() {
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup:299:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
