@@ -314,7 +314,13 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                     borderRadius: AppGeometry.dialogRadius,
                     boxShadow: [
                       BoxShadow(
-                        color: theme.shadowColor.withValues(alpha: 0.2),
+                        color: AppTheme.primaryRose.withValues(alpha: 0.10),
+                        blurRadius: 22,
+                        spreadRadius: 1,
+                        offset: const Offset(0, 0),
+                      ),
+                      BoxShadow(
+                        color: theme.shadowColor.withValues(alpha: 0.16),
                         blurRadius: 12,
                         spreadRadius: 0,
                         offset: const Offset(0, 8),
@@ -1043,9 +1049,17 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 color: Theme.of(context).colorScheme.surface,
                 borderRadius: AppGeometry.dialogRadius,
                 border: Border.all(
-                  color: AppTheme.primaryRose.withValues(alpha: 0.08),
+                  color: AppTheme.primaryRose.withValues(alpha: 0.10),
                   width: 1,
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppTheme.primaryRose.withValues(alpha: 0.05),
+                    blurRadius: 10,
+                    spreadRadius: 0,
+                    offset: const Offset(0, 0),
+                  ),
+                ],
               ),
               child: TextField(
                 textAlignVertical: TextAlignVertical.center,
