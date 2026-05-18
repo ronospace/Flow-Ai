@@ -141,7 +141,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             Future.delayed(_thinkingDelay, () {
               if (!mounted) return;
 
-              final keyboardOpen = _inputFocusNode.hasFocus;
+              final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
 
               setState(() {
                 _isTyping = false;
@@ -287,7 +287,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     // // // // debugPrint("VIEW INSETS (keyboard): ");
 
     final theme = Theme.of(context);
-    final keyboardOpen = _inputFocusNode.hasFocus;
+    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
 
     return Stack(
       children: [
@@ -361,7 +361,9 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                         ),
 
                         // Suggested Questions (above input)
-                        if (!keyboardOpen && _shouldShowQuickQuestions())
+                        if (!keyboardOpen &&
+                            !_inputFocusNode.hasFocus &&
+                            _shouldShowQuickQuestions())
                           SizedBox(
                             height: 80,
                             child: SingleChildScrollView(
@@ -376,6 +378,20 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                                   padding: const EdgeInsets.only(bottom: 6),
                                   child: _buildEnhancedQuickReplies(theme),
                                 ),
+                              ),
+                            ),
+                          ),
+
+                        if (keyboardOpen)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 2, bottom: 8),
+                            child: Text(
+                              'Tap the screen to view suggestions ✨',
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: AppTheme.primaryRose.withValues(
+                                  alpha: 0.72,
+                                ),
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ),
@@ -790,7 +806,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     }
 
     if (_messages.length > 1) {
-      return '✦ Personalized insights based on your cycle data ⓘ';
+      return 'ⓘ Personalized insights based on your cycle data';
     }
 
     return '✦ Personalized AI insights ⓘ Not medical advice';
