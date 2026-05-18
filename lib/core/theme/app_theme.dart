@@ -63,6 +63,21 @@ class AppTheme {
     ),
   ];
 
+  // Zyra Visual System
+  static const double zyraAuraBlur = 22;
+  static const double zyraAuraSpread = 1;
+  static const double zyraInputGlowBlur = 10;
+
+  static Color zyraAuraColor = primaryRose.withValues(alpha: 0.10);
+
+  static Color zyraInputGlowColor = primaryRose.withValues(alpha: 0.05);
+
+  static LinearGradient zyraBodyGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Color(0x03FF6B9D), Color(0x00FFFFFF)],
+  );
+
   // Light Theme Colors
   static const Color lightBackground = Color(0xFFFAFAFA);
   static const Color lightSurface = Color(0xFFFFFFFF);
