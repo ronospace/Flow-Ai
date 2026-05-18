@@ -308,61 +308,87 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             child: AnimatedBuilder(
               animation: _chatAnimation,
               builder: (context, child) {
-                return Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surface,
-                    borderRadius: AppGeometry.dialogRadius,
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppTheme.primaryRose.withValues(alpha: 0.10),
-                        blurRadius: 22,
-                        spreadRadius: 1,
-                        offset: const Offset(0, 0),
+                return ClipRRect(
+                  borderRadius: AppGeometry.dialogRadius,
+                  child: Container(
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface,
+                      borderRadius: AppGeometry.dialogRadius,
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppTheme.primaryRose.withValues(alpha: 0.10),
+                          blurRadius: 22,
+                          spreadRadius: 1,
+                          offset: const Offset(0, 0),
+                        ),
+                        BoxShadow(
+                          color: theme.shadowColor.withValues(alpha: 0.16),
+                          blurRadius: 12,
+                          spreadRadius: 0,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
+                      border: Border.all(
+                        color: AppTheme.primaryRose.withValues(alpha: 0.08),
+                        width: 1,
                       ),
-                      BoxShadow(
-                        color: theme.shadowColor.withValues(alpha: 0.16),
-                        blurRadius: 12,
-                        spreadRadius: 0,
-                        offset: const Offset(0, 8),
-                      ),
-                    ],
-                    border: Border.all(
-                      color: AppTheme.primaryRose.withValues(alpha: 0.08),
-                      width: 1,
                     ),
-                  ),
-                  child: Column(
-                    children: [
-                      // Enhanced Draggable Header with Controls
-                      _buildEnhancedHeader(theme, compact: keyboardOpen),
+                    child: Column(
+                      children: [
+                        // Enhanced Draggable Header with Controls
+                        _buildEnhancedHeader(theme, compact: keyboardOpen),
 
-                      // Main content area - improved spacing
-                      Flexible(
-                        fit: FlexFit.loose,
-                        child: _buildChatArea(theme),
-                      ),
-
-                      // Suggested Questions (above input)
-                      if (!keyboardOpen && _shouldShowQuickQuestions())
-                        SizedBox(
-                          height: 80,
-                          child: SingleChildScrollView(
-                            child: Container(
-                              padding: const EdgeInsets.fromLTRB(16, 4, 16, 2),
-                              child: Padding(
-                                padding: const EdgeInsets.only(bottom: 6),
-                                child: _buildEnhancedQuickReplies(theme),
-                              ),
+                        // Localized Header Transition Fade
+                        Container(
+                          height: 22,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                AppTheme.primaryRose.withValues(alpha: 0.045),
+                                Colors.white.withValues(alpha: 0.0),
+                              ],
                             ),
                           ),
                         ),
 
-                      // Input Area (last = primary)
-                      SizedBox(
-                        height: MediaQuery.of(context).size.width > 900 ? 0 : 8,
-                      ),
-                      _buildEnhancedInput(theme),
-                    ],
+                        // Main content area - improved spacing
+                        Flexible(
+                          fit: FlexFit.loose,
+                          child: _buildChatArea(theme),
+                        ),
+
+                        // Suggested Questions (above input)
+                        if (!keyboardOpen && _shouldShowQuickQuestions())
+                          SizedBox(
+                            height: 80,
+                            child: SingleChildScrollView(
+                              child: Container(
+                                padding: const EdgeInsets.fromLTRB(
+                                  16,
+                                  4,
+                                  16,
+                                  2,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 6),
+                                  child: _buildEnhancedQuickReplies(theme),
+                                ),
+                              ),
+                            ),
+                          ),
+
+                        // Input Area (last = primary)
+                        SizedBox(
+                          height: MediaQuery.of(context).size.width > 900
+                              ? 0
+                              : 8,
+                        ),
+                        _buildEnhancedInput(theme),
+                      ],
+                    ),
                   ),
                 );
               },
@@ -386,7 +412,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   scale: _isExpanded ? 1.0 : (1.0 + _fabAnimation.value * 0.1),
                   child: Container(
                     decoration: BoxDecoration(
-                      borderRadius: AppGeometry.dialogRadius,
+                      borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
                           color: AppTheme.primaryRose.withValues(alpha: 0.2),
@@ -535,7 +561,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                     height: 4,
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.3),
-                      borderRadius: AppGeometry.dialogRadius,
+                      borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                 ),
@@ -552,7 +578,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                     height: 48,
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.2),
-                      borderRadius: AppGeometry.dialogRadius,
+                      borderRadius: BorderRadius.circular(12),
                       border: Border.all(
                         color: Colors.white.withValues(alpha: 0.3),
                         width: 2,
@@ -606,7 +632,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                           ),
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.18),
-                            borderRadius: AppGeometry.dialogRadius,
+                            borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.white.withValues(
@@ -686,7 +712,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       width: 48,
                       height: 48,
                       decoration: BoxDecoration(
-                        borderRadius: AppGeometry.dialogRadius,
+                        borderRadius: BorderRadius.circular(12),
                         color: Colors.white.withValues(alpha: 0.1),
                       ),
                       child: Icon(
@@ -709,7 +735,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       width: 48,
                       height: 48,
                       decoration: BoxDecoration(
-                        borderRadius: AppGeometry.dialogRadius,
+                        borderRadius: BorderRadius.circular(12),
                         color: Colors.white.withValues(alpha: 0.1),
                       ),
                       child: Icon(
@@ -731,7 +757,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.08),
-                borderRadius: AppGeometry.dialogRadius,
+                borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
               ),
               child: Row(
@@ -764,7 +790,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     }
 
     if (_messages.length > 1) {
-      return 'Insight based on your cycle data';
+      return '✦ Personalized insights based on your cycle data ⓘ';
     }
 
     return '✦ Personalized AI insights ⓘ Not medical advice';
@@ -850,7 +876,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                     gradient: LinearGradient(
                       colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
                     ),
-                    borderRadius: AppGeometry.dialogRadius,
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
                     Icons.auto_awesome_outlined,
@@ -929,7 +955,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   AppTheme.primaryPurple.withValues(alpha: 0.08),
                 ],
               ),
-              borderRadius: AppGeometry.dialogRadius,
+              borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: AppTheme.primaryRose.withValues(alpha: 0.2),
                 width: 1,
@@ -1047,7 +1073,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               constraints: const BoxConstraints(maxHeight: 120),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
-                borderRadius: AppGeometry.dialogRadius,
+                borderRadius: BorderRadius.circular(12),
                 border: Border.all(
                   color: AppTheme.primaryRose.withValues(alpha: 0.10),
                   width: 1,
