@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flow_ai/core/ui/app_geometry.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -11,7 +10,6 @@ import '../../../generated/app_localizations.dart';
 import '../../settings/providers/settings_provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flow_ai/core/layout/app_layout_metrics.dart';
-import 'zyra/controllers/zyra_shell_controller.dart';
 
 /// Floating AI Chat Widget for insights screen
 class FloatingAIChat extends StatefulWidget {
@@ -29,8 +27,10 @@ class FloatingAIChat extends StatefulWidget {
 
 class _FloatingAIChatState extends State<FloatingAIChat>
     with TickerProviderStateMixin {
-  static const double _floatingChatGap = 8;
   static const _thinkingDelay = Duration(milliseconds: 900);
+  bool _isExpanded = false;
+  bool _isFullScreen = false;
+  double _chatHeight = 0.5; // Percentage of screen height
   late AnimationController _fabController;
   late AnimationController _chatController;
   late AnimationController _expandController;
@@ -40,8 +40,9 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   late StreamSubscription _messagesSub;
 
   final EnhancedAIChatService _chatService = EnhancedAIChatService();
-  late final ZyraShellController _shellController;
   List<types.Message> _messages = [];
+  bool _isTyping = false;
+  bool _quickRepliesCollapsed = false;
   // removed unused _showQuickReplies
   // ignore: unused_field
   bool _isSuggestionsExpanded = true;
@@ -65,6 +66,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   // For resize gesture
   // ignore: unused_field
   double _initialHeight = 0;
+  bool _isResizing = false;
 
   @override
   void initState() {
@@ -107,17 +109,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
     // Initialize text controller
     _textController = TextEditingController();
-    _shellController = ZyraShellController()
-      ..addListener(() {
-        if (mounted) setState(() {});
-      });
-
     _inputFocusNode = FocusNode()
       ..addListener(() {
-        _shellController.setKeyboardVisibility(
-          _inputFocusNode.hasFocus,
-        );
-
         if (mounted) setState(() {});
       });
 
@@ -146,12 +139,12 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             Future.delayed(_thinkingDelay, () {
               if (!mounted) return;
 
-              final keyboardOpen = _inputFocusNode.hasFocus;
+              final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
 
               setState(() {
-                _shellController.setTyping(false);
+                _isTyping = false;
                 if (!keyboardOpen) {
-                  _shellController.setQuickRepliesCollapsed(false);
+                  _quickRepliesCollapsed = false;
                   _isSuggestionsExpanded = true;
                 }
               });
@@ -180,12 +173,11 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     _textController.dispose();
     _messagesSub.cancel();
     _inputFocusNode.dispose();
-    _shellController.dispose();
     super.dispose();
   }
 
   void _startPulsingAnimation() {
-    if (!_shellController.isExpanded) {
+    if (!_isExpanded) {
       _fabController.repeat(reverse: true);
     }
   }
@@ -197,12 +189,14 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
   void _toggleChat() {
     setState(() {
-      _shellController.toggleExpanded();
-      if (!_shellController.isExpanded) {
+      _isExpanded = !_isExpanded;
+      if (!_isExpanded) {
+        _isFullScreen = false;
+        _chatHeight = 0.5;
       }
     });
 
-    if (_shellController.isExpanded) {
+    if (_isExpanded) {
       _stopPulsingAnimation();
       _chatController.forward();
     } else {
@@ -214,10 +208,11 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
   void _toggleFullScreen() {
     setState(() {
-      _shellController.toggleFullScreen();
+      _isFullScreen = !_isFullScreen;
+      _chatHeight = _isFullScreen ? 0.9 : 0.6;
     });
 
-    if (_shellController.isFullScreen) {
+    if (_isFullScreen) {
       _expandController.forward();
     } else {
       _expandController.reverse();
@@ -225,14 +220,17 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   }
 
   void _adjustChatHeight(double delta) {
-    _shellController.adjustChatHeight(
-      delta,
-      MediaQuery.of(context).size.height,
-    );
+    setState(() {
+      _chatHeight = (_chatHeight - delta / MediaQuery.of(context).size.height)
+          .clamp(0.3, 0.9);
+    });
   }
 
   /// Determine if Quick Questions should be shown
   /// Show when there's only the welcome message (no user messages yet)
+  bool _shouldShowQuickQuestions() {
+    return true;
+  }
 
   void _handleSendPressed(types.PartialText message) {
     final currentUser = _chatService.currentUser;
@@ -246,20 +244,14 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     );
 
     setState(() {
-      _shellController.setTyping(true);
+      _isTyping = true;
     });
 
     _chatService.sendMessage(textMessage);
   }
 
   void _handleMessageTap(BuildContext _, types.Message message) {
-    FocusScope.of(context).unfocus();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-
-      _shellController.restoreDialogState();
-    });
+    // Handle message tap if needed
   }
 
   void _handlePreviewDataFetched(
@@ -293,121 +285,63 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     // // // // debugPrint("VIEW INSETS (keyboard): ");
 
     final theme = Theme.of(context);
-    final keyboardOpen = _inputFocusNode.hasFocus;
+    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
 
     return Stack(
       children: [
         // Enhanced Chat Interface - NO OVERLAY
-        if (_shellController.isExpanded)
+        if (_isExpanded)
           AnimatedPositioned(
             duration: Duration(milliseconds: 300),
             curve: Curves.easeOutCubic,
-            right: _shellController.isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
-            left: _shellController.isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
-            top: _shellController.isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
-            bottom: _shellController.isFullScreen
+            right: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+            left: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+            bottom: _isFullScreen
                 ? (MediaQuery.of(context).padding.bottom +
                       MediaQuery.of(context).viewInsets.bottom)
-                : (MediaQuery.of(context).padding.bottom +
-                      MediaQuery.of(context).viewInsets.bottom +
-                      (keyboardOpen ? 0 : _floatingChatGap)),
+                : AppLayoutMetrics.dialogBottom(context),
             child: AnimatedBuilder(
               animation: _chatAnimation,
               builder: (context, child) {
-                return ClipRRect(
-                  borderRadius: AppGeometry.dialogRadius,
-                  child: Container(
-                    clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface,
-                      borderRadius: AppGeometry.dialogRadius,
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppTheme.primaryRose.withValues(alpha: 0.10),
-                          blurRadius: 22,
-                          spreadRadius: 1,
-                          offset: const Offset(0, 0),
-                        ),
-                        BoxShadow(
-                          color: theme.shadowColor.withValues(alpha: 0.16),
-                          blurRadius: 12,
-                          spreadRadius: 0,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
-                      border: Border.all(
-                        color: AppTheme.primaryRose.withValues(alpha: 0.08),
-                        width: 1,
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surface,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: theme.shadowColor.withValues(alpha: 0.2),
+                        blurRadius: 12,
+                        spreadRadius: 0,
+                        offset: const Offset(0, 8),
                       ),
+                    ],
+                    border: Border.all(
+                      color: AppTheme.primaryRose.withValues(alpha: 0.08),
+                      width: 1,
                     ),
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.deferToChild,
-                      onTap: () {
-                        FocusScope.of(context).unfocus();
+                  ),
+                  child: Column(
+                    children: [
+                      // Enhanced Draggable Header with Controls
+                      _buildEnhancedHeader(theme, compact: keyboardOpen),
 
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          if (!mounted) return;
+                      // Main content area - improved spacing
+                      Expanded(child: _buildChatArea(theme)),
 
-                          _shellController.restoreDialogState();
-                        });
-                      },
-                      child: Column(
-                        children: [
-                        // Enhanced Draggable Header with Controls
-                        _buildEnhancedHeader(theme, compact: keyboardOpen),
-
-                        // Localized Header Transition Fade
-                        if (!keyboardOpen)
-                          Container(
-                            height: 22,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [
-                                  AppTheme.primaryRose.withValues(alpha: 0.045),
-                                  Colors.white.withValues(alpha: 0.0),
-                                ],
-                              ),
-                            ),
-                          ),
-
-                        // Main content area - improved spacing
-                        Flexible(
-                          fit: FlexFit.loose,
-                          child: _buildChatArea(theme),
+                      // Suggested Questions (above input)
+                      if (!keyboardOpen && _shouldShowQuickQuestions())
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(16, 4, 16, 10),
+                          child: _buildEnhancedQuickReplies(theme),
                         ),
 
-                        // Suggested Questions (above input)
-                        if (!keyboardOpen)
-                          SizedBox(
-                            height: 80,
-                            child: SingleChildScrollView(
-                              child: Container(
-                                padding: const EdgeInsets.fromLTRB(
-                                  16,
-                                  4,
-                                  16,
-                                  2,
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(bottom: 6),
-                                  child: _buildEnhancedQuickReplies(theme),
-                                ),
-                              ),
-                            ),
-                          ),
-
-                        // Input Area (last = primary)
-                        SizedBox(
-                          height: MediaQuery.of(context).size.width > 900
-                              ? 0
-                              : 8,
-                        ),
-                        _buildEnhancedInput(theme, keyboardOpen),
-                        ],
+                      // Input Area (last = primary)
+                      SizedBox(
+                        height: MediaQuery.of(context).size.width > 900 ? 0 : 8,
                       ),
-                    ),
+                      _buildEnhancedInput(theme),
+                    ],
                   ),
                 );
               },
@@ -415,23 +349,21 @@ class _FloatingAIChatState extends State<FloatingAIChat>
           ),
 
         // Enhanced Floating Action Button
-        if (!_shellController.isExpanded)
+        if (!_isExpanded)
           Positioned(
             right: 16,
-            bottom: _shellController.isFullScreen
+            bottom: _isFullScreen
                 ? (MediaQuery.of(context).padding.bottom +
                       MediaQuery.of(context).viewInsets.bottom)
-                : (MediaQuery.of(context).padding.bottom +
-                      MediaQuery.of(context).viewInsets.bottom +
-                      16),
+                : AppLayoutMetrics.dialogBottom(context),
             child: AnimatedBuilder(
               animation: _fabAnimation,
               builder: (context, child) {
                 return Transform.scale(
-                  scale: _shellController.isExpanded ? 1.0 : (1.0 + _fabAnimation.value * 0.1),
+                  scale: _isExpanded ? 1.0 : (1.0 + _fabAnimation.value * 0.1),
                   child: Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
                           color: AppTheme.primaryRose.withValues(alpha: 0.2),
@@ -454,7 +386,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                             child: child,
                           );
                         },
-                        child: _shellController.isExpanded
+                        child: _isExpanded
                             ? Icon(
                                 Icons.close_rounded,
                                 color: Theme.of(context).colorScheme.surface,
@@ -471,7 +403,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                                     ).colorScheme.surface,
                                     size: 28,
                                   ),
-                                  if (!_shellController.isExpanded)
+                                  if (!_isExpanded)
                                     Positioned(
                                       top: -2,
                                       right: -2,
@@ -488,7 +420,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                                                         ],
                                                       ),
                                                   borderRadius:
-                                                      AppGeometry.dialogRadius,
+                                                      BorderRadius.circular(16),
                                                   boxShadow: [
                                                     BoxShadow(
                                                       color: AppTheme
@@ -544,7 +476,10 @@ class _FloatingAIChatState extends State<FloatingAIChat>
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: AppGeometry.dialogRadius,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(_isFullScreen ? 16 : 24),
+          topRight: Radius.circular(_isFullScreen ? 16 : 24),
+        ),
         boxShadow: [
           BoxShadow(
             color: AppTheme.primaryRose.withValues(alpha: 0.2),
@@ -556,20 +491,20 @@ class _FloatingAIChatState extends State<FloatingAIChat>
       child: Column(
         children: [
           // Resize Handle - Only draggable area
-          if (!_shellController.isFullScreen && !compact)
+          if (!_isFullScreen && !compact)
             Center(
               child: GestureDetector(
                 onPanStart: (details) {
-                  _initialHeight = _shellController.chatHeight;
-                  _shellController.setResizing(true);
+                  _initialHeight = _chatHeight;
+                  _isResizing = true;
                 },
                 onPanUpdate: (details) {
-                  if (!_shellController.isFullScreen && _shellController.isResizing) {
+                  if (!_isFullScreen && _isResizing) {
                     _adjustChatHeight(details.delta.dy);
                   }
                 },
                 onPanEnd: (details) {
-                  _shellController.setResizing(false);
+                  _isResizing = false;
                 },
                 child: Container(
                   width: 16, // Larger hit area for better UX
@@ -580,13 +515,13 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                     height: 4,
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.3),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(16),
                     ),
                   ),
                 ),
               ),
             ),
-          if (!_shellController.isFullScreen && !compact) const SizedBox(height: 4),
+          if (!_isFullScreen && !compact) const SizedBox(height: 4),
 
           // Header Content
           Row(
@@ -597,7 +532,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                     height: 48,
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(16),
                       border: Border.all(
                         color: Colors.white.withValues(alpha: 0.3),
                         width: 2,
@@ -651,7 +586,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                           ),
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.18),
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(16),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.white.withValues(
@@ -701,15 +636,15 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                             duration: const Duration(milliseconds: 220),
                             style: theme.textTheme.bodyMedium!.copyWith(
                               color: Colors.white.withValues(
-                                alpha: _shellController.isTyping ? 0.9 : 0.78,
+                                alpha: _isTyping ? 0.9 : 0.78,
                               ),
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
                               height: 1.05,
-                              letterSpacing: _shellController.isTyping ? 0.08 : 0.0,
+                              letterSpacing: _isTyping ? 0.08 : 0.0,
                             ),
                             child: Text(
-                              _shellController.isTyping ? 'Thinking...' : 'Ready to assist',
+                              _isTyping ? 'Thinking...' : 'Ready to assist',
                             ),
                           ),
                         ),
@@ -731,11 +666,11 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       width: 48,
                       height: 48,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(16),
                         color: Colors.white.withValues(alpha: 0.1),
                       ),
                       child: Icon(
-                        _shellController.isFullScreen
+                        _isFullScreen
                             ? Icons.fullscreen_exit_rounded
                             : Icons.fullscreen_rounded,
                         color: Theme.of(context).colorScheme.surface,
@@ -754,7 +689,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       width: 48,
                       height: 48,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(16),
                         color: Colors.white.withValues(alpha: 0.1),
                       ),
                       child: Icon(
@@ -776,7 +711,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.08),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
               ),
               child: Row(
@@ -803,13 +738,13 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   }
 
   String _getInsightsBannerText() {
-    if (_shellController.isTyping) {
+    if (_isTyping) {
       return 'Analyzing your patterns ✨' +
           '.' * ((_pulseController.value * 3).floor() + 1);
     }
 
     if (_messages.length > 1) {
-      return '✦ Personalized insights based on your cycle data ⓘ';
+      return 'Insight based on your cycle data';
     }
 
     return '✦ Personalized AI insights ⓘ Not medical advice';
@@ -818,18 +753,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   // Enhanced Chat Area - Better spacing and padding
   Widget _buildChatArea(ThemeData theme) {
     return SizedBox.expand(
-      child: Listener(
-        behavior: HitTestBehavior.translucent,
-        onPointerDown: (_) {
-          FocusScope.of(context).unfocus();
-
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (!mounted) return;
-
-            _shellController.restoreDialogState();
-          });
-        },
-        child: Theme(
+      child: Theme(
         data: theme.copyWith(
           primaryColor: theme.brightness == Brightness.dark
               ? Colors.blueGrey
@@ -877,7 +801,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               const SizedBox.shrink(), // We'll use our enhanced input
         ),
       ),
-    ));
+    );
   }
 
   // Enhanced Quick Replies - More visible and professional
@@ -890,12 +814,10 @@ class _FloatingAIChatState extends State<FloatingAIChat>
       children: [
         // Header - More prominent
         InkWell(
-          borderRadius: AppGeometry.dialogRadius,
+          borderRadius: BorderRadius.circular(12),
           onTap: () {
             setState(() {
-              _shellController.setQuickRepliesCollapsed(
-                !_shellController.quickRepliesCollapsed,
-              );
+              _quickRepliesCollapsed = !_quickRepliesCollapsed;
             });
           },
           child: Padding(
@@ -908,7 +830,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                     gradient: LinearGradient(
                       colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
                     ),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(16),
                   ),
                   child: Icon(
                     Icons.auto_awesome_outlined,
@@ -928,7 +850,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   ),
                 ),
                 Icon(
-                  _shellController.quickRepliesCollapsed
+                  _quickRepliesCollapsed
                       ? Icons.keyboard_arrow_down
                       : Icons.keyboard_arrow_up,
                   color: AppTheme.primaryRose,
@@ -939,7 +861,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
         ),
         const SizedBox(height: 4),
         // Suggestions - Horizontal scrollable for better visibility
-        if (!_shellController.quickRepliesCollapsed)
+        if (!_quickRepliesCollapsed)
           SizedBox(
             height: 34,
             child: ListView.separated(
@@ -970,14 +892,14 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             );
 
             setState(() {
-              _shellController.setTyping(true);
+              _isTyping = true;
               _isSuggestionsExpanded = false;
-              _shellController.setQuickRepliesCollapsed(true);
+              _quickRepliesCollapsed = true;
             });
 
             _chatService.sendMessage(message);
           },
-          borderRadius: AppGeometry.dialogRadius,
+          borderRadius: BorderRadius.circular(16),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
@@ -987,7 +909,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   AppTheme.primaryPurple.withValues(alpha: 0.08),
                 ],
               ),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: AppTheme.primaryRose.withValues(alpha: 0.2),
                 width: 1,
@@ -1016,7 +938,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   }
 
   Widget _buildLiveStatusIndicator() {
-    final isThinking = _shellController.isTyping;
+    final isThinking = _isTyping;
     final coreColor = isThinking ? AppTheme.primaryPurple : AppTheme.accentMint;
     final haloColor = isThinking
         ? AppTheme.primaryRose
@@ -1089,12 +1011,15 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   }
 
   // Enhanced Input Area - Better spacing and visibility
-  Widget _buildEnhancedInput(ThemeData theme, bool keyboardOpen) {
+  Widget _buildEnhancedInput(ThemeData theme) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
-        borderRadius: AppGeometry.dialogRadius,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(_isFullScreen ? 16 : 24),
+          bottomRight: Radius.circular(_isFullScreen ? 16 : 24),
+        ),
         border: null,
       ),
       child: Row(
@@ -1105,19 +1030,11 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               constraints: const BoxConstraints(maxHeight: 120),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: AppTheme.primaryRose.withValues(alpha: 0.10),
+                  color: AppTheme.primaryRose.withValues(alpha: 0.08),
                   width: 1,
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppTheme.primaryRose.withValues(alpha: 0.05),
-                    blurRadius: 10,
-                    spreadRadius: 0,
-                    offset: const Offset(0, 0),
-                  ),
-                ],
               ),
               child: TextField(
                 textAlignVertical: TextAlignVertical.center,
@@ -1129,12 +1046,11 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                     horizontal: 16,
                     vertical: 14,
                   ),
-                  hintText: keyboardOpen
-                      ? 'Tap the screen to view suggestions ✨'
-                      : 'Ask about health, science, technology, lifestyle...',
+                  hintText:
+                      'Ask about health, science, technology, lifestyle...',
                   hintStyle: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.hintColor.withValues(alpha: 0.7),
-                    fontSize: keyboardOpen ? 13.5 : 15,
+                    fontSize: 15,
                   ),
                   suffixIcon: IconButton(
                     icon: Icon(
