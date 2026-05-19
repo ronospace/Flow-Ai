@@ -11,6 +11,7 @@ import '../../../generated/app_localizations.dart';
 import '../../settings/providers/settings_provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flow_ai/core/layout/app_layout_metrics.dart';
+import 'zyra/controllers/zyra_shell_controller.dart';
 
 /// Floating AI Chat Widget for insights screen
 class FloatingAIChat extends StatefulWidget {
@@ -30,9 +31,6 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     with TickerProviderStateMixin {
   static const double _floatingChatGap = 8;
   static const _thinkingDelay = Duration(milliseconds: 900);
-  bool _isExpanded = false;
-  bool _isFullScreen = false;
-  double _chatHeight = 0.5; // Percentage of screen height
   late AnimationController _fabController;
   late AnimationController _chatController;
   late AnimationController _expandController;
@@ -42,9 +40,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   late StreamSubscription _messagesSub;
 
   final EnhancedAIChatService _chatService = EnhancedAIChatService();
+  late final ZyraShellController _shellController;
   List<types.Message> _messages = [];
-  bool _isTyping = false;
-  bool _quickRepliesCollapsed = false;
   // removed unused _showQuickReplies
   // ignore: unused_field
   bool _isSuggestionsExpanded = true;
@@ -68,7 +65,6 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   // For resize gesture
   // ignore: unused_field
   double _initialHeight = 0;
-  bool _isResizing = false;
 
   @override
   void initState() {
@@ -111,8 +107,17 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
     // Initialize text controller
     _textController = TextEditingController();
+    _shellController = ZyraShellController()
+      ..addListener(() {
+        if (mounted) setState(() {});
+      });
+
     _inputFocusNode = FocusNode()
       ..addListener(() {
+        _shellController.setKeyboardVisibility(
+          _inputFocusNode.hasFocus,
+        );
+
         if (mounted) setState(() {});
       });
 
@@ -144,9 +149,9 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               final keyboardOpen = _inputFocusNode.hasFocus;
 
               setState(() {
-                _isTyping = false;
+                _shellController.setTyping(false);
                 if (!keyboardOpen) {
-                  _quickRepliesCollapsed = false;
+                  _shellController.setQuickRepliesCollapsed(false);
                   _isSuggestionsExpanded = true;
                 }
               });
@@ -175,11 +180,12 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     _textController.dispose();
     _messagesSub.cancel();
     _inputFocusNode.dispose();
+    _shellController.dispose();
     super.dispose();
   }
 
   void _startPulsingAnimation() {
-    if (!_isExpanded) {
+    if (!_shellController.isExpanded) {
       _fabController.repeat(reverse: true);
     }
   }
@@ -191,14 +197,12 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
   void _toggleChat() {
     setState(() {
-      _isExpanded = !_isExpanded;
-      if (!_isExpanded) {
-        _isFullScreen = false;
-        _chatHeight = 0.5;
+      _shellController.toggleExpanded();
+      if (!_shellController.isExpanded) {
       }
     });
 
-    if (_isExpanded) {
+    if (_shellController.isExpanded) {
       _stopPulsingAnimation();
       _chatController.forward();
     } else {
@@ -210,11 +214,10 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
   void _toggleFullScreen() {
     setState(() {
-      _isFullScreen = !_isFullScreen;
-      _chatHeight = _isFullScreen ? 0.9 : 0.6;
+      _shellController.toggleFullScreen();
     });
 
-    if (_isFullScreen) {
+    if (_shellController.isFullScreen) {
       _expandController.forward();
     } else {
       _expandController.reverse();
@@ -222,17 +225,14 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   }
 
   void _adjustChatHeight(double delta) {
-    setState(() {
-      _chatHeight = (_chatHeight - delta / MediaQuery.of(context).size.height)
-          .clamp(0.3, 0.9);
-    });
+    _shellController.adjustChatHeight(
+      delta,
+      MediaQuery.of(context).size.height,
+    );
   }
 
   /// Determine if Quick Questions should be shown
   /// Show when there's only the welcome message (no user messages yet)
-  bool _shouldShowQuickQuestions() {
-    return true;
-  }
 
   void _handleSendPressed(types.PartialText message) {
     final currentUser = _chatService.currentUser;
@@ -246,14 +246,20 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     );
 
     setState(() {
-      _isTyping = true;
+      _shellController.setTyping(true);
     });
 
     _chatService.sendMessage(textMessage);
   }
 
   void _handleMessageTap(BuildContext _, types.Message message) {
-    // Handle message tap if needed
+    FocusScope.of(context).unfocus();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+
+      _shellController.restoreDialogState();
+    });
   }
 
   void _handlePreviewDataFetched(
@@ -292,19 +298,19 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     return Stack(
       children: [
         // Enhanced Chat Interface - NO OVERLAY
-        if (_isExpanded)
+        if (_shellController.isExpanded)
           AnimatedPositioned(
             duration: Duration(milliseconds: 300),
             curve: Curves.easeOutCubic,
-            right: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
-            left: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
-            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
-            bottom: _isFullScreen
+            right: _shellController.isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+            left: _shellController.isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+            top: _shellController.isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+            bottom: _shellController.isFullScreen
                 ? (MediaQuery.of(context).padding.bottom +
                       MediaQuery.of(context).viewInsets.bottom)
                 : (MediaQuery.of(context).padding.bottom +
                       MediaQuery.of(context).viewInsets.bottom +
-                      _floatingChatGap),
+                      (keyboardOpen ? 0 : _floatingChatGap)),
             child: AnimatedBuilder(
               animation: _chatAnimation,
               builder: (context, child) {
@@ -334,8 +340,19 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                         width: 1,
                       ),
                     ),
-                    child: Column(
-                      children: [
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.deferToChild,
+                      onTap: () {
+                        FocusScope.of(context).unfocus();
+
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          if (!mounted) return;
+
+                          _shellController.restoreDialogState();
+                        });
+                      },
+                      child: Column(
+                        children: [
                         // Enhanced Draggable Header with Controls
                         _buildEnhancedHeader(theme, compact: keyboardOpen),
 
@@ -362,7 +379,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                         ),
 
                         // Suggested Questions (above input)
-                        if (!keyboardOpen && _shouldShowQuickQuestions())
+                        if (!keyboardOpen)
                           SizedBox(
                             height: 80,
                             child: SingleChildScrollView(
@@ -388,7 +405,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                               : 8,
                         ),
                         _buildEnhancedInput(theme, keyboardOpen),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -397,10 +415,10 @@ class _FloatingAIChatState extends State<FloatingAIChat>
           ),
 
         // Enhanced Floating Action Button
-        if (!_isExpanded)
+        if (!_shellController.isExpanded)
           Positioned(
             right: 16,
-            bottom: _isFullScreen
+            bottom: _shellController.isFullScreen
                 ? (MediaQuery.of(context).padding.bottom +
                       MediaQuery.of(context).viewInsets.bottom)
                 : (MediaQuery.of(context).padding.bottom +
@@ -410,7 +428,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               animation: _fabAnimation,
               builder: (context, child) {
                 return Transform.scale(
-                  scale: _isExpanded ? 1.0 : (1.0 + _fabAnimation.value * 0.1),
+                  scale: _shellController.isExpanded ? 1.0 : (1.0 + _fabAnimation.value * 0.1),
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
@@ -436,7 +454,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                             child: child,
                           );
                         },
-                        child: _isExpanded
+                        child: _shellController.isExpanded
                             ? Icon(
                                 Icons.close_rounded,
                                 color: Theme.of(context).colorScheme.surface,
@@ -453,7 +471,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                                     ).colorScheme.surface,
                                     size: 28,
                                   ),
-                                  if (!_isExpanded)
+                                  if (!_shellController.isExpanded)
                                     Positioned(
                                       top: -2,
                                       right: -2,
@@ -538,20 +556,20 @@ class _FloatingAIChatState extends State<FloatingAIChat>
       child: Column(
         children: [
           // Resize Handle - Only draggable area
-          if (!_isFullScreen && !compact)
+          if (!_shellController.isFullScreen && !compact)
             Center(
               child: GestureDetector(
                 onPanStart: (details) {
-                  _initialHeight = _chatHeight;
-                  _isResizing = true;
+                  _initialHeight = _shellController.chatHeight;
+                  _shellController.setResizing(true);
                 },
                 onPanUpdate: (details) {
-                  if (!_isFullScreen && _isResizing) {
+                  if (!_shellController.isFullScreen && _shellController.isResizing) {
                     _adjustChatHeight(details.delta.dy);
                   }
                 },
                 onPanEnd: (details) {
-                  _isResizing = false;
+                  _shellController.setResizing(false);
                 },
                 child: Container(
                   width: 16, // Larger hit area for better UX
@@ -568,7 +586,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 ),
               ),
             ),
-          if (!_isFullScreen && !compact) const SizedBox(height: 4),
+          if (!_shellController.isFullScreen && !compact) const SizedBox(height: 4),
 
           // Header Content
           Row(
@@ -683,15 +701,15 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                             duration: const Duration(milliseconds: 220),
                             style: theme.textTheme.bodyMedium!.copyWith(
                               color: Colors.white.withValues(
-                                alpha: _isTyping ? 0.9 : 0.78,
+                                alpha: _shellController.isTyping ? 0.9 : 0.78,
                               ),
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
                               height: 1.05,
-                              letterSpacing: _isTyping ? 0.08 : 0.0,
+                              letterSpacing: _shellController.isTyping ? 0.08 : 0.0,
                             ),
                             child: Text(
-                              _isTyping ? 'Thinking...' : 'Ready to assist',
+                              _shellController.isTyping ? 'Thinking...' : 'Ready to assist',
                             ),
                           ),
                         ),
@@ -717,7 +735,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                         color: Colors.white.withValues(alpha: 0.1),
                       ),
                       child: Icon(
-                        _isFullScreen
+                        _shellController.isFullScreen
                             ? Icons.fullscreen_exit_rounded
                             : Icons.fullscreen_rounded,
                         color: Theme.of(context).colorScheme.surface,
@@ -785,7 +803,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   }
 
   String _getInsightsBannerText() {
-    if (_isTyping) {
+    if (_shellController.isTyping) {
       return 'Analyzing your patterns ✨' +
           '.' * ((_pulseController.value * 3).floor() + 1);
     }
@@ -800,7 +818,18 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   // Enhanced Chat Area - Better spacing and padding
   Widget _buildChatArea(ThemeData theme) {
     return SizedBox.expand(
-      child: Theme(
+      child: Listener(
+        behavior: HitTestBehavior.translucent,
+        onPointerDown: (_) {
+          FocusScope.of(context).unfocus();
+
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (!mounted) return;
+
+            _shellController.restoreDialogState();
+          });
+        },
+        child: Theme(
         data: theme.copyWith(
           primaryColor: theme.brightness == Brightness.dark
               ? Colors.blueGrey
@@ -848,7 +877,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               const SizedBox.shrink(), // We'll use our enhanced input
         ),
       ),
-    );
+    ));
   }
 
   // Enhanced Quick Replies - More visible and professional
@@ -864,7 +893,9 @@ class _FloatingAIChatState extends State<FloatingAIChat>
           borderRadius: AppGeometry.dialogRadius,
           onTap: () {
             setState(() {
-              _quickRepliesCollapsed = !_quickRepliesCollapsed;
+              _shellController.setQuickRepliesCollapsed(
+                !_shellController.quickRepliesCollapsed,
+              );
             });
           },
           child: Padding(
@@ -897,7 +928,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   ),
                 ),
                 Icon(
-                  _quickRepliesCollapsed
+                  _shellController.quickRepliesCollapsed
                       ? Icons.keyboard_arrow_down
                       : Icons.keyboard_arrow_up,
                   color: AppTheme.primaryRose,
@@ -908,7 +939,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
         ),
         const SizedBox(height: 4),
         // Suggestions - Horizontal scrollable for better visibility
-        if (!_quickRepliesCollapsed)
+        if (!_shellController.quickRepliesCollapsed)
           SizedBox(
             height: 34,
             child: ListView.separated(
@@ -939,9 +970,9 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             );
 
             setState(() {
-              _isTyping = true;
+              _shellController.setTyping(true);
               _isSuggestionsExpanded = false;
-              _quickRepliesCollapsed = true;
+              _shellController.setQuickRepliesCollapsed(true);
             });
 
             _chatService.sendMessage(message);
@@ -985,7 +1016,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   }
 
   Widget _buildLiveStatusIndicator() {
-    final isThinking = _isTyping;
+    final isThinking = _shellController.isTyping;
     final coreColor = isThinking ? AppTheme.primaryPurple : AppTheme.accentMint;
     final haloColor = isThinking
         ? AppTheme.primaryRose
