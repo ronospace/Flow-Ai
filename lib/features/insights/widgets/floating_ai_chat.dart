@@ -141,7 +141,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             Future.delayed(_thinkingDelay, () {
               if (!mounted) return;
 
-              final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+              final keyboardOpen = _inputFocusNode.hasFocus;
 
               setState(() {
                 _isTyping = false;
@@ -287,7 +287,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     // // // // debugPrint("VIEW INSETS (keyboard): ");
 
     final theme = Theme.of(context);
-    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+    final keyboardOpen = _inputFocusNode.hasFocus;
 
     return Stack(
       children: [
@@ -340,19 +340,20 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                         _buildEnhancedHeader(theme, compact: keyboardOpen),
 
                         // Localized Header Transition Fade
-                        Container(
-                          height: 22,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                AppTheme.primaryRose.withValues(alpha: 0.045),
-                                Colors.white.withValues(alpha: 0.0),
-                              ],
+                        if (!keyboardOpen)
+                          Container(
+                            height: 22,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  AppTheme.primaryRose.withValues(alpha: 0.045),
+                                  Colors.white.withValues(alpha: 0.0),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
 
                         // Main content area - improved spacing
                         Flexible(
@@ -361,9 +362,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                         ),
 
                         // Suggested Questions (above input)
-                        if (!keyboardOpen &&
-                            !_inputFocusNode.hasFocus &&
-                            _shouldShowQuickQuestions())
+                        if (!keyboardOpen && _shouldShowQuickQuestions())
                           SizedBox(
                             height: 80,
                             child: SingleChildScrollView(
@@ -382,27 +381,13 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                             ),
                           ),
 
-                        if (keyboardOpen)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 2, bottom: 8),
-                            child: Text(
-                              'Tap the screen to view suggestions ✨',
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: AppTheme.primaryRose.withValues(
-                                  alpha: 0.72,
-                                ),
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-
                         // Input Area (last = primary)
                         SizedBox(
                           height: MediaQuery.of(context).size.width > 900
                               ? 0
                               : 8,
                         ),
-                        _buildEnhancedInput(theme),
+                        _buildEnhancedInput(theme, keyboardOpen),
                       ],
                     ),
                   ),
@@ -806,7 +791,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     }
 
     if (_messages.length > 1) {
-      return 'ⓘ Personalized insights based on your cycle data';
+      return '✦ Personalized insights based on your cycle data ⓘ';
     }
 
     return '✦ Personalized AI insights ⓘ Not medical advice';
@@ -1073,7 +1058,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   }
 
   // Enhanced Input Area - Better spacing and visibility
-  Widget _buildEnhancedInput(ThemeData theme) {
+  Widget _buildEnhancedInput(ThemeData theme, bool keyboardOpen) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
@@ -1113,11 +1098,12 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                     horizontal: 16,
                     vertical: 14,
                   ),
-                  hintText:
-                      'Ask about health, science, technology, lifestyle...',
+                  hintText: keyboardOpen
+                      ? 'Tap the screen to view suggestions ✨'
+                      : 'Ask about health, science, technology, lifestyle...',
                   hintStyle: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.hintColor.withValues(alpha: 0.7),
-                    fontSize: 15,
+                    fontSize: keyboardOpen ? 13.5 : 15,
                   ),
                   suffixIcon: IconButton(
                     icon: Icon(
