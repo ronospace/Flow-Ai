@@ -1,0 +1,7 @@
+
+========== DEAD COMMENT SCAN ==========
+
+284:    // // // // debugPrint("SCREEN HEIGHT: ");
+285:    // // debugPrint("SAFE TOP: ");
+286:    // // debugPrint("SAFE BOTTOM: ");
+287:    // // // // debugPrint("VIEW INSETS (keyboard): ");

@@ -1,0 +1,1110 @@
+================ 1 ANALYZE ================
+Analyzing floating_ai_chat.dart...                              
+No issues found! (ran in 2.4s)
+Analyzing zyra_shell_controller.dart...                         
+No issues found! (ran in 1.1s)
+
+================ 2 ZYRA FILE MAP ================
+lib/features/insights/widgets/floating_ai_chat.dart
+lib/features/insights/widgets/floating_ai_chat.dart.bak
+lib/features/insights/widgets/floating_ai_chat.dart.centralspacingbackup
+lib/features/insights/widgets/floating_ai_chat.dart.compactheaderbackup
+lib/features/insights/widgets/floating_ai_chat.dart.constraintfixbackup
+lib/features/insights/widgets/floating_ai_chat.dart.keyboardoverflowbackup
+lib/features/insights/widgets/floating_ai_chat.dart.phase1backup
+lib/features/insights/widgets/floating_ai_chat.dart.positionbackup
+lib/features/insights/widgets/floating_ai_chat.dart.pre56fixbackup
+lib/features/insights/widgets/floating_ai_chat.dart.preactualbottomfix
+lib/features/insights/widgets/floating_ai_chat.dart.prebottomgap
+lib/features/insights/widgets/floating_ai_chat.dart.prebottominsetfix
+lib/features/insights/widgets/floating_ai_chat.dart.precentralizedlayout
+lib/features/insights/widgets/floating_ai_chat.dart.preflexownershipfix
+lib/features/insights/widgets/floating_ai_chat.dart.prekeyboardownerfix
+lib/features/insights/widgets/floating_ai_chat.dart.prepositionfix
+lib/features/insights/widgets/floating_ai_chat.dart.presizedboxexpand
+lib/features/insights/widgets/floating_ai_chat.dart.quickreplyrestorebackup
+lib/features/insights/widgets/floating_ai_chat.dart.verifiedgapbackup
+lib/features/insights/widgets/floating_ai_chat_BACKUP.dart
+lib/features/insights/widgets/zyra
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart
+
+================ 3 MAIN ZYRA STRUCTURE ================
+16:class FloatingAIChat extends StatefulWidget {
+29:class _FloatingAIChatState extends State<FloatingAIChat>
+69:  void initState() {
+70:    super.initState();
+172:  void dispose() {
+173:    // Ensure animations are stopped and controllers disposed properly
+177:    _fabController.dispose();
+178:    _chatController.dispose();
+179:    _expandController.dispose();
+180:    _pulseController.dispose();
+181:    _textController.dispose();
+183:    _inputFocusNode.dispose();
+184:    _shellController.dispose();
+185:    super.dispose();
+199:  void _toggleChat() {
+216:  void _toggleFullScreen() {
+228:  void _adjustChatHeight(double delta) {
+238:  void _handleSendPressed(types.PartialText message) {
+275:  Widget build(BuildContext context) {
+522:  Widget _buildEnhancedHeader(ThemeData theme, {bool compact = false}) {
+803:  Widget _buildChatArea(ThemeData theme) {
+857:  Widget _buildEnhancedQuickReplies(ThemeData theme) {
+932:  Widget _buildSuggestionChip(String suggestion, ThemeData theme, int index) {
+991:  Widget _buildLiveStatusIndicator() {
+1065:  Widget _buildEnhancedInput(ThemeData theme, bool keyboardOpen) {
+
+================ 4 CONTROLLER FULL MAP ================
+     1	import 'package:flutter/material.dart';
+     2	
+     3	class ZyraShellController extends ChangeNotifier {
+     4	  bool isExpanded = false;
+     5	  bool isFullScreen = false;
+     6	  bool isTyping = false;
+     7	  bool quickRepliesCollapsed = false;
+     8	  bool isKeyboardVisible = false;
+     9	  bool isTransitioning = false;
+    10	  bool isResizing = false;
+    11	
+    12	  double chatHeight = 0.5;
+    13	
+    14	  void setKeyboardVisibility(bool visible) {
+    15	    if (isKeyboardVisible == visible) return;
+    16	
+    17	    isKeyboardVisible = visible;
+    18	
+    19	    notifyListeners();
+    20	  }
+    21	
+    22	  void toggleExpanded() {
+    23	    if (isTransitioning) return;
+    24	
+    25	    isExpanded = !isExpanded;
+    26	
+    27	    if (!isExpanded) {
+    28	      isFullScreen = false;
+    29	      chatHeight = 0.5;
+    30	    }
+    31	
+    32	    notifyListeners();
+    33	  }
+    34	
+    35	  void toggleFullScreen() {
+    36	    if (isTransitioning) return;
+    37	
+    38	    isFullScreen = !isFullScreen;
+    39	    chatHeight = isFullScreen ? 0.9 : 0.6;
+    40	
+    41	    notifyListeners();
+    42	  }
+    43	
+    44	  void setTyping(bool value) {
+    45	    if (isTyping == value) return;
+    46	
+    47	    isTyping = value;
+    48	
+    49	    notifyListeners();
+    50	  }
+    51	
+    52	  void setQuickRepliesCollapsed(bool value) {
+    53	    if (quickRepliesCollapsed == value) return;
+    54	
+    55	    quickRepliesCollapsed = value;
+    56	
+    57	    notifyListeners();
+    58	  }
+    59	
+    60	  void setTransitioning(bool value) {
+    61	    if (isTransitioning == value) return;
+    62	
+    63	    isTransitioning = value;
+    64	
+    65	    notifyListeners();
+    66	  }
+    67	
+    68	  void setResizing(bool value) {
+    69	    if (isResizing == value) return;
+    70	
+    71	    isResizing = value;
+    72	
+    73	    notifyListeners();
+    74	  }
+    75	
+    76	  void adjustChatHeight(
+    77	    double delta,
+    78	    double screenHeight,
+    79	  ) {
+    80	    final updatedHeight =
+    81	        (chatHeight - delta / screenHeight).clamp(0.3, 0.9);
+    82	
+    83	    if (updatedHeight == chatHeight) return;
+    84	
+    85	    chatHeight = updatedHeight;
+    86	
+    87	    notifyListeners();
+    88	  }
+    89	
+    90	  void restoreDialogState() {
+    91	    quickRepliesCollapsed = false;
+    92	    isKeyboardVisible = false;
+    93	
+    94	    notifyListeners();
+    95	  }
+    96	}
+
+================ 5 DIALOG POSITION / STACK LAYERS ================
+   275	  Widget build(BuildContext context) {
+   276	    // // // // debugPrint("SCREEN HEIGHT: ");
+   277	    // // debugPrint("SAFE TOP: ");
+   278	    // // debugPrint("SAFE BOTTOM: ");
+   279	    // // // // debugPrint("VIEW INSETS (keyboard): ");
+   280	
+   281	    final theme = Theme.of(context);
+   282	    final keyboardOpen = _inputFocusNode.hasFocus;
+   283	
+   284	    return Stack(
+   285	      children: [
+   286	        // Enhanced Chat Interface - NO OVERLAY
+   287	        if (_shellController.isExpanded)
+   288	          AnimatedPositioned(
+   289	            duration: Duration(milliseconds: 300),
+   290	            curve: Curves.easeOutCubic,
+   291	            right: _shellController.isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+   292	            left: _shellController.isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+   293	            top: _shellController.isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+   294	            bottom: _shellController.isFullScreen
+   295	                ? (MediaQuery.of(context).padding.bottom +
+   296	                      MediaQuery.of(context).viewInsets.bottom)
+   297	                : (MediaQuery.of(context).padding.bottom +
+   298	                      MediaQuery.of(context).viewInsets.bottom +
+   299	                      (keyboardOpen ? 0 : _floatingChatGap)),
+   300	            child: AnimatedBuilder(
+   301	              animation: _chatAnimation,
+   302	              builder: (context, child) {
+   303	                return ClipRRect(
+   304	                  borderRadius: AppGeometry.dialogRadius,
+   305	                  child: Container(
+   306	                    clipBehavior: Clip.antiAlias,
+   307	                    decoration: BoxDecoration(
+   308	                      color: Theme.of(context).colorScheme.surface,
+   309	                      borderRadius: AppGeometry.dialogRadius,
+   310	                      boxShadow: [
+   311	                        BoxShadow(
+   312	                          color: AppTheme.primaryRose.withValues(alpha: 0.10),
+   313	                          blurRadius: 22,
+   314	                          spreadRadius: 1,
+   315	                          offset: const Offset(0, 0),
+   316	                        ),
+   317	                        BoxShadow(
+   318	                          color: theme.shadowColor.withValues(alpha: 0.16),
+   319	                          blurRadius: 12,
+   320	                          spreadRadius: 0,
+   321	                          offset: const Offset(0, 8),
+   322	                        ),
+   323	                      ],
+   324	                      border: Border.all(
+   325	                        color: AppTheme.primaryRose.withValues(alpha: 0.08),
+   326	                        width: 1,
+   327	                      ),
+   328	                    ),
+   329	                    child: GestureDetector(
+   330	                      behavior: HitTestBehavior.deferToChild,
+   331	                      onTap: () {
+   332	                        FocusScope.of(context).unfocus();
+   333	
+   334	                        WidgetsBinding.instance.addPostFrameCallback((_) {
+   335	                          if (!mounted) return;
+   336	
+   337	                          _shellController.restoreDialogState();
+   338	                        });
+   339	                      },
+   340	                      child: Column(
+   341	                        children: [
+   342	                        // Enhanced Draggable Header with Controls
+   343	                        _buildEnhancedHeader(theme, compact: keyboardOpen),
+   344	
+   345	                        // Localized Header Transition Fade
+   346	                        if (!keyboardOpen)
+   347	                          Container(
+   348	                            height: 22,
+   349	                            decoration: BoxDecoration(
+   350	                              gradient: LinearGradient(
+   351	                                begin: Alignment.topCenter,
+   352	                                end: Alignment.bottomCenter,
+   353	                                colors: [
+   354	                                  AppTheme.primaryRose.withValues(alpha: 0.045),
+   355	                                  Colors.white.withValues(alpha: 0.0),
+   356	                                ],
+   357	                              ),
+   358	                            ),
+   359	                          ),
+   360	
+   361	                        // Main content area - improved spacing
+   362	                        Expanded(
+   363	                          child: _buildChatArea(theme),
+   364	                        ),
+   365	
+   366	                        // Suggested Questions (above input)
+   367	                        SizedBox(
+   368	                          height: keyboardOpen ? 0 : 80,
+   369	                            child: SingleChildScrollView(
+   370	                              child: Container(
+   371	                                padding: const EdgeInsets.fromLTRB(
+   372	                                  16,
+   373	                                  4,
+   374	                                  16,
+   375	                                  2,
+   376	                                ),
+   377	                                child: Padding(
+   378	                                  padding: const EdgeInsets.only(bottom: 6),
+   379	                                  child: _buildEnhancedQuickReplies(theme),
+   380	                                ),
+   381	                              ),
+   382	                            ),
+   383	                          ),
+   384	
+   385	                        // Input Area (last = primary)
+   386	                        SizedBox(
+   387	                          height: MediaQuery.of(context).size.width > 900
+   388	                              ? 0
+   389	                              : 8,
+   390	                        ),
+   391	                        _buildEnhancedInput(theme, keyboardOpen),
+   392	                        ],
+   393	                      ),
+   394	                    ),
+   395	                  ),
+   396	                );
+   397	              },
+   398	            ),
+   399	          ),
+   400	
+   401	        // Enhanced Floating Action Button
+   402	        if (!_shellController.isExpanded)
+   403	          Positioned(
+   404	            right: 16,
+   405	            bottom: _shellController.isFullScreen
+   406	                ? (MediaQuery.of(context).padding.bottom +
+   407	                      MediaQuery.of(context).viewInsets.bottom)
+   408	                : (MediaQuery.of(context).padding.bottom +
+   409	                      MediaQuery.of(context).viewInsets.bottom +
+   410	                      16),
+   411	            child: AnimatedBuilder(
+   412	              animation: _fabAnimation,
+   413	              builder: (context, child) {
+   414	                return Transform.scale(
+   415	                  scale: _shellController.isExpanded ? 1.0 : (1.0 + _fabAnimation.value * 0.1),
+   416	                  child: Container(
+   417	                    decoration: BoxDecoration(
+   418	                      borderRadius: BorderRadius.circular(12),
+   419	                      boxShadow: [
+   420	                        BoxShadow(
+   421	                          color: AppTheme.primaryRose.withValues(alpha: 0.2),
+   422	                          blurRadius: 16,
+   423	                          spreadRadius: 2,
+   424	                          offset: const Offset(0, 4),
+   425	                        ),
+   426	                      ],
+   427	                    ),
+   428	                    child: FloatingActionButton(
+   429	                      heroTag: "ai_chat_main_fab",
+   430	                      onPressed: _toggleChat,
+
+================ 6 HEADER LAYER ================
+   517	      ],
+   518	    );
+   519	  }
+   520	
+   521	  // Enhanced Header with Controls
+   522	  Widget _buildEnhancedHeader(ThemeData theme, {bool compact = false}) {
+   523	    return Container(
+   524	      padding: const EdgeInsets.all(20),
+   525	      decoration: BoxDecoration(
+   526	        gradient: LinearGradient(
+   527	          colors: [AppTheme.primaryPurple, AppTheme.primaryRose],
+   528	          begin: Alignment.topLeft,
+   529	          end: Alignment.bottomRight,
+   530	        ),
+   531	        borderRadius: AppGeometry.dialogRadius,
+   532	        boxShadow: [
+   533	          BoxShadow(
+   534	            color: AppTheme.primaryRose.withValues(alpha: 0.2),
+   535	            blurRadius: 8,
+   536	            offset: const Offset(0, 2),
+   537	          ),
+   538	        ],
+   539	      ),
+   540	      child: Column(
+   541	        children: [
+   542	          // Resize Handle - Only draggable area
+   543	          if (!_shellController.isFullScreen && !compact)
+   544	            Center(
+   545	              child: GestureDetector(
+   546	                onPanStart: (details) {
+   547	                  _initialHeight = _shellController.chatHeight;
+   548	                  _shellController.setResizing(true);
+   549	                },
+   550	                onPanUpdate: (details) {
+   551	                  if (!_shellController.isFullScreen && _shellController.isResizing) {
+   552	                    _adjustChatHeight(details.delta.dy);
+   553	                  }
+   554	                },
+   555	                onPanEnd: (details) {
+   556	                  _shellController.setResizing(false);
+   557	                },
+   558	                child: Container(
+   559	                  width: 16, // Larger hit area for better UX
+   560	                  height: 30, // Larger hit area
+   561	                  padding: const EdgeInsets.symmetric(vertical: 13),
+   562	                  child: Container(
+   563	                    width: 40,
+   564	                    height: 4,
+   565	                    decoration: BoxDecoration(
+   566	                      color: Colors.white.withValues(alpha: 0.3),
+   567	                      borderRadius: BorderRadius.circular(12),
+   568	                    ),
+   569	                  ),
+   570	                ),
+   571	              ),
+   572	            ),
+   573	          if (!_shellController.isFullScreen && !compact) const SizedBox(height: 4),
+   574	
+   575	          // Header Content
+   576	          Row(
+   577	            children: [
+   578	              // AI Avatar with Animation
+   579	              Container(
+   580	                    width: 48,
+   581	                    height: 48,
+   582	                    decoration: BoxDecoration(
+   583	                      color: Colors.white.withValues(alpha: 0.2),
+   584	                      borderRadius: BorderRadius.circular(12),
+   585	                      border: Border.all(
+   586	                        color: Colors.white.withValues(alpha: 0.3),
+   587	                        width: 2,
+   588	                      ),
+   589	                    ),
+   590	                    child: Transform.scale(
+   591	                      scale: 0.965 + (_pulseController.value * 0.08),
+   592	                      child: Icon(
+   593	                        Icons.psychology_rounded,
+   594	                        color: Theme.of(context).colorScheme.surface,
+   595	                        size: 24,
+   596	                      ),
+   597	                    ),
+   598	                  )
+   599	                  .animate(onPlay: null)
+   600	                  .shimmer(
+   601	                    duration: 3000.ms,
+   602	                    color: Colors.white.withValues(alpha: 0.3),
+   603	                  )
+   604	                  .then(delay: 2000.ms),
+   605	
+   606	              const SizedBox(width: 16),
+   607	
+   608	              // Title and Status
+   609	              Expanded(
+   610	                child: Column(
+   611	                  mainAxisAlignment: MainAxisAlignment.center,
+   612	                  crossAxisAlignment: CrossAxisAlignment.start,
+   613	                  mainAxisSize: MainAxisSize.min,
+   614	                  children: [
+   615	                    Row(
+   616	                      mainAxisSize: MainAxisSize.min,
+   617	                      children: [
+   618	                        Text(
+   619	                          'Zyra AI',
+   620	                          style: theme.textTheme.titleLarge?.copyWith(
+   621	                            color: Theme.of(context).colorScheme.surface,
+   622	                            fontWeight: FontWeight.w700,
+   623	                            fontSize: 18,
+   624	                            height: 1.0,
+   625	                            letterSpacing: -0.2,
+   626	                          ),
+   627	                        ),
+   628	                        const SizedBox(width: 6),
+   629	                        AnimatedContainer(
+   630	                          duration: const Duration(milliseconds: 950),
+   631	                          curve: Curves.easeInOutCubic,
+   632	                          padding: const EdgeInsets.symmetric(
+   633	                            horizontal: 6,
+   634	                            vertical: 2,
+   635	                          ),
+   636	                          decoration: BoxDecoration(
+   637	                            color: Colors.white.withValues(alpha: 0.18),
+   638	                            borderRadius: BorderRadius.circular(12),
+   639	                            boxShadow: [
+   640	                              BoxShadow(
+   641	                                color: Colors.white.withValues(
+   642	                                  alpha: 0.26 + (0.48 * _pulseController.value),
+   643	                                ),
+   644	                                blurRadius: 16 + (18 * _pulseController.value),
+   645	                                spreadRadius: 0.4,
+   646	                              ),
+   647	                            ],
+   648	                          ),
+   649	                          child: FadeTransition(
+   650	                            opacity: Tween(begin: 0.55, end: 1.0).animate(
+   651	                              CurvedAnimation(
+   652	                                parent: _pulseController,
+   653	                                curve: Curves.easeOut,
+   654	                              ),
+   655	                            ),
+   656	                            child: ScaleTransition(
+   657	                              scale: Tween(begin: 0.90, end: 1.03).animate(
+   658	                                CurvedAnimation(
+   659	                                  parent: _pulseController,
+   660	                                  curve: Curves.easeInOut,
+   661	                                ),
+   662	                              ),
+   663	                              child: Text(
+   664	                                'LIVE',
+   665	                                style: theme.textTheme.labelSmall?.copyWith(
+   666	                                  color: Theme.of(context).colorScheme.surface,
+   667	                                  fontSize: 9,
+   668	                                  fontWeight: FontWeight.w700,
+   669	                                ),
+   670	                              ),
+   671	                            ),
+   672	                          ),
+   673	                        ),
+   674	                      ],
+   675	                    ),
+   676	                    const SizedBox(height: 2),
+   677	                    Row(
+   678	                      mainAxisSize: MainAxisSize.min,
+   679	                      children: [
+   680	                        _buildLiveStatusIndicator(),
+   681	                        const SizedBox(width: 6),
+   682	                        const SizedBox(width: 4),
+   683	                        Flexible(
+   684	                          child: AnimatedDefaultTextStyle(
+   685	                            duration: const Duration(milliseconds: 220),
+   686	                            style: theme.textTheme.bodyMedium!.copyWith(
+   687	                              color: Colors.white.withValues(
+   688	                                alpha: _shellController.isTyping ? 0.9 : 0.78,
+   689	                              ),
+   690	                              fontSize: 13,
+   691	                              fontWeight: FontWeight.w400,
+   692	                              height: 1.05,
+   693	                              letterSpacing: _shellController.isTyping ? 0.08 : 0.0,
+   694	                            ),
+   695	                            child: Text(
+   696	                              _shellController.isTyping ? 'Thinking...' : 'Ready to assist',
+   697	                            ),
+   698	                          ),
+   699	                        ),
+   700	                      ],
+   701	                    ),
+   702	                  ],
+   703	                ),
+   704	              ),
+   705	
+   706	              // Header Actions - With improved tap handling
+   707	              Row(
+   708	                mainAxisSize: MainAxisSize.min,
+   709	                children: [
+   710	                  // Fullscreen Toggle
+   711	                  GestureDetector(
+   712	                    onTap: _toggleFullScreen,
+   713	                    behavior: HitTestBehavior.opaque,
+   714	                    child: Container(
+   715	                      width: 48,
+   716	                      height: 48,
+   717	                      decoration: BoxDecoration(
+   718	                        borderRadius: BorderRadius.circular(12),
+   719	                        color: Colors.white.withValues(alpha: 0.1),
+   720	                      ),
+   721	                      child: Icon(
+   722	                        _shellController.isFullScreen
+   723	                            ? Icons.fullscreen_exit_rounded
+   724	                            : Icons.fullscreen_rounded,
+   725	                        color: Theme.of(context).colorScheme.surface,
+   726	                        size: 24,
+   727	                      ),
+   728	                    ),
+   729	                  ),
+   730	
+   731	                  const SizedBox(width: 4),
+   732	
+   733	                  // Close Button - Enhanced with better tap handling
+   734	                  GestureDetector(
+   735	                    onTap: _toggleChat,
+   736	                    behavior: HitTestBehavior.opaque,
+   737	                    child: Container(
+   738	                      width: 48,
+   739	                      height: 48,
+   740	                      decoration: BoxDecoration(
+   741	                        borderRadius: BorderRadius.circular(12),
+   742	                        color: Colors.white.withValues(alpha: 0.1),
+   743	                      ),
+   744	                      child: Icon(
+   745	                        Icons.keyboard_arrow_down_rounded,
+   746	                        color: Theme.of(context).colorScheme.surface,
+   747	                        size: 24,
+   748	                      ),
+   749	                    ),
+   750	                  ),
+   751	                ],
+   752	              ),
+   753	            ],
+   754	          ),
+   755	
+   756	          if (!compact) ...[
+   757	            // Medical Disclaimer (Guideline 1.4.1)
+   758	            const SizedBox(height: 12),
+   759	            Container(
+   760	              padding: const EdgeInsets.all(8),
+   761	              decoration: BoxDecoration(
+   762	                color: Colors.white.withValues(alpha: 0.08),
+   763	                borderRadius: BorderRadius.circular(12),
+   764	                border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+   765	              ),
+   766	              child: Row(
+   767	                mainAxisSize: MainAxisSize.min,
+   768	                children: [
+   769	                  const SizedBox(width: 6),
+   770	                  Expanded(
+   771	                    child: Text(
+   772	                      _getInsightsBannerText(),
+   773	                      style: TextStyle(
+   774	                        fontSize: 12,
+   775	                        color: Colors.white.withValues(alpha: 0.9),
+   776	                        fontWeight: FontWeight.w400,
+   777	                      ),
+   778	                    ),
+   779	                  ),
+   780	                ],
+   781	              ),
+   782	            ),
+   783	          ],
+   784	        ],
+   785	      ),
+   786	    );
+   787	  }
+   788	
+   789	  String _getInsightsBannerText() {
+   790	    if (_shellController.isTyping) {
+
+================ 7 CHAT LIST LAYER ================
+   798	
+   799	    return '✦ Personalized AI insights ⓘ Not medical advice';
+   800	  }
+   801	
+   802	  // Stable Chat Area - replaces flutter_chat_ui AnimatedList
+   803	  Widget _buildChatArea(ThemeData theme) {
+   804	    final currentUserId = _chatService.currentUser?.id ?? 'fallback_user';
+   805	
+   806	    return Listener(
+   807	      behavior: HitTestBehavior.translucent,
+   808	      onPointerDown: (_) {
+   809	        FocusScope.of(context).unfocus();
+   810	
+   811	        WidgetsBinding.instance.addPostFrameCallback((_) {
+   812	          if (!mounted) return;
+   813	          _shellController.restoreDialogState();
+   814	        });
+   815	      },
+   816	      child: ListView.builder(
+   817	        reverse: true,
+   818	        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+   819	        itemCount: _messages.length,
+   820	        itemBuilder: (context, index) {
+   821	          final message = _messages[index];
+   822	          final isUser = message.author.id == currentUserId;
+   823	          final text = message is types.TextMessage ? message.text : '';
+   824	
+   825	          return Align(
+   826	            alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
+   827	            child: Container(
+   828	              margin: const EdgeInsets.symmetric(vertical: 4),
+   829	              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+   830	              constraints: BoxConstraints(
+   831	                maxWidth: MediaQuery.of(context).size.width * 0.72,
+   832	              ),
+   833	              decoration: BoxDecoration(
+   834	                color: isUser
+   835	                    ? AppTheme.primaryRose
+   836	                    : Theme.of(context).colorScheme.surfaceContainer,
+   837	                borderRadius: BorderRadius.circular(16),
+   838	              ),
+   839	              child: Text(
+   840	                text,
+   841	                style: theme.textTheme.bodyMedium?.copyWith(
+   842	                  color: isUser
+   843	                      ? Theme.of(context).colorScheme.surface
+   844	                      : theme.textTheme.bodyMedium?.color,
+   845	                  fontSize: 14,
+
+================ 8 QUICK REPLIES LAYER ================
+   847	                ),
+   848	              ),
+   849	            ),
+   850	          );
+   851	        },
+   852	      ),
+   853	    );
+   854	  }
+   855	
+   856	  // Enhanced Quick Replies - More visible and professional
+   857	  Widget _buildEnhancedQuickReplies(ThemeData theme) {
+   858	    final suggestions = _chatService.getSuggestedReplies().toList();
+   859	
+   860	    return Column(
+   861	      crossAxisAlignment: CrossAxisAlignment.start,
+   862	      mainAxisSize: MainAxisSize.min,
+   863	      children: [
+   864	        // Header - More prominent
+   865	        InkWell(
+   866	          borderRadius: AppGeometry.dialogRadius,
+   867	          onTap: () {
+   868	            setState(() {
+   869	              _shellController.setQuickRepliesCollapsed(
+   870	                !_shellController.quickRepliesCollapsed,
+   871	              );
+   872	            });
+   873	          },
+   874	          child: Padding(
+   875	            padding: const EdgeInsets.symmetric(vertical: 4),
+   876	            child: Row(
+   877	              children: [
+   878	                Container(
+   879	                  padding: const EdgeInsets.all(6),
+   880	                  decoration: BoxDecoration(
+   881	                    gradient: LinearGradient(
+   882	                      colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+   883	                    ),
+   884	                    borderRadius: BorderRadius.circular(12),
+   885	                  ),
+   886	                  child: Icon(
+   887	                    Icons.auto_awesome_outlined,
+   888	                    color: Theme.of(context).colorScheme.surface,
+   889	                    size: 18,
+   890	                  ),
+   891	                ),
+   892	                const SizedBox(width: 8),
+   893	                Expanded(
+   894	                  child: Text(
+   895	                    'Suggested Questions',
+   896	                    style: theme.textTheme.titleMedium?.copyWith(
+   897	                      color: AppTheme.primaryRose,
+   898	                      fontWeight: FontWeight.w500,
+   899	                      fontSize: 14,
+   900	                    ),
+   901	                  ),
+   902	                ),
+   903	                Icon(
+   904	                  _shellController.quickRepliesCollapsed
+   905	                      ? Icons.keyboard_arrow_down
+   906	                      : Icons.keyboard_arrow_up,
+   907	                  color: AppTheme.primaryRose,
+   908	                ),
+   909	              ],
+   910	            ),
+   911	          ),
+   912	        ),
+   913	        const SizedBox(height: 4),
+   914	        // Suggestions - Horizontal scrollable for better visibility
+   915	        if (!_shellController.quickRepliesCollapsed)
+   916	          SizedBox(
+   917	            height: 34,
+   918	            child: ListView.separated(
+   919	              scrollDirection: Axis.horizontal,
+   920	              itemCount: suggestions.length,
+   921	              separatorBuilder: (context, index) => const SizedBox(width: 12),
+   922	              itemBuilder: (context, index) {
+   923	                return _buildSuggestionChip(suggestions[index], theme, index);
+   924	              },
+   925	            ),
+
+================ 9 INPUT LAYER ================
+  1055	              begin: dotBegin,
+  1056	              end: dotEnd,
+  1057	              duration: pulseDuration,
+  1058	              curve: Curves.easeInOutCubic,
+  1059	            ),
+  1060	      ],
+  1061	    );
+  1062	  }
+  1063	
+  1064	  // Enhanced Input Area - Better spacing and visibility
+  1065	  Widget _buildEnhancedInput(ThemeData theme, bool keyboardOpen) {
+  1066	    return Container(
+  1067	      padding: EdgeInsets.symmetric(horizontal: 16, vertical: keyboardOpen ? 4 : 8),
+  1068	      decoration: BoxDecoration(
+  1069	        color: Theme.of(context).colorScheme.surface,
+  1070	        borderRadius: AppGeometry.dialogRadius,
+  1071	        border: null,
+  1072	      ),
+  1073	      child: Row(
+  1074	        crossAxisAlignment: CrossAxisAlignment.end,
+  1075	        children: [
+  1076	          Expanded(
+  1077	            child: Container(
+  1078	              constraints: BoxConstraints(maxHeight: keyboardOpen ? 56 : 120),
+  1079	              decoration: BoxDecoration(
+  1080	                color: Theme.of(context).colorScheme.surface,
+  1081	                borderRadius: BorderRadius.circular(12),
+  1082	                border: Border.all(
+  1083	                  color: AppTheme.primaryRose.withValues(alpha: 0.10),
+  1084	                  width: 1,
+  1085	                ),
+  1086	                boxShadow: [
+  1087	                  BoxShadow(
+  1088	                    color: AppTheme.primaryRose.withValues(alpha: 0.05),
+  1089	                    blurRadius: 10,
+  1090	                    spreadRadius: 0,
+  1091	                    offset: const Offset(0, 0),
+  1092	                  ),
+  1093	                ],
+  1094	              ),
+  1095	              child: TextField(
+  1096	                textAlignVertical: TextAlignVertical.center,
+  1097	                enableInteractiveSelection: false,
+  1098	                controller: _textController,
+  1099	                focusNode: _inputFocusNode,
+  1100	                decoration: InputDecoration(
+  1101	                  contentPadding: EdgeInsets.symmetric(
+  1102	                    horizontal: 16,
+  1103	                    vertical: keyboardOpen ? 8 : 14,
+  1104	                  ),
+  1105	                  hintText: keyboardOpen
+  1106	                      ? 'Tap the screen to view suggestions ✨'
+  1107	                      : 'Ask about health, science, technology, lifestyle...',
+  1108	                  hintStyle: theme.textTheme.bodyMedium?.copyWith(
+  1109	                    color: theme.hintColor.withValues(alpha: 0.7),
+  1110	                    fontSize: keyboardOpen ? 13.5 : 15,
+  1111	                  ),
+  1112	                  suffixIcon: IconButton(
+  1113	                    icon: Icon(
+  1114	                      Icons.send_rounded,
+  1115	                      size: 20,
+  1116	                      color: Theme.of(context).colorScheme.primary,
+  1117	                    ),
+  1118	                    onPressed: () {
+  1119	                      final text = _textController.text.trim();
+  1120	                      if (text.isNotEmpty) {
+  1121	                        _handleSendPressed(types.PartialText(text: text));
+  1122	                        _textController.clear();
+  1123	                      }
+  1124	                    },
+  1125	                  ),
+  1126	                  border: InputBorder.none,
+  1127	                ),
+  1128	                maxLines: null,
+  1129	                minLines: 1,
+  1130	                keyboardType: TextInputType.multiline,
+  1131	                textCapitalization: TextCapitalization.sentences,
+  1132	                style: theme.textTheme.bodyMedium?.copyWith(
+  1133	                  fontSize: 14,
+  1134	                  height: 1.4,
+  1135	                ),
+  1136	                onSubmitted: (text) {
+  1137	                  if (text.trim().isNotEmpty) {
+  1138	                    _handleSendPressed(types.PartialText(text: text.trim()));
+  1139	                    _textController.clear();
+  1140	                  }
+
+================ 10 ALL MEASUREMENTS / HEIGHTS / PADDING ================
+201:      _shellController.toggleExpanded();
+288:          AnimatedPositioned(
+326:                        width: 1,
+348:                            height: 22,
+362:                        Expanded(
+367:                        SizedBox(
+368:                          height: keyboardOpen ? 0 : 80,
+371:                                padding: const EdgeInsets.fromLTRB(
+378:                                  padding: const EdgeInsets.only(bottom: 6),
+386:                        SizedBox(
+387:                          height: MediaQuery.of(context).size.width > 900
+403:          Positioned(
+414:                return Transform.scale(
+459:                                    Positioned(
+464:                                                width: 16,
+465:                                                height: 16,
+524:      padding: const EdgeInsets.all(20),
+559:                  width: 16, // Larger hit area for better UX
+560:                  height: 30, // Larger hit area
+561:                  padding: const EdgeInsets.symmetric(vertical: 13),
+563:                    width: 40,
+564:                    height: 4,
+573:          if (!_shellController.isFullScreen && !compact) const SizedBox(height: 4),
+580:                    width: 48,
+581:                    height: 48,
+587:                        width: 2,
+590:                    child: Transform.scale(
+606:              const SizedBox(width: 16),
+609:              Expanded(
+624:                            height: 1.0,
+628:                        const SizedBox(width: 6),
+632:                          padding: const EdgeInsets.symmetric(
+676:                    const SizedBox(height: 2),
+681:                        const SizedBox(width: 6),
+682:                        const SizedBox(width: 4),
+683:                        Flexible(
+692:                              height: 1.05,
+715:                      width: 48,
+716:                      height: 48,
+731:                  const SizedBox(width: 4),
+738:                      width: 48,
+739:                      height: 48,
+758:            const SizedBox(height: 12),
+760:              padding: const EdgeInsets.all(8),
+769:                  const SizedBox(width: 6),
+770:                  Expanded(
+818:        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+828:              margin: const EdgeInsets.symmetric(vertical: 4),
+829:              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+830:              constraints: BoxConstraints(
+846:                  height: 1.5,
+875:            padding: const EdgeInsets.symmetric(vertical: 4),
+879:                  padding: const EdgeInsets.all(6),
+892:                const SizedBox(width: 8),
+893:                Expanded(
+913:        const SizedBox(height: 4),
+916:          SizedBox(
+917:            height: 34,
+921:              separatorBuilder: (context, index) => const SizedBox(width: 12),
+955:            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+966:                width: 1,
+1007:              width: 16,
+1008:              height: 16,
+1026:              width: 9,
+1027:              height: 9,
+1067:      padding: EdgeInsets.symmetric(horizontal: 16, vertical: keyboardOpen ? 4 : 8),
+1076:          Expanded(
+1078:              constraints: BoxConstraints(maxHeight: keyboardOpen ? 56 : 120),
+1084:                  width: 1,
+1134:                  height: 1.4,
+
+================ 11 KEYBOARD / INSET / FOCUS SYSTEM ================
+62:  late FocusNode _inputFocusNode;
+114:    _inputFocusNode = FocusNode()
+117:          _inputFocusNode.hasFocus,
+151:          final keyboardOpen = _inputFocusNode.hasFocus;
+155:          if (!keyboardOpen) {
+183:    _inputFocusNode.dispose();
+282:    final keyboardOpen = _inputFocusNode.hasFocus;
+296:                      MediaQuery.of(context).viewInsets.bottom)
+298:                      MediaQuery.of(context).viewInsets.bottom +
+299:                      (keyboardOpen ? 0 : _floatingChatGap)),
+332:                        FocusScope.of(context).unfocus();
+343:                        _buildEnhancedHeader(theme, compact: keyboardOpen),
+346:                        if (!keyboardOpen)
+368:                          height: keyboardOpen ? 0 : 80,
+391:                        _buildEnhancedInput(theme, keyboardOpen),
+407:                      MediaQuery.of(context).viewInsets.bottom)
+409:                      MediaQuery.of(context).viewInsets.bottom +
+809:        FocusScope.of(context).unfocus();
+1065:  Widget _buildEnhancedInput(ThemeData theme, bool keyboardOpen) {
+1067:      padding: EdgeInsets.symmetric(horizontal: 16, vertical: keyboardOpen ? 4 : 8),
+1078:              constraints: BoxConstraints(maxHeight: keyboardOpen ? 56 : 120),
+1095:              child: TextField(
+1099:                focusNode: _inputFocusNode,
+1103:                    vertical: keyboardOpen ? 8 : 14,
+1105:                  hintText: keyboardOpen
+1110:                    fontSize: keyboardOpen ? 13.5 : 15,
+
+================ 12 TAP / GESTURE / REBUILD TRIGGERS ================
+lib/features/insights/widgets/floating_ai_chat.dart:92:          ..addListener(() {
+lib/features/insights/widgets/floating_ai_chat.dart:93:            if (mounted) setState(() {});
+lib/features/insights/widgets/floating_ai_chat.dart:110:      ..addListener(() {
+lib/features/insights/widgets/floating_ai_chat.dart:111:        if (mounted) setState(() {});
+lib/features/insights/widgets/floating_ai_chat.dart:115:      ..addListener(() {
+lib/features/insights/widgets/floating_ai_chat.dart:120:        if (mounted) setState(() {});
+lib/features/insights/widgets/floating_ai_chat.dart:124:    WidgetsBinding.instance.addPostFrameCallback((_) {
+lib/features/insights/widgets/floating_ai_chat.dart:142:      setState(() {
+lib/features/insights/widgets/floating_ai_chat.dart:148:        Future.delayed(_thinkingDelay, () {
+lib/features/insights/widgets/floating_ai_chat.dart:160:          setState(() {});
+lib/features/insights/widgets/floating_ai_chat.dart:200:    setState(() {
+lib/features/insights/widgets/floating_ai_chat.dart:217:    setState(() {
+lib/features/insights/widgets/floating_ai_chat.dart:249:    setState(() {
+lib/features/insights/widgets/floating_ai_chat.dart:331:                      onTap: () {
+lib/features/insights/widgets/floating_ai_chat.dart:334:                        WidgetsBinding.instance.addPostFrameCallback((_) {
+lib/features/insights/widgets/floating_ai_chat.dart:430:                      onPressed: _toggleChat,
+lib/features/insights/widgets/floating_ai_chat.dart:546:                onPanStart: (details) {
+lib/features/insights/widgets/floating_ai_chat.dart:550:                onPanUpdate: (details) {
+lib/features/insights/widgets/floating_ai_chat.dart:555:                onPanEnd: (details) {
+lib/features/insights/widgets/floating_ai_chat.dart:712:                    onTap: _toggleFullScreen,
+lib/features/insights/widgets/floating_ai_chat.dart:735:                    onTap: _toggleChat,
+lib/features/insights/widgets/floating_ai_chat.dart:808:      onPointerDown: (_) {
+lib/features/insights/widgets/floating_ai_chat.dart:811:        WidgetsBinding.instance.addPostFrameCallback((_) {
+lib/features/insights/widgets/floating_ai_chat.dart:867:          onTap: () {
+lib/features/insights/widgets/floating_ai_chat.dart:868:            setState(() {
+lib/features/insights/widgets/floating_ai_chat.dart:934:          onTap: () {
+lib/features/insights/widgets/floating_ai_chat.dart:945:            setState(() {
+lib/features/insights/widgets/floating_ai_chat.dart:1118:                    onPressed: () {
+lib/features/insights/widgets/floating_ai_chat.dart:1136:                onSubmitted: (text) {
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:19:    notifyListeners();
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:32:    notifyListeners();
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:41:    notifyListeners();
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:49:    notifyListeners();
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:57:    notifyListeners();
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:65:    notifyListeners();
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:73:    notifyListeners();
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:87:    notifyListeners();
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:94:    notifyListeners();
+
+================ 13 DIALOG STATE MUTATIONS ================
+lib/features/insights/widgets/floating_ai_chat.dart:189:    if (!_shellController.isExpanded) {
+lib/features/insights/widgets/floating_ai_chat.dart:201:      _shellController.toggleExpanded();
+lib/features/insights/widgets/floating_ai_chat.dart:202:      if (!_shellController.isExpanded) {
+lib/features/insights/widgets/floating_ai_chat.dart:206:    if (_shellController.isExpanded) {
+lib/features/insights/widgets/floating_ai_chat.dart:216:  void _toggleFullScreen() {
+lib/features/insights/widgets/floating_ai_chat.dart:218:      _shellController.toggleFullScreen();
+lib/features/insights/widgets/floating_ai_chat.dart:221:    if (_shellController.isFullScreen) {
+lib/features/insights/widgets/floating_ai_chat.dart:228:  void _adjustChatHeight(double delta) {
+lib/features/insights/widgets/floating_ai_chat.dart:229:    _shellController.adjustChatHeight(
+lib/features/insights/widgets/floating_ai_chat.dart:287:        if (_shellController.isExpanded)
+lib/features/insights/widgets/floating_ai_chat.dart:291:            right: _shellController.isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart:292:            left: _shellController.isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+lib/features/insights/widgets/floating_ai_chat.dart:293:            top: _shellController.isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+lib/features/insights/widgets/floating_ai_chat.dart:294:            bottom: _shellController.isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart:337:                          _shellController.restoreDialogState();
+lib/features/insights/widgets/floating_ai_chat.dart:402:        if (!_shellController.isExpanded)
+lib/features/insights/widgets/floating_ai_chat.dart:405:            bottom: _shellController.isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart:415:                  scale: _shellController.isExpanded ? 1.0 : (1.0 + _fabAnimation.value * 0.1),
+lib/features/insights/widgets/floating_ai_chat.dart:441:                        child: _shellController.isExpanded
+lib/features/insights/widgets/floating_ai_chat.dart:458:                                  if (!_shellController.isExpanded)
+lib/features/insights/widgets/floating_ai_chat.dart:543:          if (!_shellController.isFullScreen && !compact)
+lib/features/insights/widgets/floating_ai_chat.dart:547:                  _initialHeight = _shellController.chatHeight;
+lib/features/insights/widgets/floating_ai_chat.dart:551:                  if (!_shellController.isFullScreen && _shellController.isResizing) {
+lib/features/insights/widgets/floating_ai_chat.dart:552:                    _adjustChatHeight(details.delta.dy);
+lib/features/insights/widgets/floating_ai_chat.dart:573:          if (!_shellController.isFullScreen && !compact) const SizedBox(height: 4),
+lib/features/insights/widgets/floating_ai_chat.dart:688:                                alpha: _shellController.isTyping ? 0.9 : 0.78,
+lib/features/insights/widgets/floating_ai_chat.dart:693:                              letterSpacing: _shellController.isTyping ? 0.08 : 0.0,
+lib/features/insights/widgets/floating_ai_chat.dart:696:                              _shellController.isTyping ? 'Thinking...' : 'Ready to assist',
+lib/features/insights/widgets/floating_ai_chat.dart:712:                    onTap: _toggleFullScreen,
+lib/features/insights/widgets/floating_ai_chat.dart:722:                        _shellController.isFullScreen
+lib/features/insights/widgets/floating_ai_chat.dart:790:    if (_shellController.isTyping) {
+lib/features/insights/widgets/floating_ai_chat.dart:813:          _shellController.restoreDialogState();
+lib/features/insights/widgets/floating_ai_chat.dart:870:                !_shellController.quickRepliesCollapsed,
+lib/features/insights/widgets/floating_ai_chat.dart:904:                  _shellController.quickRepliesCollapsed
+lib/features/insights/widgets/floating_ai_chat.dart:915:        if (!_shellController.quickRepliesCollapsed)
+lib/features/insights/widgets/floating_ai_chat.dart:992:    final isThinking = _shellController.isTyping;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:4:  bool isExpanded = false;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:5:  bool isFullScreen = false;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:6:  bool isTyping = false;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:7:  bool quickRepliesCollapsed = false;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:8:  bool isKeyboardVisible = false;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:9:  bool isTransitioning = false;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:10:  bool isResizing = false;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:12:  double chatHeight = 0.5;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:15:    if (isKeyboardVisible == visible) return;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:17:    isKeyboardVisible = visible;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:22:  void toggleExpanded() {
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:23:    if (isTransitioning) return;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:25:    isExpanded = !isExpanded;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:27:    if (!isExpanded) {
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:28:      isFullScreen = false;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:29:      chatHeight = 0.5;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:35:  void toggleFullScreen() {
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:36:    if (isTransitioning) return;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:38:    isFullScreen = !isFullScreen;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:39:    chatHeight = isFullScreen ? 0.9 : 0.6;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:45:    if (isTyping == value) return;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:47:    isTyping = value;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:53:    if (quickRepliesCollapsed == value) return;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:55:    quickRepliesCollapsed = value;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:61:    if (isTransitioning == value) return;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:63:    isTransitioning = value;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:69:    if (isResizing == value) return;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:71:    isResizing = value;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:76:  void adjustChatHeight(
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:81:        (chatHeight - delta / screenHeight).clamp(0.3, 0.9);
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:83:    if (updatedHeight == chatHeight) return;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:85:    chatHeight = updatedHeight;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:90:  void restoreDialogState() {
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:91:    quickRepliesCollapsed = false;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:92:    isKeyboardVisible = false;
+
+================ 14 IMPORTS / PACKAGE DEPENDENCIES ================
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:flow_ai/core/ui/app_geometry.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:provider/provider.dart';
+import '../../../core/services/enhanced_ai_chat_service.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../generated/app_localizations.dart';
+import '../../settings/providers/settings_provider.dart';
+import 'package:uuid/uuid.dart';
+import 'package:flow_ai/core/layout/app_layout_metrics.dart';
+import 'zyra/controllers/zyra_shell_controller.dart';
+
+/// Floating AI Chat Widget for insights screen
+class FloatingAIChat extends StatefulWidget {
+  final GlobalKey tabsKey;
+  final GlobalKey periodSelectorKey;
+  const FloatingAIChat({
+    super.key,
+    required this.tabsKey,
+    required this.periodSelectorKey,
+  });
+
+  @override
+  State<FloatingAIChat> createState() => _FloatingAIChatState();
+}
+
+class _FloatingAIChatState extends State<FloatingAIChat>
+    with TickerProviderStateMixin {
+  static const double _floatingChatGap = 8;
+  static const _thinkingDelay = Duration(milliseconds: 900);
+  late AnimationController _fabController;
+  late AnimationController _chatController;
+  late AnimationController _expandController;
+  late AnimationController _pulseController;
+  late Animation<double> _fabAnimation;
+  late Animation<double> _chatAnimation;
+  late StreamSubscription _messagesSub;
+
+  final EnhancedAIChatService _chatService = EnhancedAIChatService();
+  late final ZyraShellController _shellController;
+  List<types.Message> _messages = [];
+  // removed unused _showQuickReplies
+  // ignore: unused_field
+  bool _isSuggestionsExpanded = true;
+  // ignore: unused_field
+  final List<String> _suggestedQuestions = [
+    "When will my next period start?",
+    "Is my cycle regular?",
+    "Can I get pregnant today?",
+    "What are my fertile days?",
+    "Why is my period late?",
+    "What do my symptoms mean?",
+    "How long is a normal cycle?",
+    "When am I ovulating?",
+    "Is spotting normal?",
+    "How can I reduce cramps?",
+  ];
+
+  late TextEditingController _textController;
+  late FocusNode _inputFocusNode;
+
+  // For resize gesture
+  // ignore: unused_field
+  double _initialHeight = 0;
+
+  @override
+  void initState() {
+    super.initState();
+pubspec.yaml:35:  flutter_animate: ^4.2.0
+pubspec.yaml:91:  flutter_chat_ui: ^1.6.10
+pubspec.yaml:92:  flutter_chat_types: ^3.6.2
+pubspec.yaml:95:  uuid: ^4.2.1
+pubspec.lock:553:  flutter_animate:
+pubspec.lock:556:      name: flutter_animate
+pubspec.lock:561:  flutter_chat_types:
+pubspec.lock:564:      name: flutter_chat_types
+pubspec.lock:569:  flutter_chat_ui:
+pubspec.lock:572:      name: flutter_chat_ui
+pubspec.lock:1876:  uuid:
+pubspec.lock:1879:      name: uuid
+
+================ 15 CURRENT GIT DIFF ================
+
+================ 16 GIT STATUS ================
+?? audits/
+?? lib/features/insights/widgets/floating_ai_chat_BACKUP.dart

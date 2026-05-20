@@ -1,0 +1,22 @@
+
+========== TESTS ==========
+
+00:00 +0: loading /Users/ronos/flow_ai/test/features/partner/partner_invitation_dialog_test.dart
+00:00 +0: /Users/ronos/flow_ai/test/features/partner/partner_invitation_dialog_test.dart: Partner invitation dialog renders tabs
+00:00 +0: /Users/ronos/flow_ai/test/features/partner/partner_service_test.dart: PartnerService createPartnerInvitation completes
+✅ PartnerService: Using local partner service
+✅ LocalPartnerService initialized
+✅ Partner invitation created: YGLKM3
+00:00 +1: /Users/ronos/flow_ai/test/features/partner/partner_invitation_dialog_test.dart: Partner invitation dialog renders tabs
+00:00 +1: /Users/ronos/flow_ai/test/features/partner/partner_service_test.dart: PartnerService sendPartnerInvitation resets loading state
+✅ Partner invitation created: KBDUM9
+00:00 +2: /Users/ronos/flow_ai/test/features/partner/partner_invitation_dialog_test.dart: Partner invitation dialog renders tabs
+00:00 +3: /Users/ronos/flow_ai/test/features/partner/partner_invitation_dialog_test.dart: Partner invitation dialog renders tabs
+00:00 +4: /Users/ronos/flow_ai/test/features/partner/partner_invitation_dialog_test.dart: Partner invitation dialog renders tabs
+✅ PartnerService: Using local partner service
+00:01 +5: /Users/ronos/flow_ai/test/features/partner/partner_invitation_dialog_test.dart: Can switch to QR and Link tabs
+00:01 +6: /Users/ronos/flow_ai/test/features/partner/partner_invitation_dialog_test.dart: Email validation shows required error for empty input
+00:01 +7: /Users/ronos/flow_ai/test/features/partner/partner_invitation_dialog_test.dart: Email validation rejects malformed email
+00:01 +8: /Users/ronos/flow_ai/test/features/partner/partner_invitation_dialog_test.dart: Email validation detects typo domain
+00:02 +9: /Users/ronos/flow_ai/test/features/partner/partner_invitation_dialog_test.dart: Valid email does not show validation errors
+00:02 +10: All tests passed!
