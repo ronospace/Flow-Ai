@@ -1,0 +1,1143 @@
+
+========== FILE STRUCTURE ==========
+
+     1	import 'dart:async';
+     2	import 'package:flutter/material.dart';
+     3	import 'package:flow_ai/core/ui/app_geometry.dart';
+     4	import 'package:flutter_animate/flutter_animate.dart';
+     5	import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+     6	import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+     7	import 'package:provider/provider.dart';
+     8	import '../../../core/services/enhanced_ai_chat_service.dart';
+     9	import '../../../core/theme/app_theme.dart';
+    10	import '../../../generated/app_localizations.dart';
+    11	import '../../settings/providers/settings_provider.dart';
+    12	import 'package:uuid/uuid.dart';
+    13	import 'package:flow_ai/core/layout/app_layout_metrics.dart';
+    14	
+    15	/// Floating AI Chat Widget for insights screen
+    16	class FloatingAIChat extends StatefulWidget {
+    17	  final GlobalKey tabsKey;
+    18	  final GlobalKey periodSelectorKey;
+    19	  const FloatingAIChat({
+    20	    super.key,
+    21	    required this.tabsKey,
+    22	    required this.periodSelectorKey,
+    23	  });
+    24	
+    25	  @override
+    26	  State<FloatingAIChat> createState() => _FloatingAIChatState();
+    27	}
+    28	
+    29	class _FloatingAIChatState extends State<FloatingAIChat>
+    30	    with TickerProviderStateMixin {
+    31	  static const double _floatingChatGap = 8;
+    32	  static const _thinkingDelay = Duration(milliseconds: 900);
+    33	  bool _isExpanded = false;
+    34	  bool _isFullScreen = false;
+    35	  double _chatHeight = 0.5; // Percentage of screen height
+    36	  late AnimationController _fabController;
+    37	  late AnimationController _chatController;
+    38	  late AnimationController _expandController;
+    39	  late AnimationController _pulseController;
+    40	  late Animation<double> _fabAnimation;
+    41	  late Animation<double> _chatAnimation;
+    42	  late StreamSubscription _messagesSub;
+    43	
+    44	  final EnhancedAIChatService _chatService = EnhancedAIChatService();
+    45	  List<types.Message> _messages = [];
+    46	  bool _isTyping = false;
+    47	  bool _quickRepliesCollapsed = false;
+    48	  // removed unused _showQuickReplies
+    49	  // ignore: unused_field
+    50	  bool _isSuggestionsExpanded = true;
+    51	  // ignore: unused_field
+    52	  final List<String> _suggestedQuestions = [
+    53	    "When will my next period start?",
+    54	    "Is my cycle regular?",
+    55	    "Can I get pregnant today?",
+    56	    "What are my fertile days?",
+    57	    "Why is my period late?",
+    58	    "What do my symptoms mean?",
+    59	    "How long is a normal cycle?",
+    60	    "When am I ovulating?",
+    61	    "Is spotting normal?",
+    62	    "How can I reduce cramps?",
+    63	  ];
+    64	
+    65	  late TextEditingController _textController;
+    66	  late FocusNode _inputFocusNode;
+    67	
+    68	  // For resize gesture
+    69	  // ignore: unused_field
+    70	  double _initialHeight = 0;
+    71	  bool _isResizing = false;
+    72	
+    73	  @override
+    74	  void initState() {
+    75	    super.initState();
+    76	
+    77	    _fabController = AnimationController(
+    78	      duration: const Duration(milliseconds: 300),
+    79	      vsync: this,
+    80	    );
+    81	
+    82	    _chatController = AnimationController(
+    83	      duration: const Duration(milliseconds: 500),
+    84	      vsync: this,
+    85	    );
+    86	
+    87	    _expandController = AnimationController(
+    88	      duration: const Duration(milliseconds: 300),
+    89	      vsync: this,
+    90	    );
+    91	
+    92	    _pulseController =
+    93	        AnimationController(
+    94	            duration: const Duration(milliseconds: 950),
+    95	            vsync: this,
+    96	          )
+    97	          ..addListener(() {
+    98	            if (mounted) setState(() {});
+    99	          })
+   100	          ..repeat(reverse: true);
+   101	
+   102	    _fabAnimation = CurvedAnimation(
+   103	      parent: _fabController,
+   104	      curve: Curves.easeInOutCubic,
+   105	    );
+   106	
+   107	    _chatAnimation = CurvedAnimation(
+   108	      parent: _chatController,
+   109	      curve: Curves.easeOutCubic,
+   110	    );
+   111	
+   112	    // Initialize text controller
+   113	    _textController = TextEditingController();
+   114	    _inputFocusNode = FocusNode()
+   115	      ..addListener(() {
+   116	        if (mounted) setState(() {});
+   117	      });
+   118	
+   119	    // Initialize chat service after first build to get localizations
+   120	    WidgetsBinding.instance.addPostFrameCallback((_) {
+   121	      final localizations = AppLocalizations.of(context);
+   122	      final settingsProvider = context.read<SettingsProvider>();
+   123	      final userPreferences = settingsProvider.preferences;
+   124	
+   125	      final userName = userPreferences.displayName;
+   126	
+   127	      _chatService.initialize(
+   128	        userId: userPreferences.userId,
+   129	        userName: userName,
+   130	        localizations: localizations,
+   131	      );
+   132	    });
+   133	
+   134	    // Listen to messages
+   135	    _messagesSub = _chatService.messagesStream.listen((messages) {
+   136	      if (mounted) {
+   137	        setState(() {
+   138	          _messages = messages;
+   139	          if (messages.isNotEmpty &&
+   140	              messages.last.author.id == 'ai_flowai_enhanced') {
+   141	            Future.delayed(_thinkingDelay, () {
+   142	              if (!mounted) return;
+   143	
+   144	              final keyboardOpen = _inputFocusNode.hasFocus;
+   145	
+   146	              setState(() {
+   147	                _isTyping = false;
+   148	                if (!keyboardOpen) {
+   149	                  _quickRepliesCollapsed = false;
+   150	                  _isSuggestionsExpanded = true;
+   151	                }
+   152	              });
+   153	            });
+   154	          }
+   155	        });
+   156	      }
+   157	    });
+   158	
+   159	    _messages = _chatService.messages;
+   160	
+   161	    // Start pulsing animation
+   162	    _startPulsingAnimation();
+   163	  }
+   164	
+   165	  @override
+   166	  void dispose() {
+   167	    // Ensure animations are stopped and controllers disposed properly
+   168	    _fabController.stop();
+   169	    _chatController.stop();
+   170	    _expandController.stop();
+   171	    _fabController.dispose();
+   172	    _chatController.dispose();
+   173	    _expandController.dispose();
+   174	    _pulseController.dispose();
+   175	    _textController.dispose();
+   176	    _messagesSub.cancel();
+   177	    _inputFocusNode.dispose();
+   178	    super.dispose();
+   179	  }
+   180	
+   181	  void _startPulsingAnimation() {
+   182	    if (!_isExpanded) {
+   183	      _fabController.repeat(reverse: true);
+   184	    }
+   185	  }
+   186	
+   187	  void _stopPulsingAnimation() {
+   188	    _fabController.stop();
+   189	    _fabController.reset();
+   190	  }
+   191	
+   192	  void _toggleChat() {
+   193	    setState(() {
+   194	      _isExpanded = !_isExpanded;
+   195	      if (!_isExpanded) {
+   196	        _isFullScreen = false;
+   197	        _chatHeight = 0.5;
+   198	      }
+   199	    });
+   200	
+   201	    if (_isExpanded) {
+   202	      _stopPulsingAnimation();
+   203	      _chatController.forward();
+   204	    } else {
+   205	      _chatController.reverse();
+   206	      _expandController.reverse();
+   207	      _startPulsingAnimation();
+   208	    }
+   209	  }
+   210	
+   211	  void _toggleFullScreen() {
+   212	    setState(() {
+   213	      _isFullScreen = !_isFullScreen;
+   214	      _chatHeight = _isFullScreen ? 0.9 : 0.6;
+   215	    });
+   216	
+   217	    if (_isFullScreen) {
+   218	      _expandController.forward();
+   219	    } else {
+   220	      _expandController.reverse();
+   221	    }
+   222	  }
+   223	
+   224	  void _adjustChatHeight(double delta) {
+   225	    setState(() {
+   226	      _chatHeight = (_chatHeight - delta / MediaQuery.of(context).size.height)
+   227	          .clamp(0.3, 0.9);
+   228	    });
+   229	  }
+   230	
+   231	  /// Determine if Quick Questions should be shown
+   232	  /// Show when there's only the welcome message (no user messages yet)
+   233	  bool _shouldShowQuickQuestions() {
+   234	    return true;
+   235	  }
+   236	
+   237	  void _handleSendPressed(types.PartialText message) {
+   238	    final currentUser = _chatService.currentUser;
+   239	    if (currentUser == null) return;
+   240	
+   241	    final textMessage = types.TextMessage(
+   242	      author: currentUser,
+   243	      createdAt: DateTime.now().millisecondsSinceEpoch,
+   244	      id: const Uuid().v4(),
+   245	      text: message.text,
+   246	    );
+   247	
+   248	    setState(() {
+   249	      _isTyping = true;
+   250	    });
+   251	
+   252	    _chatService.sendMessage(textMessage);
+   253	  }
+   254	
+   255	  void _handleMessageTap(BuildContext _, types.Message message) {
+   256	    // Handle message tap if needed
+   257	  }
+   258	
+   259	  void _handlePreviewDataFetched(
+   260	    types.TextMessage message,
+   261	    types.PreviewData previewData,
+   262	  ) {
+   263	    // Handle preview data if needed
+   264	  }
+   265	
+   266	  double _getTabsBottom() {
+   267	    final ctx = widget.tabsKey.currentContext;
+   268	    if (ctx == null) return 200;
+   269	    final box = ctx.findRenderObject() as RenderBox;
+   270	    final pos = box.localToGlobal(Offset.zero);
+   271	    return pos.dy + box.size.height + 8;
+   272	  }
+   273	
+   274	  double _getPeriodSelectorTop() {
+   275	    final ctx = widget.periodSelectorKey.currentContext;
+   276	    if (ctx == null) return MediaQuery.of(context).padding.top + 80;
+   277	    final box = ctx.findRenderObject() as RenderBox;
+   278	    final pos = box.localToGlobal(Offset.zero);
+   279	    return pos.dy;
+   280	  }
+   281	
+   282	  @override
+   283	  Widget build(BuildContext context) {
+   284	    // // // // debugPrint("SCREEN HEIGHT: ");
+   285	    // // debugPrint("SAFE TOP: ");
+   286	    // // debugPrint("SAFE BOTTOM: ");
+   287	    // // // // debugPrint("VIEW INSETS (keyboard): ");
+   288	
+   289	    final theme = Theme.of(context);
+   290	    final keyboardOpen = _inputFocusNode.hasFocus;
+   291	
+   292	    return Stack(
+   293	      children: [
+   294	        // Enhanced Chat Interface - NO OVERLAY
+   295	        if (_isExpanded)
+   296	          AnimatedPositioned(
+   297	            duration: Duration(milliseconds: 300),
+   298	            curve: Curves.easeOutCubic,
+   299	            right: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+   300	            left: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+   301	            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+   302	            bottom: _isFullScreen
+   303	                ? (MediaQuery.of(context).padding.bottom +
+   304	                      MediaQuery.of(context).viewInsets.bottom)
+   305	                : (MediaQuery.of(context).padding.bottom +
+   306	                      MediaQuery.of(context).viewInsets.bottom +
+   307	                      _floatingChatGap),
+   308	            child: AnimatedBuilder(
+   309	              animation: _chatAnimation,
+   310	              builder: (context, child) {
+   311	                return ClipRRect(
+   312	                  borderRadius: AppGeometry.dialogRadius,
+   313	                  child: Container(
+   314	                    clipBehavior: Clip.antiAlias,
+   315	                    decoration: BoxDecoration(
+   316	                      color: Theme.of(context).colorScheme.surface,
+   317	                      borderRadius: AppGeometry.dialogRadius,
+   318	                      boxShadow: [
+   319	                        BoxShadow(
+   320	                          color: AppTheme.primaryRose.withValues(alpha: 0.10),
+   321	                          blurRadius: 22,
+   322	                          spreadRadius: 1,
+   323	                          offset: const Offset(0, 0),
+   324	                        ),
+   325	                        BoxShadow(
+   326	                          color: theme.shadowColor.withValues(alpha: 0.16),
+   327	                          blurRadius: 12,
+   328	                          spreadRadius: 0,
+   329	                          offset: const Offset(0, 8),
+   330	                        ),
+   331	                      ],
+   332	                      border: Border.all(
+   333	                        color: AppTheme.primaryRose.withValues(alpha: 0.08),
+   334	                        width: 1,
+   335	                      ),
+   336	                    ),
+   337	                    child: Column(
+   338	                      children: [
+   339	                        // Enhanced Draggable Header with Controls
+   340	                        _buildEnhancedHeader(theme, compact: keyboardOpen),
+   341	
+   342	                        // Localized Header Transition Fade
+   343	                        Container(
+   344	                          height: 22,
+   345	                          decoration: BoxDecoration(
+   346	                            gradient: LinearGradient(
+   347	                              begin: Alignment.topCenter,
+   348	                              end: Alignment.bottomCenter,
+   349	                              colors: [
+   350	                                AppTheme.primaryRose.withValues(alpha: 0.045),
+   351	                                Colors.white.withValues(alpha: 0.0),
+   352	                              ],
+   353	                            ),
+   354	                          ),
+   355	                        ),
+   356	
+   357	                        // Main content area - protected flex ownership
+   358	                        Expanded(child: _buildChatArea(theme)),
+   359	
+   360	                        // Suggested Questions (above input)
+   361	                        if (!keyboardOpen && _shouldShowQuickQuestions())
+   362	                          SizedBox(
+   363	                            height: 80,
+   364	                            child: SingleChildScrollView(
+   365	                              child: Container(
+   366	                                padding: const EdgeInsets.fromLTRB(
+   367	                                  16,
+   368	                                  4,
+   369	                                  16,
+   370	                                  2,
+   371	                                ),
+   372	                                child: Padding(
+   373	                                  padding: const EdgeInsets.only(bottom: 6),
+   374	                                  child: _buildEnhancedQuickReplies(theme),
+   375	                                ),
+   376	                              ),
+   377	                            ),
+   378	                          ),
+   379	
+   380	                        // Input Area (last = primary)
+   381	                        SizedBox(
+   382	                          height: MediaQuery.of(context).size.width > 900
+   383	                              ? 0
+   384	                              : 8,
+   385	                        ),
+   386	                        _buildEnhancedInput(theme),
+   387	                      ],
+   388	                    ),
+   389	                  ),
+   390	                );
+   391	              },
+   392	            ),
+   393	          ),
+   394	
+   395	        // Enhanced Floating Action Button
+   396	        if (!_isExpanded)
+   397	          Positioned(
+   398	            right: 16,
+   399	            bottom: _isFullScreen
+   400	                ? (MediaQuery.of(context).padding.bottom +
+   401	                      MediaQuery.of(context).viewInsets.bottom)
+   402	                : (MediaQuery.of(context).padding.bottom +
+   403	                      MediaQuery.of(context).viewInsets.bottom +
+   404	                      16),
+   405	            child: AnimatedBuilder(
+   406	              animation: _fabAnimation,
+   407	              builder: (context, child) {
+   408	                return Transform.scale(
+   409	                  scale: _isExpanded ? 1.0 : (1.0 + _fabAnimation.value * 0.1),
+   410	                  child: Container(
+   411	                    decoration: BoxDecoration(
+   412	                      borderRadius: BorderRadius.circular(12),
+   413	                      boxShadow: [
+   414	                        BoxShadow(
+   415	                          color: AppTheme.primaryRose.withValues(alpha: 0.2),
+   416	                          blurRadius: 16,
+   417	                          spreadRadius: 2,
+   418	                          offset: const Offset(0, 4),
+   419	                        ),
+   420	                      ],
+   421	                    ),
+   422	                    child: FloatingActionButton(
+   423	                      heroTag: "ai_chat_main_fab",
+   424	                      onPressed: _toggleChat,
+   425	                      backgroundColor: AppTheme.primaryRose,
+   426	                      elevation: 0,
+   427	                      child: AnimatedSwitcher(
+   428	                        duration: const Duration(milliseconds: 300),
+   429	                        transitionBuilder: (child, animation) {
+   430	                          return RotationTransition(
+   431	                            turns: animation,
+   432	                            child: child,
+   433	                          );
+   434	                        },
+   435	                        child: _isExpanded
+   436	                            ? Icon(
+   437	                                Icons.close_rounded,
+   438	                                color: Theme.of(context).colorScheme.surface,
+   439	                                key: const ValueKey('close'),
+   440	                                size: 28,
+   441	                              )
+   442	                            : Stack(
+   443	                                key: const ValueKey('chat'),
+   444	                                children: [
+   445	                                  Icon(
+   446	                                    Icons.psychology_rounded,
+   447	                                    color: Theme.of(
+   448	                                      context,
+   449	                                    ).colorScheme.surface,
+   450	                                    size: 28,
+   451	                                  ),
+   452	                                  if (!_isExpanded)
+   453	                                    Positioned(
+   454	                                      top: -2,
+   455	                                      right: -2,
+   456	                                      child:
+   457	                                          Container(
+   458	                                                width: 16,
+   459	                                                height: 16,
+   460	                                                decoration: BoxDecoration(
+   461	                                                  gradient:
+   462	                                                      const LinearGradient(
+   463	                                                        colors: [
+   464	                                                          AppTheme.successGreen,
+   465	                                                          AppTheme.accentMint,
+   466	                                                        ],
+   467	                                                      ),
+   468	                                                  borderRadius:
+   469	                                                      AppGeometry.dialogRadius,
+   470	                                                  boxShadow: [
+   471	                                                    BoxShadow(
+   472	                                                      color: AppTheme
+   473	                                                          .successGreen
+   474	                                                          .withValues(
+   475	                                                            alpha: 0.5,
+   476	                                                          ),
+   477	                                                      blurRadius: 8,
+   478	                                                      spreadRadius: 1,
+   479	                                                    ),
+   480	                                                  ],
+   481	                                                ),
+   482	                                                child: Icon(
+   483	                                                  Icons.auto_awesome,
+   484	                                                  color: Theme.of(
+   485	                                                    context,
+   486	                                                  ).colorScheme.surface,
+   487	                                                  size: 10,
+   488	                                                ),
+   489	                                              )
+   490	                                              .animate(onPlay: null)
+   491	                                              .shimmer(
+   492	                                                duration: 2000.ms,
+   493	                                                color: Colors.white.withValues(
+   494	                                                  alpha: 0.5,
+   495	                                                ),
+   496	                                              )
+   497	                                              .then(delay: 1000.ms)
+   498	                                              .fadeOut(duration: 500.ms)
+   499	                                              .then(delay: 1000.ms)
+   500	                                              .fadeIn(duration: 500.ms),
+   501	                                    ),
+   502	                                ],
+   503	                              ),
+   504	                      ),
+   505	                    ),
+   506	                  ),
+   507	                );
+   508	              },
+   509	            ),
+   510	          ),
+   511	      ],
+   512	    );
+   513	  }
+   514	
+   515	  // Enhanced Header with Controls
+   516	  Widget _buildEnhancedHeader(ThemeData theme, {bool compact = false}) {
+   517	    return Container(
+   518	      padding: const EdgeInsets.all(20),
+   519	      decoration: BoxDecoration(
+   520	        gradient: LinearGradient(
+   521	          colors: [AppTheme.primaryPurple, AppTheme.primaryRose],
+   522	          begin: Alignment.topLeft,
+   523	          end: Alignment.bottomRight,
+   524	        ),
+   525	        borderRadius: AppGeometry.dialogRadius,
+   526	        boxShadow: [
+   527	          BoxShadow(
+   528	            color: AppTheme.primaryRose.withValues(alpha: 0.2),
+   529	            blurRadius: 8,
+   530	            offset: const Offset(0, 2),
+   531	          ),
+   532	        ],
+   533	      ),
+   534	      child: Column(
+   535	        children: [
+   536	          // Resize Handle - Only draggable area
+   537	          if (!_isFullScreen && !compact)
+   538	            Center(
+   539	              child: GestureDetector(
+   540	                onPanStart: (details) {
+   541	                  _initialHeight = _chatHeight;
+   542	                  _isResizing = true;
+   543	                },
+   544	                onPanUpdate: (details) {
+   545	                  if (!_isFullScreen && _isResizing) {
+   546	                    _adjustChatHeight(details.delta.dy);
+   547	                  }
+   548	                },
+   549	                onPanEnd: (details) {
+   550	                  _isResizing = false;
+   551	                },
+   552	                child: Container(
+   553	                  width: 16, // Larger hit area for better UX
+   554	                  height: 30, // Larger hit area
+   555	                  padding: const EdgeInsets.symmetric(vertical: 13),
+   556	                  child: Container(
+   557	                    width: 40,
+   558	                    height: 4,
+   559	                    decoration: BoxDecoration(
+   560	                      color: Colors.white.withValues(alpha: 0.3),
+   561	                      borderRadius: BorderRadius.circular(12),
+   562	                    ),
+   563	                  ),
+   564	                ),
+   565	              ),
+   566	            ),
+   567	          if (!_isFullScreen && !compact) const SizedBox(height: 4),
+   568	
+   569	          // Header Content
+   570	          Row(
+   571	            children: [
+   572	              // AI Avatar with Animation
+   573	              Container(
+   574	                    width: 48,
+   575	                    height: 48,
+   576	                    decoration: BoxDecoration(
+   577	                      color: Colors.white.withValues(alpha: 0.2),
+   578	                      borderRadius: BorderRadius.circular(12),
+   579	                      border: Border.all(
+   580	                        color: Colors.white.withValues(alpha: 0.3),
+   581	                        width: 2,
+   582	                      ),
+   583	                    ),
+   584	                    child: Transform.scale(
+   585	                      scale: 0.965 + (_pulseController.value * 0.08),
+   586	                      child: Icon(
+   587	                        Icons.psychology_rounded,
+   588	                        color: Theme.of(context).colorScheme.surface,
+   589	                        size: 24,
+   590	                      ),
+   591	                    ),
+   592	                  )
+   593	                  .animate(onPlay: null)
+   594	                  .shimmer(
+   595	                    duration: 3000.ms,
+   596	                    color: Colors.white.withValues(alpha: 0.3),
+   597	                  )
+   598	                  .then(delay: 2000.ms),
+   599	
+   600	              const SizedBox(width: 16),
+   601	
+   602	              // Title and Status
+   603	              Expanded(
+   604	                child: Column(
+   605	                  mainAxisAlignment: MainAxisAlignment.center,
+   606	                  crossAxisAlignment: CrossAxisAlignment.start,
+   607	                  mainAxisSize: MainAxisSize.min,
+   608	                  children: [
+   609	                    Row(
+   610	                      mainAxisSize: MainAxisSize.min,
+   611	                      children: [
+   612	                        Text(
+   613	                          'Zyra AI',
+   614	                          style: theme.textTheme.titleLarge?.copyWith(
+   615	                            color: Theme.of(context).colorScheme.surface,
+   616	                            fontWeight: FontWeight.w700,
+   617	                            fontSize: 18,
+   618	                            height: 1.0,
+   619	                            letterSpacing: -0.2,
+   620	                          ),
+   621	                        ),
+   622	                        const SizedBox(width: 6),
+   623	                        AnimatedContainer(
+   624	                          duration: const Duration(milliseconds: 950),
+   625	                          curve: Curves.easeInOutCubic,
+   626	                          padding: const EdgeInsets.symmetric(
+   627	                            horizontal: 6,
+   628	                            vertical: 2,
+   629	                          ),
+   630	                          decoration: BoxDecoration(
+   631	                            color: Colors.white.withValues(alpha: 0.18),
+   632	                            borderRadius: BorderRadius.circular(12),
+   633	                            boxShadow: [
+   634	                              BoxShadow(
+   635	                                color: Colors.white.withValues(
+   636	                                  alpha: 0.26 + (0.48 * _pulseController.value),
+   637	                                ),
+   638	                                blurRadius: 16 + (18 * _pulseController.value),
+   639	                                spreadRadius: 0.4,
+   640	                              ),
+   641	                            ],
+   642	                          ),
+   643	                          child: FadeTransition(
+   644	                            opacity: Tween(begin: 0.55, end: 1.0).animate(
+   645	                              CurvedAnimation(
+   646	                                parent: _pulseController,
+   647	                                curve: Curves.easeOut,
+   648	                              ),
+   649	                            ),
+   650	                            child: ScaleTransition(
+   651	                              scale: Tween(begin: 0.90, end: 1.03).animate(
+   652	                                CurvedAnimation(
+   653	                                  parent: _pulseController,
+   654	                                  curve: Curves.easeInOut,
+   655	                                ),
+   656	                              ),
+   657	                              child: Text(
+   658	                                'LIVE',
+   659	                                style: theme.textTheme.labelSmall?.copyWith(
+   660	                                  color: Theme.of(context).colorScheme.surface,
+   661	                                  fontSize: 9,
+   662	                                  fontWeight: FontWeight.w700,
+   663	                                ),
+   664	                              ),
+   665	                            ),
+   666	                          ),
+   667	                        ),
+   668	                      ],
+   669	                    ),
+   670	                    const SizedBox(height: 2),
+   671	                    Row(
+   672	                      mainAxisSize: MainAxisSize.min,
+   673	                      children: [
+   674	                        _buildLiveStatusIndicator(),
+   675	                        const SizedBox(width: 6),
+   676	                        const SizedBox(width: 4),
+   677	                        Flexible(
+   678	                          child: AnimatedDefaultTextStyle(
+   679	                            duration: const Duration(milliseconds: 220),
+   680	                            style: theme.textTheme.bodyMedium!.copyWith(
+   681	                              color: Colors.white.withValues(
+   682	                                alpha: _isTyping ? 0.9 : 0.78,
+   683	                              ),
+   684	                              fontSize: 13,
+   685	                              fontWeight: FontWeight.w400,
+   686	                              height: 1.05,
+   687	                              letterSpacing: _isTyping ? 0.08 : 0.0,
+   688	                            ),
+   689	                            child: Text(
+   690	                              _isTyping ? 'Thinking...' : 'Ready to assist',
+   691	                            ),
+   692	                          ),
+   693	                        ),
+   694	                      ],
+   695	                    ),
+   696	                  ],
+   697	                ),
+   698	              ),
+   699	
+   700	              // Header Actions - With improved tap handling
+   701	              Row(
+   702	                mainAxisSize: MainAxisSize.min,
+   703	                children: [
+   704	                  // Fullscreen Toggle
+   705	                  GestureDetector(
+   706	                    onTap: _toggleFullScreen,
+   707	                    behavior: HitTestBehavior.opaque,
+   708	                    child: Container(
+   709	                      width: 48,
+   710	                      height: 48,
+   711	                      decoration: BoxDecoration(
+   712	                        borderRadius: BorderRadius.circular(12),
+   713	                        color: Colors.white.withValues(alpha: 0.1),
+   714	                      ),
+   715	                      child: Icon(
+   716	                        _isFullScreen
+   717	                            ? Icons.fullscreen_exit_rounded
+   718	                            : Icons.fullscreen_rounded,
+   719	                        color: Theme.of(context).colorScheme.surface,
+   720	                        size: 24,
+   721	                      ),
+   722	                    ),
+   723	                  ),
+   724	
+   725	                  const SizedBox(width: 4),
+   726	
+   727	                  // Close Button - Enhanced with better tap handling
+   728	                  GestureDetector(
+   729	                    onTap: _toggleChat,
+   730	                    behavior: HitTestBehavior.opaque,
+   731	                    child: Container(
+   732	                      width: 48,
+   733	                      height: 48,
+   734	                      decoration: BoxDecoration(
+   735	                        borderRadius: BorderRadius.circular(12),
+   736	                        color: Colors.white.withValues(alpha: 0.1),
+   737	                      ),
+   738	                      child: Icon(
+   739	                        Icons.keyboard_arrow_down_rounded,
+   740	                        color: Theme.of(context).colorScheme.surface,
+   741	                        size: 24,
+   742	                      ),
+   743	                    ),
+   744	                  ),
+   745	                ],
+   746	              ),
+   747	            ],
+   748	          ),
+   749	
+   750	          if (!compact) ...[
+   751	            // Medical Disclaimer (Guideline 1.4.1)
+   752	            const SizedBox(height: 12),
+   753	            Container(
+   754	              padding: const EdgeInsets.all(8),
+   755	              decoration: BoxDecoration(
+   756	                color: Colors.white.withValues(alpha: 0.08),
+   757	                borderRadius: BorderRadius.circular(12),
+   758	                border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+   759	              ),
+   760	              child: Row(
+   761	                mainAxisSize: MainAxisSize.min,
+   762	                children: [
+   763	                  const SizedBox(width: 6),
+   764	                  Expanded(
+   765	                    child: Text(
+   766	                      _getInsightsBannerText(),
+   767	                      style: TextStyle(
+   768	                        fontSize: 12,
+   769	                        color: Colors.white.withValues(alpha: 0.9),
+   770	                        fontWeight: FontWeight.w400,
+   771	                      ),
+   772	                    ),
+   773	                  ),
+   774	                ],
+   775	              ),
+   776	            ),
+   777	          ],
+   778	        ],
+   779	      ),
+   780	    );
+   781	  }
+   782	
+   783	  String _getInsightsBannerText() {
+   784	    if (_isTyping) {
+   785	      return 'Analyzing your patterns ✨' +
+   786	          '.' * ((_pulseController.value * 3).floor() + 1);
+   787	    }
+   788	
+   789	    if (_messages.length > 1) {
+   790	      return '✦ Personalized insights based on your cycle data ⓘ';
+   791	    }
+   792	
+   793	    return '✦ Personalized AI insights ⓘ Not medical advice';
+   794	  }
+   795	
+   796	  // Enhanced Chat Area - Better spacing and padding
+   797	  Widget _buildChatArea(ThemeData theme) {
+   798	    return SizedBox.expand(
+   799	      child: Theme(
+   800	        data: theme.copyWith(
+   801	          primaryColor: theme.brightness == Brightness.dark
+   802	              ? Colors.blueGrey
+   803	              : AppTheme.primaryRose,
+   804	        ),
+   805	        child: Chat(
+   806	          messages: _messages,
+   807	          onSendPressed: _handleSendPressed,
+   808	          onMessageTap: _handleMessageTap,
+   809	          onPreviewDataFetched: _handlePreviewDataFetched,
+   810	          user: _chatService.currentUser ?? types.User(id: 'fallback_user'),
+   811	          theme: DefaultChatTheme(
+   812	            primaryColor: theme.brightness == Brightness.dark
+   813	                ? Colors.blueGrey
+   814	                : AppTheme.primaryRose,
+   815	            secondaryColor: Theme.of(context).colorScheme.surfaceContainer,
+   816	            backgroundColor: Colors.transparent,
+   817	            inputBackgroundColor: Theme.of(context).colorScheme.surface,
+   818	            inputTextColor: theme.textTheme.bodyMedium?.color ?? Colors.black,
+   819	            messageBorderRadius: 16,
+   820	            messageInsetsHorizontal: 12,
+   821	            messageInsetsVertical: 8,
+   822	            receivedMessageBodyTextStyle:
+   823	                theme.textTheme.bodyMedium?.copyWith(
+   824	                  color: theme.textTheme.bodyMedium?.color,
+   825	                  fontSize: 14,
+   826	                  height: 1.5,
+   827	                ) ??
+   828	                const TextStyle(fontSize: 14, height: 1.5),
+   829	            sentMessageBodyTextStyle:
+   830	                theme.textTheme.bodyMedium?.copyWith(
+   831	                  color: Theme.of(context).colorScheme.surface,
+   832	                  fontSize: 14,
+   833	                  height: 1.5,
+   834	                ) ??
+   835	                TextStyle(
+   836	                  color: Theme.of(context).colorScheme.surface,
+   837	                  fontSize: 14,
+   838	                  height: 1.5,
+   839	                ),
+   840	          ),
+   841	          showUserAvatars: true,
+   842	          showUserNames: false,
+   843	          customBottomWidget:
+   844	              const SizedBox.shrink(), // We'll use our enhanced input
+   845	        ),
+   846	      ),
+   847	    );
+   848	  }
+   849	
+   850	  // Enhanced Quick Replies - More visible and professional
+   851	  Widget _buildEnhancedQuickReplies(ThemeData theme) {
+   852	    final suggestions = _chatService.getSuggestedReplies().toList();
+   853	
+   854	    return Column(
+   855	      crossAxisAlignment: CrossAxisAlignment.start,
+   856	      mainAxisSize: MainAxisSize.min,
+   857	      children: [
+   858	        // Header - More prominent
+   859	        InkWell(
+   860	          borderRadius: AppGeometry.dialogRadius,
+   861	          onTap: () {
+   862	            setState(() {
+   863	              _quickRepliesCollapsed = !_quickRepliesCollapsed;
+   864	            });
+   865	          },
+   866	          child: Padding(
+   867	            padding: const EdgeInsets.symmetric(vertical: 4),
+   868	            child: Row(
+   869	              children: [
+   870	                Container(
+   871	                  padding: const EdgeInsets.all(6),
+   872	                  decoration: BoxDecoration(
+   873	                    gradient: LinearGradient(
+   874	                      colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+   875	                    ),
+   876	                    borderRadius: BorderRadius.circular(12),
+   877	                  ),
+   878	                  child: Icon(
+   879	                    Icons.auto_awesome_outlined,
+   880	                    color: Theme.of(context).colorScheme.surface,
+   881	                    size: 18,
+   882	                  ),
+   883	                ),
+   884	                const SizedBox(width: 8),
+   885	                Expanded(
+   886	                  child: Text(
+   887	                    'Suggested Questions',
+   888	                    style: theme.textTheme.titleMedium?.copyWith(
+   889	                      color: AppTheme.primaryRose,
+   890	                      fontWeight: FontWeight.w500,
+   891	                      fontSize: 14,
+   892	                    ),
+   893	                  ),
+   894	                ),
+   895	                Icon(
+   896	                  _quickRepliesCollapsed
+   897	                      ? Icons.keyboard_arrow_down
+   898	                      : Icons.keyboard_arrow_up,
+   899	                  color: AppTheme.primaryRose,
+   900	                ),
+   901	              ],
+   902	            ),
+   903	          ),
+   904	        ),
+   905	        const SizedBox(height: 4),
+   906	        // Suggestions - Horizontal scrollable for better visibility
+   907	        if (!_quickRepliesCollapsed)
+   908	          SizedBox(
+   909	            height: 34,
+   910	            child: ListView.separated(
+   911	              scrollDirection: Axis.horizontal,
+   912	              itemCount: suggestions.length,
+   913	              separatorBuilder: (context, index) => const SizedBox(width: 12),
+   914	              itemBuilder: (context, index) {
+   915	                return _buildSuggestionChip(suggestions[index], theme, index);
+   916	              },
+   917	            ),
+   918	          ),
+   919	      ],
+   920	    );
+   921	  }
+   922	
+   923	  // Suggestion Chip - More prominent and professional
+   924	  Widget _buildSuggestionChip(String suggestion, ThemeData theme, int index) {
+   925	    return InkWell(
+   926	          onTap: () {
+   927	            final currentUser = _chatService.currentUser;
+   928	            if (currentUser == null) return;
+   929	
+   930	            final message = types.TextMessage(
+   931	              author: currentUser,
+   932	              createdAt: DateTime.now().millisecondsSinceEpoch,
+   933	              id: const Uuid().v4(),
+   934	              text: suggestion,
+   935	            );
+   936	
+   937	            setState(() {
+   938	              _isTyping = true;
+   939	              _isSuggestionsExpanded = false;
+   940	              _quickRepliesCollapsed = true;
+   941	            });
+   942	
+   943	            _chatService.sendMessage(message);
+   944	          },
+   945	          borderRadius: AppGeometry.dialogRadius,
+   946	          child: Container(
+   947	            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+   948	            decoration: BoxDecoration(
+   949	              gradient: LinearGradient(
+   950	                colors: [
+   951	                  AppTheme.primaryRose.withValues(alpha: 0.08),
+   952	                  AppTheme.primaryPurple.withValues(alpha: 0.08),
+   953	                ],
+   954	              ),
+   955	              borderRadius: BorderRadius.circular(12),
+   956	              border: Border.all(
+   957	                color: AppTheme.primaryRose.withValues(alpha: 0.2),
+   958	                width: 1,
+   959	              ),
+   960	              boxShadow: [
+   961	                BoxShadow(
+   962	                  color: AppTheme.primaryRose.withValues(alpha: 0.1),
+   963	                  blurRadius: 4,
+   964	                  offset: const Offset(0, 2),
+   965	                ),
+   966	              ],
+   967	            ),
+   968	            child: Text(
+   969	              suggestion,
+   970	              style: theme.textTheme.bodyMedium?.copyWith(
+   971	                color: AppTheme.primaryRose,
+   972	                fontWeight: FontWeight.w700,
+   973	                fontSize: 14,
+   974	              ),
+   975	            ),
+   976	          ),
+   977	        )
+   978	        .animate()
+   979	        .fadeIn(duration: 300.ms, delay: (index * 100).ms)
+   980	        .slideX(begin: 0.3, end: 0);
+   981	  }
+   982	
+   983	  Widget _buildLiveStatusIndicator() {
+   984	    final isThinking = _isTyping;
+   985	    final coreColor = isThinking ? AppTheme.primaryPurple : AppTheme.accentMint;
+   986	    final haloColor = isThinking
+   987	        ? AppTheme.primaryRose
+   988	        : AppTheme.secondaryBlue;
+   989	    final pulseDuration = isThinking ? 1050.ms : 1600.ms;
+   990	    final haloBegin = isThinking ? 0.82 : 0.76;
+   991	    final haloEnd = isThinking ? 1.28 : 1.18;
+   992	    final dotBegin = isThinking ? 0.94 : 0.97;
+   993	    final dotEnd = isThinking ? 1.09 : 1.05;
+   994	
+   995	    return Stack(
+   996	      alignment: Alignment.center,
+   997	      children: [
+   998	        Container(
+   999	              width: 16,
+  1000	              height: 16,
+  1001	              decoration: BoxDecoration(
+  1002	                shape: BoxShape.circle,
+  1003	                color: haloColor.withValues(alpha: isThinking ? 0.20 : 0.18),
+  1004	              ),
+  1005	            )
+  1006	            .animate(onPlay: null)
+  1007	            .scaleXY(
+  1008	              begin: haloBegin,
+  1009	              end: haloEnd,
+  1010	              duration: pulseDuration,
+  1011	              curve: Curves.easeInOutCubic,
+  1012	            )
+  1013	            .fadeIn(duration: 180.ms)
+  1014	            .then(delay: 120.ms)
+  1015	            .fadeOut(duration: isThinking ? 520.ms : 900.ms),
+  1016	
+  1017	        Container(
+  1018	              width: 9,
+  1019	              height: 9,
+  1020	              decoration: BoxDecoration(
+  1021	                shape: BoxShape.circle,
+  1022	                gradient: isThinking
+  1023	                    ? const LinearGradient(
+  1024	                        colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+  1025	                        begin: Alignment.topLeft,
+  1026	                        end: Alignment.bottomRight,
+  1027	                      )
+  1028	                    : const LinearGradient(
+  1029	                        colors: [AppTheme.secondaryBlue, AppTheme.accentMint],
+  1030	                        begin: Alignment.topLeft,
+  1031	                        end: Alignment.bottomRight,
+  1032	                      ),
+  1033	                color: null,
+  1034	                boxShadow: [
+  1035	                  BoxShadow(
+  1036	                    color: coreColor.withValues(
+  1037	                      alpha: isThinking ? 0.46 : 0.44,
+  1038	                    ),
+  1039	                    blurRadius: isThinking ? 13 : 10,
+  1040	                    spreadRadius: isThinking ? 1.8 : 1.4,
+  1041	                  ),
+  1042	                ],
+  1043	              ),
+  1044	            )
+  1045	            .animate(onPlay: null)
+  1046	            .scaleXY(
+  1047	              begin: dotBegin,
+  1048	              end: dotEnd,
+  1049	              duration: pulseDuration,
+  1050	              curve: Curves.easeInOutCubic,
+  1051	            ),
+  1052	      ],
+  1053	    );
+  1054	  }
+  1055	
+  1056	  // Enhanced Input Area - Better spacing and visibility
+  1057	  Widget _buildEnhancedInput(ThemeData theme) {
+  1058	    return Container(
+  1059	      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+  1060	      decoration: BoxDecoration(
+  1061	        color: Theme.of(context).colorScheme.surface,
+  1062	        borderRadius: AppGeometry.dialogRadius,
+  1063	        border: null,
+  1064	      ),
+  1065	      child: Row(
+  1066	        crossAxisAlignment: CrossAxisAlignment.end,
+  1067	        children: [
+  1068	          Expanded(
+  1069	            child: Container(
+  1070	              constraints: const BoxConstraints(maxHeight: 120),
+  1071	              decoration: BoxDecoration(
+  1072	                color: Theme.of(context).colorScheme.surface,
+  1073	                borderRadius: BorderRadius.circular(12),
+  1074	                border: Border.all(
+  1075	                  color: AppTheme.primaryRose.withValues(alpha: 0.10),
+  1076	                  width: 1,
+  1077	                ),
+  1078	                boxShadow: [
+  1079	                  BoxShadow(
+  1080	                    color: AppTheme.primaryRose.withValues(alpha: 0.05),
+  1081	                    blurRadius: 10,
+  1082	                    spreadRadius: 0,
+  1083	                    offset: const Offset(0, 0),
+  1084	                  ),
+  1085	                ],
+  1086	              ),
+  1087	              child: TextField(
+  1088	                textAlignVertical: TextAlignVertical.center,
+  1089	                enableInteractiveSelection: false,
+  1090	                controller: _textController,
+  1091	                focusNode: _inputFocusNode,
+  1092	                decoration: InputDecoration(
+  1093	                  contentPadding: EdgeInsets.symmetric(
+  1094	                    horizontal: 16,
+  1095	                    vertical: 14,
+  1096	                  ),
+  1097	                  hintText:
+  1098	                      'Ask about health, science, technology, lifestyle...',
+  1099	                  hintStyle: theme.textTheme.bodyMedium?.copyWith(
+  1100	                    color: theme.hintColor.withValues(alpha: 0.7),
+  1101	                    fontSize: 15,
+  1102	                  ),
+  1103	                  suffixIcon: IconButton(
+  1104	                    icon: Icon(
+  1105	                      Icons.send_rounded,
+  1106	                      size: 20,
+  1107	                      color: Theme.of(context).colorScheme.primary,
+  1108	                    ),
+  1109	                    onPressed: () {
+  1110	                      final text = _textController.text.trim();
+  1111	                      if (text.isNotEmpty) {
+  1112	                        _handleSendPressed(types.PartialText(text: text));
+  1113	                        _textController.clear();
+  1114	                      }
+  1115	                    },
+  1116	                  ),
+  1117	                  border: InputBorder.none,
+  1118	                ),
+  1119	                maxLines: null,
+  1120	                minLines: 1,
+  1121	                keyboardType: TextInputType.multiline,
+  1122	                textCapitalization: TextCapitalization.sentences,
+  1123	                style: theme.textTheme.bodyMedium?.copyWith(
+  1124	                  fontSize: 14,
+  1125	                  height: 1.4,
+  1126	                ),
+  1127	                onSubmitted: (text) {
+  1128	                  if (text.trim().isNotEmpty) {
+  1129	                    _handleSendPressed(types.PartialText(text: text.trim()));
+  1130	                    _textController.clear();
+  1131	                  }
+  1132	                },
+  1133	              ),
+  1134	            ),
+  1135	          ),
+  1136	        ],
+  1137	      ),
+  1138	    );
+  1139	  }
+  1140	}

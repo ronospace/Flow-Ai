@@ -1,0 +1,432 @@
+=== 1 ANALYZE ===
+Analyzing floating_ai_chat.dart...                              
+No issues found! (ran in 2.3s)
+
+=== 2 POSITION / KEYBOARD / BOTTOM ===
+   275	  Widget build(BuildContext context) {
+   276	    // // // // debugPrint("SCREEN HEIGHT: ");
+   277	    // // debugPrint("SAFE TOP: ");
+   278	    // // debugPrint("SAFE BOTTOM: ");
+   279	    // // // // debugPrint("VIEW INSETS (keyboard): ");
+   280	
+   281	    final theme = Theme.of(context);
+   282	    final keyboardInset = MediaQuery.of(context).viewInsets.bottom;
+   283	    final keyboardOpen = keyboardInset > 0;
+   284	    final effectiveFullScreen = _shellController.isFullScreen || keyboardOpen;
+   285	
+   286	    return Stack(
+   287	      children: [
+   288	        // Enhanced Chat Interface - NO OVERLAY
+   289	        if (_shellController.isExpanded)
+   290	          AnimatedPositioned(
+   291	            duration: Duration(milliseconds: 300),
+   292	            curve: Curves.easeOutCubic,
+   293	            right: effectiveFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+   294	            left: effectiveFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+   295	            top: effectiveFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+   296	            bottom: effectiveFullScreen
+   297	                ? 0
+   298	                : (keyboardOpen
+   299	                    ? 0
+   300	                    : (MediaQuery.of(context).padding.bottom +
+   301	                        _floatingChatGap)),
+   302	            child: AnimatedBuilder(
+   303	              animation: _chatAnimation,
+   304	              builder: (context, child) {
+   305	                return ClipRRect(
+   306	                  borderRadius: AppGeometry.dialogRadius,
+   307	                  child: Container(
+   308	                    clipBehavior: Clip.antiAlias,
+   309	                    decoration: BoxDecoration(
+   310	                      color: Theme.of(context).colorScheme.surface,
+   311	                      borderRadius: AppGeometry.dialogRadius,
+   312	                      boxShadow: [
+   313	                        BoxShadow(
+   314	                          color: AppTheme.primaryRose.withValues(alpha: 0.10),
+   315	                          blurRadius: 22,
+   316	                          spreadRadius: 1,
+   317	                          offset: const Offset(0, 0),
+   318	                        ),
+   319	                        BoxShadow(
+   320	                          color: theme.shadowColor.withValues(alpha: 0.16),
+   321	                          blurRadius: 12,
+   322	                          spreadRadius: 0,
+   323	                          offset: const Offset(0, 8),
+   324	                        ),
+   325	                      ],
+   326	                      border: Border.all(
+   327	                        color: AppTheme.primaryRose.withValues(alpha: 0.08),
+   328	                        width: 1,
+   329	                      ),
+   330	                    ),
+   331	                    child: GestureDetector(
+   332	                      behavior: HitTestBehavior.deferToChild,
+   333	                      onTap: () {
+   334	                        FocusScope.of(context).unfocus();
+   335	
+   336	
+   337	                      },
+   338	                      child: Column(
+   339	                        children: [
+   340	                        // Enhanced Draggable Header with Controls
+   341	                        _buildEnhancedHeader(theme, compact: keyboardOpen),
+   342	
+   343	                        // Localized Header Transition Fade
+   344	                        if (!keyboardOpen)
+   345	                          Container(
+   346	                            height: 22,
+   347	                            decoration: BoxDecoration(
+   348	                              gradient: LinearGradient(
+   349	                                begin: Alignment.topCenter,
+   350	                                end: Alignment.bottomCenter,
+   351	                                colors: [
+   352	                                  AppTheme.primaryRose.withValues(alpha: 0.045),
+   353	                                  Colors.white.withValues(alpha: 0.0),
+   354	                                ],
+   355	                              ),
+   356	                            ),
+   357	                          ),
+   358	
+   359	                        // Main content area - improved spacing
+   360	                        Expanded(
+   361	                          child: _buildChatArea(theme),
+   362	                        ),
+   363	
+   364	                        // Suggested Questions (above input)
+   365	                        if (!keyboardOpen)
+   366	                          SizedBox(
+   367	                            height: 80,
+   368	                            child: SingleChildScrollView(
+   369	                              child: Container(
+   370	                                padding: const EdgeInsets.fromLTRB(
+   371	                                  16,
+   372	                                  4,
+   373	                                  16,
+   374	                                  2,
+   375	                                ),
+   376	                                child: Padding(
+   377	                                  padding: const EdgeInsets.only(bottom: 6),
+   378	                                  child: _buildEnhancedQuickReplies(theme),
+   379	                                ),
+   380	                              ),
+   381	                            ),
+   382	                          ),
+   383	
+   384	                        // Input Area (last = primary)
+   385	                        SizedBox(
+   386	                          height: MediaQuery.of(context).size.width > 900
+   387	                              ? 0
+   388	                              : 8,
+   389	                        ),
+   390	                        _buildEnhancedInput(theme, keyboardOpen),
+   391	                        ],
+   392	                      ),
+   393	                    ),
+   394	                  ),
+   395	                );
+   396	              },
+   397	            ),
+   398	          ),
+   399	
+   400	        // Enhanced Floating Action Button
+   401	        if (!_shellController.isExpanded)
+   402	          Positioned(
+   403	            right: 16,
+   404	            bottom: _shellController.isFullScreen
+   405	                ? (MediaQuery.of(context).padding.bottom +
+   406	                      MediaQuery.of(context).viewInsets.bottom)
+   407	                : (MediaQuery.of(context).padding.bottom +
+   408	                      MediaQuery.of(context).viewInsets.bottom +
+   409	                      16),
+   410	            child: AnimatedBuilder(
+   411	              animation: _fabAnimation,
+   412	              builder: (context, child) {
+   413	                return Transform.scale(
+   414	                  scale: _shellController.isExpanded ? 1.0 : (1.0 + _fabAnimation.value * 0.1),
+   415	                  child: Container(
+   416	                    decoration: BoxDecoration(
+   417	                      borderRadius: BorderRadius.circular(12),
+   418	                      boxShadow: [
+   419	                        BoxShadow(
+   420	                          color: AppTheme.primaryRose.withValues(alpha: 0.2),
+
+=== 3 ALL INSETS / BOTTOM / GAP ===
+31:  static const double _floatingChatGap = 8;
+151:          final keyboardOpen = _inputFocusNode.hasFocus;
+155:          if (!keyboardOpen) {
+282:    final keyboardInset = MediaQuery.of(context).viewInsets.bottom;
+283:    final keyboardOpen = keyboardInset > 0;
+284:    final effectiveFullScreen = _shellController.isFullScreen || keyboardOpen;
+293:            right: effectiveFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+294:            left: effectiveFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+295:            top: effectiveFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+296:            bottom: effectiveFullScreen
+298:                : (keyboardOpen
+300:                    : (MediaQuery.of(context).padding.bottom +
+301:                        _floatingChatGap)),
+341:                        _buildEnhancedHeader(theme, compact: keyboardOpen),
+344:                        if (!keyboardOpen)
+365:                        if (!keyboardOpen)
+377:                                  padding: const EdgeInsets.only(bottom: 6),
+390:                        _buildEnhancedInput(theme, keyboardOpen),
+404:            bottom: _shellController.isFullScreen
+405:                ? (MediaQuery.of(context).padding.bottom +
+406:                      MediaQuery.of(context).viewInsets.bottom)
+407:                : (MediaQuery.of(context).padding.bottom +
+408:                      MediaQuery.of(context).viewInsets.bottom +
+1061:  Widget _buildEnhancedInput(ThemeData theme, bool keyboardOpen) {
+1063:      padding: EdgeInsets.symmetric(horizontal: 16, vertical: keyboardOpen ? 4 : 8),
+1074:              constraints: BoxConstraints(maxHeight: keyboardOpen ? 56 : 120),
+1099:                    vertical: keyboardOpen ? 8 : 14,
+1101:                  hintText: keyboardOpen
+1106:                    fontSize: keyboardOpen ? 13.5 : 15,
+
+=== 4 TAP / FOCUS / RESTORE ===
+124:    WidgetsBinding.instance.addPostFrameCallback((_) {
+148:        Future.delayed(_thinkingDelay, () {
+333:                      onTap: () {
+334:                        FocusScope.of(context).unfocus();
+711:                    onTap: _toggleFullScreen,
+734:                    onTap: _toggleChat,
+807:      onPointerDown: (_) {
+808:        FocusScope.of(context).unfocus();
+863:          onTap: () {
+930:          onTap: () {
+
+=== 5 HEIGHT OWNERS ===
+201:      _shellController.toggleExpanded();
+307:                  child: Container(
+345:                          Container(
+346:                            height: 22,
+360:                        Expanded(
+366:                          SizedBox(
+367:                            height: 80,
+369:                              child: Container(
+385:                        SizedBox(
+386:                          height: MediaQuery.of(context).size.width > 900
+415:                  child: Container(
+462:                                          Container(
+464:                                                height: 16,
+522:    return Container(
+557:                child: Container(
+559:                  height: 30, // Larger hit area
+561:                  child: Container(
+563:                    height: 4,
+572:          if (!_shellController.isFullScreen && !compact) const SizedBox(height: 4),
+578:              Container(
+580:                    height: 48,
+605:              const SizedBox(width: 16),
+608:              Expanded(
+623:                            height: 1.0,
+627:                        const SizedBox(width: 6),
+628:                        AnimatedContainer(
+675:                    const SizedBox(height: 2),
+680:                        const SizedBox(width: 6),
+681:                        const SizedBox(width: 4),
+682:                        Flexible(
+691:                              height: 1.05,
+713:                    child: Container(
+715:                      height: 48,
+730:                  const SizedBox(width: 4),
+736:                    child: Container(
+738:                      height: 48,
+757:            const SizedBox(height: 12),
+758:            Container(
+768:                  const SizedBox(width: 6),
+769:                  Expanded(
+823:            child: Container(
+826:              constraints: BoxConstraints(
+842:                  height: 1.5,
+874:                Container(
+888:                const SizedBox(width: 8),
+889:                Expanded(
+909:        const SizedBox(height: 4),
+912:          SizedBox(
+913:            height: 34,
+917:              separatorBuilder: (context, index) => const SizedBox(width: 12),
+950:          child: Container(
+1002:        Container(
+1004:              height: 16,
+1021:        Container(
+1023:              height: 9,
+1062:    return Container(
+1072:          Expanded(
+1073:            child: Container(
+1074:              constraints: BoxConstraints(maxHeight: keyboardOpen ? 56 : 120),
+1130:                  height: 1.4,
+
+=== 6 CONTROLLER STATE ===
+     1	import 'package:flutter/material.dart';
+     2	
+     3	class ZyraShellController extends ChangeNotifier {
+     4	  bool isExpanded = false;
+     5	  bool isFullScreen = false;
+     6	  bool isTyping = false;
+     7	  bool quickRepliesCollapsed = false;
+     8	  bool isKeyboardVisible = false;
+     9	  bool isTransitioning = false;
+    10	  bool isResizing = false;
+    11	
+    12	  double chatHeight = 0.5;
+    13	
+    14	  void setKeyboardVisibility(bool visible) {
+    15	    if (isKeyboardVisible == visible) return;
+    16	
+    17	    isKeyboardVisible = visible;
+    18	
+    19	    notifyListeners();
+    20	  }
+    21	
+    22	  void toggleExpanded() {
+    23	    if (isTransitioning) return;
+    24	
+    25	    isExpanded = !isExpanded;
+    26	
+    27	    if (!isExpanded) {
+    28	      isFullScreen = false;
+    29	      chatHeight = 0.5;
+    30	    }
+    31	
+    32	    notifyListeners();
+    33	  }
+    34	
+    35	  void toggleFullScreen() {
+    36	    if (isTransitioning) return;
+    37	
+    38	    isFullScreen = !isFullScreen;
+    39	    chatHeight = isFullScreen ? 0.9 : 0.6;
+    40	
+    41	    notifyListeners();
+    42	  }
+    43	
+    44	  void setTyping(bool value) {
+    45	    if (isTyping == value) return;
+    46	
+    47	    isTyping = value;
+    48	
+    49	    notifyListeners();
+    50	  }
+    51	
+    52	  void setQuickRepliesCollapsed(bool value) {
+    53	    if (quickRepliesCollapsed == value) return;
+    54	
+    55	    quickRepliesCollapsed = value;
+    56	
+    57	    notifyListeners();
+    58	  }
+    59	
+    60	  void setTransitioning(bool value) {
+    61	    if (isTransitioning == value) return;
+    62	
+    63	    isTransitioning = value;
+    64	
+    65	    notifyListeners();
+    66	  }
+    67	
+    68	  void setResizing(bool value) {
+    69	    if (isResizing == value) return;
+    70	
+    71	    isResizing = value;
+    72	
+    73	    notifyListeners();
+    74	  }
+    75	
+    76	  void adjustChatHeight(
+    77	    double delta,
+    78	    double screenHeight,
+    79	  ) {
+    80	    final updatedHeight =
+    81	        (chatHeight - delta / screenHeight).clamp(0.3, 0.9);
+    82	
+    83	    if (updatedHeight == chatHeight) return;
+    84	
+    85	    chatHeight = updatedHeight;
+    86	
+    87	    notifyListeners();
+    88	  }
+    89	
+    90	  void restoreDialogState() {
+    91	    quickRepliesCollapsed = false;
+    92	    isKeyboardVisible = false;
+    93	
+    94	    notifyListeners();
+    95	  }
+    96	}
+
+=== 7 GIT DIFF ===
+diff --git a/lib/features/insights/widgets/floating_ai_chat.dart b/lib/features/insights/widgets/floating_ai_chat.dart
+index 49818fa..a83e06f 100644
+--- a/lib/features/insights/widgets/floating_ai_chat.dart
++++ b/lib/features/insights/widgets/floating_ai_chat.dart
+@@ -279,7 +279,9 @@ class _FloatingAIChatState extends State<FloatingAIChat>
+     // // // // debugPrint("VIEW INSETS (keyboard): ");
+ 
+     final theme = Theme.of(context);
+-    final keyboardOpen = _inputFocusNode.hasFocus;
++    final keyboardInset = MediaQuery.of(context).viewInsets.bottom;
++    final keyboardOpen = keyboardInset > 0;
++    final effectiveFullScreen = _shellController.isFullScreen || keyboardOpen;
+ 
+     return Stack(
+       children: [
+@@ -288,15 +290,15 @@ class _FloatingAIChatState extends State<FloatingAIChat>
+           AnimatedPositioned(
+             duration: Duration(milliseconds: 300),
+             curve: Curves.easeOutCubic,
+-            right: _shellController.isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+-            left: _shellController.isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+-            top: _shellController.isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+-            bottom: _shellController.isFullScreen
+-                ? (MediaQuery.of(context).padding.bottom +
+-                      MediaQuery.of(context).viewInsets.bottom)
+-                : (MediaQuery.of(context).padding.bottom +
+-                      MediaQuery.of(context).viewInsets.bottom +
+-                      (keyboardOpen ? 0 : _floatingChatGap)),
++            right: effectiveFullScreen ? 16 : AppLayoutMetrics.sideMargin,
++            left: effectiveFullScreen ? 16 : AppLayoutMetrics.sideMargin,
++            top: effectiveFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
++            bottom: effectiveFullScreen
++                ? 0
++                : (keyboardOpen
++                    ? 0
++                    : (MediaQuery.of(context).padding.bottom +
++                        _floatingChatGap)),
+             child: AnimatedBuilder(
+               animation: _chatAnimation,
+               builder: (context, child) {
+@@ -331,11 +333,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
+                       onTap: () {
+                         FocusScope.of(context).unfocus();
+ 
+-                        WidgetsBinding.instance.addPostFrameCallback((_) {
+-                          if (!mounted) return;
+ 
+-                          _shellController.restoreDialogState();
+-                        });
+                       },
+                       child: Column(
+                         children: [
+@@ -364,8 +362,9 @@ class _FloatingAIChatState extends State<FloatingAIChat>
+                         ),
+ 
+                         // Suggested Questions (above input)
+-                        SizedBox(
+-                          height: keyboardOpen ? 0 : 80,
++                        if (!keyboardOpen)
++                          SizedBox(
++                            height: 80,
+                             child: SingleChildScrollView(
+                               child: Container(
+                                 padding: const EdgeInsets.fromLTRB(
+@@ -808,10 +807,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
+       onPointerDown: (_) {
+         FocusScope.of(context).unfocus();
+ 
+-        WidgetsBinding.instance.addPostFrameCallback((_) {
+-          if (!mounted) return;
+-          _shellController.restoreDialogState();
+-        });
++
+       },
+       child: ListView.builder(
+         reverse: true,

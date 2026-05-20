@@ -1,0 +1,39 @@
+
+========== CONTAINER DEPTH ==========
+
+313:                  child: Container(
+343:                        Container(
+362:                          SizedBox(
+365:                              child: Container(
+372:                                child: Padding(
+381:                        SizedBox(
+410:                  child: Container(
+457:                                          Container(
+517:    return Container(
+552:                child: Container(
+556:                  child: Container(
+567:          if (!_isFullScreen && !compact) const SizedBox(height: 4),
+573:              Container(
+600:              const SizedBox(width: 16),
+622:                        const SizedBox(width: 6),
+623:                        AnimatedContainer(
+670:                    const SizedBox(height: 2),
+675:                        const SizedBox(width: 6),
+676:                        const SizedBox(width: 4),
+708:                    child: Container(
+725:                  const SizedBox(width: 4),
+731:                    child: Container(
+752:            const SizedBox(height: 12),
+753:            Container(
+763:                  const SizedBox(width: 6),
+866:          child: Padding(
+870:                Container(
+884:                const SizedBox(width: 8),
+905:        const SizedBox(height: 4),
+908:          SizedBox(
+913:              separatorBuilder: (context, index) => const SizedBox(width: 12),
+946:          child: Container(
+998:        Container(
+1017:        Container(
+1058:    return Container(
+1069:            child: Container(

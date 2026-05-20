@@ -1,0 +1,158 @@
+
+========== SHADOW / GLOW OWNERSHIP ==========
+
+314-                    clipBehavior: Clip.antiAlias,
+315-                    decoration: BoxDecoration(
+316-                      color: Theme.of(context).colorScheme.surface,
+317-                      borderRadius: AppGeometry.dialogRadius,
+318:                      boxShadow: [
+319-                        BoxShadow(
+320-                          color: AppTheme.primaryRose.withValues(alpha: 0.10),
+321:                          blurRadius: 22,
+322:                          spreadRadius: 1,
+323-                          offset: const Offset(0, 0),
+324-                        ),
+325-                        BoxShadow(
+326-                          color: theme.shadowColor.withValues(alpha: 0.16),
+327:                          blurRadius: 12,
+328:                          spreadRadius: 0,
+329-                          offset: const Offset(0, 8),
+330-                        ),
+331-                      ],
+332-                      border: Border.all(
+333-                        color: AppTheme.primaryRose.withValues(alpha: 0.08),
+334-                        width: 1,
+335-                      ),
+336-                    ),
+--
+409-                  scale: _isExpanded ? 1.0 : (1.0 + _fabAnimation.value * 0.1),
+410-                  child: Container(
+411-                    decoration: BoxDecoration(
+412-                      borderRadius: BorderRadius.circular(12),
+413:                      boxShadow: [
+414-                        BoxShadow(
+415-                          color: AppTheme.primaryRose.withValues(alpha: 0.2),
+416:                          blurRadius: 16,
+417:                          spreadRadius: 2,
+418-                          offset: const Offset(0, 4),
+419-                        ),
+420-                      ],
+421-                    ),
+422-                    child: FloatingActionButton(
+423-                      heroTag: "ai_chat_main_fab",
+424-                      onPressed: _toggleChat,
+425-                      backgroundColor: AppTheme.primaryRose,
+--
+466-                                                        ],
+467-                                                      ),
+468-                                                  borderRadius:
+469-                                                      AppGeometry.dialogRadius,
+470:                                                  boxShadow: [
+471-                                                    BoxShadow(
+472-                                                      color: AppTheme
+473-                                                          .successGreen
+474-                                                          .withValues(
+475-                                                            alpha: 0.5,
+476-                                                          ),
+477:                                                      blurRadius: 8,
+478:                                                      spreadRadius: 1,
+479-                                                    ),
+480-                                                  ],
+481-                                                ),
+482-                                                child: Icon(
+483-                                                  Icons.auto_awesome,
+484-                                                  color: Theme.of(
+485-                                                    context,
+486-                                                  ).colorScheme.surface,
+--
+522-          begin: Alignment.topLeft,
+523-          end: Alignment.bottomRight,
+524-        ),
+525-        borderRadius: AppGeometry.dialogRadius,
+526:        boxShadow: [
+527-          BoxShadow(
+528-            color: AppTheme.primaryRose.withValues(alpha: 0.2),
+529:            blurRadius: 8,
+530-            offset: const Offset(0, 2),
+531-          ),
+532-        ],
+533-      ),
+534-      child: Column(
+535-        children: [
+536-          // Resize Handle - Only draggable area
+537-          if (!_isFullScreen && !compact)
+--
+629-                          ),
+630-                          decoration: BoxDecoration(
+631-                            color: Colors.white.withValues(alpha: 0.18),
+632-                            borderRadius: BorderRadius.circular(12),
+633:                            boxShadow: [
+634-                              BoxShadow(
+635-                                color: Colors.white.withValues(
+636-                                  alpha: 0.26 + (0.48 * _pulseController.value),
+637-                                ),
+638:                                blurRadius: 16 + (18 * _pulseController.value),
+639:                                spreadRadius: 0.4,
+640-                              ),
+641-                            ],
+642-                          ),
+643-                          child: FadeTransition(
+644-                            opacity: Tween(begin: 0.55, end: 1.0).animate(
+645-                              CurvedAnimation(
+646-                                parent: _pulseController,
+647-                                curve: Curves.easeOut,
+--
+956-              border: Border.all(
+957-                color: AppTheme.primaryRose.withValues(alpha: 0.2),
+958-                width: 1,
+959-              ),
+960:              boxShadow: [
+961-                BoxShadow(
+962-                  color: AppTheme.primaryRose.withValues(alpha: 0.1),
+963:                  blurRadius: 4,
+964-                  offset: const Offset(0, 2),
+965-                ),
+966-              ],
+967-            ),
+968-            child: Text(
+969-              suggestion,
+970-              style: theme.textTheme.bodyMedium?.copyWith(
+971-                color: AppTheme.primaryRose,
+--
+1030-                        begin: Alignment.topLeft,
+1031-                        end: Alignment.bottomRight,
+1032-                      ),
+1033-                color: null,
+1034:                boxShadow: [
+1035-                  BoxShadow(
+1036-                    color: coreColor.withValues(
+1037-                      alpha: isThinking ? 0.46 : 0.44,
+1038-                    ),
+1039:                    blurRadius: isThinking ? 13 : 10,
+1040:                    spreadRadius: isThinking ? 1.8 : 1.4,
+1041-                  ),
+1042-                ],
+1043-              ),
+1044-            )
+1045-            .animate(onPlay: null)
+1046-            .scaleXY(
+1047-              begin: dotBegin,
+1048-              end: dotEnd,
+--
+1074-                border: Border.all(
+1075-                  color: AppTheme.primaryRose.withValues(alpha: 0.10),
+1076-                  width: 1,
+1077-                ),
+1078:                boxShadow: [
+1079-                  BoxShadow(
+1080-                    color: AppTheme.primaryRose.withValues(alpha: 0.05),
+1081:                    blurRadius: 10,
+1082:                    spreadRadius: 0,
+1083-                    offset: const Offset(0, 0),
+1084-                  ),
+1085-                ],
+1086-              ),
+1087-              child: TextField(
+1088-                textAlignVertical: TextAlignVertical.center,
+1089-                enableInteractiveSelection: false,
+1090-                controller: _textController,

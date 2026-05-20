@@ -1,0 +1,376 @@
+===== STATE FLAGS =====
+33:  bool _isExpanded = false;
+34:  bool _isFullScreen = false;
+46:  bool _isTyping = false;
+47:  bool _quickRepliesCollapsed = false;
+144:              final keyboardOpen = _inputFocusNode.hasFocus;
+147:                _isTyping = false;
+148:                if (!keyboardOpen) {
+149:                  _quickRepliesCollapsed = false;
+182:    if (!_isExpanded) {
+194:      _isExpanded = !_isExpanded;
+195:      if (!_isExpanded) {
+196:        _isFullScreen = false;
+201:    if (_isExpanded) {
+213:      _isFullScreen = !_isFullScreen;
+214:      _chatHeight = _isFullScreen ? 0.9 : 0.6;
+217:    if (_isFullScreen) {
+249:      _isTyping = true;
+290:    final keyboardOpen = _inputFocusNode.hasFocus;
+295:        if (_isExpanded)
+299:            right: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+300:            left: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+301:            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+302:            bottom: _isFullScreen
+304:                      MediaQuery.of(context).viewInsets.bottom)
+306:                      MediaQuery.of(context).viewInsets.bottom +
+307:                      (keyboardOpen ? 0 : _floatingChatGap)),
+340:                        _buildEnhancedHeader(theme, compact: keyboardOpen),
+343:                        if (!keyboardOpen)
+365:                        if (!keyboardOpen && _shouldShowQuickQuestions())
+390:                        _buildEnhancedInput(theme, keyboardOpen),
+400:        if (!_isExpanded)
+403:            bottom: _isFullScreen
+405:                      MediaQuery.of(context).viewInsets.bottom)
+407:                      MediaQuery.of(context).viewInsets.bottom +
+413:                  scale: _isExpanded ? 1.0 : (1.0 + _fabAnimation.value * 0.1),
+439:                        child: _isExpanded
+456:                                  if (!_isExpanded)
+541:          if (!_isFullScreen && !compact)
+549:                  if (!_isFullScreen && _isResizing) {
+571:          if (!_isFullScreen && !compact) const SizedBox(height: 4),
+686:                                alpha: _isTyping ? 0.9 : 0.78,
+691:                              letterSpacing: _isTyping ? 0.08 : 0.0,
+694:                              _isTyping ? 'Thinking...' : 'Ready to assist',
+720:                        _isFullScreen
+788:    if (_isTyping) {
+867:              _quickRepliesCollapsed = !_quickRepliesCollapsed;
+900:                  _quickRepliesCollapsed
+911:        if (!_quickRepliesCollapsed)
+942:              _isTyping = true;
+944:              _quickRepliesCollapsed = true;
+988:    final isThinking = _isTyping;
+1061:  Widget _buildEnhancedInput(ThemeData theme, bool keyboardOpen) {
+1101:                  hintText: keyboardOpen
+1106:                    fontSize: keyboardOpen ? 13.5 : 15,
+
+===== SETSTATE CALLS =====
+98:            if (mounted) setState(() {});
+116:        if (mounted) setState(() {});
+137:        setState(() {
+146:              setState(() {
+193:    setState(() {
+212:    setState(() {
+225:    setState(() {
+248:    setState(() {
+866:            setState(() {
+941:            setState(() {
+
+===== GESTURE DETECTORS =====
+543:              child: GestureDetector(
+709:                  GestureDetector(
+710:                    onTap: _toggleFullScreen,
+732:                  GestureDetector(
+733:                    onTap: _toggleChat,
+863:        InkWell(
+865:          onTap: () {
+929:    return InkWell(
+930:          onTap: () {
+
+===== FOCUS OWNERSHIP =====
+106-
+107-    _chatAnimation = CurvedAnimation(
+108-      parent: _chatController,
+109-      curve: Curves.easeOutCubic,
+110-    );
+111-
+112-    // Initialize text controller
+113-    _textController = TextEditingController();
+114:    _inputFocusNode = FocusNode()
+115-      ..addListener(() {
+116-        if (mounted) setState(() {});
+117-      });
+118-
+119-    // Initialize chat service after first build to get localizations
+120-    WidgetsBinding.instance.addPostFrameCallback((_) {
+121-      final localizations = AppLocalizations.of(context);
+122-      final settingsProvider = context.read<SettingsProvider>();
+
+===== QUICK QUESTION OWNERSHIP =====
+37-  late AnimationController _chatController;
+38-  late AnimationController _expandController;
+39-  late AnimationController _pulseController;
+40-  late Animation<double> _fabAnimation;
+41-  late Animation<double> _chatAnimation;
+42-  late StreamSubscription _messagesSub;
+43-
+44-  final EnhancedAIChatService _chatService = EnhancedAIChatService();
+45-  List<types.Message> _messages = [];
+46-  bool _isTyping = false;
+47:  bool _quickRepliesCollapsed = false;
+48-  // removed unused _showQuickReplies
+49-  // ignore: unused_field
+50-  bool _isSuggestionsExpanded = true;
+51-  // ignore: unused_field
+52-  final List<String> _suggestedQuestions = [
+53-    "When will my next period start?",
+54-    "Is my cycle regular?",
+55-    "Can I get pregnant today?",
+56-    "What are my fertile days?",
+57-    "Why is my period late?",
+58-    "What do my symptoms mean?",
+59-    "How long is a normal cycle?",
+60-    "When am I ovulating?",
+61-    "Is spotting normal?",
+62-    "How can I reduce cramps?",
+63-  ];
+64-
+65-  late TextEditingController _textController;
+66-  late FocusNode _inputFocusNode;
+67-
+--
+139-          if (messages.isNotEmpty &&
+140-              messages.last.author.id == 'ai_flowai_enhanced') {
+141-            Future.delayed(_thinkingDelay, () {
+142-              if (!mounted) return;
+143-
+144-              final keyboardOpen = _inputFocusNode.hasFocus;
+145-
+146-              setState(() {
+147-                _isTyping = false;
+148-                if (!keyboardOpen) {
+149:                  _quickRepliesCollapsed = false;
+150-                  _isSuggestionsExpanded = true;
+151-                }
+152-              });
+153-            });
+154-          }
+155-        });
+156-      }
+157-    });
+158-
+159-    _messages = _chatService.messages;
+160-
+161-    // Start pulsing animation
+162-    _startPulsingAnimation();
+163-  }
+164-
+165-  @override
+166-  void dispose() {
+167-    // Ensure animations are stopped and controllers disposed properly
+168-    _fabController.stop();
+169-    _chatController.stop();
+--
+223-
+224-  void _adjustChatHeight(double delta) {
+225-    setState(() {
+226-      _chatHeight = (_chatHeight - delta / MediaQuery.of(context).size.height)
+227-          .clamp(0.3, 0.9);
+228-    });
+229-  }
+230-
+231-  /// Determine if Quick Questions should be shown
+232-  /// Show when there's only the welcome message (no user messages yet)
+233:  bool _shouldShowQuickQuestions() {
+234-    return true;
+235-  }
+236-
+237-  void _handleSendPressed(types.PartialText message) {
+238-    final currentUser = _chatService.currentUser;
+239-    if (currentUser == null) return;
+240-
+241-    final textMessage = types.TextMessage(
+242-      author: currentUser,
+243-      createdAt: DateTime.now().millisecondsSinceEpoch,
+244-      id: const Uuid().v4(),
+245-      text: message.text,
+246-    );
+247-
+248-    setState(() {
+249-      _isTyping = true;
+250-    });
+251-
+252-    _chatService.sendMessage(textMessage);
+253-  }
+--
+355-                            ),
+356-                          ),
+357-
+358-                        // Main content area - improved spacing
+359-                        Flexible(
+360-                          fit: FlexFit.loose,
+361-                          child: _buildChatArea(theme),
+362-                        ),
+363-
+364-                        // Suggested Questions (above input)
+365:                        if (!keyboardOpen && _shouldShowQuickQuestions())
+366-                          SizedBox(
+367-                            height: 80,
+368-                            child: SingleChildScrollView(
+369-                              child: Container(
+370-                                padding: const EdgeInsets.fromLTRB(
+371-                                  16,
+372-                                  4,
+373-                                  16,
+374-                                  2,
+375-                                ),
+376-                                child: Padding(
+377-                                  padding: const EdgeInsets.only(bottom: 6),
+378-                                  child: _buildEnhancedQuickReplies(theme),
+379-                                ),
+380-                              ),
+381-                            ),
+382-                          ),
+383-
+384-                        // Input Area (last = primary)
+385-                        SizedBox(
+--
+857-
+858-    return Column(
+859-      crossAxisAlignment: CrossAxisAlignment.start,
+860-      mainAxisSize: MainAxisSize.min,
+861-      children: [
+862-        // Header - More prominent
+863-        InkWell(
+864-          borderRadius: AppGeometry.dialogRadius,
+865-          onTap: () {
+866-            setState(() {
+867:              _quickRepliesCollapsed = !_quickRepliesCollapsed;
+868-            });
+869-          },
+870-          child: Padding(
+871-            padding: const EdgeInsets.symmetric(vertical: 4),
+872-            child: Row(
+873-              children: [
+874-                Container(
+875-                  padding: const EdgeInsets.all(6),
+876-                  decoration: BoxDecoration(
+877-                    gradient: LinearGradient(
+878-                      colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+879-                    ),
+880-                    borderRadius: BorderRadius.circular(12),
+881-                  ),
+882-                  child: Icon(
+883-                    Icons.auto_awesome_outlined,
+884-                    color: Theme.of(context).colorScheme.surface,
+885-                    size: 18,
+886-                  ),
+887-                ),
+--
+890-                  child: Text(
+891-                    'Suggested Questions',
+892-                    style: theme.textTheme.titleMedium?.copyWith(
+893-                      color: AppTheme.primaryRose,
+894-                      fontWeight: FontWeight.w500,
+895-                      fontSize: 14,
+896-                    ),
+897-                  ),
+898-                ),
+899-                Icon(
+900:                  _quickRepliesCollapsed
+901-                      ? Icons.keyboard_arrow_down
+902-                      : Icons.keyboard_arrow_up,
+903-                  color: AppTheme.primaryRose,
+904-                ),
+905-              ],
+906-            ),
+907-          ),
+908-        ),
+909-        const SizedBox(height: 4),
+910-        // Suggestions - Horizontal scrollable for better visibility
+911:        if (!_quickRepliesCollapsed)
+912-          SizedBox(
+913-            height: 34,
+914-            child: ListView.separated(
+915-              scrollDirection: Axis.horizontal,
+916-              itemCount: suggestions.length,
+917-              separatorBuilder: (context, index) => const SizedBox(width: 12),
+918-              itemBuilder: (context, index) {
+919-                return _buildSuggestionChip(suggestions[index], theme, index);
+920-              },
+921-            ),
+922-          ),
+923-      ],
+924-    );
+925-  }
+926-
+927-  // Suggestion Chip - More prominent and professional
+928-  Widget _buildSuggestionChip(String suggestion, ThemeData theme, int index) {
+929-    return InkWell(
+930-          onTap: () {
+931-            final currentUser = _chatService.currentUser;
+--
+934-            final message = types.TextMessage(
+935-              author: currentUser,
+936-              createdAt: DateTime.now().millisecondsSinceEpoch,
+937-              id: const Uuid().v4(),
+938-              text: suggestion,
+939-            );
+940-
+941-            setState(() {
+942-              _isTyping = true;
+943-              _isSuggestionsExpanded = false;
+944:              _quickRepliesCollapsed = true;
+945-            });
+946-
+947-            _chatService.sendMessage(message);
+948-          },
+949-          borderRadius: AppGeometry.dialogRadius,
+950-          child: Container(
+951-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+952-            decoration: BoxDecoration(
+953-              gradient: LinearGradient(
+954-                colors: [
+955-                  AppTheme.primaryRose.withValues(alpha: 0.08),
+956-                  AppTheme.primaryPurple.withValues(alpha: 0.08),
+957-                ],
+958-              ),
+959-              borderRadius: BorderRadius.circular(12),
+960-              border: Border.all(
+961-                color: AppTheme.primaryRose.withValues(alpha: 0.2),
+962-                width: 1,
+963-              ),
+964-              boxShadow: [
+
+===== POSITION + CONSTRAINTS =====
+296:          AnimatedPositioned(
+345:                            height: 22,
+359:                        Flexible(
+366:                          SizedBox(
+367:                            height: 80,
+385:                        SizedBox(
+386:                          height: MediaQuery.of(context).size.width > 900
+463:                                                height: 16,
+558:                  height: 30, // Larger hit area
+562:                    height: 4,
+571:          if (!_isFullScreen && !compact) const SizedBox(height: 4),
+579:                    height: 48,
+604:              const SizedBox(width: 16),
+607:              Expanded(
+622:                            height: 1.0,
+626:                        const SizedBox(width: 6),
+674:                    const SizedBox(height: 2),
+679:                        const SizedBox(width: 6),
+680:                        const SizedBox(width: 4),
+681:                        Flexible(
+690:                              height: 1.05,
+714:                      height: 48,
+729:                  const SizedBox(width: 4),
+737:                      height: 48,
+756:            const SizedBox(height: 12),
+767:                  const SizedBox(width: 6),
+768:                  Expanded(
+830:                  height: 1.5,
+832:                const TextStyle(fontSize: 14, height: 1.5),
+837:                  height: 1.5,
+842:                  height: 1.5,
+888:                const SizedBox(width: 8),
+889:                Expanded(
+909:        const SizedBox(height: 4),
+912:          SizedBox(
+913:            height: 34,
+917:              separatorBuilder: (context, index) => const SizedBox(width: 12),
+1004:              height: 16,
+1023:              height: 9,
+1072:          Expanded(
+1130:                  height: 1.4,

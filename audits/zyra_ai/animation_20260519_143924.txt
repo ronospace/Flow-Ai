@@ -1,0 +1,20 @@
+
+========== ANIMATION OWNERSHIP ==========
+
+36:  late AnimationController _fabController;
+37:  late AnimationController _chatController;
+38:  late AnimationController _expandController;
+39:  late AnimationController _pulseController;
+77:    _fabController = AnimationController(
+82:    _chatController = AnimationController(
+87:    _expandController = AnimationController(
+92:    _pulseController =
+93:        AnimationController(
+174:    _pulseController.dispose();
+585:                      scale: 0.965 + (_pulseController.value * 0.08),
+636:                                  alpha: 0.26 + (0.48 * _pulseController.value),
+638:                                blurRadius: 16 + (18 * _pulseController.value),
+646:                                parent: _pulseController,
+653:                                  parent: _pulseController,
+786:          '.' * ((_pulseController.value * 3).floor() + 1);
+978:        .animate()

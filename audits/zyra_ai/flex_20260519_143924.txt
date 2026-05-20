@@ -1,0 +1,123 @@
+
+========== FLEX / OVERFLOW RISKS ==========
+
+354-                          ),
+355-                        ),
+356-
+357-                        // Main content area - protected flex ownership
+358:                        Expanded(child: _buildChatArea(theme)),
+359-
+360-                        // Suggested Questions (above input)
+361-                        if (!keyboardOpen && _shouldShowQuickQuestions())
+362-                          SizedBox(
+363-                            height: 80,
+364:                            child: SingleChildScrollView(
+365-                              child: Container(
+366-                                padding: const EdgeInsets.fromLTRB(
+367-                                  16,
+368-                                  4,
+369-                                  16,
+370-                                  2,
+--
+563-                  ),
+564-                ),
+565-              ),
+566-            ),
+567:          if (!_isFullScreen && !compact) const SizedBox(height: 4),
+568-
+569-          // Header Content
+570-          Row(
+571-            children: [
+572-              // AI Avatar with Animation
+573-              Container(
+--
+599-
+600-              const SizedBox(width: 16),
+601-
+602-              // Title and Status
+603:              Expanded(
+604-                child: Column(
+605-                  mainAxisAlignment: MainAxisAlignment.center,
+606-                  crossAxisAlignment: CrossAxisAlignment.start,
+607-                  mainAxisSize: MainAxisSize.min,
+608-                  children: [
+609-                    Row(
+--
+666-                          ),
+667-                        ),
+668-                      ],
+669-                    ),
+670:                    const SizedBox(height: 2),
+671-                    Row(
+672-                      mainAxisSize: MainAxisSize.min,
+673-                      children: [
+674-                        _buildLiveStatusIndicator(),
+675-                        const SizedBox(width: 6),
+676-                        const SizedBox(width: 4),
+677:                        Flexible(
+678-                          child: AnimatedDefaultTextStyle(
+679-                            duration: const Duration(milliseconds: 220),
+680-                            style: theme.textTheme.bodyMedium!.copyWith(
+681-                              color: Colors.white.withValues(
+682-                                alpha: _isTyping ? 0.9 : 0.78,
+683-                              ),
+--
+748-          ),
+749-
+750-          if (!compact) ...[
+751-            // Medical Disclaimer (Guideline 1.4.1)
+752:            const SizedBox(height: 12),
+753-            Container(
+754-              padding: const EdgeInsets.all(8),
+755-              decoration: BoxDecoration(
+756-                color: Colors.white.withValues(alpha: 0.08),
+757-                borderRadius: BorderRadius.circular(12),
+758-                border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+--
+760-              child: Row(
+761-                mainAxisSize: MainAxisSize.min,
+762-                children: [
+763-                  const SizedBox(width: 6),
+764:                  Expanded(
+765-                    child: Text(
+766-                      _getInsightsBannerText(),
+767-                      style: TextStyle(
+768-                        fontSize: 12,
+769-                        color: Colors.white.withValues(alpha: 0.9),
+770-                        fontWeight: FontWeight.w400,
+--
+881-                    size: 18,
+882-                  ),
+883-                ),
+884-                const SizedBox(width: 8),
+885:                Expanded(
+886-                  child: Text(
+887-                    'Suggested Questions',
+888-                    style: theme.textTheme.titleMedium?.copyWith(
+889-                      color: AppTheme.primaryRose,
+890-                      fontWeight: FontWeight.w500,
+891-                      fontSize: 14,
+--
+901-              ],
+902-            ),
+903-          ),
+904-        ),
+905:        const SizedBox(height: 4),
+906-        // Suggestions - Horizontal scrollable for better visibility
+907-        if (!_quickRepliesCollapsed)
+908-          SizedBox(
+909-            height: 34,
+910-            child: ListView.separated(
+911-              scrollDirection: Axis.horizontal,
+--
+1064-      ),
+1065-      child: Row(
+1066-        crossAxisAlignment: CrossAxisAlignment.end,
+1067-        children: [
+1068:          Expanded(
+1069-            child: Container(
+1070-              constraints: const BoxConstraints(maxHeight: 120),
+1071-              decoration: BoxDecoration(
+1072-                color: Theme.of(context).colorScheme.surface,
+1073-                borderRadius: BorderRadius.circular(12),
+1074-                border: Border.all(

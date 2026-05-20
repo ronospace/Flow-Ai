@@ -1,0 +1,19 @@
+
+========== CLIPPING OWNERSHIP ==========
+
+307-                      _floatingChatGap),
+308-            child: AnimatedBuilder(
+309-              animation: _chatAnimation,
+310-              builder: (context, child) {
+311:                return ClipRRect(
+312-                  borderRadius: AppGeometry.dialogRadius,
+313-                  child: Container(
+314:                    clipBehavior: Clip.antiAlias,
+315-                    decoration: BoxDecoration(
+316-                      color: Theme.of(context).colorScheme.surface,
+317-                      borderRadius: AppGeometry.dialogRadius,
+318-                      boxShadow: [
+319-                        BoxShadow(
+320-                          color: AppTheme.primaryRose.withValues(alpha: 0.10),
+321-                          blurRadius: 22,
+322-                          spreadRadius: 1,

@@ -1,0 +1,186 @@
+
+========== KEYBOARD OWNERSHIP ==========
+
+60-    "When am I ovulating?",
+61-    "Is spotting normal?",
+62-    "How can I reduce cramps?",
+63-  ];
+64-
+65-  late TextEditingController _textController;
+66:  late FocusNode _inputFocusNode;
+67-
+68-  // For resize gesture
+69-  // ignore: unused_field
+70-  double _initialHeight = 0;
+71-  bool _isResizing = false;
+72-
+73-  @override
+74-  void initState() {
+75-    super.initState();
+76-
+--
+108-      parent: _chatController,
+109-      curve: Curves.easeOutCubic,
+110-    );
+111-
+112-    // Initialize text controller
+113-    _textController = TextEditingController();
+114:    _inputFocusNode = FocusNode()
+115-      ..addListener(() {
+116-        if (mounted) setState(() {});
+117-      });
+118-
+119-    // Initialize chat service after first build to get localizations
+120-    WidgetsBinding.instance.addPostFrameCallback((_) {
+121-      final localizations = AppLocalizations.of(context);
+122-      final settingsProvider = context.read<SettingsProvider>();
+123-      final userPreferences = settingsProvider.preferences;
+124-
+--
+138-          _messages = messages;
+139-          if (messages.isNotEmpty &&
+140-              messages.last.author.id == 'ai_flowai_enhanced') {
+141-            Future.delayed(_thinkingDelay, () {
+142-              if (!mounted) return;
+143-
+144:              final keyboardOpen = _inputFocusNode.hasFocus;
+145-
+146-              setState(() {
+147-                _isTyping = false;
+148:                if (!keyboardOpen) {
+149-                  _quickRepliesCollapsed = false;
+150-                  _isSuggestionsExpanded = true;
+151-                }
+152-              });
+153-            });
+154-          }
+155-        });
+156-      }
+157-    });
+158-
+--
+171-    _fabController.dispose();
+172-    _chatController.dispose();
+173-    _expandController.dispose();
+174-    _pulseController.dispose();
+175-    _textController.dispose();
+176-    _messagesSub.cancel();
+177:    _inputFocusNode.dispose();
+178-    super.dispose();
+179-  }
+180-
+181-  void _startPulsingAnimation() {
+182-    if (!_isExpanded) {
+183-      _fabController.repeat(reverse: true);
+184-    }
+185-  }
+186-
+187-  void _stopPulsingAnimation() {
+--
+284-    // // // // debugPrint("SCREEN HEIGHT: ");
+285-    // // debugPrint("SAFE TOP: ");
+286-    // // debugPrint("SAFE BOTTOM: ");
+287-    // // // // debugPrint("VIEW INSETS (keyboard): ");
+288-
+289-    final theme = Theme.of(context);
+290:    final keyboardOpen = _inputFocusNode.hasFocus;
+291-
+292-    return Stack(
+293-      children: [
+294-        // Enhanced Chat Interface - NO OVERLAY
+295-        if (_isExpanded)
+296-          AnimatedPositioned(
+297-            duration: Duration(milliseconds: 300),
+298-            curve: Curves.easeOutCubic,
+299-            right: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+300-            left: _isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
+301-            top: _isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
+302-            bottom: _isFullScreen
+303-                ? (MediaQuery.of(context).padding.bottom +
+304:                      MediaQuery.of(context).viewInsets.bottom)
+305-                : (MediaQuery.of(context).padding.bottom +
+306:                      MediaQuery.of(context).viewInsets.bottom +
+307-                      _floatingChatGap),
+308-            child: AnimatedBuilder(
+309-              animation: _chatAnimation,
+310-              builder: (context, child) {
+311-                return ClipRRect(
+312-                  borderRadius: AppGeometry.dialogRadius,
+313-                  child: Container(
+314-                    clipBehavior: Clip.antiAlias,
+315-                    decoration: BoxDecoration(
+316-                      color: Theme.of(context).colorScheme.surface,
+--
+334-                        width: 1,
+335-                      ),
+336-                    ),
+337-                    child: Column(
+338-                      children: [
+339-                        // Enhanced Draggable Header with Controls
+340:                        _buildEnhancedHeader(theme, compact: keyboardOpen),
+341-
+342-                        // Localized Header Transition Fade
+343-                        Container(
+344-                          height: 22,
+345-                          decoration: BoxDecoration(
+346-                            gradient: LinearGradient(
+347-                              begin: Alignment.topCenter,
+348-                              end: Alignment.bottomCenter,
+349-                              colors: [
+350-                                AppTheme.primaryRose.withValues(alpha: 0.045),
+--
+355-                        ),
+356-
+357-                        // Main content area - protected flex ownership
+358-                        Expanded(child: _buildChatArea(theme)),
+359-
+360-                        // Suggested Questions (above input)
+361:                        if (!keyboardOpen && _shouldShowQuickQuestions())
+362-                          SizedBox(
+363-                            height: 80,
+364-                            child: SingleChildScrollView(
+365-                              child: Container(
+366-                                padding: const EdgeInsets.fromLTRB(
+367-                                  16,
+368-                                  4,
+369-                                  16,
+370-                                  2,
+371-                                ),
+--
+395-        // Enhanced Floating Action Button
+396-        if (!_isExpanded)
+397-          Positioned(
+398-            right: 16,
+399-            bottom: _isFullScreen
+400-                ? (MediaQuery.of(context).padding.bottom +
+401:                      MediaQuery.of(context).viewInsets.bottom)
+402-                : (MediaQuery.of(context).padding.bottom +
+403:                      MediaQuery.of(context).viewInsets.bottom +
+404-                      16),
+405-            child: AnimatedBuilder(
+406-              animation: _fabAnimation,
+407-              builder: (context, child) {
+408-                return Transform.scale(
+409-                  scale: _isExpanded ? 1.0 : (1.0 + _fabAnimation.value * 0.1),
+410-                  child: Container(
+411-                    decoration: BoxDecoration(
+412-                      borderRadius: BorderRadius.circular(12),
+413-                      boxShadow: [
+--
+1085-                ],
+1086-              ),
+1087-              child: TextField(
+1088-                textAlignVertical: TextAlignVertical.center,
+1089-                enableInteractiveSelection: false,
+1090-                controller: _textController,
+1091:                focusNode: _inputFocusNode,
+1092-                decoration: InputDecoration(
+1093-                  contentPadding: EdgeInsets.symmetric(
+1094-                    horizontal: 16,
+1095-                    vertical: 14,
+1096-                  ),
+1097-                  hintText:
+1098-                      'Ask about health, science, technology, lifestyle...',
+1099-                  hintStyle: theme.textTheme.bodyMedium?.copyWith(
+1100-                    color: theme.hintColor.withValues(alpha: 0.7),
+1101-                    fontSize: 15,
