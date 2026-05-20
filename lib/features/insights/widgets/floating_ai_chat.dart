@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flow_ai/core/ui/app_geometry.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:provider/provider.dart';
 import '../../../core/services/enhanced_ai_chat_service.dart';
@@ -138,30 +137,32 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
     // Listen to messages
     _messagesSub = _chatService.messagesStream.listen((messages) {
-      if (mounted) {
-        setState(() {
-          _messages = messages;
-          if (messages.isNotEmpty &&
-              messages.last.author.id == 'ai_flowai_enhanced') {
-            Future.delayed(_thinkingDelay, () {
-              if (!mounted) return;
+      if (!mounted) return;
 
-              final keyboardOpen = _inputFocusNode.hasFocus;
+      setState(() {
+        _messages = List<types.Message>.from(messages);
+      });
 
-              setState(() {
-                _shellController.setTyping(false);
-                if (!keyboardOpen) {
-                  _shellController.setQuickRepliesCollapsed(false);
-                  _isSuggestionsExpanded = true;
-                }
-              });
-            });
+      if (messages.isNotEmpty &&
+          messages.last.author.id == 'ai_flowai_enhanced') {
+        Future.delayed(_thinkingDelay, () {
+          if (!mounted) return;
+
+          final keyboardOpen = _inputFocusNode.hasFocus;
+
+          _shellController.setTyping(false);
+
+          if (!keyboardOpen) {
+            _shellController.setQuickRepliesCollapsed(false);
+            _isSuggestionsExpanded = true;
           }
+
+          setState(() {});
         });
       }
     });
 
-    _messages = _chatService.messages;
+    _messages = List<types.Message>.from(_chatService.messages);
 
     // Start pulsing animation
     _startPulsingAnimation();
@@ -252,22 +253,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     _chatService.sendMessage(textMessage);
   }
 
-  void _handleMessageTap(BuildContext _, types.Message message) {
-    FocusScope.of(context).unfocus();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-
-      _shellController.restoreDialogState();
-    });
-  }
-
-  void _handlePreviewDataFetched(
-    types.TextMessage message,
-    types.PreviewData previewData,
-  ) {
-    // Handle preview data if needed
-  }
 
   double _getTabsBottom() {
     final ctx = widget.tabsKey.currentContext;
@@ -373,15 +359,13 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                           ),
 
                         // Main content area - improved spacing
-                        Flexible(
-                          fit: FlexFit.loose,
+                        Expanded(
                           child: _buildChatArea(theme),
                         ),
 
                         // Suggested Questions (above input)
-                        if (!keyboardOpen)
-                          SizedBox(
-                            height: 80,
+                        SizedBox(
+                          height: keyboardOpen ? 0 : 80,
                             child: SingleChildScrollView(
                               child: Container(
                                 padding: const EdgeInsets.fromLTRB(
@@ -815,69 +799,58 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     return '✦ Personalized AI insights ⓘ Not medical advice';
   }
 
-  // Enhanced Chat Area - Better spacing and padding
+  // Stable Chat Area - replaces flutter_chat_ui AnimatedList
   Widget _buildChatArea(ThemeData theme) {
-    return SizedBox.expand(
-      child: Listener(
-        behavior: HitTestBehavior.translucent,
-        onPointerDown: (_) {
-          FocusScope.of(context).unfocus();
+    final currentUserId = _chatService.currentUser?.id ?? 'fallback_user';
 
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (!mounted) return;
+    return Listener(
+      behavior: HitTestBehavior.translucent,
+      onPointerDown: (_) {
+        FocusScope.of(context).unfocus();
 
-            _shellController.restoreDialogState();
-          });
-        },
-        child: Theme(
-        data: theme.copyWith(
-          primaryColor: theme.brightness == Brightness.dark
-              ? Colors.blueGrey
-              : AppTheme.primaryRose,
-        ),
-        child: Chat(
-          messages: _messages,
-          onSendPressed: _handleSendPressed,
-          onMessageTap: _handleMessageTap,
-          onPreviewDataFetched: _handlePreviewDataFetched,
-          user: _chatService.currentUser ?? types.User(id: 'fallback_user'),
-          theme: DefaultChatTheme(
-            primaryColor: theme.brightness == Brightness.dark
-                ? Colors.blueGrey
-                : AppTheme.primaryRose,
-            secondaryColor: Theme.of(context).colorScheme.surfaceContainer,
-            backgroundColor: Colors.transparent,
-            inputBackgroundColor: Theme.of(context).colorScheme.surface,
-            inputTextColor: theme.textTheme.bodyMedium?.color ?? Colors.black,
-            messageBorderRadius: 16,
-            messageInsetsHorizontal: 12,
-            messageInsetsVertical: 8,
-            receivedMessageBodyTextStyle:
-                theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.textTheme.bodyMedium?.color,
-                  fontSize: 14,
-                  height: 1.5,
-                ) ??
-                const TextStyle(fontSize: 14, height: 1.5),
-            sentMessageBodyTextStyle:
-                theme.textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.surface,
-                  fontSize: 14,
-                  height: 1.5,
-                ) ??
-                TextStyle(
-                  color: Theme.of(context).colorScheme.surface,
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
+          _shellController.restoreDialogState();
+        });
+      },
+      child: ListView.builder(
+        reverse: true,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        itemCount: _messages.length,
+        itemBuilder: (context, index) {
+          final message = _messages[index];
+          final isUser = message.author.id == currentUserId;
+          final text = message is types.TextMessage ? message.text : '';
+
+          return Align(
+            alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
+            child: Container(
+              margin: const EdgeInsets.symmetric(vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width * 0.72,
+              ),
+              decoration: BoxDecoration(
+                color: isUser
+                    ? AppTheme.primaryRose
+                    : Theme.of(context).colorScheme.surfaceContainer,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Text(
+                text,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: isUser
+                      ? Theme.of(context).colorScheme.surface
+                      : theme.textTheme.bodyMedium?.color,
                   fontSize: 14,
                   height: 1.5,
                 ),
-          ),
-          showUserAvatars: true,
-          showUserNames: false,
-          customBottomWidget:
-              const SizedBox.shrink(), // We'll use our enhanced input
-        ),
+              ),
+            ),
+          );
+        },
       ),
-    ));
+    );
   }
 
   // Enhanced Quick Replies - More visible and professional
@@ -1091,7 +1064,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   // Enhanced Input Area - Better spacing and visibility
   Widget _buildEnhancedInput(ThemeData theme, bool keyboardOpen) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: keyboardOpen ? 4 : 8),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: AppGeometry.dialogRadius,
@@ -1102,7 +1075,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
         children: [
           Expanded(
             child: Container(
-              constraints: const BoxConstraints(maxHeight: 120),
+              constraints: BoxConstraints(maxHeight: keyboardOpen ? 56 : 120),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(12),
@@ -1127,7 +1100,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.symmetric(
                     horizontal: 16,
-                    vertical: 14,
+                    vertical: keyboardOpen ? 8 : 14,
                   ),
                   hintText: keyboardOpen
                       ? 'Tap the screen to view suggestions ✨'
