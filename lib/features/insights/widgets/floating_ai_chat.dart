@@ -148,7 +148,9 @@ class _FloatingAIChatState extends State<FloatingAIChat>
         Future.delayed(_thinkingDelay, () {
           if (!mounted) return;
 
-          final keyboardOpen = _inputFocusNode.hasFocus;
+          final keyboardInset = MediaQuery.of(context).viewInsets.bottom;
+    final keyboardVisible = keyboardInset > 0;
+    final keyboardOpen = _inputFocusNode.hasFocus || keyboardVisible;
 
           _shellController.setTyping(false);
 
@@ -279,24 +281,24 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     // // // // debugPrint("VIEW INSETS (keyboard): ");
 
     final theme = Theme.of(context);
-    final keyboardOpen = _inputFocusNode.hasFocus;
+    final keyboardInset = MediaQuery.of(context).viewInsets.bottom;
+    final keyboardVisible = keyboardInset > 0;
+    final keyboardOpen = _inputFocusNode.hasFocus || keyboardVisible;
 
     return Stack(
       children: [
         // Enhanced Chat Interface - NO OVERLAY
         if (_shellController.isExpanded)
-          AnimatedPositioned(
-            duration: Duration(milliseconds: 300),
-            curve: Curves.easeOutCubic,
+          Positioned(
+
             right: _shellController.isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
             left: _shellController.isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
-            top: _shellController.isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
-            bottom: _shellController.isFullScreen
-                ? (MediaQuery.of(context).padding.bottom +
-                      MediaQuery.of(context).viewInsets.bottom)
-                : (MediaQuery.of(context).padding.bottom +
-                      MediaQuery.of(context).viewInsets.bottom +
-                      (keyboardOpen ? 0 : _floatingChatGap)),
+            top: (_shellController.isFullScreen || keyboardOpen)
+                ? _getPeriodSelectorTop()
+                : _getTabsBottom(),
+            bottom: (_shellController.isFullScreen || keyboardOpen)
+                ? (MediaQuery.of(context).padding.bottom + keyboardInset)
+                : (MediaQuery.of(context).padding.bottom + _floatingChatGap),
             child: AnimatedBuilder(
               animation: _chatAnimation,
               builder: (context, child) {
@@ -331,11 +333,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       onTap: () {
                         FocusScope.of(context).unfocus();
 
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          if (!mounted) return;
 
-                          _shellController.restoreDialogState();
-                        });
                       },
                       child: Column(
                         children: [
@@ -808,10 +806,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
       onPointerDown: (_) {
         FocusScope.of(context).unfocus();
 
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (!mounted) return;
-          _shellController.restoreDialogState();
-        });
+
       },
       child: ListView.builder(
         reverse: true,
