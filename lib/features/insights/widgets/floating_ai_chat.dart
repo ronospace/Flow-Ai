@@ -309,21 +309,27 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       borderRadius: AppGeometry.dialogRadius,
                       boxShadow: [
                         BoxShadow(
-                          color: AppTheme.primaryRose.withValues(alpha: 0.10),
-                          blurRadius: 22,
-                          spreadRadius: 1,
+                          color: AppTheme.primaryRose.withValues(alpha: 0.46),
+                          blurRadius: 26,
+                          spreadRadius: 5,
+                          offset: const Offset(0, 0),
+                        ),
+                        BoxShadow(
+                          color: AppTheme.primaryPurple.withValues(alpha: 0.36),
+                          blurRadius: 34,
+                          spreadRadius: 4,
                           offset: const Offset(0, 0),
                         ),
                         BoxShadow(
                           color: theme.shadowColor.withValues(alpha: 0.16),
-                          blurRadius: 12,
+                          blurRadius: 18,
                           spreadRadius: 0,
                           offset: const Offset(0, 8),
                         ),
                       ],
                       border: Border.all(
                         color: AppTheme.primaryRose.withValues(alpha: 0.08),
-                        width: 1,
+                        width: 1.8,
                       ),
                     ),
                     child: GestureDetector(
@@ -831,10 +837,40 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 maxWidth: MediaQuery.of(context).size.width * 0.72,
               ),
               decoration: BoxDecoration(
-                color: isUser
-                    ? AppTheme.primaryRose
-                    : Theme.of(context).colorScheme.surfaceContainer,
-                borderRadius: BorderRadius.circular(16),
+                gradient: isUser
+                    ? const LinearGradient(
+                        colors: [
+                          AppTheme.primaryRose,
+                          AppTheme.primaryPurple,
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      )
+                    : LinearGradient(
+                        colors: [
+                          Theme.of(context).colorScheme.surfaceContainer,
+                          Theme.of(context).colorScheme.surface,
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(
+                  color: isUser
+                      ? Colors.white.withValues(alpha: 0.10)
+                      : AppTheme.primaryRose.withValues(alpha: 0.22),
+                  width: 1,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: isUser
+                        ? AppTheme.primaryRose.withValues(alpha: 0.18)
+                        : AppTheme.primaryPurple.withValues(alpha: 0.08),
+                    blurRadius: 12,
+                    spreadRadius: 0,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
               child: Text(
                 text,
