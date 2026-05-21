@@ -487,7 +487,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                                                             alpha: 0.5,
                                                           ),
                                                       blurRadius: 8,
-                                                      spreadRadius: 1,
+                                                      spreadRadius: 4,
                                                     ),
                                                   ],
                                                 ),
@@ -1116,7 +1116,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: AppTheme.primaryRose.withValues(alpha: 0.10),
+                  color: AppTheme.primaryRose.withValues(alpha: 0.52),
                   width: 1,
                 ),
                 boxShadow: [
