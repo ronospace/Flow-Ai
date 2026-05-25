@@ -345,23 +345,24 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                         ),
 
                         // Suggested Questions (above input)
-                        SizedBox(
-                          height: keyboardOpen ? 0 : 80,
-                            child: SingleChildScrollView(
-                              child: Container(
-                                padding: const EdgeInsets.fromLTRB(
-                                  16,
-                                  4,
-                                  16,
-                                  2,
+                        AnimatedSize(
+                          duration: const Duration(milliseconds: 220),
+                          curve: Curves.easeOutCubic,
+                          child: keyboardOpen
+                              ? const SizedBox.shrink()
+                              : Container(
+                                  padding: const EdgeInsets.fromLTRB(
+                                    16,
+                                    4,
+                                    16,
+                                    2,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(bottom: 4),
+                                    child: _buildEnhancedQuickReplies(theme),
+                                  ),
                                 ),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(bottom: 6),
-                                  child: _buildEnhancedQuickReplies(theme),
-                                ),
-                              ),
-                            ),
-                          ),
+                        ),
 
                         // Input Area (last = primary)
                         SizedBox(
