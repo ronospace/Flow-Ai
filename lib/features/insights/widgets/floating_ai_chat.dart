@@ -149,6 +149,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
           if (!mounted) return;
 
           final keyboardOpen = _inputFocusNode.hasFocus;
+    final forceMaxMode =
+        keyboardOpen || _shellController.isFullScreen;
 
           _shellController.setTyping(false);
 
@@ -280,6 +282,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
     final theme = Theme.of(context);
     final keyboardOpen = _inputFocusNode.hasFocus;
+    final forceMaxMode =
+        keyboardOpen || _shellController.isFullScreen;
 
     return Stack(
       children: [
@@ -288,48 +292,34 @@ class _FloatingAIChatState extends State<FloatingAIChat>
           AnimatedPositioned(
             duration: Duration(milliseconds: 300),
             curve: Curves.easeOutCubic,
-            right: _shellController.isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
-            left: _shellController.isFullScreen ? 16 : AppLayoutMetrics.sideMargin,
-            top: _shellController.isFullScreen ? _getPeriodSelectorTop() : _getTabsBottom(),
-            bottom: _shellController.isFullScreen
-                ? (MediaQuery.of(context).padding.bottom +
-                      MediaQuery.of(context).viewInsets.bottom)
-                : (MediaQuery.of(context).padding.bottom +
-                      MediaQuery.of(context).viewInsets.bottom +
-                      (keyboardOpen ? 0 : _floatingChatGap)),
+            right: forceMaxMode ? 16 : AppLayoutMetrics.sideMargin,
+            left: forceMaxMode ? 16 : AppLayoutMetrics.sideMargin,
+            top: forceMaxMode
+                ? _getPeriodSelectorTop()
+                : _getTabsBottom(),
+            bottom:
+                MediaQuery.of(context).padding.bottom +
+                MediaQuery.of(context).viewInsets.bottom,
             child: AnimatedBuilder(
               animation: _chatAnimation,
               builder: (context, child) {
                 return ClipRRect(
                   borderRadius: AppGeometry.dialogRadius,
                   child: Container(
-                    clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
                       borderRadius: AppGeometry.dialogRadius,
                       boxShadow: [
                         BoxShadow(
-                          color: AppTheme.primaryRose.withValues(alpha: 0.46),
-                          blurRadius: 26,
-                          spreadRadius: 5,
-                          offset: const Offset(0, 0),
-                        ),
-                        BoxShadow(
-                          color: AppTheme.primaryPurple.withValues(alpha: 0.36),
-                          blurRadius: 34,
-                          spreadRadius: 4,
-                          offset: const Offset(0, 0),
-                        ),
-                        BoxShadow(
-                          color: theme.shadowColor.withValues(alpha: 0.16),
+                          color: theme.shadowColor.withValues(alpha: 0.14),
                           blurRadius: 18,
                           spreadRadius: 0,
                           offset: const Offset(0, 8),
                         ),
                       ],
                       border: Border.all(
-                        color: AppTheme.primaryRose.withValues(alpha: 0.08),
-                        width: 1.8,
+                        color: AppTheme.primaryRose.withValues(alpha: 0.16),
+                        width: 1.2,
                       ),
                     ),
                     child: GestureDetector(
@@ -348,21 +338,6 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                         // Enhanced Draggable Header with Controls
                         _buildEnhancedHeader(theme, compact: keyboardOpen),
 
-                        // Localized Header Transition Fade
-                        if (!keyboardOpen)
-                          Container(
-                            height: 22,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [
-                                  AppTheme.primaryRose.withValues(alpha: 0.045),
-                                  Colors.white.withValues(alpha: 0.0),
-                                ],
-                              ),
-                            ),
-                          ),
 
                         // Main content area - improved spacing
                         Expanded(
@@ -528,20 +503,18 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   Widget _buildEnhancedHeader(ThemeData theme, {bool compact = false}) {
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [AppTheme.primaryPurple, AppTheme.primaryRose],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: AppGeometry.dialogRadius,
-        boxShadow: [
-          BoxShadow(
-            color: AppTheme.primaryRose.withValues(alpha: 0.2),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(AppGeometry.radiusLg),
+          topRight: Radius.circular(AppGeometry.radiusLg),
+          bottomLeft: Radius.circular(18),
+          bottomRight: Radius.circular(18),
+        ),
       ),
       child: Column(
         children: [
