@@ -326,14 +326,8 @@ class _InsightsScreenState extends State<InsightsScreen>
             ),
           );
         }
+        return SingleChildScrollView(
 
-        return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 12),
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surface.withValues(alpha: 0.88),
-            borderRadius: BorderRadius.circular(24),
-          ),
-          child: SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
             child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -383,7 +377,6 @@ class _InsightsScreenState extends State<InsightsScreen>
               }),
             ],
             ),
-          ),
         );
       },
     );
