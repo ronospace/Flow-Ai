@@ -327,9 +327,15 @@ class _InsightsScreenState extends State<InsightsScreen>
           );
         }
 
-        return SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-          child: Column(
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 12),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surface.withValues(alpha: 0.72),
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+            child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Cycle Regularity
@@ -376,6 +382,7 @@ class _InsightsScreenState extends State<InsightsScreen>
                 );
               }),
             ],
+            ),
           ),
         );
       },
