@@ -330,7 +330,7 @@ class _InsightsScreenState extends State<InsightsScreen>
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 12),
           decoration: BoxDecoration(
-            color: theme.colorScheme.surface.withValues(alpha: 0.72),
+            color: theme.colorScheme.surface.withValues(alpha: 0.88),
             borderRadius: BorderRadius.circular(24),
           ),
           child: SingleChildScrollView(
