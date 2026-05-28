@@ -28,6 +28,7 @@ class _InsightsScreenState extends State<InsightsScreen>
   final GlobalKey periodSelectorKey = GlobalKey();
   late TabController _tabController;
   late AnimationController _aiPulseController;
+  bool _isZyraExpanded = false;
   int _selectedPeriod = 3; // 3 months default
 
   final List<Map<String, dynamic>> _timePeriods = [
@@ -93,14 +94,22 @@ class _InsightsScreenState extends State<InsightsScreen>
 
                     // Tab Content
                     Expanded(
-                      child: TabBarView(
-                        controller: _tabController,
-                        children: [
-                          _buildOverviewTab(),
-                          _buildTrendsTab(),
-                          _buildPatternsTab(),
-                        ],
-                      ),
+                      child: _isZyraExpanded
+                          ? DecoratedBox(
+                              decoration: BoxDecoration(
+                                gradient: AppTheme.backgroundGradient(
+                                  theme.brightness == Brightness.dark,
+                                ),
+                              ),
+                            )
+                          : TabBarView(
+                              controller: _tabController,
+                              children: [
+                                _buildOverviewTab(),
+                                _buildTrendsTab(),
+                                _buildPatternsTab(),
+                              ],
+                            ),
                     ),
                   ],
                 ),
@@ -112,6 +121,12 @@ class _InsightsScreenState extends State<InsightsScreen>
               FloatingAIChat(
                 tabsKey: tabsKey,
                 periodSelectorKey: periodSelectorKey,
+                onExpandedChanged: (expanded) {
+                  if (_isZyraExpanded == expanded) return;
+                  setState(() {
+                    _isZyraExpanded = expanded;
+                  });
+                },
               ),
           ],
         ),
