@@ -1071,14 +1071,14 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   // Enhanced Input Area - Better spacing and visibility
   Widget _buildEnhancedInput(ThemeData theme, bool keyboardOpen) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: keyboardOpen ? 4 : 8),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: keyboardOpen ? 6 : 8),
       decoration: const BoxDecoration(),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Expanded(
             child: ConstrainedBox(
-              constraints: BoxConstraints(maxHeight: keyboardOpen ? 56 : 120),
+              constraints: BoxConstraints(minHeight: AppGeometry.inputHeight, maxHeight: keyboardOpen ? 64 : 120),
               child: TextField(
                 textAlignVertical: TextAlignVertical.center,
                 enableInteractiveSelection: false,
@@ -1087,14 +1087,14 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.symmetric(
                     horizontal: 16,
-                    vertical: keyboardOpen ? 8 : 14,
+                    vertical: keyboardOpen ? 10 : 14,
                   ),
                   hintText: keyboardOpen
                       ? 'Tap the screen to view suggestions ✨'
                       : 'Ask about health, science, technology, lifestyle...',
                   hintStyle: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.hintColor.withValues(alpha: 0.7),
-                    fontSize: keyboardOpen ? 13.5 : 15,
+                    fontSize: keyboardOpen ? 14 : 15,
                   ),
                   suffixIcon: IconButton(
                     icon: Icon(
