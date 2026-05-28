@@ -792,7 +792,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
       },
       child: ListView.builder(
         reverse: true,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
         itemCount: _messages.length,
         itemBuilder: (context, index) {
           final message = _messages[index];
@@ -802,10 +802,10 @@ class _FloatingAIChatState extends State<FloatingAIChat>
           return Align(
             alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
             child: Container(
-              margin: const EdgeInsets.symmetric(vertical: 4),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              margin: const EdgeInsets.symmetric(vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
               constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width * 0.72,
+                maxWidth: MediaQuery.of(context).size.width * 0.76,
               ),
               decoration: BoxDecoration(
                 gradient: isUser
@@ -850,7 +850,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       ? Theme.of(context).colorScheme.surface
                       : theme.textTheme.bodyMedium?.color,
                   fontSize: 14,
-                  height: 1.5,
+                  height: 1.45,
                 ),
               ),
             ),
