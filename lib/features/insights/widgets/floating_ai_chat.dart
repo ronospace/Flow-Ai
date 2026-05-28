@@ -512,12 +512,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(AppGeometry.radiusLg),
-          topRight: Radius.circular(AppGeometry.radiusLg),
-          bottomLeft: Radius.circular(18),
-          bottomRight: Radius.circular(18),
-        ),
+        borderRadius: AppGeometry.dialogRadius, // ZYRA_HEADER_INPUT_LAYER_PATCH
       ),
       child: Column(
         children: [
@@ -1077,33 +1072,13 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   Widget _buildEnhancedInput(ThemeData theme, bool keyboardOpen) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: keyboardOpen ? 4 : 8),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: AppGeometry.dialogRadius,
-        border: null,
-      ),
+      decoration: const BoxDecoration(),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Expanded(
-            child: Container(
+            child: ConstrainedBox(
               constraints: BoxConstraints(maxHeight: keyboardOpen ? 56 : 120),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: AppTheme.primaryRose.withValues(alpha: 0.52),
-                  width: 1,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppTheme.primaryRose.withValues(alpha: 0.05),
-                    blurRadius: 10,
-                    spreadRadius: 0,
-                    offset: const Offset(0, 0),
-                  ),
-                ],
-              ),
               child: TextField(
                 textAlignVertical: TextAlignVertical.center,
                 enableInteractiveSelection: false,
@@ -1135,7 +1110,29 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       }
                     },
                   ),
-                  border: InputBorder.none,
+                  filled: true, // ZYRA_INPUT_SINGLE_SHELL_PATCH
+                  fillColor: Theme.of(context).colorScheme.surface,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: AppGeometry.capsuleRadius,
+                    borderSide: BorderSide(
+                      color: AppTheme.primaryRose.withValues(alpha: 0.52),
+                      width: 1,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: AppGeometry.capsuleRadius,
+                    borderSide: BorderSide(
+                      color: AppTheme.primaryRose.withValues(alpha: 0.52),
+                      width: 1,
+                    ),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: AppGeometry.capsuleRadius,
+                    borderSide: BorderSide(
+                      color: AppTheme.primaryRose.withValues(alpha: 0.52),
+                      width: 1,
+                    ),
+                  ),
                 ),
                 maxLines: null,
                 minLines: 1,
