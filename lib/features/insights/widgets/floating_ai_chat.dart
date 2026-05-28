@@ -298,7 +298,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             bottom:
                 MediaQuery.of(context).padding.bottom +
                 MediaQuery.of(context).viewInsets.bottom +
-                AppLayoutMetrics.gap,
+                (forceMaxMode ? 0 : AppLayoutMetrics.gap),
             child: AnimatedBuilder(
               animation: _chatAnimation,
               builder: (context, child) {
