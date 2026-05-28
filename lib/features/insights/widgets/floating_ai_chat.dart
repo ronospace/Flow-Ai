@@ -280,6 +280,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
     final theme = Theme.of(context);
     final keyboardOpen = _inputFocusNode.hasFocus;
+    final forceMaxMode =
+        keyboardOpen || _shellController.isFullScreen;
 
     return Stack(
       children: [
@@ -295,7 +297,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 : _getTabsBottom(),
             bottom:
                 MediaQuery.of(context).padding.bottom +
-                MediaQuery.of(context).viewInsets.bottom,
+                MediaQuery.of(context).viewInsets.bottom +
+                AppLayoutMetrics.gap,
             child: AnimatedBuilder(
               animation: _chatAnimation,
               builder: (context, child) {

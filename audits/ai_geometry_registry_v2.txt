@@ -1,0 +1,18 @@
+AI_GEOMETRY_REGISTRY_V2
+
+TOP_GAP_BELOW_TABS=8
+SIDE_MARGIN_NORMAL=20
+SIDE_MARGIN_MAX_MODE=16
+BOTTOM_NAV_CONTAINER_HEIGHT=72
+BOTTOM_NAV_SAFEAREA_TOP=false
+SCAFFOLD_EXTEND_BODY=true
+CURRENT_AI_BOTTOM_GAP=0
+FAB_BOTTOM_GAP=16
+
+UNPROVEN:
+- exact runtime safeBottom per device
+- exact nav top Y coordinate
+- exact AI carrier bottom Y coordinate
+
+RULE:
+No geometry patch until runtime safeBottom and carrier/nav coordinates are logged.
