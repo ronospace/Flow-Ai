@@ -1,0 +1,1798 @@
+===== 01 BASELINE =====
+3a516dc hide insights content behind zyra dialog
+2305eea refine zyra dialog bottom gap behavior
+07c4d26 restore zyra ai dialog bottom gap
+4dc3372 remove unused zyra ai chat variables
+383f23f restore overview tab native layout
+?? audits/zyra_system_audit_master_20260529_003730.txt
+
+===== 02 ANALYZER =====
+Analyzing flow_ai...                                            
+No issues found! (ran in 4.4s)
+
+===== 03 ZYRA FILE MAP =====
+lib/features/insights/widgets/floating_ai_chat.dart
+lib/features/insights/widgets/zyra
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart
+
+===== 04 INSIGHTS SCREEN STATE / STACK =====
+     1	import 'dart:math';
+     2	import 'package:flutter/material.dart';
+     3	import 'package:flutter/services.dart';
+     4	import '../../../generated/app_localizations.dart';
+     5	import 'package:flutter_animate/flutter_animate.dart';
+     6	import 'package:provider/provider.dart';
+     7	import '../../../core/theme/app_theme.dart';
+     8	import '../../../core/models/time_period.dart';
+     9	import '../providers/insights_provider.dart';
+    10	import '../../cycle/providers/cycle_provider.dart';
+    11	import '../widgets/cycle_length_chart.dart';
+    12	import '../widgets/ai_insight_card.dart';
+    13	import '../widgets/cycle_regularity_indicator.dart';
+    14	import '../widgets/mood_energy_chart.dart';
+    15	import '../widgets/symptom_heatmap.dart';
+    16	import '../widgets/floating_ai_chat.dart';
+    17	
+    18	class InsightsScreen extends StatefulWidget {
+    19	  const InsightsScreen({super.key});
+    20	
+    21	  @override
+    22	  State<InsightsScreen> createState() => _InsightsScreenState();
+    23	}
+    24	
+    25	class _InsightsScreenState extends State<InsightsScreen>
+    26	    with TickerProviderStateMixin {
+    27	  final GlobalKey tabsKey = GlobalKey();
+    28	  final GlobalKey periodSelectorKey = GlobalKey();
+    29	  late TabController _tabController;
+    30	  late AnimationController _aiPulseController;
+    31	  bool _isZyraExpanded = false;
+    32	  int _selectedPeriod = 3; // 3 months default
+    33	
+    34	  final List<Map<String, dynamic>> _timePeriods = [
+    35	    {'label': '1M', 'months': 1},
+    36	    {'label': '3M', 'months': 3},
+    37	    {'label': '6M', 'months': 6},
+    38	    {'label': '1Y', 'months': 12},
+    39	  ];
+    40	
+    41	  @override
+    42	  void initState() {
+    43	    super.initState();
+    44	    _aiPulseController = AnimationController(
+    45	      vsync: this,
+    46	      duration: const Duration(seconds: 3),
+    47	    )..repeat(reverse: true);
+    48	    _tabController = TabController(length: 3, vsync: this);
+    49	
+    50	    WidgetsBinding.instance.addPostFrameCallback((_) {
+    51	      context.read<InsightsProvider>().loadInsights();
+    52	      context.read<CycleProvider>().loadCycles();
+    53	    });
+    54	  }
+    55	
+    56	  @override
+    57	  void dispose() {
+    58	    _aiPulseController.dispose();
+    59	    _tabController.dispose();
+    60	    super.dispose();
+    61	  }
+    62	
+    63	  @override
+    64	  Widget build(BuildContext context) {
+    65	    final theme = Theme.of(context);
+    66	    return PopScope(
+    67	      canPop: true,
+    68	      onPopInvokedWithResult: (didPop, result) {
+    69	        // Ensure proper cleanup when navigating away
+    70	        if (didPop && mounted) {
+    71	          // This helps prevent widget tree persistence issues
+    72	        }
+    73	      },
+    74	      child: Scaffold(
+    75	        body: Stack(
+    76	          children: [
+    77	            Container(
+    78	              decoration: BoxDecoration(
+    79	                gradient: AppTheme.backgroundGradient(
+    80	                  theme.brightness == Brightness.dark,
+    81	                ),
+    82	              ),
+    83	              child: SafeArea(
+    84	                child: Column(
+    85	                  children: [
+    86	                    // Custom Header
+    87	                    _buildHeader(),
+    88	
+    89	                    // Time Period Selector
+    90	                    _buildTimePeriodSelector(),
+    91	
+    92	                    // Tab Bar
+    93	                    _buildTabBar(),
+    94	
+    95	                    // Tab Content
+    96	                    Expanded(
+    97	                      child: _isZyraExpanded
+    98	                          ? DecoratedBox(
+    99	                              decoration: BoxDecoration(
+   100	                                gradient: AppTheme.backgroundGradient(
+   101	                                  theme.brightness == Brightness.dark,
+   102	                                ),
+   103	                              ),
+   104	                            )
+   105	                          : TabBarView(
+   106	                              controller: _tabController,
+   107	                              children: [
+   108	                                _buildOverviewTab(),
+   109	                                _buildTrendsTab(),
+   110	                                _buildPatternsTab(),
+   111	                              ],
+   112	                            ),
+   113	                    ),
+   114	                  ],
+   115	                ),
+   116	              ),
+   117	            ),
+   118	
+   119	            // Floating AI Chat - only render if mounted
+   120	            if (mounted)
+   121	              FloatingAIChat(
+   122	                tabsKey: tabsKey,
+   123	                periodSelectorKey: periodSelectorKey,
+   124	                onExpandedChanged: (expanded) {
+   125	                  if (_isZyraExpanded == expanded) return;
+   126	                  setState(() {
+   127	                    _isZyraExpanded = expanded;
+   128	                  });
+   129	                },
+   130	              ),
+   131	          ],
+   132	        ),
+   133	      ),
+   134	    );
+   135	  }
+   136	
+   137	  Widget _buildHeader() {
+   138	    final theme = Theme.of(context);
+   139	    return Container(
+   140	      padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+
+===== 05 INSIGHTS TAB CONTENT =====
+    88	
+    89	                    // Time Period Selector
+    90	                    _buildTimePeriodSelector(),
+    91	
+    92	                    // Tab Bar
+    93	                    _buildTabBar(),
+    94	
+    95	                    // Tab Content
+    96	                    Expanded(
+    97	                      child: _isZyraExpanded
+    98	                          ? DecoratedBox(
+    99	                              decoration: BoxDecoration(
+   100	                                gradient: AppTheme.backgroundGradient(
+   101	                                  theme.brightness == Brightness.dark,
+   102	                                ),
+   103	                              ),
+   104	                            )
+   105	                          : TabBarView(
+   106	                              controller: _tabController,
+   107	                              children: [
+   108	                                _buildOverviewTab(),
+   109	                                _buildTrendsTab(),
+   110	                                _buildPatternsTab(),
+   111	                              ],
+   112	                            ),
+   113	                    ),
+   114	                  ],
+   115	                ),
+   116	              ),
+   117	            ),
+   118	
+   119	            // Floating AI Chat - only render if mounted
+   120	            if (mounted)
+   121	              FloatingAIChat(
+   122	                tabsKey: tabsKey,
+   123	                periodSelectorKey: periodSelectorKey,
+   124	                onExpandedChanged: (expanded) {
+   125	                  if (_isZyraExpanded == expanded) return;
+   126	                  setState(() {
+   127	                    _isZyraExpanded = expanded;
+   128	                  });
+   129	                },
+   130	              ),
+   131	          ],
+   132	        ),
+
+===== 06 ZYRA WIDGET HEADER / API =====
+     1	import 'dart:async';
+     2	import 'package:flutter/material.dart';
+     3	import 'package:flow_ai/core/ui/app_geometry.dart';
+     4	import 'package:flutter_animate/flutter_animate.dart';
+     5	import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+     6	import 'package:provider/provider.dart';
+     7	import '../../../core/services/enhanced_ai_chat_service.dart';
+     8	import '../../../core/theme/app_theme.dart';
+     9	import '../../../generated/app_localizations.dart';
+    10	import '../../settings/providers/settings_provider.dart';
+    11	import 'package:uuid/uuid.dart';
+    12	import 'package:flow_ai/core/layout/app_layout_metrics.dart';
+    13	import 'zyra/controllers/zyra_shell_controller.dart';
+    14	
+    15	/// Floating AI Chat Widget for insights screen
+    16	class FloatingAIChat extends StatefulWidget {
+    17	  final GlobalKey tabsKey;
+    18	  final GlobalKey periodSelectorKey;
+    19	  final ValueChanged<bool>? onExpandedChanged;
+    20	  const FloatingAIChat({
+    21	    super.key,
+    22	    required this.tabsKey,
+    23	    required this.periodSelectorKey,
+    24	    this.onExpandedChanged,
+    25	  });
+    26	
+    27	  @override
+    28	  State<FloatingAIChat> createState() => _FloatingAIChatState();
+    29	}
+    30	
+    31	class _FloatingAIChatState extends State<FloatingAIChat>
+    32	    with TickerProviderStateMixin {
+    33	  static const double _floatingChatGap = 8;
+    34	  static const _thinkingDelay = Duration(milliseconds: 900);
+    35	  late AnimationController _fabController;
+    36	  late AnimationController _chatController;
+    37	  late AnimationController _expandController;
+    38	  late AnimationController _pulseController;
+    39	  late Animation<double> _fabAnimation;
+    40	  late Animation<double> _chatAnimation;
+    41	  late StreamSubscription _messagesSub;
+    42	
+    43	  final EnhancedAIChatService _chatService = EnhancedAIChatService();
+    44	  late final ZyraShellController _shellController;
+    45	  List<types.Message> _messages = [];
+    46	  // removed unused _showQuickReplies
+    47	  // ignore: unused_field
+    48	  bool _isSuggestionsExpanded = true;
+    49	  // ignore: unused_field
+    50	  final List<String> _suggestedQuestions = [
+    51	    "When will my next period start?",
+    52	    "Is my cycle regular?",
+    53	    "Can I get pregnant today?",
+    54	    "What are my fertile days?",
+    55	    "Why is my period late?",
+    56	    "What do my symptoms mean?",
+    57	    "How long is a normal cycle?",
+    58	    "When am I ovulating?",
+    59	    "Is spotting normal?",
+    60	    "How can I reduce cramps?",
+
+===== 07 ZYRA CONTROLLERS / LIFECYCLE =====
+    60	    "How can I reduce cramps?",
+    61	  ];
+    62	
+    63	  late TextEditingController _textController;
+    64	  late FocusNode _inputFocusNode;
+    65	
+    66	  // For resize gesture
+    67	  // ignore: unused_field
+    68	  double _initialHeight = 0;
+    69	
+    70	  @override
+    71	  void initState() {
+    72	    super.initState();
+    73	
+    74	    _fabController = AnimationController(
+    75	      duration: const Duration(milliseconds: 300),
+    76	      vsync: this,
+    77	    );
+    78	
+    79	    _chatController = AnimationController(
+    80	      duration: const Duration(milliseconds: 500),
+    81	      vsync: this,
+    82	    );
+    83	
+    84	    _expandController = AnimationController(
+    85	      duration: const Duration(milliseconds: 300),
+    86	      vsync: this,
+    87	    );
+    88	
+    89	    _pulseController =
+    90	        AnimationController(
+    91	            duration: const Duration(milliseconds: 950),
+    92	            vsync: this,
+    93	          )
+    94	          ..addListener(() {
+    95	            if (mounted) setState(() {});
+    96	          })
+    97	          ..repeat(reverse: true);
+    98	
+    99	    _fabAnimation = CurvedAnimation(
+   100	      parent: _fabController,
+   101	      curve: Curves.easeInOutCubic,
+   102	    );
+   103	
+   104	    _chatAnimation = CurvedAnimation(
+   105	      parent: _chatController,
+   106	      curve: Curves.easeOutCubic,
+   107	    );
+   108	
+   109	    // Initialize text controller
+   110	    _textController = TextEditingController();
+   111	    _shellController = ZyraShellController()
+   112	      ..addListener(() {
+   113	        if (mounted) setState(() {});
+   114	      });
+   115	
+   116	    _inputFocusNode = FocusNode()
+   117	      ..addListener(() {
+   118	        _shellController.setKeyboardVisibility(
+   119	          _inputFocusNode.hasFocus,
+   120	        );
+   121	
+   122	        if (mounted) setState(() {});
+   123	      });
+   124	
+   125	    // Initialize chat service after first build to get localizations
+   126	    WidgetsBinding.instance.addPostFrameCallback((_) {
+   127	      final localizations = AppLocalizations.of(context);
+   128	      final settingsProvider = context.read<SettingsProvider>();
+   129	      final userPreferences = settingsProvider.preferences;
+   130	
+   131	      final userName = userPreferences.displayName;
+   132	
+   133	      _chatService.initialize(
+   134	        userId: userPreferences.userId,
+   135	        userName: userName,
+   136	        localizations: localizations,
+   137	      );
+   138	    });
+   139	
+   140	    // Listen to messages
+   141	    _messagesSub = _chatService.messagesStream.listen((messages) {
+   142	      if (!mounted) return;
+   143	
+   144	      setState(() {
+   145	        _messages = List<types.Message>.from(messages);
+   146	      });
+   147	
+   148	      if (messages.isNotEmpty &&
+   149	          messages.last.author.id == 'ai_flowai_enhanced') {
+   150	        Future.delayed(_thinkingDelay, () {
+   151	          if (!mounted) return;
+   152	
+   153	          final keyboardOpen = _inputFocusNode.hasFocus;
+   154	
+   155	          _shellController.setTyping(false);
+   156	
+   157	          if (!keyboardOpen) {
+   158	            _shellController.setQuickRepliesCollapsed(false);
+   159	            _isSuggestionsExpanded = true;
+   160	          }
+   161	
+   162	          setState(() {});
+   163	        });
+   164	      }
+   165	    });
+   166	
+   167	    _messages = List<types.Message>.from(_chatService.messages);
+   168	
+   169	    // Start pulsing animation
+   170	    _startPulsingAnimation();
+   171	  }
+   172	
+   173	  @override
+   174	  void dispose() {
+   175	    // Ensure animations are stopped and controllers disposed properly
+   176	    _fabController.stop();
+   177	    _chatController.stop();
+   178	    _expandController.stop();
+   179	    _fabController.dispose();
+   180	    _chatController.dispose();
+   181	    _expandController.dispose();
+   182	    _pulseController.dispose();
+   183	    _textController.dispose();
+   184	    _messagesSub.cancel();
+   185	    _inputFocusNode.dispose();
+   186	    _shellController.dispose();
+   187	    super.dispose();
+   188	  }
+   189	
+   190	  void _startPulsingAnimation() {
+
+===== 08 ZYRA TOGGLE / STATE FLOW =====
+   190	  void _startPulsingAnimation() {
+   191	    if (!_shellController.isExpanded) {
+   192	      _fabController.repeat(reverse: true);
+   193	    }
+   194	  }
+   195	
+   196	  void _stopPulsingAnimation() {
+   197	    _fabController.stop();
+   198	    _fabController.reset();
+   199	  }
+   200	
+   201	  void _toggleChat() {
+   202	    setState(() {
+   203	      _shellController.toggleExpanded();
+   204	      widget.onExpandedChanged?.call(_shellController.isExpanded);
+   205	      if (!_shellController.isExpanded) {
+   206	      }
+   207	    });
+   208	
+   209	    if (_shellController.isExpanded) {
+   210	      _stopPulsingAnimation();
+   211	      _chatController.forward();
+   212	    } else {
+   213	      _chatController.reverse();
+   214	      _expandController.reverse();
+   215	      _startPulsingAnimation();
+   216	    }
+   217	  }
+   218	
+   219	  void _toggleFullScreen() {
+   220	    setState(() {
+   221	      _shellController.toggleFullScreen();
+   222	    });
+   223	
+   224	    if (_shellController.isFullScreen) {
+   225	      _expandController.forward();
+   226	    } else {
+   227	      _expandController.reverse();
+   228	    }
+   229	  }
+   230	
+
+===== 09 ZYRA GEOMETRY OWNER =====
+   250	    );
+   251	
+   252	    setState(() {
+   253	      _shellController.setTyping(true);
+   254	    });
+   255	
+   256	    _chatService.sendMessage(textMessage);
+   257	  }
+   258	
+   259	
+   260	
+   261	  double _getTabsBottom() {
+   262	    final ctx = widget.tabsKey.currentContext;
+   263	    if (ctx == null) return 200;
+   264	    final box = ctx.findRenderObject() as RenderBox;
+   265	    final pos = box.localToGlobal(Offset.zero);
+   266	    return pos.dy + box.size.height + 8;
+   267	  }
+   268	
+   269	  double _getPeriodSelectorTop() {
+   270	    final ctx = widget.periodSelectorKey.currentContext;
+   271	    if (ctx == null) return MediaQuery.of(context).padding.top + 80;
+   272	    final box = ctx.findRenderObject() as RenderBox;
+   273	    final pos = box.localToGlobal(Offset.zero);
+   274	    return pos.dy;
+   275	  }
+   276	
+   277	  @override
+   278	  Widget build(BuildContext context) {
+   279	    // // // // debugPrint("SCREEN HEIGHT: ");
+   280	    // // debugPrint("SAFE TOP: ");
+   281	    // // debugPrint("SAFE BOTTOM: ");
+   282	    // // // // debugPrint("VIEW INSETS (keyboard): ");
+   283	
+   284	    final theme = Theme.of(context);
+   285	    final keyboardOpen = _inputFocusNode.hasFocus;
+   286	    final forceMaxMode =
+   287	        keyboardOpen || _shellController.isFullScreen;
+   288	
+   289	    return Stack(
+   290	      children: [
+   291	        // Enhanced Chat Interface - NO OVERLAY
+   292	        if (_shellController.isExpanded)
+   293	          AnimatedPositioned(
+   294	            duration: Duration(milliseconds: 300),
+   295	            curve: Curves.easeOutCubic,
+   296	            right: forceMaxMode ? 16 : AppLayoutMetrics.sideMargin,
+   297	            left: forceMaxMode ? 16 : AppLayoutMetrics.sideMargin,
+   298	            top: forceMaxMode
+   299	                ? _getPeriodSelectorTop()
+   300	                : _getTabsBottom(),
+   301	            bottom:
+   302	                MediaQuery.of(context).padding.bottom +
+   303	                MediaQuery.of(context).viewInsets.bottom +
+   304	                (forceMaxMode ? 0 : AppLayoutMetrics.gap),
+   305	            child: AnimatedBuilder(
+   306	              animation: _chatAnimation,
+   307	              builder: (context, child) {
+   308	                return ClipRRect(
+   309	                  borderRadius: AppGeometry.dialogRadius,
+   310	                  child: Container(
+   311	                    decoration: BoxDecoration(
+   312	                      color: Theme.of(context).colorScheme.surface,
+   313	                      borderRadius: AppGeometry.dialogRadius,
+   314	                      boxShadow: [
+   315	                        BoxShadow(
+   316	                          color: theme.shadowColor.withValues(alpha: 0.14),
+   317	                          blurRadius: 18,
+   318	                          spreadRadius: 0,
+   319	                          offset: const Offset(0, 8),
+   320	                        ),
+   321	                      ],
+   322	                      border: Border.all(
+   323	                        color: AppTheme.primaryRose.withValues(alpha: 0.16),
+   324	                        width: 1.2,
+   325	                      ),
+   326	                    ),
+   327	                    child: GestureDetector(
+   328	                      behavior: HitTestBehavior.deferToChild,
+   329	                      onTap: () {
+   330	                        FocusScope.of(context).unfocus();
+   331	
+   332	                        WidgetsBinding.instance.addPostFrameCallback((_) {
+   333	                          if (!mounted) return;
+   334	
+   335	                          _shellController.restoreDialogState();
+   336	                        });
+   337	                      },
+   338	                      child: Column(
+   339	                        children: [
+   340	                        // Enhanced Draggable Header with Controls
+   341	                        _buildEnhancedHeader(theme, compact: keyboardOpen),
+   342	
+   343	
+   344	                        // Main content area - improved spacing
+   345	                        Expanded(
+   346	                          child: _buildChatArea(theme),
+   347	                        ),
+   348	
+   349	                        // Suggested Questions (above input)
+   350	                        AnimatedSize(
+   351	                          duration: const Duration(milliseconds: 220),
+   352	                          curve: Curves.easeOutCubic,
+   353	                          child: keyboardOpen
+   354	                              ? const SizedBox.shrink()
+   355	                              : Container(
+   356	                                  padding: const EdgeInsets.fromLTRB(
+   357	                                    16,
+   358	                                    4,
+   359	                                    16,
+   360	                                    2,
+   361	                                  ),
+   362	                                  child: Padding(
+   363	                                    padding: const EdgeInsets.only(bottom: 4),
+   364	                                    child: _buildEnhancedQuickReplies(theme),
+   365	                                  ),
+   366	                                ),
+   367	                        ),
+   368	
+   369	                        // Input Area (last = primary)
+   370	                        SizedBox(
+   371	                          height: MediaQuery.of(context).size.width > 900
+   372	                              ? 0
+   373	                              : 8,
+   374	                        ),
+   375	                        _buildEnhancedInput(theme, keyboardOpen),
+   376	                        ],
+   377	                      ),
+   378	                    ),
+   379	                  ),
+   380	                );
+   381	              },
+   382	            ),
+   383	          ),
+   384	
+   385	        // Enhanced Floating Action Button
+
+===== 10 ZYRA FAB OWNER =====
+   382	            ),
+   383	          ),
+   384	
+   385	        // Enhanced Floating Action Button
+   386	        if (!_shellController.isExpanded)
+   387	          Positioned(
+   388	            right: 16,
+   389	            bottom: _shellController.isFullScreen
+   390	                ? (MediaQuery.of(context).padding.bottom +
+   391	                      MediaQuery.of(context).viewInsets.bottom)
+   392	                : (MediaQuery.of(context).padding.bottom +
+   393	                      MediaQuery.of(context).viewInsets.bottom +
+   394	                      16),
+   395	            child: AnimatedBuilder(
+   396	              animation: _fabAnimation,
+   397	              builder: (context, child) {
+   398	                return Transform.scale(
+   399	                  scale: _shellController.isExpanded ? 1.0 : (1.0 + _fabAnimation.value * 0.1),
+   400	                  child: Container(
+   401	                    decoration: BoxDecoration(
+   402	                      borderRadius: BorderRadius.circular(12),
+   403	                      boxShadow: [
+   404	                        BoxShadow(
+   405	                          color: AppTheme.primaryRose.withValues(alpha: 0.2),
+   406	                          blurRadius: 16,
+   407	                          spreadRadius: 2,
+   408	                          offset: const Offset(0, 4),
+   409	                        ),
+   410	                      ],
+   411	                    ),
+   412	                    child: FloatingActionButton(
+   413	                      heroTag: "ai_chat_main_fab",
+   414	                      onPressed: _toggleChat,
+   415	                      backgroundColor: AppTheme.primaryRose,
+   416	                      elevation: 0,
+   417	                      child: AnimatedSwitcher(
+   418	                        duration: const Duration(milliseconds: 300),
+   419	                        transitionBuilder: (child, animation) {
+   420	                          return RotationTransition(
+   421	                            turns: animation,
+   422	                            child: child,
+   423	                          );
+   424	                        },
+   425	                        child: _shellController.isExpanded
+   426	                            ? Icon(
+   427	                                Icons.close_rounded,
+   428	                                color: Theme.of(context).colorScheme.surface,
+   429	                                key: const ValueKey('close'),
+   430	                                size: 28,
+   431	                              )
+   432	                            : Stack(
+   433	                                key: const ValueKey('chat'),
+   434	                                children: [
+   435	                                  Icon(
+   436	                                    Icons.psychology_rounded,
+   437	                                    color: Theme.of(
+   438	                                      context,
+   439	                                    ).colorScheme.surface,
+   440	                                    size: 28,
+   441	                                  ),
+   442	                                  if (!_shellController.isExpanded)
+   443	                                    Positioned(
+   444	                                      top: -2,
+   445	                                      right: -2,
+   446	                                      child:
+   447	                                          Container(
+   448	                                                width: 16,
+   449	                                                height: 16,
+   450	                                                decoration: BoxDecoration(
+   451	                                                  gradient:
+   452	                                                      const LinearGradient(
+   453	                                                        colors: [
+   454	                                                          AppTheme.successGreen,
+   455	                                                          AppTheme.accentMint,
+   456	                                                        ],
+   457	                                                      ),
+   458	                                                  borderRadius:
+   459	                                                      AppGeometry.dialogRadius,
+   460	                                                  boxShadow: [
+   461	                                                    BoxShadow(
+   462	                                                      color: AppTheme
+   463	                                                          .successGreen
+   464	                                                          .withValues(
+   465	                                                            alpha: 0.5,
+   466	                                                          ),
+   467	                                                      blurRadius: 8,
+   468	                                                      spreadRadius: 4,
+   469	                                                    ),
+   470	                                                  ],
+   471	                                                ),
+   472	                                                child: Icon(
+   473	                                                  Icons.auto_awesome,
+   474	                                                  color: Theme.of(
+   475	                                                    context,
+   476	                                                  ).colorScheme.surface,
+   477	                                                  size: 10,
+   478	                                                ),
+   479	                                              )
+   480	                                              .animate(onPlay: null)
+   481	                                              .shimmer(
+   482	                                                duration: 2000.ms,
+   483	                                                color: Colors.white.withValues(
+   484	                                                  alpha: 0.5,
+   485	                                                ),
+   486	                                              )
+   487	                                              .then(delay: 1000.ms)
+   488	                                              .fadeOut(duration: 500.ms)
+   489	                                              .then(delay: 1000.ms)
+   490	                                              .fadeIn(duration: 500.ms),
+   491	                                    ),
+   492	                                ],
+   493	                              ),
+   494	                      ),
+   495	                    ),
+   496	                  ),
+   497	                );
+   498	              },
+   499	            ),
+   500	          ),
+
+===== 11 ZYRA HEADER LAYER =====
+   500	          ),
+   501	      ],
+   502	    );
+   503	  }
+   504	
+   505	  // Enhanced Header with Controls
+   506	  Widget _buildEnhancedHeader(ThemeData theme, {bool compact = false}) {
+   507	    return Container(
+   508	      padding: const EdgeInsets.all(20),
+   509	      decoration: const BoxDecoration(
+   510	        gradient: LinearGradient(
+   511	          colors: [AppTheme.primaryPurple, AppTheme.primaryRose],
+   512	          begin: Alignment.topLeft,
+   513	          end: Alignment.bottomRight,
+   514	        ),
+   515	        borderRadius: BorderRadius.only(
+   516	          topLeft: Radius.circular(AppGeometry.radiusLg),
+   517	          topRight: Radius.circular(AppGeometry.radiusLg),
+   518	          bottomLeft: Radius.circular(18),
+   519	          bottomRight: Radius.circular(18),
+   520	        ),
+   521	      ),
+   522	      child: Column(
+   523	        children: [
+   524	          // Resize Handle - Only draggable area
+   525	          if (!_shellController.isFullScreen && !compact)
+   526	            Center(
+   527	              child: GestureDetector(
+   528	                onPanStart: (details) {
+   529	                  _initialHeight = _shellController.chatHeight;
+   530	                  _shellController.setResizing(true);
+   531	                },
+   532	                onPanUpdate: (details) {
+   533	                  if (!_shellController.isFullScreen && _shellController.isResizing) {
+   534	                    _adjustChatHeight(details.delta.dy);
+   535	                  }
+   536	                },
+   537	                onPanEnd: (details) {
+   538	                  _shellController.setResizing(false);
+   539	                },
+   540	                child: Container(
+   541	                  width: 16, // Larger hit area for better UX
+   542	                  height: 30, // Larger hit area
+   543	                  padding: const EdgeInsets.symmetric(vertical: 13),
+   544	                  child: Container(
+   545	                    width: 40,
+   546	                    height: 4,
+   547	                    decoration: BoxDecoration(
+   548	                      color: Colors.white.withValues(alpha: 0.3),
+   549	                      borderRadius: BorderRadius.circular(12),
+   550	                    ),
+   551	                  ),
+   552	                ),
+   553	              ),
+   554	            ),
+   555	          if (!_shellController.isFullScreen && !compact) const SizedBox(height: 4),
+   556	
+   557	          // Header Content
+   558	          Row(
+   559	            children: [
+   560	              // AI Avatar with Animation
+   561	              Container(
+   562	                    width: 48,
+   563	                    height: 48,
+   564	                    decoration: BoxDecoration(
+   565	                      color: Colors.white.withValues(alpha: 0.2),
+   566	                      borderRadius: BorderRadius.circular(12),
+   567	                      border: Border.all(
+   568	                        color: Colors.white.withValues(alpha: 0.3),
+   569	                        width: 2,
+   570	                      ),
+   571	                    ),
+   572	                    child: Transform.scale(
+   573	                      scale: 0.965 + (_pulseController.value * 0.08),
+   574	                      child: Icon(
+   575	                        Icons.psychology_rounded,
+   576	                        color: Theme.of(context).colorScheme.surface,
+   577	                        size: 24,
+   578	                      ),
+   579	                    ),
+   580	                  )
+   581	                  .animate(onPlay: null)
+   582	                  .shimmer(
+   583	                    duration: 3000.ms,
+   584	                    color: Colors.white.withValues(alpha: 0.3),
+   585	                  )
+   586	                  .then(delay: 2000.ms),
+   587	
+   588	              const SizedBox(width: 16),
+   589	
+   590	              // Title and Status
+   591	              Expanded(
+   592	                child: Column(
+   593	                  mainAxisAlignment: MainAxisAlignment.center,
+   594	                  crossAxisAlignment: CrossAxisAlignment.start,
+   595	                  mainAxisSize: MainAxisSize.min,
+   596	                  children: [
+   597	                    Row(
+   598	                      mainAxisSize: MainAxisSize.min,
+   599	                      children: [
+   600	                        Text(
+   601	                          'Zyra AI',
+   602	                          style: theme.textTheme.titleLarge?.copyWith(
+   603	                            color: Theme.of(context).colorScheme.surface,
+   604	                            fontWeight: FontWeight.w700,
+   605	                            fontSize: 18,
+   606	                            height: 1.0,
+   607	                            letterSpacing: -0.2,
+   608	                          ),
+   609	                        ),
+   610	                        const SizedBox(width: 6),
+   611	                        AnimatedContainer(
+   612	                          duration: const Duration(milliseconds: 950),
+   613	                          curve: Curves.easeInOutCubic,
+   614	                          padding: const EdgeInsets.symmetric(
+   615	                            horizontal: 6,
+   616	                            vertical: 2,
+   617	                          ),
+   618	                          decoration: BoxDecoration(
+   619	                            color: Colors.white.withValues(alpha: 0.18),
+   620	                            borderRadius: BorderRadius.circular(12),
+   621	                            boxShadow: [
+   622	                              BoxShadow(
+   623	                                color: Colors.white.withValues(
+   624	                                  alpha: 0.26 + (0.48 * _pulseController.value),
+   625	                                ),
+   626	                                blurRadius: 16 + (18 * _pulseController.value),
+   627	                                spreadRadius: 0.4,
+   628	                              ),
+   629	                            ],
+   630	                          ),
+   631	                          child: FadeTransition(
+   632	                            opacity: Tween(begin: 0.55, end: 1.0).animate(
+   633	                              CurvedAnimation(
+   634	                                parent: _pulseController,
+   635	                                curve: Curves.easeOut,
+   636	                              ),
+   637	                            ),
+   638	                            child: ScaleTransition(
+   639	                              scale: Tween(begin: 0.90, end: 1.03).animate(
+   640	                                CurvedAnimation(
+   641	                                  parent: _pulseController,
+   642	                                  curve: Curves.easeInOut,
+   643	                                ),
+   644	                              ),
+   645	                              child: Text(
+   646	                                'LIVE',
+   647	                                style: theme.textTheme.labelSmall?.copyWith(
+   648	                                  color: Theme.of(context).colorScheme.surface,
+   649	                                  fontSize: 9,
+   650	                                  fontWeight: FontWeight.w700,
+   651	                                ),
+   652	                              ),
+   653	                            ),
+   654	                          ),
+   655	                        ),
+   656	                      ],
+   657	                    ),
+   658	                    const SizedBox(height: 2),
+   659	                    Row(
+   660	                      mainAxisSize: MainAxisSize.min,
+   661	                      children: [
+   662	                        _buildLiveStatusIndicator(),
+   663	                        const SizedBox(width: 6),
+   664	                        const SizedBox(width: 4),
+   665	                        Flexible(
+   666	                          child: AnimatedDefaultTextStyle(
+   667	                            duration: const Duration(milliseconds: 220),
+   668	                            style: theme.textTheme.bodyMedium!.copyWith(
+   669	                              color: Colors.white.withValues(
+   670	                                alpha: _shellController.isTyping ? 0.9 : 0.78,
+   671	                              ),
+   672	                              fontSize: 13,
+   673	                              fontWeight: FontWeight.w400,
+   674	                              height: 1.05,
+   675	                              letterSpacing: _shellController.isTyping ? 0.08 : 0.0,
+   676	                            ),
+   677	                            child: Text(
+   678	                              _shellController.isTyping ? 'Thinking...' : 'Ready to assist',
+   679	                            ),
+   680	                          ),
+   681	                        ),
+   682	                      ],
+   683	                    ),
+   684	                  ],
+   685	                ),
+   686	              ),
+   687	
+   688	              // Header Actions - With improved tap handling
+   689	              Row(
+   690	                mainAxisSize: MainAxisSize.min,
+   691	                children: [
+   692	                  // Fullscreen Toggle
+   693	                  GestureDetector(
+   694	                    onTap: _toggleFullScreen,
+   695	                    behavior: HitTestBehavior.opaque,
+   696	                    child: Container(
+   697	                      width: 48,
+   698	                      height: 48,
+   699	                      decoration: BoxDecoration(
+   700	                        borderRadius: BorderRadius.circular(12),
+   701	                        color: Colors.white.withValues(alpha: 0.1),
+   702	                      ),
+   703	                      child: Icon(
+   704	                        _shellController.isFullScreen
+   705	                            ? Icons.fullscreen_exit_rounded
+   706	                            : Icons.fullscreen_rounded,
+   707	                        color: Theme.of(context).colorScheme.surface,
+   708	                        size: 24,
+   709	                      ),
+   710	                    ),
+   711	                  ),
+   712	
+   713	                  const SizedBox(width: 4),
+   714	
+   715	                  // Close Button - Enhanced with better tap handling
+   716	                  GestureDetector(
+   717	                    onTap: _toggleChat,
+   718	                    behavior: HitTestBehavior.opaque,
+   719	                    child: Container(
+   720	                      width: 48,
+   721	                      height: 48,
+   722	                      decoration: BoxDecoration(
+   723	                        borderRadius: BorderRadius.circular(12),
+   724	                        color: Colors.white.withValues(alpha: 0.1),
+   725	                      ),
+   726	                      child: Icon(
+   727	                        Icons.keyboard_arrow_down_rounded,
+   728	                        color: Theme.of(context).colorScheme.surface,
+   729	                        size: 24,
+   730	                      ),
+   731	                    ),
+   732	                  ),
+   733	                ],
+   734	              ),
+   735	            ],
+   736	          ),
+   737	
+   738	          if (!compact) ...[
+   739	            // Medical Disclaimer (Guideline 1.4.1)
+   740	            const SizedBox(height: 12),
+   741	            Container(
+   742	              padding: const EdgeInsets.all(8),
+   743	              decoration: BoxDecoration(
+   744	                color: Colors.white.withValues(alpha: 0.08),
+   745	                borderRadius: BorderRadius.circular(12),
+   746	                border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+   747	              ),
+   748	              child: Row(
+   749	                mainAxisSize: MainAxisSize.min,
+   750	                children: [
+   751	                  const SizedBox(width: 6),
+   752	                  Expanded(
+   753	                    child: Text(
+   754	                      _getInsightsBannerText(),
+   755	                      style: TextStyle(
+   756	                        fontSize: 12,
+   757	                        color: Colors.white.withValues(alpha: 0.9),
+   758	                        fontWeight: FontWeight.w400,
+   759	                      ),
+   760	                    ),
+   761	                  ),
+   762	                ],
+   763	              ),
+   764	            ),
+   765	          ],
+   766	        ],
+   767	      ),
+   768	    );
+   769	  }
+   770	
+   771	  String _getInsightsBannerText() {
+   772	    if (_shellController.isTyping) {
+   773	      return 'Analyzing your patterns ✨' +
+   774	          '.' * ((_pulseController.value * 3).floor() + 1);
+   775	    }
+   776	
+   777	    if (_messages.length > 1) {
+   778	      return '✦ Personalized insights based on your cycle data ⓘ';
+   779	    }
+   780	
+
+===== 12 ZYRA CHAT AREA =====
+   781	    return '✦ Personalized AI insights ⓘ Not medical advice';
+   782	  }
+   783	
+   784	  // Stable Chat Area - replaces flutter_chat_ui AnimatedList
+   785	  Widget _buildChatArea(ThemeData theme) {
+   786	    final currentUserId = _chatService.currentUser?.id ?? 'fallback_user';
+   787	
+   788	    return Listener(
+   789	      behavior: HitTestBehavior.translucent,
+   790	      onPointerDown: (_) {
+   791	        FocusScope.of(context).unfocus();
+   792	
+   793	        WidgetsBinding.instance.addPostFrameCallback((_) {
+   794	          if (!mounted) return;
+   795	          _shellController.restoreDialogState();
+   796	        });
+   797	      },
+   798	      child: ListView.builder(
+   799	        reverse: true,
+   800	        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+   801	        itemCount: _messages.length,
+   802	        itemBuilder: (context, index) {
+   803	          final message = _messages[index];
+   804	          final isUser = message.author.id == currentUserId;
+   805	          final text = message is types.TextMessage ? message.text : '';
+   806	
+   807	          return Align(
+   808	            alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
+   809	            child: Container(
+   810	              margin: const EdgeInsets.symmetric(vertical: 4),
+   811	              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+   812	              constraints: BoxConstraints(
+   813	                maxWidth: MediaQuery.of(context).size.width * 0.72,
+   814	              ),
+   815	              decoration: BoxDecoration(
+   816	                gradient: isUser
+   817	                    ? const LinearGradient(
+   818	                        colors: [
+   819	                          AppTheme.primaryRose,
+   820	                          AppTheme.primaryPurple,
+   821	                        ],
+   822	                        begin: Alignment.topLeft,
+   823	                        end: Alignment.bottomRight,
+   824	                      )
+   825	                    : LinearGradient(
+   826	                        colors: [
+   827	                          Theme.of(context).colorScheme.surfaceContainer,
+   828	                          Theme.of(context).colorScheme.surface,
+   829	                        ],
+   830	                        begin: Alignment.topLeft,
+   831	                        end: Alignment.bottomRight,
+   832	                      ),
+   833	                borderRadius: BorderRadius.circular(18),
+   834	                border: Border.all(
+   835	                  color: isUser
+   836	                      ? Colors.white.withValues(alpha: 0.10)
+   837	                      : AppTheme.primaryRose.withValues(alpha: 0.22),
+   838	                  width: 1,
+   839	                ),
+   840	                boxShadow: [
+   841	                  BoxShadow(
+   842	                    color: isUser
+   843	                        ? AppTheme.primaryRose.withValues(alpha: 0.18)
+   844	                        : AppTheme.primaryPurple.withValues(alpha: 0.08),
+   845	                    blurRadius: 12,
+   846	                    spreadRadius: 0,
+   847	                    offset: const Offset(0, 4),
+   848	                  ),
+   849	                ],
+   850	              ),
+   851	              child: Text(
+   852	                text,
+   853	                style: theme.textTheme.bodyMedium?.copyWith(
+   854	                  color: isUser
+   855	                      ? Theme.of(context).colorScheme.surface
+   856	                      : theme.textTheme.bodyMedium?.color,
+   857	                  fontSize: 14,
+   858	                  height: 1.5,
+   859	                ),
+   860	              ),
+   861	            ),
+   862	          );
+   863	        },
+   864	      ),
+   865	    );
+
+===== 13 ZYRA QUICK REPLIES =====
+   865	    );
+   866	  }
+   867	
+   868	  // Enhanced Quick Replies - More visible and professional
+   869	  Widget _buildEnhancedQuickReplies(ThemeData theme) {
+   870	    final suggestions = _chatService.getSuggestedReplies().toList();
+   871	
+   872	    return Column(
+   873	      crossAxisAlignment: CrossAxisAlignment.start,
+   874	      mainAxisSize: MainAxisSize.min,
+   875	      children: [
+   876	        // Header - More prominent
+   877	        InkWell(
+   878	          borderRadius: AppGeometry.dialogRadius,
+   879	          onTap: () {
+   880	            setState(() {
+   881	              _shellController.setQuickRepliesCollapsed(
+   882	                !_shellController.quickRepliesCollapsed,
+   883	              );
+   884	            });
+   885	          },
+   886	          child: Padding(
+   887	            padding: const EdgeInsets.symmetric(vertical: 4),
+   888	            child: Row(
+   889	              children: [
+   890	                Container(
+   891	                  padding: const EdgeInsets.all(6),
+   892	                  decoration: BoxDecoration(
+   893	                    gradient: LinearGradient(
+   894	                      colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+   895	                    ),
+   896	                    borderRadius: BorderRadius.circular(12),
+   897	                  ),
+   898	                  child: Icon(
+   899	                    Icons.auto_awesome_outlined,
+   900	                    color: Theme.of(context).colorScheme.surface,
+   901	                    size: 18,
+   902	                  ),
+   903	                ),
+   904	                const SizedBox(width: 8),
+   905	                Expanded(
+   906	                  child: Text(
+   907	                    'Suggested Questions',
+   908	                    style: theme.textTheme.titleMedium?.copyWith(
+   909	                      color: AppTheme.primaryRose,
+   910	                      fontWeight: FontWeight.w500,
+   911	                      fontSize: 14,
+   912	                    ),
+   913	                  ),
+   914	                ),
+   915	                Icon(
+   916	                  _shellController.quickRepliesCollapsed
+   917	                      ? Icons.keyboard_arrow_down
+   918	                      : Icons.keyboard_arrow_up,
+   919	                  color: AppTheme.primaryRose,
+   920	                ),
+   921	              ],
+   922	            ),
+   923	          ),
+   924	        ),
+   925	        const SizedBox(height: 4),
+   926	        // Suggestions - Horizontal scrollable for better visibility
+   927	        if (!_shellController.quickRepliesCollapsed)
+   928	          SizedBox(
+   929	            height: 34,
+   930	            child: ListView.separated(
+   931	              scrollDirection: Axis.horizontal,
+   932	              itemCount: suggestions.length,
+   933	              separatorBuilder: (context, index) => const SizedBox(width: 12),
+   934	              itemBuilder: (context, index) {
+   935	                return _buildSuggestionChip(suggestions[index], theme, index);
+   936	              },
+   937	            ),
+   938	          ),
+   939	      ],
+   940	    );
+   941	  }
+   942	
+   943	  // Suggestion Chip - More prominent and professional
+   944	  Widget _buildSuggestionChip(String suggestion, ThemeData theme, int index) {
+   945	    return InkWell(
+   946	          onTap: () {
+   947	            final currentUser = _chatService.currentUser;
+   948	            if (currentUser == null) return;
+   949	
+   950	            final message = types.TextMessage(
+   951	              author: currentUser,
+   952	              createdAt: DateTime.now().millisecondsSinceEpoch,
+   953	              id: const Uuid().v4(),
+   954	              text: suggestion,
+   955	            );
+   956	
+   957	            setState(() {
+   958	              _shellController.setTyping(true);
+   959	              _isSuggestionsExpanded = false;
+   960	              _shellController.setQuickRepliesCollapsed(true);
+   961	            });
+   962	
+   963	            _chatService.sendMessage(message);
+   964	          },
+   965	          borderRadius: AppGeometry.dialogRadius,
+   966	          child: Container(
+   967	            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+   968	            decoration: BoxDecoration(
+   969	              gradient: LinearGradient(
+   970	                colors: [
+   971	                  AppTheme.primaryRose.withValues(alpha: 0.08),
+   972	                  AppTheme.primaryPurple.withValues(alpha: 0.08),
+   973	                ],
+   974	              ),
+   975	              borderRadius: BorderRadius.circular(12),
+   976	              border: Border.all(
+   977	                color: AppTheme.primaryRose.withValues(alpha: 0.2),
+   978	                width: 1,
+   979	              ),
+   980	              boxShadow: [
+   981	                BoxShadow(
+   982	                  color: AppTheme.primaryRose.withValues(alpha: 0.1),
+   983	                  blurRadius: 4,
+   984	                  offset: const Offset(0, 2),
+   985	                ),
+   986	              ],
+   987	            ),
+   988	            child: Text(
+   989	              suggestion,
+   990	              style: theme.textTheme.bodyMedium?.copyWith(
+   991	                color: AppTheme.primaryRose,
+   992	                fontWeight: FontWeight.w700,
+   993	                fontSize: 14,
+   994	              ),
+   995	            ),
+   996	          ),
+   997	        )
+   998	        .animate()
+   999	        .fadeIn(duration: 300.ms, delay: (index * 100).ms)
+  1000	        .slideX(begin: 0.3, end: 0);
+  1001	  }
+  1002	
+  1003	  Widget _buildLiveStatusIndicator() {
+  1004	    final isThinking = _shellController.isTyping;
+  1005	    final coreColor = isThinking ? AppTheme.primaryPurple : AppTheme.accentMint;
+  1006	    final haloColor = isThinking
+  1007	        ? AppTheme.primaryRose
+  1008	        : AppTheme.secondaryBlue;
+  1009	    final pulseDuration = isThinking ? 1050.ms : 1600.ms;
+  1010	    final haloBegin = isThinking ? 0.82 : 0.76;
+  1011	    final haloEnd = isThinking ? 1.28 : 1.18;
+  1012	    final dotBegin = isThinking ? 0.94 : 0.97;
+  1013	    final dotEnd = isThinking ? 1.09 : 1.05;
+  1014	
+  1015	    return Stack(
+  1016	      alignment: Alignment.center,
+  1017	      children: [
+  1018	        Container(
+  1019	              width: 16,
+  1020	              height: 16,
+  1021	              decoration: BoxDecoration(
+  1022	                shape: BoxShape.circle,
+  1023	                color: haloColor.withValues(alpha: isThinking ? 0.20 : 0.18),
+  1024	              ),
+  1025	            )
+  1026	            .animate(onPlay: null)
+  1027	            .scaleXY(
+  1028	              begin: haloBegin,
+  1029	              end: haloEnd,
+  1030	              duration: pulseDuration,
+  1031	              curve: Curves.easeInOutCubic,
+  1032	            )
+  1033	            .fadeIn(duration: 180.ms)
+  1034	            .then(delay: 120.ms)
+  1035	            .fadeOut(duration: isThinking ? 520.ms : 900.ms),
+  1036	
+  1037	        Container(
+  1038	              width: 9,
+  1039	              height: 9,
+  1040	              decoration: BoxDecoration(
+  1041	                shape: BoxShape.circle,
+  1042	                gradient: isThinking
+  1043	                    ? const LinearGradient(
+  1044	                        colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+  1045	                        begin: Alignment.topLeft,
+  1046	                        end: Alignment.bottomRight,
+  1047	                      )
+  1048	                    : const LinearGradient(
+  1049	                        colors: [AppTheme.secondaryBlue, AppTheme.accentMint],
+  1050	                        begin: Alignment.topLeft,
+  1051	                        end: Alignment.bottomRight,
+  1052	                      ),
+  1053	                color: null,
+  1054	                boxShadow: [
+  1055	                  BoxShadow(
+  1056	                    color: coreColor.withValues(
+  1057	                      alpha: isThinking ? 0.46 : 0.44,
+  1058	                    ),
+  1059	                    blurRadius: isThinking ? 13 : 10,
+  1060	                    spreadRadius: isThinking ? 1.8 : 1.4,
+  1061	                  ),
+  1062	                ],
+  1063	              ),
+  1064	            )
+  1065	            .animate(onPlay: null)
+  1066	            .scaleXY(
+  1067	              begin: dotBegin,
+  1068	              end: dotEnd,
+  1069	              duration: pulseDuration,
+  1070	              curve: Curves.easeInOutCubic,
+
+===== 14 ZYRA INPUT AREA =====
+  1070	              curve: Curves.easeInOutCubic,
+  1071	            ),
+  1072	      ],
+  1073	    );
+  1074	  }
+  1075	
+  1076	  // Enhanced Input Area - Better spacing and visibility
+  1077	  Widget _buildEnhancedInput(ThemeData theme, bool keyboardOpen) {
+  1078	    return Container(
+  1079	      padding: EdgeInsets.symmetric(horizontal: 16, vertical: keyboardOpen ? 4 : 8),
+  1080	      decoration: BoxDecoration(
+  1081	        color: Theme.of(context).colorScheme.surface,
+  1082	        borderRadius: AppGeometry.dialogRadius,
+  1083	        border: null,
+  1084	      ),
+  1085	      child: Row(
+  1086	        crossAxisAlignment: CrossAxisAlignment.end,
+  1087	        children: [
+  1088	          Expanded(
+  1089	            child: Container(
+  1090	              constraints: BoxConstraints(maxHeight: keyboardOpen ? 56 : 120),
+  1091	              decoration: BoxDecoration(
+  1092	                color: Theme.of(context).colorScheme.surface,
+  1093	                borderRadius: BorderRadius.circular(12),
+  1094	                border: Border.all(
+  1095	                  color: AppTheme.primaryRose.withValues(alpha: 0.52),
+  1096	                  width: 1,
+  1097	                ),
+  1098	                boxShadow: [
+  1099	                  BoxShadow(
+  1100	                    color: AppTheme.primaryRose.withValues(alpha: 0.05),
+  1101	                    blurRadius: 10,
+  1102	                    spreadRadius: 0,
+  1103	                    offset: const Offset(0, 0),
+  1104	                  ),
+  1105	                ],
+  1106	              ),
+  1107	              child: TextField(
+  1108	                textAlignVertical: TextAlignVertical.center,
+  1109	                enableInteractiveSelection: false,
+  1110	                controller: _textController,
+  1111	                focusNode: _inputFocusNode,
+  1112	                decoration: InputDecoration(
+  1113	                  contentPadding: EdgeInsets.symmetric(
+  1114	                    horizontal: 16,
+  1115	                    vertical: keyboardOpen ? 8 : 14,
+  1116	                  ),
+  1117	                  hintText: keyboardOpen
+  1118	                      ? 'Tap the screen to view suggestions ✨'
+  1119	                      : 'Ask about health, science, technology, lifestyle...',
+  1120	                  hintStyle: theme.textTheme.bodyMedium?.copyWith(
+  1121	                    color: theme.hintColor.withValues(alpha: 0.7),
+  1122	                    fontSize: keyboardOpen ? 13.5 : 15,
+  1123	                  ),
+  1124	                  suffixIcon: IconButton(
+  1125	                    icon: Icon(
+  1126	                      Icons.send_rounded,
+  1127	                      size: 20,
+  1128	                      color: Theme.of(context).colorScheme.primary,
+  1129	                    ),
+  1130	                    onPressed: () {
+  1131	                      final text = _textController.text.trim();
+  1132	                      if (text.isNotEmpty) {
+  1133	                        _handleSendPressed(types.PartialText(text: text));
+  1134	                        _textController.clear();
+  1135	                      }
+  1136	                    },
+  1137	                  ),
+  1138	                  border: InputBorder.none,
+  1139	                ),
+  1140	                maxLines: null,
+  1141	                minLines: 1,
+  1142	                keyboardType: TextInputType.multiline,
+  1143	                textCapitalization: TextCapitalization.sentences,
+  1144	                style: theme.textTheme.bodyMedium?.copyWith(
+  1145	                  fontSize: 14,
+  1146	                  height: 1.4,
+  1147	                ),
+  1148	                onSubmitted: (text) {
+  1149	                  if (text.trim().isNotEmpty) {
+  1150	                    _handleSendPressed(types.PartialText(text: text.trim()));
+  1151	                    _textController.clear();
+  1152	                  }
+  1153	                },
+  1154	              ),
+  1155	            ),
+  1156	          ),
+  1157	        ],
+  1158	      ),
+  1159	    );
+  1160	  }
+  1161	}
+===== 15 ZYRA SHELL CONTROLLER =====
+     1	import 'package:flutter/material.dart';
+     2	
+     3	class ZyraShellController extends ChangeNotifier {
+     4	  bool isExpanded = false;
+     5	  bool isFullScreen = false;
+     6	  bool isTyping = false;
+     7	  bool quickRepliesCollapsed = false;
+     8	  bool isKeyboardVisible = false;
+     9	  bool isTransitioning = false;
+    10	  bool isResizing = false;
+    11	
+    12	  double chatHeight = 0.5;
+    13	
+    14	  void setKeyboardVisibility(bool visible) {
+    15	    if (isKeyboardVisible == visible) return;
+    16	
+    17	    isKeyboardVisible = visible;
+    18	
+    19	    notifyListeners();
+    20	  }
+    21	
+    22	  void toggleExpanded() {
+    23	    if (isTransitioning) return;
+    24	
+    25	    isExpanded = !isExpanded;
+    26	
+    27	    if (!isExpanded) {
+    28	      isFullScreen = false;
+    29	      chatHeight = 0.5;
+    30	    }
+    31	
+    32	    notifyListeners();
+    33	  }
+    34	
+    35	  void toggleFullScreen() {
+    36	    if (isTransitioning) return;
+    37	
+    38	    isFullScreen = !isFullScreen;
+    39	    chatHeight = isFullScreen ? 0.9 : 0.6;
+    40	
+    41	    notifyListeners();
+    42	  }
+    43	
+    44	  void setTyping(bool value) {
+    45	    if (isTyping == value) return;
+    46	
+    47	    isTyping = value;
+    48	
+    49	    notifyListeners();
+    50	  }
+    51	
+    52	  void setQuickRepliesCollapsed(bool value) {
+    53	    if (quickRepliesCollapsed == value) return;
+    54	
+    55	    quickRepliesCollapsed = value;
+    56	
+    57	    notifyListeners();
+    58	  }
+    59	
+    60	  void setTransitioning(bool value) {
+    61	    if (isTransitioning == value) return;
+    62	
+    63	    isTransitioning = value;
+    64	
+    65	    notifyListeners();
+    66	  }
+    67	
+    68	  void setResizing(bool value) {
+    69	    if (isResizing == value) return;
+    70	
+    71	    isResizing = value;
+    72	
+    73	    notifyListeners();
+    74	  }
+    75	
+    76	  void adjustChatHeight(
+    77	    double delta,
+    78	    double screenHeight,
+    79	  ) {
+    80	    final updatedHeight =
+    81	        (chatHeight - delta / screenHeight).clamp(0.3, 0.9);
+    82	
+    83	    if (updatedHeight == chatHeight) return;
+    84	
+    85	    chatHeight = updatedHeight;
+    86	
+    87	    notifyListeners();
+    88	  }
+    89	
+    90	  void restoreDialogState() {
+    91	    quickRepliesCollapsed = false;
+    92	    isKeyboardVisible = false;
+    93	
+    94	    notifyListeners();
+    95	  }
+    96	}
+
+===== 16 CENTRAL GEOMETRY / METRICS =====
+     1	import 'package:flutter/material.dart';
+     2	
+     3	class AppGeometry {
+     4	  AppGeometry._();
+     5	
+     6	  // Radius
+     7	  static const double radiusXs = 8;
+     8	  static const double radiusSm = 12;
+     9	  static const double radiusMd = 16;
+    10	  static const double radiusLg = 20;
+    11	
+    12	  // Heights
+    13	  static const double capsuleHeight = 44;
+    14	  static const double inputHeight = 52;
+    15	
+    16	  // Insets
+    17	  static const double insetXs = 4;
+    18	  static const double insetSm = 8;
+    19	  static const double insetMd = 12;
+    20	  static const double insetLg = 16;
+    21	
+    22	  // Shared Shapes
+    23	  static const BorderRadius capsuleRadius = BorderRadius.all(
+    24	    Radius.circular(radiusSm),
+    25	  );
+    26	
+    27	  static const BorderRadius carrierRadius = BorderRadius.all(
+    28	    Radius.circular(radiusMd),
+    29	  );
+    30	
+    31	  static const BorderRadius dialogRadius = BorderRadius.all(
+    32	    Radius.circular(radiusLg),
+    33	  );
+    34	}
+     1	import 'package:flutter/widgets.dart';
+     2	
+     3	class AppLayoutMetrics {
+     4	  static const double sideMargin = 20;
+     5	  static const double radius = 24;
+     6	  static const double gap = 8;
+     7	
+     8	  static double safeTop(BuildContext c) => MediaQuery.of(c).padding.top;
+     9	
+    10	  static double safeBottom(BuildContext c) => MediaQuery.of(c).padding.bottom;
+    11	
+    12	  static double dialogBottom(BuildContext c) => safeBottom(c) + gap;
+    13	
+    14	  static double centeredMaxWidth(BuildContext c, {double max = 720}) {
+    15	    final w = MediaQuery.of(c).size.width;
+    16	    return w < max ? w - (sideMargin * 2) : max;
+    17	  }
+    18	
+    19	  static double centeredLeft(BuildContext c, {double max = 720}) {
+    20	    final w = MediaQuery.of(c).size.width;
+    21	    final width = centeredMaxWidth(c, max: max);
+    22	    return (w - width) / 2;
+    23	  }
+    24	
+    25	  static double centeredRight(BuildContext c, {double max = 720}) {
+    26	    return centeredLeft(c, max: max);
+    27	  }
+    28	}
+
+===== 17 PAINT / LAYER / SURFACE SEARCH =====
+lib/features/insights/screens/insights_screen.dart:75:        body: Stack(
+lib/features/insights/screens/insights_screen.dart:77:            Container(
+lib/features/insights/screens/insights_screen.dart:79:                gradient: AppTheme.backgroundGradient(
+lib/features/insights/screens/insights_screen.dart:98:                          ? DecoratedBox(
+lib/features/insights/screens/insights_screen.dart:100:                                gradient: AppTheme.backgroundGradient(
+lib/features/insights/screens/insights_screen.dart:139:    return Container(
+lib/features/insights/screens/insights_screen.dart:152:                    color: theme.colorScheme.onSurface,
+lib/features/insights/screens/insights_screen.dart:158:                    color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+lib/features/insights/screens/insights_screen.dart:169:          Container(
+lib/features/insights/screens/insights_screen.dart:172:              gradient: LinearGradient(
+lib/features/insights/screens/insights_screen.dart:176:              boxShadow: [
+lib/features/insights/screens/insights_screen.dart:177:                BoxShadow(
+lib/features/insights/screens/insights_screen.dart:178:                  color: AppTheme.secondaryBlue.withValues(
+lib/features/insights/screens/insights_screen.dart:184:                BoxShadow(
+lib/features/insights/screens/insights_screen.dart:185:                  color: AppTheme.secondaryBlue.withValues(alpha: 0.3),
+lib/features/insights/screens/insights_screen.dart:194:                const Icon(Icons.psychology, color: Colors.white, size: 16),
+lib/features/insights/screens/insights_screen.dart:199:                    color: Colors.white,
+lib/features/insights/screens/insights_screen.dart:213:    return Container(
+lib/features/insights/screens/insights_screen.dart:217:        color: theme.colorScheme.surface.withValues(alpha: 0.9),
+lib/features/insights/screens/insights_screen.dart:219:        boxShadow: [...AppTheme.shadowSm(theme.shadowColor)],
+lib/features/insights/screens/insights_screen.dart:236:              child: AnimatedContainer(
+lib/features/insights/screens/insights_screen.dart:241:                  gradient: isSelected
+lib/features/insights/screens/insights_screen.dart:255:                    color: isSelected
+lib/features/insights/screens/insights_screen.dart:272:    return Container(
+lib/features/insights/screens/insights_screen.dart:276:        color: theme.colorScheme.surface.withValues(alpha: 0.9),
+lib/features/insights/screens/insights_screen.dart:278:        boxShadow: [
+lib/features/insights/screens/insights_screen.dart:279:          BoxShadow(
+lib/features/insights/screens/insights_screen.dart:280:            color: theme.shadowColor.withValues(alpha: 0.1),
+lib/features/insights/screens/insights_screen.dart:293:        overlayColor: WidgetStatePropertyAll(Colors.transparent),
+lib/features/insights/screens/insights_screen.dart:295:          gradient: LinearGradient(
+lib/features/insights/screens/insights_screen.dart:300:        dividerColor: Colors.transparent,
+lib/features/insights/screens/insights_screen.dart:301:        labelColor: Colors.white,
+lib/features/insights/screens/insights_screen.dart:302:        unselectedLabelColor: theme.colorScheme.onSurface.withValues(
+lib/features/insights/screens/insights_screen.dart:340:              valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryRose),
+lib/features/insights/screens/insights_screen.dart:375:                  color: theme.colorScheme.onSurface,
+lib/features/insights/screens/insights_screen.dart:406:              valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryRose),
+lib/features/insights/screens/insights_screen.dart:442:              valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryRose),
+lib/features/insights/widgets/floating_ai_chat.dart:118:        _shellController.setKeyboardVisibility(
+lib/features/insights/widgets/floating_ai_chat.dart:289:    return Stack(
+lib/features/insights/widgets/floating_ai_chat.dart:293:          AnimatedPositioned(
+lib/features/insights/widgets/floating_ai_chat.dart:308:                return ClipRRect(
+lib/features/insights/widgets/floating_ai_chat.dart:310:                  child: Container(
+lib/features/insights/widgets/floating_ai_chat.dart:312:                      color: Theme.of(context).colorScheme.surface,
+lib/features/insights/widgets/floating_ai_chat.dart:314:                      boxShadow: [
+lib/features/insights/widgets/floating_ai_chat.dart:315:                        BoxShadow(
+lib/features/insights/widgets/floating_ai_chat.dart:316:                          color: theme.shadowColor.withValues(alpha: 0.14),
+lib/features/insights/widgets/floating_ai_chat.dart:322:                      border: Border.all(
+lib/features/insights/widgets/floating_ai_chat.dart:323:                        color: AppTheme.primaryRose.withValues(alpha: 0.16),
+lib/features/insights/widgets/floating_ai_chat.dart:355:                              : Container(
+lib/features/insights/widgets/floating_ai_chat.dart:387:          Positioned(
+lib/features/insights/widgets/floating_ai_chat.dart:400:                  child: Container(
+lib/features/insights/widgets/floating_ai_chat.dart:403:                      boxShadow: [
+lib/features/insights/widgets/floating_ai_chat.dart:404:                        BoxShadow(
+lib/features/insights/widgets/floating_ai_chat.dart:405:                          color: AppTheme.primaryRose.withValues(alpha: 0.2),
+lib/features/insights/widgets/floating_ai_chat.dart:415:                      backgroundColor: AppTheme.primaryRose,
+lib/features/insights/widgets/floating_ai_chat.dart:428:                                color: Theme.of(context).colorScheme.surface,
+lib/features/insights/widgets/floating_ai_chat.dart:432:                            : Stack(
+lib/features/insights/widgets/floating_ai_chat.dart:437:                                    color: Theme.of(
+lib/features/insights/widgets/floating_ai_chat.dart:443:                                    Positioned(
+lib/features/insights/widgets/floating_ai_chat.dart:447:                                          Container(
+lib/features/insights/widgets/floating_ai_chat.dart:451:                                                  gradient:
+lib/features/insights/widgets/floating_ai_chat.dart:460:                                                  boxShadow: [
+lib/features/insights/widgets/floating_ai_chat.dart:461:                                                    BoxShadow(
+lib/features/insights/widgets/floating_ai_chat.dart:462:                                                      color: AppTheme
+lib/features/insights/widgets/floating_ai_chat.dart:474:                                                  color: Theme.of(
+lib/features/insights/widgets/floating_ai_chat.dart:483:                                                color: Colors.white.withValues(
+lib/features/insights/widgets/floating_ai_chat.dart:507:    return Container(
+lib/features/insights/widgets/floating_ai_chat.dart:510:        gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart:540:                child: Container(
+lib/features/insights/widgets/floating_ai_chat.dart:544:                  child: Container(
+lib/features/insights/widgets/floating_ai_chat.dart:548:                      color: Colors.white.withValues(alpha: 0.3),
+lib/features/insights/widgets/floating_ai_chat.dart:561:              Container(
+lib/features/insights/widgets/floating_ai_chat.dart:565:                      color: Colors.white.withValues(alpha: 0.2),
+lib/features/insights/widgets/floating_ai_chat.dart:567:                      border: Border.all(
+lib/features/insights/widgets/floating_ai_chat.dart:568:                        color: Colors.white.withValues(alpha: 0.3),
+lib/features/insights/widgets/floating_ai_chat.dart:576:                        color: Theme.of(context).colorScheme.surface,
+lib/features/insights/widgets/floating_ai_chat.dart:584:                    color: Colors.white.withValues(alpha: 0.3),
+lib/features/insights/widgets/floating_ai_chat.dart:603:                            color: Theme.of(context).colorScheme.surface,
+lib/features/insights/widgets/floating_ai_chat.dart:611:                        AnimatedContainer(
+lib/features/insights/widgets/floating_ai_chat.dart:619:                            color: Colors.white.withValues(alpha: 0.18),
+lib/features/insights/widgets/floating_ai_chat.dart:621:                            boxShadow: [
+lib/features/insights/widgets/floating_ai_chat.dart:622:                              BoxShadow(
+lib/features/insights/widgets/floating_ai_chat.dart:623:                                color: Colors.white.withValues(
+lib/features/insights/widgets/floating_ai_chat.dart:632:                            opacity: Tween(begin: 0.55, end: 1.0).animate(
+lib/features/insights/widgets/floating_ai_chat.dart:648:                                  color: Theme.of(context).colorScheme.surface,
+lib/features/insights/widgets/floating_ai_chat.dart:669:                              color: Colors.white.withValues(
+lib/features/insights/widgets/floating_ai_chat.dart:696:                    child: Container(
+lib/features/insights/widgets/floating_ai_chat.dart:701:                        color: Colors.white.withValues(alpha: 0.1),
+lib/features/insights/widgets/floating_ai_chat.dart:707:                        color: Theme.of(context).colorScheme.surface,
+lib/features/insights/widgets/floating_ai_chat.dart:719:                    child: Container(
+lib/features/insights/widgets/floating_ai_chat.dart:724:                        color: Colors.white.withValues(alpha: 0.1),
+lib/features/insights/widgets/floating_ai_chat.dart:728:                        color: Theme.of(context).colorScheme.surface,
+lib/features/insights/widgets/floating_ai_chat.dart:741:            Container(
+lib/features/insights/widgets/floating_ai_chat.dart:744:                color: Colors.white.withValues(alpha: 0.08),
+lib/features/insights/widgets/floating_ai_chat.dart:746:                border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+lib/features/insights/widgets/floating_ai_chat.dart:757:                        color: Colors.white.withValues(alpha: 0.9),
+lib/features/insights/widgets/floating_ai_chat.dart:809:            child: Container(
+lib/features/insights/widgets/floating_ai_chat.dart:816:                gradient: isUser
+lib/features/insights/widgets/floating_ai_chat.dart:834:                border: Border.all(
+lib/features/insights/widgets/floating_ai_chat.dart:835:                  color: isUser
+lib/features/insights/widgets/floating_ai_chat.dart:840:                boxShadow: [
+lib/features/insights/widgets/floating_ai_chat.dart:841:                  BoxShadow(
+lib/features/insights/widgets/floating_ai_chat.dart:842:                    color: isUser
+lib/features/insights/widgets/floating_ai_chat.dart:854:                  color: isUser
+lib/features/insights/widgets/floating_ai_chat.dart:890:                Container(
+lib/features/insights/widgets/floating_ai_chat.dart:893:                    gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart:900:                    color: Theme.of(context).colorScheme.surface,
+lib/features/insights/widgets/floating_ai_chat.dart:909:                      color: AppTheme.primaryRose,
+lib/features/insights/widgets/floating_ai_chat.dart:919:                  color: AppTheme.primaryRose,
+lib/features/insights/widgets/floating_ai_chat.dart:926:        // Suggestions - Horizontal scrollable for better visibility
+lib/features/insights/widgets/floating_ai_chat.dart:966:          child: Container(
+lib/features/insights/widgets/floating_ai_chat.dart:969:              gradient: LinearGradient(
+lib/features/insights/widgets/floating_ai_chat.dart:976:              border: Border.all(
+lib/features/insights/widgets/floating_ai_chat.dart:977:                color: AppTheme.primaryRose.withValues(alpha: 0.2),
+lib/features/insights/widgets/floating_ai_chat.dart:980:              boxShadow: [
+lib/features/insights/widgets/floating_ai_chat.dart:981:                BoxShadow(
+lib/features/insights/widgets/floating_ai_chat.dart:982:                  color: AppTheme.primaryRose.withValues(alpha: 0.1),
+lib/features/insights/widgets/floating_ai_chat.dart:991:                color: AppTheme.primaryRose,
+lib/features/insights/widgets/floating_ai_chat.dart:1015:    return Stack(
+lib/features/insights/widgets/floating_ai_chat.dart:1018:        Container(
+lib/features/insights/widgets/floating_ai_chat.dart:1023:                color: haloColor.withValues(alpha: isThinking ? 0.20 : 0.18),
+lib/features/insights/widgets/floating_ai_chat.dart:1037:        Container(
+lib/features/insights/widgets/floating_ai_chat.dart:1042:                gradient: isThinking
+lib/features/insights/widgets/floating_ai_chat.dart:1053:                color: null,
+lib/features/insights/widgets/floating_ai_chat.dart:1054:                boxShadow: [
+lib/features/insights/widgets/floating_ai_chat.dart:1055:                  BoxShadow(
+lib/features/insights/widgets/floating_ai_chat.dart:1056:                    color: coreColor.withValues(
+lib/features/insights/widgets/floating_ai_chat.dart:1076:  // Enhanced Input Area - Better spacing and visibility
+lib/features/insights/widgets/floating_ai_chat.dart:1078:    return Container(
+lib/features/insights/widgets/floating_ai_chat.dart:1081:        color: Theme.of(context).colorScheme.surface,
+lib/features/insights/widgets/floating_ai_chat.dart:1089:            child: Container(
+lib/features/insights/widgets/floating_ai_chat.dart:1092:                color: Theme.of(context).colorScheme.surface,
+lib/features/insights/widgets/floating_ai_chat.dart:1094:                border: Border.all(
+lib/features/insights/widgets/floating_ai_chat.dart:1095:                  color: AppTheme.primaryRose.withValues(alpha: 0.52),
+lib/features/insights/widgets/floating_ai_chat.dart:1098:                boxShadow: [
+lib/features/insights/widgets/floating_ai_chat.dart:1099:                  BoxShadow(
+lib/features/insights/widgets/floating_ai_chat.dart:1100:                    color: AppTheme.primaryRose.withValues(alpha: 0.05),
+lib/features/insights/widgets/floating_ai_chat.dart:1121:                    color: theme.hintColor.withValues(alpha: 0.7),
+lib/features/insights/widgets/floating_ai_chat.dart:1128:                      color: Theme.of(context).colorScheme.primary,
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:14:  void setKeyboardVisibility(bool visible) {
+
+===== 18 STATE / CALLBACK SEARCH =====
+lib/features/insights/screens/insights_screen.dart:31:  bool _isZyraExpanded = false;
+lib/features/insights/screens/insights_screen.dart:57:  void dispose() {
+lib/features/insights/screens/insights_screen.dart:58:    _aiPulseController.dispose();
+lib/features/insights/screens/insights_screen.dart:59:    _tabController.dispose();
+lib/features/insights/screens/insights_screen.dart:60:    super.dispose();
+lib/features/insights/screens/insights_screen.dart:97:                      child: _isZyraExpanded
+lib/features/insights/screens/insights_screen.dart:124:                onExpandedChanged: (expanded) {
+lib/features/insights/screens/insights_screen.dart:125:                  if (_isZyraExpanded == expanded) return;
+lib/features/insights/screens/insights_screen.dart:126:                  setState(() {
+lib/features/insights/screens/insights_screen.dart:127:                    _isZyraExpanded = expanded;
+lib/features/insights/screens/insights_screen.dart:231:                setState(() {
+lib/features/insights/widgets/floating_ai_chat.dart:19:  final ValueChanged<bool>? onExpandedChanged;
+lib/features/insights/widgets/floating_ai_chat.dart:24:    this.onExpandedChanged,
+lib/features/insights/widgets/floating_ai_chat.dart:94:          ..addListener(() {
+lib/features/insights/widgets/floating_ai_chat.dart:95:            if (mounted) setState(() {});
+lib/features/insights/widgets/floating_ai_chat.dart:112:      ..addListener(() {
+lib/features/insights/widgets/floating_ai_chat.dart:113:        if (mounted) setState(() {});
+lib/features/insights/widgets/floating_ai_chat.dart:117:      ..addListener(() {
+lib/features/insights/widgets/floating_ai_chat.dart:122:        if (mounted) setState(() {});
+lib/features/insights/widgets/floating_ai_chat.dart:144:      setState(() {
+lib/features/insights/widgets/floating_ai_chat.dart:162:          setState(() {});
+lib/features/insights/widgets/floating_ai_chat.dart:174:  void dispose() {
+lib/features/insights/widgets/floating_ai_chat.dart:179:    _fabController.dispose();
+lib/features/insights/widgets/floating_ai_chat.dart:180:    _chatController.dispose();
+lib/features/insights/widgets/floating_ai_chat.dart:181:    _expandController.dispose();
+lib/features/insights/widgets/floating_ai_chat.dart:182:    _pulseController.dispose();
+lib/features/insights/widgets/floating_ai_chat.dart:183:    _textController.dispose();
+lib/features/insights/widgets/floating_ai_chat.dart:185:    _inputFocusNode.dispose();
+lib/features/insights/widgets/floating_ai_chat.dart:186:    _shellController.dispose();
+lib/features/insights/widgets/floating_ai_chat.dart:187:    super.dispose();
+lib/features/insights/widgets/floating_ai_chat.dart:191:    if (!_shellController.isExpanded) {
+lib/features/insights/widgets/floating_ai_chat.dart:202:    setState(() {
+lib/features/insights/widgets/floating_ai_chat.dart:203:      _shellController.toggleExpanded();
+lib/features/insights/widgets/floating_ai_chat.dart:204:      widget.onExpandedChanged?.call(_shellController.isExpanded);
+lib/features/insights/widgets/floating_ai_chat.dart:205:      if (!_shellController.isExpanded) {
+lib/features/insights/widgets/floating_ai_chat.dart:209:    if (_shellController.isExpanded) {
+lib/features/insights/widgets/floating_ai_chat.dart:220:    setState(() {
+lib/features/insights/widgets/floating_ai_chat.dart:252:    setState(() {
+lib/features/insights/widgets/floating_ai_chat.dart:292:        if (_shellController.isExpanded)
+lib/features/insights/widgets/floating_ai_chat.dart:386:        if (!_shellController.isExpanded)
+lib/features/insights/widgets/floating_ai_chat.dart:399:                  scale: _shellController.isExpanded ? 1.0 : (1.0 + _fabAnimation.value * 0.1),
+lib/features/insights/widgets/floating_ai_chat.dart:425:                        child: _shellController.isExpanded
+lib/features/insights/widgets/floating_ai_chat.dart:442:                                  if (!_shellController.isExpanded)
+lib/features/insights/widgets/floating_ai_chat.dart:880:            setState(() {
+lib/features/insights/widgets/floating_ai_chat.dart:957:            setState(() {
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:4:  bool isExpanded = false;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:22:  void toggleExpanded() {
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:25:    isExpanded = !isExpanded;
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:27:    if (!isExpanded) {
+
+===== 19 KEYBOARD / FOCUS SEARCH =====
+lib/features/insights/widgets/floating_ai_chat.dart:64:  late FocusNode _inputFocusNode;
+lib/features/insights/widgets/floating_ai_chat.dart:116:    _inputFocusNode = FocusNode()
+lib/features/insights/widgets/floating_ai_chat.dart:118:        _shellController.setKeyboardVisibility(
+lib/features/insights/widgets/floating_ai_chat.dart:119:          _inputFocusNode.hasFocus,
+lib/features/insights/widgets/floating_ai_chat.dart:153:          final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart:157:          if (!keyboardOpen) {
+lib/features/insights/widgets/floating_ai_chat.dart:185:    _inputFocusNode.dispose();
+lib/features/insights/widgets/floating_ai_chat.dart:285:    final keyboardOpen = _inputFocusNode.hasFocus;
+lib/features/insights/widgets/floating_ai_chat.dart:287:        keyboardOpen || _shellController.isFullScreen;
+lib/features/insights/widgets/floating_ai_chat.dart:303:                MediaQuery.of(context).viewInsets.bottom +
+lib/features/insights/widgets/floating_ai_chat.dart:330:                        FocusScope.of(context).unfocus();
+lib/features/insights/widgets/floating_ai_chat.dart:341:                        _buildEnhancedHeader(theme, compact: keyboardOpen),
+lib/features/insights/widgets/floating_ai_chat.dart:353:                          child: keyboardOpen
+lib/features/insights/widgets/floating_ai_chat.dart:375:                        _buildEnhancedInput(theme, keyboardOpen),
+lib/features/insights/widgets/floating_ai_chat.dart:391:                      MediaQuery.of(context).viewInsets.bottom)
+lib/features/insights/widgets/floating_ai_chat.dart:393:                      MediaQuery.of(context).viewInsets.bottom +
+lib/features/insights/widgets/floating_ai_chat.dart:791:        FocusScope.of(context).unfocus();
+lib/features/insights/widgets/floating_ai_chat.dart:1077:  Widget _buildEnhancedInput(ThemeData theme, bool keyboardOpen) {
+lib/features/insights/widgets/floating_ai_chat.dart:1079:      padding: EdgeInsets.symmetric(horizontal: 16, vertical: keyboardOpen ? 4 : 8),
+lib/features/insights/widgets/floating_ai_chat.dart:1090:              constraints: BoxConstraints(maxHeight: keyboardOpen ? 56 : 120),
+lib/features/insights/widgets/floating_ai_chat.dart:1111:                focusNode: _inputFocusNode,
+lib/features/insights/widgets/floating_ai_chat.dart:1115:                    vertical: keyboardOpen ? 8 : 14,
+lib/features/insights/widgets/floating_ai_chat.dart:1117:                  hintText: keyboardOpen
+lib/features/insights/widgets/floating_ai_chat.dart:1122:                    fontSize: keyboardOpen ? 13.5 : 15,
+lib/features/insights/widgets/zyra/controllers/zyra_shell_controller.dart:14:  void setKeyboardVisibility(bool visible) {
+
+===== 20 DUPLICATE / DEAD CODE SIGNALS =====
+lib/features/insights/providers/insights_provider.dart:99:    debugPrint('✅ InsightsProvider: All user data cleared');
+lib/features/insights/screens/insights_screen.dart:223:          // ignore: unused_local_variable
+lib/features/insights/screens/insights_screen.dart:382:                // ignore: unused_local_variable
+lib/features/insights/screens/analytics_dashboard_screen.dart:584:              return FlSpot(index.toDouble(), 26 + (index % 3).toDouble());
+lib/features/insights/screens/analytics_dashboard_screen.dart:609:                toY: 4 + (index % 2).toDouble(),
+lib/features/insights/screens/analytics_dashboard_screen.dart:643:                toY: (5 - index).toDouble() * 2,
+lib/features/insights/screens/analytics_dashboard_screen.dart:667:              return FlSpot(index.toDouble(), y);
+lib/features/insights/screens/analytics_dashboard_screen.dart:702:              return FlSpot(index.toDouble(), y);
+lib/features/insights/screens/analytics_dashboard_screen.dart:726:              return FlSpot(index.toDouble(), y);
+lib/features/insights/screens/enhanced_consumer_dashboard.dart:666:        index.toDouble(),
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:70:      debugPrint('Failed to initialize dashboard: $e');
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:106:      debugPrint('Failed to load dashboard data: $e');
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:723:        .map((entry) => FlSpot(entry.key.toDouble(), entry.value.value))
+lib/features/insights/screens/consumer_intelligence_dashboard.dart:1310:        sources: ['Clinical studies', 'Personal data analysis'],
+lib/features/insights/widgets/floating_ai_chat.dart:46:  // removed unused _showQuickReplies
+lib/features/insights/widgets/floating_ai_chat.dart:47:  // ignore: unused_field
+lib/features/insights/widgets/floating_ai_chat.dart:49:  // ignore: unused_field
+lib/features/insights/widgets/floating_ai_chat.dart:67:  // ignore: unused_field
+lib/features/insights/widgets/floating_ai_chat.dart:279:    // // // // debugPrint("SCREEN HEIGHT: ");
+lib/features/insights/widgets/floating_ai_chat.dart:280:    // // debugPrint("SAFE TOP: ");
+lib/features/insights/widgets/floating_ai_chat.dart:281:    // // debugPrint("SAFE BOTTOM: ");
+lib/features/insights/widgets/floating_ai_chat.dart:282:    // // // // debugPrint("VIEW INSETS (keyboard): ");
+lib/features/insights/widgets/prediction_accuracy_card.dart:235:  } // ignore: unused_element
+lib/features/insights/widgets/prediction_accuracy_card.dart:237:  // ignore: unused_element
+lib/features/insights/widgets/ai_insight_card.dart:325:  // ignore: unused_element
+lib/features/insights/widgets/ai_insight_card.dart:336:  // ignore: unused_element
+lib/features/insights/widgets/cycle_length_chart.dart:187:      return FlSpot(entry.key.toDouble(), entry.value.length.toDouble());
+lib/features/insights/widgets/cycle_length_chart.dart:224:                ? (cycles.length / 5).roundToDouble()
+lib/features/insights/widgets/cycle_regularity_indicator.dart:393:                'Machine learning models trained on clinical cycle data and research.',
+lib/features/insights/widgets/mood_energy_chart.dart:177:                maxX: (filteredData.length - 1).toDouble(),
+lib/features/insights/widgets/mood_energy_chart.dart:421:      final index = entry.key.toDouble();
+lib/features/insights/widgets/mood_energy_chart.dart:425:      return FlSpot(index, moodScore.toDouble());
+lib/features/insights/widgets/mood_energy_chart.dart:431:      final index = entry.key.toDouble();
+lib/features/insights/widgets/mood_energy_chart.dart:435:      return FlSpot(index, energyScore.toDouble());
+
+===== 21 IMPORT / GENERATED / DIRT SEARCH =====
+?? audits/zyra_system_audit_master_20260529_003730.txt
+
+===== 22 FINAL ANALYZER =====
+Analyzing flow_ai...                                            
+No issues found! (ran in 4.2s)
