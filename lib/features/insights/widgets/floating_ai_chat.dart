@@ -149,8 +149,6 @@ class _FloatingAIChatState extends State<FloatingAIChat>
           if (!mounted) return;
 
           final keyboardOpen = _inputFocusNode.hasFocus;
-    final forceMaxMode =
-        keyboardOpen || _shellController.isFullScreen;
 
           _shellController.setTyping(false);
 
@@ -282,8 +280,6 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
     final theme = Theme.of(context);
     final keyboardOpen = _inputFocusNode.hasFocus;
-    final forceMaxMode =
-        keyboardOpen || _shellController.isFullScreen;
 
     return Stack(
       children: [
