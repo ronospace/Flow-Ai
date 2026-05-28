@@ -825,7 +825,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
-                borderRadius: BorderRadius.circular(18),
+                borderRadius: AppGeometry.bubbleRadius,
                 border: Border.all(
                   color: isUser
                       ? Colors.white.withValues(alpha: 0.10)
