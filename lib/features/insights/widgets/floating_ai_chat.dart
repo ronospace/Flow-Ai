@@ -16,10 +16,12 @@ import 'zyra/controllers/zyra_shell_controller.dart';
 class FloatingAIChat extends StatefulWidget {
   final GlobalKey tabsKey;
   final GlobalKey periodSelectorKey;
+  final ValueChanged<bool>? onExpandedChanged;
   const FloatingAIChat({
     super.key,
     required this.tabsKey,
     required this.periodSelectorKey,
+    this.onExpandedChanged,
   });
 
   @override
@@ -199,6 +201,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   void _toggleChat() {
     setState(() {
       _shellController.toggleExpanded();
+      widget.onExpandedChanged?.call(_shellController.isExpanded);
       if (!_shellController.isExpanded) {
       }
     });
