@@ -921,11 +921,11 @@ class _FloatingAIChatState extends State<FloatingAIChat>
         // Suggestions - Horizontal scrollable for better visibility
         if (!_shellController.quickRepliesCollapsed)
           SizedBox(
-            height: 34,
+            height: 36,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: suggestions.length,
-              separatorBuilder: (context, index) => const SizedBox(width: 12),
+              separatorBuilder: (context, index) => const SizedBox(width: 8),
               itemBuilder: (context, index) {
                 return _buildSuggestionChip(suggestions[index], theme, index);
               },
@@ -959,7 +959,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
           },
           borderRadius: AppGeometry.dialogRadius,
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
