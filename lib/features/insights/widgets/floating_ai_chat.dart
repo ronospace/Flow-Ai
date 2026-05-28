@@ -399,7 +399,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   scale: _shellController.isExpanded ? 1.0 : (1.0 + _fabAnimation.value * 0.1),
                   child: Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: AppGeometry.capsuleRadius, // ZYRA_COMPACT_RADIUS_CENTRALIZATION
                       boxShadow: [
                         BoxShadow(
                           color: AppTheme.primaryRose.withValues(alpha: 0.2),
@@ -541,7 +541,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                     height: 4,
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.3),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: AppGeometry.capsuleRadius,
                     ),
                   ),
                 ),
@@ -558,7 +558,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                     height: 48,
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: AppGeometry.capsuleRadius,
                       border: Border.all(
                         color: Colors.white.withValues(alpha: 0.3),
                         width: 2,
@@ -612,7 +612,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                           ),
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.18),
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: AppGeometry.capsuleRadius,
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.white.withValues(
@@ -692,7 +692,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       width: 48,
                       height: 48,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: AppGeometry.capsuleRadius,
                         color: Colors.white.withValues(alpha: 0.1),
                       ),
                       child: Icon(
@@ -715,7 +715,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       width: 48,
                       height: 48,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: AppGeometry.capsuleRadius,
                         color: Colors.white.withValues(alpha: 0.1),
                       ),
                       child: Icon(
@@ -737,7 +737,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.08),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: AppGeometry.capsuleRadius,
                 border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
               ),
               child: Row(
@@ -888,7 +888,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                     gradient: LinearGradient(
                       colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
                     ),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: AppGeometry.capsuleRadius,
                   ),
                   child: Icon(
                     Icons.auto_awesome_outlined,
@@ -967,7 +967,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   AppTheme.primaryPurple.withValues(alpha: 0.08),
                 ],
               ),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: AppGeometry.capsuleRadius,
               border: Border.all(
                 color: AppTheme.primaryRose.withValues(alpha: 0.2),
                 width: 1,
