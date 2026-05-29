@@ -611,7 +611,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         setState(() {
           _showForgotPassword = false;
         });
-        _showSuccessMessage('Welcome back!');
       } else {
         // Check if email already exists before attempting sign up
         // router + _settingsProvider captured before async gaps
@@ -641,7 +640,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         if (!result.isSuccess) {
           throw Exception(result.error);
         }
-        _showSuccessMessage('Account created successfully!');
       }
 
       // Sync user data immediately to ensure username is captured and available
@@ -697,7 +695,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
       if (result.isSuccess) {
         HapticFeedback.lightImpact();
-        _showSuccessMessage('Welcome! Signed in with Google successfully!');
 
         // Sync user data
         try {
@@ -755,7 +752,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
       if (result.isSuccess) {
         HapticFeedback.lightImpact();
-        _showSuccessMessage('Welcome! Signed in with Apple successfully!');
 
         // Sync user data
         try {
