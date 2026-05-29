@@ -1364,11 +1364,6 @@ class _SettingsScreenState extends State<SettingsScreen>
 
       AppLogger.auth('✅ Complete sign out successful - all user data cleared');
 
-      // Show success message
-      if (mounted) {
-        await AdaptiveMessages.showSuccess(context, 'Signed out');
-      }
-
       // Navigate to auth screen immediately
       if (mounted) {
         try {
