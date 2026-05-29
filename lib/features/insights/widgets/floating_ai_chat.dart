@@ -367,7 +367,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
                         // Input Area (last = primary)
                         SizedBox(
-                          height: MediaQuery.of(context).size.width > 900
+                          height: keyboardOpen || MediaQuery.of(context).size.width > 900
                               ? 0
                               : 8,
                         ),
@@ -504,7 +504,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   // Enhanced Header with Controls
   Widget _buildEnhancedHeader(ThemeData theme, {bool compact = false}) {
     return Container(
-      padding: EdgeInsets.all(compact ? 14 : 20),
+      padding: EdgeInsets.all(compact ? 12 : 20),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [AppTheme.primaryPurple, AppTheme.primaryRose],
