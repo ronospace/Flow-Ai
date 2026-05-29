@@ -1372,7 +1372,7 @@ class _SettingsScreenState extends State<SettingsScreen>
       // Navigate to auth screen immediately
       if (mounted) {
         try {
-          context.go('/auth');
+          context.go('/auth/choice');
           AppLogger.navigation('📱 Navigated to auth screen after sign out');
         } catch (goError) {
           AppLogger.error('GoRouter navigation failed: $goError');
