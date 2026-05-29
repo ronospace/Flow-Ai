@@ -1091,7 +1091,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   ),
                   hintText: keyboardOpen
                       ? 'Tap the screen to view suggestions ✨'
-                      : 'Ask about health, science, technology, lifestyle...',
+                      : 'Ask about your cycle, symptoms, wellness, or lifestyle...',
                   hintStyle: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.hintColor.withValues(alpha: 0.7),
                     fontSize: keyboardOpen ? 14 : 15,
