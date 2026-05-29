@@ -770,7 +770,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     }
 
     if (_messages.length > 1) {
-      return '✦ Personalized insights based on your cycle data ⓘ';
+      return 'Personalized insights based on your cycle data ⓘ';
     }
 
     return '✦ Personalized AI insights ⓘ Not medical advice';
