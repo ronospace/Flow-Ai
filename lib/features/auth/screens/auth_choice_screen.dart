@@ -214,7 +214,7 @@ class _AuthChoiceScreenState extends State<AuthChoiceScreen>
             ),
           ),
           child: const Text(
-            '💫 AI-Powered Menstrual Health',
+            'Private cycle support, made for you',
             style: TextStyle(
               fontSize: 16,
               color: Colors.white,
@@ -233,7 +233,7 @@ class _AuthChoiceScreenState extends State<AuthChoiceScreen>
         // Login Button
         _buildChoiceButton(
           title: localizations.login,
-          subtitle: 'Access your existing account',
+          subtitle: 'Continue your personal health journey',
           icon: Icons.login_outlined,
           gradient: const LinearGradient(
             colors: [AppTheme.primaryPurple, AppTheme.primaryRose],
@@ -247,7 +247,7 @@ class _AuthChoiceScreenState extends State<AuthChoiceScreen>
         // Sign Up Button
         _buildChoiceButton(
           title: localizations.signUp,
-          subtitle: 'Create a new account',
+          subtitle: 'Start with privacy-first setup',
           icon: Icons.person_add_outlined,
           gradient: const LinearGradient(
             colors: [AppTheme.primaryRose, AppTheme.warningOrange],
