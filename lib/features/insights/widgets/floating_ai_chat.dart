@@ -505,7 +505,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   // Enhanced Header with Controls
   Widget _buildEnhancedHeader(ThemeData theme, {bool compact = false}) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(compact ? 14 : 20),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [AppTheme.primaryPurple, AppTheme.primaryRose],
@@ -554,8 +554,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             children: [
               // AI Avatar with Animation
               Container(
-                    width: 48,
-                    height: 48,
+                    width: compact ? 42 : 48,
+                    height: compact ? 42 : 48,
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.2),
                       borderRadius: AppGeometry.capsuleRadius,
@@ -580,7 +580,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   )
                   .then(delay: 2000.ms),
 
-              const SizedBox(width: 16),
+              SizedBox(width: compact ? 12 : 16),
 
               // Title and Status
               Expanded(
@@ -597,7 +597,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                           style: theme.textTheme.titleLarge?.copyWith(
                             color: Theme.of(context).colorScheme.surface,
                             fontWeight: FontWeight.w700,
-                            fontSize: 18,
+                            fontSize: compact ? 17 : 18,
                             height: 1.0,
                             letterSpacing: -0.2,
                           ),
@@ -664,7 +664,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                               color: Colors.white.withValues(
                                 alpha: _shellController.isTyping ? 0.9 : 0.78,
                               ),
-                              fontSize: 13,
+                              fontSize: compact ? 12.5 : 13,
                               fontWeight: FontWeight.w400,
                               height: 1.05,
                               letterSpacing: _shellController.isTyping ? 0.08 : 0.0,
@@ -689,8 +689,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                     onTap: _toggleFullScreen,
                     behavior: HitTestBehavior.opaque,
                     child: Container(
-                      width: 48,
-                      height: 48,
+                      width: compact ? 42 : 48,
+                      height: compact ? 42 : 48,
                       decoration: BoxDecoration(
                         borderRadius: AppGeometry.capsuleRadius,
                         color: Colors.white.withValues(alpha: 0.1),
@@ -712,8 +712,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                     onTap: _toggleChat,
                     behavior: HitTestBehavior.opaque,
                     child: Container(
-                      width: 48,
-                      height: 48,
+                      width: compact ? 42 : 48,
+                      height: compact ? 42 : 48,
                       decoration: BoxDecoration(
                         borderRadius: AppGeometry.capsuleRadius,
                         color: Colors.white.withValues(alpha: 0.1),
