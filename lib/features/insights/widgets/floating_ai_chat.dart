@@ -298,10 +298,9 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             top: forceMaxMode
                 ? _getPeriodSelectorTop()
                 : _getTabsBottom(),
-            bottom:
-                MediaQuery.of(context).padding.bottom +
-                MediaQuery.of(context).viewInsets.bottom +
-                (forceMaxMode ? 0 : AppLayoutMetrics.gap),
+            bottom: forceMaxMode
+                ? MediaQuery.of(context).viewInsets.bottom
+                : MediaQuery.of(context).padding.bottom + AppLayoutMetrics.gap,
             child: AnimatedBuilder(
               animation: _chatAnimation,
               builder: (context, child) {
