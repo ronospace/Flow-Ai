@@ -365,7 +365,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                     : (_isLogin ? 'Sign In' : 'Create Account'),
                 onPressed: _isLoading ? null : _handleSubmit,
                 isPrimary: true,
-                width: double.infinity,
+                width: 260,
                 height: 56,
                 icon: _isLoading
                     ? null
