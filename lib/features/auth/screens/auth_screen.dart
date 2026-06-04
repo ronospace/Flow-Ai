@@ -210,50 +210,25 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
           const SizedBox(height: 20),
 
-          // Biometric Login (if available and on login page)
+          // Primary social sign-in section
+          _buildSocialLogin(theme),
+
           if (_biometricsAvailable && _isLogin) ...[
+            const SizedBox(height: 16),
             BiometricButton(
                   availableBiometrics: _availableBiometrics,
                   onBiometricLogin: _handleBiometricLogin,
                 )
                 .animate(controller: _formController)
-                .slideY(begin: 0.3, end: 0)
+                .slideY(begin: 0.2, end: 0)
                 .fadeIn(),
-
-            const SizedBox(height: 20),
-
-            // Divider
-            Row(
-              children: [
-                Expanded(
-                  child: Divider(
-                    height: 1,
-                    thickness: 1,
-                    color: theme.dividerColor.withValues(alpha: 0.3),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    'Or continue with',
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: AppTheme.mediumGrey,
-                      fontSize: 13,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Divider(
-                    height: 1,
-                    thickness: 1,
-                    color: theme.dividerColor.withValues(alpha: 0.3),
-                  ),
-                ),
-              ],
-            ).animate(controller: _formController).fadeIn(delay: 100.ms),
-
-            const SizedBox(height: 20),
           ],
+
+          const SizedBox(height: 20),
+
+          _buildManualDivider(theme),
+
+          const SizedBox(height: 20),
 
           // Email Field - using adaptive text field
           AdaptiveComponents.adaptiveTextField(
@@ -400,11 +375,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
               .slideY(begin: 0.3, end: 0)
               .fadeIn(delay: 500.ms),
 
-          const SizedBox(height: 20),
-
-          // Social Login Section
-          _buildSocialLogin(theme),
-
           const SizedBox(height: 24),
         ],
       ),
@@ -429,19 +399,50 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     ).animate(controller: _formController).slideY(begin: -0.3, end: 0).fadeIn();
   }
 
+  Widget _buildManualDivider(ThemeData theme) {
+    return Row(
+      children: [
+        Expanded(
+          child: Divider(
+            height: 1,
+            thickness: 1,
+            color: theme.dividerColor.withValues(alpha: 0.28),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14),
+          child: Text(
+            'Or use email',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: AppTheme.mediumGrey,
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+        Expanded(
+          child: Divider(
+            height: 1,
+            thickness: 1,
+            color: theme.dividerColor.withValues(alpha: 0.28),
+          ),
+        ),
+      ],
+    ).animate(controller: _formController).fadeIn(delay: 100.ms);
+  }
+
   Widget _buildSocialLogin(ThemeData theme) {
     return Column(
       children: [
-        // Social Login Title
         Text(
-          'Or continue with',
+          _isLogin ? 'Sign in quickly' : 'Create your account quickly',
           style: theme.textTheme.bodyMedium?.copyWith(
-            color: AppTheme.mediumGrey,
-            fontWeight: FontWeight.w500,
+            color: AppTheme.darkGrey,
+            fontWeight: FontWeight.w700,
           ),
         ).animate(controller: _socialController).fadeIn(),
 
-        const SizedBox(height: 20),
+        const SizedBox(height: 14),
 
         // Social Login Buttons
         if (PlatformService().platformInfo.platform == TargetPlatform.iOS)
