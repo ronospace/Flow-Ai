@@ -157,16 +157,16 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
   Widget _buildHeader(ThemeData theme, AppLocalizations l10n) {
     return Container(
-      padding: const EdgeInsets.all(40),
+      padding: const EdgeInsets.fromLTRB(32, 22, 32, 24),
       child: Column(
         children: [
           // Flow AI Logo
-          FlowAiLogo(size: 120, showWordmark: false)
+          FlowAiLogo(size: 86, showWordmark: false)
               .animate(controller: _headerController)
               .scale(begin: const Offset(0.5, 0.5))
               .fadeIn(),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 14),
 
           // App Name
           Text(
@@ -174,21 +174,21 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                 style: theme.textTheme.headlineLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppTheme.darkGrey,
-                  fontSize: 32,
+                  fontSize: 30,
                 ),
               )
               .animate(controller: _headerController)
               .slideY(begin: 0.3, end: 0)
               .fadeIn(delay: 200.ms),
 
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
 
           // Subtitle
           Text(
-                'Smart Period & Wellness Tracking',
+                'Private cycle support, made for you',
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: AppTheme.mediumGrey,
-                  fontSize: 16,
+                  fontSize: 15,
                 ),
                 textAlign: TextAlign.center,
               )
@@ -434,16 +434,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   Widget _buildSocialLogin(ThemeData theme) {
     return Column(
       children: [
-        Text(
-          _isLogin ? 'Sign in quickly' : 'Create your account quickly',
-          style: theme.textTheme.bodyMedium?.copyWith(
-            color: AppTheme.darkGrey,
-            fontWeight: FontWeight.w700,
-          ),
-        ).animate(controller: _socialController).fadeIn(),
-
-        const SizedBox(height: 14),
-
         // Social Login Buttons
         if (PlatformService().platformInfo.platform == TargetPlatform.iOS)
           Row(
