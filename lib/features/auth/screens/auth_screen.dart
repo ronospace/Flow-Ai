@@ -666,11 +666,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     } catch (e) {
       debugPrint('❌ Auth error: $e');
       final errorMessage = e.toString().replaceFirst('Exception: ', '');
-      _showErrorMessage(
-        _isLogin
-            ? 'Sign in failed: $errorMessage'
-            : 'Sign up failed: $errorMessage',
-      );
+      _showErrorMessage(_formatAuthError(errorMessage, isLogin: _isLogin));
     } finally {
       if (mounted) {
         setState(() {
@@ -718,7 +714,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       }
     } catch (e) {
       debugPrint('Google sign-in error: $e');
-      _showErrorMessage('Google sign-in failed. Please try again.');
+      _showErrorMessage('We could not complete Google sign-in. Please try again.');
     } finally {
       if (mounted) {
         setState(() {
@@ -780,7 +776,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       }
     } catch (e) {
       debugPrint('Apple sign-in error: $e');
-      _showErrorMessage('Apple sign-in failed. Please try again.');
+      _showErrorMessage('We could not complete Apple sign-in. Please try again.');
     } finally {
       if (mounted) {
         setState(() {
@@ -944,14 +940,14 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                                       if (result.isSuccess) {
                                         dialogNavigator.pop();
                                         _showSuccessMessage(
-                                          'Password reset link sent! Check your email.',
+                                          'Password reset link sent. Please check your email.',
                                         );
                                       } else {
                                         throw Exception(result.error);
                                       }
                                     } catch (e) {
                                       _showErrorMessage(
-                                        'Failed to send reset email. Please try again.',
+                                        'We could not send the reset email. Please try again.',
                                       );
                                     } finally {
                                       setState(() => isResetting = false);
@@ -970,6 +966,41 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         );
       },
     );
+  }
+
+  String _formatAuthError(String message, {required bool isLogin}) {
+    final normalized = message
+        .replaceFirst('Exception: ', '')
+        .replaceFirst('Sign in failed: ', '')
+        .replaceFirst('Sign up failed: ')
+        .trim();
+
+    if (normalized == 'No account found with this email') {
+      return 'No account found for this email address.';
+    }
+
+    if (normalized == 'Invalid password') {
+      return 'The password entered is incorrect.';
+    }
+
+    if (normalized == 'Account is deactivated') {
+      return 'This account is currently deactivated.';
+    }
+
+    if (normalized == 'Local storage not initialized' ||
+        normalized == 'Authentication service not properly initialized') {
+      return 'Sign-in is temporarily unavailable. Please try again shortly.';
+    }
+
+    if (normalized.isEmpty) {
+      return isLogin
+          ? 'We could not sign you in. Please try again.'
+          : 'We could not create your account. Please try again.';
+    }
+
+    return isLogin
+        ? 'We could not sign you in. $normalized'
+        : 'We could not create your account. $normalized';
   }
 
   void _showSuccessMessage(String message) {
