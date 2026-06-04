@@ -1348,11 +1348,6 @@ class _SettingsScreenState extends State<SettingsScreen>
 
   void _handleSignOut() async {
     try {
-      // Show loading message using adaptive messaging
-      if (mounted) {
-        await AdaptiveMessages.showInfo(context, 'Signing out...');
-      }
-
       AppLogger.auth('🔐 Starting comprehensive sign out process...');
 
       // Clear all app state and user data first
