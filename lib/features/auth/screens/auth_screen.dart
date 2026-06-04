@@ -972,7 +972,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     final normalized = message
         .replaceFirst('Exception: ', '')
         .replaceFirst('Sign in failed: ', '')
-        .replaceFirst('Sign up failed: ')
+        .replaceFirst('Sign up failed: ', '')
         .trim();
 
     if (normalized == 'No account found with this email') {
