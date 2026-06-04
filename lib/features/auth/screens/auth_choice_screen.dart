@@ -71,17 +71,17 @@ class _AuthChoiceScreenState extends State<AuthChoiceScreen>
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
                 children: [
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 28),
 
                   // Logo and title
                   _buildHeader(),
 
-                  const SizedBox(height: 48),
+                  const SizedBox(height: 36),
 
                   // Choice buttons
                   _buildChoiceButtons(localizations),
 
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 18),
                 ],
               ),
             ),
@@ -142,8 +142,8 @@ class _AuthChoiceScreenState extends State<AuthChoiceScreen>
       children: [
         // Logo
         Container(
-          width: 120,
-          height: 120,
+          width: 96,
+          height: 96,
           decoration: BoxDecoration(
             gradient: RadialGradient(
               colors: [
@@ -152,7 +152,7 @@ class _AuthChoiceScreenState extends State<AuthChoiceScreen>
                 AppTheme.primaryRose.withValues(alpha: 0.1),
               ],
             ),
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(26),
             boxShadow: [
               BoxShadow(
                 color: AppTheme.primaryRose.withValues(alpha: 0.3),
@@ -174,7 +174,7 @@ class _AuthChoiceScreenState extends State<AuthChoiceScreen>
             },
             child: const Icon(
               Icons.favorite_rounded,
-              size: 60,
+              size: 46,
               color: Colors.white,
             ),
           ),
@@ -192,7 +192,7 @@ class _AuthChoiceScreenState extends State<AuthChoiceScreen>
           child: const Text(
             'Flow Ai',
             style: TextStyle(
-              fontSize: 48,
+              fontSize: 40,
               fontWeight: FontWeight.w800,
               color: Colors.white,
               letterSpacing: -1.5,
@@ -200,7 +200,7 @@ class _AuthChoiceScreenState extends State<AuthChoiceScreen>
           ),
         ).animate().fadeIn(delay: 600.ms).slideY(begin: 0.3, end: 0),
 
-        const SizedBox(height: 12),
+        const SizedBox(height: 10),
 
         // Tagline
         Container(
@@ -233,7 +233,7 @@ class _AuthChoiceScreenState extends State<AuthChoiceScreen>
         // Login Button
         _buildChoiceButton(
           title: localizations.login,
-          subtitle: 'Continue your personal health journey',
+          subtitle: 'Continue where you left off',
           icon: Icons.login_outlined,
           gradient: const LinearGradient(
             colors: [AppTheme.primaryPurple, AppTheme.primaryRose],
