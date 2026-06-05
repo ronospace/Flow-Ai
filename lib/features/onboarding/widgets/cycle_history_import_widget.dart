@@ -622,7 +622,7 @@ class _CycleHistoryImportWidgetState extends State<CycleHistoryImportWidget>
           const SizedBox(height: 8),
 
           Text(
-            'Sync your menstrual cycle data from Apple Health or Google Fit.',
+            'Sync your menstrual cycle data from Apple Health on iOS or Health Connect on Android.',
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
             ),

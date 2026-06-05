@@ -115,9 +115,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
     _inputFocusNode = FocusNode()
       ..addListener(() {
-        _shellController.setKeyboardVisibility(
-          _inputFocusNode.hasFocus,
-        );
+        _shellController.setKeyboardVisibility(_inputFocusNode.hasFocus);
 
         if (mounted) setState(() {});
       });
@@ -202,8 +200,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     setState(() {
       _shellController.toggleExpanded();
       widget.onExpandedChanged?.call(_shellController.isExpanded);
-      if (!_shellController.isExpanded) {
-      }
+      if (!_shellController.isExpanded) {}
     });
 
     if (_shellController.isExpanded) {
@@ -256,8 +253,6 @@ class _FloatingAIChatState extends State<FloatingAIChat>
     _chatService.sendMessage(textMessage);
   }
 
-
-
   double _getTabsBottom() {
     final ctx = widget.tabsKey.currentContext;
     if (ctx == null) return 200;
@@ -283,8 +278,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
 
     final theme = Theme.of(context);
     final keyboardOpen = _inputFocusNode.hasFocus;
-    final forceMaxMode =
-        keyboardOpen || _shellController.isFullScreen;
+    final forceMaxMode = keyboardOpen || _shellController.isFullScreen;
 
     return Stack(
       children: [
@@ -295,9 +289,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
             curve: Curves.easeOutCubic,
             right: forceMaxMode ? 16 : AppLayoutMetrics.sideMargin,
             left: forceMaxMode ? 16 : AppLayoutMetrics.sideMargin,
-            top: forceMaxMode
-                ? _getPeriodSelectorTop()
-                : _getTabsBottom(),
+            top: forceMaxMode ? _getPeriodSelectorTop() : _getTabsBottom(),
             bottom:
                 MediaQuery.of(context).padding.bottom +
                 MediaQuery.of(context).viewInsets.bottom +
@@ -337,42 +329,39 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       },
                       child: Column(
                         children: [
-                        // Enhanced Draggable Header with Controls
-                        _buildEnhancedHeader(theme, compact: keyboardOpen),
+                          // Enhanced Draggable Header with Controls
+                          _buildEnhancedHeader(theme, compact: keyboardOpen),
 
+                          // Main content area - improved spacing
+                          Expanded(child: _buildChatArea(theme)),
 
-                        // Main content area - improved spacing
-                        Expanded(
-                          child: _buildChatArea(theme),
-                        ),
-
-                        // Suggested Questions (above input)
-                        AnimatedSize(
-                          duration: const Duration(milliseconds: 220),
-                          curve: Curves.easeOutCubic,
-                          child: keyboardOpen
-                              ? const SizedBox.shrink()
-                              : Container(
-                                  padding: const EdgeInsets.fromLTRB(
-                                    16,
-                                    4,
-                                    16,
-                                    2,
+                          // Suggested Questions (above input)
+                          AnimatedSize(
+                            duration: const Duration(milliseconds: 220),
+                            curve: Curves.easeOutCubic,
+                            child: keyboardOpen
+                                ? const SizedBox.shrink()
+                                : Container(
+                                    padding: const EdgeInsets.fromLTRB(
+                                      16,
+                                      4,
+                                      16,
+                                      2,
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(bottom: 4),
+                                      child: _buildEnhancedQuickReplies(theme),
+                                    ),
                                   ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(bottom: 4),
-                                    child: _buildEnhancedQuickReplies(theme),
-                                  ),
-                                ),
-                        ),
+                          ),
 
-                        // Input Area (last = primary)
-                        SizedBox(
-                          height: MediaQuery.of(context).size.width > 900
-                              ? 0
-                              : 8,
-                        ),
-                        _buildEnhancedInput(theme, keyboardOpen),
+                          // Input Area (last = primary)
+                          SizedBox(
+                            height: MediaQuery.of(context).size.width > 900
+                                ? 0
+                                : 8,
+                          ),
+                          _buildEnhancedInput(theme, keyboardOpen),
                         ],
                       ),
                     ),
@@ -396,10 +385,13 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               animation: _fabAnimation,
               builder: (context, child) {
                 return Transform.scale(
-                  scale: _shellController.isExpanded ? 1.0 : (1.0 + _fabAnimation.value * 0.1),
+                  scale: _shellController.isExpanded
+                      ? 1.0
+                      : (1.0 + _fabAnimation.value * 0.1),
                   child: Container(
                     decoration: BoxDecoration(
-                      borderRadius: AppGeometry.capsuleRadius, // ZYRA_COMPACT_RADIUS_CENTRALIZATION
+                      borderRadius: AppGeometry
+                          .capsuleRadius, // ZYRA_COMPACT_RADIUS_CENTRALIZATION
                       boxShadow: [
                         BoxShadow(
                           color: AppTheme.primaryRose.withValues(alpha: 0.2),
@@ -525,7 +517,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                   _shellController.setResizing(true);
                 },
                 onPanUpdate: (details) {
-                  if (!_shellController.isFullScreen && _shellController.isResizing) {
+                  if (!_shellController.isFullScreen &&
+                      _shellController.isResizing) {
                     _adjustChatHeight(details.delta.dy);
                   }
                 },
@@ -547,7 +540,8 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                 ),
               ),
             ),
-          if (!_shellController.isFullScreen && !compact) const SizedBox(height: 4),
+          if (!_shellController.isFullScreen && !compact)
+            const SizedBox(height: 4),
 
           // Header Content
           Row(
@@ -667,10 +661,14 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                               fontSize: compact ? 12.5 : 13,
                               fontWeight: FontWeight.w400,
                               height: 1.05,
-                              letterSpacing: _shellController.isTyping ? 0.08 : 0.0,
+                              letterSpacing: _shellController.isTyping
+                                  ? 0.08
+                                  : 0.0,
                             ),
                             child: Text(
-                              _shellController.isTyping ? 'Thinking...' : 'Ready to assist',
+                              _shellController.isTyping
+                                  ? 'Thinking...'
+                                  : 'Ready to assist',
                             ),
                           ),
                         ),
@@ -731,7 +729,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
           ),
 
           if (!compact) ...[
-            // Medical Disclaimer (Guideline 1.4.1)
+            // Medical disclaimer
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(8),
@@ -810,10 +808,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
               decoration: BoxDecoration(
                 gradient: isUser
                     ? const LinearGradient(
-                        colors: [
-                          AppTheme.primaryRose,
-                          AppTheme.primaryPurple,
-                        ],
+                        colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       )
@@ -1071,14 +1066,20 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   // Enhanced Input Area - Better spacing and visibility
   Widget _buildEnhancedInput(ThemeData theme, bool keyboardOpen) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: keyboardOpen ? 6 : 8),
+      padding: EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: keyboardOpen ? 6 : 8,
+      ),
       decoration: const BoxDecoration(),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Expanded(
             child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: AppGeometry.inputHeight, maxHeight: keyboardOpen ? 64 : 120),
+              constraints: BoxConstraints(
+                minHeight: AppGeometry.inputHeight,
+                maxHeight: keyboardOpen ? 64 : 120,
+              ),
               child: TextField(
                 textAlignVertical: TextAlignVertical.center,
                 enableInteractiveSelection: false,

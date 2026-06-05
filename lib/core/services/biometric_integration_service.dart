@@ -16,7 +16,7 @@ class BiometricIntegrationService {
   bool _healthPermissionGranted = false;
   final Map<String, List<BiometricReading>> _cachedData = {};
 
-  /// MethodChannel for native health integration (HealthKit/Google Fit)
+  /// MethodChannel for native health integration (Apple HealthKit/Health Connect)
   static const _healthChannel = MethodChannel('flowsense.health/integration');
 
   bool get isInitialized => _isInitialized;

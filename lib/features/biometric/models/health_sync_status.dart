@@ -74,7 +74,7 @@ enum HealthSyncStatus {
   String? get recommendedAction {
     switch (this) {
       case HealthSyncStatus.disconnected:
-        return 'Connect to Apple Health or Google Fit to sync your health data';
+        return 'Connect to Apple Health on iOS or Health Connect on Android to sync your health data';
       case HealthSyncStatus.connecting:
       case HealthSyncStatus.syncing:
         return 'Please wait while we sync your health data';
@@ -171,7 +171,7 @@ class HealthSyncDetails {
 }
 
 /// Platform Sync Status
-/// Status for individual health platforms (Apple Health, Google Fit, etc.)
+/// Status for individual health platforms (Apple Health, Health Connect, etc.)
 @JsonSerializable()
 class PlatformSyncStatus {
   final String platformName;

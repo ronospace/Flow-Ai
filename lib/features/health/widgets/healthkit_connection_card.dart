@@ -310,8 +310,8 @@ class HealthKitConnectionCard extends StatelessWidget {
                           const SizedBox(height: 2),
                           Text(
                             Platform.isIOS
-                                ? 'App Store Guideline 2.5.1 - HealthKit Transparency'
-                                : 'Health Connect data disclosure',
+                                ? 'Health Data Transparency'
+                                : 'Health Connect Data Transparency',
                             style: TextStyle(
                               fontSize: 10,
                               color: AppTheme.warningOrange.withValues(

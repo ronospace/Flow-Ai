@@ -72,7 +72,7 @@ enum PremiumFeatureType {
       case PremiumFeatureType.prioritySupport:
         return '24/7 priority customer support';
       case PremiumFeatureType.biometricSync:
-        return 'Sync with Apple Health, Google Fit, and wearables';
+        return 'Sync with Apple Health, Health Connect, and wearables';
       case PremiumFeatureType.multiUserProfiles:
         return 'Manage multiple family member profiles';
       case PremiumFeatureType.advancedAnalytics:

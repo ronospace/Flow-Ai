@@ -205,7 +205,7 @@ class OnboardingTutorialService {
     TutorialStep(
       title: 'Biometric Integration',
       description:
-          'Connect Apple Health or Google Fit to track heart rate, temperature, sleep, and other metrics that affect your cycle.',
+          'Connect Apple Health on iOS or Health Connect on Android to track heart rate, temperature, sleep, and other metrics that affect your cycle.',
       icon: Icons.monitor_heart_rounded,
       highlightKey: 'biometric_card',
     ),

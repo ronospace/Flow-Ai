@@ -4,7 +4,7 @@ import '../../features/settings/widgets/medical_citations_section.dart';
 
 /// Medical Disclaimer Banner
 /// Always-visible disclaimer on screens with medical content
-/// Required by App Store Guideline 1.4.1 - Medical information transparency
+/// Keeps health information transparency visible and understandable
 class MedicalDisclaimerBanner extends StatelessWidget {
   const MedicalDisclaimerBanner({super.key});
 
@@ -88,7 +88,9 @@ class MedicalDisclaimerBanner extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                                const Expanded(child: MedicalCitationsSection()),
+                                const Expanded(
+                                  child: MedicalCitationsSection(),
+                                ),
                               ],
                             ),
                           ),

@@ -78,7 +78,7 @@ class BiometricSnapshot {
 }
 
 /// Advanced Biometric Integration Service
-/// Integrates with HealthKit (iOS) and Google Fit (Android) for comprehensive health data
+/// Integrates with Apple HealthKit on iOS and Health Connect on Android for comprehensive health data
 class AdvancedBiometricService {
   static final AdvancedBiometricService _instance =
       AdvancedBiometricService._internal();
@@ -187,8 +187,7 @@ class AdvancedBiometricService {
   }
 
   /// Request health data permissions
-  /// NOTE: HealthKit disclosure dialog MUST be shown BEFORE calling this
-  /// (App Store Guideline 2.5.1 - HealthKit Transparency)
+  /// NOTE: Health data transparency disclosure MUST be shown BEFORE calling this.
   Future<bool> _requestHealthPermissions() async {
     try {
       // IMPORTANT: HealthKit disclosure dialog should be shown by the calling screen

@@ -3,7 +3,7 @@ import '../../../core/theme/app_theme.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 /// Health Integration Coming Soon Card
-/// Shows when HealthKit/Google Fit integration is not yet available
+/// Shows when Apple HealthKit/Health Connect integration is not yet available
 /// This prevents App Store rejection for claiming functionality that doesn't work
 class HealthIntegrationComingSoonCard extends StatelessWidget {
   const HealthIntegrationComingSoonCard({super.key});
