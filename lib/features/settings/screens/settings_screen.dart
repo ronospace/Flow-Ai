@@ -91,14 +91,14 @@ class _SettingsScreenState extends State<SettingsScreen>
             slivers: [
               // Custom App Bar
               SliverAppBar(
-                expandedHeight: 120,
+                expandedHeight: 96,
                 floating: false,
-                pinned: true,
+                pinned: false,
                 backgroundColor: Colors.transparent,
                 elevation: 0,
                 automaticallyImplyLeading: false,
                 flexibleSpace: FlexibleSpaceBar(
-                  titlePadding: const EdgeInsets.only(left: 60, bottom: 16),
+                  titlePadding: const EdgeInsets.only(left: 60, bottom: 12),
                   title: Row(
                     children: [
                       Container(

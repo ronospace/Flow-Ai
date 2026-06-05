@@ -18,7 +18,7 @@ class ThemeSwitcherCard extends StatelessWidget {
     return Consumer<SettingsProvider>(
       builder: (context, settings, child) {
         return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
@@ -37,7 +37,7 @@ class ThemeSwitcherCard extends StatelessWidget {
                       : Colors.white.withValues(alpha: 0.7),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -45,8 +45,8 @@ class ThemeSwitcherCard extends StatelessWidget {
                     Row(
                       children: [
                         Container(
-                          width: 36,
-                          height: 36,
+                          width: 32,
+                          height: 32,
                           decoration: BoxDecoration(
                             gradient: const LinearGradient(
                               colors: [
@@ -59,7 +59,7 @@ class ThemeSwitcherCard extends StatelessWidget {
                           child: const Icon(
                             Icons.palette,
                             color: Colors.white,
-                            size: 20,
+                            size: 18,
                           ),
                         ),
                         const SizedBox(width: 12),
@@ -71,17 +71,8 @@ class ThemeSwitcherCard extends StatelessWidget {
                                 l10n.theme,
                                 style: TextStyle(
                                   color: theme.colorScheme.onSurface,
-                                  fontSize: 16,
+                                  fontSize: 15,
                                   fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(
-                                l10n.customizeAppearance,
-                                style: TextStyle(
-                                  color: theme.colorScheme.onSurface.withValues(
-                                    alpha: 0.6,
-                                  ),
-                                  fontSize: 12,
                                 ),
                               ),
                             ],
@@ -90,7 +81,7 @@ class ThemeSwitcherCard extends StatelessWidget {
                       ],
                     ),
 
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 12),
 
                     // Theme Options - Horizontal
                     Row(
@@ -170,7 +161,7 @@ class _ThemeOption extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
         decoration: BoxDecoration(
           gradient: isSelected
               ? const LinearGradient(
@@ -196,16 +187,16 @@ class _ThemeOption extends StatelessWidget {
               color: isSelected
                   ? Colors.white
                   : theme.colorScheme.onSurface.withValues(alpha: 0.7),
-              size: 24,
+              size: 20,
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 4),
             Text(
               label,
               style: TextStyle(
                 color: isSelected
                     ? Colors.white
                     : theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                fontSize: 12,
+                fontSize: 11,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
               ),
             ),
