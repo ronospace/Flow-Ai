@@ -88,29 +88,29 @@ class _HealthScreenState extends State<HealthScreen>
           child: Consumer<HealthProvider>(
             builder: (context, healthProvider, child) {
               return SingleChildScrollView(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildHealthHeader(localizations),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 18),
 
                     // HealthKit Connection Card
                     // Clearly identifies HealthKit functionality (App Store 2.5.1)
                     const HealthKitConnectionCard(),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 18),
 
                     _buildHealthScoreCard(localizations),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 18),
 
                     _buildBiometricGrid(localizations),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 18),
 
                     _buildHealthInsightsSection(localizations),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 18),
 
                     _buildSymptomTracker(localizations),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 18),
 
                     _buildHealthGoals(localizations),
                   ],
@@ -126,7 +126,7 @@ class _HealthScreenState extends State<HealthScreen>
   Widget _buildHealthHeader(AppLocalizations localizations) {
     final theme = Theme.of(context);
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -136,7 +136,7 @@ class _HealthScreenState extends State<HealthScreen>
             AppTheme.successGreen.withValues(alpha: 0.02),
           ],
         ),
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: AppTheme.successGreen.withValues(alpha: 0.1),
           width: 2,
@@ -155,17 +155,17 @@ class _HealthScreenState extends State<HealthScreen>
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
                     colors: [AppTheme.successGreen, AppTheme.accentMint],
                   ),
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(14),
                 ),
                 child: const Icon(
                   Icons.health_and_safety,
                   color: Colors.white,
-                  size: 28,
+                  size: 22,
                 ),
               ),
               const SizedBox(width: 16),
@@ -204,7 +204,7 @@ class _HealthScreenState extends State<HealthScreen>
     final healthScore = 0.82; // Mock data
 
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -214,7 +214,7 @@ class _HealthScreenState extends State<HealthScreen>
             AppTheme.primaryPurple.withValues(alpha: 0.1),
           ],
         ),
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: AppTheme.primaryRose.withValues(alpha: 0.2),
           width: 2,
@@ -241,24 +241,12 @@ class _HealthScreenState extends State<HealthScreen>
                     color: AppTheme.primaryRose,
                   ),
                 ),
-                const SizedBox(height: 12),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppTheme.successGreen.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: const SizedBox.shrink(),
-                ),
               ],
             ),
           ),
           SizedBox(
-            width: 100,
-            height: 100,
+            width: 78,
+            height: 78,
             child: AnimatedBuilder(
               animation: _heartRateAnimation,
               builder: (context, child) {
@@ -345,7 +333,7 @@ class _HealthScreenState extends State<HealthScreen>
   ) {
     final theme = Theme.of(context);
     return Container(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
