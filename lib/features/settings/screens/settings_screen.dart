@@ -670,7 +670,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                                     size: 14,
                                   ),
                                 ),
-                                title: '🚀 Future Plans',
+                                title: 'Product Roadmap',
                                 subtitle: 'See what\'s coming next in Flow Ai',
                                 onTap: () => context.push('/future-plans'),
                                 trailing: Container(
@@ -702,7 +702,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                                   Icons.favorite,
                                   color: AppTheme.primaryRose,
                                 ),
-                                title: 'Help Us Improve',
+                                title: 'Send Feedback',
                                 subtitle: 'Share your feedback and ideas',
                                 onTap: () => context.push('/feedback'),
                                 trailing: Container(
