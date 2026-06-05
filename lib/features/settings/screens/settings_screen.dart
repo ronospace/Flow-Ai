@@ -212,7 +212,7 @@ class _SettingsScreenState extends State<SettingsScreen>
 
                       // Health Data & Privacy (Guideline 2.5.1 & 1.4.1)
                       SettingsSection(
-                            title: 'Health Data',
+                            title: 'Health Connections',
                             icon: Icons.health_and_safety,
                             children: [
                               SettingsTile(
@@ -468,7 +468,7 @@ class _SettingsScreenState extends State<SettingsScreen>
 
                       // Data & Privacy
                       SettingsSection(
-                            title: 'Data & Privacy',
+                            title: 'Privacy & Data',
                             icon: Icons.cloud_download_outlined,
                             children: [
                               SettingsTile(
@@ -524,7 +524,7 @@ class _SettingsScreenState extends State<SettingsScreen>
 
                       // Account & Security
                       SettingsSection(
-                            title: 'Authentication & Security',
+                            title: 'Account & Security',
                             icon: Icons.security_outlined,
                             children: [
                               SettingsTile(
@@ -599,7 +599,7 @@ class _SettingsScreenState extends State<SettingsScreen>
 
                       // Help & Tutorials
                       SettingsSection(
-                            title: 'Help & Tutorials',
+                            title: 'Help',
                             icon: Icons.school_outlined,
                             children: [
                               SettingsTile(
