@@ -2346,7 +2346,7 @@ abstract class AppLocalizations {
   /// Support and about section title
   ///
   /// In en, this message translates to:
-  /// **'Support & About'**
+  /// **'Support & Legal'**
   String get supportAbout;
 
   /// Help section subtitle

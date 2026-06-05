@@ -1134,7 +1134,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get vibrationInteractions => 'Feel vibrations on interactions';
 
   @override
-  String get supportAbout => 'Support & About';
+  String get supportAbout => 'Support & Legal';
 
   @override
   String get getHelpTutorials => 'Get help and tutorials';
