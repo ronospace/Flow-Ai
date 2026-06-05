@@ -21,11 +21,11 @@ class HealthKitConnectionCard extends StatelessWidget {
         final isIOS = Platform.isIOS;
         final platformName = isIOS ? 'Apple HealthKit' : 'Health Connect';
         final platformShort = isIOS ? 'HealthKit' : 'Health Connect';
-        final disclosureLabel = isIOS ? '' : 'Uses Android Health';
+        final disclosureLabel = isIOS ? null : 'Uses Android Health';
         final syncSource = isIOS ? 'Apple Health' : 'Android Health';
 
         return Container(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
@@ -40,7 +40,7 @@ class HealthKitConnectionCard extends StatelessWidget {
                       AppTheme.secondaryBlue.withValues(alpha: 0.05),
                     ],
             ),
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: isConnected
                   ? AppTheme.successGreen.withValues(alpha: 0.3)
@@ -55,8 +55,8 @@ class HealthKitConnectionCard extends StatelessWidget {
                 children: [
                   // Icon
                   Container(
-                    width: 56,
-                    height: 56,
+                    width: 42,
+                    height: 42,
                     decoration: BoxDecoration(
                       color:
                           (isConnected
@@ -72,10 +72,10 @@ class HealthKitConnectionCard extends StatelessWidget {
                       color: isConnected
                           ? AppTheme.successGreen
                           : AppTheme.secondaryBlue,
-                      size: 28,
+                      size: 22,
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(width: 12),
 
                   // Content
                   Expanded(
@@ -121,32 +121,33 @@ class HealthKitConnectionCard extends StatelessWidget {
                               ),
                           ],
                         ),
-                        const SizedBox(height: 6),
-                        // Disclosure badge row
-                        Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 6,
-                                vertical: 3,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppTheme.secondaryBlue.withValues(
-                                  alpha: 0.15,
+                        if (disclosureLabel != null) ...[
+                          const SizedBox(height: 6),
+                          Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 3,
                                 ),
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: Text(
-                                disclosureLabel,
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppTheme.secondaryBlue,
+                                decoration: BoxDecoration(
+                                  color: AppTheme.secondaryBlue.withValues(
+                                    alpha: 0.15,
+                                  ),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text(
+                                  disclosureLabel,
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppTheme.secondaryBlue,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
+                        ],
                         const SizedBox(height: 4),
                         Text(
                           isConnected
@@ -159,14 +160,36 @@ class HealthKitConnectionCard extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 4),
-                        GestureDetector(
-                          onTap: () => _showHealthKitDisclosure(context),
-                          child: Text(
-                            'View full disclosure in Settings',
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: AppTheme.secondaryBlue,
-                              fontSize: 10,
-                              decoration: TextDecoration.underline,
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(999),
+                            onTap: () => _showHealthKitDisclosure(context),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 5,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppTheme.secondaryBlue.withValues(
+                                  alpha: 0.12,
+                                ),
+                                borderRadius: BorderRadius.circular(999),
+                                border: Border.all(
+                                  color: AppTheme.secondaryBlue.withValues(
+                                    alpha: 0.22,
+                                  ),
+                                ),
+                              ),
+                              child: Text(
+                                'Privacy details',
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: AppTheme.secondaryBlue,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w600,
+                                  height: 1.1,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -176,7 +199,7 @@ class HealthKitConnectionCard extends StatelessWidget {
                 ],
               ),
               if (isConnected) ...[
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
                 Row(
                   children: [
                     Expanded(
@@ -204,7 +227,7 @@ class HealthKitConnectionCard extends StatelessWidget {
                   ],
                 ),
               ] else ...[
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
@@ -216,7 +239,7 @@ class HealthKitConnectionCard extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppTheme.secondaryBlue,
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
