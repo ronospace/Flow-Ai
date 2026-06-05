@@ -15,7 +15,7 @@ class HealthProvider extends ChangeNotifier {
   /// Connect to HealthKit - Shows mandatory disclosure dialog first (App Store 2.5.1)
   Future<void> connectHealthKit(BuildContext context) async {
     // Show mandatory HealthKit disclosure dialog BEFORE requesting permissions
-    // This ensures compliance with App Store Guideline 2.5.1
+    // This ensures users see the health data disclosure before permissions are requested
     final accepted = await HealthKitPermissionDialog.show(
       context,
       onAccept: () async {

@@ -540,11 +540,11 @@ Flow Ai transforms complex health data into actionable insights, helping women m
   Future<void> _initializeComplianceChecks() async {
     // Initialize comprehensive compliance checks
     _complianceChecks.addAll([
-      // App Store Guidelines Compliance
+      // Store Compliance
       _createComplianceCheck(
         'app_store_guidelines',
-        'App Store Guidelines Compliance',
-        'Verify compliance with Apple App Store Review Guidelines',
+        'Store Compliance',
+        'Verify compliance with store review requirements',
         'store_compliance',
       ),
 

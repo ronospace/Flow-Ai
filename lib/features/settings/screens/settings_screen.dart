@@ -210,7 +210,7 @@ class _SettingsScreenState extends State<SettingsScreen>
 
                       const SizedBox(height: 24),
 
-                      // Health Data & Privacy (Guideline 2.5.1 & 1.4.1)
+                      // Health Data & Privacy
                       SettingsSection(
                             title: 'Health Connections',
                             icon: Icons.health_and_safety,

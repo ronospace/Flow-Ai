@@ -6,7 +6,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 
 /// Medical Citations Section for Settings
 /// Displays all medical sources and citations used in the app
-/// Required by App Store Guideline 1.4.1 - Medical Citations
+/// Keeps medical citations visible and accessible
 class MedicalCitationsSection extends StatefulWidget {
   const MedicalCitationsSection({super.key});
 

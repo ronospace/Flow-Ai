@@ -4,7 +4,7 @@ import '../../features/settings/widgets/medical_citations_section.dart';
 
 /// Medical Citations Footer Widget
 /// Shows on all screens displaying medical information
-/// Required by App Store Guideline 1.4.1 - Medical Citations must be easy to find
+/// Keeps medical citations easy to find and understand
 class MedicalCitationsFooter extends StatelessWidget {
   final bool showInlineCitations;
 

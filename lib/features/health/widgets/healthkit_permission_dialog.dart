@@ -3,8 +3,8 @@ import '../../../core/theme/app_theme.dart';
 import 'dart:io';
 
 /// Mandatory HealthKit disclosure dialog
-/// Shows BEFORE requesting HealthKit permissions (App Store Guideline 2.5.1)
-/// This ensures users are informed about HealthKit usage before any data access
+/// Shows BEFORE requesting health data permissions.
+/// This ensures users are informed about health platform access before any data access.
 class HealthKitPermissionDialog extends StatelessWidget {
   final VoidCallback onAccept;
   final VoidCallback? onDecline;
@@ -93,8 +93,8 @@ class HealthKitPermissionDialog extends StatelessWidget {
                         const SizedBox(height: 2),
                         Text(
                           Platform.isIOS
-                              ? 'App Store Guideline 2.5.1 - HealthKit Transparency'
-                              : 'Health Connect data disclosure',
+                              ? 'Health Data Transparency'
+                              : 'Health Connect Data Transparency',
                           style: TextStyle(
                             fontSize: 11,
                             color: AppTheme.warningOrange.withValues(

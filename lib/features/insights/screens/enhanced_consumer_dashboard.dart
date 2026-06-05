@@ -799,7 +799,7 @@ class _EnhancedConsumerDashboardState extends State<EnhancedConsumerDashboard>
       builder: (context) => AlertDialog(
         title: const Text('Connect Health Apps'),
         content: const Text(
-          'Connect your Apple Health or Google Fit to unlock personalized insights based on your biometric data.',
+          'Connect Apple Health on iOS or Health Connect on Android to unlock personalized insights based on your biometric data.',
         ),
         actions: [
           TextButton(

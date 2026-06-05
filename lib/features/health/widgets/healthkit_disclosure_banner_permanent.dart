@@ -3,7 +3,7 @@ import '../../../core/theme/app_theme.dart';
 import 'dart:io';
 
 /// Permanent HealthKit disclosure banner
-/// Required by App Store Guideline 2.5.1 - HealthKit Transparency
+/// Permanent health data transparency banner
 /// Must clearly identify HealthKit functionality in UI
 class HealthKitDisclosureBannerPermanent extends StatelessWidget {
   const HealthKitDisclosureBannerPermanent({super.key});

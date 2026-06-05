@@ -5,7 +5,7 @@ import '../../../core/theme/app_theme.dart';
 import 'dart:io';
 
 /// HealthKit/Health Data Transparency Disclosure Banner
-/// Required by App Store Guideline 2.5.1 for transparency in health data usage
+/// Keeps health data usage transparent before health platform access
 class HealthKitDisclosureBanner extends StatelessWidget {
   final VoidCallback? onDismiss;
   final bool showDismissButton;
@@ -128,7 +128,7 @@ class HealthKitDisclosureBanner extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      'HealthKit Usage Disclosure',
+                      'Health Data Transparency',
                       style: theme.textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppTheme.secondaryBlue,
