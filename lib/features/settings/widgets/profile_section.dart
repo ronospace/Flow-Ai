@@ -16,7 +16,7 @@ class ProfileSection extends StatelessWidget {
         final preferences = settings.preferences;
 
         return Container(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
@@ -28,12 +28,12 @@ class ProfileSection extends StatelessWidget {
                 AppTheme.primaryRose,
               ],
             ),
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(22),
             boxShadow: [
               BoxShadow(
                 color: AppTheme.primaryRose.withValues(alpha: 0.2),
-                blurRadius: 20,
-                offset: const Offset(0, 10),
+                blurRadius: 14,
+                offset: const Offset(0, 7),
               ),
             ],
           ),
@@ -43,8 +43,8 @@ class ProfileSection extends StatelessWidget {
               GestureDetector(
                 onTap: () => _editAvatar(context, settings),
                 child: Container(
-                  width: 80,
-                  height: 80,
+                  width: 64,
+                  height: 64,
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
                       colors: [AppTheme.accentMint, AppTheme.secondaryBlue],
@@ -59,7 +59,7 @@ class ProfileSection extends StatelessWidget {
                     ],
                   ),
                   child: preferences.avatarUrl.isEmpty
-                      ? Icon(Icons.person, color: Colors.white, size: 40)
+                      ? Icon(Icons.person, color: Colors.white, size: 32)
                       : ClipOval(
                           child: Image.network(
                             preferences.avatarUrl,
@@ -76,7 +76,7 @@ class ProfileSection extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(width: 20),
+              const SizedBox(width: 16),
 
               // User Info
               Expanded(
@@ -94,7 +94,7 @@ class ProfileSection extends StatelessWidget {
                                   ? 'Tap to add your name'
                                   : preferences.displayName,
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 18,
                                 fontWeight: FontWeight.bold,
                                 color: preferences.displayName.isEmpty
                                     ? Colors.white.withValues(alpha: 0.7)
@@ -111,18 +111,18 @@ class ProfileSection extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 6),
 
                     // User ID or Email
                     Text(
-                      'User ID: ${preferences.userId}',
+                      'Account ID: ${_shortAccountId(preferences.userId)}',
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: 11,
                         color: Colors.white.withValues(alpha: 0.8),
                       ),
                     ),
 
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 10),
 
                     // Quick Stats
                     Row(
@@ -159,6 +159,13 @@ class ProfileSection extends StatelessWidget {
         );
       },
     );
+  }
+
+  String _shortAccountId(String userId) {
+    final clean = userId.trim();
+    if (clean.isEmpty || clean == 'default_user') return 'FL-LOCAL';
+    final suffix = clean.length <= 4 ? clean.toUpperCase() : clean.substring(clean.length - 4).toUpperCase();
+    return 'FL-$suffix';
   }
 
   Widget _buildStatChip({
