@@ -384,26 +384,37 @@ class AIInsightCard extends StatelessWidget {
           const SizedBox(height: 6),
           // View source button
           InkWell(
+            borderRadius: BorderRadius.circular(999),
             onTap: () => _launchCitationUrl(citation.url),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.open_in_new,
-                  size: 12,
-                  color: AppTheme.secondaryBlue,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppTheme.secondaryBlue.withValues(alpha: 0.10),
+                borderRadius: BorderRadius.circular(999),
+                border: Border.all(
+                  color: AppTheme.secondaryBlue.withValues(alpha: 0.20),
                 ),
-                const SizedBox(width: 2),
-                Text(
-                  'View Source',
-                  style: TextStyle(
-                    fontSize: 11,
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.open_in_new,
+                    size: 11,
                     color: AppTheme.secondaryBlue,
-                    fontWeight: FontWeight.w600,
-                    decoration: TextDecoration.underline,
                   ),
-                ),
-              ],
+                  const SizedBox(width: 4),
+                  Text(
+                    'View source',
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: AppTheme.secondaryBlue,
+                      fontWeight: FontWeight.w600,
+                      height: 1.1,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

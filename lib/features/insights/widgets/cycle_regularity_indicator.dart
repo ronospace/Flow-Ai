@@ -219,31 +219,6 @@ class CycleRegularityIndicator extends StatelessWidget {
               ],
             ),
           ),
-
-          const SizedBox(height: 12),
-
-          // View Sources link
-          GestureDetector(
-            onTap: () {
-              // Navigate to detailed insights or show citation dialog
-              _showCitationDialog(context);
-            },
-            child: Row(
-              // mainAxisAlignment removed
-              children: [
-                const SizedBox.shrink(),
-                const SizedBox(width: 6),
-                Text(
-                  '',
-                  style: TextStyle(
-                    color: AppTheme.primaryPurple,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     ).animate().fadeIn().slideY(begin: 0.2, end: 0);

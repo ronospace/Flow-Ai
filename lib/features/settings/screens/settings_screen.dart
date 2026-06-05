@@ -40,8 +40,8 @@ class _SettingsScreenState extends State<SettingsScreen>
   late AnimationController _sectionsController;
 
   String get _platformDisclosureLabel => Platform.isIOS
-      ? 'App Store Guideline 2.5.1 - HealthKit Transparency'
-      : 'Required Disclosure';
+      ? 'Health Data Transparency'
+      : 'Health Connect Data Transparency';
 
   String get _platformIntegrationText => Platform.isIOS
       ? 'Flow Ai integrates with Apple HealthKit to enhance your experience:'
