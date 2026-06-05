@@ -59,45 +59,62 @@ class MedicalDisclaimerBanner extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 6),
-                GestureDetector(
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => Dialog(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Container(
-                          constraints: const BoxConstraints(maxHeight: 600),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              AppBar(
-                                title: const Text(
-                                  'Medical Sources & Citations',
-                                ),
-                                automaticallyImplyLeading: false,
-                                actions: [
-                                  IconButton(
-                                    icon: const Icon(Icons.close),
-                                    onPressed: () =>
-                                        Navigator.of(context).pop(),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(999),
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => Dialog(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Container(
+                            constraints: const BoxConstraints(maxHeight: 600),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                AppBar(
+                                  title: const Text(
+                                    'Medical Sources & Citations',
                                   ),
-                                ],
-                              ),
-                              const Expanded(child: MedicalCitationsSection()),
-                            ],
+                                  automaticallyImplyLeading: false,
+                                  actions: [
+                                    IconButton(
+                                      icon: const Icon(Icons.close),
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(),
+                                    ),
+                                  ],
+                                ),
+                                const Expanded(child: MedicalCitationsSection()),
+                              ],
+                            ),
                           ),
                         ),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
                       ),
-                    );
-                  },
-                  child: Text(
-                    'View sources →',
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: AppTheme.secondaryBlue,
-                      fontWeight: FontWeight.w600,
-                      decoration: TextDecoration.underline,
+                      decoration: BoxDecoration(
+                        color: AppTheme.secondaryBlue.withValues(alpha: 0.10),
+                        borderRadius: BorderRadius.circular(999),
+                        border: Border.all(
+                          color: AppTheme.secondaryBlue.withValues(alpha: 0.20),
+                        ),
+                      ),
+                      child: Text(
+                        'View sources',
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: AppTheme.secondaryBlue,
+                          fontWeight: FontWeight.w600,
+                          height: 1.1,
+                        ),
+                      ),
                     ),
                   ),
                 ),

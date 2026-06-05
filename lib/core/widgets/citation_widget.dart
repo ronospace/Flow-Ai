@@ -28,26 +28,36 @@ class CitationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => _showCitationDialog(context),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.menu_book,
-            size: 14,
-            color: linkColor ?? AppTheme.primaryPurple,
+    final color = linkColor ?? AppTheme.primaryPurple;
+
+    return Center(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(999),
+        onTap: () => _showCitationDialog(context),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.10),
+            borderRadius: BorderRadius.circular(999),
+            border: Border.all(color: color.withValues(alpha: 0.20)),
           ),
-          const SizedBox(width: 6),
-          Text(
-            'View Sources',
-            style: TextStyle(
-              color: linkColor ?? AppTheme.primaryPurple,
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-            ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.menu_book, size: 13, color: color),
+              const SizedBox(width: 6),
+              Text(
+                'View sources',
+                style: TextStyle(
+                  color: color,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  height: 1.1,
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
