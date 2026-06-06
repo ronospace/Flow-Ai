@@ -953,7 +953,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get smartActionCommandCenter => 'Smart Action Command Center';
+  String get smartActionCommandCenter => 'Smart Command Center';
 
   @override
   String get quickAccessToEssentialFeatures =>
@@ -1639,7 +1639,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get realTimeBiometricAnalysis => 'Real-time Biometric Analysis';
 
   @override
-  String get predictiveAnalyticsCenter => 'Predictive Analytics Center';
+  String get predictiveAnalyticsCenter => 'AI Prediction Center';
 
   @override
   String get aiPoweredCycleForecast => 'AI-Powered Cycle Forecast';

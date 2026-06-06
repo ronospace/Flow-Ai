@@ -591,7 +591,7 @@
       }
     }
   },
-  "smartActionCommandCenter": "Smart Action Command Center",
+  "smartActionCommandCenter": "Smart Command Center",
   "@smartActionCommandCenter": {
     "description": "Smart action center title"
   },
@@ -1613,7 +1613,7 @@
     "description": "Action button subtitle for FAQ"
   },
   
-  "smartActionCommandCenter": "Smart Action Command Center",
+  "smartActionCommandCenter": "Smart Command Center",
   "@smartActionCommandCenter": {
     "description": "Smart action center title"
   },
@@ -1691,7 +1691,7 @@
   "@realTimeBiometricAnalysis": {
     "description": "Real-time biometric analysis title"
   },
-  "predictiveAnalyticsCenter": "Predictive Analytics Center",
+  "predictiveAnalyticsCenter": "AI Prediction Center",
   "@predictiveAnalyticsCenter": {
     "description": "Predictive analytics center title"
   },
