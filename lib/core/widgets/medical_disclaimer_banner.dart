@@ -81,9 +81,7 @@ class MedicalDisclaimerBanner extends StatelessWidget {
                                     onPressed: () =>
                                         Navigator.of(context).pop(),
                                   ),
-                                  title: const Text(
-                                    'Medical Sources & Citations',
-                                  ),
+                                  title: const Text('Medical Sources'),
                                   automaticallyImplyLeading: false,
                                 ),
                                 const Expanded(
