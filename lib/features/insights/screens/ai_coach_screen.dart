@@ -11,6 +11,10 @@ class AICoachScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         title: const Text('AI Health Coach'),
         backgroundColor: Colors.transparent,
         elevation: 0,
