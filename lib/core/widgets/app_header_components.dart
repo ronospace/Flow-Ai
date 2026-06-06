@@ -32,6 +32,34 @@ class AppBackButton extends StatelessWidget {
 ///
 /// Titles stay on one line by scaling down inside the available width.
 /// Subtitles stay on one line and ellipsize if the screen is too narrow.
+/// Shared soft square icon used as a trailing header accent/action.
+class AppHeaderTrailingIcon extends StatelessWidget {
+  const AppHeaderTrailingIcon({
+    super.key,
+    required this.icon,
+    required this.color,
+    this.size = 24,
+    this.padding = 10,
+  });
+
+  final IconData icon;
+  final Color color;
+  final double size;
+  final double padding;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(padding),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Icon(icon, color: color, size: size),
+    );
+  }
+}
+
 class AppHeaderTextBlock extends StatelessWidget {
   const AppHeaderTextBlock({
     super.key,
