@@ -9,7 +9,7 @@ class Citation {
   const Citation({required this.title, required this.description});
 }
 
-/// Reusable widget to display "View Sources" link and citation dialog
+/// Reusable widget to display a source chip and citation dialog
 class CitationWidget extends StatelessWidget {
   final String dialogTitle;
   final String dialogDescription;

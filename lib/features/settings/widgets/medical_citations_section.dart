@@ -358,7 +358,7 @@ class _MedicalCitationsSectionState extends State<MedicalCitationsSection> {
               const SizedBox(height: 8),
             ],
 
-            // View Source button
+            // View source control
             SizedBox(
               width: double.infinity,
               child: OutlinedButton.icon(
@@ -369,13 +369,13 @@ class _MedicalCitationsSectionState extends State<MedicalCitationsSection> {
                   }
                 },
                 icon: const Icon(Icons.open_in_new, size: 18),
-                label: const Text('View Source'),
+                label: const Text('View source'),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: AppTheme.secondaryBlue,
                   side: BorderSide(color: AppTheme.secondaryBlue),
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(999),
                   ),
                 ),
               ),
