@@ -203,7 +203,7 @@ class AIEngine {
                 ]
               : ['Keep up your healthy routine!'],
           citationCategory:
-              'cycle_regularity', // Required for App Store compliance (1.4.1)
+              'cycle_regularity', // Citation category for health transparency
         ),
       );
     }
@@ -322,7 +322,7 @@ class AIEngine {
         'Note severity levels',
       ],
       citationCategory:
-          'menstrual_symptoms', // Required for App Store compliance (1.4.1)
+          'menstrual_symptoms', // Citation category for health transparency
     );
   }
 
@@ -355,7 +355,7 @@ class AIEngine {
           'Consider consulting healthcare provider if trend continues',
         ],
         citationCategory:
-            'cycle_length', // Required for App Store compliance (1.4.1)
+            'cycle_length', // Citation category for health transparency
       );
     }
 

@@ -26,9 +26,9 @@ class AICoachScreen extends StatelessWidget {
               },
             ),
           ),
-          // Medical Disclaimer Banner (App Store 1.4.1)
+          // Medical disclaimer banner
           MedicalDisclaimerBanner(),
-          // Medical Citations Footer (App Store 1.4.1)
+          // Medical citations footer
           MedicalCitationsFooter(),
         ],
       ),

@@ -657,10 +657,10 @@ class _BiometricDashboardScreenState extends State<BiometricDashboardScreen>
 
           const SizedBox(height: 20),
 
-          // Medical Disclaimer Banner (App Store 1.4.1)
+          // Medical disclaimer banner
           MedicalDisclaimerBanner(),
 
-          // Medical Citations Footer (App Store 1.4.1)
+          // Medical citations footer
           MedicalCitationsFooter(),
         ],
       ),

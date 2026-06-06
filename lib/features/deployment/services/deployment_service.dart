@@ -685,7 +685,7 @@ Flow Ai transforms complex health data into actionable insights, helping women m
     try {
       switch (check.id) {
         case 'app_store_guidelines':
-          issues.addAll(await _checkAppStoreGuidelines());
+          issues.addAll(await _checkStoreReviewRequirements());
           break;
         case 'privacy_policy':
           issues.addAll(await _checkPrivacyPolicy());
@@ -746,7 +746,7 @@ Flow Ai transforms complex health data into actionable insights, helping women m
 
   // === SPECIFIC COMPLIANCE CHECKS ===
 
-  Future<List<ComplianceIssue>> _checkAppStoreGuidelines() async {
+  Future<List<ComplianceIssue>> _checkStoreReviewRequirements() async {
     final issues = <ComplianceIssue>[];
 
     // Check app metadata completeness
