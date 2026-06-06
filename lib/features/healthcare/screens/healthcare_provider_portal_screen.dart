@@ -94,7 +94,7 @@ class _HealthcareProviderPortalScreenState
       child: Row(
         children: [
           IconButton(
-            icon: const Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back_ios_new),
             onPressed: () => Navigator.of(context).pop(),
           ),
           const SizedBox(width: 12),

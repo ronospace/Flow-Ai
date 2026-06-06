@@ -77,7 +77,7 @@ class MedicalCitationsFooter extends StatelessWidget {
                               icon: const Icon(Icons.arrow_back_ios_new),
                               onPressed: () => Navigator.of(context).pop(),
                             ),
-                            title: const Text('Medical Sources & Citations'),
+                            title: const Text('Medical Sources'),
                             automaticallyImplyLeading: false,
                           ),
                           const Expanded(child: MedicalCitationsSection()),

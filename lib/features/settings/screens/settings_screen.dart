@@ -250,7 +250,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                                   Icons.medical_information,
                                   color: AppTheme.secondaryBlue,
                                 ),
-                                title: 'Medical Sources & Citations',
+                                title: 'Medical Sources',
                                 subtitle:
                                     'View all medical sources and citations',
                                 onTap: () => _showMedicalCitations(context),
@@ -1131,7 +1131,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                   icon: const Icon(Icons.arrow_back_ios_new),
                   onPressed: () => Navigator.of(context).pop(),
                 ),
-                title: const Text('Medical Sources & Citations'),
+                title: const Text('Medical Sources'),
                 automaticallyImplyLeading: false,
               ),
               const Expanded(child: MedicalCitationsSection()),
