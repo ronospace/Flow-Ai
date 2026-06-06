@@ -8,6 +8,7 @@ import '../widgets/trend_chart_widget.dart';
 import '../widgets/recommendations_list.dart';
 import '../widgets/advanced_analytics_dashboard.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/app_header_components.dart';
 import '../../../generated/app_localizations.dart';
 import '../../../core/widgets/medical_disclaimer_banner.dart';
 import '../../../core/widgets/medical_citations_footer.dart';
@@ -91,33 +92,22 @@ class _EnhancedAnalyticsDashboardScreenState
 
   Widget _buildHeader(ThemeData theme, AppLocalizations localizations) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
       child: Row(
         children: [
-          IconButton(
-            onPressed: () => Navigator.of(context).pop(),
-            color: AppTheme.primaryRose,
-            icon: const Icon(Icons.arrow_back_ios_new),
-          ),
-          const SizedBox(width: 16),
+          AppBackButton(onPressed: () => Navigator.of(context).pop()),
+          const SizedBox(width: 12),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Advanced Analytics',
-                  style: theme.textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.onSurface,
-                  ),
-                ),
-                Text(
-                  'AI-powered health insights dashboard',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                  ),
-                ),
-              ],
+            child: AppHeaderTextBlock(
+              title: 'Advanced Analytics',
+              subtitle: 'AI-powered health insights',
+              titleStyle: theme.textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: theme.colorScheme.onSurface,
+              ),
+              subtitleStyle: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+              ),
             ),
           ),
           IconButton(
@@ -134,7 +124,7 @@ class _EnhancedAnalyticsDashboardScreenState
               child: Icon(
                 Icons.date_range,
                 color: AppTheme.primaryPurple,
-                size: 20,
+                size: 24,
               ),
             ),
           ),
@@ -150,7 +140,7 @@ class _EnhancedAnalyticsDashboardScreenState
                   color: AppTheme.accentMint.withValues(alpha: 0.3),
                 ),
               ),
-              child: Icon(Icons.download, color: AppTheme.accentMint, size: 20),
+              child: Icon(Icons.download, color: AppTheme.accentMint, size: 24),
             ),
           ),
         ],

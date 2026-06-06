@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/app_header_components.dart';
 import '../../data_management/services/data_export_import_service.dart';
 import '../../data_management/models/export_import_models.dart';
 
@@ -80,9 +81,9 @@ class _HealthcareProviderPortalScreenState
 
   Widget _buildHeader(BuildContext context, ThemeData theme) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
       decoration: BoxDecoration(
-        color: theme.cardColor,
+        color: theme.scaffoldBackgroundColor,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -93,10 +94,7 @@ class _HealthcareProviderPortalScreenState
       ),
       child: Row(
         children: [
-          IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
+          AppBackButton(onPressed: () => Navigator.of(context).pop()),
           const SizedBox(width: 12),
           Container(
             padding: const EdgeInsets.all(10),
@@ -112,22 +110,16 @@ class _HealthcareProviderPortalScreenState
           ),
           const SizedBox(width: 16),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Healthcare Provider Portal',
-                  style: theme.textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'Export health data for appointments',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: AppTheme.mediumGrey,
-                  ),
-                ),
-              ],
+            child: AppHeaderTextBlock(
+              title: 'Healthcare Provider Portal',
+              subtitle: 'Export health data for appointments',
+              titleStyle: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+              subtitleStyle: theme.textTheme.bodySmall?.copyWith(
+                color: AppTheme.mediumGrey,
+              ),
             ),
           ),
         ],
