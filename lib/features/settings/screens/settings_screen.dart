@@ -1206,9 +1206,19 @@ class _SettingsScreenState extends State<SettingsScreen>
               TextButton.icon(
                 onPressed: () => _launchPrivacyPolicy(),
                 icon: Icon(Icons.open_in_new, size: 16),
-                label: const Text('Read Full Privacy Policy'),
+                label: const Text('Privacy policy'),
                 style: TextButton.styleFrom(
                   foregroundColor: AppTheme.secondaryBlue,
+                  backgroundColor: AppTheme.secondaryBlue.withValues(
+                    alpha: 0.08,
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 10,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(999),
+                  ),
                 ),
               ),
             ],

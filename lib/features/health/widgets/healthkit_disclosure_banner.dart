@@ -230,13 +230,16 @@ class HealthKitDisclosureBanner extends StatelessWidget {
                 child: OutlinedButton.icon(
                   onPressed: () => _launchPrivacyPolicy(),
                   icon: Icon(Icons.privacy_tip_outlined, size: 18),
-                  label: Text('Privacy Policy'),
+                  label: Text('Privacy policy'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: AppTheme.secondaryBlue,
                     side: BorderSide(
                       color: AppTheme.secondaryBlue.withValues(alpha: 0.5),
                     ),
                     padding: const EdgeInsets.symmetric(vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(999),
+                    ),
                   ),
                 ),
               ),
@@ -250,6 +253,9 @@ class HealthKitDisclosureBanner extends StatelessWidget {
                     backgroundColor: AppTheme.secondaryBlue,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(999),
+                    ),
                   ),
                 ),
               ),

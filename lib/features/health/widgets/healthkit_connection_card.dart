@@ -300,7 +300,7 @@ class HealthKitConnectionCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Required Disclosure',
+                            'Health data disclosure',
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
