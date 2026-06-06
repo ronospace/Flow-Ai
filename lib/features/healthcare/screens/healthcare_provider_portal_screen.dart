@@ -96,19 +96,6 @@ class _HealthcareProviderPortalScreenState
         children: [
           AppBackButton(onPressed: () => Navigator.of(context).pop()),
           const SizedBox(width: 12),
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: AppTheme.secondaryBlue.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const Icon(
-              Icons.medical_services_rounded,
-              color: AppTheme.secondaryBlue,
-              size: 24,
-            ),
-          ),
-          const SizedBox(width: 16),
           Expanded(
             child: AppHeaderTextBlock(
               title: 'Healthcare Provider Portal',
@@ -121,6 +108,11 @@ class _HealthcareProviderPortalScreenState
                 color: AppTheme.mediumGrey,
               ),
             ),
+          ),
+          const SizedBox(width: 12),
+          const AppHeaderTrailingIcon(
+            icon: Icons.medical_services_rounded,
+            color: AppTheme.secondaryBlue,
           ),
         ],
       ),
