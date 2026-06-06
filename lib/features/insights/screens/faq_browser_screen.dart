@@ -531,7 +531,7 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
                       ),
                       IconButton(
                         onPressed: () => Navigator.pop(context),
-                        icon: const Icon(Icons.close),
+                        icon: const Icon(Icons.arrow_back_ios_new_rounded),
                       ),
                     ],
                   ),
