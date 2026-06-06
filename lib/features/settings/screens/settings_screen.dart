@@ -1127,14 +1127,12 @@ class _SettingsScreenState extends State<SettingsScreen>
             mainAxisSize: MainAxisSize.min,
             children: [
               AppBar(
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios_new),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
                 title: const Text('Medical Sources & Citations'),
                 automaticallyImplyLeading: false,
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                ],
               ),
               const Expanded(child: MedicalCitationsSection()),
             ],

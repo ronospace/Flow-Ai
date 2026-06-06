@@ -84,9 +84,7 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
                               Align(
                                 alignment: Alignment.topRight,
                                 child: IconButton(
-                                  icon: const Icon(
-                                    Icons.arrow_back_ios_new_rounded,
-                                  ),
+                                  icon: const Icon(Icons.arrow_back_ios_new),
                                   onPressed: () => Navigator.of(context).pop(),
                                 ),
                               ),

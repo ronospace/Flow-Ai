@@ -96,21 +96,8 @@ class _EnhancedAnalyticsDashboardScreenState
         children: [
           IconButton(
             onPressed: () => Navigator.of(context).pop(),
-            icon: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: theme.colorScheme.surface.withValues(alpha: 0.8),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: theme.colorScheme.outline.withValues(alpha: 0.3),
-                ),
-              ),
-              child: Icon(
-                Icons.arrow_back,
-                color: theme.colorScheme.onSurface,
-                size: 20,
-              ),
-            ),
+            color: AppTheme.primaryRose,
+            icon: const Icon(Icons.arrow_back_ios_new),
           ),
           const SizedBox(width: 16),
           Expanded(
