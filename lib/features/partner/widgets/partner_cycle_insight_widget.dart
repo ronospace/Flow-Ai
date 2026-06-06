@@ -36,7 +36,7 @@ class PartnerCycleInsightWidget extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'Partner cycle insights coming soon',
+              'Partner cycle insights will appear when shared cycle data is available',
               style: TextStyle(fontSize: 14, color: AppTheme.textSecondary),
             ),
           ],

@@ -407,7 +407,7 @@ class _HelpScreenState extends State<HelpScreen> {
   void _launchEmail() async {
     final Uri emailLaunchUri = Uri(
       scheme: 'mailto',
-      path: 'support@flowsense.app',
+      path: 'support@flowiq.app',
       query: Uri.encodeComponent(
         'subject=Flow Ai Support Request&body=Hello Flow Ai Support Team,\n\nI need help with:\n\nPlease describe your issue here...\n\nBest regards',
       ),
@@ -420,7 +420,7 @@ class _HelpScreenState extends State<HelpScreen> {
       } else {
         // Fallback: Try alternative email URI format
         final fallbackUri = Uri.parse(
-          'mailto:support@flowsense.app?subject=Flow Ai Support Request',
+          'mailto:support@flowiq.app?subject=Flow Ai Support Request',
         );
         if (await canLaunchUrl(fallbackUri)) {
           await launchUrl(fallbackUri, mode: LaunchMode.externalApplication);
@@ -488,7 +488,7 @@ class _HelpScreenState extends State<HelpScreen> {
             ),
             const SizedBox(height: 16),
             const Text(
-              'Or email us at support@flowsense.app',
+              'Or email us at support@flowiq.app',
               style: TextStyle(
                 fontSize: 12,
                 fontStyle: FontStyle.italic,
@@ -508,7 +508,7 @@ class _HelpScreenState extends State<HelpScreen> {
   }
 
   void _openUserGuide() async {
-    const url = 'https://flowsense.app/guide';
+    const url = 'https://flowiq.app/guide';
     final Uri uri = Uri.parse(url);
 
     try {
@@ -565,7 +565,7 @@ class _HelpScreenState extends State<HelpScreen> {
                 children: [
                   const Expanded(
                     child: Text(
-                      'support@flowsense.app',
+                      'support@flowiq.app',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
@@ -575,7 +575,7 @@ class _HelpScreenState extends State<HelpScreen> {
                   IconButton(
                     onPressed: () {
                       Clipboard.setData(
-                        const ClipboardData(text: 'support@flowsense.app'),
+                        const ClipboardData(text: 'support@flowiq.app'),
                       );
                       AdaptiveMessages.showSuccess(
                         context,
@@ -690,7 +690,7 @@ class _HelpScreenState extends State<HelpScreen> {
   }
 
   void _launchTelegram() async {
-    const username = 'flowsense_support'; // Flow Ai Telegram Support
+    const username = 'flowiq_support'; // Flow Ai Telegram Support
     final Uri telegramUri = Uri.parse('https://t.me/$username');
 
     try {

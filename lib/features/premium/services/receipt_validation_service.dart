@@ -5,11 +5,10 @@ import 'package:flutter/foundation.dart';
 /// Receipt Validation Service
 /// Validates purchase receipts from App Store and Google Play
 class ReceiptValidationService {
-  // Backend API endpoints (replace with your actual backend URLs)
-  static const String _appleValidationEndpoint =
-      'https://your-backend.com/api/validate-apple-receipt';
-  static const String _googleValidationEndpoint =
-      'https://your-backend.com/api/validate-google-receipt';
+  // Optional backend receipt validation endpoints.
+  static const String _appleValidationEndpoint = '';
+  static const String _googleValidationEndpoint = '';
+  static const String _subscriptionStatusEndpoint = '';
 
   // Apple Sandbox vs Production
   static const String _appleSandboxUrl =
@@ -27,7 +26,7 @@ class ReceiptValidationService {
     try {
       debugPrint('🍎 Validating Apple receipt for product: $productId');
 
-      // Option 1: Validate through your backend (RECOMMENDED)
+      // Option 1: Validate through configured backend service when available
       final backendResult = await _validateThroughBackend(
         endpoint: _appleValidationEndpoint,
         receiptData: receiptData,
@@ -62,7 +61,7 @@ class ReceiptValidationService {
     try {
       debugPrint('🤖 Validating Google Play receipt for product: $productId');
 
-      // Validate through your backend (REQUIRED for Google Play)
+      // Validate through configured backend service when available
       final result = await _validateThroughBackend(
         endpoint: _googleValidationEndpoint,
         receiptData: purchaseToken,
@@ -85,7 +84,7 @@ class ReceiptValidationService {
     }
   }
 
-  /// Validate through your backend server (RECOMMENDED)
+  /// Validate through configured backend receipt service
   Future<ReceiptValidationResult?> _validateThroughBackend({
     required String endpoint,
     required String receiptData,
@@ -93,6 +92,11 @@ class ReceiptValidationService {
     required String platform,
     Map<String, dynamic>? additionalData,
   }) async {
+    if (endpoint.trim().isEmpty) {
+      debugPrint('Receipt validation backend is not configured');
+      return null;
+    }
+
     try {
       final response = await http
           .post(
@@ -239,13 +243,16 @@ class ReceiptValidationService {
     required String userId,
     required String subscriptionId,
   }) async {
+    if (_subscriptionStatusEndpoint.trim().isEmpty) {
+      debugPrint('Subscription status endpoint is not configured');
+      return false;
+    }
+
     try {
-      // Query your backend to check subscription status
+      // Query configured backend to check subscription status
       final response = await http
           .get(
-            Uri.parse(
-              'https://your-backend.com/api/subscription/status/$userId/$subscriptionId',
-            ),
+            Uri.parse('$_subscriptionStatusEndpoint/$userId/$subscriptionId'),
             headers: {
               'Content-Type': 'application/json',
               // Add authentication headers

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
-/// Health Integration Coming Soon Card
+/// Health integration unavailable card
 /// Shows when Apple HealthKit/Health Connect integration is not yet available
 /// This avoids claiming functionality that does not work yet
 class HealthIntegrationComingSoonCard extends StatelessWidget {
@@ -56,7 +56,7 @@ class HealthIntegrationComingSoonCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        'Health Integration Coming Soon',
+                        'Health integration unavailable',
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: theme.colorScheme.onSurface,
@@ -72,7 +72,7 @@ class HealthIntegrationComingSoonCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Apple Health & wearable device sync - Coming Soon',
+                  'Apple Health and wearable sync are unavailable on this device',
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
