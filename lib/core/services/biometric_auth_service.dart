@@ -123,7 +123,7 @@ class BiometricAuthService {
 
   /// Authenticate user with biometrics
   Future<BiometricAuthResult> authenticate({
-    String localizedReason = 'Please verify your identity to access FlowSense',
+    String localizedReason = 'Please verify your identity to access Flow Ai',
     bool useErrorDialogs = true,
     bool stickyAuth = false,
   }) async {
@@ -189,7 +189,7 @@ class BiometricAuthService {
   }
 
   /// Quick authentication method for app lock scenarios
-  Future<bool> authenticateQuick({String reason = 'Unlock FlowSense'}) async {
+  Future<bool> authenticateQuick({String reason = 'Unlock Flow Ai'}) async {
     final result = await authenticate(
       localizedReason: reason,
       useErrorDialogs: false,
@@ -345,7 +345,7 @@ extension BiometricAuthServiceExtension on BiometricAuthService {
   /// Authenticate with custom messages for different scenarios
   Future<BiometricAuthResult> authenticateForAppLock() {
     return authenticate(
-      localizedReason: 'Unlock FlowSense with your biometric',
+      localizedReason: 'Unlock Flow Ai with your biometric',
       useErrorDialogs: true,
       stickyAuth: true,
     );

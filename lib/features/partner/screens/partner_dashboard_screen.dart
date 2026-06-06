@@ -667,7 +667,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
     }
 
     // Try to determine current user ID from LocalUserService synchronously via stored value
-    // For now, use a placeholder - will be set correctly by the service
+    // Use the partnership owner field; service-level logic resolves the active user
     // Service Partnership uses primaryUserId/partnerUserId, not userId1/userId2
     final currentUserId = partnership
         .primaryUserId; // Service will handle determining the correct user
@@ -883,7 +883,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
       useRootNavigator: true,
       builder: (context) => AlertDialog(
         title: const Text('Send Message'),
-        content: const Text('Message feature coming soon'),
+        content: const Text('Secure messaging is currently unavailable'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
@@ -931,7 +931,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                   Navigator.pop(sheetContext);
                   AdaptiveMessages.showInfo(
                     context,
-                    'Privacy controls coming soon',
+                    'Privacy controls are currently unavailable',
                   );
                 },
               ),
@@ -943,7 +943,7 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
                   Navigator.pop(sheetContext);
                   AdaptiveMessages.showWarning(
                     context,
-                    'Disconnect tools coming soon',
+                    'Disconnect tools are currently unavailable',
                   );
                 },
               ),

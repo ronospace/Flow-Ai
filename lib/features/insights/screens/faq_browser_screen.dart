@@ -585,7 +585,7 @@ class _FAQBrowserScreenState extends State<FAQBrowserScreen>
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          'Full chat experience coming soon!',
+                          'Use Flow Ai chat from the Insights screen',
                           style: Theme.of(context).textTheme.titleMedium
                               ?.copyWith(color: AppTheme.mediumGrey),
                         ),

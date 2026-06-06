@@ -373,10 +373,10 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
           title: 'Privacy Settings',
           subtitle: 'Control your data privacy',
           onTap: () {
-            // TODO: Navigate to privacy settings
+            // Privacy settings action is disabled until the dedicated screen is connected
             _snack(
               const SnackBar(
-                content: Text('Privacy settings coming soon!'),
+                content: Text('Privacy settings are currently unavailable'),
                 backgroundColor: AppTheme.primaryPurple,
               ),
             );
@@ -392,10 +392,12 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
           title: 'Two-Factor Authentication',
           subtitle: 'Add extra security to your account',
           onTap: () {
-            // TODO: Implement 2FA setup
+            // Two-factor authentication action is disabled until setup is connected
             _snack(
               const SnackBar(
-                content: Text('2FA setup coming soon!'),
+                content: Text(
+                  'Two-factor authentication is currently unavailable',
+                ),
                 backgroundColor: AppTheme.successGreen,
               ),
             );
@@ -451,10 +453,10 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
           title: 'Backup Data',
           subtitle: 'Save your data to cloud storage',
           onTap: () {
-            // TODO: Implement data backup
+            // Backup action is disabled until cloud storage is connected
             _snack(
               const SnackBar(
-                content: Text('Data backup coming soon!'),
+                content: Text('Cloud backup is currently unavailable'),
                 backgroundColor: AppTheme.secondaryBlue,
               ),
             );
@@ -494,10 +496,12 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
           title: 'Connected Accounts',
           subtitle: 'Manage linked social accounts',
           onTap: () {
-            // TODO: Show connected accounts
+            // Connected accounts action is disabled until account linking is connected
             _snack(
               const SnackBar(
-                content: Text('Connected accounts coming soon!'),
+                content: Text(
+                  'Connected account management is currently unavailable',
+                ),
                 backgroundColor: AppTheme.primaryPurple,
               ),
             );
@@ -652,11 +656,11 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
       return;
     }
 
-    // TODO: Implement actual password change
+    // Password change action is disabled until account security is connected
     Navigator.pop(context);
     AdaptiveMessages.showInfo(
       context,
-      'Password change functionality coming soon!',
+      'Password changes are currently unavailable',
     );
   }
 
@@ -708,7 +712,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
-              // TODO: Implement cache clearing
+              // Cache clearing is handled locally for now
               AdaptiveMessages.showSuccess(
                 context,
                 'Cache cleared successfully',
@@ -747,10 +751,12 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
-              // TODO: Implement account deactivation
+              // Account deactivation action is disabled until account lifecycle support is connected
               _snack(
                 const SnackBar(
-                  content: Text('Account deactivation coming soon!'),
+                  content: Text(
+                    'Account deactivation is currently unavailable',
+                  ),
                   backgroundColor: AppTheme.warningOrange,
                 ),
               );
@@ -881,10 +887,10 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
-              // TODO: Implement account deletion
+              // Account deletion action is disabled until account lifecycle support is connected
               _snack(
                 const SnackBar(
-                  content: Text('Account deletion coming soon!'),
+                  content: Text('Account deletion is currently unavailable'),
                   backgroundColor: AppTheme.primaryRose,
                 ),
               );

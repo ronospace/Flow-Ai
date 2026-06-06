@@ -45,7 +45,7 @@ class ExportImportService {
           'exportDate': DateTime.now().toIso8601String(),
           'startDate': startDate.toIso8601String(),
           'endDate': endDate.toIso8601String(),
-          'appName': 'FlowSense',
+          'appName': 'Flow Ai',
         },
         'cycles': cycles.map((c) => c.toJson()).toList(),
         'trackingData': trackingData,
@@ -284,11 +284,11 @@ class ExportImportService {
       // ignore: unused_local_variable
       final data = jsonDecode(clueData) as Map<String, dynamic>;
 
-      // Parse Clue's format and convert to FlowSense format
+      // Parse Clue's format and convert to Flow Ai format
       final cycles = <CycleData>[];
       final trackingData = <DailyTrackingData>[];
 
-      // Convert Clue data format to FlowSense format
+      // Convert Clue data format to Flow Ai format
       // This would need to be implemented based on Clue's actual export format
 
       int importedCycles = 0;
@@ -543,7 +543,7 @@ class ExportImportService {
               pw.Header(
                 level: 0,
                 child: pw.Text(
-                  'FlowSense Medical Report',
+                  'Flow Ai Medical Report',
                   style: pw.TextStyle(
                     fontSize: 24,
                     fontWeight: pw.FontWeight.bold,

@@ -25,7 +25,7 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
         final isConnected = settings.preferences.syncWithCycleSync;
 
         return SettingsSection(
-          title: 'Flow iQ Integration',
+          title: 'Care-team sync',
           icon: Icons.local_hospital_outlined,
           children: [
             // Connection Status
@@ -116,7 +116,7 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                             const SizedBox(height: 4),
                             Text(
                               isConnected
-                                  ? 'Your data syncs with Flow iQ Clinical'
+                                  ? 'Your data syncs with approved care-team tools'
                                   : 'Connect to sync your cycle data with clinical app',
                               style: TextStyle(
                                 fontSize: 14,
@@ -192,10 +192,12 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                     ? AppTheme.successGreen
                     : AppTheme.warningOrange,
               ),
-              title: isConnected ? 'Disconnect Flow iQ' : 'Connect to Flow iQ',
+              title: isConnected
+                  ? 'Disconnect care-team sync'
+                  : 'Connect care-team sync',
               subtitle: isConnected
-                  ? 'Stop syncing with Flow iQ Clinical'
-                  : 'Sync your cycle data with Flow iQ Clinical',
+                  ? 'Stop syncing with approved care-team tools'
+                  : 'Sync your cycle data with approved care-team tools',
               trailing: _isConnecting
                   ? const SizedBox(
                       width: 20,
@@ -280,7 +282,7 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                       ),
                       const SizedBox(width: 8),
                       const Text(
-                        'About Flow iQ Integration',
+                        'About care-team sync',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -291,7 +293,7 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Connect Flow Ai with Flow iQ Clinical to sync your menstrual cycle data across platforms. Flow iQ is our clinical app project (https://github.com/ronospace/Flow-iQ) for healthcare providers. Your data remains secure and encrypted during transfer.',
+                    'Connect Flow Ai with approved care-team tools to support coordinated reproductive health workflows. Your data remains secure and encrypted during transfer.',
                     style: TextStyle(
                       fontSize: 12,
                       color: Theme.of(
@@ -343,7 +345,7 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
     try {
       HapticFeedback.mediumImpact();
       _showComingSoonDialog(context);
-      // Show coming soon message instead of actual functionality
+      // Show availability context before starting the connection flow
       _connectToCycleSync(context, settings);
     } finally {
       if (mounted) {
@@ -542,7 +544,7 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
                   Text('✓ Complies with healthcare privacy standards'),
                   SizedBox(height: 16),
                   Text(
-                    'Do you consent to connect your Flow Ai data with CycleSync Enterprise?',
+                    'Do you consent to connect your Flow Ai data with approved care-team sync?',
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       color: AppTheme.darkGrey,
@@ -636,7 +638,7 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
               const SizedBox(height: 24),
 
               Text(
-                'Flow iQ Coming Soon! 🏥',
+                'Care-team sync',
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppTheme.darkGrey,
@@ -647,7 +649,7 @@ class _FlowIQIntegrationState extends State<FlowIQIntegration> {
               const SizedBox(height: 16),
 
               Text(
-                'We\'re developing the Flow iQ integration to connect with healthcare providers and clinical systems for enhanced cycle tracking and medical insights. Flow iQ (https://github.com/ronospace/Flow-iQ) is our AI-powered clinical app for reproductive health professionals.',
+                'Care-team sync is designed to connect Flow Ai with approved healthcare workflows for enhanced cycle tracking and medical insights when this service is available.',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppTheme.mediumGrey,
                   height: 1.5,

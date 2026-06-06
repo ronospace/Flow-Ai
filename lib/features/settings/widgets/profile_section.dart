@@ -164,7 +164,9 @@ class ProfileSection extends StatelessWidget {
   String _shortAccountId(String userId) {
     final clean = userId.trim();
     if (clean.isEmpty || clean == 'default_user') return 'FL-LOCAL';
-    final suffix = clean.length <= 4 ? clean.toUpperCase() : clean.substring(clean.length - 4).toUpperCase();
+    final suffix = clean.length <= 4
+        ? clean.toUpperCase()
+        : clean.substring(clean.length - 4).toUpperCase();
     return 'FL-$suffix';
   }
 
@@ -354,15 +356,21 @@ class ProfileSection extends StatelessWidget {
   }
 
   void _selectFromCamera(BuildContext context, SettingsProvider settings) {
-    // TODO: Implement camera selection
+    // Camera avatar selection is disabled until image capture is connected
     Navigator.pop(context);
-    AdaptiveMessages.showInfo(context, 'Camera selection coming soon!');
+    AdaptiveMessages.showInfo(
+      context,
+      'Camera avatar selection is currently unavailable',
+    );
   }
 
   void _selectFromGallery(BuildContext context, SettingsProvider settings) {
-    // TODO: Implement gallery selection
+    // Gallery avatar selection is disabled until media picking is connected
     Navigator.pop(context);
-    AdaptiveMessages.showInfo(context, 'Gallery selection coming soon!');
+    AdaptiveMessages.showInfo(
+      context,
+      'Gallery avatar selection is currently unavailable',
+    );
   }
 
   void _removeAvatar(BuildContext context, SettingsProvider settings) async {
