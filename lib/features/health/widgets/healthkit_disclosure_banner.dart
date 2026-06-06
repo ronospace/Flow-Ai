@@ -18,7 +18,7 @@ class HealthKitDisclosureBanner extends StatelessWidget {
     this.onDismiss,
     this.showDismissButton = false,
     this.isFirstTimeDisclosure =
-        false, // First-time disclosures cannot be dismissed (App Store 2.5.1)
+        false, // First-time disclosures cannot be dismissed before permission context is shown
   });
 
   @override
@@ -50,7 +50,7 @@ class HealthKitDisclosureBanner extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Header with icon - Enhanced for App Store compliance (2.5.1)
+          // Header with icon for clear health data transparency
           Row(
             children: [
               Container(
@@ -78,7 +78,7 @@ class HealthKitDisclosureBanner extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'Required disclosure per App Store guidelines',
+                      'Required health data disclosure',
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: theme.colorScheme.onSurface.withValues(
                           alpha: 0.6,
@@ -89,7 +89,7 @@ class HealthKitDisclosureBanner extends StatelessWidget {
                   ],
                 ),
               ),
-              // Only show dismiss button if not first-time disclosure (App Store compliance)
+              // Only show dismiss button if not first-time disclosure
               if (showDismissButton && !isFirstTimeDisclosure)
                 IconButton(
                   icon: Icon(
@@ -105,7 +105,7 @@ class HealthKitDisclosureBanner extends StatelessWidget {
           ),
           const SizedBox(height: 12),
 
-          // Disclosure text - Enhanced for clarity (App Store 2.5.1)
+          // Disclosure text for clarity
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(

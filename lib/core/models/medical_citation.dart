@@ -1,5 +1,5 @@
 /// Medical citation model for health and medical information
-/// Ensures compliance with App Store guideline 1.4.1 - Safety - Physical Harm
+/// Supports transparent sourcing for health and medical information
 class MedicalCitation {
   final String id;
   final String title;

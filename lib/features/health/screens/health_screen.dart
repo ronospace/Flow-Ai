@@ -96,7 +96,7 @@ class _HealthScreenState extends State<HealthScreen>
                     const SizedBox(height: 18),
 
                     // HealthKit Connection Card
-                    // Clearly identifies HealthKit functionality (App Store 2.5.1)
+                    // Clearly identifies HealthKit functionality
                     const HealthKitConnectionCard(),
                     const SizedBox(height: 18),
 

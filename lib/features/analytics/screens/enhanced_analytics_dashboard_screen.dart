@@ -262,7 +262,7 @@ class _EnhancedAnalyticsDashboardScreenState
                 color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
               ),
             ),
-            // Medical Citations Footer (App Store 1.4.1)
+            // Medical citations footer
             MedicalCitationsFooter(),
           ],
         ),
@@ -303,10 +303,10 @@ class _EnhancedAnalyticsDashboardScreenState
 
           const SizedBox(height: 20),
 
-          // Medical Disclaimer Banner (App Store 1.4.1)
+          // Medical disclaimer banner
           MedicalDisclaimerBanner(),
 
-          // Medical Citations Footer (App Store 1.4.1)
+          // Medical citations footer
           MedicalCitationsFooter(),
         ],
       ),
@@ -343,10 +343,10 @@ class _EnhancedAnalyticsDashboardScreenState
 
           const SizedBox(height: 20),
 
-          // Medical Disclaimer Banner (App Store 1.4.1)
+          // Medical disclaimer banner
           MedicalDisclaimerBanner(),
 
-          // Medical Citations Footer (App Store 1.4.1)
+          // Medical citations footer
           MedicalCitationsFooter(),
         ],
       ),
@@ -419,10 +419,10 @@ class _EnhancedAnalyticsDashboardScreenState
 
           const SizedBox(height: 20),
 
-          // Medical Disclaimer Banner (App Store 1.4.1)
+          // Medical disclaimer banner
           MedicalDisclaimerBanner(),
 
-          // Medical Citations Footer (App Store 1.4.1)
+          // Medical citations footer
           MedicalCitationsFooter(),
         ],
       ),

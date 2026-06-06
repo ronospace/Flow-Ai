@@ -302,7 +302,7 @@ class EnhancedAIChatService {
           contextPrompt,
         );
         if (flowAIResponse != null && flowAIResponse.isNotEmpty) {
-          // Add medical citations to FlowAI responses for App Store compliance (1.4.1)
+          // Add medical citations to FlowAI health responses
           return _addMedicalCitationToHealthResponse(
             flowAIResponse,
             userMessage.toLowerCase(),
@@ -398,7 +398,7 @@ class EnhancedAIChatService {
       personalizedInsights,
     );
 
-    // Add medical citations for health-related responses (App Store compliance 1.4.1)
+    // Add medical citations for health-related responses
     if (_isHealthRelated(lowerMessage)) {
       enhancedResponse = _addMedicalCitationToHealthResponse(
         enhancedResponse,
@@ -409,14 +409,14 @@ class EnhancedAIChatService {
     return enhancedResponse;
   }
 
-  /// Add medical citation to health responses for App Store compliance (1.4.1)
+  /// Add medical citation to health responses
   String _addMedicalCitationToHealthResponse(
     String response,
     String userMessage,
   ) {
     final lowerResponse = response.toLowerCase();
 
-    // Check if response contains medical/health content - required for App Store compliance
+    // Check if response contains medical/health content that needs citation support
     final hasMedicalContent =
         lowerResponse.contains('period') ||
         lowerResponse.contains('menstrual') ||
@@ -1184,7 +1184,7 @@ class EnhancedAIChatService {
         currentPhase: _getCurrentCyclePhase(),
       );
 
-      // Add medical citations to FlowAI responses for App Store compliance (1.4.1)
+      // Add medical citations to FlowAI health responses
       final content = response.content;
       return _addMedicalCitationToHealthResponse(
         content,

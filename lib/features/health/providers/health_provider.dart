@@ -12,7 +12,7 @@ class HealthProvider extends ChangeNotifier {
   double get healthScore => _healthScore;
   bool get healthKitBannerDismissed => _healthKitBannerDismissed;
 
-  /// Connect to HealthKit - Shows mandatory disclosure dialog first (App Store 2.5.1)
+  /// Connect to HealthKit after showing the mandatory disclosure dialog
   Future<void> connectHealthKit(BuildContext context) async {
     // Show mandatory HealthKit disclosure dialog BEFORE requesting permissions
     // This ensures users see the health data disclosure before permissions are requested

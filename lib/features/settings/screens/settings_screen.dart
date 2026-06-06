@@ -252,7 +252,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                                 ),
                                 title: 'Medical Sources & Citations',
                                 subtitle:
-                                    'View all medical sources and citations (App Store 1.4.1)',
+                                    'View all medical sources and citations',
                                 onTap: () => _showMedicalCitations(context),
                                 trailing: const Icon(
                                   Icons.arrow_forward_ios,

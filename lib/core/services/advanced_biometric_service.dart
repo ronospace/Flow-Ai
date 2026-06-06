@@ -191,7 +191,7 @@ class AdvancedBiometricService {
   Future<bool> _requestHealthPermissions() async {
     try {
       // IMPORTANT: HealthKit disclosure dialog should be shown by the calling screen
-      // BEFORE this method is called. This ensures compliance with App Store 2.5.1
+      // BEFORE this method is called so users understand health data access.
 
       final permissions = _supportedDataTypes
           .map((type) => HealthDataAccess.READ)
