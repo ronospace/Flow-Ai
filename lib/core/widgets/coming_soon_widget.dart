@@ -15,6 +15,7 @@ class ComingSoonWidget extends StatelessWidget {
     this.onNotifyMe,
     this.backgroundColor,
     this.gradientColors,
+    this.footerWidgets,
   });
 
   final String title;
@@ -25,11 +26,13 @@ class ComingSoonWidget extends StatelessWidget {
   final VoidCallback? onNotifyMe;
   final Color? backgroundColor;
   final List<Color>? gradientColors;
+  final List<Widget>? footerWidgets;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final size = MediaQuery.of(context).size;
+    final isCompactHeight = size.height < 860;
 
     return Container(
       decoration: BoxDecoration(
@@ -43,37 +46,31 @@ class ComingSoonWidget extends StatelessWidget {
       ),
       child: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.fromLTRB(16, isCompactHeight ? 8 : 16, 16, 28),
           child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: size.height * 0.7),
+            constraints: BoxConstraints(
+              minHeight: isCompactHeight ? 0 : size.height * 0.68,
+            ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: isCompactHeight
+                  ? MainAxisAlignment.start
+                  : MainAxisAlignment.center,
               children: [
-                // Main illustration (made responsive)
-                _buildMainIllustration(context, size),
-
-                SizedBox(height: size.height * 0.03),
-
-                // Title and description
+                _buildMainIllustration(context, size, isCompactHeight),
+                SizedBox(height: isCompactHeight ? 14 : size.height * 0.03),
                 _buildTitleSection(context),
-
-                SizedBox(height: size.height * 0.02),
-
-                // Feature list (made collapsible for smaller screens)
+                SizedBox(height: isCompactHeight ? 12 : size.height * 0.02),
                 if (featureList != null && featureList!.isNotEmpty)
-                  _buildFeatureList(context, size),
-
-                SizedBox(height: size.height * 0.02),
-
-                // Estimated date
+                  _buildFeatureList(context, size, isCompactHeight),
+                SizedBox(height: isCompactHeight ? 12 : size.height * 0.02),
                 if (estimatedDate != null) _buildEstimatedDate(context),
-
-                const SizedBox(height: 16),
-
-                // Notify me button
+                SizedBox(height: isCompactHeight ? 10 : 16),
                 if (onNotifyMe != null) _buildNotifyButton(context),
-
-                const SizedBox(height: 16), // Bottom padding
+                if (footerWidgets != null && footerWidgets!.isNotEmpty) ...[
+                  const SizedBox(height: 16),
+                  ...footerWidgets!,
+                ],
+                SizedBox(height: isCompactHeight ? 48 : 24),
               ],
             ),
           ),
@@ -82,8 +79,17 @@ class ComingSoonWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildMainIllustration(BuildContext context, Size screenSize) {
-    final illustrationSize = screenSize.height < 700 ? 120.0 : 160.0;
+  Widget _buildMainIllustration(
+    BuildContext context,
+    Size screenSize,
+    bool isCompactHeight,
+  ) {
+    final illustrationSize = screenSize.height < 700
+        ? 112.0
+        : isCompactHeight
+        ? 132.0
+        : 160.0;
+
     return Container(
       width: illustrationSize,
       height: illustrationSize,
@@ -108,7 +114,6 @@ class ComingSoonWidget extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          // Background pattern
           ...List.generate(3, (index) {
             final patternSize = illustrationSize - 20 - (index * 20);
             return Container(
@@ -128,8 +133,6 @@ class ComingSoonWidget extends StatelessWidget {
                 .scale(begin: const Offset(0.8, 0.8))
                 .fadeIn();
           }),
-
-          // Main icon
           Container(
                 width: illustrationSize * 0.5,
                 height: illustrationSize * 0.5,
@@ -227,13 +230,17 @@ class ComingSoonWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildFeatureList(BuildContext context, Size screenSize) {
+  Widget _buildFeatureList(
+    BuildContext context,
+    Size screenSize,
+    bool isCompactHeight,
+  ) {
     final theme = Theme.of(context);
-    final isCompact = screenSize.height < 700;
+    final isCompact = isCompactHeight || screenSize.height < 700;
     final maxFeatures = isCompact ? 3 : featureList!.length;
 
     return Container(
-      padding: EdgeInsets.all(isCompact ? 16 : 20),
+      padding: EdgeInsets.all(isCompact ? 14 : 20),
       decoration: BoxDecoration(
         color: Colors.white.withValues(
           alpha: theme.brightness == Brightness.dark ? 0.1 : 0.8,
@@ -266,14 +273,14 @@ class ComingSoonWidget extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: isCompact ? 10 : 12),
           ...featureList!.take(maxFeatures).toList().asMap().entries.map((
             entry,
           ) {
             final index = entry.key;
             final feature = entry.value;
             return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 3),
+              padding: EdgeInsets.symmetric(vertical: isCompact ? 2 : 3),
               child:
                   Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -295,7 +302,7 @@ class ComingSoonWidget extends StatelessWidget {
                                 color: theme.brightness == Brightness.dark
                                     ? Colors.white70
                                     : AppTheme.mediumGrey,
-                                height: 1.3,
+                                height: 1.25,
                               ),
                             ),
                           ),
@@ -375,7 +382,11 @@ class ComingSoonWidget extends StatelessWidget {
 /// Specialized Coming Soon widgets for different feature categories
 class ComingSoonWidgets {
   /// AI Coach Coming Soon
-  static Widget aiCoach(BuildContext context, {VoidCallback? onNotifyMe}) {
+  static Widget aiCoach(
+    BuildContext context, {
+    VoidCallback? onNotifyMe,
+    List<Widget>? footerWidgets,
+  }) {
     return ComingSoonWidget(
       title: 'AI Health Coach',
       description:
@@ -390,6 +401,7 @@ class ComingSoonWidgets {
       ],
       estimatedDate: 'Coming Soon',
       onNotifyMe: onNotifyMe,
+      footerWidgets: footerWidgets,
       gradientColors: [
         AppTheme.primaryPurple.withValues(alpha: 0.1),
         AppTheme.primaryRose.withValues(alpha: 0.1),

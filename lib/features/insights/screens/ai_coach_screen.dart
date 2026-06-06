@@ -20,19 +20,15 @@ class AICoachScreen extends StatelessWidget {
         elevation: 0,
         foregroundColor: AppTheme.primaryPurple,
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ComingSoonWidgets.aiCoach(
-              context,
-              onNotifyMe: () {
-                _showNotificationDialog(context);
-              },
-            ),
-          ),
-          // Medical disclaimer banner
+      body: ComingSoonWidgets.aiCoach(
+        context,
+        onNotifyMe: () {
+          _showNotificationDialog(context);
+        },
+        footerWidgets: [
+          const SizedBox(height: 8),
           MedicalDisclaimerBanner(),
-          // Medical citations footer
+          const SizedBox(height: 16),
           MedicalCitationsFooter(),
         ],
       ),
