@@ -240,37 +240,48 @@ class AIPredictionCard extends StatelessWidget {
   }
 
   Widget _buildConfidenceSection(ThemeData theme) {
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Icon(
-          Icons.analytics_rounded,
-          size: 16,
-          color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+        Wrap(
+          spacing: 12,
+          runSpacing: 6,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.analytics_rounded,
+                  size: 16,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  'Confidence: ${prediction.confidenceLevel}%',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            Text(
+              'Cycle: ${prediction.cycleLengthPrediction}d',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.64),
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
         ),
-        const SizedBox(width: 8),
-        Text(
-          'Confidence: ${prediction.confidenceLevel}%',
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: LinearProgressIndicator(
-            value: prediction.confidenceLevel / 100,
-            backgroundColor: AppTheme.lightGrey.withValues(alpha: 0.1),
-            valueColor: AlwaysStoppedAnimation<Color>(_getConfidenceColor()),
-            borderRadius: BorderRadius.circular(4),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Text(
-          'Cycle: ${prediction.cycleLengthPrediction}d',
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: AppTheme.mediumGrey,
-            fontWeight: FontWeight.w500,
-          ),
+        const SizedBox(height: 8),
+        LinearProgressIndicator(
+          value: prediction.confidenceLevel / 100,
+          minHeight: 6,
+          backgroundColor: theme.colorScheme.onSurface.withValues(alpha: 0.1),
+          valueColor: AlwaysStoppedAnimation<Color>(_getConfidenceColor()),
+          borderRadius: BorderRadius.circular(4),
         ),
       ],
     );
@@ -288,7 +299,7 @@ class AIPredictionCard extends StatelessWidget {
               'AI Insights',
               style: theme.textTheme.bodyMedium?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: AppTheme.darkGrey,
+                color: theme.colorScheme.onSurface,
               ),
             ),
           ],
@@ -315,7 +326,9 @@ class AIPredictionCard extends StatelessWidget {
                       child: Text(
                         insight,
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: AppTheme.mediumGrey,
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.74,
+                          ),
                           height: 1.3,
                         ),
                       ),
@@ -356,7 +369,7 @@ class AIPredictionCard extends StatelessWidget {
                 'Fertility Window',
                 style: theme.textTheme.bodyMedium?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppTheme.darkGrey,
+                  color: theme.colorScheme.onSurface,
                 ),
               ),
             ],
@@ -371,7 +384,9 @@ class AIPredictionCard extends StatelessWidget {
                     Text(
                       'Most Fertile Days',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: AppTheme.mediumGrey,
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.68,
+                        ),
                         fontSize: 11,
                       ),
                     ),
@@ -532,7 +547,9 @@ class AIPredictionSummary extends StatelessWidget {
                         ? 'Period expected today'
                         : 'Next period in $daysUntil days',
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: AppTheme.mediumGrey,
+                      color: theme.colorScheme.onSurface.withValues(
+                        alpha: 0.68,
+                      ),
                     ),
                   ),
                 ],
@@ -541,7 +558,7 @@ class AIPredictionSummary extends StatelessWidget {
             Icon(
               Icons.arrow_forward_ios_rounded,
               size: 16,
-              color: AppTheme.mediumGrey,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
             ),
           ],
         ),

@@ -430,9 +430,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               const SizedBox(height: AppTheme.spaceXxl),
 
                               // AI Prediction Summary
-                              _LazyWidget(
-                                builder: () => _buildAIPredictionSummary(),
-                              ),
+                              _buildAIPredictionSummary(),
                               const SizedBox(height: AppTheme.spaceXxl),
 
                               // Use lazy loading for heavy widgets to improve performance
