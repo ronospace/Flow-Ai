@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/constants/app_layout.dart';
 import '../../../generated/app_localizations.dart';
 import '../../../core/models/cycle_data.dart';
 import '../providers/cycle_provider.dart';
@@ -58,6 +59,7 @@ class _CalendarScreenState extends State<CalendarScreen>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final scrollBottomPadding = AppLayout.scrollBottomPadding(context);
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -66,18 +68,22 @@ class _CalendarScreenState extends State<CalendarScreen>
           ),
         ),
         child: SafeArea(
-          child: Column(
-            children: [
-              // Custom Header
-              _buildHeader(),
+          bottom: false,
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics(),
+            ),
+            padding: EdgeInsets.only(bottom: scrollBottomPadding),
+            child: Column(
+              children: [
+                // Custom Header
+                _buildHeader(),
 
-              // Calendar Legend
-              _buildCalendarLegend(),
+                // Calendar Legend
+                _buildCalendarLegend(),
 
-              // Calendar Widget
-              Expanded(
-                flex: 3,
-                child: Container(
+                // Calendar Widget
+                Container(
                   margin: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 8,
@@ -97,18 +103,16 @@ class _CalendarScreenState extends State<CalendarScreen>
                     borderRadius: BorderRadius.circular(20),
                     child: Consumer<CycleProvider>(
                       builder: (context, cycleProvider, child) {
-                        return SingleChildScrollView(
-                          child: _buildCalendar(cycleProvider),
-                        );
+                        return _buildCalendar(cycleProvider);
                       },
                     ),
                   ),
                 ),
-              ),
 
-              // Current Cycle Info
-              _buildCurrentCycleInfo(),
-            ],
+                // Current Cycle Info
+                _buildCurrentCycleInfo(),
+              ],
+            ),
           ),
         ),
       ),
@@ -118,7 +122,10 @@ class _CalendarScreenState extends State<CalendarScreen>
   Widget _buildHeader() {
     final theme = Theme.of(context);
     return Container(
-      padding: const EdgeInsets.all(AppTheme.spaceXl),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppTheme.spaceXl,
+        vertical: AppTheme.spaceLg,
+      ),
       child: Row(
         children: [
           // Title
@@ -237,6 +244,8 @@ class _CalendarScreenState extends State<CalendarScreen>
   Widget _buildCalendar(CycleProvider cycleProvider) {
     final theme = Theme.of(context);
     return TableCalendar<CycleData>(
+      rowHeight: 44,
+      daysOfWeekHeight: 32,
       firstDay: DateTime.utc(2020, 1, 1),
       lastDay: DateTime.utc(2030, 12, 31),
       focusedDay: _focusedDay,
@@ -306,7 +315,7 @@ class _CalendarScreenState extends State<CalendarScreen>
           Icons.chevron_right,
           color: AppTheme.primaryRose,
         ),
-        headerPadding: const EdgeInsets.symmetric(vertical: 16),
+        headerPadding: const EdgeInsets.symmetric(vertical: 12),
       ),
       daysOfWeekStyle: DaysOfWeekStyle(
         weekendStyle: TextStyle(
@@ -357,7 +366,7 @@ class _CalendarScreenState extends State<CalendarScreen>
 
     return AnimatedContainer(
       duration: AppTheme.motionFast,
-      margin: const EdgeInsets.all(6),
+      margin: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         gradient: isSelected
             ? const LinearGradient(
@@ -649,7 +658,10 @@ class _CalendarScreenState extends State<CalendarScreen>
 
         return Container(
           margin: const EdgeInsets.all(AppTheme.spaceXl),
-          padding: const EdgeInsets.all(AppTheme.spaceXl),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppTheme.spaceXl,
+            vertical: AppTheme.spaceLg,
+          ),
           decoration: BoxDecoration(
             color: theme.colorScheme.surface,
             borderRadius: BorderRadius.circular(16),

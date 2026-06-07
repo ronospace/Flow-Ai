@@ -3,8 +3,7 @@ import 'package:fl_chart/fl_chart.dart';
 import '../providers/analytics_provider.dart';
 import '../../../core/services/analytics_service.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/medical_citations_footer.dart';
-import '../../../core/widgets/medical_disclaimer_banner.dart';
+import '../../../core/constants/app_layout.dart';
 
 class AdvancedAnalyticsDashboard extends StatelessWidget {
   final AnalyticsProvider provider;
@@ -16,13 +15,21 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
     final theme = Theme.of(context);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
+      physics: const BouncingScrollPhysics(
+        parent: AlwaysScrollableScrollPhysics(),
+      ),
+      padding: EdgeInsets.fromLTRB(
+        20,
+        16,
+        20,
+        AppLayout.scrollBottomPadding(context),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Advanced Health Score Card
           _buildAdvancedHealthScoreCard(theme),
-          const SizedBox(height: 24),
+          const SizedBox(height: 14),
 
           // Key Metrics Grid
           _buildAdvancedMetricsGrid(theme),
@@ -48,12 +55,6 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
           _buildHealthPatternsSection(theme),
 
           const SizedBox(height: 24),
-
-          // Medical disclaimer banner
-          MedicalDisclaimerBanner(),
-
-          // Medical citations footer
-          MedicalCitationsFooter(),
         ],
       ),
     );
@@ -71,7 +72,7 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
     final scoreColor = _getScoreColor(overallScore);
 
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.fromLTRB(24, 20, 24, 14),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -173,7 +174,7 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 14),
           // Score Breakdown
           Row(
             children: [
@@ -421,7 +422,7 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
 
   Widget _buildAIInsightsSection(ThemeData theme) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(20, 18, 20, 14),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -556,7 +557,7 @@ class AdvancedAnalyticsDashboard extends StatelessWidget {
 
   Widget _buildComparativeAnalysis(ThemeData theme) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(20, 18, 20, 14),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),

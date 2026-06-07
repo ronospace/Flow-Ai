@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import '../../../core/ui/adaptive_messages.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/app_header_components.dart';
 import '../../../core/ai/period_prediction_engine.dart';
 import '../widgets/ai_prediction_card.dart';
 
@@ -16,6 +20,8 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
     with TickerProviderStateMixin {
   PeriodPrediction? currentPrediction;
   bool isLoading = false;
+  bool _showRefreshAction = false;
+  Timer? _refreshVisibilityTimer;
   late AnimationController _refreshController;
 
   @override
@@ -30,6 +36,7 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
 
   @override
   void dispose() {
+    _refreshVisibilityTimer?.cancel();
     _refreshController.dispose();
     super.dispose();
   }
@@ -69,9 +76,59 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
   }
 
   Future<void> _refreshPrediction() async {
+    _refreshVisibilityTimer?.cancel();
+
+    if (_showRefreshAction && mounted) {
+      setState(() {
+        _showRefreshAction = false;
+      });
+    }
+
     _refreshController.reset();
     _refreshController.forward();
     await _generatePrediction();
+  }
+
+  bool _handleRefreshScroll(UserScrollNotification notification) {
+    if (notification.direction == ScrollDirection.reverse) {
+      _refreshVisibilityTimer?.cancel();
+
+      if (_showRefreshAction && mounted) {
+        setState(() {
+          _showRefreshAction = false;
+        });
+      }
+
+      return false;
+    }
+
+    if (notification.direction == ScrollDirection.forward) {
+      if (!_showRefreshAction && mounted) {
+        setState(() {
+          _showRefreshAction = true;
+        });
+      }
+
+      _scheduleRefreshActionHide();
+      return false;
+    }
+
+    if (notification.direction == ScrollDirection.idle) {
+      _scheduleRefreshActionHide();
+    }
+
+    return false;
+  }
+
+  void _scheduleRefreshActionHide() {
+    _refreshVisibilityTimer?.cancel();
+    _refreshVisibilityTimer = Timer(const Duration(milliseconds: 1400), () {
+      if (!mounted || !_showRefreshAction) return;
+
+      setState(() {
+        _showRefreshAction = false;
+      });
+    });
   }
 
   @override
@@ -79,89 +136,88 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
-      body: CustomScrollView(
-        slivers: [
-          _buildAppBar(),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate([
-                if (isLoading) ...[
-                  _buildLoadingCard(),
+      body: NotificationListener<UserScrollNotification>(
+        onNotification: _handleRefreshScroll,
+        child: CustomScrollView(
+          slivers: [
+            _buildAppBar(),
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate([
+                  if (isLoading) ...[
+                    _buildLoadingCard(),
+                    const SizedBox(height: 20),
+                  ] else if (currentPrediction != null) ...[
+                    AIPredictionCard(
+                      prediction: currentPrediction!,
+                      onTap: () => _showPredictionDetails(currentPrediction!),
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+                  _buildEducationSection(),
                   const SizedBox(height: 20),
-                ] else if (currentPrediction != null) ...[
-                  AIPredictionCard(
-                    prediction: currentPrediction!,
-                    onTap: () => _showPredictionDetails(currentPrediction!),
-                  ),
-                  const SizedBox(height: 20),
-                ],
-                _buildEducationSection(),
-                const SizedBox(height: 20),
-                _buildHistorySection(),
-                const SizedBox(height: 100), // Bottom padding for safe area
-              ]),
+                  _buildHistorySection(),
+                ]),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-      floatingActionButton: _buildRefreshFAB(),
+      floatingActionButton: _buildTransientRefreshAction(),
     );
   }
 
   Widget _buildAppBar() {
     final theme = Theme.of(context);
     return SliverAppBar(
-      expandedHeight: 120,
       floating: false,
       pinned: true,
+      toolbarHeight: 72,
+      leadingWidth: 56,
+      titleSpacing: 8,
       backgroundColor: theme.scaffoldBackgroundColor,
       elevation: 0,
-      leading: IconButton(
-        icon: Icon(
-          Icons.arrow_back_rounded,
-          color: theme.colorScheme.onSurface,
-        ),
-        onPressed: () => Navigator.of(context).pop(),
-      ),
-      flexibleSpace: FlexibleSpaceBar(
-        titlePadding: const EdgeInsets.only(left: 20, bottom: 16),
-        title: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+      leading: AppBackButton(onPressed: () => Navigator.of(context).pop()),
+      title: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+              ),
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: AppTheme.primaryRose.withValues(alpha: 0.1),
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
                 ),
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppTheme.primaryRose.withValues(alpha: 0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: const Icon(
-                Icons.psychology_rounded,
-                color: Colors.white,
-                size: 20,
-              ),
+              ],
             ),
-            const SizedBox(width: 12),
-            Text(
+            child: const Icon(
+              Icons.psychology_rounded,
+              color: Colors.white,
+              size: 20,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
               'AI Predictions',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 color: theme.colorScheme.onSurface,
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-    ).animate().fadeIn(duration: 600.ms);
+    );
   }
 
   Widget _buildLoadingCard() {
@@ -265,6 +321,7 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 padding: const EdgeInsets.all(8),
@@ -279,11 +336,14 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
                 ),
               ),
               const SizedBox(width: 12),
-              Text(
-                'How AI Predictions Work',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: theme.colorScheme.onSurface,
+              Expanded(
+                child: Text(
+                  'How AI Predictions Work',
+                  softWrap: true,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurface,
+                  ),
                 ),
               ),
             ],
@@ -344,30 +404,32 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
   }
 
   Widget _buildHistorySection() {
+    final theme = Theme.of(context);
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppTheme.lightGrey.withValues(alpha: 0.1)),
+        border: Border.all(color: theme.dividerColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const Icon(
+              Icon(
                 Icons.history_rounded,
-                color: AppTheme.mediumGrey,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.68),
                 size: 20,
               ),
               const SizedBox(width: 8),
               Text(
                 'Prediction History',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppTheme.darkGrey,
+                  color: theme.colorScheme.onSurface,
                 ),
               ),
             ],
@@ -375,29 +437,91 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
           const SizedBox(height: 16),
           Text(
             'Previous predictions will appear here as you track more cycles.',
-            style: Theme.of(
-              context,
-            ).textTheme.bodyMedium?.copyWith(color: AppTheme.mediumGrey),
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.72),
+            ),
           ),
         ],
       ),
     ).animate().fadeIn(delay: 400.ms);
   }
 
-  Widget _buildRefreshFAB() {
-    return FloatingActionButton.extended(
-      onPressed: isLoading ? null : _refreshPrediction,
-      backgroundColor: AppTheme.primaryRose,
-      elevation: 8,
-      icon: RotationTransition(
-        turns: _refreshController,
-        child: const Icon(Icons.refresh_rounded, color: Colors.white),
+  Widget _buildTransientRefreshAction() {
+    final isVisible = _showRefreshAction && !isLoading;
+
+    return ExcludeSemantics(
+      excluding: !isVisible,
+      child: IgnorePointer(
+        ignoring: !isVisible,
+        child: AnimatedSlide(
+          duration: const Duration(milliseconds: 180),
+          curve: Curves.easeOutCubic,
+          offset: isVisible ? Offset.zero : const Offset(0, 0.35),
+          child: AnimatedOpacity(
+            key: const ValueKey('ai_predictions_refresh_visibility'),
+            duration: const Duration(milliseconds: 160),
+            curve: Curves.easeOut,
+            opacity: isVisible ? 1 : 0,
+            child: _buildRefreshFAB(),
+          ),
+        ),
       ),
-      label: Text(
-        isLoading ? 'Generating...' : 'Refresh',
-        style: const TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.w600,
+    );
+  }
+
+  Widget _buildRefreshFAB() {
+    final actionLabel = isLoading
+        ? 'Generating prediction'
+        : 'Refresh prediction';
+
+    return Padding(
+      padding: const EdgeInsets.only(right: 4),
+      child: Tooltip(
+        message: actionLabel,
+        child: Semantics(
+          button: true,
+          enabled: !isLoading,
+          label: actionLabel,
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: isLoading ? null : _refreshPrediction,
+              customBorder: const CircleBorder(),
+              child: SizedBox.square(
+                dimension: 48,
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: Ink(
+                    width: 42,
+                    height: 42,
+                    decoration: ShapeDecoration(
+                      color: isLoading
+                          ? AppTheme.primaryRose.withValues(alpha: 0.55)
+                          : AppTheme.primaryRose,
+                      shape: const CircleBorder(),
+                      shadows: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.18),
+                          blurRadius: 8,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: RotationTransition(
+                        turns: _refreshController,
+                        child: const Icon(
+                          Icons.refresh_rounded,
+                          color: Colors.white,
+                          size: 19,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     ).animate().fadeIn(delay: 600.ms).scale(begin: const Offset(0.8, 0.8));
@@ -410,9 +534,9 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
       isScrollControlled: true,
       builder: (context) => Container(
         height: MediaQuery.of(context).size.height * 0.85,
-        decoration: const BoxDecoration(
-          color: AppTheme.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         ),
         child: Column(
           children: [
@@ -421,7 +545,9 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
               height: 4,
               margin: const EdgeInsets.only(top: 12, bottom: 20),
               decoration: BoxDecoration(
-                color: AppTheme.lightGrey,
+                color: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.24),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -436,7 +562,7 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
                       style: Theme.of(context).textTheme.headlineSmall
                           ?.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: AppTheme.darkGrey,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                     ),
                     const SizedBox(height: 20),
@@ -448,7 +574,7 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
                         style: Theme.of(context).textTheme.titleMedium
                             ?.copyWith(
                               fontWeight: FontWeight.bold,
-                              color: AppTheme.darkGrey,
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
                       ),
                       const SizedBox(height: 12),
@@ -477,7 +603,10 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
                                   insight,
                                   style: Theme.of(context).textTheme.bodySmall
                                       ?.copyWith(
-                                        color: AppTheme.darkGrey,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface
+                                            .withValues(alpha: 0.82),
                                         height: 1.4,
                                       ),
                                 ),

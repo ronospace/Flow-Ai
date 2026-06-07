@@ -1,6 +1,7 @@
 import 'package:flow_ai/features/partner/screens/qr_join_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import '../constants/app_layout.dart';
 
 import '../../features/onboarding/screens/splash_screen.dart';
 import '../../features/onboarding/screens/onboarding_screen.dart';
@@ -328,14 +329,16 @@ class _MainShellState extends State<MainShell> {
         }
       },
       child: Scaffold(
-        extendBody: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        extendBody: false,
         body: widget.child,
         bottomNavigationBar: SafeArea(
           top: false,
           child: Container(
-            color: Colors.transparent,
-            height: 72,
+            color: Theme.of(
+              context,
+            ).colorScheme.surface.withValues(alpha: 0.98),
+            height: AppLayout.bottomNavigationHeight,
             child: Row(
               children: [
                 Expanded(child: _buildNavItem(0, Icons.home_rounded, 'Home')),

@@ -10,8 +10,6 @@ import '../widgets/advanced_analytics_dashboard.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/app_header_components.dart';
 import '../../../generated/app_localizations.dart';
-import '../../../core/widgets/medical_disclaimer_banner.dart';
-import '../../../core/widgets/medical_citations_footer.dart';
 
 class EnhancedAnalyticsDashboardScreen extends StatefulWidget {
   const EnhancedAnalyticsDashboardScreen({super.key});
@@ -110,86 +108,143 @@ class _EnhancedAnalyticsDashboardScreenState
               ),
             ),
           ),
-          IconButton(
-            onPressed: () => _showTimeRangeSelector(context),
-            icon: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: AppTheme.primaryPurple.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: AppTheme.primaryPurple.withValues(alpha: 0.3),
-                ),
-              ),
-              child: Icon(
-                Icons.date_range,
-                color: AppTheme.primaryPurple,
-                size: 24,
-              ),
-            ),
+          _buildHeaderActionButton(
+            label: 'Select analytics time range',
+            color: AppTheme.primaryPurple,
+            icon: Icons.date_range,
+            onTap: () => _showTimeRangeSelector(context),
           ),
-          const SizedBox(width: 8),
-          IconButton(
-            onPressed: () => _showExportOptions(context),
-            icon: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: AppTheme.accentMint.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: AppTheme.accentMint.withValues(alpha: 0.3),
-                ),
-              ),
-              child: Icon(Icons.download, color: AppTheme.accentMint, size: 24),
-            ),
+          const SizedBox(width: 4),
+          _buildHeaderActionButton(
+            label: 'Export analytics',
+            color: AppTheme.accentMint,
+            icon: Icons.download,
+            onTap: () => _showExportOptions(context),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildTabBar(ThemeData theme, AppLocalizations localizations) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface.withValues(alpha: 0.8),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: theme.colorScheme.outline.withValues(alpha: 0.3),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: theme.shadowColor.withValues(alpha: 0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: TabBar(
-        controller: _tabController,
-        indicator: BoxDecoration(
+  Widget _buildHeaderActionButton({
+    required String label,
+    required Color color,
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return Semantics(
+      label: label,
+      button: true,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
           borderRadius: BorderRadius.circular(12),
-          gradient: LinearGradient(
-            colors: [AppTheme.primaryPurple, AppTheme.secondaryBlue],
+          child: Ink(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: color.withValues(alpha: 0.3)),
+            ),
+            child: Center(child: Icon(icon, color: color, size: 24)),
           ),
         ),
-        labelColor: Colors.white,
-        unselectedLabelColor: theme.colorScheme.onSurface.withValues(
-          alpha: 0.7,
+      ),
+    );
+  }
+
+  void _moveAnalyticsTab(int delta) {
+    final nextIndex = (_tabController.index + delta).clamp(
+      0,
+      _tabController.length - 1,
+    );
+
+    if (nextIndex == _tabController.index) return;
+    _tabController.animateTo(nextIndex);
+  }
+
+  Widget _buildTabBar(ThemeData theme, AppLocalizations localizations) {
+    const labels = ['Overview', 'Cycles', 'Health', 'Trends', 'Insights'];
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onHorizontalDragEnd: (details) {
+        final velocity = details.primaryVelocity ?? 0;
+        if (velocity.abs() < 120) return;
+
+        _moveAnalyticsTab(velocity < 0 ? 1 : -1);
+      },
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surface.withValues(alpha: 0.9),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: theme.colorScheme.outline.withValues(alpha: 0.16),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: theme.shadowColor.withValues(alpha: 0.08),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
-        labelStyle: theme.textTheme.bodySmall?.copyWith(
-          fontWeight: FontWeight.w600,
+        clipBehavior: Clip.antiAlias,
+        child: TabBar(
+          controller: _tabController,
+          isScrollable: false,
+          tabAlignment: TabAlignment.fill,
+          labelPadding: EdgeInsets.zero,
+          indicatorSize: TabBarIndicatorSize.tab,
+          indicatorPadding: const EdgeInsets.all(2),
+          dividerColor: Colors.transparent,
+          splashFactory: NoSplash.splashFactory,
+          overlayColor: const WidgetStatePropertyAll(Colors.transparent),
+          indicator: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            gradient: const LinearGradient(
+              colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+            ),
+          ),
+          labelColor: Colors.white,
+          unselectedLabelColor: theme.colorScheme.onSurface.withValues(
+            alpha: 0.68,
+          ),
+          labelStyle: theme.textTheme.bodySmall?.copyWith(
+            fontWeight: FontWeight.w800,
+            letterSpacing: 0.02,
+          ),
+          unselectedLabelStyle: theme.textTheme.bodySmall?.copyWith(
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.02,
+          ),
+          tabs: labels
+              .map(
+                (label) => Tab(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 4,
+                      vertical: 6,
+                    ),
+                    child: Center(
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          label,
+                          maxLines: 1,
+                          softWrap: false,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+              .toList(),
         ),
-        unselectedLabelStyle: theme.textTheme.bodySmall,
-        indicatorSize: TabBarIndicatorSize.tab,
-        dividerColor: Colors.transparent,
-        tabs: const [
-          Tab(text: 'Overview'),
-          Tab(text: 'Cycles'),
-          Tab(text: 'Health'),
-          Tab(text: 'Trends'),
-          Tab(text: 'Insights'),
-        ],
       ),
     );
   }
@@ -239,8 +294,6 @@ class _EnhancedAnalyticsDashboardScreenState
                 color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
               ),
             ),
-            // Medical citations footer
-            MedicalCitationsFooter(),
           ],
         ),
       ),
@@ -279,12 +332,6 @@ class _EnhancedAnalyticsDashboardScreenState
             PredictionAnalyticsCard(analytics: provider.predictionAnalytics!),
 
           const SizedBox(height: 20),
-
-          // Medical disclaimer banner
-          MedicalDisclaimerBanner(),
-
-          // Medical citations footer
-          MedicalCitationsFooter(),
         ],
       ),
     );
@@ -319,12 +366,6 @@ class _EnhancedAnalyticsDashboardScreenState
             HealthAnalyticsCard(analytics: provider.healthAnalytics!),
 
           const SizedBox(height: 20),
-
-          // Medical disclaimer banner
-          MedicalDisclaimerBanner(),
-
-          // Medical citations footer
-          MedicalCitationsFooter(),
         ],
       ),
     );
@@ -395,12 +436,6 @@ class _EnhancedAnalyticsDashboardScreenState
           ),
 
           const SizedBox(height: 20),
-
-          // Medical disclaimer banner
-          MedicalDisclaimerBanner(),
-
-          // Medical citations footer
-          MedicalCitationsFooter(),
         ],
       ),
     );
