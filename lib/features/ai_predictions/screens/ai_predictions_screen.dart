@@ -418,6 +418,7 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Icon(
                 Icons.history_rounded,
@@ -425,11 +426,14 @@ class _AIPredictionsScreenState extends State<AIPredictionsScreen>
                 size: 20,
               ),
               const SizedBox(width: 8),
-              Text(
-                'Prediction History',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: theme.colorScheme.onSurface,
+              Expanded(
+                child: Text(
+                  'Prediction History',
+                  softWrap: true,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurface,
+                  ),
                 ),
               ),
             ],
