@@ -196,8 +196,8 @@ class AIPredictionCard extends StatelessWidget {
           ),
         ),
         Container(
-          width: 80,
-          height: 80,
+          constraints: const BoxConstraints(minWidth: 80, minHeight: 80),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
@@ -212,6 +212,7 @@ class AIPredictionCard extends StatelessWidget {
             ),
           ),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
@@ -250,6 +251,7 @@ class AIPredictionCard extends StatelessWidget {
           children: [
             Row(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Icon(
                   Icons.analytics_rounded,
@@ -257,11 +259,14 @@ class AIPredictionCard extends StatelessWidget {
                   color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
                 const SizedBox(width: 8),
-                Text(
-                  'Confidence: ${prediction.confidenceLevel}%',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                    fontWeight: FontWeight.w500,
+                Flexible(
+                  child: Text(
+                    'Confidence: ${prediction.confidenceLevel}%',
+                    softWrap: true,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ],
@@ -292,14 +297,18 @@ class AIPredictionCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Icon(Icons.lightbulb_rounded, size: 16, color: AppTheme.accentMint),
             const SizedBox(width: 8),
-            Text(
-              'AI Insights',
-              style: theme.textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: theme.colorScheme.onSurface,
+            Expanded(
+              child: Text(
+                'AI Insights',
+                softWrap: true,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: theme.colorScheme.onSurface,
+                ),
               ),
             ),
           ],
@@ -362,14 +371,18 @@ class AIPredictionCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Icon(Icons.eco_rounded, size: 16, color: AppTheme.accentMint),
               const SizedBox(width: 8),
-              Text(
-                'Fertility Window',
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: theme.colorScheme.onSurface,
+              Expanded(
+                child: Text(
+                  'Fertility Window',
+                  softWrap: true,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurface,
+                  ),
                 ),
               ),
             ],

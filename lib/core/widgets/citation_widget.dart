@@ -43,16 +43,20 @@ class CitationWidget extends StatelessWidget {
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Icon(Icons.menu_book, size: 13, color: color),
               const SizedBox(width: 6),
-              Text(
-                'View sources',
-                style: TextStyle(
-                  color: color,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                  height: 1.1,
+              Flexible(
+                child: Text(
+                  'View sources',
+                  softWrap: true,
+                  style: TextStyle(
+                    color: color,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    height: 1.1,
+                  ),
                 ),
               ),
             ],
