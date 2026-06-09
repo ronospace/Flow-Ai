@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import 'source_action_button.dart';
 
 /// Model for a single citation entry
 class Citation {
@@ -31,37 +32,9 @@ class CitationWidget extends StatelessWidget {
     final color = linkColor ?? AppTheme.primaryPurple;
 
     return Center(
-      child: InkWell(
-        borderRadius: BorderRadius.circular(999),
-        onTap: () => _showCitationDialog(context),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.10),
-            borderRadius: BorderRadius.circular(999),
-            border: Border.all(color: color.withValues(alpha: 0.20)),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(Icons.menu_book, size: 13, color: color),
-              const SizedBox(width: 6),
-              Flexible(
-                child: Text(
-                  'View sources',
-                  softWrap: true,
-                  style: TextStyle(
-                    color: color,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    height: 1.1,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+      child: SourceActionButton.sources(
+        color: color,
+        onPressed: () => _showCitationDialog(context),
       ),
     );
   }

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../../generated/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/services/source_link_launcher.dart';
+import '../../../core/widgets/source_action_button.dart';
 import '../../../core/models/ai_insights.dart';
 import '../../../core/models/medical_citation.dart';
 
@@ -383,49 +384,12 @@ class AIInsightCard extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           // View source button
-          InkWell(
-            borderRadius: BorderRadius.circular(999),
-            onTap: () => _launchCitationUrl(citation.url),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: AppTheme.secondaryBlue.withValues(alpha: 0.10),
-                borderRadius: BorderRadius.circular(999),
-                border: Border.all(
-                  color: AppTheme.secondaryBlue.withValues(alpha: 0.20),
-                ),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.open_in_new,
-                    size: 11,
-                    color: AppTheme.secondaryBlue,
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    'View source',
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: AppTheme.secondaryBlue,
-                      fontWeight: FontWeight.w600,
-                      height: 1.1,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          SourceActionButton.source(
+            color: AppTheme.secondaryBlue,
+            onPressed: () => launchSourceLink(context, citation.url),
           ),
         ],
       ),
     );
-  }
-
-  Future<void> _launchCitationUrl(String url) async {
-    final Uri uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    }
   }
 }

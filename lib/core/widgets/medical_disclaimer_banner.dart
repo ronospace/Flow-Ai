@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
-import '../../features/settings/widgets/medical_citations_section.dart';
+import 'medical_sources_dialog.dart';
+import 'source_action_button.dart';
 
 /// Medical Disclaimer Banner
 /// Always-visible disclaimer on screens with medical content
@@ -61,59 +62,9 @@ class MedicalDisclaimerBanner extends StatelessWidget {
                 const SizedBox(height: 6),
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(999),
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => Dialog(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Container(
-                            constraints: const BoxConstraints(maxHeight: 600),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                AppBar(
-                                  leading: IconButton(
-                                    icon: const Icon(Icons.arrow_back_ios_new),
-                                    onPressed: () =>
-                                        Navigator.of(context).pop(),
-                                  ),
-                                  title: const Text('Medical Sources'),
-                                  automaticallyImplyLeading: false,
-                                ),
-                                const Expanded(
-                                  child: MedicalCitationsSection(),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 5,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppTheme.secondaryBlue.withValues(alpha: 0.10),
-                        borderRadius: BorderRadius.circular(999),
-                        border: Border.all(
-                          color: AppTheme.secondaryBlue.withValues(alpha: 0.20),
-                        ),
-                      ),
-                      child: Text(
-                        'View sources',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: AppTheme.secondaryBlue,
-                          fontWeight: FontWeight.w600,
-                          height: 1.1,
-                        ),
-                      ),
-                    ),
+                  child: SourceActionButton.sources(
+                    color: AppTheme.secondaryBlue,
+                    onPressed: () => showMedicalSourcesDialog(context),
                   ),
                 ),
               ],
