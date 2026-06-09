@@ -263,14 +263,14 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                         widget.label,
                         style: theme.textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: AppTheme.darkGrey,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         'Biometric Analysis',
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: AppTheme.mediumGrey,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                           fontSize: 10,
                         ),
                       ),
@@ -643,7 +643,9 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                           'Min',
                           style: TextStyle(
                             fontSize: 10,
-                            color: AppTheme.mediumGrey,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
                           ),
                         ),
                       ],
@@ -662,7 +664,9 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                           'Max',
                           style: TextStyle(
                             fontSize: 10,
-                            color: AppTheme.mediumGrey,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
                           ),
                         ),
                       ],
@@ -749,7 +753,7 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                           'AI Psychology Insights',
                           style: theme.textTheme.titleSmall?.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: AppTheme.darkGrey,
+                            color: Theme.of(context).colorScheme.onSurface,
                             fontSize: 16,
                           ),
                         ),
@@ -757,7 +761,9 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                         Text(
                           'Personalized for your cycle',
                           style: theme.textTheme.bodySmall?.copyWith(
-                            color: AppTheme.mediumGrey,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
                             fontSize: 11,
                           ),
                         ),

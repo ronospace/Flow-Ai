@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
+import '../../../core/constants/app_layout.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/models/cycle_data.dart';
 import '../../../core/database/database_service.dart';
@@ -239,74 +240,65 @@ class _TrackingScreenState extends State<TrackingScreen>
     }
   }
 
+  bool get _showSaveAction => _hasUnsavedChanges || _isSaving || _recentlySaved;
+
+  Widget _buildSaveActionArea() {
+    return AnimatedSize(
+      duration: AppTheme.motionBase,
+      curve: Curves.easeInOut,
+      alignment: Alignment.bottomCenter,
+      child: _showSaveAction
+          ? Padding(
+              padding: AppLayout.bottomActionPadding,
+              child: _buildSaveButton(),
+            )
+          : const SizedBox.shrink(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              gradient: AppTheme.backgroundGradient(
-                theme.brightness == Brightness.dark,
-              ),
-            ),
-            child: SafeArea(
-              child: Column(
-                children: [
-                  // Custom App Bar with Date Selector
-                  _buildCustomAppBar(),
-
-                  // Tab Bar
-                  _buildTabBar(),
-
-                  // Tab Content
-                  Expanded(
-                    child: PageView(
-                      controller: _pageController,
-                      onPageChanged: (index) {
-                        _tabController.animateTo(index);
-                      },
-                      children: [
-                        _buildFlowTab(),
-                        _buildSymptomsTab(),
-                        _buildMoodEnergyTab(),
-                        _buildPainTab(),
-                        _buildNotesTab(),
-                      ],
-                    ),
-                  ),
-
-                  // Floating Save Button spacer
-                  const SizedBox.shrink(),
-                ],
-              ),
-            ),
+      resizeToAvoidBottomInset: true,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: AppTheme.backgroundGradient(
+            theme.brightness == Brightness.dark,
           ),
-          Positioned(
-            left: 20,
-            right: 20,
-            bottom: MediaQuery.of(context).viewInsets.bottom > 0
-                ? MediaQuery.of(context).viewInsets.bottom + 12
-                : 68,
-            child: IgnorePointer(
-              ignoring: !(_hasUnsavedChanges || _isSaving || _recentlySaved),
-              child: AnimatedOpacity(
-                duration: AppTheme.motionFast,
-                opacity: (_hasUnsavedChanges || _isSaving || _recentlySaved)
-                    ? 1
-                    : 0,
-                child: AnimatedSlide(
-                  duration: AppTheme.motionBase,
-                  offset: (_hasUnsavedChanges || _isSaving || _recentlySaved)
-                      ? Offset.zero
-                      : const Offset(0, 1.2),
-                  child: _buildSaveButton(),
+        ),
+        child: SafeArea(
+          child: Column(
+            children: [
+              // Custom App Bar with Date Selector
+              _buildCustomAppBar(),
+
+              // Tab Bar
+              _buildTabBar(),
+
+              // Tab Content
+              Expanded(
+                child: PageView(
+                  controller: _pageController,
+                  onPageChanged: (index) {
+                    _tabController.animateTo(index);
+                  },
+                  children: [
+                    _buildFlowTab(),
+                    _buildSymptomsTab(),
+                    _buildMoodEnergyTab(),
+                    _buildPainTab(),
+                    _buildNotesTab(),
+                  ],
                 ),
               ),
-            ),
+
+              // Participates in layout instead of covering tab content.
+              _buildSaveActionArea(),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -765,24 +757,21 @@ class _TrackingScreenState extends State<TrackingScreen>
           const SizedBox(height: 40),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: SizedBox(
-              height: 400, // Fixed height for PainBodyMap
-              child: PainBodyMap(
-                painAreas: _painAreas,
-                onPainAreaChanged: (area, intensity) {
-                  setState(() {
-                    if (intensity > 0) {
-                      _painAreas[area] = intensity;
-                    } else {
-                      _painAreas.remove(area);
-                    }
-                  });
-                  _markUnsavedChanges();
-                },
-              ),
+            child: PainBodyMap(
+              painAreas: _painAreas,
+              onPainAreaChanged: (area, intensity) {
+                setState(() {
+                  if (intensity > 0) {
+                    _painAreas[area] = intensity;
+                  } else {
+                    _painAreas.remove(area);
+                  }
+                });
+                _markUnsavedChanges();
+              },
             ),
           ),
-          const SizedBox(height: 140), // Bottom padding
+          const SizedBox(height: AppTheme.spaceXl),
         ],
       ),
     );

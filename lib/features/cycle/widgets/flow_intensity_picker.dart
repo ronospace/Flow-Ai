@@ -112,57 +112,117 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
 
   @override
   Widget build(BuildContext context) {
-    // ignore: unused_local_variable
-    final theme = Theme.of(context);
     final intensityOptions = _getIntensityOptions(context);
     final selectedOption = intensityOptions.firstWhere(
       (option) => option.intensity == widget.selectedIntensity,
-      orElse: () => intensityOptions[0],
+      orElse: () => intensityOptions.first,
     );
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Optimized Grid View - Using better scrolling with more space
-        SizedBox(
-          height: 620, // Fixed height to avoid unbounded constraints
-          child: GridView.builder(
-            padding: const EdgeInsets.all(12),
-            physics:
-                const NeverScrollableScrollPhysics(), // Better scrolling performance
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-              childAspectRatio: 0.8, // Improved ratio for better visibility
-            ),
-            itemCount: intensityOptions.length,
-            itemBuilder: (context, index) {
-              final option = intensityOptions[index];
-              final isSelected = option.intensity == widget.selectedIntensity;
+        _buildResponsiveOptionGrid(intensityOptions),
 
-              return GestureDetector(
-                onTap: () {
-                  HapticFeedback.mediumImpact();
-                  widget.onIntensitySelected(option.intensity);
-                },
-                onLongPress: () {
-                  _showMedicalInfo(option);
-                  HapticFeedback.heavyImpact();
-                },
-                child: _buildFlowIntensityCard(option, isSelected),
-              );
-            },
-          ),
-        ),
-
-        // AI Insights Panel - Positioned at bottom for better layout
         if (widget.selectedIntensity != FlowIntensity.none)
           Container(
             margin: const EdgeInsets.fromLTRB(16, 12, 16, 8),
             child: _buildAIInsightsPanel(selectedOption),
           ),
       ],
+    );
+  }
+
+  Widget _buildResponsiveOptionGrid(List<FlowIntensityOption> options) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        const gridPadding = 12.0;
+        const spacing = 12.0;
+
+        // At 360pt and 1.0 text scale:
+        // 360 - 32 parent padding - 24 grid padding - 12 spacing
+        // = 292 / 2 = exactly 146pt per card.
+        const baseCardMinimumWidth = 146.0;
+
+        final textScale = MediaQuery.textScalerOf(
+          context,
+        ).scale(1).clamp(1.0, 2.0);
+        final availableWidth = constraints.maxWidth - (gridPadding * 2);
+        final scaledMinimumWidth = baseCardMinimumWidth * textScale;
+
+        final twoColumnRequiredWidth = (scaledMinimumWidth * 2) + spacing;
+
+        final columnCount = availableWidth >= twoColumnRequiredWidth ? 2 : 1;
+
+        final rows = <Widget>[];
+
+        for (
+          var rowStart = 0;
+          rowStart < options.length;
+          rowStart += columnCount
+        ) {
+          final cells = <Widget>[];
+
+          for (var column = 0; column < columnCount; column++) {
+            if (column > 0) {
+              cells.add(const SizedBox(width: spacing));
+            }
+
+            final index = rowStart + column;
+
+            if (index >= options.length) {
+              cells.add(const Expanded(child: SizedBox.shrink()));
+              continue;
+            }
+
+            final option = options[index];
+            final isSelected = option.intensity == widget.selectedIntensity;
+
+            cells.add(
+              Expanded(
+                child: Semantics(
+                  button: true,
+                  selected: isSelected,
+                  label: option.title,
+                  child: GestureDetector(
+                    key: ValueKey('flow-option-${option.intensity.name}'),
+                    onTap: () {
+                      HapticFeedback.mediumImpact();
+                      widget.onIntensitySelected(option.intensity);
+                    },
+                    onLongPress: () {
+                      _showMedicalInfo(option);
+                      HapticFeedback.heavyImpact();
+                    },
+                    child: _buildFlowIntensityCard(option, isSelected),
+                  ),
+                ),
+              ),
+            );
+          }
+
+          rows.add(
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: cells,
+              ),
+            ),
+          );
+        }
+
+        return Padding(
+          key: ValueKey('flow-grid-columns-$columnCount'),
+          padding: const EdgeInsets.all(gridPadding),
+          child: Column(
+            children: [
+              for (var index = 0; index < rows.length; index++) ...[
+                if (index > 0) const SizedBox(height: spacing),
+                rows[index],
+              ],
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -237,7 +297,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                   Text(
                     option.medicalInfo,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppTheme.darkGrey,
+                      color: Theme.of(context).colorScheme.onSurface,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -252,7 +312,11 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                             context,
                           ).hourlyChanges(option.hourlyChanges),
                           style: Theme.of(context).textTheme.bodySmall
-                              ?.copyWith(color: AppTheme.mediumGrey),
+                              ?.copyWith(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
+                              ),
                         ),
                       ],
                     ),
@@ -269,6 +333,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
     // ignore: unused_local_variable
     final theme = Theme.of(context);
     return Container(
+      key: const ValueKey('flow-ai-insights'),
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -388,35 +453,31 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
 
             const SizedBox(height: 8),
 
-            // Title
-            Flexible(
-              child: Text(
-                option.title,
-                style: theme.textTheme.titleSmall?.copyWith(
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                  color: isSelected ? option.color : AppTheme.darkGrey,
-                  fontSize: 14,
-                ),
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+            // Natural-height title.
+            Text(
+              option.title,
+              style: theme.textTheme.titleSmall?.copyWith(
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                color: isSelected ? option.color : theme.colorScheme.onSurface,
+                fontSize: 14,
               ),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
 
             const SizedBox(height: 2),
 
-            // Subtitle
-            Flexible(
-              child: Text(
-                option.subtitle,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: AppTheme.mediumGrey,
-                  fontSize: 10,
-                ),
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+            // Natural-height subtitle.
+            Text(
+              option.subtitle,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+                fontSize: 10,
               ),
+              textAlign: TextAlign.center,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
             ),
 
             // Medical indicator for heavy flows
@@ -451,7 +512,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
               ),
             ],
 
-            const Spacer(),
+            const SizedBox(height: 8),
 
             // Selection indicator
             if (isSelected)
@@ -550,7 +611,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                           option.title,
                           style: theme.textTheme.headlineSmall?.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: AppTheme.darkGrey,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                         ),
                         Text(
@@ -586,7 +647,7 @@ class _FlowIntensityPickerState extends State<FlowIntensityPicker> {
                       option.description,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         height: 1.5,
-                        color: AppTheme.darkGrey,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
 
