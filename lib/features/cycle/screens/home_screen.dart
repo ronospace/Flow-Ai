@@ -128,14 +128,43 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  void _loadBannerAd() {
+  Future<void> _loadBannerAd() async {
     _bannerAd?.dispose();
     _bannerAd = null;
+
     if (mounted) {
       setState(() {
         _isBannerAdReady = false;
       });
     }
+
+    await admob.AdMobService.initialize();
+    if (!mounted || !admob.AdMobService.canLoadAds) return;
+
+    final bannerAd = _adMobService.createBannerAd(
+      onLoaded: (ad) {
+        if (!mounted) {
+          ad.dispose();
+          return;
+        }
+
+        setState(() {
+          _bannerAd = ad;
+          _isBannerAdReady = true;
+        });
+      },
+      onFailedToLoad: (error) {
+        if (!mounted) return;
+
+        setState(() {
+          _bannerAd = null;
+          _isBannerAdReady = false;
+        });
+      },
+    );
+
+    _bannerAd = bannerAd;
+    bannerAd.load();
   }
 
   Future<void> _loadAIPrediction() async {

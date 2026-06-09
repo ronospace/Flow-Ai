@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/ui/adaptive_messages.dart';
@@ -30,6 +31,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
 
   bool _isEditingProfile = false;
   bool _isExporting = false;
+  bool _isDeletingAccount = false;
   bool _showPassword = false;
   bool _showNewPassword = false;
   bool _showConfirmPassword = false;
@@ -864,6 +866,71 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
     }
   }
 
+  Future<void> _performAccountDeletion() async {
+    if (_isDeletingAccount) return;
+
+    setState(() {
+      _isDeletingAccount = true;
+    });
+
+    final navigator = Navigator.of(context, rootNavigator: true);
+    final auth = Provider.of<AuthService>(context, listen: false);
+    final settings = Provider.of<SettingsProvider>(context, listen: false);
+
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(height: 16),
+            Text('Permanently deleting your account...'),
+          ],
+        ),
+      ),
+    );
+
+    try {
+      final result = await auth.deleteAccount();
+
+      if (navigator.mounted && navigator.canPop()) {
+        navigator.pop();
+      }
+      if (!mounted) return;
+
+      if (!result.isSuccess) {
+        await AdaptiveMessages.showError(
+          context,
+          result.error ?? 'Account deletion failed',
+        );
+        return;
+      }
+
+      await settings.resetToDefaults();
+      if (!mounted) return;
+
+      context.go('/auth/choice');
+    } catch (error) {
+      if (navigator.mounted && navigator.canPop()) {
+        navigator.pop();
+      }
+      if (!mounted) return;
+
+      await AdaptiveMessages.showError(
+        context,
+        'Account deletion failed: $error',
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isDeletingAccount = false;
+        });
+      }
+    }
+  }
+
   void _showDeleteAccountDialog() {
     showDialog(
       context: context,
@@ -885,16 +952,12 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
             child: const Text('Cancel'),
           ),
           ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              // Account deletion action is disabled until account lifecycle support is connected
-              _snack(
-                const SnackBar(
-                  content: Text('Account deletion is currently unavailable'),
-                  backgroundColor: AppTheme.primaryRose,
-                ),
-              );
-            },
+            onPressed: _isDeletingAccount
+                ? null
+                : () {
+                    Navigator.pop(context);
+                    _performAccountDeletion();
+                  },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppTheme.primaryRose,
             ),

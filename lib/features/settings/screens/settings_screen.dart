@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/services/app_state_service.dart';
+import '../../../core/services/ad_consent_service.dart';
 import '../../../core/services/data_export_service.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/app_logger.dart';
@@ -27,6 +28,8 @@ import 'account_management_screen.dart';
 import '../widgets/medical_citations_section.dart';
 import 'dart:io';
 
+import '../../../core/widgets/medical_sources_dialog.dart';
+
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
@@ -38,6 +41,7 @@ class _SettingsScreenState extends State<SettingsScreen>
     with TickerProviderStateMixin {
   late AnimationController _headerController;
   late AnimationController _sectionsController;
+  bool _adPrivacyOptionsRequired = false;
 
   String get _platformDisclosureLabel => Platform.isIOS
       ? 'Health Data Transparency'
@@ -65,6 +69,10 @@ class _SettingsScreenState extends State<SettingsScreen>
 
     _headerController.forward();
     _sectionsController.forward();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _refreshAdPrivacyOptionsRequirement();
+    });
   }
 
   @override
@@ -471,6 +479,21 @@ class _SettingsScreenState extends State<SettingsScreen>
                             title: 'Privacy & Data',
                             icon: Icons.cloud_download_outlined,
                             children: [
+                              if (_adPrivacyOptionsRequired)
+                                SettingsTile(
+                                  leading: const Icon(
+                                    Icons.privacy_tip_outlined,
+                                    color: AppTheme.secondaryBlue,
+                                  ),
+                                  title: 'Ad privacy choices',
+                                  subtitle:
+                                      'Review or change advertising consent',
+                                  onTap: _showAdPrivacyOptions,
+                                  trailing: const Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: 16,
+                                  ),
+                                ),
                               SettingsTile(
                                 leading: const Icon(
                                   Icons.picture_as_pdf,
@@ -1116,30 +1139,31 @@ class _SettingsScreenState extends State<SettingsScreen>
     );
   }
 
+  Future<void> _refreshAdPrivacyOptionsRequirement() async {
+    await AdConsentService.instance.refreshPrivacyOptionsRequirement();
+    if (!mounted) return;
+
+    final required = AdConsentService.instance.privacyOptionsRequired;
+    if (required != _adPrivacyOptionsRequired) {
+      setState(() {
+        _adPrivacyOptionsRequired = required;
+      });
+    }
+  }
+
+  Future<void> _showAdPrivacyOptions() async {
+    final error = await AdConsentService.instance.showPrivacyOptions();
+    if (!mounted) return;
+
+    if (error != null) {
+      AdaptiveMessages.showError(context, 'Could not open ad privacy choices');
+    }
+
+    await _refreshAdPrivacyOptionsRequirement();
+  }
+
   void _showMedicalCitations(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        child: Container(
-          constraints: const BoxConstraints(maxHeight: 600),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              AppBar(
-                leading: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios_new),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-                title: const Text('Medical Sources'),
-                automaticallyImplyLeading: false,
-              ),
-              const Expanded(child: MedicalCitationsSection()),
-            ],
-          ),
-        ),
-      ),
-    );
+    showMedicalSourcesDialog(context);
   }
 
   void _showHealthDataPrivacy(BuildContext context) {

@@ -45,12 +45,17 @@ class AuthService {
 
   /// Get current user, checking both Firebase and local users
   Future<dynamic> getCurrentUser() async {
-    // Check Firebase user first (disabled for iOS build)
-    // if (_auth?.currentUser != null) {
-    //   return _auth!.currentUser;
-    // }
+    final firebaseUser = _auth?.currentUser;
 
-    // Check local user session
+    // A signed-in Google, Apple, or Firebase email account owns the app session.
+    if (_firebaseAvailable &&
+        firebaseUser != null &&
+        !firebaseUser.isAnonymous) {
+      return firebaseUser;
+    }
+
+    // Local accounts remain the primary app identity even when an anonymous
+    // Firebase session exists only to authorize cloud features.
     if (_localUserService != null) {
       final localUser = await _localUserService!.getCurrentUser();
       if (localUser != null) {
@@ -61,7 +66,8 @@ class AuthService {
       }
     }
 
-    return null;
+    // Preserve an anonymous Firebase session only when no local account exists.
+    return firebaseUser;
   }
 
   /// Get comprehensive user data for UI display and persistence
@@ -115,6 +121,40 @@ class AuthService {
     // Check if we have a valid local user session
     final isValid = await _localUserService?.isUserSessionValid();
     return isValid == true;
+  }
+
+  /// Ensure cloud features have an authenticated Firebase identity.
+  ///
+  /// Existing Google, Apple, and Firebase email sessions are preserved.
+  /// Local-only accounts receive an isolated anonymous Firebase session.
+  Future<User?> ensureCloudIdentity() async {
+    if (!_isInitialized) {
+      await initialize();
+    }
+
+    final auth = _auth;
+    if (!_firebaseAvailable || auth == null) {
+      return null;
+    }
+
+    final existingUser = auth.currentUser;
+    if (existingUser != null) {
+      return existingUser;
+    }
+
+    try {
+      final credential = await auth.signInAnonymously();
+      return credential.user;
+    } on FirebaseAuthException catch (error) {
+      AppLogger.warning(
+        'Unable to establish Firebase cloud identity: '
+        '${error.code} ${error.message ?? ''}',
+      );
+      return null;
+    } catch (error) {
+      AppLogger.warning('Unable to establish Firebase cloud identity: $error');
+      return null;
+    }
   }
 
   Future<void> initialize() async {
@@ -642,6 +682,14 @@ class AuthService {
     try {
       await _googleSignIn?.disconnect();
     } catch (_) {}
+
+    // Never reuse a Firebase or anonymous cloud identity across app accounts.
+    try {
+      await _auth?.signOut();
+    } catch (error) {
+      debugPrint('⚠️ Firebase sign out failed: $error');
+    }
+
     try {
       debugPrint('🔐 Starting complete sign out process...');
 
@@ -800,21 +848,61 @@ class AuthService {
     }
   }
 
-  /// Delete account
+  /// Permanently delete the active Firebase or local account.
   Future<AuthResult> deleteAccount() async {
     try {
-      if (currentUser == null) {
+      final account = await getCurrentUser();
+      if (account == null) {
         return AuthResult.failure('No user signed in');
       }
 
-      await currentUser!.delete();
-      if (_prefs != null) {
-        await _prefs!.remove(_lastLoginMethodKey);
+      if (account is User) {
+        await account.delete();
+      } else if (account is LocalUser) {
+        final localService = _localUserService;
+        if (localService == null) {
+          return AuthResult.failure('Local account service is unavailable');
+        }
+
+        final deleted = await localService.deleteUser(account.uid);
+        if (!deleted) {
+          return AuthResult.failure('Local account could not be deleted');
+        }
+      } else {
+        return AuthResult.failure('Unsupported account type');
       }
 
+      await _clearAllUserData();
+
+      if (_prefs != null) {
+        await _prefs!.remove(_userDataKey);
+        await _prefs!.remove(_lastLoginMethodKey);
+        await _prefs!.remove('user_preferences');
+        await _prefs!.remove('app_settings');
+      }
+
+      try {
+        await _googleSignIn?.signOut();
+      } catch (_) {}
+
+      try {
+        await _googleSignIn?.disconnect();
+      } catch (_) {}
+
+      await _clearMemoryCache();
       return AuthResult.success(null);
-    } catch (e) {
-      return AuthResult.failure(e.toString());
+    } on FirebaseAuthException catch (error) {
+      if (error.code == 'requires-recent-login') {
+        return AuthResult.failure(
+          'Please sign in again, then retry account deletion.',
+        );
+      }
+
+      return AuthResult.failure(
+        error.message ?? 'Firebase account deletion failed',
+      );
+    } catch (error) {
+      return AuthResult.failure('Account deletion failed: $error');
     }
   }
 

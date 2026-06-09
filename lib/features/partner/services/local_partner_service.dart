@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/services/local_user_service.dart';
 import '../models/partner_models.dart'
@@ -91,14 +90,9 @@ class LocalPartnerService {
       message: personalMessage,
     );
 
-    // Save invitation
+    // Persist locally while production cloud activation is blocked.
+    // PartnerCloudGateway owns remote publication after billing recovery.
     await _saveInvitation(invitation);
-    try {
-      await FirebaseFirestore.instance
-          .collection('partnerInvites')
-          .doc(invitation.id)
-          .set(invitation.toJson());
-    } catch (_) {}
     debugPrint('✅ Partner invitation created: $invitationCode');
 
     return invitation;
@@ -120,19 +114,9 @@ class LocalPartnerService {
     // ignore: unused_local_variable
     final inviteeEmail = userInfo['userEmail'];
 
-    // Find invitation
-    PartnerInvitation? invitation;
-    try {
-      final snap = await FirebaseFirestore.instance
-          .collection('partnerInvites')
-          .where('invitationCode', isEqualTo: invitationCode)
-          .limit(1)
-          .get();
-      if (snap.docs.isNotEmpty) {
-        invitation = PartnerInvitation.fromJson(snap.docs.first.data());
-      }
-    } catch (_) {}
-    invitation ??= await _findInvitationByCode(invitationCode);
+    // Resolve locally while the production backend is unavailable.
+    // Cloud acceptance remains isolated in PartnerCloudGateway.
+    final invitation = await _findInvitationByCode(invitationCode);
     if (invitation == null) {
       debugPrint('❌ Invitation not found: $invitationCode');
       return null;
@@ -179,10 +163,6 @@ class LocalPartnerService {
 
     // Remove invitation (one-time use)
     await _removeInvitation(invitation.id);
-    await FirebaseFirestore.instance
-        .collection('partnerInvites')
-        .doc(invitation.id)
-        .delete();
 
     debugPrint('✅ Partnership created: ${partnership.id}');
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/services/source_link_launcher.dart';
+import '../../../core/widgets/source_action_button.dart';
 import '../../../core/models/medical_citation.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -359,26 +360,9 @@ class _MedicalCitationsSectionState extends State<MedicalCitationsSection> {
             ],
 
             // View source control
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton.icon(
-                onPressed: () async {
-                  final uri = Uri.parse(citation.url);
-                  if (await canLaunchUrl(uri)) {
-                    await launchUrl(uri, mode: LaunchMode.externalApplication);
-                  }
-                },
-                icon: const Icon(Icons.open_in_new, size: 18),
-                label: const Text('View source'),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: AppTheme.secondaryBlue,
-                  side: BorderSide(color: AppTheme.secondaryBlue),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                ),
-              ),
+            SourceActionButton.source(
+              color: AppTheme.secondaryBlue,
+              onPressed: () => launchSourceLink(context, citation.url),
             ),
           ],
         ),

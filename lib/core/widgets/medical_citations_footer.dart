@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
-import '../../features/settings/widgets/medical_citations_section.dart';
+import 'medical_sources_dialog.dart';
+import 'source_action_button.dart';
 
 /// Medical Citations Footer Widget
 /// Shows on all screens displaying medical information
@@ -57,47 +58,10 @@ class MedicalCitationsFooter extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton.icon(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => Dialog(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Container(
-                      constraints: const BoxConstraints(maxHeight: 600),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          AppBar(
-                            leading: IconButton(
-                              icon: const Icon(Icons.arrow_back_ios_new),
-                              onPressed: () => Navigator.of(context).pop(),
-                            ),
-                            title: const Text('Medical Sources'),
-                            automaticallyImplyLeading: false,
-                          ),
-                          const Expanded(child: MedicalCitationsSection()),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.library_books, size: 18),
-              label: const Text('View sources'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.secondaryBlue,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(999),
-                ),
-              ),
-            ),
+          SourceActionButton.sources(
+            color: AppTheme.secondaryBlue,
+            icon: Icons.library_books_rounded,
+            onPressed: () => showMedicalSourcesDialog(context),
           ),
         ],
       ),

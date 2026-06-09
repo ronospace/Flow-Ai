@@ -1,7 +1,7 @@
 module.exports = {
   root: true,
   env: {
-    es6: true,
+    es2022: true,
     node: true,
   },
   extends: [
@@ -14,20 +14,22 @@ module.exports = {
   ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
-    project: ["tsconfig.json", "tsconfig.dev.json"],
+    project: ["./tsconfig.json"],
+    tsconfigRootDir: __dirname,
     sourceType: "module",
+    ecmaVersion: 2022,
   },
   ignorePatterns: [
-    "/lib/**/*", // Ignore built files.
-    "/generated/**/*", // Ignore generated files.
+    "/lib/**/*",
+    "/generated/**/*",
   ],
   plugins: [
     "@typescript-eslint",
     "import",
   ],
   rules: {
-    "quotes": ["error", "double"],
+    quotes: ["error", "double"],
     "import/no-unresolved": 0,
-    "indent": ["error", 2],
+    indent: ["error", 2],
   },
 };

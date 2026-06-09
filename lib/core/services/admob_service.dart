@@ -2,17 +2,14 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
+import 'ad_consent_service.dart';
+
 class AdMobService {
   static final AdMobService _instance = AdMobService._internal();
   factory AdMobService() => _instance;
   AdMobService._internal();
 
-  // Test Ad Unit IDs (use these for development)
-  static const String _testBannerAdUnitId = '';
-  static const String _testInterstitialAdUnitId = '';
-  static const String _testRewardedAdUnitId = '';
-
-  // Android Production Ad Unit IDs (App ID: ca-app-pub-3053779336)
+  // Android production ad units (App ID: ca-app-pub-8707491489514576~2318954189)
   static const String _androidBannerAdUnitId =
       'ca-app-pub-8707491489514576/9591267529';
   static const String _androidInterstitialAdUnitId =
@@ -29,7 +26,7 @@ class AdMobService {
   static const String _androidRewardedInterstitialAdUnitId =
       'ca-app-pub-8707491489514576/8114534323';
 
-  // iOS Production Ad Unit IDs (App ID: ca-app-pub-5064348089)
+  // iOS production ad units (App ID: ca-app-pub-8707491489514576~3053779336)
   static const String _iosBannerAdUnitId =
       'ca-app-pub-8707491489514576/4146566820';
   static const String _iosInterstitialAdUnitId =
@@ -46,34 +43,25 @@ class AdMobService {
   static const String _iosRewardedInterstitialAdUnitId =
       'ca-app-pub-8707491489514576/2881586612';
 
-  // Ad unit getters
-  // Debug: defaults to TEST ads (safe). Override with:
-  // flutter run --dart-define=USE_TEST_ADS=false
-  static bool get _useTestAds =>
-      kDebugMode &&
-      const bool.fromEnvironment("USE_TEST_ADS", defaultValue: true);
+  // Production ads are enabled only in release builds.
+  static bool get adsEnabled => kReleaseMode;
 
-  static String get bannerAdUnitId {
-    return _useTestAds
-        ? _testBannerAdUnitId
-        : (Platform.isAndroid ? _androidBannerAdUnitId : _iosBannerAdUnitId);
-  }
+  static Future<void>? _initialization;
+  static bool _mobileAdsInitialized = false;
+  static bool _consentAllowsAds = false;
 
-  static String get interstitialAdUnitId {
-    return _useTestAds
-        ? _testInterstitialAdUnitId
-        : (Platform.isAndroid
-              ? _androidInterstitialAdUnitId
-              : _iosInterstitialAdUnitId);
-  }
+  static bool get canLoadAds =>
+      adsEnabled && _consentAllowsAds && _mobileAdsInitialized;
 
-  static String get rewardedAdUnitId {
-    return _useTestAds
-        ? _testRewardedAdUnitId
-        : (Platform.isAndroid
-              ? _androidRewardedAdUnitId
-              : _iosRewardedAdUnitId);
-  }
+  static String get bannerAdUnitId =>
+      Platform.isAndroid ? _androidBannerAdUnitId : _iosBannerAdUnitId;
+
+  static String get interstitialAdUnitId => Platform.isAndroid
+      ? _androidInterstitialAdUnitId
+      : _iosInterstitialAdUnitId;
+
+  static String get rewardedAdUnitId =>
+      Platform.isAndroid ? _androidRewardedAdUnitId : _iosRewardedAdUnitId;
 
   // Interstitial ad variables
   InterstitialAd? _interstitialAd;
@@ -83,16 +71,38 @@ class AdMobService {
   RewardedAd? _rewardedAd;
   bool _isRewardedAdReady = false;
 
-  // Initialize the Mobile Ads SDK
-  static Future<void> initialize() async {
+  // Initialize consent first, then Mobile Ads exactly once.
+  static Future<void> initialize() {
+    if (!adsEnabled || _mobileAdsInitialized) {
+      return Future<void>.value();
+    }
+
+    return _initialization ??= _initializeOnce().whenComplete(() {
+      _initialization = null;
+    });
+  }
+
+  static Future<void> _initializeOnce() async {
+    _consentAllowsAds = await AdConsentService.instance.gatherConsent();
+    if (!_consentAllowsAds || _mobileAdsInitialized) return;
+
     await MobileAds.instance.initialize();
+    _mobileAdsInitialized = true;
+
     if (kDebugMode) {
-      print('🎯 AdMob SDK initialized successfully');
+      print('🎯 AdMob initialized after consent verification');
     }
   }
 
   // Create banner ad
-  BannerAd createBannerAd() {
+  BannerAd createBannerAd({
+    required void Function(BannerAd ad) onLoaded,
+    required void Function(LoadAdError error) onFailedToLoad,
+  }) {
+    if (!canLoadAds) {
+      throw StateError('Ads are unavailable until consent permits requests');
+    }
+
     return BannerAd(
       adUnitId: bannerAdUnitId,
       size: AdSize.banner,
@@ -102,12 +112,14 @@ class AdMobService {
           if (kDebugMode) {
             print('🎯 Banner ad loaded');
           }
+          onLoaded(ad as BannerAd);
         },
         onAdFailedToLoad: (ad, error) {
           if (kDebugMode) {
             print('🎯 Banner ad failed to load: $error');
           }
           ad.dispose();
+          onFailedToLoad(error);
         },
         onAdOpened: (ad) {
           if (kDebugMode) {
@@ -125,6 +137,7 @@ class AdMobService {
 
   // Load interstitial ad
   void loadInterstitialAd() {
+    if (!canLoadAds) return;
     InterstitialAd.load(
       adUnitId: interstitialAdUnitId,
       request: const AdRequest(),
@@ -172,19 +185,24 @@ class AdMobService {
   }
 
   // Show interstitial ad
-  void showInterstitialAd() {
+  bool showInterstitialAd() {
+    if (!canLoadAds) return false;
+
     if (_isInterstitialAdReady && _interstitialAd != null) {
       _interstitialAd!.show();
-    } else {
-      if (kDebugMode) {
-        print('🎯 Interstitial ad not ready');
-      }
-      loadInterstitialAd(); // Try loading again
+      return true;
     }
+
+    if (kDebugMode) {
+      print('🎯 Interstitial ad not ready');
+    }
+    loadInterstitialAd();
+    return false;
   }
 
   // Load rewarded ad
   void loadRewardedAd() {
+    if (!canLoadAds) return;
     RewardedAd.load(
       adUnitId: rewardedAdUnitId,
       request: const AdRequest(),
@@ -232,7 +250,9 @@ class AdMobService {
   }
 
   // Show rewarded ad
-  void showRewardedAd({required Function(RewardItem) onRewarded}) {
+  bool showRewardedAd({required Function(RewardItem) onRewarded}) {
+    if (!canLoadAds) return false;
+
     if (_isRewardedAdReady && _rewardedAd != null) {
       _rewardedAd!.show(
         onUserEarnedReward: (ad, reward) {
@@ -242,12 +262,14 @@ class AdMobService {
           onRewarded(reward);
         },
       );
-    } else {
-      if (kDebugMode) {
-        print('🎯 Rewarded ad not ready');
-      }
-      loadRewardedAd(); // Try loading again
+      return true;
     }
+
+    if (kDebugMode) {
+      print('🎯 Rewarded ad not ready');
+    }
+    loadRewardedAd();
+    return false;
   }
 
   // Check if interstitial ad is ready
@@ -282,15 +304,13 @@ class AdMobService {
   }
 
   void showInterstitialAdWithFrequency() {
-    if (canShowInterstitialAd()) {
-      showInterstitialAd();
+    if (canShowInterstitialAd() && showInterstitialAd()) {
       _lastInterstitialShown = DateTime.now();
     }
   }
 
   void showRewardedAdWithFrequency({required Function(RewardItem) onRewarded}) {
-    if (canShowRewardedAd()) {
-      showRewardedAd(onRewarded: onRewarded);
+    if (canShowRewardedAd() && showRewardedAd(onRewarded: onRewarded)) {
       _lastRewardedShown = DateTime.now();
     }
   }

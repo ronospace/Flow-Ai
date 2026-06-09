@@ -142,11 +142,16 @@ Future<void> _initializeNonCriticalServices() async {
 Future<void> _initializeAdMob() async {
   try {
     await admob.AdMobService.initialize();
+
+    if (!admob.AdMobService.canLoadAds) {
+      AppLogger.info('AdMob not started because consent does not permit ads');
+      return;
+    }
+
     final adMobService = admob.AdMobService();
-    // Load ads without blocking - fire and forget
     adMobService.loadInterstitialAd();
     adMobService.loadRewardedAd();
-    AppLogger.success('AdMob initialized successfully');
+    AppLogger.success('AdMob initialized with verified consent');
   } catch (e) {
     AppLogger.warning('AdMob initialization failed: $e');
   }
