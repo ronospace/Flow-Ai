@@ -11,10 +11,10 @@ class AppLayout {
   /// The app shell already owns persistent-navigation and system-safe-area
   /// clearance, so child screens must not repeat those measurements.
   static const EdgeInsets bottomActionPadding = EdgeInsets.fromLTRB(
-    20,
-    12,
-    20,
-    12,
+    16,
+    8,
+    16,
+    8,
   );
 
   static double bottomNavigationClearance(BuildContext context) {
