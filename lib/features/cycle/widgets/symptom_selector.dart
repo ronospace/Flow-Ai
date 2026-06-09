@@ -75,141 +75,179 @@ class _SymptomSelectorState extends State<SymptomSelector> {
 
   @override
   Widget build(BuildContext context) {
-    // ignore: unused_local_variable
-    final theme = Theme.of(context);
     final symptomCategories = _getSymptomCategories(context);
+
     if (_expandedCategory.isEmpty) {
       _expandedCategory = symptomCategories.keys.first;
     }
-    return SingleChildScrollView(
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height * 0.7,
-        ),
-        child: Column(
-          children: [
-            // Selected symptoms summary
-            if (widget.selectedSymptoms.isNotEmpty) ...[
-              _buildSelectedSymptomsSummary(),
-              const SizedBox(height: 20),
-            ],
 
-            // Category selector
-            _buildCategorySelector(),
-
-            const SizedBox(height: 20),
-
-            // Symptoms list
-            Expanded(child: _buildSymptomsList()),
-          ],
-        ),
-      ),
+    return CustomScrollView(
+      key: const PageStorageKey<String>('symptom-selector-scroll'),
+      primary: false,
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      slivers: [
+        if (widget.selectedSymptoms.isNotEmpty) ...[
+          SliverToBoxAdapter(child: _buildSelectedSymptomsSummary()),
+          const SliverToBoxAdapter(child: SizedBox(height: 20)),
+        ],
+        SliverToBoxAdapter(child: _buildCategorySelector()),
+        const SliverToBoxAdapter(child: SizedBox(height: 20)),
+        _buildSymptomsSliver(),
+      ],
     );
   }
 
   Widget _buildSelectedSymptomsSummary() {
-    // ignore: unused_local_variable
     final theme = Theme.of(context);
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: theme.shadowColor.withValues(alpha: 0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(
-                Icons.checklist_rounded,
-                color: AppTheme.primaryRose,
-                size: 20,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                AppLocalizations.of(
-                  context,
-                ).selectedSymptoms(widget.selectedSymptoms.length),
-                style: theme.textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final maxChipWidth = constraints.maxWidth.isFinite
+            ? constraints.maxWidth
+            : MediaQuery.sizeOf(context).width;
+
+        return Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surface,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: theme.shadowColor.withValues(alpha: 0.1),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
               ),
             ],
           ),
-          const SizedBox(height: 12),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: widget.selectedSymptoms.map((symptom) {
-              final severity = widget.symptomSeverity[symptom] ?? 3.0;
-              return _buildSelectedSymptomChip(symptom, severity);
-            }).toList(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Icon(
+                    Icons.checklist_rounded,
+                    color: AppTheme.primaryRose,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      AppLocalizations.of(
+                        context,
+                      ).selectedSymptoms(widget.selectedSymptoms.length),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: theme.colorScheme.onSurface,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: widget.selectedSymptoms.map((symptom) {
+                  final severity = widget.symptomSeverity[symptom] ?? 3.0;
+
+                  return _buildSelectedSymptomChip(
+                    symptom,
+                    severity,
+                    maxChipWidth,
+                  );
+                }).toList(),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     ).animate().fadeIn().slideY(begin: -0.2, end: 0);
   }
 
-  Widget _buildSelectedSymptomChip(String symptom, double severity) {
+  Widget _buildSelectedSymptomChip(
+    String symptom,
+    double severity,
+    double maxWidth,
+  ) {
     final color = _getSymptomColor(symptom);
     final severityText = _getSeverityText(severity);
+    final removeLabel =
+        '${MaterialLocalizations.of(context).deleteButtonTooltip}: $symptom';
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withValues(alpha: 0.3)),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(_getSymptomEmoji(symptom), style: const TextStyle(fontSize: 14)),
-          const SizedBox(width: 6),
-          Text(
-            symptom,
-            style: TextStyle(
-              color: color,
-              fontWeight: FontWeight.w600,
-              fontSize: 12,
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: maxWidth),
+      child: Container(
+        padding: const EdgeInsetsDirectional.fromSTEB(12, 4, 4, 4),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.15),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: color.withValues(alpha: 0.3)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              _getSymptomEmoji(symptom),
+              style: const TextStyle(fontSize: 14),
             ),
-          ),
-          const SizedBox(width: 4),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-            decoration: BoxDecoration(
-              color: color,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Text(
-              severityText,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 8,
-                fontWeight: FontWeight.bold,
+            const SizedBox(width: 6),
+            Flexible(
+              child: Text(
+                symptom,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: color,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
               ),
             ),
-          ),
-          const SizedBox(width: 4),
-          GestureDetector(
-            onTap: () {
-              final updatedSymptoms = Set<String>.from(widget.selectedSymptoms);
-              updatedSymptoms.remove(symptom);
-              widget.onSymptomsChanged(updatedSymptoms);
-              HapticFeedback.lightImpact();
-            },
-            child: Icon(Icons.close, size: 14, color: color),
-          ),
-        ],
+            const SizedBox(width: 4),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                severityText,
+                maxLines: 1,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 8,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Semantics(
+              button: true,
+              label: removeLabel,
+              child: ExcludeSemantics(
+                child: IconButton(
+                  tooltip: removeLabel,
+                  constraints: const BoxConstraints.tightFor(
+                    width: 48,
+                    height: 48,
+                  ),
+                  padding: EdgeInsets.zero,
+                  onPressed: () {
+                    final updatedSymptoms = Set<String>.from(
+                      widget.selectedSymptoms,
+                    )..remove(symptom);
+
+                    widget.onSymptomsChanged(updatedSymptoms);
+                    HapticFeedback.lightImpact();
+                  },
+                  icon: Icon(Icons.close, size: 16, color: color),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -278,22 +316,24 @@ class _SymptomSelectorState extends State<SymptomSelector> {
     );
   }
 
-  Widget _buildSymptomsList() {
+  Widget _buildSymptomsSliver() {
     final symptomCategories = _getSymptomCategories(context);
     final symptoms = symptomCategories[_expandedCategory] ?? [];
 
-    return ListView.builder(
-      itemCount: symptoms.length,
-      itemBuilder: (context, index) {
-        final symptom = symptoms[index];
-        final isSelected = widget.selectedSymptoms.contains(symptom.name);
-        final severity = widget.symptomSeverity[symptom.name] ?? 3.0;
+    return SliverPadding(
+      padding: const EdgeInsets.only(bottom: AppTheme.spaceXl),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate((context, index) {
+          final symptom = symptoms[index];
+          final isSelected = widget.selectedSymptoms.contains(symptom.name);
+          final severity = widget.symptomSeverity[symptom.name] ?? 3.0;
 
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: _buildSymptomTile(symptom, isSelected, severity, index),
-        );
-      },
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: _buildSymptomTile(symptom, isSelected, severity, index),
+          );
+        }, childCount: symptoms.length),
+      ),
     );
   }
 
