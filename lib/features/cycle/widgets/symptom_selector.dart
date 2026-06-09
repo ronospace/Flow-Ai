@@ -140,7 +140,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
                 ).selectedSymptoms(widget.selectedSymptoms.length),
                 style: theme.textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppTheme.darkGrey,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
             ],
@@ -264,7 +264,9 @@ class _SymptomSelectorState extends State<SymptomSelector> {
                 child: Text(
                   category,
                   style: TextStyle(
-                    color: isSelected ? Colors.white : AppTheme.mediumGrey,
+                    color: isSelected
+                        ? Colors.white
+                        : Theme.of(context).colorScheme.onSurfaceVariant,
                     fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                   ),
                 ),
@@ -361,7 +363,9 @@ class _SymptomSelectorState extends State<SymptomSelector> {
                           fontWeight: isSelected
                               ? FontWeight.bold
                               : FontWeight.w500,
-                          color: isSelected ? symptom.color : AppTheme.darkGrey,
+                          color: isSelected
+                              ? symptom.color
+                              : Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                     ),
@@ -416,7 +420,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
             Text(
               'Severity:',
               style: theme.textTheme.bodySmall?.copyWith(
-                color: AppTheme.mediumGrey,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
                 fontWeight: FontWeight.w500,
               ),
             ),

@@ -92,10 +92,11 @@ class _PainBodyMapState extends State<PainBodyMap> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        // Body map
-        Expanded(
-          flex: 3,
+        // Bounded map geometry inside the parent scroll view.
+        AspectRatio(
+          aspectRatio: 0.82,
           child: Container(
             width: double.infinity,
             decoration: BoxDecoration(
@@ -219,6 +220,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
             children: [
               Text(
                 area.emoji,
+                textScaler: TextScaler.noScaling,
                 style: TextStyle(
                   fontSize: isSelected ? 20 : (isActive ? 18 : 16),
                 ),
@@ -227,6 +229,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
                 const SizedBox(height: 2),
                 Text(
                   intensity.round().toString(),
+                  textScaler: TextScaler.noScaling,
                   style: const TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
@@ -284,7 +287,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
                       area.name,
                       style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: AppTheme.darkGrey,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                     Text(
@@ -294,7 +297,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: intensity > 0
                             ? _getColorForIntensity(intensity)
-                            : AppTheme.mediumGrey,
+                            : Theme.of(context).colorScheme.onSurfaceVariant,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -313,7 +316,10 @@ class _PainBodyMapState extends State<PainBodyMap> {
                       _selectedArea = null;
                     });
                   },
-                  icon: const Icon(Icons.close, color: AppTheme.mediumGrey),
+                  icon: Icon(
+                    Icons.close,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                 ),
             ],
           ),
@@ -333,9 +339,13 @@ class _PainBodyMapState extends State<PainBodyMap> {
     final color = _getColorForIntensity(intensity);
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        Wrap(
+          alignment: WrapAlignment.spaceBetween,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: 12,
+          runSpacing: 8,
           children: [
             Text(
               'Pain Intensity',
@@ -360,9 +370,7 @@ class _PainBodyMapState extends State<PainBodyMap> {
             ),
           ],
         ),
-
         const SizedBox(height: 16),
-
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
             activeTrackColor: color,
@@ -381,13 +389,10 @@ class _PainBodyMapState extends State<PainBodyMap> {
               widget.onPainAreaChanged(_selectedArea!, value);
               HapticFeedback.selectionClick();
 
-              // Auto-dismiss selection after a short delay to show the body map
               if (value > 0) {
                 Future.delayed(const Duration(milliseconds: 800), () {
                   if (mounted) {
-                    setState(() {
-                      _selectedArea = null;
-                    });
+                    setState(() => _selectedArea = null);
                   }
                 });
               }
@@ -400,22 +405,29 @@ class _PainBodyMapState extends State<PainBodyMap> {
 
   Widget _buildQuickPainLevels() {
     final theme = Theme.of(context);
+
     if (_selectedArea == null) {
       return Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: AppTheme.lightGrey.withValues(alpha: 0.5),
+          color: theme.colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Row(
           children: [
-            Icon(Icons.touch_app, color: AppTheme.mediumGrey, size: 20),
+            Icon(
+              Icons.touch_app,
+              color: theme.colorScheme.onSurfaceVariant,
+              size: 20,
+            ),
             const SizedBox(width: 12),
-            Text(
-              'Tap on any body area to track pain',
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: AppTheme.mediumGrey,
-                fontStyle: FontStyle.italic,
+            Expanded(
+              child: Text(
+                'Tap on any body area to track pain',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                  fontStyle: FontStyle.italic,
+                ),
               ),
             ),
           ],
@@ -446,61 +458,90 @@ class _PainBodyMapState extends State<PainBodyMap> {
             ),
           ),
           const SizedBox(height: 12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: List.generate(6, (index) {
-              final level = index.toDouble();
-              final isSelected =
-                  (widget.painAreas[_selectedArea!] ?? 0.0) == level;
-              final color = _getColorForIntensity(level);
+          LayoutBuilder(
+            builder: (context, constraints) {
+              const spacing = 8.0;
+              final textScale = MediaQuery.textScalerOf(context).scale(1);
+              final columns = constraints.maxWidth < 330 || textScale > 1.15
+                  ? 3
+                  : 6;
+              final itemWidth =
+                  (constraints.maxWidth - spacing * (columns - 1)) / columns;
 
-              return GestureDetector(
-                onTap: () {
-                  widget.onPainAreaChanged(_selectedArea!, level);
-                  HapticFeedback.selectionClick();
+              return Wrap(
+                spacing: spacing,
+                runSpacing: spacing,
+                children: List.generate(6, (index) {
+                  final level = index.toDouble();
+                  final selected =
+                      (widget.painAreas[_selectedArea!] ?? 0) == level;
+                  final color = _getColorForIntensity(level);
 
-                  // Auto-dismiss selection after pain level is set
-                  if (level > 0) {
-                    Future.delayed(const Duration(milliseconds: 600), () {
-                      if (mounted) {
-                        setState(() {
-                          _selectedArea = null;
-                        });
-                      }
-                    });
-                  }
-                },
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  width: 45,
-                  height: 45,
-                  decoration: BoxDecoration(
-                    color: isSelected ? color : color.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: color, width: isSelected ? 2 : 1),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        level.round().toString(),
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: isSelected
-                              ? theme.colorScheme.onPrimary
-                              : color,
+                  return Semantics(
+                    button: true,
+                    selected: selected,
+                    label:
+                        'Pain level ${level.round()}: '
+                        '${_getPainLevelText(level)}',
+                    child: GestureDetector(
+                      onTap: () {
+                        widget.onPainAreaChanged(_selectedArea!, level);
+                        HapticFeedback.selectionClick();
+
+                        if (level > 0) {
+                          Future.delayed(const Duration(milliseconds: 600), () {
+                            if (mounted) {
+                              setState(() => _selectedArea = null);
+                            }
+                          });
+                        }
+                      },
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        width: itemWidth,
+                        constraints: const BoxConstraints(minHeight: 54),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 4,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: selected
+                              ? color
+                              : color.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: color,
+                            width: selected ? 2 : 1,
+                          ),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              level.round().toString(),
+                              textScaler: TextScaler.noScaling,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: selected
+                                    ? theme.colorScheme.onPrimary
+                                    : color,
+                              ),
+                            ),
+                            Text(
+                              _getPainLevelEmoji(level),
+                              textScaler: TextScaler.noScaling,
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                          ],
                         ),
                       ),
-                      Text(
-                        _getPainLevelEmoji(level),
-                        style: const TextStyle(fontSize: 12),
-                      ),
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                }),
               );
-            }),
+            },
           ),
         ],
       ),
@@ -618,13 +659,15 @@ class _PainBodyMapState extends State<PainBodyMap> {
                           area.name,
                           style: theme.textTheme.headlineSmall?.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: AppTheme.darkGrey,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                         ),
                         Text(
                           'Set your current pain level',
                           style: theme.textTheme.bodyMedium?.copyWith(
-                            color: AppTheme.mediumGrey,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
                           ),
                         ),
                       ],

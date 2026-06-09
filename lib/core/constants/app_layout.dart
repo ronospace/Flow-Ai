@@ -6,6 +6,17 @@ class AppLayout {
   static const double bottomNavigationHeight = 72.0;
   static const double bottomNavigationContentGap = 32.0;
 
+  /// Insets for a screen-owned action placed above the app shell.
+  ///
+  /// The app shell already owns persistent-navigation and system-safe-area
+  /// clearance, so child screens must not repeat those measurements.
+  static const EdgeInsets bottomActionPadding = EdgeInsets.fromLTRB(
+    20,
+    12,
+    20,
+    12,
+  );
+
   static double bottomNavigationClearance(BuildContext context) {
     return bottomNavigationHeight +
         MediaQuery.viewPaddingOf(context).bottom +
