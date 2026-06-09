@@ -244,11 +244,13 @@ class _TrackingScreenState extends State<TrackingScreen>
 
   Widget _buildSaveActionArea() {
     return AnimatedSize(
-      duration: AppTheme.motionBase,
+      key: const ValueKey('track-save-action-area'),
+      duration: AppTheme.motionFast,
       curve: Curves.easeInOut,
       alignment: Alignment.bottomCenter,
       child: _showSaveAction
           ? Padding(
+              key: const ValueKey('track-save-action-padding'),
               padding: AppLayout.bottomActionPadding,
               child: _buildSaveButton(),
             )
@@ -1148,25 +1150,20 @@ class _TrackingScreenState extends State<TrackingScreen>
       isEnabled = false;
     }
 
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppTheme.spaceLg,
-        vertical: AppTheme.spaceXl,
+    return AnimatedContainer(
+      duration: AppTheme.motionFast,
+      curve: AppTheme.motionCurve,
+      child: ModernButton(
+        key: const ValueKey('track-save-button'),
+        text: buttonText,
+        onPressed: isEnabled ? _saveTrackingData : null,
+        icon: buttonIcon,
+        type: ModernButtonType.primary,
+        size: ModernButtonSize.medium,
+        isExpanded: true,
+        isLoading: isLoading,
+        gradientColors: gradientColors,
       ),
-      child: AnimatedContainer(
-        duration: AppTheme.motionBase,
-        curve: AppTheme.motionCurve,
-        child: ModernButton(
-          text: buttonText,
-          onPressed: isEnabled ? _saveTrackingData : null,
-          icon: buttonIcon,
-          type: ModernButtonType.primary,
-          size: ModernButtonSize.medium,
-          isExpanded: true,
-          isLoading: isLoading,
-          gradientColors: gradientColors,
-        ),
-      ).animate().fadeIn(delay: 500.ms).slideY(begin: 0.3, end: 0),
     );
   }
 
