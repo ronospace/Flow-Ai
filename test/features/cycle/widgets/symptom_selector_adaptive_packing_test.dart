@@ -89,6 +89,10 @@ void main() {
     expect((first.top - second.top).abs(), lessThanOrEqualTo(1));
     expect(first.right, lessThanOrEqualTo(second.left + 1));
     expect(long.top, greaterThan(first.bottom));
+    expect(first.width, lessThan(190));
+
+    expect(second.width, lessThan(190));
+
     expect(long.width, greaterThan(first.width * 1.8));
     expect(tester.takeException(), isNull);
 
