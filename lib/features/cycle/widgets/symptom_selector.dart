@@ -102,9 +102,12 @@ class _SymptomSelectorState extends State<SymptomSelector> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final maxChipWidth = constraints.maxWidth.isFinite
+        final availableWidth = constraints.maxWidth.isFinite
             ? constraints.maxWidth
             : MediaQuery.sizeOf(context).width;
+        final contentWidth = (availableWidth - 32)
+            .clamp(0.0, double.infinity)
+            .toDouble();
 
         return Container(
           padding: const EdgeInsets.all(16),
@@ -153,10 +156,15 @@ class _SymptomSelectorState extends State<SymptomSelector> {
                 children: widget.selectedSymptoms.map((symptom) {
                   final severity = widget.symptomSeverity[symptom] ?? 3.0;
 
+                  final chipWidth = _selectedSymptomChipWidth(
+                    symptom,
+                    contentWidth,
+                  );
+
                   return _buildSelectedSymptomChip(
                     symptom,
                     severity,
-                    maxChipWidth,
+                    chipWidth,
                   );
                 }).toList(),
               ),
@@ -167,18 +175,49 @@ class _SymptomSelectorState extends State<SymptomSelector> {
     ).animate().fadeIn().slideY(begin: -0.2, end: 0);
   }
 
+  double _selectedSymptomChipWidth(String symptom, double availableWidth) {
+    const spacing = 8.0;
+    const minimumPairedWidth = 176.0;
+    const reservedChromeWidth = 120.0;
+
+    final pairedWidth = (availableWidth - spacing) / 2;
+
+    if (pairedWidth < minimumPairedWidth) {
+      return availableWidth;
+    }
+
+    final availableLabelWidth = pairedWidth - reservedChromeWidth;
+
+    if (availableLabelWidth <= 0) {
+      return availableWidth;
+    }
+
+    final painter = TextPainter(
+      text: TextSpan(
+        text: symptom,
+        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+      ),
+      maxLines: 2,
+      textDirection: Directionality.of(context),
+      textScaler: MediaQuery.textScalerOf(context),
+    )..layout(maxWidth: availableLabelWidth);
+
+    return painter.didExceedMaxLines ? availableWidth : pairedWidth;
+  }
+
   Widget _buildSelectedSymptomChip(
     String symptom,
     double severity,
-    double maxWidth,
+    double width,
   ) {
     final color = _getSymptomColor(symptom);
     final severityText = _getSeverityText(severity);
     final removeLabel =
         '${MaterialLocalizations.of(context).deleteButtonTooltip}: $symptom';
 
-    return ConstrainedBox(
-      constraints: BoxConstraints(maxWidth: maxWidth),
+    return SizedBox(
+      key: ValueKey<String>('selected-symptom-$symptom'),
+      width: width,
       child: Container(
         padding: const EdgeInsetsDirectional.fromSTEB(12, 4, 4, 4),
         decoration: BoxDecoration(
