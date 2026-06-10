@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'receipt_validation_service.dart';
 import '../models/subscription_models.dart';
 
 class SubscriptionService {
@@ -11,6 +13,8 @@ class SubscriptionService {
   SubscriptionService._internal();
 
   final InAppPurchase _iap = InAppPurchase.instance;
+  final ReceiptValidationService _receiptValidationService =
+      ReceiptValidationService();
   late StreamSubscription<List<PurchaseDetails>> _subscription;
 
   // Product IDs (configure these in App Store Connect and Google Play Console)
@@ -28,6 +32,18 @@ class SubscriptionService {
   bool get isAvailable => _isAvailable;
   UserSubscription? get currentSubscription => _currentSubscription;
   bool get isPremium => _currentSubscription?.isPremium ?? false;
+
+  bool get _isPurchaseValidationConfigured {
+    if (Platform.isIOS) {
+      return _receiptValidationService.canValidateAppleReceipts;
+    }
+
+    if (Platform.isAndroid) {
+      return _receiptValidationService.canValidateGooglePlayReceipts;
+    }
+
+    return false;
+  }
 
   /// Initialize the service
   Future<void> initialize(String userId) async {
@@ -48,7 +64,7 @@ class SubscriptionService {
 
     // Listen to purchase updates
     _subscription = _iap.purchaseStream.listen(
-      _onPurchaseUpdate,
+      (purchaseDetails) => unawaited(_onPurchaseUpdate(purchaseDetails)),
       onDone: () => _subscription.cancel(),
       onError: (error) {
         if (kDebugMode) {
@@ -141,6 +157,13 @@ class SubscriptionService {
       );
     }
 
+    if (!_isPurchaseValidationConfigured) {
+      return PurchaseResult.failure(
+        'Secure purchase validation is not configured',
+        PurchaseError.unknown,
+      );
+    }
+
     final product = _products.firstWhere(
       (p) => p.id == productId,
       orElse: () => throw Exception('Product not found'),
@@ -175,7 +198,9 @@ class SubscriptionService {
   }
 
   /// Handle purchase updates
-  void _onPurchaseUpdate(List<PurchaseDetails> purchaseDetailsList) {
+  Future<void> _onPurchaseUpdate(
+    List<PurchaseDetails> purchaseDetailsList,
+  ) async {
     for (final purchaseDetails in purchaseDetailsList) {
       if (kDebugMode) {
         print('📦 Purchase update: ${purchaseDetails.status}');
@@ -187,7 +212,7 @@ class SubscriptionService {
           break;
         case PurchaseStatus.purchased:
         case PurchaseStatus.restored:
-          _handlePurchased(purchaseDetails);
+          await _handlePurchased(purchaseDetails);
           break;
         case PurchaseStatus.error:
           _handleError(purchaseDetails);
@@ -197,9 +222,10 @@ class SubscriptionService {
           break;
       }
 
-      // Complete the purchase
+      // Complete the purchase after local processing has finished. Premium is
+      // granted only when backend validation succeeds.
       if (purchaseDetails.pendingCompletePurchase) {
-        _iap.completePurchase(purchaseDetails);
+        await _iap.completePurchase(purchaseDetails);
       }
     }
   }
@@ -215,9 +241,18 @@ class SubscriptionService {
       print('✅ Purchase successful: ${purchaseDetails.productID}');
     }
 
-    // Verify purchase (in production, verify with your backend)
-    if (await _verifyPurchase(purchaseDetails)) {
-      await _grantPremiumAccess(purchaseDetails);
+    final validationResult = await _validatePurchase(purchaseDetails);
+
+    if (validationResult?.isValid == true) {
+      await _grantPremiumAccess(purchaseDetails, validationResult!);
+      return;
+    }
+
+    if (kDebugMode) {
+      print(
+        '❌ Purchase validation failed: '
+        '${validationResult?.errorMessage ?? 'missing validation result'}',
+      );
     }
   }
 
@@ -233,30 +268,56 @@ class SubscriptionService {
     }
   }
 
-  /// Verify purchase (implement server-side verification in production)
-  Future<bool> _verifyPurchase(PurchaseDetails purchaseDetails) async {
-    // In production, send purchaseDetails.verificationData to your backend
-    // Your backend should verify with Apple/Google servers
-    // For now, we'll trust the store
+  /// Validate purchases through Flow AI backend before granting Premium.
+  Future<ReceiptValidationResult?> _validatePurchase(
+    PurchaseDetails purchaseDetails,
+  ) async {
+    final verificationData =
+        purchaseDetails.verificationData.serverVerificationData;
 
-    if (Platform.isIOS) {
-      // iOS receipt verification
-      final receipt = purchaseDetails.verificationData.serverVerificationData;
-      // TODO: Send to backend for verification
-      return receipt.isNotEmpty;
-    } else if (Platform.isAndroid) {
-      // Android purchase token verification
-      final purchaseToken =
-          purchaseDetails.verificationData.serverVerificationData;
-      // TODO: Send to backend for verification
-      return purchaseToken.isNotEmpty;
+    if (verificationData.isEmpty) {
+      return ReceiptValidationResult(
+        isValid: false,
+        errorMessage: 'Missing store verification data',
+      );
     }
 
-    return false;
+    try {
+      if (Platform.isIOS) {
+        return await _receiptValidationService.validateAppleReceipt(
+          receiptData: verificationData,
+          productId: purchaseDetails.productID,
+          isProduction: kReleaseMode,
+        );
+      }
+
+      if (Platform.isAndroid) {
+        final packageInfo = await PackageInfo.fromPlatform();
+
+        return await _receiptValidationService.validateGooglePlayReceipt(
+          purchaseToken: verificationData,
+          productId: purchaseDetails.productID,
+          packageName: packageInfo.packageName,
+        );
+      }
+
+      return ReceiptValidationResult(
+        isValid: false,
+        errorMessage: 'Unsupported purchase platform',
+      );
+    } catch (e) {
+      return ReceiptValidationResult(
+        isValid: false,
+        errorMessage: 'Purchase validation failed: ${e.toString()}',
+      );
+    }
   }
 
   /// Grant premium access after successful purchase
-  Future<void> _grantPremiumAccess(PurchaseDetails purchaseDetails) async {
+  Future<void> _grantPremiumAccess(
+    PurchaseDetails purchaseDetails,
+    ReceiptValidationResult validationResult,
+  ) async {
     final userId = _currentSubscription?.userId ?? 'unknown';
     final isYearly = purchaseDetails.productID == yearlyProductId;
 
@@ -265,9 +326,10 @@ class SubscriptionService {
       int.tryParse(purchaseDetails.transactionDate ?? '0') ??
           DateTime.now().millisecondsSinceEpoch,
     );
-    final expiryDate = isYearly
+    final fallbackExpiryDate = isYearly
         ? purchaseDate.add(const Duration(days: 365))
         : purchaseDate.add(const Duration(days: 30));
+    final expiryDate = validationResult.expirationDate ?? fallbackExpiryDate;
 
     _currentSubscription = UserSubscription.premium(
       userId: userId,
@@ -275,8 +337,10 @@ class SubscriptionService {
       billingPeriod: isYearly ? BillingPeriod.yearly : BillingPeriod.monthly,
       purchaseDate: purchaseDate,
       expiryDate: expiryDate,
-      transactionId: purchaseDetails.purchaseID,
-      originalTransactionId: purchaseDetails.purchaseID,
+      transactionId:
+          validationResult.transactionId ?? purchaseDetails.purchaseID,
+      originalTransactionId:
+          validationResult.originalTransactionId ?? purchaseDetails.purchaseID,
     );
 
     // Save to persistent storage
@@ -301,24 +365,19 @@ class SubscriptionService {
 
       await _iap.restorePurchases();
 
-      // Load saved subscription from storage
-      final prefs = await SharedPreferences.getInstance();
-      final subscriptionJson = prefs.getString('user_subscription');
+      // Restore events are delivered through purchaseStream and must pass
+      // backend validation before Premium is granted. Local storage alone is
+      // never trusted as proof of entitlement.
+      final restoredIsPremium = _currentSubscription?.isPremium ?? false;
 
-      if (subscriptionJson != null) {
-        // Parse and validate subscription
-        // TODO: Implement proper parsing from JSON
-        if (kDebugMode) {
-          print('✅ Subscription restored from storage');
-        }
-        return true;
-      } else {
+      if (!restoredIsPremium) {
         _currentSubscription = UserSubscription.free(userId);
         if (kDebugMode) {
-          print('ℹ️ No previous subscription found');
+          print('ℹ️ No backend-validated restored subscription found');
         }
-        return false;
       }
+
+      return restoredIsPremium;
     } catch (e) {
       if (kDebugMode) {
         print('❌ Error restoring purchases: $e');
