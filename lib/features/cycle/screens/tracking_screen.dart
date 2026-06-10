@@ -345,26 +345,33 @@ class _TrackingScreenState extends State<TrackingScreen>
                       size: 20,
                     ),
                     const SizedBox(width: 12),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          DateFormat('EEEE').format(_selectedDate),
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.onSurface.withValues(
-                              alpha: 0.6,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            DateFormat('EEEE').format(_selectedDate),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.colorScheme.onSurface.withValues(
+                                alpha: 0.6,
+                              ),
                             ),
                           ),
-                        ),
-                        Text(
-                          DateFormat('MMMM d, y').format(_selectedDate),
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: AppTheme.fwSemi,
+                          Text(
+                            DateFormat('MMMM d, y').format(_selectedDate),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: AppTheme.fwSemi,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                    const Spacer(),
+                    const SizedBox(width: 8),
                     Icon(
                       Icons.expand_more,
                       color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
@@ -782,6 +789,8 @@ class _TrackingScreenState extends State<TrackingScreen>
   Widget _buildNotesTab() {
     final theme = Theme.of(context);
     return SingleChildScrollView(
+      key: const ValueKey('track-notes-scroll-view'),
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       padding: const EdgeInsets.symmetric(
         horizontal: AppTheme.spaceLg,
         vertical: AppTheme.spaceXl,
@@ -812,7 +821,7 @@ class _TrackingScreenState extends State<TrackingScreen>
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Container(
-              constraints: const BoxConstraints(minHeight: 200),
+              key: const ValueKey('track-notes-editor'),
               decoration: BoxDecoration(
                 color: theme.cardColor,
                 borderRadius: BorderRadius.circular(12),
@@ -923,7 +932,7 @@ class _TrackingScreenState extends State<TrackingScreen>
 
                   // Text Input Area
                   Container(
-                    constraints: const BoxConstraints(minHeight: 180),
+                    key: const ValueKey('track-notes-input-area'),
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16,
                       vertical: 20,
@@ -934,52 +943,50 @@ class _TrackingScreenState extends State<TrackingScreen>
                         bottomRight: Radius.circular(12),
                       ),
                     ),
-                    child: TextField(
-                      controller: _notesController,
-                      textInputAction: TextInputAction.done,
-                      maxLines: null,
-                      minLines: 8,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        height: 1.5,
-                        color: theme.textTheme.bodyMedium?.color,
-                      ),
-                      decoration: InputDecoration(
-                        hintText:
-                            'How are you feeling today? Any symptoms, mood changes, or observations you\'d like to remember?\n\nTip: Recording your thoughts helps identify patterns over time.',
-                        hintStyle: TextStyle(
-                          color: theme.textTheme.bodyMedium?.color?.withValues(
-                            alpha: 0.1,
-                          ),
-                          fontSize: AppTheme.fsMd,
+                    child: Semantics(
+                      container: true,
+                      textField: true,
+                      label: AppLocalizations.of(context).notesTab,
+                      child: TextField(
+                        key: const ValueKey('track-notes-field'),
+                        controller: _notesController,
+                        keyboardType: TextInputType.multiline,
+                        textInputAction: TextInputAction.newline,
+                        textCapitalization: TextCapitalization.sentences,
+                        maxLines: null,
+                        minLines: 5,
+                        scrollPadding: const EdgeInsets.all(AppTheme.spaceXl),
+                        style: theme.textTheme.bodyMedium?.copyWith(
                           height: 1.5,
+                          color: theme.textTheme.bodyMedium?.color,
                         ),
-                        border: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        enabledBorder: InputBorder.none,
+                        decoration: InputDecoration(
+                          hintText:
+                              'How are you feeling today? Any symptoms, mood changes, or observations you\'d like to remember?\n\nTip: Recording your thoughts helps identify patterns over time.',
+                          hintStyle: TextStyle(
+                            color: theme.textTheme.bodyMedium?.color
+                                ?.withValues(alpha: 0.1),
+                            fontSize: AppTheme.fsMd,
+                            height: 1.5,
+                          ),
+                          border: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                        ),
+                        onChanged: (value) {
+                          if (_notes == value) {
+                            return;
+                          }
+
+                          setState(() {
+                            _notes = value;
+                          });
+                          _markUnsavedChanges();
+                        },
+                        onTapOutside: (_) {
+                          FocusScope.of(context).unfocus();
+                        },
                       ),
-                      onChanged: (value) {
-                        setState(() {
-                          _notes = value;
-                        });
-                      },
-                      onSubmitted: (_) {
-                        FocusScope.of(context).unfocus();
-                        if (_notesController.text.trim() != _notes.trim()) {
-                          _markUnsavedChanges();
-                        }
-                      },
-                      onEditingComplete: () {
-                        FocusScope.of(context).unfocus();
-                        if (_notesController.text.trim() != _notes.trim()) {
-                          _markUnsavedChanges();
-                        }
-                      },
-                      onTapOutside: (_) {
-                        FocusScope.of(context).unfocus();
-                        if (_notesController.text.trim() != _notes.trim()) {
-                          _markUnsavedChanges();
-                        }
-                      },
                     ),
                   ),
                 ],
@@ -1020,7 +1027,6 @@ class _TrackingScreenState extends State<TrackingScreen>
               ],
             ),
           ).animate().fadeIn(delay: 400.ms),
-          const SizedBox(height: 140),
         ],
       ),
     );
@@ -1070,42 +1076,53 @@ class _TrackingScreenState extends State<TrackingScreen>
                   ),
                 ],
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              emoji,
-              style: TextStyle(
-                fontSize: 15,
-                shadows: isSelected
-                    ? [
-                        Shadow(
-                          color: AppTheme.primaryRose.withValues(alpha: 0.3),
-                          blurRadius: 4,
-                        ),
-                      ]
-                    : null,
+        child: Semantics(
+          button: true,
+          selected: isSelected,
+          label: label,
+          excludeSemantics: true,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                emoji,
+                style: TextStyle(
+                  fontSize: 15,
+                  shadows: isSelected
+                      ? [
+                          Shadow(
+                            color: AppTheme.primaryRose.withValues(alpha: 0.3),
+                            blurRadius: 4,
+                          ),
+                        ]
+                      : null,
+                ),
               ),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              label,
-              style: theme.textTheme.bodySmall?.copyWith(
+              const SizedBox(width: 8),
+              Flexible(
+                child: Text(
+                  label,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: true,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: isSelected
+                        ? AppTheme.primaryRose
+                        : theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 4),
+              Icon(
+                isSelected ? Icons.check_circle : Icons.add_circle_outline,
+                size: 14,
                 color: isSelected
                     ? AppTheme.primaryRose
-                    : theme.colorScheme.onSurface.withValues(alpha: 0.8),
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                    : theme.colorScheme.onSurface.withValues(alpha: 0.6),
               ),
-            ),
-            const SizedBox(width: 2),
-            Icon(
-              isSelected ? Icons.check_circle : Icons.add_circle_outline,
-              size: 14,
-              color: isSelected
-                  ? AppTheme.primaryRose
-                  : theme.colorScheme.onSurface.withValues(alpha: 0.6),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
