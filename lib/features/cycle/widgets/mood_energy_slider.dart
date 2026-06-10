@@ -254,32 +254,39 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
           child: Column(
             children: [
               // Enhanced Header with Neural Activity Indicator
-              Row(
-                children: [
-                  Column(
+              LayoutBuilder(
+                key: const ValueKey('mood-header-responsive-layout'),
+                builder: (context, constraints) {
+                  final textScale = MediaQuery.textScalerOf(context).scale(1);
+                  final useStackedLayout =
+                      constraints.maxWidth < 420 || textScale > 1.2;
+
+                  final title = Column(
+                    key: const ValueKey('mood-header-title'),
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         widget.label,
                         style: theme.textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.onSurface,
+                          color: theme.colorScheme.onSurface,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         'Biometric Analysis',
+                        softWrap: true,
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          color: theme.colorScheme.onSurfaceVariant,
                           fontSize: 10,
                         ),
                       ),
                     ],
-                  ),
-                  const Spacer(),
+                  );
 
-                  // Neural Activity Indicator
-                  Container(
+                  final indicator = Container(
+                    key: const ValueKey('mood-neural-indicator'),
                     width: 60,
                     height: 24,
                     decoration: BoxDecoration(
@@ -288,7 +295,6 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                     ),
                     child: Stack(
                       children: [
-                        // Animated wave pattern
                         Positioned.fill(
                           child: CustomPaint(
                             painter: NeuralWavePainter(
@@ -300,12 +306,10 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                         ),
                       ],
                     ),
-                  ),
+                  );
 
-                  const SizedBox(width: 12),
-
-                  // Status Badge
-                  Container(
+                  final badge = Container(
+                    key: const ValueKey('mood-status-badge'),
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12,
                       vertical: 6,
@@ -328,14 +332,43 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
                     ),
                     child: Text(
                       levelText,
+                      softWrap: true,
+                      textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 12,
                       ),
                     ),
-                  ),
-                ],
+                  );
+
+                  if (useStackedLayout) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        title,
+                        const SizedBox(height: 12),
+                        Wrap(
+                          spacing: 12,
+                          runSpacing: 8,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [indicator, badge],
+                        ),
+                      ],
+                    );
+                  }
+
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(child: title),
+                      const SizedBox(width: 12),
+                      indicator,
+                      const SizedBox(width: 12),
+                      badge,
+                    ],
+                  );
+                },
               ),
 
               const SizedBox(height: 32),
@@ -622,54 +655,66 @@ class _MoodEnergySliderState extends State<MoodEnergySlider>
 
               // Range labels with enhanced styling
               Padding(
+                key: const ValueKey('mood-range-labels'),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 12,
                   vertical: 8,
                 ),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          _getLevelText(widget.min),
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: _getColorForValue(widget.min),
-                            fontWeight: FontWeight.w600,
+                    Expanded(
+                      child: Column(
+                        key: const ValueKey('mood-range-min'),
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            _getLevelText(widget.min),
+                            softWrap: true,
+                            textAlign: TextAlign.start,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: _getColorForValue(widget.min),
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
-                        Text(
-                          'Min',
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.onSurfaceVariant,
+                          Text(
+                            'Min',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          _getLevelText(widget.max),
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: _getColorForValue(widget.max),
-                            fontWeight: FontWeight.w600,
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        key: const ValueKey('mood-range-max'),
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            _getLevelText(widget.max),
+                            softWrap: true,
+                            textAlign: TextAlign.end,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: _getColorForValue(widget.max),
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
-                        Text(
-                          'Max',
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.onSurfaceVariant,
+                          Text(
+                            'Max',
+                            textAlign: TextAlign.end,
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ),
