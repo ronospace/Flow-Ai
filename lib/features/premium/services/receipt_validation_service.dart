@@ -3,30 +3,35 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 
 /// Receipt Validation Service
-/// Validates purchase receipts from App Store and Google Play
+/// Validates purchase receipts from App Store and Google Play through
+/// Flow AI backend only. The client never grants entitlement from local
+/// receipt presence.
 class ReceiptValidationService {
-  // Optional backend receipt validation endpoints.
+  // Backend receipt validation endpoints.
   static const String _appleValidationEndpoint = '';
   static const String _googleValidationEndpoint = '';
   static const String _subscriptionStatusEndpoint = '';
 
-  // Apple Sandbox vs Production
-  static const String _appleSandboxUrl =
-      'https://sandbox.itunes.apple.com/verifyReceipt';
-  static const String _appleProductionUrl =
-      'https://buy.itunes.apple.com/verifyReceipt';
+  bool get canValidateAppleReceipts =>
+      _appleValidationEndpoint.trim().isNotEmpty;
+  bool get canValidateGooglePlayReceipts =>
+      _googleValidationEndpoint.trim().isNotEmpty;
+  bool get canValidateSubscriptionStatus =>
+      _subscriptionStatusEndpoint.trim().isNotEmpty;
 
-  /// Validate App Store receipt
-  /// Returns true if receipt is valid, false otherwise
+  /// Validate App Store receipt through Flow AI backend only.
   Future<ReceiptValidationResult> validateAppleReceipt({
     required String receiptData,
     required String productId,
     bool isProduction = false,
   }) async {
     try {
-      debugPrint('🍎 Validating Apple receipt for product: $productId');
+      final environment = isProduction ? 'production' : 'sandbox';
+      debugPrint(
+        '🍎 Validating Apple receipt through backend for product: '
+        '$productId ($environment)',
+      );
 
-      // Option 1: Validate through configured backend service when available
       final backendResult = await _validateThroughBackend(
         endpoint: _appleValidationEndpoint,
         receiptData: receiptData,
@@ -34,15 +39,11 @@ class ReceiptValidationService {
         platform: 'ios',
       );
 
-      if (backendResult != null) {
-        return backendResult;
-      }
-
-      // Option 2: Direct validation with Apple (fallback, less secure)
-      return await _validateWithAppleDirect(
-        receiptData: receiptData,
-        isProduction: isProduction,
-      );
+      return backendResult ??
+          ReceiptValidationResult(
+            isValid: false,
+            errorMessage: 'Backend validation unavailable',
+          );
     } catch (e) {
       debugPrint('❌ Apple receipt validation error: $e');
       return ReceiptValidationResult(
@@ -52,7 +53,7 @@ class ReceiptValidationService {
     }
   }
 
-  /// Validate Google Play receipt
+  /// Validate Google Play receipt through Flow AI backend only.
   Future<ReceiptValidationResult> validateGooglePlayReceipt({
     required String purchaseToken,
     required String productId,
@@ -61,7 +62,6 @@ class ReceiptValidationService {
     try {
       debugPrint('🤖 Validating Google Play receipt for product: $productId');
 
-      // Validate through configured backend service when available
       final result = await _validateThroughBackend(
         endpoint: _googleValidationEndpoint,
         receiptData: purchaseToken,
@@ -84,7 +84,7 @@ class ReceiptValidationService {
     }
   }
 
-  /// Validate through configured backend receipt service
+  /// Validate through configured backend receipt service.
   Future<ReceiptValidationResult?> _validateThroughBackend({
     required String endpoint,
     required String receiptData,
@@ -101,11 +101,7 @@ class ReceiptValidationService {
       final response = await http
           .post(
             Uri.parse(endpoint),
-            headers: {
-              'Content-Type': 'application/json',
-              // Add authentication headers if needed
-              // 'Authorization': 'Bearer YOUR_API_KEY',
-            },
+            headers: {'Content-Type': 'application/json'},
             body: jsonEncode({
               'receipt': receiptData,
               'productId': productId,
@@ -126,137 +122,31 @@ class ReceiptValidationService {
           originalTransactionId: data['originalTransactionId'],
           errorMessage: data['error'],
         );
-      } else {
-        debugPrint('Backend validation failed: ${response.statusCode}');
-        return null;
       }
+
+      debugPrint('Backend validation failed: ${response.statusCode}');
+      return null;
     } catch (e) {
       debugPrint('Backend validation error: $e');
       return null;
     }
   }
 
-  /// Direct validation with Apple (fallback, less secure)
-  /// Note: Apple recommends validating on your own server
-  Future<ReceiptValidationResult> _validateWithAppleDirect({
-    required String receiptData,
-    required bool isProduction,
-  }) async {
-    final url = isProduction ? _appleProductionUrl : _appleSandboxUrl;
-
-    try {
-      final response = await http
-          .post(
-            Uri.parse(url),
-            headers: {'Content-Type': 'application/json'},
-            body: jsonEncode({
-              'receipt-data': receiptData,
-              'password': '', // Your App-Specific Shared Secret
-              'exclude-old-transactions': true,
-            }),
-          )
-          .timeout(const Duration(seconds: 10));
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        final status = data['status'] as int;
-
-        // Status 0 = valid receipt
-        if (status == 0) {
-          final latestReceiptInfo = data['latest_receipt_info'];
-          if (latestReceiptInfo != null && latestReceiptInfo.isNotEmpty) {
-            final receipt = latestReceiptInfo[0];
-
-            return ReceiptValidationResult(
-              isValid: true,
-              expirationDate: _parseAppleDate(receipt['expires_date_ms']),
-              transactionId: receipt['transaction_id'],
-              originalTransactionId: receipt['original_transaction_id'],
-            );
-          }
-        } else if (status == 21007) {
-          // Receipt is from sandbox but sent to production
-          // Retry with sandbox
-          return await _validateWithAppleDirect(
-            receiptData: receiptData,
-            isProduction: false,
-          );
-        }
-
-        return ReceiptValidationResult(
-          isValid: false,
-          errorMessage: _getAppleErrorMessage(status),
-        );
-      }
-
-      return ReceiptValidationResult(
-        isValid: false,
-        errorMessage: 'Invalid response from Apple: ${response.statusCode}',
-      );
-    } catch (e) {
-      return ReceiptValidationResult(
-        isValid: false,
-        errorMessage: 'Network error: ${e.toString()}',
-      );
-    }
-  }
-
-  /// Parse Apple timestamp (milliseconds since epoch)
-  DateTime? _parseAppleDate(dynamic milliseconds) {
-    if (milliseconds == null) return null;
-    try {
-      final ms = int.parse(milliseconds.toString());
-      return DateTime.fromMillisecondsSinceEpoch(ms);
-    } catch (e) {
-      return null;
-    }
-  }
-
-  /// Get human-readable error message for Apple status codes
-  String _getAppleErrorMessage(int status) {
-    switch (status) {
-      case 21000:
-        return 'The App Store could not read the receipt data.';
-      case 21002:
-        return 'The receipt data was malformed.';
-      case 21003:
-        return 'The receipt could not be authenticated.';
-      case 21004:
-        return 'The shared secret does not match.';
-      case 21005:
-        return 'The receipt server is not available.';
-      case 21006:
-        return 'This receipt is valid but expired.';
-      case 21007:
-        return 'This receipt is from the sandbox environment.';
-      case 21008:
-        return 'This receipt is from the production environment.';
-      case 21010:
-        return 'This receipt could not be authorized.';
-      default:
-        return 'Unknown error (status: $status)';
-    }
-  }
-
-  /// Verify subscription is still active
+  /// Verify subscription is still active through Flow AI backend only.
   Future<bool> verifySubscriptionActive({
     required String userId,
     required String subscriptionId,
   }) async {
-    if (_subscriptionStatusEndpoint.trim().isEmpty) {
+    if (!canValidateSubscriptionStatus) {
       debugPrint('Subscription status endpoint is not configured');
       return false;
     }
 
     try {
-      // Query configured backend to check subscription status
       final response = await http
           .get(
             Uri.parse('$_subscriptionStatusEndpoint/$userId/$subscriptionId'),
-            headers: {
-              'Content-Type': 'application/json',
-              // Add authentication headers
-            },
+            headers: {'Content-Type': 'application/json'},
           )
           .timeout(const Duration(seconds: 10));
 
