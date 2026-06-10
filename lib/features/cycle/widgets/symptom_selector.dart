@@ -158,6 +158,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
 
                   final chipWidth = _selectedSymptomChipWidth(
                     symptom,
+                    severity,
                     contentWidth,
                   );
 
@@ -175,34 +176,73 @@ class _SymptomSelectorState extends State<SymptomSelector> {
     ).animate().fadeIn().slideY(begin: -0.2, end: 0);
   }
 
-  double _selectedSymptomChipWidth(String symptom, double availableWidth) {
+  double _selectedSymptomChipWidth(
+    String symptom,
+    double severity,
+    double availableWidth,
+  ) {
     const spacing = 8.0;
-    const minimumPairedWidth = 176.0;
-    const reservedChromeWidth = 120.0;
+    const compactChipWidth = 184.0;
+    const baseChromeWidth = 92.0;
+    const minimumReservedChromeWidth = 124.0;
+    const maximumReservedChromeWidth = 136.0;
+
+    if (availableWidth <= 0) {
+      return 0;
+    }
 
     final pairedWidth = (availableWidth - spacing) / 2;
 
-    if (pairedWidth < minimumPairedWidth) {
+    if (pairedWidth < compactChipWidth) {
       return availableWidth;
     }
 
-    final availableLabelWidth = pairedWidth - reservedChromeWidth;
+    final textDirection = Directionality.of(context);
+    final textScaler = MediaQuery.textScalerOf(context);
+    final severityText = _getSeverityText(severity);
+    final severityWidth = _selectedSymptomMeasuredTextWidth(
+      severityText,
+      const TextStyle(fontSize: 8, fontWeight: FontWeight.bold),
+      textScaler,
+      textDirection,
+    );
+    final reservedChromeWidth = (baseChromeWidth + severityWidth)
+        .clamp(minimumReservedChromeWidth, maximumReservedChromeWidth)
+        .toDouble();
+    final labelCapacity = compactChipWidth - reservedChromeWidth;
 
-    if (availableLabelWidth <= 0) {
+    if (labelCapacity <= 0) {
       return availableWidth;
     }
 
+    final labelStyle = const TextStyle(
+      fontSize: 12,
+      fontWeight: FontWeight.w600,
+    );
     final painter = TextPainter(
-      text: TextSpan(
-        text: symptom,
-        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-      ),
+      text: TextSpan(text: symptom, style: labelStyle),
       maxLines: 2,
-      textDirection: Directionality.of(context),
-      textScaler: MediaQuery.textScalerOf(context),
-    )..layout(maxWidth: availableLabelWidth);
+      textDirection: textDirection,
+      textScaler: textScaler,
+    )..layout(maxWidth: labelCapacity);
 
-    return painter.didExceedMaxLines ? availableWidth : pairedWidth;
+    return painter.didExceedMaxLines ? availableWidth : compactChipWidth;
+  }
+
+  double _selectedSymptomMeasuredTextWidth(
+    String text,
+    TextStyle style,
+    TextScaler textScaler,
+    TextDirection textDirection,
+  ) {
+    final painter = TextPainter(
+      text: TextSpan(text: text, style: style),
+      maxLines: 1,
+      textDirection: textDirection,
+      textScaler: textScaler,
+    )..layout();
+
+    return painter.width;
   }
 
   Widget _buildSelectedSymptomChip(
