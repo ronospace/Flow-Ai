@@ -4,10 +4,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../../generated/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/services/admob_service.dart' as admob;
 import '../../../core/services/app_state_service.dart';
 import '../../../core/models/cycle_data.dart';
 import '../providers/cycle_provider.dart';
@@ -18,7 +16,6 @@ import '../../healthcare/screens/healthcare_provider_portal_screen.dart';
 import '../../analytics/screens/enhanced_analytics_dashboard_screen.dart';
 import '../../../core/ai/period_prediction_engine.dart';
 import '../../ai_predictions/widgets/ai_prediction_card.dart';
-import '../widgets/premium_insights_unlock_card.dart';
 import '../../ai_predictions/screens/ai_predictions_screen.dart';
 import 'dart:math' as math;
 import 'dart:ui';
@@ -39,11 +36,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   late Animation<double> _dashboardAnimation;
   late Animation<double> _healthAnimation;
   late Animation<double> _predictiveAnimation;
-
-  // AdMob
-  BannerAd? _bannerAd;
-  bool _isBannerAdReady = false;
-  final admob.AdMobService _adMobService = admob.AdMobService();
 
   // AI Prediction
   PeriodPrediction? _currentPrediction;
@@ -103,13 +95,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         }
       });
 
-      // Load ad even later to not impact startup
-      Future.delayed(const Duration(milliseconds: 1000), () {
-        if (mounted) {
-          _loadBannerAd();
-        }
-      });
-
       // Load AI prediction
       Future.delayed(const Duration(milliseconds: 800), () {
         if (mounted) {
@@ -124,47 +109,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     _dashboardController.dispose();
     _healthController.dispose();
     _predictiveController.dispose();
-    _bannerAd?.dispose();
     super.dispose();
   }
 
-  Future<void> _loadBannerAd() async {
-    _bannerAd?.dispose();
-    _bannerAd = null;
-
-    if (mounted) {
-      setState(() {
-        _isBannerAdReady = false;
-      });
-    }
-
-    await admob.AdMobService.initialize();
-    if (!mounted || !admob.AdMobService.canLoadAds) return;
-
-    final bannerAd = _adMobService.createBannerAd(
-      onLoaded: (ad) {
-        if (!mounted) {
-          ad.dispose();
-          return;
-        }
-
-        setState(() {
-          _bannerAd = ad;
-          _isBannerAdReady = true;
-        });
-      },
-      onFailedToLoad: (error) {
-        if (!mounted) return;
-
-        setState(() {
-          _bannerAd = null;
-          _isBannerAdReady = false;
-        });
-      },
-    );
-
-    _bannerAd = bannerAd;
-    bannerAd.load();
+  void _showPremiumInsightsPaywall() {
+    context.push('/premium/paywall');
   }
 
   Future<void> _loadAIPrediction() async {
@@ -197,22 +146,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         });
       }
     }
-  }
-
-  Widget _buildBannerAdWidget() {
-    final theme = Theme.of(context);
-    return Container(
-      width: double.infinity,
-      height: 60,
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: theme.cardColor,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: theme.dividerColor, width: 1),
-        boxShadow: [...AppTheme.shadowSm(theme.shadowColor)],
-      ),
-      child: AdWidget(ad: _bannerAd!),
-    ).animate().fadeIn(delay: 1200.ms).slideY(begin: 0.2, end: 0);
   }
 
   Widget _buildLockedAdvancedInsightTeaserWidget() {
@@ -300,7 +233,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 child: Material(
                   color: Colors.transparent,
                   child: InkWell(
-                    onTap: _showRewardedAdForInsights,
+                    onTap: _showPremiumInsightsPaywall,
                     borderRadius: BorderRadius.circular(12),
                     child: Container(
                       width: double.infinity,
@@ -334,7 +267,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           const SizedBox(width: 10),
                           Flexible(
                             child: Text(
-                              localizations.watchAdUnlockInsights,
+                              localizations.unlockPremiumAiInsights,
                               overflow: TextOverflow.ellipsis,
                               style: theme.textTheme.titleSmall?.copyWith(
                                 color: theme.colorScheme.onPrimary,
@@ -353,44 +286,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ),
       ],
     ).animate().fadeIn(delay: 650.ms).slideX(begin: 0.15, end: 0);
-  }
-
-  void _showRewardedAdForInsights() {
-    final localizations = AppLocalizations.of(context);
-    final theme = Theme.of(context);
-    _adMobService.showRewardedAdWithFrequency(
-      onRewarded: (reward) {
-        // User watched the full ad, unlock premium insights
-        _unlockPremiumInsights();
-
-        // Completion-based interstitial (post-reward unlock)
-        _adMobService.showInterstitialAdWithFrequency();
-        // Show success message
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Row(
-              children: [
-                Icon(Icons.star, color: AppTheme.warningOrange),
-                const SizedBox(width: 8),
-                Text(
-                  localizations.premiumInsightsUnlocked,
-                  style: TextStyle(
-                    color: theme.colorScheme.onPrimary,
-                    fontWeight: AppTheme.fwSemi,
-                  ),
-                ),
-              ],
-            ),
-            backgroundColor: AppTheme.sweetPeach,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            duration: const Duration(seconds: 3),
-          ),
-        );
-      },
-    );
   }
 
   void _unlockPremiumInsights() {
@@ -506,14 +401,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                       _navigateToAdvancedAnalytics(),
                                 ),
                               ),
-
-                              // Banner Ad - load last to not impact UI
-                              if (_isBannerAdReady) ...[
-                                const SizedBox(height: AppTheme.spaceXxl),
-                                _LazyWidget(
-                                  builder: () => _buildBannerAdWidget(),
-                                ),
-                              ],
                             ],
                           ),
                         );
@@ -1374,13 +1261,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           if (provider.insights.isNotEmpty) ...[
             // Advanced insights lock
             // Premium AI insights unlock widget
-            if (!provider.premiumUnlocked)
-              PremiumInsightsUnlockCard(
-                theme: theme,
-                localizations: AppLocalizations.of(context),
-                onWatchAd: _showRewardedAdForInsights,
-              ),
-
             if (!provider.premiumUnlocked)
               _buildLockedAdvancedInsightTeaserWidget(),
 
