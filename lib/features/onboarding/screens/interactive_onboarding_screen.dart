@@ -122,7 +122,7 @@ class _InteractiveOnboardingScreenState
               IconButton(
                 onPressed: () => _showSkipDialog(context, controller),
                 icon: Icon(
-                  Icons.close,
+                  Icons.keyboard_arrow_down_rounded,
                   color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                 ),
               ),

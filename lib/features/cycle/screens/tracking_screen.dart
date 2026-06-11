@@ -637,6 +637,8 @@ class _TrackingScreenState extends State<TrackingScreen>
             child: SymptomSelector(
               selectedSymptoms: _symptoms,
               symptomSeverity: _symptomSeverity,
+              collapseSelectedSummary:
+                  !_hasUnsavedChanges && !_isSaving && !_recentlySaved,
               onSymptomsChanged: (symptoms) {
                 setState(() {
                   _symptoms.clear();

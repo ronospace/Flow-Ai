@@ -10,7 +10,10 @@ const symptoms = <String>[
   'Severe and persistent lower abdominal cramping',
 ];
 
-Widget harness(TextDirection direction) {
+Widget harness(
+  TextDirection direction, {
+  bool collapseSelectedSummary = false,
+}) {
   return MaterialApp(
     locale: direction == TextDirection.rtl
         ? const Locale('ar')
@@ -32,6 +35,7 @@ Widget harness(TextDirection direction) {
                 'Cramps': 4,
                 'Severe and persistent lower abdominal cramping': 3,
               },
+              collapseSelectedSummary: collapseSelectedSummary,
               onSymptomsChanged: (_) {},
               onSeverityChanged: (_, __) {},
             ),
@@ -48,11 +52,14 @@ Finder chip(String symptom) =>
 Future<void> mount(
   WidgetTester tester,
   double width,
-  TextDirection direction,
-) async {
+  TextDirection direction, {
+  bool collapseSelectedSummary = false,
+}) async {
   tester.view.physicalSize = Size(width, 844);
   tester.view.devicePixelRatio = 1;
-  await tester.pumpWidget(harness(direction));
+  await tester.pumpWidget(
+    harness(direction, collapseSelectedSummary: collapseSelectedSummary),
+  );
   await tester.pump(const Duration(seconds: 2));
 }
 
@@ -293,4 +300,35 @@ void main() {
 
     await disposeTree(tester);
   });
+  testWidgets(
+    'saved-state collapse keeps selected summary header and hides chips',
+    (tester) async {
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      await mount(
+        tester,
+        390,
+        TextDirection.ltr,
+        collapseSelectedSummary: true,
+      );
+
+      expect(
+        find.byKey(
+          const ValueKey<String>('selected-symptoms-collapsed-summary'),
+        ),
+        findsOneWidget,
+      );
+      expect(find.text('Selected Symptoms (3)'), findsOneWidget);
+      expect(chip('Diarrhea'), findsNothing);
+      expect(chip('Cramps'), findsNothing);
+      expect(
+        chip('Severe and persistent lower abdominal cramping'),
+        findsNothing,
+      );
+      expect(tester.takeException(), isNull);
+
+      await disposeTree(tester);
+    },
+  );
 }
