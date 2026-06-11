@@ -1,3 +1,4 @@
+import 'package:flow_ai/core/services/app_state_service.dart';
 import 'package:flow_ai/core/ui/adaptive_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -566,10 +567,20 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
     SubscriptionProvider provider,
   ) async {
     final navigator = Navigator.of(context);
-
     final messenger = ScaffoldMessenger.maybeOf(context);
-    // Get user ID (you'll need to implement this)
-    const userId = 'current_user_id'; // TODO: Get from auth provider
+    final appState = context.read<AppStateService>();
+
+    final userId = await _resolveCurrentUserId(appState);
+
+    if (!mounted) return;
+
+    if (userId == null) {
+      AdaptiveMessages.showError(
+        messenger?.context ?? navigator.context,
+        'Please sign in before restoring purchases.',
+      );
+      return;
+    }
 
     final restored = await provider.restorePurchases(userId);
 
@@ -588,6 +599,35 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
       );
     }
   }
+}
+
+Future<String?> _resolveCurrentUserId(AppStateService appState) async {
+  final auth = appState.auth;
+  if (!auth.isInitialized) {
+    await auth.initialize();
+  }
+
+  final currentUser = await auth.getCurrentUser();
+  if (currentUser == null) return null;
+
+  final uid = _readStringProperty(currentUser, 'uid');
+  if (uid != null) return uid;
+
+  return _readStringProperty(currentUser, 'id');
+}
+
+String? _readStringProperty(Object source, String propertyName) {
+  try {
+    final dynamic user = source;
+    final Object? value = propertyName == 'uid' ? user.uid : user.id;
+    if (value is String && value.trim().isNotEmpty) {
+      return value.trim();
+    }
+  } catch (_) {
+    return null;
+  }
+
+  return null;
 }
 
 class _Feature {
