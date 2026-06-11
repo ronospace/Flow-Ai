@@ -452,5 +452,40 @@ void main() {
         contains('--dart-define=FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT='),
       );
     });
+
+    test('Android release builds inject monetization backend dart defines', () {
+      final androidBuildScript = File(
+        'scripts/deploy-android.sh',
+      ).readAsStringSync();
+      final multiPlatformBuildScript = File(
+        'scripts/deploy-all.sh',
+      ).readAsStringSync();
+
+      for (final script in [androidBuildScript, multiPlatformBuildScript]) {
+        expect(script, contains('REQUIRED_DART_DEFINES='));
+        expect(script, contains('FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT'));
+        expect(script, contains('FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT'));
+        expect(script, contains('FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT'));
+        expect(
+          script,
+          contains(
+            'Refusing to build Android release without backend receipt/status validation endpoints.',
+          ),
+        );
+        expect(
+          script,
+          contains('--dart-define=FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT='),
+        );
+        expect(
+          script,
+          contains('--dart-define=FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT='),
+        );
+        expect(
+          script,
+          contains('--dart-define=FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT='),
+        );
+        expect(script, contains('MONETIZATION_DART_DEFINES'));
+      }
+    });
   });
 }

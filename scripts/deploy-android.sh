@@ -54,6 +54,31 @@ flutter pub get
 print_status "Generating localization files..."
 flutter gen-l10n
 
+
+# Verify required monetization backend endpoints are injected into release builds
+print_status "Verifying monetization backend dart-defines..."
+REQUIRED_DART_DEFINES=(
+    FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT
+    FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT
+    FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT
+)
+
+for define_name in "${REQUIRED_DART_DEFINES[@]}"; do
+    if [ -z "${!define_name:-}" ]; then
+        print_error "Missing required release dart-define environment variable: ${define_name}"
+        print_error "Refusing to build Android release without backend receipt/status validation endpoints."
+        exit 1
+    fi
+done
+
+MONETIZATION_DART_DEFINES=(
+    --dart-define=FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT="$FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT"
+    --dart-define=FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT="$FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT"
+    --dart-define=FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT="$FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT"
+)
+
+print_success "Monetization backend dart-defines are present"
+
 # Run analyzer to check for issues
 print_status "Running Flutter analyzer..."
 if ! flutter analyze; then
@@ -80,7 +105,7 @@ if [ ! -f "android/key.properties" ]; then
     echo "3. Update android/app/build.gradle to use the signing config"
     echo ""
     print_status "Building unsigned APK for testing..."
-    flutter build apk --release
+    flutter build apk --release "${MONETIZATION_DART_DEFINES[@]}"
     print_success "Unsigned APK built successfully at: build/app/outputs/flutter-apk/app-release.apk"
     exit 0
 fi
@@ -99,23 +124,23 @@ read -p "Enter your choice (1-3): " build_choice
 case $build_choice in
     1)
         print_status "Building APK..."
-        flutter build apk --release
+        flutter build apk --release "${MONETIZATION_DART_DEFINES[@]}"
         print_success "APK built successfully!"
         print_status "APK location: build/app/outputs/flutter-apk/app-release.apk"
         ;;
     2)
         print_status "Building App Bundle..."
-        flutter build appbundle --release
+        flutter build appbundle --release "${MONETIZATION_DART_DEFINES[@]}"
         print_success "App Bundle built successfully!"
         print_status "App Bundle location: build/app/outputs/bundle/release/app-release.aab"
         ;;
     3)
         print_status "Building APK..."
-        flutter build apk --release
+        flutter build apk --release "${MONETIZATION_DART_DEFINES[@]}"
         print_success "APK built successfully!"
         
         print_status "Building App Bundle..."
-        flutter build appbundle --release
+        flutter build appbundle --release "${MONETIZATION_DART_DEFINES[@]}"
         print_success "App Bundle built successfully!"
         
         print_status "Build artifacts:"

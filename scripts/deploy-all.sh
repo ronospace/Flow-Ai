@@ -71,6 +71,31 @@ fi
 
 print_success "Pre-build checks completed successfully"
 
+
+# Verify required monetization backend endpoints are injected into release builds
+print_status "Verifying monetization backend dart-defines..."
+REQUIRED_DART_DEFINES=(
+    FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT
+    FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT
+    FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT
+)
+
+for define_name in "${REQUIRED_DART_DEFINES[@]}"; do
+    if [ -z "${!define_name:-}" ]; then
+        print_error "Missing required release dart-define environment variable: ${define_name}"
+        print_error "Refusing to build Android release without backend receipt/status validation endpoints."
+        exit 1
+    fi
+done
+
+MONETIZATION_DART_DEFINES=(
+    --dart-define=FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT="$FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT"
+    --dart-define=FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT="$FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT"
+    --dart-define=FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT="$FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT"
+)
+
+print_success "Monetization backend dart-defines are present"
+
 echo ""
 echo "🎯 Select platforms to build:"
 echo "1. Web only"
@@ -165,7 +190,7 @@ if [ "$BUILD_ANDROID" = true ]; then
     # Check if signing is configured
     if [ -f "android/key.properties" ]; then
         print_status "Signing key found. Building signed App Bundle..."
-        if flutter build appbundle --release; then
+        if flutter build appbundle --release "${MONETIZATION_DART_DEFINES[@]}"; then
             print_success "✅ Android App Bundle build completed successfully!"
             BUILDS_COMPLETED+=("Android (App Bundle)")
             print_status "App Bundle location: build/app/outputs/bundle/release/app-release.aab"
@@ -175,7 +200,7 @@ if [ "$BUILD_ANDROID" = true ]; then
         fi
         
         print_status "Building signed APK..."
-        if flutter build apk --release; then
+        if flutter build apk --release "${MONETIZATION_DART_DEFINES[@]}"; then
             print_success "✅ Android APK build completed successfully!"
             BUILDS_COMPLETED+=("Android (APK)")
             print_status "APK location: build/app/outputs/flutter-apk/app-release.apk"
@@ -185,7 +210,7 @@ if [ "$BUILD_ANDROID" = true ]; then
         fi
     else
         print_warning "No signing key found. Building unsigned APK..."
-        if flutter build apk --release; then
+        if flutter build apk --release "${MONETIZATION_DART_DEFINES[@]}"; then
             print_success "✅ Android APK build completed successfully (unsigned)!"
             BUILDS_COMPLETED+=("Android (APK - Unsigned)")
             print_status "APK location: build/app/outputs/flutter-apk/app-release.apk"
