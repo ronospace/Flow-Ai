@@ -182,10 +182,9 @@ class _SymptomSelectorState extends State<SymptomSelector> {
     double availableWidth,
   ) {
     const spacing = 8.0;
-    const compactChipWidth = 184.0;
-    const baseChromeWidth = 92.0;
-    const minimumReservedChromeWidth = 124.0;
-    const maximumReservedChromeWidth = 136.0;
+    const preferredCompactChipWidth = 184.0;
+    const minimumCompactChipWidth = 156.0;
+    const compactHorizontalPadding = 12.0;
 
     if (availableWidth <= 0) {
       return 0;
@@ -193,56 +192,30 @@ class _SymptomSelectorState extends State<SymptomSelector> {
 
     final pairedWidth = (availableWidth - spacing) / 2;
 
-    if (pairedWidth < compactChipWidth) {
+    if (pairedWidth < minimumCompactChipWidth) {
       return availableWidth;
     }
 
-    final textDirection = Directionality.of(context);
-    final textScaler = MediaQuery.textScalerOf(context);
-    final severityText = _getSeverityText(severity);
-    final severityWidth = _selectedSymptomMeasuredTextWidth(
-      severityText,
-      const TextStyle(fontSize: 8, fontWeight: FontWeight.bold),
-      textScaler,
-      textDirection,
-    );
-    final reservedChromeWidth = (baseChromeWidth + severityWidth)
-        .clamp(minimumReservedChromeWidth, maximumReservedChromeWidth)
-        .toDouble();
-    final labelCapacity = compactChipWidth - reservedChromeWidth;
+    final compactChipWidth = pairedWidth < preferredCompactChipWidth
+        ? pairedWidth
+        : preferredCompactChipWidth;
+    final labelCapacity = compactChipWidth - compactHorizontalPadding;
 
     if (labelCapacity <= 0) {
       return availableWidth;
     }
 
-    final labelStyle = const TextStyle(
-      fontSize: 12,
-      fontWeight: FontWeight.w600,
-    );
     final painter = TextPainter(
-      text: TextSpan(text: symptom, style: labelStyle),
+      text: TextSpan(
+        text: symptom,
+        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+      ),
       maxLines: 2,
-      textDirection: textDirection,
-      textScaler: textScaler,
+      textDirection: Directionality.of(context),
+      textScaler: MediaQuery.textScalerOf(context),
     )..layout(maxWidth: labelCapacity);
 
     return painter.didExceedMaxLines ? availableWidth : compactChipWidth;
-  }
-
-  double _selectedSymptomMeasuredTextWidth(
-    String text,
-    TextStyle style,
-    TextScaler textScaler,
-    TextDirection textDirection,
-  ) {
-    final painter = TextPainter(
-      text: TextSpan(text: text, style: style),
-      maxLines: 1,
-      textDirection: textDirection,
-      textScaler: textScaler,
-    )..layout();
-
-    return painter.width;
   }
 
   Widget _buildSelectedSymptomChip(
@@ -259,71 +232,75 @@ class _SymptomSelectorState extends State<SymptomSelector> {
       key: ValueKey<String>('selected-symptom-$symptom'),
       width: width,
       child: Container(
-        padding: const EdgeInsetsDirectional.fromSTEB(12, 4, 4, 4),
+        padding: const EdgeInsetsDirectional.fromSTEB(8, 6, 4, 4),
         decoration: BoxDecoration(
           color: color.withValues(alpha: 0.15),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: color.withValues(alpha: 0.3)),
         ),
-        child: Row(
+        child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              _getSymptomEmoji(symptom),
-              style: const TextStyle(fontSize: 14),
-            ),
-            const SizedBox(width: 6),
-            Flexible(
-              child: Text(
-                symptom,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: color,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-            ),
-            const SizedBox(width: 4),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-              decoration: BoxDecoration(
+              key: ValueKey<String>('selected-symptom-label-$symptom'),
+              symptom,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
                 color: color,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Text(
-                severityText,
-                maxLines: 1,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 8,
-                  fontWeight: FontWeight.bold,
-                ),
+                fontWeight: FontWeight.w600,
+                fontSize: 12,
               ),
             ),
-            Semantics(
-              button: true,
-              label: removeLabel,
-              child: ExcludeSemantics(
-                child: IconButton(
-                  tooltip: removeLabel,
-                  constraints: const BoxConstraints.tightFor(
-                    width: 48,
-                    height: 48,
+            const SizedBox(height: 2),
+            Row(
+              children: [
+                Container(
+                  key: ValueKey<String>('selected-symptom-severity-$symptom'),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
                   ),
-                  padding: EdgeInsets.zero,
-                  onPressed: () {
-                    final updatedSymptoms = Set<String>.from(
-                      widget.selectedSymptoms,
-                    )..remove(symptom);
-
-                    widget.onSymptomsChanged(updatedSymptoms);
-                    HapticFeedback.lightImpact();
-                  },
-                  icon: Icon(Icons.close, size: 16, color: color),
+                  decoration: BoxDecoration(
+                    color: color,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    severityText,
+                    maxLines: 1,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 8,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-              ),
+                const Spacer(),
+                Semantics(
+                  button: true,
+                  label: removeLabel,
+                  child: ExcludeSemantics(
+                    child: IconButton(
+                      key: ValueKey<String>('selected-symptom-remove-$symptom'),
+                      tooltip: removeLabel,
+                      constraints: const BoxConstraints.tightFor(
+                        width: 48,
+                        height: 48,
+                      ),
+                      padding: EdgeInsets.zero,
+                      onPressed: () {
+                        final updatedSymptoms = Set<String>.from(
+                          widget.selectedSymptoms,
+                        )..remove(symptom);
+
+                        widget.onSymptomsChanged(updatedSymptoms);
+                        HapticFeedback.lightImpact();
+                      },
+                      icon: Icon(Icons.close, size: 16, color: color),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
