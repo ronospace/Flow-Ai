@@ -232,75 +232,102 @@ class _SymptomSelectorState extends State<SymptomSelector> {
       key: ValueKey<String>('selected-symptom-$symptom'),
       width: width,
       child: Container(
-        padding: const EdgeInsetsDirectional.fromSTEB(8, 6, 4, 4),
+        padding: const EdgeInsetsDirectional.fromSTEB(8, 5, 4, 5),
         decoration: BoxDecoration(
           color: color.withValues(alpha: 0.15),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: color.withValues(alpha: 0.3)),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              key: ValueKey<String>('selected-symptom-label-$symptom'),
-              symptom,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: color,
-                fontWeight: FontWeight.w600,
-                fontSize: 12,
+            SizedBox(
+              key: ValueKey<String>('selected-symptom-emoji-$symptom'),
+              width: 18,
+              child: Center(
+                child: Text(
+                  _getSymptomEmoji(symptom),
+                  style: const TextStyle(fontSize: 18, height: 1),
+                ),
               ),
             ),
-            const SizedBox(height: 2),
-            Row(
-              children: [
-                Container(
-                  key: ValueKey<String>('selected-symptom-severity-$symptom'),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: color,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    severityText,
-                    maxLines: 1,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 8,
-                      fontWeight: FontWeight.bold,
+            const SizedBox(width: 8),
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    key: ValueKey<String>('selected-symptom-label-$symptom'),
+                    symptom,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      color: color,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                      height: 1.1,
                     ),
                   ),
-                ),
-                const Spacer(),
-                Semantics(
-                  button: true,
-                  label: removeLabel,
-                  child: ExcludeSemantics(
-                    child: IconButton(
-                      key: ValueKey<String>('selected-symptom-remove-$symptom'),
-                      tooltip: removeLabel,
-                      constraints: const BoxConstraints.tightFor(
-                        width: 48,
-                        height: 48,
+                  const SizedBox(height: 4),
+                  Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: Container(
+                      key: ValueKey<String>(
+                        'selected-symptom-severity-$symptom',
                       ),
-                      padding: EdgeInsets.zero,
-                      onPressed: () {
-                        final updatedSymptoms = Set<String>.from(
-                          widget.selectedSymptoms,
-                        )..remove(symptom);
-
-                        widget.onSymptomsChanged(updatedSymptoms);
-                        HapticFeedback.lightImpact();
-                      },
-                      icon: Icon(Icons.close, size: 16, color: color),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: color,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        severityText,
+                        maxLines: 1,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 8,
+                          fontWeight: FontWeight.bold,
+                          height: 1,
+                        ),
+                      ),
                     ),
                   ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 4),
+            Semantics(
+              button: true,
+              label: removeLabel,
+              child: SizedBox(
+                key: ValueKey<String>('selected-symptom-remove-$symptom'),
+                width: 48,
+                height: 48,
+                child: ExcludeSemantics(
+                  child: IconButton(
+                    tooltip: removeLabel,
+                    constraints: const BoxConstraints.tightFor(
+                      width: 48,
+                      height: 48,
+                    ),
+                    padding: EdgeInsets.zero,
+                    onPressed: () {
+                      final updatedSymptoms = Set<String>.from(
+                        widget.selectedSymptoms,
+                      )..remove(symptom);
+
+                      widget.onSymptomsChanged(updatedSymptoms);
+                      HapticFeedback.lightImpact();
+                    },
+                    icon: Icon(Icons.close, size: 16, color: color),
+                  ),
                 ),
-              ],
+              ),
             ),
           ],
         ),
@@ -414,7 +441,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
           },
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
               color: theme.colorScheme.surface,
               borderRadius: BorderRadius.circular(12),
@@ -438,8 +465,8 @@ class _SymptomSelectorState extends State<SymptomSelector> {
                   children: [
                     // Emoji and name
                     Container(
-                      width: 40,
-                      height: 40,
+                      width: 38,
+                      height: 38,
                       decoration: BoxDecoration(
                         color: symptom.color.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(12),
@@ -447,7 +474,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
                       child: Center(
                         child: Text(
                           symptom.emoji,
-                          style: const TextStyle(fontSize: 20),
+                          style: const TextStyle(fontSize: 19),
                         ),
                       ),
                     ),
@@ -493,7 +520,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
 
                 // Severity slider (shown when selected)
                 if (isSelected) ...[
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 12),
                   _buildSeveritySlider(symptom.name, severity, symptom.color),
                 ],
               ],
@@ -530,14 +557,14 @@ class _SymptomSelectorState extends State<SymptomSelector> {
             ),
           ],
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 6),
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
             activeTrackColor: color,
             inactiveTrackColor: color.withValues(alpha: 0.2),
             thumbColor: color,
             overlayColor: color.withValues(alpha: 0.2),
-            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
+            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 7),
             trackHeight: 4,
           ),
           child: Slider(

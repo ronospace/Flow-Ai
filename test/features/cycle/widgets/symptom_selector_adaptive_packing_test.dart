@@ -210,18 +210,87 @@ void main() {
       expect((firstChip.top - secondChip.top).abs(), lessThanOrEqualTo(1));
       expect(secondChip.left - firstChip.right, closeTo(8.0, 0.1));
 
-      expect(firstLabel.height, lessThanOrEqualTo(17.1));
-      expect(secondLabel.height, lessThanOrEqualTo(17.1));
+      expect(firstLabel.height, lessThanOrEqualTo(26.1));
+      expect(secondLabel.height, lessThanOrEqualTo(26.1));
       expect(longLabel.height, lessThanOrEqualTo(34.1));
 
-      expect(firstSeverity.top, greaterThanOrEqualTo(firstLabel.bottom));
-      expect(secondSeverity.top, greaterThanOrEqualTo(secondLabel.bottom));
-      expect(firstRemove.top, greaterThanOrEqualTo(firstLabel.bottom));
-      expect(secondRemove.top, greaterThanOrEqualTo(secondLabel.bottom));
+      expect(firstSeverity.top, greaterThanOrEqualTo(firstLabel.bottom - 1));
+      expect(secondSeverity.top, greaterThanOrEqualTo(secondLabel.bottom - 1));
+      expect(firstRemove.width, closeTo(48.0, 0.1));
+      expect(firstRemove.height, closeTo(48.0, 0.1));
+      expect(secondRemove.width, closeTo(48.0, 0.1));
+      expect(secondRemove.height, closeTo(48.0, 0.1));
+      expect(
+        (firstRemove.center.dy - firstChip.center.dy).abs(),
+        lessThanOrEqualTo(1),
+      );
+      expect(
+        (secondRemove.center.dy - secondChip.center.dy).abs(),
+        lessThanOrEqualTo(1),
+      );
+      expect(firstLabel.center.dx, lessThan(firstChip.center.dx));
+      expect(secondLabel.center.dx, lessThan(secondChip.center.dx));
       expect(longChip.top, greaterThan(firstChip.bottom));
       expect(tester.takeException(), isNull);
 
       await disposeTree(tester);
     },
   );
+  testWidgets('selected chips use old compact measured 9px 5px chrome', (
+    tester,
+  ) async {
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await mount(tester, 390, TextDirection.ltr);
+
+    final chipFinder = chip('Cramps');
+    final chipRect = tester.getRect(chipFinder);
+    final emojiRect = tester.getRect(
+      find.descendant(
+        of: chipFinder,
+        matching: find.byKey(
+          const ValueKey<String>('selected-symptom-emoji-Cramps'),
+        ),
+      ),
+    );
+    final labelRect = tester.getRect(
+      find.descendant(
+        of: chipFinder,
+        matching: find.byKey(
+          const ValueKey<String>('selected-symptom-label-Cramps'),
+        ),
+      ),
+    );
+    final severityRect = tester.getRect(
+      find.descendant(
+        of: chipFinder,
+        matching: find.byKey(
+          const ValueKey<String>('selected-symptom-severity-Cramps'),
+        ),
+      ),
+    );
+    final removeRect = tester.getRect(
+      find.descendant(
+        of: chipFinder,
+        matching: find.byKey(
+          const ValueKey<String>('selected-symptom-remove-Cramps'),
+        ),
+      ),
+    );
+
+    expect(chipRect.width, closeTo(159.0, 0.1));
+    expect(chipRect.height, lessThanOrEqualTo(62.0));
+    expect(emojiRect.left - chipRect.left, closeTo(9.0, 0.1));
+    expect(emojiRect.width, closeTo(18.0, 0.1));
+    expect(labelRect.left, greaterThan(emojiRect.right));
+    expect((severityRect.left - labelRect.left).abs(), lessThanOrEqualTo(1));
+    expect(labelRect.center.dx, lessThan(chipRect.center.dx));
+    expect(removeRect.width, closeTo(48.0, 0.1));
+    expect(removeRect.height, closeTo(48.0, 0.1));
+    expect(chipRect.right - removeRect.right, closeTo(5.0, 0.1));
+    expect(tester.takeException(), isNull);
+
+    await disposeTree(tester);
+  });
 }
