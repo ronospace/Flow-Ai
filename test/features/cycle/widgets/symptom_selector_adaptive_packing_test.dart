@@ -119,4 +119,109 @@ void main() {
 
     await disposeTree(tester);
   });
+  testWidgets('measured 390 selected chips pair with exact rendered widths', (
+    tester,
+  ) async {
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await mount(tester, 390, TextDirection.ltr);
+
+    final first = tester.getRect(chip('Diarrhea'));
+    final second = tester.getRect(chip('Cramps'));
+    final long = tester.getRect(
+      chip('Severe and persistent lower abdominal cramping'),
+    );
+
+    expect(first.width, closeTo(159.0, 0.1));
+    expect(second.width, closeTo(159.0, 0.1));
+    expect(long.width, closeTo(326.0, 0.1));
+    expect((first.top - second.top).abs(), lessThanOrEqualTo(1));
+    expect(second.left - first.right, closeTo(8.0, 0.1));
+    expect(long.top, greaterThan(first.bottom));
+    expect(tester.takeException(), isNull);
+
+    await disposeTree(tester);
+  });
+
+  testWidgets('measured 360 selected chips stay full-width fallback', (
+    tester,
+  ) async {
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await mount(tester, 360, TextDirection.ltr);
+
+    final first = tester.getRect(chip('Diarrhea'));
+    final second = tester.getRect(chip('Cramps'));
+
+    expect(first.width, closeTo(296.0, 0.1));
+    expect(second.width, closeTo(296.0, 0.1));
+    expect(second.top, greaterThan(first.bottom));
+    expect(tester.takeException(), isNull);
+
+    await disposeTree(tester);
+  });
+  testWidgets(
+    'proven readable selected chips keep label above severity and remove',
+    (tester) async {
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      await mount(tester, 390, TextDirection.ltr);
+
+      final firstChip = tester.getRect(chip('Diarrhea'));
+      final secondChip = tester.getRect(chip('Cramps'));
+      final longChip = tester.getRect(
+        chip('Severe and persistent lower abdominal cramping'),
+      );
+
+      final firstLabel = tester.getRect(
+        find.byKey(const ValueKey<String>('selected-symptom-label-Diarrhea')),
+      );
+      final secondLabel = tester.getRect(
+        find.byKey(const ValueKey<String>('selected-symptom-label-Cramps')),
+      );
+      final longLabel = tester.getRect(
+        find.byKey(
+          const ValueKey<String>(
+            'selected-symptom-label-Severe and persistent lower abdominal cramping',
+          ),
+        ),
+      );
+      final firstSeverity = tester.getRect(
+        find.byKey(
+          const ValueKey<String>('selected-symptom-severity-Diarrhea'),
+        ),
+      );
+      final secondSeverity = tester.getRect(
+        find.byKey(const ValueKey<String>('selected-symptom-severity-Cramps')),
+      );
+      final firstRemove = tester.getRect(
+        find.byKey(const ValueKey<String>('selected-symptom-remove-Diarrhea')),
+      );
+      final secondRemove = tester.getRect(
+        find.byKey(const ValueKey<String>('selected-symptom-remove-Cramps')),
+      );
+
+      expect(firstChip.width, closeTo(159.0, 0.1));
+      expect(secondChip.width, closeTo(159.0, 0.1));
+      expect(longChip.width, closeTo(326.0, 0.1));
+      expect((firstChip.top - secondChip.top).abs(), lessThanOrEqualTo(1));
+      expect(secondChip.left - firstChip.right, closeTo(8.0, 0.1));
+
+      expect(firstLabel.height, lessThanOrEqualTo(17.1));
+      expect(secondLabel.height, lessThanOrEqualTo(17.1));
+      expect(longLabel.height, lessThanOrEqualTo(34.1));
+
+      expect(firstSeverity.top, greaterThanOrEqualTo(firstLabel.bottom));
+      expect(secondSeverity.top, greaterThanOrEqualTo(secondLabel.bottom));
+      expect(firstRemove.top, greaterThanOrEqualTo(firstLabel.bottom));
+      expect(secondRemove.top, greaterThanOrEqualTo(secondLabel.bottom));
+      expect(longChip.top, greaterThan(firstChip.bottom));
+      expect(tester.takeException(), isNull);
+
+      await disposeTree(tester);
+    },
+  );
 }
