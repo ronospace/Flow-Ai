@@ -487,5 +487,49 @@ void main() {
         expect(script, contains('MONETIZATION_DART_DEFINES'));
       }
     });
+
+    test('backend receipt validation endpoints are fail closed', () {
+      final backendIndex = File('functions/src/index.ts').readAsStringSync();
+      final backendReceiptValidation = File(
+        'functions/src/receipt_validation_http.ts',
+      ).readAsStringSync();
+
+      expect(backendIndex, contains('validateAppleReceipt'));
+      expect(backendIndex, contains('validateGooglePlayReceipt'));
+      expect(backendIndex, contains('subscriptionStatus'));
+      expect(backendIndex, contains('receipt_validation_http'));
+
+      expect(backendReceiptValidation, contains('onRequest'));
+      expect(backendReceiptValidation, contains('method_not_allowed'));
+      expect(
+        backendReceiptValidation,
+        contains('invalid_receipt_validation_request'),
+      );
+      expect(
+        backendReceiptValidation,
+        contains('invalid_subscription_status_request'),
+      );
+      expect(
+        backendReceiptValidation,
+        contains('provider_validation_not_configured'),
+      );
+      expect(backendReceiptValidation, contains('valid: false'));
+      expect(backendReceiptValidation, contains('active: false'));
+      expect(backendReceiptValidation, contains('Cache-Control'));
+      expect(backendReceiptValidation, contains('no-store'));
+
+      expect(
+        backendReceiptValidation,
+        isNot(contains('valid: true')),
+        reason:
+            'Backend skeleton must not grant entitlement before provider validation exists.',
+      );
+      expect(
+        backendReceiptValidation,
+        isNot(contains('active: true')),
+        reason:
+            'Backend skeleton must not mark subscriptions active before provider validation exists.',
+      );
+    });
   });
 }
