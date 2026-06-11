@@ -316,5 +316,39 @@ void main() {
       expect(receiptValidationService, contains("uri.scheme == 'https'"));
       expect(receiptValidationService, contains('Uri.tryParse'));
     });
+
+    test('premium restore uses authenticated user identity', () {
+      final premiumPaywallScreen = File(
+        'lib/features/premium/screens/premium_paywall_screen.dart',
+      ).readAsStringSync();
+
+      const forbidden = <String>[
+        "const userId = 'current_user_id';",
+        'TODO: Get from auth provider',
+      ];
+
+      for (final token in forbidden) {
+        expect(
+          premiumPaywallScreen.contains(token),
+          isFalse,
+          reason: 'Unsafe restore identity token remained: $token',
+        );
+      }
+
+      expect(premiumPaywallScreen, contains("context.read<AppStateService>()"));
+      expect(premiumPaywallScreen, contains('_resolveCurrentUserId'));
+      expect(premiumPaywallScreen, contains('auth.getCurrentUser()'));
+      expect(premiumPaywallScreen, contains('auth.initialize()'));
+      expect(premiumPaywallScreen, contains("'uid'"));
+      expect(premiumPaywallScreen, contains("'id'"));
+      expect(
+        premiumPaywallScreen,
+        contains('Please sign in before restoring purchases.'),
+      );
+      expect(
+        premiumPaywallScreen,
+        contains('provider.restorePurchases(userId)'),
+      );
+    });
   });
 }
