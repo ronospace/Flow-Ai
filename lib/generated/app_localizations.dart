@@ -2004,7 +2004,7 @@ abstract class AppLocalizations {
   /// Smart action center title
   ///
   /// In en, this message translates to:
-  /// **'Smart Action Command Center'**
+  /// **'Smart Command Center'**
   String get smartActionCommandCenter;
 
   /// Smart action center subtitle
@@ -3270,7 +3270,7 @@ abstract class AppLocalizations {
   /// Predictive analytics center title
   ///
   /// In en, this message translates to:
-  /// **'Predictive Analytics Center'**
+  /// **'AI Prediction Center'**
   String get predictiveAnalyticsCenter;
 
   /// AI-powered cycle forecast subtitle
