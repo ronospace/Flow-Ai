@@ -416,5 +416,41 @@ void main() {
         );
       },
     );
+
+    test('iOS App Store build injects monetization backend dart defines', () {
+      final appStoreBuildScript = File('build_appstore.sh').readAsStringSync();
+
+      expect(appStoreBuildScript, contains('REQUIRED_DART_DEFINES='));
+      expect(
+        appStoreBuildScript,
+        contains('FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT'),
+      );
+      expect(
+        appStoreBuildScript,
+        contains('FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT'),
+      );
+      expect(
+        appStoreBuildScript,
+        contains('FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT'),
+      );
+      expect(
+        appStoreBuildScript,
+        contains(
+          'Refusing to build store IPA without backend receipt/status validation endpoints.',
+        ),
+      );
+      expect(
+        appStoreBuildScript,
+        contains('--dart-define=FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT='),
+      );
+      expect(
+        appStoreBuildScript,
+        contains('--dart-define=FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT='),
+      );
+      expect(
+        appStoreBuildScript,
+        contains('--dart-define=FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT='),
+      );
+    });
   });
 }
