@@ -62,7 +62,6 @@ class SubscriptionAnalyticsService {
     await _logEvent(
       'purchase_initiated',
       parameters: {
-        'product_id': plan.productId,
         'tier': plan.tier.name,
         'billing_cycle': plan.billingCycle.name,
         'timestamp': DateTime.now().toIso8601String(),
@@ -79,7 +78,6 @@ class SubscriptionAnalyticsService {
     await _logEvent(
       'purchase_completed',
       parameters: {
-        'product_id': plan.productId,
         'tier': plan.tier.name,
         'billing_cycle': plan.billingCycle.name,
         'transaction_id': transactionId,
@@ -99,7 +97,6 @@ class SubscriptionAnalyticsService {
     await _logEvent(
       'purchase_failed',
       parameters: {
-        'product_id': plan.productId,
         'tier': plan.tier.name,
         'billing_cycle': plan.billingCycle.name,
         'error_message': errorMessage,
@@ -116,7 +113,6 @@ class SubscriptionAnalyticsService {
     await _logEvent(
       'purchase_cancelled',
       parameters: {
-        'product_id': plan.productId,
         'tier': plan.tier.name,
         'billing_cycle': plan.billingCycle.name,
         'timestamp': DateTime.now().toIso8601String(),

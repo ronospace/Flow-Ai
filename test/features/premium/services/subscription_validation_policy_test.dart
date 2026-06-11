@@ -213,5 +213,32 @@ void main() {
         contains('product.priceString'),
       );
     });
+
+    test(
+      'does not duplicate stale product identifiers outside store service',
+      () {
+        final subscriptionPlan = File(
+          'lib/features/premium/models/subscription_plan.dart',
+        ).readAsStringSync();
+        final subscriptionAnalyticsService = File(
+          'lib/features/premium/services/subscription_analytics_service.dart',
+        ).readAsStringSync();
+        final subscriptionService = File(
+          'lib/features/premium/services/subscription_service.dart',
+        ).readAsStringSync();
+
+        for (final source in [subscriptionPlan, subscriptionAnalyticsService]) {
+          expect(source.contains('com.zyraflow'), isFalse);
+          expect(source.contains('plan.productId'), isFalse);
+        }
+
+        expect(subscriptionService, contains('monthlyProductId'));
+        expect(subscriptionService, contains('yearlyProductId'));
+        expect(
+          subscriptionService,
+          contains('queryProductDetails(_productIds)'),
+        );
+      },
+    );
   });
 }
