@@ -280,5 +280,41 @@ void main() {
       );
       expect(premiumService, contains('backend-validated SubscriptionService'));
     });
+
+    test('uses secure build-time backend validation endpoints', () {
+      const forbidden = <String>[
+        "static const String _appleValidationEndpoint = '';",
+        "static const String _googleValidationEndpoint = '';",
+        "static const String _subscriptionStatusEndpoint = '';",
+        'Uri.parse(endpoint)',
+        "Uri.parse('\$_subscriptionStatusEndpoint/\$userId/\$subscriptionId')",
+        'endpoint.trim().isNotEmpty',
+      ];
+
+      for (final token in forbidden) {
+        expect(
+          receiptValidationService.contains(token),
+          isFalse,
+          reason: 'Unsafe backend config token remained: $token',
+        );
+      }
+
+      expect(receiptValidationService, contains('String.fromEnvironment'));
+      expect(
+        receiptValidationService,
+        contains('FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT'),
+      );
+      expect(
+        receiptValidationService,
+        contains('FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT'),
+      );
+      expect(
+        receiptValidationService,
+        contains('FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT'),
+      );
+      expect(receiptValidationService, contains('_isConfiguredSecureEndpoint'));
+      expect(receiptValidationService, contains("uri.scheme == 'https'"));
+      expect(receiptValidationService, contains('Uri.tryParse'));
+    });
   });
 }
