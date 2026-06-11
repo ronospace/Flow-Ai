@@ -7,17 +7,28 @@ import 'package:flutter/foundation.dart';
 /// Flow AI backend only. The client never grants entitlement from local
 /// receipt presence.
 class ReceiptValidationService {
-  // Backend receipt validation endpoints.
-  static const String _appleValidationEndpoint = '';
-  static const String _googleValidationEndpoint = '';
-  static const String _subscriptionStatusEndpoint = '';
+  // Backend receipt validation endpoints are injected at build time.
+  static const String _appleValidationEndpoint = String.fromEnvironment(
+    'FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT',
+  );
+  static const String _googleValidationEndpoint = String.fromEnvironment(
+    'FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT',
+  );
+  static const String _subscriptionStatusEndpoint = String.fromEnvironment(
+    'FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT',
+  );
 
   bool get canValidateAppleReceipts =>
-      _appleValidationEndpoint.trim().isNotEmpty;
+      _isConfiguredSecureEndpoint(_appleValidationEndpoint);
   bool get canValidateGooglePlayReceipts =>
-      _googleValidationEndpoint.trim().isNotEmpty;
+      _isConfiguredSecureEndpoint(_googleValidationEndpoint);
   bool get canValidateSubscriptionStatus =>
-      _subscriptionStatusEndpoint.trim().isNotEmpty;
+      _isConfiguredSecureEndpoint(_subscriptionStatusEndpoint);
+
+  static bool _isConfiguredSecureEndpoint(String endpoint) {
+    final uri = Uri.tryParse(endpoint.trim());
+    return uri != null && uri.scheme == 'https' && uri.host.isNotEmpty;
+  }
 
   /// Validate App Store receipt through Flow AI backend only.
   Future<ReceiptValidationResult> validateAppleReceipt({
@@ -92,15 +103,16 @@ class ReceiptValidationService {
     required String platform,
     Map<String, dynamic>? additionalData,
   }) async {
-    if (endpoint.trim().isEmpty) {
-      debugPrint('Receipt validation backend is not configured');
+    final uri = Uri.tryParse(endpoint.trim());
+    if (!_isConfiguredSecureEndpoint(endpoint) || uri == null) {
+      debugPrint('Receipt validation backend is not configured securely');
       return null;
     }
 
     try {
       final response = await http
           .post(
-            Uri.parse(endpoint),
+            uri,
             headers: {'Content-Type': 'application/json'},
             body: jsonEncode({
               'receipt': receiptData,
@@ -137,17 +149,24 @@ class ReceiptValidationService {
     required String userId,
     required String subscriptionId,
   }) async {
-    if (!canValidateSubscriptionStatus) {
-      debugPrint('Subscription status endpoint is not configured');
+    final endpoint = _subscriptionStatusEndpoint.trim();
+    final baseUri = Uri.tryParse(endpoint);
+    if (!canValidateSubscriptionStatus || baseUri == null) {
+      debugPrint('Subscription status endpoint is not configured securely');
       return false;
     }
 
+    final uri = baseUri.replace(
+      pathSegments: [
+        ...baseUri.pathSegments.where((segment) => segment.isNotEmpty),
+        userId,
+        subscriptionId,
+      ],
+    );
+
     try {
       final response = await http
-          .get(
-            Uri.parse('$_subscriptionStatusEndpoint/$userId/$subscriptionId'),
-            headers: {'Content-Type': 'application/json'},
-          )
+          .get(uri, headers: {'Content-Type': 'application/json'})
           .timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
