@@ -77,6 +77,9 @@ class SubscriptionService {
     // Load products
     await _loadProducts();
 
+    // Load only backend-verified entitlement state before restore.
+    await _loadBackendVerifiedSubscription(userId);
+
     // Restore previous purchases
     await restorePurchases(userId);
 
@@ -397,6 +400,57 @@ class SubscriptionService {
       'user_subscription',
       jsonEncode(_currentSubscription!.toJson()),
     );
+  }
+
+  /// Load persisted subscription state only after backend status verification.
+  Future<bool> _loadBackendVerifiedSubscription(String userId) async {
+    if (!_receiptValidationService.canValidateSubscriptionStatus) {
+      _currentSubscription = UserSubscription.free(userId);
+      return false;
+    }
+
+    final prefs = await SharedPreferences.getInstance();
+    final storedSubscription = prefs.getString('user_subscription');
+    if (storedSubscription == null || storedSubscription.trim().isEmpty) {
+      _currentSubscription = UserSubscription.free(userId);
+      return false;
+    }
+
+    try {
+      final decoded = jsonDecode(storedSubscription);
+      if (decoded is! Map<String, dynamic>) {
+        _currentSubscription = UserSubscription.free(userId);
+        return false;
+      }
+
+      final candidate = UserSubscription.fromJson(decoded);
+      final subscriptionId =
+          candidate.originalTransactionId ?? candidate.transactionId;
+
+      if (candidate.userId != userId ||
+          candidate.tier == SubscriptionTier.free ||
+          subscriptionId == null ||
+          subscriptionId.trim().isEmpty) {
+        _currentSubscription = UserSubscription.free(userId);
+        return false;
+      }
+
+      final isActive = await _receiptValidationService.verifySubscriptionActive(
+        userId: userId,
+        subscriptionId: subscriptionId,
+      );
+
+      _currentSubscription = isActive
+          ? candidate
+          : UserSubscription.free(userId);
+      return isActive;
+    } catch (e) {
+      if (kDebugMode) {
+        print('❌ Failed to load backend-verified subscription: $e');
+      }
+      _currentSubscription = UserSubscription.free(userId);
+      return false;
+    }
   }
 
   /// Check if user can access a premium feature
