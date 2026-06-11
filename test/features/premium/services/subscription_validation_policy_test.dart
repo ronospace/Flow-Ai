@@ -350,5 +350,27 @@ void main() {
         contains('provider.restorePurchases(userId)'),
       );
     });
+
+    test('persists subscription state as valid JSON only', () {
+      const forbidden = <String>[
+        'TODO: Implement proper JSON serialization',
+        '_currentSubscription!.toJson().toString()',
+      ];
+
+      for (final token in forbidden) {
+        expect(
+          subscriptionService.contains(token),
+          isFalse,
+          reason: 'Unsafe subscription persistence token remained: $token',
+        );
+      }
+
+      expect(subscriptionService, contains("import 'dart:convert';"));
+      expect(subscriptionService, contains('jsonEncode('));
+      expect(
+        subscriptionService,
+        contains("await prefs.setString(\n      'user_subscription',"),
+      );
+    });
   });
 }
