@@ -353,9 +353,7 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
               product: yearlyProduct,
               isSelected: _selectedPeriod == BillingPeriod.yearly,
               isPopular: true,
-              savingsText: yearlySavings != null
-                  ? 'Save ${yearlySavings.toStringAsFixed(0)}%'
-                  : null,
+              savingsText: yearlySavings != null ? 'Yearly billing' : null,
               onTap: () {
                 setState(() {
                   _selectedPeriod = BillingPeriod.yearly;
@@ -442,7 +440,7 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            'BEST VALUE',
+                            'YEARLY',
                             style: Theme.of(context).textTheme.labelSmall
                                 ?.copyWith(
                                   color: Colors.amber.shade900,
@@ -478,7 +476,7 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
                 ),
                 if (product.billingPeriod == BillingPeriod.yearly)
                   Text(
-                    '${product.getPricePerMonth().toStringAsFixed(2)}/mo',
+                    'Billed yearly by your app store',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: Theme.of(
                         context,

@@ -215,16 +215,6 @@ class SubscriptionProvider extends ChangeNotifier {
     );
   }
 
-  /// Calculate savings for yearly subscription
-  double? calculateYearlySavings() {
-    final monthly = getMonthlyProduct();
-    final yearly = getYearlyProduct();
-
-    if (monthly == null || yearly == null) return null;
-
-    return yearly.getSavingsPercentage(monthly.price);
-  }
-
   /// Get upgrade message based on current usage
   String getUpgradeMessage() {
     if (isPremium) return 'You have premium access';

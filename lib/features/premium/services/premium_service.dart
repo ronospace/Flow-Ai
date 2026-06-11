@@ -297,7 +297,7 @@ class PremiumService {
   ) async {
     // Mock payment processing - in real implementation, integrate with payment provider
     debugPrint(
-      '💳 Processing payment: ${tier.price} via ${paymentMethod.displayName}',
+      '💳 Processing ${tier.displayName} checkout via ${paymentMethod.displayName}',
     );
     await Future.delayed(const Duration(seconds: 2));
     return true; // Mock success

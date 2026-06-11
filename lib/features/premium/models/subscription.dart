@@ -4,17 +4,13 @@ part 'subscription.g.dart';
 
 /// Subscription tiers available in the app
 enum SubscriptionTier {
-  basic('Basic', 4.99),
-  premium('Premium', 9.99),
-  ultimate('Ultimate', 19.99);
+  basic('Basic'),
+  premium('Premium'),
+  ultimate('Ultimate');
 
-  const SubscriptionTier(this.displayName, this.price);
+  const SubscriptionTier(this.displayName);
 
   final String displayName;
-  final double price;
-
-  /// Get monthly price string
-  String get priceString => '\$${price.toStringAsFixed(2)}/month';
 
   /// Get features available for this tier
   String get featuresDescription {

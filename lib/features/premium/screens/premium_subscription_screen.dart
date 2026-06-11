@@ -308,14 +308,14 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen>
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    tier.priceString,
+                    'Price shown at checkout',
                     style: theme.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: isSelected ? theme.colorScheme.primary : null,
                     ),
                   ),
                   Text(
-                    'monthly',
+                    'App store pricing',
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
                     ),
@@ -507,7 +507,7 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen>
         child: provider.isLoading
             ? const CircularProgressIndicator()
             : Text(
-                'Subscribe to ${_selectedTier.displayName} - ${_selectedTier.priceString}',
+                'Continue to ${_selectedTier.displayName}',
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -611,7 +611,7 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen>
                 Expanded(
                   child: _buildStatCard(
                     'Monthly Cost',
-                    subscription.tier.priceString,
+                    'Managed by app store',
                     Icons.payments,
                   ),
                 ),
