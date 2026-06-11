@@ -14,7 +14,9 @@ Future<void> showMedicalSourcesDialog(BuildContext context) {
   );
 }
 
-const double _medicalSourcesDialogInset = 16.0;
+const double _medicalSourcesDialogHorizontalInset = 20.0;
+const double _medicalSourcesDialogTopInset = 32.0;
+const double _medicalSourcesDialogBottomNavGap = 0.0;
 const ValueKey<String> _medicalSourcesDialogShellKey = ValueKey<String>(
   'medical-sources-dialog-shell',
 );
@@ -27,11 +29,14 @@ class MedicalSourcesDialog extends StatelessWidget {
     final theme = Theme.of(context);
     final media = MediaQuery.of(context);
 
-    final bottomNavigationClearance = AppLayout.bottomNavigationHeight;
-    final bottomInset = _medicalSourcesDialogInset + bottomNavigationClearance;
+    final bottomInset =
+        AppLayout.bottomNavigationHeight + _medicalSourcesDialogBottomNavGap;
     final width = math.min(
       720.0,
-      math.max(0.0, media.size.width - (_medicalSourcesDialogInset * 2)),
+      math.max(
+        0.0,
+        media.size.width - (_medicalSourcesDialogHorizontalInset * 2),
+      ),
     );
     final height = math.min(
       760.0,
@@ -39,16 +44,16 @@ class MedicalSourcesDialog extends StatelessWidget {
         0.0,
         media.size.height -
             media.padding.vertical -
-            _medicalSourcesDialogInset -
+            _medicalSourcesDialogTopInset -
             bottomInset,
       ),
     );
 
     return Dialog(
       insetPadding: EdgeInsets.fromLTRB(
-        _medicalSourcesDialogInset,
-        _medicalSourcesDialogInset,
-        _medicalSourcesDialogInset,
+        _medicalSourcesDialogHorizontalInset,
+        _medicalSourcesDialogTopInset,
+        _medicalSourcesDialogHorizontalInset,
         bottomInset,
       ),
       clipBehavior: Clip.antiAlias,
