@@ -240,5 +240,45 @@ void main() {
         );
       },
     );
+
+    test('legacy PremiumService does not grant entitlement locally', () {
+      final premiumService = File(
+        'lib/features/premium/services/premium_service.dart',
+      ).readAsStringSync();
+
+      const forbidden = <String>[
+        'await _loadCurrentSubscription();',
+        "getString('current_subscription')",
+        "setString('current_subscription'",
+        'Mock payment processing',
+        'return true; // Mock success',
+        'status: SubscriptionStatus.active,',
+        'await _unlockPremiumFeatures(tier);',
+        r"feature_${feature.name}_unlocked",
+        '_preferences.setBool(',
+        '_restoreFromStore',
+        'Mock restoration',
+        'await _handleAutoRenewal(subscription);',
+      ];
+
+      for (final token in forbidden) {
+        expect(
+          premiumService.contains(token),
+          isFalse,
+          reason:
+              'Legacy PremiumService local entitlement token remained: $token',
+        );
+      }
+
+      expect(
+        premiumService,
+        contains('Legacy PremiumService purchase path disabled'),
+      );
+      expect(
+        premiumService,
+        contains('Legacy PremiumService restore path disabled'),
+      );
+      expect(premiumService, contains('backend-validated SubscriptionService'));
+    });
   });
 }
