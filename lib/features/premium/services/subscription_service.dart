@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
@@ -392,10 +393,9 @@ class SubscriptionService {
     if (_currentSubscription == null) return;
 
     final prefs = await SharedPreferences.getInstance();
-    // TODO: Implement proper JSON serialization
     await prefs.setString(
       'user_subscription',
-      _currentSubscription!.toJson().toString(),
+      jsonEncode(_currentSubscription!.toJson()),
     );
   }
 
