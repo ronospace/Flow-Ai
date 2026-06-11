@@ -372,5 +372,49 @@ void main() {
         contains("await prefs.setString(\n      'user_subscription',"),
       );
     });
+
+    test(
+      'loads persisted subscription only after backend status verification',
+      () {
+        const forbidden = <String>[
+          "final subscriptionJson = prefs.getString('user_subscription');",
+          'Subscription restored from storage',
+        ];
+
+        for (final token in forbidden) {
+          expect(
+            subscriptionService.contains(token),
+            isFalse,
+            reason: 'Unsafe entitlement refresh token remained: $token',
+          );
+        }
+
+        expect(
+          subscriptionService,
+          contains('await _loadBackendVerifiedSubscription(userId);'),
+        );
+        expect(
+          subscriptionService,
+          contains('_loadBackendVerifiedSubscription(String userId)'),
+        );
+        expect(subscriptionService, contains('canValidateSubscriptionStatus'));
+        expect(
+          subscriptionService,
+          contains("prefs.getString('user_subscription')"),
+        );
+        expect(subscriptionService, contains('jsonDecode(storedSubscription)'));
+        expect(
+          subscriptionService,
+          contains('UserSubscription.fromJson(decoded)'),
+        );
+        expect(subscriptionService, contains('verifySubscriptionActive('));
+        expect(subscriptionService, contains('isActive'));
+        expect(subscriptionService, contains('? candidate'));
+        expect(
+          subscriptionService,
+          contains(': UserSubscription.free(userId)'),
+        );
+      },
+    );
   });
 }
