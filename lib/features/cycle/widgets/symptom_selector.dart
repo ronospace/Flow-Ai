@@ -9,6 +9,7 @@ class SymptomSelector extends StatefulWidget {
   final Map<String, double> symptomSeverity;
   final Function(Set<String>) onSymptomsChanged;
   final Function(String, double) onSeverityChanged;
+  final bool collapseSelectedSummary;
 
   const SymptomSelector({
     super.key,
@@ -16,6 +17,7 @@ class SymptomSelector extends StatefulWidget {
     required this.symptomSeverity,
     required this.onSymptomsChanged,
     required this.onSeverityChanged,
+    this.collapseSelectedSummary = false,
   });
 
   @override
@@ -87,13 +89,64 @@ class _SymptomSelectorState extends State<SymptomSelector> {
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       slivers: [
         if (widget.selectedSymptoms.isNotEmpty) ...[
-          SliverToBoxAdapter(child: _buildSelectedSymptomsSummary()),
+          SliverToBoxAdapter(
+            child: widget.collapseSelectedSummary
+                ? _buildCollapsedSelectedSymptomsSummary()
+                : _buildSelectedSymptomsSummary(),
+          ),
           const SliverToBoxAdapter(child: SizedBox(height: 20)),
         ],
         SliverToBoxAdapter(child: _buildCategorySelector()),
         const SliverToBoxAdapter(child: SizedBox(height: 20)),
         _buildSymptomsSliver(),
       ],
+    );
+  }
+
+  Widget _buildCollapsedSelectedSymptomsSummary() {
+    final theme = Theme.of(context);
+
+    return Container(
+      key: const ValueKey<String>('selected-symptoms-collapsed-summary'),
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 14,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Icon(
+            Icons.checklist_rtl_rounded,
+            color: AppTheme.primaryRose,
+            size: 20,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              'Selected Symptoms (${widget.selectedSymptoms.length})',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: theme.colorScheme.onSurface,
+              ),
+            ),
+          ),
+          Icon(
+            Icons.keyboard_arrow_down_rounded,
+            color: theme.colorScheme.onSurfaceVariant,
+            size: 20,
+          ),
+        ],
+      ),
     );
   }
 

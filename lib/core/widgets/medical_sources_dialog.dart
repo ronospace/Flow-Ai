@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../features/settings/widgets/medical_citations_section.dart';
 import '../theme/app_theme.dart';
+import '../constants/app_layout.dart';
 
 Future<void> showMedicalSourcesDialog(BuildContext context) {
   return showDialog<void>(
@@ -13,6 +14,11 @@ Future<void> showMedicalSourcesDialog(BuildContext context) {
   );
 }
 
+const double _medicalSourcesDialogInset = 16.0;
+const ValueKey<String> _medicalSourcesDialogShellKey = ValueKey<String>(
+  'medical-sources-dialog-shell',
+);
+
 class MedicalSourcesDialog extends StatelessWidget {
   const MedicalSourcesDialog({super.key});
 
@@ -21,17 +27,34 @@ class MedicalSourcesDialog extends StatelessWidget {
     final theme = Theme.of(context);
     final media = MediaQuery.of(context);
 
-    final width = math.min(720.0, math.max(0.0, media.size.width - 32.0));
+    final bottomNavigationClearance = AppLayout.bottomNavigationHeight;
+    final bottomInset = _medicalSourcesDialogInset + bottomNavigationClearance;
+    final width = math.min(
+      720.0,
+      math.max(0.0, media.size.width - (_medicalSourcesDialogInset * 2)),
+    );
     final height = math.min(
       760.0,
-      math.max(0.0, media.size.height - media.padding.vertical - 32.0),
+      math.max(
+        0.0,
+        media.size.height -
+            media.padding.vertical -
+            _medicalSourcesDialogInset -
+            bottomInset,
+      ),
     );
 
     return Dialog(
-      insetPadding: const EdgeInsets.all(16),
+      insetPadding: EdgeInsets.fromLTRB(
+        _medicalSourcesDialogInset,
+        _medicalSourcesDialogInset,
+        _medicalSourcesDialogInset,
+        bottomInset,
+      ),
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       child: SizedBox(
+        key: _medicalSourcesDialogShellKey,
         width: width,
         height: height,
         child: Column(
@@ -44,7 +67,7 @@ class MedicalSourcesDialog extends StatelessWidget {
                   IconButton(
                     tooltip: 'Close',
                     onPressed: () => Navigator.of(context).pop(),
-                    icon: const Icon(Icons.close_rounded),
+                    icon: const Icon(Icons.keyboard_arrow_down_rounded),
                   ),
                   const SizedBox(width: 4),
                   Expanded(

@@ -93,7 +93,7 @@ class HealthKitDisclosureBanner extends StatelessWidget {
               if (showDismissButton && !isFirstTimeDisclosure)
                 IconButton(
                   icon: Icon(
-                    Icons.close,
+                    Icons.keyboard_arrow_down_rounded,
                     size: 20,
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                   ),
