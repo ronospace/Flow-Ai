@@ -10,7 +10,6 @@ class SubscriptionPlan {
   final SubscriptionTier tier;
   final SubscriptionBillingCycle billingCycle;
   final List<String> features;
-  final String productId; // For in-app purchase
 
   const SubscriptionPlan({
     required this.id,
@@ -18,7 +17,6 @@ class SubscriptionPlan {
     required this.tier,
     required this.billingCycle,
     required this.features,
-    required this.productId,
   });
 
   /// Create a plan for a specific tier and billing cycle
@@ -42,7 +40,6 @@ class SubscriptionPlan {
       name: 'Basic',
       tier: SubscriptionTier.basic,
       billingCycle: cycle,
-      productId: 'com.zyraflow.basic',
       features: [
         'Period tracking',
         'Basic predictions',
@@ -59,9 +56,6 @@ class SubscriptionPlan {
       name: 'Premium',
       tier: SubscriptionTier.premium,
       billingCycle: cycle,
-      productId: isYearly
-          ? 'com.zyraflow.premium.yearly'
-          : 'com.zyraflow.premium.monthly',
       features: [
         'Everything in Basic',
         'Advanced AI predictions (95% accuracy)',
@@ -82,9 +76,6 @@ class SubscriptionPlan {
       name: 'Ultimate',
       tier: SubscriptionTier.ultimate,
       billingCycle: cycle,
-      productId: isYearly
-          ? 'com.zyraflow.ultimate.yearly'
-          : 'com.zyraflow.ultimate.monthly',
       features: [
         'Everything in Premium',
         'Multi-user profiles (up to 5)',
