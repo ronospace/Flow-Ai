@@ -343,7 +343,7 @@ class PlatformConfig {
   String _getAndroidPackageName() {
     return const String.fromEnvironment(
       'ANDROID_PACKAGE_NAME',
-      defaultValue: 'com.flowai.health',
+      defaultValue: 'com.flowai.app',
     );
   }
 
