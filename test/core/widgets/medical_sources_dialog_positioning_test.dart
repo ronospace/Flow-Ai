@@ -96,38 +96,52 @@ void main() {
       'POSITION name=$name overlap_into_nav_carrier=${overlapIntoNavCarrier.toStringAsFixed(1)}',
     );
 
-    expect(leftMargin, closeTo(16.0, 0.1));
-    expect(rightMargin, closeTo(16.0, 0.1));
-    expect(bottomGapToNavTop, greaterThanOrEqualTo(15.9));
-    expect(overlapIntoNavCarrier, lessThanOrEqualTo(-15.9));
+    final expectedCompactBottomGapToNavTop = 0.0;
+
+    print(
+      'POSITION name=$name expected_compact_bottom_gap_to_nav_top=${expectedCompactBottomGapToNavTop.toStringAsFixed(1)}',
+    );
+
+    expect(leftMargin, closeTo(20.0, 0.1));
+    expect(rightMargin, closeTo(20.0, 0.1));
+    expect(dialogShellRect.top, greaterThanOrEqualTo(31.9));
+    expect(bottomGapToNavTop, greaterThanOrEqualTo(0.0));
+    if (size.height <= 844.0) {
+      expect(bottomGapToNavTop, closeTo(expectedCompactBottomGapToNavTop, 0.1));
+      expect(overlapIntoNavCarrier, closeTo(0.0, 0.1));
+    } else {
+      expect(bottomGapToNavTop, greaterThan(0.0));
+      expect(overlapIntoNavCarrier, lessThan(0.0));
+    }
     expect(tester.takeException(), isNull);
 
     navigatorKey.currentState!.pop();
     await tester.pumpAndSettle();
   }
 
-  testWidgets('Medical Sources dialog stays above bottom nav carrier', (
-    tester,
-  ) async {
-    addTearDown(tester.view.resetPhysicalSize);
-    addTearDown(tester.view.resetDevicePixelRatio);
+  testWidgets(
+    'Medical Sources dialog floats and aligns to nav carrier on compact screens',
+    (tester) async {
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
 
-    await measureCase(
-      tester,
-      name: 'compact_360x780',
-      size: const Size(360, 780),
-    );
+      await measureCase(
+        tester,
+        name: 'compact_360x780',
+        size: const Size(360, 780),
+      );
 
-    await measureCase(
-      tester,
-      name: 'iphone_air_390x844',
-      size: const Size(390, 844),
-    );
+      await measureCase(
+        tester,
+        name: 'iphone_air_390x844',
+        size: const Size(390, 844),
+      );
 
-    await measureCase(
-      tester,
-      name: 'large_430x932',
-      size: const Size(430, 932),
-    );
-  });
+      await measureCase(
+        tester,
+        name: 'large_430x932',
+        size: const Size(430, 932),
+      );
+    },
+  );
 }
