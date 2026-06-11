@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import '../../../core/services/user_preferences_service.dart';
 import '../models/subscription.dart';
@@ -23,7 +22,9 @@ class PremiumService {
     debugPrint('💎 Initializing Premium Service...');
 
     try {
-      await _loadCurrentSubscription();
+      // Legacy local subscription hydration is disabled; Premium access must
+      // come from the validated store/backend subscription flow.
+      _currentSubscription = null;
       await _loadAvailableFeatures();
 
       _isInitialized = true;
@@ -66,40 +67,11 @@ class PremiumService {
     SubscriptionTier tier,
     PaymentMethod paymentMethod,
   ) async {
-    try {
-      debugPrint('💳 Purchasing ${tier.displayName} subscription...');
-
-      // Mock payment processing
-      final success = await _processPayment(tier, paymentMethod);
-      if (!success) {
-        throw Exception('Payment processing failed');
-      }
-
-      // Create new subscription
-      final subscription = Subscription(
-        id: 'sub_${DateTime.now().millisecondsSinceEpoch}',
-        userId: _preferences.getString('user_id') ?? 'unknown',
-        tier: tier,
-        startDate: DateTime.now(),
-        endDate: DateTime.now().add(_getSubscriptionDuration(tier)),
-        paymentMethod: paymentMethod,
-        status: SubscriptionStatus.active,
-        autoRenew: true,
-      );
-
-      // Store subscription
-      await _saveSubscription(subscription);
-      _currentSubscription = subscription;
-
-      // Unlock premium features
-      await _unlockPremiumFeatures(tier);
-
-      debugPrint('✅ Subscription purchased successfully: ${tier.displayName}');
-      return true;
-    } catch (e) {
-      debugPrint('❌ Subscription purchase failed: $e');
-      return false;
-    }
+    debugPrint(
+      '🔒 Legacy PremiumService purchase path disabled for ${tier.displayName}; '
+      'use backend-validated SubscriptionService purchases.',
+    );
+    return false;
   }
 
   /// Cancel subscription
@@ -115,7 +87,6 @@ class PremiumService {
         autoRenew: false,
       );
 
-      await _saveSubscription(updatedSubscription);
       _currentSubscription = updatedSubscription;
 
       debugPrint('✅ Subscription cancelled successfully');
@@ -128,25 +99,11 @@ class PremiumService {
 
   /// Restore subscription (for App Store/Play Store purchases)
   Future<bool> restoreSubscription() async {
-    try {
-      debugPrint('🔄 Restoring subscription...');
-
-      // Mock subscription restoration from App Store/Play Store
-      final restoredSubscription = await _restoreFromStore();
-
-      if (restoredSubscription != null) {
-        await _saveSubscription(restoredSubscription);
-        _currentSubscription = restoredSubscription;
-
-        debugPrint('✅ Subscription restored successfully');
-        return true;
-      }
-
-      return false;
-    } catch (e) {
-      debugPrint('❌ Subscription restoration failed: $e');
-      return false;
-    }
+    debugPrint(
+      '🔒 Legacy PremiumService restore path disabled; use backend-validated '
+      'SubscriptionService restorePurchases.',
+    );
+    return false;
   }
 
   /// Get premium feature usage analytics
@@ -181,13 +138,14 @@ class PremiumService {
         status: SubscriptionStatus.expired,
       );
 
-      await _saveSubscription(updatedSubscription);
       _currentSubscription = updatedSubscription;
     }
 
     // Handle auto-renewal
     if (subscription.shouldAutoRenew) {
-      await _handleAutoRenewal(subscription);
+      debugPrint(
+        'ℹ️ Auto-renewal is handled by the app store/backend validation flow',
+      );
     }
   }
 
@@ -201,18 +159,6 @@ class PremiumService {
   }
 
   // Private helper methods
-
-  Future<void> _loadCurrentSubscription() async {
-    try {
-      final subscriptionData = _preferences.getString('current_subscription');
-      if (subscriptionData != null) {
-        final json = jsonDecode(subscriptionData);
-        _currentSubscription = Subscription.fromJson(json);
-      }
-    } catch (e) {
-      debugPrint('⚠️ Error loading subscription: $e');
-    }
-  }
 
   Future<void> _loadAvailableFeatures() async {
     _availableFeatures = [
@@ -286,39 +232,6 @@ class PremiumService {
     ];
   }
 
-  Future<void> _saveSubscription(Subscription subscription) async {
-    final json = jsonEncode(subscription.toJson());
-    await _preferences.setString('current_subscription', json);
-  }
-
-  Future<bool> _processPayment(
-    SubscriptionTier tier,
-    PaymentMethod paymentMethod,
-  ) async {
-    // Mock payment processing - in real implementation, integrate with payment provider
-    debugPrint(
-      '💳 Processing ${tier.displayName} checkout via ${paymentMethod.displayName}',
-    );
-    await Future.delayed(const Duration(seconds: 2));
-    return true; // Mock success
-  }
-
-  Duration _getSubscriptionDuration(SubscriptionTier tier) {
-    switch (tier) {
-      case SubscriptionTier.basic:
-      case SubscriptionTier.premium:
-      case SubscriptionTier.ultimate:
-        return const Duration(days: 30); // Monthly subscription
-    }
-  }
-
-  Future<void> _unlockPremiumFeatures(SubscriptionTier tier) async {
-    final features = _getFeaturesForTier(tier);
-    for (final feature in features) {
-      _preferences.setBool('feature_${feature.name}_unlocked', true);
-    }
-  }
-
   List<PremiumFeatureType> _getFreeTierFeatures() {
     return [
       PremiumFeatureType.basicTracking,
@@ -364,12 +277,6 @@ class PremiumService {
     return allFeatures;
   }
 
-  Future<Subscription?> _restoreFromStore() async {
-    // Mock restoration - in real implementation, check with App Store/Play Store
-    await Future.delayed(const Duration(seconds: 1));
-    return null; // Mock no subscription found
-  }
-
   Future<int> _getUsedFeaturesCount() async {
     int count = 0;
     for (final feature in _availableFeatures) {
@@ -377,30 +284,6 @@ class PremiumService {
       if (used) count++;
     }
     return count;
-  }
-
-  Future<void> _handleAutoRenewal(Subscription subscription) async {
-    if (!subscription.autoRenew) return;
-
-    try {
-      // Mock auto-renewal process
-      final renewed = await _processPayment(
-        subscription.tier,
-        subscription.paymentMethod,
-      );
-      if (renewed) {
-        final renewedSubscription = subscription.copyWith(
-          endDate: DateTime.now().add(
-            _getSubscriptionDuration(subscription.tier),
-          ),
-        );
-
-        await _saveSubscription(renewedSubscription);
-        _currentSubscription = renewedSubscription;
-      }
-    } catch (e) {
-      debugPrint('❌ Auto-renewal failed: $e');
-    }
   }
 }
 
