@@ -114,5 +114,104 @@ void main() {
       expect(receiptValidationService, contains('validateAppleReceipt'));
       expect(receiptValidationService, contains('validateGooglePlayReceipt'));
     });
+
+    test('does not expose trusted hardcoded client pricing', () {
+      final sourceByFile = <String, String>{
+        'subscription.dart': File(
+          'lib/features/premium/models/subscription.dart',
+        ).readAsStringSync(),
+        'subscription_plan.dart': File(
+          'lib/features/premium/models/subscription_plan.dart',
+        ).readAsStringSync(),
+        'premium_paywall_screen.dart': File(
+          'lib/features/premium/screens/premium_paywall_screen.dart',
+        ).readAsStringSync(),
+        'premium_subscription_screen.dart': File(
+          'lib/features/premium/screens/premium_subscription_screen.dart',
+        ).readAsStringSync(),
+        'premium_service.dart': File(
+          'lib/features/premium/services/premium_service.dart',
+        ).readAsStringSync(),
+        'subscription_analytics_service.dart': File(
+          'lib/features/premium/services/subscription_analytics_service.dart',
+        ).readAsStringSync(),
+        'subscription_service.dart': File(
+          'lib/features/premium/services/subscription_service.dart',
+        ).readAsStringSync(),
+        'subscription_provider.dart': File(
+          'lib/features/premium/providers/subscription_provider.dart',
+        ).readAsStringSync(),
+        'subscription_status_widget.dart': File(
+          'lib/features/premium/widgets/subscription_status_widget.dart',
+        ).readAsStringSync(),
+        'subscription_tier_card.dart': File(
+          'lib/features/premium/widgets/subscription_tier_card.dart',
+        ).readAsStringSync(),
+      };
+
+      const forbiddenByFile = <String, List<String>>{
+        'subscription.dart': [
+          r"basic('Basic', 4.99)",
+          r"premium('Premium', 9.99)",
+          r"ultimate('Ultimate', 19.99)",
+          'final double price;',
+          'priceString =>',
+        ],
+        'subscription_plan.dart': [
+          'price: isYearly ? 79.99 : 9.99',
+          'price: isYearly ? 119.99 : 14.99',
+          'discount: isYearly ? 0.20 : null',
+          'currencySymbol',
+          'currencyCode',
+          'pricePerMonth',
+          'getSavingsComparedToMonthly',
+          'getSavingsPercentage',
+        ],
+        'premium_paywall_screen.dart': [
+          r'Save ${yearlySavings.toStringAsFixed(0)}%',
+          'BEST VALUE',
+          'getPricePerMonth().toStringAsFixed(2)',
+        ],
+        'premium_subscription_screen.dart': [
+          'tier.priceString',
+          '_selectedTier.priceString',
+          'subscription.tier.priceString',
+        ],
+        'premium_service.dart': ['tier.price'],
+        'subscription_analytics_service.dart': [
+          'plan.price',
+          'plan.currencyCode',
+          r"'revenue': plan.price",
+        ],
+        'subscription_service.dart': ['2 months free!'],
+        'subscription_provider.dart': ['calculateYearlySavings'],
+        'subscription_status_widget.dart': ['subscription.tier.priceString'],
+        'subscription_tier_card.dart': [
+          'plan.price',
+          'plan.currencySymbol',
+          '(plan.price / 12)',
+        ],
+      };
+
+      for (final entry in forbiddenByFile.entries) {
+        final source = sourceByFile[entry.key]!;
+        for (final token in entry.value) {
+          expect(
+            source.contains(token),
+            isFalse,
+            reason: '${entry.key} still exposes trusted pricing token: $token',
+          );
+        }
+      }
+
+      expect(
+        sourceByFile['subscription_service.dart'],
+        contains('priceString: product.price'),
+      );
+      expect(
+        sourceByFile['premium_paywall_screen.dart'],
+        contains('product.priceString'),
+      );
+    });
   });
 }

@@ -65,8 +65,6 @@ class SubscriptionAnalyticsService {
         'product_id': plan.productId,
         'tier': plan.tier.name,
         'billing_cycle': plan.billingCycle.name,
-        'price': plan.price,
-        'currency': plan.currencyCode,
         'timestamp': DateTime.now().toIso8601String(),
       },
     );
@@ -84,21 +82,11 @@ class SubscriptionAnalyticsService {
         'product_id': plan.productId,
         'tier': plan.tier.name,
         'billing_cycle': plan.billingCycle.name,
-        'price': plan.price,
-        'currency': plan.currencyCode,
         'transaction_id': transactionId,
         if (originalTransactionId != null)
           'original_transaction_id': originalTransactionId,
         'timestamp': DateTime.now().toIso8601String(),
-        'revenue': plan.price, // For revenue tracking
       },
-    );
-
-    // Also track conversion event
-    await trackConversion(
-      tier: plan.tier,
-      billingCycle: plan.billingCycle,
-      revenue: plan.price,
     );
   }
 

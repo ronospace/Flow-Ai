@@ -137,7 +137,7 @@ class SubscriptionService {
         'Export data to PDF/CSV',
         'Ad-free experience',
         'Priority support',
-        if (isYearly) '2 months free!',
+        if (isYearly) 'Yearly billing through your app store',
       ],
       isPopular: isYearly,
     );

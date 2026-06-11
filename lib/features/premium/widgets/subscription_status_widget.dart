@@ -254,7 +254,7 @@ class SubscriptionStatusWidget extends StatelessWidget {
                           ],
                         ),
                         Text(
-                          '${subscription.tier.priceString}/month',
+                          'Managed by app store',
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: theme.colorScheme.onSurface.withValues(
                               alpha: 0.1,

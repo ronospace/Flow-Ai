@@ -121,46 +121,21 @@ class SubscriptionTierCard extends StatelessWidget {
 
                 const SizedBox(height: 20),
 
-                // Pricing
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      plan.currencySymbol,
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
-                        color: AppTheme.textPrimary,
-                      ),
-                    ),
-                    Text(
-                      plan.price.toStringAsFixed(2),
-                      style: TextStyle(
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold,
-                        color: AppTheme.textPrimary,
-                        height: 1.0,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Text(
-                        '/${billingCycle == SubscriptionBillingCycle.monthly ? 'month' : 'year'}',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: AppTheme.textSecondary,
-                        ),
-                      ),
-                    ),
-                  ],
+                // Pricing must come from store metadata/paywall checkout.
+                Text(
+                  'Price shown at checkout',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: AppTheme.textPrimary,
+                  ),
                 ),
 
                 if (billingCycle == SubscriptionBillingCycle.yearly)
                   Padding(
                     padding: const EdgeInsets.only(top: 8),
                     child: Text(
-                      '${plan.currencySymbol}${(plan.price / 12).toStringAsFixed(2)}/month',
+                      'Billed yearly by your app store',
                       style: TextStyle(
                         fontSize: 13,
                         color: AppTheme.accentMint,
