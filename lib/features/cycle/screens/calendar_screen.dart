@@ -22,6 +22,7 @@ class CalendarScreen extends StatefulWidget {
 class _CalendarScreenState extends State<CalendarScreen>
     with TickerProviderStateMixin {
   late final PageController _pageController;
+  late final ScrollController _landingScrollController;
   late final AnimationController _fadeController;
   late final AnimationController _scaleController;
 
@@ -33,6 +34,7 @@ class _CalendarScreenState extends State<CalendarScreen>
   void initState() {
     super.initState();
     _pageController = PageController();
+    _landingScrollController = ScrollController();
     _fadeController = AnimationController(
       duration: AppTheme.motionBase,
       vsync: this,
@@ -50,6 +52,7 @@ class _CalendarScreenState extends State<CalendarScreen>
 
   @override
   void dispose() {
+    _landingScrollController.dispose();
     _pageController.dispose();
     _fadeController.dispose();
     _scaleController.dispose();
@@ -68,53 +71,79 @@ class _CalendarScreenState extends State<CalendarScreen>
         ),
         child: SafeArea(
           bottom: false,
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(
-              parent: AlwaysScrollableScrollPhysics(),
-            ),
-            padding: AppLayout.calendarLandingScrollPadding,
-            child: Column(
-              children: [
-                // Custom Header
-                _buildHeader(),
+          child: NotificationListener<ScrollEndNotification>(
+            onNotification: (notification) {
+              if (notification.metrics.axis == Axis.vertical) {
+                _springBackToCalendarLanding();
+              }
+              return false;
+            },
+            child: SingleChildScrollView(
+              controller: _landingScrollController,
+              physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics(),
+              ),
+              padding: AppLayout.calendarLandingScrollPadding,
+              child: Column(
+                children: [
+                  // Custom Header
+                  _buildHeader(),
 
-                // Calendar Legend
-                _buildCalendarLegend(),
+                  // Calendar Legend
+                  _buildCalendarLegend(),
 
-                // Calendar Widget
-                Container(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.surface,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: theme.shadowColor.withValues(alpha: 0.1),
-                        blurRadius: 15,
-                        offset: const Offset(0, 8),
+                  // Calendar Widget
+                  Container(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.surface,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: theme.shadowColor.withValues(alpha: 0.1),
+                          blurRadius: 15,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Consumer<CycleProvider>(
+                        builder: (context, cycleProvider, child) {
+                          return _buildCalendar(cycleProvider);
+                        },
                       ),
-                    ],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Consumer<CycleProvider>(
-                      builder: (context, cycleProvider, child) {
-                        return _buildCalendar(cycleProvider);
-                      },
                     ),
                   ),
-                ),
 
-                // Current Cycle Info
-                _buildCurrentCycleInfo(),
-              ],
+                  // Current Cycle Info
+                  _buildCurrentCycleInfo(),
+                ],
+              ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  void _springBackToCalendarLanding() {
+    if (!_landingScrollController.hasClients) {
+      return;
+    }
+
+    if (_landingScrollController.offset <=
+        AppLayout.calendarLandingSpringBackTolerance) {
+      return;
+    }
+
+    _landingScrollController.animateTo(
+      0,
+      duration: AppLayout.calendarLandingSpringBackDuration,
+      curve: AppLayout.calendarLandingSpringBackCurve,
     );
   }
 
