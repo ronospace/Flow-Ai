@@ -278,19 +278,30 @@ class SubscriptionService {
   ) async {
     final verificationData =
         purchaseDetails.verificationData.serverVerificationData;
+    final userId = _currentSubscription?.userId;
 
-    if (verificationData.isEmpty) {
+    if (verificationData.isEmpty || userId == null || userId.trim().isEmpty) {
       return ReceiptValidationResult(
         isValid: false,
-        errorMessage: 'Missing store verification data',
+        errorMessage: 'Missing store verification data or user identity',
       );
     }
 
     try {
       if (Platform.isIOS) {
+        final transactionId = purchaseDetails.purchaseID;
+        if (transactionId == null || transactionId.trim().isEmpty) {
+          return const ReceiptValidationResult(
+            isValid: false,
+            errorMessage: 'Missing App Store transaction identifier',
+          );
+        }
+
         return await _receiptValidationService.validateAppleReceipt(
           receiptData: verificationData,
           productId: purchaseDetails.productID,
+          userId: userId,
+          transactionId: transactionId,
           isProduction: kReleaseMode,
         );
       }
@@ -302,6 +313,7 @@ class SubscriptionService {
           purchaseToken: verificationData,
           productId: purchaseDetails.productID,
           packageName: packageInfo.packageName,
+          userId: userId,
         );
       }
 

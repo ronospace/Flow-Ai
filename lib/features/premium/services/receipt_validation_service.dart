@@ -33,6 +33,8 @@ class ReceiptValidationService {
   Future<ReceiptValidationResult> validateAppleReceipt({
     required String receiptData,
     required String productId,
+    required String userId,
+    required String transactionId,
     required bool isProduction,
   }) async {
     try {
@@ -43,6 +45,8 @@ class ReceiptValidationService {
         platform: 'ios',
         additionalData: {
           'environment': isProduction ? 'production' : 'sandbox',
+          'transactionId': transactionId,
+          'userId': userId,
         },
       );
 
@@ -64,6 +68,7 @@ class ReceiptValidationService {
     required String purchaseToken,
     required String productId,
     required String packageName,
+    required String userId,
   }) async {
     try {
       final result = await _validateThroughBackend(
@@ -71,7 +76,7 @@ class ReceiptValidationService {
         receiptData: purchaseToken,
         productId: productId,
         platform: 'android',
-        additionalData: {'packageName': packageName},
+        additionalData: {'packageName': packageName, 'userId': userId},
       );
 
       return result ??

@@ -34,11 +34,18 @@ void main() {
       ).readAsStringSync();
 
       expect(receiptValidationService, contains('required bool isProduction'));
+      expect(receiptValidationService, contains('required String userId'));
+      expect(
+        receiptValidationService,
+        contains('required String transactionId'),
+      );
       expect(
         receiptValidationService,
         isNot(contains('bool isProduction = false')),
       );
       expect(subscriptionService, contains('isProduction: kReleaseMode'));
+      expect(subscriptionService, contains('transactionId: transactionId'));
+      expect(subscriptionService, contains('userId: userId'));
     });
   });
 }

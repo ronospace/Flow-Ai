@@ -54,11 +54,17 @@ void main() {
       expect(backend, contains('production'));
       expect(backend, contains('sandbox'));
       expect(backend, contains('packageName !== configuredPackageName'));
+      expect(backend, contains('body.userId'));
+      expect(backend, contains('body.transactionId'));
+      expect(backend, contains('appleTransactionId'));
+      expect(backend, contains('userIdHashPrefix'));
 
       expect(
         client,
         contains("'environment': isProduction ? 'production' : 'sandbox'"),
       );
+      expect(client, contains("'transactionId': transactionId"));
+      expect(client, contains("'userId': userId"));
       expect(client, contains("'packageName': packageName"));
     });
   });
