@@ -113,6 +113,9 @@ void main() {
       );
       expect(receiptValidationService, contains('validateAppleReceipt'));
       expect(receiptValidationService, contains('validateGooglePlayReceipt'));
+      expect(receiptValidationService, isNot(contains('debugPrint(')));
+      expect(receiptValidationService, isNot(contains('isProduction = false')));
+      expect(subscriptionService, contains('isProduction: kReleaseMode'));
     });
 
     test('does not expose trusted hardcoded client pricing', () {
