@@ -337,7 +337,7 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
 android {
-    namespace 'com.flowai.health'
+    namespace 'com.flowai.app'
     compileSdkVersion ${config['compileSdkVersion']}
     ndkVersion "${config['ndkVersion']}"
 
@@ -351,7 +351,7 @@ android {
     }
 
     defaultConfig {
-        applicationId 'com.flowai.health'
+        applicationId 'com.flowai.app'
         minSdkVersion ${config['minSdkVersion']}
         targetSdkVersion ${config['targetSdkVersion']}
         versionCode flutterVersionCode.toInteger()
@@ -364,7 +364,7 @@ android {
             minifyEnabled ${config['enableMinifyEnabled']}
             shrinkResources ${config['enableShrinkResources']}
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
         }
         debug {
             minifyEnabled false

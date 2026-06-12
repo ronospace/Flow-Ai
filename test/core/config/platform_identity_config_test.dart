@@ -49,7 +49,22 @@ void main() {
         iosProject,
         contains('PRODUCT_BUNDLE_IDENTIFIER = com.flowai.health;'),
       );
-      expect(iosGoogleServices, contains('<string>com.flowai.health</string>'));
+      final deploymentService = File(
+        'lib/features/deployment/services/deployment_service.dart',
+      ).readAsStringSync();
+      final buildConfig = File(
+        'lib/core/config/build_config.dart',
+      ).readAsStringSync();
+
+      expect(deploymentService, contains("bundleId: 'com.flowai.health'"));
+      expect(deploymentService, isNot(contains('com.flowiq.app')));
+      expect(buildConfig, contains("namespace 'com.flowai.app'"));
+      expect(buildConfig, contains("applicationId 'com.flowai.app'"));
+      expect(buildConfig, contains('signingConfig signingConfigs.release'));
+      expect(
+        buildConfig,
+        isNot(contains('signingConfig signingConfigs.debug')),
+      );
     });
   });
 }

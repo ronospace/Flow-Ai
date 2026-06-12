@@ -52,7 +52,7 @@ class DeploymentService {
     // Create default Flow Ai app metadata
     _appMetadata = AppMetadata(
       appName: 'Flow Ai',
-      bundleId: 'com.flowiq.app',
+      bundleId: 'com.flowai.health',
       version: '1.0.0',
       buildNumber: '1',
       description:
