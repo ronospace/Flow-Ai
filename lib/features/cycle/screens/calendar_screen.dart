@@ -23,7 +23,6 @@ class _CalendarScreenState extends State<CalendarScreen>
     with TickerProviderStateMixin {
   late final PageController _pageController;
   late final ScrollController _landingScrollController;
-  bool _calendarLandingListenerAttached = false;
   bool _isSpringingBackToCalendarLanding = false;
   late final AnimationController _fadeController;
   late final AnimationController _scaleController;
@@ -48,19 +47,12 @@ class _CalendarScreenState extends State<CalendarScreen>
     _selectedDay = DateTime.now();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _attachCalendarLandingScrollListener();
       context.read<CycleProvider>().loadCycles();
     });
   }
 
   @override
   void dispose() {
-    if (_calendarLandingListenerAttached &&
-        _landingScrollController.hasClients) {
-      _landingScrollController.position.isScrollingNotifier.removeListener(
-        _handleCalendarLandingScrollIdle,
-      );
-    }
     _landingScrollController.dispose();
     _pageController.dispose();
     _fadeController.dispose();
@@ -80,57 +72,61 @@ class _CalendarScreenState extends State<CalendarScreen>
         ),
         child: SafeArea(
           bottom: false,
-          child: NotificationListener<ScrollEndNotification>(
-            onNotification: (notification) {
-              if (notification.metrics.axis == Axis.vertical) {
-                _springBackToCalendarLanding();
-              }
-              return false;
-            },
-            child: SingleChildScrollView(
-              controller: _landingScrollController,
-              physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics(),
-              ),
-              padding: AppLayout.calendarLandingScrollPadding,
-              child: Column(
-                children: [
-                  // Custom Header
-                  _buildHeader(),
+          child: Listener(
+            onPointerUp: (_) => _requestCalendarLandingSpringBack(),
+            onPointerCancel: (_) => _requestCalendarLandingSpringBack(),
+            child: NotificationListener<ScrollEndNotification>(
+              onNotification: (notification) {
+                if (notification.metrics.axis == Axis.vertical) {
+                  _requestCalendarLandingSpringBack();
+                }
+                return false;
+              },
+              child: SingleChildScrollView(
+                controller: _landingScrollController,
+                physics: const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics(),
+                ),
+                padding: AppLayout.calendarLandingScrollPadding,
+                child: Column(
+                  children: [
+                    // Custom Header
+                    _buildHeader(),
 
-                  // Calendar Legend
-                  _buildCalendarLegend(),
+                    // Calendar Legend
+                    _buildCalendarLegend(),
 
-                  // Calendar Widget
-                  Container(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.surface,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: theme.shadowColor.withValues(alpha: 0.1),
-                          blurRadius: 15,
-                          offset: const Offset(0, 8),
+                    // Calendar Widget
+                    Container(
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.surface,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: theme.shadowColor.withValues(alpha: 0.1),
+                            blurRadius: 15,
+                            offset: const Offset(0, 8),
+                          ),
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Consumer<CycleProvider>(
+                          builder: (context, cycleProvider, child) {
+                            return _buildCalendar(cycleProvider);
+                          },
                         ),
-                      ],
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Consumer<CycleProvider>(
-                        builder: (context, cycleProvider, child) {
-                          return _buildCalendar(cycleProvider);
-                        },
                       ),
                     ),
-                  ),
 
-                  // Current Cycle Info
-                  _buildCurrentCycleInfo(),
-                ],
+                    // Current Cycle Info
+                    _buildCurrentCycleInfo(),
+                  ],
+                ),
               ),
             ),
           ),
@@ -139,37 +135,7 @@ class _CalendarScreenState extends State<CalendarScreen>
     );
   }
 
-  void _attachCalendarLandingScrollListener() {
-    if (!mounted) {
-      return;
-    }
-
-    if (_calendarLandingListenerAttached) {
-      return;
-    }
-
-    if (!_landingScrollController.hasClients) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _attachCalendarLandingScrollListener();
-      });
-      return;
-    }
-
-    _landingScrollController.position.isScrollingNotifier.addListener(
-      _handleCalendarLandingScrollIdle,
-    );
-    _calendarLandingListenerAttached = true;
-  }
-
-  void _handleCalendarLandingScrollIdle() {
-    if (!_landingScrollController.hasClients) {
-      return;
-    }
-
-    if (_landingScrollController.position.isScrollingNotifier.value) {
-      return;
-    }
-
+  void _requestCalendarLandingSpringBack() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         _springBackToCalendarLanding();

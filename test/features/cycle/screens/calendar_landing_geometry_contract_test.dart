@@ -16,18 +16,19 @@ void main() {
       appLayout = File('lib/core/constants/app_layout.dart').readAsStringSync();
     });
 
-    test('keeps light bounce and springs back after true scroll idle', () {
+    test('keeps light bounce and springs back immediately after release', () {
       expect(calendarScreen, contains('SingleChildScrollView'));
       expect(calendarScreen, contains('BouncingScrollPhysics'));
       expect(calendarScreen, contains('AlwaysScrollableScrollPhysics'));
       expect(calendarScreen, contains('ScrollController'));
+      expect(calendarScreen, contains('Listener'));
+      expect(calendarScreen, contains('onPointerUp'));
+      expect(calendarScreen, contains('onPointerCancel'));
       expect(
         calendarScreen,
         contains('NotificationListener<ScrollEndNotification>'),
       );
-      expect(calendarScreen, contains('isScrollingNotifier'));
-      expect(calendarScreen, contains('_attachCalendarLandingScrollListener'));
-      expect(calendarScreen, contains('_handleCalendarLandingScrollIdle'));
+      expect(calendarScreen, contains('_requestCalendarLandingSpringBack'));
       expect(calendarScreen, contains('_springBackToCalendarLanding'));
       expect(calendarScreen, contains('animateTo('));
       expect(calendarScreen, contains('0,'));
@@ -36,6 +37,15 @@ void main() {
         contains('padding: AppLayout.calendarLandingScrollPadding'),
       );
 
+      expect(calendarScreen, isNot(contains('isScrollingNotifier')));
+      expect(
+        calendarScreen,
+        isNot(contains('_attachCalendarLandingScrollListener')),
+      );
+      expect(
+        calendarScreen,
+        isNot(contains('_handleCalendarLandingScrollIdle')),
+      );
       expect(calendarScreen, isNot(contains('scrollBottomPadding')));
       expect(calendarScreen, isNot(contains('bottomNavigationClearance')));
       expect(calendarScreen, isNot(contains('AppLayout.scrollBottomPadding')));
@@ -45,7 +55,7 @@ void main() {
       );
     });
 
-    test('centralizes landing and spring-back geometry in AppLayout', () {
+    test('centralizes landing and soft spring-back geometry in AppLayout', () {
       expect(appRouter, contains('extendBody: false'));
       expect(appRouter, contains('bottomNavigationBar: SafeArea'));
       expect(appRouter, contains('AppLayout.bottomNavigationHeight'));
@@ -59,7 +69,9 @@ void main() {
       expect(appLayout, contains('calendarLandingSummaryCardMargin'));
       expect(appLayout, contains('calendarLandingSpringBackTolerance'));
       expect(appLayout, contains('calendarLandingSpringBackDuration'));
+      expect(appLayout, contains('milliseconds: 520'));
       expect(appLayout, contains('calendarLandingSpringBackCurve'));
+      expect(appLayout, contains('Curves.easeInOutCubic'));
     });
 
     test('keeps current-cycle card as the bottom landing anchor', () {
