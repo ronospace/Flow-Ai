@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/constants/app_layout.dart';
 import '../../../generated/app_localizations.dart';
 import '../../../core/models/cycle_data.dart';
 import '../providers/cycle_provider.dart';
@@ -59,7 +58,6 @@ class _CalendarScreenState extends State<CalendarScreen>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final scrollBottomPadding = AppLayout.scrollBottomPadding(context);
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -73,7 +71,7 @@ class _CalendarScreenState extends State<CalendarScreen>
             physics: const BouncingScrollPhysics(
               parent: AlwaysScrollableScrollPhysics(),
             ),
-            padding: EdgeInsets.only(bottom: scrollBottomPadding),
+            padding: EdgeInsets.zero,
             child: Column(
               children: [
                 // Custom Header
