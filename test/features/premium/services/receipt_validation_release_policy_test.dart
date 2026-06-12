@@ -46,6 +46,8 @@ void main() {
       expect(subscriptionService, contains('isProduction: kReleaseMode'));
       expect(subscriptionService, contains('transactionId: transactionId'));
       expect(subscriptionService, contains('userId: userId'));
+      expect(receiptValidationService, contains("data['valid'] == true"));
+      expect(receiptValidationService, contains("data['active'] == true"));
     });
   });
 }

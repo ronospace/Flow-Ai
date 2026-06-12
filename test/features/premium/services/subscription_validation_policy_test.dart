@@ -497,75 +497,75 @@ void main() {
       }
     });
 
-    test('backend receipt validation endpoints are fail closed', () {
-      final backendIndex = File('functions/src/index.ts').readAsStringSync();
-      final backendReceiptValidation = File(
-        'functions/src/receipt_validation_http.ts',
-      ).readAsStringSync();
+    test(
+      'backend receipt validation verifies providers and persists entitlement',
+      () {
+        final backendIndex = File('functions/src/index.ts').readAsStringSync();
+        final backendReceiptValidation = File(
+          'functions/src/receipt_validation_http.ts',
+        ).readAsStringSync();
 
-      expect(backendIndex, contains('validateAppleReceipt'));
-      expect(backendIndex, contains('validateGooglePlayReceipt'));
-      expect(backendIndex, contains('subscriptionStatus'));
-      expect(backendIndex, contains('receipt_validation_http'));
+        expect(backendIndex, contains('validateAppleReceipt'));
+        expect(backendIndex, contains('validateGooglePlayReceipt'));
+        expect(backendIndex, contains('subscriptionStatus'));
+        expect(backendIndex, contains('receipt_validation_http'));
 
-      expect(backendReceiptValidation, contains('onRequest'));
-      expect(backendReceiptValidation, contains('method_not_allowed'));
-      expect(
-        backendReceiptValidation,
-        contains('invalid_receipt_validation_request'),
-      );
-      expect(
-        backendReceiptValidation,
-        contains('invalid_subscription_status_request'),
-      );
-      expect(
-        backendReceiptValidation,
-        contains('provider_validation_not_configured'),
-      );
-      expect(
-        backendReceiptValidation,
-        contains('provider_secrets_not_configured'),
-      );
-      expect(backendReceiptValidation, contains('defineSecret'));
-      expect(backendReceiptValidation, contains('FLOW_AI_APPLE_BUNDLE_ID'));
-      expect(backendReceiptValidation, contains('FLOW_AI_APPLE_ISSUER_ID'));
-      expect(backendReceiptValidation, contains('FLOW_AI_APPLE_KEY_ID'));
-      expect(
-        backendReceiptValidation,
-        contains('FLOW_AI_APPLE_PRIVATE_KEY_P8'),
-      );
-      expect(
-        backendReceiptValidation,
-        contains('FLOW_AI_APPLE_ROOT_CERTIFICATES_PEM'),
-      );
-      expect(backendReceiptValidation, contains('FLOW_AI_GOOGLE_PACKAGE_NAME'));
-      expect(
-        backendReceiptValidation,
-        contains('FLOW_AI_GOOGLE_SERVICE_ACCOUNT_JSON'),
-      );
-      expect(backendReceiptValidation, contains('appleProviderSecrets'));
-      expect(backendReceiptValidation, contains('googleProviderSecrets'));
-      expect(backendReceiptValidation, contains('environment'));
-      expect(backendReceiptValidation, contains('body.userId'));
-      expect(backendReceiptValidation, contains('body.transactionId'));
-      expect(backendReceiptValidation, contains('appleTransactionId'));
-      expect(backendReceiptValidation, contains('valid: false'));
-      expect(backendReceiptValidation, contains('active: false'));
-      expect(backendReceiptValidation, contains('Cache-Control'));
-      expect(backendReceiptValidation, contains('no-store'));
+        for (final token in [
+          'AppStoreServerAPIClient',
+          'SignedDataVerifier',
+          'GoogleAuth',
+          'getTransactionInfo',
+          'verifyAndDecodeTransaction',
+          'subscriptionsv2',
+          'androidpublisher',
+          'persistValidatedEntitlement',
+          'premiumEntitlements',
+          'expiresAtMillis',
+          'FieldValue.serverTimestamp',
+          'Timestamp.fromMillis',
+          'valid: true',
+          'active: true',
+        ]) {
+          expect(backendReceiptValidation, contains(token));
+        }
 
-      expect(
-        backendReceiptValidation,
-        isNot(contains('valid: true')),
-        reason:
-            'Backend skeleton must not grant entitlement before provider validation exists.',
-      );
-      expect(
-        backendReceiptValidation,
-        isNot(contains('active: true')),
-        reason:
-            'Backend skeleton must not mark subscriptions active before provider validation exists.',
-      );
-    });
+        expect(
+          backendReceiptValidation,
+          contains('provider_secrets_not_configured'),
+        );
+        expect(backendReceiptValidation, contains('receipt_not_active'));
+        expect(
+          backendReceiptValidation,
+          contains('provider_validation_failed'),
+        );
+        expect(backendReceiptValidation, contains('body.userId'));
+        expect(backendReceiptValidation, contains('body.transactionId'));
+        expect(backendReceiptValidation, contains('appleTransactionId'));
+        expect(backendReceiptValidation, contains('Cache-Control'));
+        expect(backendReceiptValidation, contains('no-store'));
+
+        final validIndex = backendReceiptValidation.indexOf('valid: true');
+        final persistIndex = backendReceiptValidation.indexOf(
+          'await persistValidatedEntitlement',
+        );
+        expect(persistIndex, greaterThan(-1));
+        expect(validIndex, greaterThan(-1));
+        expect(persistIndex, lessThan(validIndex));
+
+        expect(
+          backendReceiptValidation,
+          isNot(contains('provider_validation_not_configured')),
+        );
+        expect(backendReceiptValidation, isNot(contains('return true')));
+        expect(
+          backendReceiptValidation,
+          isNot(contains('sandbox.itunes.apple.com')),
+        );
+        expect(
+          backendReceiptValidation,
+          isNot(contains('buy.itunes.apple.com')),
+        );
+      },
+    );
   });
 }
