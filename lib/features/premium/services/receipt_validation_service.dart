@@ -41,6 +41,9 @@ class ReceiptValidationService {
         receiptData: receiptData,
         productId: productId,
         platform: 'ios',
+        additionalData: {
+          'environment': isProduction ? 'production' : 'sandbox',
+        },
       );
 
       return backendResult ??

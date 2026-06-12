@@ -4,6 +4,9 @@ import {
 import {
   logger,
 } from "firebase-functions";
+import {
+  defineSecret,
+} from "firebase-functions/params";
 
 type ReceiptValidationResponse = {
   valid: boolean;
@@ -18,6 +21,31 @@ type SubscriptionStatusResponse = {
   error?: string;
 };
 
+type SecretValue = {
+  value: () => string;
+};
+
+const appleBundleId = defineSecret("FLOW_AI_APPLE_BUNDLE_ID");
+const appleIssuerId = defineSecret("FLOW_AI_APPLE_ISSUER_ID");
+const appleKeyId = defineSecret("FLOW_AI_APPLE_KEY_ID");
+const applePrivateKeyP8 = defineSecret("FLOW_AI_APPLE_PRIVATE_KEY_P8");
+const googlePackageName = defineSecret("FLOW_AI_GOOGLE_PACKAGE_NAME");
+const googleServiceAccountJson = defineSecret(
+  "FLOW_AI_GOOGLE_SERVICE_ACCOUNT_JSON",
+);
+
+const appleProviderSecrets = [
+  appleBundleId,
+  appleIssuerId,
+  appleKeyId,
+  applePrivateKeyP8,
+];
+
+const googleProviderSecrets = [
+  googlePackageName,
+  googleServiceAccountJson,
+];
+
 const jsonHeaders = {
   "Content-Type": "application/json",
   "Cache-Control": "no-store",
@@ -26,6 +54,11 @@ const jsonHeaders = {
 const allowedPlatforms = new Set([
   "ios",
   "android",
+]);
+
+const allowedAppleEnvironments = new Set([
+  "production",
+  "sandbox",
 ]);
 
 /**
@@ -65,11 +98,68 @@ function readNonEmptyString(value: unknown): string | null {
 }
 
 /**
+ * Reads a Firebase secret value without leaking it to logs.
+ *
+ * @param {SecretValue} secret Firebase secret parameter.
+ * @return {string|null} Non-empty secret value, or null.
+ */
+function readSecret(secret: SecretValue): string | null {
+  try {
+    const value = secret.value().trim();
+    return value.length > 0 ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Returns missing Apple provider secret names.
+ *
+ * @return {string[]} Missing secret names.
+ */
+function missingAppleProviderSecrets(): string[] {
+  const missing: string[] = [];
+
+  if (readSecret(appleBundleId) === null) {
+    missing.push("FLOW_AI_APPLE_BUNDLE_ID");
+  }
+  if (readSecret(appleIssuerId) === null) {
+    missing.push("FLOW_AI_APPLE_ISSUER_ID");
+  }
+  if (readSecret(appleKeyId) === null) {
+    missing.push("FLOW_AI_APPLE_KEY_ID");
+  }
+  if (readSecret(applePrivateKeyP8) === null) {
+    missing.push("FLOW_AI_APPLE_PRIVATE_KEY_P8");
+  }
+
+  return missing;
+}
+
+/**
+ * Returns missing Google provider secret names.
+ *
+ * @return {string[]} Missing secret names.
+ */
+function missingGoogleProviderSecrets(): string[] {
+  const missing: string[] = [];
+
+  if (readSecret(googlePackageName) === null) {
+    missing.push("FLOW_AI_GOOGLE_PACKAGE_NAME");
+  }
+  if (readSecret(googleServiceAccountJson) === null) {
+    missing.push("FLOW_AI_GOOGLE_SERVICE_ACCOUNT_JSON");
+  }
+
+  return missing;
+}
+
+/**
  * Handles the shared receipt validation request contract used by the app.
  *
- * The endpoint is intentionally fail-closed. It validates transport and payload
- * shape, logs only non-sensitive metadata, and refuses entitlement until the
- * provider verification implementation is added with secure secrets.
+ * The endpoint is intentionally fail-closed. It validates transport, payload
+ * shape, and provider secret readiness, but refuses entitlement until provider
+ * verification and server-side entitlement persistence are implemented.
  *
  * @param {unknown} request Express request object from Firebase.
  * @param {unknown} response Express response object from Firebase.
@@ -95,6 +185,8 @@ function handleReceiptValidation(
   const receipt = readNonEmptyString(body.receipt);
   const productId = readNonEmptyString(body.productId);
   const platform = readNonEmptyString(body.platform);
+  let packageName: string | null = null;
+  let appleEnvironment: string | null = null;
 
   if (
     receipt === null ||
@@ -110,8 +202,22 @@ function handleReceiptValidation(
     return;
   }
 
+  if (expectedPlatform === "ios") {
+    appleEnvironment = readNonEmptyString(body.environment);
+    if (
+      appleEnvironment === null ||
+      !allowedAppleEnvironments.has(appleEnvironment)
+    ) {
+      sendJson(response, 400, {
+        valid: false,
+        error: "invalid_receipt_validation_request",
+      });
+      return;
+    }
+  }
+
   if (expectedPlatform === "android") {
-    const packageName = readNonEmptyString(body.packageName);
+    packageName = readNonEmptyString(body.packageName);
     if (packageName === null) {
       sendJson(response, 400, {
         valid: false,
@@ -121,7 +227,38 @@ function handleReceiptValidation(
     }
   }
 
-  logger.warn("Receipt validation provider integration is not configured", {
+  const missingSecrets = expectedPlatform === "ios" ?
+    missingAppleProviderSecrets() :
+    missingGoogleProviderSecrets();
+
+  if (missingSecrets.length > 0) {
+    logger.error("Receipt validation provider secrets are not configured", {
+      missingSecretCount: missingSecrets.length,
+      platform,
+    });
+
+    sendJson(response, 503, {
+      valid: false,
+      error: "provider_secrets_not_configured",
+    });
+    return;
+  }
+
+  if (expectedPlatform === "android") {
+    const configuredPackageName = readSecret(googlePackageName);
+    if (
+      configuredPackageName === null ||
+      packageName !== configuredPackageName
+    ) {
+      sendJson(response, 400, {
+        valid: false,
+        error: "invalid_receipt_validation_request",
+      });
+      return;
+    }
+  }
+
+  logger.warn("Receipt validation provider integration is not implemented", {
     productId,
     platform,
   });
@@ -135,16 +272,26 @@ function handleReceiptValidation(
 /**
  * Validates an Apple receipt through the Flow AI backend contract.
  */
-export const validateAppleReceipt = onRequest((request, response) => {
-  handleReceiptValidation(request, response, "ios");
-});
+export const validateAppleReceipt = onRequest(
+  {
+    secrets: appleProviderSecrets,
+  },
+  (request, response) => {
+    handleReceiptValidation(request, response, "ios");
+  },
+);
 
 /**
  * Validates a Google Play purchase token through the Flow AI backend contract.
  */
-export const validateGooglePlayReceipt = onRequest((request, response) => {
-  handleReceiptValidation(request, response, "android");
-});
+export const validateGooglePlayReceipt = onRequest(
+  {
+    secrets: googleProviderSecrets,
+  },
+  (request, response) => {
+    handleReceiptValidation(request, response, "android");
+  },
+);
 
 /**
  * Verifies persisted subscription status through the Flow AI backend contract.
