@@ -16,62 +16,63 @@ void main() {
       appLayout = File('lib/core/constants/app_layout.dart').readAsStringSync();
     });
 
-    test('uses native scroll physics for top and bottom landing feel', () {
-      expect(calendarScreen, contains('CustomScrollView'));
-      expect(calendarScreen, contains('SliverPadding'));
-      expect(calendarScreen, contains('SliverFillRemaining'));
-      expect(calendarScreen, contains('fillOverscroll: true'));
-      expect(calendarScreen, contains('hasScrollBody: false'));
+    test('keeps light bounce and springs back immediately after release', () {
+      expect(calendarScreen, contains('SingleChildScrollView'));
       expect(calendarScreen, contains('BouncingScrollPhysics'));
       expect(calendarScreen, contains('AlwaysScrollableScrollPhysics'));
+      expect(calendarScreen, contains('ScrollController'));
+      expect(calendarScreen, contains('Listener'));
+      expect(calendarScreen, contains('onPointerUp'));
+      expect(calendarScreen, contains('onPointerCancel'));
       expect(
         calendarScreen,
-        contains('mainAxisAlignment: MainAxisAlignment.spaceBetween'),
+        contains('NotificationListener<ScrollEndNotification>'),
+      );
+      expect(calendarScreen, contains('_requestCalendarLandingSpringBack'));
+      expect(calendarScreen, contains('_springBackToCalendarLanding'));
+      expect(calendarScreen, contains('animateTo('));
+      expect(calendarScreen, contains('0,'));
+      expect(
+        calendarScreen,
+        contains('padding: AppLayout.calendarLandingScrollPadding'),
       );
 
-      expect(calendarScreen, isNot(contains('SingleChildScrollView')));
-      expect(calendarScreen, isNot(contains('ScrollController')));
-      expect(calendarScreen, isNot(contains('Listener')));
+      expect(calendarScreen, isNot(contains('isScrollingNotifier')));
       expect(
         calendarScreen,
-        isNot(contains('NotificationListener<ScrollEndNotification>')),
+        isNot(contains('_attachCalendarLandingScrollListener')),
       );
-      expect(calendarScreen, isNot(contains('animateTo(')));
-      expect(calendarScreen, isNot(contains('jumpTo(')));
       expect(
         calendarScreen,
-        isNot(contains('_requestCalendarLandingSpringBack')),
+        isNot(contains('_handleCalendarLandingScrollIdle')),
       );
-      expect(calendarScreen, isNot(contains('_springBackToCalendarLanding')));
+      expect(calendarScreen, isNot(contains('scrollBottomPadding')));
+      expect(calendarScreen, isNot(contains('bottomNavigationClearance')));
+      expect(calendarScreen, isNot(contains('AppLayout.scrollBottomPadding')));
+      expect(
+        calendarScreen,
+        isNot(contains('AppLayout.bottomNavigationClearance')),
+      );
     });
 
-    test(
-      'centralizes landing geometry in AppLayout without custom animation',
-      () {
-        expect(appRouter, contains('extendBody: false'));
-        expect(appRouter, contains('bottomNavigationBar: SafeArea'));
-        expect(appRouter, contains('AppLayout.bottomNavigationHeight'));
+    test('centralizes landing and soft spring-back geometry in AppLayout', () {
+      expect(appRouter, contains('extendBody: false'));
+      expect(appRouter, contains('bottomNavigationBar: SafeArea'));
+      expect(appRouter, contains('AppLayout.bottomNavigationHeight'));
 
-        expect(appLayout, contains('bottomNavigationHeight = 72.0'));
-        expect(appLayout, contains('bottomNavigationContentGap = 32.0'));
-        expect(
-          appLayout,
-          contains('calendarLandingScrollPadding = EdgeInsets.zero'),
-        );
-        expect(appLayout, contains('calendarLandingSummaryCardMargin'));
-        expect(
-          calendarScreen,
-          contains('padding: AppLayout.calendarLandingScrollPadding'),
-        );
-
-        expect(
-          appLayout,
-          isNot(contains('calendarLandingSpringBackTolerance')),
-        );
-        expect(appLayout, isNot(contains('calendarLandingSpringBackDuration')));
-        expect(appLayout, isNot(contains('calendarLandingSpringBackCurve')));
-      },
-    );
+      expect(appLayout, contains('bottomNavigationHeight = 72.0'));
+      expect(appLayout, contains('bottomNavigationContentGap = 32.0'));
+      expect(
+        appLayout,
+        contains('calendarLandingScrollPadding = EdgeInsets.zero'),
+      );
+      expect(appLayout, contains('calendarLandingSummaryCardMargin'));
+      expect(appLayout, contains('calendarLandingSpringBackTolerance'));
+      expect(appLayout, contains('calendarLandingSpringBackDuration'));
+      expect(appLayout, contains('milliseconds: 520'));
+      expect(appLayout, contains('calendarLandingSpringBackCurve'));
+      expect(appLayout, contains('Curves.easeInOutCubic'));
+    });
 
     test('keeps current-cycle card as the bottom landing anchor', () {
       expect(calendarScreen, contains('_buildCurrentCycleInfo()'));
@@ -81,17 +82,14 @@ void main() {
         calendarScreen,
         contains('margin: AppLayout.calendarLandingSummaryCardMargin'),
       );
-    });
-
-    test('does not duplicate app-shell bottom navigation clearance', () {
-      expect(calendarScreen, isNot(contains('scrollBottomPadding')));
-      expect(calendarScreen, isNot(contains('bottomNavigationClearance')));
-      expect(calendarScreen, isNot(contains('AppLayout.scrollBottomPadding')));
       expect(
         calendarScreen,
-        isNot(contains('AppLayout.bottomNavigationClearance')),
+        contains('AppLayout.calendarLandingSpringBackDuration'),
       );
-      expect(calendarScreen, isNot(contains('EdgeInsets.only(bottom:')));
+      expect(
+        calendarScreen,
+        contains('AppLayout.calendarLandingSpringBackCurve'),
+      );
     });
   });
 }
