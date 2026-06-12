@@ -96,6 +96,36 @@ MONETIZATION_DART_DEFINES=(
 
 print_success "Monetization backend dart-defines are present"
 
+
+# Verify Android release signing is configured before any release build
+require_android_release_signing() {
+    if [ ! -f "android/key.properties" ]; then
+        print_error "Missing android/key.properties. Refusing unsigned Android release build."
+        print_error "Create android/key.properties with storeFile, storePassword, keyAlias, and keyPassword."
+        exit 1
+    fi
+
+    for signing_key in storeFile storePassword keyAlias keyPassword; do
+        if ! grep -Eq "^[[:space:]]*${signing_key}[[:space:]]*=" android/key.properties; then
+            print_error "Missing required Android release signing property: ${signing_key}"
+            exit 1
+        fi
+    done
+
+    signing_store_file="$(awk -F= '$1 ~ /^[[:space:]]*storeFile[[:space:]]*$/ {print $2}' android/key.properties | tail -1 | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+    if [ -z "$signing_store_file" ]; then
+        print_error "Android release signing storeFile is empty"
+        exit 1
+    fi
+
+    if [ ! -f "android/${signing_store_file}" ] && [ ! -f "$signing_store_file" ]; then
+        print_error "Android release signing keystore file is missing"
+        exit 1
+    fi
+
+    print_success "Android release signing configuration is present"
+}
+
 echo ""
 echo "🎯 Select platforms to build:"
 echo "1. Web only"
@@ -138,12 +168,12 @@ case $platform_choice in
         if [[ $web_choice == "y" || $web_choice == "Y" ]]; then
             BUILD_WEB=true
         fi
-        
+
         read -p "Build Android? (y/n): " android_choice
         if [[ $android_choice == "y" || $android_choice == "Y" ]]; then
             BUILD_ANDROID=true
         fi
-        
+
         if [[ "$OSTYPE" == "darwin"* ]]; then
             read -p "Build iOS? (y/n): " ios_choice
             if [[ $ios_choice == "y" || $ios_choice == "Y" ]]; then
@@ -171,7 +201,7 @@ BUILDS_FAILED=()
 if [ "$BUILD_WEB" = true ]; then
     echo ""
     print_platform "Building for Web..."
-    
+
     if flutter build web --release; then
         print_success "✅ Web build completed successfully!"
         BUILDS_COMPLETED+=("Web")
@@ -186,39 +216,28 @@ fi
 if [ "$BUILD_ANDROID" = true ]; then
     echo ""
     print_platform "Building for Android..."
-    
+
     # Check if signing is configured
-    if [ -f "android/key.properties" ]; then
-        print_status "Signing key found. Building signed App Bundle..."
-        if flutter build appbundle --release "${MONETIZATION_DART_DEFINES[@]}"; then
-            print_success "✅ Android App Bundle build completed successfully!"
-            BUILDS_COMPLETED+=("Android (App Bundle)")
-            print_status "App Bundle location: build/app/outputs/bundle/release/app-release.aab"
-        else
-            print_error "❌ Android App Bundle build failed!"
-            BUILDS_FAILED+=("Android (App Bundle)")
-        fi
-        
-        print_status "Building signed APK..."
-        if flutter build apk --release "${MONETIZATION_DART_DEFINES[@]}"; then
-            print_success "✅ Android APK build completed successfully!"
-            BUILDS_COMPLETED+=("Android (APK)")
-            print_status "APK location: build/app/outputs/flutter-apk/app-release.apk"
-        else
-            print_error "❌ Android APK build failed!"
-            BUILDS_FAILED+=("Android (APK)")
-        fi
+    require_android_release_signing
+
+    print_status "Signing key found. Building signed App Bundle..."
+    if flutter build appbundle --release "${MONETIZATION_DART_DEFINES[@]}"; then
+        print_success "✅ Android App Bundle build completed successfully!"
+        BUILDS_COMPLETED+=("Android (App Bundle)")
+        print_status "App Bundle location: build/app/outputs/bundle/release/app-release.aab"
     else
-        print_warning "No signing key found. Building unsigned APK..."
-        if flutter build apk --release "${MONETIZATION_DART_DEFINES[@]}"; then
-            print_success "✅ Android APK build completed successfully (unsigned)!"
-            BUILDS_COMPLETED+=("Android (APK - Unsigned)")
-            print_status "APK location: build/app/outputs/flutter-apk/app-release.apk"
-            print_warning "⚠️ APK is unsigned. Set up signing for production release."
-        else
-            print_error "❌ Android APK build failed!"
-            BUILDS_FAILED+=("Android (APK)")
-        fi
+        print_error "❌ Android App Bundle build failed!"
+        BUILDS_FAILED+=("Android (App Bundle)")
+    fi
+
+    print_status "Building signed APK..."
+    if flutter build apk --release "${MONETIZATION_DART_DEFINES[@]}"; then
+        print_success "✅ Android APK build completed successfully!"
+        BUILDS_COMPLETED+=("Android (APK)")
+        print_status "APK location: build/app/outputs/flutter-apk/app-release.apk"
+    else
+        print_error "❌ Android APK build failed!"
+        BUILDS_FAILED+=("Android (APK)")
     fi
 fi
 
@@ -226,7 +245,7 @@ fi
 if [ "$BUILD_IOS" = true ]; then
     echo ""
     print_platform "Building for iOS..."
-    
+
     # Check if on macOS
     if [[ "$OSTYPE" != "darwin"* ]]; then
         print_error "❌ iOS builds require macOS!"
@@ -310,7 +329,7 @@ if [[ " ${BUILDS_COMPLETED[@]} " =~ "Android" ]]; then
     echo "🤖 Android Deployment:"
     echo "   • Google Play Console: play.google.com/console"
     echo "   • Upload App Bundle (.aab) for optimal distribution"
-    echo "   • APK for direct distribution or testing"
+    echo "   • Signed APK"
 fi
 
 if [[ " ${BUILDS_COMPLETED[@]} " =~ " iOS " ]]; then

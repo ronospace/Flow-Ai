@@ -79,6 +79,36 @@ MONETIZATION_DART_DEFINES=(
 
 print_success "Monetization backend dart-defines are present"
 
+
+# Verify Android release signing is configured before any release build
+require_android_release_signing() {
+    if [ ! -f "android/key.properties" ]; then
+        print_error "Missing android/key.properties. Refusing unsigned Android release build."
+        print_error "Create android/key.properties with storeFile, storePassword, keyAlias, and keyPassword."
+        exit 1
+    fi
+
+    for signing_key in storeFile storePassword keyAlias keyPassword; do
+        if ! grep -Eq "^[[:space:]]*${signing_key}[[:space:]]*=" android/key.properties; then
+            print_error "Missing required Android release signing property: ${signing_key}"
+            exit 1
+        fi
+    done
+
+    signing_store_file="$(awk -F= '$1 ~ /^[[:space:]]*storeFile[[:space:]]*$/ {print $2}' android/key.properties | tail -1 | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+    if [ -z "$signing_store_file" ]; then
+        print_error "Android release signing storeFile is empty"
+        exit 1
+    fi
+
+    if [ ! -f "android/${signing_store_file}" ] && [ ! -f "$signing_store_file" ]; then
+        print_error "Android release signing keystore file is missing"
+        exit 1
+    fi
+
+    print_success "Android release signing configuration is present"
+}
+
 # Run analyzer to check for issues
 print_status "Running Flutter analyzer..."
 if ! flutter analyze; then
@@ -89,33 +119,14 @@ fi
 print_success "Analysis completed successfully"
 
 # Check if signing key is configured
-if [ ! -f "android/key.properties" ]; then
-    print_warning "Signing key not configured!"
-    echo ""
-    echo "To set up app signing:"
-    echo "1. Generate a signing key:"
-    echo "   keytool -genkey -v -keystore ~/upload-keystore.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload"
-    echo ""
-    echo "2. Create android/key.properties with:"
-    echo "   storePassword=<password>"
-    echo "   keyPassword=<password>"
-    echo "   keyAlias=upload"
-    echo "   storeFile=<path-to-keystore>"
-    echo ""
-    echo "3. Update android/app/build.gradle to use the signing config"
-    echo ""
-    print_status "Building unsigned APK for testing..."
-    flutter build apk --release "${MONETIZATION_DART_DEFINES[@]}"
-    print_success "Unsigned APK built successfully at: build/app/outputs/flutter-apk/app-release.apk"
-    exit 0
-fi
+require_android_release_signing
 
 print_status "Signing key found. Building signed app..."
 
 # Ask user what type of build they want
 echo ""
 echo "Select build type:"
-echo "1. APK (for testing or direct distribution)"
+echo "1. APK"
 echo "2. App Bundle (recommended for Google Play Store)"
 echo "3. Both"
 echo ""
@@ -138,11 +149,11 @@ case $build_choice in
         print_status "Building APK..."
         flutter build apk --release "${MONETIZATION_DART_DEFINES[@]}"
         print_success "APK built successfully!"
-        
+
         print_status "Building App Bundle..."
         flutter build appbundle --release "${MONETIZATION_DART_DEFINES[@]}"
         print_success "App Bundle built successfully!"
-        
+
         print_status "Build artifacts:"
         print_status "APK: build/app/outputs/flutter-apk/app-release.apk"
         print_status "App Bundle: build/app/outputs/bundle/release/app-release.aab"
