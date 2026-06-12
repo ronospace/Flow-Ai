@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:flutter/foundation.dart';
 
 /// Receipt Validation Service
 /// Validates purchase receipts from App Store and Google Play through
@@ -34,15 +33,9 @@ class ReceiptValidationService {
   Future<ReceiptValidationResult> validateAppleReceipt({
     required String receiptData,
     required String productId,
-    bool isProduction = false,
+    required bool isProduction,
   }) async {
     try {
-      final environment = isProduction ? 'production' : 'sandbox';
-      debugPrint(
-        '🍎 Validating Apple receipt through backend for product: '
-        '$productId ($environment)',
-      );
-
       final backendResult = await _validateThroughBackend(
         endpoint: _appleValidationEndpoint,
         receiptData: receiptData,
@@ -56,7 +49,6 @@ class ReceiptValidationService {
             errorMessage: 'Backend validation unavailable',
           );
     } catch (e) {
-      debugPrint('❌ Apple receipt validation error: $e');
       return ReceiptValidationResult(
         isValid: false,
         errorMessage: 'Failed to validate receipt: ${e.toString()}',
@@ -71,8 +63,6 @@ class ReceiptValidationService {
     required String packageName,
   }) async {
     try {
-      debugPrint('🤖 Validating Google Play receipt for product: $productId');
-
       final result = await _validateThroughBackend(
         endpoint: _googleValidationEndpoint,
         receiptData: purchaseToken,
@@ -87,7 +77,6 @@ class ReceiptValidationService {
             errorMessage: 'Backend validation unavailable',
           );
     } catch (e) {
-      debugPrint('❌ Google Play receipt validation error: $e');
       return ReceiptValidationResult(
         isValid: false,
         errorMessage: 'Failed to validate receipt: ${e.toString()}',
@@ -105,7 +94,6 @@ class ReceiptValidationService {
   }) async {
     final uri = Uri.tryParse(endpoint.trim());
     if (!_isConfiguredSecureEndpoint(endpoint) || uri == null) {
-      debugPrint('Receipt validation backend is not configured securely');
       return null;
     }
 
@@ -136,10 +124,8 @@ class ReceiptValidationService {
         );
       }
 
-      debugPrint('Backend validation failed: ${response.statusCode}');
       return null;
     } catch (e) {
-      debugPrint('Backend validation error: $e');
       return null;
     }
   }
@@ -152,7 +138,6 @@ class ReceiptValidationService {
     final endpoint = _subscriptionStatusEndpoint.trim();
     final baseUri = Uri.tryParse(endpoint);
     if (!canValidateSubscriptionStatus || baseUri == null) {
-      debugPrint('Subscription status endpoint is not configured securely');
       return false;
     }
 
@@ -176,7 +161,6 @@ class ReceiptValidationService {
 
       return false;
     } catch (e) {
-      debugPrint('Error verifying subscription: $e');
       return false;
     }
   }
