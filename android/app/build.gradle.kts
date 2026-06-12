@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     // START: FlutterFire Configuration
@@ -8,13 +11,61 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
-android {
-      lint {
-    checkReleaseBuilds = false
-    abortOnError = false
-  }
+val keystoreProperties = Properties()
+val keystorePropertiesFile = rootProject.file("key.properties")
 
-namespace = "com.flowai.app"
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+}
+
+val requiredReleaseSigningKeys = listOf(
+    "storeFile",
+    "storePassword",
+    "keyAlias",
+    "keyPassword",
+)
+
+fun releaseSigningValue(name: String): String? =
+    (keystoreProperties[name] as String?)?.trim()?.takeIf { it.isNotEmpty() }
+
+fun releaseStoreFileCandidate(): java.io.File? {
+    val configuredStoreFile = releaseSigningValue("storeFile") ?: return null
+    val rootCandidate = rootProject.file(configuredStoreFile)
+    return if (rootCandidate.exists()) rootCandidate else file(configuredStoreFile)
+}
+
+val releaseStoreFile = releaseStoreFileCandidate()
+val releaseSigningConfigured =
+    requiredReleaseSigningKeys.all { releaseSigningValue(it) != null } &&
+        releaseStoreFile?.exists() == true
+
+gradle.taskGraph.whenReady {
+    val releaseTaskRequested = allTasks.any { task ->
+        val taskName = task.name.lowercase()
+        taskName.contains("release") &&
+            (taskName.contains("assemble") ||
+                taskName.contains("bundle") ||
+                taskName.contains("package"))
+    }
+
+    if (releaseTaskRequested && !releaseSigningConfigured) {
+        throw GradleException(
+            "Missing Android release signing configuration. " +
+                "Create android/key.properties with storeFile, storePassword, " +
+                "keyAlias, and keyPassword; ensure storeFile points to an " +
+                "existing keystore. Refusing to build Android release with " +
+                "debug or unsigned signing.",
+        )
+    }
+}
+
+android {
+    lint {
+        checkReleaseBuilds = true
+        abortOnError = true
+    }
+
+    namespace = "com.flowai.app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -29,21 +80,27 @@ sourceCompatibility = JavaVersion.VERSION_17
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.flowai.app"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = 26
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        create("release") {
+            if (releaseSigningConfigured) {
+                keyAlias = releaseSigningValue("keyAlias")
+                keyPassword = releaseSigningValue("keyPassword")
+                storePassword = releaseSigningValue("storePassword")
+                storeFile = releaseStoreFile
+            }
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 }
