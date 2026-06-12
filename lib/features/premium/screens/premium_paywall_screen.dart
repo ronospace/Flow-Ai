@@ -52,7 +52,9 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
       body: SafeArea(
         child: Consumer<SubscriptionProvider>(
           builder: (context, subscriptionProvider, child) {
-            final yearlySavings = subscriptionProvider.calculateYearlySavings();
+            final hasYearlyBillingOption =
+                subscriptionProvider.getMonthlyProduct() != null &&
+                subscriptionProvider.getYearlyProduct() != null;
 
             return Stack(
               children: [
@@ -150,7 +152,7 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
                             _buildSubscriptionOptions(
                               context,
                               subscriptionProvider,
-                              yearlySavings,
+                              hasYearlyBillingOption,
                             ),
 
                             const SizedBox(height: 24),
@@ -322,7 +324,7 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
   Widget _buildSubscriptionOptions(
     BuildContext context,
     SubscriptionProvider provider,
-    double? yearlySavings,
+    bool hasYearlyBillingOption,
   ) {
     final monthlyProduct = provider.getMonthlyProduct();
     final yearlyProduct = provider.getYearlyProduct();
@@ -354,7 +356,7 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
               product: yearlyProduct,
               isSelected: _selectedPeriod == BillingPeriod.yearly,
               isPopular: true,
-              savingsText: yearlySavings != null ? 'Yearly billing' : null,
+              savingsText: hasYearlyBillingOption ? 'Yearly billing' : null,
               onTap: () {
                 setState(() {
                   _selectedPeriod = BillingPeriod.yearly;
