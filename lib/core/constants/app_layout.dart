@@ -22,11 +22,11 @@ class AppLayout {
 
   /// Duration used when Calendar returns to the stable landing point.
   static const Duration calendarLandingSpringBackDuration = Duration(
-    milliseconds: 260,
+    milliseconds: 520,
   );
 
   /// Curve used when Calendar returns to the stable landing point.
-  static const Curve calendarLandingSpringBackCurve = Curves.easeOutCubic;
+  static const Curve calendarLandingSpringBackCurve = Curves.easeInOutCubic;
 
   /// Insets for a screen-owned action placed above the app shell.
   ///
