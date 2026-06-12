@@ -58,6 +58,12 @@ void main() {
         expect(subscriptionService, contains('validateAppleReceipt'));
         expect(subscriptionService, contains('validateGooglePlayReceipt'));
         expect(subscriptionService, contains('PackageInfo.fromPlatform'));
+        expect(subscriptionService, contains('_currentSubscription?.userId'));
+        expect(subscriptionService, contains('purchaseDetails.purchaseID'));
+        expect(
+          subscriptionService,
+          contains('Missing App Store transaction identifier'),
+        );
         expect(
           subscriptionService,
           contains('backend validation before Premium is granted'),
@@ -536,6 +542,9 @@ void main() {
       expect(backendReceiptValidation, contains('appleProviderSecrets'));
       expect(backendReceiptValidation, contains('googleProviderSecrets'));
       expect(backendReceiptValidation, contains('environment'));
+      expect(backendReceiptValidation, contains('body.userId'));
+      expect(backendReceiptValidation, contains('body.transactionId'));
+      expect(backendReceiptValidation, contains('appleTransactionId'));
       expect(backendReceiptValidation, contains('valid: false'));
       expect(backendReceiptValidation, contains('active: false'));
       expect(backendReceiptValidation, contains('Cache-Control'));

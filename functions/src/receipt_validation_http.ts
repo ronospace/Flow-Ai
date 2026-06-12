@@ -185,13 +185,16 @@ function handleReceiptValidation(
   const receipt = readNonEmptyString(body.receipt);
   const productId = readNonEmptyString(body.productId);
   const platform = readNonEmptyString(body.platform);
+  const userId = readNonEmptyString(body.userId);
   let packageName: string | null = null;
   let appleEnvironment: string | null = null;
+  let appleTransactionId: string | null = null;
 
   if (
     receipt === null ||
     productId === null ||
     platform === null ||
+    userId === null ||
     !allowedPlatforms.has(platform) ||
     platform !== expectedPlatform
   ) {
@@ -204,8 +207,10 @@ function handleReceiptValidation(
 
   if (expectedPlatform === "ios") {
     appleEnvironment = readNonEmptyString(body.environment);
+    appleTransactionId = readNonEmptyString(body.transactionId);
     if (
       appleEnvironment === null ||
+      appleTransactionId === null ||
       !allowedAppleEnvironments.has(appleEnvironment)
     ) {
       sendJson(response, 400, {
@@ -259,8 +264,9 @@ function handleReceiptValidation(
   }
 
   logger.warn("Receipt validation provider integration is not implemented", {
-    productId,
     platform,
+    productId,
+    userIdHashPrefix: userId.slice(0, 8),
   });
 
   sendJson(response, 501, {
