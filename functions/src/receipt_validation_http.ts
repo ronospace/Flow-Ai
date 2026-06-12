@@ -29,6 +29,9 @@ const appleBundleId = defineSecret("FLOW_AI_APPLE_BUNDLE_ID");
 const appleIssuerId = defineSecret("FLOW_AI_APPLE_ISSUER_ID");
 const appleKeyId = defineSecret("FLOW_AI_APPLE_KEY_ID");
 const applePrivateKeyP8 = defineSecret("FLOW_AI_APPLE_PRIVATE_KEY_P8");
+const appleRootCertificatesPem = defineSecret(
+  "FLOW_AI_APPLE_ROOT_CERTIFICATES_PEM",
+);
 const googlePackageName = defineSecret("FLOW_AI_GOOGLE_PACKAGE_NAME");
 const googleServiceAccountJson = defineSecret(
   "FLOW_AI_GOOGLE_SERVICE_ACCOUNT_JSON",
@@ -39,6 +42,7 @@ const appleProviderSecrets = [
   appleIssuerId,
   appleKeyId,
   applePrivateKeyP8,
+  appleRootCertificatesPem,
 ];
 
 const googleProviderSecrets = [
@@ -131,6 +135,9 @@ function missingAppleProviderSecrets(): string[] {
   }
   if (readSecret(applePrivateKeyP8) === null) {
     missing.push("FLOW_AI_APPLE_PRIVATE_KEY_P8");
+  }
+  if (readSecret(appleRootCertificatesPem) === null) {
+    missing.push("FLOW_AI_APPLE_ROOT_CERTIFICATES_PEM");
   }
 
   return missing;

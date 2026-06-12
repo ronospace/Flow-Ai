@@ -23,6 +23,7 @@ void main() {
         'FLOW_AI_APPLE_ISSUER_ID',
         'FLOW_AI_APPLE_KEY_ID',
         'FLOW_AI_APPLE_PRIVATE_KEY_P8',
+        'FLOW_AI_APPLE_ROOT_CERTIFICATES_PEM',
         'FLOW_AI_GOOGLE_PACKAGE_NAME',
         'FLOW_AI_GOOGLE_SERVICE_ACCOUNT_JSON',
       ]) {
@@ -63,6 +64,7 @@ void main() {
         client,
         contains("'environment': isProduction ? 'production' : 'sandbox'"),
       );
+      expect(backend, contains('appleRootCertificatesPem'));
       expect(client, contains("'transactionId': transactionId"));
       expect(client, contains("'userId': userId"));
       expect(client, contains("'packageName': packageName"));
