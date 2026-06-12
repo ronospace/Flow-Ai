@@ -16,10 +16,17 @@ void main() {
       appLayout = File('lib/core/constants/app_layout.dart').readAsStringSync();
     });
 
-    test('keeps light bounce but removes duplicated bottom-nav clearance', () {
+    test('keeps light bounce and springs back to the landing point', () {
       expect(calendarScreen, contains('SingleChildScrollView'));
       expect(calendarScreen, contains('BouncingScrollPhysics'));
       expect(calendarScreen, contains('AlwaysScrollableScrollPhysics'));
+      expect(calendarScreen, contains('ScrollController'));
+      expect(
+        calendarScreen,
+        contains('NotificationListener<ScrollEndNotification>'),
+      );
+      expect(calendarScreen, contains('_springBackToCalendarLanding'));
+      expect(calendarScreen, contains('animateTo('));
       expect(
         calendarScreen,
         contains('padding: AppLayout.calendarLandingScrollPadding'),
@@ -34,7 +41,7 @@ void main() {
       );
     });
 
-    test('lets the shell own bottom navigation geometry', () {
+    test('centralizes landing and spring-back geometry in AppLayout', () {
       expect(appRouter, contains('extendBody: false'));
       expect(appRouter, contains('bottomNavigationBar: SafeArea'));
       expect(appRouter, contains('AppLayout.bottomNavigationHeight'));
@@ -46,6 +53,9 @@ void main() {
         contains('calendarLandingScrollPadding = EdgeInsets.zero'),
       );
       expect(appLayout, contains('calendarLandingSummaryCardMargin'));
+      expect(appLayout, contains('calendarLandingSpringBackTolerance'));
+      expect(appLayout, contains('calendarLandingSpringBackDuration'));
+      expect(appLayout, contains('calendarLandingSpringBackCurve'));
     });
 
     test('keeps current-cycle card as the bottom landing anchor', () {
@@ -55,6 +65,14 @@ void main() {
       expect(
         calendarScreen,
         contains('margin: AppLayout.calendarLandingSummaryCardMargin'),
+      );
+      expect(
+        calendarScreen,
+        contains('AppLayout.calendarLandingSpringBackDuration'),
+      );
+      expect(
+        calendarScreen,
+        contains('AppLayout.calendarLandingSpringBackCurve'),
       );
     });
   });

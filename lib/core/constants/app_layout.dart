@@ -17,6 +17,17 @@ class AppLayout {
     24.0,
   );
 
+  /// Scroll offset tolerance before Calendar springs back to its landing point.
+  static const double calendarLandingSpringBackTolerance = 0.5;
+
+  /// Duration used when Calendar returns to the stable landing point.
+  static const Duration calendarLandingSpringBackDuration = Duration(
+    milliseconds: 260,
+  );
+
+  /// Curve used when Calendar returns to the stable landing point.
+  static const Curve calendarLandingSpringBackCurve = Curves.easeOutCubic;
+
   /// Insets for a screen-owned action placed above the app shell.
   ///
   /// The app shell already owns persistent-navigation and system-safe-area
