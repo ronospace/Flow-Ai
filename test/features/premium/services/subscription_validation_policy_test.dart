@@ -534,6 +534,10 @@ void main() {
         backendReceiptValidation,
         contains('FLOW_AI_APPLE_PRIVATE_KEY_P8'),
       );
+      expect(
+        backendReceiptValidation,
+        contains('FLOW_AI_APPLE_ROOT_CERTIFICATES_PEM'),
+      );
       expect(backendReceiptValidation, contains('FLOW_AI_GOOGLE_PACKAGE_NAME'));
       expect(
         backendReceiptValidation,
