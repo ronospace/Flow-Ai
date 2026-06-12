@@ -23,6 +23,8 @@ class _CalendarScreenState extends State<CalendarScreen>
     with TickerProviderStateMixin {
   late final PageController _pageController;
   late final ScrollController _landingScrollController;
+  bool _calendarLandingListenerAttached = false;
+  bool _isSpringingBackToCalendarLanding = false;
   late final AnimationController _fadeController;
   late final AnimationController _scaleController;
 
@@ -46,12 +48,19 @@ class _CalendarScreenState extends State<CalendarScreen>
     _selectedDay = DateTime.now();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      _attachCalendarLandingScrollListener();
       context.read<CycleProvider>().loadCycles();
     });
   }
 
   @override
   void dispose() {
+    if (_calendarLandingListenerAttached &&
+        _landingScrollController.hasClients) {
+      _landingScrollController.position.isScrollingNotifier.removeListener(
+        _handleCalendarLandingScrollIdle,
+      );
+    }
     _landingScrollController.dispose();
     _pageController.dispose();
     _fadeController.dispose();
@@ -130,8 +139,47 @@ class _CalendarScreenState extends State<CalendarScreen>
     );
   }
 
-  void _springBackToCalendarLanding() {
+  void _attachCalendarLandingScrollListener() {
+    if (!mounted) {
+      return;
+    }
+
+    if (_calendarLandingListenerAttached) {
+      return;
+    }
+
     if (!_landingScrollController.hasClients) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _attachCalendarLandingScrollListener();
+      });
+      return;
+    }
+
+    _landingScrollController.position.isScrollingNotifier.addListener(
+      _handleCalendarLandingScrollIdle,
+    );
+    _calendarLandingListenerAttached = true;
+  }
+
+  void _handleCalendarLandingScrollIdle() {
+    if (!_landingScrollController.hasClients) {
+      return;
+    }
+
+    if (_landingScrollController.position.isScrollingNotifier.value) {
+      return;
+    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _springBackToCalendarLanding();
+      }
+    });
+  }
+
+  void _springBackToCalendarLanding() {
+    if (!_landingScrollController.hasClients ||
+        _isSpringingBackToCalendarLanding) {
       return;
     }
 
@@ -140,11 +188,16 @@ class _CalendarScreenState extends State<CalendarScreen>
       return;
     }
 
-    _landingScrollController.animateTo(
-      0,
-      duration: AppLayout.calendarLandingSpringBackDuration,
-      curve: AppLayout.calendarLandingSpringBackCurve,
-    );
+    _isSpringingBackToCalendarLanding = true;
+    _landingScrollController
+        .animateTo(
+          0,
+          duration: AppLayout.calendarLandingSpringBackDuration,
+          curve: AppLayout.calendarLandingSpringBackCurve,
+        )
+        .whenComplete(() {
+          _isSpringingBackToCalendarLanding = false;
+        });
   }
 
   Widget _buildHeader() {
