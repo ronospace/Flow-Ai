@@ -516,6 +516,26 @@ void main() {
         backendReceiptValidation,
         contains('provider_validation_not_configured'),
       );
+      expect(
+        backendReceiptValidation,
+        contains('provider_secrets_not_configured'),
+      );
+      expect(backendReceiptValidation, contains('defineSecret'));
+      expect(backendReceiptValidation, contains('FLOW_AI_APPLE_BUNDLE_ID'));
+      expect(backendReceiptValidation, contains('FLOW_AI_APPLE_ISSUER_ID'));
+      expect(backendReceiptValidation, contains('FLOW_AI_APPLE_KEY_ID'));
+      expect(
+        backendReceiptValidation,
+        contains('FLOW_AI_APPLE_PRIVATE_KEY_P8'),
+      );
+      expect(backendReceiptValidation, contains('FLOW_AI_GOOGLE_PACKAGE_NAME'));
+      expect(
+        backendReceiptValidation,
+        contains('FLOW_AI_GOOGLE_SERVICE_ACCOUNT_JSON'),
+      );
+      expect(backendReceiptValidation, contains('appleProviderSecrets'));
+      expect(backendReceiptValidation, contains('googleProviderSecrets'));
+      expect(backendReceiptValidation, contains('environment'));
       expect(backendReceiptValidation, contains('valid: false'));
       expect(backendReceiptValidation, contains('active: false'));
       expect(backendReceiptValidation, contains('Cache-Control'));
