@@ -6,6 +6,7 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'receipt_validation_service.dart';
+import '../constants/store_product_ids.dart';
 import '../models/subscription_models.dart';
 
 class SubscriptionService {
@@ -18,11 +19,11 @@ class SubscriptionService {
       ReceiptValidationService();
   late StreamSubscription<List<PurchaseDetails>> _subscription;
 
-  // Product IDs (configure these in App Store Connect and Google Play Console)
-  static const String monthlyProductId = 'flow_ai_premium_monthly';
-  static const String yearlyProductId = 'flow_ai_premium_yearly';
+  // Product IDs configured in App Store Connect and Google Play Console.
+  static const String monthlyProductId = StoreProductIds.premiumMonthly;
+  static const String yearlyProductId = StoreProductIds.premiumYearly;
 
-  static const Set<String> _productIds = {monthlyProductId, yearlyProductId};
+  static const Set<String> _productIds = StoreProductIds.subscriptions;
 
   List<ProductDetails> _products = [];
   bool _isAvailable = false;

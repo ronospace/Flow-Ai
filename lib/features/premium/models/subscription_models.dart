@@ -35,7 +35,7 @@ class SubscriptionProduct {
   final BillingPeriod billingPeriod;
   final double price;
   final String currency;
-  final String priceString; // Formatted price like "$4.99"
+  final String priceString; // Store-formatted localized price string
   final List<String> features;
   final int? trialDays;
   final double? discount; // Percentage discount if applicable

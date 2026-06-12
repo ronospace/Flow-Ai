@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import '../models/deployment_models.dart';
+import '../../premium/constants/store_product_ids.dart';
 
 class DeploymentService {
   static DeploymentService? _instance;
@@ -302,54 +303,25 @@ Flow Ai transforms complex health data into actionable insights, helping women m
       ),
       pricingInfo: PricingInfo(
         isFree: true,
-        prices: {}, // Free app
-        inAppPurchases: [
-          InAppPurchase(
-            id: 'premium_features',
-            name: 'Flow Ai Premium Features',
-            description:
-                'Unlock advanced analytics, extended history, and premium insights',
-            prices: {
-              'US': 4.99,
-              'GB': 4.99,
-              'EU': 4.99,
-              'CA': 6.99,
-              'AU': 7.99,
-              'JP': 600,
-            },
-            type: 'non-consumable',
-          ),
-        ],
+        prices: {}, // Free app; paid regional pricing is store-managed.
+        inAppPurchases: const [],
         subscriptions: [
           Subscription(
-            id: 'premium_monthly',
+            id: StoreProductIds.premiumMonthly,
             name: 'Flow Ai Premium Monthly',
-            description: 'Monthly subscription for premium features',
-            prices: {
-              'US': 2.99,
-              'GB': 2.99,
-              'EU': 2.99,
-              'CA': 3.99,
-              'AU': 4.99,
-              'JP': 350,
-            },
+            description:
+                'Monthly subscription for premium features with store-managed regional pricing',
+            prices: const {},
             duration: 'monthly',
             hasFreeTrial: true,
             freeTrialDays: 7,
           ),
           Subscription(
-            id: 'premium_yearly',
+            id: StoreProductIds.premiumYearly,
             name: 'Flow Ai Premium Yearly',
             description:
-                'Yearly subscription for premium features with significant savings',
-            prices: {
-              'US': 19.99,
-              'GB': 19.99,
-              'EU': 19.99,
-              'CA': 26.99,
-              'AU': 29.99,
-              'JP': 2200,
-            },
+                'Yearly subscription for premium features with store-managed regional pricing',
+            prices: const {},
             duration: 'yearly',
             hasFreeTrial: true,
             freeTrialDays: 14,
