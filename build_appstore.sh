@@ -59,14 +59,10 @@ cd ..
 
 # Run static analysis
 echo -e "\n${YELLOW}🔍 Running static analysis...${NC}"
-flutter analyze --no-fatal-infos || {
-    echo -e "${RED}⚠️  Analysis found issues. Please review and fix before submitting.${NC}"
-    read -p "Continue anyway? (y/n) " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        exit 1
-    fi
-}
+if ! flutter analyze; then
+    echo -e "${RED}❌ Analysis failed. Refusing App Store release build.${NC}"
+    exit 1
+fi
 
 # Build iOS app for App Store
 echo -e "\n${YELLOW}🏗️  Building iOS release for App Store...${NC}"
@@ -85,10 +81,9 @@ if [ $? -eq 0 ]; then
     echo -e "\n📦 IPA location:"
     echo -e "   build/ios/ipa/flow_ai.ipa"
     echo -e "\n📋 Next steps:"
-    echo -e "   1. Open Xcode"
-    echo -e "   2. Product > Archive"
-    echo -e "   3. Distribute App to App Store Connect"
-    echo -e "   4. Submit for review in App Store Connect"
+    echo -e "   1. Upload the generated IPA to App Store Connect"
+    echo -e "   2. Verify build processing and compliance metadata"
+    echo -e "   3. Submit for review in App Store Connect"
     echo -e "\n${YELLOW}⚠️  Important: Make sure to verify the following before submission:${NC}"
     echo -e "   ✓ HealthKit disclosure banners are visible"
     echo -e "   ✓ Medical citations section is accessible"

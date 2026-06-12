@@ -256,15 +256,19 @@ if [ "$BUILD_IOS" = true ]; then
             print_error "❌ Xcode is not installed!"
             BUILDS_FAILED+=("iOS")
         else
-            print_status "Building iOS app (no codesign)..."
-            if flutter build ios --release --no-codesign; then
-                print_success "✅ iOS build completed successfully!"
-                BUILDS_COMPLETED+=("iOS")
-                print_status "iOS build location: build/ios/iphoneos/Runner.app"
-                print_warning "⚠️ iOS app needs to be signed and archived in Xcode for distribution."
-            else
-                print_error "❌ iOS build failed!"
+            if [ ! -x "./build_appstore.sh" ]; then
+                print_error "❌ build_appstore.sh is missing or not executable"
                 BUILDS_FAILED+=("iOS")
+            else
+                print_status "Building signed iOS App Store IPA..."
+                if ./build_appstore.sh; then
+                    print_success "✅ iOS App Store IPA build completed successfully!"
+                    BUILDS_COMPLETED+=("iOS (App Store IPA)")
+                    print_status "IPA location: build/ios/ipa/"
+                else
+                    print_error "❌ iOS App Store IPA build failed!"
+                    BUILDS_FAILED+=("iOS")
+                fi
             fi
         fi
     fi
@@ -309,8 +313,8 @@ if [ "$BUILD_ANDROID" = true ]; then
     fi
 fi
 
-if [ "$BUILD_IOS" = true ] && [ -d "build/ios/iphoneos/Runner.app" ]; then
-    echo "📱 iOS App: build/ios/iphoneos/Runner.app"
+if [ "$BUILD_IOS" = true ] && [ -d "build/ios/ipa" ]; then
+    echo "📱 iOS App Store IPA: build/ios/ipa/"
 fi
 
 # Next Steps
@@ -332,10 +336,9 @@ if [[ " ${BUILDS_COMPLETED[@]} " =~ "Android" ]]; then
     echo "   • Signed APK"
 fi
 
-if [[ " ${BUILDS_COMPLETED[@]} " =~ " iOS " ]]; then
+if [[ " ${BUILDS_COMPLETED[@]} " =~ "iOS" ]]; then
     echo "📱 iOS Deployment:"
-    echo "   • Open ios/Runner.xcworkspace in Xcode"
-    echo "   • Archive and upload to App Store Connect"
+    echo "   • Upload generated IPA from build/ios/ipa/ to App Store Connect"
     echo "   • appstoreconnect.apple.com"
 fi
 
