@@ -778,6 +778,10 @@ class _CalendarScreenState extends State<CalendarScreen>
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      isDismissible: true,
+      enableDrag: false,
+      useSafeArea: true,
+      barrierColor: Colors.black.withValues(alpha: 0.18),
       backgroundColor: Colors.transparent,
       builder: (context) => DayDetailSheet(
         selectedDate: selectedDay,

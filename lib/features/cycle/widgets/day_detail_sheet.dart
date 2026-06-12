@@ -19,75 +19,78 @@ class DayDetailSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-      initialChildSize: 0.6,
-      minChildSize: 0.4,
-      maxChildSize: 0.9,
-      builder: (context, scrollController) {
-        return Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(24),
-              topRight: Radius.circular(24),
-            ),
-          ),
-          child: Column(
-            children: [
-              // Handle
-              Container(
-                margin: const EdgeInsets.only(top: 12),
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: AppTheme.lightGrey,
-                  borderRadius: BorderRadius.circular(2),
-                ),
+    final maxPanelHeight = MediaQuery.sizeOf(context).height * 0.44;
+
+    return SafeArea(
+      top: false,
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: maxPanelHeight),
+          child: Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(24),
+                topRight: Radius.circular(24),
               ),
+            ),
+            child: Column(
+              children: [
+                // Handle
+                Container(
+                  margin: const EdgeInsets.only(top: 12),
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: AppTheme.lightGrey,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
 
-              // Content
-              Expanded(
-                child: SingleChildScrollView(
-                  controller: scrollController,
-                  child: Padding(
-                    padding: const EdgeInsets.all(24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Header
-                        _buildHeader(),
+                // Content
+                Flexible(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Header
+                          _buildHeader(),
 
-                        const SizedBox(height: 24),
-
-                        // Day Information
-                        if (dayInfo.cycleDay != null) ...[
-                          _buildCycleInfo(),
                           const SizedBox(height: 24),
-                        ],
 
-                        // Phase Information
-                        if (dayInfo.phase != null) ...[
-                          _buildPhaseInfo(),
-                          const SizedBox(height: 24),
-                        ],
+                          // Day Information
+                          if (dayInfo.cycleDay != null) ...[
+                            _buildCycleInfo(),
+                            const SizedBox(height: 24),
+                          ],
 
-                        // Prediction Info
-                        if (dayInfo.isPredicted) ...[
-                          _buildPredictionInfo(),
-                          const SizedBox(height: 24),
-                        ],
+                          // Phase Information
+                          if (dayInfo.phase != null) ...[
+                            _buildPhaseInfo(),
+                            const SizedBox(height: 24),
+                          ],
 
-                        // Quick Actions
-                        _buildQuickActions(context),
-                      ],
+                          // Prediction Info
+                          if (dayInfo.isPredicted) ...[
+                            _buildPredictionInfo(),
+                            const SizedBox(height: 24),
+                          ],
+
+                          // Quick Actions
+                          _buildQuickActions(context),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 
