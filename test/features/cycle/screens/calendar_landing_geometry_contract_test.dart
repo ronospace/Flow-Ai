@@ -16,7 +16,7 @@ void main() {
       appLayout = File('lib/core/constants/app_layout.dart').readAsStringSync();
     });
 
-    test('keeps light bounce and springs back to the landing point', () {
+    test('keeps light bounce and springs back after true scroll idle', () {
       expect(calendarScreen, contains('SingleChildScrollView'));
       expect(calendarScreen, contains('BouncingScrollPhysics'));
       expect(calendarScreen, contains('AlwaysScrollableScrollPhysics'));
@@ -25,8 +25,12 @@ void main() {
         calendarScreen,
         contains('NotificationListener<ScrollEndNotification>'),
       );
+      expect(calendarScreen, contains('isScrollingNotifier'));
+      expect(calendarScreen, contains('_attachCalendarLandingScrollListener'));
+      expect(calendarScreen, contains('_handleCalendarLandingScrollIdle'));
       expect(calendarScreen, contains('_springBackToCalendarLanding'));
       expect(calendarScreen, contains('animateTo('));
+      expect(calendarScreen, contains('0,'));
       expect(
         calendarScreen,
         contains('padding: AppLayout.calendarLandingScrollPadding'),
