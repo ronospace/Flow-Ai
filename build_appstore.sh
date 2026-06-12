@@ -1,1 +1,102 @@
-#!/bin/bash\n\n# App Store Build Script for Flow Ai\n# This script builds and prepares the app for App Store submission\n\nset -e\n\necho "🚀 Starting App Store build preparation..."\n\n# Colors for output\nGREEN='\033[0;32m'\nYELLOW='\033[1;33m'\nRED='\033[0;31m'\nNC='\033[0m' # No Color\n\n# Check Flutter is available\nif ! command -v flutter &> /dev/null; then\n    echo -e "${RED}❌ Flutter not found. Please install Flutter first.${NC}"\n    exit 1\nfi\n\n# Get current version from pubspec.yaml\nVERSION=$(grep "^version:" pubspec.yaml | sed 's/version: //' | tr -d ' ')\nBUILD_NUMBER=$(echo $VERSION | cut -d'+' -f2)\nVERSION_NAME=$(echo $VERSION | cut -d'+' -f1)\n\necho -e "${GREEN}📱 Building Flow Ai${NC}"\necho -e "   Version: ${VERSION_NAME}"\necho -e "   Build Number: ${BUILD_NUMBER}"\n\n# Clean previous builds\necho -e "\n${YELLOW}🧹 Cleaning previous builds...${NC}"\nflutter clean\nflutter pub get\n\n# Verify required monetization backend endpoints are injected into release builds\necho -e "\n${YELLOW}🔐 Verifying monetization backend dart-defines...${NC}"\nREQUIRED_DART_DEFINES=(\n    FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT\n    FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT\n    FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT\n)\n\nfor define_name in "${REQUIRED_DART_DEFINES[@]}"; do\n    if [ -z "${!define_name:-}" ]; then\n        echo -e "${RED}❌ Missing required release dart-define environment variable: ${define_name}${NC}"\n        echo -e "${RED}   Refusing to build store IPA without backend receipt/status validation endpoints.${NC}"\n        exit 1\n    fi\ndone\n\necho -e "${GREEN}✅ Monetization backend dart-defines are present.${NC}"\n\n# Verify iOS dependencies\necho -e "\n${YELLOW}📦 Installing iOS dependencies...${NC}"\ncd ios\npod install\ncd ..\n\n# Run static analysis\necho -e "\n${YELLOW}🔍 Running static analysis...${NC}"\nif ! flutter analyze; then\n    echo -e "${RED}❌ Analysis failed. Refusing App Store release build.${NC}"\n    exit 1\nfi\n\n# Build iOS app for App Store\necho -e "\n${YELLOW}🏗️  Building iOS release for App Store...${NC}"\nflutter build ipa \\n    --release \\n    --export-options-plist=ios/ExportOptionsAppStore.plist \\n    --build-number=$BUILD_NUMBER \\n    --build-name=$VERSION_NAME \\n    --dart-define=FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT="$FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT" \\n    --dart-define=FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT="$FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT" \\n    --dart-define=FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT="$FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT"\n\n# Check if build succeeded\nif [ $? -eq 0 ]; then\n    echo -e "\n${GREEN}✅ Build completed successfully!${NC}"\n    echo -e "\n📦 IPA location:"\n    echo -e "   build/ios/ipa/flow_ai.ipa"\n    echo -e "\n📋 Next steps:"\n    echo -e "   1. Open Xcode"\n    echo -e "   2. Product > Archive"\n    echo -e "   3. Distribute App to App Store Connect"\n    echo -e "   4. Submit for review in App Store Connect"\n    echo -e "\n${YELLOW}⚠️  Important: Make sure to verify the following before submission:${NC}"\n    echo -e "   ✓ HealthKit disclosure banners are visible"\n    echo -e "   ✓ Medical citations section is accessible"\n    echo -e "   ✓ Privacy descriptions are accurate"\n    echo -e "   ✓ All features work correctly"\n    echo -e "   ✓ App Store Connect metadata is complete"\nelse\n    echo -e "\n${RED}❌ Build failed. Please check the errors above.${NC}"\n    exit 1\nfi\n\n
+#!/bin/bash
+
+# App Store Build Script for Flow Ai
+# This script builds and prepares the app for App Store submission
+
+set -e
+
+echo "🚀 Starting App Store build preparation..."
+
+# Colors for output
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+
+# Check Flutter is available
+if ! command -v flutter &> /dev/null; then
+    echo -e "${RED}❌ Flutter not found. Please install Flutter first.${NC}"
+    exit 1
+fi
+
+# Get current version from pubspec.yaml
+VERSION=$(grep "^version:" pubspec.yaml | sed 's/version: //' | tr -d ' ')
+BUILD_NUMBER=$(echo $VERSION | cut -d'+' -f2)
+VERSION_NAME=$(echo $VERSION | cut -d'+' -f1)
+
+echo -e "${GREEN}📱 Building Flow Ai${NC}"
+echo -e "   Version: ${VERSION_NAME}"
+echo -e "   Build Number: ${BUILD_NUMBER}"
+
+# Clean previous builds
+echo -e "\n${YELLOW}🧹 Cleaning previous builds...${NC}"
+flutter clean
+flutter pub get
+
+# Verify required monetization backend endpoints are injected into release builds
+echo -e "\n${YELLOW}🔐 Verifying monetization backend dart-defines...${NC}"
+REQUIRED_DART_DEFINES=(
+    FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT
+    FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT
+    FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT
+)
+
+for define_name in "${REQUIRED_DART_DEFINES[@]}"; do
+    if [ -z "${!define_name:-}" ]; then
+        echo -e "${RED}❌ Missing required release dart-define environment variable: ${define_name}${NC}"
+        echo -e "${RED}   Refusing to build store IPA without backend receipt/status validation endpoints.${NC}"
+        exit 1
+    fi
+done
+
+echo -e "${GREEN}✅ Monetization backend dart-defines are present.${NC}"
+
+# Verify iOS dependencies
+echo -e "\n${YELLOW}📦 Installing iOS dependencies...${NC}"
+cd ios
+pod install
+cd ..
+
+# Run static analysis
+echo -e "\n${YELLOW}🔍 Running static analysis...${NC}"
+flutter analyze --no-fatal-infos || {
+    echo -e "${RED}⚠️  Analysis found issues. Please review and fix before submitting.${NC}"
+    read -p "Continue anyway? (y/n) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        exit 1
+    fi
+}
+
+# Build iOS app for App Store
+echo -e "\n${YELLOW}🏗️  Building iOS release for App Store...${NC}"
+flutter build ipa \
+    --release \
+    --export-options-plist=ios/ExportOptionsAppStore.plist \
+    --build-number=$BUILD_NUMBER \
+    --build-name=$VERSION_NAME \
+    --dart-define=FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT="$FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT" \
+    --dart-define=FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT="$FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT" \
+    --dart-define=FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT="$FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT"
+
+# Check if build succeeded
+if [ $? -eq 0 ]; then
+    echo -e "\n${GREEN}✅ Build completed successfully!${NC}"
+    echo -e "\n📦 IPA location:"
+    echo -e "   build/ios/ipa/flow_ai.ipa"
+    echo -e "\n📋 Next steps:"
+    echo -e "   1. Open Xcode"
+    echo -e "   2. Product > Archive"
+    echo -e "   3. Distribute App to App Store Connect"
+    echo -e "   4. Submit for review in App Store Connect"
+    echo -e "\n${YELLOW}⚠️  Important: Make sure to verify the following before submission:${NC}"
+    echo -e "   ✓ HealthKit disclosure banners are visible"
+    echo -e "   ✓ Medical citations section is accessible"
+    echo -e "   ✓ Privacy descriptions are accurate"
+    echo -e "   ✓ All features work correctly"
+    echo -e "   ✓ App Store Connect metadata is complete"
+else
+    echo -e "\n${RED}❌ Build failed. Please check the errors above.${NC}"
+    exit 1
+fi
+
