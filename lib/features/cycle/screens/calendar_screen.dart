@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/constants/app_layout.dart';
 import '../../../generated/app_localizations.dart';
 import '../../../core/models/cycle_data.dart';
 import '../providers/cycle_provider.dart';
@@ -71,7 +72,7 @@ class _CalendarScreenState extends State<CalendarScreen>
             physics: const BouncingScrollPhysics(
               parent: AlwaysScrollableScrollPhysics(),
             ),
-            padding: EdgeInsets.zero,
+            padding: AppLayout.calendarLandingScrollPadding,
             child: Column(
               children: [
                 // Custom Header
@@ -655,7 +656,7 @@ class _CalendarScreenState extends State<CalendarScreen>
         final predictions = cycleProvider.predictions;
 
         return Container(
-          margin: const EdgeInsets.all(AppTheme.spaceXl),
+          margin: AppLayout.calendarLandingSummaryCardMargin,
           padding: const EdgeInsets.symmetric(
             horizontal: AppTheme.spaceXl,
             vertical: AppTheme.spaceLg,

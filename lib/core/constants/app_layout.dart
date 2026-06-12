@@ -6,6 +6,17 @@ class AppLayout {
   static const double bottomNavigationHeight = 72.0;
   static const double bottomNavigationContentGap = 32.0;
 
+  /// Calendar page landing scroll padding.
+  ///
+  /// The app shell owns the persistent bottom-navigation carrier, so Calendar
+  /// must not duplicate that clearance inside its own scroll view.
+  static const EdgeInsets calendarLandingScrollPadding = EdgeInsets.zero;
+
+  /// Stable bottom summary-card margin for the Calendar landing position.
+  static const EdgeInsets calendarLandingSummaryCardMargin = EdgeInsets.all(
+    24.0,
+  );
+
   /// Insets for a screen-owned action placed above the app shell.
   ///
   /// The app shell already owns persistent-navigation and system-safe-area

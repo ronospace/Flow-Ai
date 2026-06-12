@@ -20,11 +20,18 @@ void main() {
       expect(calendarScreen, contains('SingleChildScrollView'));
       expect(calendarScreen, contains('BouncingScrollPhysics'));
       expect(calendarScreen, contains('AlwaysScrollableScrollPhysics'));
-      expect(calendarScreen, contains('padding: EdgeInsets.zero'));
+      expect(
+        calendarScreen,
+        contains('padding: AppLayout.calendarLandingScrollPadding'),
+      );
 
       expect(calendarScreen, isNot(contains('scrollBottomPadding')));
       expect(calendarScreen, isNot(contains('bottomNavigationClearance')));
-      expect(calendarScreen, isNot(contains('AppLayout.')));
+      expect(calendarScreen, isNot(contains('AppLayout.scrollBottomPadding')));
+      expect(
+        calendarScreen,
+        isNot(contains('AppLayout.bottomNavigationClearance')),
+      );
     });
 
     test('lets the shell own bottom navigation geometry', () {
@@ -34,6 +41,11 @@ void main() {
 
       expect(appLayout, contains('bottomNavigationHeight = 72.0'));
       expect(appLayout, contains('bottomNavigationContentGap = 32.0'));
+      expect(
+        appLayout,
+        contains('calendarLandingScrollPadding = EdgeInsets.zero'),
+      );
+      expect(appLayout, contains('calendarLandingSummaryCardMargin'));
     });
 
     test('keeps current-cycle card as the bottom landing anchor', () {
@@ -42,7 +54,7 @@ void main() {
       expect(calendarScreen, contains('Next Period'));
       expect(
         calendarScreen,
-        contains('margin: const EdgeInsets.all(AppTheme.spaceXl)'),
+        contains('margin: AppLayout.calendarLandingSummaryCardMargin'),
       );
     });
   });
