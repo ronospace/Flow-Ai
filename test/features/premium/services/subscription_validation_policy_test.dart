@@ -80,47 +80,49 @@ void main() {
       },
     );
 
-    test('does not validate App Store receipts directly from the client', () {
-      const forbidden = <String>[
+    test('uses the authenticated isolated receipt service only', () {
+      expect(
+        receiptValidationService,
+        contains('FLOW_AI_RECEIPT_SERVICE_BASE_URL'),
+      );
+      expect(
+        receiptValidationService,
+        contains('package:firebase_auth/firebase_auth.dart'),
+      );
+      expect(receiptValidationService, contains('FirebaseAuth.instance'));
+      expect(receiptValidationService, contains('getIdToken(forceRefresh)'));
+      expect(
+        receiptValidationService,
+        contains("'Authorization': 'Bearer \$token'"),
+      );
+      expect(receiptValidationService, contains("'v1', 'receipts', 'apple'"));
+      expect(receiptValidationService, contains("'v1', 'receipts', 'google'"));
+      expect(receiptValidationService, contains("'v1', 'subscriptions'"));
+      expect(
+        subscriptionService,
+        contains('_receiptValidationService.isAuthenticatedUser(userId)'),
+      );
+
+      for (final forbidden in <String>[
         'sandbox.itunes.apple.com/verifyReceipt',
         'buy.itunes.apple.com/verifyReceipt',
-        'Direct validation with Apple',
-        'fallback, less secure',
-        'App-Specific Shared Secret',
-        '\'password\': \'\'',
         '_validateWithAppleDirect',
-        '_appleSandboxUrl',
-        '_appleProductionUrl',
-        '_parseAppleDate',
-        '_getAppleErrorMessage',
-      ];
-
-      for (final token in forbidden) {
+        'FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT',
+        'FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT',
+        'FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT',
+        "'userId':",
+        "'receipt':",
+        "'platform':",
+      ]) {
         expect(
-          receiptValidationService.contains(token),
-          isFalse,
-          reason: 'Unsafe receipt token remained: $token',
+          receiptValidationService,
+          isNot(contains(forbidden)),
+          reason: 'Legacy receipt token remained: $forbidden',
         );
       }
 
-      expect(
-        receiptValidationService,
-        contains('Validate App Store receipt through Flow AI backend only'),
-      );
-      expect(
-        receiptValidationService,
-        contains('Backend validation unavailable'),
-      );
-      expect(receiptValidationService, contains('_validateThroughBackend'));
-      expect(receiptValidationService, contains('canValidateAppleReceipts'));
-      expect(
-        receiptValidationService,
-        contains('canValidateGooglePlayReceipts'),
-      );
-      expect(receiptValidationService, contains('validateAppleReceipt'));
-      expect(receiptValidationService, contains('validateGooglePlayReceipt'));
       expect(receiptValidationService, isNot(contains('debugPrint(')));
-      expect(receiptValidationService, isNot(contains('isProduction = false')));
+      expect(receiptValidationService, isNot(contains('print(')));
       expect(subscriptionService, contains('isProduction: kReleaseMode'));
     });
 
@@ -290,40 +292,22 @@ void main() {
       expect(premiumService, contains('backend-validated SubscriptionService'));
     });
 
-    test('uses secure build-time backend validation endpoints', () {
-      const forbidden = <String>[
-        "static const String _appleValidationEndpoint = '';",
-        "static const String _googleValidationEndpoint = '';",
-        "static const String _subscriptionStatusEndpoint = '';",
-        'Uri.parse(endpoint)',
-        "Uri.parse('\$_subscriptionStatusEndpoint/\$userId/\$subscriptionId')",
-        'endpoint.trim().isNotEmpty',
-      ];
-
-      for (final token in forbidden) {
-        expect(
-          receiptValidationService.contains(token),
-          isFalse,
-          reason: 'Unsafe backend config token remained: $token',
-        );
-      }
-
+    test('uses one secure build-time Cloud Run base URL', () {
       expect(receiptValidationService, contains('String.fromEnvironment'));
       expect(
         receiptValidationService,
-        contains('FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT'),
+        contains('FLOW_AI_RECEIPT_SERVICE_BASE_URL'),
       );
-      expect(
-        receiptValidationService,
-        contains('FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT'),
-      );
-      expect(
-        receiptValidationService,
-        contains('FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT'),
-      );
-      expect(receiptValidationService, contains('_isConfiguredSecureEndpoint'));
       expect(receiptValidationService, contains("uri.scheme == 'https'"));
       expect(receiptValidationService, contains('Uri.tryParse'));
+
+      for (final forbidden in <String>[
+        'FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT',
+        'FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT',
+        'FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT',
+      ]) {
+        expect(receiptValidationService, isNot(contains(forbidden)));
+      }
     });
 
     test('premium restore uses authenticated user identity', () {
@@ -426,146 +410,61 @@ void main() {
       },
     );
 
-    test('iOS App Store build injects monetization backend dart defines', () {
-      final appStoreBuildScript = File('build_appstore.sh').readAsStringSync();
+    test('store builds inject one receipt service base URL', () {
+      final scripts = <String>[
+        File('build_appstore.sh').readAsStringSync(),
+        File('scripts/deploy-android.sh').readAsStringSync(),
+        File('scripts/deploy-all.sh').readAsStringSync(),
+      ];
 
-      expect(appStoreBuildScript, contains('REQUIRED_DART_DEFINES='));
-      expect(
-        appStoreBuildScript,
-        contains('FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT'),
-      );
-      expect(
-        appStoreBuildScript,
-        contains('FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT'),
-      );
-      expect(
-        appStoreBuildScript,
-        contains('FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT'),
-      );
-      expect(
-        appStoreBuildScript,
-        contains(
-          'Refusing to build store IPA without backend receipt/status validation endpoints.',
-        ),
-      );
-      expect(
-        appStoreBuildScript,
-        contains('--dart-define=FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT='),
-      );
-      expect(
-        appStoreBuildScript,
-        contains('--dart-define=FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT='),
-      );
-      expect(
-        appStoreBuildScript,
-        contains('--dart-define=FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT='),
-      );
-    });
-
-    test('Android release builds inject monetization backend dart defines', () {
-      final androidBuildScript = File(
-        'scripts/deploy-android.sh',
-      ).readAsStringSync();
-      final multiPlatformBuildScript = File(
-        'scripts/deploy-all.sh',
-      ).readAsStringSync();
-
-      for (final script in [androidBuildScript, multiPlatformBuildScript]) {
+      for (final script in scripts) {
         expect(script, contains('REQUIRED_DART_DEFINES='));
-        expect(script, contains('FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT'));
-        expect(script, contains('FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT'));
-        expect(script, contains('FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT'));
+        expect(script, contains('FLOW_AI_RECEIPT_SERVICE_BASE_URL'));
         expect(
           script,
-          contains(
-            'Refusing to build Android release without backend receipt/status validation endpoints.',
-          ),
+          contains('--dart-define=FLOW_AI_RECEIPT_SERVICE_BASE_URL='),
         );
-        expect(
-          script,
-          contains('--dart-define=FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT='),
-        );
-        expect(
-          script,
-          contains('--dart-define=FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT='),
-        );
-        expect(
-          script,
-          contains('--dart-define=FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT='),
-        );
-        expect(script, contains('MONETIZATION_DART_DEFINES'));
+
+        for (final legacyDefine in <String>[
+          'FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT',
+          'FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT',
+          'FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT',
+        ]) {
+          expect(script, isNot(contains(legacyDefine)));
+        }
       }
     });
 
-    test(
-      'backend receipt validation verifies providers and persists entitlement',
-      () {
-        final backendIndex = File('functions/src/index.ts').readAsStringSync();
-        final backendReceiptValidation = File(
-          'functions/src/receipt_validation_http.ts',
-        ).readAsStringSync();
+    test('isolated receipt service authenticates and persists entitlement', () {
+      final backend = File(
+        'services/receipt-service/src/index.ts',
+      ).readAsStringSync();
 
-        expect(backendIndex, contains('validateAppleReceipt'));
-        expect(backendIndex, contains('validateGooglePlayReceipt'));
-        expect(backendIndex, contains('subscriptionStatus'));
-        expect(backendIndex, contains('receipt_validation_http'));
+      for (final token in <String>[
+        'createRemoteJWKSet',
+        'jwtVerify',
+        'requireFirebaseUid',
+        'generateAccessToken',
+        'androidpublisher',
+        'premiumEntitlements',
+        'allowedProducts',
+        'FLOW_AI_APPLE_ISSUER_ID_NEXT',
+        'FLOW_AI_GOOGLE_PLAY_SERVICE_ACCOUNT',
+        'valid: true',
+        'active: true',
+      ]) {
+        expect(backend, contains(token));
+      }
 
-        for (final token in [
-          'AppStoreServerAPIClient',
-          'SignedDataVerifier',
-          'GoogleAuth',
-          'getTransactionInfo',
-          'verifyAndDecodeTransaction',
-          'subscriptionsv2',
-          'androidpublisher',
-          'persistValidatedEntitlement',
-          'premiumEntitlements',
-          'expiresAtMillis',
-          'FieldValue.serverTimestamp',
-          'Timestamp.fromMillis',
-          'valid: true',
-          'active: true',
-        ]) {
-          expect(backendReceiptValidation, contains(token));
-        }
-
-        expect(
-          backendReceiptValidation,
-          contains('provider_secrets_not_configured'),
-        );
-        expect(backendReceiptValidation, contains('receipt_not_active'));
-        expect(
-          backendReceiptValidation,
-          contains('provider_validation_failed'),
-        );
-        expect(backendReceiptValidation, contains('body.userId'));
-        expect(backendReceiptValidation, contains('body.transactionId'));
-        expect(backendReceiptValidation, contains('appleTransactionId'));
-        expect(backendReceiptValidation, contains('Cache-Control'));
-        expect(backendReceiptValidation, contains('no-store'));
-
-        final validIndex = backendReceiptValidation.indexOf('valid: true');
-        final persistIndex = backendReceiptValidation.indexOf(
-          'await persistValidatedEntitlement',
-        );
-        expect(persistIndex, greaterThan(-1));
-        expect(validIndex, greaterThan(-1));
-        expect(persistIndex, lessThan(validIndex));
-
-        expect(
-          backendReceiptValidation,
-          isNot(contains('provider_validation_not_configured')),
-        );
-        expect(backendReceiptValidation, isNot(contains('return true')));
-        expect(
-          backendReceiptValidation,
-          isNot(contains('sandbox.itunes.apple.com')),
-        );
-        expect(
-          backendReceiptValidation,
-          isNot(contains('buy.itunes.apple.com')),
-        );
-      },
-    );
+      for (final forbidden in <String>[
+        'body.userId',
+        'body.uid',
+        'FLOW_AI_GOOGLE_SERVICE_ACCOUNT_JSON',
+        'firebase-admin',
+        'firebase-functions',
+      ]) {
+        expect(backend, isNot(contains(forbidden)));
+      }
+    });
   });
 }

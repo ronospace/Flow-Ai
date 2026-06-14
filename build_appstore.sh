@@ -36,15 +36,13 @@ flutter pub get
 # Verify required monetization backend endpoints are injected into release builds
 echo -e "\n${YELLOW}🔐 Verifying monetization backend dart-defines...${NC}"
 REQUIRED_DART_DEFINES=(
-    FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT
-    FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT
-    FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT
+    FLOW_AI_RECEIPT_SERVICE_BASE_URL
 )
 
 for define_name in "${REQUIRED_DART_DEFINES[@]}"; do
     if [ -z "${!define_name:-}" ]; then
         echo -e "${RED}❌ Missing required release dart-define environment variable: ${define_name}${NC}"
-        echo -e "${RED}   Refusing to build store IPA without backend receipt/status validation endpoints.${NC}"
+        echo -e "${RED}   Refusing to build store IPA without the Cloud Run receipt service base URL.${NC}"
         exit 1
     fi
 done
@@ -71,9 +69,7 @@ flutter build ipa \
     --export-options-plist=ios/ExportOptionsAppStore.plist \
     --build-number=$BUILD_NUMBER \
     --build-name=$VERSION_NAME \
-    --dart-define=FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT="$FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT" \
-    --dart-define=FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT="$FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT" \
-    --dart-define=FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT="$FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT"
+    --dart-define=FLOW_AI_RECEIPT_SERVICE_BASE_URL="$FLOW_AI_RECEIPT_SERVICE_BASE_URL" \
 
 # Check if build succeeded
 if [ $? -eq 0 ]; then

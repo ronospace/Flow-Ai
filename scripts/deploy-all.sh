@@ -75,23 +75,19 @@ print_success "Pre-build checks completed successfully"
 # Verify required monetization backend endpoints are injected into release builds
 print_status "Verifying monetization backend dart-defines..."
 REQUIRED_DART_DEFINES=(
-    FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT
-    FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT
-    FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT
+    FLOW_AI_RECEIPT_SERVICE_BASE_URL
 )
 
 for define_name in "${REQUIRED_DART_DEFINES[@]}"; do
     if [ -z "${!define_name:-}" ]; then
         print_error "Missing required release dart-define environment variable: ${define_name}"
-        print_error "Refusing to build Android release without backend receipt/status validation endpoints."
+        print_error "Refusing to build Android release without the Cloud Run receipt service base URL."
         exit 1
     fi
 done
 
 MONETIZATION_DART_DEFINES=(
-    --dart-define=FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT="$FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT"
-    --dart-define=FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT="$FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT"
-    --dart-define=FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT="$FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT"
+    --dart-define=FLOW_AI_RECEIPT_SERVICE_BASE_URL="$FLOW_AI_RECEIPT_SERVICE_BASE_URL"
 )
 
 print_success "Monetization backend dart-defines are present"
