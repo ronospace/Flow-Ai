@@ -43,7 +43,7 @@ test("health endpoint works without credentials", async () => {
     }
 
     const response = await fetch(
-      `http://127.0.0.1:${address.port}/healthz`,
+      `http://127.0.0.1:${address.port}/health`,
     );
 
     assert.equal(response.status, 200);

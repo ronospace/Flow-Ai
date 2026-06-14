@@ -995,7 +995,7 @@ async function handleRequest(
 
     if (
       request.method === "GET" &&
-      url.pathname === "/healthz"
+      url.pathname === "/health"
     ) {
       sendJson(response, 200, {
         architecture: runtimeArchitecture,
