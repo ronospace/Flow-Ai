@@ -4,50 +4,90 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Receipt validation client release policy', () {
-    test('does not emit receipt validation debug logs', () {
-      final receiptValidationService = File(
-        'lib/features/premium/services/receipt_validation_service.dart',
+    late String receiptClient;
+    late String subscriptionService;
+
+    setUpAll(() {
+      receiptClient = File(
+        'lib/features/premium/services/'
+        'receipt_validation_service.dart',
       ).readAsStringSync();
 
-      expect(receiptValidationService, isNot(contains('debugPrint(')));
-      expect(receiptValidationService, isNot(contains('print(')));
-      expect(
-        receiptValidationService,
-        isNot(contains('Validating Apple receipt')),
-      );
-      expect(
-        receiptValidationService,
-        isNot(contains('Validating Google Play receipt')),
-      );
-      expect(
-        receiptValidationService,
-        isNot(contains('Backend validation error')),
-      );
+      subscriptionService = File(
+        'lib/features/premium/services/'
+        'subscription_service.dart',
+      ).readAsStringSync();
     });
 
-    test('requires explicit Apple production/sandbox environment', () {
-      final receiptValidationService = File(
-        'lib/features/premium/services/receipt_validation_service.dart',
-      ).readAsStringSync();
-      final subscriptionService = File(
-        'lib/features/premium/services/subscription_service.dart',
-      ).readAsStringSync();
+    String invocationArguments(String methodName) {
+      final match = RegExp(
+        '$methodName\\((.*?)\\);',
+        dotAll: true,
+      ).firstMatch(subscriptionService);
 
-      expect(receiptValidationService, contains('required bool isProduction'));
-      expect(receiptValidationService, contains('required String userId'));
+      expect(match, isNotNull, reason: 'Missing invocation of $methodName');
+
+      return match!.group(1)!;
+    }
+
+    test('uses Firebase Bearer authentication', () {
       expect(
-        receiptValidationService,
-        contains('required String transactionId'),
+        receiptClient,
+        contains('package:firebase_auth/firebase_auth.dart'),
       );
+      expect(receiptClient, contains('FirebaseAuth.instance'));
+      expect(receiptClient, contains('currentUser'));
+      expect(receiptClient, contains('getIdToken(forceRefresh)'));
+      expect(receiptClient, contains("'Authorization': 'Bearer \$token'"));
+      expect(receiptClient, contains('isAuthenticatedUser'));
+
+      expect(receiptClient, isNot(contains('debugPrint(')));
+      expect(receiptClient, isNot(contains('print(')));
+    });
+
+    test('uses one HTTPS Cloud Run base URL', () {
+      expect(receiptClient, contains('FLOW_AI_RECEIPT_SERVICE_BASE_URL'));
+      expect(receiptClient, contains("'v1', 'receipts', 'apple'"));
+      expect(receiptClient, contains("'v1', 'receipts', 'google'"));
+      expect(receiptClient, contains("'v1', 'subscriptions'"));
+      expect(receiptClient, contains("uri.scheme == 'https'"));
+
+      for (final legacyDefine in <String>[
+        'FLOW_AI_APPLE_RECEIPT_VALIDATION_ENDPOINT',
+        'FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT',
+        'FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT',
+      ]) {
+        expect(receiptClient, isNot(contains(legacyDefine)));
+      }
+    });
+
+    test('never sends client-owned UID to validation routes', () {
+      expect(receiptClient, isNot(contains("'userId':")));
+      expect(receiptClient, isNot(contains('required String userId')));
+      expect(receiptClient, isNot(contains("'receipt':")));
+      expect(receiptClient, isNot(contains("'platform':")));
+
+      for (final methodName in <String>[
+        'validateAppleReceipt',
+        'validateGooglePlayReceipt',
+        'verifySubscriptionActive',
+      ]) {
+        expect(
+          invocationArguments(methodName),
+          isNot(contains('userId:')),
+          reason: '$methodName still receives a client UID',
+        );
+      }
+
       expect(
-        receiptValidationService,
-        isNot(contains('bool isProduction = false')),
+        invocationArguments('validateAppleReceipt'),
+        contains('transactionId: transactionId'),
       );
-      expect(subscriptionService, contains('isProduction: kReleaseMode'));
-      expect(subscriptionService, contains('transactionId: transactionId'));
-      expect(subscriptionService, contains('userId: userId'));
-      expect(receiptValidationService, contains("data['valid'] == true"));
-      expect(receiptValidationService, contains("data['active'] == true"));
+
+      expect(
+        invocationArguments('validateGooglePlayReceipt'),
+        contains('purchaseToken: verificationData'),
+      );
     });
   });
 }

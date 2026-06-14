@@ -281,10 +281,12 @@ class SubscriptionService {
         purchaseDetails.verificationData.serverVerificationData;
     final userId = _currentSubscription?.userId;
 
-    if (verificationData.isEmpty || userId == null || userId.trim().isEmpty) {
-      return ReceiptValidationResult(
+    if (userId == null ||
+        userId.trim().isEmpty ||
+        !_receiptValidationService.isAuthenticatedUser(userId)) {
+      return const ReceiptValidationResult(
         isValid: false,
-        errorMessage: 'Missing store verification data or user identity',
+        errorMessage: 'Firebase purchase identity is unavailable or mismatched',
       );
     }
 
@@ -299,22 +301,26 @@ class SubscriptionService {
         }
 
         return await _receiptValidationService.validateAppleReceipt(
-          receiptData: verificationData,
           productId: purchaseDetails.productID,
-          userId: userId,
           transactionId: transactionId,
           isProduction: kReleaseMode,
         );
       }
 
       if (Platform.isAndroid) {
+        if (verificationData.trim().isEmpty) {
+          return const ReceiptValidationResult(
+            isValid: false,
+            errorMessage: 'Missing Google Play purchase token',
+          );
+        }
+
         final packageInfo = await PackageInfo.fromPlatform();
 
         return await _receiptValidationService.validateGooglePlayReceipt(
           purchaseToken: verificationData,
           productId: purchaseDetails.productID,
           packageName: packageInfo.packageName,
-          userId: userId,
         );
       }
 
@@ -417,7 +423,8 @@ class SubscriptionService {
 
   /// Load persisted subscription state only after backend status verification.
   Future<bool> _loadBackendVerifiedSubscription(String userId) async {
-    if (!_receiptValidationService.canValidateSubscriptionStatus) {
+    if (!_receiptValidationService.canValidateSubscriptionStatus ||
+        !_receiptValidationService.isAuthenticatedUser(userId)) {
       _currentSubscription = UserSubscription.free(userId);
       return false;
     }
@@ -449,7 +456,6 @@ class SubscriptionService {
       }
 
       final isActive = await _receiptValidationService.verifySubscriptionActive(
-        userId: userId,
         subscriptionId: subscriptionId,
       );
 

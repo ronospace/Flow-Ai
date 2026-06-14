@@ -3,103 +3,72 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('Receipt validation backend provider contract', () {
+  group('Isolated receipt-service contract', () {
     late String backend;
     late String client;
 
     setUpAll(() {
       backend = File(
-        'functions/src/receipt_validation_http.ts',
+        'services/receipt-service/src/index.ts',
       ).readAsStringSync();
+
       client = File(
-        'lib/features/premium/services/receipt_validation_service.dart',
+        'lib/features/premium/services/'
+        'receipt_validation_service.dart',
       ).readAsStringSync();
     });
 
-    test('declares official provider SDKs and provider secrets', () {
-      for (final token in [
-        '@apple/app-store-server-library',
-        'AppStoreServerAPIClient',
-        'SignedDataVerifier',
-        'GoogleAuth',
-        'FLOW_AI_APPLE_BUNDLE_ID',
-        'FLOW_AI_APPLE_ISSUER_ID',
-        'FLOW_AI_APPLE_KEY_ID',
-        'FLOW_AI_APPLE_PRIVATE_KEY_P8',
-        'FLOW_AI_APPLE_ROOT_CERTIFICATES_PEM',
-        'FLOW_AI_GOOGLE_PACKAGE_NAME',
-        'FLOW_AI_GOOGLE_SERVICE_ACCOUNT_JSON',
-      ]) {
-        expect(backend, contains(token));
-      }
+    test('authenticates Firebase identity without UID trust', () {
+      expect(backend, contains('createRemoteJWKSet'));
+      expect(backend, contains('jwtVerify'));
+      expect(backend, contains('requireFirebaseUid'));
+      expect(backend, contains('extractBearerToken'));
+      expect(backend, contains('RS256'));
 
-      expect(backend, contains('secrets: appleProviderSecrets'));
-      expect(backend, contains('secrets: googleProviderSecrets'));
-      expect(backend, contains('missingAppleProviderSecrets'));
-      expect(backend, contains('missingGoogleProviderSecrets'));
+      expect(backend, isNot(contains('body.userId')));
+      expect(backend, isNot(contains('body.uid')));
+      expect(client, isNot(contains("'userId':")));
     });
 
-    test('verifies providers before returning a valid receipt response', () {
-      expect(backend, contains('getTransactionInfo'));
-      expect(backend, contains('verifyAndDecodeTransaction'));
-      expect(backend, contains('subscriptionsv2'));
-      expect(backend, contains('androidpublisher'));
-      expect(backend, contains('verifyAppleTransaction'));
-      expect(backend, contains('verifyGoogleSubscription'));
-      expect(backend, contains('receipt_not_active'));
-      expect(backend, contains('provider_validation_failed'));
+    test('matches Apple and Google request contracts', () {
+      expect(backend, contains('transactionId'));
+      expect(backend, contains('environment'));
+      expect(backend, contains('purchaseToken'));
+      expect(backend, contains('packageName'));
+      expect(backend, contains('productId'));
 
-      expect(backend, isNot(contains('provider_validation_not_configured')));
-      expect(backend, isNot(contains('sandbox.itunes.apple.com')));
-      expect(backend, isNot(contains('buy.itunes.apple.com')));
-      expect(backend, isNot(contains('return true')));
-    });
-
-    test(
-      'persists entitlement before granting and reads status from Firestore',
-      () {
-        final validIndex = backend.indexOf('valid: true');
-        final persistIndex = backend.indexOf(
-          'await persistValidatedEntitlement',
-        );
-        final activeIndex = backend.indexOf('active: true');
-        final statusSnapshotIndex = backend.indexOf(
-          'const snapshot = await db',
-        );
-
-        expect(validIndex, greaterThan(-1));
-        expect(persistIndex, greaterThan(-1));
-        expect(persistIndex, lessThan(validIndex));
-
-        expect(activeIndex, greaterThan(-1));
-        expect(statusSnapshotIndex, greaterThan(-1));
-        expect(statusSnapshotIndex, lessThan(activeIndex));
-
-        expect(backend, contains('premiumEntitlements'));
-        expect(backend, contains('subscriptions'));
-        expect(backend, contains('expiresAtMillis'));
-        expect(backend, contains('Timestamp.fromMillis'));
-        expect(backend, contains('FieldValue.serverTimestamp'));
-      },
-    );
-
-    test('requires Apple environment and Android package contract', () {
-      expect(backend, contains('allowedAppleEnvironments'));
-      expect(backend, contains('production'));
-      expect(backend, contains('sandbox'));
-      expect(backend, contains('packageName !== configuredPackageName'));
-      expect(backend, contains('body.userId'));
-      expect(backend, contains('body.transactionId'));
-      expect(backend, contains('appleTransactionId'));
-      expect(backend, contains('appleRootCertificatesPem'));
-
+      expect(client, contains("'transactionId': transactionId"));
       expect(
         client,
-        contains("'environment': isProduction ? 'production' : 'sandbox'"),
+        contains(
+          "'environment': "
+          "isProduction ? 'production' : 'sandbox'",
+        ),
       );
-      expect(client, contains("'transactionId': transactionId"));
-      expect(client, contains("'userId': userId"));
+      expect(client, contains("'purchaseToken': purchaseToken"));
       expect(client, contains("'packageName': packageName"));
+      expect(client, contains("'productId': productId"));
+    });
+
+    test('uses keyless provider access', () {
+      expect(backend, contains('generateAccessToken'));
+      expect(backend, contains('androidpublisher'));
+      expect(backend, contains('premiumEntitlements'));
+      expect(backend, contains('allowedProducts'));
+      expect(backend, contains('FLOW_AI_APPLE_ISSUER_ID_NEXT'));
+      expect(backend, contains('FLOW_AI_GOOGLE_PLAY_SERVICE_ACCOUNT'));
+
+      expect(backend, isNot(contains('FLOW_AI_GOOGLE_SERVICE_ACCOUNT_JSON')));
+      expect(backend, isNot(contains('firebase-admin')));
+      expect(backend, isNot(contains('firebase-functions')));
+    });
+
+    test('client uses the protected v1 routes', () {
+      expect(client, contains('FLOW_AI_RECEIPT_SERVICE_BASE_URL'));
+      expect(client, contains("'v1', 'receipts', 'apple'"));
+      expect(client, contains("'v1', 'receipts', 'google'"));
+      expect(client, contains("'v1', 'subscriptions', normalizedId"));
+      expect(client, contains("'Authorization': 'Bearer \$token'"));
     });
   });
 }
