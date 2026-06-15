@@ -11,7 +11,7 @@ Flow Ai ("we," "our," or "us") is committed to protecting your privacy. This Pri
 ### Health and Personal Data
 - **Menstrual Cycle Information**: Period start/end dates, cycle length, flow intensity
 - **Symptoms and Mood**: Physical symptoms, emotional state, energy levels
-- **Biometric Data** (optional, with your consent): Heart rate, body temperature, sleep patterns accessed via Apple HealthKit or Google Fit
+- **Biometric Data** (optional, with your consent): Heart rate, body temperature, sleep patterns accessed via Apple HealthKit on iOS
 - **Lifestyle Data**: Exercise, water intake, medications, notes
 
 ### Account Information
@@ -21,7 +21,7 @@ Flow Ai ("we," "our," or "us") is committed to protecting your privacy. This Pri
 
 ### Technical Data
 - **Device Information**: Device type, operating system version
-- **Usage Analytics**: App features used, session duration (anonymized)
+- **Optional Local Analytics**: Limited app-usage events stored locally and disabled by default
 - **Crash Reports**: Technical logs for debugging (no personal health data included)
 
 ## How We Use Your Information
@@ -33,25 +33,25 @@ Flow Ai ("we," "our," or "us") is committed to protecting your privacy. This Pri
 - **Reminders**: Send notifications for period predictions, medication, or custom reminders
 
 ### Data Processing
-- All health data processing happens **locally on your device**
-- Our AI predictions run on-device to ensure privacy
-- Optional cloud backup uses **end-to-end encryption**
+- Health and cycle records are stored locally by default; explicitly enabled connected features may process limited data using configured services
+- The current production release does not enable external AI processing of health values
+- Connected services use authenticated access controls and encrypted network transport
 
 ## Data Storage and Security
 
 ### Local Storage
 - Your health data is stored **locally on your device** by default
-- Data is encrypted using industry-standard encryption (AES-256)
+- Local data relies on application and operating-system storage protections
 - You control access via device biometric authentication (Face ID, Touch ID, Fingerprint)
 
 ### Cloud Backup (Optional)
-- If enabled, encrypted backups are stored on **EU-based servers** (GDPR compliant)
-- Firebase Cloud Firestore is hosted in the European Union
+- Cloud data location depends on the configured Firebase project resources
+- Firebase services may process data in configured service locations
 - All cloud data is encrypted both in transit (TLS) and at rest
-- We cannot access your unencrypted health data
+- Access to service data is restricted to authorized operational purposes
 
 ### HealthKit Integration
-- Health data accessed from Apple HealthKit **never leaves your device** unless you explicitly enable cloud backup
+- Apple HealthKit access is optional and controlled through iOS settings. The current production release does not use HealthKit data for advertising.
 - We request only the minimum necessary permissions
 - You can revoke HealthKit access at any time in iOS Settings
 
@@ -63,8 +63,8 @@ Flow Ai ("we," "our," or "us") is committed to protecting your privacy. This Pri
 - ❌ Use your health data for marketing purposes
 - ❌ Share identifiable health information with partners
 
-### Limited Sharing (Anonymized Only):
-- ✅ Anonymized, aggregated usage analytics (e.g., "80% of users track symptoms")
+### Limited Service-Provider Processing:
+- Optional analytics are disabled by default and are not used for health-data advertising or profiling
 - ✅ Crash reports with no personal information
 - ✅ App performance metrics to improve user experience
 
@@ -88,7 +88,7 @@ We may disclose information if required by law, court order, or government reque
 ## Data Retention
 
 - **Active Accounts**: Data retained as long as your account is active
-- **Account Deletion**: All data permanently deleted within 30 days of account deletion request
+- **Account Deletion**: Deletion begins after verification; limited records may be retained where legally required
 - **Inactive Accounts**: Accounts inactive for 3+ years may be archived (you'll be notified)
 
 ## Children's Privacy
@@ -106,13 +106,13 @@ Flow Ai is intended for users **13 years and older**. We do not knowingly collec
   - Privacy Policy: https://support.google.com/admob/answer/6128543
 
 ### AI and Machine Learning:
-- All AI/ML predictions run **on-device**
-- No health data is sent to external AI services (OpenAI, etc.)
-- We do not use your data to train external AI models
+- External AI processing of health values is not enabled in the current production release
+- External AI processing is disabled in the current production release
+- Health data is not used to train external AI models in the current production release
 
 ## International Data Transfers
 
-- Primary data storage: **European Union** (GDPR compliant)
+- Cloud processing locations depend on the configured service resources
 - US users: Data may be stored on US servers (with your consent)
 - We comply with EU-US Data Privacy Framework and Standard Contractual Clauses (SCCs)
 
@@ -120,7 +120,7 @@ Flow Ai is intended for users **13 years and older**. We do not knowingly collec
 
 - **No Advertising Cookies**: We do not use tracking cookies for ads
 - **Essential Cookies Only**: Session management, authentication
-- **Analytics**: Optional, anonymized usage data (can be disabled in Settings)
+- **Analytics**: Disabled by default and stored locally unless explicitly enabled
 
 ## Changes to This Policy
 
@@ -137,14 +137,14 @@ We may update this Privacy Policy to reflect changes in our practices or legal r
 - **Postal Address**: Flow Ai, [Your Business Address]
 
 ### Response Time:
-We respond to privacy inquiries within **30 days** (GDPR requirement).
+We respond to privacy inquiries within applicable legal timeframes.
 
 ## Regulatory Compliance
 
 Flow Ai complies with:
-- ✅ **GDPR** (European Union General Data Protection Regulation)
-- ✅ **CCPA** (California Consumer Privacy Act)
-- ✅ **HIPAA** (Health Insurance Portability and Accountability Act) - for US users
+- We handle privacy requests according to applicable data-protection laws
+- California residents may exercise rights available under applicable California law
+- Flow AI is a consumer wellness application and does not claim HIPAA-covered-entity status
 - ✅ **Apple App Store Review Guidelines** (Section 5.1 Privacy)
 - ✅ **Google Play Developer Policy** (User Data)
 
@@ -157,7 +157,7 @@ By using Flow Ai, you consent to this Privacy Policy. You can withdraw consent a
 
 ---
 
-**Privacy-First Design:**  
+**Privacy-First Design:**
 Flow Ai is designed with privacy at its core. Your menstrual health data is **your data**—we're just here to help you understand it better.
 
 **Questions?** Contact us at privacy@flowai.app or visit https://flowai.app/privacy
