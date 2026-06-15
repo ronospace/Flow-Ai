@@ -14,6 +14,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
 import 'local_user_service.dart';
+import 'cloud_data_deletion_gateway.dart';
+import '../database/database_service.dart';
 import '../utils/app_logger.dart';
 
 /// Enhanced Authentication Service with biometric and multi-provider OAuth
@@ -81,24 +83,26 @@ class AuthService {
 
     Map<String, dynamic> userData = {};
 
-    // Handle Firebase User (disabled for iOS build)
-    // if (currentUser is User) {
-    //   // Get stored user data to preserve username and other custom fields
-    //   final storedData = await _getStoredUserData();
-    //
-    //   userData = {
-    //     'uid': currentUser.uid,
-    //     'email': currentUser.email,
-    //     'displayName': currentUser.displayName,
-    //     'username': storedData?['username'] ?? currentUser.displayName, // Preserve stored username
-    //     'photoURL': currentUser.photoURL,
-    //     'provider': 'firebase',
-    //     'createdAt': currentUser.metadata.creationTime?.toIso8601String(),
-    //     'lastSignIn': currentUser.metadata.lastSignInTime?.toIso8601String(),
-    //     'profileComplete': currentUser.displayName != null && currentUser.displayName!.isNotEmpty,
-    //   };
-    // } else
-    if (currentUser is LocalUser) {
+    if (currentUser is User) {
+      final storedData = await _getStoredUserData();
+
+      userData = {
+        'uid': currentUser.uid,
+        'email': currentUser.email,
+        'displayName': currentUser.displayName,
+        'username':
+            storedData?['username'] ?? currentUser.displayName,
+        'photoURL': currentUser.photoURL,
+        'provider': storedData?['provider'] ?? 'firebase',
+        'createdAt':
+            currentUser.metadata.creationTime?.toIso8601String(),
+        'lastSignIn':
+            currentUser.metadata.lastSignInTime?.toIso8601String(),
+        'profileComplete':
+            (currentUser.displayName?.trim().isNotEmpty ?? false) ||
+            (currentUser.email?.trim().isNotEmpty ?? false),
+      };
+    } else if (currentUser is LocalUser) {
       // Handle Local User
       final localUser = currentUser;
       userData = {
@@ -564,6 +568,8 @@ class AuthService {
       await _storeUserData({
         'uid': userCredential.user?.uid,
         'email': userCredential.user?.email,
+        'displayName': userCredential.user?.displayName,
+        'photoURL': userCredential.user?.photoURL,
         'provider': 'google',
         'lastLogin': DateTime.now().toIso8601String(),
       });
@@ -857,6 +863,10 @@ class AuthService {
       }
 
       if (account is User) {
+        // The callable requires the still-authenticated Firebase identity.
+        // Never delete the identity until server-side erasure is confirmed.
+        await CloudDataDeletionGateway().deleteCurrentUserCloudData();
+        await _clearAllUserData();
         await account.delete();
       } else if (account is LocalUser) {
         final localService = _localUserService;
@@ -868,11 +878,11 @@ class AuthService {
         if (!deleted) {
           return AuthResult.failure('Local account could not be deleted');
         }
+
+        await _clearAllUserData();
       } else {
         return AuthResult.failure('Unsupported account type');
       }
-
-      await _clearAllUserData();
 
       if (_prefs != null) {
         await _prefs!.remove(_userDataKey);
@@ -923,6 +933,9 @@ class AuthService {
 
   /// Clear all user-related data from local storage
   Future<void> _clearAllUserData() async {
+    // Cycle, symptom, prediction, and tracking records live in SQLite.
+    await DatabaseService().deleteDatabase();
+
     if (_prefs != null) {
       // Get all keys and remove user-related ones
       final keys = _prefs!.getKeys();
