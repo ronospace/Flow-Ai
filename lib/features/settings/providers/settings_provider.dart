@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../models/user_preferences.dart';
 import '../../../core/services/app_state_service.dart';
+import 'package:flow_ai/core/utils/user_display_name_resolver.dart';
 
 class SettingsProvider extends ChangeNotifier {
   static const String _preferencesKey = 'user_preferences';
@@ -82,70 +83,11 @@ class SettingsProvider extends ChangeNotifier {
         String? email = userData['email'];
         String? photoURL = userData['photoURL'];
 
-        // Smart name resolution with multiple fallbacks
-        String? finalDisplayName = displayName;
+        final finalDisplayName = UserDisplayNameResolver.resolve(
+          email: email,
+          displayName: displayName,
+        );
 
-        // Prefer human-readable names only
-        if (finalDisplayName != null &&
-            finalDisplayName.contains(RegExp(r"[0-9]"))) {
-          finalDisplayName = null;
-        }
-
-        // Normalize display name
-        if (finalDisplayName != null && finalDisplayName.isNotEmpty) {
-          if (finalDisplayName.contains("@")) {
-            finalDisplayName = finalDisplayName.split("@").first;
-          }
-          if (finalDisplayName.contains(".")) {
-            finalDisplayName = finalDisplayName.split(".").first;
-          }
-          finalDisplayName =
-              finalDisplayName[0].toUpperCase() +
-              finalDisplayName.substring(1).toLowerCase();
-        }
-
-        // Try displayName first
-        if (finalDisplayName == null || finalDisplayName.isEmpty) {}
-
-        // If still empty, extract from email
-        if (finalDisplayName == null || finalDisplayName.isEmpty) {
-          if (email != null && email.isNotEmpty) {
-            // Extract name from email (before @)
-            final emailParts = email.split('@');
-            if (emailParts.isNotEmpty) {
-              finalDisplayName = emailParts.first;
-            }
-          }
-        }
-
-        // Final fallback
-        if (finalDisplayName == null || finalDisplayName.isEmpty) {
-          finalDisplayName = 'User';
-        }
-        // === SMART NAME FORMATTING (GLOBAL) ===
-        if (finalDisplayName.isNotEmpty) {
-          String name = finalDisplayName.trim();
-
-          // Remove trailing numbers
-          name = name.replaceAll(RegExp(r'\d+$'), '');
-
-          // Replace separators
-          name = name.replaceAll(RegExp(r'[_\.-]'), ' ');
-
-          // Smart shorten (only if single word & long)
-          if (!name.contains(" ") && name.length > 6) {
-            name = name.substring(0, name.length ~/ 2);
-          }
-
-          // Capitalize words
-          name = name
-              .split(" ")
-              .where((w) => w.isNotEmpty)
-              .map((w) => w[0].toUpperCase() + w.substring(1).toLowerCase())
-              .join(" ");
-
-          finalDisplayName = name.isEmpty ? "User" : name;
-        }
         // Always update if we have valid data - be more aggressive about syncing
         bool hasChanges = false;
 

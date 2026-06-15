@@ -83,24 +83,23 @@ class AuthService {
 
     Map<String, dynamic> userData = {};
 
-    // Handle Firebase User (disabled for iOS build)
-    // if (currentUser is User) {
-    //   // Get stored user data to preserve username and other custom fields
-    //   final storedData = await _getStoredUserData();
-    //
-    //   userData = {
-    //     'uid': currentUser.uid,
-    //     'email': currentUser.email,
-    //     'displayName': currentUser.displayName,
-    //     'username': storedData?['username'] ?? currentUser.displayName, // Preserve stored username
-    //     'photoURL': currentUser.photoURL,
-    //     'provider': 'firebase',
-    //     'createdAt': currentUser.metadata.creationTime?.toIso8601String(),
-    //     'lastSignIn': currentUser.metadata.lastSignInTime?.toIso8601String(),
-    //     'profileComplete': currentUser.displayName != null && currentUser.displayName!.isNotEmpty,
-    //   };
-    // } else
-    if (currentUser is LocalUser) {
+    if (currentUser is User) {
+      final storedData = await _getStoredUserData();
+
+      userData = {
+        'uid': currentUser.uid,
+        'email': currentUser.email,
+        'displayName': currentUser.displayName,
+        'username': storedData?['username'] ?? currentUser.displayName,
+        'photoURL': currentUser.photoURL,
+        'provider': storedData?['provider'] ?? 'firebase',
+        'createdAt': currentUser.metadata.creationTime?.toIso8601String(),
+        'lastSignIn': currentUser.metadata.lastSignInTime?.toIso8601String(),
+        'profileComplete':
+            (currentUser.displayName?.trim().isNotEmpty ?? false) ||
+            (currentUser.email?.trim().isNotEmpty ?? false),
+      };
+    } else if (currentUser is LocalUser) {
       // Handle Local User
       final localUser = currentUser;
       userData = {
@@ -566,6 +565,8 @@ class AuthService {
       await _storeUserData({
         'uid': userCredential.user?.uid,
         'email': userCredential.user?.email,
+        'displayName': userCredential.user?.displayName,
+        'photoURL': userCredential.user?.photoURL,
         'provider': 'google',
         'lastLogin': DateTime.now().toIso8601String(),
       });
