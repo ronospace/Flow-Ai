@@ -9,6 +9,9 @@ permissions:
   pull-requests: write
 jobs:
   build_and_preview:
+    permissions:
+      contents: read
+      id-token: write
     if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
     runs-on: ubuntu-latest
     steps:
@@ -27,8 +30,11 @@ jobs:
       - run: flutter build web --release
       
       # Deploy to Firebase Hosting Preview
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: Deploy Firebase Hosting (preview)
+        if: ${{ vars.FIREBASE_HOSTING_DEPLOY_ENABLED == 'true' }}
+        uses: ./.github/actions/firebase-hosting-deploy
         with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_ZYRAFLOW_PRODUCTION }}
-          projectId: flowai-production
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER_FLOW_AI }}
+          service_account: ${{ vars.GCP_WIF_SERVICE_ACCOUNT_FLOW_AI }}
+          mode: preview
+          channel: pr-${{ github.event.number }}
