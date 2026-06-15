@@ -130,6 +130,13 @@ class AdvancedBiometricService {
 
   /// Initialize biometric integration
   Future<void> initialize() async {
+    if (!Platform.isIOS) {
+      AppLogger.warning(
+        'Apple Health integration is available only on iOS in this release',
+      );
+      return;
+    }
+
     if (_isInitialized) return;
 
     try {

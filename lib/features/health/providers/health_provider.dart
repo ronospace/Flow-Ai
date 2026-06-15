@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/services/advanced_biometric_service.dart';
@@ -14,6 +15,13 @@ class HealthProvider extends ChangeNotifier {
 
   /// Connect to HealthKit after showing the mandatory disclosure dialog
   Future<void> connectHealthKit(BuildContext context) async {
+    if (kIsWeb || defaultTargetPlatform != TargetPlatform.iOS) {
+      debugPrint(
+        'Apple Health integration is available only on iOS in this release',
+      );
+      return;
+    }
+
     // Show mandatory HealthKit disclosure dialog BEFORE requesting permissions
     // This ensures users see the health data disclosure before permissions are requested
     final accepted = await HealthKitPermissionDialog.show(

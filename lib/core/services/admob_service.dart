@@ -44,7 +44,7 @@ class AdMobService {
       'ca-app-pub-8707491489514576/2881586612';
 
   // Production ads are enabled only in release builds.
-  static bool get adsEnabled => kReleaseMode;
+  static bool get adsEnabled => false;
 
   static Future<void>? _initialization;
   static bool _mobileAdsInitialized = false;

@@ -14,6 +14,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
 import 'local_user_service.dart';
+import 'cloud_data_deletion_gateway.dart';
+import '../database/database_service.dart';
 import '../utils/app_logger.dart';
 
 /// Enhanced Authentication Service with biometric and multi-provider OAuth
@@ -857,6 +859,10 @@ class AuthService {
       }
 
       if (account is User) {
+        // The callable requires the still-authenticated Firebase identity.
+        // Never delete the identity until server-side erasure is confirmed.
+        await CloudDataDeletionGateway().deleteCurrentUserCloudData();
+        await _clearAllUserData();
         await account.delete();
       } else if (account is LocalUser) {
         final localService = _localUserService;
@@ -868,11 +874,11 @@ class AuthService {
         if (!deleted) {
           return AuthResult.failure('Local account could not be deleted');
         }
+
+        await _clearAllUserData();
       } else {
         return AuthResult.failure('Unsupported account type');
       }
-
-      await _clearAllUserData();
 
       if (_prefs != null) {
         await _prefs!.remove(_userDataKey);
@@ -923,6 +929,9 @@ class AuthService {
 
   /// Clear all user-related data from local storage
   Future<void> _clearAllUserData() async {
+    // Cycle, symptom, prediction, and tracking records live in SQLite.
+    await DatabaseService().deleteDatabase();
+
     if (_prefs != null) {
       // Get all keys and remove user-related ones
       final keys = _prefs!.getKeys();
