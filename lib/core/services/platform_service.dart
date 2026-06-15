@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import '../utils/app_logger.dart';
+import 'package:flow_ai/core/theme/system_ui_overlay_theme.dart';
 
 /// Cross-platform compatibility service with adaptive UI and optimizations
 class PlatformService {
@@ -157,12 +158,7 @@ class PlatformService {
 
         // Configure status bar
         SystemChrome.setSystemUIOverlayStyle(
-          const SystemUiOverlayStyle(
-            statusBarColor: Colors.transparent,
-            statusBarIconBrightness: Brightness.dark,
-            systemNavigationBarColor: Colors.transparent,
-            systemNavigationBarIconBrightness: Brightness.dark,
-          ),
+          SystemUiOverlayTheme.forBrightness(Brightness.light),
         );
 
         // Lock orientation to portrait for mobile
