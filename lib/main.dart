@@ -44,6 +44,7 @@ import 'features/settings/providers/settings_provider.dart';
 import 'features/premium/providers/premium_provider.dart';
 import 'features/premium/providers/subscription_provider.dart';
 import 'features/analytics/providers/analytics_provider.dart';
+import 'package:flow_ai/core/theme/system_ui_overlay_theme.dart';
 
 const bool ENABLE_PD = false;
 
@@ -387,15 +388,8 @@ class _FlowAIAppState extends State<FlowAIApp> {
                   MediaQuery.platformBrightnessOf(context) == Brightness.dark);
 
           SystemChrome.setSystemUIOverlayStyle(
-            SystemUiOverlayStyle(
-              statusBarColor: Colors.transparent,
-              statusBarIconBrightness: isDark
-                  ? Brightness.light
-                  : Brightness.dark,
-              systemNavigationBarColor: Colors.transparent,
-              systemNavigationBarIconBrightness: isDark
-                  ? Brightness.light
-                  : Brightness.dark,
+            SystemUiOverlayTheme.forBrightness(
+              isDark ? Brightness.dark : Brightness.light,
             ),
           );
 
@@ -409,11 +403,9 @@ class _FlowAIAppState extends State<FlowAIApp> {
               debugShowCheckedModeBanner: false,
               scrollBehavior: AppScrollBehavior(),
               theme: CupertinoThemeData(
-                brightness: settings.themeMode == ThemeMode.dark
-                    ? Brightness.dark
-                    : Brightness.light,
+                brightness: isDark ? Brightness.dark : Brightness.light,
                 primaryColor: AppTheme.primaryRose,
-                scaffoldBackgroundColor: settings.themeMode == ThemeMode.dark
+                scaffoldBackgroundColor: isDark
                     ? AppTheme.darkBackground
                     : AppTheme.lightBackground,
               ),
