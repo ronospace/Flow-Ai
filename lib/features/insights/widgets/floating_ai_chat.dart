@@ -14,14 +14,17 @@ import 'zyra/controllers/zyra_shell_controller.dart';
 
 /// Floating AI Chat Widget for insights screen
 class FloatingAIChat extends StatefulWidget {
-  final GlobalKey tabsKey;
-  final GlobalKey periodSelectorKey;
+  final GlobalKey? tabsKey;
+  final GlobalKey? periodSelectorKey;
   final ValueChanged<bool>? onExpandedChanged;
+  final Object heroTag;
+
   const FloatingAIChat({
     super.key,
-    required this.tabsKey,
-    required this.periodSelectorKey,
+    this.tabsKey,
+    this.periodSelectorKey,
     this.onExpandedChanged,
+    this.heroTag = 'ai_chat_main_fab',
   });
 
   @override
@@ -254,7 +257,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   }
 
   double _getTabsBottom() {
-    final ctx = widget.tabsKey.currentContext;
+    final ctx = widget.tabsKey?.currentContext;
     if (ctx == null) return 200;
     final box = ctx.findRenderObject() as RenderBox;
     final pos = box.localToGlobal(Offset.zero);
@@ -262,7 +265,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
   }
 
   double _getPeriodSelectorTop() {
-    final ctx = widget.periodSelectorKey.currentContext;
+    final ctx = widget.periodSelectorKey?.currentContext;
     if (ctx == null) return MediaQuery.of(context).padding.top + 80;
     final box = ctx.findRenderObject() as RenderBox;
     final pos = box.localToGlobal(Offset.zero);
@@ -402,7 +405,7 @@ class _FloatingAIChatState extends State<FloatingAIChat>
                       ],
                     ),
                     child: FloatingActionButton(
-                      heroTag: "ai_chat_main_fab",
+                      heroTag: widget.heroTag,
                       onPressed: _toggleChat,
                       backgroundColor: AppTheme.primaryRose,
                       elevation: 0,
