@@ -956,8 +956,11 @@ class _TrackingScreenState extends State<TrackingScreen>
                         key: const ValueKey('track-notes-field'),
                         controller: _notesController,
                         keyboardType: TextInputType.multiline,
-                        textInputAction: TextInputAction.newline,
+                        textInputAction: TextInputAction.done,
                         textCapitalization: TextCapitalization.sentences,
+                        onEditingComplete: () {
+                          FocusManager.instance.primaryFocus?.unfocus();
+                        },
                         maxLines: null,
                         minLines: 5,
                         scrollPadding: const EdgeInsets.all(AppTheme.spaceXl),

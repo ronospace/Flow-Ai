@@ -71,8 +71,11 @@ void main() {
     expect(notes, contains("ValueKey('track-notes-field')"));
 
     expect(notes, contains('keyboardType: TextInputType.multiline'));
+    expect(notes, contains('textInputAction: TextInputAction.done'));
+    expect(notes, contains('onEditingComplete: ()'));
+    expect(notes, contains('FocusManager.instance.primaryFocus?.unfocus();'));
 
-    expect(notes, contains('textInputAction: TextInputAction.newline'));
+    expect(notes, contains('textInputAction: TextInputAction.done'));
 
     expect(notes, contains('textCapitalization: TextCapitalization.sentences'));
 
