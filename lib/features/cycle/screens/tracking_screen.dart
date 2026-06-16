@@ -240,7 +240,10 @@ class _TrackingScreenState extends State<TrackingScreen>
     }
   }
 
-  bool get _showSaveAction => _hasUnsavedChanges || _isSaving || _recentlySaved;
+  bool get _isKeyboardVisible => MediaQuery.viewInsetsOf(context).bottom > 0;
+
+  bool get _showSaveAction =>
+      !_isKeyboardVisible && (_hasUnsavedChanges || _isSaving);
 
   Widget _buildSaveActionArea() {
     return AnimatedSize(
