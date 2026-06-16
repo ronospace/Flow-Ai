@@ -40,6 +40,7 @@ class _TrackingScreenState extends State<TrackingScreen>
   final Set<String> _selectedQuickNotes = {}; // Multi-select state
 
   final TextEditingController _notesController = TextEditingController();
+  final FocusNode _notesFocusNode = FocusNode();
   bool _hasUnsavedChanges = false;
   bool _isSaving = false;
   bool _recentlySaved = false;
@@ -48,6 +49,7 @@ class _TrackingScreenState extends State<TrackingScreen>
   @override
   void initState() {
     super.initState();
+    _notesFocusNode.addListener(_handleNotesFocusChanged);
     _tabController = TabController(length: 5, vsync: this);
     _pageController = PageController();
 
@@ -71,6 +73,8 @@ class _TrackingScreenState extends State<TrackingScreen>
     _savedStateTimer?.cancel();
     _tabController.dispose();
     _pageController.dispose();
+    _notesFocusNode.removeListener(_handleNotesFocusChanged);
+    _notesFocusNode.dispose();
     _notesController.dispose();
     super.dispose();
   }
@@ -148,6 +152,12 @@ class _TrackingScreenState extends State<TrackingScreen>
     } catch (e) {
       // Handle database errors gracefully
       debugPrint('Error loading tracking data: $e');
+    }
+  }
+
+  void _handleNotesFocusChanged() {
+    if (mounted) {
+      setState(() {});
     }
   }
 
@@ -242,8 +252,12 @@ class _TrackingScreenState extends State<TrackingScreen>
 
   bool get _isKeyboardVisible => MediaQuery.viewInsetsOf(context).bottom > 0;
 
+  bool get _isNotesEditing => _notesFocusNode.hasFocus;
+
   bool get _showSaveAction =>
-      !_isKeyboardVisible && (_hasUnsavedChanges || _isSaving);
+      !_isNotesEditing &&
+      !_isKeyboardVisible &&
+      (_hasUnsavedChanges || _isSaving);
 
   Widget _buildSaveActionArea() {
     return AnimatedSize(
@@ -955,9 +969,13 @@ class _TrackingScreenState extends State<TrackingScreen>
                       child: TextField(
                         key: const ValueKey('track-notes-field'),
                         controller: _notesController,
-                        keyboardType: TextInputType.multiline,
-                        textInputAction: TextInputAction.newline,
+                        focusNode: _notesFocusNode,
+                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.done,
                         textCapitalization: TextCapitalization.sentences,
+                        onEditingComplete: () {
+                          _notesFocusNode.unfocus();
+                        },
                         maxLines: null,
                         minLines: 5,
                         scrollPadding: const EdgeInsets.all(AppTheme.spaceXl),
