@@ -19,12 +19,15 @@ void main() {
     expect(source, contains('keyboardType: TextInputType.text'));
     expect(source, contains('textInputAction: TextInputAction.done'));
     expect(source, isNot(contains('textInputAction: TextInputAction.newline')));
-    expect(source, contains('onEditingComplete: ()'));
+    expect(source, contains('onEditingComplete: _finishNotesEditing,'));
     expect(source, contains('_notesFocusNode.unfocus();'));
   });
 
   test('Save appears only for dirty state after editing finishes', () {
-    expect(source, contains('(_hasUnsavedChanges || _isSaving)'));
+    expect(
+      source,
+      contains('(_hasUnsavedChanges || _isSaving || _recentlySaved)'),
+    );
     expect(source, contains('_hasUnsavedChanges = false;'));
   });
 }
