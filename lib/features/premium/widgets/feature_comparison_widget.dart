@@ -93,7 +93,6 @@ class FeatureComparisonWidget extends StatelessWidget {
             basic: false,
             premium: true,
             ultimate: true,
-            premiumNote: '95% accuracy',
           ),
           _buildFeatureRow(
             'Healthcare Integration',
