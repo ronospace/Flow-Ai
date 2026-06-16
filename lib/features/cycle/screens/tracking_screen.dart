@@ -41,6 +41,7 @@ class _TrackingScreenState extends State<TrackingScreen>
 
   final TextEditingController _notesController = TextEditingController();
   final FocusNode _notesFocusNode = FocusNode();
+  bool _notesEditorActive = false;
   bool _hasUnsavedChanges = false;
   bool _isSaving = false;
   bool _recentlySaved = false;
@@ -156,9 +157,35 @@ class _TrackingScreenState extends State<TrackingScreen>
   }
 
   void _handleNotesFocusChanged() {
-    if (mounted) {
-      setState(() {});
+    final isActive = _notesFocusNode.hasFocus;
+
+    if (!mounted || _notesEditorActive == isActive) {
+      return;
     }
+
+    setState(() {
+      _notesEditorActive = isActive;
+    });
+  }
+
+  void _beginNotesEditing() {
+    if (!mounted || _notesEditorActive) {
+      return;
+    }
+
+    setState(() {
+      _notesEditorActive = true;
+    });
+  }
+
+  void _finishNotesEditing() {
+    if (mounted && _notesEditorActive) {
+      setState(() {
+        _notesEditorActive = false;
+      });
+    }
+
+    _notesFocusNode.unfocus();
   }
 
   void _markUnsavedChanges() {
@@ -252,12 +279,12 @@ class _TrackingScreenState extends State<TrackingScreen>
 
   bool get _isKeyboardVisible => MediaQuery.viewInsetsOf(context).bottom > 0;
 
-  bool get _isNotesEditing => _notesFocusNode.hasFocus;
+  bool get _isNotesEditing => _notesEditorActive || _notesFocusNode.hasFocus;
 
   bool get _showSaveAction =>
       !_isNotesEditing &&
       !_isKeyboardVisible &&
-      (_hasUnsavedChanges || _isSaving);
+      (_hasUnsavedChanges || _isSaving || _recentlySaved);
 
   Widget _buildSaveActionArea() {
     return AnimatedSize(
@@ -265,13 +292,14 @@ class _TrackingScreenState extends State<TrackingScreen>
       duration: AppTheme.motionFast,
       curve: Curves.easeInOut,
       alignment: Alignment.bottomCenter,
-      child: _showSaveAction
-          ? Padding(
-              key: const ValueKey('track-save-action-padding'),
-              padding: AppLayout.bottomActionPadding,
-              child: _buildSaveButton(),
-            )
-          : const SizedBox.shrink(),
+      child: Offstage(
+        offstage: !_showSaveAction,
+        child: Padding(
+          key: const ValueKey('track-save-action-padding'),
+          padding: AppLayout.bottomActionPadding,
+          child: _buildSaveButton(),
+        ),
+      ),
     );
   }
 
@@ -970,12 +998,11 @@ class _TrackingScreenState extends State<TrackingScreen>
                         key: const ValueKey('track-notes-field'),
                         controller: _notesController,
                         focusNode: _notesFocusNode,
+                        onTap: _beginNotesEditing,
                         keyboardType: TextInputType.text,
                         textInputAction: TextInputAction.done,
                         textCapitalization: TextCapitalization.sentences,
-                        onEditingComplete: () {
-                          _notesFocusNode.unfocus();
-                        },
+                        onEditingComplete: _finishNotesEditing,
                         maxLines: null,
                         minLines: 5,
                         scrollPadding: const EdgeInsets.all(AppTheme.spaceXl),
