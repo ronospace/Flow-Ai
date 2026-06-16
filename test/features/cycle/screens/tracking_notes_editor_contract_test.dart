@@ -67,12 +67,12 @@ void main() {
     expect(notes, contains("ValueKey('track-notes-input-area')"));
   });
 
-  test('Notes field is multiline and semantic', () {
+  test('Notes field grows and completes editing with Done', () {
     expect(notes, contains("ValueKey('track-notes-field')"));
 
-    expect(notes, contains('keyboardType: TextInputType.multiline'));
+    expect(notes, contains('keyboardType: TextInputType.text'));
 
-    expect(notes, contains('textInputAction: TextInputAction.newline'));
+    expect(notes, contains('textInputAction: TextInputAction.done'));
 
     expect(notes, contains('textCapitalization: TextCapitalization.sentences'));
 
