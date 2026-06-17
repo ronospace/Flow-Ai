@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import '../models/subscription_models.dart';
 import '../services/subscription_service.dart';
 
+import 'package:flow_ai/core/services/admob_service.dart';
+
 class SubscriptionProvider extends ChangeNotifier {
   final SubscriptionService _subscriptionService = SubscriptionService();
   StreamSubscription<UserSubscription>? _entitlementSubscription;
@@ -70,6 +72,9 @@ class SubscriptionProvider extends ChangeNotifier {
       _entitlementSubscription = _subscriptionService.entitlementChanges.listen(
         (subscription) {
           _subscription = subscription;
+          if (subscription.isPremium) {
+            AdMobService().dispose();
+          }
           notifyListeners();
         },
       );
