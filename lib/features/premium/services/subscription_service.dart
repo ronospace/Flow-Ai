@@ -28,11 +28,15 @@ class SubscriptionService {
   List<ProductDetails> _products = [];
   bool _isAvailable = false;
   UserSubscription? _currentSubscription;
+  final StreamController<UserSubscription> _entitlementController =
+      StreamController<UserSubscription>.broadcast();
 
   // Getters
   List<ProductDetails> get products => _products;
   bool get isAvailable => _isAvailable;
   UserSubscription? get currentSubscription => _currentSubscription;
+  Stream<UserSubscription> get entitlementChanges =>
+      _entitlementController.stream;
   bool get isPremium => _currentSubscription?.isPremium ?? false;
 
   bool get _isPurchaseValidationConfigured {
@@ -369,6 +373,11 @@ class SubscriptionService {
     // Save to persistent storage
     await _saveSubscription();
 
+    final validatedSubscription = _currentSubscription;
+    if (validatedSubscription != null) {
+      _entitlementController.add(validatedSubscription);
+    }
+
     if (kDebugMode) {
       print('🎉 Premium access granted until: $expiryDate');
     }
@@ -501,5 +510,6 @@ class SubscriptionService {
   /// Dispose
   void dispose() {
     _subscription.cancel();
+    _entitlementController.close();
   }
 }

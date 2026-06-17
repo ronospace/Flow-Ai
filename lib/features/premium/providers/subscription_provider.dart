@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import '../models/subscription_models.dart';
 import '../services/subscription_service.dart';
 
 class SubscriptionProvider extends ChangeNotifier {
   final SubscriptionService _subscriptionService = SubscriptionService();
+  StreamSubscription<UserSubscription>? _entitlementSubscription;
 
   UserSubscription? _subscription;
   List<SubscriptionProduct> _availableProducts = [];
@@ -63,6 +66,13 @@ class SubscriptionProvider extends ChangeNotifier {
 
     try {
       await _subscriptionService.initialize(userId);
+      await _entitlementSubscription?.cancel();
+      _entitlementSubscription = _subscriptionService.entitlementChanges.listen(
+        (subscription) {
+          _subscription = subscription;
+          notifyListeners();
+        },
+      );
       _subscription = _subscriptionService.currentSubscription;
       _availableProducts = _subscriptionService.getAvailableProducts();
       _isInitialized = true;
@@ -240,6 +250,7 @@ class SubscriptionProvider extends ChangeNotifier {
 
   @override
   void dispose() {
+    _entitlementSubscription?.cancel();
     _subscriptionService.dispose();
     super.dispose();
   }
