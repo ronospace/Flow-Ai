@@ -26,7 +26,36 @@ class SymptomSelector extends StatefulWidget {
 
 class _SymptomSelectorState extends State<SymptomSelector> {
   // Saving must never hide the user's selected symptoms.
-  bool get _shouldCollapseSelectedSummary => false;
+  late bool _selectedSummaryExpanded;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedSummaryExpanded = !widget.collapseSelectedSummary;
+  }
+
+  @override
+  void didUpdateWidget(covariant SymptomSelector oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.collapseSelectedSummary &&
+        !widget.collapseSelectedSummary &&
+        !_selectedSummaryExpanded) {
+      _selectedSummaryExpanded = true;
+    }
+  }
+
+  bool get _shouldCollapseSelectedSummary => !_selectedSummaryExpanded;
+
+  void _expandSelectedSummary() {
+    if (_selectedSummaryExpanded) return;
+
+    setState(() {
+      _selectedSummaryExpanded = true;
+    });
+
+    HapticFeedback.selectionClick();
+  }
 
   Map<String, List<SymptomOption>> _getSymptomCategories(BuildContext context) {
     final localizations = AppLocalizations.of(context);
@@ -109,46 +138,56 @@ class _SymptomSelectorState extends State<SymptomSelector> {
   Widget _buildCollapsedSelectedSymptomsSummary() {
     final theme = Theme.of(context);
 
-    return Container(
-      key: const ValueKey<String>('selected-symptoms-collapsed-summary'),
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
+    return Semantics(
+      button: true,
+      label: 'Selected Symptoms (${widget.selectedSymptoms.length})',
+      hint: 'Show selected symptoms',
+      child: InkWell(
+        key: const ValueKey<String>('selected-symptoms-collapsed-summary'),
+        onTap: _expandSelectedSummary,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 14,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Icon(
-            Icons.checklist_rtl_rounded,
-            color: AppTheme.primaryRose,
-            size: 20,
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              'Selected Symptoms (${widget.selectedSymptoms.length})',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: theme.colorScheme.onSurface,
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surface,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.08),
+                blurRadius: 14,
+                offset: const Offset(0, 4),
               ),
-            ),
+            ],
           ),
-          Icon(
-            Icons.keyboard_arrow_down_rounded,
-            color: theme.colorScheme.onSurfaceVariant,
-            size: 20,
+          child: Row(
+            children: [
+              Icon(
+                Icons.checklist_rtl_rounded,
+                color: AppTheme.primaryRose,
+                size: 20,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  'Selected Symptoms (${widget.selectedSymptoms.length})',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurface,
+                  ),
+                ),
+              ),
+              Icon(
+                key: const ValueKey<String>('selected-symptoms-expand-arrow'),
+                Icons.keyboard_arrow_down_rounded,
+                color: theme.colorScheme.onSurfaceVariant,
+                size: 20,
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

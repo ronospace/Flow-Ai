@@ -300,35 +300,43 @@ void main() {
 
     await disposeTree(tester);
   });
-  testWidgets(
-    'saved-state collapse requests keep selected symptom cards visible',
-    (tester) async {
-      addTearDown(tester.view.resetPhysicalSize);
-      addTearDown(tester.view.resetDevicePixelRatio);
+  testWidgets('collapsed selected summary opens from dropdown arrow', (
+    tester,
+  ) async {
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
 
-      await mount(
-        tester,
-        390,
-        TextDirection.ltr,
-        collapseSelectedSummary: true,
-      );
+    await mount(tester, 390, TextDirection.ltr, collapseSelectedSummary: true);
 
-      expect(
-        find.byKey(
-          const ValueKey<String>('selected-symptoms-collapsed-summary'),
-        ),
-        findsNothing,
-      );
-      expect(find.text('Selected Symptoms (3)'), findsOneWidget);
-      expect(chip('Diarrhea'), findsWidgets);
-      expect(chip('Cramps'), findsWidgets);
-      expect(
-        chip('Severe and persistent lower abdominal cramping'),
-        findsWidgets,
-      );
-      expect(tester.takeException(), isNull);
+    final collapsedHeader = find.byKey(
+      const ValueKey<String>('selected-symptoms-collapsed-summary'),
+    );
+    final dropdownArrow = find.byKey(
+      const ValueKey<String>('selected-symptoms-expand-arrow'),
+    );
 
-      await disposeTree(tester);
-    },
-  );
+    expect(collapsedHeader, findsOneWidget);
+    expect(dropdownArrow, findsOneWidget);
+    expect(chip('Diarrhea'), findsNothing);
+    expect(chip('Cramps'), findsNothing);
+    expect(
+      chip('Severe and persistent lower abdominal cramping'),
+      findsNothing,
+    );
+
+    await tester.tap(dropdownArrow);
+    await tester.pumpAndSettle();
+
+    expect(collapsedHeader, findsNothing);
+    expect(find.text('Selected Symptoms (3)'), findsOneWidget);
+    expect(chip('Diarrhea'), findsWidgets);
+    expect(chip('Cramps'), findsWidgets);
+    expect(
+      chip('Severe and persistent lower abdominal cramping'),
+      findsWidgets,
+    );
+    expect(tester.takeException(), isNull);
+
+    await disposeTree(tester);
+  });
 }
