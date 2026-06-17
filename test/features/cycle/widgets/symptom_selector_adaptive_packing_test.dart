@@ -301,7 +301,7 @@ void main() {
     await disposeTree(tester);
   });
   testWidgets(
-    'saved-state collapse keeps selected summary header and hides chips',
+    'saved-state collapse requests keep selected symptom cards visible',
     (tester) async {
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
@@ -317,14 +317,14 @@ void main() {
         find.byKey(
           const ValueKey<String>('selected-symptoms-collapsed-summary'),
         ),
-        findsOneWidget,
+        findsNothing,
       );
       expect(find.text('Selected Symptoms (3)'), findsOneWidget);
-      expect(chip('Diarrhea'), findsNothing);
-      expect(chip('Cramps'), findsNothing);
+      expect(chip('Diarrhea'), findsWidgets);
+      expect(chip('Cramps'), findsWidgets);
       expect(
         chip('Severe and persistent lower abdominal cramping'),
-        findsNothing,
+        findsWidgets,
       );
       expect(tester.takeException(), isNull);
 
