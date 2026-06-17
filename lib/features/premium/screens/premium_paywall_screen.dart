@@ -545,22 +545,21 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
     if (!mounted) return;
 
     if (result.success) {
-      // Show success message
-      AdaptiveMessages.showSuccess(
-        messenger?.context ?? navigator.context,
-        '🎉 Welcome to Premium!',
+      messenger?.showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Purchase started. Premium will activate after secure verification.',
+          ),
+        ),
       );
+      return;
+    }
 
-      // Close paywall
-      navigator.pop(true);
-    } else {
-      // Show error
-      if (result.error != PurchaseError.cancelled) {
-        AdaptiveMessages.showError(
-          messenger?.context ?? navigator.context,
-          result.errorMessage ?? 'Purchase failed',
-        );
-      }
+    if (result.error != PurchaseError.cancelled) {
+      AdaptiveMessages.showError(
+        messenger?.context ?? navigator.context,
+        result.errorMessage ?? 'Purchase failed',
+      );
     }
   }
 
