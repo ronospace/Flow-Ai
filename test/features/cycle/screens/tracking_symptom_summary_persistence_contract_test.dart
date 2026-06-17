@@ -31,15 +31,21 @@ void main() {
 
     expect(selectorSource, contains('this.collapseSelectedSummary = false'));
   });
-  test('saved-state collapse is disabled by the owner', () {
+  test('collapsed selected symptoms have a working expansion control', () {
     final selectorSource = File(
       'lib/features/cycle/widgets/symptom_selector.dart',
     ).readAsStringSync();
 
+    expect(selectorSource, contains('late bool _selectedSummaryExpanded;'));
     expect(
       selectorSource,
-      contains('bool get _shouldCollapseSelectedSummary => false;'),
+      contains(
+        '_selectedSummaryExpanded = '
+        '!widget.collapseSelectedSummary;',
+      ),
     );
-    expect(selectorSource, isNot(contains('widget.collapseSelectedSummary')));
+    expect(selectorSource, contains('onTap: _expandSelectedSummary'));
+    expect(selectorSource, contains('_selectedSummaryExpanded = true;'));
+    expect(selectorSource, contains('selected-symptoms-expand-arrow'));
   });
 }
