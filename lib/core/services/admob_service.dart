@@ -44,7 +44,10 @@ class AdMobService {
       'ca-app-pub-8707491489514576/2881586612';
 
   // Production ads are enabled only in release builds.
-  static bool get adsEnabled => false;
+  static bool get adsEnabled => const bool.fromEnvironment(
+    'FLOW_AI_ENABLE_ADS',
+    defaultValue: kReleaseMode,
+  );
 
   static Future<void>? _initialization;
   static bool _mobileAdsInitialized = false;
