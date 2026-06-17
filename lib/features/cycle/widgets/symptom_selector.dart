@@ -25,6 +25,9 @@ class SymptomSelector extends StatefulWidget {
 }
 
 class _SymptomSelectorState extends State<SymptomSelector> {
+  // Saving must never hide the user's selected symptoms.
+  bool get _shouldCollapseSelectedSummary => false;
+
   Map<String, List<SymptomOption>> _getSymptomCategories(BuildContext context) {
     final localizations = AppLocalizations.of(context);
     return {
@@ -90,7 +93,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
       slivers: [
         if (widget.selectedSymptoms.isNotEmpty) ...[
           SliverToBoxAdapter(
-            child: widget.collapseSelectedSummary
+            child: _shouldCollapseSelectedSummary
                 ? _buildCollapsedSelectedSymptomsSummary()
                 : _buildSelectedSymptomsSummary(),
           ),
