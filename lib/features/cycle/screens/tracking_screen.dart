@@ -23,7 +23,7 @@ class TrackingScreen extends StatefulWidget {
 }
 
 class _TrackingScreenState extends State<TrackingScreen>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   late TabController _tabController;
   late PageController _pageController;
 
@@ -40,6 +40,12 @@ class _TrackingScreenState extends State<TrackingScreen>
   final Set<String> _selectedQuickNotes = {}; // Multi-select state
 
   final TextEditingController _notesController = TextEditingController();
+
+  final FocusNode _notesFocusNode = FocusNode();
+
+  Timer? _keyboardDismissSettleTimer;
+
+  bool _keyboardFullyDismissed = true;
   bool _hasUnsavedChanges = false;
   bool _isSaving = false;
   bool _recentlySaved = false;
@@ -48,6 +54,11 @@ class _TrackingScreenState extends State<TrackingScreen>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _notesFocusNode.addListener(_handleKeyboardSaveFocusChanged);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _synchronizeKeyboardSaveVisibility();
+    });
     _tabController = TabController(length: 5, vsync: this);
     _pageController = PageController();
 
@@ -67,11 +78,63 @@ class _TrackingScreenState extends State<TrackingScreen>
   }
 
   @override
+  void didChangeMetrics() {
+    super.didChangeMetrics();
+    _synchronizeKeyboardSaveVisibility();
+  }
+
+  double get _currentKeyboardInset {
+    if (!mounted) return 0;
+    return View.of(context).viewInsets.bottom;
+  }
+
+  void _handleKeyboardSaveFocusChanged() {
+    _synchronizeKeyboardSaveVisibility();
+  }
+
+  void _synchronizeKeyboardSaveVisibility() {
+    if (!mounted) return;
+
+    final mustRemainHidden =
+        _notesFocusNode.hasFocus || _currentKeyboardInset > 0;
+
+    if (mustRemainHidden) {
+      _keyboardDismissSettleTimer?.cancel();
+
+      if (_keyboardFullyDismissed) {
+        setState(() {
+          _keyboardFullyDismissed = false;
+        });
+      }
+
+      return;
+    }
+
+    _keyboardDismissSettleTimer?.cancel();
+    _keyboardDismissSettleTimer = Timer(const Duration(milliseconds: 160), () {
+      if (!mounted) return;
+
+      final keyboardIsStillFullyDismissed =
+          !_notesFocusNode.hasFocus && _currentKeyboardInset == 0;
+
+      if (keyboardIsStillFullyDismissed && !_keyboardFullyDismissed) {
+        setState(() {
+          _keyboardFullyDismissed = true;
+        });
+      }
+    });
+  }
+
+  @override
   void dispose() {
     _savedStateTimer?.cancel();
     _tabController.dispose();
     _pageController.dispose();
     _notesController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    _keyboardDismissSettleTimer?.cancel();
+    _notesFocusNode.removeListener(_handleKeyboardSaveFocusChanged);
+    _notesFocusNode.dispose();
     super.dispose();
   }
 
@@ -243,7 +306,9 @@ class _TrackingScreenState extends State<TrackingScreen>
   bool get _isKeyboardVisible => MediaQuery.viewInsetsOf(context).bottom > 0;
 
   bool get _showSaveAction =>
-      !_isKeyboardVisible && (_hasUnsavedChanges || _isSaving);
+      _keyboardFullyDismissed &&
+      !_notesFocusNode.hasFocus &&
+      (!_isKeyboardVisible && (_hasUnsavedChanges || _isSaving));
 
   Widget _buildSaveActionArea() {
     return AnimatedSize(
@@ -955,6 +1020,7 @@ class _TrackingScreenState extends State<TrackingScreen>
                       child: TextField(
                         key: const ValueKey('track-notes-field'),
                         controller: _notesController,
+                        focusNode: _notesFocusNode,
                         keyboardType: TextInputType.multiline,
                         textInputAction: TextInputAction.done,
                         textCapitalization: TextCapitalization.sentences,
