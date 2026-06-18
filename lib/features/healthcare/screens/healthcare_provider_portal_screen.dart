@@ -514,20 +514,6 @@ class _HealthcareProviderPortalScreenState
           _exportFilePath = result.filePath;
           _isExporting = false;
         });
-
-        if (mounted) {
-          ScaffoldMessenger.maybeOf(context)?.showSnackBar(
-            SnackBar(
-              content: const Text('Health data exported successfully!'),
-              backgroundColor: AppTheme.successGreen,
-              action: SnackBarAction(
-                label: 'Share',
-                textColor: Colors.white,
-                onPressed: _shareExport,
-              ),
-            ),
-          );
-        }
       } else {
         throw Exception('Export failed');
       }
