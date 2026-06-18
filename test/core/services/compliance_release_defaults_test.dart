@@ -3,12 +3,15 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('first compliance release keeps advertising disabled', () {
+  test('release advertising remains build and consent gated', () {
     final source = File(
       'lib/core/services/admob_service.dart',
     ).readAsStringSync();
 
-    expect(source, contains('static bool get adsEnabled => false;'));
+    expect(source, isNot(contains('adsEnabled => false')));
+    expect(source, contains('FLOW_AI_ENABLE_ADS'));
+    expect(source, contains('defaultValue: kReleaseMode'));
+    expect(source, contains('_consentAllowsAds'));
   });
 
   test('analytics is disabled until explicit consent is persisted', () {
