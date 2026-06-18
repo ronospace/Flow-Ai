@@ -47,11 +47,9 @@ class _SymptomSelectorState extends State<SymptomSelector> {
 
   bool get _shouldCollapseSelectedSummary => !_selectedSummaryExpanded;
 
-  void _expandSelectedSummary() {
-    if (_selectedSummaryExpanded) return;
-
+  void _toggleSelectedSummary() {
     setState(() {
-      _selectedSummaryExpanded = true;
+      _selectedSummaryExpanded = !_selectedSummaryExpanded;
     });
 
     HapticFeedback.selectionClick();
@@ -144,7 +142,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
       hint: 'Show selected symptoms',
       child: InkWell(
         key: const ValueKey<String>('selected-symptoms-collapsed-summary'),
-        onTap: _expandSelectedSummary,
+        onTap: _toggleSelectedSummary,
         borderRadius: BorderRadius.circular(16),
         child: Container(
           width: double.infinity,
@@ -179,11 +177,15 @@ class _SymptomSelectorState extends State<SymptomSelector> {
                   ),
                 ),
               ),
-              Icon(
+              IconButton(
                 key: const ValueKey<String>('selected-symptoms-expand-arrow'),
-                Icons.keyboard_arrow_down_rounded,
-                color: theme.colorScheme.onSurfaceVariant,
-                size: 20,
+                tooltip: 'Show selected symptoms',
+                onPressed: _toggleSelectedSummary,
+                icon: Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  color: theme.colorScheme.onSurfaceVariant,
+                  size: 20,
+                ),
               ),
             ],
           ),
@@ -242,6 +244,18 @@ class _SymptomSelectorState extends State<SymptomSelector> {
                       ),
                     ),
                   ),
+                  IconButton(
+                    key: const ValueKey<String>(
+                      'selected-symptoms-collapse-arrow',
+                    ),
+                    tooltip: 'Hide selected symptoms',
+                    onPressed: _toggleSelectedSummary,
+                    icon: Icon(
+                      Icons.keyboard_arrow_up_rounded,
+                      color: theme.colorScheme.onSurfaceVariant,
+                      size: 20,
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 12),
@@ -268,7 +282,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
           ),
         );
       },
-    ).animate().fadeIn().slideY(begin: -0.2, end: 0);
+    );
   }
 
   double _selectedSymptomChipWidth(

@@ -339,4 +339,61 @@ void main() {
 
     await disposeTree(tester);
   });
+
+  testWidgets(
+    'pointer taps collapse and expand selected symptoms without IgnorePointer',
+    (tester) async {
+      WidgetController.hitTestWarningShouldBeFatal = true;
+      addTearDown(() {
+        WidgetController.hitTestWarningShouldBeFatal = false;
+      });
+
+      await mount(tester, 390, TextDirection.ltr);
+      await tester.pumpAndSettle();
+
+      final collapseButton = find.byKey(
+        const ValueKey<String>('selected-symptoms-collapse-arrow'),
+      );
+
+      expect(collapseButton, findsOneWidget);
+
+      final collapseWidget = tester.widget<IconButton>(collapseButton);
+
+      expect(collapseWidget.onPressed, isNotNull);
+
+      await tester.ensureVisible(collapseButton);
+      await tester.pumpAndSettle();
+      await tester.tap(collapseButton);
+      await tester.pumpAndSettle();
+
+      final collapsedSummary = find.byKey(
+        const ValueKey<String>('selected-symptoms-collapsed-summary'),
+      );
+
+      final expandButton = find.byKey(
+        const ValueKey<String>('selected-symptoms-expand-arrow'),
+      );
+
+      expect(collapsedSummary, findsOneWidget);
+      expect(expandButton, findsOneWidget);
+
+      final expandWidget = tester.widget<IconButton>(expandButton);
+
+      expect(expandWidget.onPressed, isNotNull);
+
+      await tester.ensureVisible(expandButton);
+      await tester.pumpAndSettle();
+      await tester.tap(expandButton);
+      await tester.pumpAndSettle();
+
+      expect(
+        find.byKey(const ValueKey<String>('selected-symptoms-collapse-arrow')),
+        findsOneWidget,
+      );
+
+      expect(collapsedSummary, findsNothing);
+
+      await disposeTree(tester);
+    },
+  );
 }

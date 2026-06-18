@@ -44,7 +44,7 @@ void main() {
         '!widget.collapseSelectedSummary;',
       ),
     );
-    expect(selectorSource, contains('onTap: _expandSelectedSummary'));
+    expect(selectorSource, contains('onTap: _toggleSelectedSummary'));
     expect(selectorSource, contains('_selectedSummaryExpanded = true;'));
     expect(selectorSource, contains('selected-symptoms-expand-arrow'));
   });
