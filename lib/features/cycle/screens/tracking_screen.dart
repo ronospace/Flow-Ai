@@ -481,6 +481,7 @@ class _TrackingScreenState extends State<TrackingScreen>
 
   Widget _buildTabBar() {
     final theme = Theme.of(context);
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: AppTheme.spaceLg),
       decoration: BoxDecoration(
@@ -488,81 +489,100 @@ class _TrackingScreenState extends State<TrackingScreen>
         borderRadius: BorderRadius.circular(12),
         boxShadow: [...AppTheme.shadowLg(Colors.black)],
       ),
-      child: TabBar(
-        controller: _tabController,
-        isScrollable: false,
-
-        indicator: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 56),
+        child: TabBar(
+          controller: _tabController,
+          isScrollable: false,
+          indicator: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+            ),
+            borderRadius: BorderRadius.circular(12),
           ),
-          borderRadius: BorderRadius.circular(12),
+          dividerColor: Colors.transparent,
+          splashFactory: NoSplash.splashFactory,
+          overlayColor: const WidgetStatePropertyAll(Colors.transparent),
+          splashBorderRadius: BorderRadius.circular(12),
+          indicatorSize: TabBarIndicatorSize.tab,
+          indicatorPadding: const EdgeInsets.symmetric(
+            horizontal: 4,
+            vertical: 4,
+          ),
+          labelPadding: EdgeInsets.zero,
+          tabAlignment: TabAlignment.fill,
+          labelColor: theme.colorScheme.onPrimary,
+          unselectedLabelColor: theme.colorScheme.onSurface.withValues(
+            alpha: 0.6,
+          ),
+          labelStyle: const TextStyle(fontWeight: AppTheme.fwBold, fontSize: 9),
+          tabs: [
+            Tab(
+              child: _buildTabContent(
+                Icons.water_drop,
+                AppLocalizations.of(context).flowTab,
+              ),
+            ),
+            Tab(
+              child: _buildTabContent(
+                Icons.health_and_safety,
+                AppLocalizations.of(context).symptomsTab,
+              ),
+            ),
+            Tab(
+              child: _buildTabContent(
+                Icons.mood,
+                AppLocalizations.of(context).moodTab,
+              ),
+            ),
+            Tab(
+              child: _buildTabContent(
+                Icons.healing,
+                AppLocalizations.of(context).painTab,
+              ),
+            ),
+            Tab(
+              child: _buildTabContent(
+                Icons.note_alt,
+                AppLocalizations.of(context).notesTab,
+              ),
+            ),
+          ],
         ),
-        dividerColor: Colors.transparent,
-        splashFactory: NoSplash.splashFactory,
-        overlayColor: WidgetStatePropertyAll(Colors.transparent),
-        splashBorderRadius: BorderRadius.circular(12),
-        indicatorSize: TabBarIndicatorSize.tab,
-        indicatorPadding: const EdgeInsets.symmetric(
-          horizontal: 4,
-          vertical: 4,
-        ),
-        labelPadding: EdgeInsets.zero,
-        tabAlignment: TabAlignment.fill,
-        labelColor: theme.colorScheme.onPrimary,
-        unselectedLabelColor: theme.colorScheme.onSurface.withValues(
-          alpha: 0.6,
-        ),
-        labelStyle: const TextStyle(fontWeight: AppTheme.fwBold, fontSize: 9.0),
-        tabs: [
-          Tab(
-            child: _buildTabContent(
-              Icons.water_drop,
-              AppLocalizations.of(context).flowTab,
-            ),
-          ),
-          Tab(
-            child: _buildTabContent(
-              Icons.health_and_safety,
-              AppLocalizations.of(context).symptomsTab,
-            ),
-          ),
-          Tab(
-            child: _buildTabContent(
-              Icons.mood,
-              AppLocalizations.of(context).moodTab,
-            ),
-          ),
-          Tab(
-            child: _buildTabContent(
-              Icons.healing,
-              AppLocalizations.of(context).painTab,
-            ),
-          ),
-          Tab(
-            child: _buildTabContent(
-              Icons.note_alt,
-              AppLocalizations.of(context).notesTab,
-            ),
-          ),
-        ],
       ),
     ).animate().fadeIn(delay: 300.ms).slideY(begin: -0.2, end: 0);
   }
 
   Widget _buildTabContent(IconData icon, String label) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
-      child: Center(
-        child: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(icon, size: 12),
-              const SizedBox(width: 2),
-              Text(label, textAlign: TextAlign.center),
-            ],
+    final textScale = MediaQuery.textScalerOf(context).scale(1);
+    final horizontalPadding = textScale > 1.3 ? 2.0 : 6.0;
+    final verticalPadding = textScale > 1.3 ? 6.0 : 8.0;
+
+    return Semantics(
+      button: true,
+      label: label,
+      excludeSemantics: true,
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: horizontalPadding,
+          vertical: verticalPadding,
+        ),
+        child: Center(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(icon, size: 12),
+                const SizedBox(width: 2),
+                Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
           ),
         ),
       ),
