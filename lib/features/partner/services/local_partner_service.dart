@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../../core/services/local_user_service.dart';
+import '../../../core/services/local_user_service.dart';
 import '../models/partner_models.dart'
     show Partnership, PartnershipStatus, PartnerPrivacySettings;
 import 'partner_service.dart'
