@@ -431,28 +431,6 @@ class ComingSoonWidgets {
     );
   }
 
-  /// Healthcare Provider Features Coming Soon
-  static Widget healthcareProvider(
-    BuildContext context, {
-    VoidCallback? onNotifyMe,
-  }) {
-    return ComingSoonWidget(
-      title: 'Healthcare Provider Portal',
-      description:
-          'Seamlessly share your cycle data with healthcare providers for better diagnosis and treatment.',
-      icon: Icons.medical_services_rounded,
-      featureList: [
-        'Secure data export for medical appointments',
-        'Provider dashboard for tracking patient progress',
-        'Integration with electronic health records',
-        'Customizable reports for different conditions',
-        'Telehealth consultation scheduling',
-      ],
-      estimatedDate: 'Coming Soon',
-      onNotifyMe: onNotifyMe,
-    );
-  }
-
   /// Premium Analytics Coming Soon
   static Widget premiumAnalytics(
     BuildContext context, {
