@@ -682,8 +682,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
       );
 
       if (!mounted) return;
-      AdaptiveMessages.showSuccess(context, 'Data exported successfully');
-    } catch (e) {
+} catch (e) {
       if (!mounted) return;
       AdaptiveMessages.showError(context, 'Export failed: $e');
     } finally {
