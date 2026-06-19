@@ -424,10 +424,10 @@ class _HealthcareProviderPortalScreenState
         ),
         style: ElevatedButton.styleFrom(
           backgroundColor: exportCompleted
-              ? AppTheme.successGreen
+              ? const Color(0xFF0F766E)
               : AppTheme.secondaryBlue,
           disabledBackgroundColor: exportCompleted
-              ? AppTheme.successGreen
+              ? const Color(0xFF0F766E)
               : null,
           disabledForegroundColor: exportCompleted ? Colors.white : null,
           foregroundColor: Colors.white,
