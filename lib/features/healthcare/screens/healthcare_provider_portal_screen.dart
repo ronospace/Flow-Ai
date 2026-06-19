@@ -247,10 +247,11 @@ class _HealthcareProviderPortalScreenState
   Widget _buildDateRangeChip(String label, DateRange Function() rangeBuilder) {
     final range = rangeBuilder();
     final isSelected =
-        _selectedDateRange?.start == range.start &&
-        _selectedDateRange?.end == range.end;
+        DateUtils.isSameDay(_selectedDateRange?.start, range.start) &&
+        DateUtils.isSameDay(_selectedDateRange?.end, range.end);
 
     return FilterChip(
+      key: ValueKey<String>('date-range-$label'),
       label: Text(label),
       selected: isSelected,
       onSelected: (selected) {
