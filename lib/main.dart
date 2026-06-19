@@ -376,8 +376,13 @@ class _FlowAIAppState extends State<FlowAIApp> {
         ChangeNotifierProvider(create: (_) => HealthProvider()),
         ChangeNotifierProvider.value(value: settingsProvider),
         ChangeNotifierProvider.value(value: progressiveDisclosureService),
-        ChangeNotifierProvider(create: (_) => PremiumProvider()),
         ChangeNotifierProvider(create: (_) => SubscriptionProvider()),
+        ChangeNotifierProxyProvider<SubscriptionProvider, PremiumProvider>(
+          create: (_) => PremiumProvider(),
+          update: (_, subscriptionProvider, premiumProvider) =>
+              (premiumProvider ?? PremiumProvider())
+                ..updateSubscriptionProvider(subscriptionProvider),
+        ),
       ],
       child: Consumer<SettingsProvider>(
         builder: (context, settings, child) {
