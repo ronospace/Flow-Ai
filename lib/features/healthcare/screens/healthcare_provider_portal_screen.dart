@@ -514,9 +514,6 @@ class _HealthcareProviderPortalScreenState
           _exportFilePath = result.filePath;
           _isExporting = false;
         });
-
-        if (mounted) {
-        }
       } else {
         throw Exception('Export failed');
       }
