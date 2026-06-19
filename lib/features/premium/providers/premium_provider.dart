@@ -2,10 +2,12 @@ import 'package:flutter/foundation.dart';
 import '../models/subscription.dart';
 import '../models/premium_feature.dart';
 import '../services/premium_service.dart';
+import 'subscription_provider.dart';
 
 /// Provider for managing premium features and subscription state
 class PremiumProvider extends ChangeNotifier {
   final PremiumService _premiumService = PremiumService();
+  SubscriptionProvider? _subscriptionProvider;
 
   Subscription? _currentSubscription;
   List<PremiumFeature> _availableFeatures = [];
@@ -25,7 +27,7 @@ class PremiumProvider extends ChangeNotifier {
   FeatureLimits? get featureLimits => _featureLimits;
 
   /// Check if user has premium subscription
-  bool get hasPremium => _premiumService.hasPremium;
+  bool get hasPremium => _subscriptionProvider?.isPremium ?? false;
 
   /// Check if provider is loading
   bool get isLoading => _isLoading;
@@ -38,6 +40,18 @@ class PremiumProvider extends ChangeNotifier {
       Map.unmodifiable(_monthlyUsage);
 
   /// Initialize premium provider
+  void updateSubscriptionProvider(SubscriptionProvider provider) {
+    if (identical(_subscriptionProvider, provider)) return;
+    _subscriptionProvider?.removeListener(_handleSubscriptionChanged);
+    _subscriptionProvider = provider;
+    _subscriptionProvider!.addListener(_handleSubscriptionChanged);
+    notifyListeners();
+  }
+
+  void _handleSubscriptionChanged() {
+    notifyListeners();
+  }
+
   Future<void> initialize() async {
     if (_isLoading) return;
 
@@ -61,7 +75,24 @@ class PremiumProvider extends ChangeNotifier {
 
   /// Check if a specific feature is available
   bool hasFeature(PremiumFeatureType featureType) {
-    return _premiumService.hasFeature(featureType);
+    final provider = _subscriptionProvider;
+    switch (featureType.name) {
+      case 'basicTracking':
+      case 'basicPredictions':
+      case 'limitedExports':
+        return true;
+      case 'unlimitedExports':
+      case 'customReports':
+        return provider?.canExportData ?? false;
+      case 'advancedAI':
+        return provider?.hasUnlimitedInsights ?? false;
+      case 'prioritySupport':
+        return provider?.hasPrioritySupport ?? false;
+      case 'advancedAnalytics':
+        return provider?.hasAdvancedAnalytics ?? false;
+      default:
+        return provider?.isPremium ?? false;
+    }
   }
 
   /// Get feature by type
@@ -97,73 +128,22 @@ class PremiumProvider extends ChangeNotifier {
     SubscriptionTier tier,
     PaymentMethod paymentMethod,
   ) async {
-    _setLoading(true);
-    _clearError();
-
-    try {
-      final success = await _premiumService.purchaseSubscription(
-        tier,
-        paymentMethod,
-      );
-      if (success) {
-        await _loadSubscriptionData();
-        await _loadFeatures();
-        _notifyListeners();
-      } else {
-        _setError('Purchase failed. Please try again.');
-      }
-      return success;
-    } catch (e) {
-      _setError('Purchase error: $e');
-      return false;
-    } finally {
-      _setLoading(false);
-    }
+    _setError('Purchases must use the backend-validated Premium paywall.');
+    return false;
   }
 
   /// Cancel current subscription
   Future<bool> cancelSubscription() async {
-    if (_currentSubscription == null) return false;
-
-    _setLoading(true);
-    _clearError();
-
-    try {
-      final success = await _premiumService.cancelSubscription();
-      if (success) {
-        await _loadSubscriptionData();
-        _notifyListeners();
-      } else {
-        _setError('Cancellation failed. Please try again.');
-      }
-      return success;
-    } catch (e) {
-      _setError('Cancellation error: $e');
-      return false;
-    } finally {
-      _setLoading(false);
-    }
+    _setError(
+      'Subscription management must use the authenticated store workflow.',
+    );
+    return false;
   }
 
   /// Restore subscription from App Store/Play Store
   Future<bool> restoreSubscription() async {
-    _setLoading(true);
-    _clearError();
-
-    try {
-      final success = await _premiumService.restoreSubscription();
-      if (success) {
-        await _loadSubscriptionData();
-        await _loadFeatures();
-        _notifyListeners();
-      }
-      return success;
-    } catch (e) {
-      _setError('Restoration failed: $e');
-      return false;
-    } finally {
-      _setLoading(false);
-    }
+    _setError('Restore must use the backend-validated Premium paywall.');
+    return false;
   }
 
   /// Record feature usage
@@ -307,6 +287,7 @@ class PremiumProvider extends ChangeNotifier {
   @override
   void dispose() {
     debugPrint('🗑️ PremiumProvider disposed');
+    _subscriptionProvider?.removeListener(_handleSubscriptionChanged);
     super.dispose();
   }
 }
