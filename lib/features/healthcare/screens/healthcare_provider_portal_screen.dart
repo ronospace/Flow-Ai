@@ -22,6 +22,7 @@ class _HealthcareProviderPortalScreenState
       DataExportImportService.instance;
   bool _isExporting = false;
   String? _exportFilePath;
+  final GlobalKey _exportSuccessKey = GlobalKey();
   DateRange? _selectedDateRange;
   DataFormat _selectedFormat = DataFormat.fhir;
 
@@ -66,7 +67,10 @@ class _HealthcareProviderPortalScreenState
                       _buildExportButton(context, theme),
                       if (_exportFilePath != null) ...[
                         const SizedBox(height: 24),
-                        _buildExportSuccessCard(context, theme),
+                        KeyedSubtree(
+                          key: _exportSuccessKey,
+                          child: _buildExportSuccessCard(context, theme),
+                        ),
                       ],
                     ],
                   ),
@@ -486,6 +490,23 @@ class _HealthcareProviderPortalScreenState
     );
   }
 
+  void _revealExportSuccessCard() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+
+      final successContext = _exportSuccessKey.currentContext;
+      if (successContext == null) return;
+
+      Scrollable.ensureVisible(
+        successContext,
+        duration: const Duration(milliseconds: 380),
+        curve: Curves.easeOutCubic,
+        alignment: 1.0,
+        alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
+      );
+    });
+  }
+
   Future<void> _exportData() async {
     setState(() {
       _isExporting = true;
@@ -514,6 +535,8 @@ class _HealthcareProviderPortalScreenState
           _exportFilePath = result.filePath;
           _isExporting = false;
         });
+
+        _revealExportSuccessCard();
       } else {
         throw Exception('Export failed');
       }
