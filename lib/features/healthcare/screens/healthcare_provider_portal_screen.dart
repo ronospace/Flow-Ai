@@ -256,6 +256,8 @@ class _HealthcareProviderPortalScreenState
       onSelected: (selected) {
         setState(() {
           _selectedDateRange = range;
+
+          _exportFilePath = null;
         });
         HapticFeedback.lightImpact();
       },
@@ -339,6 +341,8 @@ class _HealthcareProviderPortalScreenState
       onTap: () {
         setState(() {
           _selectedFormat = format;
+
+          _exportFilePath = null;
         });
         HapticFeedback.lightImpact();
       },
@@ -390,10 +394,12 @@ class _HealthcareProviderPortalScreenState
   }
 
   Widget _buildExportButton(BuildContext context, ThemeData theme) {
+    final exportCompleted = _exportFilePath != null && !_isExporting;
+
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton.icon(
-        onPressed: _isExporting ? null : _exportData,
+        onPressed: _isExporting || exportCompleted ? null : _exportData,
         icon: _isExporting
             ? const SizedBox(
                 width: 20,
@@ -403,13 +409,27 @@ class _HealthcareProviderPortalScreenState
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                 ),
               )
-            : const Icon(Icons.file_download, size: 24),
+            : Icon(
+                exportCompleted
+                    ? Icons.check_circle_rounded
+                    : Icons.download_rounded,
+              ),
         label: Text(
-          _isExporting ? 'Exporting...' : 'Export Health Data',
+          _isExporting
+              ? 'Exporting...'
+              : exportCompleted
+              ? 'Health Data Exported'
+              : 'Export Health Data',
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppTheme.secondaryBlue,
+          backgroundColor: exportCompleted
+              ? AppTheme.successGreen
+              : AppTheme.secondaryBlue,
+          disabledBackgroundColor: exportCompleted
+              ? AppTheme.successGreen
+              : null,
+          disabledForegroundColor: exportCompleted ? Colors.white : null,
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
