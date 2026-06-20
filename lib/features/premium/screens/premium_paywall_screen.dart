@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flow_ai/core/services/app_state_service.dart';
 import 'package:flow_ai/core/ui/adaptive_messages.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +27,9 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
   late Animation<double> _fadeAnimation;
   BillingPeriod _selectedPeriod = BillingPeriod.yearly;
   final GlobalKey _subscriptionOptionsKey = GlobalKey();
+  String? _subscriptionUserId;
+  String? _catalogMessage;
+  bool _catalogLoading = false;
 
   @override
   void initState() {
@@ -38,6 +43,57 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
       curve: Curves.easeInOut,
     );
     _animationController.forward();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        unawaited(_initializeSubscriptionCatalog());
+      }
+    });
+  }
+
+  Future<void> _initializeSubscriptionCatalog({
+    bool forceRefresh = false,
+  }) async {
+    if (mounted) {
+      setState(() {
+        _catalogLoading = true;
+        if (forceRefresh) {
+          _catalogMessage = null;
+        }
+      });
+    }
+
+    final appState = context.read<AppStateService>();
+    final userId = _subscriptionUserId ?? await _resolveCurrentUserId(appState);
+
+    if (!mounted) return;
+
+    if (userId == null) {
+      setState(() {
+        _catalogLoading = false;
+        _catalogMessage = 'Please sign in to load subscription plans.';
+      });
+      return;
+    }
+
+    _subscriptionUserId = userId;
+    final provider = context.read<SubscriptionProvider>();
+
+    if (forceRefresh) {
+      await provider.refreshProducts(userId);
+    } else {
+      await provider.initialize(userId);
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      _catalogLoading = false;
+      _catalogMessage = provider.availableProducts.isEmpty
+          ? provider.errorMessage ??
+                'Subscription plans are temporarily unavailable.'
+          : null;
+    });
   }
 
   @override
@@ -149,22 +205,11 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
 
                             const SizedBox(height: 32),
 
-                            // Subscription options
-                            KeyedSubtree(
-                              key: _subscriptionOptionsKey,
-                              child: _buildSubscriptionOptions(
-                                context,
-                                subscriptionProvider,
-                                hasYearlyBillingOption,
-                              ),
-                            ),
-
-                            const SizedBox(height: 24),
-
-                            // Subscribe button
-                            _buildSubscribeButton(
+                            // Subscription catalog
+                            _buildCatalogSection(
                               context,
                               subscriptionProvider,
+                              hasYearlyBillingOption,
                             ),
 
                             const SizedBox(height: 16),
@@ -336,6 +381,21 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
   }
 
   void _handleFeatureTap(BuildContext context, _Feature feature) {
+    final provider = context.read<SubscriptionProvider>();
+    final messenger = ScaffoldMessenger.maybeOf(context);
+
+    if (provider.availableProducts.isEmpty) {
+      unawaited(_initializeSubscriptionCatalog(forceRefresh: true));
+
+      messenger?.hideCurrentSnackBar();
+      messenger?.showSnackBar(
+        SnackBar(
+          content: Text('Loading subscription plans for ${feature.title}.'),
+        ),
+      );
+      return;
+    }
+
     final optionsContext = _subscriptionOptionsKey.currentContext;
 
     if (optionsContext != null) {
@@ -347,16 +407,97 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
       );
     }
 
-    final messenger = ScaffoldMessenger.maybeOf(context);
+    messenger?.hideCurrentSnackBar();
+    messenger?.showSnackBar(
+      SnackBar(
+        content: Text('Choose a plan below to unlock ${feature.title}.'),
+      ),
+    );
+  }
 
-    if (messenger != null) {
-      messenger.hideCurrentSnackBar();
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text('Choose a plan below to unlock ${feature.title}.'),
+  Widget _buildCatalogSection(
+    BuildContext context,
+    SubscriptionProvider provider,
+    bool hasYearlyBillingOption,
+  ) {
+    if (_catalogLoading ||
+        (provider.isLoading && provider.availableProducts.isEmpty)) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(vertical: 32),
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (provider.availableProducts.isEmpty) {
+      final message =
+          _catalogMessage ??
+          provider.errorMessage ??
+          'Subscription plans are temporarily unavailable.';
+
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+            ),
+          ),
+          child: Column(
+            children: [
+              Icon(
+                Icons.cloud_off_outlined,
+                size: 36,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Plans temporarily unavailable',
+                textAlign: TextAlign.center,
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                message,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 16),
+              OutlinedButton.icon(
+                key: const ValueKey('premium-catalog-retry'),
+                onPressed: provider.isLoading
+                    ? null
+                    : () => unawaited(
+                        _initializeSubscriptionCatalog(forceRefresh: true),
+                      ),
+                icon: const Icon(Icons.refresh),
+                label: const Text('Try Again'),
+              ),
+            ],
+          ),
         ),
       );
     }
+
+    return Column(
+      children: [
+        KeyedSubtree(
+          key: _subscriptionOptionsKey,
+          child: _buildSubscriptionOptions(
+            context,
+            provider,
+            hasYearlyBillingOption,
+          ),
+        ),
+        const SizedBox(height: 24),
+        _buildSubscribeButton(context, provider),
+      ],
+    );
   }
 
   Widget _buildSubscriptionOptions(
