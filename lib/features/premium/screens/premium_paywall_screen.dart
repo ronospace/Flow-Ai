@@ -24,6 +24,7 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   BillingPeriod _selectedPeriod = BillingPeriod.yearly;
+  final GlobalKey _subscriptionOptionsKey = GlobalKey();
 
   @override
   void initState() {
@@ -149,10 +150,13 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
                             const SizedBox(height: 32),
 
                             // Subscription options
-                            _buildSubscriptionOptions(
-                              context,
-                              subscriptionProvider,
-                              hasYearlyBillingOption,
+                            KeyedSubtree(
+                              key: _subscriptionOptionsKey,
+                              child: _buildSubscriptionOptions(
+                                context,
+                                subscriptionProvider,
+                                hasYearlyBillingOption,
+                              ),
                             ),
 
                             const SizedBox(height: 24),
@@ -263,62 +267,96 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
   }
 
   Widget _buildFeatureItem(BuildContext context, _Feature feature) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: feature.highlight
-            ? Theme.of(context).colorScheme.primaryContainer
-            : Theme.of(context).colorScheme.surface,
+    return Material(
+      type: MaterialType.transparency,
+      child: InkWell(
+        key: ValueKey(
+          'premium-feature-${feature.title.toLowerCase().replaceAll(" ", "-")}',
+        ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: feature.highlight
-              ? Theme.of(context).colorScheme.primary
-              : Theme.of(context).colorScheme.outline.withOpacity(0.2),
-          width: feature.highlight ? 2 : 1,
+        onTap: () => _handleFeatureTap(context, feature),
+        child: Ink(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: feature.highlight
+                ? Theme.of(context).colorScheme.primaryContainer
+                : Theme.of(context).colorScheme.surface,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: feature.highlight
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.outline.withOpacity(0.2),
+              width: feature.highlight ? 2 : 1,
+            ),
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  feature.icon,
+                  color: Theme.of(context).colorScheme.primary,
+                  size: 28,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      feature.title,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      feature.description,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withOpacity(0.7),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (feature.highlight)
+                Icon(Icons.star, color: Theme.of(context).colorScheme.primary),
+            ],
+          ),
         ),
       ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(
-              feature.icon,
-              color: Theme.of(context).colorScheme.primary,
-              size: 28,
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  feature.title,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  feature.description,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.onSurface.withOpacity(0.7),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          if (feature.highlight)
-            Icon(Icons.star, color: Theme.of(context).colorScheme.primary),
-        ],
-      ),
     );
+  }
+
+  void _handleFeatureTap(BuildContext context, _Feature feature) {
+    final optionsContext = _subscriptionOptionsKey.currentContext;
+
+    if (optionsContext != null) {
+      Scrollable.ensureVisible(
+        optionsContext,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+        alignment: 0.1,
+      );
+    }
+
+    final messenger = ScaffoldMessenger.maybeOf(context);
+
+    if (messenger != null) {
+      messenger.hideCurrentSnackBar();
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text('Choose a plan below to unlock ${feature.title}.'),
+        ),
+      );
+    }
   }
 
   Widget _buildSubscriptionOptions(
