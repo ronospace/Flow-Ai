@@ -107,7 +107,10 @@ void main() {
       ),
     );
 
-    await tester.pump(const Duration(seconds: 2));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 1));
+    await tester.pump(const Duration(seconds: 12));
+    await tester.pump();
 
     final scheme = AppTheme.darkTheme.colorScheme;
     final heading = tester.widget<Text>(find.text('Premium Features'));
@@ -119,6 +122,9 @@ void main() {
     expect(heading.style?.color, scheme.onSurface);
     expect(subtitle.style?.color, scheme.onSurfaceVariant);
     expect(feature.style?.color, scheme.onSurface);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump();
     expect(tester.takeException(), isNull);
   });
 }

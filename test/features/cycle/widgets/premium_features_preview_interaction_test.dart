@@ -31,7 +31,10 @@ void main() {
       ),
     );
 
-    await tester.pump(const Duration(seconds: 2));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 1));
+    await tester.pump(const Duration(seconds: 12));
+    await tester.pump();
 
     final premiumEntry = find.byKey(
       const ValueKey('premium-features-paywall-entry'),
@@ -66,6 +69,9 @@ void main() {
     }
 
     expect(premiumTapCount, 1);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump();
     expect(tester.takeException(), isNull);
   });
 }
