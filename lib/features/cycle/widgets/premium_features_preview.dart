@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../generated/app_localizations.dart';
 import 'premium_feature_preview_card.dart';
 
 class PremiumFeaturesPreview extends StatelessWidget {
+  final VoidCallback onPremiumTap;
   final VoidCallback onAICoach;
   final VoidCallback onPartnerSharing;
   final VoidCallback onHealthcarePortal;
@@ -11,6 +13,7 @@ class PremiumFeaturesPreview extends StatelessWidget {
 
   const PremiumFeaturesPreview({
     super.key,
+    required this.onPremiumTap,
     required this.onAICoach,
     required this.onPartnerSharing,
     required this.onHealthcarePortal,
@@ -20,6 +23,7 @@ class PremiumFeaturesPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final localizations = AppLocalizations.of(context);
 
     return Container(
       padding: const EdgeInsets.all(24),
@@ -101,6 +105,16 @@ class PremiumFeaturesPreview extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              key: const ValueKey('premium-features-paywall-entry'),
+              onPressed: onPremiumTap,
+              icon: const Icon(Icons.lock_open_rounded),
+              label: Text(localizations.unlockPremiumAiInsights),
+            ),
           ),
           const SizedBox(height: 24),
           GridView.count(
