@@ -246,22 +246,24 @@ class SubscriptionProvider extends ChangeNotifier {
 
   /// Get monthly product
   SubscriptionProduct? getMonthlyProduct() {
-    if (_availableProducts.isEmpty) return null;
+    for (final product in _availableProducts) {
+      if (product.billingPeriod == BillingPeriod.monthly) {
+        return product;
+      }
+    }
 
-    return _availableProducts.firstWhere(
-      (p) => p.billingPeriod == BillingPeriod.monthly,
-      orElse: () => _availableProducts.first,
-    );
+    return null;
   }
 
   /// Get yearly product
   SubscriptionProduct? getYearlyProduct() {
-    if (_availableProducts.isEmpty) return null;
+    for (final product in _availableProducts) {
+      if (product.billingPeriod == BillingPeriod.yearly) {
+        return product;
+      }
+    }
 
-    return _availableProducts.firstWhere(
-      (p) => p.billingPeriod == BillingPeriod.yearly,
-      orElse: () => _availableProducts.first,
-    );
+    return null;
   }
 
   /// Get upgrade message based on current usage
