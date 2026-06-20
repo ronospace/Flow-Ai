@@ -82,6 +82,10 @@ class SubscriptionProvider extends ChangeNotifier {
       _availableProducts = _subscriptionService.getAvailableProducts();
       _isInitialized = true;
 
+      if (_availableProducts.isEmpty) {
+        _errorMessage = 'Subscription plans are temporarily unavailable.';
+      }
+
       if (kDebugMode) {
         print('✅ SubscriptionProvider initialized');
         print('   Tier: ${_subscription?.tier}');
@@ -91,6 +95,36 @@ class SubscriptionProvider extends ChangeNotifier {
       _errorMessage = 'Failed to initialize subscriptions: ${e.toString()}';
       if (kDebugMode) {
         print('❌ SubscriptionProvider error: $_errorMessage');
+      }
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  /// Refresh products after an unavailable or empty catalog response.
+  Future<void> refreshProducts(String userId) async {
+    if (!_isInitialized) {
+      await initialize(userId);
+      return;
+    }
+
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      await _subscriptionService.reloadProducts();
+      _availableProducts = _subscriptionService.getAvailableProducts();
+
+      if (_availableProducts.isEmpty) {
+        _errorMessage = 'Subscription plans are temporarily unavailable.';
+      }
+    } catch (e) {
+      _errorMessage = 'Failed to refresh subscription plans: ${e.toString()}';
+
+      if (kDebugMode) {
+        print('❌ Subscription product refresh error: $_errorMessage');
       }
     } finally {
       _isLoading = false;

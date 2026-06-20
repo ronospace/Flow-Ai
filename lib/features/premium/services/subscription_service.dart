@@ -128,6 +128,21 @@ class SubscriptionService {
     }
   }
 
+  /// Re-query the app store after an unavailable or empty response.
+  Future<void> reloadProducts() async {
+    _isAvailable = await _iap.isAvailable();
+    _products = [];
+
+    if (!_isAvailable) {
+      if (kDebugMode) {
+        print('⚠️ In-app purchases are not available during refresh');
+      }
+      return;
+    }
+
+    await _loadProducts();
+  }
+
   /// Convert product details to our model
   SubscriptionProduct _convertToSubscriptionProduct(ProductDetails product) {
     final isYearly = product.id == yearlyProductId;
