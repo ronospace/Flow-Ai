@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flow_ai/core/theme/app_theme.dart';
 import 'package:flow_ai/features/cycle/widgets/premium_features_preview.dart';
+import 'package:flow_ai/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -88,11 +89,14 @@ void main() {
   testWidgets('Premium preview uses semantic dark text', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         darkTheme: AppTheme.darkTheme,
         themeMode: ThemeMode.dark,
         home: Scaffold(
           body: SingleChildScrollView(
             child: PremiumFeaturesPreview(
+              onPremiumTap: () {},
               onAICoach: () {},
               onPartnerSharing: () {},
               onHealthcarePortal: () {},

@@ -1,5 +1,6 @@
 import 'package:flow_ai/core/theme/app_theme.dart';
 import 'package:flow_ai/features/cycle/widgets/premium_features_preview.dart';
+import 'package:flow_ai/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -37,6 +38,8 @@ void main() {
 
             await tester.pumpWidget(
               MaterialApp(
+                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                supportedLocales: AppLocalizations.supportedLocales,
                 theme: AppTheme.lightTheme,
                 darkTheme: AppTheme.darkTheme,
                 themeMode: mode,
@@ -49,6 +52,7 @@ void main() {
                     body: SingleChildScrollView(
                       padding: const EdgeInsets.all(16),
                       child: PremiumFeaturesPreview(
+                        onPremiumTap: () {},
                         onAICoach: () {},
                         onPartnerSharing: () {},
                         onHealthcarePortal: () {},

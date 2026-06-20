@@ -392,6 +392,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               // Premium Features Coming Soon
                               _LazyWidget(
                                 builder: () => PremiumFeaturesPreview(
+                                  onPremiumTap: _showPremiumInsightsPaywall,
                                   onAICoach: () => _navigateToAICoach(),
                                   onPartnerSharing: () =>
                                       _navigateToPartnerSharing(),
