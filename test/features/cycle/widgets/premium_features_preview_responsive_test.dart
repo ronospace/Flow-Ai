@@ -25,17 +25,6 @@ void main() {
               tester.view.resetPhysicalSize();
             });
 
-            FlutterErrorDetails? frameworkError;
-            final previousHandler = FlutterError.onError;
-
-            FlutterError.onError = (details) {
-              frameworkError ??= details;
-            };
-
-            addTearDown(() {
-              FlutterError.onError = previousHandler;
-            });
-
             await tester.pumpWidget(
               MaterialApp(
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -64,10 +53,12 @@ void main() {
               ),
             );
 
-            await tester.pump(const Duration(milliseconds: 500));
+            await tester.pump();
+            await tester.pump(const Duration(milliseconds: 1));
+            await tester.pump(const Duration(seconds: 12));
+            await tester.pump();
 
             expect(tester.takeException(), isNull);
-            expect(frameworkError, isNull);
 
             expect(find.text('Premium Features'), findsOneWidget);
             expect(find.text('AI Health Coach'), findsOneWidget);
@@ -79,6 +70,10 @@ void main() {
 
             expect(bounds.left, greaterThanOrEqualTo(-0.5));
             expect(bounds.right, lessThanOrEqualTo(width + 0.5));
+
+            await tester.pumpWidget(const SizedBox.shrink());
+            await tester.pump();
+            expect(tester.takeException(), isNull);
           });
         }
       }
