@@ -1,3 +1,13 @@
+class ResolvedUserIdentity {
+  final String displayName;
+  final String greetingName;
+
+  const ResolvedUserIdentity({
+    required this.displayName,
+    required this.greetingName,
+  });
+}
+
 /// Resolves the short personal name displayed in greetings.
 ///
 /// Priority:
@@ -24,6 +34,53 @@ abstract final class UserDisplayNameResolver {
     }
 
     return firstNameFromDisplayName(displayName);
+  }
+
+  /// Separates the canonical profile name from the short greeting name.
+  ///
+  /// A provider/profile name is authoritative. A saved name is reused only
+  /// for the same authenticated user. Email-derived text is a final fallback.
+  static ResolvedUserIdentity resolveIdentity({
+    required String? userId,
+    required String? email,
+    required String? displayName,
+    required String existingUserId,
+    required String existingDisplayName,
+  }) {
+    final normalizedUserId = userId?.trim() ?? '';
+    final providerDisplayName = normalizeDisplayName(displayName);
+    final sameUser =
+        normalizedUserId.isNotEmpty && normalizedUserId == existingUserId;
+    final savedDisplayName = sameUser
+        ? normalizeDisplayName(existingDisplayName)
+        : '';
+    final emailFirstName = firstNameFromEmail(email);
+
+    final canonicalDisplayName = providerDisplayName.isNotEmpty
+        ? providerDisplayName
+        : savedDisplayName.isNotEmpty
+        ? savedDisplayName
+        : emailFirstName;
+
+    final profileFirstName = firstNameFromDisplayName(canonicalDisplayName);
+    final greetingName = profileFirstName.isNotEmpty
+        ? profileFirstName
+        : emailFirstName;
+
+    return ResolvedUserIdentity(
+      displayName: canonicalDisplayName,
+      greetingName: greetingName,
+    );
+  }
+
+  static String normalizeDisplayName(String? displayName) {
+    final value = displayName?.trim().replaceAll(RegExp(r'\s+'), ' ') ?? '';
+
+    if (value.isEmpty || _placeholders.contains(value.toLowerCase())) {
+      return '';
+    }
+
+    return value;
   }
 
   static String firstNameFromEmail(String? email) {
