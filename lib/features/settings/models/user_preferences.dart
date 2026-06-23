@@ -82,6 +82,7 @@ extension AppLanguageExtension on AppLanguage {
 class UserPreferences {
   final String userId;
   final String displayName;
+  final String greetingName;
   final AppThemeMode themeMode;
   final AppLanguage language;
   final bool notificationsEnabled;
@@ -103,6 +104,7 @@ class UserPreferences {
   const UserPreferences({
     required this.userId,
     this.displayName = '',
+    this.greetingName = '',
     this.themeMode = AppThemeMode.system,
     this.language = AppLanguage.english,
     this.notificationsEnabled = true,
@@ -125,6 +127,7 @@ class UserPreferences {
   UserPreferences copyWith({
     String? userId,
     String? displayName,
+    String? greetingName,
     AppThemeMode? themeMode,
     AppLanguage? language,
     bool? notificationsEnabled,
@@ -146,6 +149,7 @@ class UserPreferences {
     return UserPreferences(
       userId: userId ?? this.userId,
       displayName: displayName ?? this.displayName,
+      greetingName: greetingName ?? this.greetingName,
       themeMode: themeMode ?? this.themeMode,
       language: language ?? this.language,
       notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
@@ -171,6 +175,7 @@ class UserPreferences {
     return {
       'userId': userId,
       'displayName': displayName,
+      'greetingName': greetingName,
       'themeMode': themeMode.index,
       'language': language.index,
       'notificationsEnabled': notificationsEnabled,
@@ -196,6 +201,7 @@ class UserPreferences {
     return UserPreferences(
       userId: json['userId'] ?? '',
       displayName: json['displayName'] ?? '',
+      greetingName: json['greetingName'] ?? '',
       themeMode: AppThemeMode.values[json['themeMode'] ?? 0],
       language: AppLanguage.values[json['language'] ?? 0],
       notificationsEnabled: json['notificationsEnabled'] ?? true,

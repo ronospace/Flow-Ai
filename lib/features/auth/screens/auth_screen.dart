@@ -512,7 +512,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         try {
           // _settingsProvider captured above
           // Force an immediate sync to capture fresh auth data
-          _settingsProvider.forceUserDataSync();
+          await _settingsProvider.forceUserDataSync();
 
           if (!mounted) return;
           debugPrint(
@@ -686,7 +686,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         // Sync user data
         try {
           // _settingsProvider captured above
-          _settingsProvider.forceUserDataSync();
+          await _settingsProvider.forceUserDataSync();
           debugPrint('✅ User settings synced after Google sign-in');
         } catch (syncError) {
           debugPrint('⚠️ Warning: Could not sync user settings: $syncError');
@@ -705,7 +705,9 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       }
     } catch (e) {
       debugPrint('Google sign-in error: $e');
-      _showErrorMessage('We could not complete Google sign-in. Please try again.');
+      _showErrorMessage(
+        'We could not complete Google sign-in. Please try again.',
+      );
     } finally {
       if (mounted) {
         setState(() {
@@ -743,7 +745,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         // Sync user data
         try {
           // _settingsProvider captured above
-          _settingsProvider.forceUserDataSync();
+          await _settingsProvider.forceUserDataSync();
 
           if (!mounted) return;
           debugPrint('✅ User settings synced after Apple sign-in');
@@ -767,7 +769,9 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       }
     } catch (e) {
       debugPrint('Apple sign-in error: $e');
-      _showErrorMessage('We could not complete Apple sign-in. Please try again.');
+      _showErrorMessage(
+        'We could not complete Apple sign-in. Please try again.',
+      );
     } finally {
       if (mounted) {
         setState(() {

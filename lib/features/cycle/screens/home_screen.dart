@@ -515,9 +515,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ? localizations.goodAfternoon
         : localizations.goodEvening;
 
-    final displayName = settingsProvider.preferences.displayName;
-    final personalizedGreeting = displayName.isNotEmpty
-        ? '$baseGreeting, $displayName!'
+    final greetingName = settingsProvider.preferences.greetingName;
+    final personalizedGreeting = greetingName.isNotEmpty
+        ? '$baseGreeting, $greetingName!'
         : '$baseGreeting!';
 
     // Simulate AI health score based on time and random factors
@@ -559,7 +559,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     Text(
                       '$personalizedGreeting 👋',
                       style: theme.textTheme.headlineSmall?.copyWith(
-                        color: AppTheme.darkGrey,
+                        color: Theme.of(context).colorScheme.onSurface,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -567,7 +567,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     Text(
                       DateFormat('EEEE, MMMM d').format(now),
                       style: theme.textTheme.bodyLarge?.copyWith(
-                        color: AppTheme.mediumGrey,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -652,7 +652,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             localizations.health,
                             style: TextStyle(
                               fontSize: AppTheme.fsXs,
-                              color: AppTheme.mediumGrey,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -799,13 +801,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       localizations.healthDashboardMatrix,
                       style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: AppTheme.darkGrey,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                     Text(
                       localizations.realTimeBiometricAnalysis,
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: AppTheme.mediumGrey,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                     ),
                   ],
@@ -927,7 +929,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               Text(
                 title,
                 style: theme.textTheme.bodySmall?.copyWith(
-                  color: AppTheme.mediumGrey,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -935,7 +937,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               Text(
                 value,
                 style: theme.textTheme.titleMedium?.copyWith(
-                  color: AppTheme.darkGrey,
+                  color: Theme.of(context).colorScheme.onSurface,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -958,7 +960,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Colors.white, AppTheme.accentMint.withValues(alpha: 0.02)],
+          colors: [
+            Theme.of(context).colorScheme.surface,
+            AppTheme.accentMint.withValues(alpha: 0.02),
+          ],
         ),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
@@ -1001,13 +1006,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       localizations.predictiveAnalyticsCenter,
                       style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: AppTheme.darkGrey,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                     Text(
                       localizations.aiPoweredCycleForecast,
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: AppTheme.mediumGrey,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                     ),
                   ],
@@ -1060,7 +1065,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         Text(
                           localizations.nextPeriod,
                           style: theme.textTheme.bodySmall?.copyWith(
-                            color: AppTheme.mediumGrey,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -1076,7 +1083,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         Text(
                           localizations.inDays(prediction.daysUntilNextPeriod),
                           style: theme.textTheme.bodySmall?.copyWith(
-                            color: AppTheme.mediumGrey,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
                           ),
                         ),
                       ],
@@ -1112,7 +1121,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             Text(
                               'Accuracy',
                               style: theme.textTheme.bodySmall?.copyWith(
-                                color: AppTheme.mediumGrey,
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -1136,7 +1147,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         Text(
                           'High confidence',
                           style: theme.textTheme.bodySmall?.copyWith(
-                            color: AppTheme.mediumGrey,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
                           ),
                         ),
                       ],
@@ -1152,7 +1165,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 color: AppTheme.lightGrey.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: AppTheme.mediumGrey.withValues(alpha: 0.2),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurfaceVariant.withValues(alpha: 0.2),
                   width: 1,
                 ),
               ),
@@ -1160,14 +1175,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 children: [
                   Icon(
                     Icons.analytics_outlined,
-                    color: AppTheme.mediumGrey,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                     size: 32,
                   ),
                   const SizedBox(height: 12),
                   Text(
                     'Gathering Data for Predictions',
                     style: theme.textTheme.titleMedium?.copyWith(
-                      color: AppTheme.mediumGrey,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                       fontWeight: AppTheme.fwSemi,
                     ),
                   ),
@@ -1175,7 +1190,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   Text(
                     'Start tracking your cycles to unlock AI predictions',
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: AppTheme.mediumGrey,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -1242,13 +1257,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       'Health Insights Portal',
                       style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: AppTheme.darkGrey,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                     Text(
                       'Personalized Health Intelligence',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: AppTheme.mediumGrey,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                     ),
                   ],
@@ -1315,7 +1330,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                         style: theme.textTheme.titleMedium
                                             ?.copyWith(
                                               fontWeight: FontWeight.bold,
-                                              color: AppTheme.darkGrey,
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.onSurface,
                                             ),
                                       ),
                                     ),
@@ -1344,7 +1361,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 Text(
                                   insight.description,
                                   style: theme.textTheme.bodyMedium?.copyWith(
-                                    color: AppTheme.mediumGrey,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
                                     height: 1.4,
                                   ),
                                 ),
@@ -1409,7 +1428,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 color: AppTheme.lightGrey.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: AppTheme.mediumGrey.withValues(alpha: 0.2),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurfaceVariant.withValues(alpha: 0.2),
                   width: 1,
                 ),
               ),
@@ -1417,14 +1438,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 children: [
                   Icon(
                     Icons.psychology_outlined,
-                    color: AppTheme.mediumGrey,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                     size: 32,
                   ),
                   const SizedBox(height: 12),
                   Text(
                     'AI Learning Your Patterns',
                     style: theme.textTheme.titleMedium?.copyWith(
-                      color: AppTheme.mediumGrey,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                       fontWeight: AppTheme.fwSemi,
                     ),
                   ),
@@ -1432,7 +1453,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   Text(
                     'Track your cycles to unlock personalized AI insights',
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: AppTheme.mediumGrey,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -1455,7 +1476,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Colors.white,
+            Theme.of(context).colorScheme.surface,
             AppTheme.warningOrange.withValues(alpha: 0.02),
           ],
         ),
@@ -1500,13 +1521,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       localizations.smartActionCommandCenter,
                       style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: AppTheme.darkGrey,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                     Text(
                       localizations.quickAccessToEssentialFeatures,
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: AppTheme.mediumGrey,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                     ),
                   ],
@@ -1574,7 +1595,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [Colors.white, color.withValues(alpha: 0.03)],
+              colors: [
+                Theme.of(context).colorScheme.surface,
+                color.withValues(alpha: 0.03),
+              ],
             ),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: color.withValues(alpha: 0.2), width: 1),
@@ -1606,7 +1630,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         const Spacer(),
                         Icon(
                           Icons.arrow_forward_ios,
-                          color: AppTheme.mediumGrey,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                           size: 9,
                         ),
                       ],
@@ -1621,7 +1645,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           style: Theme.of(context).textTheme.titleSmall
                               ?.copyWith(
                                 fontWeight: FontWeight.bold,
-                                color: AppTheme.darkGrey,
+                                color: Theme.of(context).colorScheme.onSurface,
                                 fontSize: AppTheme.fsXs,
                               ),
                           maxLines: 1,
@@ -1631,7 +1655,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           subtitle,
                           style: Theme.of(context).textTheme.bodySmall
                               ?.copyWith(
-                                color: AppTheme.mediumGrey,
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
                                 fontSize: 8,
                               ),
                           maxLines: 1,
@@ -1658,7 +1684,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Colors.white, AppTheme.successGreen.withValues(alpha: 0.02)],
+          colors: [
+            Theme.of(context).colorScheme.surface,
+            AppTheme.successGreen.withValues(alpha: 0.02),
+          ],
         ),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
@@ -1701,13 +1730,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       'Health Trends Visualization',
                       style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: AppTheme.darkGrey,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                     Text(
                       'Long-Term Health Patterns',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: AppTheme.mediumGrey,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                     ),
                   ],
@@ -1749,7 +1778,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         'Cycle Regularity',
                         style: theme.textTheme.bodyMedium?.copyWith(
                           fontWeight: AppTheme.fwSemi,
-                          color: AppTheme.darkGrey,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -1826,7 +1855,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           Text(
                             'Avg Cycle',
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: AppTheme.mediumGrey,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -1872,7 +1903,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           Text(
                             'Avg Mood',
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: AppTheme.mediumGrey,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -2183,9 +2216,9 @@ extension _NavigationMethods on _HomeScreenState {
                   ),
                   Text(
                     'AI is analyzing your cycle patterns...',
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodySmall?.copyWith(color: AppTheme.mediumGrey),
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                   ),
                 ],
               ),
