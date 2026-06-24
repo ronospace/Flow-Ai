@@ -26,6 +26,8 @@ const db = getFirestore();
 
 const INVITES_COLLECTION = "partnerInvites";
 const CONNECTIONS_COLLECTION = "partnerConnections";
+const ENTITLEMENTS_COLLECTION = "premiumEntitlements";
+const SUBSCRIPTIONS_COLLECTION = "subscriptions";
 
 export const deleteMyCloudData = onCall(
   {
@@ -37,6 +39,17 @@ export const deleteMyCloudData = onCall(
     );
 
     try {
+      const entitlementReference = db
+        .collection(ENTITLEMENTS_COLLECTION)
+        .doc(uid);
+      const entitlementSubscriptions =
+        await entitlementReference
+          .collection(SUBSCRIPTIONS_COLLECTION)
+          .get();
+
+      // Delete the entitlement document and every nested subscription.
+      await db.recursiveDelete(entitlementReference);
+
       const snapshots = await Promise.all([
         db
           .collection(INVITES_COLLECTION)
@@ -105,16 +118,19 @@ export const deleteMyCloudData = onCall(
         await batch.commit();
       }
 
+      const deletedDocuments =
+        documents.length + entitlementSubscriptions.size;
+
       console.log(
-        "PARTNER_CLOUD_DATA_DELETED",
+        "USER_CLOUD_DATA_DELETED",
         {
-          documentCount: documents.length,
+          documentCount: deletedDocuments,
         },
       );
 
       return {
         ok: true,
-        deletedDocuments: documents.length,
+        deletedDocuments,
       };
     } catch (error) {
       if (error instanceof HttpsError) {
