@@ -89,7 +89,7 @@ Flow Ai transforms complex health data into actionable insights, helping women m
       secondaryCategory: 'Medical',
       supportUrl: 'https://support.flowiq.app',
       marketingUrl: 'https://www.flowiq.app',
-      privacyPolicyUrl: 'https://www.flowiq.app/privacy',
+      privacyPolicyUrl: 'https://flowai.app/privacy',
       copyrightText: '© 2026 Flow Ai Technologies. All rights reserved.',
       localizedDescriptions: {
         'en':
