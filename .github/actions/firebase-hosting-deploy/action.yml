@@ -1,0 +1,57 @@
+name: Flow AI Firebase Hosting deployment
+description: Centralized keyless Firebase Hosting deployment
+
+inputs:
+  workload_identity_provider:
+    required: true
+    description: Workload Identity provider resource
+  service_account:
+    required: true
+    description: Dedicated Hosting deployment service account
+  mode:
+    required: true
+    description: live or preview
+  channel:
+    required: false
+    default: ""
+    description: Preview channel
+
+runs:
+  using: composite
+  steps:
+    - name: Validate Hosting deployment inputs
+      shell: bash
+      env:
+        FLOW_AI_WIF_PROVIDER: ${{ inputs.workload_identity_provider }}
+        FLOW_AI_WIF_SERVICE_ACCOUNT: ${{ inputs.service_account }}
+        FLOW_AI_HOSTING_MODE: ${{ inputs.mode }}
+        FLOW_AI_HOSTING_CHANNEL: ${{ inputs.channel }}
+      run: |
+        set -euo pipefail
+        test -n "${FLOW_AI_WIF_PROVIDER}"
+        test -n "${FLOW_AI_WIF_SERVICE_ACCOUNT}"
+        case "${FLOW_AI_HOSTING_MODE}" in
+          live)
+            test -z "${FLOW_AI_HOSTING_CHANNEL}"
+            ;;
+          preview)
+            [[ "${FLOW_AI_HOSTING_CHANNEL}" =~ ^pr-[0-9]+$ ]]
+            ;;
+          *)
+            exit 64
+            ;;
+        esac
+
+    - name: Authenticate with Google Cloud OIDC
+      uses: google-github-actions/auth@v3
+      with:
+        project_id: flow-ai-656b3
+        workload_identity_provider: ${{ inputs.workload_identity_provider }}
+        service_account: ${{ inputs.service_account }}
+
+    - name: Run centralized Hosting command
+      shell: bash
+      env:
+        FLOW_AI_HOSTING_MODE: ${{ inputs.mode }}
+        FLOW_AI_HOSTING_CHANNEL: ${{ inputs.channel }}
+      run: bash "${{ github.action_path }}/../../scripts/firebase_hosting_deploy.sh"
