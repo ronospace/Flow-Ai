@@ -60,7 +60,7 @@ class PremiumFeaturesPreview extends StatelessWidget {
                 ),
                 child: const Icon(
                   Icons.stars_rounded,
-                  color: Colors.white,
+                  color: AppTheme.onBrightAccent,
                   size: 20,
                 ),
               ),
@@ -73,13 +73,13 @@ class PremiumFeaturesPreview extends StatelessWidget {
                       'Premium Features',
                       style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: AppTheme.darkGrey,
+                        color: theme.colorScheme.onSurface,
                       ),
                     ),
                     Text(
                       'Health Intelligence Features',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: AppTheme.mediumGrey,
+                        color: theme.colorScheme.onSurfaceVariant,
                       ),
                     ),
                   ],
@@ -88,9 +88,7 @@ class PremiumFeaturesPreview extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [AppTheme.primaryPurple, AppTheme.primaryRose],
-                  ),
+                  color: AppTheme.primaryPurple,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Text(

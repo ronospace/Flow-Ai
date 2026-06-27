@@ -92,6 +92,9 @@ class AppTheme {
   static const Color darkText = Color(0xFFE5E5E5);
   static const Color darkTextSecondary = Color(0xFF9CA3AF);
 
+  // Certified foreground for Flow AI custom bright gradients.
+  static const Color onBrightAccent = darkSurface;
+
   // Legacy colors for compatibility
   static const Color darkGrey = lightText;
   static const Color mediumGrey = lightTextSecondary;
