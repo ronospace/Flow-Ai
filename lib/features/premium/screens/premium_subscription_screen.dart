@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/premium_provider.dart';
 import '../models/subscription.dart';
 import '../models/premium_feature.dart';
+import '../services/subscription_management_service.dart';
 
 class PremiumSubscriptionScreen extends StatefulWidget {
   const PremiumSubscriptionScreen({super.key});
@@ -808,7 +809,7 @@ class _PremiumSubscriptionScreenState extends State<PremiumSubscriptionScreen>
           width: double.infinity,
           child: OutlinedButton.icon(
             onPressed: () {
-              // Navigate to manage subscription
+              SubscriptionManagementService.open();
             },
             icon: const Icon(Icons.settings),
             label: const Text('Manage Subscription'),
