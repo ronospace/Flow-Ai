@@ -12,6 +12,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
 import 'local_user_service.dart';
+import 'cloud_data_deletion_gateway.dart';
+import '../database/database_service.dart';
 import '../utils/app_logger.dart';
 
 /// Enhanced Authentication Service with biometric and multi-provider OAuth
@@ -777,20 +779,62 @@ class AuthService {
   /// Delete account
   Future<AuthResult> deleteAccount() async {
     try {
-      if (currentUser == null) {
+      final account = await getCurrentUser();
+      if (account == null) {
         return AuthResult.failure('No user signed in');
       }
 
-      await currentUser!.delete();
-      await _clearStoredUserData();
-      if (_prefs != null) {
-        await _prefs!.remove(_lastLoginMethodKey);
-        await _prefs!.remove(_biometricEnabledKey);
+      if (account is User) {
+        // The callable requires the still-authenticated Firebase identity.
+        // Never delete the identity until server-side erasure is confirmed.
+        await CloudDataDeletionGateway().deleteCurrentUserCloudData();
+        await _clearAllUserData();
+        await account.delete();
+      } else if (account is LocalUser) {
+        final localService = _localUserService;
+        if (localService == null) {
+          return AuthResult.failure('Local account service is unavailable');
+        }
+
+        final deleted = await localService.deleteUser(account.uid);
+        if (!deleted) {
+          return AuthResult.failure('Local account could not be deleted');
+        }
+
+        await _clearAllUserData();
+      } else {
+        return AuthResult.failure('Unsupported account type');
       }
 
+      if (_prefs != null) {
+        await _prefs!.remove(_userDataKey);
+        await _prefs!.remove(_lastLoginMethodKey);
+        await _prefs!.remove('user_preferences');
+        await _prefs!.remove('app_settings');
+      }
+
+      try {
+        await _googleSignIn?.signOut();
+      } catch (_) {}
+
+      try {
+        await _googleSignIn?.disconnect();
+      } catch (_) {}
+
+      await _clearMemoryCache();
       return AuthResult.success(null);
-    } catch (e) {
-      return AuthResult.failure(e.toString());
+    } on FirebaseAuthException catch (error) {
+      if (error.code == 'requires-recent-login') {
+        return AuthResult.failure(
+          'Please sign in again, then retry account deletion.',
+        );
+      }
+
+      return AuthResult.failure(
+        error.message ?? 'Firebase account deletion failed',
+      );
+    } catch (error) {
+      return AuthResult.failure('Account deletion failed: $error');
     }
   }
 
@@ -817,11 +861,14 @@ class AuthService {
 
   /// Clear all user-related data from local storage
   Future<void> _clearAllUserData() async {
+    // Cycle, symptom, prediction, and tracking records live in SQLite.
+    await DatabaseService().deleteDatabase();
+
     if (_prefs != null) {
       // Get all keys and remove user-related ones
       final keys = _prefs!.getKeys();
       for (final key in keys) {
-        if (key.contains('user_') ||
+        if ((key.contains('user_') && key != _userDataKey) ||
             key.contains('auth_') ||
             key.contains('profile_') ||
             key.contains('settings_') ||
