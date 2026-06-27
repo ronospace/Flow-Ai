@@ -16,17 +16,13 @@ class AdMobService {
   static const String _androidBannerAdUnitId = 'ca-app-pub-8707491489514576/9591267529';
   static const String _androidInterstitialAdUnitId = 'ca-app-pub-8707491489514576/8812021403';
   static const String _androidRewardedAdUnitId = 'ca-app-pub-8707491489514576/7894240148';
-  static const String _androidAppOpenAdUnitId = 'ca-app-pub-8707491489514576/7498939737';
-  static const String _androidNativeAdUnitId = 'ca-app-pub-8707491489514576/2837639998';
-  static const String _androidRewardedInterstitialAdUnitId = 'ca-app-pub-8707491489514576/8114534323';
   
   // iOS Production Ad Unit IDs (App ID: ca-app-pub-5064348089)
   static const String _iosBannerAdUnitId = 'ca-app-pub-8707491489514576/4146566820';
   static const String _iosInterstitialAdUnitId = 'ca-app-pub-8707491489514576/4558432692';
   static const String _iosRewardedAdUnitId = 'ca-app-pub-8707491489514576/2833485150';
-  static const String _iosAppOpenAdUnitId = 'ca-app-pub-8707491489514576/1932269355';
-  static const String _iosNativeAdUnitId = 'ca-app-pub-8707491489514576/3245351026';
-  static const String _iosRewardedInterstitialAdUnitId = 'ca-app-pub-8707491489514576/2881586612';
+
+  static bool get adsEnabled => false;
 
   // Ad unit getters
   // Debug: defaults to TEST ads (safe). Override with:
@@ -62,6 +58,7 @@ class AdMobService {
 
   // Initialize the Mobile Ads SDK
   static Future<void> initialize() async {
+    if (!adsEnabled) return;
     await MobileAds.instance.initialize();
     if (kDebugMode) {
       print('🎯 AdMob SDK initialized successfully');
@@ -102,6 +99,7 @@ class AdMobService {
 
   // Load interstitial ad
   void loadInterstitialAd() {
+    if (!adsEnabled) return;
     InterstitialAd.load(
       adUnitId: interstitialAdUnitId,
       request: const AdRequest(),
@@ -150,6 +148,7 @@ class AdMobService {
 
   // Show interstitial ad
   void showInterstitialAd() {
+    if (!adsEnabled) return;
     if (_isInterstitialAdReady && _interstitialAd != null) {
       _interstitialAd!.show();
     } else {
@@ -162,6 +161,7 @@ class AdMobService {
 
   // Load rewarded ad
   void loadRewardedAd() {
+    if (!adsEnabled) return;
     RewardedAd.load(
       adUnitId: rewardedAdUnitId,
       request: const AdRequest(),
@@ -210,6 +210,7 @@ class AdMobService {
 
   // Show rewarded ad
   void showRewardedAd({required Function(RewardItem) onRewarded}) {
+    if (!adsEnabled) return;
     if (_isRewardedAdReady && _rewardedAd != null) {
       _rewardedAd!.show(
         onUserEarnedReward: (ad, reward) {
@@ -247,11 +248,13 @@ class AdMobService {
   static const Duration _minRewardedInterval = Duration(minutes: 1);
 
   bool canShowInterstitialAd() {
+    if (!adsEnabled) return false;
     if (_lastInterstitialShown == null) return true;
     return DateTime.now().difference(_lastInterstitialShown!) >= _minInterstitialInterval;
   }
 
   bool canShowRewardedAd() {
+    if (!adsEnabled) return false;
     if (_lastRewardedShown == null) return true;
     return DateTime.now().difference(_lastRewardedShown!) >= _minRewardedInterval;
   }

@@ -127,6 +127,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   void _loadBannerAd() {
+    if (!admob.AdMobService.adsEnabled) return;
     _bannerAd = _adMobService.createBannerAd();
     _bannerAd!.load();
     setState(() {
