@@ -22,6 +22,7 @@ class _HealthcareProviderPortalScreenState
       DataExportImportService.instance;
   bool _isExporting = false;
   String? _exportFilePath;
+  final GlobalKey _exportSuccessKey = GlobalKey();
   DateRange? _selectedDateRange;
   DataFormat _selectedFormat = DataFormat.fhir;
 
@@ -66,7 +67,10 @@ class _HealthcareProviderPortalScreenState
                       _buildExportButton(context, theme),
                       if (_exportFilePath != null) ...[
                         const SizedBox(height: 24),
-                        _buildExportSuccessCard(context, theme),
+                        KeyedSubtree(
+                          key: _exportSuccessKey,
+                          child: _buildExportSuccessCard(context, theme),
+                        ),
                       ],
                     ],
                   ),
@@ -243,15 +247,18 @@ class _HealthcareProviderPortalScreenState
   Widget _buildDateRangeChip(String label, DateRange Function() rangeBuilder) {
     final range = rangeBuilder();
     final isSelected =
-        _selectedDateRange?.start == range.start &&
-        _selectedDateRange?.end == range.end;
+        DateUtils.isSameDay(_selectedDateRange?.start, range.start) &&
+        DateUtils.isSameDay(_selectedDateRange?.end, range.end);
 
     return FilterChip(
+      key: ValueKey<String>('date-range-$label'),
       label: Text(label),
       selected: isSelected,
       onSelected: (selected) {
         setState(() {
           _selectedDateRange = range;
+
+          _exportFilePath = null;
         });
         HapticFeedback.lightImpact();
       },
@@ -335,6 +342,8 @@ class _HealthcareProviderPortalScreenState
       onTap: () {
         setState(() {
           _selectedFormat = format;
+
+          _exportFilePath = null;
         });
         HapticFeedback.lightImpact();
       },
@@ -386,10 +395,12 @@ class _HealthcareProviderPortalScreenState
   }
 
   Widget _buildExportButton(BuildContext context, ThemeData theme) {
+    final exportCompleted = _exportFilePath != null && !_isExporting;
+
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton.icon(
-        onPressed: _isExporting ? null : _exportData,
+        onPressed: _isExporting || exportCompleted ? null : _exportData,
         icon: _isExporting
             ? const SizedBox(
                 width: 20,
@@ -399,13 +410,27 @@ class _HealthcareProviderPortalScreenState
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                 ),
               )
-            : const Icon(Icons.file_download, size: 24),
+            : Icon(
+                exportCompleted
+                    ? Icons.check_circle_rounded
+                    : Icons.download_rounded,
+              ),
         label: Text(
-          _isExporting ? 'Exporting...' : 'Export Health Data',
+          _isExporting
+              ? 'Exporting...'
+              : exportCompleted
+              ? 'Health Data Exported'
+              : 'Export Health Data',
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppTheme.secondaryBlue,
+          backgroundColor: exportCompleted
+              ? const Color(0xFF0F766E)
+              : AppTheme.secondaryBlue,
+          disabledBackgroundColor: exportCompleted
+              ? const Color(0xFF0F766E)
+              : null,
+          disabledForegroundColor: exportCompleted ? Colors.white : null,
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
@@ -486,6 +511,23 @@ class _HealthcareProviderPortalScreenState
     );
   }
 
+  void _revealExportSuccessCard() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+
+      final successContext = _exportSuccessKey.currentContext;
+      if (successContext == null) return;
+
+      Scrollable.ensureVisible(
+        successContext,
+        duration: const Duration(milliseconds: 380),
+        curve: Curves.easeOutCubic,
+        alignment: 1.0,
+        alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
+      );
+    });
+  }
+
   Future<void> _exportData() async {
     setState(() {
       _isExporting = true;
@@ -515,19 +557,7 @@ class _HealthcareProviderPortalScreenState
           _isExporting = false;
         });
 
-        if (mounted) {
-          ScaffoldMessenger.maybeOf(context)?.showSnackBar(
-            SnackBar(
-              content: const Text('Health data exported successfully!'),
-              backgroundColor: AppTheme.successGreen,
-              action: SnackBarAction(
-                label: 'Share',
-                textColor: Colors.white,
-                onPressed: _shareExport,
-              ),
-            ),
-          );
-        }
+        _revealExportSuccessCard();
       } else {
         throw Exception('Export failed');
       }
