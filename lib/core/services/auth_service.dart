@@ -34,17 +34,20 @@ class AuthService {
 
   User? get currentUser => _auth?.currentUser;
   bool get isInitialized => _isInitialized;
-  Future<bool> get isAuthenticated async => /* _auth?.currentUser != null || */
+  Future<bool> get isAuthenticated async =>
+      (_firebaseAvailable && _auth?.currentUser != null) ||
       await _hasLocalUser();
 
   /// Get current user, checking both Firebase and local users
   Future<dynamic> getCurrentUser() async {
-    // Check Firebase user first (disabled for iOS build)
-    // if (_auth?.currentUser != null) {
-    //   return _auth!.currentUser;
-    // }
+    final firebaseUser = _auth?.currentUser;
 
-    // Check local user session
+    if (_firebaseAvailable &&
+        firebaseUser != null &&
+        !firebaseUser.isAnonymous) {
+      return firebaseUser;
+    }
+
     if (_localUserService != null) {
       final localUser = await _localUserService!.getCurrentUser();
       if (localUser != null) {
@@ -55,54 +58,55 @@ class AuthService {
       }
     }
 
-    return null;
+    return firebaseUser;
   }
 
   /// Get comprehensive user data for UI display and persistence
   Future<Map<String, dynamic>?> getUserData() async {
     final currentUser = await getCurrentUser();
     if (currentUser == null) {
-      // Check if we have stored user data from previous session
-      final storedData = await _getStoredUserData();
-      return storedData;
+      return _getStoredUserData();
     }
 
-    Map<String, dynamic> userData = {};
+    if (currentUser is User) {
+      final storedData = await _getStoredUserData();
+      final sameStoredUser =
+          storedData != null && storedData['uid'] == currentUser.uid;
+      final storedUsername = sameStoredUser
+          ? storedData['username'] as String?
+          : null;
+      final storedProvider = sameStoredUser
+          ? storedData['provider'] as String?
+          : null;
 
-    // Handle Firebase User (disabled for iOS build)
-    // if (currentUser is User) {
-    //   // Get stored user data to preserve username and other custom fields
-    //   final storedData = await _getStoredUserData();
-    //
-    //   userData = {
-    //     'uid': currentUser.uid,
-    //     'email': currentUser.email,
-    //     'displayName': currentUser.displayName,
-    //     'username': storedData?['username'] ?? currentUser.displayName, // Preserve stored username
-    //     'photoURL': currentUser.photoURL,
-    //     'provider': 'firebase',
-    //     'createdAt': currentUser.metadata.creationTime?.toIso8601String(),
-    //     'lastSignIn': currentUser.metadata.lastSignInTime?.toIso8601String(),
-    //     'profileComplete': currentUser.displayName != null && currentUser.displayName!.isNotEmpty,
-    //   };
-    // } else
-    if (currentUser is LocalUser) {
-      // Handle Local User
-      final localUser = currentUser;
-      userData = {
-        'uid': localUser.uid,
-        'email': localUser.email,
-        'displayName': localUser.displayName,
-        'username': localUser.username ?? localUser.displayName,
+      return {
+        'uid': currentUser.uid,
+        'email': currentUser.email,
+        'displayName': currentUser.displayName,
+        'username': storedUsername ?? currentUser.displayName,
+        'photoURL': currentUser.photoURL,
+        'provider': storedProvider ?? 'firebase',
+        'createdAt': currentUser.metadata.creationTime?.toIso8601String(),
+        'lastSignIn': currentUser.metadata.lastSignInTime?.toIso8601String(),
+        'profileComplete':
+            (currentUser.displayName?.trim().isNotEmpty ?? false) ||
+            (currentUser.email?.trim().isNotEmpty ?? false),
+      };
+    } else if (currentUser is LocalUser) {
+      return {
+        'uid': currentUser.uid,
+        'email': currentUser.email,
+        'displayName': currentUser.displayName,
+        'username': currentUser.username ?? currentUser.displayName,
         'photoURL': null,
         'provider': 'local',
-        'createdAt': localUser.createdAt.toIso8601String(),
-        'lastSignIn': localUser.lastLogin.toIso8601String(),
-        'profileComplete': true, // Local users always have complete profiles
+        'createdAt': currentUser.createdAt.toIso8601String(),
+        'lastSignIn': currentUser.lastLogin.toIso8601String(),
+        'profileComplete': true,
       };
     }
 
-    return userData.isNotEmpty ? userData : null;
+    return null;
   }
 
   Future<bool> _hasLocalUser() async {
@@ -404,7 +408,6 @@ class AuthService {
     required String password,
   }) async {
     try {
-      
       //   try {
       //     final UserCredential result = await _auth!.signInWithEmailAndPassword(
       //       email: email,
@@ -436,11 +439,6 @@ class AuthService {
 
       // Fallback to local authentication
       if (_localUserService != null) {
-              if (!kReleaseMode) {
-            }
-        }
-        }
-
         final localResult = await _localUserService!.signInUser(
           email: email,
           password: password,
@@ -462,10 +460,7 @@ class AuthService {
           });
 
           if (_prefs != null) {
-            await _prefs!.setString(
-              _lastLoginMethodKey,
-              'local',
-            );
+            await _prefs!.setString(_lastLoginMethodKey, 'local');
           }
 
           debugPrint('✅ Local user signed in successfully: $email');
@@ -509,6 +504,15 @@ class AuthService {
       );
 
       final userCredential = await _auth!.signInWithCredential(credential);
+
+      await _storeUserData({
+        'uid': userCredential.user?.uid,
+        'email': userCredential.user?.email,
+        'displayName': userCredential.user?.displayName,
+        'photoURL': userCredential.user?.photoURL,
+        'provider': 'google',
+        'lastLogin': DateTime.now().toIso8601String(),
+      });
 
       return AuthResult.success(userCredential.user);
     } catch (e) {
@@ -839,14 +843,26 @@ class AuthService {
     debugPrint('🧠 Memory cache cleared for user isolation');
   }
 
-  Future<UserCredential> firebaseCreateUserWithEmailAndPassword(String email, String password) async {
+  Future<UserCredential> firebaseCreateUserWithEmailAndPassword(
+    String email,
+    String password,
+  ) async {
     _auth ??= FirebaseAuth.instance;
-    return await _auth!.createUserWithEmailAndPassword(email: email, password: password);
+    return await _auth!.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
   }
 
-  Future<UserCredential> firebaseSignInWithEmailAndPassword(String email, String password) async {
+  Future<UserCredential> firebaseSignInWithEmailAndPassword(
+    String email,
+    String password,
+  ) async {
     _auth ??= FirebaseAuth.instance;
-    return await _auth!.signInWithEmailAndPassword(email: email, password: password);
+    return await _auth!.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
   }
 }
 
