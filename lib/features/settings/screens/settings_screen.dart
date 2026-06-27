@@ -223,23 +223,21 @@ class _SettingsScreenState extends State<SettingsScreen>
                             title: 'Health Connections',
                             icon: Icons.health_and_safety,
                             children: [
-                              SettingsTile(
-                                leading: const Icon(
-                                  Icons.favorite,
-                                  color: AppTheme.primaryRose,
+                              if (Platform.isIOS)
+                                SettingsTile(
+                                  leading: const Icon(
+                                    Icons.favorite,
+                                    color: AppTheme.primaryRose,
+                                  ),
+                                  title: 'HealthKit Integration',
+                                  subtitle:
+                                      'Manage Apple HealthKit data access',
+                                  onTap: () => _showHealthKitInfo(context),
+                                  trailing: const Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: 16,
+                                  ),
                                 ),
-                                title: Platform.isIOS
-                                    ? 'HealthKit Integration'
-                                    : 'Health Connect Integration',
-                                subtitle: Platform.isIOS
-                                    ? 'Manage Apple HealthKit data access'
-                                    : 'Manage Health Connect data access',
-                                onTap: () => _showHealthKitInfo(context),
-                                trailing: const Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: 16,
-                                ),
-                              ),
                               SettingsTile(
                                 leading: const Icon(
                                   Icons.privacy_tip,
@@ -848,7 +846,9 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   void _showHealthKitFullDisclosure(BuildContext context) {
-    final platformName = Platform.isIOS ? 'Apple HealthKit' : 'Health Connect';
+    if (!Platform.isIOS) return;
+
+    const platformName = 'Apple HealthKit';
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -1027,6 +1027,8 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   void _showHealthKitInfo(BuildContext context) {
+    if (!Platform.isIOS) return;
+
     // Show the full disclosure dialog
     _showHealthKitFullDisclosure(context);
     final theme = Theme.of(context);
@@ -1260,7 +1262,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   Future<void> _launchPrivacyPolicy() async {
-    final url = Uri.parse('https://flowiq.app/privacy');
+    final url = Uri.parse('https://flowai.app/privacy');
     if (await canLaunchUrl(url)) {
       await launchUrl(url, mode: LaunchMode.externalApplication);
     }

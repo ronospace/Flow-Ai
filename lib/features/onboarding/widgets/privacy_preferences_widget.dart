@@ -29,7 +29,7 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
 
   bool _shareDataForResearch = false;
   bool _enableAIInsights = true;
-  bool _allowAnonymousAnalytics = true;
+  bool _allowAnonymousAnalytics = false;
   bool _enableCloudBackup = true;
   bool _shareWithPartners = false;
   bool _marketingCommunications = false;
@@ -76,13 +76,13 @@ class _PrivacyPreferencesWidgetState extends State<PrivacyPreferencesWidget>
     {
       'id': 'analytics',
       'title': 'Anonymous App Analytics',
-      'subtitle': 'Help us improve the app experience',
+      'subtitle': 'Optional and disabled by default',
       'description':
-          'Shares anonymized usage patterns to help us understand how to make the app better. No personal health data is included.',
+          'Optional local usage analytics. This setting is disabled by default and must never include health values.',
       'icon': Icons.analytics,
       'color': Colors.green,
-      'recommended': true,
-      'defaultValue': true,
+      'recommended': false,
+      'defaultValue': false,
     },
     {
       'id': 'cloud_backup',

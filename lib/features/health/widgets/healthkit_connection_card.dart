@@ -13,6 +13,10 @@ class HealthKitConnectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (!Platform.isIOS) {
+      return const SizedBox.shrink();
+    }
+
     final theme = Theme.of(context);
 
     return Consumer<HealthProvider>(

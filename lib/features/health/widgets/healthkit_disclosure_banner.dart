@@ -307,7 +307,7 @@ class HealthKitDisclosureBanner extends StatelessWidget {
   }
 
   void _launchPrivacyPolicy() async {
-    final url = Uri.parse('https://flowiq.app/privacy');
+    final url = Uri.parse('https://flowai.app/privacy');
     if (await canLaunchUrl(url)) {
       await launchUrl(url, mode: LaunchMode.externalApplication);
     }
