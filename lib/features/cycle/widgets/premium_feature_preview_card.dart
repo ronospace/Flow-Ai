@@ -30,7 +30,7 @@ class PremiumFeaturePreviewCard extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [Colors.white, color.withValues(alpha: 0.02)],
+              colors: [theme.cardColor, color.withValues(alpha: 0.06)],
             ),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: color.withValues(alpha: 0.2), width: 1),
@@ -89,20 +89,20 @@ class PremiumFeaturePreviewCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: theme.textTheme.titleSmall?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: AppTheme.darkGrey,
+                          color: theme.colorScheme.onSurface,
                           fontSize: 12,
                         ),
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Flexible(
+                    Expanded(
                       flex: 2,
                       child: Text(
                         description,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: AppTheme.mediumGrey,
+                          color: theme.colorScheme.onSurfaceVariant,
                           height: 1.2,
                           fontSize: 10,
                         ),
@@ -118,6 +118,9 @@ class PremiumFeaturePreviewCard extends StatelessWidget {
                             estimatedDate == 'Q2 2026'
                                 ? 'Coming Soon'
                                 : 'Active',
+                            maxLines: 1,
+                            softWrap: false,
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               color: color,
                               fontSize: 9,
@@ -126,9 +129,9 @@ class PremiumFeaturePreviewCard extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 4),
-                        const Icon(
+                        Icon(
                           Icons.arrow_forward_ios,
-                          color: AppTheme.mediumGrey,
+                          color: theme.colorScheme.onSurfaceVariant,
                           size: 10,
                         ),
                       ],
