@@ -58,7 +58,7 @@ class SubscriptionPlan {
       billingCycle: cycle,
       features: [
         'Everything in Basic',
-        'Advanced AI predictions (95% accuracy)',
+        'Advanced AI predictions',
         'Unlimited exports',
         'Custom health reports',
         'Healthcare integration',
