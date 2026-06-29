@@ -76,62 +76,57 @@ jobs:
           token_format: access_token
           access_token_lifetime: 1800s
           access_token_scopes: https://www.googleapis.com/auth/cloud-platform
-          create_credentials_file: true
-          export_environment_variables: true
+          create_credentials_file: false
+          export_environment_variables: false
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: '24'
-          package-manager-cache: false
-
-      - name: Install pinned Firebase CLI
-        run: npm install --global firebase-tools@15.10.1
-
-      - name: Verify short-lived Firebase credential
+      - name: Verify Firebase Hosting access
         shell: bash
         env:
           FIREBASE_ACCESS_TOKEN: ${{ steps.google_auth.outputs.access_token }}
         run: |
           set -Eeuo pipefail
 
-          [[ -n "$FIREBASE_ACCESS_TOKEN" ]]
+          result="$RUNNER_TEMP/firebase-hosting-sites.json"
 
-          response="$RUNNER_TEMP/firebase-project-access.json"
-          status="$(
-            curl               --silent               --show-error               --output "$response"               --write-out '%{http_code}'               --header "Authorization: Bearer $FIREBASE_ACCESS_TOKEN"               --header 'Accept: application/json'               'https://firebase.googleapis.com/v1beta1/projects/flow-ai-656b3'
-          )"
-
-          printf 'firebase_api_http_status=%s\n' "$status"
-
-          if [[ "$status" != 200 ]]; then
-            jq '{
-              error: {
-                code: .error.code,
-                status: .error.status,
-                message: .error.message
-              }
-            }' "$response" 2>/dev/null || true
-            exit 1
-          fi
+          curl \
+            --fail \
+            --silent \
+            --show-error \
+            --header "Authorization: Bearer $FIREBASE_ACCESS_TOKEN" \
+            --header 'Accept: application/json' \
+            --output "$result" \
+            'https://firebasehosting.googleapis.com/v1beta1/projects/flow-ai-656b3/sites'
 
           jq -e '
-            .projectId == "flow-ai-656b3"
-          ' "$response" >/dev/null
+            any(
+              .sites[];
+              .name ==
+                "projects/flow-ai-656b3/sites/flow-ai-656b3"
+            )
+          ' "$result" >/dev/null
 
-          printf 'short_lived_token_verified=true\n'
-          printf 'firebase_project_access_verified=true\n'
+          printf 'firebase_hosting_api_access=true\n'
 
-      - name: Deploy Firebase Hosting production
+      - name: Deploy Firebase Hosting production through REST API
         shell: bash
         env:
           FIREBASE_ACCESS_TOKEN: ${{ steps.google_auth.outputs.access_token }}
         run: |
           set -Eeuo pipefail
 
-          firebase deploy \
-            --only hosting \
-            --project flow-ai-656b3 \
-            --token "$FIREBASE_ACCESS_TOKEN" \
-            --non-interactive \
-            --message "GitHub Actions ${GITHUB_SHA}"
+          result="$RUNNER_TEMP/firebase-hosting-production.json"
+
+          python3 tool/firebase_hosting_rest_deploy.py \
+            --site flow-ai-656b3 \
+            --public build/web \
+            --channel live \
+            --message "GitHub Actions ${GITHUB_SHA}" \
+            --output "$result"
+
+          jq . "$result"
+
+          [[ "$(
+            jq -r '.status' "$result"
+          )" == success ]]
+
+          printf 'firebase_production_deployment_passed=true\n'

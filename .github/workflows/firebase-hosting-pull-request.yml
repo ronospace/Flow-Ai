@@ -77,189 +77,76 @@ jobs:
           token_format: access_token
           access_token_lifetime: 1800s
           access_token_scopes: https://www.googleapis.com/auth/cloud-platform
-          create_credentials_file: true
-          export_environment_variables: true
+          create_credentials_file: false
+          export_environment_variables: false
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: '24'
-          package-manager-cache: false
-
-      - name: Install pinned Firebase CLI
-        run: npm install --global firebase-tools@15.10.1
-
-      - name: Verify short-lived Firebase credential
+      - name: Verify Firebase Hosting access
         shell: bash
         env:
           FIREBASE_ACCESS_TOKEN: ${{ steps.google_auth.outputs.access_token }}
         run: |
           set -Eeuo pipefail
 
-          [[ -n "$FIREBASE_ACCESS_TOKEN" ]]
+          result="$RUNNER_TEMP/firebase-hosting-sites.json"
 
-          response="$RUNNER_TEMP/firebase-project-access.json"
-          status="$(
-            curl               --silent               --show-error               --output "$response"               --write-out '%{http_code}'               --header "Authorization: Bearer $FIREBASE_ACCESS_TOKEN"               --header 'Accept: application/json'               'https://firebase.googleapis.com/v1beta1/projects/flow-ai-656b3'
-          )"
-
-          printf 'firebase_api_http_status=%s\n' "$status"
-
-          if [[ "$status" != 200 ]]; then
-            jq '{
-              error: {
-                code: .error.code,
-                status: .error.status,
-                message: .error.message
-              }
-            }' "$response" 2>/dev/null || true
-            exit 1
-          fi
+          curl \
+            --fail \
+            --silent \
+            --show-error \
+            --header "Authorization: Bearer $FIREBASE_ACCESS_TOKEN" \
+            --header 'Accept: application/json' \
+            --output "$result" \
+            'https://firebasehosting.googleapis.com/v1beta1/projects/flow-ai-656b3/sites'
 
           jq -e '
-            .projectId == "flow-ai-656b3"
-          ' "$response" >/dev/null
+            any(
+              .sites[];
+              .name ==
+                "projects/flow-ai-656b3/sites/flow-ai-656b3"
+            )
+          ' "$result" >/dev/null
 
-          printf 'short_lived_token_verified=true\n'
-          printf 'firebase_project_access_verified=true\n'
+          printf 'firebase_hosting_api_access=true\n'
 
-      - name: Deploy Firebase preview channel
+      - name: Deploy Firebase preview through REST API
         shell: bash
         env:
           FIREBASE_ACCESS_TOKEN: ${{ steps.google_auth.outputs.access_token }}
         run: |
           set -Eeuo pipefail
 
+          result="$RUNNER_TEMP/firebase-hosting-preview.json"
           channel="pr-${{ github.event.pull_request.number }}"
-          result="$RUNNER_TEMP/firebase-preview.json"
-          error_log="$RUNNER_TEMP/firebase-preview.stderr"
 
-          set +e
-          firebase hosting:channel:deploy "$channel" \
-            --expires 7d \
-            --project flow-ai-656b3 \
-            --token "$FIREBASE_ACCESS_TOKEN" \
-            --non-interactive \
-            --json \
-            > "$result" \
-            2> "$error_log"
-          deploy_status=$?
-          set -e
+          python3 tool/firebase_hosting_rest_deploy.py \
+            --site flow-ai-656b3 \
+            --public build/web \
+            --channel "$channel" \
+            --ttl 604800s \
+            --message "PR #${{ github.event.pull_request.number }} ${GITHUB_SHA}" \
+            --output "$result"
 
-          printf 'firebase_cli_exit_status=%s\n' "$deploy_status"
-
-          if [[ -s "$error_log" ]]; then
-            printf '%s\n' '=== FIREBASE STDERR ==='
-
-            sed -E \
-              -e 's/(Bearer[[:space:]]+)[^[:space:]]+/\1[REDACTED]/g' \
-              -e 's/([Tt]oken["=:[:space:]]+)[^[:space:]",]+/\1[REDACTED]/g' \
-              "$error_log"
-          fi
-
-          if [[ ! -s "$result" ]]; then
-            echo '::error::Firebase CLI returned no JSON result.'
-            exit "${deploy_status:-1}"
-          fi
-
-          if ! jq empty "$result" 2>/dev/null; then
-            echo '::error::Firebase CLI returned invalid JSON.'
-            head -c 4000 "$result"
-            printf '\n'
-            exit "${deploy_status:-1}"
-          fi
-
-          firebase_status="$(
-            jq -r '.status // empty' "$result"
-          )"
-
-          printf 'firebase_json_status=%s\n' \
-            "${firebase_status:-unspecified}"
-
-          if [[ "$deploy_status" -ne 0 ]] ||
-             [[ "$firebase_status" == error ]]; then
-            echo '::error::Firebase preview deployment failed.'
-            printf '%s\n' '=== SANITIZED FIREBASE DIAGNOSTICS ==='
-
-            jq -r '
-              paths(scalars) as $path |
-              ($path[-1] | tostring) as $key |
-              select(
-                $key |
-                test(
-                  "^(status|code|message|error|reason)$";
-                  "i"
-                )
-              ) |
-              "\($path | map(tostring) | join("."))=" +
-              "\(getpath($path) | tostring)"
-            ' "$result" |
-            head -n 100
-
-            exit "$(
-              if [[ "$deploy_status" -eq 0 ]]
-              then printf '1'
-              else printf '%s' "$deploy_status"
-              fi
-            )"
-          fi
+          jq . "$result"
 
           preview_url="$(
-            jq -r '
-              .. |
-              strings |
-              select(test("^https://"))
-            ' "$result" |
-            awk '
-              /\.web\.app|\.firebaseapp\.com/ {
-                print
-                exit
-              }
-            '
+            jq -r '.channelUrl // empty' "$result"
           )"
 
-          if [[ -z "$preview_url" ]]; then
-            preview_url="$(
-              jq -r '
-                .. |
-                strings |
-                select(test("^https://"))
-              ' "$result" |
-              awk 'NR == 1 { print; exit }'
-            )"
-          fi
+          [[ "$(
+            jq -r '.status' "$result"
+          )" == success ]]
 
-          printf '%s\n' '=== FIREBASE RESULT SUMMARY ==='
-
-          jq -r '
-            paths(scalars) as $path |
-            ($path[-1] | tostring) as $key |
-            select(
-              $key |
-              test(
-                "^(status|site|channel|channelId|url|expireTime|releaseTime)$";
-                "i"
-              )
-            ) |
-            "\($path | map(tostring) | join("."))=" +
-            "\(getpath($path) | tostring)"
-          ' "$result" |
-          head -n 100
+          [[ -n "$preview_url" ]]
 
           {
-            echo "## Firebase Hosting preview"
+            echo '## Firebase Hosting preview'
             echo
-            echo "- Project: \`flow-ai-656b3\`"
+            echo '- Authentication: keyless WIF'
+            echo '- Project: `flow-ai-656b3`'
             echo "- Channel: \`$channel\`"
             echo "- Commit: \`${GITHUB_SHA}\`"
-
-            if [[ -n "$preview_url" ]]; then
-              echo "- Preview: $preview_url"
-            else
-              echo "- Preview URL: deployed successfully; URL not present in CLI JSON"
-            fi
+            echo "- Preview: $preview_url"
           } >> "$GITHUB_STEP_SUMMARY"
 
-          printf 'preview_channel=%s\n' "$channel"
-          printf 'preview_url=%s\n' "${preview_url:-unavailable}"
-          printf 'firebase_preview_deploy_succeeded=true\n'
+          printf 'preview_url=%s\n' "$preview_url"
+          printf 'firebase_preview_deployment_passed=true\n'
