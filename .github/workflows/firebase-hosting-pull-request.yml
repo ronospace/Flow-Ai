@@ -92,27 +92,118 @@ jobs:
 
           channel="pr-${{ github.event.pull_request.number }}"
           result="$RUNNER_TEMP/firebase-preview.json"
+          error_log="$RUNNER_TEMP/firebase-preview.stderr"
 
+          set +e
           firebase hosting:channel:deploy "$channel" \
             --expires 7d \
             --project flow-ai-656b3 \
             --non-interactive \
-            --json > "$result"
+            --json \
+            > "$result" \
+            2> "$error_log"
+          deploy_status=$?
+          set -e
+
+          printf 'firebase_cli_exit_status=%s\n' "$deploy_status"
+
+          if [[ -s "$error_log" ]]; then
+            printf '%s\n' '=== FIREBASE STDERR ==='
+
+            sed -E \
+              -e 's/(Bearer[[:space:]]+)[^[:space:]]+/\1[REDACTED]/g' \
+              -e 's/([Tt]oken["=:[:space:]]+)[^[:space:]",]+/\1[REDACTED]/g' \
+              "$error_log"
+          fi
+
+          if [[ ! -s "$result" ]]; then
+            echo '::error::Firebase CLI returned no JSON result.'
+            exit "${deploy_status:-1}"
+          fi
+
+          if ! jq empty "$result" 2>/dev/null; then
+            echo '::error::Firebase CLI returned invalid JSON.'
+            head -c 4000 "$result"
+            printf '\n'
+            exit "${deploy_status:-1}"
+          fi
+
+          firebase_status="$(
+            jq -r '.status // empty' "$result"
+          )"
+
+          printf 'firebase_json_status=%s\n' \
+            "${firebase_status:-unspecified}"
+
+          if [[ "$deploy_status" -ne 0 ]] ||
+             [[ "$firebase_status" == error ]]; then
+            echo '::error::Firebase preview deployment failed.'
+            printf '%s\n' '=== SANITIZED FIREBASE DIAGNOSTICS ==='
+
+            jq -r '
+              paths(scalars) as $path |
+              ($path[-1] | tostring) as $key |
+              select(
+                $key |
+                test(
+                  "^(status|code|message|error|reason)$";
+                  "i"
+                )
+              ) |
+              "\($path | map(tostring) | join("."))=" +
+              "\(getpath($path) | tostring)"
+            ' "$result" |
+            head -n 100
+
+            exit "$(
+              if [[ "$deploy_status" -eq 0 ]]
+              then printf '1'
+              else printf '%s' "$deploy_status"
+              fi
+            )"
+          fi
 
           preview_url="$(
             jq -r '
               .. |
-              objects |
-              (
-                .url? //
-                .previewUrl? //
-                .defaultUrl? //
-                empty
-              )
+              strings |
+              select(test("^https://"))
             ' "$result" |
-            grep -E '^https://' |
-            head -n 1
+            awk '
+              /\.web\.app|\.firebaseapp\.com/ {
+                print
+                exit
+              }
+            '
           )"
+
+          if [[ -z "$preview_url" ]]; then
+            preview_url="$(
+              jq -r '
+                .. |
+                strings |
+                select(test("^https://"))
+              ' "$result" |
+              awk 'NR == 1 { print; exit }'
+            )"
+          fi
+
+          printf '%s\n' '=== FIREBASE RESULT SUMMARY ==='
+
+          jq -r '
+            paths(scalars) as $path |
+            ($path[-1] | tostring) as $key |
+            select(
+              $key |
+              test(
+                "^(status|site|channel|channelId|url|expireTime|releaseTime)$";
+                "i"
+              )
+            ) |
+            "\($path | map(tostring) | join("."))=" +
+            "\(getpath($path) | tostring)"
+          ' "$result" |
+          head -n 100
 
           {
             echo "## Firebase Hosting preview"
@@ -123,8 +214,11 @@ jobs:
 
             if [[ -n "$preview_url" ]]; then
               echo "- Preview: $preview_url"
+            else
+              echo "- Preview URL: deployed successfully; URL not present in CLI JSON"
             fi
           } >> "$GITHUB_STEP_SUMMARY"
 
           printf 'preview_channel=%s\n' "$channel"
           printf 'preview_url=%s\n' "${preview_url:-unavailable}"
+          printf 'firebase_preview_deploy_succeeded=true\n'
