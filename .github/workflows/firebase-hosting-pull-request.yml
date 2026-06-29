@@ -68,11 +68,15 @@ jobs:
         run: flutter build web --release
 
       - name: Authenticate to Google Cloud
+        id: google_auth
         uses: google-github-actions/auth@v3
         with:
           workload_identity_provider: projects/752724279049/locations/global/workloadIdentityPools/github-actions/providers/flow-ai-repository
           service_account: flow-ai-github-hosting@flow-ai-656b3.iam.gserviceaccount.com
           project_id: flow-ai-656b3
+          token_format: access_token
+          access_token_lifetime: 1800s
+          access_token_scopes: https://www.googleapis.com/auth/cloud-platform
           create_credentials_file: true
           export_environment_variables: true
 
@@ -85,8 +89,44 @@ jobs:
       - name: Install pinned Firebase CLI
         run: npm install --global firebase-tools@15.10.1
 
+      - name: Verify short-lived Firebase credential
+        shell: bash
+        env:
+          FIREBASE_ACCESS_TOKEN: ${{ steps.google_auth.outputs.access_token }}
+        run: |
+          set -Eeuo pipefail
+
+          [[ -n "$FIREBASE_ACCESS_TOKEN" ]]
+
+          response="$RUNNER_TEMP/firebase-project-access.json"
+          status="$(
+            curl               --silent               --show-error               --output "$response"               --write-out '%{http_code}'               --header "Authorization: Bearer $FIREBASE_ACCESS_TOKEN"               --header 'Accept: application/json'               'https://firebase.googleapis.com/v1beta1/projects/flow-ai-656b3'
+          )"
+
+          printf 'firebase_api_http_status=%s\n' "$status"
+
+          if [[ "$status" != 200 ]]; then
+            jq '{
+              error: {
+                code: .error.code,
+                status: .error.status,
+                message: .error.message
+              }
+            }' "$response" 2>/dev/null || true
+            exit 1
+          fi
+
+          jq -e '
+            .projectId == "flow-ai-656b3"
+          ' "$response" >/dev/null
+
+          printf 'short_lived_token_verified=true\n'
+          printf 'firebase_project_access_verified=true\n'
+
       - name: Deploy Firebase preview channel
         shell: bash
+        env:
+          FIREBASE_ACCESS_TOKEN: ${{ steps.google_auth.outputs.access_token }}
         run: |
           set -Eeuo pipefail
 
@@ -98,6 +138,7 @@ jobs:
           firebase hosting:channel:deploy "$channel" \
             --expires 7d \
             --project flow-ai-656b3 \
+            --token "$FIREBASE_ACCESS_TOKEN" \
             --non-interactive \
             --json \
             > "$result" \
