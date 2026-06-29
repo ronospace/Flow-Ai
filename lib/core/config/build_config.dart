@@ -11,8 +11,7 @@ class BuildConfig {
 
   /// Get required dependencies for each platform
   Map<String, List<String>> getRequiredDependencies() {
-    final platformInfo = _platformService.platformInfo;
-    
+
     return {
       'common': [
         'flutter',
@@ -94,7 +93,7 @@ class BuildConfig {
   /// Get platform-specific compiler definitions
   Map<String, String> getCompilerDefinitions() {
     final platformInfo = _platformService.platformInfo;
-    
+
     final definitions = <String, String>{
       'FLUTTER_COMPILED': 'true',
       'APP_VERSION': '1.0.0',
@@ -130,7 +129,7 @@ class BuildConfig {
   /// Get build arguments for different platforms
   Map<String, List<String>> getBuildArguments() {
     final platformInfo = _platformService.platformInfo;
-    
+
     final args = <String, List<String>>{};
 
     if (platformInfo.platform == TargetPlatform.android) {
@@ -219,7 +218,7 @@ class BuildConfig {
   /// Get desktop build configurations
   Map<String, dynamic> getDesktopBuildConfig() {
     final platformInfo = _platformService.platformInfo;
-    
+
     final config = <String, dynamic>{
       'enableAOT': !kDebugMode,
       'enableTreeShaking': !kDebugMode,
@@ -256,20 +255,20 @@ class BuildConfig {
   String generatePubspecDependencies() {
     final dependencies = getRequiredDependencies();
     final platformInfo = _platformService.platformInfo;
-    
+
     final buffer = StringBuffer();
     buffer.writeln('dependencies:');
     buffer.writeln('  flutter:');
     buffer.writeln('    sdk: flutter');
     buffer.writeln();
-    
+
     // Add common dependencies
     for (final dep in dependencies['common']!) {
       if (dep != 'flutter') {
         buffer.writeln('  $dep: ^latest');
       }
     }
-    
+
     // Add platform-specific dependencies
     if (platformInfo.isMobile) {
       buffer.writeln();
@@ -278,7 +277,7 @@ class BuildConfig {
         buffer.writeln('  $dep: ^latest');
       }
     }
-    
+
     if (platformInfo.platform == TargetPlatform.iOS) {
       buffer.writeln();
       buffer.writeln('  # iOS-specific dependencies');
@@ -286,7 +285,7 @@ class BuildConfig {
         buffer.writeln('  $dep: ^latest');
       }
     }
-    
+
     if (platformInfo.platform == TargetPlatform.android) {
       buffer.writeln();
       buffer.writeln('  # Android-specific dependencies');
@@ -294,7 +293,7 @@ class BuildConfig {
         buffer.writeln('  $dep: ^latest');
       }
     }
-    
+
     if (platformInfo.isWeb) {
       buffer.writeln();
       buffer.writeln('  # Web-specific dependencies');
@@ -302,7 +301,7 @@ class BuildConfig {
         buffer.writeln('  $dep: ^latest');
       }
     }
-    
+
     if (platformInfo.isDesktop) {
       buffer.writeln();
       buffer.writeln('  # Desktop-specific dependencies');
@@ -310,21 +309,21 @@ class BuildConfig {
         buffer.writeln('  $dep: ^latest');
       }
     }
-    
+
     // Add dev dependencies
     buffer.writeln();
     buffer.writeln('dev_dependencies:');
     for (final dep in getDevDependencies()) {
       buffer.writeln('  $dep: ^latest');
     }
-    
+
     return buffer.toString();
   }
 
   /// Generate Android build.gradle configurations
   String generateAndroidBuildGradle() {
     final config = getAndroidGradleConfig();
-    
+
     return '''
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
@@ -457,7 +456,7 @@ dependencies {
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	
+
 	<!-- Privacy Permissions -->
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs camera access to capture cycle-related photos and documents.</string>
@@ -475,7 +474,7 @@ dependencies {
 	<string>This app can read health data to provide better cycle tracking insights.</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>This app can write cycle data to HealthKit for comprehensive health tracking.</string>
-	
+
 	<!-- Firebase and Authentication -->
 	<key>CFBundleURLTypes</key>
 	<array>
@@ -488,7 +487,7 @@ dependencies {
 			</array>
 		</dict>
 	</array>
-	
+
 	<!-- App Transport Security -->
 	<key>NSAppTransportSecurity</key>
 	<dict>
@@ -512,51 +511,51 @@ dependencies {
   String generateAndroidManifest() {
     return '''
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    
+
     <!-- Network permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    
+
     <!-- Device permissions -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    
+
     <!-- Biometric permissions -->
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
-    
+
     <!-- Storage permissions -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
                      android:maxSdkVersion="28" />
-    
+
     <!-- Camera and media permissions -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    
+
     <!-- Location permissions -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    
+
     <!-- Calendar and contacts permissions -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
-    
+
     <!-- Health permissions -->
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
-    
+
     <!-- Notification permissions -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    
+
     <application
         android:label="Flow Ai"
         android:name="\${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:enableOnBackInvokedCallback="true"
         android:exported="true">
-        
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -566,13 +565,13 @@ dependencies {
             android:screenOrientation="portrait"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
-            
+
             <!-- Standard launch intent filter -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-            
+
             <!-- Deep link intent filters -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
@@ -582,7 +581,7 @@ dependencies {
                       android:host="flowai.app" />
             </intent-filter>
         </activity>
-        
+
         <!-- Firebase Messaging Service -->
         <service
             android:name="com.google.firebase.messaging.FirebaseMessagingService"
@@ -591,26 +590,26 @@ dependencies {
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        
+
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-            
-        <meta-data 
-            android:name="com.google.firebase.messaging.default_notification_icon" 
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_notification" />
-            
-        <meta-data 
-            android:name="com.google.firebase.messaging.default_notification_color" 
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/notification_color" />
-            
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="default_notification_channel" />
     </application>
-    
+
     <!-- Declare features -->
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
@@ -618,7 +617,7 @@ dependencies {
     <uses-feature android:name="android.hardware.location.gps" android:required="false" />
     <uses-feature android:name="android.hardware.fingerprint" android:required="false" />
     <uses-feature android:name="android.hardware.biometrics" android:required="false" />
-    
+
     <!-- Network security config -->
     <application android:networkSecurityConfig="@xml/network_security_config">
     </application>
@@ -629,7 +628,7 @@ dependencies {
   /// Generate build scripts for different platforms
   Map<String, String> generateBuildScripts() {
     final scripts = <String, String>{};
-    
+
     // Android build script
     scripts['build_android.sh'] = '''
 #!/bin/bash
@@ -806,7 +805,7 @@ const bool IS_DEVELOPMENT = ${environment == 'development'};
 const bool IS_STAGING = ${environment == 'staging'};
 
 // API Configuration
-const String API_BASE_URL = IS_PRODUCTION 
+const String API_BASE_URL = IS_PRODUCTION
     ? 'https://api.flowai.app'
     : IS_STAGING
         ? 'https://staging-api.flowai.app'
@@ -831,8 +830,7 @@ const String BUILD_ENVIRONMENT = ENVIRONMENT;
 
 /// Build utilities for fixing common platform issues
 class BuildUtilities {
-  static final PlatformService _platformService = PlatformService();
-  
+
   /// Fix common iOS build issues
   static List<String> getiOSBuildFixes() {
     return [
@@ -846,7 +844,7 @@ class BuildUtilities {
       'Verify Firebase configuration files are present',
     ];
   }
-  
+
   /// Fix common Android build issues
   static List<String> getAndroidBuildFixes() {
     return [
@@ -861,7 +859,7 @@ class BuildUtilities {
       'Verify Firebase configuration files are present',
     ];
   }
-  
+
   /// Fix common web build issues
   static List<String> getWebBuildFixes() {
     return [
@@ -875,7 +873,7 @@ class BuildUtilities {
       'Optimize bundle size: Enable tree shaking',
     ];
   }
-  
+
   /// Fix common desktop build issues
   static List<String> getDesktopBuildFixes() {
     return [

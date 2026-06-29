@@ -22,4 +22,4 @@ subprojects {
 tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
 }
-val kotlin_version by extra("1.9.20")
+val kotlin_version by extra("2.2.0")

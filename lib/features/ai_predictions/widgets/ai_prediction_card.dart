@@ -8,7 +8,7 @@ import '../../../core/widgets/citation_widget.dart';
 class AIPredictionCard extends StatelessWidget {
   final PeriodPrediction prediction;
   final VoidCallback? onTap;
-  
+
   const AIPredictionCard({
     super.key,
     required this.prediction,
@@ -18,7 +18,7 @@ class AIPredictionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -53,30 +53,30 @@ class AIPredictionCard extends StatelessWidget {
             children: [
               // Header with AI badge
               _buildHeader(theme),
-              
+
               const SizedBox(height: 20),
-              
+
               // Main prediction display
               _buildPredictionDisplay(theme),
-              
+
               const SizedBox(height: 20),
-              
+
               // Confidence and additional info
               _buildConfidenceSection(theme),
-              
+
               const SizedBox(height: 16),
-              
+
               // AI Insights
               if (prediction.insights.isNotEmpty) ...[
                 _buildInsightsSection(theme),
                 const SizedBox(height: 12),
               ],
-              
+
               // Fertility window
               _buildFertilityWindow(theme),
-              
+
               const SizedBox(height: 16),
-              
+
               // View Sources Citation
               CitationWidget(
                 dialogTitle: 'Period Prediction Sources',
@@ -94,7 +94,7 @@ class AIPredictionCard extends StatelessWidget {
       .slideY(begin: 0.3, end: 0, duration: 600.ms, curve: Curves.easeOutCubic)
       .shimmer(delay: 800.ms, duration: 1200.ms);
   }
-  
+
   Widget _buildHeader(ThemeData theme) {
     return Row(
       children: [
@@ -162,12 +162,11 @@ class AIPredictionCard extends StatelessWidget {
       ],
     );
   }
-  
+
   Widget _buildPredictionDisplay(ThemeData theme) {
     final daysUntil = prediction.daysUntilNextPeriod;
-    final isToday = daysUntil == 0;
     final isPast = daysUntil < 0;
-    
+
     return Row(
       children: [
         Expanded(
@@ -220,7 +219,7 @@ class AIPredictionCard extends StatelessWidget {
                 ),
               ),
               Text(
-                isPast ? (daysUntil == -1 ? 'day ago' : 'days ago') 
+                isPast ? (daysUntil == -1 ? 'day ago' : 'days ago')
                       : (daysUntil == 1 ? 'day' : 'days'),
                 style: TextStyle(
                   fontSize: 10,
@@ -234,7 +233,7 @@ class AIPredictionCard extends StatelessWidget {
       ],
     );
   }
-  
+
   Widget _buildConfidenceSection(ThemeData theme) {
     return Row(
       children: [
@@ -271,7 +270,7 @@ class AIPredictionCard extends StatelessWidget {
       ],
     );
   }
-  
+
   Widget _buildInsightsSection(ThemeData theme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -323,12 +322,12 @@ class AIPredictionCard extends StatelessWidget {
       ],
     );
   }
-  
+
   Widget _buildFertilityWindow(ThemeData theme) {
     final fertilityWindow = prediction.fertilityWindow;
     final startDate = fertilityWindow[0];
     final endDate = fertilityWindow[1];
-    
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -408,10 +407,10 @@ class AIPredictionCard extends StatelessWidget {
       ),
     );
   }
-  
+
   String _getPredictionStatusText() {
     final daysUntil = prediction.daysUntilNextPeriod;
-    
+
     if (daysUntil == 0) {
       return 'Today';
     } else if (daysUntil == 1) {
@@ -424,10 +423,10 @@ class AIPredictionCard extends StatelessWidget {
       return '${-daysUntil} days ago';
     }
   }
-  
+
   Color _getPredictionStatusColor() {
     final daysUntil = prediction.daysUntilNextPeriod;
-    
+
     if (daysUntil <= 0) {
       return AppTheme.primaryRose;
     } else if (daysUntil <= 3) {
@@ -438,7 +437,7 @@ class AIPredictionCard extends StatelessWidget {
       return AppTheme.secondaryBlue;
     }
   }
-  
+
   Color _getConfidenceColor() {
     if (prediction.confidenceLevel >= 85) {
       return AppTheme.successGreen;
@@ -454,7 +453,7 @@ class AIPredictionCard extends StatelessWidget {
 class AIPredictionSummary extends StatelessWidget {
   final PeriodPrediction prediction;
   final VoidCallback? onTap;
-  
+
   const AIPredictionSummary({
     super.key,
     required this.prediction,
@@ -465,7 +464,7 @@ class AIPredictionSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final daysUntil = prediction.daysUntilNextPeriod;
-    
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -531,7 +530,7 @@ class AIPredictionSummary extends StatelessWidget {
                     ],
                   ),
                   Text(
-                    daysUntil <= 0 
+                    daysUntil <= 0
                       ? 'Period expected today'
                       : 'Next period in $daysUntil days',
                     style: theme.textTheme.bodySmall?.copyWith(

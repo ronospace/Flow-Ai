@@ -27,7 +27,6 @@ class EnhancedAIChatService {
   types.User? _currentUser;
   AIConversationMemory? _conversationMemory;
   bool _isInitialized = false;
-  AppLocalizations? _localizations;
 
   // FlowAI Integration
   final FlowAIService _flowAIService = FlowAIService();
@@ -158,7 +157,6 @@ class EnhancedAIChatService {
   }) async {
     if (_isInitialized) return;
 
-    _localizations = localizations;
 
     _currentUser = types.User(id: userId, firstName: userName);
 
@@ -685,17 +683,6 @@ class EnhancedAIChatService {
     return responses[math.Random().nextInt(responses.length)];
   }
 
-  String _getPersonalResponse(String message) {
-    if (message.contains('who are you') || message.contains('about you')) {
-      return "I'm Mira, your enhanced AI assistant! ✨ I'm designed to help with reproductive health tracking, but I also love discussing science, technology, lifestyle, and general knowledge. I'm here to learn with you and provide helpful information on almost any topic. What would you like to explore together?";
-    } else if (message.contains('hello') || message.contains('hi')) {
-      return "Hello! 👋 I'm excited to chat with you today. I can help with cycle tracking, answer health questions, discuss science and technology, share interesting facts, or just have a friendly conversation. What's on your mind?";
-    } else if (message.contains('thank')) {
-      return "You're so welcome! 💕 I genuinely enjoy helping and learning together. Whether it's health questions, curious facts, or just chatting - I'm here for it all. Feel free to ask me anything!";
-    } else {
-      return "I'm here and ready to help! 😊 As your AI companion, I can discuss health topics, answer questions about science and technology, share interesting facts, or help you navigate the app. What would you like to explore?";
-    }
-  }
 
   String _getAppResponse(String message) {
     final responses = [

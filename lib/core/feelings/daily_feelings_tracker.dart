@@ -18,15 +18,14 @@ class DailyFeelingsTracker {
   // Tracking configuration
   static const int _morningHour = 9; // 9 AM
   static const int _eveningHour = 21; // 9 PM
-  static const Duration _trackingWindow = Duration(hours: 3);
-  
+
   // Data storage
   final List<FeelingsEntry> _feelingsHistory = [];
   Timer? _reminderTimer;
-  
+
   // Analytics engine
   late FeelingsAnalytics _analytics;
-  
+
   // Notification callbacks
   final List<Function(FeelingsReminder)> _reminderCallbacks = [];
 
@@ -95,13 +94,13 @@ class DailyFeelingsTracker {
 
       // Store entry
       await _storeFeelingsEntry(entry);
-      
+
       // Add to local cache
       _feelingsHistory.add(entry);
-      
+
       // Sort by timestamp (newest first)
       _feelingsHistory.sort((a, b) => b.timestamp.compareTo(a.timestamp));
-      
+
       // Keep only last 365 days
       _maintainHistorySize();
 
@@ -109,7 +108,7 @@ class DailyFeelingsTracker {
       await _analytics.processNewEntry(entry);
 
       AppLogger.success('💖 Feelings entry recorded: ${entry.feelingScore}/10 (${timeOfDay.name})');
-      
+
       return true;
     } catch (e) {
       AppLogger.error('Failed to record feelings entry: $e');
@@ -133,12 +132,12 @@ class DailyFeelingsTracker {
   FeelingsTrackingStatus getTrackingStatus({String? userId}) {
     final now = DateTime.now();
     final todaysFeelings = getTodaysFeelings(userId: userId);
-    
+
     // Check for morning entry
     final hasMorningEntry = todaysFeelings.any(
       (entry) => entry.timeOfDay == FeelingsTimeOfDay.morning
     );
-    
+
     // Check for evening entry
     final hasEveningEntry = todaysFeelings.any(
       (entry) => entry.timeOfDay == FeelingsTimeOfDay.evening
@@ -147,7 +146,7 @@ class DailyFeelingsTracker {
     // Determine current time period
     final currentHour = now.hour;
     FeelingsTimeOfDay? currentPeriod;
-    
+
     if (currentHour >= _morningHour - 2 && currentHour <= _morningHour + 2) {
       currentPeriod = FeelingsTimeOfDay.morning;
     } else if (currentHour >= _eveningHour - 2 && currentHour <= _eveningHour + 2) {
@@ -172,7 +171,7 @@ class DailyFeelingsTracker {
   }) async {
     final endDate = DateTime.now();
     final startDate = endDate.subtract(Duration(days: daysBack));
-    
+
     final entries = _feelingsHistory.where((entry) {
       return entry.userId == userId &&
              entry.timestamp.isAfter(startDate) &&
@@ -191,7 +190,7 @@ class DailyFeelingsTracker {
   }) {
     final endDate = DateTime.now();
     final startDate = endDate.subtract(Duration(days: daysBack));
-    
+
     final entries = _feelingsHistory.where((entry) {
       return entry.userId == userId &&
              entry.timestamp.isAfter(startDate) &&
@@ -201,7 +200,7 @@ class DailyFeelingsTracker {
 
     // Group by date and calculate daily averages
     final Map<String, List<int>> dailyScores = {};
-    
+
     for (final entry in entries) {
       final dateKey = '${entry.timestamp.year}-${entry.timestamp.month}-${entry.timestamp.day}';
       dailyScores[dateKey] ??= [];
@@ -210,12 +209,12 @@ class DailyFeelingsTracker {
 
     // Convert to data points
     final dataPoints = <FeelingsDataPoint>[];
-    
+
     for (final entry in dailyScores.entries) {
       final date = DateTime.parse(entry.key.replaceAll('-', '-'));
       final scores = entry.value;
       final averageScore = scores.reduce((a, b) => a + b) / scores.length;
-      
+
       dataPoints.add(FeelingsDataPoint(
         date: date,
         score: averageScore,
@@ -225,7 +224,7 @@ class DailyFeelingsTracker {
 
     // Sort by date
     dataPoints.sort((a, b) => a.date.compareTo(b.date));
-    
+
     return dataPoints;
   }
 
@@ -250,13 +249,13 @@ class DailyFeelingsTracker {
   /// Schedule daily reminders
   void _scheduleDailyReminders() {
     final now = DateTime.now();
-    
+
     // Schedule morning reminder
     final morningTime = DateTime(now.year, now.month, now.day, _morningHour, 0);
-    final morningDelay = morningTime.isAfter(now) 
+    final morningDelay = morningTime.isAfter(now)
         ? morningTime.difference(now)
         : morningTime.add(const Duration(days: 1)).difference(now);
-    
+
     Timer(morningDelay, () {
       _sendReminder(FeelingsTimeOfDay.morning);
     });
@@ -266,7 +265,7 @@ class DailyFeelingsTracker {
     final eveningDelay = eveningTime.isAfter(now)
         ? eveningTime.difference(now)
         : eveningTime.add(const Duration(days: 1)).difference(now);
-    
+
     Timer(eveningDelay, () {
       _sendReminder(FeelingsTimeOfDay.evening);
     });
@@ -276,7 +275,7 @@ class DailyFeelingsTracker {
   void _checkAndSendReminders() {
     final now = DateTime.now();
     final hour = now.hour;
-    
+
     // Check for morning reminder window
     if (hour >= _morningHour && hour <= _morningHour + 2) {
       final status = getTrackingStatus();
@@ -284,7 +283,7 @@ class DailyFeelingsTracker {
         _sendReminder(FeelingsTimeOfDay.morning);
       }
     }
-    
+
     // Check for evening reminder window
     if (hour >= _eveningHour && hour <= _eveningHour + 2) {
       final status = getTrackingStatus();
@@ -325,17 +324,17 @@ class DailyFeelingsTracker {
   DateTime? _calculateNextReminderTime(bool hasMorning, bool hasEvening) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    
+
     // If morning entry missing and we're before evening time
     if (!hasMorning && now.hour < _eveningHour) {
       return today.add(Duration(hours: _morningHour));
     }
-    
+
     // If evening entry missing and we're in evening window
     if (!hasEvening && now.hour < _eveningHour + 3) {
       return today.add(Duration(hours: _eveningHour));
     }
-    
+
     // Next morning
     return today.add(const Duration(days: 1, hours: _morningHour));
   }
@@ -346,10 +345,10 @@ class DailyFeelingsTracker {
       final entries = await DatabaseService.instance.getFeelingsHistory();
       _feelingsHistory.clear();
       _feelingsHistory.addAll(entries.cast<FeelingsEntry>());
-      
+
       // Sort by timestamp (newest first)
       _feelingsHistory.sort((a, b) => b.timestamp.compareTo(a.timestamp));
-      
+
       AppLogger.success('📊 Loaded ${_feelingsHistory.length} feelings entries');
     } catch (e) {
       AppLogger.warning('Failed to load feelings history: $e');
@@ -370,7 +369,7 @@ class DailyFeelingsTracker {
   void _maintainHistorySize() {
     const maxDays = 365;
     final cutoffDate = DateTime.now().subtract(const Duration(days: maxDays));
-    
+
     _feelingsHistory.removeWhere((entry) => entry.timestamp.isBefore(cutoffDate));
   }
 
@@ -439,10 +438,10 @@ class FeelingsAnalytics {
 
     // Calculate trends
     final trend = _calculateTrend(entries);
-    
+
     // Generate insights
     final insights = _generateInsights(entries, averageScore, trend, isConsumerApp);
-    
+
     // Calculate completion rate
     final expectedEntries = daysBack * 2; // Twice daily
     final completionRate = entries.length / expectedEntries;
@@ -495,19 +494,19 @@ class FeelingsAnalytics {
 
     // Average score insights
     if (averageScore >= 8) {
-      insights.add(isConsumerApp 
+      insights.add(isConsumerApp
           ? "You're maintaining excellent emotional wellness! Keep up the great work 🌟"
           : "Patient shows consistently high mood scores indicating good emotional stability");
     } else if (averageScore >= 6) {
-      insights.add(isConsumerApp 
+      insights.add(isConsumerApp
           ? "Your overall mood is positive with room for growth 💪"
           : "Patient demonstrates moderate emotional stability with potential for improvement");
     } else if (averageScore >= 4) {
-      insights.add(isConsumerApp 
+      insights.add(isConsumerApp
           ? "Consider focusing on self-care activities to boost your mood 💖"
           : "Patient shows moderate mood concerns that may benefit from intervention");
     } else {
-      insights.add(isConsumerApp 
+      insights.add(isConsumerApp
           ? "Your mood patterns suggest you might benefit from additional support 🤗"
           : "Patient demonstrates concerning mood patterns requiring clinical attention");
     }
@@ -515,17 +514,17 @@ class FeelingsAnalytics {
     // Trend insights
     switch (trend) {
       case FeelingsTrend.improving:
-        insights.add(isConsumerApp 
+        insights.add(isConsumerApp
             ? "Great progress! Your mood has been steadily improving 📈"
             : "Positive trend indicates improving emotional state over time");
         break;
       case FeelingsTrend.declining:
-        insights.add(isConsumerApp 
+        insights.add(isConsumerApp
             ? "Let's focus on activities that help you feel better 💝"
             : "Declining trend warrants attention and possible intervention");
         break;
       case FeelingsTrend.stable:
-        insights.add(isConsumerApp 
+        insights.add(isConsumerApp
             ? "Your mood has been consistent - that's a sign of emotional stability!"
             : "Stable mood patterns indicate consistent emotional state");
         break;
@@ -534,11 +533,11 @@ class FeelingsAnalytics {
     // Completion insights
     final completionRate = entries.length / 60.0; // 30 days * 2 entries
     if (completionRate >= 0.8) {
-      insights.add(isConsumerApp 
+      insights.add(isConsumerApp
           ? "Excellent tracking consistency! This data will help you understand your patterns better"
           : "High compliance with mood tracking indicates good patient engagement");
     } else if (completionRate < 0.5) {
-      insights.add(isConsumerApp 
+      insights.add(isConsumerApp
           ? "Try setting reminders to track your mood more consistently for better insights"
           : "Low tracking compliance may limit effectiveness of mood monitoring");
     }

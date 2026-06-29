@@ -12,7 +12,7 @@ class ProductionAnalyticsService {
 
   SharedPreferences? _prefs;
   bool _isInitialized = false;
-  bool _analyticsEnabled = true;
+  bool _analyticsEnabled = false;
   String? _userId;
   Map<String, dynamic> _sessionData = {};
 
@@ -27,7 +27,7 @@ class ProductionAnalyticsService {
 
     try {
       _prefs = await SharedPreferences.getInstance();
-      _analyticsEnabled = _prefs?.getBool(_keyAnalyticsEnabled) ?? true;
+      _analyticsEnabled = _prefs?.getBool(_keyAnalyticsEnabled) ?? false;
       _userId = userId ?? _prefs?.getString(_keyUserId);
       
       _sessionData = {

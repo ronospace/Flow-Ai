@@ -126,10 +126,12 @@ class PerformanceOptimizer {
       key: key,
       compute: loader,
       cacheDuration: cacheDuration,
-    ).catchError((error) {
-      debugPrint('⚠️ Preload failed for $key: $error');
-      return null;
-    });
+    ).then<void>(
+      (_) {},
+      onError: (Object error, StackTrace stackTrace) {
+        debugPrint('⚠️ Preload failed for $key: $error');
+      },
+    );
   }
 
   /// Clear cache entries

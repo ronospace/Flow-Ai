@@ -22,10 +22,10 @@ class ClinicalIntelligenceEngine {
 
   // Clinical data validation and integrity
   late DataValidationEngine _dataValidator;
-  
+
   // Performance monitoring
   final Map<String, ClinicalMetrics> _performanceMetrics = {};
-  
+
   /// Initialize the clinical intelligence system
   Future<void> initialize() async {
     if (_isInitialized) return;
@@ -42,7 +42,7 @@ class ClinicalIntelligenceEngine {
       await _initializeDataValidation();
 
       _isInitialized = true;
-      
+
       AppLogger.success('✅ Clinical Intelligence Engine initialized with evidence-based algorithms');
     } catch (e) {
       await ErrorHandler.instance.handleError(AppError(
@@ -138,7 +138,7 @@ class ClinicalIntelligenceEngine {
       );
 
       // Analyze symptoms
-      final symptomAnalysis = symptoms != null 
+      final symptomAnalysis = symptoms != null
           ? await _symptomAnalyzer.analyzeSymptoms(
               symptoms: symptoms,
               patientData: healthData,
@@ -307,7 +307,7 @@ class ClinicalIntelligenceEngine {
 
       if (monitoringResult.isDeterioration) {
         AppLogger.clinical('🚨 Clinical deterioration detected for patient $patientId');
-        
+
         return ClinicalAlert(
           alertId: _generateAlertId(),
           patientId: patientId,
@@ -349,8 +349,8 @@ class ClinicalIntelligenceEngine {
         evidence: riskAssessment.riskFactors.map((f) => f.description).toList(),
         recommendations: riskAssessment.recommendations,
         confidence: riskAssessment.confidence,
-        urgency: riskAssessment.overallRisk > 0.85 
-            ? ClinicalUrgency.high 
+        urgency: riskAssessment.overallRisk > 0.85
+            ? ClinicalUrgency.high
             : ClinicalUrgency.medium,
       ));
     }
@@ -399,7 +399,7 @@ class ClinicalIntelligenceEngine {
   /// Calculate overall assessment confidence
   double _calculateOverallConfidence(List<double> confidenceScores) {
     if (confidenceScores.isEmpty) return 0.0;
-    
+
     // Weighted average with emphasis on lower scores (conservative approach)
     final weights = List.generate(confidenceScores.length, (i) => 1.0);
     double weightedSum = 0.0;
@@ -467,7 +467,7 @@ class ClinicalIntelligenceEngine {
           ? _performanceMetrics.values
               .map((m) => m.lastAssessmentTime)
               .where((time) => time != null)
-              .fold<DateTime?>(null, (latest, time) => 
+              .fold<DateTime?>(null, (latest, time) =>
                 latest == null || time!.isAfter(latest) ? time : latest)
               ?.toIso8601String()
           : null,
@@ -484,7 +484,7 @@ class ClinicalIntelligenceEngine {
 /// Clinical knowledge base with evidence-based protocols
 class ClinicalKnowledgeBase {
   String get version => '1.0.0';
-  
+
   // Clinical protocols and guidelines
   late Map<String, ClinicalProtocol> _protocols;
   late Map<String, List<String>> _symptomMappings;
@@ -571,9 +571,8 @@ class ClinicalKnowledgeBase {
 
 /// Risk assessment engine
 class RiskAssessmentEngine {
-  final ClinicalKnowledgeBase _knowledgeBase;
 
-  RiskAssessmentEngine(this._knowledgeBase);
+  RiskAssessmentEngine(ClinicalKnowledgeBase knowledgeBase);
 
   Future<void> initialize() async {
     // Initialize risk assessment algorithms
@@ -714,7 +713,7 @@ class SymptomAnalyzer {
 
     for (final symptom in symptoms) {
       final significance = _calculateClinicalSignificance(symptom, patientData, vitalSigns);
-      
+
       clinicalSymptoms.add(ClinicalSymptom(
         name: symptom,
         description: _getSymptomDescription(symptom),
@@ -781,7 +780,7 @@ class SymptomAnalyzer {
 
   double _calculateOverallSignificance(List<ClinicalSymptom> symptoms) {
     if (symptoms.isEmpty) return 0.0;
-    
+
     return symptoms
         .map((s) => s.clinicalSignificance)
         .reduce(math.max);
@@ -808,9 +807,8 @@ class SymptomAnalyzer {
 
 /// Treatment recommendation engine
 class TreatmentRecommendationEngine {
-  final ClinicalKnowledgeBase _knowledgeBase;
 
-  TreatmentRecommendationEngine(this._knowledgeBase);
+  TreatmentRecommendationEngine(ClinicalKnowledgeBase knowledgeBase);
 
   Future<void> initialize() async {
     // Initialize treatment recommendation algorithms
@@ -931,9 +929,8 @@ class TreatmentRecommendationEngine {
 
 /// Clinical decision support system
 class ClinicalDecisionSupport {
-  final ClinicalKnowledgeBase _knowledgeBase;
 
-  ClinicalDecisionSupport(this._knowledgeBase);
+  ClinicalDecisionSupport(ClinicalKnowledgeBase knowledgeBase);
 
   Future<void> initialize() async {
     // Initialize decision support algorithms
@@ -1472,7 +1469,7 @@ class ClinicalException implements Exception {
 
   @override
   String toString() {
-    return context != null 
+    return context != null
         ? 'ClinicalException in $context: $message'
         : 'ClinicalException: $message';
   }

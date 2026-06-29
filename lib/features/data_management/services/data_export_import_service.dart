@@ -24,14 +24,10 @@ class DataExportImportService {
   bool _isInitialized = false;
   SharedPreferences? _prefs;
   Directory? _documentsDirectory;
-  Directory? _tempDirectory;
 
   // Export/Import configuration
-  static const String _exportConfigKey = 'export_config';
-  static const String _lastExportKey = 'last_export_timestamp';
   static const String _importHistoryKey = 'import_history';
   static const int _maxExportHistory = 50;
-  static const int _compressionLevel = 6;
 
   /// Initialize the data export/import service
   Future<void> initialize() async {
@@ -40,8 +36,8 @@ class DataExportImportService {
     try {
       _prefs = await SharedPreferences.getInstance();
       _documentsDirectory = await getApplicationDocumentsDirectory();
-      _tempDirectory = await getTemporaryDirectory();
-      
+      await getTemporaryDirectory();
+
       // Ensure export directory exists
       final exportDir = Directory('${_documentsDirectory!.path}/exports');
       if (!exportDir.existsSync()) {
@@ -65,10 +61,10 @@ class DataExportImportService {
 
     try {
       debugPrint('📤 Starting data export with config: ${config.format.name}');
-      
+
       // Collect all requested data
       final DataCollection dataCollection = await _collectUserData(config);
-      
+
       // Generate export based on format
       final ExportResult result = await _generateExport(
         dataCollection,
@@ -106,7 +102,7 @@ class DataExportImportService {
 
       // Detect file format
       final DataFormat format = await _detectFileFormat(filePath);
-      
+
       // Load and parse data
       final ImportedDataSet dataSet = await _parseImportFile(
         importFile,
@@ -162,9 +158,9 @@ class DataExportImportService {
 
       // Export data
       final ExportResult exportResult = await exportUserData(config: config);
-      
+
       // Update last backup timestamp
-      await _prefs?.setInt('last_backup_${frequency.name}', 
+      await _prefs?.setInt('last_backup_${frequency.name}',
         DateTime.now().millisecondsSinceEpoch);
 
       return BackupResult(
@@ -197,8 +193,8 @@ class DataExportImportService {
 
       // Import backup data
       final ImportConfig config = ImportConfig(
-        mergeStrategy: overwriteExisting 
-          ? MergeStrategy.overwrite 
+        mergeStrategy: overwriteExisting
+          ? MergeStrategy.overwrite
           : MergeStrategy.preserve,
         validateData: true,
         createBackupBeforeImport: true,
@@ -243,7 +239,7 @@ class DataExportImportService {
     try {
       // Collect health data
       final Map<DataType, List<Map<String, dynamic>>> healthData = {};
-      
+
       for (final dataType in includeTypes) {
         healthData[dataType] = await _collectHealthDataByType(
           dataType,
@@ -260,12 +256,12 @@ class DataExportImportService {
       }
 
       final List<String> generatedFiles = [];
-      
+
       for (final entry in healthData.entries) {
         if (entry.value.isNotEmpty) {
           final String fileName = 'healthcare_${entry.key.name}_${DateTime.now().millisecondsSinceEpoch}.csv';
           final String filePath = '$reportDir/$fileName';
-          
+
           await _writeCSVFile(filePath, entry.value);
           generatedFiles.add(filePath);
         }
@@ -305,7 +301,7 @@ class DataExportImportService {
 
     try {
       final List<String> historyStrings = _prefs?.getStringList('export_history') ?? [];
-      
+
       return historyStrings.map((historyStr) {
         try {
           final Map<String, dynamic> historyJson = json.decode(historyStr);
@@ -328,7 +324,7 @@ class DataExportImportService {
 
     try {
       final List<String> historyStrings = _prefs?.getStringList(_importHistoryKey) ?? [];
-      
+
       return historyStrings.map((historyStr) {
         try {
           final Map<String, dynamic> historyJson = json.decode(historyStr);
@@ -440,7 +436,7 @@ class DataExportImportService {
       };
 
       String jsonContent = const JsonEncoder.withIndent('  ').convert(exportData);
-      
+
       if (config.encryptData) {
         final SecurityPrivacyService security = SecurityPrivacyService.instance;
         final encryptedData = await security.encryptData(jsonContent);
@@ -459,7 +455,7 @@ class DataExportImportService {
       }
 
       final int fileSize = await File(filePath).length();
-      
+
       return ExportResult(
         success: true,
         filePath: filePath,
@@ -482,14 +478,14 @@ class DataExportImportService {
   ) async {
     try {
       final List<List<dynamic>> csvData = [];
-      
+
       // Combine all data into a flat structure for CSV
       final List<Map<String, dynamic>> flatData = _flattenDataCollection(dataCollection);
-      
+
       if (flatData.isNotEmpty) {
         // Add headers
         csvData.add(flatData.first.keys.toList());
-        
+
         // Add data rows
         for (final item in flatData) {
           csvData.add(item.values.toList());
@@ -500,7 +496,7 @@ class DataExportImportService {
       await File(filePath).writeAsString(csvContent);
 
       final int fileSize = await File(filePath).length();
-      
+
       return ExportResult(
         success: true,
         filePath: filePath,
@@ -529,7 +525,7 @@ class DataExportImportService {
       xmlContent.writeln('    <version>1.0</version>');
       xmlContent.writeln('    <exported_at>${DateTime.now().toIso8601String()}</exported_at>');
       xmlContent.writeln('  </metadata>');
-      
+
       // Convert data collection to XML
       xmlContent.writeln('  <data>');
       xmlContent.writeln(_dataCollectionToXML(dataCollection));
@@ -539,7 +535,7 @@ class DataExportImportService {
       await File(filePath).writeAsString(xmlContent.toString());
 
       final int fileSize = await File(filePath).length();
-      
+
       return ExportResult(
         success: true,
         filePath: filePath,
@@ -595,7 +591,7 @@ class DataExportImportService {
       await File(filePath).writeAsBytes(finalContent);
 
       final int fileSize = await File(filePath).length();
-      
+
       return ExportResult(
         success: true,
         filePath: filePath,
@@ -629,7 +625,7 @@ class DataExportImportService {
       await File(filePath).writeAsString(fhirContent);
 
       final int fileSize = await File(filePath).length();
-      
+
       return ExportResult(
         success: true,
         filePath: filePath,
@@ -647,7 +643,7 @@ class DataExportImportService {
   /// Detect file format from file extension and content
   Future<DataFormat> _detectFileFormat(String filePath) async {
     final String extension = filePath.split('.').last.toLowerCase();
-    
+
     switch (extension) {
       case 'json':
         return DataFormat.json;
@@ -661,7 +657,7 @@ class DataExportImportService {
         // Try to detect from content
         final File file = File(filePath);
         final String content = await file.readAsString();
-        
+
         if (content.trim().startsWith('{') || content.trim().startsWith('[')) {
           return DataFormat.json;
         } else if (content.contains('<?xml')) {
@@ -702,7 +698,7 @@ class DataExportImportService {
       final entries = await FeelingsDatabaseService.instance.getRecentEntries(
         limit: dateRange != null ? 1000 : 100,
       );
-      
+
       return entries.map((entry) => entry.toJson()).toList();
     } catch (e) {
       debugPrint('⚠️ Failed to collect mood data: $e');
@@ -742,7 +738,7 @@ class DataExportImportService {
     try {
       final SecurityPrivacyService security = SecurityPrivacyService.instance;
       final privacySettings = await security.getPrivacySettings();
-      
+
       return {
         'privacy_settings': privacySettings.toJson(),
         'app_version': '1.0.0',
@@ -788,30 +784,30 @@ class DataExportImportService {
 
   List<Map<String, dynamic>> _flattenDataCollection(DataCollection collection) {
     final List<Map<String, dynamic>> flatData = [];
-    
+
     // Flatten all data types into a single list
     collection.cycleData?.forEach((item) {
       flatData.add({...item, 'data_type': 'cycle'});
     });
-    
+
     collection.symptomData?.forEach((item) {
       flatData.add({...item, 'data_type': 'symptom'});
     });
-    
+
     collection.moodData?.forEach((item) {
       flatData.add({...item, 'data_type': 'mood'});
     });
-    
+
     collection.biometricData?.forEach((item) {
       flatData.add({...item, 'data_type': 'biometric'});
     });
-    
+
     return flatData;
   }
 
   String _dataCollectionToXML(DataCollection collection) {
     final StringBuffer xml = StringBuffer();
-    
+
     if (collection.cycleData != null) {
       xml.writeln('    <cycle_data>');
       for (final item in collection.cycleData!) {
@@ -823,15 +819,15 @@ class DataExportImportService {
       }
       xml.writeln('    </cycle_data>');
     }
-    
+
     // Similar for other data types...
-    
+
     return xml.toString();
   }
 
   List<Map<String, dynamic>> _convertToFHIRResources(DataCollection collection) {
     final List<Map<String, dynamic>> resources = [];
-    
+
     // Convert cycle data to FHIR Observation resources
     collection.cycleData?.forEach((item) {
       resources.add({
@@ -863,19 +859,19 @@ class DataExportImportService {
         }
       });
     });
-    
+
     // Convert other data types to appropriate FHIR resources...
-    
+
     return resources;
   }
 
   Future<bool> _shouldCreateBackup(BackupFrequency frequency) async {
     final int? lastBackup = _prefs?.getInt('last_backup_${frequency.name}');
     if (lastBackup == null) return true;
-    
+
     final DateTime lastBackupDate = DateTime.fromMillisecondsSinceEpoch(lastBackup);
     final Duration elapsed = DateTime.now().difference(lastBackupDate);
-    
+
     switch (frequency) {
       case BackupFrequency.daily:
         return elapsed.inDays >= 1;
@@ -888,14 +884,14 @@ class DataExportImportService {
 
   Future<void> _writeCSVFile(String filePath, List<Map<String, dynamic>> data) async {
     if (data.isEmpty) return;
-    
+
     final List<List<dynamic>> csvData = [];
     csvData.add(data.first.keys.toList());
-    
+
     for (final item in data) {
       csvData.add(item.values.toList());
     }
-    
+
     final String csvContent = const ListToCsvConverter().convert(csvData);
     await File(filePath).writeAsString(csvContent);
   }
@@ -910,20 +906,20 @@ class DataExportImportService {
     summary.writeln('Generated: ${DateTime.now()}');
     summary.writeln('Date Range: ${dateRange.start} to ${dateRange.end}');
     summary.writeln('');
-    
+
     healthData.forEach((dataType, data) {
       summary.writeln('${dataType.name.toUpperCase()}: ${data.length} entries');
     });
-    
+
     final String summaryPath = '$reportDir/summary.txt';
     await File(summaryPath).writeAsString(summary.toString());
-    
+
     return summaryPath;
   }
 
   Future<void> _createZipArchive(List<String> filePaths, String zipPath) async {
     final Archive archive = Archive();
-    
+
     for (final filePath in filePaths) {
       final File file = File(filePath);
       if (file.existsSync()) {
@@ -932,7 +928,7 @@ class DataExportImportService {
         archive.addFile(ArchiveFile(fileName, bytes.length, bytes));
       }
     }
-    
+
     final List<int> zipBytes = ZipEncoder().encode(archive)!;
     await File(zipPath).writeAsBytes(zipBytes);
   }
@@ -970,15 +966,15 @@ class DataExportImportService {
       isEncrypted: result.isEncrypted,
       isCompressed: result.isCompressed,
     );
-    
+
     final List<String> history = _prefs?.getStringList('export_history') ?? [];
     history.add(json.encode(metadata.toJson()));
-    
+
     // Keep only recent exports
     if (history.length > _maxExportHistory) {
       history.removeRange(0, history.length - _maxExportHistory);
     }
-    
+
     await _prefs?.setStringList('export_history', history);
   }
 
@@ -991,15 +987,15 @@ class DataExportImportService {
       success: result.success,
       errors: result.errors,
     );
-    
+
     final List<String> history = _prefs?.getStringList(_importHistoryKey) ?? [];
     history.add(json.encode(metadata.toJson()));
-    
+
     // Keep only recent imports
     if (history.length > _maxExportHistory) {
       history.removeRange(0, history.length - _maxExportHistory);
     }
-    
+
     await _prefs?.setStringList(_importHistoryKey, history);
   }
 

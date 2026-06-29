@@ -5,10 +5,18 @@ import '../../../core/services/user_preferences_service.dart';
 import '../../../core/services/notification_service.dart';
 import '../../../core/services/onboarding_tutorial_service.dart';
 
-
 // --- Sample mode removed (store-safe) ---
 // These are minimal stubs to keep legacy onboarding code compiling.
 // They do NOT provide credentials or any auto-demo login.
+class OnboardingProvider extends ChangeNotifier {
+  bool _isCompleted = false;
+  int _currentStep = 0;
+  bool _isLoading = false;
+  final List<OnboardingStep> _steps = OnboardingData.steps;
+  UserPreferencesService? _preferencesService;
+  final NotificationService _notificationService = NotificationService.instance;
+  final OnboardingTutorialService _tutorialService =
+      OnboardingTutorialService();
 
   OnboardingProvider() {
     _initializeServices();
@@ -18,7 +26,6 @@ import '../../../core/services/onboarding_tutorial_service.dart';
     try {
       _preferencesService = UserPreferencesService();
       await _preferencesService!.initialize();
-      _isInitialized = true;
       notifyListeners();
     } catch (e) {
       debugPrint('Error initializing OnboardingProvider services: $e');
@@ -45,7 +52,9 @@ import '../../../core/services/onboarding_tutorial_service.dart';
         await _preferencesService!.setOnboardingComplete(true);
         await _preferencesService!.setFirstLaunch(false);
       } else {
-        debugPrint('PreferencesService not initialized, skipping preferences update');
+        debugPrint(
+          'PreferencesService not initialized, skipping preferences update',
+        );
       }
     } catch (e) {
       debugPrint('Error completing onboarding: $e');
@@ -152,7 +161,9 @@ import '../../../core/services/onboarding_tutorial_service.dart';
     notifyListeners();
   }
 
-  // Sample data management
+  /// Generate demo data for exploration
+  /// Start a tutorial for a specific feature
+  Future<void> startTutorial(String tutorialId) async {
     final completed = await _tutorialService.isTutorialCompleted(tutorialId);
     if (!completed) {
       // Tutorial will be shown by the UI layer

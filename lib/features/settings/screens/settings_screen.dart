@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/services/app_state_service.dart';
 import '../../../core/services/data_export_service.dart';
+import '../../../core/services/admob_service.dart' as admob;
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/app_logger.dart';
 import '../../../core/ui/adaptive_messages.dart';
@@ -497,6 +498,20 @@ class _SettingsScreenState extends State<SettingsScreen>
                                   size: 16,
                                 ),
                               ),
+                              SettingsTile(
+                                leading: const Icon(
+                                  Icons.ads_click,
+                                  color: AppTheme.secondaryBlue,
+                                ),
+                                title: 'Ad Privacy Choices',
+                                subtitle:
+                                    'Review or change advertising consent',
+                                onTap: () => _showAdPrivacyChoices(context),
+                                trailing: const Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                ),
+                              ),
                             ],
                           )
                           .animate(controller: _sectionsController)
@@ -763,7 +778,6 @@ class _SettingsScreenState extends State<SettingsScreen>
       ),
     );
   }
-
 
   void _showLanguageSelector(BuildContext context) {
     showModalBottomSheet(
@@ -1114,6 +1128,37 @@ class _SettingsScreenState extends State<SettingsScreen>
               const Expanded(child: MedicalCitationsSection()),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _showAdPrivacyChoices(BuildContext context) async {
+    final required = await admob.AdMobService.isPrivacyOptionsRequired();
+
+    if (!context.mounted) return;
+
+    if (!required) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'No additional ad privacy choices are currently required.',
+          ),
+        ),
+      );
+      return;
+    }
+
+    final error = await admob.AdMobService.showPrivacyOptionsForm();
+
+    if (!context.mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          error == null
+              ? 'Ad privacy choices updated.'
+              : 'Unable to open ad privacy choices.',
         ),
       ),
     );
@@ -1516,7 +1561,8 @@ class _SettingsScreenState extends State<SettingsScreen>
           backgroundColor: Colors.red,
         ),
       );
-    }  }
+    }
+  }
 
   Future<ExportDateRange?> _showDateRangeSelector(BuildContext context) async {
     return await showDialog<ExportDateRange>(
@@ -1555,7 +1601,6 @@ class _SettingsScreenState extends State<SettingsScreen>
     );
   }
 
-
   void _showExportSuccessAfterExport(
     ScaffoldMessengerState messenger,
     NavigatorState navigator,
@@ -1563,7 +1608,9 @@ class _SettingsScreenState extends State<SettingsScreen>
     ExportFormat format,
   ) {
     _showExportSuccess(navigator.context, filePath, format);
-  }  void _showExportSuccess(
+  }
+
+  void _showExportSuccess(
     BuildContext context,
     String filePath,
     ExportFormat format,
@@ -1746,82 +1793,83 @@ class _SettingsScreenState extends State<SettingsScreen>
           ),
         );
       }
-    }    }
+    }
   }
+}
 
-  void _showFeatureProgress(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Row(
+void _showFeatureProgress(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Row(
+        children: [
+          Icon(Icons.lock_open, color: AppTheme.accentMint),
+          const SizedBox(width: 12),
+          const Text('Feature Progress'),
+        ],
+      ),
+      content: SizedBox(
+        width: double.maxFinite,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.lock_open, color: AppTheme.accentMint),
-            const SizedBox(width: 12),
-            const Text('Feature Progress'),
+            const Text(
+              'Progressive feature unlocking helps you learn the app gradually. Track your progress below:',
+              style: TextStyle(fontSize: 14),
+            ),
+            const SizedBox(height: 16),
+            _buildFeatureProgressItem('Basic Tracking', 1.0, 'Unlocked'),
+            _buildFeatureProgressItem('Cycle Calendar', 0.8, '4/5 actions'),
+            _buildFeatureProgressItem('AI Insights', 0.3, '3/10 entries'),
+            _buildFeatureProgressItem('Health Dashboard', 0.0, 'Locked'),
           ],
         ),
-        content: SizedBox(
-          width: double.maxFinite,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                'Progressive feature unlocking helps you learn the app gradually. Track your progress below:',
-                style: TextStyle(fontSize: 14),
-              ),
-              const SizedBox(height: 16),
-              _buildFeatureProgressItem('Basic Tracking', 1.0, 'Unlocked'),
-              _buildFeatureProgressItem('Cycle Calendar', 0.8, '4/5 actions'),
-              _buildFeatureProgressItem('AI Insights', 0.3, '3/10 entries'),
-              _buildFeatureProgressItem('Health Dashboard', 0.0, 'Locked'),
-            ],
-          ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Close'),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Close'),
-          ),
-        ],
-      ),
-    );
-  }
+      ],
+    ),
+  );
+}
 
-  Widget _buildFeatureProgressItem(
-    String title,
-    double progress,
-    String subtitle,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
-              Text(
-                subtitle,
-                style: TextStyle(
-                  color: progress == 1.0
-                      ? AppTheme.successGreen
-                      : AppTheme.mediumGrey,
-                  fontSize: 12,
-                ),
+Widget _buildFeatureProgressItem(
+  String title,
+  double progress,
+  String subtitle,
+) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
+            Text(
+              subtitle,
+              style: TextStyle(
+                color: progress == 1.0
+                    ? AppTheme.successGreen
+                    : AppTheme.mediumGrey,
+                fontSize: 12,
               ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          LinearProgressIndicator(
-            value: progress,
-            backgroundColor: AppTheme.lightGrey,
-            valueColor: AlwaysStoppedAnimation<Color>(
-              progress == 1.0 ? AppTheme.successGreen : AppTheme.primaryPurple,
             ),
-            borderRadius: BorderRadius.circular(4),
+          ],
+        ),
+        const SizedBox(height: 4),
+        LinearProgressIndicator(
+          value: progress,
+          backgroundColor: AppTheme.lightGrey,
+          valueColor: AlwaysStoppedAnimation<Color>(
+            progress == 1.0 ? AppTheme.successGreen : AppTheme.primaryPurple,
           ),
-        ],
-      ),
-    );
-  }
+          borderRadius: BorderRadius.circular(4),
+        ),
+      ],
+    ),
+  );
+}

@@ -4,7 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../generated/app_localizations.dart';
-import '../services/partner_service.dart' hide PartnershipStatus, PartnerMessageType, PartnerMessage, PartnerInsight, PartnerInsightType, Partnership show PartnerService, PartnerCareAction, PartnerCareActionType, PartnerInvitation, PartnerSharingSettings;
+import '../services/partner_service.dart' show PartnerService, PartnerCareActionType;
 import '../services/partner_service.dart' as service_types show PartnerMessageType;
 import '../models/partner_models.dart' show Partnership, PartnershipStatus, PartnerMessage, PartnerMessageType, PartnerPrivacySettings, CareAction, CareActionType;
 import '../models/partner_insight.dart';
@@ -173,7 +173,6 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
   Widget _buildPartnershipHeader(ThemeData theme, AppLocalizations localizations, PartnerService partnerService) {
     final partnership = partnerService.currentPartnership!;
     // Service Partnership doesn't have status field, so assume active if partnership exists
-    final isConnected = partnerService.hasPartner && (partnership.partnerUserName.isNotEmpty ?? false);
     
     return AnimatedBuilder(
       animation: _contentAnimation,
@@ -613,7 +612,6 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen>
           break;
       }
       
-      final partnership = partnerService.currentPartnership!;
       return CareAction(
         id: pa.id,
         partnershipId: pa.partnershipId,

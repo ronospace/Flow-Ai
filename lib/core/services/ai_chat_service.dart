@@ -26,7 +26,6 @@ class AIChatService {
   types.User? _currentUser;
   AIConversationMemory? _conversationMemory;
   bool _isInitialized = false;
-  AppLocalizations? _localizations;
 
   // FlowAI Integration
   final FlowAIService _flowAIService = FlowAIService();
@@ -43,7 +42,6 @@ class AIChatService {
   }) async {
     if (_isInitialized) return;
 
-    _localizations = localizations;
 
     _currentUser = types.User(id: userId, firstName: userName);
 
@@ -271,10 +269,10 @@ class AIChatService {
   String _addMedicalCitationToResponse(String response, String userMessage) {
     final lowerMessage = userMessage.toLowerCase();
     final lowerResponse = response.toLowerCase();
-    
+
     // Determine citation category based on message and response content
     String? citationCategory;
-    
+
     // Check for medical/health content in response
     final hasMedicalContent = lowerResponse.contains('period') ||
         lowerResponse.contains('menstrual') ||
@@ -288,12 +286,12 @@ class AIChatService {
         lowerResponse.contains('health') ||
         lowerResponse.contains('medical') ||
         lowerResponse.contains('pregnancy');
-    
+
     if (!hasMedicalContent) {
       // Not medical content, return as-is
       return response;
     }
-    
+
     // Determine appropriate citation category
     if (lowerMessage.contains('period') || lowerMessage.contains('menstruation') ||
         lowerResponse.contains('cycle length') || lowerResponse.contains('cycle pattern')) {
@@ -311,7 +309,7 @@ class AIChatService {
       // Default to general health tracking citation
       citationCategory = 'health_tracking';
     }
-    
+
     return _addMedicalCitation(response, citationCategory);
   }
 

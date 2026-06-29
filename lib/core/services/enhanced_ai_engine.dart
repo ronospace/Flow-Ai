@@ -15,14 +15,12 @@ class EnhancedAIEngine {
   // Enhanced AI Models
   late Map<String, dynamic> _advancedPredictionModel;
   late Map<String, dynamic> _personalizedPatterns;
-  late Map<String, dynamic> _biometricCorrelations;
-  late Map<String, dynamic> _intelligentInsights;
 
   Future<void> initialize() async {
     if (_isInitialized) return;
 
     debugPrint('🧠 Initializing Enhanced AI Engine...');
-    
+
     _advancedPredictionModel = {
       'lstm_weights': _generateLSTMWeights(),
       'seasonal_patterns': _initializeSeasonalPatterns(),
@@ -37,19 +35,15 @@ class EnhancedAIEngine {
       'pattern_memory': _initializePatternMemory(),
     };
 
-    _biometricCorrelations = {
-      'heart_rate_patterns': _generateHRPatterns(),
-      'temperature_correlations': _generateTempCorrelations(),
-      'sleep_cycle_impacts': _generateSleepImpacts(),
-      'stress_indicators': _generateStressIndicators(),
-    };
+    _generateHRPatterns();
+    _generateTempCorrelations();
+    _generateSleepImpacts();
+    _generateStressIndicators();
 
-    _intelligentInsights = {
-      'dynamic_templates': _generateDynamicTemplates(),
-      'contextual_recommendations': _generateContextualRecs(),
-      'proactive_alerts': _generateProactiveAlerts(),
-      'coaching_modules': _generateCoachingModules(),
-    };
+    _generateDynamicTemplates();
+    _generateContextualRecs();
+    _generateProactiveAlerts();
+    _generateCoachingModules();
 
     _isInitialized = true;
     debugPrint('✅ Enhanced AI Engine initialized successfully');
@@ -62,23 +56,23 @@ class EnhancedAIEngine {
      Map<String, dynamic>? lifestyleFactors}
   ) async {
     if (!_isInitialized) await initialize();
-    
+
     if (historicalCycles.isEmpty) {
       return _generateDefaultPrediction();
     }
 
     // Multi-algorithm ensemble prediction
     final predictions = <CyclePrediction>[];
-    
+
     // 1. LSTM-style sequential prediction
     predictions.add(await _lstmStylePrediction(historicalCycles));
-    
+
     // 2. Seasonal pattern analysis
     predictions.add(await _seasonalPatternPrediction(historicalCycles));
-    
+
     // 3. Personal baseline adaptation
     predictions.add(await _personalizedPrediction(historicalCycles));
-    
+
     // 4. Biometric-enhanced prediction (if available)
     if (biometricData != null) {
       predictions.add(await _biometricEnhancedPrediction(
@@ -96,21 +90,21 @@ class EnhancedAIEngine {
      Map<String, dynamic>? userPreferences}
   ) async {
     if (!_isInitialized) await initialize();
-    
+
     final insights = <AIInsight>[];
-    
+
     // Advanced cycle regularity analysis
     insights.addAll(await _analyzeAdvancedRegularity(cycles));
-    
+
     // Symptom pattern intelligence
     insights.addAll(await _intelligentSymptomAnalysis(cycles));
-    
+
     // Predictive health alerts
     insights.addAll(await _generatePredictiveAlerts(cycles));
-    
+
     // Personalized coaching insights
     insights.addAll(await _generateCoachingInsights(cycles, userPreferences));
-    
+
     // Biometric correlation insights (if available)
     if (biometricData != null) {
       insights.addAll(await _analyzeBiometricCorrelations(cycles, biometricData));
@@ -132,19 +126,19 @@ class EnhancedAIEngine {
     Map<String, dynamic> biometricData
   ) async {
     final correlations = <String, dynamic>{};
-    
+
     // Heart rate variability correlation
     correlations['hrv_cycle_correlation'] = await _analyzeHRVCorrelation(
       cycles, biometricData['hrv'] ?? []);
-    
+
     // Sleep quality impact
     correlations['sleep_cycle_impact'] = await _analyzeSleepImpact(
       cycles, biometricData['sleep'] ?? []);
-    
+
     // Temperature pattern analysis
     correlations['temperature_patterns'] = await _analyzeTemperaturePatterns(
       cycles, biometricData['temperature'] ?? []);
-    
+
     // Stress level correlation
     correlations['stress_impact'] = await _analyzeStressCorrelation(
       cycles, biometricData['stress'] ?? []);
@@ -167,10 +161,10 @@ class EnhancedAIEngine {
     };
 
     _personalizedPatterns['learning_history'].add(learningRecord);
-    
+
     // Adapt model weights based on feedback
     await _adaptModelWeights(learningRecord);
-    
+
     debugPrint('🎯 Learning from feedback: ${wasAccurate ? 'Accurate' : 'Needs adjustment'}');
   }
 
@@ -204,7 +198,7 @@ class EnhancedAIEngine {
   Future<CyclePrediction> _seasonalPatternPrediction(List<CycleData> cycles) async {
     final currentMonth = DateTime.now().month;
     final seasonalAdjustment = _advancedPredictionModel['seasonal_patterns'][currentMonth] ?? 0.0;
-    
+
     final baseLength = _calculateAverageCycleLength(cycles);
     final adjustedLength = baseLength + seasonalAdjustment;
 
@@ -224,7 +218,7 @@ class EnhancedAIEngine {
   Future<CyclePrediction> _personalizedPrediction(List<CycleData> cycles) async {
     // Use user's personal baseline and adaptation
     final userBaseline = _personalizedPatterns['user_baseline'];
-    
+
     if (userBaseline.isEmpty) {
       // First time, establish baseline
       userBaseline['average_length'] = _calculateAverageCycleLength(cycles);
@@ -250,27 +244,27 @@ class EnhancedAIEngine {
   }
 
   Future<CyclePrediction> _biometricEnhancedPrediction(
-    List<CycleData> cycles, 
+    List<CycleData> cycles,
     Map<String, dynamic> biometricData
   ) async {
     // Enhance prediction with biometric data
     final basePrediction = await _personalizedPrediction(cycles);
-    
+
     // Adjust based on current biometric indicators
     double biometricAdjustment = 0.0;
-    
+
     // Heart rate variability adjustment
     if (biometricData.containsKey('hrv_trend')) {
       final hrvTrend = biometricData['hrv_trend'] as double;
       biometricAdjustment += hrvTrend * 0.3; // HRV impact factor
     }
-    
+
     // Sleep quality adjustment
     if (biometricData.containsKey('sleep_quality')) {
       final sleepQuality = biometricData['sleep_quality'] as double;
       biometricAdjustment += (sleepQuality - 0.7) * 2.0; // Sleep impact
     }
-    
+
     // Stress level adjustment
     if (biometricData.containsKey('stress_level')) {
       final stressLevel = biometricData['stress_level'] as double;
@@ -301,7 +295,7 @@ class EnhancedAIEngine {
       totalWeight += weight;
       weightedLength += prediction.predictedLength * weight;
       totalConfidence += prediction.confidence;
-      
+
       if (weightedStart == null) {
         weightedStart = prediction.predictedStartDate;
       } else {
@@ -326,7 +320,7 @@ class EnhancedAIEngine {
 
   Future<List<AIInsight>> _analyzeAdvancedRegularity(List<CycleData> cycles) async {
     final insights = <AIInsight>[];
-    
+
     if (cycles.length < 3) return insights;
 
     final regularity = _calculateAdvancedRegularity(cycles);
@@ -346,14 +340,14 @@ class EnhancedAIEngine {
   }
 
   Future<List<AIInsight>> _generateCoachingInsights(
-    List<CycleData> cycles, 
+    List<CycleData> cycles,
     Map<String, dynamic>? preferences
   ) async {
     final insights = <AIInsight>[];
-    
+
     // Personalized coaching based on goals
     final userGoals = preferences?['goals'] ?? ['better_predictions', 'symptom_management'];
-    
+
     for (final goal in userGoals) {
       final coachingInsight = _generateGoalBasedInsight(goal, cycles);
       if (coachingInsight != null) {
@@ -457,21 +451,21 @@ class EnhancedAIEngine {
   Map<String, dynamic> _generateProactiveAlerts() => {};
   Map<String, dynamic> _generateCoachingModules() => {};
 
-  Map<String, dynamic> _computeLSTMOutput(List<List<double>> sequence, Map<String, dynamic> weights) => 
+  Map<String, dynamic> _computeLSTMOutput(List<List<double>> sequence, Map<String, dynamic> weights) =>
     {'length_adjustment': 0.0, 'confidence': 0.85};
 
   double _calculateRecentTrend(List<CycleData> cycles) => 0.0;
   Map<String, dynamic> _extractSymptomPatterns(List<CycleData> cycles) => {};
   Map<String, dynamic> _extractMoodPatterns(List<CycleData> cycles) => {};
-  Map<String, dynamic> _calculateAdvancedRegularity(List<CycleData> cycles) => 
+  Map<String, dynamic> _calculateAdvancedRegularity(List<CycleData> cycles) =>
     {'confidence': 0.8, 'needs_attention': false};
   Map<String, dynamic> _analyzeCycleTrends(List<CycleData> cycles) => {};
 
-  String _getAdvancedRegularityTitle(Map<String, dynamic> regularity, Map<String, dynamic> trends) => 
+  String _getAdvancedRegularityTitle(Map<String, dynamic> regularity, Map<String, dynamic> trends) =>
     'Your cycles show excellent patterns! 🎯';
-  String _getAdvancedRegularityDescription(Map<String, dynamic> regularity, Map<String, dynamic> trends) => 
+  String _getAdvancedRegularityDescription(Map<String, dynamic> regularity, Map<String, dynamic> trends) =>
     'Based on advanced analysis, your cycle patterns are highly predictable.';
-  List<String> _getRegularityRecommendations(Map<String, dynamic> regularity, Map<String, dynamic> trends) => 
+  List<String> _getRegularityRecommendations(Map<String, dynamic> regularity, Map<String, dynamic> trends) =>
     ['Continue current lifestyle', 'Track for optimization'];
 
   AIInsight? _generateGoalBasedInsight(String goal, List<CycleData> cycles) => null;
