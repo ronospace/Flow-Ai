@@ -23,7 +23,7 @@ class ConsumerVisualEngine {
 
   // Animation controllers
   final List<AnimationController> _activeControllers = [];
-  
+
   // Color palettes
   static const Map<MoodState, List<Color>> _moodPalettes = {
     MoodState.joyful: [
@@ -222,10 +222,6 @@ class ConsumerVisualEngine {
     );
   }
 
-  /// Register animation controller for cleanup
-  void _registerController(AnimationController controller) {
-    _activeControllers.add(controller);
-  }
 
   /// Dispose all resources
   void dispose() {
@@ -233,7 +229,7 @@ class ConsumerVisualEngine {
       controller.dispose();
     }
     _activeControllers.clear();
-    
+
     _colorMorph.dispose();
     _breathingEngine.dispose();
     _wellnessViz.dispose();
@@ -245,7 +241,7 @@ class ConsumerVisualEngine {
 class MoodColorMorph {
   bool _isInitialized = false;
   Timer? _morphTimer;
-  
+
   Future<void> initialize() async {
     if (_isInitialized) return;
     _isInitialized = true;
@@ -258,7 +254,7 @@ class MoodColorMorph {
     double intensity = 1.0,
     bool animated = true,
   }) {
-    final palette = ConsumerVisualEngine._moodPalettes[moodState] ?? 
+    final palette = ConsumerVisualEngine._moodPalettes[moodState] ??
                    ConsumerVisualEngine._moodPalettes[MoodState.neutral]!;
 
     return AnimatedContainer(
@@ -717,7 +713,7 @@ class WellnessChartPainter extends CustomPainter {
 
     for (int i = 0; i < data.length; i++) {
       final x = i * stepX;
-      final normalizedScore = scoreRange > 0 
+      final normalizedScore = scoreRange > 0
           ? (data[i].score - minScore) / scoreRange
           : 0.5;
       final y = size.height - (normalizedScore * size.height);
@@ -729,7 +725,7 @@ class WellnessChartPainter extends CustomPainter {
       }
 
       // Draw point
-      canvas.drawCircle(Offset(x, y), 4, 
+      canvas.drawCircle(Offset(x, y), 4,
           Paint()..color = color..style = PaintingStyle.fill);
     }
 
@@ -771,7 +767,7 @@ class _BiometricParticleSystemState extends State<BiometricParticleSystem>
       duration: const Duration(seconds: 2),
       vsync: this,
     );
-    
+
     _generateParticles();
     _controller.repeat();
   }
@@ -865,7 +861,7 @@ class ParticlePainter extends CustomPainter {
 
       // Update particle position based on animation
       final animatedY = particle.y + (particle.speed * animationValue * 50) % size.height;
-      
+
       canvas.drawCircle(
         Offset(particle.x, animatedY),
         particle.size,

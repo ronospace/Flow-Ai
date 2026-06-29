@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/services/local_user_service.dart';
 import '../models/partner_models.dart' show Partnership, PartnershipStatus, PartnerPrivacySettings;
-import 'partner_service.dart' show PartnerInvitation, PartnerMessage, PartnerMessageType, PartnerCareAction, PartnerCareActionType, PartnerInsight, PartnerInsightType, PartnerSharingSettings;
+import 'partner_service.dart' show PartnerInvitation, PartnerMessage, PartnerMessageType, PartnerCareAction, PartnerCareActionType, PartnerSharingSettings;
 
 /// Local Partner Service
 /// Provides partner sharing functionality using local storage (SharedPreferences)
@@ -19,7 +19,6 @@ class LocalPartnerService {
   static const String _invitationsKey = 'local_invitations';
   static const String _messagesKey = 'local_partner_messages';
   static const String _careActionsKey = 'local_partner_care_actions';
-  static const String _insightsKey = 'local_partner_insights';
 
   Future<void> initialize() async {
     _prefs = await SharedPreferences.getInstance();
@@ -92,8 +91,6 @@ class LocalPartnerService {
     // Get current user info
     final userInfo = await _getCurrentUserInfo();
     final inviteeUserId = userInfo['userId']!;
-    final inviteeUserName = userInfo['userName']!;
-    final inviteeEmail = userInfo['userEmail'];
 
     // Find invitation
     final invitation = await _findInvitationByCode(invitationCode);

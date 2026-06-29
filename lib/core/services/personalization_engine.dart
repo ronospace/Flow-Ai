@@ -15,37 +15,17 @@ class PersonalizationEngine {
   bool get isInitialized => _isInitialized;
 
   // User-specific models
-  late Map<String, dynamic> _userProfileModel;
   late Map<String, dynamic> _adaptiveLearningModel;
   late Map<String, dynamic> _personalizationRules;
   late Map<String, dynamic> _behavioralPatterns;
-  late Map<String, dynamic> _preferenceEngine;
 
   Future<void> initialize() async {
     if (_isInitialized) return;
 
     debugPrint('🧠 Initializing Personalization Engine (Week 2)...');
-    
+
     // User profile and preference modeling
-    _userProfileModel = {
-      'demographic_factors': {
-        'age_influence': 0.2,
-        'lifestyle_impact': 0.3,
-        'health_history_weight': 0.4,
-      },
-      'personal_baselines': {
-        'average_cycle_length': 28.0,
-        'typical_symptoms': <String>[],
-        'mood_energy_baseline': {'mood': 3.0, 'energy': 3.0},
-        'pain_tolerance': 2.5,
-      },
-      'adaptation_coefficients': {
-        'learning_rate': 0.1,
-        'confidence_threshold': 0.7,
-        'stability_factor': 0.8,
-      },
-    };
-    
+
     // Adaptive learning from user corrections
     _adaptiveLearningModel = {
       'correction_history': <String, List<double>>{},
@@ -61,7 +41,7 @@ class PersonalizationEngine {
         'confidence_recalibration': 0.15,
       },
     };
-    
+
     // Personalized recommendation rules
     _personalizationRules = {
       'lifestyle_recommendations': {
@@ -95,7 +75,7 @@ class PersonalizationEngine {
         },
       },
     };
-    
+
     // Behavioral pattern recognition
     _behavioralPatterns = {
       'tracking_behavior': {
@@ -115,28 +95,9 @@ class PersonalizationEngine {
         'health_priorities': <String>[],
       },
     };
-    
+
     // Preference-based customization engine
-    _preferenceEngine = {
-      'notification_preferences': {
-        'prediction_reminders': true,
-        'symptom_tracking_prompts': true,
-        'health_tips': true,
-        'preferred_timing': 'morning',
-      },
-      'insight_preferences': {
-        'detail_level': 'moderate',
-        'scientific_explanations': false,
-        'actionable_focus': true,
-        'emotional_support': true,
-      },
-      'visualization_preferences': {
-        'chart_types': ['line_graph', 'calendar_view'],
-        'color_schemes': 'warm',
-        'data_granularity': 'daily',
-      },
-    };
-    
+
     _isInitialized = true;
     debugPrint('✅ Personalization Engine initialized with adaptive learning');
   }
@@ -160,10 +121,10 @@ class PersonalizationEngine {
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
     );
-    
+
     // Initialize personalized models for this user
     await _initializeUserSpecificModels(profile);
-    
+
     return profile;
   }
 
@@ -177,27 +138,27 @@ class PersonalizationEngine {
   }) async {
     final correctionKey = '${userId}_$predictionType';
     final correctionHistory = _adaptiveLearningModel['correction_history'] as Map<String, List<double>>;
-    
+
     // Store correction
     if (!correctionHistory.containsKey(correctionKey)) {
       correctionHistory[correctionKey] = [];
     }
-    
+
     final correctionMagnitude = (correctedValue - originalValue).abs() / originalValue;
     correctionHistory[correctionKey]!.add(correctionMagnitude);
-    
+
     // Update prediction accuracy
     final accuracy = _adaptiveLearningModel['prediction_accuracy'] as Map<String, double>;
     final currentAccuracy = accuracy[correctionKey] ?? 0.5;
     final learningRate = _adaptiveLearningModel['learning_weights']['recent_corrections'] as double;
-    
+
     // Exponential moving average for accuracy
-    accuracy[correctionKey] = currentAccuracy * (1 - learningRate) + 
+    accuracy[correctionKey] = currentAccuracy * (1 - learningRate) +
                                (1 - correctionMagnitude) * learningRate;
-    
+
     // Adapt model parameters based on correction
     await _adaptModelParameters(userId, predictionType, correctionMagnitude, correctionReason);
-    
+
     debugPrint('📊 Learning from correction: $predictionType, accuracy: ${accuracy[correctionKey]?.toStringAsFixed(2)}');
   }
 
@@ -208,26 +169,26 @@ class PersonalizationEngine {
     required UserProfile profile,
   }) async {
     final insights = <PersonalizedInsight>[];
-    
+
     // Lifestyle-specific insights
     insights.addAll(await _generateLifestyleInsights(profile, cycles));
-    
+
     // Behavioral pattern insights
     insights.addAll(await _generateBehavioralInsights(profile, cycles));
-    
+
     // Health optimization insights
     insights.addAll(await _generateHealthOptimizationInsights(profile, cycles));
-    
+
     // Predictive health insights
     insights.addAll(await _generatePredictiveHealthInsights(profile, cycles));
-    
+
     // Sort by relevance and confidence
     insights.sort((a, b) {
       final scoreA = a.confidence * a.relevanceScore;
       final scoreB = b.confidence * b.relevanceScore;
       return scoreB.compareTo(scoreA);
     });
-    
+
     return insights.take(6).toList();
   }
 
@@ -238,24 +199,24 @@ class PersonalizationEngine {
     required UserProfile profile,
   }) async {
     final adaptations = <String, double>{};
-    
+
     // Cycle length adaptation
     final personalCyclePattern = _analyzePersonalCyclePattern(cycles, profile);
     adaptations['cycle_length_adjustment'] = personalCyclePattern['adjustment'] ?? 0.0;
-    
+
     // Symptom likelihood adaptation
     final symptomAdaptation = _analyzePersonalSymptomPatterns(cycles, profile);
     adaptations['symptom_likelihood_multiplier'] = symptomAdaptation['multiplier'] ?? 1.0;
-    
+
     // Mood/energy baseline adaptation
     final moodEnergyAdaptation = _analyzePersonalMoodEnergyPatterns(cycles, profile);
     adaptations['mood_baseline_shift'] = moodEnergyAdaptation['mood_shift'] ?? 0.0;
     adaptations['energy_baseline_shift'] = moodEnergyAdaptation['energy_shift'] ?? 0.0;
-    
+
     // Confidence calibration based on user's historical accuracy
     final confidenceAdaptation = _calculatePersonalConfidenceCalibration(userId);
     adaptations['confidence_calibration'] = confidenceAdaptation;
-    
+
     return adaptations;
   }
 
@@ -266,22 +227,22 @@ class PersonalizationEngine {
     required String currentPhase,
   }) async {
     final recommendations = <PersonalizedRecommendation>[];
-    
+
     // Lifestyle recommendations
     final lifestyleRecs = await _generateLifestyleRecommendations(profile, currentPhase);
     recommendations.addAll(lifestyleRecs);
-    
+
     // Health optimization recommendations
     final healthRecs = await _generateHealthRecommendations(profile, currentCycle);
     recommendations.addAll(healthRecs);
-    
+
     // Behavioral recommendations
     final behavioralRecs = await _generateBehavioralRecommendations(profile);
     recommendations.addAll(behavioralRecs);
-    
+
     // Sort by personal relevance
     recommendations.sort((a, b) => b.personalRelevance.compareTo(a.personalRelevance));
-    
+
     return recommendations.take(5).toList();
   }
 
@@ -301,28 +262,24 @@ class PersonalizationEngine {
     // Initialize user-specific learning parameters
     final userId = profile.id;
     final behaviorModel = _behavioralPatterns['tracking_behavior'] as Map<String, dynamic>;
-    
+
     behaviorModel['consistency_score'] = 0.5; // Start with neutral
     behaviorModel['engagement_level'] = 0.7; // Assume moderate engagement
-    
+
     debugPrint('👤 Initialized personalized models for user: $userId');
   }
 
-  Future<void> _adaptModelParameters(String userId, String predictionType, 
+  Future<void> _adaptModelParameters(String userId, String predictionType,
                                    double correctionMagnitude, String reason) async {
-    final strategies = _adaptiveLearningModel['adaptation_strategies'] as Map<String, double>;
-    
+
     switch (predictionType) {
       case 'cycle_length':
-        final adjustment = strategies['cycle_length_adjustment']! * correctionMagnitude;
         // Apply adjustment to user's personal cycle length model
         break;
       case 'symptom_likelihood':
-        final adjustment = strategies['symptom_likelihood_update']! * correctionMagnitude;
         // Apply adjustment to symptom prediction model
         break;
       case 'confidence_score':
-        final adjustment = strategies['confidence_recalibration']! * correctionMagnitude;
         // Apply adjustment to confidence calculation
         break;
     }
@@ -331,7 +288,7 @@ class PersonalizationEngine {
   Future<List<PersonalizedInsight>> _generateLifestyleInsights(
       UserProfile profile, List<CycleData> cycles) async {
     final insights = <PersonalizedInsight>[];
-    
+
     // Stress impact analysis
     if (profile.healthConcerns.contains('stress')) {
       final stressImpact = _analyzeStressImpactOnCycles(cycles);
@@ -353,14 +310,14 @@ class PersonalizationEngine {
         ));
       }
     }
-    
+
     return insights;
   }
 
   Future<List<PersonalizedInsight>> _generateBehavioralInsights(
       UserProfile profile, List<CycleData> cycles) async {
     final insights = <PersonalizedInsight>[];
-    
+
     // Tracking consistency insight
     final consistency = _calculateTrackingConsistency(cycles);
     if (consistency < 0.7) {
@@ -380,14 +337,14 @@ class PersonalizationEngine {
         basedOnFactors: ['tracking_frequency', 'prediction_accuracy'],
       ));
     }
-    
+
     return insights;
   }
 
   Future<List<PersonalizedInsight>> _generateHealthOptimizationInsights(
       UserProfile profile, List<CycleData> cycles) async {
     final insights = <PersonalizedInsight>[];
-    
+
     // Nutrition correlation insight
     if (_hasNutritionCorrelation(cycles, profile)) {
       insights.add(PersonalizedInsight(
@@ -406,14 +363,14 @@ class PersonalizationEngine {
         basedOnFactors: ['symptom_patterns', 'user_lifestyle', 'health_goals'],
       ));
     }
-    
+
     return insights;
   }
 
   Future<List<PersonalizedInsight>> _generatePredictiveHealthInsights(
       UserProfile profile, List<CycleData> cycles) async {
     final insights = <PersonalizedInsight>[];
-    
+
     // Personal cycle evolution insight
     final cycleEvolution = _analyzeCycleEvolution(cycles);
     if (cycleEvolution.isNotEmpty) {
@@ -433,7 +390,7 @@ class PersonalizationEngine {
         basedOnFactors: ['long_term_trends', 'personal_baselines'],
       ));
     }
-    
+
     return insights;
   }
 
@@ -441,7 +398,7 @@ class PersonalizationEngine {
       UserProfile profile, String currentPhase) async {
     final recommendations = <PersonalizedRecommendation>[];
     final lifestyleRules = _personalizationRules['lifestyle_recommendations'] as Map<String, dynamic>;
-    
+
     // Exercise recommendations based on cycle phase
     final exerciseRules = lifestyleRules['exercise_suggestions'] as Map<String, dynamic>;
     if (exerciseRules.containsKey(currentPhase)) {
@@ -457,26 +414,26 @@ class PersonalizationEngine {
         timeframe: 'This week',
       ));
     }
-    
+
     return recommendations;
   }
 
   Future<List<PersonalizedRecommendation>> _generateHealthRecommendations(
       UserProfile profile, CycleData? currentCycle) async {
     final recommendations = <PersonalizedRecommendation>[];
-    
+
     if (currentCycle != null && currentCycle.symptoms.isNotEmpty) {
       final symptomBasedRecs = _getSymptomBasedRecommendations(currentCycle.symptoms, profile);
       recommendations.addAll(symptomBasedRecs);
     }
-    
+
     return recommendations;
   }
 
   Future<List<PersonalizedRecommendation>> _generateBehavioralRecommendations(
       UserProfile profile) async {
     final recommendations = <PersonalizedRecommendation>[];
-    
+
     // Tracking optimization
     recommendations.add(PersonalizedRecommendation(
       id: 'tracking_optimization',
@@ -492,7 +449,7 @@ class PersonalizationEngine {
       expectedBenefit: 'More accurate predictions and insights',
       timeframe: 'Next 2 weeks',
     ));
-    
+
     return recommendations;
   }
 
@@ -507,28 +464,28 @@ class PersonalizationEngine {
 
   double _calculateTrackingConsistency(List<CycleData> cycles) {
     if (cycles.isEmpty) return 0.0;
-    
-    final cyclesWithData = cycles.where((c) => 
+
+    final cyclesWithData = cycles.where((c) =>
       c.symptoms.isNotEmpty || c.mood != null || c.energy != null).length;
-    
+
     return cyclesWithData / cycles.length;
   }
 
   bool _hasNutritionCorrelation(List<CycleData> cycles, UserProfile profile) {
     // Simplified check - in production, this would analyze actual nutrition data
-    return profile.healthConcerns.contains('nutrition') || 
+    return profile.healthConcerns.contains('nutrition') ||
            cycles.any((c) => c.symptoms.contains('bloating') || c.symptoms.contains('cramps'));
   }
 
   Map<String, String> _analyzeCycleEvolution(List<CycleData> cycles) {
     if (cycles.length < 6) return {};
-    
+
     final recentCycles = cycles.takeLast(3);
     final olderCycles = cycles.take(cycles.length - 3);
-    
+
     final recentAvg = recentCycles.map((c) => c.actualLength).reduce((a, b) => a + b) / recentCycles.length;
     final olderAvg = olderCycles.map((c) => c.actualLength).reduce((a, b) => a + b) / olderCycles.length;
-    
+
     if ((recentAvg - olderAvg).abs() < 1) {
       return {'trend': 'stable', 'magnitude': 'minimal'};
     } else {
@@ -554,7 +511,7 @@ class PersonalizationEngine {
   Map<String, dynamic> _analyzePersonalMoodEnergyPatterns(List<CycleData> cycles, UserProfile profile) {
     final moodData = cycles.where((c) => c.mood != null).map((c) => c.mood!);
     final energyData = cycles.where((c) => c.energy != null).map((c) => c.energy!);
-    
+
     return {
       'mood_shift': moodData.isNotEmpty ? moodData.reduce((a, b) => a + b) / moodData.length - 3.0 : 0.0,
       'energy_shift': energyData.isNotEmpty ? energyData.reduce((a, b) => a + b) / energyData.length - 3.0 : 0.0,
@@ -570,7 +527,7 @@ class PersonalizationEngine {
   List<PersonalizedRecommendation> _getSymptomBasedRecommendations(
       List<String> symptoms, UserProfile profile) {
     final recommendations = <PersonalizedRecommendation>[];
-    
+
     if (symptoms.contains('cramps')) {
       recommendations.add(PersonalizedRecommendation(
         id: 'cramps_relief',
@@ -587,13 +544,10 @@ class PersonalizationEngine {
         timeframe: 'Today',
       ));
     }
-    
+
     return recommendations;
   }
 }
 
 extension<T> on Iterable<T> {
-  Iterable<T> takeLast(int count) {
-    return skip(math.max(0, length - count));
-  }
 }

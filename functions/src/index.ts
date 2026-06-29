@@ -60,3 +60,7 @@ export const sendPartnerInvite = onCall({secrets: [RESEND_API_KEY]}, async (req)
   const json = await resp.json();
   return {ok: true, id: json?.id ?? null};
 });
+
+export {
+  deleteMyCloudData,
+} from "./partner_delete_callable";

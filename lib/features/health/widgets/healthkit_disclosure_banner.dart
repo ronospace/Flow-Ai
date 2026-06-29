@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../../generated/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 
 /// HealthKit/Health Data Transparency Disclosure Banner
@@ -23,7 +22,6 @@ class HealthKitDisclosureBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
 
     return Container(
       margin: const EdgeInsets.all(16),

@@ -26,7 +26,7 @@ class _InsightsScreenState extends State<InsightsScreen>
     with TickerProviderStateMixin {
   late TabController _tabController;
   int _selectedPeriod = 3; // 3 months default
-  
+
   final List<Map<String, dynamic>> _timePeriods = [
     {'label': '1M', 'months': 1},
     {'label': '3M', 'months': 3},
@@ -38,7 +38,7 @@ class _InsightsScreenState extends State<InsightsScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<InsightsProvider>().loadInsights();
       context.read<CycleProvider>().loadCycles();
@@ -74,13 +74,13 @@ class _InsightsScreenState extends State<InsightsScreen>
                   children: [
                     // Custom Header
                     _buildHeader(),
-                    
+
                     // Time Period Selector
                     _buildTimePeriodSelector(),
-                    
+
                     // Tab Bar
                     _buildTabBar(),
-                    
+
                     // Tab Content
                     Expanded(
                       child: TabBarView(
@@ -96,7 +96,7 @@ class _InsightsScreenState extends State<InsightsScreen>
                 ),
               ),
             ),
-            
+
             // Floating AI Chat - only render if mounted
             if (mounted) const FloatingAIChat(),
           ],
@@ -132,11 +132,11 @@ class _InsightsScreenState extends State<InsightsScreen>
               ],
             ),
           ),
-          
+
           // Settings icon removed - not necessary per user request
-          
+
           const SizedBox(width: 8),
-          
+
           // AI Badge
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -194,10 +194,9 @@ class _InsightsScreenState extends State<InsightsScreen>
       ),
       child: Row(
         children: _timePeriods.asMap().entries.map((entry) {
-          final index = entry.key;
           final period = entry.value;
           final isSelected = _selectedPeriod == period['months'];
-          
+
           return Expanded(
             child: GestureDetector(
               onTap: () {
@@ -310,18 +309,18 @@ class _InsightsScreenState extends State<InsightsScreen>
                 standardDeviation: _calculateStandardDeviation(cycleProvider.cycles),
                 totalCycles: cycleProvider.cycles.length,
               ).animate().fadeIn().slideY(begin: 0.3, end: 0),
-              
+
               const SizedBox(height: 20),
-              
+
               // Prediction Accuracy
               PredictionAccuracyCard(
                 accuracy: 0.87,
                 totalPredictions: cycleProvider.cycles.length,
                 correctPredictions: (cycleProvider.cycles.length * 0.87).round(),
               ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.3, end: 0),
-              
+
               const SizedBox(height: 20),
-              
+
               // AI Insights
               Text(
                 'AI Insights',
@@ -330,9 +329,9 @@ class _InsightsScreenState extends State<InsightsScreen>
                   color: theme.colorScheme.onSurface,
                 ),
               ).animate().fadeIn(delay: 200.ms),
-              
+
               const SizedBox(height: 16),
-              
+
               ...insightsProvider.insights.asMap().entries.map((entry) {
                 final index = entry.key;
                 final insight = entry.value;
@@ -372,9 +371,9 @@ class _InsightsScreenState extends State<InsightsScreen>
                 cycles: cycleProvider.cycles,
                 months: _selectedPeriod,
               ).animate().fadeIn().slideY(begin: 0.3, end: 0),
-              
+
               const SizedBox(height: 20),
-              
+
               // Mood & Energy Chart
               MoodEnergyChart(
                 cycleData: cycleProvider.cycles,
@@ -414,30 +413,30 @@ class _InsightsScreenState extends State<InsightsScreen>
       },
     );
   }
-  
+
   // Helper methods for calculations
   double _calculateRegularityScore(List<dynamic> cycles) {
     if (cycles.length < 3) return 0.5;
-    
+
     final lengths = cycles.map((cycle) => 28).toList(); // Mock cycle lengths
     final avg = lengths.reduce((a, b) => a + b) / lengths.length;
     final variance = lengths.map((l) => (l - avg) * (l - avg)).reduce((a, b) => a + b) / lengths.length;
     final stdDev = sqrt(variance);
-    
+
     // Higher regularity score for lower standard deviation
     return (1.0 - (stdDev / 10.0)).clamp(0.0, 1.0);
   }
-  
+
   double _calculateAverageCycleLength(List<dynamic> cycles) {
     if (cycles.isEmpty) return 28.0;
     return 28.0; // Mock average cycle length
   }
-  
+
   double _calculateStandardDeviation(List<dynamic> cycles) {
     if (cycles.length < 2) return 0.0;
     return 2.5; // Mock standard deviation
   }
-  
+
   TimePeriod _getTimePeriod(int months) {
     switch (months) {
       case 1:

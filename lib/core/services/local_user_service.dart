@@ -325,8 +325,6 @@ class LocalUserService {
     return _prefs!.getBool('onboarding_completed') ?? false;
   }
 
-  }
-
   /// Check if user exists by email
   Future<bool> userExists(String email) async {
     final user = await getUserByEmail(email);
@@ -347,30 +345,33 @@ class LocalUserService {
 
   /// Delete user by ID (compatibility method)
   Future<bool> deleteUser(String userId) async {
-    // Find user by ID and delete
+    if (_prefs == null) {
+      await initialize();
+    }
+
     final users = await getAllUsers();
-    final user = users.where((u) => u.uid == userId).firstOrNull;
+    final user = users.where((item) => item.uid == userId).firstOrNull;
     if (user == null) return false;
 
     try {
       final usersJson = _prefs!.getString(_usersKey);
-      if (usersJson != null) {
-        final usersData = Map<String, dynamic>.from(json.decode(usersJson));
-        usersData.remove(userId);
-        await _prefs!.setString(_usersKey, json.encode(usersData));
+      if (usersJson == null) return false;
 
-        // Clear current user if it's the deleted user
-        final currentUser = await getCurrentUser();
-        if (currentUser?.uid == userId) {
-          await signOut();
-        }
+      final usersData = Map<String, dynamic>.from(json.decode(usersJson));
+      usersData.remove(userId);
+      await _prefs!.setString(_usersKey, json.encode(usersData));
+      await _clearUserCycleData(userId);
 
-        return true;
+      final currentUser = await getCurrentUser();
+      if (currentUser?.uid == userId) {
+        await signOut();
       }
-    } catch (e) {
-      debugPrint('❌ Failed to delete user: $e');
+
+      return true;
+    } catch (error) {
+      debugPrint('❌ Failed to delete user: $error');
+      return false;
     }
-    return false;
   }
 
   /// Save user (compatibility method)

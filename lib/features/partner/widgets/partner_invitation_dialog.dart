@@ -6,7 +6,6 @@ import 'package:share_plus/share_plus.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../generated/app_localizations.dart';
 import '../services/partner_service.dart';
-import '../models/partner_models.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PartnerInvitationDialog extends StatefulWidget {
@@ -201,7 +200,10 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
         tabs: const [
           Tab(icon: Icon(Icons.email, size: 20), text: "Email"),
           Tab(icon: Icon(Icons.qr_code, size: 20), text: "QR Code"),
-          Tab(icon: Icon(Icons.whatsapp, size: 20), text: "WhatsApp"),
+          Tab(
+            icon: Icon(Icons.chat_bubble_outline, size: 20),
+            text: "WhatsApp",
+          ),
           Tab(icon: Icon(Icons.share, size: 20), text: "Share Link"),
         ],
       ),
@@ -450,6 +452,66 @@ class _PartnerInvitationDialogState extends State<PartnerInvitationDialog>
                 ),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildWhatsAppTab(ThemeData theme, AppLocalizations localizations) {
+    return Padding(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 88,
+            height: 88,
+            decoration: BoxDecoration(
+              color: AppTheme.successGreen.withValues(alpha: 0.12),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.chat_bubble_outline,
+              size: 44,
+              color: AppTheme.successGreen,
+            ),
+          ),
+          const SizedBox(height: 24),
+          Text(
+            'Share through WhatsApp',
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: AppTheme.darkGrey,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'Generate a secure invitation link and send it to your partner.',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: AppTheme.mediumGrey,
+              height: 1.4,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 32),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: _isLoading ? null : _shareWhatsApp,
+              icon: const Icon(Icons.chat_bubble_outline),
+              label: const Text('Share via WhatsApp'),
+            ),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              onPressed: _isLoading ? null : _shareSystemSheet,
+              icon: const Icon(Icons.share),
+              label: const Text('Use another app'),
+            ),
           ),
         ],
       ),
