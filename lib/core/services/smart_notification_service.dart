@@ -513,8 +513,6 @@ class SmartNotificationService {
       case NotificationType.aiInsight:
       case NotificationType.wellnessCoaching:
         return 'ai_coaching';
-      default:
-        return 'cycle_insights';
     }
   }
 

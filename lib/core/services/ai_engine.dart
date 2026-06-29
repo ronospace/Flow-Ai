@@ -19,8 +19,6 @@ class AIEngine {
 
   // Enhanced AI Models for Week 1 Implementation
   late Map<String, dynamic> _predictionModel;
-  late Map<String, dynamic> _patternModel;
-  late Map<String, dynamic> _insightModel;
   late Map<String, dynamic> _symptomModel;
   late Map<String, dynamic> _moodEnergyModel;
 
@@ -45,35 +43,7 @@ class AIEngine {
     };
 
     // Advanced pattern recognition model
-    _patternModel = {
-      'cycle_phase_patterns': {},
-      'symptom_timing_patterns': {},
-      'flow_intensity_patterns': {},
-      'anomaly_detection_threshold': 0.25,
-      'cycle_patterns': _generateCyclePatterns(),
-      'symptom_patterns': _generateSymptomPatterns(),
-    };
-
     // Sophisticated insight generation model
-    _insightModel = {
-      'templates': {
-        'regularity':
-            'Your cycles show {regularity} with {variance_desc} variation',
-        'prediction_accuracy':
-            'Our predictions have been {accuracy}% accurate for you',
-        'symptom_forecast':
-            'Based on patterns, expect {symptoms} in your next cycle',
-        'mood_energy_trend': 'Your {metric} tends to be {trend} during {phase}',
-      },
-      'confidence_weights': {
-        'data_points': 0.3,
-        'consistency': 0.4,
-        'recency': 0.3,
-      },
-      'insight_templates': _generateInsightTemplates(),
-      'recommendation_engine': _generateRecommendationRules(),
-    };
-
     // Symptom prediction and correlation model
     _symptomModel = {
       'common_symptoms': [
@@ -231,7 +201,6 @@ class AIEngine {
 
     // Detect length variations
     final lengths = cycles.map((c) => c.length).toList();
-    final avgLength = lengths.reduce((a, b) => a + b) / lengths.length;
     final variance = _calculateVariance(
       lengths.map((l) => l.toDouble()).toList(),
     );
@@ -251,22 +220,6 @@ class AIEngine {
   }
 
   /// Private helper methods
-  double _calculateAverageCycleLength(List<CycleData> cycles) {
-    if (cycles.isEmpty) return 28.0;
-    final lengths = cycles.map((c) => c.length).toList();
-    return lengths.reduce((a, b) => a + b) / lengths.length;
-  }
-
-  double _calculatePredictionConfidence(List<CycleData> cycles) {
-    if (cycles.length < 3) return 0.6;
-
-    final lengths = cycles.map((c) => c.length.toDouble()).toList();
-    final variance = _calculateVariance(lengths);
-
-    // Higher variance = lower confidence
-    return math.max(0.5, 1.0 - (variance / 10.0));
-  }
-
   double _analyzeRegularity(List<CycleData> cycles) {
     final lengths = cycles.map((c) => c.length.toDouble()).toList();
     final variance = _calculateVariance(lengths);
@@ -357,61 +310,9 @@ class AIEngine {
     return null;
   }
 
-  Map<String, List<String>> _generateCyclePatterns() {
-    return {
-      'regular': ['21-35 days', 'consistent flow', 'predictable symptoms'],
-      'irregular': [
-        'variable length',
-        'unpredictable timing',
-        'varying symptoms',
-      ],
-      'short': ['<21 days', 'frequent cycles', 'light flow patterns'],
-      'long': ['>35 days', 'infrequent cycles', 'heavy flow patterns'],
-    };
-  }
 
-  Map<String, List<String>> _generateSymptomPatterns() {
-    return {
-      'pms': ['mood changes', 'bloating', 'breast tenderness'],
-      'dysmenorrhea': ['cramping', 'pain', 'fatigue'],
-      'ovulation': ['mid-cycle pain', 'discharge changes', 'temperature rise'],
-    };
-  }
 
-  Map<String, dynamic> _generateInsightTemplates() {
-    return {
-      'regular_cycles': {
-        'title': 'Your cycles are beautifully regular!',
-        'description': 'Consistency is a great sign of reproductive health.',
-      },
-      'irregular_cycles': {
-        'title': 'Your cycles show some variation',
-        'description':
-            'This is normal, but tracking can help identify patterns.',
-      },
-    };
-  }
 
-  Map<String, List<String>> _generateRecommendationRules() {
-    return {
-      'irregular_cycles': [
-        'Track stress levels daily',
-        'Monitor sleep patterns',
-        'Note exercise intensity',
-        'Consider consulting a healthcare provider',
-      ],
-      'heavy_bleeding': [
-        'Track flow intensity',
-        'Monitor for anemia symptoms',
-        'Consult healthcare provider if concerned',
-      ],
-      'pms_symptoms': [
-        'Try relaxation techniques',
-        'Consider dietary changes',
-        'Track symptom severity',
-      ],
-    };
-  }
 
   // Enhanced prediction algorithms - Week 1 Implementation
 

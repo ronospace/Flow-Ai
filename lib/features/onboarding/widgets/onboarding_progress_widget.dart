@@ -100,12 +100,12 @@ class _OnboardingProgressWidgetState extends State<OnboardingProgressWidget>
       children: [
         // Main progress bar
         _buildMainProgressBar(context, primaryColor, backgroundColor),
-        
+
         const SizedBox(height: 16),
-        
+
         // Step indicators
         _buildStepIndicators(context, primaryColor, backgroundColor),
-        
+
         if (widget.stepTitles != null) ...[
           const SizedBox(height: 12),
           _buildStepTitle(context),
@@ -116,7 +116,7 @@ class _OnboardingProgressWidgetState extends State<OnboardingProgressWidget>
 
   Widget _buildMainProgressBar(BuildContext context, Color primaryColor, Color backgroundColor) {
     final theme = Theme.of(context);
-    
+
     return Container(
       height: 6,
       decoration: BoxDecoration(
@@ -191,12 +191,11 @@ class _OnboardingProgressWidgetState extends State<OnboardingProgressWidget>
     final theme = Theme.of(context);
     final isCompleted = stepIndex < widget.currentStep;
     final isCurrent = stepIndex == widget.currentStep;
-    final isFuture = stepIndex > widget.currentStep;
 
     Color indicatorColor;
     Color textColor;
     IconData? icon;
-    
+
     if (isCompleted) {
       indicatorColor = primaryColor;
       textColor = Colors.white;
@@ -210,7 +209,7 @@ class _OnboardingProgressWidgetState extends State<OnboardingProgressWidget>
     }
 
     Widget indicatorChild;
-    
+
     if (icon != null) {
       indicatorChild = Icon(
         icon,
@@ -269,7 +268,7 @@ class _OnboardingProgressWidgetState extends State<OnboardingProgressWidget>
     return Column(
       children: [
         indicator,
-        
+
         if (widget.stepTitles != null && stepIndex < widget.stepTitles!.length) ...[
           const SizedBox(height: 8),
           Text(
@@ -296,7 +295,7 @@ class _OnboardingProgressWidgetState extends State<OnboardingProgressWidget>
 
     final theme = Theme.of(context);
     final currentTitle = widget.stepTitles![widget.currentStep];
-    
+
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 300),
       transitionBuilder: (child, animation) {
@@ -349,7 +348,7 @@ class EnhancedOnboardingProgressWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final primaryColor = accentColor ?? theme.colorScheme.primary;
-    
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -375,7 +374,7 @@ class EnhancedOnboardingProgressWidget extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              
+
               Text(
                 '${(progress * 100).round()}%',
                 style: theme.textTheme.titleMedium?.copyWith(
@@ -385,9 +384,9 @@ class EnhancedOnboardingProgressWidget extends StatelessWidget {
               ),
             ],
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Progress visualization
           OnboardingProgressWidget(
             progress: progress,
@@ -396,9 +395,9 @@ class EnhancedOnboardingProgressWidget extends StatelessWidget {
             stepTitles: stepTitles,
             primaryColor: primaryColor,
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Progress details
           _buildProgressDetails(context, theme, primaryColor),
         ],
@@ -409,7 +408,7 @@ class EnhancedOnboardingProgressWidget extends StatelessWidget {
   Widget _buildProgressDetails(BuildContext context, ThemeData theme, Color primaryColor) {
     final completedSteps = currentStep;
     final remainingSteps = totalSteps - currentStep - 1;
-    
+
     return Row(
       children: [
         Expanded(
@@ -421,7 +420,7 @@ class EnhancedOnboardingProgressWidget extends StatelessWidget {
             color: Colors.green,
           ),
         ),
-        
+
         Expanded(
           child: _buildProgressStat(
             context,
@@ -431,7 +430,7 @@ class EnhancedOnboardingProgressWidget extends StatelessWidget {
             color: primaryColor,
           ),
         ),
-        
+
         Expanded(
           child: _buildProgressStat(
             context,
@@ -453,7 +452,7 @@ class EnhancedOnboardingProgressWidget extends StatelessWidget {
     required Color color,
   }) {
     final theme = Theme.of(context);
-    
+
     return Column(
       children: [
         Icon(
@@ -461,9 +460,9 @@ class EnhancedOnboardingProgressWidget extends StatelessWidget {
           color: color,
           size: 20,
         ),
-        
+
         const SizedBox(height: 4),
-        
+
         Text(
           value,
           style: theme.textTheme.titleSmall?.copyWith(
@@ -471,7 +470,7 @@ class EnhancedOnboardingProgressWidget extends StatelessWidget {
             color: color,
           ),
         ),
-        
+
         Text(
           label,
           style: theme.textTheme.bodySmall?.copyWith(

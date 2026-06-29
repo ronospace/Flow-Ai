@@ -63,7 +63,6 @@ class _SymptomSelectorState extends State<SymptomSelector> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final symptomCategories = _getSymptomCategories(context);
     if (_expandedCategory.isEmpty) {
       _expandedCategory = symptomCategories.keys.first;
@@ -80,12 +79,12 @@ class _SymptomSelectorState extends State<SymptomSelector> {
               _buildSelectedSymptomsSummary(),
               const SizedBox(height: 20),
             ],
-            
+
             // Category selector
             _buildCategorySelector(),
-            
+
             const SizedBox(height: 20),
-            
+
             // Symptoms list
             Expanded(
               child: _buildSymptomsList(),
@@ -148,7 +147,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
   Widget _buildSelectedSymptomChip(String symptom, double severity) {
     final color = _getSymptomColor(symptom);
     final severityText = _getSeverityText(severity);
-    
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
@@ -227,7 +226,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
                 duration: const Duration(milliseconds: 200),
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 decoration: BoxDecoration(
-                  gradient: isSelected 
+                  gradient: isSelected
                       ? const LinearGradient(
                           colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
                         )
@@ -264,14 +263,14 @@ class _SymptomSelectorState extends State<SymptomSelector> {
   Widget _buildSymptomsList() {
     final symptomCategories = _getSymptomCategories(context);
     final symptoms = symptomCategories[_expandedCategory] ?? [];
-    
+
     return ListView.builder(
       itemCount: symptoms.length,
       itemBuilder: (context, index) {
         final symptom = symptoms[index];
         final isSelected = widget.selectedSymptoms.contains(symptom.name);
         final severity = widget.symptomSeverity[symptom.name] ?? 3.0;
-        
+
         return Padding(padding: const EdgeInsets.only(bottom: 12),
           child: _buildSymptomTile(symptom, isSelected, severity, index),
         );
@@ -304,7 +303,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
           ),
           boxShadow: [
             BoxShadow(
-              color: isSelected 
+              color: isSelected
                   ? symptom.color.withValues(alpha: 0.2)
                   : Colors.black.withValues(alpha: 0.1),
               blurRadius: isSelected ? 12 : 8,
@@ -364,7 +363,7 @@ class _SymptomSelectorState extends State<SymptomSelector> {
                 ),
               ],
             ),
-            
+
             // Severity slider (shown when selected)
             if (isSelected) ...[
               const SizedBox(height: 16),

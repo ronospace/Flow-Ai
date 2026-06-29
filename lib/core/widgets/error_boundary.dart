@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../theme/app_theme.dart';
-import '../services/app_enhancement_service.dart';
 import '../utils/app_logger.dart';
 
 /// Enhanced error boundary widget with beautiful error UI and recovery options
@@ -43,22 +42,6 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
     return widget.child;
   }
 
-  void _captureError(Object error, StackTrace? stackTrace) {
-    setState(() {
-      _hasError = true;
-      _error = error;
-      _stackTrace = stackTrace;
-    });
-
-    // Log to enhancement service
-    try {
-      final enhancementService = AppEnhancementService();
-      // This would record the error for analytics/reporting
-      AppLogger.error('🚨 Error captured by ErrorBoundary: $error', stackTrace);
-    } catch (e) {
-      AppLogger.warning('Failed to log error to enhancement service: $e');
-    }
-  }
 
   Widget _buildErrorUI(BuildContext context) {
     final theme = Theme.of(context);
@@ -112,7 +95,7 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
 
               // Error Message
               Text(
-                widget.fallbackMessage ?? 
+                widget.fallbackMessage ??
                 'We\'re sorry, but something unexpected happened. Don\'t worry, your data is safe.',
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: isDark ? Colors.white70 : AppTheme.mediumGrey,
@@ -227,8 +210,8 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
-                            _showDetails 
-                              ? Icons.expand_less_rounded 
+                            _showDetails
+                              ? Icons.expand_less_rounded
                               : Icons.expand_more_rounded,
                             color: AppTheme.mediumGrey,
                           ),
@@ -254,7 +237,7 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
                   margin: const EdgeInsets.only(top: 24),
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: isDark 
+                    color: isDark
                       ? Colors.grey[900]?.withValues(alpha: 0.1)
                       : Colors.grey[100],
                     borderRadius: BorderRadius.circular(12),
@@ -331,7 +314,7 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
 
   void _handleRetry() {
     HapticFeedback.lightImpact();
-    
+
     if (widget.onRetry != null) {
       widget.onRetry!();
     } else {
@@ -363,7 +346,7 @@ ${_stackTrace != null ? '\nStack Trace:\n${_stackTrace.toString()}' : ''}
 ''';
 
         await Clipboard.setData(ClipboardData(text: errorReport));
-        
+
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

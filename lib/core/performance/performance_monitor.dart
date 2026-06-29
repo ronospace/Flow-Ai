@@ -282,7 +282,7 @@ class PerformanceMonitor {
   int _getHeapUsage() {
     try {
       // This would use dart:developer's Service API in a real implementation
-      return ProcessInfo.currentRss ?? 0;
+      return ProcessInfo.currentRss;
     } catch (e) {
       return 0;
     }
@@ -291,7 +291,7 @@ class PerformanceMonitor {
   /// Get current RSS usage
   int _getRSSUsage() {
     try {
-      return ProcessInfo.currentRss ?? 0;
+      return ProcessInfo.currentRss;
     } catch (e) {
       return 0;
     }

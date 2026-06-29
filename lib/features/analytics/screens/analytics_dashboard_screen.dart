@@ -19,7 +19,7 @@ class AnalyticsDashboardScreen extends StatefulWidget {
 class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  
+
   @override
   void initState() {
     super.initState();
@@ -39,7 +39,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localizations = AppLocalizations.of(context);
-    
+
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       body: Container(
@@ -59,7 +59,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
                     if (provider.isLoading) {
                       return _buildLoadingState(theme);
                     }
-                    
+
                     return TabBarView(
                       controller: _tabController,
                       children: [
@@ -189,19 +189,19 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
           // Advanced Health Score Card
           _buildAdvancedHealthScoreCard(provider, theme),
           const SizedBox(height: 24),
-          
+
           // Key Metrics Grid
           _buildAdvancedMetricsGrid(provider, theme),
           const SizedBox(height: 24),
-          
+
           // AI Insights Section
           _buildAIInsightsSection(provider, theme),
           const SizedBox(height: 24),
-          
+
           // Comparative Analysis
           _buildComparativeAnalysis(provider, theme),
           const SizedBox(height: 24),
-          
+
           // Predictive Insights
           _buildPredictiveInsights(provider, theme),
         ],
@@ -210,15 +210,15 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
   }
 
   // === ADVANCED ANALYTICS COMPONENTS ===
-  
+
   Widget _buildAdvancedHealthScoreCard(AnalyticsProvider provider, ThemeData theme) {
     final healthScore = provider.healthAnalytics?.overallHealthScore ?? 70.0;
     final cycleRegularity = (provider.cycleAnalytics?.regularityScore ?? 0.8) * 100;
     final predictionAccuracy = provider.predictionAnalytics?.confidenceScore ?? 85.0;
-    
+
     final overallScore = (healthScore + cycleRegularity + predictionAccuracy) / 3;
     final scoreColor = _getScoreColor(overallScore);
-    
+
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -320,7 +320,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
       ),
     );
   }
-  
+
   Widget _buildScoreBreakdown(String label, double score, Color color) {
     return Column(
       children: [
@@ -343,7 +343,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
       ],
     );
   }
-  
+
   Widget _buildAdvancedMetricsGrid(AnalyticsProvider provider, ThemeData theme) {
     return GridView.count(
       crossAxisCount: 2,
@@ -392,7 +392,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
       ],
     );
   }
-  
+
   Widget _buildAdvancedMetricCard({
     required String title,
     required String value,
@@ -466,7 +466,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
       ),
     );
   }
-  
+
   Widget _buildAIInsightsSection(AnalyticsProvider provider, ThemeData theme) {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -535,7 +535,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
       ),
     );
   }
-  
+
   Widget _buildInsightItem(Map<String, dynamic> insight, ThemeData theme) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -561,7 +561,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
       ),
     );
   }
-  
+
   Widget _buildComparativeAnalysis(AnalyticsProvider provider, ThemeData theme) {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -624,7 +624,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
       ),
     );
   }
-  
+
   Widget _buildComparisonMetric(
     String period,
     String value,
@@ -635,12 +635,12 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isImprovement 
+        color: isImprovement
             ? AppTheme.successGreen.withValues(alpha: 0.05)
             : theme.colorScheme.surface.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: isImprovement 
+          color: isImprovement
               ? AppTheme.successGreen.withValues(alpha: 0.3)
               : theme.colorScheme.outline.withValues(alpha: 0.2),
         ),
@@ -677,7 +677,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
-                  color: isImprovement 
+                  color: isImprovement
                       ? AppTheme.successGreen
                       : theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
@@ -688,7 +688,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
       ),
     );
   }
-  
+
   Widget _buildPredictiveInsights(AnalyticsProvider provider, ThemeData theme) {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -774,7 +774,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
       ),
     );
   }
-  
+
   Widget _buildPredictionItem(
     String title,
     String value,
@@ -827,23 +827,23 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
       ),
     );
   }
-  
+
   // === HELPER FUNCTIONS ===
-  
+
   Color _getScoreColor(double score) {
     if (score >= 85) return AppTheme.successGreen;
     if (score >= 70) return AppTheme.accentMint;
     if (score >= 55) return AppTheme.warningOrange;
     return AppTheme.errorRed;
   }
-  
+
   String _getScoreDescription(double score) {
     if (score >= 85) return 'Excellent wellness patterns';
     if (score >= 70) return 'Good overall health trends';
     if (score >= 55) return 'Moderate wellness indicators';
     return 'Areas for improvement identified';
   }
-  
+
   IconData _getTrendIcon(TrendDirection direction) {
     switch (direction) {
       case TrendDirection.improving:
@@ -854,7 +854,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
         return Icons.trending_flat;
     }
   }
-  
+
   Color _getTrendColor(TrendDirection direction) {
     switch (direction) {
       case TrendDirection.improving:
@@ -865,10 +865,10 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
         return AppTheme.mediumGrey;
     }
   }
-  
+
   List<Map<String, dynamic>> _getAIInsights(AnalyticsProvider provider) {
     final insights = <Map<String, dynamic>>[];
-    
+
     // Cycle regularity insight
     final regularity = provider.cycleAnalytics?.regularityScore ?? 0.8;
     if (regularity > 0.85) {
@@ -884,7 +884,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
         'text': 'Cycle irregularity detected. Consider tracking stress levels and sleep patterns for better insights.',
       });
     }
-    
+
     // Prediction accuracy insight
     final accuracy = provider.predictionAnalytics?.confidenceScore ?? 85.0;
     if (accuracy > 90) {
@@ -894,7 +894,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
         'text': 'AI predictions are highly accurate at ${accuracy.toInt()}%. Your data quality is excellent.',
       });
     }
-    
+
     // Health trend insight
     final healthScore = provider.healthAnalytics?.overallHealthScore ?? 75.0;
     if (healthScore > 80) {
@@ -910,7 +910,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
         'text': 'Consider focusing on stress management and sleep quality to improve overall wellness.',
       });
     }
-    
+
     // Default insights if no specific conditions met
     if (insights.isEmpty) {
       insights.addAll([
@@ -931,7 +931,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
         },
       ]);
     }
-    
+
     return insights;
   }
 
@@ -989,73 +989,6 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
     );
   }
 
-  Widget _buildOverviewMetricCard({
-    required String title,
-    required String value,
-    required IconData icon,
-    required Color color,
-    required ThemeData theme,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface.withValues(alpha: 0.8),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: color.withValues(alpha: 0.3),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: theme.shadowColor.withValues(alpha: 0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(
-                icon,
-                color: color,
-                size: 20,
-              ),
-              const Spacer(),
-              Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Icon(
-                  Icons.trending_up,
-                  color: color,
-                  size: 12,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            value,
-            style: theme.textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: theme.colorScheme.onSurface,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            title,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   void _showTimeRangeSelector(BuildContext context) {
     showModalBottomSheet(
@@ -1120,50 +1053,4 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
     );
   }
 
-  void _showRecommendationDetails(BuildContext context, recommendation) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(recommendation.title),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(recommendation.description),
-            const SizedBox(height: 16),
-            Text(
-              'Action Items:',
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            ...recommendation.actionItems.map((item) => Padding(
-              padding: const EdgeInsets.only(bottom: 4),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('• ', style: TextStyle(color: Theme.of(context).colorScheme.primary)),
-                  Expanded(child: Text(item)),
-                ],
-              ),
-            )),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Close'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              // Implement reminder/goal setting
-              Navigator.pop(context);
-            },
-            child: const Text('Set Reminder'),
-          ),
-        ],
-      ),
-    );
-  }
 }

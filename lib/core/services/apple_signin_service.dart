@@ -9,7 +9,6 @@ class AppleSignInService {
   AppleSignInService._internal();
 
   bool _isInitialized = false;
-  bool _isAvailable = false;
 
   /// Initialize the Apple Sign-In service
   Future<void> initialize() async {
@@ -17,10 +16,9 @@ class AppleSignInService {
 
     try {
       AppLogger.auth('🍎 Initializing Apple Sign-In service...');
-      
+
       // Currently disabled for iOS compatibility
-      _isAvailable = false;
-      
+
       _isInitialized = true;
       AppLogger.auth('⚠️ Apple Sign-In service disabled for iOS compatibility');
     } catch (e) {
@@ -43,7 +41,7 @@ class AppleSignInService {
       }
 
       AppLogger.auth('🍎 Apple Sign-In requested but disabled');
-      
+
       // Return failure indicating disabled status
       return AuthResult.failure(
         error: 'Apple Sign-In is temporarily disabled for iOS compatibility. Please use email authentication instead.',

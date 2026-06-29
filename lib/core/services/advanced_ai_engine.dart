@@ -21,7 +21,6 @@ class AdvancedAIEngine {
 
   // Learning parameters
   double _userAccuracyScore = 0.75; // Starts at 75%, learns to 95%+
-  Map<String, double> _personalFactors = {};
   List<PredictionFeedback> _feedbackHistory = [];
 
   Future<void> initialize() async {
@@ -260,7 +259,7 @@ class AdvancedAIEngine {
 
     // Calculate personal bias adjustments
     final biasAdjustment = _calculatePersonalBias();
-    
+
     // Adjust prediction date
     final adjustedDate = prediction.nextPeriodDate.add(
       Duration(days: biasAdjustment.round()),
@@ -282,18 +281,18 @@ class AdvancedAIEngine {
   /// Record user feedback to improve predictions
   Future<void> recordFeedback(PredictionFeedback feedback) async {
     _feedbackHistory.add(feedback);
-    
+
     // Update accuracy score
     _updateAccuracyScore(feedback);
-    
+
     // Update personal factors
     _updatePersonalFactors(feedback);
-    
+
     // Limit history size
     if (_feedbackHistory.length > 50) {
       _feedbackHistory = _feedbackHistory.sublist(_feedbackHistory.length - 50);
     }
-    
+
     debugPrint('📊 Feedback recorded. New accuracy: ${_userAccuracyScore.toStringAsFixed(3)}');
   }
 
@@ -385,7 +384,7 @@ class AdvancedAIEngine {
   SeasonalPattern _detectSeasonalPatterns(List<CycleData> cycles) {
     // Analyze cycles by season
     final seasonalData = <String, List<int>>{};
-    
+
     for (final cycle in cycles) {
       final season = _getSeason(cycle.startDate);
       seasonalData.putIfAbsent(season, () => []);
@@ -403,7 +402,7 @@ class AdvancedAIEngine {
   FlowPatterns _analyzeFlowPatterns(List<CycleData> cycles) {
     // Use flowIntensity from CycleData instead of flowData
     final intensities = cycles.map((c) => c.flowIntensity?.index ?? 2).toList();
-    
+
     return FlowPatterns(
       averageIntensity: _calculateAverageIntensity(intensities),
       durationPattern: _calculateDurationPattern(cycles),
@@ -413,7 +412,7 @@ class AdvancedAIEngine {
 
   SymptomPatterns _analyzeSymptomProgression(List<CycleData> cycles) {
     final allSymptoms = cycles.expand((c) => c.symptoms).toList();
-    
+
     return SymptomPatterns(
       commonSymptoms: _findCommonSymptoms(allSymptoms),
       severityPatterns: _analyzeSeverityPatterns(allSymptoms),
@@ -422,15 +421,9 @@ class AdvancedAIEngine {
   }
 
   // Additional helper methods...
-  
+
   Future<void> _loadPersonalFactors() async {
     // Load user-specific calibration factors
-    _personalFactors = {
-      'stress_sensitivity': 0.1,
-      'exercise_impact': 0.05,
-      'sleep_sensitivity': 0.08,
-      'seasonal_sensitivity': 0.03,
-    };
   }
 
   Future<void> _calibrateModels() async {
@@ -445,7 +438,7 @@ class AdvancedAIEngine {
   void _updateAccuracyScore(PredictionFeedback feedback) {
     final error = feedback.actualDate.difference(feedback.predictedDate).inDays.abs();
     final accuracy = math.max(0.0, 1.0 - (error / 7.0)); // 7-day window
-    
+
     // Exponential moving average
     _userAccuracyScore = 0.8 * _userAccuracyScore + 0.2 * accuracy;
   }
@@ -464,67 +457,67 @@ class AdvancedAIEngine {
   }
 
   // Complete implementation of helper methods
-  
+
   double _calculateTrend(List<int> lengths) {
     if (lengths.length < 3) return 0.0;
-    
+
     // Simple linear regression to calculate trend
     final n = lengths.length;
     final x = List.generate(n, (i) => i.toDouble());
     final y = lengths.map((e) => e.toDouble()).toList();
-    
+
     final sumX = x.reduce((a, b) => a + b);
     final sumY = y.reduce((a, b) => a + b);
     final sumXY = List.generate(n, (i) => x[i] * y[i]).reduce((a, b) => a + b);
     final sumXX = x.map((e) => e * e).reduce((a, b) => a + b);
-    
+
     final slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
     return slope;
   }
-  
+
   double _calculatePatternConfidence(List<CycleData> cycles) {
     if (cycles.length < 3) return 0.3;
-    
+
     final lengths = cycles.map((c) => c.length).toList();
     final regularity = _calculateRegularity(lengths);
     final dataQuality = math.min(1.0, cycles.length / 12.0); // More data = higher confidence
-    
+
     return 0.5 + (regularity * 0.3) + (dataQuality * 0.2);
   }
-  
+
   double _calculateSeasonAverage(List<int>? lengths) {
     if (lengths == null || lengths.isEmpty) return 28.0;
     return lengths.reduce((a, b) => a + b) / lengths.length;
   }
-  
+
   double _calculateAverageIntensity(List<dynamic> intensities) {
     if (intensities.isEmpty) return 2.0;
     final values = intensities.map((e) => e is int ? e.toDouble() : e as double).toList();
     return values.reduce((a, b) => a + b) / values.length;
   }
-  
+
   List<int> _calculateDurationPattern(List<CycleData> cycles) {
     return cycles.map((c) => c.length).toList();
   }
-  
+
   List<double> _calculateIntensityProgression(List<dynamic> intensities) {
     return intensities.map((e) => e is int ? e.toDouble() : e as double).toList();
   }
-  
+
   List<String> _findCommonSymptoms(List<dynamic> allSymptoms) {
     final symptomCounts = <String, int>{};
-    
+
     for (final symptom in allSymptoms) {
       final symptomStr = symptom.toString();
       symptomCounts[symptomStr] = (symptomCounts[symptomStr] ?? 0) + 1;
     }
-    
+
     final sorted = symptomCounts.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
-    
+
     return sorted.take(5).map((e) => e.key).toList();
   }
-  
+
   Map<String, double> _analyzeSeverityPatterns(List<dynamic> symptoms) {
     // Simplified severity analysis
     return {
@@ -533,7 +526,7 @@ class AdvancedAIEngine {
       'severe': 0.2,
     };
   }
-  
+
   Map<String, int> _analyzeSymptomTiming(List<dynamic> symptoms) {
     // Simplified timing analysis - days before period
     return {
@@ -543,112 +536,112 @@ class AdvancedAIEngine {
       'fatigue': -3,
     };
   }
-  
+
   Map<String, double> _analyzeHRVPatterns(List<BiometricAnalysis> data) {
     final hrvData = data.where((d) => d.hrvData.isNotEmpty)
                         .expand((d) => d.hrvData.map((hrv) => hrv.value)).toList();
-    
+
     if (hrvData.isEmpty) return {};
-    
+
     final average = hrvData.reduce((a, b) => a + b) / hrvData.length;
-    
+
     return {
       'average': average,
       'trend': _calculateTrend(hrvData.map((e) => e.round()).toList()),
       'variability': _calculateVariance(hrvData.map((e) => e.round()).toList()),
     };
   }
-  
+
   double _analyzeTemperatureCorrelation(List<BiometricAnalysis> data) {
     final tempData = data.where((d) => d.temperatureData.isNotEmpty)
                          .expand((d) => d.temperatureData.map((temp) => temp.value)).toList();
-    
+
     if (tempData.length < 5) return 0.0;
-    
+
     // Simplified correlation analysis
     return 0.75; // Placeholder for complex BBT analysis
   }
-  
+
   double _analyzeSleepImpact(List<BiometricAnalysis> data) {
     final sleepData = data.where((d) => d.sleepData.isNotEmpty)
                           .expand((d) => d.sleepData.map((sleep) => sleep.value)).toList();
-    
+
     if (sleepData.isEmpty) return 0.0;
-    
+
     final average = sleepData.reduce((a, b) => a + b) / sleepData.length;
     return average / 10.0; // Normalize to 0-1 scale
   }
-  
+
   double _analyzeStressCorrelation(List<BiometricAnalysis> data) {
     final stressData = data.where((d) => d.stressData.isNotEmpty)
                            .expand((d) => d.stressData.map((stress) => stress.value)).toList();
-    
+
     if (stressData.isEmpty) return 0.0;
-    
+
     final average = stressData.reduce((a, b) => a + b) / stressData.length;
     return average / 10.0; // Normalize to 0-1 scale
   }
-  
+
   Map<String, double> _analyzeActivityPatterns(List<BiometricAnalysis> data) {
     final activityData = data.where((d) => d.activityData.isNotEmpty)
                              .expand((d) => d.activityData.map((activity) => activity.value)).toList();
-    
+
     if (activityData.isEmpty) return {};
-    
+
     final average = activityData.reduce((a, b) => a + b) / activityData.length;
-    
+
     return {
       'average_activity': average,
       'consistency': _calculateRegularity(activityData.map((e) => e.round()).toList()),
     };
   }
-  
+
   List<String> _extractPredictiveIndicators(List<BiometricAnalysis> data) {
     final indicators = <String>[];
-    
+
     if (data.any((d) => d.hrvData.isNotEmpty)) {
       indicators.add('Heart Rate Variability Available');
     }
-    
+
     if (data.any((d) => d.temperatureData.isNotEmpty)) {
       indicators.add('Temperature Tracking Available');
     }
-    
+
     if (data.any((d) => d.sleepData.isNotEmpty)) {
       indicators.add('Sleep Quality Data Available');
     }
-    
+
     return indicators;
   }
-  
+
   Map<String, double> _analyzeMoodPatterns(List<CycleData> cycles) {
     final allMoods = cycles.where((c) => c.mood != null).map((c) => c.mood!).toList();
-    
+
     if (allMoods.isEmpty) return {};
-    
+
     final moodCounts = <String, int>{};
     for (final mood in allMoods) {
       final moodStr = mood.toString();
       moodCounts[moodStr] = (moodCounts[moodStr] ?? 0) + 1;
     }
-    
+
     final total = moodCounts.values.reduce((a, b) => a + b);
     return moodCounts.map((k, v) => MapEntry(k, v / total));
   }
-  
+
   Map<String, double> _analyzeEnergyCorrelations(List<CycleData> cycles) {
     final allEnergy = cycles.where((c) => c.energy != null).map((c) => c.energy!).toList();
-    
+
     if (allEnergy.isEmpty) return {};
-    
+
     final average = allEnergy.reduce((a, b) => a + b) / allEnergy.length;
-    
+
     return {
       'average_energy': average,
       'cycle_correlation': 0.65, // Placeholder for cycle phase correlation
     };
   }
-  
+
   Map<String, double> _analyzeLifestyleImpact(UserProfile profile, List<CycleData> cycles) {
     return {
       'exercise_impact': 0.3,
@@ -657,22 +650,22 @@ class AdvancedAIEngine {
       'sleep_impact': 0.5,
     };
   }
-  
+
   Map<String, double> _analyzeMedicationEffects(List<CycleData> cycles) {
     return {
       'birth_control_effect': 0.8,
       'pain_medication_effect': 0.6,
     };
   }
-  
+
   double _analyzeWeatherImpact(Map<String, dynamic> data) {
     final pressure = data['barometric_pressure'] as double? ?? 0.0;
     final humidity = data['humidity'] as double? ?? 0.0;
-    
+
     // Simplified weather impact calculation
     return (pressure * 0.3 + humidity * 0.7) / 100.0;
   }
-  
+
   Map<String, double> _analyzeSeasonalEffects(Map<String, dynamic> data) {
     return {
       'temperature_effect': 0.2,
@@ -680,17 +673,17 @@ class AdvancedAIEngine {
       'seasonal_affective': 0.1,
     };
   }
-  
+
   double _analyzeTravelEffects(Map<String, dynamic> data) {
     final timezoneChanges = data['timezone_changes'] as int? ?? 0;
     return math.min(1.0, timezoneChanges * 0.2);
   }
-  
+
   double _analyzeAirQualityEffects(Map<String, dynamic> data) {
     final aqi = data['air_quality_index'] as double? ?? 50.0;
     return math.max(0.0, (aqi - 50.0) / 100.0);
   }
-  
+
   Map<String, double> _calculateModalWeights(
     CyclePatternAnalysis cyclePatterns,
     BiometricInsights biometricInsights,
@@ -704,12 +697,12 @@ class AdvancedAIEngine {
       'environmental': 0.05,
     };
   }
-  
+
   DateTime _calculateBasePrediction(CyclePatternAnalysis patterns) {
     final now = DateTime.now();
     return now.add(Duration(days: patterns.averageLength.round()));
   }
-  
+
   DateTime _applyBiometricAdjustments(
     DateTime baseDate,
     BiometricInsights insights,
@@ -717,10 +710,10 @@ class AdvancedAIEngine {
   ) {
     // Apply temperature-based adjustments
     final tempAdjustment = insights.temperatureCorrelation * weight * 2;
-    
+
     return baseDate.add(Duration(days: tempAdjustment.round()));
   }
-  
+
   DateTime _applyBehavioralAdjustments(
     DateTime baseDate,
     BehavioralInsights insights,
@@ -728,10 +721,10 @@ class AdvancedAIEngine {
   ) {
     // Apply stress and lifestyle adjustments
     final stressImpact = (insights.lifestyleImpact['stress_impact'] ?? 0.0) * weight;
-    
+
     return baseDate.add(Duration(days: (stressImpact * 3).round()));
   }
-  
+
   DateTime _applyEnvironmentalAdjustments(
     DateTime baseDate,
     EnvironmentalFactors factors,
@@ -739,10 +732,10 @@ class AdvancedAIEngine {
   ) {
     // Apply seasonal and weather adjustments
     final totalAdjustment = (factors.weatherImpact + factors.travelEffects) * weight;
-    
+
     return baseDate.add(Duration(days: (totalAdjustment * 2).round()));
   }
-  
+
   double _calculatePredictionConfidence(
     CyclePatternAnalysis cyclePatterns,
     BiometricInsights biometricInsights,
@@ -753,10 +746,10 @@ class AdvancedAIEngine {
     final baseConfidence = cyclePatterns.confidence * weights['cycle']!;
     final biometricBonus = biometricInsights.predictiveIndicators.length * 0.05;
     final dataQualityBonus = math.min(0.2, weights.values.reduce((a, b) => a + b));
-    
+
     return math.min(95.0, (baseConfidence + biometricBonus + dataQualityBonus) * 100);
   }
-  
+
   List<PersonalizedInsight> _generatePersonalizedInsights(
     CyclePatternAnalysis cyclePatterns,
     BiometricInsights biometricInsights,
@@ -765,7 +758,7 @@ class AdvancedAIEngine {
     UserProfile userProfile,
   ) {
     final insights = <PersonalizedInsight>[];
-    
+
     // Cycle regularity insight
     insights.add(PersonalizedInsight(
       title: 'Cycle Regularity',
@@ -778,7 +771,7 @@ class AdvancedAIEngine {
         'Manage stress levels',
       ],
     ));
-    
+
     // Biometric insights
     if (biometricInsights.predictiveIndicators.isNotEmpty) {
       insights.add(PersonalizedInsight(
@@ -793,30 +786,30 @@ class AdvancedAIEngine {
         ],
       ));
     }
-    
+
     return insights;
   }
-  
+
   DateTime _calculateOvulationDate(DateTime nextPeriod, double cycleLength) {
     final ovulationDay = cycleLength - 14; // Luteal phase is typically 14 days
     return nextPeriod.subtract(Duration(days: (cycleLength - ovulationDay).round()));
   }
-  
+
   List<DateTime> _calculateFertilityWindow(DateTime nextPeriod, double cycleLength) {
     final ovulationDate = _calculateOvulationDate(nextPeriod, cycleLength);
-    
+
     return List.generate(6, (i) => ovulationDate.subtract(Duration(days: 5 - i)));
   }
-  
+
   double _calculatePersonalBias() {
     if (_feedbackHistory.isEmpty) return 0.0;
-    
-    final errors = _feedbackHistory.map((f) => 
+
+    final errors = _feedbackHistory.map((f) =>
       f.actualDate.difference(f.predictedDate).inDays.toDouble()).toList();
-    
+
     return errors.reduce((a, b) => a + b) / errors.length;
   }
-  
+
   List<SymptomPrediction> _predictPMSSymptoms(
     DateTime nextPeriodDate,
     CyclePatternAnalysis patterns,
@@ -847,19 +840,19 @@ class AdvancedAIEngine {
       ),
     ];
   }
-  
+
   SymptomPrediction _predictFlowIntensity(
     CyclePatternAnalysis patterns,
     BiometricInsights biometric,
   ) {
     final avgIntensity = patterns.flowPatterns.averageIntensity;
     String severity;
-    
+
     if (avgIntensity < 2) {
       severity = 'light';
     } else if (avgIntensity < 3) severity = 'moderate';
     else severity = 'heavy';
-    
+
     return SymptomPrediction(
       symptom: 'Flow Intensity',
       probability: 0.9,
@@ -872,7 +865,7 @@ class AdvancedAIEngine {
       ],
     );
   }
-  
+
   List<SymptomPrediction> _predictMoodChanges(
     DateTime nextPeriodDate,
     BehavioralInsights behavioral,
@@ -892,7 +885,7 @@ class AdvancedAIEngine {
       ),
     ];
   }
-  
+
   List<SymptomPrediction> _predictEnergyLevels(
     DateTime nextPeriodDate,
     BehavioralInsights behavioral,
@@ -912,7 +905,7 @@ class AdvancedAIEngine {
       ),
     ];
   }
-  
+
   List<HealthRecommendation> _generateNutritionRecommendations(
     List<PersonalizedInsight> insights,
     List<SymptomPrediction> symptoms,
@@ -932,7 +925,7 @@ class AdvancedAIEngine {
       ),
     ];
   }
-  
+
   List<HealthRecommendation> _generateExerciseRecommendations(
     List<PersonalizedInsight> insights,
     List<SymptomPrediction> symptoms,
@@ -952,7 +945,7 @@ class AdvancedAIEngine {
       ),
     ];
   }
-  
+
   List<HealthRecommendation> _generateSleepRecommendations(
     List<PersonalizedInsight> insights,
     List<SymptomPrediction> symptoms,
@@ -972,7 +965,7 @@ class AdvancedAIEngine {
       ),
     ];
   }
-  
+
   List<HealthRecommendation> _generateStressManagementRecommendations(
     List<PersonalizedInsight> insights,
     List<SymptomPrediction> symptoms,
@@ -992,17 +985,17 @@ class AdvancedAIEngine {
       ),
     ];
   }
-  
+
   List<HealthRecommendation> _generateMedicalRecommendations(
     List<PersonalizedInsight> insights,
     List<SymptomPrediction> symptoms,
   ) {
     final medicalRecommendations = <HealthRecommendation>[];
-    
+
     // Check for concerning patterns
-    final hasHeavyFlow = symptoms.any((s) => 
+    final hasHeavyFlow = symptoms.any((s) =>
       s.symptom == 'Flow Intensity' && s.severity == 'heavy');
-    
+
     if (hasHeavyFlow) {
       medicalRecommendations.add(HealthRecommendation(
         category: 'medical',
@@ -1017,7 +1010,7 @@ class AdvancedAIEngine {
         scientificBasis: 'Heavy menstrual bleeding may indicate underlying conditions',
       ));
     }
-    
+
     return medicalRecommendations;
   }
 }

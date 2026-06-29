@@ -8,13 +8,14 @@ class UserService extends ChangeNotifier {
   static final UserService _instance = UserService._internal();
   static UserService get instance => _instance;
   factory UserService() => _instance;
-  UserService._internal();
+  UserService._internal() {
+    AuthService();
+  }
 
   UserProfile? _currentUser;
   bool _isInitialized = false;
   
   final LocalUserService _localUserService = LocalUserService();
-  final AuthService _authService = AuthService();
 
   UserProfile? get currentUser => _currentUser;
   bool get isInitialized => _isInitialized;
