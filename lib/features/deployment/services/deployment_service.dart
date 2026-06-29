@@ -18,7 +18,7 @@ class DeploymentService {
   final List<ComplianceCheck> _complianceChecks = [];
   final List<BuildResult> _buildResults = [];
   final List<ReleasePackage> _releases = [];
-  
+
   // Event streams
   final StreamController<BuildResult> _buildController = StreamController.broadcast();
   final StreamController<ComplianceReport> _complianceController = StreamController.broadcast();
@@ -35,7 +35,7 @@ class DeploymentService {
       await _loadAppMetadata();
       await _createDeploymentDirectories();
       await _initializeComplianceChecks();
-      
+
       debugPrint('✅ Deployment Service initialized');
     } catch (e) {
       debugPrint('❌ Failed to initialize Deployment Service: $e');
@@ -208,20 +208,20 @@ Flow Ai transforms complex health data into actionable insights, helping women m
       Screenshot(filePath: 'assets/screenshots/ios/6.7/03_tracking.png', platform: PlatformTarget.ios, deviceType: 'iPhone 6.7"', width: 1290, height: 2796, order: 3),
       Screenshot(filePath: 'assets/screenshots/ios/6.7/04_insights.png', platform: PlatformTarget.ios, deviceType: 'iPhone 6.7"', width: 1290, height: 2796, order: 4),
       Screenshot(filePath: 'assets/screenshots/ios/6.7/05_analytics.png', platform: PlatformTarget.ios, deviceType: 'iPhone 6.7"', width: 1290, height: 2796, order: 5),
-      
+
       // iPhone 6.5" Screenshots
       Screenshot(filePath: 'assets/screenshots/ios/6.5/01_welcome.png', platform: PlatformTarget.ios, deviceType: 'iPhone 6.5"', width: 1242, height: 2688, order: 1),
       Screenshot(filePath: 'assets/screenshots/ios/6.5/02_calendar.png', platform: PlatformTarget.ios, deviceType: 'iPhone 6.5"', width: 1242, height: 2688, order: 2),
       Screenshot(filePath: 'assets/screenshots/ios/6.5/03_tracking.png', platform: PlatformTarget.ios, deviceType: 'iPhone 6.5"', width: 1242, height: 2688, order: 3),
       Screenshot(filePath: 'assets/screenshots/ios/6.5/04_insights.png', platform: PlatformTarget.ios, deviceType: 'iPhone 6.5"', width: 1242, height: 2688, order: 4),
       Screenshot(filePath: 'assets/screenshots/ios/6.5/05_analytics.png', platform: PlatformTarget.ios, deviceType: 'iPhone 6.5"', width: 1242, height: 2688, order: 5),
-      
+
       // iPad Pro Screenshots
       Screenshot(filePath: 'assets/screenshots/ios/ipad/01_welcome.png', platform: PlatformTarget.ios, deviceType: 'iPad Pro 12.9"', width: 2048, height: 2732, order: 1),
       Screenshot(filePath: 'assets/screenshots/ios/ipad/02_dashboard.png', platform: PlatformTarget.ios, deviceType: 'iPad Pro 12.9"', width: 2048, height: 2732, order: 2),
       Screenshot(filePath: 'assets/screenshots/ios/ipad/03_calendar.png', platform: PlatformTarget.ios, deviceType: 'iPad Pro 12.9"', width: 2048, height: 2732, order: 3),
       Screenshot(filePath: 'assets/screenshots/ios/ipad/04_analytics.png', platform: PlatformTarget.ios, deviceType: 'iPad Pro 12.9"', width: 2048, height: 2732, order: 4),
-      
+
       // Android Screenshots
       Screenshot(filePath: 'assets/screenshots/android/01_welcome.png', platform: PlatformTarget.android, deviceType: 'Phone', width: 1080, height: 2400, order: 1),
       Screenshot(filePath: 'assets/screenshots/android/02_calendar.png', platform: PlatformTarget.android, deviceType: 'Phone', width: 1080, height: 2400, order: 2),
@@ -237,7 +237,7 @@ Flow Ai transforms complex health data into actionable insights, helping women m
     final buildsDir = Directory('${directory.path}/deployment/builds');
     final reportsDir = Directory('${directory.path}/deployment/reports');
     final artifactsDir = Directory('${directory.path}/deployment/artifacts');
-    
+
     for (final dir in [deploymentDir, buildsDir, reportsDir, artifactsDir]) {
       if (!await dir.exists()) {
         await dir.create(recursive: true);
@@ -255,7 +255,7 @@ Flow Ai transforms complex health data into actionable insights, helping women m
         'Verify compliance with Apple App Store Review Guidelines',
         'store_compliance',
       ),
-      
+
       // Privacy and Data Protection
       _createComplianceCheck(
         'privacy_policy',
@@ -263,7 +263,7 @@ Flow Ai transforms complex health data into actionable insights, helping women m
         'Verify privacy policy is complete and compliant with GDPR, CCPA',
         'privacy',
       ),
-      
+
       // Health Data Compliance
       _createComplianceCheck(
         'health_data_compliance',
@@ -271,7 +271,7 @@ Flow Ai transforms complex health data into actionable insights, helping women m
         'Verify compliance with health data regulations (HIPAA, FDA)',
         'health_regulation',
       ),
-      
+
       // Security Compliance
       _createComplianceCheck(
         'security_standards',
@@ -279,7 +279,7 @@ Flow Ai transforms complex health data into actionable insights, helping women m
         'Verify app meets security standards and encryption requirements',
         'security',
       ),
-      
+
       // Accessibility Compliance
       _createComplianceCheck(
         'accessibility_wcag',
@@ -287,7 +287,7 @@ Flow Ai transforms complex health data into actionable insights, helping women m
         'Verify app meets WCAG 2.1 AA accessibility standards',
         'accessibility',
       ),
-      
+
       // Content Rating
       _createComplianceCheck(
         'content_rating',
@@ -295,7 +295,7 @@ Flow Ai transforms complex health data into actionable insights, helping women m
         'Verify age rating and content descriptions are appropriate',
         'content',
       ),
-      
+
       // Internationalization
       _createComplianceCheck(
         'internationalization',
@@ -303,7 +303,7 @@ Flow Ai transforms complex health data into actionable insights, helping women m
         'Verify app supports required languages and locales',
         'localization',
       ),
-      
+
       // Performance Standards
       _createComplianceCheck(
         'performance_standards',
@@ -331,25 +331,24 @@ Flow Ai transforms complex health data into actionable insights, helping women m
 
   Future<ComplianceReport> runComplianceCheck(DeploymentTarget target) async {
     debugPrint('🔍 Running compliance check for ${target.name}...');
-    
-    final startTime = DateTime.now();
+
     final updatedChecks = <ComplianceCheck>[];
-    
+
     for (final check in _complianceChecks) {
       final updatedCheck = await _performComplianceCheck(check, target);
       updatedChecks.add(updatedCheck);
     }
-    
+
     final passedCount = updatedChecks.where((c) => c.isCompliant).length;
     final failedCount = updatedChecks.where((c) => c.hasErrors).length;
     final warningCount = updatedChecks.where((c) => c.hasWarnings && !c.hasErrors).length;
-    
-    final overallStatus = failedCount > 0 
+
+    final overallStatus = failedCount > 0
         ? ComplianceStatus.nonCompliant
-        : warningCount > 0 
+        : warningCount > 0
             ? ComplianceStatus.warning
             : ComplianceStatus.compliant;
-    
+
     final report = ComplianceReport(
       id: 'compliance_${DateTime.now().millisecondsSinceEpoch}',
       generatedAt: DateTime.now(),
@@ -362,21 +361,21 @@ Flow Ai transforms complex health data into actionable insights, helping women m
       failedChecks: failedCount,
       warningChecks: warningCount,
     );
-    
+
     await _saveComplianceReport(report);
     _complianceController.add(report);
-    
+
     debugPrint('✅ Compliance check completed: $passedCount/${updatedChecks.length} passed');
-    
+
     return report;
   }
 
   Future<ComplianceCheck> _performComplianceCheck(ComplianceCheck check, DeploymentTarget target) async {
     debugPrint('🔍 Checking: ${check.name}');
-    
+
     final issues = <ComplianceIssue>[];
     ComplianceStatus status = ComplianceStatus.checking;
-    
+
     try {
       switch (check.id) {
         case 'app_store_guidelines':
@@ -404,10 +403,10 @@ Flow Ai transforms complex health data into actionable insights, helping women m
           issues.addAll(await _checkPerformanceStandards());
           break;
       }
-      
+
       final hasErrors = issues.any((i) => i.isError);
       final hasWarnings = issues.any((i) => i.isWarning);
-      
+
       if (hasErrors) {
         status = ComplianceStatus.nonCompliant;
       } else if (hasWarnings) {
@@ -415,7 +414,7 @@ Flow Ai transforms complex health data into actionable insights, helping women m
       } else {
         status = ComplianceStatus.compliant;
       }
-      
+
     } catch (e) {
       status = ComplianceStatus.error;
       issues.add(ComplianceIssue(
@@ -425,7 +424,7 @@ Flow Ai transforms complex health data into actionable insights, helping women m
         category: check.category,
       ));
     }
-    
+
     return ComplianceCheck(
       id: check.id,
       name: check.name,
@@ -442,7 +441,7 @@ Flow Ai transforms complex health data into actionable insights, helping women m
 
   Future<List<ComplianceIssue>> _checkAppStoreGuidelines() async {
     final issues = <ComplianceIssue>[];
-    
+
     // Check app metadata completeness
     if (_appMetadata == null) {
       issues.add(ComplianceIssue(
@@ -463,7 +462,7 @@ Flow Ai transforms complex health data into actionable insights, helping women m
           suggestedFix: 'Expand app description to provide more detail',
         ));
       }
-      
+
       if (_appMetadata!.keywords.length < 5) {
         issues.add(ComplianceIssue(
           id: 'insufficient_keywords',
@@ -473,7 +472,7 @@ Flow Ai transforms complex health data into actionable insights, helping women m
           suggestedFix: 'Add more relevant keywords',
         ));
       }
-      
+
       if (_appMetadata!.screenshots.isEmpty) {
         issues.add(ComplianceIssue(
           id: 'missing_screenshots',
@@ -484,13 +483,13 @@ Flow Ai transforms complex health data into actionable insights, helping women m
         ));
       }
     }
-    
+
     return issues;
   }
 
   Future<List<ComplianceIssue>> _checkPrivacyPolicy() async {
     final issues = <ComplianceIssue>[];
-    
+
     if (_appMetadata?.privacyPolicyUrl.isEmpty ?? true) {
       issues.add(ComplianceIssue(
         id: 'missing_privacy_policy',
@@ -501,7 +500,7 @@ Flow Ai transforms complex health data into actionable insights, helping women m
         documentationUrl: 'https://developer.apple.com/app-store/review/guidelines/#privacy',
       ));
     }
-    
+
     // Check for health data privacy compliance
     issues.add(ComplianceIssue(
       id: 'health_data_privacy_notice',
@@ -510,13 +509,13 @@ Flow Ai transforms complex health data into actionable insights, helping women m
       category: 'privacy',
       suggestedFix: 'Ensure privacy policy covers health data collection, storage, and sharing practices',
     ));
-    
+
     return issues;
   }
 
   Future<List<ComplianceIssue>> _checkHealthDataCompliance() async {
     final issues = <ComplianceIssue>[];
-    
+
     // HIPAA compliance for health apps
     issues.add(ComplianceIssue(
       id: 'hipaa_compliance_review',
@@ -526,7 +525,7 @@ Flow Ai transforms complex health data into actionable insights, helping women m
       suggestedFix: 'Review HIPAA requirements and ensure appropriate safeguards',
       documentationUrl: 'https://www.hhs.gov/hipaa/index.html',
     ));
-    
+
     // FDA considerations for health apps
     issues.add(ComplianceIssue(
       id: 'fda_guidance_review',
@@ -536,13 +535,13 @@ Flow Ai transforms complex health data into actionable insights, helping women m
       suggestedFix: 'Ensure app does not require FDA approval or meets FDA guidelines',
       documentationUrl: 'https://www.fda.gov/medical-devices/digital-health-center-of-excellence/mobile-medical-applications',
     ));
-    
+
     return issues;
   }
 
   Future<List<ComplianceIssue>> _checkSecurityStandards() async {
     final issues = <ComplianceIssue>[];
-    
+
     // Check encryption implementation
     issues.add(ComplianceIssue(
       id: 'encryption_verification',
@@ -551,7 +550,7 @@ Flow Ai transforms complex health data into actionable insights, helping women m
       category: 'security',
       suggestedFix: 'Review encryption implementation and key management',
     ));
-    
+
     // Biometric authentication
     issues.add(ComplianceIssue(
       id: 'biometric_security',
@@ -560,13 +559,13 @@ Flow Ai transforms complex health data into actionable insights, helping women m
       category: 'security',
       suggestedFix: 'Test biometric authentication flows and fallback mechanisms',
     ));
-    
+
     return issues;
   }
 
   Future<List<ComplianceIssue>> _checkAccessibilityCompliance() async {
     final issues = <ComplianceIssue>[];
-    
+
     // WCAG 2.1 AA compliance
     issues.add(ComplianceIssue(
       id: 'wcag_aa_compliance',
@@ -576,7 +575,7 @@ Flow Ai transforms complex health data into actionable insights, helping women m
       suggestedFix: 'Run accessibility tests and fix identified issues',
       documentationUrl: 'https://www.w3.org/WAI/WCAG21/quickref/',
     ));
-    
+
     // Screen reader support
     issues.add(ComplianceIssue(
       id: 'screen_reader_support',
@@ -585,13 +584,13 @@ Flow Ai transforms complex health data into actionable insights, helping women m
       category: 'accessibility',
       suggestedFix: 'Test with VoiceOver (iOS) and TalkBack (Android)',
     ));
-    
+
     return issues;
   }
 
   Future<List<ComplianceIssue>> _checkContentRating() async {
     final issues = <ComplianceIssue>[];
-    
+
     if (_appMetadata?.ageRating.minimumAge == null) {
       issues.add(ComplianceIssue(
         id: 'missing_age_rating',
@@ -601,7 +600,7 @@ Flow Ai transforms complex health data into actionable insights, helping women m
         suggestedFix: 'Set appropriate age rating for health content',
       ));
     }
-    
+
     // Health content considerations
     issues.add(ComplianceIssue(
       id: 'health_content_rating',
@@ -610,13 +609,13 @@ Flow Ai transforms complex health data into actionable insights, helping women m
       category: 'content',
       suggestedFix: 'Review content and ensure age rating reflects health information',
     ));
-    
+
     return issues;
   }
 
   Future<List<ComplianceIssue>> _checkInternationalization() async {
     final issues = <ComplianceIssue>[];
-    
+
     final supportedLanguages = _appMetadata?.supportedLanguages ?? [];
     if (supportedLanguages.isEmpty) {
       issues.add(ComplianceIssue(
@@ -627,13 +626,13 @@ Flow Ai transforms complex health data into actionable insights, helping women m
         suggestedFix: 'Add support for major languages in target markets',
       ));
     }
-    
+
     return issues;
   }
 
   Future<List<ComplianceIssue>> _checkPerformanceStandards() async {
     final issues = <ComplianceIssue>[];
-    
+
     // Performance benchmarks
     issues.add(ComplianceIssue(
       id: 'performance_testing',
@@ -642,7 +641,7 @@ Flow Ai transforms complex health data into actionable insights, helping women m
       category: 'performance',
       suggestedFix: 'Run performance tests and optimize as needed',
     ));
-    
+
     return issues;
   }
 
@@ -654,11 +653,11 @@ Flow Ai transforms complex health data into actionable insights, helping women m
     BuildConfiguration? configuration,
   }) async {
     debugPrint('🔨 Building for ${platform.name} (${target.name})...');
-    
+
     final buildConfig = configuration ?? _createDefaultBuildConfiguration(target, platform);
     final buildId = 'build_${DateTime.now().millisecondsSinceEpoch}';
     final startTime = DateTime.now();
-    
+
     final buildResult = BuildResult(
       id: buildId,
       configuration: buildConfig,
@@ -668,13 +667,13 @@ Flow Ai transforms complex health data into actionable insights, helping women m
       messages: [],
       buildMetrics: {},
     );
-    
+
     _buildController.add(buildResult);
-    
+
     try {
       // Simulate build process
       await _performBuild(buildResult);
-      
+
       final endTime = DateTime.now();
       final updatedResult = BuildResult(
         id: buildId,
@@ -698,14 +697,14 @@ Flow Ai transforms complex health data into actionable insights, helping women m
           'binary_size_bytes': 45 * 1024 * 1024,
         },
       );
-      
+
       _buildResults.add(updatedResult);
       _buildController.add(updatedResult);
-      
+
       debugPrint('✅ Build completed successfully: ${updatedResult.outputPath}');
-      
+
       return updatedResult;
-      
+
     } catch (e) {
       final errorResult = BuildResult(
         id: buildId,
@@ -720,12 +719,12 @@ Flow Ai transforms complex health data into actionable insights, helping women m
         errorMessage: e.toString(),
         buildMetrics: {},
       );
-      
+
       _buildResults.add(errorResult);
       _buildController.add(errorResult);
-      
+
       debugPrint('❌ Build failed: $e');
-      
+
       return errorResult;
     }
   }
@@ -775,7 +774,7 @@ Flow Ai transforms complex health data into actionable insights, helping women m
   List<BuildArtifact> _generateBuildArtifacts(String buildId, PlatformTarget platform) {
     final extension = _getArtifactExtension(platform);
     final timestamp = DateTime.now();
-    
+
     return [
       BuildArtifact(
         name: 'FlowAi-release.$extension',
@@ -820,17 +819,17 @@ Flow Ai transforms complex health data into actionable insights, helping women m
     ReleaseConfiguration? configuration,
   }) async {
     debugPrint('📦 Creating release package v$version ($buildNumber)...');
-    
+
     // Run compliance check
     final complianceReport = await runComplianceCheck(DeploymentTarget.production);
-    
+
     // Build for all platforms
     final buildResults = <PlatformTarget, BuildResult>{};
     for (final platform in platforms) {
       final buildResult = await buildForTarget(DeploymentTarget.production, platform);
       buildResults[platform] = buildResult;
     }
-    
+
     final release = ReleasePackage(
       id: 'release_${DateTime.now().millisecondsSinceEpoch}',
       version: version,
@@ -845,12 +844,12 @@ Flow Ai transforms complex health data into actionable insights, helping women m
       complianceReport: complianceReport,
       configuration: configuration ?? ReleaseConfiguration(),
     );
-    
+
     _releases.add(release);
     await _saveReleasePackage(release);
-    
+
     debugPrint('✅ Release package created: ${release.id}');
-    
+
     return release;
   }
 
@@ -860,11 +859,11 @@ Flow Ai transforms complex health data into actionable insights, helping women m
     try {
       final directory = await getApplicationSupportDirectory();
       final file = File('${directory.path}/deployment/reports/compliance_${report.id}.json');
-      
+
       await file.writeAsString(
         const JsonEncoder.withIndent('  ').convert(report.toJson()),
       );
-      
+
       debugPrint('📄 Compliance report saved: ${file.path}');
     } catch (e) {
       debugPrint('⚠️ Failed to save compliance report: $e');
@@ -875,11 +874,11 @@ Flow Ai transforms complex health data into actionable insights, helping women m
     try {
       final directory = await getApplicationSupportDirectory();
       final file = File('${directory.path}/deployment/releases/release_${release.id}.json');
-      
+
       await file.writeAsString(
         const JsonEncoder.withIndent('  ').convert(release.toJson()),
       );
-      
+
       debugPrint('📦 Release package saved: ${file.path}');
     } catch (e) {
       debugPrint('⚠️ Failed to save release package: $e');

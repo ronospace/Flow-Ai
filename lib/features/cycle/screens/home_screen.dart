@@ -4,7 +4,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../../generated/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/services/admob_service.dart' as admob;
@@ -12,6 +11,7 @@ import '../../../core/services/auth_service.dart';
 import '../../../core/models/cycle_data.dart';
 import '../providers/cycle_provider.dart';
 import '../../insights/providers/insights_provider.dart';
+import '../../premium/providers/premium_provider.dart';
 import '../../settings/providers/settings_provider.dart';
 import '../../../core/services/cycle_calculation_engine.dart';
 import '../../healthcare/screens/healthcare_provider_portal_screen.dart';
@@ -39,9 +39,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   late Animation<double> _healthAnimation;
   late Animation<double> _predictiveAnimation;
 
-  // AdMob
-  BannerAd? _bannerAd;
-  bool _isBannerAdReady = false;
   final admob.AdMobService _adMobService = admob.AdMobService();
 
   // AI Prediction
@@ -51,6 +48,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<PremiumProvider>().initialize();
+      }
+    });
 
     // Use slower, less intensive animations to reduce frame drops
     _dashboardController = AnimationController(
@@ -102,12 +104,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         }
       });
 
-      // Load ad even later to not impact startup
-      Future.delayed(const Duration(milliseconds: 1000), () {
-        if (mounted) {
-      _loadBannerAd();        }
-      });
-
       // Load AI prediction
       Future.delayed(const Duration(milliseconds: 800), () {
         if (mounted) {
@@ -122,17 +118,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     _dashboardController.dispose();
     _healthController.dispose();
     _predictiveController.dispose();
-    _bannerAd?.dispose();
     super.dispose();
-  }
-
-  void _loadBannerAd() {
-    if (!admob.AdMobService.adsEnabled) return;
-    _bannerAd = _adMobService.createBannerAd();
-    _bannerAd!.load();
-    setState(() {
-      _isBannerAdReady = true;
-    });
   }
 
   Future<void> _loadAIPrediction() async {
@@ -165,28 +151,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         });
       }
     }
-  }
-
-  Widget _buildBannerAdWidget() {
-    final theme = Theme.of(context);
-    return Container(
-      width: double.infinity,
-      height: 60,
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: theme.cardColor,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: theme.dividerColor, width: 1),
-        boxShadow: [
-          BoxShadow(
-            color: theme.shadowColor.withValues(alpha: 0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: AdWidget(ad: _bannerAd!),
-    ).animate().fadeIn(delay: 1200.ms).slideY(begin: 0.2, end: 0);
   }
 
   Widget _buildPremiumInsightsUnlockWidget() {
@@ -366,31 +330,41 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         children: [
           Text(
             "Advanced AI Analysis",
-            style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 8),
           ...[
             "6-month forecast & confidence",
             "Hormone projection & correlations",
             "Mood patterns + long-term modeling",
-          ].map((t) => Padding(
-                padding: const EdgeInsets.only(top: 6),
-                child: Row(
-                  children: [
-                    Icon(Icons.lock, size: 16, color: theme.colorScheme.onSurface.withValues(alpha: 0.55)),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        t,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.75),
-                          fontWeight: FontWeight.w600,
+          ].map(
+            (t) => Padding(
+              padding: const EdgeInsets.only(top: 6),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.lock,
+                    size: 16,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      t,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.75,
                         ),
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                  ],
-                ),
-              )),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -431,12 +405,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
-                          colors: [AppTheme.warningOrange, AppTheme.primaryRose],
+                          colors: [
+                            AppTheme.warningOrange,
+                            AppTheme.primaryRose,
+                          ],
                         ),
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
-                            color: AppTheme.warningOrange.withValues(alpha: 0.30),
+                            color: AppTheme.warningOrange.withValues(
+                              alpha: 0.30,
+                            ),
                             blurRadius: 10,
                             offset: const Offset(0, 6),
                           ),
@@ -445,7 +424,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.lock_open, color: theme.colorScheme.onPrimary, size: 18),
+                          Icon(
+                            Icons.lock_open,
+                            color: theme.colorScheme.onPrimary,
+                            size: 18,
+                          ),
                           const SizedBox(width: 10),
                           Flexible(
                             child: Text(
@@ -470,17 +453,35 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     ).animate().fadeIn(delay: 650.ms).slideX(begin: 0.15, end: 0);
   }
 
-  void _showRewardedAdForInsights() {
+  Future<void> _showRewardedAdForInsights() async {
     final localizations = AppLocalizations.of(context);
     final theme = Theme.of(context);
+    final premiumProvider = context.read<PremiumProvider>();
+
+    await premiumProvider.initialize();
+
+    if (!mounted) return;
+
+    if (premiumProvider.error != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Unable to verify subscription. Please try again.'),
+        ),
+      );
+      return;
+    }
+
+    if (premiumProvider.hasPremium) {
+      _unlockPremiumInsights();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Premium access is already ad-free.')),
+      );
+      return;
+    }
     _adMobService.showRewardedAdWithFrequency(
       onRewarded: (reward) {
         // User watched the full ad, unlock premium insights
         _unlockPremiumInsights();
-
-
-        // Completion-based interstitial (post-reward unlock)
-        _adMobService.showInterstitialAdWithFrequency();
         // Show success message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -521,6 +522,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     final localizations = AppLocalizations.of(context);
     final authService = context.read<AuthService>();
     final user = authService.currentUser;
+    final hasPremium = context.watch<PremiumProvider>().hasPremium;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -533,14 +535,20 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
-      
-      actions: [
-        Padding(
-          padding: const EdgeInsets.only(right: 16),
-          child: PressableAvatar(onTap: () { context.push('/settings'); }, displayName: user?.displayName, photoUrl: user?.photoURL),
-        ),
-      ],
-),
+
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: PressableAvatar(
+              onTap: () {
+                context.push('/settings');
+              },
+              displayName: user?.displayName,
+              photoUrl: user?.photoURL,
+            ),
+          ),
+        ],
+      ),
       body: Stack(
         children: [
           Consumer<SettingsProvider>(
@@ -591,6 +599,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               _LazyWidget(
                                 builder: () => _buildAIHealthInsightsPortal(
                                   insightsProvider,
+                                  hasPremium: hasPremium,
                                 ),
                               ),
                               const SizedBox(height: 24),
@@ -610,14 +619,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               _LazyWidget(
                                 builder: () => _buildPremiumFeaturesPreview(),
                               ),
-
-                              // Banner Ad - load last to not impact UI
-                              if (_isBannerAdReady) ...[
-                                const SizedBox(height: 24),
-                                _LazyWidget(
-                                  builder: () => _buildBannerAdWidget(),
-                                ),
-                              ],
                             ],
                           ),
                         );
@@ -915,11 +916,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       ),
     ).animate().fadeIn().slideY(begin: -0.3, end: 0);
   }
-
-
-
-
-
 
   Widget _buildHealthDashboardMatrix(CycleProvider provider) {
     final theme = Theme.of(context);
@@ -1365,7 +1361,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     ).animate().fadeIn(delay: 400.ms).slideX(begin: 0.3, end: 0);
   }
 
-  Widget _buildAIHealthInsightsPortal(InsightsProvider provider) {
+  Widget _buildAIHealthInsightsPortal(
+    InsightsProvider provider, {
+    required bool hasPremium,
+  }) {
     final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(24),
@@ -1438,13 +1437,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           if (provider.insights.isNotEmpty) ...[
             // Advanced insights lock
             // Premium AI insights unlock widget
-            if (!provider.premiumUnlocked)
+            if (!provider.premiumUnlocked && !hasPremium)
               _buildPremiumInsightsUnlockWidget(),
 
-            if (!provider.premiumUnlocked) _buildLockedAdvancedInsightTeaserWidget(),
+            if (!provider.premiumUnlocked && !hasPremium)
+              _buildLockedAdvancedInsightTeaserWidget(),
 
             ...provider.insights
-                .take(provider.premiumUnlocked ? 2 : 1)
+                .take(provider.premiumUnlocked || hasPremium ? 2 : 1)
                 .map(
                   (insight) =>
                       Container(
@@ -2400,8 +2400,6 @@ extension _PremiumFeaturesMethods on _HomeScreenState {
         .shimmer(duration: 4000.ms, color: color.withValues(alpha: 0.03))
         .then(delay: 3000.ms);
   }
-
-
 }
 
 // Lazy loading widget to improve performance
@@ -2570,9 +2568,7 @@ extension _NavigationMethods on _HomeScreenState {
 
   void _navigateToPartnerSharing() {
     Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const PartnerDashboardScreen(),
-      ),
+      MaterialPageRoute(builder: (context) => const PartnerDashboardScreen()),
     );
   }
 

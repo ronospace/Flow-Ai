@@ -1,275 +1,321 @@
-import 'dart:io';
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class AdMobService {
   static final AdMobService _instance = AdMobService._internal();
+
   factory AdMobService() => _instance;
+
   AdMobService._internal();
 
-  // Test Ad Unit IDs (use these for development)
-  static const String _testBannerAdUnitId = 'ca-app-pub-3940256099942544/6300978111';
-  static const String _testInterstitialAdUnitId = 'ca-app-pub-3940256099942544/1033173712';
-  static const String _testRewardedAdUnitId = 'ca-app-pub-3940256099942544/5224354917';
+  static const String _testInterstitial =
+      'ca-app-pub-3940256099942544/1033173712';
+  static const String _testRewarded = 'ca-app-pub-3940256099942544/5224354917';
 
-  // Android Production Ad Unit IDs (App ID: ca-app-pub-3053779336)
-  static const String _androidBannerAdUnitId = 'ca-app-pub-8707491489514576/9591267529';
-  static const String _androidInterstitialAdUnitId = 'ca-app-pub-8707491489514576/8812021403';
-  static const String _androidRewardedAdUnitId = 'ca-app-pub-8707491489514576/7894240148';
-  
-  // iOS Production Ad Unit IDs (App ID: ca-app-pub-5064348089)
-  static const String _iosBannerAdUnitId = 'ca-app-pub-8707491489514576/4146566820';
-  static const String _iosInterstitialAdUnitId = 'ca-app-pub-8707491489514576/4558432692';
-  static const String _iosRewardedAdUnitId = 'ca-app-pub-8707491489514576/2833485150';
+  static const String _androidInterstitial =
+      'ca-app-pub-8707491489514576/8812021403';
+  static const String _androidRewarded =
+      'ca-app-pub-8707491489514576/7894240148';
 
-  static bool get adsEnabled => false;
+  static const String _iosInterstitial =
+      'ca-app-pub-8707491489514576/4558432692';
+  static const String _iosRewarded = 'ca-app-pub-8707491489514576/2833485150';
 
-  // Ad unit getters
-  // Debug: defaults to TEST ads (safe). Override with:
-  // flutter run --dart-define=USE_TEST_ADS=false
-  static bool get _useTestAds => kDebugMode && const bool.fromEnvironment("USE_TEST_ADS", defaultValue: true);
+  static const bool _configured = bool.fromEnvironment(
+    'ENABLE_ADS',
+    defaultValue: true,
+  );
 
-  static String get bannerAdUnitId {
-    return _useTestAds
-        ? _testBannerAdUnitId
-        : (Platform.isAndroid ? _androidBannerAdUnitId : _iosBannerAdUnitId);
-  }
+  static bool _canRequestAds = false;
+  static bool _sdkInitialized = false;
+  static Future<void>? _initialization;
+
+  static bool get _supported =>
+      !kIsWeb &&
+      (defaultTargetPlatform == TargetPlatform.android ||
+          defaultTargetPlatform == TargetPlatform.iOS);
+
+  static bool get adsEnabled =>
+      _configured && _supported && _canRequestAds && _sdkInitialized;
+
+  static bool get _useTestAds =>
+      kDebugMode &&
+      const bool.fromEnvironment('USE_TEST_ADS', defaultValue: true);
 
   static String get interstitialAdUnitId {
-    return _useTestAds
-        ? _testInterstitialAdUnitId
-        : (Platform.isAndroid ? _androidInterstitialAdUnitId : _iosInterstitialAdUnitId);
+    if (_useTestAds) return _testInterstitial;
+
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      return _androidInterstitial;
+    }
+
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      return _iosInterstitial;
+    }
+
+    throw UnsupportedError('AdMob platform unsupported');
   }
 
   static String get rewardedAdUnitId {
-    return _useTestAds
-        ? _testRewardedAdUnitId
-        : (Platform.isAndroid ? _androidRewardedAdUnitId : _iosRewardedAdUnitId);
+    if (_useTestAds) return _testRewarded;
 
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      return _androidRewarded;
+    }
+
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      return _iosRewarded;
+    }
+
+    throw UnsupportedError('AdMob platform unsupported');
   }
 
-  // Interstitial ad variables
-  InterstitialAd? _interstitialAd;
-  bool _isInterstitialAdReady = false;
+  static const AdRequest _request = AdRequest();
 
-  // Rewarded ad variables
-  RewardedAd? _rewardedAd;
-  bool _isRewardedAdReady = false;
+  InterstitialAd? _interstitial;
+  RewardedAd? _rewarded;
 
-  // Initialize the Mobile Ads SDK
+  bool _interstitialLoading = false;
+  bool _interstitialReady = false;
+  bool _rewardedLoading = false;
+  bool _rewardedReady = false;
+
+  DateTime? _lastInterstitial;
+  DateTime? _lastRewarded;
+
   static Future<void> initialize() async {
-    if (!adsEnabled) return;
-    await MobileAds.instance.initialize();
-    if (kDebugMode) {
-      print('🎯 AdMob SDK initialized successfully');
+    if (!_configured || !_supported) return;
+
+    final existing = _initialization;
+
+    if (existing != null) {
+      await existing;
+      return;
+    }
+
+    final operation = _initializeWithConsent();
+    _initialization = operation;
+
+    try {
+      await operation;
+    } finally {
+      _initialization = null;
     }
   }
 
-  // Create banner ad
-  BannerAd createBannerAd() {
-    return BannerAd(
-      adUnitId: bannerAdUnitId,
-      size: AdSize.banner,
-      request: const AdRequest(),
-      listener: BannerAdListener(
-        onAdLoaded: (ad) {
-          if (kDebugMode) {
-            print('🎯 Banner ad loaded');
-          }
-        },
-        onAdFailedToLoad: (ad, error) {
-          if (kDebugMode) {
-            print('🎯 Banner ad failed to load: $error');
-          }
-          ad.dispose();
-        },
-        onAdOpened: (ad) {
-          if (kDebugMode) {
-            print('🎯 Banner ad opened');
-          }
-        },
-        onAdClosed: (ad) {
-          if (kDebugMode) {
-            print('🎯 Banner ad closed');
-          }
-        },
-      ),
+  static Future<void> _initializeWithConsent() async {
+    await _refreshConsentInformation();
+
+    _canRequestAds = await ConsentInformation.instance.canRequestAds();
+
+    if (!_canRequestAds) {
+      _instance.dispose();
+      return;
+    }
+
+    if (!_sdkInitialized) {
+      await MobileAds.instance.initialize();
+      _sdkInitialized = true;
+    }
+  }
+
+  static Future<void> _refreshConsentInformation() {
+    final completer = Completer<void>();
+
+    void complete() {
+      if (!completer.isCompleted) completer.complete();
+    }
+
+    ConsentInformation.instance.requestConsentInfoUpdate(
+      ConsentRequestParameters(),
+      () {
+        ConsentForm.loadAndShowConsentFormIfRequired((error) => complete());
+      },
+      (error) => complete(),
+    );
+
+    return completer.future.timeout(
+      const Duration(seconds: 30),
+      onTimeout: complete,
     );
   }
 
-  // Load interstitial ad
+  static Future<bool> isPrivacyOptionsRequired() async {
+    if (!_supported) return false;
+
+    return await ConsentInformation.instance
+            .getPrivacyOptionsRequirementStatus() ==
+        PrivacyOptionsRequirementStatus.required;
+  }
+
+  static Future<FormError?> showPrivacyOptionsForm() {
+    final completer = Completer<FormError?>();
+
+    if (!_supported) {
+      completer.complete(null);
+      return completer.future;
+    }
+
+    ConsentForm.showPrivacyOptionsForm((error) async {
+      _canRequestAds = await ConsentInformation.instance.canRequestAds();
+
+      if (_canRequestAds && !_sdkInitialized) {
+        await MobileAds.instance.initialize();
+        _sdkInitialized = true;
+      }
+
+      if (!_canRequestAds) {
+        _instance.dispose();
+      }
+
+      completer.complete(error);
+    });
+
+    return completer.future;
+  }
+
   void loadInterstitialAd() {
-    if (!adsEnabled) return;
+    if (!adsEnabled || _interstitialLoading || _interstitialReady) {
+      return;
+    }
+
+    _interstitialLoading = true;
+
     InterstitialAd.load(
       adUnitId: interstitialAdUnitId,
-      request: const AdRequest(),
+      request: _request,
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {
-          _interstitialAd = ad;
-          _isInterstitialAdReady = true;
-          
+          _interstitialLoading = false;
+          _interstitialReady = true;
+          _interstitial = ad;
+
           ad.fullScreenContentCallback = FullScreenContentCallback(
-            onAdShowedFullScreenContent: (ad) {
-              if (kDebugMode) {
-                print('🎯 Interstitial ad showed full screen content');
-              }
-            },
             onAdDismissedFullScreenContent: (ad) {
-              if (kDebugMode) {
-                print('🎯 Interstitial ad dismissed');
-              }
               ad.dispose();
-              _isInterstitialAdReady = false;
-              loadInterstitialAd(); // Load next ad
+              _interstitial = null;
+              _interstitialReady = false;
+              loadInterstitialAd();
             },
             onAdFailedToShowFullScreenContent: (ad, error) {
-              if (kDebugMode) {
-                print('🎯 Interstitial ad failed to show: $error');
-              }
               ad.dispose();
-              _isInterstitialAdReady = false;
-              loadInterstitialAd(); // Load next ad
+              _interstitial = null;
+              _interstitialReady = false;
+              loadInterstitialAd();
             },
           );
-
-          if (kDebugMode) {
-            print('🎯 Interstitial ad loaded');
-          }
         },
         onAdFailedToLoad: (error) {
-          if (kDebugMode) {
-            print('🎯 Interstitial ad failed to load: $error');
-          }
-          _isInterstitialAdReady = false;
+          _interstitialLoading = false;
+          _interstitialReady = false;
         },
       ),
     );
   }
 
-  // Show interstitial ad
-  void showInterstitialAd() {
-    if (!adsEnabled) return;
-    if (_isInterstitialAdReady && _interstitialAd != null) {
-      _interstitialAd!.show();
-    } else {
-      if (kDebugMode) {
-        print('🎯 Interstitial ad not ready');
-      }
-      loadInterstitialAd(); // Try loading again
+  bool showInterstitialAdWithFrequency() {
+    final previous = _lastInterstitial;
+
+    if (previous != null &&
+        DateTime.now().difference(previous) < const Duration(minutes: 3)) {
+      return false;
     }
+
+    if (!adsEnabled || !_interstitialReady || _interstitial == null) {
+      loadInterstitialAd();
+      return false;
+    }
+
+    final ad = _interstitial;
+
+    _interstitial = null;
+    _interstitialReady = false;
+    _lastInterstitial = DateTime.now();
+    ad!.show();
+
+    return true;
   }
 
-  // Load rewarded ad
   void loadRewardedAd() {
-    if (!adsEnabled) return;
+    if (!adsEnabled || _rewardedLoading || _rewardedReady) {
+      return;
+    }
+
+    _rewardedLoading = true;
+
     RewardedAd.load(
       adUnitId: rewardedAdUnitId,
-      request: const AdRequest(),
+      request: _request,
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (ad) {
-          _rewardedAd = ad;
-          _isRewardedAdReady = true;
+          _rewardedLoading = false;
+          _rewardedReady = true;
+          _rewarded = ad;
 
           ad.fullScreenContentCallback = FullScreenContentCallback(
-            onAdShowedFullScreenContent: (ad) {
-              if (kDebugMode) {
-                print('🎯 Rewarded ad showed full screen content');
-              }
-            },
             onAdDismissedFullScreenContent: (ad) {
-              if (kDebugMode) {
-                print('🎯 Rewarded ad dismissed');
-              }
               ad.dispose();
-              _isRewardedAdReady = false;
-              loadRewardedAd(); // Load next ad
+              _rewarded = null;
+              _rewardedReady = false;
+              loadRewardedAd();
             },
             onAdFailedToShowFullScreenContent: (ad, error) {
-              if (kDebugMode) {
-                print('🎯 Rewarded ad failed to show: $error');
-              }
               ad.dispose();
-              _isRewardedAdReady = false;
-              loadRewardedAd(); // Load next ad
+              _rewarded = null;
+              _rewardedReady = false;
+              loadRewardedAd();
             },
           );
-
-          if (kDebugMode) {
-            print('🎯 Rewarded ad loaded');
-          }
         },
         onAdFailedToLoad: (error) {
-          if (kDebugMode) {
-            print('🎯 Rewarded ad failed to load: $error');
-          }
-          _isRewardedAdReady = false;
+          _rewardedLoading = false;
+          _rewardedReady = false;
         },
       ),
     );
   }
 
-  // Show rewarded ad
-  void showRewardedAd({required Function(RewardItem) onRewarded}) {
-    if (!adsEnabled) return;
-    if (_isRewardedAdReady && _rewardedAd != null) {
-      _rewardedAd!.show(
-        onUserEarnedReward: (ad, reward) {
-          if (kDebugMode) {
-            print('🎯 User earned reward: ${reward.amount} ${reward.type}');
-          }
-          onRewarded(reward);
-        },
-      );
-    } else {
-      if (kDebugMode) {
-        print('🎯 Rewarded ad not ready');
-      }
-      loadRewardedAd(); // Try loading again
+  bool showRewardedAdWithFrequency({
+    required ValueChanged<RewardItem> onRewarded,
+  }) {
+    final previous = _lastRewarded;
+
+    if (previous != null &&
+        DateTime.now().difference(previous) < const Duration(minutes: 1)) {
+      return false;
     }
+
+    if (!adsEnabled || !_rewardedReady || _rewarded == null) {
+      loadRewardedAd();
+      return false;
+    }
+
+    final ad = _rewarded;
+
+    _rewarded = null;
+    _rewardedReady = false;
+    _lastRewarded = DateTime.now();
+
+    ad!.show(
+      onUserEarnedReward: (ad, reward) {
+        onRewarded(reward);
+      },
+    );
+
+    return true;
   }
 
-  // Check if interstitial ad is ready
-  bool get isInterstitialAdReady => _isInterstitialAdReady;
-
-  // Check if rewarded ad is ready
-  bool get isRewardedAdReady => _isRewardedAdReady;
-
-  // Dispose ads
   void dispose() {
-    _interstitialAd?.dispose();
-    _rewardedAd?.dispose();
-  }
+    _interstitial?.dispose();
+    _rewarded?.dispose();
 
-  // Ad frequency management
-  static DateTime? _lastInterstitialShown;
-  static DateTime? _lastRewardedShown;
-  
-  static const Duration _minInterstitialInterval = Duration(minutes: 3);
-  static const Duration _minRewardedInterval = Duration(minutes: 1);
-
-  bool canShowInterstitialAd() {
-    if (!adsEnabled) return false;
-    if (_lastInterstitialShown == null) return true;
-    return DateTime.now().difference(_lastInterstitialShown!) >= _minInterstitialInterval;
-  }
-
-  bool canShowRewardedAd() {
-    if (!adsEnabled) return false;
-    if (_lastRewardedShown == null) return true;
-    return DateTime.now().difference(_lastRewardedShown!) >= _minRewardedInterval;
-  }
-
-  void showInterstitialAdWithFrequency() {
-    if (canShowInterstitialAd()) {
-      showInterstitialAd();
-      _lastInterstitialShown = DateTime.now();
-    }
-  }
-
-  void showRewardedAdWithFrequency({required Function(RewardItem) onRewarded}) {
-    if (canShowRewardedAd()) {
-      showRewardedAd(onRewarded: onRewarded);
-      _lastRewardedShown = DateTime.now();
-    }
+    _interstitial = null;
+    _rewarded = null;
+    _interstitialLoading = false;
+    _interstitialReady = false;
+    _rewardedLoading = false;
+    _rewardedReady = false;
   }
 }

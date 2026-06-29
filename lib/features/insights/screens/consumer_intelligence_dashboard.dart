@@ -23,7 +23,10 @@ class _ConsumerIntelligenceDashboardState
     with TickerProviderStateMixin {
   final BiometricIntegrationService _biometricService =
       BiometricIntegrationService.instance;
-  final EnhancedAIChatService _aiService = EnhancedAIChatService();
+
+  _ConsumerIntelligenceDashboardState() {
+    EnhancedAIChatService();
+  }
 
   late AnimationController _animationController;
   late AnimationController _refreshController;

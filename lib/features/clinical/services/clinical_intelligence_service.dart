@@ -20,11 +20,8 @@ class ClinicalIntelligenceService {
 
   bool _isInitialized = false;
   SharedPreferences? _prefs;
-  
+
   // Clinical analysis configuration
-  static const int _analysisHistoryDays = 90;
-  static const double _abnormalThreshold = 0.7;
-  static const double _criticalThreshold = 0.9;
 
   /// Initialize the clinical intelligence service
   Future<void> initialize() async {
@@ -52,7 +49,7 @@ class ClinicalIntelligenceService {
 
     try {
       final DateTime startDate = reportDate.subtract(Duration(days: analysisWindowDays));
-      
+
       // Gather comprehensive health data
       final ClinicalDataSet dataSet = await _gatherClinicalData(
         userId: userId,
@@ -68,8 +65,8 @@ class ClinicalIntelligenceService {
 
       // Create recommendations
       final List<ClinicalRecommendation> recommendations = await _generateClinicalRecommendations(
-        dataSet, 
-        analysis, 
+        dataSet,
+        analysis,
         riskAssessments,
       );
 
@@ -333,7 +330,7 @@ class ClinicalIntelligenceService {
     final List<ClinicalFinding> findings = [];
 
     // Analyze mood patterns
-    if (dataSet.feelingsData.wellbeingStatistics.daysBelow5 > 
+    if (dataSet.feelingsData.wellbeingStatistics.daysBelow5 >
         dataSet.feelingsData.dateRange * 0.3) {
       findings.add(ClinicalFinding(
         category: ClinicalCategory.mentalHealth,
@@ -499,7 +496,7 @@ class ClinicalIntelligenceService {
     final List<MedicalInsight> insights = [];
 
     // Cycle-mood correlation insight
-    if (dataSet.cycleData.totalCycles > 0 && 
+    if (dataSet.cycleData.totalCycles > 0 &&
         dataSet.feelingsData.moodStatistics.isNotEmpty) {
       insights.add(MedicalInsight(
         id: _generateInsightId(),
@@ -541,7 +538,7 @@ class ClinicalIntelligenceService {
   /// Calculate various statistics and helper methods
   double _calculateStandardDeviation(List<double> values) {
     if (values.isEmpty) return 0.0;
-    
+
     final mean = values.reduce((a, b) => a + b) / values.length;
     final variance = values.map((v) => math.pow(v - mean, 2)).reduce((a, b) => a + b) / values.length;
     return math.sqrt(variance);
@@ -549,15 +546,15 @@ class ClinicalIntelligenceService {
 
   TrendDirection _calculateTrendDirection(List<double> values) {
     if (values.length < 3) return TrendDirection.stable;
-    
+
     final firstHalf = values.take(values.length ~/ 2).toList();
     final secondHalf = values.skip(values.length ~/ 2).toList();
-    
+
     final firstAvg = firstHalf.reduce((a, b) => a + b) / firstHalf.length;
     final secondAvg = secondHalf.reduce((a, b) => a + b) / secondHalf.length;
-    
+
     final difference = secondAvg - firstAvg;
-    
+
     if (difference > 0.5) return TrendDirection.up;
     if (difference < -0.5) return TrendDirection.down;
     return TrendDirection.stable;
@@ -565,12 +562,12 @@ class ClinicalIntelligenceService {
 
   double _calculateVolatility(List<double> values) {
     if (values.length < 2) return 0.0;
-    
+
     final changes = <double>[];
     for (int i = 1; i < values.length; i++) {
       changes.add((values[i] - values[i-1]).abs());
     }
-    
+
     return changes.reduce((a, b) => a + b) / changes.length;
   }
 
@@ -588,13 +585,13 @@ class ClinicalIntelligenceService {
       biometrics.heartRate.average > 0 ? 1.0 : 0.0,
       behavioral.engagementScore,
     ];
-    
+
     return completenessScores.reduce((a, b) => a + b) / completenessScores.length;
   }
 
   double _calculateHealthScore(ClinicalDataSet dataSet, List<ClinicalFinding> findings) {
     double score = 100.0;
-    
+
     for (final finding in findings) {
       switch (finding.severity) {
         case ClinicalSeverity.mild:
@@ -608,10 +605,10 @@ class ClinicalIntelligenceService {
           break;
       }
     }
-    
+
     // Adjust for data completeness
     score *= dataSet.dataCompleteness;
-    
+
     return math.max(0.0, math.min(100.0, score));
   }
 
@@ -670,7 +667,7 @@ class ClinicalIntelligenceService {
     final avgWellbeing = dataSet.feelingsData.wellbeingStatistics.average;
     final lowDays = dataSet.feelingsData.wellbeingStatistics.daysBelow5;
     final totalDays = dataSet.feelingsData.dateRange;
-    
+
     if (avgWellbeing < 4 || lowDays / totalDays > 0.5) {
       return RiskLevel.high;
     } else if (avgWellbeing < 6 || lowDays / totalDays > 0.3) {
@@ -682,7 +679,7 @@ class ClinicalIntelligenceService {
   RiskLevel _assessPCOSRisk(ClinicalDataSet dataSet) {
     final irregularCycles = dataSet.cycleData.irregularCycles;
     final cycleVariability = dataSet.cycleData.cycleVariability;
-    
+
     if (irregularCycles > 2 || cycleVariability > 10) {
       return RiskLevel.moderate;
     }
@@ -692,7 +689,7 @@ class ClinicalIntelligenceService {
   RiskLevel _assessCardiovascularRisk(ClinicalDataSet dataSet) {
     final abnormalHR = dataSet.biometricData.heartRate.abnormalReadings;
     final hypertensive = dataSet.biometricData.bloodPressure.hypertensiveReadings;
-    
+
     if (abnormalHR > 10 || hypertensive > 5) {
       return RiskLevel.moderate;
     }
@@ -789,11 +786,11 @@ class ClinicalIntelligenceService {
       // In a real implementation, this would generate actual report files
       final reportJson = report.toJson();
       final reportString = json.encode(reportJson);
-      
+
       // Save to device storage (mock implementation)
       final fileName = 'clinical_report_${report.id}.${format.name}';
       await _prefs?.setString('report_${report.id}', reportString);
-      
+
       debugPrint('📄 Clinical report exported: $fileName');
       return fileName;
     } catch (e) {

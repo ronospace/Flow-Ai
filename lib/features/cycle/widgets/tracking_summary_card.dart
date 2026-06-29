@@ -13,7 +13,6 @@ class TrackingSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       padding: const EdgeInsets.all(20),
@@ -330,10 +329,6 @@ class TrackingSummaryCard extends StatelessWidget {
     return DateTime.now().difference(cycleData.startDate).inDays + 1;
   }
 
-  String _formatDateLocal(BuildContext context, DateTime date) {
-    final l10n = AppLocalizations.of(context);
-    return DateFormat.yMMMd(l10n.localeName).format(date);
-  }
 
   Color _getFlowColor() {
     final flow = cycleData.flowIntensity ?? cycleData.averageFlow;
@@ -380,7 +375,6 @@ class TrackingSummaryCard extends StatelessWidget {
   }
 
   String _getMoodText(BuildContext context, double mood) {
-    final l10n = AppLocalizations.of(context);
     if (mood <= 1) return 'Sad';
     if (mood <= 2) return 'Low';
     if (mood <= 3) return 'Neutral';
@@ -398,7 +392,6 @@ class TrackingSummaryCard extends StatelessWidget {
 
   String _getEnergyText(BuildContext context, double energy) {
     // Map energy to generic localized labels
-    final l10n = AppLocalizations.of(context);
     if (energy <= 1) return 'Low';
     if (energy <= 2) return 'Medium';
     if (energy <= 3) return 'Medium';

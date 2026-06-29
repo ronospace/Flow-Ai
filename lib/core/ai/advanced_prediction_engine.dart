@@ -8,10 +8,6 @@ class AdvancedPredictionEngine {
   AdvancedPredictionEngine._internal();
 
   // Machine learning models (simplified for demo)
-  final Map<String, dynamic> _fertilityModel = {};
-  final Map<String, dynamic> _hormonePatternModel = {};
-  final Map<String, dynamic> _cycleIrregularityModel = {};
-  final Map<String, dynamic> _symptomPredictionModel = {};
   
   // Confidence thresholds
   static const double _highConfidenceThreshold = 0.85;

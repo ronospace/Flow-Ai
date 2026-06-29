@@ -16,11 +16,6 @@ class MultimodalSymptomAnalyzer {
   bool get isInitialized => _isInitialized;
 
   // AI Models for different input modalities
-  late Map<String, dynamic> _textAnalysisModel;
-  late Map<String, dynamic> _voiceAnalysisModel;
-  late Map<String, dynamic> _imageAnalysisModel;
-  late Map<String, dynamic> _contextualAnalysisModel;
-  late Map<String, dynamic> _smartJournalingModel;
 
   // Symptom recognition patterns
   late Map<String, List<String>> _symptomKeywords;
@@ -34,51 +29,41 @@ class MultimodalSymptomAnalyzer {
     debugPrint('🧠 Initializing Multimodal Symptom Analyzer...');
 
     // Initialize text analysis model
-    _textAnalysisModel = {
-      'nlp_processor': _initializeNLPProcessor(),
-      'sentiment_analyzer': _initializeSentimentAnalyzer(),
-      'symptom_extractor': _initializeSymptomExtractor(),
-      'mood_detector': _initializeMoodDetector(),
-      'pain_analyzer': _initializePainAnalyzer(),
-      'context_interpreter': _initializeContextInterpreter(),
-    };
+    _initializeNLPProcessor();
+    _initializeSentimentAnalyzer();
+    _initializeSymptomExtractor();
+    _initializeMoodDetector();
+    _initializePainAnalyzer();
+    _initializeContextInterpreter();
 
     // Initialize voice analysis model
-    _voiceAnalysisModel = {
-      'speech_to_text': _initializeSpeechToText(),
-      'emotion_detector': _initializeEmotionDetector(),
-      'vocal_stress_analyzer': _initializeVocalStressAnalyzer(),
-      'breathing_pattern_detector': _initializeBreathingDetector(),
-      'energy_level_detector': _initializeEnergyDetector(),
-    };
+    _initializeSpeechToText();
+    _initializeEmotionDetector();
+    _initializeVocalStressAnalyzer();
+    _initializeBreathingDetector();
+    _initializeEnergyDetector();
 
     // Initialize image analysis model
-    _imageAnalysisModel = {
-      'skin_analyzer': _initializeSkinAnalyzer(),
-      'mood_facial_recognition': _initializeFacialMoodRecognition(),
-      'acne_detection': _initializeAcneDetection(),
-      'inflammation_detector': _initializeInflammationDetector(),
-      'color_analysis': _initializeColorAnalysis(),
-      'texture_analysis': _initializeTextureAnalysis(),
-    };
+    _initializeSkinAnalyzer();
+    _initializeFacialMoodRecognition();
+    _initializeAcneDetection();
+    _initializeInflammationDetector();
+    _initializeColorAnalysis();
+    _initializeTextureAnalysis();
 
     // Initialize contextual analysis
-    _contextualAnalysisModel = {
-      'time_correlation': _initializeTimeCorrelation(),
-      'cycle_phase_context': _initializeCyclePhaseContext(),
-      'weather_correlation': _initializeWeatherCorrelation(),
-      'activity_correlation': _initializeActivityCorrelation(),
-      'medication_impact': _initializeMedicationImpact(),
-    };
+    _initializeTimeCorrelation();
+    _initializeCyclePhaseContext();
+    _initializeWeatherCorrelation();
+    _initializeActivityCorrelation();
+    _initializeMedicationImpact();
 
     // Smart journaling model
-    _smartJournalingModel = {
-      'summary_generator': _initializeSummaryGenerator(),
-      'insight_extractor': _initializeInsightExtractor(),
-      'pattern_recognizer': _initializePatternRecognizer(),
-      'recommendation_engine': _initializeRecommendationEngine(),
-      'trend_analyzer': _initializeTrendAnalyzer(),
-    };
+    _initializeSummaryGenerator();
+    _initializeInsightExtractor();
+    _initializePatternRecognizer();
+    _initializeRecommendationEngine();
+    _initializeTrendAnalyzer();
 
     // Initialize symptom recognition patterns
     _initializeSymptomPatterns();
@@ -421,7 +406,7 @@ class MultimodalSymptomAnalyzer {
   Future<List<ExtractedSymptom>> _extractSymptomsFromText(
     String text, Map<String, dynamic> nlpResults) async {
     final symptoms = <ExtractedSymptom>[];
-    
+
     for (final category in _symptomKeywords.keys) {
       for (final keyword in _symptomKeywords[category]!) {
         if (text.toLowerCase().contains(keyword)) {
@@ -434,7 +419,7 @@ class MultimodalSymptomAnalyzer {
         }
       }
     }
-    
+
     return symptoms;
   }
 
@@ -442,7 +427,7 @@ class MultimodalSymptomAnalyzer {
     final words = text.split(' ');
     final index = words.indexWhere((word) => word.toLowerCase().contains(symptom.toLowerCase()));
     if (index == -1) return '';
-    
+
     final start = math.max(0, index - 3);
     final end = math.min(words.length, index + 4);
     return words.sublist(start, end).join(' ');
@@ -789,24 +774,24 @@ class MultimodalSymptomAnalyzer {
   Future<String> _generateAISummary(
     Map<String, dynamic> combinedAnalysis, String? userJournalEntry) async {
     await Future.delayed(const Duration(milliseconds: 1500));
-    
+
     final symptoms = combinedAnalysis['symptoms'] as List<String>;
     final moods = combinedAnalysis['moods'] as List<String>;
-    
+
     String summary = 'Daily Summary: ';
-    
+
     if (symptoms.isNotEmpty) {
       summary += 'Reported symptoms include ${symptoms.take(3).join(', ')}. ';
     }
-    
+
     if (moods.isNotEmpty) {
       summary += 'Mood appeared to be predominantly ${moods.first}. ';
     }
-    
+
     if (userJournalEntry != null && userJournalEntry.isNotEmpty) {
       summary += 'Personal notes indicate additional context about daily experiences.';
     }
-    
+
     return summary;
   }
 
@@ -839,16 +824,16 @@ class MultimodalSymptomAnalyzer {
 
   Map<String, dynamic> _calculateMoodTrend(List<SymptomAnalysisBase> analyses) {
     final moodScores = <double>[];
-    
+
     for (final analysis in analyses) {
       if (analysis is TextSymptomAnalysis) {
         moodScores.add(analysis.moodAnalysis.confidence);
       }
     }
-    
+
     return {
-      'average_mood': moodScores.isNotEmpty 
-        ? moodScores.reduce((a, b) => a + b) / moodScores.length 
+      'average_mood': moodScores.isNotEmpty
+        ? moodScores.reduce((a, b) => a + b) / moodScores.length
         : 0.5,
       'trend_direction': 'stable',
       'volatility': 0.3,
@@ -857,16 +842,16 @@ class MultimodalSymptomAnalyzer {
 
   Map<String, dynamic> _calculateEnergyTrend(List<SymptomAnalysisBase> analyses) {
     final energyScores = <double>[];
-    
+
     for (final analysis in analyses) {
       if (analysis is TextSymptomAnalysis) {
         energyScores.add(analysis.energyAnalysis.energyScore);
       }
     }
-    
+
     return {
-      'average_energy': energyScores.isNotEmpty 
-        ? energyScores.reduce((a, b) => a + b) / energyScores.length 
+      'average_energy': energyScores.isNotEmpty
+        ? energyScores.reduce((a, b) => a + b) / energyScores.length
         : 0.5,
       'trend_direction': 'declining',
       'peak_times': ['morning', 'late_afternoon'],
