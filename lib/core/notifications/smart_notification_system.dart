@@ -28,14 +28,14 @@ class SmartNotificationSystem {
   final Map<String, dynamic> _userContext = {};
   final Map<String, DateTime> _lastNotificationTime = {};
   final List<SmartNotification> _notificationHistory = [];
-  
+
   // Timers and streams
   Timer? _contextUpdateTimer;
   Timer? _notificationOptimizationTimer;
-  final StreamController<NotificationEvent> _notificationEventStream = 
+  final StreamController<NotificationEvent> _notificationEventStream =
       StreamController.broadcast();
-  
-  Stream<NotificationEvent> get notificationEventStream => 
+
+  Stream<NotificationEvent> get notificationEventStream =>
       _notificationEventStream.stream;
 
   Future<void> initialize() async {
@@ -86,17 +86,17 @@ class SmartNotificationSystem {
 
   Future<void> _requestNotificationPermissions() async {
     if (_flutterLocalNotificationsPlugin == null) return;
-    
+
     final androidPlugin = _flutterLocalNotificationsPlugin!
         .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
-    
+
     if (androidPlugin != null) {
       await androidPlugin.requestNotificationsPermission();
     }
 
     final iosPlugin = _flutterLocalNotificationsPlugin!
         .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
-    
+
     if (iosPlugin != null) {
       await iosPlugin.requestPermissions(
         alert: true,
@@ -367,14 +367,14 @@ class SmartNotificationSystem {
     if (lastSent != null) {
       final timeSince = DateTime.now().difference(lastSent);
       final minimumInterval = _getMinimumInterval(type, priority);
-      
+
       if (timeSince < minimumInterval) {
         return false;
       }
     }
 
     // Check user preferences and context
-    final preferences = await _personalizationEngine?.getUserPreferences(user) ?? 
+    final preferences = await _personalizationEngine?.getUserPreferences(user) ??
         NotificationPreferences.defaultPreferences();
     if (!preferences.allowsNotification(type)) {
       return false;
@@ -430,10 +430,10 @@ class SmartNotificationSystem {
 
   void _onNotificationResponse(NotificationResponse response) {
     debugPrint('📱 Notification tapped: ${response.payload}');
-    
+
     try {
       final notification = SmartNotification.fromJsonString(response.payload!);
-      
+
       _notificationEventStream.add(NotificationEvent(
         type: NotificationEventType.tapped,
         notification: notification,
@@ -449,14 +449,14 @@ class SmartNotificationSystem {
 
   Future<void> _updateUserContext() async {
     debugPrint('🔄 Updating user context for notifications...');
-    
+
     final now = DateTime.now();
     _userContext['current_time'] = now.toIso8601String();
     _userContext['hour'] = now.hour;
     _userContext['day_of_week'] = now.weekday;
     _userContext['is_weekend'] = now.weekday >= 6;
     _userContext['time_of_day'] = _getTimeOfDay(now.hour);
-    
+
     // Add more context from other engines if available
     // This would be enhanced with real user data
   }
@@ -470,7 +470,7 @@ class SmartNotificationSystem {
 
   Future<void> _optimizeNotificationStrategy() async {
     debugPrint('⚡ Optimizing notification strategy...');
-    
+
     final insights = await _optimizer?.analyzeNotificationPerformance(
       _notificationHistory,
       _userContext,
@@ -482,7 +482,7 @@ class SmartNotificationSystem {
   String _determineAlertSeverity(String alertType) {
     const highSeverity = ['abnormal_bleeding', 'severe_pain', 'emergency'];
     const mediumSeverity = ['irregular_cycle', 'unusual_symptoms'];
-    
+
     if (highSeverity.contains(alertType)) return 'high';
     if (mediumSeverity.contains(alertType)) return 'medium';
     return 'low';
@@ -546,7 +546,7 @@ class NotificationScheduler {
     required Map<String, dynamic> userContext,
   }) async {
     final now = DateTime.now();
-    
+
     if (delayMinutes != null) {
       return now.add(Duration(minutes: delayMinutes));
     }
@@ -565,7 +565,7 @@ class NotificationScheduler {
     required Map<String, dynamic> userContext,
   }) async {
     final hour = userContext['hour'] as int? ?? DateTime.now().hour;
-    
+
     // Basic optimal time rules
     switch (type) {
       case NotificationType.wellnessTip:
@@ -591,7 +591,7 @@ class NotificationScheduler {
         } else {
           return DateTime(now.year, now.month, now.day + 1, 9, 0);
         }
-      
+
       case NotificationType.medication:
         // Send medication reminders during appropriate hours
         if (hour < 8) {
@@ -601,7 +601,7 @@ class NotificationScheduler {
         } else {
           return now.add(const Duration(minutes: 15));
         }
-      
+
       default:
         return now.add(const Duration(minutes: 5));
     }
@@ -637,23 +637,23 @@ class NotificationContentGenerator {
     Map<String, dynamic> userContext,
   ) {
     final userName = user.displayName ?? 'there';
-    
+
     switch (type) {
       case NotificationType.cyclePhase:
         return _generateCyclePhaseContent(userName, healthData);
-      
+
       case NotificationType.aiInsight:
         return _generateAIInsightContent(userName, healthData);
-      
+
       case NotificationType.healthAlert:
         return _generateHealthAlertContent(userName, healthData);
-      
+
       case NotificationType.medication:
         return _generateMedicationContent(userName, healthData);
-      
+
       case NotificationType.wellnessTip:
         return _generateWellnessTipContent(userName, userContext);
-      
+
       default:
         return NotificationContent(
           title: 'Flow Ai Health Update',
@@ -664,7 +664,7 @@ class NotificationContentGenerator {
 
   NotificationContent _generateCyclePhaseContent(String userName, Map<String, dynamic>? data) {
     final phase = data?['phase'] ?? 'current';
-    
+
     switch (phase) {
       case 'menstrual':
         return NotificationContent(
@@ -697,21 +697,21 @@ class NotificationContentGenerator {
   NotificationContent _generateAIInsightContent(String userName, Map<String, dynamic>? data) {
     final score = data?['health_score'] as double?;
     final insight = data?['specific_insight'] as String?;
-    
+
     if (insight != null) {
       return NotificationContent(
         title: '🤖 AI Health Insight',
         body: insight,
       );
     }
-    
+
     if (score != null && score >= 0.8) {
       return NotificationContent(
         title: '🎉 Great Health Progress!',
         body: 'Hi $userName! Your health score is excellent at ${(score * 100).round()}%. Keep up the great work!',
       );
     }
-    
+
     return NotificationContent(
       title: '🧠 AI Health Insight',
       body: 'Hi $userName! We\'ve discovered some interesting patterns in your health data.',
@@ -719,11 +719,10 @@ class NotificationContentGenerator {
   }
 
   NotificationContent _generateHealthAlertContent(String userName, Map<String, dynamic>? data) {
-    final alertType = data?['alert_type'] ?? 'general';
     final severity = data?['severity'] ?? 'low';
-    
+
     String emoji = severity == 'high' ? '🚨' : severity == 'medium' ? '⚠️' : 'ℹ️';
-    
+
     return NotificationContent(
       title: '$emoji Health Alert',
       body: 'Hi $userName! We noticed something that may need your attention regarding your health.',
@@ -733,7 +732,7 @@ class NotificationContentGenerator {
   NotificationContent _generateMedicationContent(String userName, Map<String, dynamic>? data) {
     final medicationName = data?['medication_name'] ?? 'your medication';
     final dosage = data?['dosage'] ?? '';
-    
+
     return NotificationContent(
       title: '💊 Medication Reminder',
       body: 'Hi $userName! Time to take $medicationName${dosage.isNotEmpty ? ' ($dosage)' : ''}.',
@@ -749,9 +748,9 @@ class NotificationContentGenerator {
       'Get 7-9 hours of sleep for optimal health.',
       'Take time to stretch and improve your flexibility.',
     ];
-    
+
     final randomTip = tips[math.Random().nextInt(tips.length)];
-    
+
     return NotificationContent(
       title: '💡 Daily Wellness Tip',
       body: 'Hi $userName! $randomTip',
@@ -786,30 +785,30 @@ class NotificationOptimizer {
     Map<String, dynamic> userContext,
   ) async {
     final insights = <String>[];
-    
+
     if (history.isEmpty) return insights;
-    
+
     // Analyze engagement rates by type
     final typeEngagement = <NotificationType, double>{};
     for (final type in NotificationType.values) {
       final notifications = history.where((n) => n.type == type).toList();
       if (notifications.isNotEmpty) {
-        final engagementRate = notifications.where((n) => n.wasEngaged).length / 
+        final engagementRate = notifications.where((n) => n.wasEngaged).length /
                               notifications.length;
         typeEngagement[type] = engagementRate;
       }
     }
-    
+
     // Generate insights
     final bestType = typeEngagement.entries
         .where((e) => e.value > 0.5)
         .map((e) => e.key)
         .toList();
-    
+
     if (bestType.isNotEmpty) {
       insights.add('High engagement types: ${bestType.join(", ")}');
     }
-    
+
     return insights;
   }
 
@@ -856,7 +855,7 @@ class SmartNotification {
   final String userId;
   final NotificationContent personalizedContent;
   final Map<String, dynamic> metadata;
-  
+
   bool _wasEngaged = false;
   String? _engagementAction;
   DateTime? _engagementTime;

@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import '../models/cycle_data.dart' as cycle_data;
 import '../models/daily_tracking_data.dart';
 import '../database/database_service.dart';
-import 'cycle_calculation_engine.dart';
 import 'performance_optimizer.dart';
 
 class AnalyticsService {
@@ -12,9 +11,6 @@ class AnalyticsService {
   AnalyticsService._internal();
 
   final DatabaseService _databaseService = DatabaseService();
-  late final CycleCalculationEngine _calculationEngine = CycleCalculationEngine(
-    _databaseService,
-  );
 
   // Cycle Analytics with performance optimization
   Future<CycleAnalytics> getCycleAnalytics({

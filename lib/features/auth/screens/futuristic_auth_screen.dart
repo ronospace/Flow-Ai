@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:local_auth/local_auth.dart';
-import '../../../core/services/auth_service.dart';
 import '../../../core/services/platform_service.dart';
-import '../../../core/ui/adaptive_messages.dart';
 import '../widgets/biometric_button.dart';
 
 /// 🚀 Futuristic Auth Screen - Gen Z & Alpha Design
@@ -785,76 +783,6 @@ class _FuturisticAuthScreenState extends State<FuturisticAuthScreen>
 
   void _handleForgotPassword() {
     // Same implementation as original auth_screen.dart
-  }
-
-  void _showSuccessMessage(String message) {
-    if (mounted) {
-      AdaptiveMessages.showSuccess(context, message);
-    }
-  }
-
-  void _showErrorMessage(String message) {
-    if (mounted) {
-      AdaptiveMessages.showError(context, message);
-    }
-  }
-
-  void _showInfoMessage(String message) {
-    if (mounted) {
-      AdaptiveMessages.showInfo(context, message);
-    }
-  }
-
-  Widget _buildFuturisticButton({
-    required String text,
-    required VoidCallback? onPressed,
-    required List<Color> colors,
-    required IconData icon,
-  }) {
-    return Container(
-      height: 56,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(colors: colors),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: colors[0].withValues(alpha: 0.5),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onPressed != null
-              ? () {
-                  HapticFeedback.mediumImpact();
-                  onPressed();
-                }
-              : null,
-          borderRadius: BorderRadius.circular(16),
-          child: Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(icon, color: Colors.white, size: 24),
-                const SizedBox(width: 12),
-                Text(
-                  text,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 0.5,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
   }
 
 }

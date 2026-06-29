@@ -70,9 +70,9 @@ class HealthMetricsCard extends StatelessWidget {
                 _buildTrendIndicator(context),
               ],
             ),
-            
+
             const SizedBox(height: 12),
-            
+
             // Value and unit
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -97,9 +97,9 @@ class HealthMetricsCard extends StatelessWidget {
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 8),
-            
+
             // Title and subtitle
             Text(
               title,
@@ -108,7 +108,7 @@ class HealthMetricsCard extends StatelessWidget {
                 color: AppTheme.darkGrey,
               ),
             ),
-            
+
             if (subtitle != null) ...[
               const SizedBox(height: 2),
               Text(
@@ -125,7 +125,7 @@ class HealthMetricsCard extends StatelessWidget {
       ).animate().fadeIn().scale(begin: const Offset(0.9, 0.9)),
     );
   }
-  
+
   Widget _buildTrendIndicator(BuildContext context) {
     if (trend == 0.0) {
       return Container(
@@ -155,12 +155,12 @@ class HealthMetricsCard extends StatelessWidget {
         ),
       );
     }
-    
+
     final isPositive = trend > 0;
     final trendColor = _getTrendColor();
     final trendIcon = isPositive ? Icons.trending_up : Icons.trending_down;
     final trendPercent = (trend.abs() * 100).toStringAsFixed(0);
-    
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
       decoration: BoxDecoration(
@@ -188,10 +188,10 @@ class HealthMetricsCard extends StatelessWidget {
       ),
     );
   }
-  
+
   Color _getTrendColor() {
     if (trend == 0.0) return AppTheme.mediumGrey;
-    
+
     // For most health metrics, positive trends are good
     // But this could be customized per metric type
     switch (title.toLowerCase()) {
@@ -224,7 +224,6 @@ class HealthMetricsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return GridView.count(
       crossAxisCount: crossAxisCount,
       shrinkWrap: true,

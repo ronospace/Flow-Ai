@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 import '../../../core/health/advanced_health_analytics.dart';
 
 /// AI-powered insights panel with smart recommendations and predictions
@@ -158,7 +157,7 @@ class _AIInsightsPanelState extends State<AIInsightsPanel>
 
   Widget _buildInsightsCarousel() {
     final insights = _getInsights();
-    
+
     return SizedBox(
       height: 160,
       child: PageView.builder(
@@ -499,8 +498,7 @@ class _AIInsightsPanelState extends State<AIInsightsPanel>
   }
 
   List<Map<String, dynamic>> _getInsights() {
-    final random = math.Random();
-    
+
     return [
       {
         'title': 'Cycle Regularity',

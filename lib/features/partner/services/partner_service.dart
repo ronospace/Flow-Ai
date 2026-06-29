@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
-import 'package:cloud_functions/cloud_functions.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'local_partner_service.dart';
 
 /// Partner service - Uses local storage for partner features
@@ -15,12 +13,12 @@ class PartnerService extends ChangeNotifier {
 
   final LocalPartnerService _localService = LocalPartnerService();
   final bool _firebaseAvailable = false;
-  
+
   Partnership? _currentPartnership;
   List<PartnerMessage> _messages = [];
   List<PartnerCareAction> _careActions = [];
   List<PartnerInsight> _insights = [];
-  
+
   bool _isLoading = false;
   String? _error;
 
@@ -49,7 +47,7 @@ class PartnerService extends ChangeNotifier {
       _setLoading(false);
     }
   }
-  
+
   /// Load partnership for current user
   Future<void> _loadPartnership() async {
     try {
@@ -81,11 +79,11 @@ class PartnerService extends ChangeNotifier {
       debugPrint('Error loading partnership: $e');
     }
   }
-  
+
   /// Load messages for current partnership
   Future<void> _loadMessages() async {
     if (_currentPartnership == null) return;
-    
+
     try {
       final messages = await _localService.getMessages(_currentPartnership!.id);
       _messages = messages;
@@ -94,13 +92,15 @@ class PartnerService extends ChangeNotifier {
       debugPrint('Error loading messages: $e');
     }
   }
-  
+
   /// Load care actions for current partnership
   Future<void> _loadCareActions() async {
     if (_currentPartnership == null) return;
-    
+
     try {
-      final actions = await _localService.getCareActions(_currentPartnership!.id);
+      final actions = await _localService.getCareActions(
+        _currentPartnership!.id,
+      );
       _careActions = actions;
       notifyListeners();
     } catch (e) {
@@ -119,9 +119,9 @@ class PartnerService extends ChangeNotifier {
       final invitation = await _localService.createPartnerInvitation(
         personalMessage: personalMessage,
       );
-      
+
       debugPrint('✅ Partner invitation created: ${invitation.invitationCode}');
-          
+
       return invitation;
     } catch (e) {
       _setError('Failed to create invitation: $e');
@@ -135,8 +135,10 @@ class PartnerService extends ChangeNotifier {
   Future<Partnership?> acceptPartnerInvitation(String invitationCode) async {
     _setLoading(true);
     try {
-      final partnershipData = await _localService.acceptPartnerInvitation(invitationCode);
-      
+      final partnershipData = await _localService.acceptPartnerInvitation(
+        invitationCode,
+      );
+
       if (partnershipData != null) {
         // Reload partnership to get updated state
         await _loadPartnership();
@@ -146,7 +148,7 @@ class PartnerService extends ChangeNotifier {
         debugPrint('✅ Partnership accepted');
         return _currentPartnership;
       }
-      
+
       _setError('Failed to accept invitation');
       return null;
     } catch (e) {
@@ -167,17 +169,17 @@ class PartnerService extends ChangeNotifier {
       _setError('No active partnership');
       return null;
     }
-    
+
     try {
       await _localService.sendMessage(
         content: content,
         type: type,
         metadata: metadata,
       );
-      
+
       // Reload messages
       await _loadMessages();
-      
+
       // Return the most recent message
       if (_messages.isNotEmpty) {
         return _messages.first;
@@ -200,7 +202,7 @@ class PartnerService extends ChangeNotifier {
       _setError('No active partnership');
       return null;
     }
-    
+
     try {
       await _localService.sendCareAction(
         type: type,
@@ -208,10 +210,10 @@ class PartnerService extends ChangeNotifier {
         description: description,
         data: actionData,
       );
-      
+
       // Reload care actions
       await _loadCareActions();
-      
+
       // Return the most recent action
       if (_careActions.isNotEmpty) {
         return _careActions.first;
@@ -229,9 +231,12 @@ class PartnerService extends ChangeNotifier {
       _setError('No active partnership');
       return;
     }
-    
+
     try {
-      await _localService.updateSharingSettings(_currentPartnership!.id, newSettings);
+      await _localService.updateSharingSettings(
+        _currentPartnership!.id,
+        newSettings,
+      );
       await _loadPartnership();
       debugPrint('✅ Sharing settings updated');
     } catch (e) {
@@ -252,7 +257,7 @@ class PartnerService extends ChangeNotifier {
   /// Disconnect partnership
   Future<void> disconnectPartnership() async {
     if (_currentPartnership == null) return;
-    
+
     try {
       await _localService.disconnectPartnership(_currentPartnership!.id);
       _currentPartnership = null;
@@ -277,7 +282,8 @@ class PartnerService extends ChangeNotifier {
   }
 
   /// Check if partner features are available
-  bool get arePartnerFeaturesAvailable => true; // Local service is always available
+  bool get arePartnerFeaturesAvailable =>
+      true; // Local service is always available
 
   /// Get local partner data
   Map<String, dynamic> getLocalPartnerData() {
@@ -480,7 +486,8 @@ class PartnerSharingSettings {
     return PartnerSharingSettings(
       shareSymptoms: shareSymptoms ?? this.shareSymptoms,
       shareMoodData: shareMoodData ?? this.shareMoodData,
-      sharePhysicalSymptoms: sharePhysicalSymptoms ?? this.sharePhysicalSymptoms,
+      sharePhysicalSymptoms:
+          sharePhysicalSymptoms ?? this.sharePhysicalSymptoms,
       sharePredictions: sharePredictions ?? this.sharePredictions,
       allowInsights: allowInsights ?? this.allowInsights,
       sendNotifications: sendNotifications ?? this.sendNotifications,
@@ -682,6 +689,14 @@ class PartnerInsight {
 
 // Enums
 enum PartnershipStatus { invited, active, paused, ended }
+
 enum PartnerMessageType { text, supportRequest, careAction, insight }
-enum PartnerCareActionType { emotionalSupport, physicalCare, thoughtfulGesture, other }
+
+enum PartnerCareActionType {
+  emotionalSupport,
+  physicalCare,
+  thoughtfulGesture,
+  other,
+}
+
 enum PartnerInsightType { supportSuggestion, cycleUpdate, moodAlert, healthTip }

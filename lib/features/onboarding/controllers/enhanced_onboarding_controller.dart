@@ -68,14 +68,10 @@ class EnhancedOnboardingController extends ChangeNotifier {
       // Check if user has any existing preferences
       final cycleLength = _preferencesService.getAverageCycleLength();
       final periodLength = _preferencesService.getAveragePeriodLength();
-      final trackingGoals = _preferencesService.getTrackingGoals();
-      
-      if (cycleLength != null || periodLength != null || trackingGoals.isNotEmpty) {
-        _data = _data.copyWith(
-          averageCycleLength: cycleLength,
-          averagePeriodLength: periodLength,
-        );
-      }
+      _data = _data.copyWith(
+        averageCycleLength: cycleLength,
+        averagePeriodLength: periodLength,
+      );
     } catch (e) {
       debugPrint('Error loading existing data: $e');
     }

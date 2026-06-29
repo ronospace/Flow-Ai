@@ -3,14 +3,31 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('advertising is disabled globally', () {
+  test('advertising requires platform support, consent, and SDK readiness', () {
     final source = File(
       'lib/core/services/admob_service.dart',
     ).readAsStringSync();
 
-    expect(source, contains('static bool get adsEnabled => false;'));
-    expect(source, contains('if (!adsEnabled) return;'));
-    expect(source, contains('if (!adsEnabled) return false;'));
+    expect(source, contains("'ENABLE_ADS'"));
+    expect(source, contains('defaultValue: true'));
+    expect(source, contains('requestConsentInfoUpdate'));
+    expect(source, contains('loadAndShowConsentFormIfRequired'));
+    expect(source, contains('canRequestAds'));
+    expect(source, contains('_canRequestAds'));
+    expect(source, contains('_sdkInitialized'));
+    expect(source, contains('showPrivacyOptionsForm'));
+    expect(source, contains('kDebugMode &&'));
+  });
+
+  test('sensitive dashboard remains free of automatic ad placements', () {
+    final source = File(
+      'lib/features/cycle/screens/home_screen.dart',
+    ).readAsStringSync();
+
+    expect(source, isNot(contains('BannerAd')));
+    expect(source, isNot(contains('showInterstitialAdWithFrequency')));
+    expect(source, contains('showRewardedAdWithFrequency'));
+    expect(source, contains('Premium access is already ad-free.'));
   });
 
   test('analytics requires explicit opt in', () {

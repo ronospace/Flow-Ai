@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../generated/app_localizations.dart';
 
 class WelcomeStepScreen extends StatelessWidget {
   final VoidCallback? onNext;
@@ -11,8 +10,6 @@ class WelcomeStepScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final localizations = AppLocalizations.of(context);
-    final size = MediaQuery.of(context).size;
 
     return Container(
       decoration: BoxDecoration(
@@ -57,8 +54,8 @@ class WelcomeStepScreen extends StatelessWidget {
                 child: Icon(
                   Icons.favorite_rounded,
                   size: 40,
-                  color: theme.brightness == Brightness.dark 
-                      ? Colors.white 
+                  color: theme.brightness == Brightness.dark
+                      ? Colors.white
                       : Colors.white,
                 ),
               ),

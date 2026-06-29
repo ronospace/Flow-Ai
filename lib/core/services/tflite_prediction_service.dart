@@ -12,7 +12,6 @@ class TFLitePredictionService {
 
   // Interpreter? _interpreter; // Temporarily disabled due to package compatibility
   bool _isInitialized = false;
-  bool _modelLoaded = false;
 
   // Model input/output shapes
   static const int inputLength = 30; // Last 30 days of features
@@ -51,10 +50,8 @@ class TFLitePredictionService {
       debugPrint(
         '📦 TFLite model loading prepared (model file not yet available)',
       );
-      _modelLoaded = false; // Model not yet available
     } catch (e) {
       debugPrint('❌ Error loading TFLite model: $e');
-      _modelLoaded = false;
     }
   }
 
@@ -91,78 +88,7 @@ class TFLitePredictionService {
     // }
   }
 
-  /// Prepare input tensor from historical data
-  List<List<List<double>>> _prepareInputTensor(
-    List<List<double>> historicalData,
-  ) {
-    // Ensure we have exactly inputLength days of data
-    final paddedData = _padOrTruncateData(historicalData, inputLength);
 
-    // Reshape to [1, inputLength, featureCount] for batch processing
-    return [paddedData];
-  }
-
-  List<List<double>> _padOrTruncateData(
-    List<List<double>> data,
-    int targetLength,
-  ) {
-    if (data.length == targetLength) return data;
-
-    if (data.length > targetLength) {
-      // Take the most recent data
-      return data.sublist(data.length - targetLength);
-    } else {
-      // Pad with zeros (or average values)
-      final padded = List<List<double>>.from(data);
-      final average = _calculateAverageFeatures(data);
-
-      while (padded.length < targetLength) {
-        padded.insert(0, List.from(average));
-      }
-
-      return padded;
-    }
-  }
-
-  List<double> _calculateAverageFeatures(List<List<double>> data) {
-    if (data.isEmpty) return List.filled(featureCount, 0.0);
-
-    final sums = List.filled(featureCount, 0.0);
-    for (final row in data) {
-      for (int i = 0; i < featureCount && i < row.length; i++) {
-        sums[i] += row[i];
-      }
-    }
-
-    return sums.map((s) => s / data.length).toList();
-  }
-
-  /// Process model output into prediction result
-  CyclePredictionResult _processModelOutput(
-    List<List<double>> output,
-    List<List<double>> historicalData,
-  ) {
-    // Extract predictions
-    final periodProbabilities = output.map((day) => day[0]).toList();
-    final ovulationProbabilities = output.map((day) => day[1]).toList();
-    final symptomScores = output.map((day) => day[2]).toList();
-
-    // Calculate confidence scores
-    final avgPeriodConfidence =
-        periodProbabilities.reduce((a, b) => a + b) /
-        periodProbabilities.length;
-    final avgOvulationConfidence =
-        ovulationProbabilities.reduce((a, b) => a + b) /
-        ovulationProbabilities.length;
-
-    return CyclePredictionResult(
-      periodProbabilities: periodProbabilities,
-      ovulationProbabilities: ovulationProbabilities,
-      symptomScores: symptomScores,
-      confidence: (avgPeriodConfidence + avgOvulationConfidence) / 2,
-      method: PredictionMethod.tflite,
-    );
-  }
 
   /// Statistical fallback when TFLite model is not available
   CyclePredictionResult _statisticalFallback(
@@ -198,7 +124,6 @@ class TFLitePredictionService {
   void dispose() {
     // _interpreter?.close(); // Temporarily disabled
     // _interpreter = null; // Temporarily disabled
-    _modelLoaded = false;
     _isInitialized = false;
   }
 }
