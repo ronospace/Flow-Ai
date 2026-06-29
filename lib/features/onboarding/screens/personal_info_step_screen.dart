@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../generated/app_localizations.dart';
 import '../models/onboarding_data.dart';
 
 class PersonalInfoStepScreen extends StatefulWidget {
@@ -43,7 +42,6 @@ class _PersonalInfoStepScreenState extends State<PersonalInfoStepScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final localizations = AppLocalizations.of(context);
 
     return Container(
       decoration: BoxDecoration(

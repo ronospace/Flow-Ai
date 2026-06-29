@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../models/user_preferences.dart';
 import '../../../core/services/app_state_service.dart';
+import '../../../core/utils/user_display_name_resolver.dart';
 
 class SettingsProvider extends ChangeNotifier {
   static const String _preferencesKey = 'user_preferences';
@@ -52,99 +53,72 @@ class SettingsProvider extends ChangeNotifier {
       if (!appState.isInitialized) {
         await appState.initialize();
       }
+
       final userData = await appState.auth.getUserData();
-      
-      debugPrint('🔄 Syncing user data: $userData');
-      
-      if (userData != null) {
-        String? displayName = userData['displayName'];
-        String? username = userData['username'];
-        String? uid = userData['uid'];
-        String? email = userData['email'];
-        String? photoURL = userData['photoURL'];
-        
-        // Smart name resolution with multiple fallbacks
-        String? finalDisplayName = displayName;
-        
-        // Try displayName first
-        if (finalDisplayName == null || finalDisplayName.isEmpty) {
-          finalDisplayName = username;
-        }
-        
-        // If still empty, extract from email
-        if (finalDisplayName == null || finalDisplayName.isEmpty) {
-          if (email != null && email.isNotEmpty) {
-            // Extract name from email (before @)
-            final emailParts = email.split('@');
-            if (emailParts.isNotEmpty) {
-              finalDisplayName = emailParts.first;
-              // Capitalize first letter
-              if (finalDisplayName.isNotEmpty) {
-                finalDisplayName = finalDisplayName[0].toUpperCase() + 
-                    finalDisplayName.substring(1).toLowerCase();
-              }
-            }
-          }
-        }
-        
-        // Final fallback
-        if (finalDisplayName == null || finalDisplayName.isEmpty) {
-          finalDisplayName = 'User';
-        }
-        
-        // Always update if we have valid data - be more aggressive about syncing
-        bool hasChanges = false;
-        
-        // Update display name
-        if (finalDisplayName.isNotEmpty) {
-          _preferences = _preferences.copyWith(displayName: finalDisplayName);
-          hasChanges = true;
-          debugPrint('✅ Updated display name: $finalDisplayName');
-        }
-        
-        // Update user ID
-        if (uid != null && uid.isNotEmpty) {
-          _preferences = _preferences.copyWith(userId: uid);
-          hasChanges = true;
-          debugPrint('✅ Updated user ID: $uid');
-        }
-        
-        // Always mark as updated for proper sync
-        if (hasChanges || _preferences.displayName != finalDisplayName) {
-          _preferences = _preferences.copyWith(
-            lastUpdated: DateTime.now(),
-            displayName: finalDisplayName,
-          );
-          
-          // Store comprehensive user metadata for future sessions
-          await storeUserMetadata({
-            'email': email,
-            'photoURL': photoURL,
-            'provider': userData['provider'],
-            'profileComplete': userData['profileComplete'] ?? true,
-            'lastSync': DateTime.now().toIso8601String(),
-            'username': username,
-            'displayName': finalDisplayName,
-            'uid': uid,
-          });
-          
-          debugPrint('📝 User metadata stored: (email, photoURL, provider, profileComplete, lastSync)');
-          
-          // Immediately save and notify
-          await _savePreferences();
-          notifyListeners();
-          debugPrint('✅ User data sync completed successfully');
-        } else {
-          debugPrint('ℹ️ No user data changes detected');
-        }
-      } else {
+      if (userData == null) {
         debugPrint('⚠️ No user data found in AuthService');
+        return;
       }
+
+      final uid = (userData['uid'] as String?)?.trim() ?? '';
+      final email = userData['email'] as String?;
+      final username = userData['username'] as String?;
+      final photoUrl = (userData['photoURL'] as String?)?.trim() ?? '';
+      final providerName = userData['displayName'] as String?;
+
+      final identity = UserDisplayNameResolver.resolveIdentity(
+        userId: uid,
+        email: email,
+        displayName: providerName,
+        existingUserId: _preferences.userId,
+        existingDisplayName: _preferences.displayName,
+      );
+
+      final sameUser = uid.isNotEmpty && uid == _preferences.userId;
+      final resolvedAvatarUrl = photoUrl.isNotEmpty
+          ? photoUrl
+          : sameUser
+              ? _preferences.avatarUrl
+              : '';
+      final resolvedUserId = uid.isNotEmpty ? uid : _preferences.userId;
+
+      final hasChanges =
+          _preferences.userId != resolvedUserId ||
+          _preferences.displayName != identity.displayName ||
+          _preferences.greetingName != identity.greetingName ||
+          _preferences.avatarUrl != resolvedAvatarUrl;
+
+      if (!hasChanges) {
+        return;
+      }
+
+      _preferences = _preferences.copyWith(
+        userId: resolvedUserId,
+        displayName: identity.displayName,
+        greetingName: identity.greetingName,
+        avatarUrl: resolvedAvatarUrl,
+        lastUpdated: DateTime.now(),
+      );
+
+      await storeUserMetadata({
+        'uid': resolvedUserId,
+        'email': email,
+        'displayName': identity.displayName,
+        'greetingName': identity.greetingName,
+        'username': username,
+        'photoURL': resolvedAvatarUrl,
+        'provider': userData['provider'],
+        'profileComplete': userData['profileComplete'] ?? true,
+        'lastSync': DateTime.now().toIso8601String(),
+      });
+
+      await _savePreferences();
+      notifyListeners();
     } catch (e) {
       debugPrint('❌ Error syncing user data from auth: $e');
     }
   }
-  
+
   /// Force user data synchronization - called after authentication
   Future<void> forceUserDataSync() async {
     debugPrint('🔄 Forcing user data sync...');
@@ -180,8 +154,15 @@ class SettingsProvider extends ChangeNotifier {
 
   // Update display name
   Future<void> updateDisplayName(String name) async {
+    final displayName = UserDisplayNameResolver.normalizeDisplayName(name);
+    if (displayName.isEmpty) {
+      return;
+    }
+
     _preferences = _preferences.copyWith(
-      displayName: name,
+      displayName: displayName,
+      greetingName:
+          UserDisplayNameResolver.firstNameFromDisplayName(displayName),
       lastUpdated: DateTime.now(),
     );
     notifyListeners();

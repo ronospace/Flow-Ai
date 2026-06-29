@@ -42,7 +42,6 @@ import 'features/analytics/providers/analytics_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await _initializeAdMob();
   // Configure Flutter for production performance
   if (kReleaseMode) {
     // Disable debug banner and optimize for production
@@ -124,13 +123,19 @@ Future<void> _initializeNonCriticalServices() async {
 Future<void> _initializeAdMob() async {
   try {
     await admob.AdMobService.initialize();
-    final adMobService = admob.AdMobService();
-    // Load ads without blocking - fire and forget
-    adMobService.loadInterstitialAd();
-    adMobService.loadRewardedAd();
-    AppLogger.success('AdMob initialized successfully');
-  } catch (e) {
-    AppLogger.warning('AdMob initialization failed: $e');
+
+    if (!admob.AdMobService.adsEnabled) {
+      AppLogger.warning('AdMob unavailable until UMP permits requests');
+      return;
+    }
+
+    final service = admob.AdMobService();
+    service.loadInterstitialAd();
+    service.loadRewardedAd();
+
+    AppLogger.success('AdMob initialized after consent verification');
+  } catch (error) {
+    AppLogger.warning('AdMob initialization failed: $error');
   }
 }
 
@@ -451,5 +456,6 @@ class _FlowAIAppState extends State<FlowAIApp> {
     );
   }
 }
+
 // hot-reload-test Tue Feb 24 23:29:29 CET 2026
 // hot-reload-test Tue Feb 24 23:29:33 CET 2026
