@@ -516,9 +516,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ? localizations.goodAfternoon
         : localizations.goodEvening;
 
-    final displayName = settingsProvider.preferences.displayName;
-    final personalizedGreeting = displayName.isNotEmpty
-        ? '$baseGreeting, $displayName!'
+    final greetingName = settingsProvider.preferences.greetingName;
+    final personalizedGreeting = greetingName.isNotEmpty
+        ? '$baseGreeting, $greetingName!'
         : '$baseGreeting!';
 
     // Simulate AI health score based on time and random factors
