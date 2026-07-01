@@ -160,9 +160,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  integration_test:
-    sdk: flutter
-    
   # Mocking for unit tests
   mockito: ^5.4.4
   build_runner: ^2.4.12
