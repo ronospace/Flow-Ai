@@ -1,11 +1,9 @@
-import 'package:flow_ai/core/services/auth_service.dart';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../models/user_preferences.dart';
 import '../../../core/services/app_state_service.dart';
-import 'package:flow_ai/core/utils/user_display_name_resolver.dart';
+import '../../../core/utils/user_display_name_resolver.dart';
 
 class SettingsProvider extends ChangeNotifier {
   static const String _preferencesKey = 'user_preferences';
@@ -46,23 +44,6 @@ class SettingsProvider extends ChangeNotifier {
   // Initialize settings from storage
   Future<void> initializeSettings() async {
     await _loadPreferences();
-
-    final appState = AppStateService();
-    if (!appState.isInitialized) {
-      await appState.initialize();
-    }
-
-    final existingUser = await appState.auth.getUserData();
-    if (existingUser == null) {
-      debugPrint("🆕 Creating initial local user");
-      await appState.auth.signUpWithEmail(
-        email: "local.ai",
-        password: "password123",
-        displayName:
-            (await appState.auth.getUserData())?["email"]?.split("@")[0] ??
-            "User",
-      );
-    }
     await _syncUserDataFromAuth();
   }
 
@@ -73,70 +54,67 @@ class SettingsProvider extends ChangeNotifier {
       if (!appState.isInitialized) {
         await appState.initialize();
       }
+
       final userData = await appState.auth.getUserData();
-
-      debugPrint('🔄 Syncing user data: $userData');
-
-      if (userData != null) {
-        String? displayName = userData['displayName'];
-        String? uid = userData['uid'];
-        String? email = userData['email'];
-        String? photoURL = userData['photoURL'];
-
-        final finalDisplayName = UserDisplayNameResolver.resolve(
-          email: email,
-          displayName: displayName,
-        );
-
-        // Always update if we have valid data - be more aggressive about syncing
-        bool hasChanges = false;
-
-        // Update display name
-        if (finalDisplayName.isNotEmpty) {
-          _preferences = _preferences.copyWith(displayName: finalDisplayName);
-          hasChanges = true;
-          debugPrint('✅ Updated display name: $finalDisplayName');
-        }
-
-        // Update user ID
-        if (uid != null && uid.isNotEmpty) {
-          _preferences = _preferences.copyWith(userId: uid);
-          hasChanges = true;
-          debugPrint('✅ Updated user ID: $uid');
-        }
-
-        // Always mark as updated for proper sync
-        if (hasChanges || _preferences.displayName != finalDisplayName) {
-          _preferences = _preferences.copyWith(
-            lastUpdated: DateTime.now(),
-            displayName: finalDisplayName,
-          );
-
-          // Store comprehensive user metadata for future sessions
-          await storeUserMetadata({
-            'email': email,
-            'photoURL': photoURL,
-            'provider': userData['provider'],
-            'profileComplete': userData['profileComplete'] ?? true,
-            'lastSync': DateTime.now().toIso8601String(),
-            'displayName': finalDisplayName,
-            'uid': uid,
-          });
-
-          debugPrint(
-            '📝 User metadata stored: (email, photoURL, provider, profileComplete, lastSync)',
-          );
-
-          // Immediately save and notify
-          await _savePreferences();
-          notifyListeners();
-          debugPrint('✅ User data sync completed successfully');
-        } else {
-          debugPrint('ℹ️ No user data changes detected');
-        }
-      } else {
+      if (userData == null) {
         debugPrint('⚠️ No user data found in AuthService');
+        return;
       }
+
+      final uid = (userData['uid'] as String?)?.trim() ?? '';
+      final email = userData['email'] as String?;
+      final username = userData['username'] as String?;
+      final photoUrl = (userData['photoURL'] as String?)?.trim() ?? '';
+      final providerName = userData['displayName'] as String?;
+
+      final identity = UserDisplayNameResolver.resolveIdentity(
+        userId: uid,
+        email: email,
+        displayName: providerName,
+        existingUserId: _preferences.userId,
+        existingDisplayName: _preferences.displayName,
+      );
+
+      final sameUser = uid.isNotEmpty && uid == _preferences.userId;
+      final resolvedAvatarUrl = photoUrl.isNotEmpty
+          ? photoUrl
+          : sameUser
+          ? _preferences.avatarUrl
+          : '';
+      final resolvedUserId = uid.isNotEmpty ? uid : _preferences.userId;
+
+      final hasChanges =
+          _preferences.userId != resolvedUserId ||
+          _preferences.displayName != identity.displayName ||
+          _preferences.greetingName != identity.greetingName ||
+          _preferences.avatarUrl != resolvedAvatarUrl;
+
+      if (!hasChanges) {
+        return;
+      }
+
+      _preferences = _preferences.copyWith(
+        userId: resolvedUserId,
+        displayName: identity.displayName,
+        greetingName: identity.greetingName,
+        avatarUrl: resolvedAvatarUrl,
+        lastUpdated: DateTime.now(),
+      );
+
+      await storeUserMetadata({
+        'uid': resolvedUserId,
+        'email': email,
+        'displayName': identity.displayName,
+        'greetingName': identity.greetingName,
+        'username': username,
+        'photoURL': resolvedAvatarUrl,
+        'provider': userData['provider'],
+        'profileComplete': userData['profileComplete'] ?? true,
+        'lastSync': DateTime.now().toIso8601String(),
+      });
+
+      await _savePreferences();
+      notifyListeners();
     } catch (e) {
       debugPrint('❌ Error syncing user data from auth: $e');
     }
@@ -177,8 +155,16 @@ class SettingsProvider extends ChangeNotifier {
 
   // Update display name
   Future<void> updateDisplayName(String name) async {
+    final displayName = UserDisplayNameResolver.normalizeDisplayName(name);
+    if (displayName.isEmpty) {
+      return;
+    }
+
     _preferences = _preferences.copyWith(
-      displayName: name,
+      displayName: displayName,
+      greetingName: UserDisplayNameResolver.firstNameFromDisplayName(
+        displayName,
+      ),
       lastUpdated: DateTime.now(),
     );
     notifyListeners();
@@ -306,8 +292,6 @@ class SettingsProvider extends ChangeNotifier {
     );
     notifyListeners();
     await _savePreferences();
-    final auth = AuthService();
-    await auth.setBiometricEnabled(enabled);
   }
 
   // Update CycleSync integration

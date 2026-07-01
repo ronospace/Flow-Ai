@@ -44,4 +44,34 @@ void main() {
       isTrue,
     );
   });
+
+  test(
+    'all sign-in paths await identity synchronization before navigation',
+    () {
+      final screen = File(
+        'lib/features/auth/screens/auth_screen.dart',
+      ).readAsStringSync();
+
+      expect(
+        occurrences(screen, 'await _settingsProvider.forceUserDataSync();'),
+        4,
+      );
+    },
+  );
+
+  test('profile and greeting use separate identity fields', () {
+    final home = File(
+      'lib/features/cycle/screens/home_screen.dart',
+    ).readAsStringSync();
+    final profile = File(
+      'lib/features/settings/widgets/profile_section.dart',
+    ).readAsStringSync();
+    final settings = File(
+      'lib/features/settings/providers/settings_provider.dart',
+    ).readAsStringSync();
+
+    expect(profile.contains('preferences.displayName'), isTrue);
+    expect(home.contains('preferences.greetingName'), isTrue);
+    expect(settings.contains('Syncing user data: \$userData'), isFalse);
+  });
 }

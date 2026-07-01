@@ -86,5 +86,44 @@ void main() {
         isEmpty,
       );
     });
+
+    test('keeps the full profile name and derives the greeting first name', () {
+      final identity = UserDisplayNameResolver.resolveIdentity(
+        userId: 'uid-1',
+        email: 'mouha_gueye@hotmail.com',
+        displayName: 'Mohameth Gueye',
+        existingUserId: '',
+        existingDisplayName: '',
+      );
+
+      expect(identity.displayName, 'Mohameth Gueye');
+      expect(identity.greetingName, 'Mohameth');
+    });
+
+    test('preserves a saved name only for the same authenticated user', () {
+      final identity = UserDisplayNameResolver.resolveIdentity(
+        userId: 'uid-1',
+        email: 'accountwithoutseparator@example.com',
+        displayName: null,
+        existingUserId: 'uid-1',
+        existingDisplayName: 'Leah Brown',
+      );
+
+      expect(identity.displayName, 'Leah Brown');
+      expect(identity.greetingName, 'Leah');
+    });
+
+    test('does not leak the previous account name after account switching', () {
+      final identity = UserDisplayNameResolver.resolveIdentity(
+        userId: 'uid-2',
+        email: 'new.user@example.com',
+        displayName: null,
+        existingUserId: 'uid-1',
+        existingDisplayName: 'Previous Person',
+      );
+
+      expect(identity.displayName, 'New');
+      expect(identity.greetingName, 'New');
+    });
   });
 }
