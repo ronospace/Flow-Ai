@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../generated/app_localizations.dart';
 import 'premium_feature_preview_card.dart';
 
 class PremiumFeaturesPreview extends StatelessWidget {
@@ -23,7 +22,6 @@ class PremiumFeaturesPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final localizations = AppLocalizations.of(context);
 
     return Container(
       padding: const EdgeInsets.all(24),
@@ -107,13 +105,59 @@ class PremiumFeaturesPreview extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton.icon(
-              key: const ValueKey('premium-features-paywall-entry'),
-              onPressed: onPremiumTap,
-              icon: const Icon(Icons.lock_open_rounded),
-              label: Text(localizations.unlockPremiumAiInsights),
+          Semantics(
+            button: true,
+            label: 'Unlock All Premium Features',
+            child: SizedBox(
+              width: double.infinity,
+              child: Material(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(12),
+                clipBehavior: Clip.antiAlias,
+                child: InkWell(
+                  key: const ValueKey('premium-features-paywall-entry'),
+                  onTap: onPremiumTap,
+                  borderRadius: BorderRadius.circular(12),
+                  child: Ink(
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [AppTheme.warningOrange, AppTheme.primaryRose],
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 16,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.lock_open_rounded,
+                            color: AppTheme.onBrightAccent,
+                            size: 20,
+                          ),
+                          SizedBox(width: 10),
+                          Flexible(
+                            child: Text(
+                              'Unlock All Premium Features',
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: AppTheme.onBrightAccent,
+                                fontWeight: FontWeight.w800,
+                                letterSpacing: 0.2,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ),
           ),
           const SizedBox(height: 24),
