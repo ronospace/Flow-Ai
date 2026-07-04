@@ -43,6 +43,8 @@
 	<string>Flow Ai reads health data such as heart rate, sleep, temperature, activity, and menstrual flow to improve cycle insights and predictions.</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Flow Ai can write menstrual flow data to Apple Health when you choose to sync it.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Flow AI accesses your photo library only when you choose an image to upload or attach in the app.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
