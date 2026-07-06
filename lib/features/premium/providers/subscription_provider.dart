@@ -92,7 +92,8 @@ class SubscriptionProvider extends ChangeNotifier {
         print('   Premium: $isPremium');
       }
     } catch (e) {
-      _errorMessage = 'Failed to initialize subscriptions: ${e.toString()}';
+      _errorMessage =
+          'Subscriptions are temporarily unavailable. Please try again.';
       if (kDebugMode) {
         print('❌ SubscriptionProvider error: $_errorMessage');
       }
@@ -121,7 +122,8 @@ class SubscriptionProvider extends ChangeNotifier {
         _errorMessage = 'Subscription plans are temporarily unavailable.';
       }
     } catch (e) {
-      _errorMessage = 'Failed to refresh subscription plans: ${e.toString()}';
+      _errorMessage =
+          'Subscription plans could not be refreshed. Please try again.';
 
       if (kDebugMode) {
         print('❌ Subscription product refresh error: $_errorMessage');
@@ -146,26 +148,26 @@ class SubscriptionProvider extends ChangeNotifier {
     try {
       final result = await _subscriptionService.purchaseSubscription(productId);
 
-      if (result.success && result.subscription != null) {
+      if (!result.success) {
+        _errorMessage =
+            result.errorMessage ??
+            'We could not start the purchase. Please try again.';
+      } else if (result.subscription != null) {
         _subscription = result.subscription;
-
-        if (kDebugMode) {
-          print('🎉 Purchase successful! User is now premium');
-        }
-      } else {
-        _errorMessage = result.errorMessage ?? 'Purchase failed';
-        if (kDebugMode) {
-          print('❌ Purchase failed: $_errorMessage');
-        }
       }
 
       return result;
-    } catch (e) {
-      _errorMessage = 'Purchase error: ${e.toString()}';
+    } catch (error) {
       if (kDebugMode) {
-        print('❌ Purchase exception: $_errorMessage');
+        print('❌ Purchase provider error: $error');
       }
-      return PurchaseResult.failure(_errorMessage!);
+
+      _errorMessage = 'We could not start the purchase. Please try again.';
+
+      return PurchaseResult.failure(
+        _errorMessage!,
+        PurchaseError.paymentFailed,
+      );
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -181,23 +183,13 @@ class SubscriptionProvider extends ChangeNotifier {
     try {
       final restored = await _subscriptionService.restorePurchases(userId);
       _subscription = _subscriptionService.currentSubscription;
-
-      if (restored) {
-        if (kDebugMode) {
-          print('✅ Purchases restored');
-        }
-      } else {
-        if (kDebugMode) {
-          print('ℹ️ No purchases to restore');
-        }
-      }
-
       return restored;
-    } catch (e) {
-      _errorMessage = 'Failed to restore purchases: ${e.toString()}';
+    } catch (error) {
       if (kDebugMode) {
-        print('❌ Restore error: $_errorMessage');
+        print('❌ Restore provider error: $error');
       }
+
+      _errorMessage = 'We could not restore purchases. Please try again.';
       return false;
     } finally {
       _isLoading = false;

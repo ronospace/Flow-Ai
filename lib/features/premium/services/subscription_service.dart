@@ -18,6 +18,9 @@ class SubscriptionService {
   final ReceiptValidationService _receiptValidationService =
       ReceiptValidationService();
   late StreamSubscription<List<PurchaseDetails>> _subscription;
+  Completer<bool>? _restoreCompleter;
+
+  static const Duration _restoreTimeout = Duration(seconds: 15);
 
   // Product IDs configured in App Store Connect and Google Play Console.
   static const String monthlyProductId = StoreProductIds.premiumMonthly;
@@ -71,8 +74,19 @@ class SubscriptionService {
     // Listen to purchase updates
     _subscription = _iap.purchaseStream.listen(
       (purchaseDetails) => unawaited(_onPurchaseUpdate(purchaseDetails)),
-      onDone: () => _subscription.cancel(),
+      onDone: () {
+        final restoreCompleter = _restoreCompleter;
+        if (restoreCompleter != null && !restoreCompleter.isCompleted) {
+          restoreCompleter.complete(false);
+        }
+        unawaited(_subscription.cancel());
+      },
       onError: (error) {
+        final restoreCompleter = _restoreCompleter;
+        if (restoreCompleter != null && !restoreCompleter.isCompleted) {
+          restoreCompleter.complete(false);
+        }
+
         if (kDebugMode) {
           print('❌ Purchase stream error: $error');
         }
@@ -85,8 +99,8 @@ class SubscriptionService {
     // Load only backend-verified entitlement state before restore.
     await _loadBackendVerifiedSubscription(userId);
 
-    // Restore previous purchases
-    await restorePurchases(userId);
+    // Restore is explicitly user-initiated. Store callbacks are
+    // asynchronous and must not block subscription catalog initialization.
 
     if (kDebugMode) {
       print('✅ SubscriptionService initialized');
@@ -176,47 +190,60 @@ class SubscriptionService {
   Future<PurchaseResult> purchaseSubscription(String productId) async {
     if (!_isAvailable) {
       return PurchaseResult.failure(
-        'In-app purchases are not available',
+        'Purchases are temporarily unavailable. Please try again.',
         PurchaseError.productNotAvailable,
       );
     }
 
     if (!_isPurchaseValidationConfigured) {
       return PurchaseResult.failure(
-        'Secure purchase validation is not configured',
+        'Secure purchase validation is temporarily unavailable.',
         PurchaseError.unknown,
       );
     }
 
-    final product = _products.firstWhere(
-      (p) => p.id == productId,
-      orElse: () => throw Exception('Product not found'),
-    );
+    ProductDetails? product;
+
+    for (final candidate in _products) {
+      if (candidate.id == productId) {
+        product = candidate;
+        break;
+      }
+    }
+
+    if (product == null) {
+      return PurchaseResult.failure(
+        'This subscription plan is temporarily unavailable.',
+        PurchaseError.productNotAvailable,
+      );
+    }
 
     try {
       if (kDebugMode) {
-        print('🛒 Purchasing: ${product.id}');
+        print('🛒 Opening app-store checkout for: ${product.id}');
       }
 
       final purchaseParam = PurchaseParam(productDetails: product);
+      final launched = await _iap.buyNonConsumable(
+        purchaseParam: purchaseParam,
+      );
 
-      // For subscriptions, use buyNonConsumable on iOS, subscribe on Android
-      if (Platform.isIOS) {
-        await _iap.buyNonConsumable(purchaseParam: purchaseParam);
-      } else {
-        // Android subscriptions
-        await _iap.buyNonConsumable(purchaseParam: purchaseParam);
+      if (!launched) {
+        return PurchaseResult.failure(
+          'Your app store could not open the purchase screen. Please try again.',
+          PurchaseError.paymentFailed,
+        );
       }
 
-      // Purchase will be processed in _onPurchaseUpdate
-      return PurchaseResult(success: true);
-    } catch (e) {
+      return PurchaseResult.launched();
+    } catch (error) {
       if (kDebugMode) {
-        print('❌ Purchase error: $e');
+        print('❌ Purchase launch error: $error');
       }
+
       return PurchaseResult.failure(
-        'Purchase failed: ${e.toString()}',
-        PurchaseError.unknown,
+        'We could not start the purchase. Please try again.',
+        PurchaseError.paymentFailed,
       );
     }
   }
@@ -225,6 +252,8 @@ class SubscriptionService {
   Future<void> _onPurchaseUpdate(
     List<PurchaseDetails> purchaseDetailsList,
   ) async {
+    var restoredValidationSucceeded = false;
+
     for (final purchaseDetails in purchaseDetailsList) {
       if (kDebugMode) {
         print('📦 Purchase update: ${purchaseDetails.status}');
@@ -235,8 +264,12 @@ class SubscriptionService {
           _handlePending(purchaseDetails);
           break;
         case PurchaseStatus.purchased:
-        case PurchaseStatus.restored:
           await _handlePurchased(purchaseDetails);
+          break;
+        case PurchaseStatus.restored:
+          restoredValidationSucceeded =
+              await _handlePurchased(purchaseDetails) ||
+              restoredValidationSucceeded;
           break;
         case PurchaseStatus.error:
           _handleError(purchaseDetails);
@@ -246,11 +279,15 @@ class SubscriptionService {
           break;
       }
 
-      // Complete the purchase after local processing has finished. Premium is
-      // granted only when backend validation succeeds.
       if (purchaseDetails.pendingCompletePurchase) {
         await _iap.completePurchase(purchaseDetails);
       }
+    }
+
+    final restoreCompleter = _restoreCompleter;
+
+    if (restoreCompleter != null && !restoreCompleter.isCompleted) {
+      restoreCompleter.complete(restoredValidationSucceeded);
     }
   }
 
@@ -260,16 +297,17 @@ class SubscriptionService {
     }
   }
 
-  Future<void> _handlePurchased(PurchaseDetails purchaseDetails) async {
+  /// A purchase must pass backend validation before Premium is granted.
+  Future<bool> _handlePurchased(PurchaseDetails purchaseDetails) async {
     if (kDebugMode) {
-      print('✅ Purchase successful: ${purchaseDetails.productID}');
+      print('✅ Store purchase received: ${purchaseDetails.productID}');
     }
 
     final validationResult = await _validatePurchase(purchaseDetails);
 
     if (validationResult?.isValid == true) {
       await _grantPremiumAccess(purchaseDetails, validationResult!);
-      return;
+      return true;
     }
 
     if (kDebugMode) {
@@ -278,6 +316,8 @@ class SubscriptionService {
         '${validationResult?.errorMessage ?? 'missing validation result'}',
       );
     }
+
+    return false;
   }
 
   void _handleError(PurchaseDetails purchaseDetails) {
@@ -350,7 +390,7 @@ class SubscriptionService {
     } catch (e) {
       return ReceiptValidationResult(
         isValid: false,
-        errorMessage: 'Purchase validation failed: ${e.toString()}',
+        errorMessage: 'Purchase validation failed',
       );
     }
   }
@@ -405,32 +445,53 @@ class SubscriptionService {
       return false;
     }
 
+    final activeRestore = _restoreCompleter;
+
+    if (activeRestore != null && !activeRestore.isCompleted) {
+      return activeRestore.future.timeout(
+        _restoreTimeout,
+        onTimeout: () => false,
+      );
+    }
+
+    final previouslyVerifiedPremium = _currentSubscription?.isPremium ?? false;
+    final completer = Completer<bool>();
+    _restoreCompleter = completer;
+
     try {
       if (kDebugMode) {
-        print('🔄 Restoring purchases...');
+        print('🔄 Requesting app-store purchase restoration');
       }
 
       await _iap.restorePurchases();
 
-      // Restore events are delivered through purchaseStream and must pass
-      // backend validation before Premium is granted. Local storage alone is
-      // never trusted as proof of entitlement.
-      final restoredIsPremium = _currentSubscription?.isPremium ?? false;
+      final restored = await completer.future.timeout(
+        _restoreTimeout,
+        onTimeout: () => false,
+      );
 
-      if (!restoredIsPremium) {
+      final entitlementIsPremium =
+          restored || (_currentSubscription?.isPremium ?? false);
+
+      if (!entitlementIsPremium && !previouslyVerifiedPremium) {
         _currentSubscription = UserSubscription.free(userId);
-        if (kDebugMode) {
-          print('ℹ️ No backend-validated restored subscription found');
-        }
       }
 
-      return restoredIsPremium;
-    } catch (e) {
+      return entitlementIsPremium || previouslyVerifiedPremium;
+    } catch (error) {
       if (kDebugMode) {
-        print('❌ Error restoring purchases: $e');
+        print('❌ Restore request failed: $error');
       }
-      _currentSubscription = UserSubscription.free(userId);
-      return false;
+
+      if (!previouslyVerifiedPremium) {
+        _currentSubscription = UserSubscription.free(userId);
+      }
+
+      return previouslyVerifiedPremium;
+    } finally {
+      if (identical(_restoreCompleter, completer)) {
+        _restoreCompleter = null;
+      }
     }
   }
 

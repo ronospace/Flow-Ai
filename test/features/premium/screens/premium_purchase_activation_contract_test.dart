@@ -16,7 +16,7 @@ void main() {
     expect(
       paywall,
       contains(
-        'Purchase started. Premium will activate after secure verification.',
+        'App-store checkout opened. Premium activates after secure verification.',
       ),
     );
 

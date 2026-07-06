@@ -219,10 +219,12 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
 
                             // Restore purchases
                             TextButton(
-                              onPressed: () => _restorePurchases(
-                                context,
-                                subscriptionProvider,
-                              ),
+                              onPressed: subscriptionProvider.isLoading
+                                  ? null
+                                  : () => _restorePurchases(
+                                      context,
+                                      subscriptionProvider,
+                                    ),
                               child: const Text('Restore Purchases'),
                             ),
 
@@ -749,7 +751,7 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen>
       messenger?.showSnackBar(
         const SnackBar(
           content: Text(
-            'Purchase started. Premium will activate after secure verification.',
+            'App-store checkout opened. Premium activates after secure verification.',
           ),
         ),
       );

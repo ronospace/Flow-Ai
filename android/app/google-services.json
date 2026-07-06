@@ -14,6 +14,30 @@
       },
       "oauth_client": [
         {
+          "client_id": "752724279049-063vqegu5r1v2pco3omhflf401bearph.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.flowai.app",
+            "certificate_hash": "5bc4b1f076be2d6c0ba01d77bcac34cc915d6a59"
+          }
+        },
+        {
+          "client_id": "752724279049-nht0fafqtpq7ta9rum7clsuj6o0696e1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.flowai.app",
+            "certificate_hash": "7081df1ccad12b11b4a8c6cf785a7a543007f51e"
+          }
+        },
+        {
+          "client_id": "752724279049-pbuftj1vgnejai7odkvo43or6motluc2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.flowai.app",
+            "certificate_hash": "9c05e5999671173454ad150a9a1b0699bd276b2f"
+          }
+        },
+        {
           "client_id": "752724279049-e3432ijrrbud5d5l3plai26t1bbtji1k.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -31,16 +55,17 @@
               "client_type": 3
             },
             {
-              "client_id": "752724279049-n2esdt1pg3e5elbnij69f1jo17cl2c3s.apps.googleusercontent.com",
+              "client_id": "752724279049-ei2380bh9o9ph6tq348lht6sf0ks52n2.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.healpray.healpray",
-                "app_store_id": "6754618866"
+                "bundle_id": "com.flowai.health",
+                "app_store_id": "6751801915"
               }
             }
           ]
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-8707491489514576~2318954189"
     }
   ],
   "configuration_version": "1"
