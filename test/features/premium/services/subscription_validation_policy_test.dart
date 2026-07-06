@@ -48,7 +48,7 @@ void main() {
         );
         expect(
           subscriptionService,
-          contains('Secure purchase validation is not configured'),
+          contains('Secure purchase validation is temporarily unavailable.'),
         );
         expect(subscriptionService, contains('_validatePurchase'));
         expect(

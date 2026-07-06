@@ -291,6 +291,14 @@ class PurchaseResult {
     this.error,
   });
 
+  /// The app store accepted the request and opened checkout.
+  ///
+  /// Entitlement is still granted only after purchase-stream processing and
+  /// backend receipt validation complete successfully.
+  factory PurchaseResult.launched() {
+    return const PurchaseResult(success: true);
+  }
+
   factory PurchaseResult.success(UserSubscription subscription) {
     return PurchaseResult(success: true, subscription: subscription);
   }

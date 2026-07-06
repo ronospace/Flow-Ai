@@ -50,6 +50,11 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   bool _biometricsAvailable = false;
   List<BiometricType> _availableBiometrics = [];
   bool _showForgotPassword = false; // Only show after failed login attempt
+  String? _emailError;
+  String? _passwordError;
+  String? _displayNameError;
+  String? _confirmPasswordError;
+  String? _formError;
 
   @override
   void initState() {
@@ -239,6 +244,15 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                 prefixIcon: const Icon(Icons.email_outlined),
                 keyboardType: TextInputType.emailAddress,
                 enabled: !_isLoading,
+                errorText: _emailError,
+                onChanged: (_) {
+                  if (_emailError != null || _formError != null) {
+                    setState(() {
+                      _emailError = null;
+                      _formError = null;
+                    });
+                  }
+                },
                 textInputAction: TextInputAction.next,
               )
               .animate(controller: _formController)
@@ -256,6 +270,15 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                   hintText: 'Enter your display name',
                   prefixIcon: const Icon(Icons.person_outline),
                   enabled: !_isLoading,
+                  errorText: _displayNameError,
+                  onChanged: (_) {
+                    if (_displayNameError != null || _formError != null) {
+                      setState(() {
+                        _displayNameError = null;
+                        _formError = null;
+                      });
+                    }
+                  },
                   textInputAction: TextInputAction.next,
                 )
                 .animate(controller: _formController)
@@ -277,6 +300,15 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                 textInputAction: _isLogin
                     ? TextInputAction.done
                     : TextInputAction.next,
+                errorText: _passwordError,
+                onChanged: (_) {
+                  if (_passwordError != null || _formError != null) {
+                    setState(() {
+                      _passwordError = null;
+                      _formError = null;
+                    });
+                  }
+                },
                 suffixIcon: IconButton(
                   onPressed: () {
                     setState(() {
@@ -335,6 +367,15 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                   obscureText: _obscureConfirmPassword,
                   enabled: !_isLoading,
                   textInputAction: TextInputAction.done,
+                  errorText: _confirmPasswordError,
+                  onChanged: (_) {
+                    if (_confirmPasswordError != null || _formError != null) {
+                      setState(() {
+                        _confirmPasswordError = null;
+                        _formError = null;
+                      });
+                    }
+                  },
                   suffixIcon: IconButton(
                     onPressed: () {
                       setState(() {
@@ -354,6 +395,11 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                 .slideY(begin: 0.3, end: 0)
                 .fadeIn(delay: 200.ms),
 
+            const SizedBox(height: 16),
+          ],
+
+          if (_formError != null) ...[
+            _buildInlineFormError(theme),
             const SizedBox(height: 16),
           ],
 
@@ -379,6 +425,50 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         ],
       ),
     );
+  }
+
+  Widget _buildInlineFormError(ThemeData theme) {
+    return Semantics(
+      liveRegion: true,
+      child: Container(
+        key: const ValueKey('auth_inline_error'),
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.errorContainer,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: theme.colorScheme.error.withValues(alpha: 0.35),
+          ),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+              Icons.error_outline_rounded,
+              color: theme.colorScheme.onErrorContainer,
+              size: 20,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                _formError!,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onErrorContainer,
+                  fontWeight: FontWeight.w600,
+                  height: 1.3,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _setFormError(String message) {
+    if (!mounted) return;
+    setState(() => _formError = message);
   }
 
   Widget _buildTabSelector(ThemeData theme) {
@@ -552,32 +642,36 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   Future<void> _handleSubmit() async {
     if (_isLoading) return;
 
-    // Basic validation
-    if (_emailController.text.trim().isEmpty) {
-      _showErrorMessage('Please enter your email address');
+    final emailError = _emailController.text.trim().isEmpty
+        ? 'Enter your email address.'
+        : null;
+    final passwordError = _passwordController.text.isEmpty
+        ? 'Enter your password.'
+        : (!_isLogin && _passwordController.text.length < 8
+              ? 'Use at least 8 characters.'
+              : null);
+    final displayNameError =
+        !_isLogin && _displayNameController.text.trim().isEmpty
+        ? 'Enter your display name.'
+        : null;
+    final confirmPasswordError =
+        !_isLogin && _confirmPasswordController.text != _passwordController.text
+        ? 'Passwords do not match.'
+        : null;
+
+    setState(() {
+      _emailError = emailError;
+      _passwordError = passwordError;
+      _displayNameError = displayNameError;
+      _confirmPasswordError = confirmPasswordError;
+      _formError = null;
+    });
+
+    if (emailError != null ||
+        passwordError != null ||
+        displayNameError != null ||
+        confirmPasswordError != null) {
       return;
-    }
-
-    if (_passwordController.text.isEmpty) {
-      _showErrorMessage('Please enter your password');
-      return;
-    }
-
-    if (!_isLogin) {
-      if (_displayNameController.text.trim().isEmpty) {
-        _showErrorMessage('Please enter a display name');
-        return;
-      }
-
-      if (_passwordController.text != _confirmPasswordController.text) {
-        _showErrorMessage('Passwords do not match');
-        return;
-      }
-
-      if (_passwordController.text.length < 8) {
-        _showErrorMessage('Password must be at least 8 characters long');
-        return;
-      }
     }
 
     setState(() {
@@ -672,6 +766,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
     setState(() {
       _isLoading = true;
+      _formError = null;
     });
 
     try {
@@ -701,13 +796,14 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
           PendingDeepLinkService.clearPendingRoute();
         }
       } else {
-        _showErrorMessage(result.error ?? 'Google sign-in failed');
+        _setFormError(
+          result.error ??
+              'We could not complete Google sign-in. Please try again.',
+        );
       }
     } catch (e) {
       debugPrint('Google sign-in error: $e');
-      _showErrorMessage(
-        'We could not complete Google sign-in. Please try again.',
-      );
+      _setFormError('We could not complete Google sign-in. Please try again.');
     } finally {
       if (mounted) {
         setState(() {

@@ -572,8 +572,12 @@ class AuthService {
       });
       await AppStateService().preferences.setOnboardingComplete(true);
       return AuthResult.success(userCredential.user);
-    } catch (e) {
-      return AuthResult.failure('Google sign-in failed: $e');
+    } catch (error, stackTrace) {
+      debugPrint('Google sign-in failed: $error');
+      debugPrintStack(stackTrace: stackTrace);
+      return AuthResult.failure(
+        'We could not complete Google sign-in. Please try again.',
+      );
     }
   }
 

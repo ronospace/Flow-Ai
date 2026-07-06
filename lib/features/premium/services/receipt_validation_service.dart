@@ -15,6 +15,7 @@ class ReceiptValidationService {
 
   static const String _serviceBaseUrl = String.fromEnvironment(
     'FLOW_AI_RECEIPT_SERVICE_BASE_URL',
+    defaultValue: 'https://flow-ai-receipt-service-v2-ylrxu2v7qq-uc.a.run.app',
   );
 
   static const Duration _requestTimeout = Duration(seconds: 15);
