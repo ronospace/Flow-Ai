@@ -43,6 +43,10 @@
 	<string>Flow Ai reads health data such as heart rate, sleep, temperature, activity, and menstrual flow to improve cycle insights and predictions.</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Flow Ai can write menstrual flow data to Apple Health when you choose to sync it.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Flow Ai may use your location in the background to support location-aware health and wellness features that you enable.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Flow Ai uses your location to provide location-aware health and wellness features when you choose to use them.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Flow AI accesses your photo library only when you choose an image to upload or attach in the app.</string>
 	<key>UIApplicationSceneManifest</key>
