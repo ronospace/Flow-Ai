@@ -376,89 +376,125 @@ class AuthService {
     required String displayName,
     String? username,
   }) async {
-    try {
-      // Firebase temporarily disabled for iOS build
-      // if (_firebaseAvailable && _auth != null) {
-      //   try {
-      //     final UserCredential result = await _auth!.createUserWithEmailAndPassword(
-      //       email: email,
-      //       password: password,
-      //     );
-      //
-      //     if (result.user != null) {
-      //       // Update display name
-      //       await result.user!.updateDisplayName(displayName);
-      //       await result.user!.reload();
-      //
-      //       // Store user data with comprehensive profile information
-      //       await _storeUserData({
-      //         'uid': result.user!.uid,
-      //         'email': email,
-      //         'displayName': displayName,
-      //         'username': username ?? displayName, // Use displayName as fallback for username
-      //         'provider': 'firebase',
-      //         'createdAt': DateTime.now().toIso8601String(),
-      //         'lastUpdated': DateTime.now().toIso8601String(),
-      //         'profileComplete': true,
-      //       });
-      //
-      //       debugPrint('✅ User profile saved: $displayName (${result.user!.uid})');
-      //
-      //       if (_prefs != null) {
-      //         await _prefs!.setString(_lastLoginMethodKey, 'firebase');
-      //       }
-      //
-      //       return AuthResult.success(result.user!);
-      //     }
-      //   } catch (firebaseError) {
-      //     debugPrint('⚠️ Firebase sign up failed, falling back to local: $firebaseError');
-      //   }
-      // }
+    if (!_isInitialized) {
+      await initialize();
+    }
 
-      // Fallback to local authentication
-      if (_localUserService != null) {
-        final localResult = await _localUserService!.createUser(
-          email: email,
+    final normalizedEmail = email.trim();
+    final normalizedDisplayName = displayName.trim();
+    final auth = _auth;
+
+    if (_firebaseAvailable && auth != null) {
+      try {
+        final result = await auth.createUserWithEmailAndPassword(
+          email: normalizedEmail,
           password: password,
-          displayName: displayName,
-          username: username,
         );
 
-        if (localResult.isSuccess) {
-          // Get existing stored data to preserve username
-          final existingData = await _getStoredUserData();
-          await _storeUserData({
-            'uid': localResult.user!.uid,
-            'email': email,
-            'displayName': localResult.user!.displayName,
-            'username':
-                existingData?['username'] ??
-                localResult.user!.username ??
-                localResult.user!.displayName, // Preserve username
-            'provider': 'local',
-            'lastLogin': DateTime.now().toIso8601String(),
-          });
-
-          if (_prefs != null) {
-            await _prefs!.setString(_lastLoginMethodKey, 'local');
-          }
-
-          debugPrint('✅ Local user signed in successfully: $email');
-          return AuthResult.success(
-            null,
-          ); // No Firebase user, but successful local sign in
-        } else {
-          return AuthResult.failure(localResult.error!);
+        final user = result.user;
+        if (user == null) {
+          return AuthResult.failure(
+            'The account was created without a valid user session.',
+          );
         }
+
+        try {
+          await user.updateDisplayName(normalizedDisplayName);
+        } catch (error) {
+          AppLogger.warning(
+            'Firebase account created, but display-name update failed: $error',
+          );
+        }
+
+        try {
+          await _prefs?.remove(_userDataKey);
+        } catch (error) {
+          AppLogger.warning(
+            'Unable to clear the previous local identity before signup: $error',
+          );
+        }
+
+        try {
+          await _storeUserData({
+            'uid': user.uid,
+            'email': normalizedEmail,
+            'displayName': normalizedDisplayName,
+            'username': username?.trim().isNotEmpty == true
+                ? username!.trim()
+                : normalizedDisplayName,
+            'provider': 'firebase',
+            'createdAt': DateTime.now().toIso8601String(),
+            'lastUpdated': DateTime.now().toIso8601String(),
+            'profileComplete': true,
+          });
+        } catch (error) {
+          try {
+            await _prefs?.remove(_userDataKey);
+          } catch (_) {}
+
+          AppLogger.warning(
+            'Firebase account created, but local profile persistence failed: '
+            '$error',
+          );
+        }
+
+        try {
+          await _prefs?.setString(_lastLoginMethodKey, 'firebase');
+        } catch (error) {
+          AppLogger.warning(
+            'Firebase account created, but login-method persistence failed: '
+            '$error',
+          );
+        }
+
+        AppLogger.auth('Firebase email account created successfully');
+        return AuthResult.success(user);
+      } on FirebaseAuthException catch (error) {
+        AppLogger.warning('Firebase email registration failed: ${error.code}');
+        return AuthResult.failure(
+          _firebaseAuthFailureMessage(error, operation: 'create the account'),
+        );
+      } catch (error) {
+        AppLogger.error(
+          'Unexpected Firebase email registration failure',
+          error,
+        );
+        return AuthResult.failure(
+          'We could not create the account. Please try again.',
+        );
+      }
+    }
+
+    // Firebase is unavailable: preserve the existing local-only fallback.
+    final localService = _localUserService;
+    if (localService != null) {
+      final localResult = await localService.createUser(
+        email: normalizedEmail,
+        password: password,
+        displayName: normalizedDisplayName,
+        username: username,
+      );
+
+      if (!localResult.isSuccess) {
+        return AuthResult.failure(localResult.error!);
       }
 
-      return AuthResult.failure(
-        'Authentication service not properly initialized',
-      );
-    } catch (e) {
-      debugPrint('❌ Sign in error: $e');
-      return AuthResult.failure('Sign in failed: ${e.toString()}');
+      await _storeUserData({
+        'uid': localResult.user!.uid,
+        'email': normalizedEmail,
+        'displayName': localResult.user!.displayName,
+        'username': localResult.user!.username ?? localResult.user!.displayName,
+        'provider': 'local',
+        'lastLogin': DateTime.now().toIso8601String(),
+      });
+      await _prefs?.setString(_lastLoginMethodKey, 'local');
+
+      return AuthResult.success(null);
     }
+
+    return AuthResult.failure(
+      'Authentication service is currently unavailable.',
+    );
   }
 
   /// Sign in with email and password
@@ -466,73 +502,159 @@ class AuthService {
     required String email,
     required String password,
   }) async {
-    try {
-      // Firebase temporarily disabled for iOS build
-      // if (_firebaseAvailable && _auth != null) {
-      //   try {
-      //     final UserCredential result = await _auth!.signInWithEmailAndPassword(
-      //       email: email,
-      //       password: password,
-      //     );
-      //     if (result.user != null) {
-      //       final existingData = await _getStoredUserData();
-      //       await _storeUserData({
-      //         'uid': result.user!.uid,
-      //         'email': email,
-      //         'displayName': result.user!.displayName,
-      //         'username': existingData?['username'] ?? result.user!.displayName,
-      //         'provider': 'firebase',
-      //         'lastLogin': DateTime.now().toIso8601String(),
-      //       });
-      //       if (_prefs != null) {
-      //         await _prefs!.setString(_lastLoginMethodKey, 'firebase');
-      //       }
-      //       return AuthResult.success(result.user!);
-      //     }
-      //   } catch (firebaseError) {
-      //     debugPrint('⚠️ Firebase sign in failed, trying local: $firebaseError');
-      //   }
-      // }
+    if (!_isInitialized) {
+      await initialize();
+    }
 
-      // Fallback to local authentication
-      if (_localUserService != null) {
-        final localResult = await _localUserService!.signInUser(
-          email: email,
+    final normalizedEmail = email.trim();
+    final auth = _auth;
+    final localService = _localUserService;
+    final storedIdentity = await _getStoredUserData();
+    final storedEmail = storedIdentity?['email']
+        ?.toString()
+        .trim()
+        .toLowerCase();
+
+    // Preserve access for an account explicitly recorded as local by an
+    // earlier release. This happens before Firebase authentication and is
+    // therefore not a silent fallback after a Firebase credential failure.
+    final shouldUseLegacyLocalAccount =
+        localService != null &&
+        storedIdentity?['provider'] == 'local' &&
+        storedEmail == normalizedEmail.toLowerCase();
+
+    if (shouldUseLegacyLocalAccount) {
+      final localResult = await localService!.signInUser(
+        email: normalizedEmail,
+        password: password,
+      );
+
+      if (localResult.isSuccess) {
+        await _storeUserData({
+          'uid': localResult.user!.uid,
+          'email': normalizedEmail,
+          'displayName': localResult.user!.displayName,
+          'username':
+              localResult.user!.username ?? localResult.user!.displayName,
+          'provider': 'local',
+          'lastLogin': DateTime.now().toIso8601String(),
+        });
+        await _prefs?.setString(_lastLoginMethodKey, 'local');
+
+        return AuthResult.success(null);
+      }
+
+      if (!_firebaseAvailable || auth == null) {
+        return AuthResult.failure(localResult.error!);
+      }
+    }
+
+    if (_firebaseAvailable && auth != null) {
+      try {
+        final result = await auth.signInWithEmailAndPassword(
+          email: normalizedEmail,
           password: password,
         );
 
-        if (localResult.isSuccess) {
-          final existingData = await _getStoredUserData();
-          await _storeUserData({
-            'uid': localResult.user!.uid,
-            'email': email,
-            'displayName': localResult.user!.displayName,
-            'username':
-                existingData?['username'] ??
-                localResult.user!.username ??
-                localResult.user!.displayName,
-            'provider': 'local',
-            'lastLogin': DateTime.now().toIso8601String(),
-          });
+        final user = result.user;
+        if (user == null) {
+          return AuthResult.failure(
+            'Sign-in completed without a valid user session.',
+          );
+        }
 
-          if (_prefs != null) {
-            await _prefs!.setString(_lastLoginMethodKey, 'local');
+        Map<String, dynamic>? existingData;
+        try {
+          existingData = await _getStoredUserData();
+        } catch (error) {
+          AppLogger.warning(
+            'Unable to read the previously stored identity: $error',
+          );
+        }
+
+        final sameStoredIdentity = existingData?['uid']?.toString() == user.uid;
+
+        try {
+          if (!sameStoredIdentity) {
+            await _prefs?.remove(_userDataKey);
           }
 
-          debugPrint('✅ Local user signed in successfully: $email');
-          return AuthResult.success(null);
-        } else {
-          return AuthResult.failure(localResult.error!);
+          await _storeUserData({
+            'uid': user.uid,
+            'email': user.email ?? normalizedEmail,
+            'displayName': user.displayName,
+            'username': sameStoredIdentity
+                ? (existingData?['username'] ?? user.displayName)
+                : user.displayName,
+            'provider': 'firebase',
+            'lastLogin': DateTime.now().toIso8601String(),
+          });
+        } catch (error) {
+          try {
+            await _prefs?.remove(_userDataKey);
+          } catch (_) {}
+
+          AppLogger.warning(
+            'Firebase sign-in succeeded, but local profile persistence failed: '
+            '$error',
+          );
         }
+
+        try {
+          await _prefs?.setString(_lastLoginMethodKey, 'firebase');
+        } catch (error) {
+          AppLogger.warning(
+            'Firebase sign-in succeeded, but login-method persistence failed: '
+            '$error',
+          );
+        }
+
+        AppLogger.auth('Firebase email sign-in completed successfully');
+        return AuthResult.success(user);
+      } on FirebaseAuthException catch (error) {
+        AppLogger.warning('Firebase email sign-in failed: ${error.code}');
+        return AuthResult.failure(
+          _firebaseAuthFailureMessage(error, operation: 'sign in'),
+        );
+      } catch (error) {
+        AppLogger.error('Unexpected Firebase email sign-in failure', error);
+        return AuthResult.failure(
+          'We could not sign you in. Please try again.',
+        );
+      }
+    }
+
+    // Firebase is unavailable: preserve the existing local-only fallback.
+    if (localService != null) {
+      final localResult = await localService.signInUser(
+        email: normalizedEmail,
+        password: password,
+      );
+
+      if (!localResult.isSuccess) {
+        return AuthResult.failure(localResult.error!);
       }
 
-      return AuthResult.failure(
-        'Authentication service not properly initialized',
-      );
-    } catch (e) {
-      debugPrint('❌ Sign in error: $e');
-      return AuthResult.failure('Sign in failed: ${e.toString()}');
+      final existingData = await _getStoredUserData();
+      await _storeUserData({
+        'uid': localResult.user!.uid,
+        'email': normalizedEmail,
+        'displayName': localResult.user!.displayName,
+        'username':
+            existingData?['username'] ??
+            localResult.user!.username ??
+            localResult.user!.displayName,
+        'provider': 'local',
+        'lastLogin': DateTime.now().toIso8601String(),
+      });
+      await _prefs?.setString(_lastLoginMethodKey, 'local');
+
+      return AuthResult.success(null);
     }
+
+    return AuthResult.failure(
+      'Authentication service is currently unavailable.',
+    );
   }
 
   /// Sign in with Google
@@ -719,25 +841,6 @@ class AuthService {
         }
       }
 
-      // Firebase temporarily disabled for iOS build
-      // if (_auth != null) {
-      //   try {
-      //     await _auth!.signOut();
-      //     debugPrint('✅ Firebase Auth sign out successful');
-      //   } catch (firebaseError) {
-      //     debugPrint('⚠️ Firebase Auth sign out failed (continuing anyway): $firebaseError');
-      //   }
-      // }
-
-      // if (_googleSignIn != null) {
-      //   try {
-      //     await _googleSignIn!.signOut();
-      //     debugPrint('✅ Google Sign-In sign out successful');
-      //   } catch (googleError) {
-      //     debugPrint('⚠️ Google Sign-In sign out failed (continuing anyway): $googleError');
-      //   }
-      // }
-
       // Clear memory cache and force garbage collection
       await _clearMemoryCache();
 
@@ -759,33 +862,9 @@ class AuthService {
     }
   }
 
-  /// Check if an email account already exists
-  Future<bool> isEmailRegistered(String email) async {
+  /// Check whether this device already knows the email account.
+  Future<bool> isEmailKnownOnDevice(String email) async {
     try {
-      // Firebase temporarily disabled for iOS build
-      // if (_firebaseAvailable && _auth != null) {
-      //   try {
-      //     // Use a different method since fetchSignInMethodsForEmail is deprecated
-      //     try {
-      //       await _auth!.createUserWithEmailAndPassword(
-      //         email: email,
-      //         password: 'temp_password_to_check_existence'
-      //       );
-      //       // If we get here, user doesn't exist
-      //       return false;
-      //     } on FirebaseAuthException catch (e) {
-      //       if (e.code == 'email-already-in-use') {
-      //         AppLogger.info('Email found in Firebase: $email');
-      //         return true;
-      //       }
-      //       // Other errors mean we can't determine, assume not found
-      //       return false;
-      //     }
-      //   } catch (e) {
-      //     AppLogger.warning('Firebase email check failed: $e');
-      //   }
-      // }
-
       // Check local user service
       if (_localUserService != null) {
         final localUser = await _localUserService!.getUserByEmail(email);
@@ -797,7 +876,8 @@ class AuthService {
 
       // Check stored user data as backup
       final storedData = await _getStoredUserData();
-      if (storedData != null && storedData['email'] == email) {
+      final storedEmail = storedData?['email']?.toString().trim().toLowerCase();
+      if (storedEmail == email.trim().toLowerCase()) {
         debugPrint('✅ Email found in stored data: $email');
         return true;
       }
@@ -812,46 +892,44 @@ class AuthService {
 
   /// Reset password
   Future<AuthResult> resetPassword(String email) async {
-    try {
-      // Firebase temporarily disabled for iOS build
-      // if (_firebaseAvailable && _auth != null) {
-      //   try {
-      //     await _auth!.sendPasswordResetEmail(email: email);
-      //     debugPrint('✅ Password reset email sent via Firebase');
-      //     return AuthResult.success(null);
-      //   } catch (firebaseError) {
-      //     debugPrint('⚠️ Firebase password reset failed: $firebaseError');
-      //   }
-      // }
+    if (!_isInitialized) {
+      await initialize();
+    }
 
-      // Local password reset is not supported in the current implementation
-      // In a production environment, this would typically send an email through a backend service
-      if (_localUserService != null) {
-        debugPrint(
-          'ℹ️ Local password reset not supported. Using Firebase only.',
-        );
-        return AuthResult.failure(
-          'Password reset is only available for online accounts. Please ensure you have an internet connection.',
-        );
+    final normalizedEmail = email.trim();
+    final auth = _auth;
+
+    if (!_firebaseAvailable || auth == null) {
+      return AuthResult.failure(
+        'Password reset is temporarily unavailable. Please try again later.',
+      );
+    }
+
+    try {
+      await auth.sendPasswordResetEmail(email: normalizedEmail);
+      AppLogger.auth('Firebase password-reset request completed');
+      return AuthResult.success(null);
+    } on FirebaseAuthException catch (error) {
+      AppLogger.warning(
+        'Firebase password-reset request failed: ${error.code}',
+      );
+
+      // Avoid revealing whether an account exists for an email address.
+      if (error.code == 'user-not-found') {
+        return AuthResult.success(null);
       }
 
-      return AuthResult.failure('Password reset service not available');
-      // } on FirebaseAuthException catch (e) {
-      //   debugPrint('❌ Firebase Auth Error during password reset: ${e.code} - ${e.message}');
-      //
-      //   switch (e.code) {
-      //     case 'user-not-found':
-      //       return AuthResult.failure('No account found with this email address.');
-      //     case 'invalid-email':
-      //       return AuthResult.failure('Please enter a valid email address.');
-      //     case 'too-many-requests':
-      //       return AuthResult.failure('Too many reset attempts. Please try again later.');
-      //     default:
-      //       return AuthResult.failure('Password reset failed: ${e.message ?? e.code}');
-      //   }
-    } catch (e) {
-      debugPrint('❌ Password reset error: $e');
-      return AuthResult.failure('Password reset failed: ${e.toString()}');
+      return AuthResult.failure(
+        _firebaseAuthFailureMessage(
+          error,
+          operation: 'send the password-reset email',
+        ),
+      );
+    } catch (error) {
+      AppLogger.error('Unexpected password-reset failure', error);
+      return AuthResult.failure(
+        'We could not send the password-reset email. Please try again.',
+      );
     }
   }
 
@@ -914,6 +992,34 @@ class AuthService {
       );
     } catch (error) {
       return AuthResult.failure('Account deletion failed: $error');
+    }
+  }
+
+  String _firebaseAuthFailureMessage(
+    FirebaseAuthException error, {
+    required String operation,
+  }) {
+    switch (error.code) {
+      case 'invalid-email':
+        return 'Please enter a valid email address.';
+      case 'email-already-in-use':
+        return 'An account already exists for this email address.';
+      case 'weak-password':
+        return 'Choose a stronger password with at least eight characters.';
+      case 'invalid-credential':
+      case 'wrong-password':
+      case 'user-not-found':
+        return 'The email address or password is incorrect.';
+      case 'user-disabled':
+        return 'This account has been disabled.';
+      case 'network-request-failed':
+        return 'Check your internet connection and try again.';
+      case 'too-many-requests':
+        return 'Too many attempts were made. Please wait and try again.';
+      case 'operation-not-allowed':
+        return 'Email and password authentication is not enabled.';
+      default:
+        return error.message ?? 'Unable to $operation. Please try again.';
     }
   }
 
@@ -989,7 +1095,6 @@ class AuthService {
 /// Authentication result model
 class AuthResult {
   final bool isSuccess;
-  // final User? user; // Firebase temporarily disabled for iOS build
   final dynamic user;
   final String? error;
 

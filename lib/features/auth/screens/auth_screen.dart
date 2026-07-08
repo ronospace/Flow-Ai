@@ -700,7 +700,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         // Check if email already exists before attempting sign up
         // router + _settingsProvider captured before async gaps
 
-        final emailExists = await _authService.isEmailRegistered(
+        final emailExists = await _authService.isEmailKnownOnDevice(
           _emailController.text.trim(),
         );
         if (emailExists) {
@@ -885,6 +885,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   void _showForgotPasswordDialog() {
     final TextEditingController resetEmailController = TextEditingController();
     bool isResetting = false;
+    bool didCloseDialog = false;
 
     showDialog(
       context: context,
@@ -978,74 +979,77 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
                     const SizedBox(height: 28),
 
-                    // Action Buttons
-                    Row(
+                    // Full-width actions prevent label truncation and
+                    // provide a 48 logical-pixel interaction height.
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Expanded(
-                          child: ModernButton(
-                            text: 'Cancel',
-                            onPressed: isResetting
-                                ? null
-                                : () {
-                                    Navigator.of(dialogContext).pop();
-                                  },
-                            type: ModernButtonType.secondary,
-                            size: ModernButtonSize.medium,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: ModernButton(
-                            text: isResetting
-                                ? 'Sending...'
-                                : 'Send Reset Link',
-                            isLoading: isResetting,
-                            onPressed: isResetting
-                                ? null
-                                : () async {
-                                    // Validate email
-                                    if (resetEmailController.text
-                                        .trim()
-                                        .isEmpty) {
-                                      _showErrorMessage(
-                                        'Please enter your email address',
-                                      );
-                                      return;
-                                    }
+                        ModernButton(
+                          text: isResetting ? 'Sending...' : 'Send Reset Link',
+                          isLoading: isResetting,
+                          isExpanded: true,
+                          onPressed: isResetting
+                              ? null
+                              : () async {
+                                  if (resetEmailController.text
+                                      .trim()
+                                      .isEmpty) {
+                                    _showErrorMessage(
+                                      'Please enter your email address',
+                                    );
+                                    return;
+                                  }
 
-                                    setState(() => isResetting = true);
+                                  setState(() => isResetting = true);
 
-                                    try {
-                                      final dialogNavigator = Navigator.of(
-                                        dialogContext,
-                                      );
+                                  try {
+                                    final dialogNavigator = Navigator.of(
+                                      dialogContext,
+                                    );
 
-                                      if (!mounted) return;
+                                    if (!mounted) return;
 
-                                      final result = await _authService
-                                          .resetPassword(
-                                            resetEmailController.text.trim(),
-                                          );
-
-                                      if (!mounted) return;
-                                      if (result.isSuccess) {
-                                        dialogNavigator.pop();
-                                        _showSuccessMessage(
-                                          'Password reset link sent. Please check your email.',
+                                    final result = await _authService
+                                        .resetPassword(
+                                          resetEmailController.text.trim(),
                                         );
-                                      } else {
-                                        throw Exception(result.error);
-                                      }
-                                    } catch (e) {
-                                      _showErrorMessage(
-                                        'We could not send the reset email. Please try again.',
+
+                                    if (!mounted) return;
+                                    if (result.isSuccess) {
+                                      didCloseDialog = true;
+                                      dialogNavigator.pop();
+                                      _showSuccessMessage(
+                                        'If an account exists for this email, '
+                                        'a reset link has been sent.',
                                       );
-                                    } finally {
+                                    } else {
+                                      throw Exception(result.error);
+                                    }
+                                  } catch (_) {
+                                    _showErrorMessage(
+                                      'We could not send the reset email. '
+                                      'Please try again.',
+                                    );
+                                  } finally {
+                                    if (!didCloseDialog &&
+                                        dialogContext.mounted) {
                                       setState(() => isResetting = false);
                                     }
-                                  },
-                            size: ModernButtonSize.medium,
-                          ),
+                                  }
+                                },
+                          size: ModernButtonSize.large,
+                        ),
+                        const SizedBox(height: 12),
+                        ModernButton(
+                          text: 'Cancel',
+                          isExpanded: true,
+                          onPressed: isResetting
+                              ? null
+                              : () {
+                                  Navigator.of(dialogContext).pop();
+                                },
+                          type: ModernButtonType.secondary,
+                          size: ModernButtonSize.large,
                         ),
                       ],
                     ),
@@ -1056,7 +1060,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
           },
         );
       },
-    );
+    ).whenComplete(resetEmailController.dispose);
   }
 
   String _formatAuthError(String message, {required bool isLogin}) {
