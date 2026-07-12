@@ -79,6 +79,13 @@ sourceCompatibility = JavaVersion.VERSION_17
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
+    // FLOWAI_FINAL_16KB_PACKAGING
+    packaging {
+        jniLibs {
+            excludes += listOf("**/armeabi-v7a/*.so", "lib/armeabi-v7a/*.so", "base/lib/armeabi-v7a/*.so")
+        }
+    }
+
     defaultConfig {
         applicationId = "com.flowai.app"
         minSdk = 26
@@ -110,6 +117,5 @@ flutter {
 }
 
 dependencies {
-    implementation("org.tensorflow:tensorflow-lite-gpu:2.14.0")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 }
