@@ -1,0 +1,14 @@
+# Default repository owner
+* @ronospace
+
+# Governance, security, and automation
+/.github/** @ronospace
+/SECURITY.md @ronospace
+/LICENSE @ronospace
+/CONTRIBUTING.md @ronospace
+
+# Release-sensitive application surfaces
+/ios/** @ronospace
+/android/** @ronospace
+/functions/** @ronospace
+/services/** @ronospace
