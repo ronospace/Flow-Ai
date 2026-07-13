@@ -34,6 +34,7 @@ class AuthService {
 
   static const String _userDataKey = 'user_data';
   static const String _biometricEnabledKey = 'biometric_enabled';
+  static const String _biometricsEnabledPreferenceKey = 'biometrics_enabled';
   static const String _lastLoginMethodKey = 'last_login_method';
 
   User? get currentUser => _auth?.currentUser;
@@ -240,46 +241,44 @@ class AuthService {
   Future<void> setBiometricEnabled(bool enabled) async {
     if (_prefs != null) {
       await _prefs!.setBool(_biometricEnabledKey, enabled);
+      await _prefs!.setBool(_biometricsEnabledPreferenceKey, enabled);
     }
   }
 
   /// Check if biometric authentication is enabled
   bool isBiometricEnabled() {
-    return _prefs?.getBool(_biometricEnabledKey) ?? false;
+    final legacyEnabled = _prefs?.getBool(_biometricEnabledKey) ?? false;
+    final settingsEnabled =
+        _prefs?.getBool(_biometricsEnabledPreferenceKey) ?? false;
+    return legacyEnabled || settingsEnabled;
   }
 
   /// Authenticate using biometrics
   Future<AuthResult> authenticateWithBiometrics() async {
     try {
+      if (!_isInitialized) {
+        await initialize();
+      }
+
       if (_localAuth == null) {
         return AuthResult.failure('Biometric authentication not initialized');
       }
 
       final bool isAvailable = await isBiometricAvailable();
-      debugPrint("BIO: service isAvailable=$isAvailable");
-      debugPrint(
-        "BIO: isAvailable=$isAvailable enabled=${isBiometricEnabled()}",
-      );
-      debugPrint(
-        "BIO: service isAvailable=$isAvailable enabled=${isBiometricEnabled()}",
-      );
+      final bool isEnabled = isBiometricEnabled();
+      debugPrint('BIO: isAvailable=$isAvailable enabled=$isEnabled');
       if (!isAvailable) {
         return AuthResult.failure(
           'Biometric authentication is not available on this device',
         );
       }
 
-      final bool isEnabled = isBiometricEnabled();
-      debugPrint("BIO: service enabled=$isEnabled");
-      debugPrint("BIO: enabled flag = $isEnabled");
       if (!isEnabled) {
         return AuthResult.failure(
           'Biometric authentication is not enabled. Please enable it in settings.',
         );
       }
 
-      debugPrint("BIO: calling localAuth.authenticate");
-      debugPrint("BIO: calling localAuth.authenticate");
       debugPrint("BIO: calling localAuth.authenticate");
       final bool isAuthenticated = await _localAuth!.authenticate(
         localizedReason: 'Please authenticate to access Flow Ai',
@@ -289,8 +288,6 @@ class AuthService {
         ),
       );
 
-      debugPrint("BIO: localAuth result=$isAuthenticated");
-      debugPrint("BIO: localAuth result=$isAuthenticated");
       debugPrint("BIO: localAuth result=$isAuthenticated");
       if (isAuthenticated) {
         // If biometric auth succeeds, check if we have stored credentials
