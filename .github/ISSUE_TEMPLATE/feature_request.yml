@@ -1,0 +1,63 @@
+name: Feature request
+description: Suggest an approved improvement for Flow Ai
+title: "[Feature]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting an improvement. Do not include confidential information, private health data, or proprietary third-party material.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or opportunity
+      description: Describe the user need or business problem this request addresses.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the desired behavior without prescribing unnecessary implementation details.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Describe any alternative approaches or workarounds.
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      options:
+        - All platforms
+        - iOS
+        - Android
+        - macOS
+        - Web
+        - Windows
+        - Backend or infrastructure
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Expected impact
+      description: Explain who benefits and how success could be measured.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmation
+      options:
+        - label: I removed confidential information and private user data.
+          required: true
+        - label: I understand that submission does not guarantee implementation.
+          required: true
