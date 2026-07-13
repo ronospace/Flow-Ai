@@ -37,5 +37,37 @@ void main() {
       expect(authScreen, contains('_biometricsAvailable && _isLogin'));
       expect(biometricButton, contains('Use \$biometricLabel'));
     });
+    test('auth service bridges biometric preference keys', () {
+      final authService = File(
+        'lib/core/services/auth_service.dart',
+      ).readAsStringSync();
+
+      expect(
+        authService,
+        contains("_biometricEnabledKey = 'biometric_enabled'"),
+      );
+      expect(
+        authService,
+        contains("_biometricsEnabledPreferenceKey = 'biometrics_enabled'"),
+      );
+      expect(
+        authService,
+        contains('setBool(_biometricsEnabledPreferenceKey, enabled)'),
+      );
+      expect(authService, contains('getBool(_biometricsEnabledPreferenceKey)'));
+    });
+
+    test('auth screen gates biometric login on enabled preference', () {
+      final authScreen = File(
+        'lib/features/auth/screens/auth_screen.dart',
+      ).readAsStringSync();
+
+      expect(authScreen, contains('await _authService.initialize()'));
+      expect(
+        authScreen,
+        contains('final biometricsEnabled = _authService.isBiometricEnabled()'),
+      );
+      expect(authScreen, contains('biometricsEnabled &&'));
+    });
   });
 }

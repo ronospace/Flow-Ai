@@ -94,11 +94,15 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       final isAvailable = await _localAuth.canCheckBiometrics;
       final isDeviceSupported = await _localAuth.isDeviceSupported();
       final availableBiometrics = await _localAuth.getAvailableBiometrics();
-      _authService.isBiometricEnabled();
+      await _authService.initialize();
+      final biometricsEnabled = _authService.isBiometricEnabled();
 
       setState(() {
         _biometricsAvailable =
-            isAvailable && isDeviceSupported && availableBiometrics.isNotEmpty;
+            biometricsEnabled &&
+            isAvailable &&
+            isDeviceSupported &&
+            availableBiometrics.isNotEmpty;
         _availableBiometrics = availableBiometrics;
       });
     } catch (e) {
@@ -581,12 +585,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
     try {
       if (!mounted) return;
-      debugPrint("BIO: tap -> calling authService");
       debugPrint("BIO: calling auth service");
       final result = await _authService.authenticateWithBiometrics();
-      debugPrint(
-        "BIO: auth result success=${result.isSuccess} error=${result.error}",
-      );
       debugPrint(
         "BIO: result success=${result.isSuccess} error=${result.error}",
       );
