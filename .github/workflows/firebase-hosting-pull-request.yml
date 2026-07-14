@@ -37,12 +37,20 @@ jobs:
         run: flutter pub get
 
       - name: Analyze release source
+        shell: bash
         run: |
+          set -Eeuo pipefail
+
+          targets=(lib)
+
+          if [[ -f test/core/services/runtime_privacy_defaults_test.dart ]]; then
+            targets+=(test/core/services/runtime_privacy_defaults_test.dart)
+          fi
+
           dart analyze \
             --fatal-warnings \
             --fatal-infos \
-            lib \
-            test/core/services/runtime_privacy_defaults_test.dart
+            "${targets[@]}"
 
       - name: Run active tests
         shell: bash
