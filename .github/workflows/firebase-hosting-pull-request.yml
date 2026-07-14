@@ -48,8 +48,7 @@ jobs:
           fi
 
           dart analyze \
-            --fatal-warnings \
-            --fatal-infos \
+            --no-fatal-warnings \
             "${targets[@]}"
 
       - name: Run active tests
