@@ -5,6 +5,26 @@ All notable changes to Flow Ai will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.3] - 2026-07-14
+
+### Added
+- Published the production AdMob `app-ads.txt` authorization record through Firebase Hosting.
+- Added keyless Firebase Hosting deployment workflows using short-lived credentials.
+
+### Changed
+- Enabled consent-safe production monetization with premium-user gating.
+- Removed demo mode, demo data, and disabled experimental modules.
+- Hardened authentication identity persistence and account-deletion behavior.
+
+### Security
+- Remediated critical and high-severity Firebase Functions dependency vulnerabilities.
+- Disabled advertising until consent requirements are satisfied.
+- Required explicit opt-in before analytics collection.
+
+### Fixed
+- Restored Firebase platform configuration and hardened release runtime behavior.
+- Improved Firebase Hosting preview and production deployment reporting.
+
 ## [2.2.0] - 2024-12-28
 
 ### Added
