@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - main
+      - release/professional-integration-20260701
 
 permissions:
   contents: read
