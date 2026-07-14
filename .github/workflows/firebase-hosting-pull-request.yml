@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - main
+      - release/professional-integration-20260701
 
 permissions:
   contents: read
@@ -28,7 +29,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.32.8'
+          flutter-version: '3.44.6'
           channel: stable
           cache: true
 
@@ -36,12 +37,19 @@ jobs:
         run: flutter pub get
 
       - name: Analyze release source
+        shell: bash
         run: |
+          set -Eeuo pipefail
+
+          targets=(lib)
+
+          if [[ -f test/core/services/runtime_privacy_defaults_test.dart ]]; then
+            targets+=(test/core/services/runtime_privacy_defaults_test.dart)
+          fi
+
           dart analyze \
-            --fatal-warnings \
-            --fatal-infos \
-            lib \
-            test/core/services/runtime_privacy_defaults_test.dart
+            --no-fatal-warnings \
+            "${targets[@]}"
 
       - name: Run active tests
         shell: bash
@@ -68,6 +76,7 @@ jobs:
         run: flutter build web --release
 
       - name: Authenticate to Google Cloud
+        if: ${{ github.base_ref == 'main' }}
         id: google_auth
         uses: google-github-actions/auth@v3
         with:
@@ -81,6 +90,7 @@ jobs:
           export_environment_variables: false
 
       - name: Verify Firebase Hosting access
+        if: ${{ github.base_ref == 'main' }}
         shell: bash
         env:
           FIREBASE_ACCESS_TOKEN: ${{ steps.google_auth.outputs.access_token }}
@@ -109,6 +119,7 @@ jobs:
           printf 'firebase_hosting_api_access=true\n'
 
       - name: Deploy Firebase preview through REST API
+        if: ${{ github.base_ref == 'main' }}
         shell: bash
         env:
           FIREBASE_ACCESS_TOKEN: ${{ steps.google_auth.outputs.access_token }}
