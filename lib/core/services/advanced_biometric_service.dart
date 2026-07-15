@@ -131,6 +131,7 @@ class AdvancedBiometricService {
   /// Initialize biometric integration
   Future<void> initialize() async {
     if (!Platform.isIOS) {
+      _isInitialized = false;
       AppLogger.warning(
         'Apple Health integration is available only on iOS in this release',
       );
@@ -143,51 +144,42 @@ class AdvancedBiometricService {
       AppLogger.info('🩺 Initializing Advanced Biometric Integration...');
 
       if (_isIOSSimulator) {
+        _isInitialized = false;
+        _health = null;
         AppLogger.warning(
           'iOS Simulator detected - HealthKit data is unavailable',
         );
-        _isInitialized = false;
         return;
       }
 
       _health = Health();
 
-      // Check if health data is available on this platform
-      if (_health != null) {
-        final hasPermissions =
-            await _health!.hasPermissions(_supportedDataTypes) ?? false;
-        if (!hasPermissions) {
-          AppLogger.warning('Health permissions not granted. Requesting...');
+      final granted = await _requestHealthPermissions();
 
-          final granted = await _requestHealthPermissions();
-          if (!granted) {
-            AppLogger.warning(
-              'Health permissions denied. Limited biometric functionality.',
-            );
-            // Continue with limited functionality
-          } else {
-            AppLogger.success('✅ HealthKit permissions granted');
-            // Initial sync after permissions granted
-            await _syncHealthData();
-          }
-        } else {
-          AppLogger.success('✅ HealthKit permissions already granted');
-          // Sync existing data
-          await _syncHealthData();
-        }
+      if (!granted) {
+        _isInitialized = false;
+        _health = null;
+        AppLogger.warning(
+          'HealthKit authorization was not granted. No biometric data loaded.',
+        );
+        return;
       }
 
-      // Set up real-time health data monitoring
       await _setupHealthDataMonitoring();
 
-      // Start periodic sync
+      // The initial synchronization requires an initialized service.
+      _isInitialized = true;
+      await _syncHealthData();
+
       _startPeriodicSync();
 
-      _isInitialized = true;
-      AppLogger.success('✅ Advanced Biometric Integration initialized');
-    } catch (e) {
-      AppLogger.error('Failed to initialize biometric service: $e');
+      AppLogger.success(
+        '✅ Advanced Biometric Integration initialized with HealthKit',
+      );
+    } catch (error) {
       _isInitialized = false;
+      _health = null;
+      AppLogger.error('Failed to initialize biometric service: $error');
     }
   }
 
