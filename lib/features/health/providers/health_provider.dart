@@ -70,30 +70,30 @@ class HealthProvider extends ChangeNotifier {
 
   /// Calculate health score from biometric snapshot
   double _calculateHealthScore(dynamic snapshot) {
-    if (snapshot == null) return 75.0;
+    if (snapshot == null) return 0.0;
 
-    double score = 75.0; // Base score
+    final dataQuality = (snapshot.dataQuality as num).toDouble().clamp(
+      0.0,
+      1.0,
+    );
 
-    // Add points based on data quality
-    score += snapshot.dataQuality * 15.0;
+    double score = dataQuality * 80.0;
 
-    // Add points for heart rate being in normal range (60-100)
     if (snapshot.heartRate != null) {
-      final hr = snapshot.heartRate!;
-      if (hr >= 60 && hr <= 100) {
-        score += 5.0;
+      final heartRate = (snapshot.heartRate as num).toDouble();
+      if (heartRate >= 60.0 && heartRate <= 100.0) {
+        score += 10.0;
       }
     }
 
-    // Add points for good sleep (7-9 hours)
     if (snapshot.sleepHours != null) {
-      final sleep = snapshot.sleepHours!;
-      if (sleep >= 7 && sleep <= 9) {
-        score += 5.0;
+      final sleepHours = (snapshot.sleepHours as num).toDouble();
+      if (sleepHours >= 7.0 && sleepHours <= 9.0) {
+        score += 10.0;
       }
     }
 
-    return score.clamp(0.0, 100.0);
+    return score.clamp(0.0, 100.0).toDouble();
   }
 
   /// Disconnect HealthKit
