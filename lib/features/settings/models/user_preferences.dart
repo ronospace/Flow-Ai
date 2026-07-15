@@ -217,8 +217,8 @@ class UserPreferences {
       hapticFeedbackEnabled: json['hapticFeedbackEnabled'] ?? true,
       soundsEnabled: json['soundsEnabled'] ?? true,
       avatarUrl: json['avatarUrl'] ?? '',
-      syncWithCycleSync: json['syncWithCycleSync'] ?? false,
-      cycleSyncUserId: json['cycleSyncUserId'],
+      syncWithCycleSync: false,
+      cycleSyncUserId: null,
       privacyMode: json['privacyMode'] ?? false,
       biometricAuth: json['biometricAuth'] ?? false,
       lastUpdated: DateTime.parse(
