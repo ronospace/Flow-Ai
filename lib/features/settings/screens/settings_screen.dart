@@ -21,7 +21,6 @@ import '../widgets/settings_section.dart';
 import '../widgets/settings_tile.dart';
 import '../widgets/language_selector.dart';
 import '../widgets/profile_section.dart';
-import '../widgets/cyclesync_integration.dart';
 import '../widgets/theme_switcher_card.dart';
 import 'help_screen.dart';
 import 'account_management_screen.dart';
@@ -607,14 +606,6 @@ class _SettingsScreenState extends State<SettingsScreen>
                           .animate(controller: _sectionsController)
                           .slideY(begin: 0.3, end: 0)
                           .fadeIn(delay: 350.ms),
-
-                      const SizedBox(height: 24),
-
-                      // Flow Ai Integration
-                      const FlowIQIntegration()
-                          .animate(controller: _sectionsController)
-                          .slideY(begin: 0.3, end: 0)
-                          .fadeIn(delay: 400.ms),
 
                       const SizedBox(height: 24),
 
