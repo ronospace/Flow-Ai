@@ -22,50 +22,56 @@ class HealthProvider extends ChangeNotifier {
       return;
     }
 
-    // Show mandatory HealthKit disclosure dialog BEFORE requesting permissions
-    // This ensures users see the health data disclosure before permissions are requested
-    final accepted = await HealthKitPermissionDialog.show(
+    await HealthKitPermissionDialog.show(
       context,
       onAccept: () async {
-        try {
-          // User accepted - initialize HealthKit service
-          debugPrint('✅ User accepted HealthKit integration');
+        final prefs = await SharedPreferences.getInstance();
 
-          // Initialize the advanced biometric service which handles permissions
+        try {
           final biometricService = AdvancedBiometricService.instance;
+
           if (!biometricService.isInitialized) {
             await biometricService.initialize();
           }
 
-          // Update connection status
-          _isHealthKitConnected = true;
+          if (!biometricService.isInitialized) {
+            _isHealthKitConnected = false;
+            _healthScore = 0.0;
+            await prefs.setBool('healthkit_connected', false);
+            notifyListeners();
 
-          // Calculate health score from available data
+            debugPrint(
+              'HealthKit connection failed or authorization was not granted',
+            );
+            return;
+          }
+
           final snapshot = await biometricService.getCurrentBiometricSnapshot();
+
+          _isHealthKitConnected = true;
           _healthScore = _calculateHealthScore(snapshot);
 
-          notifyListeners();
-
-          // Save connection state
-          final prefs = await SharedPreferences.getInstance();
           await prefs.setBool('healthkit_connected', true);
-
-          debugPrint('✅ HealthKit connected successfully');
-        } catch (e) {
-          debugPrint('❌ Error connecting HealthKit: $e');
-          _isHealthKitConnected = false;
           notifyListeners();
+
+          debugPrint('✅ HealthKit connected and synchronized successfully');
+        } catch (error) {
+          _isHealthKitConnected = false;
+          _healthScore = 0.0;
+          await prefs.setBool('healthkit_connected', false);
+          notifyListeners();
+
+          debugPrint('❌ Error connecting HealthKit: $error');
         }
       },
       onDecline: () {
-        // User declined - do not connect
+        _isHealthKitConnected = false;
+        _healthScore = 0.0;
+        notifyListeners();
+
         debugPrint('User declined HealthKit integration');
       },
     );
-
-    if (accepted == true) {
-      // Connection already handled in onAccept callback
-    }
   }
 
   /// Calculate health score from biometric snapshot
@@ -111,20 +117,40 @@ class HealthProvider extends ChangeNotifier {
   /// Load HealthKit connection state
   Future<void> loadConnectionState() async {
     final prefs = await SharedPreferences.getInstance();
-    _isHealthKitConnected = prefs.getBool('healthkit_connected') ?? false;
+    final storedAsConnected = prefs.getBool('healthkit_connected') ?? false;
 
-    if (_isHealthKitConnected) {
-      // Recalculate health score
-      try {
-        final biometricService = AdvancedBiometricService.instance;
-        if (!biometricService.isInitialized) {
-          await biometricService.initialize();
-        }
-        final snapshot = await biometricService.getCurrentBiometricSnapshot();
-        _healthScore = _calculateHealthScore(snapshot);
-      } catch (e) {
-        debugPrint('Error loading HealthKit state: $e');
+    if (!storedAsConnected) {
+      _isHealthKitConnected = false;
+      _healthScore = 0.0;
+      notifyListeners();
+      return;
+    }
+
+    try {
+      final biometricService = AdvancedBiometricService.instance;
+
+      if (!biometricService.isInitialized) {
+        await biometricService.initialize();
       }
+
+      if (!biometricService.isInitialized) {
+        _isHealthKitConnected = false;
+        _healthScore = 0.0;
+        await prefs.setBool('healthkit_connected', false);
+        notifyListeners();
+        return;
+      }
+
+      final snapshot = await biometricService.getCurrentBiometricSnapshot();
+
+      _isHealthKitConnected = true;
+      _healthScore = _calculateHealthScore(snapshot);
+    } catch (error) {
+      _isHealthKitConnected = false;
+      _healthScore = 0.0;
+      await prefs.setBool('healthkit_connected', false);
+
+      debugPrint('Error restoring HealthKit connection: $error');
     }
 
     notifyListeners();
