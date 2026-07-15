@@ -3,72 +3,78 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('Isolated receipt-service contract', () {
-    late String backend;
-    late String client;
+  late String backend;
+  late String client;
 
-    setUpAll(() {
-      backend = File(
-        'services/receipt-service/src/index.ts',
-      ).readAsStringSync();
+  setUpAll(() {
+    backend = File(
+      'functions/src/receipt_validation_http.ts',
+    ).readAsStringSync();
 
-      client = File(
-        'lib/features/premium/services/'
-        'receipt_validation_service.dart',
-      ).readAsStringSync();
-    });
+    client = File(
+      'lib/features/premium/services/receipt_validation_service.dart',
+    ).readAsStringSync();
+  });
 
-    test('authenticates Firebase identity without UID trust', () {
-      expect(backend, contains('createRemoteJWKSet'));
-      expect(backend, contains('jwtVerify'));
-      expect(backend, contains('requireFirebaseUid'));
-      expect(backend, contains('extractBearerToken'));
-      expect(backend, contains('RS256'));
+  test('backend verifies Firebase identity before entitlement access', () {
+    expect(backend, contains('from "firebase-admin/auth"'));
+    expect(backend, contains('verifyIdToken(token, true)'));
+    expect(
+      backend,
+      contains('const userId = await verifyAuthenticatedUser(request)'),
+    );
+    expect(
+      backend,
+      contains('persistValidatedEntitlement(userId, validationResult)'),
+    );
 
-      expect(backend, isNot(contains('body.userId')));
-      expect(backend, isNot(contains('body.uid')));
-      expect(client, isNot(contains("'userId':")));
-    });
+    expect(backend, isNot(contains('readNonEmptyString(body.userId)')));
+  });
 
-    test('matches Apple and Google request contracts', () {
-      expect(backend, contains('transactionId'));
-      expect(backend, contains('environment'));
-      expect(backend, contains('purchaseToken'));
-      expect(backend, contains('packageName'));
-      expect(backend, contains('productId'));
+  test('Apple and Google payload contracts match the mobile client', () {
+    expect(backend, contains('readNonEmptyString(body.transactionId)'));
+    expect(backend, contains('readNonEmptyString(body.environment)'));
+    expect(backend, contains('readNonEmptyString(body.purchaseToken)'));
+    expect(backend, contains('readNonEmptyString(body.packageName)'));
 
-      expect(client, contains("'transactionId': transactionId"));
-      expect(
-        client,
-        contains(
-          "'environment': "
-          "isProduction ? 'production' : 'sandbox'",
-        ),
-      );
-      expect(client, contains("'purchaseToken': purchaseToken"));
-      expect(client, contains("'packageName': packageName"));
-      expect(client, contains("'productId': productId"));
-    });
+    expect(backend, isNot(contains('readNonEmptyString(body.receipt)')));
+    expect(backend, isNot(contains('readNonEmptyString(body.platform)')));
 
-    test('uses keyless provider access', () {
-      expect(backend, contains('generateAccessToken'));
-      expect(backend, contains('androidpublisher'));
-      expect(backend, contains('premiumEntitlements'));
-      expect(backend, contains('allowedProducts'));
-      expect(backend, contains('FLOW_AI_APPLE_ISSUER_ID_NEXT'));
-      expect(backend, contains('FLOW_AI_GOOGLE_PLAY_SERVICE_ACCOUNT'));
+    expect(client, contains("'transactionId': transactionId"));
+    expect(client, contains("'purchaseToken': purchaseToken"));
+    expect(client, contains("'packageName': packageName"));
+    expect(client, isNot(contains("'userId':")));
+    expect(client, isNot(contains("'platform':")));
+    expect(client, isNot(contains("'receipt':")));
+  });
 
-      expect(backend, isNot(contains('FLOW_AI_GOOGLE_SERVICE_ACCOUNT_JSON')));
-      expect(backend, isNot(contains('firebase-admin')));
-      expect(backend, isNot(contains('firebase-functions')));
-    });
+  test('subscription status ownership is derived from verified identity', () {
+    expect(
+      backend,
+      contains('const userId = await verifyAuthenticatedUser(request)'),
+    );
+    expect(
+      backend,
+      contains('const subscriptionsIndex = pathSegments.lastIndexOf'),
+    );
+    expect(backend, contains('.doc(userId)'));
+    expect(backend, contains('.doc(subscriptionId)'));
+    expect(backend, isNot(contains('const userId = pathSegments[0]')));
+  });
 
-    test('client uses the protected v1 routes', () {
-      expect(client, contains('FLOW_AI_RECEIPT_SERVICE_BASE_URL'));
-      expect(client, contains("'v1', 'receipts', 'apple'"));
-      expect(client, contains("'v1', 'receipts', 'google'"));
-      expect(client, contains("'v1', 'subscriptions', normalizedId"));
-      expect(client, contains("'Authorization': 'Bearer \$token'"));
-    });
+  test('unauthenticated purchase and status requests fail closed', () {
+    expect(backend, contains('error: "unauthenticated"'));
+
+    expect(
+      RegExp(r'sendJson\(response,\s*401,').allMatches(backend).length,
+      greaterThanOrEqualTo(2),
+    );
+  });
+
+  test('mobile client sends Firebase bearer tokens and retries once', () {
+    expect(client, contains("'Authorization': 'Bearer \$token'"));
+    expect(client, contains('user.getIdToken(forceRefresh)'));
+    expect(client, contains('if (response.statusCode != 401)'));
+    expect(client, contains('_authenticationHeaders(forceRefresh: true)'));
   });
 }
