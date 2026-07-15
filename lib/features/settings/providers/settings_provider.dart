@@ -295,15 +295,6 @@ class SettingsProvider extends ChangeNotifier {
   }
 
   // Update CycleSync integration
-  Future<void> updateCycleSyncIntegration(bool enabled, String? userId) async {
-    _preferences = _preferences.copyWith(
-      syncWithCycleSync: enabled,
-      cycleSyncUserId: userId,
-      lastUpdated: DateTime.now(),
-    );
-    notifyListeners();
-    await _savePreferences();
-  }
 
   // Update avatar
   Future<void> updateAvatar(String avatarUrl) async {
