@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FeedbackScreen extends StatefulWidget {
   const FeedbackScreen({super.key});
@@ -50,23 +51,60 @@ class _FeedbackScreenState extends State<FeedbackScreen>
   }
 
   Future<void> _submitFeedback() async {
-    if (_feedbackController.text.trim().isEmpty) {
-      _showErrorDialog('Please provide some feedback before submitting.');
+    final feedbackText = _feedbackController.text.trim();
+
+    if (feedbackText.isEmpty) {
+      _showErrorDialog('Please provide some feedback before continuing.');
       return;
     }
 
     setState(() => _isSubmitting = true);
     await _submitAnimationController.forward();
 
-    // Simulate API call
-    await Future.delayed(const Duration(seconds: 2));
+    final senderEmail = _emailController.text.trim();
+    final body = StringBuffer()
+      ..writeln('Category: $_selectedCategory')
+      ..writeln('Rating: ${_rating == 0 ? 'Not provided' : '$_rating/5'}')
+      ..writeln(
+        'Contact email: ${senderEmail.isEmpty ? 'Not provided' : senderEmail}',
+      )
+      ..writeln()
+      ..writeln(feedbackText);
 
-    await _submitAnimationController.reverse();
-    setState(() => _isSubmitting = false);
+    final uri = Uri(
+      scheme: 'mailto',
+      path: 'support@flowai.app',
+      queryParameters: {
+        'subject': 'Flow Ai app feedback — $_selectedCategory',
+        'body': body.toString(),
+      },
+    );
 
-    if (mounted) {
-      _showSuccessDialog();
+    bool opened = false;
+
+    try {
+      opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } catch (_) {
+      opened = false;
+    } finally {
+      await _submitAnimationController.reverse();
+
+      if (mounted) {
+        setState(() => _isSubmitting = false);
+      }
     }
+
+    if (!mounted) return;
+
+    if (!opened) {
+      _showErrorDialog(
+        'No email application could be opened. '
+        'Please email support@flowai.app directly.',
+      );
+      return;
+    }
+
+    _showComposerOpenedDialog();
   }
 
   void _showErrorDialog(String message) {
@@ -85,27 +123,24 @@ class _FeedbackScreenState extends State<FeedbackScreen>
     );
   }
 
-  void _showSuccessDialog() {
+  void _showComposerOpenedDialog() {
     showDialog(
       context: context,
-      barrierDismissible: false,
       builder: (context) => AlertDialog(
         title: const Row(
           children: [
-            Icon(Icons.check_circle, color: Colors.green),
+            Icon(Icons.email_outlined),
             SizedBox(width: 8),
-            Text('Thank you!'),
+            Text('Email ready'),
           ],
         ),
         content: const Text(
-          'Your feedback has been submitted. We truly appreciate your input in making Flow Ai better!',
+          'Your email application has opened. '
+          'Review and send the message to complete your feedback submission.',
         ),
         actions: [
           TextButton(
-            onPressed: () {
-              Navigator.pop(context); // Close dialog
-              Navigator.pop(context); // Go back to previous screen
-            },
+            onPressed: () => Navigator.pop(context),
             child: const Text('Done'),
           ),
         ],
@@ -367,13 +402,13 @@ class _FeedbackScreenState extends State<FeedbackScreen>
                                 ),
                                 SizedBox(width: 12),
                                 Text(
-                                  'Submitting...',
+                                  'Opening email…',
                                   style: TextStyle(fontSize: 16),
                                 ),
                               ],
                             )
                           : const Text(
-                              'Submit Feedback',
+                              'Open Email App',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
