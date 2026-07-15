@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:csv/csv.dart';
 import 'package:archive/archive.dart';
 
@@ -712,29 +713,17 @@ class DataExportImportService {
   Future<List<Map<String, dynamic>>> _collectCycleData(
     DateRange? dateRange,
   ) async {
-    // Mock implementation - in reality, would fetch from cycle service
-    return [
-      {
-        'date': '2024-01-15',
-        'cycle_day': 1,
-        'flow': 'heavy',
-        'symptoms': ['cramps', 'mood_swings'],
-      },
-    ];
+    throw DataManagementException(
+      'Cycle export is unavailable until verified cycle storage is connected.',
+    );
   }
 
   Future<List<Map<String, dynamic>>> _collectSymptomData(
     DateRange? dateRange,
   ) async {
-    // Mock implementation - in reality, would fetch from symptom service
-    return [
-      {
-        'date': '2024-01-15',
-        'symptom': 'headache',
-        'severity': 7,
-        'notes': 'Started in the morning',
-      },
-    ];
+    throw DataManagementException(
+      'Symptom export is unavailable until verified symptom storage is connected.',
+    );
   }
 
   Future<List<Map<String, dynamic>>> _collectMoodData(
@@ -755,52 +744,51 @@ class DataExportImportService {
   Future<List<Map<String, dynamic>>> _collectBiometricData(
     DateRange? dateRange,
   ) async {
-    // Mock implementation - in reality, would fetch from biometric service
-    return [
-      {
-        'date': '2024-01-15',
-        'heart_rate': 72,
-        'blood_pressure_systolic': 120,
-        'blood_pressure_diastolic': 80,
-        'temperature': 98.6,
-      },
-    ];
+    throw DataManagementException(
+      'Biometric export is unavailable until verified device data is connected.',
+    );
   }
 
   Future<List<Map<String, dynamic>>> _collectMedicationData(
     DateRange? dateRange,
   ) async {
-    // Mock implementation
-    return [];
+    throw DataManagementException(
+      'Medication export is unavailable because no verified medication store is connected.',
+    );
   }
 
   Future<List<Map<String, dynamic>>> _collectAppointmentData(
     DateRange? dateRange,
   ) async {
-    // Mock implementation
-    return [];
+    throw DataManagementException(
+      'Appointment export is unavailable because no verified appointment store is connected.',
+    );
   }
 
   Future<List<Map<String, dynamic>>> _collectNotesData(
     DateRange? dateRange,
   ) async {
-    // Mock implementation
-    return [];
+    throw DataManagementException(
+      'Notes export is unavailable because no verified notes store is connected.',
+    );
   }
 
   Future<Map<String, dynamic>> _collectSettingsData() async {
     try {
-      final SecurityPrivacyService security = SecurityPrivacyService.instance;
+      final security = SecurityPrivacyService.instance;
       final privacySettings = await security.getPrivacySettings();
+      final packageInfo = await PackageInfo.fromPlatform();
 
       return {
         'privacy_settings': privacySettings.toJson(),
-        'app_version': '1.0.0',
-        'export_timestamp': DateTime.now().toIso8601String(),
+        'app_version': packageInfo.version,
+        'build_number': packageInfo.buildNumber,
+        'export_timestamp': DateTime.now().toUtc().toIso8601String(),
       };
-    } catch (e) {
-      debugPrint('⚠️ Failed to collect settings: $e');
-      return {};
+    } catch (error) {
+      throw DataManagementException(
+        'Failed to collect verified application settings: $error',
+      );
     }
   }
 
@@ -1000,20 +988,17 @@ class DataExportImportService {
     DataFormat format,
     String? password,
   ) async {
-    // Mock implementation - would parse based on format
-    return ImportedDataSet();
+    throw DataManagementException(
+      'Data import is disabled until parsing and integrity validation are implemented.',
+    );
   }
 
   Future<ImportResult> _importDataSet(
     ImportedDataSet dataSet,
     ImportConfig? config,
   ) async {
-    // Mock implementation - would import data into system
-    return ImportResult(
-      success: true,
-      importedItems: 0,
-      errors: [],
-      warnings: [],
+    throw DataManagementException(
+      'Data import is disabled until verified transactional persistence is implemented.',
     );
   }
 

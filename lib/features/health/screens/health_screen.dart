@@ -201,7 +201,10 @@ class _HealthScreenState extends State<HealthScreen>
 
   Widget _buildHealthScoreCard(AppLocalizations localizations) {
     final theme = Theme.of(context);
-    final healthScore = 0.82; // Mock data
+    final healthProvider = context.watch<HealthProvider>();
+    final healthScore = (healthProvider.healthScore / 100.0)
+        .clamp(0.0, 1.0)
+        .toDouble();
 
     return Container(
       padding: const EdgeInsets.all(18),
