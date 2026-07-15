@@ -11,6 +11,7 @@ import '../../../core/models/cycle_data.dart';
 import '../providers/cycle_provider.dart';
 import '../../insights/providers/insights_provider.dart';
 import '../../settings/providers/settings_provider.dart';
+import '../../health/providers/health_provider.dart';
 import '../../../core/services/cycle_calculation_engine.dart';
 import '../../healthcare/screens/healthcare_provider_portal_screen.dart';
 import '../../analytics/screens/enhanced_analytics_dashboard_screen.dart';
@@ -288,12 +289,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     ).animate().fadeIn(delay: 650.ms).slideX(begin: 0.15, end: 0);
   }
 
-  void _unlockPremiumInsights() {
-    // Simulate unlocking premium insights by adding them to the provider
-    final insightsProvider = context.read<InsightsProvider>();
-    insightsProvider.addPremiumInsights();
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -521,9 +516,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ? '$baseGreeting, $greetingName!'
         : '$baseGreeting!';
 
-    // Simulate AI health score based on time and random factors
-    final healthScore =
-        0.75 + (math.sin(now.millisecondsSinceEpoch / 100000) * 0.2);
+    final healthScore = (context.watch<HealthProvider>().healthScore / 100.0)
+        .clamp(0.0, 1.0)
+        .toDouble();
 
     return Container(
       padding: const EdgeInsets.all(AppTheme.spaceXxl),
