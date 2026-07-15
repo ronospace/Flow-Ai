@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../../../core/theme/app_theme.dart';
+
 import '../../../core/models/cycle_data.dart';
 import '../../../core/models/time_period.dart';
+import '../../../core/theme/app_theme.dart';
 
 class MoodEnergyChart extends StatelessWidget {
   final List<CycleData> cycleData;
@@ -19,13 +20,12 @@ class MoodEnergyChart extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final filteredData = _getFilteredData();
-
-    if (filteredData.isEmpty) {
-      return _buildEmptyState(context);
-    }
-
     final moodData = _getMoodData(filteredData);
     final energyData = _getEnergyData(filteredData);
+
+    if (moodData.isEmpty && energyData.isEmpty) {
+      return _buildEmptyState(context);
+    }
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -34,7 +34,7 @@ class MoodEnergyChart extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
+            color: theme.shadowColor.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -43,129 +43,54 @@ class MoodEnergyChart extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: AppTheme.primaryPurple.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Icon(
-                      Icons.mood,
-                      color: AppTheme.primaryPurple,
-                      size: 20,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
+                  Icon(Icons.mood, color: AppTheme.primaryPurple),
+                  const SizedBox(width: 10),
                   Text(
                     'Mood & Energy Trends',
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: theme.colorScheme.onSurface,
                     ),
                   ),
                 ],
               ),
               Text(
                 selectedPeriod.displayName,
-                style: TextStyle(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                  fontSize: 12,
-                ),
+                style: theme.textTheme.bodySmall,
               ),
             ],
           ),
-
-          const SizedBox(height: 20),
-
-          // Legend
+          const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildLegendItem('Mood', AppTheme.primaryPurple, context),
-              const SizedBox(width: 20),
-              _buildLegendItem('Energy', AppTheme.accentMint, context),
+              if (moodData.isNotEmpty)
+                _buildLegendItem('Mood', AppTheme.primaryPurple, context),
+              if (moodData.isNotEmpty && energyData.isNotEmpty)
+                const SizedBox(width: 20),
+              if (energyData.isNotEmpty)
+                _buildLegendItem('Energy', AppTheme.accentMint, context),
             ],
           ),
-
-          const SizedBox(height: 20),
-
-          // Chart
+          const SizedBox(height: 16),
           SizedBox(
             height: 200,
             child: LineChart(
               LineChartData(
+                minX: 0,
+                maxX: filteredData.length <= 1
+                    ? 1
+                    : (filteredData.length - 1).toDouble(),
+                minY: 1,
+                maxY: 5,
                 gridData: FlGridData(
                   show: true,
                   drawVerticalLine: false,
                   horizontalInterval: 1,
-                  getDrawingHorizontalLine: (value) {
-                    return FlLine(
-                      color: theme.colorScheme.outline.withValues(alpha: 0.3),
-                      strokeWidth: 1,
-                    );
-                  },
-                ),
-                titlesData: FlTitlesData(
-                  show: true,
-                  rightTitles: AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                  topTitles: AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                  bottomTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      reservedSize: 30,
-                      interval: _getBottomInterval(filteredData.length),
-                      getTitlesWidget: (double value, TitleMeta meta) {
-                        if (value.toInt() >= 0 &&
-                            value.toInt() < filteredData.length) {
-                          final data = filteredData[value.toInt()];
-                          return SideTitleWidget(
-                            axisSide: meta.axisSide,
-                            child: Text(
-                              '${data.startDate.month}/${data.startDate.day}',
-                              style: TextStyle(
-                                color: theme.colorScheme.onSurface.withValues(
-                                  alpha: 0.7,
-                                ),
-                                fontSize: 10,
-                              ),
-                            ),
-                          );
-                        }
-                        return const Text('');
-                      },
-                    ),
-                  ),
-                  leftTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      interval: 1,
-                      reservedSize: 40,
-                      getTitlesWidget: (double value, TitleMeta meta) {
-                        return SideTitleWidget(
-                          axisSide: meta.axisSide,
-                          child: Text(
-                            value.toInt().toString(),
-                            style: TextStyle(
-                              color: theme.colorScheme.onSurface.withValues(
-                                alpha: 0.7,
-                              ),
-                              fontSize: 12,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
                 ),
                 borderData: FlBorderData(
                   show: true,
@@ -173,69 +98,75 @@ class MoodEnergyChart extends StatelessWidget {
                     color: theme.colorScheme.outline.withValues(alpha: 0.3),
                   ),
                 ),
-                minX: 0,
-                maxX: (filteredData.length - 1).toDouble(),
-                minY: 1,
-                maxY: 5,
+                titlesData: FlTitlesData(
+                  rightTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  topTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      interval: 1,
+                      reservedSize: 34,
+                      getTitlesWidget: (value, meta) => SideTitleWidget(
+                        axisSide: meta.axisSide,
+                        child: Text(value.toInt().toString()),
+                      ),
+                    ),
+                  ),
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: 30,
+                      interval: _getBottomInterval(filteredData.length),
+                      getTitlesWidget: (value, meta) {
+                        final index = value.toInt();
+
+                        if ((value - index).abs() > 0.01 ||
+                            index < 0 ||
+                            index >= filteredData.length) {
+                          return const SizedBox.shrink();
+                        }
+
+                        final cycle = filteredData[index];
+
+                        return SideTitleWidget(
+                          axisSide: meta.axisSide,
+                          child: Text(
+                            '${cycle.startDate.month}/${cycle.startDate.day}',
+                            style: const TextStyle(fontSize: 10),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
                 lineBarsData: [
-                  // Mood line
-                  LineChartBarData(
-                    spots: moodData,
-                    isCurved: true,
-                    color: AppTheme.primaryPurple,
-                    barWidth: 3,
-                    isStrokeCapRound: true,
-                    dotData: FlDotData(
-                      show: true,
-                      getDotPainter: (spot, percent, barData, index) {
-                        return FlDotCirclePainter(
-                          radius: 4,
-                          color: AppTheme.primaryPurple,
-                          strokeWidth: 2,
-                          strokeColor: theme.colorScheme.surface,
-                        );
-                      },
+                  if (moodData.isNotEmpty)
+                    _buildLine(
+                      moodData,
+                      AppTheme.primaryPurple,
+                      theme,
+                      fill: true,
                     ),
-                    belowBarData: BarAreaData(
-                      show: true,
-                      color: AppTheme.primaryPurple.withValues(alpha: 0.1),
-                    ),
-                  ),
-                  // Energy line
-                  LineChartBarData(
-                    spots: energyData,
-                    isCurved: true,
-                    color: AppTheme.accentMint,
-                    barWidth: 3,
-                    isStrokeCapRound: true,
-                    dotData: FlDotData(
-                      show: true,
-                      getDotPainter: (spot, percent, barData, index) {
-                        return FlDotCirclePainter(
-                          radius: 4,
-                          color: AppTheme.accentMint,
-                          strokeWidth: 2,
-                          strokeColor: theme.colorScheme.surface,
-                        );
-                      },
-                    ),
-                  ),
+                  if (energyData.isNotEmpty)
+                    _buildLine(energyData, AppTheme.accentMint, theme),
                 ],
                 lineTouchData: LineTouchData(
-                  enabled: true,
                   touchTooltipData: LineTouchTooltipData(
-                    // getTooltipColor removed in newer fl_chart versions - using default styling
                     tooltipRoundedRadius: 8,
-                    getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
-                      return touchedBarSpots.map((barSpot) {
-                        final isEnergyLine = barSpot.barIndex == 1;
-                        final label = isEnergyLine ? 'Energy' : 'Mood';
-                        final color = isEnergyLine
+                    getTooltipItems: (spots) {
+                      return spots.map((spot) {
+                        final isEnergy = moodData.isEmpty || spot.barIndex == 1;
+                        final label = isEnergy ? 'Energy' : 'Mood';
+                        final color = isEnergy
                             ? AppTheme.accentMint
                             : AppTheme.primaryPurple;
 
                         return LineTooltipItem(
-                          '$label: ${barSpot.y.toInt()}/5',
+                          '$label: ${spot.y.toStringAsFixed(1)}/5',
                           TextStyle(color: color, fontWeight: FontWeight.bold),
                         );
                       }).toList();
@@ -245,94 +176,159 @@ class MoodEnergyChart extends StatelessWidget {
               ),
             ),
           ),
-
-          const SizedBox(height: 20),
-
-          // Summary stats
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildSummaryItem(
+          const SizedBox(height: 18),
+          Row(
+            children: [
+              Expanded(
+                child: _buildSummaryItem(
                   'Avg Mood',
-                  '${_getAverageMood(filteredData).toStringAsFixed(1)}/5',
+                  _averageLabel(filteredData, (cycle) => cycle.mood),
                   AppTheme.primaryPurple,
-                  Icons.mood,
                   context,
                 ),
-                _buildSummaryItem(
+              ),
+              Expanded(
+                child: _buildSummaryItem(
                   'Avg Energy',
-                  '${_getAverageEnergy(filteredData).toStringAsFixed(1)}/5',
+                  _averageLabel(filteredData, (cycle) => cycle.energy),
                   AppTheme.accentMint,
-                  Icons.battery_charging_full,
                   context,
                 ),
-                _buildSummaryItem(
+              ),
+              Expanded(
+                child: _buildSummaryItem(
                   'Trend',
                   _getTrendDirection(moodData, energyData),
                   AppTheme.secondaryBlue,
-                  Icons.trending_up,
                   context,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),
     ).animate().fadeIn().slideY(begin: 0.2, end: 0);
   }
 
-  Widget _buildEmptyState(BuildContext context) {
-    final theme = Theme.of(context);
-    return Container(
-      padding: const EdgeInsets.all(40),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+  LineChartBarData _buildLine(
+    List<FlSpot> spots,
+    Color color,
+    ThemeData theme, {
+    bool fill = false,
+  }) {
+    return LineChartBarData(
+      spots: spots,
+      isCurved: true,
+      color: color,
+      barWidth: 3,
+      isStrokeCapRound: true,
+      dotData: FlDotData(
+        show: true,
+        getDotPainter: (spot, percent, barData, index) {
+          return FlDotCirclePainter(
+            radius: 4,
+            color: color,
+            strokeWidth: 2,
+            strokeColor: theme.colorScheme.surface,
+          );
+        },
       ),
-      child: Column(
-        children: [
-          Icon(
-            Icons.mood_bad,
-            size: 48,
-            color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'No Mood Data Available',
-            style: theme.textTheme.titleMedium?.copyWith(
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Start tracking your mood and energy levels to see trends over time.',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-              fontSize: 14,
-            ),
-          ),
-        ],
+      belowBarData: BarAreaData(
+        show: fill,
+        color: color.withValues(alpha: 0.1),
       ),
     );
   }
 
+  List<CycleData> _getFilteredData() {
+    final cutoffDate = DateTime.now().subtract(
+      Duration(days: selectedPeriod.days),
+    );
+
+    return cycleData
+        .where(
+          (cycle) =>
+              cycle.startDate.isAfter(cutoffDate) &&
+              (cycle.mood != null || cycle.energy != null),
+        )
+        .toList()
+      ..sort((a, b) => a.startDate.compareTo(b.startDate));
+  }
+
+  List<FlSpot> _getMoodData(List<CycleData> data) {
+    return data
+        .asMap()
+        .entries
+        .where((entry) => entry.value.mood != null)
+        .map(
+          (entry) => FlSpot(
+            entry.key.toDouble(),
+            entry.value.mood!.clamp(1, 5).toDouble(),
+          ),
+        )
+        .toList();
+  }
+
+  List<FlSpot> _getEnergyData(List<CycleData> data) {
+    return data
+        .asMap()
+        .entries
+        .where((entry) => entry.value.energy != null)
+        .map(
+          (entry) => FlSpot(
+            entry.key.toDouble(),
+            entry.value.energy!.clamp(1, 5).toDouble(),
+          ),
+        )
+        .toList();
+  }
+
+  String _averageLabel(
+    List<CycleData> data,
+    double? Function(CycleData cycle) selector,
+  ) {
+    final values = data
+        .map(selector)
+        .whereType<double>()
+        .map((value) => value.clamp(1, 5).toDouble())
+        .toList();
+
+    if (values.isEmpty) return '—';
+
+    final average = values.reduce((a, b) => a + b) / values.length;
+    return '${average.toStringAsFixed(1)}/5';
+  }
+
+  String _getTrendDirection(List<FlSpot> moodData, List<FlSpot> energyData) {
+    final changes = <double>[];
+
+    if (moodData.length >= 2) {
+      changes.add(moodData.last.y - moodData.first.y);
+    }
+
+    if (energyData.length >= 2) {
+      changes.add(energyData.last.y - energyData.first.y);
+    }
+
+    if (changes.isEmpty) return 'Insufficient';
+
+    final improving = changes.any((change) => change > 0.25);
+    final declining = changes.any((change) => change < -0.25);
+
+    if (improving && declining) return 'Mixed';
+    if (improving) return 'Improving';
+    if (declining) return 'Declining';
+    return 'Stable';
+  }
+
+  double _getBottomInterval(int dataLength) {
+    if (dataLength <= 7) return 1;
+    if (dataLength <= 14) return 2;
+    if (dataLength <= 30) return 5;
+    return 10;
+  }
+
   Widget _buildLegendItem(String label, Color color, BuildContext context) {
-    final theme = Theme.of(context);
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -345,14 +341,7 @@ class MoodEnergyChart extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 6),
-        Text(
-          label,
-          style: TextStyle(
-            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
+        Text(label),
       ],
     );
   }
@@ -361,126 +350,48 @@ class MoodEnergyChart extends StatelessWidget {
     String label,
     String value,
     Color color,
-    IconData icon,
     BuildContext context,
   ) {
-    final theme = Theme.of(context);
     return Column(
       children: [
-        Icon(icon, color: color, size: 16),
-        const SizedBox(height: 4),
         Text(
           value,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: color,
-            fontSize: 14,
-          ),
+          textAlign: TextAlign.center,
+          style: TextStyle(fontWeight: FontWeight.bold, color: color),
         ),
+        const SizedBox(height: 3),
         Text(
           label,
-          style: TextStyle(
-            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-            fontSize: 10,
-          ),
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodySmall,
         ),
       ],
     );
   }
 
-  List<CycleData> _getFilteredData() {
-    final now = DateTime.now();
-    DateTime cutoffDate;
-
-    switch (selectedPeriod) {
-      case TimePeriod.week:
-        cutoffDate = now.subtract(const Duration(days: 7));
-        break;
-      case TimePeriod.month:
-        cutoffDate = now.subtract(const Duration(days: 30));
-        break;
-      case TimePeriod.threeMonths:
-        cutoffDate = now.subtract(const Duration(days: 90));
-        break;
-      case TimePeriod.sixMonths:
-        cutoffDate = now.subtract(const Duration(days: 180));
-        break;
-      case TimePeriod.year:
-        cutoffDate = now.subtract(const Duration(days: 365));
-        break;
-    }
-
-    return cycleData
-        .where((cycle) => cycle.startDate.isAfter(cutoffDate))
-        .toList()
-      ..sort((a, b) => a.startDate.compareTo(b.startDate));
-  }
-
-  List<FlSpot> _getMoodData(List<CycleData> data) {
-    return data.asMap().entries.map((entry) {
-      final index = entry.key.toDouble();
-      final cycle = entry.value;
-      // Mock mood data based on cycle phase
-      final moodScore = _getMockMoodScore(cycle);
-      return FlSpot(index, moodScore.toDouble());
-    }).toList();
-  }
-
-  List<FlSpot> _getEnergyData(List<CycleData> data) {
-    return data.asMap().entries.map((entry) {
-      final index = entry.key.toDouble();
-      final cycle = entry.value;
-      // Mock energy data based on cycle phase
-      final energyScore = _getMockEnergyScore(cycle);
-      return FlSpot(index, energyScore.toDouble());
-    }).toList();
-  }
-
-  int _getMockMoodScore(CycleData cycle) {
-    // Simulate mood patterns based on cycle phase
-    final dayInCycle = DateTime.now().difference(cycle.startDate).inDays % 28;
-
-    if (dayInCycle < 5) return 3; // Menstrual phase
-    if (dayInCycle < 14) return 4; // Follicular phase
-    if (dayInCycle < 16) return 5; // Ovulation
-    return 3; // Luteal phase
-  }
-
-  int _getMockEnergyScore(CycleData cycle) {
-    // Simulate energy patterns based on cycle phase
-    final dayInCycle = DateTime.now().difference(cycle.startDate).inDays % 28;
-
-    if (dayInCycle < 5) return 2; // Menstrual phase
-    if (dayInCycle < 14) return 4; // Follicular phase
-    if (dayInCycle < 16) return 5; // Ovulation
-    return 3; // Luteal phase
-  }
-
-  double _getBottomInterval(int dataLength) {
-    if (dataLength <= 7) return 1;
-    if (dataLength <= 14) return 2;
-    if (dataLength <= 30) return 5;
-    return 10;
-  }
-
-  double _getAverageMood(List<CycleData> data) {
-    if (data.isEmpty) return 0;
-    return data.map(_getMockMoodScore).reduce((a, b) => a + b) / data.length;
-  }
-
-  double _getAverageEnergy(List<CycleData> data) {
-    if (data.isEmpty) return 0;
-    return data.map(_getMockEnergyScore).reduce((a, b) => a + b) / data.length;
-  }
-
-  String _getTrendDirection(List<FlSpot> moodData, List<FlSpot> energyData) {
-    if (moodData.length < 2 || energyData.length < 2) return 'Stable';
-
-    final moodTrend = moodData.last.y - moodData.first.y;
-    final energyTrend = energyData.last.y - energyData.first.y;
-
-    if (moodTrend > 0 && energyTrend > 0) return 'Improving';
-    if (moodTrend < 0 && energyTrend < 0) return 'Declining';
-    return 'Mixed';
+  Widget _buildEmptyState(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(40),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: const Column(
+        children: [
+          Icon(Icons.mood_bad, size: 48),
+          SizedBox(height: 16),
+          Text(
+            'No Mood or Energy Data Available',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 8),
+          Text(
+            'Record mood or energy values to see real trends.',
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
   }
 }
