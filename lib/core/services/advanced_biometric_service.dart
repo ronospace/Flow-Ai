@@ -144,10 +144,9 @@ class AdvancedBiometricService {
 
       if (_isIOSSimulator) {
         AppLogger.warning(
-          'iOS Simulator detected - skipping HealthKit biometric initialization',
+          'iOS Simulator detected - HealthKit data is unavailable',
         );
-        _initializeMockService();
-        _isInitialized = true;
+        _isInitialized = false;
         return;
       }
 
@@ -188,8 +187,7 @@ class AdvancedBiometricService {
       AppLogger.success('✅ Advanced Biometric Integration initialized');
     } catch (e) {
       AppLogger.error('Failed to initialize biometric service: $e');
-      // Continue with mock data for testing
-      _initializeMockService();
+      _isInitialized = false;
     }
   }
 
@@ -582,32 +580,8 @@ class AdvancedBiometricService {
   }
 
   /// Initialize mock service for testing
-  void _initializeMockService() {
-    _isInitialized = true;
-    AppLogger.info('🧪 Mock biometric service initialized for testing');
-
-    // Generate mock insights periodically
-    Timer.periodic(const Duration(minutes: 30), (timer) {
-      _generateMockInsights();
-    });
-  }
 
   /// Generate mock insights for testing
-  void _generateMockInsights() {
-    final mockInsights = [
-      BiometricInsight(
-        type: BiometricInsightType.temperatureShift,
-        title: 'Mock Temperature Pattern',
-        insight: 'Simulated temperature shift detected for testing purposes.',
-        confidence: 0.7,
-        dataPoints: 14,
-        recommendations: ['This is mock data for development'],
-        timestamp: DateTime.now(),
-      ),
-    ];
-
-    _notifyHealthInsights(mockInsights);
-  }
 
   /// Get recent biometric data for AI analysis
   Future<Map<HealthDataType, List<HealthDataPoint>>> getRecentBiometricData({
