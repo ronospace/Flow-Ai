@@ -8,6 +8,9 @@ import {
   initializeApp,
 } from "firebase-admin/app";
 import {
+  getAuth,
+} from "firebase-admin/auth";
+import {
   FieldValue,
   getFirestore,
   Timestamp,
@@ -27,6 +30,13 @@ import {
 import {
   GoogleAuth,
 } from "google-auth-library";
+
+type HttpRequest = {
+  method?: string;
+  body?: Record<string, unknown>;
+  headers?: Record<string, string | string[] | undefined>;
+  path?: string;
+};
 
 type ReceiptValidationResponse = {
   valid: boolean;
@@ -129,11 +139,6 @@ const androidPublisherScope =
 const androidPublisherBaseUrl =
   "https://androidpublisher.googleapis.com/androidpublisher/v3";
 
-const allowedPlatforms = new Set([
-  "ios",
-  "android",
-]);
-
 const allowedAppleEnvironments = new Set([
   "production",
   "sandbox",
@@ -178,6 +183,53 @@ function readNonEmptyString(value: unknown): string | null {
 
   const trimmed = value.trim();
   return trimmed.length > 0 ? trimmed : null;
+}
+
+/**
+ * Extracts a Firebase bearer token without logging credential material.
+ *
+ * @param {HttpRequest} request Incoming HTTPS request.
+ * @return {string|null} Bearer token or null.
+ */
+function readBearerToken(request: HttpRequest): string | null {
+  const rawHeader = request.headers?.authorization;
+  const header = Array.isArray(rawHeader) ? rawHeader[0] : rawHeader;
+
+  if (typeof header !== "string") {
+    return null;
+  }
+
+  const match = header.match(/^Bearer\s+(.+)$/i);
+
+  return match === null ? null : readNonEmptyString(match[1]);
+}
+
+/**
+ * Verifies Firebase identity and returns the server-authoritative UID.
+ *
+ * @param {HttpRequest} request Incoming HTTPS request.
+ * @return {Promise<string|null>} Verified Firebase UID or null.
+ */
+async function verifyAuthenticatedUser(
+  request: HttpRequest,
+): Promise<string | null> {
+  const token = readBearerToken(request);
+
+  if (token === null) {
+    return null;
+  }
+
+  try {
+    const decodedToken = await getAuth().verifyIdToken(token, true);
+
+    return readNonEmptyString(decodedToken.uid);
+  } catch (error) {
+    logger.warn("Firebase ID token verification failed", {
+      category: error instanceof Error ? error.name : "unknown",
+    });
+
+    return null;
+  }
 }
 
 /**
@@ -588,10 +640,7 @@ async function verifyGoogleSubscription(
  * @param {"ios"|"android"} expectedPlatform Expected platform.
  */
 async function handleReceiptValidation(
-  request: {
-    method?: string;
-    body?: Record<string, unknown>;
-  },
+  request: HttpRequest,
   response: Parameters<typeof sendJson>[0],
   expectedPlatform: "ios" | "android",
 ): Promise<void> {
@@ -603,23 +652,20 @@ async function handleReceiptValidation(
     return;
   }
 
-  const body = request.body ?? {};
-  const receipt = readNonEmptyString(body.receipt);
-  const productId = readNonEmptyString(body.productId);
-  const platform = readNonEmptyString(body.platform);
-  const userId = readNonEmptyString(body.userId);
-  let packageName: string | null = null;
-  let appleEnvironment: string | null = null;
-  let appleTransactionId: string | null = null;
+  const userId = await verifyAuthenticatedUser(request);
 
-  if (
-    receipt === null ||
-    productId === null ||
-    platform === null ||
-    userId === null ||
-    !allowedPlatforms.has(platform) ||
-    platform !== expectedPlatform
-  ) {
+  if (userId === null) {
+    sendJson(response, 401, {
+      valid: false,
+      error: "unauthenticated",
+    });
+    return;
+  }
+
+  const body = request.body ?? {};
+  const productId = readNonEmptyString(body.productId);
+
+  if (productId === null) {
     sendJson(response, 400, {
       valid: false,
       error: "invalid_receipt_validation_request",
@@ -627,9 +673,15 @@ async function handleReceiptValidation(
     return;
   }
 
+  let packageName: string | null = null;
+  let purchaseToken: string | null = null;
+  let appleEnvironment: string | null = null;
+  let appleTransactionId: string | null = null;
+
   if (expectedPlatform === "ios") {
     appleEnvironment = readNonEmptyString(body.environment);
     appleTransactionId = readNonEmptyString(body.transactionId);
+
     if (
       appleEnvironment === null ||
       appleTransactionId === null ||
@@ -645,7 +697,9 @@ async function handleReceiptValidation(
 
   if (expectedPlatform === "android") {
     packageName = readNonEmptyString(body.packageName);
-    if (packageName === null) {
+    purchaseToken = readNonEmptyString(body.purchaseToken);
+
+    if (packageName === null || purchaseToken === null) {
       sendJson(response, 400, {
         valid: false,
         error: "invalid_receipt_validation_request",
@@ -661,7 +715,7 @@ async function handleReceiptValidation(
   if (missingSecrets.length > 0) {
     logger.error("Receipt validation provider secrets are not configured", {
       missingSecretCount: missingSecrets.length,
-      platform,
+      platform: expectedPlatform,
     });
 
     sendJson(response, 503, {
@@ -672,6 +726,7 @@ async function handleReceiptValidation(
   }
 
   const configuredPackageName = readSecret(googlePackageName);
+
   if (
     expectedPlatform === "android" &&
     (configuredPackageName === null || packageName !== configuredPackageName)
@@ -691,7 +746,7 @@ async function handleReceiptValidation(
         appleEnvironment ?? "",
       ) :
       await verifyGoogleSubscription(
-        receipt,
+        purchaseToken ?? "",
         productId,
         packageName ?? "",
       );
@@ -722,7 +777,7 @@ async function handleReceiptValidation(
 
     logger.error("Receipt validation provider request failed", {
       category: error instanceof Error ? error.name : "unknown",
-      platform,
+      platform: expectedPlatform,
     });
 
     sendJson(response, statusCode, {
@@ -759,82 +814,96 @@ export const validateGooglePlayReceipt = onRequest(
 /**
  * Verifies persisted subscription status through server-side entitlement state.
  */
-export const subscriptionStatus = onRequest(async (request, response) => {
-  if (request.method !== "GET") {
-    sendJson(response, 405, {
-      active: false,
-      error: "method_not_allowed",
-    });
-    return;
-  }
+export const subscriptionStatus = onRequest(
+  async (request, response) => {
+    if (request.method !== "GET") {
+      sendJson(response, 405, {
+        active: false,
+        error: "method_not_allowed",
+      });
+      return;
+    }
 
-  const pathSegments = request.path
-    .split("/")
-    .map((segment) => segment.trim())
-    .filter((segment) => segment.length > 0);
+    const userId = await verifyAuthenticatedUser(request);
 
-  const userId = pathSegments[0] ?? null;
-  const subscriptionId = pathSegments[1] ?? null;
+    if (userId === null) {
+      sendJson(response, 401, {
+        active: false,
+        error: "unauthenticated",
+      });
+      return;
+    }
 
-  if (
-    userId === null ||
-    subscriptionId === null ||
-    pathSegments.length !== 2
-  ) {
-    sendJson(response, 400, {
-      active: false,
-      error: "invalid_subscription_status_request",
-    });
-    return;
-  }
+    const pathSegments = (request.path ?? "")
+      .split("/")
+      .map((segment) => segment.trim())
+      .filter((segment) => segment.length > 0);
 
-  const snapshot = await db
-    .collection(entitlementsCollection)
-    .doc(userId)
-    .collection(subscriptionsCollection)
-    .doc(subscriptionId)
-    .get();
+    const subscriptionsIndex = pathSegments.lastIndexOf("subscriptions");
+    const entitlementSegments = subscriptionsIndex >= 0 ?
+      pathSegments.slice(subscriptionsIndex + 1) :
+      pathSegments;
 
-  if (!snapshot.exists) {
+    const subscriptionId = entitlementSegments.length === 1 ?
+      entitlementSegments[0] :
+      null;
+
+    if (subscriptionId === null) {
+      sendJson(response, 400, {
+        active: false,
+        error: "invalid_subscription_status_request",
+      });
+      return;
+    }
+
+    const snapshot = await db
+      .collection(entitlementsCollection)
+      .doc(userId)
+      .collection(subscriptionsCollection)
+      .doc(subscriptionId)
+      .get();
+
+    if (!snapshot.exists) {
+      sendJson(response, 200, {
+        active: false,
+        error: "entitlement_not_found",
+      });
+      return;
+    }
+
+    const data = snapshot.data() ?? {};
+    const active = data.active === true;
+    const expiresAtMillis = readFiniteNumber(data.expiresAtMillis);
+    const productId = readNonEmptyString(data.productId);
+    const platform = readNonEmptyString(data.platform);
+    const transactionId = readNonEmptyString(data.transactionId);
+    const originalTransactionId = readNonEmptyString(
+      data.originalTransactionId,
+    );
+
+    if (
+      !active ||
+      expiresAtMillis === null ||
+      expiresAtMillis <= Date.now() ||
+      productId === null ||
+      transactionId === null ||
+      originalTransactionId === null ||
+      (platform !== "ios" && platform !== "android")
+    ) {
+      sendJson(response, 200, {
+        active: false,
+        error: "entitlement_inactive",
+      });
+      return;
+    }
+
     sendJson(response, 200, {
-      active: false,
-      error: "entitlement_not_found",
+      active: true,
+      expirationDate: new Date(expiresAtMillis).toISOString(),
+      originalTransactionId,
+      platform,
+      productId,
+      transactionId,
     });
-    return;
-  }
-
-  const data = snapshot.data() ?? {};
-  const active = data.active === true;
-  const expiresAtMillis = readFiniteNumber(data.expiresAtMillis);
-  const productId = readNonEmptyString(data.productId);
-  const platform = readNonEmptyString(data.platform);
-  const transactionId = readNonEmptyString(data.transactionId);
-  const originalTransactionId = readNonEmptyString(
-    data.originalTransactionId,
-  );
-
-  if (
-    !active ||
-    expiresAtMillis === null ||
-    expiresAtMillis <= Date.now() ||
-    productId === null ||
-    transactionId === null ||
-    originalTransactionId === null ||
-    (platform !== "ios" && platform !== "android")
-  ) {
-    sendJson(response, 200, {
-      active: false,
-      error: "entitlement_inactive",
-    });
-    return;
-  }
-
-  sendJson(response, 200, {
-    active: true,
-    expirationDate: new Date(expiresAtMillis).toISOString(),
-    originalTransactionId,
-    platform,
-    productId,
-    transactionId,
-  });
-});
+  },
+);
