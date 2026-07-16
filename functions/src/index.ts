@@ -13,9 +13,3 @@ export {
 export {
   deleteMyCloudData,
 } from "./partner_delete_callable";
-
-export {
-  validateAppleReceipt,
-  validateGooglePlayReceipt,
-  subscriptionStatus,
-} from "./receipt_validation_http";
