@@ -93,9 +93,8 @@ test("protected receipt routes reject missing authentication", async () => {
         },
         body: JSON.stringify({
           packageName: "com.flowai.app",
-          platform: "android",
           productId: "flow_ai_premium_monthly",
-          receipt: "test-token",
+          purchaseToken: "test-token",
         }),
       },
     );
@@ -147,5 +146,32 @@ test("source enforces the keyless authenticated contract", async () => {
       source,
       new RegExp(forbiddenToken.replace("-", "\\-")),
     );
+  }
+});
+
+test("source matches the published mobile payload contract", async () => {
+  const source = await readFile(
+    new URL("../src/index.ts", import.meta.url),
+    "utf8",
+  );
+
+  for (const requiredPattern of [
+    /const purchaseToken = requiredString\(\s*body,\s*"purchaseToken",/,
+    /const transactionId = requiredString\(\s*body,\s*"transactionId",/,
+    /const environment = requiredString\(\s*body,\s*"environment",/,
+    /const uid = await requireFirebaseUid\(request\);/,
+    /verifyGoogleSubscription\(\s*purchaseToken,/,
+    /persistValidatedEntitlement\(uid, result\);/,
+  ]) {
+    assert.match(source, requiredPattern);
+  }
+
+  for (const forbiddenPattern of [
+    /const receipt = requiredString\(/,
+    /const requestPlatform = requiredString\(/,
+    /verifyGoogleSubscription\(\s*receipt,/,
+    /body\.userId/,
+  ]) {
+    assert.doesNotMatch(source, forbiddenPattern);
   }
 });

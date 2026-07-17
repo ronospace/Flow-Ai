@@ -764,26 +764,13 @@ async function handleReceiptValidation(
   }
 
   const body = await readJsonBody(request);
-  const receipt = requiredString(
-    body,
-    "receipt",
-    60 * 1024,
-  );
   const productIdValue = requiredString(
     body,
     "productId",
     128,
   );
-  const requestPlatform = requiredString(
-    body,
-    "platform",
-    16,
-  );
 
-  if (
-    requestPlatform !== platform ||
-    !allowedProducts.has(productIdValue)
-  ) {
+  if (!allowedProducts.has(productIdValue)) {
     throw new HttpError(400, "invalid_request");
   }
 
@@ -805,8 +792,6 @@ async function handleReceiptValidation(
       throw new HttpError(400, "invalid_request");
     }
 
-    void receipt;
-
     result = await verifyAppleTransaction(
       productIdValue,
       transactionId,
@@ -818,6 +803,11 @@ async function handleReceiptValidation(
       "packageName",
       256,
     );
+    const purchaseToken = requiredString(
+      body,
+      "purchaseToken",
+      60 * 1024,
+    );
     const configuredPackageName = requiredEnvironment(
       "FLOW_AI_GOOGLE_PACKAGE_NAME",
     );
@@ -827,7 +817,7 @@ async function handleReceiptValidation(
     }
 
     result = await verifyGoogleSubscription(
-      receipt,
+      purchaseToken,
       productIdValue,
       packageName,
     );
