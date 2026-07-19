@@ -95,9 +95,10 @@ class ReceiptValidationService {
 
     try {
       final response = await _postAuthenticated(uri, <String, dynamic>{
-        'packageName': packageName,
+        'receipt': purchaseToken,
         'productId': productId,
-        'purchaseToken': purchaseToken,
+        'platform': 'android',
+        'packageName': packageName,
       });
 
       return _parseValidationResponse(response);
