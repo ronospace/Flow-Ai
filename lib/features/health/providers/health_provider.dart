@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/services/advanced_biometric_service.dart';
@@ -12,80 +13,93 @@ class HealthProvider extends ChangeNotifier {
   double get healthScore => _healthScore;
   bool get healthKitBannerDismissed => _healthKitBannerDismissed;
 
-  /// Connect to HealthKit - Shows mandatory disclosure dialog first (App Store 2.5.1)
+  /// Connect to HealthKit after showing the mandatory disclosure dialog
   Future<void> connectHealthKit(BuildContext context) async {
-    // Show mandatory HealthKit disclosure dialog BEFORE requesting permissions
-    // This ensures compliance with App Store Guideline 2.5.1
-    final accepted = await HealthKitPermissionDialog.show(
+    if (kIsWeb || defaultTargetPlatform != TargetPlatform.iOS) {
+      debugPrint(
+        'Apple Health integration is available only on iOS in this release',
+      );
+      return;
+    }
+
+    await HealthKitPermissionDialog.show(
       context,
       onAccept: () async {
-        try {
-          // User accepted - initialize HealthKit service
-          debugPrint('✅ User accepted HealthKit integration');
+        final prefs = await SharedPreferences.getInstance();
 
-          // Initialize the advanced biometric service which handles permissions
+        try {
           final biometricService = AdvancedBiometricService.instance;
+
           if (!biometricService.isInitialized) {
             await biometricService.initialize();
           }
 
-          // Update connection status
-          _isHealthKitConnected = true;
+          if (!biometricService.isInitialized) {
+            _isHealthKitConnected = false;
+            _healthScore = 0.0;
+            await prefs.setBool('healthkit_connected', false);
+            notifyListeners();
 
-          // Calculate health score from available data
+            debugPrint(
+              'HealthKit connection failed or authorization was not granted',
+            );
+            return;
+          }
+
           final snapshot = await biometricService.getCurrentBiometricSnapshot();
+
+          _isHealthKitConnected = true;
           _healthScore = _calculateHealthScore(snapshot);
 
-          notifyListeners();
-
-          // Save connection state
-          final prefs = await SharedPreferences.getInstance();
           await prefs.setBool('healthkit_connected', true);
-
-          debugPrint('✅ HealthKit connected successfully');
-        } catch (e) {
-          debugPrint('❌ Error connecting HealthKit: $e');
-          _isHealthKitConnected = false;
           notifyListeners();
+
+          debugPrint('✅ HealthKit connected and synchronized successfully');
+        } catch (error) {
+          _isHealthKitConnected = false;
+          _healthScore = 0.0;
+          await prefs.setBool('healthkit_connected', false);
+          notifyListeners();
+
+          debugPrint('❌ Error connecting HealthKit: $error');
         }
       },
       onDecline: () {
-        // User declined - do not connect
+        _isHealthKitConnected = false;
+        _healthScore = 0.0;
+        notifyListeners();
+
         debugPrint('User declined HealthKit integration');
       },
     );
-
-    if (accepted == true) {
-      // Connection already handled in onAccept callback
-    }
   }
 
   /// Calculate health score from biometric snapshot
   double _calculateHealthScore(dynamic snapshot) {
-    if (snapshot == null) return 75.0;
+    if (snapshot == null) return 0.0;
 
-    double score = 75.0; // Base score
+    final dataQuality = (snapshot.dataQuality as num).toDouble().clamp(
+      0.0,
+      1.0,
+    );
 
-    // Add points based on data quality
-    score += snapshot.dataQuality * 15.0;
+    double score = dataQuality * 80.0;
 
-    // Add points for heart rate being in normal range (60-100)
     if (snapshot.heartRate != null) {
-      final hr = snapshot.heartRate!;
-      if (hr >= 60 && hr <= 100) {
-        score += 5.0;
+      final heartRate = (snapshot.heartRate as num).toDouble();
+      if (heartRate >= 60.0 && heartRate <= 100.0) {
+        score += 10.0;
       }
     }
 
-    // Add points for good sleep (7-9 hours)
     if (snapshot.sleepHours != null) {
-      final sleep = snapshot.sleepHours!;
-      if (sleep >= 7 && sleep <= 9) {
-        score += 5.0;
+      final sleepHours = (snapshot.sleepHours as num).toDouble();
+      if (sleepHours >= 7.0 && sleepHours <= 9.0) {
+        score += 10.0;
       }
     }
 
-    return score.clamp(0.0, 100.0);
+    return score.clamp(0.0, 100.0).toDouble();
   }
 
   /// Disconnect HealthKit
@@ -103,20 +117,40 @@ class HealthProvider extends ChangeNotifier {
   /// Load HealthKit connection state
   Future<void> loadConnectionState() async {
     final prefs = await SharedPreferences.getInstance();
-    _isHealthKitConnected = prefs.getBool('healthkit_connected') ?? false;
+    final storedAsConnected = prefs.getBool('healthkit_connected') ?? false;
 
-    if (_isHealthKitConnected) {
-      // Recalculate health score
-      try {
-        final biometricService = AdvancedBiometricService.instance;
-        if (!biometricService.isInitialized) {
-          await biometricService.initialize();
-        }
-        final snapshot = await biometricService.getCurrentBiometricSnapshot();
-        _healthScore = _calculateHealthScore(snapshot);
-      } catch (e) {
-        debugPrint('Error loading HealthKit state: $e');
+    if (!storedAsConnected) {
+      _isHealthKitConnected = false;
+      _healthScore = 0.0;
+      notifyListeners();
+      return;
+    }
+
+    try {
+      final biometricService = AdvancedBiometricService.instance;
+
+      if (!biometricService.isInitialized) {
+        await biometricService.initialize();
       }
+
+      if (!biometricService.isInitialized) {
+        _isHealthKitConnected = false;
+        _healthScore = 0.0;
+        await prefs.setBool('healthkit_connected', false);
+        notifyListeners();
+        return;
+      }
+
+      final snapshot = await biometricService.getCurrentBiometricSnapshot();
+
+      _isHealthKitConnected = true;
+      _healthScore = _calculateHealthScore(snapshot);
+    } catch (error) {
+      _isHealthKitConnected = false;
+      _healthScore = 0.0;
+      await prefs.setBool('healthkit_connected', false);
+
+      debugPrint('Error restoring HealthKit connection: $error');
     }
 
     notifyListeners();

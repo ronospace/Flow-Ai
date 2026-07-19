@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'dart:async';
 import 'package:health/health.dart';
 import '../utils/app_logger.dart';
+import 'package:flutter/foundation.dart';
 
 /// Biometric insight types
 enum BiometricInsightType {
@@ -76,7 +78,7 @@ class BiometricSnapshot {
 }
 
 /// Advanced Biometric Integration Service
-/// Integrates with HealthKit (iOS) and Google Fit (Android) for comprehensive health data
+/// Integrates with Apple HealthKit on iOS and Health Connect on Android for comprehensive health data
 class AdvancedBiometricService {
   static final AdvancedBiometricService _instance =
       AdvancedBiometricService._internal();
@@ -93,6 +95,15 @@ class AdvancedBiometricService {
   // Biometric data cache
   final Map<HealthDataType, List<HealthDataPoint>> _dataCache = {};
   DateTime? _lastSyncTime;
+
+  bool get _isIOSSimulator {
+    if (kIsWeb || !Platform.isIOS) return false;
+    final env = Platform.environment;
+    return env.containsKey('SIMULATOR_DEVICE_NAME') ||
+        env.containsKey('SIMULATOR_UDID') ||
+        env.containsKey('IPHONE_SIMULATOR_ROOT') ||
+        env['TARGET_OS_SIMULATOR'] == '1';
+  }
 
   /// Available health data types for menstrual health tracking
   static const List<HealthDataType> _supportedDataTypes = [
@@ -119,60 +130,65 @@ class AdvancedBiometricService {
 
   /// Initialize biometric integration
   Future<void> initialize() async {
+    if (!Platform.isIOS) {
+      _isInitialized = false;
+      AppLogger.warning(
+        'Apple Health integration is available only on iOS in this release',
+      );
+      return;
+    }
+
     if (_isInitialized) return;
 
     try {
       AppLogger.info('🩺 Initializing Advanced Biometric Integration...');
 
-      _health = Health();
-
-      // Check if health data is available on this platform
-      if (_health != null) {
-        final hasPermissions =
-            await _health!.hasPermissions(_supportedDataTypes) ?? false;
-        if (!hasPermissions) {
-          AppLogger.warning('Health permissions not granted. Requesting...');
-
-          final granted = await _requestHealthPermissions();
-          if (!granted) {
-            AppLogger.warning(
-              'Health permissions denied. Limited biometric functionality.',
-            );
-            // Continue with limited functionality
-          } else {
-            AppLogger.success('✅ HealthKit permissions granted');
-            // Initial sync after permissions granted
-            await _syncHealthData();
-          }
-        } else {
-          AppLogger.success('✅ HealthKit permissions already granted');
-          // Sync existing data
-          await _syncHealthData();
-        }
+      if (_isIOSSimulator) {
+        _isInitialized = false;
+        _health = null;
+        AppLogger.warning(
+          'iOS Simulator detected - HealthKit data is unavailable',
+        );
+        return;
       }
 
-      // Set up real-time health data monitoring
+      _health = Health();
+
+      final granted = await _requestHealthPermissions();
+
+      if (!granted) {
+        _isInitialized = false;
+        _health = null;
+        AppLogger.warning(
+          'HealthKit authorization was not granted. No biometric data loaded.',
+        );
+        return;
+      }
+
       await _setupHealthDataMonitoring();
 
-      // Start periodic sync
+      // The initial synchronization requires an initialized service.
+      _isInitialized = true;
+      await _syncHealthData();
+
       _startPeriodicSync();
 
-      _isInitialized = true;
-      AppLogger.success('✅ Advanced Biometric Integration initialized');
-    } catch (e) {
-      AppLogger.error('Failed to initialize biometric service: $e');
-      // Continue with mock data for testing
-      _initializeMockService();
+      AppLogger.success(
+        '✅ Advanced Biometric Integration initialized with HealthKit',
+      );
+    } catch (error) {
+      _isInitialized = false;
+      _health = null;
+      AppLogger.error('Failed to initialize biometric service: $error');
     }
   }
 
   /// Request health data permissions
-  /// NOTE: HealthKit disclosure dialog MUST be shown BEFORE calling this
-  /// (App Store Guideline 2.5.1 - HealthKit Transparency)
+  /// NOTE: Health data transparency disclosure MUST be shown BEFORE calling this.
   Future<bool> _requestHealthPermissions() async {
     try {
       // IMPORTANT: HealthKit disclosure dialog should be shown by the calling screen
-      // BEFORE this method is called. This ensures compliance with App Store 2.5.1
+      // BEFORE this method is called so users understand health data access.
 
       final permissions = _supportedDataTypes
           .map((type) => HealthDataAccess.READ)
@@ -222,8 +238,280 @@ class AdvancedBiometricService {
     );
   }
 
+  /// Trigger AI analysis for new biometric data
 
-              /// Notify health insights to listeners
+  void _triggerAIAnalysis(List<HealthDataPoint> newData) {
+    // Analyze new data with AI engine for cycle insights
+    Timer(const Duration(milliseconds: 500), () async {
+      try {
+        final insights = await _analyzeBiometricPatterns(newData);
+        _notifyHealthInsights(insights);
+      } catch (e) {
+        AppLogger.error('AI analysis failed: $e');
+      }
+    });
+  }
+
+  /// Analyze biometric patterns with AI
+  Future<List<BiometricInsight>> _analyzeBiometricPatterns(
+    List<HealthDataPoint> data,
+  ) async {
+    final insights = <BiometricInsight>[];
+
+    try {
+      // Heart rate variability analysis
+      final hrvData = data
+          .where((d) => d.type == HealthDataType.HEART_RATE_VARIABILITY_SDNN)
+          .toList();
+      if (hrvData.isNotEmpty) {
+        final hrvInsight = await _analyzeHRVPatterns(hrvData);
+        if (hrvInsight != null) insights.add(hrvInsight);
+      }
+
+      // Body temperature patterns
+      final tempData = data
+          .where((d) => d.type == HealthDataType.BODY_TEMPERATURE)
+          .toList();
+      if (tempData.isNotEmpty) {
+        final tempInsight = await _analyzeTemperaturePatterns(tempData);
+        if (tempInsight != null) insights.add(tempInsight);
+      }
+
+      // Sleep quality correlation
+      final sleepData = data
+          .where((d) => d.type == HealthDataType.SLEEP_ASLEEP)
+          .toList();
+      if (sleepData.isNotEmpty) {
+        final sleepInsight = await _analyzeSleepCycleCorrelation(sleepData);
+        if (sleepInsight != null) insights.add(sleepInsight);
+      }
+
+      // Stress indicators from HRV and other metrics
+      final stressInsight = await _analyzeStressIndicators(data);
+      if (stressInsight != null) insights.add(stressInsight);
+    } catch (e) {
+      AppLogger.error('Error analyzing biometric patterns: $e');
+    }
+
+    return insights;
+  }
+
+  /// Analyze heart rate variability patterns
+  Future<BiometricInsight?> _analyzeHRVPatterns(
+    List<HealthDataPoint> hrvData,
+  ) async {
+    if (hrvData.length < 7) return null; // Need at least a week of data
+
+    try {
+      final values = hrvData
+          .map((d) => (d.value as NumericHealthValue).numericValue.toDouble())
+          .toList();
+      final average = values.reduce((a, b) => a + b) / values.length;
+      final recent = values.takeLast(3).toList();
+      final recentAvg = recent.reduce((a, b) => a + b) / recent.length;
+
+      String insight;
+      BiometricInsightType type;
+      double confidence = 0.0;
+
+      if (recentAvg > average * 1.15) {
+        insight =
+            'Your heart rate variability is elevated, suggesting good recovery and low stress levels. This often correlates with the follicular phase of your cycle.\n\n⚕️ Medical Disclaimer: This is an AI-generated observation for awareness purposes only. Consult a healthcare provider for medical advice.';
+        type = BiometricInsightType.hrvElevated;
+        confidence = 0.8;
+      } else if (recentAvg < average * 0.85) {
+        insight =
+            'Your heart rate variability is lower than usual, which may indicate stress or approaching menstruation.\n\n⚕️ Medical Disclaimer: This is an AI-generated observation for awareness purposes only. Consult a healthcare provider for medical advice.';
+        type = BiometricInsightType.hrvLowered;
+        confidence = 0.75;
+      } else {
+        return null; // No significant pattern
+      }
+
+      return BiometricInsight(
+        type: type,
+        title: 'HRV Pattern Detected',
+        insight: insight,
+        confidence: confidence,
+        dataPoints: hrvData.length,
+        recommendations: _getHRVRecommendations(type),
+        timestamp: DateTime.now(),
+      );
+    } catch (e) {
+      AppLogger.error('Error analyzing HRV patterns: $e');
+      return null;
+    }
+  }
+
+  /// Analyze body temperature patterns for ovulation prediction
+  Future<BiometricInsight?> _analyzeTemperaturePatterns(
+    List<HealthDataPoint> tempData,
+  ) async {
+    if (tempData.length < 10) return null;
+
+    try {
+      // Sort by date
+      tempData.sort((a, b) => a.dateFrom.compareTo(b.dateFrom));
+
+      final values = tempData
+          .map((d) => (d.value as NumericHealthValue).numericValue.toDouble())
+          .toList();
+      final recentValues = values.takeLast(5).toList();
+      final previousValues = values.take(values.length - 5).toList();
+
+      if (previousValues.isEmpty) return null;
+
+      final recentAvg =
+          recentValues.reduce((a, b) => a + b) / recentValues.length;
+      final previousAvg =
+          previousValues.reduce((a, b) => a + b) / previousValues.length;
+
+      // Detect temperature shift (potential ovulation indicator)
+      if (recentAvg > previousAvg + 0.2) {
+        // 0.2°C increase suggests ovulation
+        return BiometricInsight(
+          type: BiometricInsightType.temperatureShift,
+          title: 'Temperature Shift Detected',
+          insight:
+              'Your basal body temperature has increased by ${(recentAvg - previousAvg).toStringAsFixed(1)}°C, which may indicate recent ovulation.\n\n⚕️ Medical Disclaimer: This is an AI-generated observation for awareness purposes only, not for medical diagnosis or birth control. Consult a healthcare provider for family planning advice.\n\n📚 Source: ACOG - Optimizing Natural Fertility (2019)',
+          confidence: 0.85,
+          dataPoints: tempData.length,
+          recommendations: [
+            'This suggests you may be in your luteal phase',
+            'Continue tracking temperature for cycle confirmation',
+            'Consult healthcare provider for family planning guidance',
+          ],
+          timestamp: DateTime.now(),
+        );
+      }
+    } catch (e) {
+      AppLogger.error('Error analyzing temperature patterns: $e');
+    }
+
+    return null;
+  }
+
+  /// Analyze sleep-cycle correlation
+  Future<BiometricInsight?> _analyzeSleepCycleCorrelation(
+    List<HealthDataPoint> sleepData,
+  ) async {
+    try {
+      if (sleepData.length < 14) return null; // Need 2 weeks minimum
+
+      final sleepDurations = sleepData
+          .map((d) => (d.value as NumericHealthValue).numericValue.toDouble())
+          .toList();
+      final avgSleep =
+          sleepDurations.reduce((a, b) => a + b) / sleepDurations.length;
+      final recentSleep =
+          sleepDurations.takeLast(3).reduce((a, b) => a + b) / 3;
+
+      if (recentSleep < avgSleep * 0.85) {
+        return BiometricInsight(
+          type: BiometricInsightType.sleepDisruption,
+          title: 'Sleep Pattern Changes',
+          insight:
+              'Your sleep quality has decreased recently. This often occurs during the luteal phase due to hormonal changes.\n\n⚕️ Medical Disclaimer: This is an AI-generated observation for awareness purposes only. Consult a healthcare provider for persistent sleep issues.\n\n📚 Source: NIH - Menstruation and the Menstrual Cycle (2021)',
+          confidence: 0.7,
+          dataPoints: sleepData.length,
+          recommendations: [
+            'Try relaxation techniques before bed',
+            'Maintain a consistent sleep schedule',
+            'Consult healthcare provider before starting supplements',
+            'Track if this pattern aligns with your cycle phases',
+          ],
+          timestamp: DateTime.now(),
+        );
+      }
+    } catch (e) {
+      AppLogger.error('Error analyzing sleep patterns: $e');
+    }
+
+    return null;
+  }
+
+  /// Analyze stress indicators
+  Future<BiometricInsight?> _analyzeStressIndicators(
+    List<HealthDataPoint> allData,
+  ) async {
+    try {
+      final hrvData = allData
+          .where((d) => d.type == HealthDataType.HEART_RATE_VARIABILITY_SDNN)
+          .toList();
+      final restingHRData = allData
+          .where((d) => d.type == HealthDataType.RESTING_HEART_RATE)
+          .toList();
+
+      if (hrvData.isEmpty && restingHRData.isEmpty) return null;
+
+      // Simple stress indicator: low HRV + elevated resting HR
+      bool lowHRV = false;
+      bool elevatedHR = false;
+
+      if (hrvData.isNotEmpty) {
+        final hrvValues = hrvData
+            .map((d) => (d.value as NumericHealthValue).numericValue.toDouble())
+            .toList();
+        final avgHRV = hrvValues.reduce((a, b) => a + b) / hrvValues.length;
+        final recentHRV = hrvValues.takeLast(2).reduce((a, b) => a + b) / 2;
+        lowHRV = recentHRV < avgHRV * 0.8;
+      }
+
+      if (restingHRData.isNotEmpty) {
+        final hrValues = restingHRData
+            .map((d) => (d.value as NumericHealthValue).numericValue.toDouble())
+            .toList();
+        final avgHR = hrValues.reduce((a, b) => a + b) / hrValues.length;
+        final recentHR = hrValues.takeLast(2).reduce((a, b) => a + b) / 2;
+        elevatedHR = recentHR > avgHR * 1.1;
+      }
+
+      if (lowHRV || elevatedHR) {
+        return BiometricInsight(
+          type: BiometricInsightType.stressLevel,
+          title: 'Stress Indicators Detected',
+          insight:
+              'Your biometric data suggests elevated stress levels, which can impact your menstrual cycle regularity.\n\n⚕️ Medical Disclaimer: This is an AI-generated observation for awareness purposes only. Seek medical attention for persistent symptoms or health concerns.\n\n📚 Source: ACOG - Lifestyle Modifications and Behavioral Interventions (2020)',
+          confidence: 0.65,
+          dataPoints: hrvData.length + restingHRData.length,
+          recommendations: [
+            'Practice stress-reduction techniques like meditation',
+            'Ensure adequate sleep (7-9 hours)',
+            'Consider gentle exercise like yoga or walking',
+            'Consult healthcare provider if stress impacts wellbeing',
+          ],
+          timestamp: DateTime.now(),
+        );
+      }
+    } catch (e) {
+      AppLogger.error('Error analyzing stress indicators: $e');
+    }
+
+    return null;
+  }
+
+  /// Get HRV-specific recommendations
+  List<String> _getHRVRecommendations(BiometricInsightType type) {
+    switch (type) {
+      case BiometricInsightType.hrvElevated:
+        return [
+          'Great recovery status! This is optimal for exercise',
+          'Your body is handling stress well',
+          'Continue your current wellness routine',
+        ];
+      case BiometricInsightType.hrvLowered:
+        return [
+          'Consider lighter exercise or rest day',
+          'Focus on stress management and relaxation',
+          'Ensure adequate hydration and nutrition',
+          'Prioritize quality sleep tonight',
+        ];
+      default:
+        return ['Continue monitoring your HRV trends'];
+    }
+  }
+
+  /// Notify health insights to listeners
   void _notifyHealthInsights(List<BiometricInsight> insights) {
     if (insights.isNotEmpty) {
       AppLogger.info('📊 Generated ${insights.length} biometric insights');
@@ -282,32 +570,8 @@ class AdvancedBiometricService {
   }
 
   /// Initialize mock service for testing
-  void _initializeMockService() {
-    _isInitialized = true;
-    AppLogger.info('🧪 Mock biometric service initialized for testing');
-
-    // Generate mock insights periodically
-    Timer.periodic(const Duration(minutes: 30), (timer) {
-      _generateMockInsights();
-    });
-  }
 
   /// Generate mock insights for testing
-  void _generateMockInsights() {
-    final mockInsights = [
-      BiometricInsight(
-        type: BiometricInsightType.temperatureShift,
-        title: 'Mock Temperature Pattern',
-        insight: 'Simulated temperature shift detected for testing purposes.',
-        confidence: 0.7,
-        dataPoints: 14,
-        recommendations: ['This is mock data for development'],
-        timestamp: DateTime.now(),
-      ),
-    ];
-
-    _notifyHealthInsights(mockInsights);
-  }
 
   /// Get recent biometric data for AI analysis
   Future<Map<HealthDataType, List<HealthDataPoint>>> getRecentBiometricData({
