@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum AppThemeMode {
-  light,
-  dark,
-  system,
-}
+enum AppThemeMode { light, dark, system }
 
 enum AppLanguage {
   english,
@@ -163,7 +159,8 @@ class UserPreferences {
       symptomReminders: symptomReminders ?? this.symptomReminders,
       reminderDaysBefore: reminderDaysBefore ?? this.reminderDaysBefore,
       aiInsightsEnabled: aiInsightsEnabled ?? this.aiInsightsEnabled,
-      hapticFeedbackEnabled: hapticFeedbackEnabled ?? this.hapticFeedbackEnabled,
+      hapticFeedbackEnabled:
+          hapticFeedbackEnabled ?? this.hapticFeedbackEnabled,
       soundsEnabled: soundsEnabled ?? this.soundsEnabled,
       avatarUrl: avatarUrl ?? this.avatarUrl,
       syncWithCycleSync: syncWithCycleSync ?? this.syncWithCycleSync,
@@ -220,11 +217,13 @@ class UserPreferences {
       hapticFeedbackEnabled: json['hapticFeedbackEnabled'] ?? true,
       soundsEnabled: json['soundsEnabled'] ?? true,
       avatarUrl: json['avatarUrl'] ?? '',
-      syncWithCycleSync: json['syncWithCycleSync'] ?? false,
-      cycleSyncUserId: json['cycleSyncUserId'],
+      syncWithCycleSync: false,
+      cycleSyncUserId: null,
       privacyMode: json['privacyMode'] ?? false,
       biometricAuth: json['biometricAuth'] ?? false,
-      lastUpdated: DateTime.parse(json['lastUpdated'] ?? DateTime.now().toIso8601String()),
+      lastUpdated: DateTime.parse(
+        json['lastUpdated'] ?? DateTime.now().toIso8601String(),
+      ),
     );
   }
 }

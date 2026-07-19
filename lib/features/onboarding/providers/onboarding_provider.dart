@@ -5,9 +5,6 @@ import '../../../core/services/user_preferences_service.dart';
 import '../../../core/services/notification_service.dart';
 import '../../../core/services/onboarding_tutorial_service.dart';
 
-// --- Sample mode removed (store-safe) ---
-// These are minimal stubs to keep legacy onboarding code compiling.
-// They do NOT provide credentials or any auto-demo login.
 class OnboardingProvider extends ChangeNotifier {
   bool _isCompleted = false;
   int _currentStep = 0;
@@ -17,6 +14,8 @@ class OnboardingProvider extends ChangeNotifier {
   final NotificationService _notificationService = NotificationService.instance;
   final OnboardingTutorialService _tutorialService =
       OnboardingTutorialService();
+  // ignore: unused_field
+  bool _isInitialized = false;
 
   OnboardingProvider() {
     _initializeServices();
@@ -135,7 +134,7 @@ class OnboardingProvider extends ChangeNotifier {
     await completeOnboarding();
   }
 
-  // Reset onboarding (for testing)
+  // Reset onboarding state
   Future<void> resetOnboarding() async {
     if (_preferencesService != null) {
       await _preferencesService!.setOnboardingComplete(false);
@@ -161,7 +160,6 @@ class OnboardingProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Generate demo data for exploration
   /// Start a tutorial for a specific feature
   Future<void> startTutorial(String tutorialId) async {
     final completed = await _tutorialService.isTutorialCompleted(tutorialId);

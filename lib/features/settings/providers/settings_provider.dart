@@ -8,14 +8,14 @@ import '../../../core/utils/user_display_name_resolver.dart';
 class SettingsProvider extends ChangeNotifier {
   static const String _preferencesKey = 'user_preferences';
   static const String _userMetadataKey = 'user_metadata';
-  
+
   UserPreferences _preferences = UserPreferences(
     userId: 'default_user',
     lastUpdated: DateTime.now(),
   );
 
   UserPreferences get preferences => _preferences;
-  
+
   bool get isDarkMode {
     switch (_preferences.themeMode) {
       case AppThemeMode.light:
@@ -23,7 +23,8 @@ class SettingsProvider extends ChangeNotifier {
       case AppThemeMode.dark:
         return true;
       case AppThemeMode.system:
-        return WidgetsBinding.instance.platformDispatcher.platformBrightness == Brightness.dark;
+        return WidgetsBinding.instance.platformDispatcher.platformBrightness ==
+            Brightness.dark;
     }
   }
 
@@ -45,7 +46,7 @@ class SettingsProvider extends ChangeNotifier {
     await _loadPreferences();
     await _syncUserDataFromAuth();
   }
-  
+
   // Sync user data from AuthService with comprehensive data management and immediate persistence
   Future<void> _syncUserDataFromAuth() async {
     try {
@@ -78,8 +79,8 @@ class SettingsProvider extends ChangeNotifier {
       final resolvedAvatarUrl = photoUrl.isNotEmpty
           ? photoUrl
           : sameUser
-              ? _preferences.avatarUrl
-              : '';
+          ? _preferences.avatarUrl
+          : '';
       final resolvedUserId = uid.isNotEmpty ? uid : _preferences.userId;
 
       final hasChanges =
@@ -130,7 +131,7 @@ class SettingsProvider extends ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       final preferencesJson = prefs.getString(_preferencesKey);
-      
+
       if (preferencesJson != null) {
         final json = jsonDecode(preferencesJson) as Map<String, dynamic>;
         _preferences = UserPreferences.fromJson(json);
@@ -161,8 +162,9 @@ class SettingsProvider extends ChangeNotifier {
 
     _preferences = _preferences.copyWith(
       displayName: displayName,
-      greetingName:
-          UserDisplayNameResolver.firstNameFromDisplayName(displayName),
+      greetingName: UserDisplayNameResolver.firstNameFromDisplayName(
+        displayName,
+      ),
       lastUpdated: DateTime.now(),
     );
     notifyListeners();
@@ -293,15 +295,6 @@ class SettingsProvider extends ChangeNotifier {
   }
 
   // Update CycleSync integration
-  Future<void> updateCycleSyncIntegration(bool enabled, String? userId) async {
-    _preferences = _preferences.copyWith(
-      syncWithCycleSync: enabled,
-      cycleSyncUserId: userId,
-      lastUpdated: DateTime.now(),
-    );
-    notifyListeners();
-    await _savePreferences();
-  }
 
   // Update avatar
   Future<void> updateAvatar(String avatarUrl) async {
@@ -338,7 +331,7 @@ class SettingsProvider extends ChangeNotifier {
       debugPrint('Error importing settings: $e');
     }
   }
-  
+
   // Store additional user metadata
   Future<void> storeUserMetadata(Map<String, dynamic> metadata) async {
     try {
@@ -349,7 +342,7 @@ class SettingsProvider extends ChangeNotifier {
       debugPrint('Error storing user metadata: $e');
     }
   }
-  
+
   // Retrieve user metadata
   Future<Map<String, dynamic>?> getUserMetadata() async {
     try {
@@ -363,5 +356,4 @@ class SettingsProvider extends ChangeNotifier {
     }
     return null;
   }
-  
 }

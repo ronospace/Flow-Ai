@@ -359,10 +359,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         HapticFeedback.lightImpact();
         _showSuccessMessage('${localizations.success}!');
       }
-    } catch (e) {
+    } catch (error) {
       if (mounted) {
         final localizations = AppLocalizations.of(context);
-        _showErrorMessage('${localizations.error}: $e');
+        _showErrorMessage('${localizations.error}: $error');
       }
     }
   }

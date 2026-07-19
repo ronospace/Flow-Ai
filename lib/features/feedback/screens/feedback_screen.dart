@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FeedbackScreen extends StatefulWidget {
   const FeedbackScreen({super.key});
@@ -8,7 +9,8 @@ class FeedbackScreen extends StatefulWidget {
   State<FeedbackScreen> createState() => _FeedbackScreenState();
 }
 
-class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStateMixin {
+class _FeedbackScreenState extends State<FeedbackScreen>
+    with TickerProviderStateMixin {
   int _rating = 0;
   String _selectedCategory = 'general';
   final TextEditingController _feedbackController = TextEditingController();
@@ -32,13 +34,12 @@ class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStat
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-    _scaleAnimation = Tween<double>(
-      begin: 1.0,
-      end: 0.95,
-    ).animate(CurvedAnimation(
-      parent: _submitAnimationController,
-      curve: Curves.easeInOut,
-    ));
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.95).animate(
+      CurvedAnimation(
+        parent: _submitAnimationController,
+        curve: Curves.easeInOut,
+      ),
+    );
   }
 
   @override
@@ -50,23 +51,60 @@ class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStat
   }
 
   Future<void> _submitFeedback() async {
-    if (_feedbackController.text.trim().isEmpty) {
-      _showErrorDialog('Please provide some feedback before submitting.');
+    final feedbackText = _feedbackController.text.trim();
+
+    if (feedbackText.isEmpty) {
+      _showErrorDialog('Please provide some feedback before continuing.');
       return;
     }
 
     setState(() => _isSubmitting = true);
     await _submitAnimationController.forward();
-    
-    // Simulate API call
-    await Future.delayed(const Duration(seconds: 2));
-    
-    await _submitAnimationController.reverse();
-    setState(() => _isSubmitting = false);
-    
-    if (mounted) {
-      _showSuccessDialog();
+
+    final senderEmail = _emailController.text.trim();
+    final body = StringBuffer()
+      ..writeln('Category: $_selectedCategory')
+      ..writeln('Rating: ${_rating == 0 ? 'Not provided' : '$_rating/5'}')
+      ..writeln(
+        'Contact email: ${senderEmail.isEmpty ? 'Not provided' : senderEmail}',
+      )
+      ..writeln()
+      ..writeln(feedbackText);
+
+    final uri = Uri(
+      scheme: 'mailto',
+      path: 'support@flowai.app',
+      queryParameters: {
+        'subject': 'Flow Ai app feedback — $_selectedCategory',
+        'body': body.toString(),
+      },
+    );
+
+    bool opened = false;
+
+    try {
+      opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } catch (_) {
+      opened = false;
+    } finally {
+      await _submitAnimationController.reverse();
+
+      if (mounted) {
+        setState(() => _isSubmitting = false);
+      }
     }
+
+    if (!mounted) return;
+
+    if (!opened) {
+      _showErrorDialog(
+        'No email application could be opened. '
+        'Please email support@flowai.app directly.',
+      );
+      return;
+    }
+
+    _showComposerOpenedDialog();
   }
 
   void _showErrorDialog(String message) {
@@ -85,25 +123,24 @@ class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStat
     );
   }
 
-  void _showSuccessDialog() {
+  void _showComposerOpenedDialog() {
     showDialog(
       context: context,
-      barrierDismissible: false,
       builder: (context) => AlertDialog(
         title: const Row(
           children: [
-            Icon(Icons.check_circle, color: Colors.green),
+            Icon(Icons.email_outlined),
             SizedBox(width: 8),
-            Text('Thank you!'),
+            Text('Email ready'),
           ],
         ),
-        content: const Text('Your feedback has been submitted. We truly appreciate your input in making Flow Ai better!'),
+        content: const Text(
+          'Your email application has opened. '
+          'Review and send the message to complete your feedback submission.',
+        ),
         actions: [
           TextButton(
-            onPressed: () {
-              Navigator.pop(context); // Close dialog
-              Navigator.pop(context); // Go back to previous screen
-            },
+            onPressed: () => Navigator.pop(context),
             child: const Text('Done'),
           ),
         ],
@@ -114,7 +151,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStat
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Help Us Improve'),
@@ -155,11 +192,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStat
               ),
               child: const Column(
                 children: [
-                  Icon(
-                    Icons.favorite,
-                    color: Colors.white,
-                    size: 48,
-                  ),
+                  Icon(Icons.favorite, color: Colors.white, size: 48),
                   SizedBox(height: 12),
                   Text(
                     'Your Voice Matters',
@@ -172,18 +205,15 @@ class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStat
                   SizedBox(height: 8),
                   Text(
                     'Help us shape the future of Flow Ai with your valuable feedback',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
+                    style: TextStyle(color: Colors.white, fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
                 ],
               ),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Rating section
             Text(
               'Rate Your Experience',
@@ -212,9 +242,9 @@ class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStat
                 );
               }),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Category selection
             Text(
               'Feedback Category',
@@ -235,12 +265,19 @@ class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStat
                   },
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
                     decoration: BoxDecoration(
-                      color: isSelected ? const Color(0xFFFF6B9D) : Colors.grey.shade200,
+                      color: isSelected
+                          ? const Color(0xFFFF6B9D)
+                          : Colors.grey.shade200,
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
-                        color: isSelected ? const Color(0xFFFF6B9D) : Colors.grey.shade300,
+                        color: isSelected
+                            ? const Color(0xFFFF6B9D)
+                            : Colors.grey.shade300,
                       ),
                     ),
                     child: Row(
@@ -248,14 +285,18 @@ class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStat
                       children: [
                         Icon(
                           entry.value,
-                          color: isSelected ? Colors.white : Colors.grey.shade600,
+                          color: isSelected
+                              ? Colors.white
+                              : Colors.grey.shade600,
                           size: 16,
                         ),
                         const SizedBox(width: 8),
                         Text(
                           entry.key.toUpperCase(),
                           style: TextStyle(
-                            color: isSelected ? Colors.white : Colors.grey.shade600,
+                            color: isSelected
+                                ? Colors.white
+                                : Colors.grey.shade600,
                             fontWeight: FontWeight.w600,
                             fontSize: 12,
                           ),
@@ -266,9 +307,9 @@ class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStat
                 );
               }).toList(),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Feedback text
             Text(
               'Your Feedback',
@@ -281,19 +322,23 @@ class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStat
               controller: _feedbackController,
               maxLines: 5,
               decoration: InputDecoration(
-                hintText: 'Tell us what you think! Your suggestions, bug reports, and ideas help us improve...',
+                hintText:
+                    'Tell us what you think! Your suggestions, bug reports, and ideas help us improve...',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: Color(0xFFFF6B9D), width: 2),
+                  borderSide: const BorderSide(
+                    color: Color(0xFFFF6B9D),
+                    width: 2,
+                  ),
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Email (optional)
             Text(
               'Email (Optional)',
@@ -311,14 +356,17 @@ class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStat
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: Color(0xFFFF6B9D), width: 2),
+                  borderSide: const BorderSide(
+                    color: Color(0xFFFF6B9D),
+                    width: 2,
+                  ),
                 ),
                 prefixIcon: const Icon(Icons.email_outlined),
               ),
             ),
-            
+
             const SizedBox(height: 32),
-            
+
             // Submit button
             AnimatedBuilder(
               animation: _scaleAnimation,
@@ -347,25 +395,33 @@ class _FeedbackScreenState extends State<FeedbackScreen> with TickerProviderStat
                                   height: 20,
                                   child: CircularProgressIndicator(
                                     strokeWidth: 2,
-                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white,
+                                    ),
                                   ),
                                 ),
                                 SizedBox(width: 12),
-                                Text('Submitting...', style: TextStyle(fontSize: 16)),
+                                Text(
+                                  'Opening email…',
+                                  style: TextStyle(fontSize: 16),
+                                ),
                               ],
                             )
                           : const Text(
-                              'Submit Feedback',
-                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                              'Open Email App',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                     ),
                   ),
                 );
               },
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Privacy note
             Container(
               padding: const EdgeInsets.all(16),
