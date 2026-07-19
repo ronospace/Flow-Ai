@@ -23,6 +23,7 @@ import '../../ai_predictions/screens/ai_predictions_screen.dart';
 import 'dart:math' as math;
 import 'dart:ui';
 import '../../../core/widgets/pressable_avatar.dart';
+import '../../health/providers/health_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -40,6 +41,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   late Animation<double> _predictiveAnimation;
 
   final admob.AdMobService _adMobService = admob.AdMobService();
+  bool _rewardedInsightsSessionAccess = false;
 
   // AI Prediction
   PeriodPrediction? _currentPrediction;
@@ -153,168 +155,50 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     }
   }
 
-  Widget _buildPremiumInsightsUnlockWidget() {
-    final localizations = AppLocalizations.of(context);
-    final theme = Theme.of(context);
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            AppTheme.warningOrange.withValues(alpha: 0.1),
-            AppTheme.primaryRose.withValues(alpha: 0.1),
-          ],
-        ),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: AppTheme.warningOrange.withValues(alpha: 0.3),
-          width: 2,
-        ),
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [AppTheme.warningOrange, AppTheme.primaryRose],
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(
-                  Icons.star,
-                  color: theme.colorScheme.onPrimary,
-                  size: 20,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      localizations.unlockPremiumAiInsights,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: theme.textTheme.titleMedium?.color,
-                      ),
-                    ),
-                    Text(
-                      localizations.watchAdToUnlockInsights,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.textTheme.bodySmall?.color,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [AppTheme.warningOrange, AppTheme.primaryRose],
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  localizations.free,
-                  style: TextStyle(
-                    color: theme.colorScheme.onPrimary,
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
+  Future<void> _showRewardedAdForInsights() async {
+    final premiumProvider = context.read<PremiumProvider>();
 
-          Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: _showRewardedAdForInsights,
-              borderRadius: BorderRadius.circular(12),
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [AppTheme.warningOrange, AppTheme.primaryRose],
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppTheme.warningOrange.withValues(alpha: 0.3),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.play_circle_fill,
-                      color: theme.colorScheme.onPrimary,
-                      size: 20,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      localizations.watchAdUnlockInsights,
-                      style: theme.textTheme.titleSmall?.copyWith(
-                        color: theme.colorScheme.onPrimary,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+    await premiumProvider.initialize();
+
+    if (!mounted) return;
+
+    if (premiumProvider.error != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Unable to verify access. Please try again.'),
+        ),
+      );
+      return;
+    }
+
+    if (premiumProvider.hasPremium) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Premium access is already ad-free.')),
+      );
+      return;
+    }
+
+    _adMobService.showRewardedAdWithFrequency(
+      onRewarded: (_) {
+        if (!mounted) return;
+
+        setState(() {
+          _rewardedInsightsSessionAccess = true;
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Rewarded access enabled for this session. '
+              'Insights remain based on recorded health data.',
             ),
           ),
-
-          const SizedBox(height: 12),
-
-          Row(
-            children: [
-              Icon(Icons.check_circle, color: AppTheme.sweetPeach, size: 16),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  localizations.getAdditionalPremiumInsights,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              Icon(Icons.check_circle, color: AppTheme.sweetPeach, size: 16),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  localizations.unlockAdvancedHealthRecommendations,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    ).animate().fadeIn(delay: 500.ms).scale(begin: const Offset(0.95, 0.95));
+        );
+      },
+    );
   }
 
   Widget _buildLockedAdvancedInsightTeaserWidget() {
-    final localizations = AppLocalizations.of(context);
     final theme = Theme.of(context);
 
     final teaser = Container(
@@ -402,7 +286,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     borderRadius: BorderRadius.circular(12),
                     child: Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.all(14),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 14,
+                      ),
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
                           colors: [
@@ -411,31 +298,21 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           ],
                         ),
                         borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppTheme.warningOrange.withValues(
-                              alpha: 0.30,
-                            ),
-                            blurRadius: 10,
-                            offset: const Offset(0, 6),
-                          ),
-                        ],
                       ),
-                      child: Row(
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            Icons.lock_open,
-                            color: theme.colorScheme.onPrimary,
-                            size: 18,
+                            Icons.play_circle_fill_rounded,
+                            color: Colors.white,
                           ),
-                          const SizedBox(width: 10),
+                          SizedBox(width: 8),
                           Flexible(
                             child: Text(
-                              localizations.watchAdUnlockInsights,
-                              overflow: TextOverflow.ellipsis,
-                              style: theme.textTheme.titleSmall?.copyWith(
-                                color: theme.colorScheme.onPrimary,
+                              'Watch a rewarded ad for session access',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -451,69 +328,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ),
       ],
     ).animate().fadeIn(delay: 650.ms).slideX(begin: 0.15, end: 0);
-  }
-
-  Future<void> _showRewardedAdForInsights() async {
-    final localizations = AppLocalizations.of(context);
-    final theme = Theme.of(context);
-    final premiumProvider = context.read<PremiumProvider>();
-
-    await premiumProvider.initialize();
-
-    if (!mounted) return;
-
-    if (premiumProvider.error != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Unable to verify subscription. Please try again.'),
-        ),
-      );
-      return;
-    }
-
-    if (premiumProvider.hasPremium) {
-      _unlockPremiumInsights();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Premium access is already ad-free.')),
-      );
-      return;
-    }
-    _adMobService.showRewardedAdWithFrequency(
-      onRewarded: (reward) {
-        // User watched the full ad, unlock premium insights
-        _unlockPremiumInsights();
-        // Show success message
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Row(
-              children: [
-                Icon(Icons.star, color: AppTheme.warningOrange),
-                const SizedBox(width: 8),
-                Text(
-                  localizations.premiumInsightsUnlocked,
-                  style: TextStyle(
-                    color: theme.colorScheme.onPrimary,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-            backgroundColor: AppTheme.sweetPeach,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            duration: const Duration(seconds: 3),
-          ),
-        );
-      },
-    );
-  }
-
-  void _unlockPremiumInsights() {
-    // Simulate unlocking premium insights by adding them to the provider
-    final insightsProvider = context.read<InsightsProvider>();
-    insightsProvider.addPremiumInsights();
   }
 
   @override
@@ -741,9 +555,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ? '$baseGreeting, $greetingName!'
         : '$baseGreeting!';
 
-    // Simulate AI health score based on time and random factors
-    final healthScore =
-        0.75 + (math.sin(now.millisecondsSinceEpoch / 100000) * 0.2);
+    final healthScore = (context.watch<HealthProvider>().healthScore / 100.0)
+        .clamp(0.0, 1.0)
+        .toDouble();
 
     return Container(
       padding: const EdgeInsets.all(24),
@@ -1437,14 +1251,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           if (provider.insights.isNotEmpty) ...[
             // Advanced insights lock
             // Premium AI insights unlock widget
-            if (!provider.premiumUnlocked && !hasPremium)
-              _buildPremiumInsightsUnlockWidget(),
-
-            if (!provider.premiumUnlocked && !hasPremium)
+            if (!hasPremium && !_rewardedInsightsSessionAccess)
               _buildLockedAdvancedInsightTeaserWidget(),
 
             ...provider.insights
-                .take(provider.premiumUnlocked || hasPremium ? 2 : 1)
+                .take(hasPremium || _rewardedInsightsSessionAccess ? 2 : 1)
                 .map(
                   (insight) =>
                       Container(

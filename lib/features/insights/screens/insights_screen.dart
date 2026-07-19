@@ -5,11 +5,11 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/models/time_period.dart';
+import '../../../core/models/cycle_data.dart';
 import '../providers/insights_provider.dart';
 import '../../cycle/providers/cycle_provider.dart';
 import '../widgets/cycle_length_chart.dart';
 import '../widgets/ai_insight_card.dart';
-import '../widgets/prediction_accuracy_card.dart';
 import '../widgets/cycle_regularity_indicator.dart';
 import '../widgets/mood_energy_chart.dart';
 import '../widgets/symptom_heatmap.dart';
@@ -67,7 +67,9 @@ class _InsightsScreenState extends State<InsightsScreen>
           children: [
             Container(
               decoration: BoxDecoration(
-              gradient: AppTheme.backgroundGradient(theme.brightness == Brightness.dark),
+                gradient: AppTheme.backgroundGradient(
+                  theme.brightness == Brightness.dark,
+                ),
               ),
               child: SafeArea(
                 child: Column(
@@ -116,13 +118,13 @@ class _InsightsScreenState extends State<InsightsScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                  Text(
-                    'AI Insights',
-                    style: theme.textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: theme.colorScheme.onSurface,
-                    ),
-                  ).animate().fadeIn().slideX(begin: -0.3, end: 0),
+                Text(
+                  'AI Insights',
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurface,
+                  ),
+                ).animate().fadeIn().slideX(begin: -0.3, end: 0),
                 Text(
                   'Powered by machine learning',
                   style: theme.textTheme.bodyLarge?.copyWith(
@@ -134,7 +136,6 @@ class _InsightsScreenState extends State<InsightsScreen>
           ),
 
           // Settings icon removed - not necessary per user request
-
           const SizedBox(width: 8),
 
           // AI Badge
@@ -156,11 +157,7 @@ class _InsightsScreenState extends State<InsightsScreen>
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(
-                  Icons.psychology,
-                  color: Colors.white,
-                  size: 16,
-                ),
+                const Icon(Icons.psychology, color: Colors.white, size: 16),
                 const SizedBox(width: 6),
                 Text(
                   'AI Powered',
@@ -212,7 +209,10 @@ class _InsightsScreenState extends State<InsightsScreen>
                 decoration: BoxDecoration(
                   gradient: isSelected
                       ? LinearGradient(
-                          colors: [AppTheme.primaryRose, AppTheme.primaryPurple],
+                          colors: [
+                            AppTheme.primaryRose,
+                            AppTheme.primaryPurple,
+                          ],
                         )
                       : null,
                   borderRadius: BorderRadius.circular(12),
@@ -221,7 +221,9 @@ class _InsightsScreenState extends State<InsightsScreen>
                   period['label'],
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: isSelected ? Colors.white : theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                    color: isSelected
+                        ? Colors.white
+                        : theme.colorScheme.onSurface.withValues(alpha: 0.7),
                     fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                     fontSize: 14,
                   ),
@@ -259,24 +261,26 @@ class _InsightsScreenState extends State<InsightsScreen>
         ),
         dividerColor: Colors.transparent,
         labelColor: Colors.white,
-        unselectedLabelColor: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-        labelStyle: const TextStyle(
-          fontWeight: FontWeight.w600,
-          fontSize: 14,
+        unselectedLabelColor: theme.colorScheme.onSurface.withValues(
+          alpha: 0.7,
         ),
+        labelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
         tabs: const [
           Tab(
-            child: Padding(padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Text('Overview'),
             ),
           ),
           Tab(
-            child: Padding(padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Text('Trends'),
             ),
           ),
           Tab(
-            child: Padding(padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Text('Patterns'),
             ),
           ),
@@ -289,39 +293,40 @@ class _InsightsScreenState extends State<InsightsScreen>
     return Consumer2<InsightsProvider, CycleProvider>(
       builder: (context, insightsProvider, cycleProvider, child) {
         final theme = Theme.of(context);
+
         if (insightsProvider.isLoading || cycleProvider.isLoading) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryRose),
             ),
           );
         }
 
+        final completedCycles = cycleProvider.cycles
+            .where((cycle) => cycle.isComplete && cycle.cycleLength != null)
+            .toList();
+
         return SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Cycle Regularity
-              CycleRegularityIndicator(
-                regularityScore: _calculateRegularityScore(cycleProvider.cycles),
-                averageCycleLength: _calculateAverageCycleLength(cycleProvider.cycles),
-                standardDeviation: _calculateStandardDeviation(cycleProvider.cycles),
-                totalCycles: cycleProvider.cycles.length,
-              ).animate().fadeIn().slideY(begin: 0.3, end: 0),
+              if (completedCycles.length >= 2)
+                CycleRegularityIndicator(
+                  regularityScore: _calculateRegularityScore(completedCycles),
+                  averageCycleLength: _calculateAverageCycleLength(
+                    completedCycles,
+                  ),
+                  standardDeviation: _calculateStandardDeviation(
+                    completedCycles,
+                  ),
+                  totalCycles: completedCycles.length,
+                ).animate().fadeIn().slideY(begin: 0.3, end: 0)
+              else
+                _buildInsufficientCycleDataCard(theme),
 
               const SizedBox(height: 20),
 
-              // Prediction Accuracy
-              PredictionAccuracyCard(
-                accuracy: 0.87,
-                totalPredictions: cycleProvider.cycles.length,
-                correctPredictions: (cycleProvider.cycles.length * 0.87).round(),
-              ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.3, end: 0),
-
-              const SizedBox(height: 20),
-
-              // AI Insights
               Text(
                 'AI Insights',
                 style: theme.textTheme.titleLarge?.copyWith(
@@ -335,18 +340,55 @@ class _InsightsScreenState extends State<InsightsScreen>
               ...insightsProvider.insights.asMap().entries.map((entry) {
                 final index = entry.key;
                 final insight = entry.value;
-                return Padding(padding: const EdgeInsets.only(bottom: 16),
-                  child: AIInsightCard(
-                    insight: insight,
-                  ).animate()
-                    .fadeIn(delay: Duration(milliseconds: 300 + index * 100))
-                    .slideX(begin: 0.3, end: 0),
+
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: AIInsightCard(insight: insight)
+                      .animate()
+                      .fadeIn(delay: Duration(milliseconds: 300 + index * 100))
+                      .slideX(begin: 0.3, end: 0),
                 );
               }),
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget _buildInsufficientCycleDataCard(ThemeData theme) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        children: [
+          Icon(
+            Icons.timeline,
+            size: 40,
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'More cycle history needed',
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'Complete at least two cycles to calculate regularity, '
+            'average length, and variation.',
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -415,26 +457,34 @@ class _InsightsScreenState extends State<InsightsScreen>
   }
 
   // Helper methods for calculations
-  double _calculateRegularityScore(List<dynamic> cycles) {
-    if (cycles.length < 3) return 0.5;
-
-    final lengths = cycles.map((cycle) => 28).toList(); // Mock cycle lengths
-    final avg = lengths.reduce((a, b) => a + b) / lengths.length;
-    final variance = lengths.map((l) => (l - avg) * (l - avg)).reduce((a, b) => a + b) / lengths.length;
-    final stdDev = sqrt(variance);
-
-    // Higher regularity score for lower standard deviation
-    return (1.0 - (stdDev / 10.0)).clamp(0.0, 1.0);
+  double _calculateRegularityScore(List<CycleData> cycles) {
+    final standardDeviation = _calculateStandardDeviation(cycles);
+    return (1.0 - (standardDeviation / 10.0)).clamp(0.0, 1.0);
   }
 
-  double _calculateAverageCycleLength(List<dynamic> cycles) {
-    if (cycles.isEmpty) return 28.0;
-    return 28.0; // Mock average cycle length
+  double _calculateAverageCycleLength(List<CycleData> cycles) {
+    final lengths = cycles
+        .map((cycle) => cycle.cycleLength!.toDouble())
+        .toList();
+
+    return lengths.reduce((a, b) => a + b) / lengths.length;
   }
 
-  double _calculateStandardDeviation(List<dynamic> cycles) {
-    if (cycles.length < 2) return 0.0;
-    return 2.5; // Mock standard deviation
+  double _calculateStandardDeviation(List<CycleData> cycles) {
+    final lengths = cycles
+        .map((cycle) => cycle.cycleLength!.toDouble())
+        .toList();
+
+    if (lengths.length < 2) return 0;
+
+    final average = lengths.reduce((a, b) => a + b) / lengths.length;
+    final variance =
+        lengths
+            .map((length) => (length - average) * (length - average))
+            .reduce((a, b) => a + b) /
+        lengths.length;
+
+    return sqrt(variance);
   }
 
   TimePeriod _getTimePeriod(int months) {
