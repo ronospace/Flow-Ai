@@ -111,8 +111,6 @@ void main() {
         'FLOW_AI_GOOGLE_RECEIPT_VALIDATION_ENDPOINT',
         'FLOW_AI_SUBSCRIPTION_STATUS_ENDPOINT',
         "'userId':",
-        "'receipt':",
-        "'platform':",
       ]) {
         expect(
           receiptValidationService,
@@ -120,6 +118,13 @@ void main() {
           reason: 'Legacy receipt token remained: $forbidden',
         );
       }
+
+      expect(receiptValidationService, contains("'receipt': purchaseToken"));
+      expect(receiptValidationService, contains("'platform': 'android'"));
+      expect(
+        receiptValidationService,
+        isNot(contains("'purchaseToken': purchaseToken")),
+      );
 
       expect(receiptValidationService, isNot(contains('debugPrint(')));
       expect(receiptValidationService, isNot(contains('print(')));

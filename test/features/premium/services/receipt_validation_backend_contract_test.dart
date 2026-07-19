@@ -45,7 +45,9 @@ void main() {
           "isProduction ? 'production' : 'sandbox'",
         ),
       );
-      expect(client, contains("'purchaseToken': purchaseToken"));
+      expect(client, contains("'receipt': purchaseToken"));
+      expect(client, contains("'platform': 'android'"));
+      expect(client, isNot(contains("'purchaseToken': purchaseToken")));
       expect(client, contains("'packageName': packageName"));
       expect(client, contains("'productId': productId"));
     });

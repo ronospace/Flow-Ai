@@ -64,8 +64,9 @@ void main() {
     test('never sends client-owned UID to validation routes', () {
       expect(receiptClient, isNot(contains("'userId':")));
       expect(receiptClient, isNot(contains('required String userId')));
-      expect(receiptClient, isNot(contains("'receipt':")));
-      expect(receiptClient, isNot(contains("'platform':")));
+      expect(receiptClient, contains("'receipt': purchaseToken"));
+      expect(receiptClient, contains("'platform': 'android'"));
+      expect(receiptClient, isNot(contains("'purchaseToken': purchaseToken")));
 
       for (final methodName in <String>[
         'validateAppleReceipt',
