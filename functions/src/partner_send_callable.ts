@@ -18,6 +18,9 @@ import {
   HttpsError,
   onCall,
 } from "firebase-functions/v2/https";
+import {
+  logger,
+} from "firebase-functions/logger";
 
 import sgMail from "@sendgrid/mail";
 
@@ -149,7 +152,7 @@ function requireConfiguredSenderEmail(): string {
       SENDGRID_FROM_EMAIL.value(),
     );
   } catch {
-    console.error(
+    logger.error(
       "PARTNER_EMAIL_CONFIGURATION_INVALID",
     );
 
@@ -210,7 +213,7 @@ function throwSafeFailure(
     throw error;
   }
 
-  console.error(
+  logger.error(
     "PARTNER_OPERATION_FAILED",
     {
       operation,
@@ -518,7 +521,7 @@ export const secureSendPartnerInvite = onCall(
           },
         );
 
-        console.log(
+        logger.info(
           "PARTNER_EMAIL_SENT",
           {
             statusCode:
@@ -551,7 +554,7 @@ export const secureSendPartnerInvite = onCall(
             },
           );
         } catch (stateError: unknown) {
-          console.error(
+          logger.error(
             "PARTNER_EMAIL_STATE_UPDATE_FAILED",
             {
               category:
@@ -562,7 +565,7 @@ export const secureSendPartnerInvite = onCall(
           );
         }
 
-        console.error(
+        logger.error(
           "PARTNER_EMAIL_FAILED",
           {
             statusCode,

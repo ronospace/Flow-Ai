@@ -15,6 +15,9 @@ import {
   HttpsError,
   onCall,
 } from "firebase-functions/v2/https";
+import {
+  logger,
+} from "firebase-functions/logger";
 
 import {
   assertInviteIsActive,
@@ -103,7 +106,7 @@ function throwSafeFailure(
     throw error;
   }
 
-  console.error(
+  logger.error(
     "PARTNER_OPERATION_FAILED",
     {
       operation,

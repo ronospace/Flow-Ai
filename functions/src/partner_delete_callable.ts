@@ -13,6 +13,9 @@ import {
   HttpsError,
   onCall,
 } from "firebase-functions/v2/https";
+import {
+  logger,
+} from "firebase-functions/logger";
 
 import {
   requireAuthenticatedUid,
@@ -121,7 +124,7 @@ export const deleteMyCloudData = onCall(
       const deletedDocuments =
         documents.length + entitlementSubscriptions.size;
 
-      console.log(
+      logger.info(
         "USER_CLOUD_DATA_DELETED",
         {
           documentCount: deletedDocuments,
@@ -137,7 +140,7 @@ export const deleteMyCloudData = onCall(
         throw error;
       }
 
-      console.error(
+      logger.error(
         "PARTNER_CLOUD_DELETE_FAILED",
         {
           category:
