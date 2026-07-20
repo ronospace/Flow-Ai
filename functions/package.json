@@ -30,7 +30,7 @@
     "serve": "npm run build && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
-"test": "node --test --test-reporter=tap test/callable_architecture.test.cjs",
+"test": "npm run build && node --test --test-reporter=tap test/*.test.cjs",
     "typecheck": "tsc --noEmit",
     "verify": "npm run lint && npm run typecheck && npm run build"
   }
