@@ -22,63 +22,31 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
           persist-credentials: false
 
       - name: Set up Flutter
-        uses: subosito/flutter-action@v2
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
         with:
           flutter-version: '3.44.6'
           channel: stable
           cache: true
 
-      - name: Resolve locked dependencies
-        run: flutter pub get
+      - name: Set up Node.js 24
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: functions/package-lock.json
 
-      - name: Analyze release source
-        shell: bash
-        run: |
-          set -Eeuo pipefail
-
-          targets=(lib)
-
-          if [[ -f test/core/services/runtime_privacy_defaults_test.dart ]]; then
-            targets+=(test/core/services/runtime_privacy_defaults_test.dart)
-          fi
-
-          dart analyze \
-            --no-fatal-warnings \
-            "${targets[@]}"
-
-      - name: Run active tests
-        shell: bash
-        run: |
-          set -Eeuo pipefail
-
-          mapfile -d '' tests < <(
-            find test \
-              -type f \
-              -name '*_test.dart' \
-              ! -path 'test/_legacy_disabled/*' \
-              -print0 |
-            sort -z
-          )
-
-          (( ${#tests[@]} > 0 ))
-
-          flutter test \
-            --no-pub \
-            --reporter=compact \
-            "${tests[@]}"
-
-      - name: Build web release
-        run: flutter build web --release
+      - name: Validate production release candidate
+        run: bash .github/scripts/validate_release.sh
 
       - name: Authenticate to Google Cloud
         if: ${{ github.base_ref == 'main' }}
         id: google_auth
-        uses: google-github-actions/auth@v3
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093
         with:
           workload_identity_provider: projects/752724279049/locations/global/workloadIdentityPools/github-actions/providers/flow-ai-repository
           service_account: flow-ai-github-hosting@flow-ai-656b3.iam.gserviceaccount.com
