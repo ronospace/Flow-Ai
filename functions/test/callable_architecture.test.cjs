@@ -320,3 +320,193 @@ for (const [
     assert.deepEqual(logging.risks, []);
   });
 }
+
+
+/*
+ * Production integrity contracts:
+ * - every partner callable authenticates before all other handler work;
+ * - the authentication primitive preserves its runtime error/UID contract.
+ */
+void function flowAiAuthenticationIntegrityContracts() {
+  const flowAiAssert = require("node:assert/strict");
+  const flowAiFs = require("node:fs");
+  const flowAiPath = require("node:path");
+  const { pathToFileURL: flowAiPathToFileURL } =
+    require("node:url");
+  const { test: flowAiTest } = require("node:test");
+  const flowAiTs = require("typescript");
+
+  const flowAiFunctionsRoot = flowAiPath.resolve(__dirname, "..");
+
+  const flowAiCallableFiles = Object.freeze([
+    "partner_accept_callable.ts",
+    "partner_delete_callable.ts",
+    "partner_publish_callable.ts",
+    "partner_send_callable.ts",
+  ]);
+
+  function flowAiFindCallableHandler(sourceFile) {
+    let handler = null;
+
+    function visit(node) {
+      if (
+        flowAiTs.isVariableDeclaration(node) &&
+        node.initializer &&
+        flowAiTs.isCallExpression(node.initializer) &&
+        node.initializer.expression
+          .getText(sourceFile)
+          .endsWith("onCall")
+      ) {
+        const argumentsList = node.initializer.arguments;
+        const candidate =
+          argumentsList[argumentsList.length - 1];
+
+        if (
+          candidate &&
+          (
+            flowAiTs.isArrowFunction(candidate) ||
+            flowAiTs.isFunctionExpression(candidate)
+          ) &&
+          flowAiTs.isBlock(candidate.body)
+        ) {
+          handler = candidate;
+        }
+      }
+
+      flowAiTs.forEachChild(node, visit);
+    }
+
+    visit(sourceFile);
+    return handler;
+  }
+
+  function flowAiDirectCalls(node, sourceFile) {
+    const calls = [];
+
+    function visit(current, rootNode = false) {
+      if (
+        !rootNode &&
+        (
+          flowAiTs.isArrowFunction(current) ||
+          flowAiTs.isFunctionExpression(current) ||
+          flowAiTs.isFunctionDeclaration(current) ||
+          flowAiTs.isMethodDeclaration(current) ||
+          flowAiTs.isClassDeclaration(current)
+        )
+      ) {
+        return;
+      }
+
+      if (flowAiTs.isCallExpression(current)) {
+        calls.push({
+          name: current.expression.getText(sourceFile),
+          arguments: current.arguments.map(
+            argument => argument.getText(sourceFile)
+          ),
+        });
+      }
+
+      flowAiTs.forEachChild(
+        current,
+        child => visit(child, false)
+      );
+    }
+
+    visit(node, true);
+    return calls;
+  }
+
+  for (const filename of flowAiCallableFiles) {
+    flowAiTest(
+      `${filename} authenticates before all handler work`,
+      () => {
+        const relativePath = flowAiPath.join("src", filename);
+        const absolutePath = flowAiPath.resolve(
+          flowAiFunctionsRoot,
+          relativePath
+        );
+
+        const sourceText = flowAiFs.readFileSync(
+          absolutePath,
+          "utf8"
+        );
+
+        const sourceFile = flowAiTs.createSourceFile(
+          relativePath,
+          sourceText,
+          flowAiTs.ScriptTarget.Latest,
+          true
+        );
+
+        const handler = flowAiFindCallableHandler(sourceFile);
+
+        flowAiAssert.ok(
+          handler,
+          `${filename}: callable handler missing`
+        );
+
+        flowAiAssert.equal(
+          handler.parameters.length,
+          1,
+          `${filename}: unexpected request parameter count`
+        );
+
+        flowAiAssert.ok(
+          handler.body.statements.length > 0,
+          `${filename}: handler body is empty`
+        );
+
+        const requestName =
+          handler.parameters[0].name.getText(sourceFile);
+
+        const firstStatement = handler.body.statements[0];
+        const calls = flowAiDirectCalls(
+          firstStatement,
+          sourceFile
+        );
+
+        flowAiAssert.deepEqual(
+          calls,
+          [{
+            name: "requireAuthenticatedUid",
+            arguments: [`${requestName}.auth`],
+          }],
+          `${filename}: authentication must be the only first operation`
+        );
+      }
+    );
+  }
+
+  flowAiTest(
+    "requireAuthenticatedUid preserves its runtime contract",
+    async () => {
+      const primitivePath = flowAiPath.resolve(
+        flowAiFunctionsRoot,
+        "src/partner_security_primitives.ts"
+      );
+
+      const primitive = await import(
+        flowAiPathToFileURL(primitivePath).href
+      );
+
+      flowAiAssert.equal(
+        typeof primitive.requireAuthenticatedUid,
+        "function"
+      );
+
+      for (const missingAuth of [undefined, null, {}]) {
+        flowAiAssert.throws(
+          () => primitive.requireAuthenticatedUid(missingAuth),
+          error => error?.code === "unauthenticated"
+        );
+      }
+
+      flowAiAssert.equal(
+        primitive.requireAuthenticatedUid({
+          uid: "flow_ai_contract_probe_uid",
+        }),
+        "flow_ai_contract_probe_uid"
+      );
+    }
+  );
+}();
