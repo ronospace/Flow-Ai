@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - release/central-integration-20260720
 
 permissions:
   contents: read
