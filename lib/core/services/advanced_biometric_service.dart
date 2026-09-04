@@ -120,7 +120,7 @@ class AdvancedBiometricService {
   }
 
   /// Available health data types for menstrual health tracking
-  static const List<HealthDataType> _supportedDataTypes = [
+  static const List<HealthDataType> _iosDataTypes = [
     HealthDataType.HEART_RATE,
     HealthDataType.RESTING_HEART_RATE,
     HealthDataType.HEART_RATE_VARIABILITY_SDNN,
@@ -142,12 +142,39 @@ class AdvancedBiometricService {
     HealthDataType.MENSTRUATION_FLOW,
   ];
 
+  static const List<HealthDataType> _androidDataTypes = [
+    HealthDataType.HEART_RATE,
+    HealthDataType.RESTING_HEART_RATE,
+    HealthDataType.HEART_RATE_VARIABILITY_RMSSD,
+    HealthDataType.BODY_TEMPERATURE,
+    HealthDataType.SLEEP_ASLEEP,
+    HealthDataType.SLEEP_AWAKE,
+    HealthDataType.SLEEP_DEEP,
+    HealthDataType.SLEEP_REM,
+    HealthDataType.STEPS,
+    HealthDataType.ACTIVE_ENERGY_BURNED,
+    HealthDataType.BLOOD_OXYGEN,
+    HealthDataType.RESPIRATORY_RATE,
+    HealthDataType.WATER,
+    HealthDataType.MENSTRUATION_FLOW,
+  ];
+
+  List<HealthDataType> get _platformDataTypes {
+    if (Platform.isAndroid) return _androidDataTypes;
+    if (Platform.isIOS) return _iosDataTypes;
+    return const <HealthDataType>[];
+  }
+
+  HealthDataType get _platformHrvType => Platform.isAndroid
+      ? HealthDataType.HEART_RATE_VARIABILITY_RMSSD
+      : HealthDataType.HEART_RATE_VARIABILITY_SDNN;
+
   /// Initialize biometric integration
   Future<void> initialize() async {
-    if (!Platform.isIOS) {
+    if (kIsWeb || (!Platform.isIOS && !Platform.isAndroid)) {
       _isInitialized = false;
       AppLogger.warning(
-        'Apple Health integration is available only on iOS in this release',
+        'Native health integration is unavailable on this platform',
       );
       return;
     }
@@ -168,13 +195,17 @@ class AdvancedBiometricService {
 
       _health = Health();
 
+      if (Platform.isAndroid) {
+        await _health!.configure();
+      }
+
       final granted = await _requestHealthPermissions();
 
       if (!granted) {
         _isInitialized = false;
         _health = null;
         AppLogger.warning(
-          'HealthKit authorization was not granted. No biometric data loaded.',
+          'Health authorization was not granted. No biometric data loaded.',
         );
         return;
       }
@@ -204,12 +235,12 @@ class AdvancedBiometricService {
       // IMPORTANT: HealthKit disclosure dialog should be shown by the calling screen
       // BEFORE this method is called so users understand health data access.
 
-      final permissions = _supportedDataTypes
+      final permissions = _platformDataTypes
           .map((type) => HealthDataAccess.READ)
           .toList();
 
       return await _health!.requestAuthorization(
-        _supportedDataTypes,
+        _platformDataTypes,
         permissions: permissions,
       );
     } catch (e) {
@@ -276,9 +307,7 @@ class AdvancedBiometricService {
 
     try {
       // Heart rate variability analysis
-      final hrvData = data
-          .where((d) => d.type == HealthDataType.HEART_RATE_VARIABILITY_SDNN)
-          .toList();
+      final hrvData = data.where((d) => d.type == _platformHrvType).toList();
       if (hrvData.isNotEmpty) {
         final hrvInsight = await _analyzeHRVPatterns(hrvData);
         if (hrvInsight != null) insights.add(hrvInsight);
@@ -451,9 +480,7 @@ class AdvancedBiometricService {
     List<HealthDataPoint> allData,
   ) async {
     try {
-      final hrvData = allData
-          .where((d) => d.type == HealthDataType.HEART_RATE_VARIABILITY_SDNN)
-          .toList();
+      final hrvData = allData.where((d) => d.type == _platformHrvType).toList();
       final restingHRData = allData
           .where((d) => d.type == HealthDataType.RESTING_HEART_RATE)
           .toList();
@@ -561,7 +588,7 @@ class AdvancedBiometricService {
       final now = DateTime.now();
       final startTime = _lastSyncTime ?? now.subtract(const Duration(days: 7));
 
-      for (final dataType in _supportedDataTypes) {
+      for (final dataType in _platformDataTypes) {
         try {
           final healthData = await _health!.getHealthDataFromTypes(
             types: [dataType],
@@ -784,9 +811,7 @@ class AdvancedBiometricService {
         restingHeartRate: _getLatestValue(
           recentData[HealthDataType.RESTING_HEART_RATE],
         ),
-        heartRateVariability: _getLatestValue(
-          recentData[HealthDataType.HEART_RATE_VARIABILITY_SDNN],
-        ),
+        heartRateVariability: _getLatestValue(recentData[_platformHrvType]),
         bodyTemperature: _getLatestValue(
           recentData[HealthDataType.BODY_TEMPERATURE],
         ),
@@ -828,7 +853,7 @@ class AdvancedBiometricService {
   ) {
     if (data.isEmpty) return 0.0;
 
-    final totalTypes = _supportedDataTypes.length;
+    final totalTypes = _platformDataTypes.length;
     final availableTypes = data.keys.length;
 
     return availableTypes / totalTypes;
