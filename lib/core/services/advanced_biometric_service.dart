@@ -194,9 +194,21 @@ class AdvancedBiometricService {
       }
 
       _health = Health();
+      await _health!.configure();
 
       if (Platform.isAndroid) {
-        await _health!.configure();
+        final healthConnectAvailable = await _health!
+            .isHealthConnectAvailable();
+
+        if (!healthConnectAvailable) {
+          _isInitialized = false;
+          _health = null;
+          AppLogger.warning(
+            'Health Connect is unavailable. '
+            'No Android health data will be requested or displayed.',
+          );
+          return;
+        }
       }
 
       final granted = await _requestHealthPermissions();
@@ -219,7 +231,9 @@ class AdvancedBiometricService {
       _startPeriodicSync();
 
       AppLogger.success(
-        '✅ Advanced Biometric Integration initialized with HealthKit',
+        Platform.isAndroid
+            ? '✅ Advanced Biometric Integration initialized with Health Connect'
+            : '✅ Advanced Biometric Integration initialized with HealthKit',
       );
     } catch (error) {
       _isInitialized = false;
