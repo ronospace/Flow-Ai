@@ -19,10 +19,12 @@ class HealthProvider extends ChangeNotifier {
 
   /// Connect to HealthKit after showing the mandatory disclosure dialog
   Future<void> connectHealthKit(BuildContext context) async {
-    if (kIsWeb || defaultTargetPlatform != TargetPlatform.iOS) {
-      debugPrint(
-        'Apple Health integration is available only on iOS in this release',
-      );
+    final supportedPlatform =
+        defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.android;
+
+    if (kIsWeb || !supportedPlatform) {
+      debugPrint('Native health integration is unavailable on this platform');
       return;
     }
 
@@ -46,7 +48,7 @@ class HealthProvider extends ChangeNotifier {
             notifyListeners();
 
             debugPrint(
-              'HealthKit connection failed or authorization was not granted',
+              'Health connection failed or authorization was not granted',
             );
             return;
           }

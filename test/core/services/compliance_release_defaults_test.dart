@@ -35,24 +35,67 @@ void main() {
     expect(manifest, contains('CA92.1'));
     expect(project, contains('PrivacyInfo.xcprivacy'));
   });
-  test('release health integration is iOS-only', () {
+  test('release health integration supports iOS and Android', () {
     final service = File(
       'lib/core/services/advanced_biometric_service.dart',
     ).readAsStringSync();
+
     final provider = File(
       'lib/features/health/providers/health_provider.dart',
     ).readAsStringSync();
+
     final card = File(
       'lib/features/health/widgets/healthkit_connection_card.dart',
     ).readAsStringSync();
-    final settings = File(
-      'lib/features/settings/screens/settings_screen.dart',
+
+    final manifest = File(
+      'android/app/src/main/AndroidManifest.xml',
     ).readAsStringSync();
 
-    expect(service, contains('if (!Platform.isIOS)'));
-    expect(provider, contains('defaultTargetPlatform != TargetPlatform.iOS'));
-    expect(card, contains('return const SizedBox.shrink();'));
-    expect(settings, contains('if (Platform.isIOS)'));
+    expect(service, contains('Platform.isAndroid'));
+    expect(service, contains('_androidDataTypes'));
+    expect(service, contains('HEART_RATE_VARIABILITY_RMSSD'));
+    expect(service, contains('await _health!.configure();'));
+    expect(service, contains('_platformDataTypes'));
+
+    expect(
+      service,
+      isNot(
+        contains(
+          'Apple Health integration is available only on iOS in this release',
+        ),
+      ),
+    );
+
+    expect(provider, contains('TargetPlatform.android'));
+    expect(card, contains('Platform.isAndroid'));
+
+    for (final permission in <String>[
+      'READ_HEART_RATE',
+      'READ_RESTING_HEART_RATE',
+      'READ_HEART_RATE_VARIABILITY',
+      'READ_BODY_TEMPERATURE',
+      'READ_SLEEP',
+      'READ_STEPS',
+      'READ_ACTIVE_CALORIES_BURNED',
+      'READ_OXYGEN_SATURATION',
+      'READ_RESPIRATORY_RATE',
+      'READ_HYDRATION',
+      'READ_MENSTRUATION',
+    ]) {
+      expect(
+        manifest,
+        contains(permission),
+        reason: 'Android Health Connect requires $permission',
+      );
+    }
+
+    expect(manifest, contains('com.google.android.apps.healthdata'));
+
+    expect(
+      manifest,
+      contains('androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE'),
+    );
   });
 
   test('release public destinations and health policy are aligned', () {

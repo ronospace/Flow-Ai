@@ -13,7 +13,7 @@ class HealthKitConnectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!Platform.isIOS) {
+    if (!Platform.isIOS && !Platform.isAndroid) {
       return const SizedBox.shrink();
     }
 
