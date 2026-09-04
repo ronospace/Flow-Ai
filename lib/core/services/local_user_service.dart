@@ -4,8 +4,10 @@ import 'dart:convert';
 import 'dart:math';
 import '../models/user_profile.dart';
 
-/// Local User Service for storing and managing user data offline
-/// This service provides fallback authentication when Firebase is not available
+/// Legacy local-account store retained for backward-compatible access and
+/// controlled identity migration.
+///
+/// New production accounts must not be created through this service.
 class LocalUserService {
   static final LocalUserService _instance = LocalUserService._internal();
   factory LocalUserService() => _instance;

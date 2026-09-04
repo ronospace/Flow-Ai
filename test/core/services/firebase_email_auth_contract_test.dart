@@ -39,30 +39,65 @@ void main() {
     );
   });
 
+  test('new email accounts never downgrade to local account creation', () {
+    final signUpStart = authSource.indexOf(
+      'Future<AuthResult> signUpWithEmail({',
+    );
+    final signInStart = authSource.indexOf(
+      'Future<AuthResult> signInWithEmail({',
+    );
+
+    expect(signUpStart, greaterThanOrEqualTo(0));
+    expect(signInStart, greaterThan(signUpStart));
+
+    final signUpBlock = authSource.substring(signUpStart, signInStart);
+
+    expect(signUpBlock, contains('await auth.createUserWithEmailAndPassword('));
+    expect(signUpBlock, isNot(contains('localService.createUser(')));
+    expect(signUpBlock, isNot(contains("'provider': 'local'")));
+    expect(
+      signUpBlock,
+      contains('New production accounts must be created by Firebase'),
+    );
+  });
+
   test(
-    'legacy local compatibility is explicit and Firebase errors do not fall back',
+    'legacy local sign-in remains explicit and general fallback is disabled',
     () {
-      final localLookup = authSource.indexOf(
-        'final storedIdentity = await _getStoredUserData();',
+      final signInStart = authSource.indexOf(
+        'Future<AuthResult> signInWithEmail({',
       );
-      final firebaseSignIn = authSource.indexOf(
+      final googleStart = authSource.indexOf(
+        'Future<AuthResult> signInWithGoogle()',
+        signInStart,
+      );
+
+      expect(signInStart, greaterThanOrEqualTo(0));
+      expect(googleStart, greaterThan(signInStart));
+
+      final signInBlock = authSource.substring(signInStart, googleStart);
+
+      final legacyGate = signInBlock.indexOf(
+        'final shouldUseLegacyLocalAccount =',
+      );
+      final legacySignIn = signInBlock.indexOf(
+        'await localService.signInUser(',
+      );
+      final firebaseSignIn = signInBlock.indexOf(
         'await auth.signInWithEmailAndPassword(',
       );
-      final unavailableFallback = authSource.indexOf(
-        '// Firebase is unavailable: preserve the existing local-only fallback.',
-        firebaseSignIn,
+
+      expect(legacyGate, greaterThanOrEqualTo(0));
+      expect(legacySignIn, greaterThan(legacyGate));
+      expect(firebaseSignIn, greaterThan(legacySignIn));
+
+      final afterFirebase = signInBlock.substring(firebaseSignIn);
+      expect(afterFirebase, isNot(contains('await localService.signInUser(')));
+
+      expect(
+        signInBlock,
+        contains('General sign-in must never silently downgrade'),
       );
-
-      expect(localLookup, greaterThanOrEqualTo(0));
-      expect(firebaseSignIn, greaterThan(localLookup));
-      expect(unavailableFallback, greaterThan(firebaseSignIn));
-
-      final firebaseCredentialBlock = authSource.substring(
-        firebaseSignIn,
-        unavailableFallback,
-      );
-      expect(firebaseCredentialBlock, isNot(contains('signInUser(')));
-
       expect(authSource, contains("case 'invalid-credential':"));
       expect(authSource, contains("case 'network-request-failed':"));
     },

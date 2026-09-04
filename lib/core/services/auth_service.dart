@@ -482,35 +482,11 @@ class AuthService {
       }
     }
 
-    // Firebase is unavailable: preserve the existing local-only fallback.
-    final localService = _localUserService;
-    if (localService != null) {
-      final localResult = await localService.createUser(
-        email: normalizedEmail,
-        password: password,
-        displayName: normalizedDisplayName,
-        username: username,
-      );
-
-      if (!localResult.isSuccess) {
-        return AuthResult.failure(localResult.error!);
-      }
-
-      await _storeUserData({
-        'uid': localResult.user!.uid,
-        'email': normalizedEmail,
-        'displayName': localResult.user!.displayName,
-        'username': localResult.user!.username ?? localResult.user!.displayName,
-        'provider': 'local',
-        'lastLogin': DateTime.now().toIso8601String(),
-      });
-      await _prefs?.setString(_lastLoginMethodKey, 'local');
-
-      return AuthResult.success(null);
-    }
-
+    // New production accounts must be created by Firebase, the canonical
+    // identity provider. Local account creation is retained only for
+    // backward-compatible legacy migration and is never a signup fallback.
     return AuthResult.failure(
-      'Authentication service is currently unavailable.',
+      'Authentication service is currently unavailable. Please try again later.',
     );
   }
 
@@ -641,36 +617,11 @@ class AuthService {
       }
     }
 
-    // Firebase is unavailable: preserve the existing local-only fallback.
-    if (localService != null) {
-      final localResult = await localService.signInUser(
-        email: normalizedEmail,
-        password: password,
-      );
-
-      if (!localResult.isSuccess) {
-        return AuthResult.failure(localResult.error!);
-      }
-
-      final existingData = await _getStoredUserData();
-      await _storeUserData({
-        'uid': localResult.user!.uid,
-        'email': normalizedEmail,
-        'displayName': localResult.user!.displayName,
-        'username':
-            existingData?['username'] ??
-            localResult.user!.username ??
-            localResult.user!.displayName,
-        'provider': 'local',
-        'lastLogin': DateTime.now().toIso8601String(),
-      });
-      await _prefs?.setString(_lastLoginMethodKey, 'local');
-
-      return AuthResult.success(null);
-    }
-
+    // Only an explicitly identified legacy-local account may authenticate
+    // through LocalUserService. General sign-in must never silently downgrade
+    // from the canonical Firebase identity provider.
     return AuthResult.failure(
-      'Authentication service is currently unavailable.',
+      'Authentication service is currently unavailable. Please try again later.',
     );
   }
 
