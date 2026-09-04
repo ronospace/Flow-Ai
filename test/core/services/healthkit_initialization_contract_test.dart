@@ -49,4 +49,25 @@ void main() {
     expect(connected, greaterThan(verification));
     expect(source, contains("prefs.setBool('healthkit_connected', false)"));
   });
+
+  test('Health Connect availability is checked before authorization', () {
+    final source = File(
+      'lib/core/services/advanced_biometric_service.dart',
+    ).readAsStringSync();
+
+    final configure = source.indexOf('await _health!.configure();');
+    final availability = source.indexOf('isHealthConnectAvailable');
+    final authorization = source.indexOf(
+      'final granted = await _requestHealthPermissions()',
+    );
+
+    expect(configure, greaterThanOrEqualTo(0));
+    expect(availability, greaterThan(configure));
+    expect(authorization, greaterThan(availability));
+
+    expect(
+      source,
+      contains('No Android health data will be requested or displayed.'),
+    );
+  });
 }
