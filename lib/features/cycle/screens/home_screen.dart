@@ -861,12 +861,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 localizations.cycleLengthLabel,
                 provider.predictions?.cycleLength != null
                     ? '${provider.predictions!.cycleLength} ${localizations.days}'
-                    : '28 ${localizations.days}',
+                    : 'Unknown',
                 Icons.loop,
                 AppTheme.warningOrange,
                 provider.insights?.periodPredictionAccuracy != null
                     ? '${(provider.insights!.periodPredictionAccuracy * 100).round()}%'
-                    : '50%',
+                    : '—',
               ),
             ],
           ),
