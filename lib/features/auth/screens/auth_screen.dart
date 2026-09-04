@@ -1,3 +1,4 @@
+import 'package:flow_ai/core/services/app_lock_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flow_ai/core/deeplinks/pending_deep_link_service.dart';
@@ -94,20 +95,14 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       final isAvailable = await _localAuth.canCheckBiometrics;
       final isDeviceSupported = await _localAuth.isDeviceSupported();
       final availableBiometrics = await _localAuth.getAvailableBiometrics();
-      await _authService.initialize();
-      final biometricsEnabled = _authService.isBiometricEnabled();
+      if (!mounted) return;
 
       setState(() {
         _biometricsAvailable =
-            biometricsEnabled &&
-            isAvailable &&
-            isDeviceSupported &&
-            availableBiometrics.isNotEmpty;
+            isAvailable && isDeviceSupported && availableBiometrics.isNotEmpty;
         _availableBiometrics = availableBiometrics;
       });
-    } catch (e) {
-      debugPrint('Error checking biometrics: $e');
-    }
+    } catch (e) {}
   }
 
   @override
@@ -261,7 +256,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
               )
               .animate(controller: _formController)
               .slideY(begin: 0.3, end: 0)
-              .fadeIn(delay: _biometricsAvailable && _isLogin ? 200.ms : 0.ms),
+              .fadeIn(delay: _isLogin ? 200.ms : 0.ms),
 
           const SizedBox(height: 16),
 
@@ -328,9 +323,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
               )
               .animate(controller: _formController)
               .slideY(begin: 0.3, end: 0)
-              .fadeIn(
-                delay: _biometricsAvailable && _isLogin ? 300.ms : 100.ms,
-              ),
+              .fadeIn(delay: _isLogin ? 300.ms : 100.ms),
 
           // Forgot Password (Login only) - only show after failed login attempt
           if (_isLogin && _showForgotPassword) ...[
@@ -416,10 +409,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                 onPressed: _isLoading ? null : _handleSubmit,
                 isPrimary: true,
                 width: 260,
-                height: 56,
-                icon: _isLoading
-                    ? null
-                    : (_isLogin ? Icons.login : Icons.person_add),
+                height: 52,
+                padding: EdgeInsets.zero,
               )
               .animate(controller: _formController)
               .slideY(begin: 0.3, end: 0)
@@ -476,20 +467,81 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildTabSelector(ThemeData theme) {
-    // Use adaptive segmented control for better platform integration
-    return AdaptiveComponents.adaptiveSegmentedControl<bool>(
-      context: context,
-      options: const {true: 'Sign In', false: 'Sign Up'},
-      selectedValue: _isLogin,
-      onChanged: (bool isLogin) {
-        setState(() {
-          _isLogin = isLogin;
-          _showForgotPassword = false; // Reset when switching tabs
-        });
-        // Use platform-appropriate haptic feedback
-        context.hapticFeedback(HapticFeedbackType.selection);
-      },
-      enabled: !_isLoading,
+    void selectMode(bool isLogin) {
+      if (_isLoading || _isLogin == isLogin) return;
+
+      setState(() {
+        _isLogin = isLogin;
+        _showForgotPassword = false;
+        _formError = null;
+        _emailError = null;
+        _passwordError = null;
+        _displayNameError = null;
+        _confirmPasswordError = null;
+      });
+
+      context.hapticFeedback(HapticFeedbackType.selection);
+    }
+
+    Widget segment({required bool value, required String label}) {
+      final selected = _isLogin == value;
+
+      return Expanded(
+        child: Semantics(
+          button: true,
+          selected: selected,
+          label: label,
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: _isLoading ? null : () => selectMode(value),
+              borderRadius: BorderRadius.circular(11),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 180),
+                curve: Curves.easeOutCubic,
+                height: 48,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: selected
+                      ? theme.colorScheme.primary
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(11),
+                ),
+                child: Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    color: selected
+                        ? theme.colorScheme.onPrimary
+                        : theme.colorScheme.onSurface,
+                    fontWeight: selected ? FontWeight.w700 : FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 332),
+        child: Container(
+          padding: const EdgeInsets.all(4),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(color: theme.colorScheme.outlineVariant),
+          ),
+          child: Row(
+            children: [
+              segment(value: true, label: 'Sign In'),
+              segment(value: false, label: 'Sign Up'),
+            ],
+          ),
+        ),
+      ),
     ).animate(controller: _formController).slideY(begin: -0.3, end: 0).fadeIn();
   }
 
@@ -573,11 +625,55 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
   Future<void> _handleBiometricLogin() async {
     debugPrint("BIO: tap biometric button");
-    if (!_biometricsAvailable) {
-      _showErrorMessage(
-        'Biometric authentication is not available on this device',
+
+    await _authService.initialize();
+    final biometricName = Theme.of(context).platform == TargetPlatform.iOS
+        ? 'Face ID'
+        : 'fingerprint';
+
+    if (!await _authService.isAuthenticated ||
+        !_authService.isBiometricEnabled()) {
+      await _showBiometricError(
+        'Sign in first to enable $biometricName login.',
       );
       return;
+    }
+
+    if (!_biometricsAvailable) {
+      try {
+        final isDeviceSupported = await _localAuth.isDeviceSupported();
+        final canCheckBiometrics = await _localAuth.canCheckBiometrics;
+        final availableBiometrics = await _localAuth.getAvailableBiometrics();
+        final biometricsEnabled = _authService.isBiometricEnabled();
+
+        if (!isDeviceSupported || !canCheckBiometrics) {
+          await _showBiometricError(
+            'Biometric login is not supported on this device.',
+          );
+          return;
+        }
+
+        if (availableBiometrics.isEmpty) {
+          await _showBiometricError(
+            'No fingerprint or biometric is enrolled. '
+            'Set one up in your device settings.',
+          );
+          return;
+        }
+
+        if (!biometricsEnabled) {
+          await _showBiometricError(
+            'Biometric login is not enabled for this account. '
+            'Sign in with your password, then enable it in Settings.',
+          );
+          return;
+        }
+      } catch (error) {
+        await _showBiometricError(
+          'Unable to check biometric availability. Please try again.',
+        );
+        return;
+      }
     }
     setState(() {
       _isLoading = true;
@@ -594,7 +690,8 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       if (!mounted) return;
 
       if (result.isSuccess) {
-        debugPrint('APPLE: success branch');
+        debugPrint('BIO: success branch');
+        AppLockService().markUnlocked();
         HapticFeedback.lightImpact();
         // suppressed biometric banner
 
@@ -625,11 +722,14 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
           PendingDeepLinkService.clearPendingRoute();
         }
       } else {
-        _showErrorMessage(result.error ?? 'Biometric authentication failed');
+        await _showBiometricError(
+          result.error ?? 'Biometric authentication failed',
+        );
       }
     } catch (e) {
-      debugPrint('Biometric authentication error: $e');
-      _showErrorMessage('Biometric authentication failed. Please try again.');
+      await _showBiometricError(
+        'Biometric authentication failed. Please try again.',
+      );
     } finally {
       if (mounted) {
         setState(() {
@@ -637,6 +737,11 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         });
       }
     }
+  }
+
+  Future<void> _showBiometricError(String message) async {
+    if (!mounted) return;
+    _setFormError(message);
   }
 
   Future<void> _handleSubmit() async {

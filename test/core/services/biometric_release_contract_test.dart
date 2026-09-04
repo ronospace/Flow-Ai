@@ -57,17 +57,18 @@ void main() {
       expect(authService, contains('getBool(_biometricsEnabledPreferenceKey)'));
     });
 
-    test('auth screen gates biometric login on enabled preference', () {
+    test('auth screen shows biometrics but guards unavailable sessions', () {
       final authScreen = File(
         'lib/features/auth/screens/auth_screen.dart',
       ).readAsStringSync();
 
       expect(authScreen, contains('await _authService.initialize()'));
+      expect(authScreen, contains('await _authService.isAuthenticated'));
+      expect(authScreen, contains('_authService.isBiometricEnabled()'));
       expect(
         authScreen,
-        contains('final biometricsEnabled = _authService.isBiometricEnabled()'),
+        contains('Sign in first to enable \$biometricName login.'),
       );
-      expect(authScreen, contains('biometricsEnabled &&'));
     });
   });
 }

@@ -424,10 +424,12 @@ class DataExportService {
   Future<void> shareExportedFile(String filePath) async {
     try {
       debugPrint('📤 Sharing file: $filePath');
-      await Share.shareXFiles(
-        [XFile(filePath)],
-        subject: 'Flow Ai Health Data Export',
-        text: 'My Flow Ai health data export',
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile(filePath)],
+          subject: 'Flow Ai Health Data Export',
+          text: 'My Flow Ai health data export',
+        ),
       );
       debugPrint('✅ File shared successfully');
     } catch (e) {

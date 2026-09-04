@@ -209,7 +209,7 @@ class _HealthTrendChartState extends State<HealthTrendChart>
   LineChartData _buildChartData() {
     return LineChartData(
       minX: 0,
-      maxX: widget.data.length.toDouble() - 1,
+      maxX: _getMaxX(),
       minY: _getMinY(),
       maxY: _getMaxY(),
       lineTouchData: LineTouchData(
@@ -295,7 +295,7 @@ class _HealthTrendChartState extends State<HealthTrendChart>
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
-            interval: math.max(1, (widget.data.length / 5).ceil().toDouble()),
+            interval: math.max(1, (_getMaxX() / 6).ceilToDouble()),
             getTitlesWidget: (double value, TitleMeta meta) {
               return Text(
                 _getTimeLabel(value.toInt()),
@@ -372,14 +372,32 @@ class _HealthTrendChartState extends State<HealthTrendChart>
     return (maxValue * 1.1).ceilToDouble();
   }
 
+  double _getMaxX() {
+    switch (widget.timeRange) {
+      case 1:
+        return 12;
+      case 24:
+        return 24;
+      case 168:
+        return 7;
+      default:
+        return widget.data.isEmpty
+            ? 1
+            : widget.data.map((spot) => spot.x).reduce(math.max);
+    }
+  }
+
   String _getTimeLabel(int index) {
     switch (widget.timeRange) {
-      case 1: // 1 hour
-        return '${index * 5}m';
-      case 24: // 24 hours
-        return '${index}h';
-      case 168: // 1 week
-        return ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][index % 7];
+      case 1:
+        final minutesAgo = (12 - index).clamp(0, 12) * 5;
+        return minutesAgo == 0 ? 'Now' : '-${minutesAgo}m';
+      case 24:
+        final hoursAgo = (24 - index).clamp(0, 24);
+        return hoursAgo == 0 ? 'Now' : '-${hoursAgo}h';
+      case 168:
+        final daysAgo = (7 - index).clamp(0, 7);
+        return daysAgo == 0 ? 'Now' : '-${daysAgo}d';
       default:
         return index.toString();
     }
@@ -394,7 +412,7 @@ class _HealthTrendChartState extends State<HealthTrendChart>
       case 'hrv':
         return 'Heart Rate Variability';
       case 'sleep':
-        return 'Sleep Score';
+        return 'Sleep Hours';
       default:
         return metric;
     }
@@ -409,7 +427,7 @@ class _HealthTrendChartState extends State<HealthTrendChart>
       case 'hrv':
         return 'ms';
       case 'sleep':
-        return '%';
+        return 'h';
       default:
         return '';
     }
@@ -433,18 +451,18 @@ class _HealthTrendChartState extends State<HealthTrendChart>
   String _getTimeRangeDescription(int hours) {
     switch (hours) {
       case 1:
-        return 'Last hour';
+        return 'Available synced readings from the last hour';
       case 24:
-        return 'Last 24 hours';
+        return 'Available synced readings from the last 24 hours';
       case 168:
-        return 'Last 7 days';
+        return 'Available synced readings from the last 7 days';
       default:
-        return 'Custom range';
+        return 'Available synced readings';
     }
   }
 
   bool _hasTargetRange(String metric) {
-    return ['heart_rate', 'temperature', 'sleep'].contains(metric);
+    return ['heart_rate', 'temperature'].contains(metric);
   }
 
   List<FlSpot> _getTargetRangeSpots() {
@@ -456,17 +474,11 @@ class _HealthTrendChartState extends State<HealthTrendChart>
       case 'temperature':
         targetValue = 36.5;
         break;
-      case 'sleep':
-        targetValue = 85.0;
-        break;
       default:
         targetValue = 50.0;
     }
 
-    return [
-      FlSpot(0, targetValue),
-      FlSpot(widget.data.length.toDouble() - 1, targetValue),
-    ];
+    return [FlSpot(0, targetValue), FlSpot(_getMaxX(), targetValue)];
   }
 
   @override

@@ -14,6 +14,7 @@ class AnalyticsProvider extends ChangeNotifier {
   HealthAnalytics? _healthAnalytics;
   PredictionAnalytics? _predictionAnalytics;
   TrendAnalytics? _trendAnalytics;
+  AnalyticsHistory _analyticsHistory = AnalyticsHistory.empty();
   List<PersonalizedRecommendation> _recommendations = [];
 
   // Getters
@@ -24,6 +25,7 @@ class AnalyticsProvider extends ChangeNotifier {
   HealthAnalytics? get healthAnalytics => _healthAnalytics;
   PredictionAnalytics? get predictionAnalytics => _predictionAnalytics;
   TrendAnalytics? get trendAnalytics => _trendAnalytics;
+  AnalyticsHistory get analyticsHistory => _analyticsHistory;
   List<PersonalizedRecommendation> get recommendations => _recommendations;
 
   // Load all analytics data
@@ -35,6 +37,7 @@ class AnalyticsProvider extends ChangeNotifier {
         loadHealthAnalytics(),
         loadPredictionAnalytics(),
         loadTrendAnalytics(),
+        loadAnalyticsHistory(),
         loadRecommendations(),
       ]);
     } catch (e) {
@@ -52,9 +55,7 @@ class AnalyticsProvider extends ChangeNotifier {
         endDate: _endDate,
       );
       notifyListeners();
-    } catch (e) {
-      debugPrint('Error loading cycle analytics: $e');
-    }
+    } catch (e) {}
   }
 
   // Load health analytics
@@ -65,9 +66,7 @@ class AnalyticsProvider extends ChangeNotifier {
         endDate: _endDate,
       );
       notifyListeners();
-    } catch (e) {
-      debugPrint('Error loading health analytics: $e');
-    }
+    } catch (e) {}
   }
 
   // Load prediction analytics
@@ -90,6 +89,19 @@ class AnalyticsProvider extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       debugPrint('Error loading trend analytics: $e');
+    }
+  }
+
+  Future<void> loadAnalyticsHistory() async {
+    try {
+      _analyticsHistory = await _analyticsService.getAnalyticsHistory(
+        startDate: _startDate,
+        endDate: _endDate,
+      );
+      notifyListeners();
+    } catch (_) {
+      _analyticsHistory = AnalyticsHistory.empty();
+      notifyListeners();
     }
   }
 
@@ -122,6 +134,7 @@ class AnalyticsProvider extends ChangeNotifier {
     _healthAnalytics = null;
     _predictionAnalytics = null;
     _trendAnalytics = null;
+    _analyticsHistory = AnalyticsHistory.empty();
     _recommendations = [];
     notifyListeners();
   }

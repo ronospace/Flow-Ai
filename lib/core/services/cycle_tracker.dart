@@ -29,20 +29,19 @@ class CycleTracker {
 
   void addCycle(CycleData cycle) {
     _cycles.add(cycle);
-    debugPrint('➕ Added new cycle: ${cycle.id}');
+    debugPrint('➕ Added new cycle: [redacted]');
   }
 
   void updateCycle(CycleData updatedCycle) {
     final index = _cycles.indexWhere((c) => c.id == updatedCycle.id);
     if (index != -1) {
       _cycles[index] = updatedCycle;
-      debugPrint('✏️ Updated cycle: ${updatedCycle.id}');
+      debugPrint('✏️ Updated cycle: [redacted]');
     }
   }
 
   void removeCycle(String cycleId) {
     _cycles.removeWhere((c) => c.id == cycleId);
-    debugPrint('🗑️ Removed cycle: $cycleId');
   }
 
   List<CycleData> getCyclesInDateRange(DateTime start, DateTime end) {

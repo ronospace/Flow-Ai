@@ -5,8 +5,13 @@ import '../../../core/theme/app_theme.dart';
 
 class HealthAnalyticsCard extends StatelessWidget {
   final HealthAnalytics analytics;
+  final AnalyticsHistory history;
 
-  const HealthAnalyticsCard({super.key, required this.analytics});
+  const HealthAnalyticsCard({
+    super.key,
+    required this.analytics,
+    required this.history,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +119,7 @@ class HealthAnalyticsCard extends StatelessWidget {
           const SizedBox(height: 20),
 
           // Health Trends Chart
-          _buildHealthTrendsChart(theme),
+          _buildHealthTrendsChart(theme, history),
         ],
       ),
     );
@@ -297,125 +302,197 @@ class HealthAnalyticsCard extends StatelessWidget {
     );
   }
 
-  Widget _buildHealthTrendsChart(ThemeData theme) {
+  Widget _buildHealthTrendsChart(ThemeData theme, AnalyticsHistory history) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Health Trends (Last 30 Days)',
+          "Health Trends",
           style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.w600,
             color: theme.colorScheme.onSurface,
           ),
         ),
         const SizedBox(height: 12),
-        Container(
-          height: 200,
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surface.withValues(alpha: 0.5),
-            borderRadius: BorderRadius.circular(12),
+        _buildHistoryMetricChart(
+          theme,
+          label: "Mood",
+          unit: "/10",
+          values: history.mood,
+          color: AppTheme.primaryPurple,
+          fixedMaxY: 10,
+        ),
+        const SizedBox(height: 12),
+        _buildHistoryMetricChart(
+          theme,
+          label: "Energy",
+          unit: "/10",
+          values: history.energy,
+          color: AppTheme.warningOrange,
+          fixedMaxY: 10,
+        ),
+        const SizedBox(height: 12),
+        _buildHistoryMetricChart(
+          theme,
+          label: "Sleep",
+          unit: "hours",
+          values: history.sleepHours,
+          color: AppTheme.secondaryBlue,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHistoryMetricChart(
+    ThemeData theme, {
+    required String label,
+    required String unit,
+    required Map<DateTime, double> values,
+    required Color color,
+    double? fixedMaxY,
+  }) {
+    final entries =
+        values.entries.where((entry) => entry.value.isFinite).toList()
+          ..sort((a, b) => a.key.compareTo(b.key));
+
+    if (entries.isEmpty) {
+      return Container(
+        height: 96,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surface.withValues(alpha: 0.5),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Text(
+          "No $label history available",
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
           ),
+        ),
+      );
+    }
+
+    final origin = DateTime(
+      entries.first.key.year,
+      entries.first.key.month,
+      entries.first.key.day,
+    );
+
+    final segments = <List<FlSpot>>[];
+    var segment = <FlSpot>[];
+    DateTime? previousDay;
+    var observedMax = 0.0;
+
+    for (final entry in entries) {
+      final day = DateTime(entry.key.year, entry.key.month, entry.key.day);
+
+      if (previousDay != null && day.difference(previousDay).inDays > 1) {
+        if (segment.isNotEmpty) {
+          segments.add(segment);
+        }
+        segment = <FlSpot>[];
+      }
+
+      segment.add(
+        FlSpot(day.difference(origin).inDays.toDouble(), entry.value),
+      );
+
+      if (entry.value > observedMax) {
+        observedMax = entry.value;
+      }
+
+      previousDay = day;
+    }
+
+    if (segment.isNotEmpty) {
+      segments.add(segment);
+    }
+
+    final maxX = entries.last.key.difference(origin).inDays.toDouble();
+
+    final maxY = fixedMaxY ?? (observedMax > 0 ? observedMax * 1.1 : 1.0);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "$label ($unit)",
+          style: theme.textTheme.bodyMedium?.copyWith(
+            fontWeight: FontWeight.w600,
+            color: theme.colorScheme.onSurface,
+          ),
+        ),
+        const SizedBox(height: 6),
+        SizedBox(
+          height: 130,
           child: LineChart(
             LineChartData(
               gridData: FlGridData(
                 show: true,
                 drawVerticalLine: false,
-                horizontalInterval: 1,
-                getDrawingHorizontalLine: (value) {
-                  return FlLine(
-                    color: theme.colorScheme.outline.withValues(alpha: 0.2),
-                    strokeWidth: 1,
-                  );
-                },
+                getDrawingHorizontalLine: (value) => FlLine(
+                  color: theme.colorScheme.outline.withValues(alpha: 0.2),
+                  strokeWidth: 1,
+                ),
               ),
               titlesData: FlTitlesData(
+                topTitles: const AxisTitles(
+                  sideTitles: SideTitles(showTitles: false),
+                ),
+                rightTitles: const AxisTitles(
+                  sideTitles: SideTitles(showTitles: false),
+                ),
                 leftTitles: AxisTitles(
                   sideTitles: SideTitles(
                     showTitles: true,
-                    reservedSize: 30,
-                    interval: 1,
-                    getTitlesWidget: (value, meta) {
-                      return Text(
-                        value.toInt().toString(),
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(
-                            alpha: 0.7,
-                          ),
+                    reservedSize: 34,
+                    getTitlesWidget: (value, meta) => Text(
+                      value.toStringAsFixed(
+                        value == value.roundToDouble() ? 0 : 1,
+                      ),
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.65,
                         ),
-                      );
-                    },
+                      ),
+                    ),
                   ),
                 ),
                 bottomTitles: AxisTitles(
                   sideTitles: SideTitles(
                     showTitles: true,
-                    reservedSize: 30,
-                    interval: 5,
-                    getTitlesWidget: (value, meta) {
-                      return Text(
-                        '${value.toInt()}d',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(
-                            alpha: 0.7,
-                          ),
+                    reservedSize: 28,
+                    interval: maxX > 5 ? (maxX / 5).ceilToDouble() : 1,
+                    getTitlesWidget: (value, meta) => Text(
+                      "${value.toInt()}d",
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.65,
                         ),
-                      );
-                    },
+                      ),
+                    ),
                   ),
-                ),
-                topTitles: AxisTitles(
-                  sideTitles: SideTitles(showTitles: false),
-                ),
-                rightTitles: AxisTitles(
-                  sideTitles: SideTitles(showTitles: false),
                 ),
               ),
               borderData: FlBorderData(show: false),
               minX: 0,
-              maxX: 30,
-              minY: 1,
-              maxY: 5,
-              lineBarsData: [
-                // Mood line
-                LineChartBarData(
-                  spots: _generateMoodSpots(),
-                  isCurved: true,
-                  color: AppTheme.primaryPurple,
-                  barWidth: 2,
-                  isStrokeCapRound: true,
-                  dotData: FlDotData(show: false),
-                ),
-                // Energy line
-                LineChartBarData(
-                  spots: _generateEnergySpots(),
-                  isCurved: true,
-                  color: AppTheme.warningOrange,
-                  barWidth: 2,
-                  isStrokeCapRound: true,
-                  dotData: FlDotData(show: false),
-                ),
-                // Sleep quality line
-                LineChartBarData(
-                  spots: _generateSleepSpots(),
-                  isCurved: true,
-                  color: AppTheme.secondaryBlue,
-                  barWidth: 2,
-                  isStrokeCapRound: true,
-                  dotData: FlDotData(show: false),
-                ),
-              ],
+              maxX: maxX > 0 ? maxX : 1,
+              minY: 0,
+              maxY: maxY,
+              lineBarsData: segments
+                  .map(
+                    (points) => LineChartBarData(
+                      spots: points,
+                      isCurved: false,
+                      color: color,
+                      barWidth: 2,
+                      isStrokeCapRound: true,
+                      dotData: FlDotData(show: points.length == 1),
+                    ),
+                  )
+                  .toList(),
             ),
           ),
-        ),
-        const SizedBox(height: 12),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _buildLegendItem('Mood', AppTheme.primaryPurple, theme),
-            _buildLegendItem('Energy', AppTheme.warningOrange, theme),
-            _buildLegendItem('Sleep', AppTheme.secondaryBlue, theme),
-          ],
         ),
       ],
     );
@@ -442,33 +519,6 @@ class HealthAnalyticsCard extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  List<FlSpot> _generateMoodSpots() {
-    // Generate sample mood data
-    return List.generate(31, (index) {
-      final baseValue = 3.0;
-      final variation = (index % 7) * 0.3 - 0.9;
-      return FlSpot(index.toDouble(), (baseValue + variation).clamp(1.0, 5.0));
-    });
-  }
-
-  List<FlSpot> _generateEnergySpots() {
-    // Generate sample energy data
-    return List.generate(31, (index) {
-      final baseValue = 3.2;
-      final variation = (index % 5) * 0.4 - 0.8;
-      return FlSpot(index.toDouble(), (baseValue + variation).clamp(1.0, 5.0));
-    });
-  }
-
-  List<FlSpot> _generateSleepSpots() {
-    // Generate sample sleep quality data
-    return List.generate(31, (index) {
-      final baseValue = 3.5;
-      final variation = (index % 6) * 0.3 - 0.9;
-      return FlSpot(index.toDouble(), (baseValue + variation).clamp(1.0, 5.0));
-    });
   }
 
   Color _getHealthScoreColor(double score) {

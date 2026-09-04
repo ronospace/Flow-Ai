@@ -67,7 +67,7 @@ class FeelingsAnalyticsService {
 
   /// Get recent trends for user
   Future<List<TrendInsight>> getRecentTrends({
-    required String userId,
+    String? userId,
     int limit = 10,
   }) async {
     if (!_isInitialized) {

@@ -4,6 +4,9 @@ import {
   initializeApp,
 } from "firebase-admin/app";
 import {
+  getAuth,
+} from "firebase-admin/auth";
+import {
   getFirestore,
 } from "firebase-admin/firestore";
 import type {
@@ -124,6 +127,23 @@ export const deleteMyCloudData = onCall(
       const deletedDocuments =
         documents.length + entitlementSubscriptions.size;
 
+      try {
+        await getAuth().deleteUser(uid);
+      } catch (error) {
+        const authErrorCode =
+          typeof error === "object" &&
+          error !== null &&
+          "code" in error ?
+            String(
+              (error as { code?: unknown }).code ?? "",
+            ) :
+            "";
+
+        if (authErrorCode !== "auth/user-not-found") {
+          throw error;
+        }
+      }
+
       logger.info(
         "USER_CLOUD_DATA_DELETED",
         {
@@ -134,6 +154,7 @@ export const deleteMyCloudData = onCall(
       return {
         ok: true,
         deletedDocuments,
+        identityDeleted: true,
       };
     } catch (error) {
       if (error instanceof HttpsError) {

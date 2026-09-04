@@ -53,7 +53,7 @@ void main() {
         expect(subscriptionService, contains('_validatePurchase'));
         expect(
           subscriptionService,
-          contains('validationResult?.isValid == true'),
+          contains('validationResult?.grantsActiveEntitlement == true'),
         );
         expect(subscriptionService, contains('validateAppleReceipt'));
         expect(subscriptionService, contains('validateGooglePlayReceipt'));
@@ -119,11 +119,17 @@ void main() {
         );
       }
 
-      expect(receiptValidationService, contains("'receipt': purchaseToken"));
-      expect(receiptValidationService, contains("'platform': 'android'"));
       expect(
         receiptValidationService,
-        isNot(contains("'purchaseToken': purchaseToken")),
+        contains("'purchaseToken': purchaseToken"),
+      );
+      expect(
+        receiptValidationService,
+        isNot(contains("'platform': 'android'")),
+      );
+      expect(
+        receiptValidationService,
+        isNot(contains("'receipt': purchaseToken")),
       );
 
       expect(receiptValidationService, isNot(contains('debugPrint(')));

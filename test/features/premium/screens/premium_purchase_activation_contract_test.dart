@@ -21,7 +21,10 @@ void main() {
     );
 
     expect(service, contains('await _validatePurchase(purchaseDetails)'));
-    expect(service, contains('if (validationResult?.isValid == true)'));
+    expect(
+      service,
+      contains('if (validationResult?.grantsActiveEntitlement == true)'),
+    );
     expect(service, contains('await _grantPremiumAccess('));
   });
 }

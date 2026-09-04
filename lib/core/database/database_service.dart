@@ -6,6 +6,8 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import '../models/cycle_data.dart';
 
+import '../identity/active_account_scope.dart';
+
 class DatabaseService {
   static final DatabaseService _instance = DatabaseService._internal();
   static Database? _database;
@@ -26,7 +28,7 @@ class DatabaseService {
 
       return await openDatabase(
         path,
-        version: 1,
+        version: 2,
         onCreate: _createTables,
         onUpgrade: _upgradeDatabase,
       );
@@ -36,7 +38,7 @@ class DatabaseService {
       }
       return await openDatabase(
         inMemoryDatabasePath,
-        version: 1,
+        version: 2,
         onCreate: _createTables,
         onUpgrade: _upgradeDatabase,
       );
@@ -89,10 +91,11 @@ class DatabaseService {
     );
   }
 
-  Future<void> _createDailyTrackingTable(Database db) async {
+  Future<void> _createDailyTrackingTable(DatabaseExecutor db) async {
     await db.execute('''
       CREATE TABLE daily_tracking (
         id TEXT PRIMARY KEY,
+        user_id TEXT NOT NULL,
         date TEXT NOT NULL,
         flow_intensity TEXT,
         symptoms TEXT, -- JSON array of symptoms
@@ -104,12 +107,12 @@ class DatabaseService {
         notes TEXT,
         created_at TEXT NOT NULL,
         updated_at TEXT NOT NULL,
-        UNIQUE(date)
+        UNIQUE(user_id, date)
       )
     ''');
 
     await db.execute(
-      'CREATE INDEX idx_daily_tracking_date ON daily_tracking(date)',
+      'CREATE INDEX idx_daily_tracking_user_date ON daily_tracking(user_id, date)',
     );
   }
 
@@ -338,6 +341,36 @@ class DatabaseService {
     int oldVersion,
     int newVersion,
   ) async {
+    if (oldVersion < 2) {
+      await db.transaction((txn) async {
+        final archivedTable = await txn.rawQuery(
+          "SELECT name FROM sqlite_master "
+          "WHERE type = 'table' AND name = ?",
+          ['daily_tracking_legacy_v1_unowned'],
+        );
+
+        if (archivedTable.isNotEmpty) {
+          throw StateError(
+            'Refusing to overwrite preserved unowned daily-tracking data.',
+          );
+        }
+
+        final existingTable = await txn.rawQuery(
+          "SELECT name FROM sqlite_master "
+          "WHERE type = 'table' AND name = ?",
+          ['daily_tracking'],
+        );
+
+        if (existingTable.isNotEmpty) {
+          await txn.execute(
+            'ALTER TABLE daily_tracking '
+            'RENAME TO daily_tracking_legacy_v1_unowned',
+          );
+        }
+
+        await _createDailyTrackingTable(txn);
+      });
+    }
     // Handle database migrations here when schema changes
     // For now, we'll just recreate tables (in production, use proper migrations)
     if (oldVersion < newVersion) {
@@ -347,13 +380,24 @@ class DatabaseService {
 
   // ===== CYCLE DATA METHODS =====
 
+  Future<String> _requireActiveAccountId([String? claimedUserId]) async {
+    final activeUserId = await ActiveAccountScope.instance.requireUserId();
+    if (claimedUserId != null && claimedUserId.trim() != activeUserId) {
+      throw StateError(
+        'Persisted private data ownership does not match the active account.',
+      );
+    }
+    return activeUserId;
+  }
+
   Future<String> insertCycle(CycleData cycle) async {
+    final activeUserId = await _requireActiveAccountId(cycle.userId);
     final db = await database;
 
     // Map CycleData to database columns
     final data = <String, dynamic>{
       'id': cycle.id,
-      'user_id': cycle.userId,
+      'user_id': activeUserId,
       'start_date': cycle.startDate.toIso8601String(),
       'end_date': cycle.endDate?.toIso8601String(),
       'length': cycle.cycleLength,
@@ -387,9 +431,12 @@ class DatabaseService {
   }
 
   Future<List<CycleData>> getAllCycles() async {
+    final activeUserId = await _requireActiveAccountId();
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query(
       'cycles',
+      where: 'user_id = ?',
+      whereArgs: [activeUserId],
       orderBy: 'start_date DESC',
     );
 
@@ -397,11 +444,12 @@ class DatabaseService {
   }
 
   Future<CycleData?> getCycleById(String id) async {
+    final activeUserId = await _requireActiveAccountId();
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query(
       'cycles',
-      where: 'id = ?',
-      whereArgs: [id],
+      where: 'id = ? AND user_id = ?',
+      whereArgs: [id, activeUserId],
     );
 
     if (maps.isNotEmpty) {
@@ -414,11 +462,12 @@ class DatabaseService {
     DateTime start,
     DateTime end,
   ) async {
+    final activeUserId = await _requireActiveAccountId();
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query(
       'cycles',
-      where: 'start_date >= ? AND start_date <= ?',
-      whereArgs: [start.toIso8601String(), end.toIso8601String()],
+      where: 'user_id = ? AND start_date >= ? AND start_date <= ?',
+      whereArgs: [activeUserId, start.toIso8601String(), end.toIso8601String()],
       orderBy: 'start_date DESC',
     );
 
@@ -431,14 +480,18 @@ class DatabaseService {
   }
 
   Future<CycleData?> getCurrentCycle() async {
+    final activeUserId = await _requireActiveAccountId();
     final db = await database;
     final now = DateTime.now();
 
     // Get cycles that might be current (started recently and not ended)
     final List<Map<String, dynamic>> maps = await db.query(
       'cycles',
-      where: 'end_date IS NULL OR end_date >= ?',
-      whereArgs: [now.subtract(const Duration(days: 7)).toIso8601String()],
+      where: 'user_id = ? AND (end_date IS NULL OR end_date >= ?)',
+      whereArgs: [
+        activeUserId,
+        now.subtract(const Duration(days: 7)).toIso8601String(),
+      ],
       orderBy: 'start_date DESC',
       limit: 1,
     );
@@ -450,13 +503,14 @@ class DatabaseService {
   }
 
   Future<void> updateCycle(CycleData cycle) async {
+    final activeUserId = await _requireActiveAccountId(cycle.userId);
     final db = await database;
     final updatedCycle = cycle.copyWith(lastUpdated: DateTime.now());
 
     // Map CycleData to database columns
     final data = <String, dynamic>{
       'id': updatedCycle.id,
-      'user_id': updatedCycle.userId,
+      'user_id': activeUserId,
       'start_date': updatedCycle.startDate.toIso8601String(),
       'end_date': updatedCycle.endDate?.toIso8601String(),
       'length': updatedCycle.cycleLength,
@@ -484,12 +538,22 @@ class DatabaseService {
           DateTime.now().toIso8601String(),
     };
 
-    await db.update('cycles', data, where: 'id = ?', whereArgs: [cycle.id]);
+    await db.update(
+      'cycles',
+      data,
+      where: 'id = ? AND user_id = ?',
+      whereArgs: [cycle.id, activeUserId],
+    );
   }
 
   Future<void> deleteCycle(String id) async {
+    final activeUserId = await _requireActiveAccountId();
     final db = await database;
-    await db.delete('cycles', where: 'id = ?', whereArgs: [id]);
+    await db.delete(
+      'cycles',
+      where: 'id = ? AND user_id = ?',
+      whereArgs: [id, activeUserId],
+    );
   }
 
   // ===== DAILY TRACKING METHODS =====
@@ -505,11 +569,13 @@ class DatabaseService {
     Map<String, double>? painAreas,
     String? notes,
   }) async {
+    final activeUserId = await _requireActiveAccountId();
     final db = await database;
     final dateStr = date.toIso8601String().split('T')[0]; // YYYY-MM-DD format
 
     final data = <String, dynamic>{
-      'id': '${dateStr}_tracking',
+      'id': '${activeUserId}_${dateStr}_tracking',
+      'user_id': activeUserId,
       'date': dateStr,
       'created_at': DateTime.now().toIso8601String(),
       'updated_at': DateTime.now().toIso8601String(),
@@ -533,13 +599,14 @@ class DatabaseService {
   }
 
   Future<Map<String, dynamic>?> getDailyTracking(DateTime date) async {
+    final activeUserId = await _requireActiveAccountId();
     final db = await database;
     final dateStr = date.toIso8601String().split('T')[0];
 
     final List<Map<String, dynamic>> maps = await db.query(
       'daily_tracking',
-      where: 'date = ?',
-      whereArgs: [dateStr],
+      where: 'user_id = ? AND (date = ?)',
+      whereArgs: [activeUserId, dateStr],
     );
 
     if (maps.isNotEmpty) {
@@ -574,14 +641,15 @@ class DatabaseService {
     DateTime start,
     DateTime end,
   ) async {
+    final activeUserId = await _requireActiveAccountId();
     final db = await database;
     final startStr = start.toIso8601String().split('T')[0];
     final endStr = end.toIso8601String().split('T')[0];
 
     final List<Map<String, dynamic>> maps = await db.query(
       'daily_tracking',
-      where: 'date >= ? AND date <= ?',
-      whereArgs: [startStr, endStr],
+      where: 'user_id = ? AND (date >= ? AND date <= ?)',
+      whereArgs: [activeUserId, startStr, endStr],
       orderBy: 'date ASC',
     );
 
@@ -925,13 +993,14 @@ class DatabaseService {
   Future<List<Map<String, dynamic>>> getRecentTrackingData({
     int days = 30,
   }) async {
+    final activeUserId = await _requireActiveAccountId();
     final db = await database;
     final startDate = DateTime.now().subtract(Duration(days: days));
 
     return await db.query(
       'daily_tracking',
-      where: 'date >= ?',
-      whereArgs: [startDate.toIso8601String().split('T')[0]],
+      where: 'user_id = ? AND (date >= ?)',
+      whereArgs: [activeUserId, startDate.toIso8601String().split('T')[0]],
       orderBy: 'date DESC',
     );
   }
@@ -940,12 +1009,15 @@ class DatabaseService {
 
   /// Store a feelings entry to the database
   Future<void> storeFeelingsEntry(dynamic feelingsEntry) async {
+    final activeUserId = await _requireActiveAccountId(
+      feelingsEntry.userId.toString(),
+    );
     final db = await database;
 
     // Convert the feelings entry to a map for database storage
     final data = <String, dynamic>{
       'id': feelingsEntry.id,
-      'user_id': feelingsEntry.userId,
+      'user_id': activeUserId,
       'feeling_score': feelingsEntry.feelingScore,
       'time_of_day': feelingsEntry.timeOfDay.name,
       'timestamp': feelingsEntry.timestamp.toIso8601String(),
@@ -968,9 +1040,12 @@ class DatabaseService {
 
   /// Get feelings history from database
   Future<List<dynamic>> getFeelingsHistory() async {
+    final activeUserId = await _requireActiveAccountId();
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query(
       'feelings',
+      where: 'user_id = ?',
+      whereArgs: [activeUserId],
       orderBy: 'timestamp DESC',
     );
 
@@ -985,10 +1060,11 @@ class DatabaseService {
     DateTime? endDate,
     String? appType,
   }) async {
+    final activeUserId = await _requireActiveAccountId(userId);
     final db = await database;
 
     String whereClause = 'user_id = ?';
-    List<dynamic> whereArgs = [userId];
+    List<dynamic> whereArgs = [activeUserId];
 
     if (startDate != null) {
       whereClause += ' AND timestamp >= ?';
@@ -1022,15 +1098,11 @@ class DatabaseService {
     String? userId,
     String? appType,
   }) async {
+    final activeUserId = await _requireActiveAccountId(userId);
     final db = await database;
 
-    String whereClause = '1=1'; // Always true condition
-    List<dynamic> whereArgs = [];
-
-    if (userId != null) {
-      whereClause += ' AND user_id = ?';
-      whereArgs.add(userId);
-    }
+    String whereClause = 'user_id = ?';
+    List<dynamic> whereArgs = [activeUserId];
 
     if (startDate != null) {
       whereClause += ' AND timestamp >= ?';
@@ -1059,13 +1131,14 @@ class DatabaseService {
 
   /// Delete old feelings entries (keep only recent data)
   Future<void> cleanupOldFeelings({int daysToKeep = 365}) async {
+    final activeUserId = await _requireActiveAccountId();
     final db = await database;
     final cutoffDate = DateTime.now().subtract(Duration(days: daysToKeep));
 
     await db.delete(
       'feelings',
-      where: 'timestamp < ?',
-      whereArgs: [cutoffDate.toIso8601String()],
+      where: 'user_id = ? AND timestamp < ?',
+      whereArgs: [activeUserId, cutoffDate.toIso8601String()],
     );
   }
 
@@ -1074,10 +1147,11 @@ class DatabaseService {
     String userId, {
     String? appType,
   }) async {
+    final activeUserId = await _requireActiveAccountId(userId);
     final db = await database;
 
     String whereClause = 'user_id = ?';
-    List<dynamic> whereArgs = [userId];
+    List<dynamic> whereArgs = [activeUserId];
 
     if (appType != null) {
       whereClause += ' AND app_type = ?';
@@ -1218,14 +1292,21 @@ class DatabaseService {
 
   /// Returns all daily tracking rows as raw maps (service-level export/sync).
   Future<List<Map<String, dynamic>>> getAllTrackingData() async {
+    final activeUserId = await _requireActiveAccountId();
     final db = await database;
-    return db.query('daily_tracking', orderBy: 'date ASC');
+    return db.query(
+      'daily_tracking',
+      where: 'user_id = ?',
+      whereArgs: [activeUserId],
+      orderBy: 'date ASC',
+    );
   }
 
   /// Returns a daily tracking row for a specific date.
   Future<Map<String, dynamic>?> getTrackingByDate({
     required DateTime date,
   }) async {
+    final activeUserId = await _requireActiveAccountId();
     final db = await database;
     final key = DateTime(
       date.year,
@@ -1234,8 +1315,8 @@ class DatabaseService {
     ).toIso8601String().split('T').first;
     final rows = await db.query(
       'daily_tracking',
-      where: 'date = ?',
-      whereArgs: [key],
+      where: 'user_id = ? AND (date = ?)',
+      whereArgs: [activeUserId, key],
       limit: 1,
     );
     return rows.isEmpty ? null : rows.first;

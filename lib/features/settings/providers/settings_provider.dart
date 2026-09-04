@@ -5,7 +5,16 @@ import '../models/user_preferences.dart';
 import '../../../core/services/app_state_service.dart';
 import '../../../core/utils/user_display_name_resolver.dart';
 
+import '../../../core/services/auth_service.dart';
+
 class SettingsProvider extends ChangeNotifier {
+  /// Keeps the Settings toggle and authentication gate synchronized.
+  Future<void> _syncBiometricAuthWithAuthenticationService(bool enabled) async {
+    final authService = AuthService();
+    await authService.initialize();
+    await authService.setBiometricEnabled(enabled);
+  }
+
   static const String _preferencesKey = 'user_preferences';
   static const String _userMetadataKey = 'user_metadata';
 
@@ -140,6 +149,14 @@ class SettingsProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint('Error loading preferences: $e');
     }
+
+    // Migrate existing users whose Settings preference predates
+    // the authentication-service biometric gate.
+    try {
+      await _syncBiometricAuthWithAuthenticationService(
+        _preferences.biometricAuth,
+      );
+    } catch (error) {}
   }
 
   // Save preferences to SharedPreferences
@@ -286,6 +303,8 @@ class SettingsProvider extends ChangeNotifier {
   }
 
   Future<void> updateBiometricAuth(bool enabled) async {
+    await _syncBiometricAuthWithAuthenticationService(enabled);
+
     _preferences = _preferences.copyWith(
       biometricAuth: enabled,
       lastUpdated: DateTime.now(),

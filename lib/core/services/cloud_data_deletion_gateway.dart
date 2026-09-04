@@ -42,6 +42,10 @@ class CloudDataDeletionGateway {
       throw StateError('Cloud data deletion could not be confirmed.');
     }
 
+    if (response['identityDeleted'] != true) {
+      throw StateError('Firebase identity deletion could not be confirmed.');
+    }
+
     final deletedDocuments = response['deletedDocuments'];
     return deletedDocuments is int ? deletedDocuments : 0;
   }

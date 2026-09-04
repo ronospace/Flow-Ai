@@ -1,3 +1,6 @@
+import '../../features/auth/screens/app_lock_screen.dart';
+import '../services/auth_service.dart';
+import '../services/app_lock_service.dart';
 import 'package:flow_ai/features/partner/screens/qr_join_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
@@ -30,12 +33,67 @@ class AppRouter {
   static final GoRouter router = GoRouter(
     initialLocation: '/splash',
     // Handle navigation and back button behavior
-    redirect: (context, state) {
-      // Normalize custom scheme launches like: flowai://invite/TEST123
+    redirect: (context, state) async {
       final uri = state.uri;
       if (uri.scheme == 'flowai') {
         return DeepLinkNormalizer.normalizeToAppPath(uri.toString());
       }
+
+      final path = uri.path;
+      const publicPaths = {
+        '/splash',
+        '/onboarding',
+        '/setup',
+        '/auth/choice',
+        '/auth/login',
+        '/auth/signup',
+        '/auth',
+      };
+
+      final isPublic =
+          publicPaths.contains(path) ||
+          path == '/qr-join' ||
+          path.startsWith('/invite/');
+
+      final auth = AuthService();
+      if (!auth.isInitialized) {
+        await auth.initialize();
+      }
+
+      final authenticated = await auth.isAuthenticated;
+      final appLock = AppLockService();
+
+      if (!authenticated) {
+        if (path == '/auth/lock' || !isPublic) {
+          return '/auth/choice';
+        }
+        return null;
+      }
+
+      if (path == '/auth/login' && await appLock.shouldRequireLock()) {
+        return null;
+      }
+
+      if (path == '/auth/choice') {
+        return await appLock.shouldRequireLock() ? '/auth/lock' : '/home';
+      }
+
+      if (path == '/auth/lock') {
+        if (!auth.isBiometricEnabled()) {
+          appLock.markUnlocked();
+          return '/home';
+        }
+        return null;
+      }
+
+      if (path.startsWith('/auth')) {
+        return await appLock.shouldRequireLock() ? '/auth/lock' : '/home';
+      }
+
+      if (!isPublic && await appLock.shouldRequireLock()) {
+        return '/auth/lock';
+      }
+
       return null;
     },
     routes: [
@@ -70,6 +128,11 @@ class AppRouter {
       ),
 
       // Authentication Routes
+      GoRoute(
+        path: '/auth/lock',
+        name: 'auth-lock',
+        builder: (context, state) => const AppLockScreen(),
+      ),
       GoRoute(
         path: '/auth/choice',
         name: 'auth-choice',
@@ -235,13 +298,14 @@ class MainShell extends StatefulWidget {
   State<MainShell> createState() => _MainShellState();
 }
 
-class _MainShellState extends State<MainShell> {
+class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   int _currentIndex = 0;
   late ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _scrollController = ScrollController();
   }
 
@@ -252,7 +316,27 @@ class _MainShellState extends State<MainShell> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      AppLockService().lock();
+      return;
+    }
+
+    if (state == AppLifecycleState.resumed) {
+      Future<void>.delayed(Duration.zero, () async {
+        if (!mounted) return;
+        if (await AppLockService().shouldRequireLock()) {
+          AppRouter.router.go('/auth/lock');
+        }
+      });
+    }
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _scrollController.dispose();
     super.dispose();
   }

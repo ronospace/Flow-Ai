@@ -1,10 +1,14 @@
 import 'dart:async';
-import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import '../../../core/models/cycle_data.dart';
+import '../../../core/database/database_service.dart';
+import '../../../core/analytics/statistics.dart';
 
 import '../models/visualization_models.dart';
 import '../../tracking/services/feelings_database_service.dart';
+import '../../../core/services/advanced_biometric_service.dart'
+    as canonical_health;
 import '../../tracking/screens/enhanced_daily_feelings_tracker.dart'
     show MoodCategory;
 
@@ -162,10 +166,20 @@ class AdvancedVisualizationService {
 
     try {
       // Mock cycle data - in a real app, this would come from cycle tracking service
-      final List<DataPoint> cycleData = _generateMockCycleData(dateRange);
-      final List<DataPoint> predictionData = showPredictions
-          ? _generateMockPredictionData(dateRange)
-          : [];
+      final cycles = await DatabaseService.instance.getCyclesByDateRange(
+        dateRange.start,
+        dateRange.end,
+      );
+      final currentCycle = await DatabaseService.instance.getCurrentCycle();
+
+      if (cycles.isEmpty && currentCycle == null) {
+        return ChartData.error('No cycle data available');
+      }
+
+      final cycleData = _buildCycleDataPoints(cycles, dateRange);
+      final predictionData = showPredictions
+          ? _buildPredictionData(currentCycle)
+          : <DataPoint>[];
 
       final List<ChartSeries> series = [
         ChartSeries(
@@ -237,13 +251,23 @@ class AdvancedVisualizationService {
     if (!_isInitialized) await initialize();
 
     try {
-      // Mock symptom correlation data
-      final Map<String, Map<String, double>> correlationMatrix =
-          _generateMockCorrelationMatrix(
-            symptoms:
-                symptomFilter ??
-                ['Headache', 'Fatigue', 'Cramps', 'Mood Swings', 'Bloating'],
-          );
+      final entries = await FeelingsDatabaseService.instance.getEntriesInRange(
+        startDate: dateRange.start,
+        endDate: dateRange.end,
+        userId: userId,
+      );
+
+      final correlationMatrix = _calculateSymptomCorrelationMatrix(
+        entries: entries,
+        symptomFilter: symptomFilter,
+      );
+
+      if (correlationMatrix.isEmpty) {
+        return ChartData.empty(
+          ChartType.heatmap,
+          'Not enough real symptom history to calculate correlations',
+        );
+      }
 
       final List<DataPoint> heatmapData = [];
       int xIndex = 0;
@@ -454,83 +478,71 @@ class AdvancedVisualizationService {
   }
 
   /// Generate mock cycle data
-  List<DataPoint> _generateMockCycleData(DateRange dateRange) {
-    final List<DataPoint> data = [];
-    final int cycleDays = 28;
+  /// Generate mock prediction data
+  List<DataPoint> _buildCycleDataPoints(
+    List<CycleData> cycles,
+    DateRange dateRange,
+  ) {
+    final data = <DataPoint>[];
 
-    DateTime currentDate = dateRange.start;
-    int dayInCycle = 1;
+    bool inRange(DateTime value) =>
+        !value.isBefore(dateRange.start) && !value.isAfter(dateRange.end);
 
-    while (currentDate.isBefore(dateRange.end)) {
-      if (dayInCycle == 1) {
-        // Menstruation start
+    for (final cycle in cycles) {
+      if (inRange(cycle.startDate)) {
         data.add(
           DataPoint(
-            x: currentDate.millisecondsSinceEpoch.toDouble(),
+            x: cycle.startDate.millisecondsSinceEpoch.toDouble(),
             y: 0,
             label: 'Period Start',
-            metadata: {'event': 'menstruation', 'day': dayInCycle},
-          ),
-        );
-      } else if (dayInCycle == 14) {
-        // Ovulation
-        data.add(
-          DataPoint(
-            x: currentDate.millisecondsSinceEpoch.toDouble(),
-            y: 1,
-            label: 'Ovulation',
-            metadata: {'event': 'ovulation', 'day': dayInCycle},
-          ),
-        );
-      } else if (dayInCycle >= 21) {
-        // PMS phase
-        data.add(
-          DataPoint(
-            x: currentDate.millisecondsSinceEpoch.toDouble(),
-            y: 2,
-            label: 'PMS Phase',
-            metadata: {'event': 'pms', 'day': dayInCycle},
+            metadata: const {'event': 'menstruation'},
           ),
         );
       }
 
-      currentDate = currentDate.add(const Duration(days: 1));
-      dayInCycle++;
-
-      if (dayInCycle > cycleDays) {
-        dayInCycle = 1;
+      final ovulationDate = cycle.ovulationDate;
+      if (ovulationDate != null && inRange(ovulationDate)) {
+        data.add(
+          DataPoint(
+            x: ovulationDate.millisecondsSinceEpoch.toDouble(),
+            y: 1,
+            label: 'Ovulation',
+            metadata: const {'event': 'ovulation'},
+          ),
+        );
       }
     }
 
+    data.sort((a, b) => a.x.compareTo(b.x));
     return data;
   }
 
-  /// Generate mock prediction data
-  List<DataPoint> _generateMockPredictionData(DateRange dateRange) {
-    final List<DataPoint> data = [];
-    final DateTime futureDate = dateRange.end.add(const Duration(days: 30));
+  List<DataPoint> _buildPredictionData(CycleData? currentCycle) {
+    if (currentCycle == null) return <DataPoint>[];
 
-    // Add predicted cycle events
-    data.add(
+    final expectedPeriod = currentCycle.expectedNextPeriod;
+    if (expectedPeriod == null) return <DataPoint>[];
+
+    final data = <DataPoint>[
       DataPoint(
-        x: futureDate.millisecondsSinceEpoch.toDouble(),
+        x: expectedPeriod.millisecondsSinceEpoch.toDouble(),
         y: 0,
         label: 'Predicted Period',
-        metadata: {'event': 'prediction', 'type': 'menstruation'},
+        metadata: const {'event': 'prediction', 'type': 'menstruation'},
       ),
-    );
+    ];
 
-    data.add(
-      DataPoint(
-        x: futureDate
-            .add(const Duration(days: 14))
-            .millisecondsSinceEpoch
-            .toDouble(),
-        y: 1,
-        label: 'Predicted Ovulation',
-        metadata: {'event': 'prediction', 'type': 'ovulation'},
-      ),
-    );
+    final ovulationDate = currentCycle.ovulationDate;
+    if (ovulationDate != null && ovulationDate.isAfter(DateTime.now())) {
+      data.add(
+        DataPoint(
+          x: ovulationDate.millisecondsSinceEpoch.toDouble(),
+          y: 1,
+          label: 'Predicted Ovulation',
+          metadata: const {'event': 'prediction', 'type': 'ovulation'},
+        ),
+      );
+    }
 
     return data;
   }
@@ -551,22 +563,96 @@ class AdvancedVisualizationService {
     ];
   }
 
-  /// Generate mock correlation matrix
-  Map<String, Map<String, double>> _generateMockCorrelationMatrix({
-    required List<String> symptoms,
+  /// Calculate correlations from persisted symptom observations.
+  Map<String, Map<String, double>> _calculateSymptomCorrelationMatrix({
+    required List<DailyFeelingsEntry> entries,
+    List<String>? symptomFilter,
   }) {
-    final Map<String, Map<String, double>> matrix = {};
-    final random = math.Random();
+    if (entries.length < 3) {
+      return <String, Map<String, double>>{};
+    }
 
-    for (final symptom1 in symptoms) {
-      matrix[symptom1] = {};
-      for (final symptom2 in symptoms) {
-        if (symptom1 == symptom2) {
-          matrix[symptom1]![symptom2] = 1.0;
-        } else {
-          // Generate correlation between -1 and 1
-          matrix[symptom1]![symptom2] = (random.nextDouble() * 2) - 1;
+    final requested = symptomFilter
+        ?.map((value) => value.trim().toLowerCase())
+        .where((value) => value.isNotEmpty)
+        .toSet();
+
+    // Normalize labels per observation. Missing symptoms stay missing and
+    // are never silently converted into fabricated zero observations.
+    final observations = <Map<String, double>>[];
+    final displayLabels = <String, String>{};
+
+    for (final entry in entries) {
+      final observation = <String, double>{};
+
+      for (final symptom in entry.symptoms.entries) {
+        final label = symptom.key.trim();
+        final normalized = label.toLowerCase();
+
+        if (normalized.isEmpty) {
+          continue;
         }
+
+        if (requested != null && !requested.contains(normalized)) {
+          continue;
+        }
+
+        final value = symptom.value.toDouble();
+
+        if (!value.isFinite) {
+          continue;
+        }
+
+        observation[normalized] = value;
+        displayLabels.putIfAbsent(normalized, () => label);
+      }
+
+      if (observation.isNotEmpty) {
+        observations.add(observation);
+      }
+    }
+
+    if (observations.length < 3 || displayLabels.length < 2) {
+      return <String, Map<String, double>>{};
+    }
+
+    final keys = displayLabels.keys.toList(growable: false)..sort();
+    final matrix = <String, Map<String, double>>{};
+
+    for (final xKey in keys) {
+      final row = <String, double>{};
+
+      for (final yKey in keys) {
+        final xValues = <double>[];
+        final yValues = <double>[];
+
+        for (final observation in observations) {
+          final xValue = observation[xKey];
+          final yValue = observation[yKey];
+
+          if (xValue == null || yValue == null) {
+            continue;
+          }
+
+          xValues.add(xValue);
+          yValues.add(yValue);
+        }
+
+        final correlation = Statistics.pearsonCorrelation(
+          xValues,
+          yValues,
+          minimumSamples: 3,
+        );
+
+        if (correlation == null) {
+          continue;
+        }
+
+        row[displayLabels[yKey]!] = correlation;
+      }
+
+      if (row.isNotEmpty) {
+        matrix[displayLabels[xKey]!] = row;
       }
     }
 
@@ -578,26 +664,34 @@ class AdvancedVisualizationService {
     String userId,
     DateRange dateRange,
   ) async {
-    final List<DataPoint> sleepData = [];
-    final random = math.Random();
+    final history = await canonical_health.AdvancedBiometricService.instance
+        .getHistoricalSleepHours(start: dateRange.start, end: dateRange.end);
 
-    DateTime currentDate = dateRange.start;
-    while (currentDate.isBefore(dateRange.end)) {
-      sleepData.add(
-        DataPoint(
-          x: currentDate.millisecondsSinceEpoch.toDouble(),
-          y: 5 + random.nextDouble() * 4, // 5-9 hours
-          label: currentDate.toString().split(' ')[0],
-          metadata: {'type': 'sleep_hours'},
-        ),
+    if (history.isEmpty) {
+      return ChartData.empty(
+        ChartType.barChart,
+        'No synced sleep history is available for this period.',
       );
-      currentDate = currentDate.add(const Duration(days: 1));
     }
+
+    final sleepData = history
+        .map(
+          (point) => DataPoint(
+            x: point.timestamp.millisecondsSinceEpoch.toDouble(),
+            y: point.value,
+            label: point.timestamp.toString().split(' ')[0],
+            metadata: const <String, dynamic>{
+              'type': 'sleep_hours',
+              'source': 'health',
+            },
+          ),
+        )
+        .toList();
 
     return ChartData(
       type: ChartType.barChart,
-      title: 'Sleep Quality',
-      subtitle: 'Hours of sleep per night',
+      title: 'Sleep History',
+      subtitle: 'Recorded sleep hours per night',
       series: [
         ChartSeries(
           name: 'Sleep Hours',
@@ -611,7 +705,6 @@ class AdvancedVisualizationService {
         title: 'Hours',
         type: AxisType.numeric,
         minimum: 0,
-        maximum: 12,
       ),
       legend: ChartLegend(show: false),
     );
@@ -622,29 +715,37 @@ class AdvancedVisualizationService {
     String userId,
     DateRange dateRange,
   ) async {
-    final List<DataPoint> activityData = [];
-    final random = math.Random();
+    final history = await canonical_health.AdvancedBiometricService.instance
+        .getHistoricalDailySteps(start: dateRange.start, end: dateRange.end);
 
-    DateTime currentDate = dateRange.start;
-    while (currentDate.isBefore(dateRange.end)) {
-      activityData.add(
-        DataPoint(
-          x: currentDate.millisecondsSinceEpoch.toDouble(),
-          y: random.nextDouble() * 100, // 0-100% activity
-          label: currentDate.toString().split(' ')[0],
-          metadata: {'type': 'activity_percentage'},
-        ),
+    if (history.isEmpty) {
+      return ChartData.empty(
+        ChartType.areaChart,
+        'No synced activity history is available for this period.',
       );
-      currentDate = currentDate.add(const Duration(days: 1));
     }
+
+    final activityData = history
+        .map(
+          (point) => DataPoint(
+            x: point.timestamp.millisecondsSinceEpoch.toDouble(),
+            y: point.value,
+            label: point.timestamp.toString().split(' ')[0],
+            metadata: const <String, dynamic>{
+              'type': 'steps',
+              'source': 'health',
+            },
+          ),
+        )
+        .toList();
 
     return ChartData(
       type: ChartType.areaChart,
-      title: 'Activity Level',
-      subtitle: 'Daily activity percentage',
+      title: 'Daily Activity',
+      subtitle: 'Recorded daily steps',
       series: [
         ChartSeries(
-          name: 'Activity %',
+          name: 'Steps',
           data: activityData,
           color: Colors.green,
           style: ChartSeriesStyle(strokeWidth: 2.0, fillOpacity: 0.3),
@@ -652,10 +753,9 @@ class AdvancedVisualizationService {
       ],
       xAxisConfig: AxisConfiguration(title: 'Date', type: AxisType.datetime),
       yAxisConfig: AxisConfiguration(
-        title: 'Activity %',
+        title: 'Steps',
         type: AxisType.numeric,
         minimum: 0,
-        maximum: 100,
       ),
       legend: ChartLegend(show: false),
     );

@@ -85,9 +85,7 @@ class _FuturisticAuthScreenState extends State<FuturisticAuthScreen>
         _biometricsAvailable = isAvailable && isDeviceSupported;
         _availableBiometrics = availableBiometrics;
       });
-    } catch (e) {
-      debugPrint('Error checking biometrics: $e');
-    }
+    } catch (e) {}
   }
 
   @override

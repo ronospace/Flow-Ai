@@ -18,22 +18,14 @@ class BiometricButton extends StatefulWidget {
 }
 
 class _BiometricButtonState extends State<BiometricButton> {
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    // Determine which biometric type is available
-    IconData biometricIcon = Icons.fingerprint;
-    String biometricLabel = 'Fingerprint';
-
-    if (widget.availableBiometrics.contains(BiometricType.face)) {
-      biometricIcon = Icons.face;
-      biometricLabel = 'Face ID';
-    } else if (widget.availableBiometrics.contains(BiometricType.iris)) {
-      biometricIcon = Icons.visibility;
-      biometricLabel = 'Iris';
-    }
+    // Product contract: Android uses Fingerprint; iOS uses Face ID.
+    final isIOS = theme.platform == TargetPlatform.iOS;
+    final biometricIcon = isIOS ? Icons.face : Icons.fingerprint;
+    final biometricLabel = isIOS ? 'Face ID' : 'Fingerprint';
 
     return Material(
       color: Colors.transparent,
@@ -58,11 +50,7 @@ class _BiometricButtonState extends State<BiometricButton> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                biometricIcon,
-                color: AppTheme.darkGrey,
-                size: 20,
-              ),
+              Icon(biometricIcon, color: AppTheme.darkGrey, size: 20),
               const SizedBox(width: 10),
               Text(
                 'Use $biometricLabel',

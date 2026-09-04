@@ -305,7 +305,7 @@ class SubscriptionService {
 
     final validationResult = await _validatePurchase(purchaseDetails);
 
-    if (validationResult?.isValid == true) {
+    if (validationResult?.grantsActiveEntitlement == true) {
       await _grantPremiumAccess(purchaseDetails, validationResult!);
       return true;
     }
@@ -403,15 +403,16 @@ class SubscriptionService {
     final userId = _currentSubscription?.userId ?? 'unknown';
     final isYearly = purchaseDetails.productID == yearlyProductId;
 
-    // Calculate expiry date
+    // Entitlement duration must come exclusively from verified store data.
     final purchaseDate = DateTime.fromMillisecondsSinceEpoch(
       int.tryParse(purchaseDetails.transactionDate ?? '0') ??
           DateTime.now().millisecondsSinceEpoch,
     );
-    final fallbackExpiryDate = isYearly
-        ? purchaseDate.add(const Duration(days: 365))
-        : purchaseDate.add(const Duration(days: 30));
-    final expiryDate = validationResult.expirationDate ?? fallbackExpiryDate;
+    final expiryDate = validationResult.expirationDate!;
+
+    if (!expiryDate.isAfter(DateTime.now())) {
+      throw StateError('Verified subscription expiry is not active');
+    }
 
     _currentSubscription = UserSubscription.premium(
       userId: userId,
@@ -419,10 +420,8 @@ class SubscriptionService {
       billingPeriod: isYearly ? BillingPeriod.yearly : BillingPeriod.monthly,
       purchaseDate: purchaseDate,
       expiryDate: expiryDate,
-      transactionId:
-          validationResult.transactionId ?? purchaseDetails.purchaseID,
-      originalTransactionId:
-          validationResult.originalTransactionId ?? purchaseDetails.purchaseID,
+      transactionId: validationResult.transactionId,
+      originalTransactionId: validationResult.originalTransactionId,
     );
 
     // Save to persistent storage

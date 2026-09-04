@@ -86,18 +86,34 @@ class AuthService {
 
     if (currentUser is User) {
       final storedData = await _getStoredUserData();
+      final matchedStoredData =
+          storedData != null && storedData['uid']?.toString() == currentUser.uid
+          ? storedData
+          : null;
+      final storedDisplayName =
+          matchedStoredData?['displayName']?.toString().trim() ?? '';
+      final providerDisplayName = currentUser.displayName?.trim() ?? '';
+      final emailDisplayName = _displayNameFromEmail(currentUser.email) ?? '';
+
+      final resolvedDisplayName = providerDisplayName.isNotEmpty
+          ? providerDisplayName
+          : storedDisplayName.isNotEmpty
+          ? storedDisplayName
+          : emailDisplayName.isNotEmpty
+          ? emailDisplayName
+          : null;
 
       userData = {
         'uid': currentUser.uid,
         'email': currentUser.email,
-        'displayName': currentUser.displayName,
-        'username': storedData?['username'] ?? currentUser.displayName,
+        'displayName': resolvedDisplayName,
+        'username': matchedStoredData?['username'] ?? resolvedDisplayName,
         'photoURL': currentUser.photoURL,
-        'provider': storedData?['provider'] ?? 'firebase',
+        'provider': matchedStoredData?['provider'] ?? 'firebase',
         'createdAt': currentUser.metadata.creationTime?.toIso8601String(),
         'lastSignIn': currentUser.metadata.lastSignInTime?.toIso8601String(),
         'profileComplete':
-            (currentUser.displayName?.trim().isNotEmpty ?? false) ||
+            (resolvedDisplayName?.isNotEmpty ?? false) ||
             (currentUser.email?.trim().isNotEmpty ?? false),
       };
     } else if (currentUser is LocalUser) {
@@ -260,6 +276,23 @@ class AuthService {
         await initialize();
       }
 
+      if (!await this.isAuthenticated) {
+        final storedIdentity = await _getStoredUserData();
+        final provider = storedIdentity?['provider']?.toString();
+        final providerLabel = switch (provider) {
+          'apple' => 'Apple',
+          'google' => 'Google',
+          'firebase' => 'your email and password',
+          'local' => 'your email and password',
+          _ => 'your account provider',
+        };
+
+        return AuthResult.failure(
+          'Biometric unlock protects an active signed-in session. '
+          'Sign in with $providerLabel first.',
+        );
+      }
+
       if (_localAuth == null) {
         return AuthResult.failure('Biometric authentication not initialized');
       }
@@ -280,7 +313,7 @@ class AuthService {
       }
 
       debugPrint("BIO: calling localAuth.authenticate");
-      final bool isAuthenticated = await _localAuth!.authenticate(
+      final bool didAuthenticate = await _localAuth!.authenticate(
         localizedReason: 'Please authenticate to access Flow Ai',
         options: const AuthenticationOptions(
           biometricOnly: true,
@@ -288,31 +321,19 @@ class AuthService {
         ),
       );
 
-      debugPrint("BIO: localAuth result=$isAuthenticated");
-      if (isAuthenticated) {
-        // If biometric auth succeeds, check if we have stored credentials
-        final userData = await _getStoredUserData();
-        if (userData != null) {
-          // Try to authenticate with stored credentials
-          if (userData['provider'] == 'local' && _localUserService != null) {
-            final sessionValid = await _localUserService!.isUserSessionValid();
-            if (sessionValid) {
-              return AuthResult.success(null); // Local user authenticated
-            }
-            // } else if (userData['provider'] == 'firebase' && _auth?.currentUser != null) {
-            //   return AuthResult.success(_auth!.currentUser!);
-          }
-          return AuthResult.success(
-            null,
-          ); // Biometric auth successful, user data exists
-        } else {
-          return AuthResult.failure(
-            'No stored user credentials found. Please sign in with your email or social account first.',
-          );
-        }
-      } else {
+      debugPrint("BIO: localAuth result=$didAuthenticate");
+      if (!didAuthenticate) {
         return AuthResult.failure('Biometric authentication failed');
       }
+
+      final activeUser = await getCurrentUser();
+      if (activeUser == null) {
+        return AuthResult.failure(
+          'Your account session has ended. Sign in with your account provider first.',
+        );
+      }
+
+      return AuthResult.success(activeUser);
     } on PlatformException catch (e) {
       debugPrint(
         'Biometric authentication platform error: ${e.code} - ${e.message}',
@@ -359,7 +380,6 @@ class AuthService {
           );
       }
     } catch (e) {
-      debugPrint('Unexpected biometric authentication error: $e');
       return AuthResult.failure(
         'Unexpected biometric authentication error. Please try again.',
       );
@@ -521,7 +541,7 @@ class AuthService {
         storedEmail == normalizedEmail.toLowerCase();
 
     if (shouldUseLegacyLocalAccount) {
-      final localResult = await localService!.signInUser(
+      final localResult = await localService.signInUser(
         email: normalizedEmail,
         password: password,
       );
@@ -710,14 +730,31 @@ class AuthService {
     return !iosInfo.isPhysicalDevice;
   }
 
+  String? _displayNameFromEmail(String? email) {
+    final normalized = email?.trim() ?? '';
+    if (normalized.isEmpty) return null;
+
+    final parts = normalized.split('@');
+    if (parts.length != 2 ||
+        parts.last.toLowerCase() == 'privaterelay.appleid.com') {
+      return null;
+    }
+
+    final words = parts.first
+        .replaceAll(RegExp(r'[._-]+'), ' ')
+        .split(RegExp(r'\s+'))
+        .where((word) => word.isNotEmpty)
+        .map(
+          (word) =>
+              '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}',
+        )
+        .toList();
+
+    return words.isEmpty ? null : words.join(' ');
+  }
+
   Future<AuthResult> signInWithApple() async {
     try {
-      debugPrint(
-        'APPLE_AUTH: apps=${Firebase.apps.length} authNull=${_auth == null} firebaseAvailable=$_firebaseAvailable',
-      );
-      debugPrint(
-        'APPLE_AUTH: apps=${Firebase.apps.length} authNull=${_auth == null} firebaseAvailable=$_firebaseAvailable',
-      );
       if (kIsWeb) {
         return AuthResult.failure('Apple Sign-In not supported on web.');
       }
@@ -750,8 +787,62 @@ class AuthService {
       );
 
       final userCredential = await _auth!.signInWithCredential(oauthCredential);
+      final user = userCredential.user;
+      if (user == null) {
+        return AuthResult.failure(
+          'Apple authentication completed without an account session.',
+        );
+      }
+
+      final appleDisplayName =
+          [appleCredential.givenName, appleCredential.familyName]
+              .whereType<String>()
+              .map((part) => part.trim())
+              .where((part) => part.isNotEmpty)
+              .join(' ');
+
+      final storedData = await _getStoredUserData();
+      final matchedStoredData =
+          storedData != null && storedData['uid']?.toString() == user.uid
+          ? storedData
+          : null;
+      final storedDisplayName =
+          matchedStoredData?['displayName']?.toString().trim() ?? '';
+      final providerDisplayName = user.displayName?.trim() ?? '';
+      final emailDisplayName = _displayNameFromEmail(user.email) ?? '';
+
+      final resolvedDisplayName = appleDisplayName.isNotEmpty
+          ? appleDisplayName
+          : providerDisplayName.isNotEmpty
+          ? providerDisplayName
+          : storedDisplayName.isNotEmpty
+          ? storedDisplayName
+          : emailDisplayName;
+
+      if (resolvedDisplayName.isNotEmpty &&
+          providerDisplayName != resolvedDisplayName) {
+        await user.updateDisplayName(resolvedDisplayName);
+        await user.reload();
+      }
+
+      final refreshedUser = _auth!.currentUser ?? user;
+
+      await _storeUserData({
+        'uid': refreshedUser.uid,
+        'email': refreshedUser.email,
+        'displayName': resolvedDisplayName.isNotEmpty
+            ? resolvedDisplayName
+            : refreshedUser.displayName,
+        'username': resolvedDisplayName.isNotEmpty
+            ? resolvedDisplayName
+            : refreshedUser.displayName,
+        'photoURL': refreshedUser.photoURL,
+        'provider': 'apple',
+        'lastLogin': DateTime.now().toIso8601String(),
+      });
+      await _prefs?.setString(_lastLoginMethodKey, 'apple');
       await AppStateService().preferences.setOnboardingComplete(true);
-      return AuthResult.success(userCredential.user);
+      return AuthResult.success(refreshedUser);
     } catch (e) {
       return AuthResult.failure('Apple sign-in failed: $e');
     }
@@ -939,11 +1030,15 @@ class AuthService {
       }
 
       if (account is User) {
-        // The callable requires the still-authenticated Firebase identity.
-        // Never delete the identity until server-side erasure is confirmed.
+        // The authenticated callable deletes cloud records and the
+        // Firebase identity. Local erasure starts only after confirmation.
         await CloudDataDeletionGateway().deleteCurrentUserCloudData();
-        await _clearAllUserData();
-        await account.delete();
+
+        try {
+          await _clearAllUserData();
+        } finally {
+          await _auth?.signOut();
+        }
       } else if (account is LocalUser) {
         final localService = _localUserService;
         if (localService == null) {
@@ -978,12 +1073,6 @@ class AuthService {
       await _clearMemoryCache();
       return AuthResult.success(null);
     } on FirebaseAuthException catch (error) {
-      if (error.code == 'requires-recent-login') {
-        return AuthResult.failure(
-          'Please sign in again, then retry account deletion.',
-        );
-      }
-
       return AuthResult.failure(
         error.message ?? 'Firebase account deletion failed',
       );
