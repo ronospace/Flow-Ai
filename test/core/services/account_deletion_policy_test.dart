@@ -3,21 +3,36 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('cloud and local erasure precede Firebase identity deletion', () {
-    final source = File(
-      'lib/core/services/auth_service.dart',
+  test('server identity authority is confirmed before local erasure', () {
+    final auth = File('lib/core/services/auth_service.dart').readAsStringSync();
+    final gateway = File(
+      'lib/core/services/cloud_data_deletion_gateway.dart',
+    ).readAsStringSync();
+    final backend = File(
+      'functions/src/partner_delete_callable.ts',
     ).readAsStringSync();
 
-    final cloud = source.indexOf(
-      'await CloudDataDeletionGateway().deleteCurrentUserCloudData();',
-    );
-    final local = source.indexOf('await _clearAllUserData();', cloud);
-    final identity = source.indexOf('await account.delete();', cloud);
+    expect(backend, contains("from \"firebase-admin/auth\";"));
+    expect(backend, contains('await getAuth().deleteUser(uid);'));
+    expect(backend, contains('identityDeleted: true'));
+    expect(gateway, contains("response['identityDeleted'] != true"));
 
-    expect(cloud, greaterThanOrEqualTo(0));
-    expect(local, greaterThan(cloud));
-    expect(identity, greaterThan(local));
-    expect(source, contains('await DatabaseService().deleteDatabase();'));
+    final deleteStart = auth.indexOf('Future<AuthResult> deleteAccount()');
+    expect(deleteStart, greaterThanOrEqualTo(0));
+
+    final remote = auth.indexOf(
+      'CloudDataDeletionGateway().deleteCurrentUserCloudData()',
+      deleteStart,
+    );
+    final local = auth.indexOf('await _clearAllUserData();', remote);
+
+    expect(remote, greaterThanOrEqualTo(0));
+    expect(local, greaterThan(remote));
+
+    final deleteMethod = auth.substring(deleteStart);
+
+    expect(deleteMethod, isNot(contains('await account.delete();')));
+    expect(deleteMethod, isNot(contains("requires-recent-login")));
   });
 
   test('external deletion page explains request and subscription handling', () {

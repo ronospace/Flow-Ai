@@ -60,8 +60,6 @@ class HealthProvider extends ChangeNotifier {
           _healthScore = 0.0;
           await prefs.setBool('healthkit_connected', false);
           notifyListeners();
-
-          debugPrint('❌ Error connecting HealthKit: $error');
         }
       },
       onDecline: () {
@@ -149,8 +147,6 @@ class HealthProvider extends ChangeNotifier {
       _isHealthKitConnected = false;
       _healthScore = 0.0;
       await prefs.setBool('healthkit_connected', false);
-
-      debugPrint('Error restoring HealthKit connection: $error');
     }
 
     notifyListeners();

@@ -20,7 +20,7 @@ class CycleProvider extends ChangeNotifier {
     try {
       _realCycleService = RealCycleService(DatabaseService());
     } catch (e) {
-      debugPrint('CycleProvider initialization failed: $e');
+      debugPrint('CycleProvider initialization failed');
       // Continue without the service - UI will show fallback content
     }
   }
@@ -65,7 +65,7 @@ class CycleProvider extends ChangeNotifier {
         _insights = null;
       }
     } catch (e) {
-      debugPrint('Error loading cycle data: $e');
+      debugPrint('Error loading cycle data');
       // Set default empty data on error
       _cycleData = null;
       _insights = null;
@@ -113,9 +113,7 @@ class CycleProvider extends ChangeNotifier {
       );
       // Reload data after starting new cycle
       await loadCycles();
-    } catch (e) {
-      debugPrint('Error starting new cycle: $e');
-    }
+    } catch (e) {}
   }
 
   Future<void> endCurrentCycle(DateTime endDate) async {
@@ -128,9 +126,7 @@ class CycleProvider extends ChangeNotifier {
       await _realCycleService!.endCurrentCycle(endDate);
       // Reload data after ending cycle
       await loadCycles();
-    } catch (e) {
-      debugPrint('Error ending current cycle: $e');
-    }
+    } catch (e) {}
   }
 
   /// Clear all user cycle data (used during sign out)

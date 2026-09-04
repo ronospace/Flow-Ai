@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
+import 'package:crypto/crypto.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
@@ -13,6 +14,7 @@ import '../models/daily_tracking_data.dart';
 import '../database/database_service.dart';
 import 'user_preferences_service.dart';
 import 'analytics_service.dart';
+import 'app_state_service.dart';
 
 class ExportImportService {
   final DatabaseService _databaseService = DatabaseService();
@@ -361,23 +363,24 @@ class ExportImportService {
   ) async {
     try {
       final filePath = await saveExportToFile(data, fileName, format);
-      await Share.shareXFiles([XFile(filePath)]);
+      await SharePlus.instance.share(ShareParams(files: [XFile(filePath)]));
     } catch (e) {
       debugPrint('Error sharing export: $e');
       rethrow;
     }
   }
 
-  Future<String?> pickImportFile() async {
+  Future<String?> pickImportFile({
+    List<String> allowedExtensions = const ['json', 'csv'],
+  }) async {
     try {
       final result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ['json', 'csv'],
+        allowedExtensions: allowedExtensions,
       );
 
       if (result != null && result.files.single.path != null) {
-        final file = File(result.files.single.path!);
-        return await file.readAsString();
+        return result.files.single.path;
       }
 
       return null;
@@ -568,7 +571,7 @@ class ExportImportService {
               ),
               pw.SizedBox(height: 20),
               pw.Header(level: 1, text: 'Cycle Details'),
-              pw.Table.fromTextArray(
+              pw.TableHelper.fromTextArray(
                 headers: ['Start Date', 'Length', 'Period Length', 'Notes'],
                 data: cycles
                     .map(
@@ -631,7 +634,7 @@ class ExportImportService {
         _databaseService.insertCycle(cycle);
         imported++;
       } catch (e) {
-        debugPrint('Error importing cycle row $i: $e');
+        debugPrint('Cycle row import failed');
         skipped++;
       }
     }
@@ -692,6 +695,412 @@ class ExportImportService {
     }
   }
 
+  /// Imports the verified signer-migration payload.
+  ///
+  /// Authentication, tokens, biometric enrollment, crypto material, and
+  /// payload identity are never restored.
+  Future<MigrationImportResult> importSanitizedMigrationPayload(
+    String filePath,
+  ) async {
+    try {
+      final file = File(filePath);
+      if (!await file.exists()) {
+        return MigrationImportResult.failure('Migration file was not found.');
+      }
+
+      final decoded = jsonDecode(await file.readAsString());
+      if (decoded is! Map) {
+        return MigrationImportResult.failure('Migration file is malformed.');
+      }
+
+      final payload = Map<String, dynamic>.from(decoded);
+
+      final validationError = _validateSanitizedMigrationPayload(payload);
+      if (validationError != null) {
+        return MigrationImportResult.failure(validationError);
+      }
+
+      // Require a real currently-authenticated account. Stored payload
+      // identity can never authorize a restore.
+      final appState = AppStateService();
+      if (!appState.isInitialized) {
+        await appState.initialize();
+      }
+
+      final activeUser = await appState.auth.getCurrentUser();
+      if (activeUser == null) {
+        return MigrationImportResult.failure(
+          'Sign in to the account that owns this backup before restoring it.',
+        );
+      }
+
+      final liveUserData = await appState.auth.getUserData();
+      final liveUid = liveUserData?['uid']?.toString().trim() ?? '';
+
+      if (liveUid.isEmpty) {
+        return MigrationImportResult.failure(
+          'The authenticated account identity could not be verified.',
+        );
+      }
+
+      final expectedFingerprint =
+          payload['sourceAccountFingerprint']?.toString() ?? '';
+
+      final liveFingerprint = sha256.convert(utf8.encode(liveUid)).toString();
+
+      if (liveFingerprint != expectedFingerprint) {
+        return MigrationImportResult.failure(
+          'This backup belongs to a different account.',
+        );
+      }
+
+      final profile = Map<String, dynamic>.from(payload['profile'] as Map);
+      final settings = Map<String, dynamic>.from(payload['settings'] as Map);
+      final conversation = Map<String, dynamic>.from(
+        payload['conversation'] as Map,
+      );
+      final onboardingComplete = payload['onboardingComplete'] as bool;
+
+      final prefs = await SharedPreferences.getInstance();
+
+      final conversationKeys = <String, String>{
+        'conversation_history': 'ai_conversation_history_$liveUid',
+        'user_preferences': 'ai_user_preferences_$liveUid',
+        'topics_interest': 'ai_topics_interest_$liveUid',
+        'frequent_questions': 'ai_frequent_questions_$liveUid',
+        'personalized_insights': 'ai_personalized_insights_$liveUid',
+      };
+
+      final destinationKeys = <String>{
+        'user_preferences',
+        'user_metadata',
+        'onboarding_complete',
+        ...conversationKeys.values,
+      };
+
+      // Snapshot every destination before first persistent mutation.
+      final oldValues = <String, Object?>{};
+      final oldKeys = <String>{};
+
+      for (final key in destinationKeys) {
+        if (prefs.containsKey(key)) {
+          oldKeys.add(key);
+          oldValues[key] = prefs.get(key);
+        }
+      }
+
+      try {
+        final mergedSettings = _readJsonPreference(prefs, 'user_preferences');
+
+        for (final entry in settings.entries) {
+          if (entry.value != null) {
+            mergedSettings[entry.key] = entry.value;
+          }
+        }
+
+        // Identity always comes from the authenticated production account.
+        mergedSettings['userId'] = liveUid;
+        mergedSettings['lastUpdated'] = DateTime.now().toIso8601String();
+
+        // Security state is explicitly regenerated in the new install.
+        mergedSettings.remove('biometricAuth');
+        mergedSettings.remove('cycleSyncUserId');
+
+        await prefs.setString('user_preferences', jsonEncode(mergedSettings));
+
+        final mergedMetadata = _readJsonPreference(prefs, 'user_metadata');
+
+        for (final entry in profile.entries) {
+          if (entry.value != null) {
+            mergedMetadata[entry.key] = entry.value;
+          }
+        }
+
+        mergedMetadata['uid'] = liveUid;
+        mergedMetadata['email'] = liveUserData?['email'];
+        mergedMetadata['provider'] = liveUserData?['provider'];
+        mergedMetadata['username'] = liveUserData?['username'];
+        mergedMetadata['lastSync'] = DateTime.now().toIso8601String();
+
+        await prefs.setString('user_metadata', jsonEncode(mergedMetadata));
+
+        // Canonical onboarding owner.
+        await _preferencesService.initialize();
+        await _preferencesService.setOnboardingComplete(onboardingComplete);
+
+        for (final entry in conversationKeys.entries) {
+          final value = conversation[entry.key];
+
+          if (value is String) {
+            await prefs.setString(entry.value, value);
+          }
+        }
+      } catch (_) {
+        // Transaction-style rollback of every destination.
+        for (final key in destinationKeys) {
+          await _restorePreferenceValue(
+            prefs,
+            key,
+            existed: oldKeys.contains(key),
+            value: oldValues[key],
+          );
+        }
+
+        return MigrationImportResult.failure(
+          'Restore failed safely. Existing app data was preserved.',
+        );
+      }
+
+      return MigrationImportResult.success(
+        restoredSections: const [
+          'profile',
+          'settings',
+          'onboarding',
+          'conversation',
+        ],
+      );
+    } catch (_) {
+      return MigrationImportResult.failure(
+        'The migration file could not be safely restored.',
+      );
+    }
+  }
+
+  String? _validateSanitizedMigrationPayload(Map<String, dynamic> payload) {
+    const allowedTopLevel = {
+      'schemaVersion',
+      'createdAtUtc',
+      'sourcePackage',
+      'sourceBackupSha256',
+      'sourceAccountFingerprint',
+      'restorePolicy',
+      'profile',
+      'settings',
+      'onboardingComplete',
+      'conversation',
+    };
+
+    if (payload.keys.any((key) => !allowedTopLevel.contains(key))) {
+      return 'Migration file contains unsupported fields.';
+    }
+
+    if (payload['schemaVersion'] != 1 ||
+        payload['sourcePackage'] != 'com.flowai.app') {
+      return 'Migration file version is unsupported.';
+    }
+
+    final accountFingerprint = payload['sourceAccountFingerprint'];
+
+    if (accountFingerprint is! String ||
+        !RegExp(r'^[a-f0-9]{64}$').hasMatch(accountFingerprint)) {
+      return 'Migration account fingerprint is invalid.';
+    }
+
+    final backupFingerprint = payload['sourceBackupSha256'];
+
+    if (backupFingerprint is! String ||
+        !RegExp(r'^[a-f0-9]{64}$').hasMatch(backupFingerprint)) {
+      return 'Migration backup fingerprint is invalid.';
+    }
+
+    final policyValue = payload['restorePolicy'];
+
+    if (policyValue is! Map) {
+      return 'Migration security policy is missing.';
+    }
+
+    final policy = Map<String, dynamic>.from(policyValue);
+
+    const requiredPolicy = {
+      'requiresSuccessfulReauthentication': true,
+      'requiresAccountFingerprintMatch': true,
+      'restoreAuthenticationSession': false,
+      'restoreBiometricEnrollment': false,
+      'restoreCryptoMaterial': false,
+    };
+
+    if (policy.length != requiredPolicy.length) {
+      return 'Migration security policy is invalid.';
+    }
+
+    for (final entry in requiredPolicy.entries) {
+      if (policy[entry.key] != entry.value) {
+        return 'Migration security policy is invalid.';
+      }
+    }
+
+    final profileValue = payload['profile'];
+    final settingsValue = payload['settings'];
+    final conversationValue = payload['conversation'];
+
+    if (profileValue is! Map ||
+        settingsValue is! Map ||
+        conversationValue is! Map ||
+        payload['onboardingComplete'] is! bool) {
+      return 'Migration payload structure is invalid.';
+    }
+
+    final profile = Map<String, dynamic>.from(profileValue);
+    final settings = Map<String, dynamic>.from(settingsValue);
+    final conversation = Map<String, dynamic>.from(conversationValue);
+
+    const allowedProfile = {
+      'displayName',
+      'greetingName',
+      'photoURL',
+      'profileComplete',
+    };
+
+    const allowedSettings = {
+      'aiInsightsEnabled',
+      'avatarUrl',
+      'displayName',
+      'greetingName',
+      'hapticFeedbackEnabled',
+      'language',
+      'notificationHour',
+      'notificationMinute',
+      'notificationsEnabled',
+      'ovulationReminders',
+      'periodReminders',
+      'privacyMode',
+      'reminderDaysBefore',
+      'soundsEnabled',
+      'symptomReminders',
+      'themeMode',
+    };
+
+    const allowedConversation = {
+      'conversation_history',
+      'frequent_questions',
+      'personalized_insights',
+      'topics_interest',
+      'user_preferences',
+    };
+
+    if (profile.keys.any((key) => !allowedProfile.contains(key)) ||
+        settings.keys.any((key) => !allowedSettings.contains(key)) ||
+        conversation.keys.any((key) => !allowedConversation.contains(key))) {
+      return 'Migration file contains unsupported account data.';
+    }
+
+    const forbiddenKeys = {
+      'uid',
+      'email',
+      'accessToken',
+      'idToken',
+      'refreshToken',
+      'biometricAuth',
+      'biometric_enabled',
+      'biometrics_enabled',
+      'cycleSyncUserId',
+      'session_token',
+      'StorageCryptoKeyset',
+    };
+
+    bool containsForbidden(dynamic value) {
+      if (value is Map) {
+        for (final entry in value.entries) {
+          if (forbiddenKeys.contains(entry.key)) {
+            return true;
+          }
+
+          if (containsForbidden(entry.value)) {
+            return true;
+          }
+        }
+      }
+
+      if (value is List) {
+        for (final item in value) {
+          if (containsForbidden(item)) {
+            return true;
+          }
+        }
+      }
+
+      return false;
+    }
+
+    if (containsForbidden(payload)) {
+      return 'Migration file contains restricted security data.';
+    }
+
+    for (final entry in conversation.entries) {
+      final value = entry.value;
+
+      if (value == null) continue;
+
+      if (value is! String) {
+        return 'Migration conversation data is malformed.';
+      }
+
+      try {
+        final decoded = jsonDecode(value);
+
+        final listExpected =
+            entry.key == 'conversation_history' ||
+            entry.key == 'topics_interest';
+
+        if (listExpected && decoded is! List) {
+          return 'Migration conversation data is malformed.';
+        }
+
+        if (!listExpected && decoded is! Map) {
+          return 'Migration conversation data is malformed.';
+        }
+      } catch (_) {
+        return 'Migration conversation data is malformed.';
+      }
+    }
+
+    return null;
+  }
+
+  Map<String, dynamic> _readJsonPreference(
+    SharedPreferences prefs,
+    String key,
+  ) {
+    final raw = prefs.getString(key);
+    if (raw == null) return <String, dynamic>{};
+
+    try {
+      final decoded = jsonDecode(raw);
+
+      return decoded is Map
+          ? Map<String, dynamic>.from(decoded)
+          : <String, dynamic>{};
+    } catch (_) {
+      return <String, dynamic>{};
+    }
+  }
+
+  Future<void> _restorePreferenceValue(
+    SharedPreferences prefs,
+    String key, {
+    required bool existed,
+    required Object? value,
+  }) async {
+    if (!existed) {
+      await prefs.remove(key);
+      return;
+    }
+
+    if (value is String) {
+      await prefs.setString(key, value);
+    } else if (value is bool) {
+      await prefs.setBool(key, value);
+    } else if (value is int) {
+      await prefs.setInt(key, value);
+    } else if (value is double) {
+      await prefs.setDouble(key, value);
+    } else if (value is List<String>) {
+      await prefs.setStringList(key, value);
+    } else {
+      throw StateError('Unsupported preference rollback type for $key');
+    }
+  }
+
   bool _validateJSONFormat(Map<String, dynamic> data) {
     // Check if the JSON has the expected structure
     return data.containsKey('exportMetadata') &&
@@ -722,4 +1131,30 @@ class ImportResult {
     this.skippedDuplicates = 0,
     required this.message,
   });
+}
+
+class MigrationImportResult {
+  final bool success;
+  final String message;
+  final List<String> restoredSections;
+
+  const MigrationImportResult({
+    required this.success,
+    required this.message,
+    this.restoredSections = const [],
+  });
+
+  factory MigrationImportResult.success({
+    required List<String> restoredSections,
+  }) {
+    return MigrationImportResult(
+      success: true,
+      message: 'Your verified app data was restored successfully.',
+      restoredSections: restoredSections,
+    );
+  }
+
+  factory MigrationImportResult.failure(String message) {
+    return MigrationImportResult(success: false, message: message);
+  }
 }

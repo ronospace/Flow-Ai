@@ -35,7 +35,6 @@ import 'core/config/platform_config.dart';
 import 'core/services/progressive_disclosure_service.dart';
 import 'core/services/ai_notification_scheduler.dart';
 import 'core/services/performance_optimizer.dart';
-import 'core/services/tflite_prediction_service.dart';
 import 'features/onboarding/providers/onboarding_provider.dart';
 import 'features/cycle/providers/cycle_provider.dart';
 import 'features/insights/providers/insights_provider.dart';
@@ -46,6 +45,10 @@ import 'features/premium/providers/subscription_provider.dart';
 import 'features/analytics/providers/analytics_provider.dart';
 import 'package:flow_ai/core/theme/system_ui_overlay_theme.dart';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'core/identity/active_account_scope.dart';
+import 'core/services/auth_service.dart';
+
 const bool ENABLE_PD = false;
 
 class AppScrollBehavior extends MaterialScrollBehavior {
@@ -55,8 +58,39 @@ class AppScrollBehavior extends MaterialScrollBehavior {
   }
 }
 
+void _configureActiveAccountScope() {
+  ActiveAccountScope.instance.configure(() async {
+    try {
+      // Resolve AuthService lazily so startup ordering stays platform-safe.
+      final authService = AuthService();
+      final dynamic activeUser = await authService.getCurrentUser();
+
+      if (activeUser == null) {
+        return null;
+      }
+
+      if (activeUser is User && activeUser.isAnonymous) {
+        return null;
+      }
+
+      final dynamic rawUserId = activeUser.uid;
+      final userId = rawUserId?.toString().trim();
+
+      if (userId == null || userId.isEmpty) {
+        return null;
+      }
+
+      return userId;
+    } catch (_) {
+      // Security-sensitive identity resolution always fails closed.
+      return null;
+    }
+  });
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  _configureActiveAccountScope();
   // Configure Flutter for production performance
   if (kReleaseMode) {
     // Disable debug banner and optimize for production
@@ -234,13 +268,6 @@ Future<void> _initializeFuturisticServices() async {
     // Initialize performance optimizer
     await PerformanceOptimizer.instance.initialize();
     AppLogger.success('⚡ Performance Optimizer initialized');
-
-    // Initialize TensorFlow Lite (non-blocking)
-    TFLitePredictionService.instance.initialize().catchError((e) {
-      AppLogger.warning(
-        'TensorFlow Lite initialization failed (using fallback): $e',
-      );
-    });
   } catch (e) {
     AppLogger.warning('Futuristic services initialization failed: $e');
   }

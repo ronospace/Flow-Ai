@@ -1,8 +1,10 @@
 import 'dart:async';
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:provider/provider.dart';
+import '../../../core/services/analytics_service.dart';
+import '../../analytics/providers/analytics_provider.dart';
 import '../../../core/biometrics/advanced_biometric_engine.dart';
 import '../../../core/health/advanced_health_analytics.dart';
 import '../../../core/performance/performance_optimization_engine.dart';
@@ -57,6 +59,10 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
     _initializeAnimations();
     _initializeRealTimeMonitoring();
     _startDataRefresh();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context.read<AnalyticsProvider>().loadAnalyticsHistory();
+    });
   }
 
   void _initializeAnimations() {
@@ -128,12 +134,18 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
   }
 
   void _onBiometricUpdate(BiometricReading reading) {
+    const supportedTrendMetrics = <String>{'heart_rate', 'temperature', 'hrv'};
+
+    if (!supportedTrendMetrics.contains(reading.type) ||
+        !reading.value.isFinite) {
+      return;
+    }
+
+    final cutoff = DateTime.now().subtract(const Duration(hours: 168));
+
     setState(() {
       _realtimeData.add(reading);
-      // Keep only last 100 readings
-      if (_realtimeData.length > 100) {
-        _realtimeData.removeAt(0);
-      }
+      _realtimeData.removeWhere((item) => item.timestamp.isBefore(cutoff));
     });
   }
 
@@ -150,20 +162,22 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
       setState(() {
         _latestBiometrics = snapshot;
       });
-    } catch (e) {
-      debugPrint('Error refreshing biometric data: $e');
-    }
+    } catch (e) {}
   }
 
   Future<void> _generateHealthReport() async {
     try {
-      // Get recent cycle data (placeholder - in real app would come from database)
-      final mockCycleHistory = _generateMockCycleHistory();
+      // Load persisted cycle history from the production database.
+      final cycleHistory = await AnalyticsService.instance
+          .getPersistedCycleHistory();
+      if (cycleHistory.isEmpty) {
+        throw StateError('No cycle history available');
+      }
 
       final report = await AdvancedHealthAnalytics.instance
           .generateHealthReport(
             user: widget.user,
-            cycleHistory: mockCycleHistory,
+            cycleHistory: cycleHistory,
             currentPhase: 'follicular',
             analysisDepth: 30,
           );
@@ -171,39 +185,7 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
       setState(() {
         _healthReport = report;
       });
-    } catch (e) {
-      debugPrint('Error generating health report: $e');
-    }
-  }
-
-  List<CycleData> _generateMockCycleHistory() {
-    final random = math.Random();
-    final cycles = <CycleData>[];
-
-    for (int i = 0; i < 6; i++) {
-      final startDate = DateTime.now().subtract(Duration(days: 28 * (i + 1)));
-      cycles.add(
-        CycleData(
-          id: 'cycle_$i',
-          userId: 'anonymous_user',
-          startDate: startDate,
-          cycleLength: 26 + random.nextInt(6), // 26-31 days
-          averageFlow:
-              FlowIntensity.values[random.nextInt(FlowIntensity.values.length)],
-          dailyData: {},
-          symptoms: [
-            'cramps',
-            'bloating',
-            'headache',
-          ].where((_) => random.nextBool()).toList(),
-          pain: 1.0 + random.nextDouble() * 4.0, // 1-5 scale
-          createdAt: startDate,
-          lastUpdated: startDate,
-        ),
-      );
-    }
-
-    return cycles;
+    } catch (e) {}
   }
 
   void _triggerHapticFeedback() {
@@ -323,6 +305,14 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
   }
 
   Widget _buildHeaderContent() {
+    final displayName = widget.user.displayName?.trim();
+    final initial = displayName != null && displayName.isNotEmpty
+        ? displayName.substring(0, 1).toUpperCase()
+        : 'U';
+
+    final heartRate = _latestBiometrics?.fusedData['heart_rate']?.toDouble();
+    final temperature = _latestBiometrics?.fusedData['temperature']?.toDouble();
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 60, 16, 16),
       child: Column(
@@ -334,7 +324,7 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
                 radius: 25,
                 backgroundColor: Colors.pink.withValues(alpha: 0.1),
                 child: Text(
-                  widget.user.displayName?.substring(0, 1).toUpperCase() ?? 'U',
+                  initial,
                   style: const TextStyle(
                     color: Colors.pink,
                     fontWeight: FontWeight.bold,
@@ -348,7 +338,7 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Welcome back, ${widget.user.displayName ?? 'User'}',
+                      'Welcome back, ${displayName?.isNotEmpty == true ? displayName : 'User'}',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 18,
@@ -373,22 +363,15 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
             ],
           ),
           const Spacer(),
-          if (_latestBiometrics != null)
+          if (heartRate != null || temperature != null)
             Row(
               children: [
-                BiometricPulseIndicator(
-                  value:
-                      _latestBiometrics!.fusedData['heart_rate']?.toDouble() ??
-                      75.0,
-                  label: 'BPM',
-                ),
-                const SizedBox(width: 24),
-                BiometricPulseIndicator(
-                  value:
-                      _latestBiometrics!.fusedData['temperature']?.toDouble() ??
-                      36.5,
-                  label: '°C',
-                ),
+                if (heartRate != null)
+                  BiometricPulseIndicator(value: heartRate, label: 'BPM'),
+                if (heartRate != null && temperature != null)
+                  const SizedBox(width: 24),
+                if (temperature != null)
+                  BiometricPulseIndicator(value: temperature, label: '°C'),
               ],
             ),
         ],
@@ -450,6 +433,103 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
 
   Widget _buildMetricsGrid() {
     final biometrics = _latestBiometrics!;
+    final metrics = <Widget>[];
+
+    void addMetric({
+      required String key,
+      required String title,
+      required String unit,
+      required IconData icon,
+      required Color color,
+      required int decimals,
+    }) {
+      final value = biometrics.fusedData[key]?.toDouble();
+
+      if (value == null || !value.isFinite) {
+        return;
+      }
+
+      metrics.add(
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(icon, color: color, size: 28),
+                const SizedBox(height: 8),
+                Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  '${value.toStringAsFixed(decimals)} $unit',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: color,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                const Text(
+                  'Live synced reading',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 11),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    addMetric(
+      key: 'heart_rate',
+      title: 'Heart Rate',
+      unit: 'BPM',
+      icon: Icons.favorite,
+      color: Colors.red,
+      decimals: 0,
+    );
+    addMetric(
+      key: 'temperature',
+      title: 'Temperature',
+      unit: '°C',
+      icon: Icons.thermostat,
+      color: Colors.orange,
+      decimals: 1,
+    );
+    addMetric(
+      key: 'hrv',
+      title: 'HRV',
+      unit: 'ms',
+      icon: Icons.graphic_eq,
+      color: Colors.blue,
+      decimals: 0,
+    );
+    addMetric(
+      key: 'sleep_score',
+      title: 'Sleep Score',
+      unit: '%',
+      icon: Icons.bedtime,
+      color: Colors.purple,
+      decimals: 0,
+    );
+
+    if (metrics.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(vertical: 24),
+        child: Center(
+          child: Text(
+            'No synced health readings are available yet.',
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+    }
 
     return GridView.count(
       shrinkWrap: true,
@@ -458,44 +538,14 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
       childAspectRatio: 1.5,
       crossAxisSpacing: 16,
       mainAxisSpacing: 16,
-      children: [
-        RealTimeMetricCard(
-          title: 'Heart Rate',
-          value: biometrics.fusedData['heart_rate']?.toDouble() ?? 75.0,
-          unit: 'BPM',
-          icon: Icons.favorite,
-          color: Colors.red,
-          trend: _calculateTrend('heart_rate'),
-        ),
-        RealTimeMetricCard(
-          title: 'Temperature',
-          value: biometrics.fusedData['temperature']?.toDouble() ?? 36.5,
-          unit: '°C',
-          icon: Icons.thermostat,
-          color: Colors.orange,
-          trend: _calculateTrend('temperature'),
-        ),
-        RealTimeMetricCard(
-          title: 'HRV',
-          value: biometrics.fusedData['hrv']?.toDouble() ?? 45.0,
-          unit: 'ms',
-          icon: Icons.graphic_eq,
-          color: Colors.blue,
-          trend: _calculateTrend('hrv'),
-        ),
-        RealTimeMetricCard(
-          title: 'Sleep Score',
-          value: biometrics.fusedData['sleep_score']?.toDouble() ?? 82.0,
-          unit: '%',
-          icon: Icons.bedtime,
-          color: Colors.purple,
-          trend: _calculateTrend('sleep'),
-        ),
-      ],
+      children: metrics,
     );
   }
 
   Widget _buildHealthTrends() {
+    final history = context.watch<AnalyticsProvider>().analyticsHistory;
+    final trendData = _generateTrendData(history);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -520,19 +570,20 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
           decoration: BoxDecoration(
             color: const Color(0xFF1D1E33),
             borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                blurRadius: 10,
-                offset: const Offset(0, 5),
-              ),
-            ],
           ),
-          child: HealthTrendChart(
-            data: _generateTrendData(),
-            selectedMetric: _selectedMetric,
-            timeRange: _selectedTimeRange,
-          ),
+          child: trendData.isEmpty
+              ? const Center(
+                  child: Text(
+                    'Historical health trends will appear after real synced history is available.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white70),
+                  ),
+                )
+              : HealthTrendChart(
+                  data: trendData,
+                  selectedMetric: _selectedMetric,
+                  timeRange: _selectedTimeRange,
+                ),
         ),
         const SizedBox(height: 16),
         _buildMetricSelector(),
@@ -833,22 +884,63 @@ class _RealTimeHealthDashboardState extends State<RealTimeHealthDashboard>
     );
   }
 
-  double _calculateTrend(String metricType) {
-    // Simulate trend calculation based on recent data
-    final random = math.Random();
-    return (random.nextDouble() - 0.5) * 10; // -5% to +5% trend
-  }
+  List<FlSpot> _generateTrendData(AnalyticsHistory history) {
+    final now = DateTime.now();
+    final start = now.subtract(Duration(hours: _selectedTimeRange));
 
-  List<FlSpot> _generateTrendData() {
-    final random = math.Random();
-    final data = <FlSpot>[];
+    double xFor(DateTime timestamp) {
+      final elapsed = timestamp.difference(start).inMilliseconds.toDouble();
 
-    for (int i = 0; i < 20; i++) {
-      final value = 50 + random.nextDouble() * 50 + math.sin(i * 0.3) * 10;
-      data.add(FlSpot(i.toDouble(), value));
+      switch (_selectedTimeRange) {
+        case 1:
+          return elapsed / const Duration(minutes: 5).inMilliseconds;
+        case 24:
+          return elapsed / const Duration(hours: 1).inMilliseconds;
+        case 168:
+          return elapsed / const Duration(days: 1).inMilliseconds;
+        default:
+          return 0;
+      }
     }
 
-    return data;
+    if (_selectedMetric == 'sleep') {
+      final entries =
+          history.sleepHours.entries
+              .where(
+                (entry) =>
+                    entry.value.isFinite &&
+                    !entry.key.isBefore(start) &&
+                    !entry.key.isAfter(now),
+              )
+              .toList()
+            ..sort((a, b) => a.key.compareTo(b.key));
+
+      return entries
+          .map((entry) => FlSpot(xFor(entry.key), entry.value))
+          .toList();
+    }
+
+    const realtimeMetrics = <String>{'heart_rate', 'temperature', 'hrv'};
+
+    if (!realtimeMetrics.contains(_selectedMetric)) {
+      return const <FlSpot>[];
+    }
+
+    final readings =
+        _realtimeData
+            .where(
+              (reading) =>
+                  reading.type == _selectedMetric &&
+                  reading.value.isFinite &&
+                  !reading.timestamp.isBefore(start) &&
+                  !reading.timestamp.isAfter(now),
+            )
+            .toList()
+          ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
+
+    return readings
+        .map((reading) => FlSpot(xFor(reading.timestamp), reading.value))
+        .toList();
   }
 
   Color _getHealthScoreColor(double score) {

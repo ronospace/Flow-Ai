@@ -7,6 +7,8 @@ import '../widgets/prediction_analytics_card.dart';
 import '../widgets/trend_chart_widget.dart';
 import '../widgets/recommendations_list.dart';
 import '../widgets/advanced_analytics_dashboard.dart';
+import '../../../core/services/data_export_service.dart';
+import '../../../core/services/notification_service.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/app_header_components.dart';
 import '../../../generated/app_localizations.dart';
@@ -363,7 +365,10 @@ class _EnhancedAnalyticsDashboardScreenState
           ),
           const SizedBox(height: 20),
           if (provider.healthAnalytics != null)
-            HealthAnalyticsCard(analytics: provider.healthAnalytics!),
+            HealthAnalyticsCard(
+              analytics: provider.healthAnalytics!,
+              history: provider.analyticsHistory,
+            ),
 
           const SizedBox(height: 20),
         ],
@@ -544,14 +549,14 @@ class _EnhancedAnalyticsDashboardScreenState
               (
                 'PDF Report',
                 Icons.picture_as_pdf,
-                () => _exportData(context, 'pdf'),
+                () => _exportData(ExportFormat.pdf),
               ),
               (
-                'Excel Spreadsheet',
+                'CSV Spreadsheet',
                 Icons.table_chart,
-                () => _exportData(context, 'excel'),
+                () => _exportData(ExportFormat.csv),
               ),
-              ('Share Summary', Icons.share, () => _shareData(context)),
+              ('Share Summary', Icons.share, () => _shareData()),
             ].map(
               (option) => ListTile(
                 title: Text(option.$1),
@@ -572,25 +577,111 @@ class _EnhancedAnalyticsDashboardScreenState
     );
   }
 
-  void _exportData(BuildContext context, String format) {
-    // TODO: Implement data export functionality
-    ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+  Future<void> _exportData(ExportFormat format) async {
+    if (!mounted) return;
+
+    final messenger = ScaffoldMessenger.maybeOf(context);
+    messenger?.showSnackBar(
       SnackBar(
-        content: Text('Exporting analytics as $format...'),
+        content: Text(
+          'Creating ${format.name.toUpperCase()} analytics export...',
+        ),
         behavior: SnackBarBehavior.floating,
-        backgroundColor: AppTheme.accentMint,
       ),
     );
+
+    try {
+      final filePath = await DataExportService().exportData(
+        format: format,
+        dateRange: ExportDateRange.allTime(),
+      );
+
+      if (!mounted) return;
+      messenger?.hideCurrentSnackBar();
+
+      if (filePath == null) {
+        messenger?.showSnackBar(
+          SnackBar(
+            content: const Text(
+              'Analytics export could not be created. Please try again.',
+            ),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+        return;
+      }
+
+      messenger?.showSnackBar(
+        SnackBar(
+          content: Text(
+            '${format.name.toUpperCase()} analytics export created successfully.',
+          ),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: AppTheme.successGreen,
+        ),
+      );
+    } catch (_) {
+      if (!mounted) return;
+      messenger?.hideCurrentSnackBar();
+      messenger?.showSnackBar(
+        SnackBar(
+          content: const Text('Analytics export failed. Please try again.'),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    }
   }
 
-  void _shareData(BuildContext context) {
-    // TODO: Implement data sharing functionality
-    ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+  Future<void> _shareData() async {
+    if (!mounted) return;
+
+    final messenger = ScaffoldMessenger.maybeOf(context);
+    messenger?.showSnackBar(
       const SnackBar(
-        content: Text('Preparing analytics summary for sharing...'),
+        content: Text('Preparing analytics report for sharing...'),
         behavior: SnackBarBehavior.floating,
       ),
     );
+
+    try {
+      final exportService = DataExportService();
+      final filePath = await exportService.exportData(
+        format: ExportFormat.pdf,
+        dateRange: ExportDateRange.allTime(),
+      );
+
+      if (!mounted) return;
+      messenger?.hideCurrentSnackBar();
+
+      if (filePath == null) {
+        messenger?.showSnackBar(
+          SnackBar(
+            content: const Text(
+              'Analytics report could not be created for sharing.',
+            ),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+        return;
+      }
+
+      await exportService.shareExportedFile(filePath);
+    } catch (_) {
+      if (!mounted) return;
+      messenger?.hideCurrentSnackBar();
+      messenger?.showSnackBar(
+        SnackBar(
+          content: const Text(
+            'Analytics report could not be shared. Please try again.',
+          ),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    }
   }
 
   void _showRecommendationDetails(BuildContext context, recommendation) {
@@ -672,14 +763,106 @@ class _EnhancedAnalyticsDashboardScreenState
     );
   }
 
-  void _setReminder(recommendation) {
-    // TODO: Implement reminder functionality
-    ScaffoldMessenger.maybeOf(context)?.showSnackBar(
-      SnackBar(
-        content: Text('Reminder set for: ${recommendation.title}'),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: AppTheme.successGreen,
-      ),
+  Future<void> _setReminder(recommendation) async {
+    if (!mounted) return;
+
+    final now = DateTime.now();
+    final initialDate = now.add(const Duration(days: 1));
+
+    final selectedDate = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: DateTime(now.year, now.month, now.day),
+      lastDate: now.add(const Duration(days: 365)),
+      helpText: 'Choose reminder date',
     );
+
+    if (selectedDate == null || !mounted) return;
+
+    final selectedTime = await showTimePicker(
+      context: context,
+      initialTime: const TimeOfDay(hour: 9, minute: 0),
+      helpText: 'Choose reminder time',
+    );
+
+    if (selectedTime == null || !mounted) return;
+
+    final scheduledDate = DateTime(
+      selectedDate.year,
+      selectedDate.month,
+      selectedDate.day,
+      selectedTime.hour,
+      selectedTime.minute,
+    );
+
+    if (!scheduledDate.isAfter(DateTime.now())) {
+      ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+        SnackBar(
+          content: const Text('Choose a future date and time.'),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+      return;
+    }
+
+    try {
+      final notificationService = NotificationService.instance;
+      final permitted = await notificationService.requestPermission();
+
+      if (!mounted) return;
+
+      if (!permitted) {
+        ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+          SnackBar(
+            content: const Text(
+              'Notification permission is required to schedule this reminder.',
+            ),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+        return;
+      }
+
+      final notificationId = scheduledDate.millisecondsSinceEpoch.remainder(
+        0x7fffffff,
+      );
+
+      await notificationService.scheduleNotification(
+        id: notificationId,
+        title: 'Flow Ai Reminder',
+        body: recommendation.title.toString(),
+        scheduledDate: scheduledDate,
+        payload: 'analytics_recommendation',
+      );
+
+      if (!mounted) return;
+
+      final dateLabel = MaterialLocalizations.of(
+        context,
+      ).formatMediumDate(scheduledDate);
+      final timeLabel = TimeOfDay.fromDateTime(scheduledDate).format(context);
+
+      ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+        SnackBar(
+          content: Text('Reminder scheduled for $dateLabel at $timeLabel.'),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: AppTheme.successGreen,
+        ),
+      );
+    } catch (_) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+        SnackBar(
+          content: const Text(
+            'Reminder could not be scheduled. Please try again.',
+          ),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    }
   }
 }

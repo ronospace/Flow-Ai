@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import '../../../core/services/auth_service.dart';
+import '../../../core/services/app_lock_service.dart';
 import '../../../core/services/app_state_service.dart';
 import '../../../core/services/ad_consent_service.dart';
 import '../../../core/services/data_export_service.dart';
@@ -24,7 +26,6 @@ import '../widgets/profile_section.dart';
 import '../widgets/theme_switcher_card.dart';
 import 'help_screen.dart';
 import 'account_management_screen.dart';
-import '../widgets/medical_citations_section.dart';
 import 'dart:io';
 
 import '../../../core/widgets/medical_sources_dialog.dart';
@@ -1310,60 +1311,51 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   void _showSignOutDialog(BuildContext context) {
-    showDialog(
+    showDialog<void>(
       context: context,
-      builder: (BuildContext context) {
+      builder: (dialogContext) {
+        final theme = Theme.of(dialogContext);
+
         return AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          title: Row(
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: AppTheme.primaryRose.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Icon(
-                  Icons.logout,
-                  color: AppTheme.primaryRose,
-                  size: 20,
-                ),
-              ),
-              const SizedBox(width: 16),
-              const Text('Sign Out'),
-            ],
+          icon: const Icon(
+            Icons.logout_rounded,
+            color: AppTheme.primaryRose,
+            size: 28,
           ),
+          title: const Text('Sign out?', textAlign: TextAlign.center),
           content: const Text(
-            'Are you sure you want to sign out of your account? You can always sign back in later.',
+            'Return to the sign-in screen?',
+            textAlign: TextAlign.center,
           ),
+          actionsAlignment: MainAxisAlignment.center,
+          actionsPadding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+          buttonPadding: const EdgeInsets.symmetric(horizontal: 4),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text(
-                'Cancel',
-                style: TextStyle(color: AppTheme.mediumGrey),
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              style: TextButton.styleFrom(
+                foregroundColor: theme.colorScheme.onSurface,
+                minimumSize: const Size(112, 48),
               ),
+              child: const Text('Cancel'),
             ),
-            ElevatedButton(
+            FilledButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(dialogContext).pop();
                 _handleSignOut();
               },
-              style: ElevatedButton.styleFrom(
+              style: FilledButton.styleFrom(
                 backgroundColor: AppTheme.primaryRose,
+                foregroundColor: Colors.white,
+                minimumSize: const Size(112, 48),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const Text(
-                'Sign Out',
-                style: TextStyle(color: Colors.white),
-              ),
+              child: const Text('Sign out'),
             ),
           ],
         );
@@ -1371,7 +1363,19 @@ class _SettingsScreenState extends State<SettingsScreen>
     );
   }
 
-  void _handleSignOut() async {
+  Future<void> _handleSignOut() async {
+    final auth = AuthService();
+    if (!auth.isInitialized) {
+      await auth.initialize();
+    }
+
+    if (await auth.isAuthenticated && auth.isBiometricEnabled()) {
+      AppLockService().lock();
+      if (!mounted) return;
+      context.go('/auth/login');
+      return;
+    }
+
     try {
       AppLogger.auth('🔐 Starting comprehensive sign out process...');
 

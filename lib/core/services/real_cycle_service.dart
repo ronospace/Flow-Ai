@@ -3,6 +3,8 @@ import '../database/database_service.dart';
 import '../models/cycle_data.dart';
 import 'cycle_calculation_engine.dart';
 
+import '../identity/active_account_scope.dart';
+
 /// Service that integrates database with cycle calculation engine
 /// to provide real cycle predictions and data management
 class RealCycleService {
@@ -40,18 +42,8 @@ class RealCycleService {
         recentTrackingData: recentTracking,
         lastUpdated: DateTime.now(),
       );
-    } catch (e) {
-      // Return default data if something goes wrong
-      return RealCycleData(
-        predictions: await _calculationEngine.calculatePredictions(
-          referenceDate: DateTime.now(),
-          monthsOfHistory: 0, // This will return default predictions
-        ),
-        recentCycles: [],
-        currentCycle: null,
-        recentTrackingData: [],
-        lastUpdated: DateTime.now(),
-      );
+    } catch (_) {
+      rethrow;
     }
   }
 
@@ -78,6 +70,7 @@ class RealCycleService {
     List<String>? symptoms,
     String? notes,
   }) async {
+    final activeUserId = await ActiveAccountScope.instance.requireUserId();
     // End current cycle if exists
     final current = await _database.getCurrentCycle();
     if (current != null && current.endDate == null) {
@@ -90,7 +83,7 @@ class RealCycleService {
     // Create new cycle
     final newCycle = CycleData(
       id: 'cycle_${DateTime.now().millisecondsSinceEpoch}',
-      userId: 'unknown', // TODO: Get from auth service
+      userId: activeUserId,
       startDate: startDate,
       endDate: null,
       cycleLength: 28, // Will be updated when cycle ends

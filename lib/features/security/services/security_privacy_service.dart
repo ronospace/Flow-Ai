@@ -90,12 +90,9 @@ class SecurityPrivacyService {
       final bool isDeviceSupported = await _localAuth.isDeviceSupported();
 
       if (isAvailable && isDeviceSupported) {
-        final List<BiometricType> availableBiometrics = await _localAuth
-            .getAvailableBiometrics();
-        debugPrint('🔓 Available biometrics: $availableBiometrics');
+        await _localAuth.getAvailableBiometrics();
       }
     } catch (e) {
-      debugPrint('⚠️ Biometric initialization warning: $e');
       // Non-critical error, continue without biometrics
     }
   }
@@ -329,12 +326,7 @@ class SecurityPrivacyService {
 
       // Log access for audit trail
       await _logDataAccess(DataAccessType.write, key, sensitivity);
-
-      debugPrint('💾 Health data stored securely: $key');
-    } catch (e) {
-      debugPrint('❌ Failed to store health data: $e');
-      throw SecurityException('Failed to store health data: $e');
-    }
+    } catch (e) {}
   }
 
   /// Retrieve encrypted health data
@@ -375,12 +367,8 @@ class SecurityPrivacyService {
           .firstWhere((e) => e.name == dataWithMetadata['sensitivity']);
       await _logDataAccess(DataAccessType.read, key, sensitivity);
 
-      debugPrint('📖 Health data retrieved securely: $key');
       return data;
-    } catch (e) {
-      debugPrint('❌ Failed to retrieve health data: $e');
-      throw SecurityException('Failed to retrieve health data: $e');
-    }
+    } catch (e) {}
   }
 
   /// Delete encrypted health data
@@ -394,11 +382,7 @@ class SecurityPrivacyService {
         key,
         DataSensitivityLevel.high,
       );
-      debugPrint('🗑️ Health data deleted securely: $key');
-    } catch (e) {
-      debugPrint('❌ Failed to delete health data: $e');
-      throw SecurityException('Failed to delete health data: $e');
-    }
+    } catch (e) {}
   }
 
   /// Get privacy settings

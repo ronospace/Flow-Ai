@@ -6,6 +6,8 @@ import 'package:path/path.dart';
 
 import '../screens/enhanced_daily_feelings_tracker.dart';
 
+import '../../../core/identity/active_account_scope.dart';
+
 /// Database service for feelings tracking with local SQLite storage
 class FeelingsDatabaseService {
   static FeelingsDatabaseService? _instance;
@@ -125,7 +127,18 @@ class FeelingsDatabaseService {
   }
 
   /// Save a feelings entry
+  Future<String> _requireActiveAccountId([String? claimedUserId]) async {
+    final activeUserId = await ActiveAccountScope.instance.requireUserId();
+    if (claimedUserId != null && claimedUserId.trim() != activeUserId) {
+      throw StateError(
+        'Persisted private data ownership does not match the active account.',
+      );
+    }
+    return activeUserId;
+  }
+
   Future<void> saveEntry(DailyFeelingsEntry entry) async {
+    final activeUserId = await _requireActiveAccountId();
     if (!_isInitialized || _database == null) {
       throw DatabaseException('Database not initialized');
     }
@@ -135,7 +148,7 @@ class FeelingsDatabaseService {
 
       await _database!.insert(_entriesTable, {
         'id': entry.id,
-        'user_id': 'current_user', // TODO: Get actual user ID
+        'user_id': activeUserId,
         'date': entry.date.toIso8601String().split('T')[0], // Date only
         'mood_scores': jsonEncode(
           entry.moodScores.map((k, v) => MapEntry(k.name, v)),
@@ -162,6 +175,7 @@ class FeelingsDatabaseService {
 
   /// Get entry for a specific date
   Future<DailyFeelingsEntry?> getEntryForDate(DateTime date) async {
+    final activeUserId = await _requireActiveAccountId();
     if (!_isInitialized || _database == null) {
       throw DatabaseException('Database not initialized');
     }
@@ -172,7 +186,7 @@ class FeelingsDatabaseService {
       final results = await _database!.query(
         _entriesTable,
         where: 'user_id = ? AND date = ?',
-        whereArgs: ['current_user', dateString],
+        whereArgs: [activeUserId, dateString],
         limit: 1,
       );
 
@@ -191,6 +205,7 @@ class FeelingsDatabaseService {
     required DateTime endDate,
     String? userId,
   }) async {
+    final activeUserId = await _requireActiveAccountId(userId);
     if (!_isInitialized || _database == null) {
       throw DatabaseException('Database not initialized');
     }
@@ -198,12 +213,10 @@ class FeelingsDatabaseService {
     try {
       final startDateString = startDate.toIso8601String().split('T')[0];
       final endDateString = endDate.toIso8601String().split('T')[0];
-      final user = userId ?? 'current_user';
-
       final results = await _database!.query(
         _entriesTable,
         where: 'user_id = ? AND date >= ? AND date <= ?',
-        whereArgs: [user, startDateString, endDateString],
+        whereArgs: [activeUserId, startDateString, endDateString],
         orderBy: 'date ASC',
       );
 
@@ -219,17 +232,16 @@ class FeelingsDatabaseService {
     int limit = 30,
     String? userId,
   }) async {
+    final activeUserId = await _requireActiveAccountId(userId);
     if (!_isInitialized || _database == null) {
       throw DatabaseException('Database not initialized');
     }
 
     try {
-      final user = userId ?? 'current_user';
-
       final results = await _database!.query(
         _entriesTable,
         where: 'user_id = ?',
-        whereArgs: [user],
+        whereArgs: [activeUserId],
         orderBy: 'date DESC',
         limit: limit,
       );
@@ -243,6 +255,7 @@ class FeelingsDatabaseService {
 
   /// Delete an entry
   Future<bool> deleteEntry(String entryId) async {
+    final activeUserId = await _requireActiveAccountId();
     if (!_isInitialized || _database == null) {
       throw DatabaseException('Database not initialized');
     }
@@ -250,8 +263,8 @@ class FeelingsDatabaseService {
     try {
       final result = await _database!.delete(
         _entriesTable,
-        where: 'id = ?',
-        whereArgs: [entryId],
+        where: 'id = ? AND user_id = ?',
+        whereArgs: [entryId, activeUserId],
       );
 
       return result > 0;
@@ -263,16 +276,15 @@ class FeelingsDatabaseService {
 
   /// Get entry count for user
   Future<int> getEntryCount({String? userId}) async {
+    final activeUserId = await _requireActiveAccountId(userId);
     if (!_isInitialized || _database == null) {
       throw DatabaseException('Database not initialized');
     }
 
     try {
-      final user = userId ?? 'current_user';
-
       final result = await _database!.rawQuery(
         'SELECT COUNT(*) as count FROM $_entriesTable WHERE user_id = ?',
-        [user],
+        [activeUserId],
       );
 
       return result.first['count'] as int;
@@ -284,6 +296,7 @@ class FeelingsDatabaseService {
 
   /// Save trend analysis
   Future<void> saveTrend(TrendAnalysis trend) async {
+    final activeUserId = await _requireActiveAccountId();
     if (!_isInitialized || _database == null) {
       throw DatabaseException('Database not initialized');
     }
@@ -291,7 +304,7 @@ class FeelingsDatabaseService {
     try {
       await _database!.insert(_trendsTable, {
         'id': trend.id,
-        'user_id': 'current_user',
+        'user_id': activeUserId,
         'trend_type': trend.type,
         'description': trend.description,
         'direction': trend.direction.name,
@@ -312,17 +325,16 @@ class FeelingsDatabaseService {
     int limit = 10,
     String? userId,
   }) async {
+    final activeUserId = await _requireActiveAccountId(userId);
     if (!_isInitialized || _database == null) {
       throw DatabaseException('Database not initialized');
     }
 
     try {
-      final user = userId ?? 'current_user';
-
       final results = await _database!.query(
         _trendsTable,
         where: 'user_id = ?',
-        whereArgs: [user],
+        whereArgs: [activeUserId],
         orderBy: 'created_at DESC',
         limit: limit,
       );
@@ -336,6 +348,7 @@ class FeelingsDatabaseService {
 
   /// Save insight
   Future<void> saveInsight(FeelingsInsight insight) async {
+    final activeUserId = await _requireActiveAccountId();
     if (!_isInitialized || _database == null) {
       throw DatabaseException('Database not initialized');
     }
@@ -343,7 +356,7 @@ class FeelingsDatabaseService {
     try {
       await _database!.insert(_insightsTable, {
         'id': insight.id,
-        'user_id': 'current_user',
+        'user_id': activeUserId,
         'insight_type': insight.type,
         'title': insight.title,
         'description': insight.description,
@@ -366,18 +379,18 @@ class FeelingsDatabaseService {
     int limit = 20,
     String? userId,
   }) async {
+    final activeUserId = await _requireActiveAccountId(userId);
     if (!_isInitialized || _database == null) {
       throw DatabaseException('Database not initialized');
     }
 
     try {
-      final user = userId ?? 'current_user';
       final now = DateTime.now().toIso8601String();
 
       final results = await _database!.query(
         _insightsTable,
         where: 'user_id = ? AND (expires_at IS NULL OR expires_at > ?)',
-        whereArgs: [user, now],
+        whereArgs: [activeUserId, now],
         orderBy: 'priority DESC, generated_at DESC',
         limit: limit,
       );
@@ -391,6 +404,7 @@ class FeelingsDatabaseService {
 
   /// Clean up expired insights
   Future<void> cleanupExpiredInsights() async {
+    final activeUserId = await _requireActiveAccountId();
     if (!_isInitialized || _database == null) {
       throw DatabaseException('Database not initialized');
     }
@@ -400,8 +414,8 @@ class FeelingsDatabaseService {
 
       await _database!.delete(
         _insightsTable,
-        where: 'expires_at IS NOT NULL AND expires_at < ?',
-        whereArgs: [now],
+        where: 'user_id = ? AND expires_at IS NOT NULL AND expires_at < ?',
+        whereArgs: [activeUserId, now],
       );
     } catch (e) {
       debugPrint('❌ Failed to cleanup expired insights: $e');
@@ -410,6 +424,7 @@ class FeelingsDatabaseService {
 
   /// Get database statistics
   Future<Map<String, dynamic>> getDatabaseStats() async {
+    final activeUserId = await _requireActiveAccountId();
     if (!_isInitialized || _database == null) {
       throw DatabaseException('Database not initialized');
     }
@@ -417,27 +432,27 @@ class FeelingsDatabaseService {
     try {
       final entriesCount = await _database!.rawQuery(
         'SELECT COUNT(*) as count FROM $_entriesTable WHERE user_id = ?',
-        ['current_user'],
+        [activeUserId],
       );
 
       final trendsCount = await _database!.rawQuery(
         'SELECT COUNT(*) as count FROM $_trendsTable WHERE user_id = ?',
-        ['current_user'],
+        [activeUserId],
       );
 
       final insightsCount = await _database!.rawQuery(
         'SELECT COUNT(*) as count FROM $_insightsTable WHERE user_id = ?',
-        ['current_user'],
+        [activeUserId],
       );
 
       final firstEntry = await _database!.rawQuery(
         'SELECT MIN(date) as first_date FROM $_entriesTable WHERE user_id = ?',
-        ['current_user'],
+        [activeUserId],
       );
 
       final lastEntry = await _database!.rawQuery(
         'SELECT MAX(date) as last_date FROM $_entriesTable WHERE user_id = ?',
-        ['current_user'],
+        [activeUserId],
       );
 
       return {
@@ -552,37 +567,36 @@ class FeelingsDatabaseService {
 
   /// Export data as JSON
   Future<Map<String, dynamic>> exportData({String? userId}) async {
+    final activeUserId = await _requireActiveAccountId(userId);
     if (!_isInitialized || _database == null) {
       throw DatabaseException('Database not initialized');
     }
 
     try {
-      final user = userId ?? 'current_user';
-
       final entries = await _database!.query(
         _entriesTable,
         where: 'user_id = ?',
-        whereArgs: [user],
+        whereArgs: [activeUserId],
         orderBy: 'date ASC',
       );
 
       final trends = await _database!.query(
         _trendsTable,
         where: 'user_id = ?',
-        whereArgs: [user],
+        whereArgs: [activeUserId],
         orderBy: 'created_at ASC',
       );
 
       final insights = await _database!.query(
         _insightsTable,
         where: 'user_id = ?',
-        whereArgs: [user],
+        whereArgs: [activeUserId],
         orderBy: 'generated_at ASC',
       );
 
       return {
         'export_date': DateTime.now().toIso8601String(),
-        'user_id': user,
+        'user_id': activeUserId,
         'entries': entries,
         'trends': trends,
         'insights': insights,

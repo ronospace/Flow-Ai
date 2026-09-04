@@ -331,7 +331,6 @@ class AdvancedHealthAnalytics {
         );
         healthData['biometrics'] = biometricSnapshot.toMap();
       } catch (e) {
-        debugPrint('Warning: Could not fetch biometric data: $e');
         healthData['biometrics'] = <String, dynamic>{};
       }
     }

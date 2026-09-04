@@ -1,8 +1,9 @@
 import 'dart:async';
-import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 
 import 'dart:math';
+
+import '../services/advanced_biometric_service.dart' as canonical_health;
 
 /// 🎯 Revolutionary Real-time Biometric Integration Engine
 /// Advanced data fusion with multiple wearable devices and sensors
@@ -16,12 +17,9 @@ class AdvancedBiometricEngine {
   bool _initialized = false;
   bool get isInitialized => _initialized;
 
-  // Data source integrations
-  late HealthKitIntegration _healthKit;
-  late FitbitIntegration _fitbit;
-  late OuraIntegration _oura;
-  late ContinuousGlucoseMonitor _cgm;
-  late SmartThermometer _thermometer;
+  // Single production source of truth for health observations.
+  final canonical_health.AdvancedBiometricService _healthProvider =
+      canonical_health.AdvancedBiometricService.instance;
 
   // Real-time data streams
   final StreamController<BiometricReading> _biometricStream =
@@ -61,21 +59,7 @@ class AdvancedBiometricEngine {
   }
 
   Future<void> _initializeIntegrations() async {
-    debugPrint('🔧 Initializing biometric integrations...');
-
-    _healthKit = HealthKitIntegration();
-    _fitbit = FitbitIntegration();
-    _oura = OuraIntegration();
-    _cgm = ContinuousGlucoseMonitor();
-    _thermometer = SmartThermometer();
-
-    await Future.wait([
-      _healthKit.initialize(),
-      _fitbit.initialize(),
-      _oura.initialize(),
-      _cgm.initialize(),
-      _thermometer.initialize(),
-    ]);
+    await _healthProvider.initialize();
   }
 
   Future<void> _initializeProcessingEngines() async {
@@ -101,12 +85,42 @@ class AdvancedBiometricEngine {
   }
 
   Future<void> _setupRealtimeMonitoring() async {
-    // Listen to all data sources
-    _healthKit.dataStream.listen(_onBiometricData);
-    _fitbit.dataStream.listen(_onBiometricData);
-    _oura.dataStream.listen(_onBiometricData);
-    _cgm.dataStream.listen(_onBiometricData);
-    _thermometer.dataStream.listen(_onBiometricData);
+    await _refreshCanonicalHealthData();
+  }
+
+  Future<void> _refreshCanonicalHealthData() async {
+    final snapshot = await _healthProvider.getCurrentBiometricSnapshot();
+
+    void emit(String type, num? rawValue) {
+      if (rawValue == null) return;
+
+      final value = rawValue.toDouble();
+      if (!value.isFinite) return;
+
+      _onBiometricData(
+        BiometricReading(
+          source: 'Health',
+          type: type,
+          value: value,
+          timestamp: snapshot.timestamp,
+        ),
+      );
+    }
+
+    emit('heart_rate', snapshot.heartRate);
+    emit('resting_heart_rate', snapshot.restingHeartRate);
+    emit('hrv', snapshot.heartRateVariability);
+    emit('temperature', snapshot.bodyTemperature);
+    emit('basal_body_temperature', snapshot.basalBodyTemperature);
+    emit('sleep', snapshot.sleepHours);
+    emit('sleep_hours', snapshot.sleepHours);
+    emit('steps', snapshot.steps);
+    emit('activity', snapshot.activeEnergy);
+    emit('active_energy', snapshot.activeEnergy);
+    emit('blood_oxygen', snapshot.bloodOxygen);
+    emit('respiratory_rate', snapshot.respiratoryRate);
+
+    // No glucose is emitted without a verified production source.
   }
 
   void _onBiometricData(BiometricReading reading) {
@@ -127,13 +141,12 @@ class AdvancedBiometricEngine {
   }
 
   Future<void> _processBackgroundData() async {
-    // Fusion processing
+    await _refreshCanonicalHealthData();
+
     final fusedData = await _fusionEngine.processLatestData(_realtimeCache);
 
-    // Trend analysis
     final trends = await _trendAnalyzer.analyzeTrends(fusedData);
 
-    // Update cache with processed insights
     _realtimeCache['fused_insights'] = fusedData;
     _realtimeCache['trends'] = trends;
   }
@@ -147,29 +160,40 @@ class AdvancedBiometricEngine {
   Future<BiometricSnapshot> getBiometricSnapshot(String userId) async {
     if (!_initialized) await initialize();
 
-    debugPrint('📊 Generating comprehensive biometric snapshot...');
+    final canonicalSnapshot = await _healthProvider
+        .getCurrentBiometricSnapshot();
 
-    // Collect latest data from all sources
-    final healthKitData = await _healthKit.getLatestData();
-    final fitbitData = await _fitbit.getLatestData();
-    final ouraData = await _oura.getLatestData();
-    final cgmData = await _cgm.getLatestData();
-    final temperatureData = await _thermometer.getLatestData();
+    final fusedData = <String, dynamic>{};
 
-    // Fuse data into comprehensive reading
-    final fusedData = await _fusionEngine.fuseMultiSourceData([
-      healthKitData,
-      fitbitData,
-      ouraData,
-      cgmData,
-      temperatureData,
-    ]);
+    void addRealValue(String key, num? rawValue) {
+      if (rawValue == null) return;
 
-    // Generate insights
+      final value = rawValue.toDouble();
+      if (!value.isFinite) return;
+
+      fusedData[key] = value;
+    }
+
+    addRealValue('heart_rate', canonicalSnapshot.heartRate);
+    addRealValue('resting_heart_rate', canonicalSnapshot.restingHeartRate);
+    addRealValue('hrv', canonicalSnapshot.heartRateVariability);
+    addRealValue('temperature', canonicalSnapshot.bodyTemperature);
+    addRealValue(
+      'basal_body_temperature',
+      canonicalSnapshot.basalBodyTemperature,
+    );
+    addRealValue('sleep', canonicalSnapshot.sleepHours);
+    addRealValue('sleep_hours', canonicalSnapshot.sleepHours);
+    addRealValue('steps', canonicalSnapshot.steps);
+    addRealValue('activity', canonicalSnapshot.activeEnergy);
+    addRealValue('active_energy', canonicalSnapshot.activeEnergy);
+    addRealValue('blood_oxygen', canonicalSnapshot.bloodOxygen);
+    addRealValue('respiratory_rate', canonicalSnapshot.respiratoryRate);
+
     final insights = await _generateBiometricInsights(fusedData);
 
     return BiometricSnapshot(
-      timestamp: DateTime.now(),
+      timestamp: canonicalSnapshot.timestamp,
       fusedData: fusedData,
       insights: insights,
       confidence: _calculateConfidence(fusedData),
@@ -196,45 +220,40 @@ class AdvancedBiometricEngine {
   ) async {
     final insights = <String, dynamic>{};
 
-    // Heart Rate Variability Analysis
-    if (fusedData.containsKey('hrv')) {
-      insights['hrv_analysis'] = _analyzeHRV(fusedData['hrv']);
+    final hrv = fusedData['hrv'];
+    if (hrv is num && hrv.toDouble().isFinite) {
+      insights['hrv_analysis'] = _analyzeHRV(hrv);
     }
 
-    // Temperature Pattern Analysis
-    if (fusedData.containsKey('temperature')) {
-      insights['temperature_analysis'] = _analyzeTemperature(
-        fusedData['temperature'],
-      );
+    final temperature = fusedData['temperature'];
+    if (temperature is num && temperature.toDouble().isFinite) {
+      insights['temperature_analysis'] = _analyzeTemperature(temperature);
     }
 
-    // Glucose Pattern Analysis
-    if (fusedData.containsKey('glucose')) {
-      insights['glucose_analysis'] = _analyzeGlucose(fusedData['glucose']);
+    final sleep = fusedData['sleep'];
+    if (sleep is num && sleep.toDouble().isFinite) {
+      insights['sleep_analysis'] = _analyzeSleep(sleep);
     }
 
-    // Sleep Quality Analysis
-    if (fusedData.containsKey('sleep')) {
-      insights['sleep_analysis'] = _analyzeSleep(fusedData['sleep']);
-    }
-
-    // Activity Analysis
-    if (fusedData.containsKey('activity')) {
-      insights['activity_analysis'] = _analyzeActivity(fusedData['activity']);
+    final activity = fusedData['activity'];
+    if (activity is num && activity.toDouble().isFinite) {
+      insights['activity_analysis'] = _analyzeActivity(activity);
     }
 
     return insights;
   }
 
-  Map<String, dynamic> _analyzeHRV(dynamic hrvData) {
-    final hrv = (hrvData as num?)?.toDouble() ?? 40.0;
+  Map<String, dynamic> _analyzeHRV(dynamic data) {
+    if (data is! num) return <String, dynamic>{};
 
-    return {
-      'value': hrv,
-      'status': _getHRVStatus(hrv),
-      'trend': _calculateHRVTrend(),
-      'recommendations': _getHRVRecommendations(hrv),
-      'cycle_impact': _assessHRVCycleImpact(hrv),
+    final value = data.toDouble();
+    if (!value.isFinite) return <String, dynamic>{};
+
+    return <String, dynamic>{
+      'value': value,
+      'status': _getHRVStatus(value),
+      'recommendations': _getHRVRecommendations(value),
+      'cycle_impact': _assessHRVCycleImpact(value),
     };
   }
 
@@ -244,11 +263,6 @@ class AdvancedBiometricEngine {
     if (hrv >= 40) return 'Good';
     if (hrv >= 30) return 'Fair';
     return 'Needs Attention';
-  }
-
-  String _calculateHRVTrend() {
-    // Simplified trend calculation
-    return ['Improving', 'Stable', 'Declining'][math.Random().nextInt(3)];
   }
 
   List<String> _getHRVRecommendations(double hrv) {
@@ -276,34 +290,19 @@ class AdvancedBiometricEngine {
     };
   }
 
-  Map<String, dynamic> _analyzeTemperature(dynamic tempData) {
-    final temp = (tempData as num?)?.toDouble() ?? 36.5;
+  Map<String, dynamic> _analyzeTemperature(dynamic data) {
+    if (data is! num) return <String, dynamic>{};
 
-    return {
-      'value': temp,
-      'phase_indication': _getTemperaturePhaseIndication(temp),
-      'ovulation_signal': _assessOvulationSignal(temp),
-      'trend': _calculateTemperatureTrend(),
-      'recommendations': _getTemperatureRecommendations(temp),
-    };
+    final value = data.toDouble();
+    if (!value.isFinite) return <String, dynamic>{};
+
+    return <String, dynamic>{'value': value};
   }
 
   String _getTemperaturePhaseIndication(double temp) {
     if (temp >= 37.0) return 'Likely post-ovulation (luteal phase)';
     if (temp >= 36.7) return 'Possible ovulation transition';
     return 'Pre-ovulation (follicular phase)';
-  }
-
-  Map<String, dynamic> _assessOvulationSignal(double temp) {
-    return {
-      'ovulation_probability': temp >= 36.8 ? 0.8 : 0.3,
-      'thermal_shift_detected': temp >= 36.9,
-      'timing_confidence': temp >= 37.0 ? 'High' : 'Moderate',
-    };
-  }
-
-  String _calculateTemperatureTrend() {
-    return ['Rising', 'Stable', 'Falling'][math.Random().nextInt(3)];
   }
 
   List<String> _getTemperatureRecommendations(double temp) {
@@ -314,89 +313,44 @@ class AdvancedBiometricEngine {
     ];
   }
 
-  Map<String, dynamic> _analyzeGlucose(dynamic glucoseData) {
-    final glucose = (glucoseData as num?)?.toDouble() ?? 95.0;
+  Map<String, dynamic> _analyzeSleep(dynamic data) {
+    if (data is! num) return <String, dynamic>{};
 
-    return {
-      'current_level': glucose,
-      'status': _getGlucoseStatus(glucose),
-      'variability': _assessGlucoseVariability(),
-      'cycle_correlation': _assessGlucoseCycleCorrelation(glucose),
-      'recommendations': _getGlucoseRecommendations(glucose),
-    };
+    final value = data.toDouble();
+    if (!value.isFinite) return <String, dynamic>{};
+
+    return <String, dynamic>{'sleep_hours': value};
   }
 
-  String _getGlucoseStatus(double glucose) {
-    if (glucose < 70) return 'Low';
-    if (glucose <= 99) return 'Normal';
-    if (glucose <= 125) return 'Elevated';
-    return 'High';
-  }
+  Map<String, dynamic> _analyzeActivity(dynamic data) {
+    if (data is! num) return <String, dynamic>{};
 
-  Map<String, dynamic> _assessGlucoseVariability() {
-    return {
-      'coefficient_of_variation': 15.0, // Example value
-      'time_in_range': 0.85,
-      'stability': 'Good',
-    };
-  }
+    final value = data.toDouble();
+    if (!value.isFinite) return <String, dynamic>{};
 
-  Map<String, dynamic> _assessGlucoseCycleCorrelation(double glucose) {
-    return {
-      'insulin_sensitivity_phase': 'Follicular phase optimal',
-      'hormonal_impact': 'Moderate',
-      'pms_correlation': glucose > 100 ? 'Possible' : 'Unlikely',
-    };
-  }
-
-  List<String> _getGlucoseRecommendations(double glucose) {
-    if (glucose > 125) {
-      return [
-        'Consider meal timing adjustments',
-        'Monitor carbohydrate intake',
-        'Consult healthcare provider',
-      ];
-    }
-    return ['Maintain balanced meals', 'Continue monitoring patterns'];
-  }
-
-  Map<String, dynamic> _analyzeSleep(dynamic sleepData) {
-    return {
-      'quality_score': 0.82,
-      'efficiency': 0.87,
-      'deep_sleep_percentage': 0.18,
-      'rem_percentage': 0.23,
-      'cycle_optimization': 'Good alignment with circadian rhythm',
-      'recommendations': [
-        'Maintain consistent bedtime',
-        'Optimize sleep environment',
-      ],
-    };
-  }
-
-  Map<String, dynamic> _analyzeActivity(dynamic activityData) {
-    return {
-      'daily_steps': 8500,
-      'active_minutes': 45,
-      'intensity_distribution': {
-        'light': 0.6,
-        'moderate': 0.3,
-        'vigorous': 0.1,
-      },
-      'recovery_status': 'Well recovered',
-      'recommendations': [
-        'Continue current activity level',
-        'Consider adding strength training',
-      ],
-    };
+    return <String, dynamic>{'active_energy': value};
   }
 
   double _calculateConfidence(Map<String, dynamic> fusedData) {
-    // Calculate confidence based on data completeness and quality
-    final completeness =
-        fusedData.keys.length / 6.0; // Expected 6 main data types
-    final recency = 0.9; // Assume recent data
-    return (completeness * 0.7 + recency * 0.3).clamp(0.0, 1.0);
+    const canonicalKeys = <String>{
+      'heart_rate',
+      'resting_heart_rate',
+      'hrv',
+      'temperature',
+      'basal_body_temperature',
+      'sleep_hours',
+      'steps',
+      'active_energy',
+      'blood_oxygen',
+      'respiratory_rate',
+    };
+
+    final available = canonicalKeys.where((key) {
+      final value = fusedData[key];
+      return value is num && value.toDouble().isFinite;
+    }).length;
+
+    return (available / canonicalKeys.length).clamp(0.0, 1.0).toDouble();
   }
 
   Map<String, dynamic> _getPhaseOptimalRanges(String phase) {
@@ -526,109 +480,6 @@ class AdvancedBiometricEngine {
 }
 
 // Integration classes for different devices/platforms
-class HealthKitIntegration {
-  final StreamController<BiometricReading> _controller =
-      StreamController.broadcast();
-  Stream<BiometricReading> get dataStream => _controller.stream;
-
-  Future<void> initialize() async {
-    debugPrint('🍎 Initializing HealthKit integration...');
-    // Simulate real-time data
-    Timer.periodic(const Duration(minutes: 1), (_) {
-      _controller.add(
-        BiometricReading(
-          source: 'HealthKit',
-          type: 'heart_rate',
-          value: 70 + math.Random().nextDouble() * 20,
-          timestamp: DateTime.now(),
-        ),
-      );
-    });
-  }
-
-  Future<Map<String, dynamic>> getLatestData() async {
-    return {
-      'heart_rate': 75.0,
-      'steps': 8500,
-      'calories': 2100,
-      'active_minutes': 45,
-    };
-  }
-}
-
-class FitbitIntegration {
-  final StreamController<BiometricReading> _controller =
-      StreamController.broadcast();
-  Stream<BiometricReading> get dataStream => _controller.stream;
-
-  Future<void> initialize() async {
-    debugPrint('⌚ Initializing Fitbit integration...');
-  }
-
-  Future<Map<String, dynamic>> getLatestData() async {
-    return {'sleep_score': 82, 'stress_level': 0.3, 'hrv': 45.0};
-  }
-}
-
-class OuraIntegration {
-  final StreamController<BiometricReading> _controller =
-      StreamController.broadcast();
-  Stream<BiometricReading> get dataStream => _controller.stream;
-
-  Future<void> initialize() async {
-    debugPrint('💍 Initializing Oura Ring integration...');
-  }
-
-  Future<Map<String, dynamic>> getLatestData() async {
-    return {
-      'readiness_score': 85,
-      'sleep_efficiency': 0.87,
-      'body_temperature_delta': 0.2,
-    };
-  }
-}
-
-class ContinuousGlucoseMonitor {
-  final StreamController<BiometricReading> _controller =
-      StreamController.broadcast();
-  Stream<BiometricReading> get dataStream => _controller.stream;
-
-  Future<void> initialize() async {
-    debugPrint('🩸 Initializing Continuous Glucose Monitor...');
-    // Simulate glucose readings every 5 minutes
-    Timer.periodic(const Duration(minutes: 5), (_) {
-      _controller.add(
-        BiometricReading(
-          source: 'CGM',
-          type: 'glucose',
-          value: 90 + math.Random().nextDouble() * 30,
-          timestamp: DateTime.now(),
-        ),
-      );
-    });
-  }
-
-  Future<Map<String, dynamic>> getLatestData() async {
-    return {'glucose': 95.0, 'trend': 'stable', 'variability': 12.0};
-  }
-}
-
-class SmartThermometer {
-  final StreamController<BiometricReading> _controller =
-      StreamController.broadcast();
-  Stream<BiometricReading> get dataStream => _controller.stream;
-
-  Future<void> initialize() async {
-    debugPrint('🌡️ Initializing Smart Thermometer...');
-  }
-
-  Future<Map<String, dynamic>> getLatestData() async {
-    return {
-      'temperature': 36.5 + math.Random().nextDouble() * 0.8,
-      'measurement_time': DateTime.now(),
-    };
-  }
-}
 
 // Data processing engines
 class DataFusionEngine {
@@ -835,18 +686,4 @@ extension BiometricSnapshotX on BiometricSnapshot {
       fusedData['steps'] != null;
 
   /// Convenience: demo/test snapshot.
-  static BiometricSnapshot mock({DateTime? timestamp, int? seed}) {
-    // keep seed for determinism if needed later
-    // ignore: unused_local_variable
-    final rnd = Random(seed ?? DateTime.now().millisecondsSinceEpoch);
-
-    return BiometricSnapshot(
-      timestamp: timestamp ?? DateTime.now(),
-      fusedData: const {},
-      insights: const {},
-      confidence: 0.0,
-      trends: const {},
-      anomalies: const [],
-    );
-  }
 }

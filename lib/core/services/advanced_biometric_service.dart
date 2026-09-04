@@ -79,6 +79,20 @@ class BiometricSnapshot {
 
 /// Advanced Biometric Integration Service
 /// Integrates with Apple HealthKit on iOS and Health Connect on Android for comprehensive health data
+class BiometricHistoryPoint {
+  final DateTime timestamp;
+  final double value;
+
+  const BiometricHistoryPoint({required this.timestamp, required this.value});
+}
+
+class _HealthInterval {
+  final DateTime start;
+  final DateTime end;
+
+  const _HealthInterval({required this.start, required this.end});
+}
+
 class AdvancedBiometricService {
   static final AdvancedBiometricService _instance =
       AdvancedBiometricService._internal();
@@ -598,6 +612,166 @@ class AdvancedBiometricService {
   }
 
   /// Get biometric snapshot for current moment
+  Future<List<BiometricHistoryPoint>> getHistoricalSleepHours({
+    required DateTime start,
+    required DateTime end,
+  }) async {
+    if (!start.isBefore(end)) {
+      return const <BiometricHistoryPoint>[];
+    }
+
+    if (!_isInitialized) {
+      await initialize();
+    }
+
+    if (!_isInitialized || _health == null) {
+      return const <BiometricHistoryPoint>[];
+    }
+
+    try {
+      final healthData = await _health!.getHealthDataFromTypes(
+        types: const <HealthDataType>[HealthDataType.SLEEP_ASLEEP],
+        startTime: start,
+        endTime: end,
+      );
+
+      final nightlyIntervals = <DateTime, List<_HealthInterval>>{};
+
+      for (final point in healthData) {
+        if (point.type != HealthDataType.SLEEP_ASLEEP) {
+          continue;
+        }
+
+        var intervalStart = point.dateFrom;
+        var intervalEnd = point.dateTo;
+
+        if (!intervalEnd.isAfter(intervalStart)) {
+          continue;
+        }
+
+        if (intervalStart.isBefore(start)) {
+          intervalStart = start;
+        }
+
+        if (intervalEnd.isAfter(end)) {
+          intervalEnd = end;
+        }
+
+        if (!intervalEnd.isAfter(intervalStart)) {
+          continue;
+        }
+
+        final wakeDate = DateTime(
+          intervalEnd.year,
+          intervalEnd.month,
+          intervalEnd.day,
+        );
+
+        nightlyIntervals
+            .putIfAbsent(wakeDate, () => <_HealthInterval>[])
+            .add(_HealthInterval(start: intervalStart, end: intervalEnd));
+      }
+
+      final result = <BiometricHistoryPoint>[];
+
+      for (final entry in nightlyIntervals.entries) {
+        final intervals = entry.value
+          ..sort((a, b) => a.start.compareTo(b.start));
+
+        if (intervals.isEmpty) {
+          continue;
+        }
+
+        var mergedStart = intervals.first.start;
+
+        var mergedEnd = intervals.first.end;
+
+        var totalSeconds = 0;
+
+        for (final interval in intervals.skip(1)) {
+          if (!interval.start.isAfter(mergedEnd)) {
+            if (interval.end.isAfter(mergedEnd)) {
+              mergedEnd = interval.end;
+            }
+            continue;
+          }
+
+          totalSeconds += mergedEnd.difference(mergedStart).inSeconds;
+
+          mergedStart = interval.start;
+          mergedEnd = interval.end;
+        }
+
+        totalSeconds += mergedEnd.difference(mergedStart).inSeconds;
+
+        final hours = totalSeconds / 3600.0;
+
+        if (hours.isFinite && hours > 0) {
+          result.add(BiometricHistoryPoint(timestamp: entry.key, value: hours));
+        }
+      }
+
+      result.sort((a, b) => a.timestamp.compareTo(b.timestamp));
+
+      return result;
+    } catch (_) {
+      return const <BiometricHistoryPoint>[];
+    }
+  }
+
+  Future<List<BiometricHistoryPoint>> getHistoricalDailySteps({
+    required DateTime start,
+    required DateTime end,
+  }) async {
+    if (!start.isBefore(end)) {
+      return const <BiometricHistoryPoint>[];
+    }
+
+    if (!_isInitialized) {
+      await initialize();
+    }
+
+    if (!_isInitialized || _health == null) {
+      return const <BiometricHistoryPoint>[];
+    }
+
+    final result = <BiometricHistoryPoint>[];
+
+    var day = DateTime(start.year, start.month, start.day);
+
+    while (day.isBefore(end)) {
+      final nextDay = DateTime(day.year, day.month, day.day + 1);
+
+      final queryStart = day.isBefore(start) ? start : day;
+
+      final queryEnd = nextDay.isAfter(end) ? end : nextDay;
+
+      if (queryStart.isBefore(queryEnd)) {
+        try {
+          final totalSteps = await _health!.getTotalStepsInInterval(
+            queryStart,
+            queryEnd,
+          );
+
+          if (totalSteps != null && totalSteps >= 0) {
+            result.add(
+              BiometricHistoryPoint(
+                timestamp: day,
+                value: totalSteps.toDouble(),
+              ),
+            );
+          }
+        } catch (_) {
+          // Fail closed for this day.
+        }
+      }
+
+      day = nextDay;
+    }
+
+    return result;
+  }
+
   Future<BiometricSnapshot> getCurrentBiometricSnapshot() async {
     try {
       final recentData = await getRecentBiometricData(

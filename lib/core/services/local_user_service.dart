@@ -314,7 +314,7 @@ class LocalUserService {
   /// Mark onboarding as completed for the current user
   Future<void> setOnboardingCompleted(bool completed) async {
     if (_prefs != null) {
-      await _prefs!.setBool('onboarding_completed', completed);
+      await _prefs!.setBool('onboarding_complete', completed);
       debugPrint('✅ Onboarding completion status set to $completed');
     }
   }
@@ -322,7 +322,7 @@ class LocalUserService {
   /// Check if current user has completed onboarding
   Future<bool> hasCompletedOnboarding() async {
     if (_prefs == null) return false;
-    return _prefs!.getBool('onboarding_completed') ?? false;
+    return _prefs!.getBool('onboarding_complete') ?? false;
   }
 
   /// Check if user exists by email

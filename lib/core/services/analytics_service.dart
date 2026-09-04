@@ -6,6 +6,8 @@ import '../database/database_service.dart';
 import 'cycle_calculation_engine.dart';
 import 'performance_optimizer.dart';
 
+import 'advanced_biometric_service.dart';
+
 class AnalyticsService {
   static final AnalyticsService _instance = AnalyticsService._internal();
   static AnalyticsService get instance => _instance;
@@ -98,7 +100,7 @@ class AnalyticsService {
 
           return _calculateCycleAnalytics(cycles, trackingData);
         } catch (e) {
-          debugPrint('Error getting cycle analytics: $e');
+          debugPrint('Error getting cycle analytics');
           return CycleAnalytics.empty();
         }
       },
@@ -250,6 +252,99 @@ class AnalyticsService {
     } catch (e) {
       debugPrint('Error getting trend analytics: $e');
       return TrendAnalytics.empty();
+    }
+  }
+
+  /// Canonical persisted/Health-backed history for analytics charts.
+  ///
+  /// Missing dates remain missing. Current snapshots are never synthesized
+  /// into historical points.
+  Future<List<cycle_data.CycleData>> getPersistedCycleHistory() async {
+    return _databaseService.getAllCycles();
+  }
+
+  Future<AnalyticsHistory> getAnalyticsHistory({
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
+    final resolvedEnd = endDate ?? DateTime.now();
+    final resolvedStart =
+        startDate ?? resolvedEnd.subtract(const Duration(days: 30));
+
+    if (!resolvedStart.isBefore(resolvedEnd)) {
+      return AnalyticsHistory.empty();
+    }
+
+    try {
+      final trackingRows = await _databaseService.getTrackingDataInRange(
+        resolvedStart,
+        resolvedEnd,
+      );
+
+      final mood = <DateTime, double>{};
+      final energy = <DateTime, double>{};
+
+      for (final row in trackingRows) {
+        final rawDate = row['date'];
+
+        final parsedDate = rawDate is DateTime
+            ? rawDate
+            : DateTime.tryParse(rawDate?.toString() ?? '');
+
+        if (parsedDate == null) continue;
+
+        final day = DateTime(parsedDate.year, parsedDate.month, parsedDate.day);
+
+        final moodValue = _asDouble(row['mood']);
+        if (moodValue != null) {
+          mood[day] = moodValue;
+        }
+
+        final energyValue = _asDouble(row['energy']);
+        if (energyValue != null) {
+          energy[day] = energyValue;
+        }
+      }
+
+      final sleepPoints = await AdvancedBiometricService.instance
+          .getHistoricalSleepHours(start: resolvedStart, end: resolvedEnd);
+
+      final sleepHours = <DateTime, double>{};
+
+      for (final point in sleepPoints) {
+        final day = DateTime(
+          point.timestamp.year,
+          point.timestamp.month,
+          point.timestamp.day,
+        );
+
+        sleepHours[day] = point.value;
+      }
+
+      final cycles = await _databaseService.getCyclesInRange(
+        resolvedStart,
+        resolvedEnd,
+      );
+
+      final completedCycleLengths = <double>[];
+      for (final cycle in cycles) {
+        final end = cycle.endDate;
+        if (end == null) continue;
+
+        final days = end.difference(cycle.startDate).inDays;
+        if (days > 0) {
+          completedCycleLengths.add(days.toDouble());
+        }
+      }
+
+      return AnalyticsHistory(
+        mood: mood,
+        energy: energy,
+        sleepHours: sleepHours,
+        cycleRegularity: completedCycleLengths,
+      );
+    } catch (_) {
+      return AnalyticsHistory.empty();
     }
   }
 
@@ -755,6 +850,36 @@ class AnalyticsService {
 }
 
 // Analytics Models
+
+class AnalyticsHistory {
+  final Map<DateTime, double> mood;
+  final Map<DateTime, double> energy;
+  final Map<DateTime, double> sleepHours;
+
+  /// Actual completed cycle lengths. Empty means insufficient history.
+  final List<double> cycleRegularity;
+
+  const AnalyticsHistory({
+    required this.mood,
+    required this.energy,
+    required this.sleepHours,
+    required this.cycleRegularity,
+  });
+
+  factory AnalyticsHistory.empty() => const AnalyticsHistory(
+    mood: <DateTime, double>{},
+    energy: <DateTime, double>{},
+    sleepHours: <DateTime, double>{},
+    cycleRegularity: <double>[],
+  );
+
+  bool get isEmpty =>
+      mood.isEmpty &&
+      energy.isEmpty &&
+      sleepHours.isEmpty &&
+      cycleRegularity.isEmpty;
+}
+
 class CycleAnalytics {
   final int totalCycles;
   final double averageCycleLength;

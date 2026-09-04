@@ -1090,9 +1090,7 @@ class _EnhancedDailyFeelingsTrackerState
               ),
               const SizedBox(height: 12),
               FutureBuilder<List<TrendInsight>>(
-                future: _analyticsService.getRecentTrends(
-                  userId: 'current_user',
-                ),
+                future: _analyticsService.getRecentTrends(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());

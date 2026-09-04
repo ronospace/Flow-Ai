@@ -95,9 +95,8 @@ class ReceiptValidationService {
 
     try {
       final response = await _postAuthenticated(uri, <String, dynamic>{
-        'receipt': purchaseToken,
+        'purchaseToken': purchaseToken,
         'productId': productId,
-        'platform': 'android',
         'packageName': packageName,
       });
 
@@ -245,16 +244,34 @@ class ReceiptValidationService {
       );
     }
 
+    final expirationDate = _parseDate(data['expirationDate']);
+    final transactionId = data['transactionId'] is String
+        ? (data['transactionId'] as String).trim()
+        : null;
+    final originalTransactionId = data['originalTransactionId'] is String
+        ? (data['originalTransactionId'] as String).trim()
+        : null;
+    final backendError = data['error'];
+
+    final responseGrantsEntitlement =
+        data['valid'] == true &&
+        expirationDate != null &&
+        expirationDate.isAfter(DateTime.now()) &&
+        transactionId != null &&
+        transactionId.isNotEmpty &&
+        originalTransactionId != null &&
+        originalTransactionId.isNotEmpty;
+
     return ReceiptValidationResult(
-      isValid: data['valid'] == true,
-      expirationDate: _parseDate(data['expirationDate']),
-      transactionId: data['transactionId'] is String
-          ? data['transactionId'] as String
-          : null,
-      originalTransactionId: data['originalTransactionId'] is String
-          ? data['originalTransactionId'] as String
-          : null,
-      errorMessage: data['error'] is String ? data['error'] as String : null,
+      isValid: responseGrantsEntitlement,
+      expirationDate: expirationDate,
+      transactionId: transactionId,
+      originalTransactionId: originalTransactionId,
+      errorMessage: responseGrantsEntitlement
+          ? null
+          : backendError is String && backendError.trim().isNotEmpty
+          ? backendError
+          : 'Receipt validation response was incomplete or expired',
     );
   }
 
@@ -300,12 +317,24 @@ class ReceiptValidationResult {
     this.errorMessage,
   });
 
-  bool get isExpired {
-    if (expirationDate == null) {
-      return false;
-    }
+  bool get grantsActiveEntitlement {
+    final normalizedTransactionId = transactionId?.trim();
+    final normalizedOriginalTransactionId = originalTransactionId?.trim();
+    final expiry = expirationDate;
 
-    return DateTime.now().isAfter(expirationDate!);
+    return isValid &&
+        expiry != null &&
+        expiry.isAfter(DateTime.now()) &&
+        normalizedTransactionId != null &&
+        normalizedTransactionId.isNotEmpty &&
+        normalizedOriginalTransactionId != null &&
+        normalizedOriginalTransactionId.isNotEmpty;
+  }
+
+  bool get isExpired {
+    final expiry = expirationDate;
+
+    return expiry == null || !expiry.isAfter(DateTime.now());
   }
 
   int? get daysUntilExpiration {

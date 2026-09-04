@@ -194,31 +194,31 @@ class OfflineService {
   Future<bool> _syncCreateCycle(PendingSyncOperation operation) async {
     // In a real implementation, this would upload to your backend server
     // For now, we'll just mark it as synced
-    debugPrint('Syncing cycle creation: ${operation.data}');
+    debugPrint('Syncing cycle creation');
     return true;
   }
 
   /// Sync cycle update to server
   Future<bool> _syncUpdateCycle(PendingSyncOperation operation) async {
-    debugPrint('Syncing cycle update: ${operation.data}');
+    debugPrint('Syncing cycle update');
     return true;
   }
 
   /// Sync daily tracking creation to server
   Future<bool> _syncCreateDailyTracking(PendingSyncOperation operation) async {
-    debugPrint('Syncing daily tracking creation: ${operation.data}');
+    debugPrint('Syncing daily tracking creation: [redacted]');
     return true;
   }
 
   /// Sync daily tracking update to server
   Future<bool> _syncUpdateDailyTracking(PendingSyncOperation operation) async {
-    debugPrint('Syncing daily tracking update: ${operation.data}');
+    debugPrint('Syncing daily tracking update: [redacted]');
     return true;
   }
 
   /// Sync settings upload to server
   Future<bool> _syncUploadSettings(PendingSyncOperation operation) async {
-    debugPrint('Syncing settings upload: ${operation.data}');
+    debugPrint('Syncing settings upload: [redacted]');
     return true;
   }
 

@@ -38,7 +38,6 @@ class BiometricIntegrationService {
       _isInitialized = true;
       debugPrint('✅ Biometric Integration Service initialized');
     } catch (e) {
-      debugPrint('❌ Failed to initialize Biometric Integration: $e');
       _isInitialized = false;
     }
   }
@@ -70,7 +69,6 @@ class BiometricIntegrationService {
       _healthPermissionGranted = result as bool? ?? false;
       return _healthPermissionGranted;
     } catch (e) {
-      debugPrint('Failed to request health permissions: $e');
       return false;
     }
   }
@@ -123,7 +121,6 @@ class BiometricIntegrationService {
         cycleCorrelations: await _calculateCycleCorrelations(results),
       );
     } catch (e) {
-      debugPrint('Failed to get biometric analysis: $e');
       return BiometricAnalysis.empty();
     }
   }
@@ -165,8 +162,7 @@ class BiometricIntegrationService {
       _cachedData[cacheKey] = data;
       return data;
     } catch (e) {
-      // Return simulated data for development/testing
-      return _generateSimulatedHeartRateData(startDate, endDate);
+      return <BiometricReading>[];
     }
   }
 
@@ -207,7 +203,7 @@ class BiometricIntegrationService {
       _cachedData[cacheKey] = data;
       return data;
     } catch (e) {
-      return _generateSimulatedSleepData(startDate, endDate);
+      return <BiometricReading>[];
     }
   }
 
@@ -248,7 +244,7 @@ class BiometricIntegrationService {
       _cachedData[cacheKey] = data;
       return data;
     } catch (e) {
-      return _generateSimulatedTemperatureData(startDate, endDate);
+      return <BiometricReading>[];
     }
   }
 
@@ -289,7 +285,7 @@ class BiometricIntegrationService {
       _cachedData[cacheKey] = data;
       return data;
     } catch (e) {
-      return _generateSimulatedHRVData(startDate, endDate);
+      return <BiometricReading>[];
     }
   }
 
@@ -305,7 +301,7 @@ class BiometricIntegrationService {
 
       return _calculateStressFromMetrics(hrvData, heartRateData);
     } catch (e) {
-      return _generateSimulatedStressData(startDate, endDate);
+      return <BiometricReading>[];
     }
   }
 
@@ -322,7 +318,7 @@ class BiometricIntegrationService {
 
       return _parseHealthData(result, BiometricType.activeEnergyBurned);
     } catch (e) {
-      return _generateSimulatedActivityData(startDate, endDate);
+      return <BiometricReading>[];
     }
   }
 
@@ -341,7 +337,6 @@ class BiometricIntegrationService {
 
       return result as bool? ?? false;
     } catch (e) {
-      debugPrint('Failed to write menstrual flow data: $e');
       return false;
     }
   }
@@ -358,7 +353,6 @@ class BiometricIntegrationService {
 
       return result as bool? ?? false;
     } catch (e) {
-      debugPrint('Failed to write cycle symptoms: $e');
       return false;
     }
   }
@@ -423,187 +417,6 @@ class BiometricIntegrationService {
     }
 
     return stressData;
-  }
-
-  // === SIMULATED DATA GENERATORS FOR DEVELOPMENT ===
-
-  List<BiometricReading> _generateSimulatedHeartRateData(
-    DateTime startDate,
-    DateTime endDate,
-  ) {
-    final data = <BiometricReading>[];
-    final random = math.Random();
-
-    for (
-      var date = startDate;
-      date.isBefore(endDate);
-      date = date.add(const Duration(hours: 1))
-    ) {
-      final baseHR = 70 + random.nextInt(20); // 70-90 BPM base
-      final cycleDay = date.day % 28;
-      final cycleModifier =
-          math.sin(cycleDay * math.pi / 14) * 5; // Cycle variation
-
-      data.add(
-        BiometricReading(
-          type: BiometricType.heartRate,
-          value: baseHR + cycleModifier + (random.nextDouble() * 10 - 5),
-          timestamp: date,
-          unit: 'BPM',
-        ),
-      );
-    }
-
-    return data;
-  }
-
-  List<BiometricReading> _generateSimulatedSleepData(
-    DateTime startDate,
-    DateTime endDate,
-  ) {
-    final data = <BiometricReading>[];
-    final random = math.Random();
-
-    for (
-      var date = startDate;
-      date.isBefore(endDate);
-      date = date.add(const Duration(days: 1))
-    ) {
-      final sleepQuality = 0.6 + random.nextDouble() * 0.4; // 60-100% quality
-      final sleepDuration = 7 + random.nextDouble() * 2; // 7-9 hours
-
-      data.add(
-        BiometricReading(
-          type: BiometricType.sleepAnalysis,
-          value: sleepQuality,
-          timestamp: date,
-          unit: 'quality_score',
-          metadata: {'duration_hours': sleepDuration},
-        ),
-      );
-    }
-
-    return data;
-  }
-
-  List<BiometricReading> _generateSimulatedTemperatureData(
-    DateTime startDate,
-    DateTime endDate,
-  ) {
-    final data = <BiometricReading>[];
-    final random = math.Random();
-
-    for (
-      var date = startDate;
-      date.isBefore(endDate);
-      date = date.add(const Duration(hours: 6))
-    ) {
-      final baseTemp = 98.6; // Normal body temperature in Fahrenheit
-      final cycleDay = date.day % 28;
-      final ovulationBoost = cycleDay >= 12 && cycleDay <= 16
-          ? 0.5
-          : 0.0; // Temperature rise during ovulation
-
-      data.add(
-        BiometricReading(
-          type: BiometricType.bodyTemperature,
-          value: baseTemp + ovulationBoost + (random.nextDouble() * 0.6 - 0.3),
-          timestamp: date,
-          unit: '°F',
-        ),
-      );
-    }
-
-    return data;
-  }
-
-  List<BiometricReading> _generateSimulatedHRVData(
-    DateTime startDate,
-    DateTime endDate,
-  ) {
-    final data = <BiometricReading>[];
-    final random = math.Random();
-
-    for (
-      var date = startDate;
-      date.isBefore(endDate);
-      date = date.add(const Duration(hours: 2))
-    ) {
-      final baseHRV = 40 + random.nextInt(30); // 40-70ms baseline
-      final stressModifier = random.nextDouble() > 0.8
-          ? -10
-          : 0; // Occasional stress impact
-
-      data.add(
-        BiometricReading(
-          type: BiometricType.heartRateVariability,
-          value: (baseHRV + stressModifier).toDouble().clamp(20.0, 100.0),
-          timestamp: date,
-          unit: 'ms',
-        ),
-      );
-    }
-
-    return data;
-  }
-
-  List<BiometricReading> _generateSimulatedStressData(
-    DateTime startDate,
-    DateTime endDate,
-  ) {
-    final data = <BiometricReading>[];
-    final random = math.Random();
-
-    for (
-      var date = startDate;
-      date.isBefore(endDate);
-      date = date.add(const Duration(hours: 3))
-    ) {
-      final baseStress = 3 + random.nextDouble() * 4; // 3-7 stress level
-      final timeOfDayModifier = date.hour >= 9 && date.hour <= 17
-          ? 1.0
-          : -0.5; // Higher during work hours
-
-      data.add(
-        BiometricReading(
-          type: BiometricType.stressLevel,
-          value: (baseStress + timeOfDayModifier).clamp(1.0, 10.0),
-          timestamp: date,
-          unit: 'stress_index',
-        ),
-      );
-    }
-
-    return data;
-  }
-
-  List<BiometricReading> _generateSimulatedActivityData(
-    DateTime startDate,
-    DateTime endDate,
-  ) {
-    final data = <BiometricReading>[];
-    final random = math.Random();
-
-    for (
-      var date = startDate;
-      date.isBefore(endDate);
-      date = date.add(const Duration(days: 1))
-    ) {
-      final steps = 6000 + random.nextInt(8000); // 6k-14k steps
-      final calories = 1800 + random.nextInt(800); // 1800-2600 calories
-
-      data.add(
-        BiometricReading(
-          type: BiometricType.activeEnergyBurned,
-          value: calories.toDouble(),
-          timestamp: date,
-          unit: 'kcal',
-          metadata: {'steps': steps},
-        ),
-      );
-    }
-
-    return data;
   }
 
   // === ADVANCED BIOMETRIC CAPABILITIES ===
@@ -696,7 +509,6 @@ class BiometricIntegrationService {
           break;
         case 'onBiometricError':
           final error = call.arguments['error'] as String;
-          debugPrint('Biometric error: $error');
           _realtimeDataController.addError(BiometricException(error));
           break;
       }
@@ -757,7 +569,6 @@ class BiometricIntegrationService {
         metadata: Map<String, dynamic>.from(data['metadata'] ?? {}),
       );
     } catch (e) {
-      debugPrint('Error parsing health reading: $e');
       return null;
     }
   }
@@ -778,7 +589,6 @@ class BiometricIntegrationService {
           )
           .toSet();
 
-      debugPrint('📱 Available biometric data types: $availableTypes');
       return availableTypes;
     } catch (e) {
       debugPrint('Error getting available data types: $e');

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../core/services/export_import_service.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
-import 'package:share_plus/share_plus.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/ui/adaptive_messages.dart';
 import '../../../core/services/auth_service.dart';
@@ -30,7 +30,6 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
   final _confirmPasswordController = TextEditingController();
 
   bool _isEditingProfile = false;
-  bool _isExporting = false;
   bool _isDeletingAccount = false;
   bool _showPassword = false;
   bool _showNewPassword = false;
@@ -429,59 +428,41 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
       title: 'Data Management',
       icon: Icons.storage,
       children: [
-        // Export Data
+        // Verified signer-migration restore
         SettingsTile(
-          leading: const Icon(Icons.download, color: AppTheme.accentMint),
-          title: 'Export Data',
-          subtitle: 'Download your tracking data',
-          onTap: _exportUserData,
-          trailing: _isExporting
-              ? const SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      AppTheme.accentMint,
-                    ),
-                  ),
-                )
-              : const Icon(Icons.arrow_forward_ios, size: 16),
-        ),
+          leading: const Icon(
+            Icons.restore_page,
+            color: AppTheme.secondaryBlue,
+          ),
+          title: 'Restore Verified Data',
+          subtitle: 'Restore your verified backup after signing in',
+          onTap: () async {
+            final service = ExportImportService();
 
-        // Data Backup
-        SettingsTile(
-          leading: const Icon(Icons.backup, color: AppTheme.secondaryBlue),
-          title: 'Backup Data',
-          subtitle: 'Save your data to cloud storage',
-          onTap: () {
-            // Backup action is disabled until cloud storage is connected
+            final filePath = await service.pickImportFile(
+              allowedExtensions: const ['json'],
+            );
+            if (filePath == null) {
+              return;
+            }
+
+            final result = await service.importSanitizedMigrationPayload(
+              filePath,
+            );
+
+            if (!mounted) {
+              return;
+            }
+
             _snack(
-              const SnackBar(
-                content: Text('Cloud backup is currently unavailable'),
-                backgroundColor: AppTheme.secondaryBlue,
+              SnackBar(
+                content: Text(result.message),
+                backgroundColor: result.success
+                    ? AppTheme.secondaryBlue
+                    : Theme.of(context).colorScheme.error,
               ),
             );
           },
-        ),
-
-        // Clear Cache
-        SettingsTile(
-          leading: const Icon(
-            Icons.cleaning_services,
-            color: AppTheme.warningOrange,
-          ),
-          title: 'Clear Cache',
-          subtitle: 'Free up storage space',
-          onTap: _clearCache,
-        ),
-
-        // Delete All Data
-        SettingsTile(
-          leading: const Icon(Icons.delete_sweep, color: AppTheme.primaryRose),
-          title: 'Delete All Data',
-          subtitle: 'Permanently delete all tracking data',
-          onTap: _showDeleteAllDataDialog,
         ),
       ],
     );
@@ -666,69 +647,6 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
     );
   }
 
-  Future<void> _exportUserData() async {
-    setState(() => _isExporting = true);
-
-    try {
-      await Future.delayed(const Duration(seconds: 2));
-
-      const csvData = '''Date,Cycle Day,Flow Intensity,Symptoms,Mood,Energy
-2024-01-15,1,Heavy,Cramps;Headache,3,2
-2024-01-16,2,Medium,Fatigue,4,3
-2024-01-17,3,Light,None,5,4''';
-
-      await SharePlus.instance.share(
-        ShareParams(text: csvData, subject: 'Flow Ai Data Export'),
-      );
-
-      if (!mounted) return;
-} catch (e) {
-      if (!mounted) return;
-      AdaptiveMessages.showError(context, 'Export failed: $e');
-    } finally {
-      if (mounted) setState(() => _isExporting = false);
-    }
-  }
-
-  Future<void> _clearCache() async {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Row(
-          children: [
-            Icon(Icons.cleaning_services, color: AppTheme.warningOrange),
-            SizedBox(width: 16),
-            Text('Clear Cache'),
-          ],
-        ),
-        content: const Text(
-          'This will clear temporary files and cached data. Your personal data will not be affected.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              // Cache clearing is handled locally for now
-              AdaptiveMessages.showSuccess(
-                context,
-                'Cache cleared successfully',
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme.warningOrange,
-            ),
-            child: const Text('Clear Cache'),
-          ),
-        ],
-      ),
-    );
-  }
-
   void _showDeactivateAccountDialog() {
     showDialog(
       context: context,
@@ -770,99 +688,6 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
         ],
       ),
     );
-  }
-
-  void _showDeleteAllDataDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Row(
-          children: [
-            Icon(Icons.delete_sweep, color: AppTheme.primaryRose),
-            SizedBox(width: 16),
-            Text('Delete All Data'),
-          ],
-        ),
-        content: const Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'This will permanently delete all your tracking data including:',
-              style: TextStyle(fontWeight: FontWeight.w600),
-            ),
-            SizedBox(height: 12),
-            Text('• Cycle history and period tracking'),
-            Text('• Symptoms and mood logs'),
-            Text('• AI insights and predictions'),
-            Text('• Personal preferences and settings'),
-            Text('• Conversation history with AI'),
-            SizedBox(height: 12),
-            Text(
-              'Your account will remain active but all data will be lost. This action cannot be undone.',
-              style: TextStyle(
-                color: AppTheme.primaryRose,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              _performDataDeletion();
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme.primaryRose,
-            ),
-            child: const Text('Delete All Data'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> _performDataDeletion() async {
-    final navigator = Navigator.of(context);
-    final settings = Provider.of<SettingsProvider>(context, listen: false);
-
-    try {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => const AlertDialog(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CircularProgressIndicator(),
-              SizedBox(height: 16),
-              Text('Deleting all data...'),
-            ],
-          ),
-        ),
-      );
-
-      await Future.delayed(const Duration(seconds: 3));
-      await settings.resetToDefaults();
-
-      if (!mounted) return;
-      navigator.pop();
-
-      AdaptiveMessages.showSuccess(context, 'All data deleted successfully');
-
-      setState(() {});
-      _loadUserData();
-    } catch (e) {
-      if (!mounted) return;
-      navigator.pop();
-      AdaptiveMessages.showError(context, 'Failed to delete data: $e');
-    }
   }
 
   Future<void> _performAccountDeletion() async {
@@ -959,6 +784,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                   },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppTheme.primaryRose,
+              foregroundColor: Colors.white,
             ),
             child: const Text('Delete Account'),
           ),

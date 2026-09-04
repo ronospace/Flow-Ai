@@ -1,3 +1,4 @@
+import 'app_lock_service.dart';
 import 'package:flutter/foundation.dart';
 import 'auth_service.dart';
 import 'user_preferences_service.dart';
@@ -74,7 +75,13 @@ class AppStateService {
         return '/onboarding';
       }
 
-      // User is authenticated and has completed onboarding
+      if (await AppLockService().shouldRequireLock()) {
+        debugPrint(
+          '📱 User authenticated and biometric app lock active -> /auth/lock',
+        );
+        return '/auth/lock';
+      }
+
       debugPrint('📱 User authenticated and onboarding complete -> /home');
       return '/home';
     } catch (e) {
@@ -115,8 +122,9 @@ class AppStateService {
       await initialize();
     }
 
-    // Sign out user
+    // Sign out and invalidate the memory-only biometric unlock.
     await _authService.signOut();
+    AppLockService().reset();
 
     // Do NOT reset onboarding status on sign out
 

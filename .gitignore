@@ -122,3 +122,7 @@ gha-creds-*.json
 !third_party/cloud_firestore_6_6_0/**
 !third_party/firebase_auth_6_5_4/
 !third_party/firebase_auth_6_5_4/**
+
+# FlowAI: track required iOS Rive linker configuration
+!ios/Flutter/
+!ios/Flutter/RiveNativeLink.xcconfig

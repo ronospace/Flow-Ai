@@ -39,6 +39,30 @@ target 'Runner' do
 end
 
 post_install do |installer|
+  # FLOW_AI_THIRD_PARTY_PODS_WARNING_COMPAT
+  installer.pods_project.targets.each do |pod_target|
+    pod_target.build_configurations.each do |config|
+
+      config.build_settings['CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER'] = 'NO'
+    end
+  end
+  # FLOW_AI_QUOTED_FRAMEWORK_HEADER_POLICY
+  # FirebaseAppCheckInterop currently contains quoted imports in public
+  # framework headers. Disable only that diagnostic for generated Pod targets.
+  installer.pods_project.build_configurations.each do |configuration|
+    configuration.build_settings[
+      'CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER'
+    ] = 'NO'
+  end
+
+  installer.pods_project.targets.each do |pod_target|
+    pod_target.build_configurations.each do |configuration|
+      configuration.build_settings[
+        'CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER'
+      ] = 'NO'
+    end
+  end
+
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
       config.build_settings["GCC_TREAT_WARNINGS_AS_ERRORS"] = "NO"
@@ -53,6 +77,21 @@ post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
 
+    target.build_configurations.each do |config|
+      config.build_settings['CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER'] = 'NO'
+      config.build_settings['GCC_TREAT_WARNINGS_AS_ERRORS'] = 'NO'
+    end
+    # FLOW_AI_ABSEIL_HEADER_ROOT
+    if ['abseil', 'FirebaseFirestoreInternal', 'gRPC-C++', 'gRPC-Core', 'Pods-Runner'].include?(target.name)
+      target.build_configurations.each do |config|
+        paths = Array(config.build_settings['HEADER_SEARCH_PATHS'])
+        paths.unshift('$(inherited)') unless paths.include?('$(inherited)')
+        abseil_root = '$(PODS_ROOT)/abseil'
+        paths << abseil_root unless paths.include?(abseil_root)
+        config.build_settings['HEADER_SEARCH_PATHS'] = paths
+      end
+    end
+
     if target.name == 'health'
       target.build_configurations.each do |config|
         config.build_settings['DEFINES_MODULE'] = 'YES'
@@ -62,5 +101,17 @@ post_install do |installer|
       end
     end
   end
-end
 
+  # FLOW_AI_FINAL_PODS_MODULE_VERIFIER_POLICY
+  # Single source of truth. Keep this after all Flutter/pod mutations.
+  installer.pods_project.build_configurations.each do |config|
+    config.build_settings['ENABLE_MODULE_VERIFIER'] = 'NO'
+  end
+
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['ENABLE_MODULE_VERIFIER'] = 'NO'
+    end
+  end
+
+end

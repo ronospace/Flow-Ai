@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import '../models/cycle_data.dart';
+import '../database/database_service.dart';
 import '../models/biometric_data.dart';
 import 'ai_engine.dart';
 import 'biometric_integration_service.dart';
@@ -179,12 +180,13 @@ class SmartNotificationService {
     try {
       // Get recent cycle data for analysis
       // In a real app, this would come from the cycle provider
-      final mockCycles = _generateMockCycleData();
+      final cycleData = await DatabaseService.instance.getAllCycles();
+      if (cycleData.isEmpty) return notifications;
 
       // Generate AI predictions
       final aiEngine = AIEngine.instance;
       if (aiEngine.isInitialized) {
-        final prediction = await aiEngine.predictNextCycleAdvanced(mockCycles);
+        final prediction = await aiEngine.predictNextCycleAdvanced(cycleData);
 
         // Check if we should send a cycle prediction alert
         final daysUntilNextCycle = prediction.predictedStartDate
@@ -235,9 +237,8 @@ class SmartNotificationService {
           }
         }
       }
-    } catch (e) {
-      debugPrint('Error generating cycle notifications: $e');
-    }
+    } catch (e) {}
+    debugPrint('Error generating cycle notifications');
 
     return notifications;
   }
@@ -320,9 +321,7 @@ class SmartNotificationService {
           }
         }
       }
-    } catch (e) {
-      debugPrint('Error generating biometric notifications: $e');
-    }
+    } catch (e) {}
 
     return notifications;
   }
@@ -444,8 +443,9 @@ class SmartNotificationService {
     try {
       final aiEngine = AIEngine.instance;
       if (aiEngine.isInitialized) {
-        final mockCycles = _generateMockCycleData();
-        final insights = await aiEngine.generateAdvancedInsights(mockCycles);
+        final cycleData = await DatabaseService.instance.getAllCycles();
+        if (cycleData.isEmpty) return;
+        final insights = await aiEngine.generateAdvancedInsights(cycleData);
 
         for (final insight in insights.take(1)) {
           // Only send the top insight
@@ -486,9 +486,7 @@ class SmartNotificationService {
           await _scheduleNotification(alert);
         }
       }
-    } catch (e) {
-      debugPrint('Error processing biometric alerts: $e');
-    }
+    } catch (e) {}
   }
 
   /// Schedule a notification for delivery
@@ -584,29 +582,6 @@ class SmartNotificationService {
   }
 
   // === HELPER METHODS ===
-
-  List<CycleData> _generateMockCycleData() {
-    // Generate mock data for development
-    final now = DateTime.now();
-    return List.generate(3, (index) {
-      final startDate = now.subtract(Duration(days: 30 * (index + 1)));
-      return CycleData(
-        id: 'mock_$index',
-        userId: 'mock_user',
-        startDate: startDate,
-        endDate: startDate.add(Duration(days: 28)),
-        cycleLength: 28 + index,
-        dailyData: {},
-        flowIntensity: FlowIntensity.medium,
-        symptoms: ['cramps', 'fatigue'],
-        mood: 3.5,
-        energy: 3.0,
-        pain: 2.5,
-        createdAt: startDate,
-        lastUpdated: startDate,
-      );
-    });
-  }
 
   Future<List<String>> _detectBiometricAnomalies(
     BiometricAnalysis analysis,

@@ -1,0 +1,5 @@
+RIVE_NATIVE_ROOT = $(PODS_ROOT)/../.symlinks/plugins/rive_native
+LIBRARY_SEARCH_PATHS[sdk=iphoneos*] = $(inherited) "$(RIVE_NATIVE_ROOT)/native/build/iphoneos/bin/release"
+LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*] = $(inherited) "$(RIVE_NATIVE_ROOT)/native/build/iphoneos/bin/emulator"
+OTHER_LDFLAGS[sdk=iphoneos*] = $(inherited) -Wl,-force_load,$(RIVE_NATIVE_ROOT)/native/build/iphoneos/bin/release/librive_native.a -lrive -lrive_pls_renderer -lrive_yoga -lrive_harfbuzz -lrive_sheenbidi -lrive_decoders -llibpng -lzlib -llibjpeg -llibwebp -lminiaudio -lluau_vm -lluau_compiler -lluau_analyzer -lrive_scripting_workspace -lspirv_cross -lbrotli
+OTHER_LDFLAGS[sdk=iphonesimulator*] = $(inherited) -Wl,-force_load,$(RIVE_NATIVE_ROOT)/native/build/iphoneos/bin/emulator/librive_native.a -lrive -lrive_pls_renderer -lrive_yoga -lrive_harfbuzz -lrive_sheenbidi -lrive_decoders -llibpng -lzlib -llibjpeg -llibwebp -lminiaudio -lluau_vm -lluau_compiler -lluau_analyzer -lrive_scripting_workspace -lspirv_cross -lbrotli

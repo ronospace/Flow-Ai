@@ -991,7 +991,10 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (provider.healthAnalytics != null)
-            HealthAnalyticsCard(analytics: provider.healthAnalytics!),
+            HealthAnalyticsCard(
+              analytics: provider.healthAnalytics!,
+              history: provider.analyticsHistory,
+            ),
         ],
       ),
     );
