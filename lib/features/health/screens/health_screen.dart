@@ -6,6 +6,7 @@ import '../../../generated/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../providers/health_provider.dart';
 import '../widgets/healthkit_connection_card.dart';
+import '../../tracking/screens/enhanced_daily_feelings_tracker.dart';
 import 'dart:math' as math;
 
 class HealthScreen extends StatefulWidget {
@@ -202,9 +203,10 @@ class _HealthScreenState extends State<HealthScreen>
   Widget _buildHealthScoreCard(AppLocalizations localizations) {
     final theme = Theme.of(context);
     final healthProvider = context.watch<HealthProvider>();
-    final healthScore = (healthProvider.healthScore / 100.0)
-        .clamp(0.0, 1.0)
-        .toDouble();
+    final hasHealthData = healthProvider.hasVerifiedHealthData;
+    final healthScore = hasHealthData
+        ? (healthProvider.healthScore / 100.0).clamp(0.0, 1.0).toDouble()
+        : 0.0;
 
     return Container(
       padding: const EdgeInsets.all(18),
@@ -238,7 +240,9 @@ class _HealthScreenState extends State<HealthScreen>
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  '${(healthScore * 100).round()}/100',
+                  hasHealthData
+                      ? '${(healthScore * 100).round()}/100'
+                      : 'No data',
                   style: theme.textTheme.displaySmall?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: AppTheme.primaryRose,
@@ -269,6 +273,7 @@ class _HealthScreenState extends State<HealthScreen>
 
   Widget _buildBiometricGrid(AppLocalizations localizations) {
     final theme = Theme.of(context);
+    final snapshot = context.watch<HealthProvider>().snapshot;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -290,7 +295,9 @@ class _HealthScreenState extends State<HealthScreen>
           children: [
             _buildBiometricCard(
               'Heart Rate',
-              '72 BPM',
+              snapshot?.heartRate != null
+                  ? '${snapshot!.heartRate!.round()} BPM'
+                  : 'No data',
               Icons.favorite,
               AppTheme.primaryRose,
               _heartRateAnimation,
@@ -298,7 +305,9 @@ class _HealthScreenState extends State<HealthScreen>
             ),
             _buildBiometricCard(
               'Temperature',
-              '98.6°F',
+              snapshot?.bodyTemperature != null
+                  ? snapshot!.bodyTemperature!.toStringAsFixed(1)
+                  : 'No data',
               Icons.thermostat,
               AppTheme.warningOrange,
               _temperatureAnimation,
@@ -306,7 +315,7 @@ class _HealthScreenState extends State<HealthScreen>
             ),
             _buildBiometricCard(
               'Sleep Quality',
-              '8.2/10',
+              'No data',
               Icons.bedtime,
               AppTheme.secondaryBlue,
               _sleepAnimation,
@@ -314,7 +323,7 @@ class _HealthScreenState extends State<HealthScreen>
             ),
             _buildBiometricCard(
               'Stress Level',
-              'Low',
+              'No data',
               Icons.psychology,
               AppTheme.accentMint,
               _heartRateAnimation,
@@ -435,25 +444,11 @@ class _HealthScreenState extends State<HealthScreen>
     final theme = Theme.of(context);
     final insights = [
       {
-        'title': 'Excellent Sleep Pattern',
+        'title': 'No verified insights yet',
         'description':
-            'Your sleep quality has improved by 15% this week. Keep maintaining your bedtime routine.',
-        'type': 'positive',
-        'icon': Icons.bedtime,
-      },
-      {
-        'title': 'Heart Rate Variability',
-        'description':
-            'Consider adding more cardio exercises to improve your heart rate variability.',
-        'type': 'suggestion',
-        'icon': Icons.favorite,
-      },
-      {
-        'title': 'Hydration Reminder',
-        'description':
-            'Your hydration levels are optimal. Continue drinking 8 glasses of water daily.',
+            'Verified wellness insights will appear after sufficient real health data is synchronized.',
         'type': 'neutral',
-        'icon': Icons.water_drop,
+        'icon': Icons.info_outline,
       },
     ];
 
@@ -593,6 +588,13 @@ class _HealthScreenState extends State<HealthScreen>
               TextButton(
                 onPressed: () {
                   HapticFeedback.lightImpact();
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => EnhancedDailyFeelingsTracker(
+                        selectedDate: DateTime.now(),
+                      ),
+                    ),
+                  );
                 },
                 child: Text(
                   'Add Symptom',
@@ -617,7 +619,7 @@ class _HealthScreenState extends State<HealthScreen>
                   'Bloating',
                   'Back Pain',
                 ].map((symptom) {
-                  final isActive = ['Fatigue', 'Mood Swings'].contains(symptom);
+                  final isActive = false;
                   return Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16,
@@ -657,21 +659,7 @@ class _HealthScreenState extends State<HealthScreen>
 
   Widget _buildHealthGoals(AppLocalizations localizations) {
     final theme = Theme.of(context);
-    final goals = [
-      {
-        'title': 'Daily Steps',
-        'current': 8420,
-        'target': 10000,
-        'unit': 'steps',
-      },
-      {'title': 'Water Intake', 'current': 6, 'target': 8, 'unit': 'glasses'},
-      {
-        'title': 'Sleep Duration',
-        'current': 7.5,
-        'target': 8.0,
-        'unit': 'hours',
-      },
-    ];
+    final goals = <Map<String, Object>>[];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

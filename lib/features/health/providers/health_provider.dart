@@ -8,10 +8,14 @@ class HealthProvider extends ChangeNotifier {
   bool _isHealthKitConnected = false;
   double _healthScore = 0.0;
   bool _healthKitBannerDismissed = false;
+  BiometricSnapshot? _snapshot;
 
   bool get isHealthKitConnected => _isHealthKitConnected;
   double get healthScore => _healthScore;
   bool get healthKitBannerDismissed => _healthKitBannerDismissed;
+  BiometricSnapshot? get snapshot => _snapshot;
+  bool get hasVerifiedHealthData =>
+      _snapshot != null && _snapshot!.dataQuality > 0.0;
 
   /// Connect to HealthKit after showing the mandatory disclosure dialog
   Future<void> connectHealthKit(BuildContext context) async {
@@ -36,6 +40,7 @@ class HealthProvider extends ChangeNotifier {
 
           if (!biometricService.isInitialized) {
             _isHealthKitConnected = false;
+            _snapshot = null;
             _healthScore = 0.0;
             await prefs.setBool('healthkit_connected', false);
             notifyListeners();
@@ -48,6 +53,7 @@ class HealthProvider extends ChangeNotifier {
 
           final snapshot = await biometricService.getCurrentBiometricSnapshot();
 
+          _snapshot = snapshot;
           _isHealthKitConnected = true;
           _healthScore = _calculateHealthScore(snapshot);
 
@@ -57,6 +63,7 @@ class HealthProvider extends ChangeNotifier {
           debugPrint('✅ HealthKit connected and synchronized successfully');
         } catch (error) {
           _isHealthKitConnected = false;
+          _snapshot = null;
           _healthScore = 0.0;
           await prefs.setBool('healthkit_connected', false);
           notifyListeners();
@@ -64,6 +71,7 @@ class HealthProvider extends ChangeNotifier {
       },
       onDecline: () {
         _isHealthKitConnected = false;
+        _snapshot = null;
         _healthScore = 0.0;
         notifyListeners();
 
@@ -103,6 +111,7 @@ class HealthProvider extends ChangeNotifier {
   /// Disconnect HealthKit
   Future<void> disconnectHealthKit() async {
     _isHealthKitConnected = false;
+    _snapshot = null;
     _healthScore = 0.0;
     notifyListeners();
 
@@ -119,6 +128,7 @@ class HealthProvider extends ChangeNotifier {
 
     if (!storedAsConnected) {
       _isHealthKitConnected = false;
+      _snapshot = null;
       _healthScore = 0.0;
       notifyListeners();
       return;
@@ -133,6 +143,7 @@ class HealthProvider extends ChangeNotifier {
 
       if (!biometricService.isInitialized) {
         _isHealthKitConnected = false;
+        _snapshot = null;
         _healthScore = 0.0;
         await prefs.setBool('healthkit_connected', false);
         notifyListeners();
@@ -141,10 +152,12 @@ class HealthProvider extends ChangeNotifier {
 
       final snapshot = await biometricService.getCurrentBiometricSnapshot();
 
+      _snapshot = snapshot;
       _isHealthKitConnected = true;
       _healthScore = _calculateHealthScore(snapshot);
     } catch (error) {
       _isHealthKitConnected = false;
+      _snapshot = null;
       _healthScore = 0.0;
       await prefs.setBool('healthkit_connected', false);
     }
@@ -179,6 +192,7 @@ class HealthProvider extends ChangeNotifier {
   /// Clear all user health data (used during sign out)
   void clearUserData() {
     _isHealthKitConnected = false;
+    _snapshot = null;
     _healthScore = 0.0;
     _healthKitBannerDismissed = false;
     notifyListeners();
