@@ -170,10 +170,17 @@ class FeelingsAnalyticsService {
   List<TrendInsight> _analyzeWellbeingTrends(List<DailyFeelingsEntry> entries) {
     final trends = <TrendInsight>[];
 
-    final values = entries.map((e) => e.overallWellbeing).toList();
-    if (values.length < 7) return trends;
+    final values = entries
+        .map((entry) => entry.overallWellbeing)
+        .whereType<double>()
+        .toList();
+
+    if (values.length < 7) {
+      return trends;
+    }
 
     final trend = _calculateTrend(values);
+
     if (trend.direction != TrendDirection.stable) {
       trends.add(
         TrendInsight(
@@ -311,7 +318,7 @@ class FeelingsAnalyticsService {
       final recentEntries = await _databaseService.getRecentEntries(limit: 14);
 
       // Low wellbeing insight
-      if (entry.overallWellbeing < 4) {
+      if (entry.overallWellbeing != null && entry.overallWellbeing! < 4) {
         insights.add(
           FeelingsInsight(
             id: 'insight_low_wellbeing_${DateTime.now().millisecondsSinceEpoch}',
@@ -457,11 +464,17 @@ class FeelingsAnalyticsService {
   }
 
   /// Calculate average wellbeing
-  double _calculateAverageWellbeing(List<DailyFeelingsEntry> entries) {
-    if (entries.isEmpty) return 0.0;
+  double? _calculateAverageWellbeing(List<DailyFeelingsEntry> entries) {
+    final values = entries
+        .map((entry) => entry.overallWellbeing)
+        .whereType<double>()
+        .toList();
 
-    final sum = entries.map((e) => e.overallWellbeing).reduce((a, b) => a + b);
-    return sum / entries.length;
+    if (values.isEmpty) {
+      return null;
+    }
+
+    return values.reduce((a, b) => a + b) / values.length;
   }
 
   /// Calculate mood distribution
@@ -550,7 +563,7 @@ class FeelingsAnalyticsService {
     // Calculate current wellbeing streak
     int currentWellbeingStreak = 0;
     for (final entry in entries) {
-      if (entry.overallWellbeing >= 7) {
+      if (entry.overallWellbeing != null && entry.overallWellbeing! >= 7) {
         currentWellbeingStreak++;
       } else {
         break;
@@ -608,7 +621,7 @@ class TrendData {
 
 class AnalyticsSummary {
   final int totalEntries;
-  final double averageWellbeing;
+  final double? averageWellbeing;
   final Map<String, double> moodDistribution;
   final Map<String, double> energyDistribution;
   final Map<String, int> commonSymptoms;
@@ -632,7 +645,7 @@ class AnalyticsSummary {
   factory AnalyticsSummary.empty() {
     return AnalyticsSummary(
       totalEntries: 0,
-      averageWellbeing: 0.0,
+      averageWellbeing: null,
       moodDistribution: {},
       energyDistribution: {},
       commonSymptoms: {},

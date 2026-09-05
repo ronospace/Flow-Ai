@@ -38,7 +38,7 @@ class _EnhancedDailyFeelingsTrackerState
   Map<String, int> _symptoms = {};
   Map<String, String> _customTags = {};
   String _notes = '';
-  double _overallWellbeing = 5.0;
+  double? _overallWellbeing;
 
   // UI state
   bool _isLoading = true;
@@ -117,9 +117,7 @@ class _EnhancedDailyFeelingsTrackerState
       _customTags = {};
       _notes = '';
 
-      // Overall wellbeing remains legacy-backed until the v2 persistence
-      // migration. It is handled in the next data-semantics milestone.
-      _overallWellbeing = 5.0;
+      _overallWellbeing = null;
     });
   }
 
@@ -372,23 +370,35 @@ class _EnhancedDailyFeelingsTrackerState
 
   /// Build overall wellbeing section
   Widget _buildOverallWellbeingSection(ThemeData theme) {
+    final scheme = theme.colorScheme;
+    final recordedValue = _overallWellbeing;
+    final sliderValue = recordedValue ?? 5.0;
+    final wellbeingColor = recordedValue == null
+        ? scheme.onSurfaceVariant
+        : _getWellbeingColor(recordedValue);
+
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                _getWellbeingColor(_overallWellbeing).withValues(alpha: 0.1),
-                _getWellbeingColor(_overallWellbeing).withValues(alpha: 0.1),
-              ],
-            ),
+            color: recordedValue == null
+                ? scheme.surfaceContainerHighest
+                : null,
+            gradient: recordedValue == null
+                ? null
+                : LinearGradient(
+                    colors: [
+                      wellbeingColor.withValues(alpha: 0.16),
+                      wellbeingColor.withValues(alpha: 0.08),
+                    ],
+                  ),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: _getWellbeingColor(
-                _overallWellbeing,
-              ).withValues(alpha: 0.1),
+              color: recordedValue == null
+                  ? scheme.outline.withValues(alpha: 0.35)
+                  : wellbeingColor.withValues(alpha: 0.4),
             ),
           ),
           child: Column(
@@ -397,26 +407,29 @@ class _EnhancedDailyFeelingsTrackerState
               Row(
                 children: [
                   Icon(
-                    _getWellbeingIcon(_overallWellbeing),
-                    color: _getWellbeingColor(_overallWellbeing),
+                    recordedValue == null
+                        ? Icons.favorite_border
+                        : _getWellbeingIcon(recordedValue),
+                    color: wellbeingColor,
                     size: 24,
                   ),
                   const SizedBox(width: 12),
-                  const Text(
-                    'Overall Wellbeing',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: AppTheme.darkGrey,
+                  Expanded(
+                    child: Text(
+                      'Overall Wellbeing',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: scheme.onSurface,
+                      ),
                     ),
                   ),
-                  const Spacer(),
                   Text(
-                    '${_overallWellbeing.toInt()}/10',
-                    style: TextStyle(
-                      fontSize: 20,
+                    recordedValue == null
+                        ? 'Not recorded'
+                        : '${recordedValue.toInt()}/10',
+                    style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: _getWellbeingColor(_overallWellbeing),
+                      color: wellbeingColor,
                     ),
                   ),
                 ],
@@ -424,21 +437,19 @@ class _EnhancedDailyFeelingsTrackerState
               const SizedBox(height: 16),
               SliderTheme(
                 data: SliderTheme.of(context).copyWith(
-                  activeTrackColor: _getWellbeingColor(_overallWellbeing),
-                  inactiveTrackColor: _getWellbeingColor(
-                    _overallWellbeing,
-                  ).withValues(alpha: 0.1),
-                  thumbColor: _getWellbeingColor(_overallWellbeing),
-                  overlayColor: _getWellbeingColor(
-                    _overallWellbeing,
-                  ).withValues(alpha: 0.1),
+                  activeTrackColor: recordedValue == null
+                      ? scheme.outline.withValues(alpha: 0.25)
+                      : wellbeingColor,
+                  inactiveTrackColor: scheme.outline.withValues(alpha: 0.25),
+                  thumbColor: wellbeingColor,
+                  overlayColor: wellbeingColor.withValues(alpha: 0.12),
                   trackHeight: 6,
-                  thumbShape: const RoundSliderThumbShape(
-                    enabledThumbRadius: 12,
-                  ),
+                  thumbShape: recordedValue == null
+                      ? SliderComponentShape.noThumb
+                      : const RoundSliderThumbShape(enabledThumbRadius: 12),
                 ),
                 child: Slider(
-                  value: _overallWellbeing,
+                  value: sliderValue,
                   min: 1,
                   max: 10,
                   divisions: 9,
@@ -452,23 +463,32 @@ class _EnhancedDailyFeelingsTrackerState
               ),
               const SizedBox(height: 8),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Poor',
-                    style: TextStyle(fontSize: 12, color: AppTheme.mediumGrey),
-                  ),
                   Text(
-                    _getWellbeingDescription(_overallWellbeing),
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: _getWellbeingColor(_overallWellbeing),
+                    'Poor',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: scheme.onSurfaceVariant,
                     ),
                   ),
-                  const Text(
+                  const Spacer(),
+                  Flexible(
+                    child: Text(
+                      recordedValue == null
+                          ? 'Tap or drag to record'
+                          : _getWellbeingDescription(recordedValue),
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: wellbeingColor,
+                      ),
+                    ),
+                  ),
+                  const Spacer(),
+                  Text(
                     'Excellent',
-                    style: TextStyle(fontSize: 12, color: AppTheme.mediumGrey),
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: scheme.onSurfaceVariant,
+                    ),
                   ),
                 ],
               ),
@@ -1367,34 +1387,36 @@ class _EnhancedDailyFeelingsTrackerState
   List<String> _generateQuickInsights() {
     final insights = <String>[];
 
-    // Analyze current mood patterns
-    final moodAverage = _moodScores.values.isEmpty
-        ? 5.0
-        : _moodScores.values.reduce((a, b) => a + b) / _moodScores.length;
+    if (_moodScores.isNotEmpty) {
+      final moodAverage =
+          _moodScores.values.reduce((a, b) => a + b) / _moodScores.length;
 
-    if (moodAverage >= 7) {
-      insights.add(
-        'Your mood is looking great today! Keep up the positive energy.',
-      );
-    } else if (moodAverage <= 4) {
-      insights.add('Consider some self-care activities to boost your mood.');
+      if (moodAverage >= 7) {
+        insights.add(
+          'Your mood is looking great today! Keep up the positive energy.',
+        );
+      } else if (moodAverage <= 4) {
+        insights.add(
+          'Consider some self-care activities to support your mood.',
+        );
+      }
     }
 
-    // Analyze energy patterns
-    final energyAverage = _energyLevels.values.isEmpty
-        ? 5.0
-        : _energyLevels.values.reduce((a, b) => a + b) / _energyLevels.length;
+    if (_energyLevels.isNotEmpty) {
+      final energyAverage =
+          _energyLevels.values.reduce((a, b) => a + b) / _energyLevels.length;
 
-    if (energyAverage <= 4) {
-      insights.add(
-        'Low energy detected. Make sure you\'re getting enough rest.',
-      );
+      if (energyAverage <= 4) {
+        insights.add(
+          'You recorded lower energy today. Consider rest if you need it.',
+        );
+      }
     }
 
-    // Analyze symptoms
     if (_symptoms.isNotEmpty) {
       insights.add(
-        'You\'ve logged ${_symptoms.length} symptoms today. Consider tracking patterns over time.',
+        'You logged ${_symptoms.length} symptoms today. '
+        'Tracking them over time may help reveal patterns.',
       );
     }
 
@@ -1536,7 +1558,7 @@ class DailyFeelingsEntry {
   final Map<String, int> symptoms;
   final Map<String, String> customTags;
   final String notes;
-  final double overallWellbeing;
+  final double? overallWellbeing;
   final DateTime timestamp;
 
   DailyFeelingsEntry({
@@ -1561,30 +1583,36 @@ class DailyFeelingsEntry {
       'customTags': customTags,
       'notes': notes,
       'overallWellbeing': overallWellbeing,
+      'overallWellbeingRecorded': overallWellbeing != null,
       'timestamp': timestamp.toIso8601String(),
     };
   }
 
   factory DailyFeelingsEntry.fromJson(Map<String, dynamic> json) {
+    final rawWellbeing = json['overallWellbeing'];
+    final wellbeingWasRecorded = json['overallWellbeingRecorded'] == true;
+
     return DailyFeelingsEntry(
       id: json['id'],
       date: DateTime.parse(json['date']),
       moodScores: (json['moodScores'] as Map<String, dynamic>).map(
-        (k, v) => MapEntry(
-          MoodCategory.values.firstWhere((e) => e.name == k),
-          (v as num).toDouble(),
+        (key, value) => MapEntry(
+          MoodCategory.values.firstWhere((category) => category.name == key),
+          (value as num).toDouble(),
         ),
       ),
       energyLevels: (json['energyLevels'] as Map<String, dynamic>).map(
-        (k, v) => MapEntry(
-          EnergyType.values.firstWhere((e) => e.name == k),
-          (v as num).toDouble(),
+        (key, value) => MapEntry(
+          EnergyType.values.firstWhere((type) => type.name == key),
+          (value as num).toDouble(),
         ),
       ),
-      symptoms: Map<String, int>.from(json['symptoms'] ?? {}),
-      customTags: Map<String, String>.from(json['customTags'] ?? {}),
+      symptoms: Map<String, int>.from(json['symptoms'] ?? const {}),
+      customTags: Map<String, String>.from(json['customTags'] ?? const {}),
       notes: json['notes'] ?? '',
-      overallWellbeing: (json['overallWellbeing'] as num).toDouble(),
+      overallWellbeing: wellbeingWasRecorded && rawWellbeing is num
+          ? rawWellbeing.toDouble()
+          : null,
       timestamp: DateTime.parse(json['timestamp']),
     );
   }

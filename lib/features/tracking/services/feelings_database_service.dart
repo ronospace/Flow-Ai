@@ -22,7 +22,7 @@ class FeelingsDatabaseService {
   bool _isInitialized = false;
 
   static const String _databaseName = 'feelings_tracker.db';
-  static const int _databaseVersion = 1;
+  static const int _databaseVersion = 2;
 
   // Table names
   static const String _entriesTable = 'feelings_entries';
@@ -65,7 +65,8 @@ class FeelingsDatabaseService {
         symptoms TEXT NOT NULL,
         custom_tags TEXT NOT NULL,
         notes TEXT NOT NULL,
-        overall_wellbeing REAL NOT NULL,
+        overall_wellbeing REAL,
+        overall_wellbeing_recorded INTEGER NOT NULL DEFAULT 0,
         timestamp TEXT NOT NULL,
         sync_status INTEGER DEFAULT 0,
         created_at TEXT NOT NULL,
@@ -122,8 +123,94 @@ class FeelingsDatabaseService {
     int oldVersion,
     int newVersion,
   ) async {
-    // Handle database migrations here
-    debugPrint('📊 Upgrading database from version $oldVersion to $newVersion');
+    debugPrint(
+      '🔄 Upgrading feelings database from version '
+      '$oldVersion to $newVersion',
+    );
+
+    if (oldVersion < 2) {
+      await db.transaction((txn) async {
+        final legacyEntriesTable = '${_entriesTable}_v1';
+
+        // SQLite cannot remove NOT NULL from a column in place.
+        // Rebuild transactionally so "not recorded" has a real NULL state.
+        await txn.execute(
+          'ALTER TABLE $_entriesTable '
+          'RENAME TO $legacyEntriesTable',
+        );
+
+        await txn.execute('DROP INDEX IF EXISTS idx_entries_date');
+        await txn.execute('DROP INDEX IF EXISTS idx_entries_user_date');
+
+        await txn.execute('''
+          CREATE TABLE $_entriesTable (
+id TEXT PRIMARY KEY,
+        user_id TEXT NOT NULL,
+        date TEXT NOT NULL,
+        mood_scores TEXT NOT NULL,
+        energy_levels TEXT NOT NULL,
+        symptoms TEXT NOT NULL,
+        custom_tags TEXT NOT NULL,
+        notes TEXT NOT NULL,
+        overall_wellbeing REAL,
+        overall_wellbeing_recorded INTEGER NOT NULL DEFAULT 0,
+        timestamp TEXT NOT NULL,
+        sync_status INTEGER DEFAULT 0,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      )
+        ''');
+
+        // V1 had no provenance flag. Existing wellbeing values therefore
+        // cannot be proven user-entered. Preserve the raw value in storage
+        // for compatibility, but mark every migrated value unverified.
+        await txn.execute('''
+          INSERT INTO $_entriesTable (
+            id,
+            user_id,
+            date,
+            mood_scores,
+            energy_levels,
+            symptoms,
+            custom_tags,
+            notes,
+            overall_wellbeing,
+            overall_wellbeing_recorded,
+            timestamp,
+            sync_status,
+            created_at,
+            updated_at
+          )
+          SELECT
+            id,
+            user_id,
+            date,
+            mood_scores,
+            energy_levels,
+            symptoms,
+            custom_tags,
+            notes,
+            overall_wellbeing,
+            0,
+            timestamp,
+            sync_status,
+            created_at,
+            updated_at
+          FROM $legacyEntriesTable
+        ''');
+
+        await txn.execute('DROP TABLE $legacyEntriesTable');
+
+        await txn.execute(
+          'CREATE INDEX idx_entries_date '
+          'ON $_entriesTable (date)',
+        );
+        await txn.execute(
+          'CREATE INDEX idx_entries_user_date '
+          'ON $_entriesTable (user_id, date)',
+        );
+      });
+    }
   }
 
   /// Save a feelings entry
@@ -160,6 +247,7 @@ class FeelingsDatabaseService {
         'custom_tags': jsonEncode(entry.customTags),
         'notes': entry.notes,
         'overall_wellbeing': entry.overallWellbeing,
+        'overall_wellbeing_recorded': entry.overallWellbeing == null ? 0 : 1,
         'timestamp': entry.timestamp.toIso8601String(),
         'sync_status': 0,
         'created_at': now,
@@ -513,7 +601,11 @@ class FeelingsDatabaseService {
       symptoms: Map<String, int>.from(symptomsJson),
       customTags: Map<String, String>.from(customTagsJson),
       notes: row['notes'],
-      overallWellbeing: (row['overall_wellbeing'] as num).toDouble(),
+      overallWellbeing:
+          row['overall_wellbeing_recorded'] == 1 &&
+              row['overall_wellbeing'] is num
+          ? (row['overall_wellbeing'] as num).toDouble()
+          : null,
       timestamp: DateTime.parse(row['timestamp']),
     );
   }
