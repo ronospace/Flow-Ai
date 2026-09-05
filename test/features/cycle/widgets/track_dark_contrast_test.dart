@@ -66,4 +66,33 @@ void main() {
       );
     }
   });
+
+  test('Enhanced Daily Feelings uses responsive semantic geometry', () {
+    final source = File(
+      'lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart',
+    ).readAsStringSync();
+
+    expect(source, isNot(contains('height: 300')));
+    expect(source, contains('BorderRadius.circular(16)'));
+    expect(source, contains('surfaceContainerHighest'));
+    expect(source, contains('onSurfaceVariant'));
+    expect(source, contains('AnimatedBuilder('));
+    expect(source, contains('AnimatedSwitcher('));
+    expect(source, contains('shrinkWrap: true'));
+    expect(source, contains('NeverScrollableScrollPhysics'));
+
+    expect(
+      source,
+      isNot(
+        contains('{for (var category in MoodCategory.values) category: 5.0}'),
+      ),
+    );
+    expect(
+      source,
+      isNot(contains('{for (var type in EnergyType.values) type: 5.0}')),
+    );
+
+    expect(source, contains("'Not recorded'"));
+    expect(source, contains('SliderComponentShape.noThumb'));
+  });
 }

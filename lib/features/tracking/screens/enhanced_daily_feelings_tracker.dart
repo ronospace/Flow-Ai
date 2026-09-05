@@ -108,14 +108,17 @@ class _EnhancedDailyFeelingsTrackerState
     }
   }
 
-  /// Initialize empty entry with default values
+  /// Initialize an empty entry without fabricating user measurements.
   void _initializeEmptyEntry() {
     setState(() {
-      _moodScores = {for (var category in MoodCategory.values) category: 5.0};
-      _energyLevels = {for (var type in EnergyType.values) type: 5.0};
+      _moodScores = {};
+      _energyLevels = {};
       _symptoms = {};
       _customTags = {};
       _notes = '';
+
+      // Overall wellbeing remains legacy-backed until the v2 persistence
+      // migration. It is handled in the next data-semantics milestone.
       _overallWellbeing = 5.0;
     });
   }
@@ -271,7 +274,7 @@ class _EnhancedDailyFeelingsTrackerState
                             Text(
                               'Track your emotional wellbeing',
                               style: theme.textTheme.bodyMedium?.copyWith(
-                                color: Colors.white.withValues(alpha: 0.1),
+                                color: Colors.white.withValues(alpha: 0.82),
                               ),
                             ).animate().fadeIn(delay: 600.ms),
                           ],
@@ -478,30 +481,35 @@ class _EnhancedDailyFeelingsTrackerState
 
   /// Build categories tabs
   Widget _buildCategoriesTabs(ThemeData theme) {
+    final scheme = theme.colorScheme;
+
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: Container(
-          height: 50,
+          constraints: const BoxConstraints(minHeight: 52),
           decoration: BoxDecoration(
-            color: AppTheme.lightGrey.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(25),
+            color: scheme.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: scheme.outline.withValues(alpha: 0.35)),
           ),
           child: TabBar(
             controller: _tabController,
+            indicatorSize: TabBarIndicatorSize.tab,
+            dividerColor: Colors.transparent,
             indicator: BoxDecoration(
               color: AppTheme.primaryPurple,
-              borderRadius: BorderRadius.circular(22),
+              borderRadius: BorderRadius.circular(12),
             ),
-            labelColor: Colors.white,
-            unselectedLabelColor: AppTheme.mediumGrey,
+            labelColor: scheme.onPrimary,
+            unselectedLabelColor: scheme.onSurfaceVariant,
             labelStyle: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
             ),
             unselectedLabelStyle: const TextStyle(
               fontSize: 14,
-              fontWeight: FontWeight.normal,
+              fontWeight: FontWeight.w500,
             ),
             tabs: const [
               Tab(text: 'Mood'),
@@ -518,17 +526,29 @@ class _EnhancedDailyFeelingsTrackerState
   /// Build feelings content
   Widget _buildFeelingsContent(ThemeData theme) {
     return SliverToBoxAdapter(
-      child: SizedBox(
-        height: 300,
-        child: TabBarView(
-          controller: _tabController,
-          children: [
-            _buildMoodSection(theme),
-            _buildEnergySection(theme),
-            _buildSymptomsSection(theme),
-            _buildTagsSection(theme),
-          ],
-        ),
+      child: AnimatedBuilder(
+        animation: _tabController,
+        builder: (context, _) {
+          final index = _tabController.index;
+
+          final Widget activeSection = switch (index) {
+            0 => _buildMoodSection(theme),
+            1 => _buildEnergySection(theme),
+            2 => _buildSymptomsSection(theme),
+            3 => _buildTagsSection(theme),
+            _ => _buildMoodSection(theme),
+          };
+
+          return AnimatedSwitcher(
+            duration: const Duration(milliseconds: 220),
+            switchInCurve: Curves.easeOut,
+            switchOutCurve: Curves.easeIn,
+            child: KeyedSubtree(
+              key: ValueKey<int>(index),
+              child: activeSection,
+            ),
+          );
+        },
       ).animate().fadeIn(delay: 800.ms),
     );
   }
@@ -552,18 +572,25 @@ class _EnhancedDailyFeelingsTrackerState
 
   /// Build mood slider
   Widget _buildMoodSlider(MoodCategory category) {
-    final value = _moodScores[category] ?? 5.0;
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final recordedValue = _moodScores[category];
+    final sliderValue = recordedValue ?? 5.0;
     final color = _getMoodCategoryColor(category);
 
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withValues(alpha: 0.1)),
+        color: theme.cardColor,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: recordedValue == null
+              ? scheme.outline.withValues(alpha: 0.35)
+              : color.withValues(alpha: 0.45),
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
+            color: theme.shadowColor.withValues(alpha: 0.08),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -576,21 +603,24 @@ class _EnhancedDailyFeelingsTrackerState
             children: [
               Icon(_getMoodCategoryIcon(category), color: color, size: 20),
               const SizedBox(width: 12),
-              Text(
-                category.displayName,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: AppTheme.darkGrey,
+              Expanded(
+                child: Text(
+                  category.displayName,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: scheme.onSurface,
+                  ),
                 ),
               ),
-              const Spacer(),
               Text(
-                '${value.toInt()}/10',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: color,
+                recordedValue == null
+                    ? 'Not recorded'
+                    : '${recordedValue.toInt()}/10',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: recordedValue == null
+                      ? scheme.onSurfaceVariant
+                      : color,
                 ),
               ),
             ],
@@ -598,15 +628,19 @@ class _EnhancedDailyFeelingsTrackerState
           const SizedBox(height: 8),
           SliderTheme(
             data: SliderTheme.of(context).copyWith(
-              activeTrackColor: color,
-              inactiveTrackColor: color.withValues(alpha: 0.1),
+              activeTrackColor: recordedValue == null
+                  ? scheme.outline.withValues(alpha: 0.25)
+                  : color,
+              inactiveTrackColor: scheme.outline.withValues(alpha: 0.25),
               thumbColor: color,
-              overlayColor: color.withValues(alpha: 0.1),
+              overlayColor: color.withValues(alpha: 0.12),
               trackHeight: 4,
-              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10),
+              thumbShape: recordedValue == null
+                  ? SliderComponentShape.noThumb
+                  : const RoundSliderThumbShape(enabledThumbRadius: 10),
             ),
             child: Slider(
-              value: value,
+              value: sliderValue,
               min: 1,
               max: 10,
               divisions: 9,
@@ -618,6 +652,13 @@ class _EnhancedDailyFeelingsTrackerState
               },
             ),
           ),
+          if (recordedValue == null)
+            Text(
+              'Tap or drag to record',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: scheme.onSurfaceVariant,
+              ),
+            ),
         ],
       ),
     );
@@ -642,18 +683,25 @@ class _EnhancedDailyFeelingsTrackerState
 
   /// Build energy slider
   Widget _buildEnergySlider(EnergyType type) {
-    final value = _energyLevels[type] ?? 5.0;
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final recordedValue = _energyLevels[type];
+    final sliderValue = recordedValue ?? 5.0;
     final color = _getEnergyTypeColor(type);
 
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withValues(alpha: 0.1)),
+        color: theme.cardColor,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: recordedValue == null
+              ? scheme.outline.withValues(alpha: 0.35)
+              : color.withValues(alpha: 0.45),
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
+            color: theme.shadowColor.withValues(alpha: 0.08),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -666,21 +714,24 @@ class _EnhancedDailyFeelingsTrackerState
             children: [
               Icon(_getEnergyTypeIcon(type), color: color, size: 20),
               const SizedBox(width: 12),
-              Text(
-                type.displayName,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: AppTheme.darkGrey,
+              Expanded(
+                child: Text(
+                  type.displayName,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: scheme.onSurface,
+                  ),
                 ),
               ),
-              const Spacer(),
               Text(
-                '${value.toInt()}/10',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: color,
+                recordedValue == null
+                    ? 'Not recorded'
+                    : '${recordedValue.toInt()}/10',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: recordedValue == null
+                      ? scheme.onSurfaceVariant
+                      : color,
                 ),
               ),
             ],
@@ -688,15 +739,19 @@ class _EnhancedDailyFeelingsTrackerState
           const SizedBox(height: 8),
           SliderTheme(
             data: SliderTheme.of(context).copyWith(
-              activeTrackColor: color,
-              inactiveTrackColor: color.withValues(alpha: 0.1),
+              activeTrackColor: recordedValue == null
+                  ? scheme.outline.withValues(alpha: 0.25)
+                  : color,
+              inactiveTrackColor: scheme.outline.withValues(alpha: 0.25),
               thumbColor: color,
-              overlayColor: color.withValues(alpha: 0.1),
+              overlayColor: color.withValues(alpha: 0.12),
               trackHeight: 4,
-              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10),
+              thumbShape: recordedValue == null
+                  ? SliderComponentShape.noThumb
+                  : const RoundSliderThumbShape(enabledThumbRadius: 10),
             ),
             child: Slider(
-              value: value,
+              value: sliderValue,
               min: 1,
               max: 10,
               divisions: 9,
@@ -708,6 +763,13 @@ class _EnhancedDailyFeelingsTrackerState
               },
             ),
           ),
+          if (recordedValue == null)
+            Text(
+              'Tap or drag to record',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: scheme.onSurfaceVariant,
+              ),
+            ),
         ],
       ),
     );
@@ -715,106 +777,100 @@ class _EnhancedDailyFeelingsTrackerState
 
   /// Build symptoms section
   Widget _buildSymptomsSection(ThemeData theme) {
+    final scheme = theme.colorScheme;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        children: [
-          Expanded(
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 3,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-              ),
-              itemCount: _commonSymptoms.length,
-              itemBuilder: (context, index) {
-                final symptom = _commonSymptoms[index];
-                final isSelected = _symptoms.containsKey(symptom);
-                final intensity = _symptoms[symptom] ?? 0;
+      child: GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 3,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 12,
+        ),
+        itemCount: _commonSymptoms.length,
+        itemBuilder: (context, index) {
+          final symptom = _commonSymptoms[index];
+          final isSelected = _symptoms.containsKey(symptom);
+          final intensity = _symptoms[symptom] ?? 0;
 
-                return GestureDetector(
-                  onTap: () => _toggleSymptom(symptom),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
+          return GestureDetector(
+            onTap: () => _toggleSymptom(symptom),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? AppTheme.primaryRose.withValues(alpha: 0.16)
+                    : theme.cardColor,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: isSelected
+                      ? AppTheme.primaryRose
+                      : scheme.outline.withValues(alpha: 0.4),
+                  width: isSelected ? 2 : 1,
+                ),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    symptom,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: isSelected
+                          ? FontWeight.w700
+                          : FontWeight.w500,
                       color: isSelected
-                          ? AppTheme.primaryRose.withValues(alpha: 0.1)
-                          : Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: isSelected
-                            ? AppTheme.primaryRose
-                            : AppTheme.mediumGrey.withValues(alpha: 0.1),
-                        width: isSelected ? 2 : 1,
+                          ? AppTheme.primaryRose
+                          : scheme.onSurface,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  if (isSelected) ...[
+                    const SizedBox(height: 4),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                        3,
+                        (i) => Container(
+                          width: 6,
+                          height: 6,
+                          margin: const EdgeInsets.symmetric(horizontal: 1),
+                          decoration: BoxDecoration(
+                            color: i < intensity
+                                ? AppTheme.primaryRose
+                                : scheme.outline.withValues(alpha: 0.35),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
                       ),
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          symptom,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: isSelected
-                                ? FontWeight.w600
-                                : FontWeight.normal,
-                            color: isSelected
-                                ? AppTheme.primaryRose
-                                : AppTheme.darkGrey,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        if (isSelected) ...[
-                          const SizedBox(height: 4),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: List.generate(
-                              3,
-                              (i) => Container(
-                                width: 6,
-                                height: 6,
-                                margin: const EdgeInsets.symmetric(
-                                  horizontal: 1,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: i < intensity
-                                      ? AppTheme.primaryRose
-                                      : AppTheme.mediumGrey.withValues(
-                                          alpha: 0.1,
-                                        ),
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
-                );
-              },
+                  ],
+                ],
+              ),
             ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
 
   /// Build tags section
   Widget _buildTagsSection(ThemeData theme) {
+    final scheme = theme.colorScheme;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Custom Tags',
-            style: TextStyle(
-              fontSize: 16,
+            style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
-              color: AppTheme.darkGrey,
+              color: scheme.onSurface,
             ),
           ),
           const SizedBox(height: 16),
@@ -825,15 +881,18 @@ class _EnhancedDailyFeelingsTrackerState
               ..._customTags.entries.map(
                 (entry) => Chip(
                   label: Text(entry.key),
-                  backgroundColor: AppTheme.accentMint.withValues(alpha: 0.1),
-                  labelStyle: const TextStyle(
-                    color: AppTheme.darkGrey,
-                    fontWeight: FontWeight.w500,
+                  backgroundColor: AppTheme.accentMint.withValues(alpha: 0.16),
+                  labelStyle: TextStyle(
+                    color: scheme.onSurface,
+                    fontWeight: FontWeight.w600,
                   ),
-                  deleteIcon: const Icon(
+                  deleteIcon: Icon(
                     Icons.close,
                     size: 16,
-                    color: AppTheme.mediumGrey,
+                    color: scheme.onSurfaceVariant,
+                  ),
+                  side: BorderSide(
+                    color: AppTheme.accentMint.withValues(alpha: 0.45),
                   ),
                   onDeleted: () {
                     setState(() {
@@ -850,22 +909,24 @@ class _EnhancedDailyFeelingsTrackerState
                   size: 16,
                   color: AppTheme.primaryPurple,
                 ),
-                backgroundColor: AppTheme.primaryPurple.withValues(alpha: 0.1),
+                backgroundColor: AppTheme.primaryPurple.withValues(alpha: 0.14),
                 labelStyle: const TextStyle(
                   color: AppTheme.primaryPurple,
                   fontWeight: FontWeight.w600,
+                ),
+                side: BorderSide(
+                  color: AppTheme.primaryPurple.withValues(alpha: 0.4),
                 ),
                 onPressed: _addCustomTag,
               ),
             ],
           ),
           const SizedBox(height: 20),
-          const Text(
+          Text(
             'Suggested Tags',
-            style: TextStyle(
-              fontSize: 14,
+            style: theme.textTheme.bodyMedium?.copyWith(
               fontWeight: FontWeight.w600,
-              color: AppTheme.mediumGrey,
+              color: scheme.onSurfaceVariant,
             ),
           ),
           const SizedBox(height: 8),
@@ -876,13 +937,13 @@ class _EnhancedDailyFeelingsTrackerState
                 .map(
                   (tag) => ActionChip(
                     label: Text(tag),
-                    backgroundColor: Colors.white,
-                    labelStyle: const TextStyle(
-                      color: AppTheme.mediumGrey,
+                    backgroundColor: theme.cardColor,
+                    labelStyle: TextStyle(
+                      color: scheme.onSurfaceVariant,
                       fontSize: 12,
                     ),
                     side: BorderSide(
-                      color: AppTheme.mediumGrey.withValues(alpha: 0.1),
+                      color: scheme.outline.withValues(alpha: 0.4),
                     ),
                     onPressed: () {
                       setState(() {
@@ -894,6 +955,7 @@ class _EnhancedDailyFeelingsTrackerState
                 )
                 .toList(),
           ),
+          const SizedBox(height: 12),
         ],
       ),
     );
