@@ -95,4 +95,30 @@ void main() {
     expect(source, contains("'Not recorded'"));
     expect(source, contains('SliderComponentShape.noThumb'));
   });
+
+  test('Daily Feelings C1 semantic dark mode and entry identity', () {
+    final source = File(
+      'lib/features/tracking/screens/enhanced_daily_feelings_tracker.dart',
+    ).readAsStringSync();
+
+    expect(
+      source,
+      contains('late final TextEditingController _notesController'),
+    );
+    expect(source, contains('_notesController.dispose();'));
+    expect(source, contains('_notesController.text = entry.notes;'));
+    expect(source, contains('_notesController.clear();'));
+    expect(source, contains('_currentEntry = null;'));
+
+    expect(source, contains('controller: _notesController'));
+    expect(source, isNot(contains('TextEditingController(text: _notes)')));
+
+    expect(source, contains('scheme.onSurface'));
+    expect(source, contains('scheme.onSurfaceVariant'));
+    expect(source, contains('surfaceContainerHighest'));
+    expect(source, contains('theme.cardColor'));
+
+    expect(source, isNot(contains('color: AppTheme.darkGrey')));
+    expect(source, isNot(contains('color: AppTheme.mediumGrey')));
+  });
 }
