@@ -28,6 +28,7 @@ class _EnhancedDailyFeelingsTrackerState
   late AnimationController _animationController;
   late AnimationController _saveController;
   late TabController _tabController;
+  late final TextEditingController _notesController;
 
   DateTime _selectedDate = DateTime.now();
   DailyFeelingsEntry? _currentEntry;
@@ -62,6 +63,7 @@ class _EnhancedDailyFeelingsTrackerState
     );
 
     _tabController = TabController(length: 4, vsync: this);
+    _notesController = TextEditingController();
 
     _initializeTracker();
   }
@@ -71,6 +73,7 @@ class _EnhancedDailyFeelingsTrackerState
     _animationController.dispose();
     _saveController.dispose();
     _tabController.dispose();
+    _notesController.dispose();
     super.dispose();
   }
 
@@ -101,7 +104,9 @@ class _EnhancedDailyFeelingsTrackerState
         _symptoms = Map.from(entry.symptoms);
         _customTags = Map.from(entry.customTags);
         _notes = entry.notes;
+        _notesController.text = entry.notes;
         _overallWellbeing = entry.overallWellbeing;
+        _hasUnsavedChanges = false;
       });
     } else {
       _initializeEmptyEntry();
@@ -111,13 +116,15 @@ class _EnhancedDailyFeelingsTrackerState
   /// Initialize an empty entry without fabricating user measurements.
   void _initializeEmptyEntry() {
     setState(() {
+      _currentEntry = null;
       _moodScores = {};
       _energyLevels = {};
       _symptoms = {};
       _customTags = {};
       _notes = '';
-
+      _notesController.clear();
       _overallWellbeing = null;
+      _hasUnsavedChanges = false;
     });
   }
 
@@ -292,17 +299,23 @@ class _EnhancedDailyFeelingsTrackerState
 
   /// Build loading state
   Widget _buildLoadingState() {
-    return const Center(
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircularProgressIndicator(
+          const CircularProgressIndicator(
             valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryPurple),
           ),
-          SizedBox(height: 24),
+          const SizedBox(height: 24),
           Text(
             'Loading your feelings data...',
-            style: TextStyle(color: AppTheme.mediumGrey, fontSize: 16),
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: scheme.onSurfaceVariant,
+              fontSize: 16,
+            ),
           ),
         ],
       ),
@@ -311,17 +324,20 @@ class _EnhancedDailyFeelingsTrackerState
 
   /// Build date selector
   Widget _buildDateSelector(ThemeData theme) {
+    final scheme = theme.colorScheme;
+
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: theme.cardColor,
             borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: scheme.outline.withValues(alpha: 0.28)),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
+                color: theme.shadowColor.withValues(alpha: 0.08),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -329,7 +345,7 @@ class _EnhancedDailyFeelingsTrackerState
           ),
           child: Row(
             children: [
-              Icon(
+              const Icon(
                 Icons.calendar_today,
                 color: AppTheme.primaryPurple,
                 size: 20,
@@ -341,17 +357,17 @@ class _EnhancedDailyFeelingsTrackerState
                   children: [
                     Text(
                       _formatSelectedDate(_selectedDate),
-                      style: const TextStyle(
+                      style: theme.textTheme.titleMedium?.copyWith(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: AppTheme.darkGrey,
+                        color: scheme.onSurface,
                       ),
                     ),
                     Text(
                       _getDateRelativeString(_selectedDate),
-                      style: const TextStyle(
+                      style: theme.textTheme.bodyMedium?.copyWith(
                         fontSize: 14,
-                        color: AppTheme.mediumGrey,
+                        color: scheme.onSurfaceVariant,
                       ),
                     ),
                   ],
@@ -359,7 +375,10 @@ class _EnhancedDailyFeelingsTrackerState
               ),
               IconButton(
                 onPressed: () => _selectDate(context),
-                icon: Icon(Icons.edit_calendar, color: AppTheme.primaryPurple),
+                icon: const Icon(
+                  Icons.edit_calendar,
+                  color: AppTheme.primaryPurple,
+                ),
               ),
             ],
           ),
@@ -984,6 +1003,7 @@ class _EnhancedDailyFeelingsTrackerState
   /// Build quick insights
   Widget _buildQuickInsights(ThemeData theme) {
     final insights = _generateQuickInsights();
+    final scheme = theme.colorScheme;
 
     if (insights.isEmpty) {
       return const SliverToBoxAdapter(child: SizedBox.shrink());
@@ -995,12 +1015,12 @@ class _EnhancedDailyFeelingsTrackerState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Quick Insights',
-              style: TextStyle(
+              style: theme.textTheme.titleMedium?.copyWith(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: AppTheme.darkGrey,
+                color: scheme.onSurface,
               ),
             ),
             const SizedBox(height: 12),
@@ -1010,15 +1030,15 @@ class _EnhancedDailyFeelingsTrackerState
                 child: Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppTheme.accentMint.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8),
+                    color: AppTheme.accentMint.withValues(alpha: 0.14),
+                    borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: AppTheme.accentMint.withValues(alpha: 0.1),
+                      color: AppTheme.accentMint.withValues(alpha: 0.42),
                     ),
                   ),
                   child: Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.lightbulb_outline,
                         color: AppTheme.accentMint,
                         size: 16,
@@ -1027,9 +1047,9 @@ class _EnhancedDailyFeelingsTrackerState
                       Expanded(
                         child: Text(
                           insight,
-                          style: const TextStyle(
+                          style: theme.textTheme.bodyMedium?.copyWith(
                             fontSize: 14,
-                            color: AppTheme.darkGrey,
+                            color: scheme.onSurface,
                           ),
                         ),
                       ),
@@ -1046,17 +1066,20 @@ class _EnhancedDailyFeelingsTrackerState
 
   /// Build notes section
   Widget _buildNotesSection(ThemeData theme) {
+    final scheme = theme.colorScheme;
+
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: theme.cardColor,
             borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: scheme.outline.withValues(alpha: 0.28)),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
+                color: theme.shadowColor.withValues(alpha: 0.08),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -1067,42 +1090,50 @@ class _EnhancedDailyFeelingsTrackerState
             children: [
               Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.edit_note,
                     color: AppTheme.primaryPurple,
                     size: 20,
                   ),
                   const SizedBox(width: 8),
-                  const Text(
+                  Text(
                     'Notes',
-                    style: TextStyle(
+                    style: theme.textTheme.titleMedium?.copyWith(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: AppTheme.darkGrey,
+                      color: scheme.onSurface,
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 12),
               TextField(
-                controller: TextEditingController(text: _notes),
+                controller: _notesController,
                 maxLines: 4,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: scheme.onSurface,
+                ),
                 decoration: InputDecoration(
                   hintText:
                       'How are you feeling today? Any specific thoughts or events you\'d like to remember?',
-                  hintStyle: TextStyle(
-                    color: AppTheme.mediumGrey.withValues(alpha: 0.1),
+                  hintStyle: theme.textTheme.bodyMedium?.copyWith(
+                    color: scheme.onSurfaceVariant,
                     fontSize: 14,
                   ),
-                  border: OutlineInputBorder(
+                  filled: true,
+                  fillColor: scheme.surfaceContainerHighest,
+                  enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide(
-                      color: AppTheme.mediumGrey.withValues(alpha: 0.1),
+                      color: scheme.outline.withValues(alpha: 0.4),
                     ),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: AppTheme.primaryPurple),
+                  focusedBorder: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
+                    borderSide: BorderSide(
+                      color: AppTheme.primaryPurple,
+                      width: 1.5,
+                    ),
                   ),
                   contentPadding: const EdgeInsets.all(12),
                 ),
@@ -1122,17 +1153,20 @@ class _EnhancedDailyFeelingsTrackerState
 
   /// Build historical trends
   Widget _buildHistoricalTrends(ThemeData theme) {
+    final scheme = theme.colorScheme;
+
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: theme.cardColor,
             borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: scheme.outline.withValues(alpha: 0.28)),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
+                color: theme.shadowColor.withValues(alpha: 0.08),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -1143,24 +1177,24 @@ class _EnhancedDailyFeelingsTrackerState
             children: [
               Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.trending_up,
                     color: AppTheme.primaryPurple,
                     size: 20,
                   ),
                   const SizedBox(width: 8),
-                  const Text(
+                  Text(
                     'Recent Trends',
-                    style: TextStyle(
+                    style: theme.textTheme.titleMedium?.copyWith(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: AppTheme.darkGrey,
+                      color: scheme.onSurface,
                     ),
                   ),
                   const Spacer(),
                   TextButton(
                     onPressed: () => _viewDetailedAnalytics(context),
-                    child: Text(
+                    child: const Text(
                       'View All',
                       style: TextStyle(
                         color: AppTheme.primaryPurple,
@@ -1179,10 +1213,10 @@ class _EnhancedDailyFeelingsTrackerState
                   }
 
                   if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Text(
+                    return Text(
                       'Track your feelings for a few more days to see trends',
-                      style: TextStyle(
-                        color: AppTheme.mediumGrey,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: scheme.onSurfaceVariant,
                         fontStyle: FontStyle.italic,
                       ),
                     );
@@ -1198,16 +1232,19 @@ class _EnhancedDailyFeelingsTrackerState
                               children: [
                                 Icon(
                                   _getTrendIcon(trend.direction),
-                                  color: _getTrendColor(trend.direction),
+                                  color: _getTrendColor(
+                                    trend.direction,
+                                    scheme.onSurfaceVariant,
+                                  ),
                                   size: 16,
                                 ),
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Text(
                                     trend.description,
-                                    style: const TextStyle(
+                                    style: theme.textTheme.bodyMedium?.copyWith(
                                       fontSize: 14,
-                                      color: AppTheme.darkGrey,
+                                      color: scheme.onSurface,
                                     ),
                                   ),
                                 ),
@@ -1228,33 +1265,34 @@ class _EnhancedDailyFeelingsTrackerState
 
   /// Build save button
   Widget _buildSaveButton() {
+    final scheme = Theme.of(context).colorScheme;
+    final enabled = _hasUnsavedChanges && !_isSaving;
+
     return AnimatedScale(
       scale: _hasUnsavedChanges ? 1.0 : 0.8,
       duration: const Duration(milliseconds: 200),
       child: FloatingActionButton.extended(
-        onPressed: _hasUnsavedChanges ? _saveEntry : null,
-        backgroundColor: _hasUnsavedChanges
+        onPressed: enabled ? _saveEntry : null,
+        backgroundColor: enabled
             ? AppTheme.primaryPurple
-            : AppTheme.mediumGrey,
+            : scheme.surfaceContainerHighest,
+        foregroundColor: enabled ? scheme.onPrimary : scheme.onSurfaceVariant,
         icon: AnimatedSwitcher(
           duration: const Duration(milliseconds: 300),
           child: _isSaving
-              ? const SizedBox(
+              ? SizedBox(
                   width: 16,
                   height: 16,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    color: scheme.onPrimary,
                   ),
                 )
-              : const Icon(Icons.save, color: Colors.white),
+              : const Icon(Icons.save),
         ),
         label: Text(
           _isSaving ? 'Saving...' : 'Save',
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
       ).animate().scale(delay: 1600.ms),
     );
@@ -1500,14 +1538,14 @@ class _EnhancedDailyFeelingsTrackerState
     }
   }
 
-  Color _getTrendColor(TrendDirection direction) {
+  Color _getTrendColor(TrendDirection direction, Color stableColor) {
     switch (direction) {
       case TrendDirection.up:
         return AppTheme.successGreen;
       case TrendDirection.down:
         return AppTheme.primaryRose;
       case TrendDirection.stable:
-        return AppTheme.mediumGrey;
+        return stableColor;
     }
   }
 
