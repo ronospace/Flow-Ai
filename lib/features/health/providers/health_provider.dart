@@ -5,12 +5,12 @@ import '../../../core/services/advanced_biometric_service.dart';
 import '../widgets/healthkit_permission_dialog.dart';
 
 class HealthProvider extends ChangeNotifier {
-  bool _isHealthKitConnected = false;
+  bool _hasHealthDataAccess = false;
   double _healthScore = 0.0;
   bool _healthKitBannerDismissed = false;
   BiometricSnapshot? _snapshot;
 
-  bool get isHealthKitConnected => _isHealthKitConnected;
+  bool get hasHealthDataAccess => _hasHealthDataAccess;
   double get healthScore => _healthScore;
   bool get healthKitBannerDismissed => _healthKitBannerDismissed;
   BiometricSnapshot? get snapshot => _snapshot;
@@ -41,10 +41,10 @@ class HealthProvider extends ChangeNotifier {
           }
 
           if (!biometricService.isInitialized) {
-            _isHealthKitConnected = false;
+            _hasHealthDataAccess = false;
             _snapshot = null;
             _healthScore = 0.0;
-            await prefs.setBool('healthkit_connected', false);
+            await prefs.setBool('health_data_access_granted', false);
             notifyListeners();
 
             debugPrint(
@@ -56,23 +56,25 @@ class HealthProvider extends ChangeNotifier {
           final snapshot = await biometricService.getCurrentBiometricSnapshot();
 
           _snapshot = snapshot;
-          _isHealthKitConnected = true;
+          _hasHealthDataAccess = true;
           _healthScore = _calculateHealthScore(snapshot);
 
-          await prefs.setBool('healthkit_connected', true);
+          await prefs.setBool('health_data_access_granted', true);
           notifyListeners();
 
-          debugPrint('✅ HealthKit connected and synchronized successfully');
+          debugPrint(
+            '✅ Health data access granted and initial health-store read completed',
+          );
         } catch (error) {
-          _isHealthKitConnected = false;
+          _hasHealthDataAccess = false;
           _snapshot = null;
           _healthScore = 0.0;
-          await prefs.setBool('healthkit_connected', false);
+          await prefs.setBool('health_data_access_granted', false);
           notifyListeners();
         }
       },
       onDecline: () {
-        _isHealthKitConnected = false;
+        _hasHealthDataAccess = false;
         _snapshot = null;
         _healthScore = 0.0;
         notifyListeners();
@@ -112,24 +114,25 @@ class HealthProvider extends ChangeNotifier {
 
   /// Disconnect HealthKit
   Future<void> disconnectHealthKit() async {
-    _isHealthKitConnected = false;
+    _hasHealthDataAccess = false;
     _snapshot = null;
     _healthScore = 0.0;
     notifyListeners();
 
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('healthkit_connected', false);
+    await prefs.setBool('health_data_access_granted', false);
 
-    debugPrint('✅ HealthKit disconnected');
+    debugPrint('✅ Flow AI health-data access disabled');
   }
 
-  /// Load HealthKit connection state
+  /// Load health-data access state
   Future<void> loadConnectionState() async {
     final prefs = await SharedPreferences.getInstance();
-    final storedAsConnected = prefs.getBool('healthkit_connected') ?? false;
+    final storedAsConnected =
+        prefs.getBool('health_data_access_granted') ?? false;
 
     if (!storedAsConnected) {
-      _isHealthKitConnected = false;
+      _hasHealthDataAccess = false;
       _snapshot = null;
       _healthScore = 0.0;
       notifyListeners();
@@ -144,10 +147,10 @@ class HealthProvider extends ChangeNotifier {
       }
 
       if (!biometricService.isInitialized) {
-        _isHealthKitConnected = false;
+        _hasHealthDataAccess = false;
         _snapshot = null;
         _healthScore = 0.0;
-        await prefs.setBool('healthkit_connected', false);
+        await prefs.setBool('health_data_access_granted', false);
         notifyListeners();
         return;
       }
@@ -155,13 +158,13 @@ class HealthProvider extends ChangeNotifier {
       final snapshot = await biometricService.getCurrentBiometricSnapshot();
 
       _snapshot = snapshot;
-      _isHealthKitConnected = true;
+      _hasHealthDataAccess = true;
       _healthScore = _calculateHealthScore(snapshot);
     } catch (error) {
-      _isHealthKitConnected = false;
+      _hasHealthDataAccess = false;
       _snapshot = null;
       _healthScore = 0.0;
-      await prefs.setBool('healthkit_connected', false);
+      await prefs.setBool('health_data_access_granted', false);
     }
 
     notifyListeners();
@@ -193,7 +196,7 @@ class HealthProvider extends ChangeNotifier {
 
   /// Clear all user health data (used during sign out)
   void clearUserData() {
-    _isHealthKitConnected = false;
+    _hasHealthDataAccess = false;
     _snapshot = null;
     _healthScore = 0.0;
     _healthKitBannerDismissed = false;

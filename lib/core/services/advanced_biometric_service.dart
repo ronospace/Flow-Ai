@@ -43,6 +43,36 @@ class BiometricInsight {
 }
 
 /// Biometric snapshot for real-time monitoring
+/// Provenance for health observations used by Flow AI.
+///
+/// This represents the source metadata reported by HealthKit/Health Connect.
+/// It does NOT prove that a smartwatch or wearable is currently paired.
+class HealthMetricProvenance {
+  final HealthDataType type;
+  final DateTime observedFrom;
+  final DateTime observedTo;
+  final int sampleCount;
+  final Set<HealthPlatformType> sourcePlatforms;
+  final Set<String> sourceIds;
+  final Set<String> sourceNames;
+  final Set<String> sourceDeviceIds;
+  final Set<String> deviceModels;
+  final Set<RecordingMethod> recordingMethods;
+
+  const HealthMetricProvenance({
+    required this.type,
+    required this.observedFrom,
+    required this.observedTo,
+    required this.sampleCount,
+    required this.sourcePlatforms,
+    required this.sourceIds,
+    required this.sourceNames,
+    required this.sourceDeviceIds,
+    required this.deviceModels,
+    required this.recordingMethods,
+  });
+}
+
 class BiometricSnapshot {
   final DateTime timestamp;
   final double? heartRate;
@@ -57,6 +87,9 @@ class BiometricSnapshot {
   final double? respiratoryRate;
   final double dataQuality;
 
+  /// Per-metric provenance for the real observations in this snapshot.
+  final Map<HealthDataType, HealthMetricProvenance> metricProvenance;
+
   BiometricSnapshot({
     required this.timestamp,
     this.heartRate,
@@ -70,6 +103,7 @@ class BiometricSnapshot {
     this.bloodOxygen,
     this.respiratoryRate,
     required this.dataQuality,
+    this.metricProvenance = const <HealthDataType, HealthMetricProvenance>{},
   });
 
   factory BiometricSnapshot.empty() {
@@ -819,7 +853,33 @@ class AdvancedBiometricService {
         timeRange: const Duration(days: 1),
       );
 
+      final metricProvenance = <HealthDataType, HealthMetricProvenance>{};
+
+      void addProvenance(HealthDataType type) {
+        final provenance = _buildMetricProvenance(type, recentData[type]);
+
+        if (provenance != null) {
+          metricProvenance[type] = provenance;
+        }
+      }
+
+      for (final type in <HealthDataType>[
+        HealthDataType.HEART_RATE,
+        HealthDataType.RESTING_HEART_RATE,
+        _platformHrvType,
+        HealthDataType.BODY_TEMPERATURE,
+        HealthDataType.SLEEP_ASLEEP,
+        HealthDataType.STEPS,
+        HealthDataType.ACTIVE_ENERGY_BURNED,
+        HealthDataType.BLOOD_OXYGEN,
+        HealthDataType.RESPIRATORY_RATE,
+      ]) {
+        addProvenance(type);
+      }
+
       return BiometricSnapshot(
+        // Snapshot generation time only. Actual observation times live
+        // in metricProvenance and must be used for freshness decisions.
         timestamp: DateTime.now(),
         heartRate: _getLatestValue(recentData[HealthDataType.HEART_RATE]),
         restingHeartRate: _getLatestValue(
@@ -832,7 +892,9 @@ class AdvancedBiometricService {
         basalBodyTemperature: _getLatestValue(
           recentData[HealthDataType.BODY_TEMPERATURE],
         ),
-        sleepHours: _getLatestValue(recentData[HealthDataType.SLEEP_ASLEEP]),
+        sleepHours: _aggregateLatestSleepHours(
+          recentData[HealthDataType.SLEEP_ASLEEP],
+        ),
         steps: _getLatestValue(recentData[HealthDataType.STEPS]),
         activeEnergy: _getLatestValue(
           recentData[HealthDataType.ACTIVE_ENERGY_BURNED],
@@ -842,11 +904,125 @@ class AdvancedBiometricService {
           recentData[HealthDataType.RESPIRATORY_RATE],
         ),
         dataQuality: _calculateDataQuality(recentData),
+        metricProvenance: metricProvenance,
       );
     } catch (e) {
       AppLogger.error('Error getting biometric snapshot: $e');
       return BiometricSnapshot.empty();
     }
+  }
+
+  double? _aggregateLatestSleepHours(List<HealthDataPoint>? points) {
+    if (points == null || points.isEmpty) {
+      return null;
+    }
+
+    final sleepPoints = points
+        .where(
+          (point) =>
+              point.type == HealthDataType.SLEEP_ASLEEP &&
+              point.dateTo.isAfter(point.dateFrom),
+        )
+        .toList();
+
+    if (sleepPoints.isEmpty) {
+      return null;
+    }
+
+    final byWakeDate = <DateTime, List<_HealthInterval>>{};
+
+    for (final point in sleepPoints) {
+      final wakeDate = DateTime(
+        point.dateTo.year,
+        point.dateTo.month,
+        point.dateTo.day,
+      );
+
+      byWakeDate
+          .putIfAbsent(wakeDate, () => <_HealthInterval>[])
+          .add(_HealthInterval(start: point.dateFrom, end: point.dateTo));
+    }
+
+    final latestWakeDate = byWakeDate.keys.reduce(
+      (a, b) => a.isAfter(b) ? a : b,
+    );
+
+    final intervals = byWakeDate[latestWakeDate]!
+      ..sort((a, b) => a.start.compareTo(b.start));
+
+    final merged = <_HealthInterval>[];
+
+    for (final interval in intervals) {
+      if (merged.isEmpty) {
+        merged.add(interval);
+        continue;
+      }
+
+      final last = merged.last;
+
+      if (!interval.start.isAfter(last.end)) {
+        if (interval.end.isAfter(last.end)) {
+          merged[merged.length - 1] = _HealthInterval(
+            start: last.start,
+            end: interval.end,
+          );
+        }
+      } else {
+        merged.add(interval);
+      }
+    }
+
+    final totalMinutes = merged.fold<int>(
+      0,
+      (sum, interval) =>
+          sum + interval.end.difference(interval.start).inMinutes,
+    );
+
+    if (totalMinutes <= 0) {
+      return null;
+    }
+
+    return totalMinutes / 60.0;
+  }
+
+  HealthMetricProvenance? _buildMetricProvenance(
+    HealthDataType type,
+    List<HealthDataPoint>? points,
+  ) {
+    if (points == null || points.isEmpty) {
+      return null;
+    }
+
+    final ordered = List<HealthDataPoint>.from(points)
+      ..sort((a, b) => a.dateFrom.compareTo(b.dateFrom));
+
+    return HealthMetricProvenance(
+      type: type,
+      observedFrom: ordered.first.dateFrom,
+      observedTo: ordered
+          .map((point) => point.dateTo)
+          .reduce((a, b) => a.isAfter(b) ? a : b),
+      sampleCount: ordered.length,
+      sourcePlatforms: ordered.map((point) => point.sourcePlatform).toSet(),
+      sourceIds: ordered
+          .map((point) => point.sourceId)
+          .where((value) => value.isNotEmpty)
+          .toSet(),
+      sourceNames: ordered
+          .map((point) => point.sourceName)
+          .where((value) => value.isNotEmpty)
+          .toSet(),
+      sourceDeviceIds: ordered
+          .map((point) => point.sourceDeviceId)
+          .where((value) => value.isNotEmpty)
+          .toSet(),
+      deviceModels: ordered
+          .map((point) => point.deviceModel)
+          .whereType<String>()
+          .where((value) => value.isNotEmpty)
+          .toSet(),
+      recordingMethods: ordered.map((point) => point.recordingMethod).toSet(),
+    );
   }
 
   /// Get latest value from health data points
