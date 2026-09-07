@@ -21,7 +21,7 @@ class HealthKitConnectionCard extends StatelessWidget {
 
     return Consumer<HealthProvider>(
       builder: (context, healthProvider, child) {
-        final isConnected = healthProvider.isHealthKitConnected;
+        final hasAccess = healthProvider.hasHealthDataAccess;
         final isIOS = Platform.isIOS;
         final platformName = isIOS ? 'Apple HealthKit' : 'Health Connect';
         final platformShort = isIOS ? 'HealthKit' : 'Health Connect';
@@ -34,7 +34,7 @@ class HealthKitConnectionCard extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: isConnected
+              colors: hasAccess
                   ? [
                       AppTheme.successGreen.withValues(alpha: 0.1),
                       AppTheme.successGreen.withValues(alpha: 0.05),
@@ -46,7 +46,7 @@ class HealthKitConnectionCard extends StatelessWidget {
             ),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: isConnected
+              color: hasAccess
                   ? AppTheme.successGreen.withValues(alpha: 0.3)
                   : AppTheme.secondaryBlue.withValues(alpha: 0.2),
               width: 1.5,
@@ -63,17 +63,15 @@ class HealthKitConnectionCard extends StatelessWidget {
                     height: 42,
                     decoration: BoxDecoration(
                       color:
-                          (isConnected
+                          (hasAccess
                                   ? AppTheme.successGreen
                                   : AppTheme.secondaryBlue)
                               .withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Icon(
-                      isConnected
-                          ? Icons.check_circle
-                          : Icons.health_and_safety,
-                      color: isConnected
+                      hasAccess ? Icons.check_circle : Icons.health_and_safety,
+                      color: hasAccess
                           ? AppTheme.successGreen
                           : AppTheme.secondaryBlue,
                       size: 22,
@@ -91,8 +89,8 @@ class HealthKitConnectionCard extends StatelessWidget {
                           children: [
                             Expanded(
                               child: Text(
-                                isConnected
-                                    ? '${platformName} Connected'
+                                hasAccess
+                                    ? '${platformName} Access Granted'
                                     : 'Connect ${platformName}',
                                 style: theme.textTheme.titleMedium?.copyWith(
                                   fontWeight: FontWeight.w600,
@@ -101,7 +99,7 @@ class HealthKitConnectionCard extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            if (isConnected)
+                            if (hasAccess)
                               Container(
                                 margin: const EdgeInsets.only(left: 8),
                                 padding: const EdgeInsets.symmetric(
@@ -115,7 +113,7 @@ class HealthKitConnectionCard extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Text(
-                                  'Connected',
+                                  'Access granted',
                                   style: TextStyle(
                                     color: AppTheme.successGreen,
                                     fontSize: 10,
@@ -154,9 +152,9 @@ class HealthKitConnectionCard extends StatelessWidget {
                         ],
                         const SizedBox(height: 4),
                         Text(
-                          isConnected
-                              ? 'Health data syncing from ${syncSource}'
-                              : 'Sync health data from ${syncSource} & wearables',
+                          hasAccess
+                              ? 'Flow AI can read the health data you chose to share through ${syncSource}'
+                              : 'Allow Flow AI to read supported health data you choose to share through ${syncSource}',
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: theme.colorScheme.onSurface.withValues(
                               alpha: 0.7,
@@ -202,7 +200,7 @@ class HealthKitConnectionCard extends StatelessWidget {
                   ),
                 ],
               ),
-              if (isConnected) ...[
+              if (hasAccess) ...[
                 const SizedBox(height: 12),
                 Row(
                   children: [
